@@ -5,7 +5,7 @@ FROM
     --
     -- Urban Areas
     --
-    SELECT '' AS name,
+    SELECT 'urban' AS name,
            ST_Area(the_geom)::bigint AS area,
            'urban area' AS kind,
            'naturalearthdata.com' AS source,

@@ -1,4 +1,4 @@
-SELECT name, area, kind, source, __geometry__
+SELECT name, area, kind, water, source, __geometry__
 
 FROM
 (
@@ -8,6 +8,7 @@ FROM
     SELECT '' AS name,
            ST_Area(the_geom)::bigint AS area,
            'ocean' AS kind,
+           'ocean' AS water,
            'naturalearthdata.com' AS source,
            the_geom AS __geometry__
     
@@ -23,6 +24,7 @@ FROM
     SELECT name,
            ST_Area(the_geom)::bigint AS area,
            'lake' AS kind,
+           'lake' AS water,
            'naturalearthdata.com' AS source,
            the_geom AS __geometry__
     

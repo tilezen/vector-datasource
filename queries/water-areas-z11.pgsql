@@ -1,4 +1,4 @@
-SELECT name, area, kind, source, __geometry__, __id__
+SELECT name, area, kind, waterway, "natural", landuse, source, __geometry__, __id__
 
 FROM
 (
@@ -8,6 +8,9 @@ FROM
     SELECT '' AS name,
            ST_Area(the_geom)::bigint AS area,
            'ocean' AS kind,
+           NULL AS waterway,
+           'ocean' AS natural,
+           NULL AS landuse,
            'openstreetmapdata.com' AS source,
            the_geom AS __geometry__,
            gid::varchar AS __id__
@@ -24,6 +27,9 @@ FROM
     SELECT name,
            ST_Area(way)::bigint AS area,
            COALESCE("waterway", "natural", "landuse") AS kind,
+           "waterway",
+           "natural",
+           "landuse",
            'openstreetmap.org' AS source,
            way AS __geometry__,
         
