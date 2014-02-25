@@ -3,7 +3,10 @@ SELECT name,
                 "leisure", "lock", "man_made", "natural", "power", "railway", "shop",
                 "tourism", "waterway") AS kind,
        way AS __geometry__,
-       osm_id AS __id__
+       osm_id AS __id__,
+       "aerialway", "aeroway", "amenity", "barrier", "highway", "historic",
+       "leisure", "lock", "man_made", "natural", "power", "railway", "shop",
+       "tourism", "waterway"
 
 FROM planet_osm_point
 
