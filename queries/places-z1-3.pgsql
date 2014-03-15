@@ -8,11 +8,10 @@ FROM planet_osm_point
 WHERE name IS NOT NULL 
 
 AND place IN (
-	'state',
-	'island',
-	'islet',
-	'gulf',
+	'continent',
+	'ocean', 
+	'country',
 	'sea',
 	'bay',
-	'ocean'
+	'archipelago'
 )

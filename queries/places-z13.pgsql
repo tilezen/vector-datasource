@@ -32,5 +32,7 @@ AND place IN (
 	'bay',
 	'ocean',
 	'lake',
-	'reservoir'
+	'reservoir',
+	'pond',
+	'glacier'
 )
