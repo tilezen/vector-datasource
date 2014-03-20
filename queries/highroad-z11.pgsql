@@ -1,6 +1,7 @@
 SELECT
     way AS __geometry__,
     highway,
+    name,
     railway,
 
     (CASE WHEN highway IN ('motorway') THEN 'highway'
