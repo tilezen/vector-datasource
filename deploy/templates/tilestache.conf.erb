@@ -2,7 +2,6 @@
 <% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>
   <% memcache_vals << name + ':11211' -%>
 <% end -%>
-
 {
   "logging": "info",
   "cache": {
