@@ -1,0 +1,405 @@
+<% memcache_vals = [] -%>
+<% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>
+  <% memcache_vals << name + ':11211' -%>
+<% end -%>
+
+{
+  "logging": "info",
+  "cache": {
+    "name": "Memcache",
+    "servers": [
+      "<%= memcache_vals.join('", "') %>"
+    ],
+    "revision": 0,
+    "key prefix": "tilestache-<%= node[:mapzen][:environment] %>"
+  },
+  "layers": {
+    "all": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:MultiProvider",
+        "kwargs": {
+          "names": [
+            "water-areas",
+            "land-areas",
+            "land-usages",
+            "buildings",
+            "skeletron",
+            "highroad",
+            "places",
+            "boundaries",
+            "pois"
+          ]
+        }
+      }
+    },
+    "lite": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:MultiProvider",
+        "kwargs": {
+          "names": [
+            "water-areas",
+            "land-areas",
+            "land-usages",
+            "buildingslite",
+            "highroad",
+            "places",
+            "boundaries",
+            "pois"
+          ]
+        }
+      }
+    },
+    "highroad": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, 
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z15.pgsql"
+          ]
+        }
+      }
+    },
+    "highroad-2x": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "simplify": 0.5,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null,
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/highroad-z15.pgsql"
+          ]
+        }
+      }
+    },
+    "skeletron": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": false,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=12",
+            "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=13",
+            "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=14",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/skeletron-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/skeletron-z16.pgsql"
+          ]
+        }
+      }
+    },
+    "skeletron-2x": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": false,
+          "simplify": 0.5,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, null, null, null, null,
+            "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=12",
+            "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=13",
+            "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=14",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/skeletron-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/skeletron-z16.pgsql"
+          ]
+        }
+      }
+    },
+    "buildings": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": false,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, null, null, null, null, null,
+            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 1600 -- 1px at z12",
+            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 400  -- 1px at z13",
+            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 100  -- 1px at z14",
+            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 25   -- 1px at z15",
+            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 0"
+          ]
+        }
+      }
+    },
+    "buildingslite": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": false,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries":
+          [
+              null, null, null, null,
+              null, null, null, null,
+              null, null, null, null,
+              null, null, null, 
+              "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, (TO_NUMBER(height, '999999D99S')::float*100)::int AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 1000  -- 1px at z15",
+              "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, (TO_NUMBER(height, '999999D99S')::float*100)::int AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 0   -- 1px at z16"
+          ]
+        }
+      }
+    },
+    "pois": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": false,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, null, null,
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z16.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z17.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/pois-z18.pgsql"
+          ]
+        }
+      }
+    },
+    "places": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/places-z12.pgsql"
+          ]
+        }
+      }
+    },
+    "boundaries": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": false,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, 
+            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level IN ('2','3') -- national, disputed",
+            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level IN ('2', '3') -- national, disputed",
+            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level = '4' -- state",
+            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level = '4' -- state",
+            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level = '4' -- state",
+            null, null, null, null, null, null, null, null
+          ]
+        }
+      }
+    },
+    "land-usages": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null,
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/land-usages-z16.pgsql"
+          ]
+        }
+      }
+    },
+    "land-areas": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            "SELECT the_geom AS __geometry__, gid::varchar AS __id__ FROM simplified_land_polygons WHERE the_geom && !bbox!",
+            null, null, null, null, null, null, null, null, null,
+            "SELECT the_geom AS __geometry__, gid::varchar AS __id__ FROM land_polygons WHERE the_geom && !bbox!"
+          ]
+        }
+      }
+    },
+    "water-areas": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/queries/water-areas-z16.pgsql"
+          ]
+        }
+      }
+    }
+  }
+}
