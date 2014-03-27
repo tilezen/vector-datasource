@@ -1,6 +1,10 @@
 Chef::Log.info("Running deploy/before_migrate.rb...")
 
 Chef::Log.info('Creating tilestache config from template')
+service 'tilestache' do
+  action :nothing
+end
+
 template "#{node[:tilestache][:cfg_path]}/tilestache.conf" do
   local     true
   owner     node[:tilestache][:user]
