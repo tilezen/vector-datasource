@@ -182,12 +182,15 @@
             "database": "gis"
           },
           "queries": [
-            null, null, null, null, null, null, null, null, null, null, null, null,
-            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 1600 -- 1px at z12",
-            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 400  -- 1px at z13",
-            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 100  -- 1px at z14",
-            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 25   -- 1px at z15",
-            "SELECT name, (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind, TO_NUMBER(height, '999999D99S')::float AS height, building, way AS __geometry__ FROM planet_osm_polygon WHERE building IS NOT null AND ST_Area(way) > 0"
+            null, null, null, null,
+            null, null, null, null,
+            null, null, null, null,
+            null,
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z16.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z17.pgsql"
           ]
         }
       }
@@ -213,8 +216,8 @@
               null, null, null, null,
               null, null, null, null,
               null, null, null, null,
-              "queries/buildingslite-z16.pgsql",
-              "queries/buildingslite-z17.pgsql"
+              "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildingslite-z16.pgsql",
+              "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildingslite-z17.pgsql"
           ]
         }
       }
