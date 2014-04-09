@@ -360,9 +360,17 @@
             "database": "gis"
           },
           "queries": [
-            "SELECT the_geom AS __geometry__, gid::varchar AS __id__ FROM simplified_land_polygons WHERE the_geom && !bbox!",
-            null, null, null, null, null, null, null, null, null,
-            "SELECT the_geom AS __geometry__, gid::varchar AS __id__ FROM land_polygons WHERE the_geom && !bbox!"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z10.pgsql"
           ]
         }
       }
