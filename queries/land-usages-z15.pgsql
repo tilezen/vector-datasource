@@ -3,7 +3,7 @@ SELECT name,
        COALESCE("landuse", "leisure", "natural", "highway", "amenity") AS kind,
        'openstreetmap.org' AS source,
        way AS __geometry__,
-       "landuse", "leisure", "natural", "highway", "amenity",
+
        --
        -- Negative osm_id is synthetic, with possibly multiple geometry rows.
        --
