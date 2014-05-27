@@ -2,9 +2,7 @@ SELECT
     name,
 
     (CASE WHEN COALESCE("building:part", building) != 'yes' THEN COALESCE("building:part", building) ELSE NULL END) AS kind,
-    building,
-    "building:part" AS building_part,
-
+    
     -- strip commas from heights (TODO: may need to strip other characters and/or do unit conversions)
     TO_NUMBER(REPLACE(height, ',', '.'), '999999D99S')::float AS height,
     TO_NUMBER(REPLACE(min_height, ',', '.'), '999999D99S')::float AS min_height,
