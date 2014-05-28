@@ -1,6 +1,6 @@
 SELECT 
 	name, 
-	place, 
+	place AS kind,
 	way AS __geometry__ 
 
 FROM planet_osm_point 
