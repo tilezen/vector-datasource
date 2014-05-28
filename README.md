@@ -1,6 +1,6 @@
 Mapzen vector-datasource
 ========================
 
-Installation
+Test
 ------------
 * test env deploy hooks
