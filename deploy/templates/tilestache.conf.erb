@@ -21,14 +21,14 @@
         "class": "TileStache.Goodies.VecTiles:MultiProvider",
         "kwargs": {
           "names": [
-            "water-areas",
-            "land-areas",
-            "land-usages",
+            "water",
+            "earth",
+            "place_borders",
+            "place_names",
+            "landuse",
+            "roads",
             "buildings",
             "skeletron",
-            "highroad",
-            "places",
-            "boundaries",
             "pois"
           ]
         }
@@ -42,19 +42,19 @@
         "class": "TileStache.Goodies.VecTiles:MultiProvider",
         "kwargs": {
           "names": [
-            "water-areas+",
-            "land-areas",
-            "land-usages+",
+            "water+",
+            "earth",
+            "place_borders",
+            "place_names+",
+            "landuse+",
+            "roads+",
             "buildings+",
-            "highroad+",
-            "places+",
-            "boundaries",
             "pois+"
           ]
         }
       }
     },
-    "highroad": {
+    "roads": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -70,20 +70,20 @@
           },
           "queries": [
             null, null, null, null, null, null, null, 
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z10.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z15.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z15.pgsql"
           ]
         }
       }
     },
-    "highroad+": {
+    "roads+": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -99,20 +99,20 @@
           },
           "queries": [
             null, null, null, null, null, null, null, 
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z10.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/highroad-z15.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z15.pgsql"
           ]
         }
       }
     },
-    "highroad-2x": {
+    "roads-2x": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -129,15 +129,15 @@
           },
           "queries": [
             null, null, null, null, null, null,
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z10.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/highroad-z15.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z15.pgsql"
           ]
         }
       }
@@ -313,7 +313,7 @@
         }
       }
     },
-    "places": {
+    "place_names": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -328,24 +328,24 @@
             "database": "gis"
           },
           "queries": [
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z12.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_names-z12.pgsql"
           ]
         }
       }
     },
-    "places+": {
+    "place_names+": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -360,24 +360,24 @@
             "database": "gis"
           },
           "queries": [
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z3.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z7.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z12.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z7.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/place_names-z12.pgsql"
           ]
         }
       }
     },
-    "boundaries": {
+    "place_borders": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -394,17 +394,17 @@
           },
           "queries": [
             null, null, null, 
-            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level IN ('2','3') -- national, disputed",
-            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level IN ('2', '3') -- national, disputed",
-            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level = '4' -- state",
-            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level = '4' -- state",
-            "SELECT name, boundary, admin_level, way AS __geometry__ FROM planet_osm_polygon WHERE boundary='administrative' AND admin_level = '4' -- state",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_borders-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_borders-z3.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_borders-z5.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_borders-z5.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/place_borders-z5.pgsql",
             null, null, null, null, null, null, null, null
           ]
         }
       }
     },
-    "land-usages": {
+    "landuse": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -420,24 +420,24 @@
           },
           "queries": [
             null, null, null, null,
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z9.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z10.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z15.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-usages-z16.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z16.pgsql"
           ]
         }
       }
     },
-    "land-usages+": {
+    "landuse+": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -453,24 +453,24 @@
           },
           "queries": [
             null, null, null, null,
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z9.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z10.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z15.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/land-usages-z16.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z10.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z16.pgsql"
           ]
         }
       }
     },
-    "land-areas": {
+    "earth": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -485,22 +485,22 @@
             "database": "gis"
           },
           "queries": [
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/land-areas-z10.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z10.pgsql"
           ]
         }
       }
     },
-    "water-areas": {
+    "water": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -515,28 +515,28 @@
             "database": "gis"
           },
           "queries": [
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z9.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z9.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z15.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-areas-z16.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z16.pgsql"
           ]
         }
       }
     },
-    "water-areas+": {
+    "water+": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
       "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -551,23 +551,23 @@
             "database": "gis"
           },
           "queries": [
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z0.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z4.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z6.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z9.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z9.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z11.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z12.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z13.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z14.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z15.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-areas-z16.pgsql"
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z0.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z4.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z6.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z9.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z11.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z12.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z13.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z14.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z15.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z16.pgsql"
           ]
         }
       }
