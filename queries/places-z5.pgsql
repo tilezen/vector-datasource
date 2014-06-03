@@ -7,7 +7,7 @@ FROM
     --
     SELECT  
     name,
-    '' AS kind,
+    boundary AS kind,
     admin_level, 
     way AS __geometry__ 
   
