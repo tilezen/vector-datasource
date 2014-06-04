@@ -10,7 +10,7 @@ template "#{node[:tilestache][:cfg_path]}/tilestache.conf" do
   owner     node[:tilestache][:user]
   group     node[:tilestache][:user]
   mode      0664
-  source    "#{release_path}/deploy/templates/tilestache.conf.erb"
+  source    "#{release_path}/deploy/templates/tilestache-dev.conf.erb"
   notifies  :restart, 'service[tilestache]', :delayed
 end
 
