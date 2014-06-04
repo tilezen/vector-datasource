@@ -38,11 +38,7 @@ FROM
       'ocean', 
       'country',
       'state',
-      'island',
-      'gulf',
-      'sea',
-      'bay',
-      'archipelago'
+      'sea'
     )
 
     AND way && !bbox!
