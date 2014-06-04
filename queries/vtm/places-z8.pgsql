@@ -10,15 +10,7 @@ WHERE name IS NOT NULL
 AND place IN (
 	'state',
 	'city',
-	'hamlet',
 	'district',
 	'county',
-	'region',
-	'province',
-	'island',
-	'islet',
-	'gulf',
-	'sea',
-	'bay',
-	'ocean'
+	'province'
 )
