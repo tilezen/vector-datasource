@@ -40,9 +40,7 @@ FROM
       'continent',
       'ocean', 
       'country',
-      'sea',
-      'bay',
-      'archipelago'
+      'sea'
     )
 
     AND way && !bbox!
