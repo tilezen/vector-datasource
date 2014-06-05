@@ -20,8 +20,16 @@
       "provider": {
         "class": "TileStache.Goodies.VecTiles:MultiProvider",
         "kwargs": {
-          "names": [
-            "parking"
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, 
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/parking-z12.pgsql"
           ]
         }
       }
