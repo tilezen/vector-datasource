@@ -9,7 +9,7 @@ task :build do
     if ENV['CIRCLE_BRANCH'] == 'master'
       puts 'Building tilestache config'.color(:blue)
       sh <<-EOH
-        ./erb-generator.rb
+        erb-generator.rb
         git diff --exit-code
         if [ $? != 0 ]
         then

@@ -3,10 +3,11 @@
   <% memcache_vals << name + ':11211' -%>
 <% end -%>
 {
+  "logging": "info",
   "cache": {
     "name": "Memcache",
     "servers": [
-      "<%= memcache_vals.join('\",\"') %>"
+      "<%= memcache_vals.join('", "') %>"
     ],
     "revision": 0,
     "key prefix": "tilestache-<%= node[:mapzen][:environment] %>"
@@ -61,17 +62,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null, null, 
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
@@ -81,33 +76,6 @@
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z13.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z14.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z15.pgsql"
-          ]
-        }
-      }
-    },
-    "_healthcheck": {
-      "allowed origin": "*",
-      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
-      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
-      "provider": {
-        "class": "TileStache.Goodies.VecTiles:Provider",
-        "kwargs": {
-          "dbinfo": {
-            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
-            "port": 5432,
-            "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
-          },
-          "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/parking-z12.pgsql"
           ]
         }
       }
@@ -123,17 +91,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null, null, 
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z7.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z7.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/roads-z7.pgsql",
@@ -159,16 +121,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null,
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
@@ -194,22 +151,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null, null, null, null, null, null, null,
             "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=12",
             "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=13",
             "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=14",
@@ -232,21 +178,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null, null, null, null, null, null,
             "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=12",
             "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=13",
             "SELECT way AS __geometry__, highway, name FROM streets_skeletron WHERE zoomlevel=14",
@@ -268,22 +204,13 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null,
+            null, null, null, null,
+            null, null, null, null,
             null,
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z13.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z14.pgsql",
@@ -306,28 +233,17 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
-          "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/buildings-z16.pgsql",
-            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/buildings-z17.pgsql"
+          "queries":
+          [
+              null, null, null, null,
+              null, null, null, null,
+              null, null, null, null,
+              null, null, null, null,
+              "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/buildings-z16.pgsql",
+              "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/buildings-z17.pgsql"
           ]
         }
       }
@@ -339,23 +255,16 @@
       "provider": {
         "class": "TileStache.Goodies.VecTiles:Provider",
         "kwargs": {
+          "clip": false,
           "dbinfo": {
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null, null, null, null,
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/pois-z9.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/pois-z10.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/pois-z11.pgsql",
@@ -377,23 +286,16 @@
       "provider": {
         "class": "TileStache.Goodies.VecTiles:Provider",
         "kwargs": {
+          "clip": false,
           "dbinfo": {
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null, null, null, null, null, null,
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/pois-z9.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/pois-z10.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/pois-z11.pgsql",
@@ -415,13 +317,12 @@
       "provider": {
         "class": "TileStache.Goodies.VecTiles:Provider",
         "kwargs": {
-          "clip": true,
           "dbinfo": {
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
@@ -448,13 +349,12 @@
       "provider": {
         "class": "TileStache.Goodies.VecTiles:Provider",
         "kwargs": {
-          "clip": true,
           "dbinfo": {
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/places-z0.pgsql",
@@ -485,14 +385,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null,
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z4.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z4.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z6.pgsql",
@@ -521,14 +418,11 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
-            null,
-            null,
-            null,
-            null,
+            null, null, null, null,
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z4.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z4.pgsql",
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/landuse-z6.pgsql",
@@ -557,8 +451,8 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
@@ -587,8 +481,8 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z0.pgsql",
@@ -623,8 +517,8 @@
             "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
             "port": 5432,
             "user": "gisuser",
-            "database": "gis",
-            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
           },
           "queries": [
             "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/water-z0.pgsql",
@@ -648,6 +542,5 @@
         }
       }
     }
-  },
-  "logging": "info"
+  }
 }
