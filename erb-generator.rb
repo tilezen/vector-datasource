@@ -12,7 +12,7 @@ output["cache"] = {
 	"name" => "Memcache", 
 	"servers" => ["<%= memcache_vals.join('\",\"') %>"], 
 	"revision"=> 0, 
-	"key prefix" => "tilestache=<%= node[:mapzen][:environment] %>"
+	"key prefix" => "tilestache-<%= node[:mapzen][:environment] %>"
 }
 
 output["layers"].each do |key, val|  
@@ -27,12 +27,10 @@ output["layers"].each do |key, val|
        	val["provider"]["kwargs"]["dbinfo"]["database"] = "gis"
        	val["provider"]["kwargs"]["queries"] = val["provider"]["kwargs"]["queries"].collect { |x| if x != nil then "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/"+x end } 
     end
+    output["layers"][key] = val.sort.to_h
 end
 
 File.open('deploy/templates/tilestache.conf.erb', 'w') do |file|
-  file.write("<% memcache_vals = [] -%>
-	<% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>
-  	<% memcache_vals << name + ':11211' -%>
-	<% end -%>\n")
+  file.write("<% memcache_vals = [] -%>\n<% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>\n  <% memcache_vals << name + ':11211' -%>\n<% end -%>\n")
   file.write(JSON.pretty_generate(output))
 end
