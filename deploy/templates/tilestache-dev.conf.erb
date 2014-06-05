@@ -13,6 +13,27 @@
     "key prefix": "tilestache-<%= node[:mapzen][:environment] %>"
   },
   "layers": {
+    "_healthcheck": {
+      "allowed origin": "*",
+      "cache lifespan": "1",
+      "maximum cache age": "0"
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>",
+            "database": "gis"
+          },
+          "queries": [
+            null, null, null, null, null, null, null, 
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/vtm/parking-z12.pgsql"
+          ]
+        }
+      }
+    },
     "all": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
