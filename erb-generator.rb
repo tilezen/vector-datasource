@@ -29,7 +29,7 @@ output["layers"].each do |key, val|
     end
 end
 
-File.open('tilestache.dev.cfg', 'w') do |file|
+File.open('deploy/templates/tilestache.conf.erb', 'w') do |file|
   file.write("<% memcache_vals = [] -%>
 	<% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>
   	<% memcache_vals << name + ':11211' -%>
