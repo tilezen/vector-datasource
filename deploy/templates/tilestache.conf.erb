@@ -6,7 +6,7 @@
   "cache": {
     "name": "Memcache",
     "servers": [
-      "<%= memcache_vals.join('\", \"') %>"
+      "<%= memcache_vals.join('\", \"').gsub(%r{\\}, '') %>"
     ],
     "revision": 0,
     "key prefix": "tilestache-<%= node[:mapzen][:environment] %>"
