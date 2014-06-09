@@ -10,7 +10,7 @@ output = data
 output["logging"] = "info"
 output["cache"] = {
 	"name" => "Memcache", 
-	"servers" => [%q[<%= memcache_vals.join('", "') %>]],
+	"servers" => [%q[<%= memcache_vals.join('", "').gsub(%r{\\}, '') %>]],
 	"revision"=> 0, 
 	"key prefix" => "tilestache-<%= node[:mapzen][:environment] %>"
 }
