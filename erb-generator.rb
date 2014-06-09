@@ -17,8 +17,8 @@ output["cache"] = {
 
 output["layers"].each do |key, val|  
     val["allowed origin"] = "*"
-    val["cache lifespan"] = "<%= node[:mapzen_tilestache][:max_age] %>"
-    val["maximum cache age"] = "<%= node[:mapzen_tilestache][:max_age] %>"
+    val["cache lifespan"] = val["cache lifespan"] || "<%= node[:mapzen_tilestache][:max_age] %>"
+    val["maximum cache age"] = val["maximum cache age"] || "<%= node[:mapzen_tilestache][:max_age] %>"
     if val["provider"]["class"] == "TileStache.Goodies.VecTiles:Provider"
     	val["provider"]["kwargs"]["dbinfo"]["host"] = "<%= node[:mapzen][:postgresql][:endpoint] %>"
        	val["provider"]["kwargs"]["dbinfo"]["port"] = 5432
