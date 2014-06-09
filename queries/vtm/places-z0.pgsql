@@ -10,10 +10,7 @@ WHERE name IS NOT NULL
 AND place IN (
   'continent',
   'ocean', 
-  'country',
-  'sea',
-  'bay',
-  'archipelago'
+  'country'
 )
 
 AND way && !bbox!
