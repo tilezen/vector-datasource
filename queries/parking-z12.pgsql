@@ -6,5 +6,5 @@ SELECT name,
 FROM planet_osm_point
 
 WHERE (
-      “amenity" IN (‘parking')
+      "amenity" IN ('parking')
 )
