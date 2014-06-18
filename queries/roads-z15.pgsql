@@ -27,7 +27,7 @@ SELECT
         --
         -- Explicit physical layers are drawn in order.
         --
-        (CASE WHEN layer ~ E'^-?[[:digit:]]+(\.[[:digit:]]+)?$' THEN 1000 * CAST (layer AS FLOAT)
+        (CASE WHEN layer ~ E'^-?[[:digit:]]+(\.[[:digit:]]+)?$' THEN 1000 * CAST (regexp_replace(layer,'[;,]','.','g') AS FLOAT)
               ELSE 0
               END)
         
