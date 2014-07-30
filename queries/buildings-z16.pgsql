@@ -32,4 +32,4 @@ WHERE
         )
     )
 
-    AND ST_Area(way) > 25 -- 4px
+    AND way_area > 25 -- 4px

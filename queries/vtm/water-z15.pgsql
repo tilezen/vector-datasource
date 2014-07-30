@@ -25,7 +25,7 @@ FROM
     UNION
 
     SELECT name,
-           ST_Area(way)::bigint AS area,
+           way_area::bigint AS area,
            COALESCE("waterway", "natural", "landuse") AS kind,
            "waterway",
            "natural",
@@ -46,7 +46,7 @@ FROM
        OR "natural" IN ('water')
        OR "landuse" IN ('basin', 'reservoir')
        )
-       AND ST_Area(way) > 100 -- 4px
+       AND way_area > 100 -- 4px
        AND way && !bbox!
 
 ) AS water_areas

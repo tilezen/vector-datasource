@@ -14,5 +14,4 @@ FROM
 
 WHERE
     building IS NOT NULL
-
-    AND ST_Area(way) > 100
+    AND way_area > 100
