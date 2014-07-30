@@ -1,5 +1,5 @@
 SELECT name,
-       ST_Area(way)::bigint AS area,
+       way_area::bigint AS area,
        COALESCE("landuse", "leisure", "natural", "highway", "amenity") AS kind,
        'openstreetmap.org' AS source,
        way AS __geometry__,

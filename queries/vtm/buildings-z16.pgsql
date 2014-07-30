@@ -15,4 +15,4 @@ FROM
 
 WHERE
     building IS NOT NULL
-    AND ST_Area(way) > 25 -- 4px
+    AND way_area > 25 -- 4px
