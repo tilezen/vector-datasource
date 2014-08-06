@@ -1,15 +1,7 @@
-<% memcache_vals = [] -%>
-<% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>
-  <% memcache_vals << name + ':11211' -%>
-<% end -%>
 {
   "cache": {
-    "name": "Memcache",
-    "servers": [
-      "<%= memcache_vals.join('\", \"').gsub(%r{\\}, '') %>"
-    ],
-    "revision": 0,
-    "key prefix": "tilestache-<%= node[:mapzen][:environment] %>"
+    "name": "Test",
+    "verbose": false
   },
   "layers": {
     "all": {
