@@ -22,7 +22,7 @@ FROM
     UNION
 
     SELECT name,
-           ST_Area(way)::bigint AS area,
+           way_area::bigint AS area,
            COALESCE("waterway", "natural", "landuse") AS kind,
            'openstreetmap.org' AS source,
            way AS __geometry__,

@@ -1,5 +1,5 @@
 SELECT name,
-       ST_Area(way)::bigint AS area,
+       way_area::bigint AS area,
        COALESCE("landuse", "leisure", "natural", "highway", "amenity") AS kind,
        'openstreetmap.org' AS source,
        way AS __geometry__,
@@ -24,4 +24,4 @@ WHERE (
    OR "amenity" IN ('university', 'school', 'college', 'library', 'fuel',
                     'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
    )
-   AND ST_Area(way) > 102400 -- 4px
+   AND way_area > 102400 -- 4px

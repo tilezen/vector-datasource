@@ -3,6 +3,6 @@ SELECT
   the_geom AS __geometry__,
   gid::varchar AS __id__
 FROM
-  ne_110m_land
+  ne_50m_land
 WHERE
   the_geom && !bbox!
