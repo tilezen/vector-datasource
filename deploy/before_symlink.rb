@@ -5,10 +5,10 @@ service 'tilestache' do
   action :nothing
 end
 
-execute 'restart tilestache' do
-  action  :nothing
-  command 'sv -w 60 restart tilestache'
-end
+runit_service 'tilestache' do
+  action     :nothing
+  sv_timeout 60
+end 
 
 template "#{node[:tilestache][:cfg_path]}/tilestache.conf" do
   local     true
@@ -16,5 +16,5 @@ template "#{node[:tilestache][:cfg_path]}/tilestache.conf" do
   group     node[:tilestache][:user]
   mode      0664
   source    "#{release_path}/deploy/templates/tilestache.conf.erb"
-  notifies  :run, 'execute[restart tilestache]', :delayed
+  notifies  :restart, 'runit_service[tilestache]', :delayed
 end
