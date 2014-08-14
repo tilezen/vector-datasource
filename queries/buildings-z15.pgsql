@@ -14,22 +14,4 @@ FROM
 
 WHERE
     (building IS NOT NULL OR "building:part" IS NOT NULL)
-
-    -- building "shells" that enclose building parts should not be rendered
-    AND NOT (
-        building_outer.building IS NOT NULL
-        AND building_outer."building:part" IS NULL
-        AND EXISTS (
-            SELECT
-                building_part_inner.osm_id
-            FROM
-                planet_osm_polygon AS building_part_inner
-            WHERE
-                building_part_inner.osm_id != building_outer.osm_id
-                AND building_part_inner."building:part" IS NOT NULL
-                AND ST_Intersects(building_outer.way, building_part_inner.way)
-            LIMIT 1
-        )
-    )
-
     AND way_area > 100 -- 4px
