@@ -7,7 +7,6 @@ shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_10m_ocean-merc.shp ne_10
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_10m_playas-merc.shp ne_10m_playas
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_110m_lakes-merc.shp ne_110m_lakes
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_110m_ocean-merc.shp ne_110m_ocean
-shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_110m_ocean.shp ne_110m_ocean.shp
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_50m_lakes-merc.shp ne_50m_lakes
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_50m_ocean-merc.shp ne_50m_ocean
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_50m_playas-merc.shp ne_50m_playas
