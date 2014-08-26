@@ -6,6 +6,5 @@ SELECT name,
 
 FROM planet_osm_point
 
-WHERE (
-      "aeroway" IN ('aerodrome', 'airport')
-)
+WHERE
+    mz_poi_level <= 9

@@ -1,4 +1,4 @@
-SELECT name, place, boundary, admin_level, __geometry__
+SELECT name, place, boundary, admin_level, __geometry__, __id__
 
 FROM
 (
@@ -10,11 +10,12 @@ FROM
     '' AS place,
     boundary,
     admin_level, 
-    way AS __geometry__ 
+    way AS __geometry__,
+    mz_id AS __id__
   
     FROM planet_osm_polygon 
     
-    WHERE way && !bbox! 
+    WHERE way && !bbox!
 
     AND boundary='administrative' 
 
@@ -30,7 +31,8 @@ FROM
       place,
       '' AS boundary,
       '' AS admin_level,
-      way AS __geometry__ 
+      way AS __geometry__,
+      mz_id AS __id__
 
     FROM planet_osm_point 
 

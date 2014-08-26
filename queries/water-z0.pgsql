@@ -1,4 +1,4 @@
-SELECT name, area, kind, source, __geometry__
+SELECT name, area, kind, source, __geometry__, __id__
 
 FROM
 (
@@ -6,28 +6,30 @@ FROM
     -- Ocean
     --
     SELECT '' AS name,
-           ST_Area(the_geom)::bigint AS area,
+           way_area::bigint AS area,
            'ocean' AS kind,
            'naturalearthdata.com' AS source,
-           the_geom AS __geometry__
-    
+           the_geom AS __geometry__,
+           gid::varchar AS __id__
+
     FROM ne_110m_ocean
-    
+
     WHERE the_geom && !bbox!
-    
+
     --
     -- Lakes
     --
     UNION
 
     SELECT name,
-           ST_Area(the_geom)::bigint AS area,
+           way_area::bigint AS area,
            'lake' AS kind,
            'naturalearthdata.com' AS source,
-           the_geom AS __geometry__
-    
+           the_geom AS __geometry__,
+           gid::varchar AS __id__
+
     FROM ne_110m_lakes
-    
+
     WHERE the_geom && !bbox!
 
 ) AS water_areas
