@@ -130,14 +130,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql VOLATILE;
 
-CREATE OR REPLACE FUNCTION mz_trigger_function_geometry_water_polygons()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.mz_the_geom12 := ST_SimplifyPreserveTopology(NEW.the_geom, 38.22);
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql VOLATILE;
-
 DO $$
 BEGIN
 
@@ -173,8 +165,5 @@ PERFORM mz_create_trigger_if_not_exists(
 
 PERFORM mz_create_trigger_if_not_exists(
     'mz_trigger_z_geometry_landuse', 'planet_osm_polygon', 'mz_trigger_function_geometry_landuse');
-
-PERFORM mz_create_trigger_if_not_exists(
-    'mz_trigger_z_geometry_water_polygons', 'water_polygons', 'mz_trigger_function_geometry_water_polygons');
 
 END $$;
