@@ -30,7 +30,7 @@ UPDATE planet_osm_point SET
     );
 
 PERFORM mz_create_partial_index_if_not_exists('planet_osm_point_place', 'planet_osm_point', 'place',
-    'name is NOT NULL' );
-PERFORM mz_create_index_if_not_exists('planet_osm_point_mz_poi_level_index', 'planet_osm_point', 'mz_poi_level');
+    'name IS NOT NULL' );
+PERFORM mz_create_partial_index_if_not_exists('planet_osm_point_mz_poi_level_index', 'planet_osm_point', 'mz_poi_level', 'mz_poi_level IS NOT NULL');
 
 END $$;

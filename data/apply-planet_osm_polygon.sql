@@ -38,10 +38,10 @@ UPDATE planet_osm_polygon AS t SET
 
 -- INDEXES
 PERFORM mz_create_index_if_not_exists('planet_osm_polygon_wayarea_index', 'planet_osm_polygon', 'way_area');
-PERFORM mz_create_index_if_not_exists('planet_osm_polygon_building_index', 'planet_osm_polygon', 'building');
+PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_building_index', 'planet_osm_polygon', 'building', 'building IS NOT NULL');
 PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_admin_level_index', 'planet_osm_polygon', 'admin_level', 'boundary = ''administrative''');
-PERFORM mz_create_index_if_not_exists('planet_osm_polygon_mz_is_landuse_index', 'planet_osm_polygon', 'mz_is_landuse');
-PERFORM mz_create_index_if_not_exists('planet_osm_polygon_mz_is_water_index', 'planet_osm_polygon', 'mz_is_water');
-PERFORM mz_create_index_if_not_exists('planet_osm_polygon_mz_is_building_or_part_index', 'planet_osm_polygon', 'mz_is_building_or_part');
+PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_mz_is_landuse_index', 'planet_osm_polygon', 'mz_is_landuse', 'mz_is_landuse = TRUE');
+PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_mz_is_water_index', 'planet_osm_polygon', 'mz_is_water', 'mz_is_water = TRUE');
+PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_mz_is_building_or_part_index', 'planet_osm_polygon', 'mz_is_building_or_part', 'mz_is_building_or_part = TRUE');
 
 END $$;
