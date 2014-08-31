@@ -202,7 +202,7 @@ BEGIN
                    OR highway_val IN ('gate', 'mini_roundabout')
                    OR lock_val IN ('yes')
                    OR man_made_val IN ('lighthouse', 'power_wind')
-                   OR natural_val IN ('cave_entrance', 'peak', 'spring', 'volcano')
+                   OR natural_val IN ('cave_entrance')
                    OR power_val IN ('generator')
                    OR waterway_val IN ('lock')) THEN 15
              WHEN (aeroway_val IN ('helipad')
@@ -214,7 +214,6 @@ BEGIN
                    OR historic_val IN ('archaeological_site')
                    OR man_made_val IN ('windmill')
                    OR natural_val IN ('tree')
-                   OR railway_val IN ('halt', 'level_crossing', 'station', 'tram_stop')
                    OR shop_val IN ('department_store', 'supermarket')
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
              WHEN (amenity_val IN (
