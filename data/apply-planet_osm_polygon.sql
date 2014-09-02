@@ -23,6 +23,31 @@ UPDATE planet_osm_polygon AS t SET
     mz_is_building_or_part = (CASE WHEN mz_calculate_is_building_or_part(t.building, "building:part") = TRUE THEN TRUE ELSE NULL END),
     mz_is_landuse = p.mz_is_landuse,
     mz_is_water = p.mz_is_water,
+
+    -- tolerances are calculated as follows
+    -- [6378137 * 2 * pi / (2 ** (zoom + 8)) for zoom in range(22)]
+    -- zoom level  0: 156543.033928
+    -- zoom level  1: 78271.516964
+    -- zoom level  2: 39135.758482
+    -- zoom level  3: 19567.879241
+    -- zoom level  4: 9783.9396205
+    -- zoom level  5: 4891.96981025
+    -- zoom level  6: 2445.98490513
+    -- zoom level  7: 1222.99245256
+    -- zoom level  8: 611.496226281
+    -- zoom level  9: 305.748113141
+    -- zoom level 10: 152.87405657
+    -- zoom level 11: 76.4370282852
+    -- zoom level 12: 38.2185141426
+    -- zoom level 13: 19.1092570713
+    -- zoom level 14: 9.55462853565
+    -- zoom level 15: 4.77731426782
+    -- zoom level 16: 2.38865713391
+    -- zoom level 17: 1.19432856696
+    -- zoom level 18: 0.597164283478
+    -- zoom level 19: 0.298582141739
+    -- zoom level 20: 0.149291070869
+    -- zoom level 21: 0.0746455354347
     mz_way14 = (CASE WHEN t.way IS NOT NULL AND t.building IS NOT NULL THEN ST_SimplifyPreserveTopology(t.way, 9.55) ELSE NULL END),
     mz_way12 = (CASE WHEN t.way IS NOT NULL AND p.mz_is_water = TRUE THEN ST_SimplifyPreserveTopology(t.way, 38.22) ELSE NULL END),
     mz_way11 = (CASE WHEN t.way IS NOT NULL AND p.mz_is_landuse = TRUE THEN ST_SimplifyPreserveTopology(t.way, 76.44) ELSE NULL END)
