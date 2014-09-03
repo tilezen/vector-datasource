@@ -1,17 +1,17 @@
 SELECT
     name,
+    mz_id AS __id__,
 
     (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind,
 
-    -- strip commas from heights (TODO: may need to strip other characters and/or do unit conversions)
-    TO_NUMBER(REPLACE(height, ',', '.'), '999999D99S')::float AS height,
-    TO_NUMBER(REPLACE(min_height, ',', '.'), '999999D99S')::float AS min_height,
+    mz_height AS height,
+    mz_min_height AS min_height,
 
-    way AS __geometry__
+    mz_way14 AS __geometry__
 
 FROM
     planet_osm_polygon
 
 WHERE
     building IS NOT NULL
-    AND way_area > 1600 -- 4px
+    AND way_area::bigint > 1600 -- 4px

@@ -4,9 +4,8 @@ SELECT
     (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind,
     building,
 
-    -- strip commas from heights (TODO: may need to strip other characters and/or do unit conversions)
-    -- multiply by 100 and force int becuase that's what OpenScienceMap expects
-    (TO_NUMBER(REPLACE(height, ',', '.'), '999999D99S') * 100)::int AS height,
+    (mz_height * 100)::int AS height,
+    (mz_min_height * 100)::int AS min_height,
 
     way AS __geometry__
 
@@ -15,4 +14,4 @@ FROM
 
 WHERE
     building IS NOT NULL
-    AND way_area > 25 -- 4px
+    AND way_area::bigint > 25 -- 4px

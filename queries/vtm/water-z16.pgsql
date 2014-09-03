@@ -6,7 +6,7 @@ FROM
     -- Ocean
     --
     SELECT '' AS name,
-           ST_Area(the_geom)::bigint AS area,
+           way_area::bigint AS area,
            'ocean' AS kind,
            'ocean' AS waterway,
            'water' AS natural,
@@ -32,20 +32,12 @@ FROM
            "landuse",
            'openstreetmap.org' AS source,
            way AS __geometry__,
-        
-           --
-           -- Negative osm_id is synthetic, with possibly multiple geometry rows.
-           --
-           (CASE WHEN osm_id < 0 THEN Substr(MD5(ST_AsBinary(way)), 1, 10)
-                 ELSE osm_id::varchar END) AS __id__
-    
+           mz_id AS __id__
+
     FROM planet_osm_polygon
-    
-    WHERE (
-         "waterway" IN ('riverbank')
-       OR "natural" IN ('water')
-       OR "landuse" IN ('basin', 'reservoir')
-       )
-       AND way && !bbox!
+
+    WHERE
+        mz_is_water = TRUE
+        AND way && !bbox!
 
 ) AS water_areas
