@@ -69,4 +69,15 @@ PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_mz_is_landuse_
 PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_mz_is_water_index', 'planet_osm_polygon', 'mz_is_water', 'mz_is_water = TRUE');
 PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_mz_is_building_or_part_index', 'planet_osm_polygon', 'mz_is_building_or_part', 'mz_is_building_or_part = TRUE');
 
+-- GEOMETRY INDEXES
+IF NOT mz_does_index_exist('planet_osm_polygon_way11_landuse') THEN
+    CREATE INDEX planet_osm_polygon_way11_landuse ON planet_osm_polygon USING gist(mz_way11) WHERE mz_is_landuse = TRUE;
+END IF;
+IF NOT mz_does_index_exist('planet_osm_polygon_way12_water') THEN
+    CREATE INDEX planet_osm_polygon_way12_water ON planet_osm_polygon USING gist(mz_way12) WHERE mz_is_water = TRUE;
+END IF;
+IF NOT mz_does_index_exist('planet_osm_polygon_way14_building') THEN
+    CREATE INDEX planet_osm_polygon_way14_building ON planet_osm_polygon USING gist(mz_way14) WHERE building IS NOT NULL;
+END IF;
+
 END $$;
