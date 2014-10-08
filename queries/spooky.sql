@@ -23,4 +23,8 @@ AND (
 	)
 	OR tourism = 'museum'
 	OR railway = 'abandoned'
+	OR name IN (
+		'Museo de las Momias de Guanajuato',
+		'Weston State Hospital'
+	)
 )
