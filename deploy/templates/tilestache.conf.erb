@@ -31,6 +31,25 @@
         }
       }
     },
+    "haunted": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:MultiProvider",
+        "kwargs": {
+          "names": [
+            "water",
+            "earth",
+            "spooky",
+            "landuse",
+            "roads",
+            "buildings",
+            "pois"
+          ]
+        }
+      }
+    },
     "roads": {
       "allowed origin": "*",
       "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
@@ -217,6 +236,43 @@
           "geometry_types": [
             "Polygon",
             "MultiPolygon",
+            "Point",
+            "MultiPoint"
+          ]
+        }
+      }
+    },
+    "spooky": {
+      "allowed origin": "*",
+      "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+      "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+          "clip": true,
+          "dbinfo": {
+            "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+            "port": 5432,
+            "user": "gisuser",
+            "database": "gis",
+            "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+          },
+          "queries": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/spooky.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/spooky.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/spooky.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/spooky.pgsql",
+            "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/spooky.pgsql"
+          ],
+          "geometry_types": [
             "Point",
             "MultiPoint"
           ]
