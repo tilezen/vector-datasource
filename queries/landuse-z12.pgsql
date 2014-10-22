@@ -10,3 +10,7 @@ FROM planet_osm_polygon
 WHERE
     mz_is_landuse = TRUE
     AND way_area::bigint > 6400 -- 4px
+
+ORDER BY
+    area DESC,
+    __id__ ASC

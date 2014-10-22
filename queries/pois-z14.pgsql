@@ -7,3 +7,5 @@ FROM planet_osm_point
 
 WHERE
     mz_poi_level <= 14
+
+ORDER BY __id__ ASC

@@ -9,3 +9,5 @@ FROM planet_osm_point
 
 WHERE
     mz_poi_level <= 15
+
+ORDER BY __id__ ASC

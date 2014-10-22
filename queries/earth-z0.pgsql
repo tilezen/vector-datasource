@@ -4,3 +4,5 @@ SELECT
   gid::varchar AS __id__
 FROM
   ne_110m_land
+ORDER BY
+  __id__ ASC

@@ -15,3 +15,7 @@ FROM
 WHERE
     mz_is_building_or_part = TRUE
     AND way_area::bigint > 25 -- 4px
+
+ORDER BY
+    way_area DESC,
+    __id__ ASC

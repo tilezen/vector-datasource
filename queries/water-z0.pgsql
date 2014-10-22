@@ -33,3 +33,7 @@ FROM
     WHERE the_geom && !bbox!
 
 ) AS water_areas
+
+ORDER BY
+    area DESC,
+    __id__ ASC
