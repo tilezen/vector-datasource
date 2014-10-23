@@ -4,3 +4,5 @@ SELECT
   gid::varchar AS __id__
 FROM
   land_polygons
+ORDER BY
+  __id__ ASC

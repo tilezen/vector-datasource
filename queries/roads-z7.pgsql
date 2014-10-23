@@ -15,3 +15,5 @@ FROM planet_osm_line
 
 WHERE
     mz_road_level <= 7
+
+ORDER BY sort_key ASC

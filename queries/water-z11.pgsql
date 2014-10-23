@@ -36,3 +36,7 @@ FROM
         AND mz_way12 && !bbox!
 
 ) AS water_areas
+
+ORDER BY
+    area DESC,
+    __id__ ASC

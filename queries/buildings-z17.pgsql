@@ -14,3 +14,7 @@ FROM
 
 WHERE
     mz_is_building_or_part = TRUE
+
+ORDER BY
+    way_area DESC,
+    __id__ ASC

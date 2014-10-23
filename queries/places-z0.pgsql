@@ -14,4 +14,4 @@ AND place IN (
   'country'
 )
 
-AND way && !bbox!
+ORDER BY __id__ ASC

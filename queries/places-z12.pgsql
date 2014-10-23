@@ -17,3 +17,5 @@ AND place IN (
 	'locality',
 	'lake'
 )
+
+ORDER BY __id__ ASC

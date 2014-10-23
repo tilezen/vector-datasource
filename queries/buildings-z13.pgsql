@@ -15,3 +15,7 @@ FROM
 WHERE
     building IS NOT NULL
     AND way_area::bigint > 1600 -- 4px
+
+ORDER BY
+    way_area DESC,
+    __id__ ASC

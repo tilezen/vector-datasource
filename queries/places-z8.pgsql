@@ -47,3 +47,5 @@ FROM
     AND way && !bbox!
 
 ) AS places
+
+ORDER BY __id__ ASC

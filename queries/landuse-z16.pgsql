@@ -9,3 +9,7 @@ FROM planet_osm_polygon
 
 WHERE
     mz_is_landuse = TRUE
+
+ORDER BY
+    area DESC,
+    __id__ ASC

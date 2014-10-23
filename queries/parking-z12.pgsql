@@ -8,3 +8,5 @@ FROM planet_osm_point
 WHERE (
       "amenity" IN ('parking')
 )
+
+ORDER BY __id__ ASC
