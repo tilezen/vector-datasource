@@ -12,7 +12,7 @@ FROM
            the_geom AS __geometry__,
            gid::varchar AS __id__
 
-    FROM ne_10m_ocean
+    FROM ne_50m_ocean
 
     WHERE the_geom && !bbox!
 
@@ -28,7 +28,7 @@ FROM
            the_geom AS __geometry__,
            gid::varchar AS __id__
 
-    FROM ne_10m_lakes
+    FROM ne_50m_lakes
 
     WHERE the_geom && !bbox!
 
@@ -44,7 +44,7 @@ FROM
            the_geom AS __geometry__,
            gid::varchar AS __id__
 
-    FROM ne_10m_playas
+    FROM ne_50m_playas
 
     WHERE the_geom && !bbox!
 

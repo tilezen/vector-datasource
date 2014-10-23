@@ -15,8 +15,9 @@ PERFORM mz_add_area_column('ne_10m_urban_areas', 'way_area', 'the_geom');
 PERFORM mz_add_area_column('ne_50m_urban_areas', 'way_area', 'the_geom');
 PERFORM mz_add_area_column('ne_10m_parks_and_protected_lands', 'way_area', 'the_geom');
 
--- water_polygons also has a simplified geometry
+-- simplified geometries
 PERFORM mz_add_simplified_geometry_column('water_polygons', 'mz_the_geom12', 'the_geom', 'Geometry', 38.22);
+PERFORM mz_add_simplified_geometry_column('land_polygons', 'mz_the_geom12', 'the_geom', 'Geometry', 38.22);
 
 -- way_area indexes
 PERFORM mz_create_index_if_not_exists('ne_110m_ocean_wayarea_index', 'ne_110m_ocean', 'way_area');

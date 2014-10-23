@@ -4,5 +4,3 @@ SELECT
   gid::varchar AS __id__
 FROM
   ne_110m_land
-WHERE
-  the_geom && !bbox!
