@@ -2,7 +2,7 @@ SELECT
     name,
     mz_id AS __id__,
 
-    (CASE WHEN building != 'yes' THEN building ELSE NULL END) AS kind,
+    COALESCE((CASE WHEN building != 'yes' THEN building ELSE NULL END), amenity, shop) AS kind,
 
     mz_height AS height,
     mz_min_height AS min_height,
