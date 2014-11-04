@@ -4,8 +4,8 @@ SELECT
 
     COALESCE((CASE WHEN COALESCE("building:part", building) != 'yes' THEN COALESCE("building:part", building) ELSE NULL END), amenity, shop, tourism) AS kind,
 
-    mz_height::float AS height,
-    mz_min_height::float AS min_height,
+    mz_height AS height,
+    mz_min_height AS min_height,
 
     way AS __geometry__
 
