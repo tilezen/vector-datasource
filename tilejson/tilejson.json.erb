@@ -1,0 +1,108 @@
+{
+    "bounds" : [
+        -180.000000,
+        -85.000000,
+        180.000000,
+        85.000000
+    ],
+    "center" : [
+        -73.97210597991945,
+        40.764372592558985,
+        15
+    ],
+    "description" : "mapzen",
+    "format" : "<%= @params[:format] %>",
+    "maxzoom" : 20.000000,
+    "minzoom" : 0.000000,
+    "name" : "<%= @params[:name] %>",
+    "private" : true,
+    "scheme" : "xyz",
+    "tilejson" : "2.0.0",
+    "tiles" : [
+        "http://<%= node[:mapzen_tilestache][:tilejson][:host] %>/osm/all/{z}/{x}/{y}.<%= @params[:extension] %>"
+    ],
+    "type" : "overlay",
+    "vector_layers" : [
+        {
+            "id" : "water",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String",
+                "area" : "Number"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "earth",
+            "fields" : {
+                "land" : "String"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "landuse",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String",
+                "area" : "Number"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "roads",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String",
+                "highway" : "String",
+                "railway" : "String",
+                "is_bridge" : "String",
+                "is_tunnel" : "String",
+                "is_link" : "String",
+                "sort_key" : "Number"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "buildings",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String",
+                "height" : "Number",
+                "minheight" : "Number"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "pois",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "places",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String",
+                "admin_level" : "Number"
+            },
+            "maxzoom" : 20.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        }
+    ],
+    "version" : "1"
+}
