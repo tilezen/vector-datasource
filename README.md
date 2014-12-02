@@ -35,7 +35,7 @@ sudo apt-get install postgresql postgresql-contrib postgis postgresql-9.3-postgi
 
 You can find a more detailed description [here](http://wiki.openstreetmap.org/wiki/PostGIS/Installation#Ubuntu_14.04_LTS).
 
-## Create database and extansions
+#### Create database and extansions
 
 ```shell
 # switch to user postgres
@@ -58,13 +58,13 @@ psql -d gis
 exit
 ```
 
-## Install osm2pgsql
+#### Install osm2pgsql
 
 ```shell
 sudo apt-get install osm2pgsql
 ```
 
-## Download data
+#### Download data
 
 Here we use data from [geofabrik](http://download.geofabrik.de/), but you can use other *.pbf files.
 
@@ -75,7 +75,7 @@ cd /path/to/your/osm/data
 wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
 ```
 
-## Add data to the database
+#### Add data to the database
 Start osm2pgsql in your data folder. Before you start the osm2pgsql script you might need to check your postgresql user rights (pg_hba.conf) 
 ```shell
 osm2pgsql --create --cache-strategy sparse -C 750 -U postgres -S osm2pgsql.style.txt -d gis -k austria-latest.osm.pbf 
@@ -83,15 +83,15 @@ osm2pgsql --create --cache-strategy sparse -C 750 -U postgres -S osm2pgsql.style
 
 
 
-# 2. PREPARE DATA
+### 2. PREPARE DATA
 
-## **Download** mapzen/vector-datasource:
+#### **Download** mapzen/vector-datasource:
 
 ```shell
 git clone https://github.com/mapzen/vector-datasource.git
 ```
 
-## **Prepare Database** 
+#### **Prepare Database** 
 
 Download the file at [https://gist.github.com/rmarianski/491e50f3dd7159ebdf23](https://gist.githubusercontent.com/rmarianski/491e50f3dd7159ebdf23/raw/c40439e9f5761d4f5ad0846a334a49ff1d6024a2/gistfile1.txt) and drop it in the *../vector-datasource/data/* folder as *gist.sh*, or just type...
 
@@ -116,9 +116,9 @@ chmod +x gist.sh
 ./gist.sh
 ```
 
-# 3. CREATE VECTOR TILES
+### 3. CREATE VECTOR TILES
 
-## Download TileStache
+#### Download TileStache
 
 ```shell
 git clone https://github.com/mapzen/TileStache.git
@@ -130,7 +130,7 @@ git checkout integration-1
 ```
 You can find TileStache at [https://github.com/mapzen/TileStache/](https://github.com/mapzen/TileStache/)
 
-## Install dependencies
+#### Install dependencies
 
 Follow the instructions at [https://github.com/TileStache/TileStache](https://github.com/TileStache/TileStache)   
 or do
@@ -158,15 +158,15 @@ sudo pip install protobuf
 ```
 
 
-## Install TileStache
+#### Install TileStache
 ```shell
 # change folder
 cd TileStache/
 # install TileStache
 sudo python setup.py install
-# start server
-./scripts/tilestache-server.py
+# start server with mapzen .cfg file
+./scripts/tilestache-server.py -c path/to/mapzen-vector-datasource/tilestache.cfg
 
-# browser
-http://localhost:8080/osm/preview.html
+# tes your configurations
+http://localhost:8080/osm/buildings/16/19293/24641.json
 ```
