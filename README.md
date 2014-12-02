@@ -18,8 +18,10 @@ Requirements:
 
 ------------
 
-#TileStache for vector tiles
+#Installation Guide
 (tested under Ubuntu 14.04)
+
+The installation is performed in three steps.
 
 ### 1. Loading data (Make ready for using vector tiles)
 
