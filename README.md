@@ -23,6 +23,8 @@ Requirements:
 
 The installation is performed in three steps.
 
+![Imgur](http://i.imgur.com/mNADpl1.png)
+
 ### 1. Loading data (Make ready for using vector tiles)
 
 #### Install postgres
