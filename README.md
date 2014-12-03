@@ -35,7 +35,7 @@ sudo apt-get install postgresql postgresql-contrib postgis postgresql-9.3-postgi
 
 You can find a more detailed description [here](http://wiki.openstreetmap.org/wiki/PostGIS/Installation#Ubuntu_14.04_LTS).
 
-#### Create database and extansions
+#### Create database and extensions
 
 ```shell
 # switch to user postgres
@@ -49,7 +49,7 @@ psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
 
 # check the results
 psql -d gis
-\conninfo 
+\conninfo
 
 # logout from db
 \q
@@ -91,7 +91,7 @@ osm2pgsql --create --cache-strategy sparse -C 750 -U postgres -S osm2pgsql.style
 git clone https://github.com/mapzen/vector-datasource.git
 ```
 
-#### **Prepare Database** 
+#### **Prepare Database**
 
 Download the file at [https://gist.github.com/rmarianski/491e50f3dd7159ebdf23](https://gist.githubusercontent.com/rmarianski/491e50f3dd7159ebdf23/raw/c40439e9f5761d4f5ad0846a334a49ff1d6024a2/gistfile1.txt) and drop it in the *../vector-datasource/data/* folder as *gist.sh*, or just type...
 
@@ -132,7 +132,7 @@ You can find TileStache at [https://github.com/mapzen/TileStache/](https://githu
 
 #### Install dependencies
 
-Follow the instructions at [https://github.com/TileStache/TileStache](https://github.com/TileStache/TileStache)   
+Follow the instructions at [https://github.com/TileStache/TileStache](https://github.com/TileStache/TileStache)
 or do
 ```shell
 # install pip
