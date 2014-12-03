@@ -1,29 +1,15 @@
+<% memcache_vals = [] -%>
+<% node[:opsworks][:layers][:memcached][:instances].map do |name, config| -%>
+  <% memcache_vals << name + ':11211' -%>
+<% end -%>
 {
   "cache": {
-    <%- if node[:mapzen_tilestache][:cache][:type] == 'memcache' -%>
     "name": "Memcache",
     "servers": [
-      <%= node[:opsworks][:layers][:memcached][:instances]
-            .map { |name, config| '"' + name + ':11211' + '"' }
-            .join(', ') %>
+      "<%= memcache_vals.join('\", \"').gsub(%r{\\}, '') %>"
     ],
     "revision": 0,
     "key prefix": "tilestache-<%= node[:mapzen][:environment] %>"
-    <%- elsif node[:mapzen_tilestache][:cache][:type] == 'tileglue' -%>
-    "class": "tileglue.make_tilestache_s3_cache",
-    "kwargs": {
-      "bucket": "<%= node[:mapzen_tilestache][:cache][:tileglue][:s3][:bucket] %>",
-      "access": "<%= node[:mapzen_tilestache][:cache][:tileglue][:s3][:access] %>",
-      "secret": "<%= node[:mapzen_tilestache][:cache][:tileglue][:s3][:secret] %>",
-      "reduced_redundancy": <%= node[:mapzen_tilestache][:cache][:tileglue][:s3][:reduced_redundancy] %>,
-      "path": "<%= node[:mapzen_tilestache][:cache][:tileglue][:s3][:path] %>",
-      "redis_host": "<%= node[:mapzen_tilestache][:cache][:tileglue][:redis][:host] %>",
-      "redis_cache_set_key": "<%= node[:mapzen_tilestache][:cache][:redis][:cache_set_key] %>"
-    }
-    <%- else -%>
-    "name": "Test",
-    "verbose": false
-    <%- end -%>
   },
   "layers": {
     "all": {
