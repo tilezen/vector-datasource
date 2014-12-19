@@ -167,6 +167,6 @@ sudo python setup.py install
 # start server with mapzen .cfg file
 ./scripts/tilestache-server.py -c path/to/mapzen-vector-datasource/tilestache.cfg
 
-# tes your configurations
+# test your configurations
 http://localhost:8080/osm/buildings/16/19293/24641.json
 ```
