@@ -15,3 +15,5 @@ AND place IN (
 	'county',
 	'province'
 )
+
+ORDER BY __id__ ASC
