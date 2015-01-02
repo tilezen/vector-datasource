@@ -5,18 +5,18 @@ FROM
     --
     -- Place Border
     --
-    SELECT  
+    SELECT
     name,
     boundary AS kind,
-    admin_level, 
+    admin_level,
     way AS __geometry__,
     mz_id AS __id__
-  
-    FROM planet_osm_polygon 
-    
+
+    FROM planet_osm_polygon
+
     WHERE way && !bbox!
 
-    AND boundary='administrative' 
+    AND boundary='administrative'
 
     AND admin_level = '4' -- state
 
@@ -25,19 +25,19 @@ FROM
     --
     UNION
 
-    SELECT 
-      name, 
+    SELECT
+      name,
       place AS kind,
       NULL AS admin_level,
       way AS __geometry__,
       mz_id AS __id__
 
-    FROM planet_osm_point 
+    FROM planet_osm_point
 
-    WHERE name IS NOT NULL 
+    WHERE name IS NOT NULL
 
     AND place IN (
-      'ocean', 
+      'ocean',
       'country',
       'state',
       'sea'

@@ -11,11 +11,11 @@ FROM
            'naturalearthdata.com' AS source,
            the_geom AS __geometry__,
            gid::varchar AS __id__
-    
+
     FROM ne_10m_urban_areas
-    
+
     WHERE the_geom && !bbox!
-    
+
     --
     -- Parks and Protected Lands
     --
@@ -27,9 +27,9 @@ FROM
            'naturalearthdata.com' AS source,
            the_geom AS __geometry__,
            gid::varchar AS __id__
-    
+
     FROM ne_10m_parks_and_protected_lands
-    
+
     WHERE the_geom && !bbox!
 
 ) AS land_usages
