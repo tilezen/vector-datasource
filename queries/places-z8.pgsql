@@ -28,7 +28,7 @@ FROM
     SELECT
       name,
       place AS kind,
-      '' AS admin_level,
+      NULL AS admin_level,
       way AS __geometry__,
       mz_id AS __id__
 
@@ -48,4 +48,8 @@ FROM
 
 ) AS places
 
-ORDER BY __id__ ASC
+ORDER BY
+    CASE WHEN admin_level IS NULL
+         THEN 1000
+         ELSE coalesce(mz_safe_convert_to_float(admin_level), 1000) END ASC,
+    __id__ ASC
