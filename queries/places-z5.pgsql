@@ -18,7 +18,7 @@ FROM
 
     AND boundary='administrative'
 
-    AND admin_level = '4' -- state
+    AND admin_level IN ('2', '3', '4') -- national, disputed, state
 
     --
     -- Place Name
@@ -39,8 +39,8 @@ FROM
     AND place IN (
       'ocean',
       'country',
-      'state',
-      'sea'
+      'sea',
+      'state'
     )
 
     AND way && !bbox!
