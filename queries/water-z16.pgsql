@@ -34,6 +34,24 @@ FROM
         mz_is_water = TRUE
         AND way && !bbox!
 
+    --
+    -- Water line geometries
+    --
+    UNION
+
+    SELECT name,
+           NULL AS area,
+           COALESCE("waterway", "natural", "landuse") AS kind,
+           'openstreetmap.org' AS source,
+           way AS __geometry__,
+           mz_id AS __id__
+
+    FROM planet_osm_line
+
+    WHERE
+        waterway IN ('canal', 'dam', 'ditch', 'drain', 'river', 'stream')
+        AND way && !bbox!
+
 ) AS water_areas
 
 ORDER BY
