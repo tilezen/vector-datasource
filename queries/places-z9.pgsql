@@ -13,7 +13,8 @@ AND place IN (
 	'city',
 	'district',
 	'county',
-	'province'
+	'province',
+    'island'
 )
 
 ORDER BY __id__ ASC

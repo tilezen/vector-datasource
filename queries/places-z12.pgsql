@@ -11,11 +11,16 @@ WHERE name IS NOT NULL
 AND place IN (
 	'city',
 	'county',
-	'province',
+    'province',
+	'island',
 	'town',
-	'neighbourhood',
+    'neighbourhood',
+	'suburb',
 	'locality',
-	'lake'
+	'lake',
+    'village',
+    'hamlet',
+    'isolated_dwelling'
 )
 
 ORDER BY __id__ ASC
