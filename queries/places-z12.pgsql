@@ -9,15 +9,15 @@ FROM planet_osm_point
 WHERE name IS NOT NULL
 
 AND place IN (
-	'city',
-	'county',
+    'city',
+    'county',
     'province',
-	'island',
-	'town',
+    'island',
+    'town',
     'neighbourhood',
-	'suburb',
-	'locality',
-	'lake',
+    'suburb',
+    'locality',
+    'lake',
     'village',
     'hamlet',
     'isolated_dwelling'

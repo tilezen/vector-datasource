@@ -1,9 +1,10 @@
-SELECT name,
-       way_area::bigint AS area,
-       COALESCE("landuse", "leisure", "natural", "highway", "amenity") AS kind,
-       'openstreetmap.org' AS source,
-       mz_way11 AS __geometry__,
-       mz_id AS __id__
+SELECT
+    name,
+    way_area::bigint AS area,
+    COALESCE("landuse", "leisure", "natural", "highway", "amenity") AS kind,
+    'openstreetmap.org' AS source,
+    mz_way11 AS __geometry__,
+    mz_id AS __id__
 
 FROM planet_osm_polygon
 

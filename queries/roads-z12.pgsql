@@ -3,6 +3,8 @@ SELECT
     highway,
     name,
     railway,
+    mz_id AS __id__,
+    mz_road_sort_key AS sort_key,
 
     (CASE WHEN highway IN ('motorway', 'motorway_link') THEN 'highway'
           WHEN highway IN ('trunk', 'trunk_link', 'secondary', 'primary') THEN 'major_road'
@@ -13,11 +15,7 @@ SELECT
     (CASE WHEN tunnel IN ('yes', 'true') THEN 'yes'
           ELSE 'no' END) AS is_tunnel,
     (CASE WHEN bridge IN ('yes', 'true') THEN 'yes'
-          ELSE 'no' END) AS is_bridge,
-
-    mz_id AS __id__,
-
-    mz_road_sort_key AS sort_key
+          ELSE 'no' END) AS is_bridge
 
 FROM planet_osm_line
 

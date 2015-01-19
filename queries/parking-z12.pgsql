@@ -1,12 +1,12 @@
-SELECT name,
-       amenity AS kind,
-       way AS __geometry__,
-       mz_id AS __id__
+SELECT
+    name,
+    amenity AS kind,
+    way AS __geometry__,
+    mz_id AS __id__
 
 FROM planet_osm_point
 
-WHERE (
-      "amenity" IN ('parking')
-)
+WHERE
+    amenity='parking'
 
 ORDER BY __id__ ASC

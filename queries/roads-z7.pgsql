@@ -3,13 +3,11 @@ SELECT
     highway,
     name,
     railway,
+    mz_id AS __id__,
+    mz_road_sort_key AS sort_key,
 
     (CASE WHEN highway IN ('motorway') THEN 'highway'
-    END) AS kind,
-
-    mz_id AS __id__,
-
-    mz_road_sort_key AS sort_key
+    END) AS kind
 
 FROM planet_osm_line
 
