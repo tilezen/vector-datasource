@@ -35,6 +35,24 @@ FROM
         AND way_area::bigint > 102400 -- 4px
         AND mz_way12 && !bbox!
 
+    --
+    -- Water line geometries
+    --
+    UNION
+
+    SELECT name,
+           NULL AS area,
+           waterway AS kind,
+           'openstreetmap.org' AS source,
+           way AS __geometry__,
+           mz_id AS __id__
+
+    FROM planet_osm_line
+
+    WHERE
+        waterway IN ('canal', 'river')
+        AND way && !bbox!
+
 ) AS water_areas
 
 ORDER BY
