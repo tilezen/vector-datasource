@@ -41,7 +41,7 @@ FROM
 
     SELECT name,
            NULL AS area,
-           COALESCE("waterway", "natural", "landuse") AS kind,
+           waterway AS kind,
            'openstreetmap.org' AS source,
            way AS __geometry__,
            mz_id AS __id__
