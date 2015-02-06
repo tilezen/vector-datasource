@@ -53,7 +53,7 @@ FROM
     FROM planet_osm_line
 
     WHERE
-        waterway IN ('canal', 'river', 'stream')
+        waterway IN ('canal', 'river', 'stream', 'dock')
         AND way && !bbox!
 
 ) AS water_areas
