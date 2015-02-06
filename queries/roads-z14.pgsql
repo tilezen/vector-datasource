@@ -9,7 +9,7 @@ SELECT
     (CASE WHEN highway IN ('motorway', 'motorway_link') THEN 'highway'
           WHEN highway IN ('trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'tertiary', 'tertiary_link') THEN 'major_road'
           WHEN highway IN ('residential', 'unclassified', 'road', 'minor') THEN 'minor_road'
-          WHEN railway IN ('rail') THEN 'rail'
+          WHEN railway IN ('rail', 'subway') THEN 'rail'
           ELSE 'unknown' END) AS kind,
 
     (CASE WHEN highway LIKE '%_link' THEN 'yes'

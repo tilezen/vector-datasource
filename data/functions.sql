@@ -250,7 +250,7 @@ BEGIN
              WHEN highway_val IN ('motorway_link', 'trunk_link', 'residential', 'unclassified', 'road') THEN 12
              WHEN highway_val IN ('primary_link', 'secondary_link') THEN 13
              WHEN (highway_val IN ('tertiary_link', 'minor')
-                OR railway_val IN ('rail')) THEN 14
+                OR railway_val IN ('rail', 'subway')) THEN 14
              WHEN (highway_val IN ('service', 'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
                 OR railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail')) THEN 15
              ELSE NULL END
@@ -293,6 +293,7 @@ BEGIN
             WHEN highway_val LIKE '%_link' THEN -5
             WHEN highway_val IN ('residential', 'unclassified', 'road') THEN -6
             WHEN highway_val IN ('unclassified', 'service', 'minor') THEN -7
+            WHEN railway_val IN ('subway') THEN -8
             ELSE -9 END)
     );
 END;
