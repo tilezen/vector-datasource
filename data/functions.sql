@@ -162,7 +162,7 @@ BEGIN
                         'recreation_ground', 'allotments', 'quarry')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
-     OR natural_val IN ('wood', 'land', 'scrub')
+     OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier')
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
                         'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
