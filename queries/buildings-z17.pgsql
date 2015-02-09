@@ -5,8 +5,14 @@ SELECT
 
     COALESCE((CASE WHEN COALESCE("building:part", building) != 'yes' THEN COALESCE("building:part", building) ELSE NULL END), amenity, shop, tourism) AS kind,
 
-    COALESCE(mz_height, GREATEST(mz_safe_convert_to_float("building:levels"), 1) * 3 + 2) AS height,
-    COALESCE(mz_min_height, GREATEST(mz_safe_convert_to_float("building:min_levels"), 0) * 3) AS min_height,
+    COALESCE(mz_height,
+             (CASE WHEN mz_safe_convert_to_float("building:levels") IS NULL
+              THEN NULL
+              ELSE GREATEST(mz_safe_convert_to_float("building:levels"), 1) * 3 + 2 END)) AS height,
+    COALESCE(mz_min_height,
+             (CASE WHEN mz_safe_convert_to_float("building:min_levels") IS NULL
+              THEN NULL
+              ELSE GREATEST(mz_safe_convert_to_float("building:min_levels"), 0) * 3 END)) AS min_height,
 
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
