@@ -19,7 +19,7 @@ UPDATE planet_osm_line AS line SET
     END)
 
     FROM (
-        SELECT osm_id, way, layer, bridge, tunnel, highway, railway, mz_calculate_road_level(highway, railway) AS mz_road_level
+        SELECT osm_id, way, layer, bridge, tunnel, highway, railway, aeroway, mz_calculate_road_level(highway, railway, aeroway) AS mz_road_level
         FROM planet_osm_line
     ) road
 

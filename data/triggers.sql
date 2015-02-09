@@ -73,14 +73,15 @@ $$ LANGUAGE plpgsql VOLATILE;
 CREATE OR REPLACE FUNCTION mz_trigger_function_road()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.mz_road_level := mz_calculate_road_level(NEW.highway, NEW.railway);
+    NEW.mz_road_level := mz_calculate_road_level(NEW.highway, NEW.railway, NEW.aeroway);
     IF NEW.mz_road_level IS NOT NULL THEN
         NEW.mz_road_sort_key := mz_calculate_road_sort_key(
             NEW.layer,
             NEW.bridge,
             NEW.tunnel,
             NEW.highway,
-            NEW.railway
+            NEW.railway,
+            NEW.aeroway
         );
     END IF;
     RETURN NEW;

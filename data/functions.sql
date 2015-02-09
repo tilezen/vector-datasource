@@ -247,7 +247,8 @@ BEGIN
     RETURN (
         CASE WHEN highway_val IN ('motorway') THEN 7
              WHEN highway_val IN ('trunk', 'primary', 'secondary') THEN 10
-             WHEN highway_val IN ('tertiary') THEN 11
+             WHEN (highway_val IN ('tertiary')
+                OR aeroway_val IN ('runway', 'taxiway')) THEN 11
              WHEN highway_val IN ('motorway_link', 'trunk_link', 'residential', 'unclassified', 'road') THEN 12
              WHEN highway_val IN ('primary_link', 'secondary_link') THEN 13
              WHEN (highway_val IN ('tertiary_link', 'minor')
@@ -260,7 +261,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_road_sort_key(
-    layer_val text, bridge_val text, tunnel_val text, highway_val text, railway_val text)
+    layer_val text, bridge_val text, tunnel_val text, highway_val text, railway_val text, aeroway_val text)
 RETURNS FLOAT AS $$
 DECLARE v_layer_as_float FLOAT DEFAULT NULL;
 BEGIN
@@ -290,6 +291,7 @@ BEGIN
             WHEN highway_val IN ('trunk') THEN -1
             WHEN highway_val IN ('primary') THEN -2
             WHEN highway_val IN ('secondary') THEN -3
+            WHEN aeroway_val IN ('runway', 'taxiway') THEN -3
             WHEN highway_val IN ('tertiary') THEN -4
             WHEN highway_val LIKE '%_link' THEN -5
             WHEN highway_val IN ('residential', 'unclassified', 'road') THEN -6
