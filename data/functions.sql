@@ -216,7 +216,8 @@ BEGIN
                    OR natural_val IN ('tree')
                    OR shop_val IN ('department_store', 'supermarket')
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
-             WHEN (amenity_val IN (
+             WHEN (aeroway_val IN ('gate')
+                   OR amenity_val IN (
                  'atm', 'bank', 'bar', 'bicycle_rental',
                  'cafe', 'cinema', 'courthouse', 'drinking_water', 'embassy', 'emergency_phone',
                  'fast_food', 'fire_station', 'fuel', 'library', 'pharmacy',
