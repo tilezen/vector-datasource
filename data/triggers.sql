@@ -37,7 +37,7 @@ CREATE OR REPLACE FUNCTION mz_trigger_function_is_landuse()
 RETURNS TRIGGER AS $$
 BEGIN
     IF mz_calculate_is_landuse(
-        NEW."landuse", NEW."leisure", NEW."natural", NEW."highway", NEW."amenity") THEN
+        NEW."landuse", NEW."leisure", NEW."natural", NEW."highway", NEW."amenity", NEW."aeroway") THEN
         NEW.mz_is_landuse := TRUE;
     ELSE
         NEW.mz_is_landuse := NULL;
