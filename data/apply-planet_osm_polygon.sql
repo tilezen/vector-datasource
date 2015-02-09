@@ -54,7 +54,7 @@ UPDATE planet_osm_polygon AS t SET
 
     FROM (
         SELECT osm_id,
-               (CASE WHEN mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity") = TRUE THEN TRUE ELSE NULL END) AS mz_is_landuse,
+               (CASE WHEN mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway") = TRUE THEN TRUE ELSE NULL END) AS mz_is_landuse,
                (CASE WHEN mz_calculate_is_water("waterway", "natural", "landuse") = TRUE THEN TRUE ELSE NULL END) AS mz_is_water
             FROM planet_osm_polygon
     ) p
