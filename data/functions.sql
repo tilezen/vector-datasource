@@ -242,7 +242,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text)
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
