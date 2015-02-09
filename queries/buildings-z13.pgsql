@@ -1,5 +1,6 @@
 SELECT
     name,
+    way_area::bigint AS area,
     mz_id AS __id__,
 
     COALESCE((CASE WHEN building != 'yes' THEN building ELSE NULL END), amenity, shop, tourism) AS kind,
