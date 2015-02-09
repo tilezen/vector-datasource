@@ -8,6 +8,12 @@ SELECT
     COALESCE(mz_height, GREATEST(mz_safe_convert_to_float("building:levels"), 1) * 3 + 2) AS height,
     COALESCE(mz_min_height, GREATEST(mz_safe_convert_to_float("building:min_levels"), 0) * 3) AS min_height,
 
+    "roof:color" AS roof_color,
+    "roof:material" AS roof_material,
+    "roof:shape" AS roof_shape,
+    "roof:height" AS roof_height,
+    "roof:orientation" AS roof_orientantion,
+
     way AS __geometry__
 
 FROM
