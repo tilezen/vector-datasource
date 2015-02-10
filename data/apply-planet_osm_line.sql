@@ -15,11 +15,11 @@ UPDATE planet_osm_line AS line SET
     mz_road_level = road.mz_road_level,
     mz_road_sort_key = (CASE WHEN road.mz_road_level IS NULL
         THEN NULL
-        ELSE mz_calculate_road_sort_key(road.layer, road.bridge, road.tunnel, road.highway, road.railway)
+        ELSE mz_calculate_road_sort_key(road.layer, road.bridge, road.tunnel, road.highway, road.railway, road.aeroway)
     END)
 
     FROM (
-        SELECT osm_id, way, layer, bridge, tunnel, highway, railway, mz_calculate_road_level(highway, railway) AS mz_road_level
+        SELECT osm_id, way, layer, bridge, tunnel, highway, railway, aeroway, mz_calculate_road_level(highway, railway, aeroway) AS mz_road_level
         FROM planet_osm_line
     ) road
 

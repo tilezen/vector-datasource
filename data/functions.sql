@@ -152,7 +152,7 @@ $$ LANGUAGE plpgsql VOLATILE;
 -- functions to encapsulate logic for calculating new columns
 
 CREATE OR REPLACE FUNCTION mz_calculate_is_landuse(
-    landuse_val text, leisure_val text, natural_val text, highway_val text, amenity_val text)
+    landuse_val text, leisure_val text, natural_val text, highway_val text, amenity_val text, aeroway_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN
@@ -162,10 +162,11 @@ BEGIN
                         'recreation_ground', 'allotments', 'quarry')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
-     OR natural_val IN ('wood', 'land', 'scrub')
+     OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier')
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
-                        'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital');
+                        'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
+     OR aeroway_val IN ('runway', 'taxiway', 'apron');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -216,7 +217,8 @@ BEGIN
                    OR natural_val IN ('tree')
                    OR shop_val IN ('department_store', 'supermarket')
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
-             WHEN (amenity_val IN (
+             WHEN (aeroway_val IN ('gate')
+                   OR amenity_val IN (
                  'atm', 'bank', 'bar', 'bicycle_rental',
                  'cafe', 'cinema', 'courthouse', 'drinking_water', 'embassy', 'emergency_phone',
                  'fast_food', 'fire_station', 'fuel', 'library', 'pharmacy',
@@ -240,17 +242,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text)
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
         CASE WHEN highway_val IN ('motorway') THEN 7
              WHEN highway_val IN ('trunk', 'primary', 'secondary') THEN 10
-             WHEN highway_val IN ('tertiary') THEN 11
+             WHEN (highway_val IN ('tertiary')
+                OR aeroway_val IN ('runway', 'taxiway')) THEN 11
              WHEN highway_val IN ('motorway_link', 'trunk_link', 'residential', 'unclassified', 'road') THEN 12
              WHEN highway_val IN ('primary_link', 'secondary_link') THEN 13
              WHEN (highway_val IN ('tertiary_link', 'minor')
-                OR railway_val IN ('rail')) THEN 14
+                OR railway_val IN ('rail', 'subway')) THEN 14
              WHEN (highway_val IN ('service', 'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway')
                 OR railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail')) THEN 15
              ELSE NULL END
@@ -259,7 +262,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_road_sort_key(
-    layer_val text, bridge_val text, tunnel_val text, highway_val text, railway_val text)
+    layer_val text, bridge_val text, tunnel_val text, highway_val text, railway_val text, aeroway_val text)
 RETURNS FLOAT AS $$
 DECLARE v_layer_as_float FLOAT DEFAULT NULL;
 BEGIN
@@ -289,10 +292,12 @@ BEGIN
             WHEN highway_val IN ('trunk') THEN -1
             WHEN highway_val IN ('primary') THEN -2
             WHEN highway_val IN ('secondary') THEN -3
+            WHEN aeroway_val IN ('runway', 'taxiway') THEN -3
             WHEN highway_val IN ('tertiary') THEN -4
             WHEN highway_val LIKE '%_link' THEN -5
             WHEN highway_val IN ('residential', 'unclassified', 'road') THEN -6
             WHEN highway_val IN ('unclassified', 'service', 'minor') THEN -7
+            WHEN railway_val IN ('subway') THEN -8
             ELSE -9 END)
     );
 END;

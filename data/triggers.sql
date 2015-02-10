@@ -37,7 +37,7 @@ CREATE OR REPLACE FUNCTION mz_trigger_function_is_landuse()
 RETURNS TRIGGER AS $$
 BEGIN
     IF mz_calculate_is_landuse(
-        NEW."landuse", NEW."leisure", NEW."natural", NEW."highway", NEW."amenity") THEN
+        NEW."landuse", NEW."leisure", NEW."natural", NEW."highway", NEW."amenity", NEW."aeroway") THEN
         NEW.mz_is_landuse := TRUE;
     ELSE
         NEW.mz_is_landuse := NULL;
@@ -73,14 +73,15 @@ $$ LANGUAGE plpgsql VOLATILE;
 CREATE OR REPLACE FUNCTION mz_trigger_function_road()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.mz_road_level := mz_calculate_road_level(NEW.highway, NEW.railway);
+    NEW.mz_road_level := mz_calculate_road_level(NEW.highway, NEW.railway, NEW.aeroway);
     IF NEW.mz_road_level IS NOT NULL THEN
         NEW.mz_road_sort_key := mz_calculate_road_sort_key(
             NEW.layer,
             NEW.bridge,
             NEW.tunnel,
             NEW.highway,
-            NEW.railway
+            NEW.railway,
+            NEW.aeroway
         );
     END IF;
     RETURN NEW;
