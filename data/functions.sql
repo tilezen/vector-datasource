@@ -292,7 +292,8 @@ BEGIN
             WHEN highway_val IN ('trunk') THEN -1
             WHEN highway_val IN ('primary') THEN -2
             WHEN highway_val IN ('secondary') THEN -3
-            WHEN aeroway_val IN ('runway', 'taxiway') THEN -3
+            WHEN aeroway_val IN ('runway') THEN -3
+            WHEN aeroway_val IN ('taxiway') THEN -3.5
             WHEN highway_val IN ('tertiary') THEN -4
             WHEN highway_val LIKE '%_link' THEN -5
             WHEN highway_val IN ('residential', 'unclassified', 'road') THEN -6
