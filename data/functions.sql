@@ -309,7 +309,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_is_water(
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
-        waterway_val IN ('riverbank')
+        waterway_val IN ('riverbank', 'dock')
      OR natural_val IN ('water')
      OR landuse_val IN ('basin', 'reservoir')
     );
