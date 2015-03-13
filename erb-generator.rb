@@ -14,7 +14,7 @@ data["layers"].each do |key, val|
     val["provider"]["kwargs"]["dbinfo"]["port"] = 5432
     val["provider"]["kwargs"]["dbinfo"]["user"] = "gisuser"
     val["provider"]["kwargs"]["dbinfo"]["password"] = "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
-    val["provider"]["kwargs"]["dbinfo"]["database"] = "gis"
+    val["provider"]["kwargs"]["dbinfo"]["database"] = "tilestache-gis"
     val["provider"]["kwargs"]["queries"] = val["provider"]["kwargs"]["queries"].collect { |x| if x != nil && x.start_with?("queries/") then "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/"+x else x end }
   end
   data["layers"][key] = val.sort.to_h
