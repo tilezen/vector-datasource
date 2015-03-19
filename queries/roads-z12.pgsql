@@ -4,6 +4,7 @@ SELECT
     name,
     railway,
     aeroway,
+    osm_id,
     mz_id AS __id__,
     mz_road_sort_key AS sort_key,
 

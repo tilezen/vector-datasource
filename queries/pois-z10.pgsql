@@ -2,7 +2,8 @@ SELECT
     name,
     aeroway AS kind,
     way AS __geometry__,
-    mz_id AS __id__
+    mz_id AS __id__,
+    osm_id
 
 FROM planet_osm_point
 
