@@ -10,13 +10,11 @@ FROM
         way_area::bigint AS area,
         'ocean' AS kind,
         'openstreetmapdata.com' AS source,
-        mz_the_geom12 AS __geometry__,
+        the_geom AS __geometry__,
         gid::varchar AS __id__,
         NULL AS osm_id
 
     FROM water_polygons
-
-    WHERE mz_the_geom12 && !bbox!
 
     --
     -- Other water areas
@@ -28,16 +26,15 @@ FROM
         way_area::bigint AS area,
         COALESCE("waterway", "natural", "landuse") AS kind,
         'openstreetmap.org' AS source,
-        mz_way12 AS __geometry__,
-        mz_id AS __id__,
+        way AS __geometry__,
+        osm_id::text AS __id__,
         osm_id
 
     FROM planet_osm_polygon
 
     WHERE
-        mz_is_water = TRUE
+        mz_calculate_is_water("waterway", "natural", "landuse") = TRUE
         AND way_area::bigint > 102400 -- 4px
-        AND mz_way12 && !bbox!
 
     --
     -- Water line geometries
@@ -50,17 +47,12 @@ FROM
         waterway AS kind,
         'openstreetmap.org' AS source,
         way AS __geometry__,
-        mz_id AS __id__,
+        osm_id::text AS __id__,
         osm_id
 
     FROM planet_osm_line
 
     WHERE
         waterway IN ('canal', 'river')
-        AND way && !bbox!
 
 ) AS water_areas
-
-ORDER BY
-    area DESC,
-    __id__ ASC

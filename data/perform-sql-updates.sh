@@ -14,9 +14,4 @@ psql $@ -f apply-planet_osm_point.sql &
 wait
 echo "done."
 
-# triggers should get added last
-echo -e "\nCreating triggers... \c"
-psql $@ -f triggers.sql
-echo "done."
-
 echo "\nAll updates complete. Exiting."

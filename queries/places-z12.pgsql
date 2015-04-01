@@ -2,8 +2,9 @@ SELECT
     name,
     place AS kind,
     way AS __geometry__,
-    mz_id AS __id__,
-    osm_id
+    osm_id::text AS __id__,
+    osm_id,
+    admin_level
 
 FROM planet_osm_point
 
@@ -23,5 +24,3 @@ AND place IN (
     'hamlet',
     'isolated_dwelling'
 )
-
-ORDER BY __id__ ASC

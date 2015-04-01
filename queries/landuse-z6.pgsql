@@ -35,7 +35,3 @@ FROM
     WHERE the_geom && !bbox!
 
 ) AS land_usages
-
-ORDER BY
-    area DESC,
-    __id__ ASC

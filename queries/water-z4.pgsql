@@ -15,8 +15,6 @@ FROM
 
     FROM ne_50m_ocean
 
-    WHERE the_geom && !bbox!
-
     --
     -- Lakes
     --
@@ -31,8 +29,6 @@ FROM
         gid::varchar AS __id__
 
     FROM ne_50m_lakes
-
-    WHERE the_geom && !bbox!
 
     --
     -- Playas
@@ -49,10 +45,4 @@ FROM
 
     FROM ne_50m_playas
 
-    WHERE the_geom && !bbox!
-
 ) AS water_areas
-
-ORDER BY
-    area DESC,
-    __id__ ASC

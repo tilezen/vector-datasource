@@ -4,15 +4,11 @@ SELECT
     COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
     'openstreetmap.org' AS source,
     way AS __geometry__,
-    mz_id AS __id__,
+    osm_id::text AS __id__,
     osm_id
 
 FROM planet_osm_polygon
 
 WHERE
-    mz_is_landuse = TRUE
+    mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway") = TRUE
     AND way_area::bigint > 6400 -- 4px
-
-ORDER BY
-    area DESC,
-    __id__ ASC

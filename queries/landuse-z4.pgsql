@@ -11,7 +11,3 @@ SELECT
     gid::varchar AS __id__
 
 FROM ne_50m_urban_areas
-
-ORDER BY
-    area DESC,
-    __id__ ASC
