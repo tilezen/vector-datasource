@@ -2,7 +2,7 @@ SELECT
     name,
     COALESCE("aerialway", "aeroway", "natural", "railway", "tourism") AS kind,
     way AS __geometry__,
-    osm_id::text AS __id__,
+    osm_id AS __id__,
     osm_id
 
 FROM planet_osm_point

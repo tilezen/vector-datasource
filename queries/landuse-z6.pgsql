@@ -11,7 +11,7 @@ FROM
         'urban area' AS kind,
         'naturalearthdata.com' AS source,
         the_geom AS __geometry__,
-        gid::varchar AS __id__
+        gid AS __id__
 
     FROM ne_10m_urban_areas
 
@@ -28,7 +28,7 @@ FROM
         'park or protected land' AS kind,
         'naturalearthdata.com' AS source,
         the_geom AS __geometry__,
-        gid::varchar AS __id__
+        gid AS __id__
 
     FROM ne_10m_parks_and_protected_lands
 

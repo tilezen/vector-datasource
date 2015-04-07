@@ -11,7 +11,7 @@ FROM
         'ocean' AS kind,
         'naturalearthdata.com' AS source,
         the_geom AS __geometry__,
-        gid::varchar AS __id__
+        gid AS __id__
 
     FROM ne_110m_ocean
 
@@ -26,7 +26,7 @@ FROM
         'lake' AS kind,
         'naturalearthdata.com' AS source,
         the_geom AS __geometry__,
-        gid::varchar AS __id__
+        gid AS __id__
 
     FROM ne_110m_lakes
 

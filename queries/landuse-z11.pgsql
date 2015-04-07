@@ -4,7 +4,7 @@ SELECT
     COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
     'openstreetmap.org' AS source,
     way AS __geometry__,
-    osm_id::text AS __id__,
+    osm_id AS __id__,
     osm_id
 
 FROM planet_osm_polygon

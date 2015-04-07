@@ -2,7 +2,7 @@ SELECT
     name,
     place AS kind,
     way AS __geometry__,
-    osm_id::text AS __id__,
+    osm_id AS __id__,
     osm_id,
     admin_level
 

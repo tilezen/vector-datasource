@@ -2,7 +2,7 @@ SELECT
     way AS __geometry__,
     name,
     osm_id,
-    osm_id::text AS __id__,
+    osm_id AS __id__,
     aeroway,
     bridge,
     highway,
