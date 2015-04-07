@@ -4,8 +4,7 @@ SELECT
              "lock", "man_made", "natural", "power", "railway", "tourism",
              "waterway") AS kind,
     way AS __geometry__,
-    osm_id AS __id__,
-    osm_id
+    osm_id AS __id__
 
 FROM planet_osm_point
 

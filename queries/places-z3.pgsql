@@ -10,8 +10,7 @@ FROM
         boundary AS kind,
         admin_level,
         way AS __geometry__,
-        osm_id AS __id__,
-        osm_id
+        osm_id AS __id__
 
     FROM planet_osm_polygon
 
@@ -30,8 +29,7 @@ FROM
         place AS kind,
         NULL AS admin_level,
         way AS __geometry__,
-        osm_id AS __id__,
-        osm_id
+        osm_id AS __id__
 
     FROM planet_osm_point
 

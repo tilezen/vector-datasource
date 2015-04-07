@@ -2,7 +2,6 @@ SELECT
     name,
     way_area::bigint AS area,
     osm_id AS __id__,
-    osm_id,
     "building:part",
     building,
     amenity,

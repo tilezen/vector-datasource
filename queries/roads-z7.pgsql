@@ -1,7 +1,6 @@
 SELECT
     way AS __geometry__,
     name,
-    osm_id,
     osm_id AS __id__,
     aeroway,
     bridge,
