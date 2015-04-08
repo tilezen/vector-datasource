@@ -2,8 +2,8 @@ SELECT
     name,
     place AS kind,
     way AS __geometry__,
-    mz_id AS __id__,
-    osm_id
+    osm_id AS __id__,
+    admin_level
 
 FROM planet_osm_point
 
@@ -17,5 +17,3 @@ AND place IN (
     'province',
     'island'
 )
-
-ORDER BY __id__ ASC

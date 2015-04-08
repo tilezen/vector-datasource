@@ -4,12 +4,25 @@ SELECT
              "lock", "man_made", "natural", "power", "railway", "tourism",
              "waterway") AS kind,
     way AS __geometry__,
-    mz_id AS __id__,
-    osm_id
+    osm_id AS __id__
 
 FROM planet_osm_point
 
 WHERE
-    mz_poi_level <= 15
-
-ORDER BY __id__ ASC
+    mz_calculate_poi_level(
+        "aerialway",
+        "aeroway",
+        "amenity",
+        "barrier",
+        "highway",
+        "historic",
+        "leisure",
+        "lock",
+        "man_made",
+        "natural",
+        "power",
+        "railway",
+        "shop",
+        "tourism",
+        "waterway"
+    ) <= 15

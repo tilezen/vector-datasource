@@ -4,14 +4,9 @@ SELECT
     COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
     'openstreetmap.org' AS source,
     way AS __geometry__,
-    mz_id AS __id__,
-    osm_id
+    osm_id AS __id__
 
 FROM planet_osm_polygon
 
 WHERE
-    mz_is_landuse = TRUE
-
-ORDER BY
-    area DESC,
-    __id__ ASC
+    mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway") = TRUE

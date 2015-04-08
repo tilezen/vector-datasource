@@ -10,8 +10,7 @@ FROM
         boundary AS kind,
         admin_level,
         way AS __geometry__,
-        mz_id AS __id__,
-        osm_id
+        osm_id AS __id__
 
     FROM planet_osm_polygon
 
@@ -30,8 +29,7 @@ FROM
         place AS kind,
         NULL AS admin_level,
         way AS __geometry__,
-        mz_id AS __id__,
-        osm_id
+        osm_id AS __id__
 
     FROM planet_osm_point
 
@@ -46,9 +44,3 @@ FROM
         AND way && !bbox!
 
 ) AS places
-
-ORDER BY
-    CASE WHEN admin_level IS NULL
-         THEN 1000
-         ELSE coalesce(mz_safe_convert_to_float(admin_level), 1000) END ASC,
-    __id__ ASC

@@ -11,8 +11,7 @@ FROM
         'ocean' AS kind,
         'openstreetmapdata.com' AS source,
         the_geom AS __geometry__,
-        gid::varchar AS __id__,
-        NULL AS osm_id
+        gid AS __id__
 
     FROM water_polygons
 
@@ -29,13 +28,12 @@ FROM
         COALESCE("waterway", "natural", "landuse") AS kind,
         'openstreetmap.org' AS source,
         way AS __geometry__,
-        mz_id AS __id__,
-        osm_id
+        osm_id AS __id__
 
     FROM planet_osm_polygon
 
     WHERE
-        mz_is_water = TRUE
+        mz_calculate_is_water("waterway", "natural", "landuse") = TRUE
         AND way && !bbox!
 
     --
@@ -49,8 +47,7 @@ FROM
         waterway AS kind,
         'openstreetmap.org' AS source,
         way AS __geometry__,
-        mz_id AS __id__,
-        osm_id
+        osm_id AS __id__
 
     FROM planet_osm_line
 
@@ -59,7 +56,3 @@ FROM
         AND way && !bbox!
 
 ) AS water_areas
-
-ORDER BY
-    area DESC,
-    __id__ ASC

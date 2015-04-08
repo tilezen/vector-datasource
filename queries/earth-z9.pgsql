@@ -1,8 +1,6 @@
 SELECT
     'base' AS land,
-    mz_the_geom12 AS __geometry__,
-    gid::varchar AS __id__
+    the_geom AS __geometry__,
+    gid AS __id__
 FROM
     land_polygons
-ORDER BY
-    __id__ ASC
