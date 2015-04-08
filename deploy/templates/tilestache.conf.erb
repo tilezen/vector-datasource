@@ -81,8 +81,13 @@
                 "MultiLineString"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+                "TileStache.Goodies.VecTiles.transform.normalize_osm_id",
+                "TileStache.Goodies.VecTiles.transform.road_kind",
+                "TileStache.Goodies.VecTiles.transform.road_classifier",
+                "TileStache.Goodies.VecTiles.transform.road_sort_key",
+                "TileStache.Goodies.VecTiles.transform.road_trim_properties"
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.roads"
         }
     }
 },
@@ -148,16 +153,18 @@
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z16.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/buildings-z17.pgsql"
             ],
-            "suppress_simplification": [
-                14
-            ],
             "geometry_types": [
                 "Polygon",
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+                "TileStache.Goodies.VecTiles.transform.normalize_osm_id",
+                "TileStache.Goodies.VecTiles.transform.building_kind",
+                "TileStache.Goodies.VecTiles.transform.building_height",
+                "TileStache.Goodies.VecTiles.transform.building_min_height",
+                "TileStache.Goodies.VecTiles.transform.building_trim_properties"
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.buildings"
         }
     }
 },
@@ -202,7 +209,8 @@
             ],
             "transform_fns": [
                 "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.pois"
         }
     }
 },
@@ -244,7 +252,8 @@
             ],
             "transform_fns": [
                 "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.places"
         }
     }
 },
@@ -281,16 +290,14 @@
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z15.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-z16.pgsql"
             ],
-            "suppress_simplification": [
-                11
-            ],
             "geometry_types": [
                 "Polygon",
                 "MultiPolygon"
             ],
             "transform_fns": [
                 "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.landuse"
         }
     }
 },
@@ -315,17 +322,10 @@
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z0.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z4.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z4.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z13.pgsql"
-            ],
-            "suppress_simplification": [
-                12
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/earth-z9.pgsql"
             ],
             "geometry_types": [
                 "Polygon",
@@ -333,7 +333,8 @@
             ],
             "transform_fns": [
                 "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.earth"
         }
     }
 },
@@ -358,9 +359,9 @@
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z0.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z4.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z9.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z9.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z11.pgsql",
@@ -370,9 +371,6 @@
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z15.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/water-z16.pgsql"
             ],
-            "suppress_simplification": [
-                12
-            ],
             "geometry_types": [
                 "Polygon",
                 "MultiPolygon",
@@ -381,7 +379,8 @@
             ],
             "transform_fns": [
                 "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
-            ]
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.water"
         }
     }
 }
