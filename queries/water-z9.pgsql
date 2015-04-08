@@ -15,6 +15,8 @@ FROM
 
     FROM water_polygons
 
+    WHERE the_geom && !bbox!
+
     --
     -- Other water areas
     --
@@ -33,6 +35,7 @@ FROM
     WHERE
         mz_calculate_is_water("waterway", "natural", "landuse") = TRUE
         AND way_area::bigint > 102400 -- 4px
+        AND way && !bbox!
 
     --
     -- Water line geometries
@@ -51,5 +54,6 @@ FROM
 
     WHERE
         waterway IN ('canal', 'river')
+        AND way && !bbox!
 
 ) AS water_areas

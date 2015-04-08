@@ -15,6 +15,8 @@ FROM
 
     FROM ne_110m_ocean
 
+    WHERE the_geom && !bbox!
+
     --
     -- Lakes
     --
@@ -29,5 +31,7 @@ FROM
         gid AS __id__
 
     FROM ne_110m_lakes
+
+    WHERE the_geom && !bbox!
 
 ) AS water_areas
