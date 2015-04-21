@@ -153,7 +153,7 @@ sudo apt-get install -y libmapnik mapnik-utils python-mapnik
 
 sudo pip install shapely
 sudo pip install protobuf
-
+sudo pip install mapbox_vector_tile
 
 ```
 
