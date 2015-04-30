@@ -7,7 +7,8 @@ SELECT
     highway,
     layer,
     railway,
-    tunnel
+    tunnel,
+    oneway
 
 FROM planet_osm_line
 
