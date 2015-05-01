@@ -36,6 +36,7 @@
                 "earth",
                 "places",
                 "landuse",
+                "landuse_labels",
                 "roads",
                 "buildings",
                 "pois"
@@ -302,6 +303,52 @@
             "geometry_types": [
                 "Polygon",
                 "MultiPolygon"
+            ],
+            "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.landuse"
+        }
+    }
+},
+    "landuse_labels": {
+    "allowed origin": "*",
+    "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+            "dbinfo": {
+                "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+                "port": 5432,
+                "user": "gisuser",
+                "database": "tilestache-gis",
+                "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            },
+            "queries": [
+                null,
+                null,
+                null,
+                null,
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z4.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z9.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z10.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z11.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z12.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z13.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z14.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z15.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z16.pgsql"
+            ],
+            "geometry_types": [
+                "Point",
+                "MultiPoint"
             ],
             "transform_fns": [
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
