@@ -81,11 +81,14 @@
                 "MultiLineString"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id",
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.road_kind",
                 "TileStache.Goodies.VecTiles.transform.road_classifier",
                 "TileStache.Goodies.VecTiles.transform.road_sort_key",
-                "TileStache.Goodies.VecTiles.transform.road_trim_properties"
+                "TileStache.Goodies.VecTiles.transform.road_oneway",
+                "TileStache.Goodies.VecTiles.transform.road_trim_properties",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.roads"
         }
@@ -158,11 +161,13 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id",
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.building_kind",
                 "TileStache.Goodies.VecTiles.transform.building_height",
                 "TileStache.Goodies.VecTiles.transform.building_min_height",
-                "TileStache.Goodies.VecTiles.transform.building_trim_properties"
+                "TileStache.Goodies.VecTiles.transform.building_trim_properties",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.buildings"
         }
@@ -208,7 +213,9 @@
                 "MultiPoint"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.pois"
         }
@@ -251,7 +258,9 @@
                 "MultiPoint"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.places"
         }
@@ -295,7 +304,9 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.landuse"
         }
@@ -332,7 +343,9 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.earth"
         }
@@ -378,7 +391,9 @@
                 "MultiLineString"
             ],
             "transform_fns": [
-                "TileStache.Goodies.VecTiles.transform.normalize_osm_id"
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "sort_fn": "TileStache.Goodies.VecTiles.sort.water"
         }
