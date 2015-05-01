@@ -3,7 +3,7 @@ SELECT name, kind, source, __geometry__, __id__, admin_level, scalerank, labelra
 FROM
 (
 
-    -- OSM
+    -- Natural Earth
     SELECT
         name,
         featurecla AS kind,
@@ -20,12 +20,12 @@ FROM
     FROM ne_10m_populated_places
 
     WHERE
-        scalerank <= 0
+        scalerank <= 11
         AND the_geom && !bbox!
 
     UNION
 
-    -- Natural Earth
+    -- OSM
     SELECT
         name,
         place AS kind,
@@ -46,7 +46,13 @@ FROM
         AND place IN (
             'continent',
             'ocean',
-            'country'
+            'country',
+            'sea',
+            'state',
+            'province',
+            'hamlet',
+            'village',
+            'town'
         )
         AND way && !bbox!
 

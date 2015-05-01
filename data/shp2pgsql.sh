@@ -15,3 +15,4 @@ shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_10m_urban_areas-merc.shp
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_10m_parks_and_protected_lands-merc.shp ne_10m_parks_and_protected_lands
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_50m_land-merc.shp ne_50m_land
 shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_110m_land-merc.shp ne_110m_land
+shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom ne_10m_populated_places-merc.shp ne_10m_populated_places

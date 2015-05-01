@@ -20,7 +20,7 @@ FROM
     FROM ne_10m_populated_places
 
     WHERE
-        scalerank <= 0
+        scalerank <= 1
         AND the_geom && !bbox!
 
     UNION
