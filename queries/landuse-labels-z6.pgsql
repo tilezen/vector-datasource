@@ -10,7 +10,7 @@ FROM
         way_area::bigint AS area,
         'urban area' AS kind,
         'naturalearthdata.com' AS source,
-        ST_Centroid(the_geom) AS __geometry__,
+        mz_centroid AS __geometry__,
         gid AS __id__
 
     FROM ne_10m_urban_areas
@@ -27,7 +27,7 @@ FROM
         way_area::bigint AS area,
         'park or protected land' AS kind,
         'naturalearthdata.com' AS source,
-        ST_Centroid(the_geom) AS __geometry__,
+        mz_centroid AS __geometry__,
         gid AS __id__
 
     FROM ne_10m_parks_and_protected_lands
