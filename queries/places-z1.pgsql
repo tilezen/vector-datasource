@@ -3,7 +3,7 @@ SELECT name, kind, source, __geometry__, __id__, admin_level, scalerank, labelra
 FROM
 (
 
-    -- OSM
+    -- Natural Earth
     SELECT
         name,
         featurecla AS kind,
@@ -25,7 +25,7 @@ FROM
 
     UNION
 
-    -- Natural Earth
+    -- OSM
     SELECT
         name,
         place AS kind,
