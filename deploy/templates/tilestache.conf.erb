@@ -239,22 +239,20 @@
             },
             "queries": [
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z0.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z1.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z2.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z3.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z4.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z5.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z5.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z5.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z7.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z8.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z9.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z9.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z10.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z11.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/places-z12.pgsql"
             ],
             "geometry_types": [
-                "Polygon",
-                "MultiPolygon",
                 "Point",
                 "MultiPoint"
             ],
@@ -262,8 +260,7 @@
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
-            ],
-            "sort_fn": "TileStache.Goodies.VecTiles.sort.places"
+            ]
         }
     }
 },
