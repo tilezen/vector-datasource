@@ -1,25 +1,62 @@
-SELECT
-    name,
-    place AS kind,
-    way AS __geometry__,
-    osm_id AS __id__,
-    admin_level
+SELECT name, kind, source, __geometry__, __id__, admin_level, scalerank, labelrank, population
 
-FROM planet_osm_point
+FROM
+(
 
-WHERE name IS NOT NULL
+    -- Natural Earth
+    SELECT
+        name,
+        featurecla AS kind,
+        'naturalearthdata.com' AS source,
+        the_geom AS __geometry__,
+        gid AS __id__,
 
-AND place IN (
-    'city',
-    'county',
-    'province',
-    'island',
-    'town',
-    'neighbourhood',
-    'suburb',
-    'locality',
-    'lake',
-    'village',
-    'hamlet',
-    'isolated_dwelling'
-)
+        NULL as admin_level,
+
+        scalerank,
+        labelrank,
+        pop_max AS population
+
+    FROM ne_10m_populated_places
+
+    WHERE
+        scalerank <= 12
+        AND the_geom && !bbox!
+
+    UNION
+
+    -- OSM
+    SELECT
+        name,
+        place AS kind,
+        'openstreetmap' AS source,
+        way AS __geometry__,
+        osm_id AS __id__,
+
+        admin_level,
+
+        NULL AS scalerank,
+        NULL AS labelrank,
+        NULL AS population
+
+    FROM planet_osm_point
+
+    WHERE
+        name IS NOT NULL
+        AND place IN (
+            'continent',
+            'ocean',
+            'country',
+            'sea',
+            'state',
+            'province',
+            'hamlet',
+            'village',
+            'town',
+            'neighbourhood',
+            'suburb',
+            'quarter'
+        )
+        AND way && !bbox!
+
+) AS places

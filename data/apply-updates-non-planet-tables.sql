@@ -29,4 +29,8 @@ PERFORM mz_create_index_if_not_exists('ne_10m_urban_areas_way_area_index', 'ne_1
 PERFORM mz_create_index_if_not_exists('ne_10m_parks_and_protected_lands_way_area_index', 'ne_10m_parks_and_protected_lands', 'way_area');
 PERFORM mz_create_index_if_not_exists('water_polygons_wayarea_index', 'water_polygons', 'way_area');
 
+-- additional indexes
+PERFORM mz_create_index_if_not_exists('ne_10m_populated_places_scalerank_index', 'ne_10m_populated_places', 'scalerank');
+
+
 END $$;

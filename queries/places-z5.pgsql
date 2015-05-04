@@ -1,45 +1,55 @@
-SELECT name, kind, admin_level, __geometry__, __id__
+SELECT name, kind, source, __geometry__, __id__, admin_level, scalerank, labelrank, population
 
 FROM
 (
-    --
-    -- Place Border
-    --
+
+    -- Natural Earth
     SELECT
         name,
-        boundary AS kind,
-        admin_level,
-        way AS __geometry__,
-        osm_id AS __id__
+        featurecla AS kind,
+        'naturalearthdata.com' AS source,
+        the_geom AS __geometry__,
+        gid AS __id__,
 
-    FROM planet_osm_polygon
+        NULL as admin_level,
+
+        scalerank,
+        labelrank,
+        pop_max AS population
+
+    FROM ne_10m_populated_places
 
     WHERE
-        way && !bbox!
-        AND boundary='administrative'
-        AND admin_level IN ('2', '3', '4') -- national, disputed, state
+        scalerank <= 5
+        AND the_geom && !bbox!
 
-    --
-    -- Place Name
-    --
     UNION
 
+    -- OSM
     SELECT
         name,
         place AS kind,
-        NULL AS admin_level,
+        'openstreetmap' AS source,
         way AS __geometry__,
-        osm_id AS __id__
+        osm_id AS __id__,
+
+        admin_level,
+
+        NULL AS scalerank,
+        NULL AS labelrank,
+        NULL AS population
 
     FROM planet_osm_point
 
     WHERE
         name IS NOT NULL
         AND place IN (
+            'continent',
             'ocean',
             'country',
             'sea',
-            'state'
+            'state',
+            'province'
         )
         AND way && !bbox!
 
