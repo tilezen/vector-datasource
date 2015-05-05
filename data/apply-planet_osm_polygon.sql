@@ -12,7 +12,6 @@ PERFORM mz_create_partial_index_if_not_exists('planet_osm_polygon_admin_level_in
 
 -- indexes on functions
 CREATE INDEX planet_osm_polygon_is_building_or_part_index ON planet_osm_polygon(mz_calculate_is_building_or_part(building, "building:part")) WHERE mz_calculate_is_building_or_part(building, "building:part") = TRUE;
-CREATE INDEX planet_osm_polygon_is_landuse_index ON planet_osm_polygon(mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway")) WHERE mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway") = TRUE;
 CREATE INDEX planet_osm_polygon_is_water_index ON planet_osm_polygon(mz_calculate_is_water("waterway", "natural", "landuse")) WHERE mz_calculate_is_water("waterway", "natural", "landuse") = TRUE;
 
 -- update polygon table to add centroids
