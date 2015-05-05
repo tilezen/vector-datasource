@@ -9,4 +9,4 @@ SELECT
 FROM planet_osm_polygon
 
 WHERE
-    mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway") = TRUE
+    mz_is_landuse = TRUE
