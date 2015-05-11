@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # subsequent sql depends on functions installed
-echo -e "Creating functions... \c"
+echo "Creating functions..."
 psql $@ -f functions.sql
 echo "done."
 
@@ -13,5 +13,9 @@ psql $@ -f apply-planet_osm_line.sql &
 psql $@ -f apply-planet_osm_point.sql &
 wait
 echo "done."
+
+echo -e '\nApplying triggers...'
+psql $@ -f triggers.sql
+echo 'done.'
 
 echo -e "\nAll updates complete. Exiting."
