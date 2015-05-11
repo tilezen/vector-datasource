@@ -1,172 +1,205 @@
-Mapzen Vector Tiles
-========================
+Mapzen provides a free & open vector tile service for OpenStreetMap base layer data, with worldwide coverage updated daily, available in GeoJSON, TopoJSON, and binary data [formats](#formats).
 
-See info about the hosted version of this service here:
+Making OpenStreetMap and other open geo data more accessible to developers is central to Mapzen’s mission. We don’t want you to have to struggle with installing PostGIS, building osm2pgsql, or downloading a planet file to start playing with OSM data.
 
-[Mapzen Vector Tile Service](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service)
+Vector tiles make real-time rendering possible by sending the underlying OSM geometry and tags directly to the client, whether that’s a browser or a native mobile app. Check out [Tangram, our work-in-progress WebGL rendering library](https://mapzen.com/tangram) for an example.
 
-Installation
-------------
+But we also believe that vector tiles will enable other, yet-to-be-invented types of OpenStreetMap-powered applications. Use this service to experiment with ideas!
 
-Requirements:
+Please note: this service is in active development and is subject to change! Questions, feedback, requests? [Let us know](https://github.com/mapzen/vector-datasource/issues).
 
-* [TileStache](http://tilestache.org)
-* [PostGIS](http://postgis.net)
-* An OpenStreetMap database created by [osm2pgsql](http://wiki.openstreetmap.org/wiki/Osm2pgsql)
-* [Natural Earth](http://www.naturalearthdata.com) tables from contents of `data/`.
+# Getting Started
+This service is freely available for all developers to use.
 
+## API Key sign-up
 
-------------
+First, you'll need to sign up for an account. You'll need a github account to continue, and Mapzen will read your email address from your github profile.
 
-#Installation Guide
-(tested under Ubuntu 14.04)
+1. Navigate to https://mapzen.com/developers
+1. Click on `continue with github`.
+1. Click through to create your account.
+1. Click on the `new key` button.
+1. Name your project.
 
-The installation is performed in three steps.
+## Using the service
 
-![Imgur](http://i.imgur.com/mNADpl1.png)
+Now, just plug that api key into this URL pattern to get started:
 
-### 1. Loading data (Make ready for using vector tiles)
+`http://vector.mapzen.com/osm/{layers}/{z}/{x}/{y}.{format}?api_key{api_key}`
 
-#### Install postgres
+The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) has more information on this url scheme.
 
-```shell
-sudo apt-get install postgresql postgresql-contrib postgis postgresql-9.3-postgis-2.1
-```
+Here’s a sample tile in GeoJSON:
 
-You can find a more detailed description [here](http://wiki.openstreetmap.org/wiki/PostGIS/Installation#Ubuntu_14.04_LTS).
+http://vector.mapzen.com/osm/all/16/19293/24641.json?api_key={api_key}
 
-#### Create database and extensions
+Layers to return can specified as `all`, or as one or more layer names separated by commas, e.g.:
 
-```shell
-# switch to user postgres
-sudo -i -u postgres
+`buildings`: http://vector.mapzen.com/osm/buildings/16/19293/24641.json?api_key={api_key}
 
-# create new database
-createdb gis
+`earth,landuse`: http://vector.mapzen.com/osm/earth,landuse/16/19293/24641.json?api_key={api_key}
 
-# create extensions
-psql -d gis -c 'CREATE EXTENSION postgis; CREATE EXTENSION hstore;'
-
-# check the results
-psql -d gis
-\conninfo
-
-# logout from db
-\q
-
-# logout user postgres
-exit
-```
-
-#### Install osm2pgsql
-
-```shell
-sudo apt-get install osm2pgsql
-```
-
-#### Download data
-
-Here we use data from [geofabrik](http://download.geofabrik.de/), but you can use other *.pbf files.
-
-```shell
-# switch to new data path
-cd /path/to/your/osm/data
-# download data
-wget http://download.geofabrik.de/europe/austria-latest.osm.pbf
-```
-
-#### Add data to the database
-Start osm2pgsql in your data folder. Before you start the osm2pgsql script you might need to check your postgresql user rights (pg_hba.conf) 
-```shell
-osm2pgsql --create --cache-strategy sparse -C 750 -U postgres -S osm2pgsql.style.txt -d gis -k austria-latest.osm.pbf 
-```
-
-
-
-### 2. PREPARE DATA
-
-#### **Download** mapzen/vector-datasource:
-
-```shell
-git clone https://github.com/mapzen/vector-datasource.git
-```
-
-#### **Prepare Database**
-
-Download the file at [https://gist.github.com/rmarianski/491e50f3dd7159ebdf23](https://gist.githubusercontent.com/rmarianski/491e50f3dd7159ebdf23/raw/c40439e9f5761d4f5ad0846a334a49ff1d6024a2/gistfile1.txt) and drop it in the *../vector-datasource/data/* folder as *gist.sh*, or just type...
-
-```shell
-# change to folder
-cd vector-datasource/data
-# download file
-wget -O gist.sh https://gist.githubusercontent.com/rmarianski/491e50f3dd7159ebdf23/raw/c40439e9f5761d4f5ad0846a334a49ff1d6024a2/gistfile1.txt
-```
-Open the file *gist.sh*  and change database options [accordingly](https://gist.github.com/rmarianski)  (leave out *-h host* when using a local machine):
-```shell
-# database options
-export PGPASSWORD=password
-PGOPTS="-d database -h host -U user"
+## Multiple layers in GeoJSON
+When requesting multiple layers in GeoJSON, a dictionary of FeatureCollections will be returned, keyed by layer name, e.g.:
 
 ```
-then run the *gist.sh* script:
-```shell
-# make sript executable
-chmod +x gist.sh
-# execute the script
-./gist.sh
+{
+   "earth": {
+      "type":"FeatureCollection",
+      "features": [...],
+      ...
+   },
+   "landuse": {
+      "type":"FeatureCollection",
+      "features": [...],
+      ...
+   }
+}
 ```
 
-### 3. CREATE VECTOR TILES
-
-#### Download TileStache
-
-```shell
-git clone https://github.com/mapzen/TileStache.git
-
-# Check out to integration-1 fork for serving .mapbox vectortiles
-
-git fetch --all
-git checkout integration-1
-```
-You can find TileStache at [https://github.com/mapzen/TileStache/](https://github.com/mapzen/TileStache/)
-
-#### Install dependencies
-
-Follow the instructions at [https://github.com/TileStache/TileStache](https://github.com/TileStache/TileStache)
-or do
-```shell
-# install pip
-curl -O -L https://raw.github.com/pypa/pip/master/contrib/get-pip.py
-sudo python get-pip.py
-rm get-pip.py
-
-# install other build dependecies (check if you need all of them)
-sudo apt-get install build-essential autoconf libtool pkg-config python-opengl python-imaging python-pyrex python-pyside.qtopengl idle-python2.7 qt4-dev-tools qt4-designer libqtgui4 libqtcore4 libqt4-xml libqt4-test libqt4-script libqt4-network libqt4-dbus python-qt4 python-qt4-gl libgle3 python-dev zlib1g-dev libjpeg-dev python-psycopg2
-
-# install pillow (better alternative to PIL)
-sudo pip install pillow
-
-# install mapnik
-sudo add-apt-repository ppa:mapnik/nightly-2.3
-sudo apt-get update
-sudo apt-get install -y libmapnik mapnik-utils python-mapnik
-
-sudo pip install shapely
-sudo pip install protobuf
-sudo pip install mapbox_vector_tile
+When requesting a single layer, the response will simply be a single FeatureCollection, without any layer name prefix, e.g.:
 
 ```
-
-
-#### Install TileStache
-```shell
-# change folder
-cd TileStache/
-# install TileStache
-sudo python setup.py install
-# start server with mapzen .cfg file
-./scripts/tilestache-server.py -c path/to/mapzen-vector-datasource/tilestache.cfg
-
-# test your configurations
-http://localhost:8080/osm/buildings/16/19293/24641.json
+{
+   "type":"FeatureCollection",
+   "features": [...],
+   ...
+}
 ```
+
+The currently supported binary formats can handle single vs. multiple layers directly.
+
+# Layers
+Data is organized into several layers comprising the elements typically used for base map rendering. This is a simplified view of OSM data for easier consumption, with common tags often condensed into a single field as noted below.
+
+## Water
+Polygons representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` tags. Includes coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) at higher zoom levels, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels.
+
+Layer name: `water`
+
+Properties:
+* `name`
+* `kind`: one of `ocean`, `riverbank`, `dock`, `water`, `basin`, `reservoir`, `lake`, `playa`, `canal`, `dam`, `ditch`, `drain`, `river`, `stream`
+* `area`: polygon area
+* `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
+
+## Earth
+Polygons representing landmass. Uses coastline-derived land polygons from [openstreetmapdata.com](http://openstreetmapdata.com).
+
+Layer name: `earth`
+
+Properties:
+* `land`: `base`
+
+## Landuse
+Polygons from OpenStreetMap representing parks, forests, residential, commercial, industrial, cemetery, golf course, university, schools, sports and other areas. Includes OSM data at higher zoom levels, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels.
+
+Layer name: `landuse`
+
+Properties:
+* `name`
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, and `amenity` OSM tags, or `urban area` and `park or protected land` for Natural Earth areas.
+* `area`: polygon area
+
+The possible kind values can be:
+
+`allotments`, `apron`, `cemetery`, `cinema`, `college`, `commercial`, `common`, `farm`, `farmland`, `farmyard`, `footway`, `forest`, `fuel`, `garden`, `glacier`, `golf_course`, `grass`, `hospital`, `industrial`, `land`, `library`, `meadow`, `nature_reserve`, `park`, `parking`, `pedestrian`, `pitch`, `place_of_worship`, `playground`, `quarry`, `railway`, `recreation_ground`, `residential`, `retail`, `runway`, `school`, `scrub`, `sports_centre`, `stadium`, `taxiway`, `theatre`, `university`, `village_green`, `wetland`, `wood`, `urban area`, `park or protected land`
+
+## Landuse labels
+Polygons from OpenStreetMap representing parks, forests, residential, commercial, industrial, cemetery, golf course, university, schools, sports and other areas. Includes OSM data at higher zoom levels, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels.
+
+Layer name: `landuse_labels`
+
+Properties:
+* `name`
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, and `amenity` OSM tags, or `urban area` and `park or protected land` for Natural Earth areas.
+* `area`: polygon area
+
+The possible kind values can be:
+
+`allotments`, `apron`, `cemetery`, `cinema`, `college`, `commercial`, `common`, `farm`, `farmland`, `farmyard`, `footway`, `forest`, `fuel`, `garden`, `glacier`, `golf_course`, `grass`, `hospital`, `industrial`, `land`, `library`, `meadow`, `nature_reserve`, `park`, `parking`, `pedestrian`, `pitch`, `place_of_worship`, `playground`, `quarry`, `railway`, `recreation_ground`, `residential`, `retail`, `runway`, `school`, `scrub`, `sports_centre`, `stadium`, `taxiway`, `theatre`, `university`, `village_green`, `wetland`, `wood`, `urban area`, `park or protected land`
+
+The geometry in this layer will be a point, and is meant to be used for labels.
+
+## Roads
+OpenStreetMap roads, highways, railways and paths matching the selection found in High Road. Sort them with `sort_key` to correctly represent layered overpasses, bridges and tunnels. Use the `kind` property for a classification of roads into `highway`, `major_road`, `minor_road`, `path`, `rail`
+
+Layer name: `roads`
+
+Properties:
+* `name`
+* `kind`: one of `highway`, `major_road`, `minor_road`, `rail`, `path`
+* `highway`: the original OSM highway tag value
+* `railway`: the original OSM railway tag value
+* `is_bridge`: `yes` or `no`
+* `is_tunnel`: `yes` or `no`
+* `is_link`: `yes` or `no`
+* `sort_key`: numeric value indicating correct rendering order
+
+## Buildings
+Polygons from OpenStreetMap representing building outlines. Includes the building footprint at lower zoom levels, and individual building:part geometries following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels.
+
+Layer name: `buildings`
+
+Properties:
+* `name`
+* `kind`: original value of the OSM `building` or `building:part` tag where it is a value other than `yes` (which is implicit)
+* `height`: OSM building `height` tag (meters) where available, estimated from `building:levels` if present
+* `min_height`: OSM building `min_height` tag (meters) where available, estimated from `building:min_levels` if present
+* `addr_housenumber`: OSM `addr:housenumber` tag
+* `addr_street`: OSM `addr:street` tag
+* `roof_color`: OSM `roof:color` tag
+* `roof_material`: OSM `roof:material` tag
+* `roof_shape`: OSM `roof:shape` tag
+* `roof_height`: OSM `roof:height` tag
+* `roof_orientation`: OSM `roof:orientation` tag
+
+
+## Points of Interest
+Points of Interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
+
+Layer name: `pois`
+
+Properties:
+* `name`
+* `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `barrier`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `power`, `railway`, `shop`, `tourism`, and `waterway` tags
+
+## Places
+Combination of OpenStreetMap `place` points, natural earth populated places, and administrative boundary polygons.
+
+Layer name: `places`
+
+Properties:
+* `name`
+* `kind`: the original value of the OSM `place` tag, or `boundary` for administrative boundaries
+* `admin_level`: the original value of the OSM `admin_level` tag for administrative boundaries
+* `scalerank`: scalerank value from natural earth populated places dataset
+* `labelrank`: labelrank value from natural earth populated places dataset
+* `population`: population value from natural earth populated places dataset
+
+# Formats<a href="formats"></a>
+Tiles can be returned in the following formats.
+
+* [GeoJSON](http://geojson.org)
+   * Easiest to get started with, human readable & compatible with many tools
+   * Use the `.json` extension
+* [TopoJSON](https://github.com/mbostock/topojson)
+   * An optimized form of JSON that saves space by encoding topology, reducing replication of shared geometry
+   * Use the `.topojson` extension
+* [Mapbox-format binary tiles](https://github.com/mapbox/vector-tile-spec)
+   * A compact format using protocol buffers
+   * Used for raster tile rendering in TileMill 2 & vector rendering in Mapbox GL
+   * Use the `.mvt` extension
+* [OpenScienceMap-format binary tiles](https://github.com/opensciencemap/vtm)
+   * A compact format using protocol buffers
+   * Used in the [OpenScienceMap](http://www.opensciencemap.org/) vector rendering library for Android
+   * Use the `.vtm` extension
+
+# How it Works
+Vector tiles are served from a [TileStache](http://tilestache.org/) provider that clips geometries to the tile bounding box,  and simplifies them to match the zoom level (to avoid unnecessary complexity at lower zoom levels).
+
+Tiles are currently served from a [fork of TileStache](https://github.com/mapzen/TileStache/tree/integration-1/TileStache/Goodies/VecTiles) that extends the VecTiles provider, using [this configuration](https://github.com/mapzen/vector-datasource). Have a question about whether a specific property is included? Check [the queries](https://github.com/mapzen/vector-datasource/tree/master/queries) behind the tiles.
+
+This is based on the work of [Michal Migurski](http://mike.teczno.com/), and extends his [OSM.US-hosted vector tile service](http://openstreetmap.us/~migurski/vector-datasource/) with additional data and format support.
+
+If you are interested in setting up your own version of this service, look at our [installation instructions](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or you can also try this [Vagrant VM](https://github.com/meetar/tangram-vm). You may also be interested in our [Metro Extracts](https://mapzen.com/metro-extracts), which provide weekly, city-sized chunks of OSM data in several formats for over 200 cities.
