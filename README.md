@@ -228,6 +228,8 @@ Upper and lower zoom levels are set using `d3.behavior.zoom()` and `.scaleExtent
 
 ```.scaleExtent([1 << 12, 1 << 25])```
 
+See also the [D3 documentation on zoom behavior](https://github.com/mbostock/d3/wiki/Zoom-Behavior).
+
 See the examples at https://github.com/mapzen/d3-vector-tiles for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt).
 
 ## MapboxGL
