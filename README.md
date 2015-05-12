@@ -235,7 +235,7 @@ See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen v
 ## Hoverboard
 [Hoverboard](https://libraries.io/bower/hoverboard/v1.0.1) is a JavaScript library created by Tristan Davies to draw vector tiles as a Leaflet tile layer on the <canvas> HTML element of a webpage. Hoverboard supports the Mapzen vector tiles in GeoJSON, TopoJSON, or Mapbox Vector Tiles format. 
 
-'  <script>
+` <script>
     window.xyz_tile_source_url = 'https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.json';
   </script>`
 
