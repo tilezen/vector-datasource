@@ -208,7 +208,7 @@ If you are interested in setting up your own version of this service, look at ou
 You can use Mapzen’s vector tile service with a variety of browser-based rendering software packages. According to the syntax of the library you are using, you need to specify the URL to the Mapzen vector tile service, the layers that you want to draw on the map, and styling information about how to draw the features. 
 
 ## Tangram
-[Tangram](https://dev.mapzen.com/projects/tangram) is a WebGL mapping engine designed for real-time rendering of 2D and 3D maps from vector tiles. More details are available on the [Tangram home  page](https://dev.mapzen.com/projects/tangram) as well as [the Tangram Github wiki}(https://github.com/tangrams/tangram/wiki).
+[Tangram](https://dev.mapzen.com/projects/tangram) is a WebGL mapping engine designed for real-time rendering of 2D and 3D maps from vector tiles. More details are available on the [Tangram home  page](https://dev.mapzen.com/projects/tangram) as well as [the Tangram Github wiki](https://github.com/tangrams/tangram/wiki).
 
 ## d3
 d3 is a JavaScript visualization library that you can use to render to SVG format in your browser. [Mike Bostock](http://bl.ocks.org/mbostock) adapated d3.geo.til [to show OpenStreetMap vector tiles](http://bl.ocks.org/mbostock/5593150). To use D3 with Mapzen vector tiles, use either GeoJSON or TopoJSON format, which have similar syntax, or the Mapbox Vector Tiles format. The layer styling can be inline or referenced from a CSS file. 
@@ -216,6 +216,7 @@ d3 is a JavaScript visualization library that you can use to render to SVG forma
 With D3, specifying the URL to the Mapzen vector tile service takes the form of 
 
 `d3.json("https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.{format}", function(error, json)` 
+
 where .{format} can be .json for GeoJSON, .topojson for TopoJSON, or .mvt for Mapbox Vector Tiles.
 
 See the examples at https://github.com/mapzen/d3-vector-tiles for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt).
@@ -234,7 +235,7 @@ See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen v
 ## Hoverboard
 [Hoverboard](https://libraries.io/bower/hoverboard/v1.0.1) is a JavaScript library created by Tristan Davies to draw vector tiles as a Leaflet tile layer on the <canvas> HTML element of a webpage. Hoverboard supports the Mapzen vector tiles in GeoJSON, TopoJSON, or Mapbox Vector Tiles format. 
 
- `<script>
+''  <script>
     window.xyz_tile_source_url = 'https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.json';
   </script>`
 
