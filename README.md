@@ -219,7 +219,7 @@ With D3, specifying the URL to the Mapzen vector tile service takes the form of
 
 where .{format} can be .json for GeoJSON, .topojson for TopoJSON, or .mvt for Mapbox Vector Tiles.
 
-D3 uses a different zoom level that the maptiles you may be used to. Default zoom for a map is set using `d3.geo.mercator` and `.scale()` – in this example, 21 is roughly equivalent to z13.
+D3 uses a different zoom level than the maptiles you may be used to. Default zoom for a map is set using `d3.geo.mercator` and `.scale()` – in this example, 21 is roughly equivalent to z13.
 
 ```var projection = d3.geo.mercator()
     .scale((1 << 21) / 2 / Math.PI)```
@@ -227,7 +227,6 @@ D3 uses a different zoom level that the maptiles you may be used to. Default zoo
 Upper and lower zoom levels are set using `d3.behavior.zoom()` and `.scaleExtent()` – in this example, the scale extent of 12 to 25 is roughly z4-z5 to z17:
 
 ```.scaleExtent([1 << 12, 1 << 25])```
-
 
 See the examples at https://github.com/mapzen/d3-vector-tiles for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt).
 
