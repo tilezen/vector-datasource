@@ -215,7 +215,7 @@ d3 is a JavaScript visualization library that you can use to render to SVG forma
 
 With D3, specifying the URL to the Mapzen vector tile service takes the form of 
 
-'d3.json("https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.{format}", function(error, json)' 
+`d3.json("https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.{format}", function(error, json)` 
 where .{format} can be .json for GeoJSON, .topojson for TopoJSON, or .mvt for Mapbox Vector Tiles.
 
 See the examples at https://github.com/mapzen/d3-vector-tiles for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt).
@@ -224,19 +224,19 @@ See the examples at https://github.com/mapzen/d3-vector-tiles for more informati
 [MapboxGL](https://www.mapbox.com/mapbox-gl/) is a JavaScript library used to render the Mapbox Vector Tiles protocol buffer format through OpenGL on both web and native platforms. 
 
 To specify Mapzen vector tile server as the source, use the following URL string, where .mvt is the file format.
-'  "sources": {
+`  "sources": {
     "osm": {
       "type": "vector",
-      "tiles": ["https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.mvt"]'
+      "tiles": ["https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.mvt"]`
 
 See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen vector tiles displayed in MapboxGL.
 
 ## Hoverboard
 [Hoverboard](https://libraries.io/bower/hoverboard/v1.0.1) is a JavaScript library created by Tristan Davies to draw vector tiles as a Leaflet tile layer on the <canvas> HTML element of a webpage. Hoverboard supports the Mapzen vector tiles in GeoJSON, TopoJSON, or Mapbox Vector Tiles format. 
 
- '<script>
+ `<script>
     window.xyz_tile_source_url = 'https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.json';
-  </script>'
+  </script>`
 
 See https://github.com/mapzen/hoverboard for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt). The Leaflet tile layer is defined in example.js, where you specify the Mapzen vector tile layers you want to render and the colors and symbols used to draw them.
 
