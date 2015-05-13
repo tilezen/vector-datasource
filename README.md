@@ -208,7 +208,7 @@ If you are interested in setting up your own version of this service, look at ou
 You can use Mapzen’s vector tile service with a variety of browser-based rendering software packages. According to the syntax of the library you are using, you need to specify the URL to the Mapzen vector tile service, the layers that you want to draw on the map, and styling information about how to draw the features. 
 
 ## Tangram
-[Tangram](https://dev.mapzen.com/projects/tangram) is a WebGL mapping engine designed for real-time rendering of 2D and 3D maps from vector tiles. More details are available on the [Tangram home  page](https://dev.mapzen.com/projects/tangram) as well as [the Tangram Github wiki](https://github.com/tangrams/tangram/wiki).
+[Tangram](https://mapzen.com/projects/tangram) is a WebGL mapping engine designed for real-time rendering of 2D and 3D maps from vector tiles. More details are available on the [Tangram home  page](https://mapzen.com/projects/tangram) as well as [the Tangram Github wiki](https://github.com/tangrams/tangram/wiki).
 
 ## D3
 D3 is a JavaScript visualization library that you can use to render to SVG format in your browser. [Mike Bostock](http://bl.ocks.org/mbostock) adapated d3.geo.til [to show OpenStreetMap vector tiles](http://bl.ocks.org/mbostock/5593150). To use D3 with Mapzen vector tiles, use either GeoJSON or TopoJSON format, which have similar syntax, or the Mapbox Vector Tiles format. The layer styling can be inline or referenced from a CSS file. 
