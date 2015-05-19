@@ -4,8 +4,8 @@
 -- A function that creates a table containing a grid of cells, taken from here:
 -- http://gis.stackexchange.com/questions/16374/how-to-create-a-regular-polygon-grid-in-postgis
 create or replace function mz_CreateGrid(
-	nrow integer,
-	ncol integer,
+	numberX integer,
+	numberY integer,
 	xsize float8,
 	ysize float8,
 	x0 float8 default 0,
@@ -19,11 +19,11 @@ $$
 	select
 		rowInd + 1 as row,
 		colInd + 1 as col,
-		st_Translate(cell, colInd * $3 + $5, rowInd * $4 + $6) as the_geom
+		st_Translate(cell, colInd * xsize + x0, rowInd * ysize + y0) as the_geom
 	from
-		generate_series(0, $1 - 1) as rowInd,
-		generate_series(0, $2 - 1) as colInd,
-		(select ('POLYGON((0 0, 0 ' || $4 || ', ' || $3 || ' ' || $4 || ', ' || $3 || ' 0,0 0))')::geometry as cell) as foo;
+		generate_series(0, numberY - 1) as rowInd,
+		generate_series(0, numberX - 1) as colInd,
+		(select (format('POLYGON((0 0, 0 %s, %s %s, %s 0,0 0))', ysize, xsize, ysize, xsize))::geometry as cell) as foo;
 $$ language sql immutable strict;
 
 -- Split the polygons in a table called `table_name` into uniformly sized tiles
