@@ -1,5 +1,12 @@
 -- This file contains functions (see `mz_SplitIntoTiles()`) for splitting a
--- table of polygons into uniform tiles.
+-- table of polygons into uniform tiles. It was useful in integrating the
+-- ne_10m_land Natural Earth dataset, which, downloaded straight from the
+-- source, stores all seven continents in one monolithic multipolygon. That
+-- makes `st_intersects()`/`st_intersection()` take absurdly long, since they
+-- can't take advantage of any spatial indexes (which *would* help if it were
+-- split up into many smaller polygons), and thus clogs up tile queries, which
+-- depend on both of those functions. Hence, we split it into 10km x 10km tiles
+-- using `mz_SplitIntoTiles()`.
 
 -- A function that creates a table containing a grid of cells, taken from here:
 -- http://gis.stackexchange.com/questions/16374/how-to-create-a-regular-polygon-grid-in-postgis
