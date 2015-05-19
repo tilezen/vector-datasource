@@ -1,3 +1,8 @@
+-- This file contains functions (see `mz_SplitIntoTiles()`) for splitting a
+-- table of polygons into uniform tiles.
+
+-- A function that creates a table containing a grid of cells, taken from here:
+-- http://gis.stackexchange.com/questions/16374/how-to-create-a-regular-polygon-grid-in-postgis
 create or replace function mz_CreateGrid(
 	nrow integer,
 	ncol integer,
@@ -14,14 +19,19 @@ $$
 	select
 		rowInd + 1 as row,
 		colInd + 1 as col,
-		ST_Translate(cell, colInd * $3 + $5, rowInd * $4 + $6) as the_geom
+		st_Translate(cell, colInd * $3 + $5, rowInd * $4 + $6) as the_geom
 	from
 		generate_series(0, $1 - 1) as rowInd,
 		generate_series(0, $2 - 1) as colInd,
 		(select ('POLYGON((0 0, 0 ' || $4 || ', ' || $3 || ' ' || $4 || ', ' || $3 || ' 0,0 0))')::geometry as cell) as foo;
 $$ language sql immutable strict;
 
-create or replace function mz_SplitIntoTiles(table_name text, tile_size_meters integer)
+-- Split the polygons in a table called `table_name` into uniformly sized tiles
+-- in a table called `${table_name}_tiles`.
+create or replace function mz_SplitIntoTiles(
+	table_name text,
+	tile_size_meters integer
+)
 returns void as
 $$
 	declare
@@ -38,7 +48,8 @@ $$
 			(st_ymax(table_bbox) - st_ymin(table_bbox)) / (tile_size_meters :: float)
 		);
 
-		-- Create the grid table and an index for it.
+		-- Create a table containing a grid with cells of length/width
+		-- `tile_size_meters`, covering the entire extent of `table_name`.
 		execute format(
 			'create table %s as
 			select *
@@ -50,10 +61,13 @@ $$
 		perform UpdateGeometrySRID(grid_table_name, 'the_geom', 900913);
 		execute format('create index %s_index on %1$s using gist(the_geom)', grid_table_name);
 
-		-- Create KK
+		-- Intersect the gridded cells with the polygons in `table_name`,
+		-- storing the now-tiled polygons in `${table_name}_tiles`.
 		execute format(
-			'create table %1$s_grid_intersected as
-			select ST_Intersection(%1$s.the_geom, %2$s.the_geom) as geom
+			'create table %1$s_tiles as
+			select
+				row::text || ''-'' || col::text as gid,
+				st_Intersection(%1$s.the_geom, %2$s.the_geom) as geom
 			from %1$s
 			join %2$s
 			on (
@@ -62,10 +76,6 @@ $$
 			);',
 			table_name, grid_table_name
 		);
-		execute format(
-			'drop table %1$s;
-			alter table %1$s_intersected rename to %1$s;',
-			grid_table_name
-		);
+		execute 'drop table ' || grid_table_name;
 	end
 $$ language plpgsql;
