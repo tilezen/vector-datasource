@@ -30,7 +30,8 @@ $$ language sql immutable strict;
 -- in a table called `${table_name}_tiles`.
 create or replace function mz_SplitIntoTiles(
 	table_name text,
-	tile_size_meters integer
+	tile_size_meters integer,
+	geom_column_name text default 'the_geom'
 )
 returns void as
 $$
@@ -40,7 +41,7 @@ $$
 		num_tiles_x integer;
 		num_tiles_y integer;
 	begin
-		execute format('select st_extent(the_geom) from %s', table_name) into table_bbox;
+		execute format('select st_extent(%s) from %s', geom_column_name, table_name) into table_bbox;
 		num_tiles_x = ceiling(
 			(st_xmax(table_bbox) - st_xmin(table_bbox)) / (tile_size_meters :: float)
 		);
@@ -67,14 +68,14 @@ $$
 			'create table %1$s_tiles as
 			select
 				row::text || ''-'' || col::text as gid,
-				st_Intersection(%1$s.the_geom, %2$s.the_geom) as geom
+				st_intersection(%1$s.%3$s, %2$s.the_geom) as geom
 			from %1$s
 			join %2$s
 			on (
-				st_isvalid(%1$s.the_geom) and
-				st_Intersects(%1$s.the_geom, %2$s.the_geom)
+				st_isvalid(%1$s.%3$s) and
+				st_intersects(%1$s.%3$s, %2$s.the_geom)
 			);',
-			table_name, grid_table_name
+			table_name, grid_table_name, geom_column_name
 		);
 		execute 'drop table ' || grid_table_name;
 	end
