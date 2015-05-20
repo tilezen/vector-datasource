@@ -78,7 +78,7 @@ $$
 			'create table %1$s_tiles as
 			select
 				nextval(''%1$s_ids'')::int as gid,
-				st_intersection(%1$s.%3$s, %2$s.the_geom) as geom
+				st_intersection(%1$s.%3$s, %2$s.the_geom) as the_geom
 			from %1$s
 			join %2$s
 			on (
