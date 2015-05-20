@@ -69,12 +69,15 @@ $$
 		perform UpdateGeometrySRID(grid_table_name, 'the_geom', 900913);
 		execute format('create index %s_index on %1$s using gist(the_geom)', grid_table_name);
 
+		execute format('create sequence %1$s_ids;', table_name);
+
 		-- Intersect the gridded cells with the polygons in `table_name`,
-		-- storing the now-tiled polygons in `${table_name}_tiles`.
+		-- storing the now-tiled polygons in `${table_name}_tiles`. Assign each
+		-- a unique `gid`.
 		execute format(
 			'create table %1$s_tiles as
 			select
-				row::text || ''-'' || col::text as gid,
+				nextval(''%1$s_ids'')::int as gid,
 				st_intersection(%1$s.%3$s, %2$s.the_geom) as geom
 			from %1$s
 			join %2$s
@@ -84,6 +87,7 @@ $$
 			);',
 			table_name, grid_table_name, geom_column_name
 		);
+
 		execute 'drop table ' || grid_table_name;
 	end
 $$ language plpgsql;
