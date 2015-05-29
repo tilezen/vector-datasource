@@ -7,11 +7,11 @@ FROM
     --
     SELECT
         '' AS name,
-        way_area::bigint AS area,
+        sum(way_area)::bigint AS area,
         'ocean' AS kind,
         'naturalearthdata.com' AS source,
-        the_geom AS __geometry__,
-        gid AS __id__
+        st_union(the_geom) AS __geometry__,
+        max(gid) __id__
 
     FROM ne_110m_ocean
 
@@ -24,14 +24,15 @@ FROM
 
     SELECT
         name,
-        way_area::bigint AS area,
+        sum(way_area)::bigint AS area,
         'lake' AS kind,
         'naturalearthdata.com' AS source,
-        the_geom AS __geometry__,
-        gid AS __id__
+        st_union(the_geom) AS __geometry__,
+        max(gid) __id__
 
     FROM ne_110m_lakes
 
     WHERE the_geom && !bbox!
+    GROUP BY name
 
 ) AS water_areas
