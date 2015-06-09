@@ -23,7 +23,8 @@ SELECT
     tags->'ascent' AS ascent,
     tags->'descent' AS descent,
     tags->'roundtrip' AS roundtrip,
-    tags->'route_name' AS route_name
+    tags->'route_name' AS route_name,
+    %#tags AS tags
 
 FROM planet_osm_line
 

@@ -1,4 +1,4 @@
-SELECT name, kind, source, __geometry__, __id__, admin_level, scalerank, labelrank, population
+SELECT name, kind, source, __geometry__, __id__, admin_level, scalerank, labelrank, population, tags
 
 FROM
 (
@@ -15,7 +15,9 @@ FROM
 
         scalerank,
         labelrank,
-        pop_max AS population
+        pop_max AS population,
+
+        NULL AS tags
 
     FROM ne_10m_populated_places
 
@@ -37,7 +39,9 @@ FROM
 
         NULL AS scalerank,
         NULL AS labelrank,
-        NULL AS population
+        NULL AS population,
+
+        %#tags AS tags
 
     FROM planet_osm_point
 

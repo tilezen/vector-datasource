@@ -16,7 +16,8 @@ SELECT
     "roof:shape" AS roof_shape,
     "roof:height" AS roof_height,
     "roof:orientation" AS roof_orientation,
-    way AS __geometry__
+    way AS __geometry__,
+    %#tags AS tags
 
 FROM
     planet_osm_polygon AS building_outer

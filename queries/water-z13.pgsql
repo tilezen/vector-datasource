@@ -1,4 +1,4 @@
-SELECT name, area, kind, source, __geometry__, __id__
+SELECT name, area, kind, source, __geometry__, __id__, tags
 
 FROM
 (
@@ -11,7 +11,8 @@ FROM
         'ocean' AS kind,
         'openstreetmapdata.com' AS source,
         the_geom AS __geometry__,
-        gid AS __id__
+        gid AS __id__,
+        NULL AS tags
 
     FROM water_polygons
 
@@ -29,7 +30,8 @@ FROM
         COALESCE("waterway", "natural", "landuse") AS kind,
         'openstreetmap.org' AS source,
         way AS __geometry__,
-        osm_id AS __id__
+        osm_id AS __id__,
+        %#tags AS tags
 
     FROM planet_osm_polygon
 
@@ -49,7 +51,8 @@ FROM
         waterway AS kind,
         'openstreetmap.org' AS source,
         way AS __geometry__,
-        osm_id AS __id__
+        osm_id AS __id__,
+        %#tags AS tags
 
     FROM planet_osm_line
 

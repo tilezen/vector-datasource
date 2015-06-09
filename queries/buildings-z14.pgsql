@@ -11,7 +11,8 @@ SELECT
     "building:min_levels",
     height,
     min_height,
-    way AS __geometry__
+    way AS __geometry__,
+    %#tags AS tags
 
 FROM
     planet_osm_polygon
