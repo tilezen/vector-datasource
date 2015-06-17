@@ -11,3 +11,4 @@ FROM planet_osm_polygon
 WHERE
     mz_is_landuse = TRUE
     AND way_area::bigint > 102400 -- 4px
+    AND name IS NOT NULL
