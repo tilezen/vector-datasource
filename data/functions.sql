@@ -219,7 +219,7 @@ BEGIN
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
              WHEN (aeroway_val IN ('gate')
                    OR amenity_val IN (
-                 'atm', 'bank', 'bar', 'bicycle_rental',
+                 'atm', 'bank', 'bar', 'bicycle_rental', 'bicycle_parking',
                  'cafe', 'cinema', 'courthouse', 'drinking_water', 'embassy', 'emergency_phone',
                  'fast_food', 'fire_station', 'fuel', 'library', 'pharmacy',
                  'police', 'post_box', 'post_office', 'restaurant', 'telephone', 'theatre',
