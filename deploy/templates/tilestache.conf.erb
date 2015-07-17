@@ -39,7 +39,9 @@
                 "landuse_labels",
                 "roads",
                 "buildings",
-                "pois"
+                "pois",
+                "boundaries",
+                "transit"
             ],
             "ignore_cached_sublayers": true
         }
@@ -65,11 +67,11 @@
                 null,
                 null,
                 null,
-                null,
-                null,
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z5.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z6.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z7.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z8.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z9.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z10.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z11.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/roads-z12.pgsql",
@@ -82,12 +84,17 @@
                 "MultiLineString"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.road_kind",
                 "TileStache.Goodies.VecTiles.transform.road_classifier",
                 "TileStache.Goodies.VecTiles.transform.road_sort_key",
                 "TileStache.Goodies.VecTiles.transform.road_oneway",
+                "TileStache.Goodies.VecTiles.transform.road_abbreviate_name",
+                "TileStache.Goodies.VecTiles.transform.route_name",
                 "TileStache.Goodies.VecTiles.transform.road_trim_properties",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
@@ -162,6 +169,9 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.building_kind",
@@ -214,6 +224,9 @@
                 "MultiPoint"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
@@ -257,6 +270,9 @@
                 "MultiPoint"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
@@ -303,6 +319,9 @@
                 "MultiPolygon"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
@@ -330,11 +349,11 @@
                 null,
                 null,
                 null,
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z4.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z4.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
-                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z6.pgsql",
+                null,
+                null,
+                null,
+                null,
+                null,
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z9.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z10.pgsql",
                 "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/landuse-labels-z11.pgsql",
@@ -349,6 +368,9 @@
                 "MultiPoint"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
@@ -437,12 +459,100 @@
                 "MultiLineString"
             ],
             "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
                 "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
                 "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
                 "TileStache.Goodies.VecTiles.transform.remove_feature_id"
             ],
             "simplify_before_intersect": true,
             "sort_fn": "TileStache.Goodies.VecTiles.sort.water"
+        }
+    }
+},
+    "boundaries": {
+    "allowed origin": "*",
+    "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+            "dbinfo": {
+                "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+                "port": 5432,
+                "user": "gisuser",
+                "database": "tilestache-gis",
+                "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            },
+            "queries": [
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z0.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z0.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z0.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z3.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z3.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z3.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z3.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z7.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/boundaries-z8.pgsql"
+            ],
+            "geometry_types": [
+                "LineString",
+                "MultiLineString"
+            ],
+            "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
+            ],
+            "simplify_before_intersect": true
+        }
+    }
+},
+    "transit": {
+    "allowed origin": "*",
+    "cache lifespan": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "maximum cache age": "<%= node[:mapzen_tilestache][:max_age] %>",
+    "provider": {
+        "class": "TileStache.Goodies.VecTiles:Provider",
+        "kwargs": {
+            "dbinfo": {
+                "host": "<%= node[:mapzen][:postgresql][:endpoint] %>",
+                "port": 5432,
+                "user": "gisuser",
+                "database": "tilestache-gis",
+                "password": "<%= node[:mapzen][:secrets][:postgresql][:password][:gisuser] %>"
+            },
+            "queries": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/transit-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/transit-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/transit-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/transit-z6.pgsql",
+                "<%= node[:mapzen_tilestache][:query_dir_name] %>/current/queries/transit-z10.pgsql"
+            ],
+            "geometry_types": [
+                "LineString",
+                "MultiLineString"
+            ],
+            "transform_fns": [
+                "TileStache.Goodies.VecTiles.transform.tags_create_dict",
+                "TileStache.Goodies.VecTiles.transform.tags_name_i18n",
+                "TileStache.Goodies.VecTiles.transform.tags_remove",
+                "TileStache.Goodies.VecTiles.transform.add_id_to_properties",
+                "TileStache.Goodies.VecTiles.transform.detect_osm_relation",
+                "TileStache.Goodies.VecTiles.transform.route_name",
+                "TileStache.Goodies.VecTiles.transform.remove_feature_id"
+            ],
+            "sort_fn": "TileStache.Goodies.VecTiles.sort.transit"
         }
     }
 }
