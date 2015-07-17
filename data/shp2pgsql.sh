@@ -27,3 +27,4 @@ import_shapefile -W UTF-8 ne_50m_admin_0_boundary_lines_land-merc.shp ne_50m_adm
 import_shapefile -W UTF-8 ne_50m_admin_1_states_provinces_lines-merc.shp ne_50m_admin_1_states_provinces_lines
 import_shapefile -W UTF-8 ne_10m_admin_0_boundary_lines_land-merc.shp ne_10m_admin_0_boundary_lines_land
 import_shapefile -W UTF-8 ne_10m_admin_1_states_provinces_lines-merc.shp ne_10m_admin_1_states_provinces_lines
+import_shapefile ne_10m_roads-merc.shp ne_10m_roads
