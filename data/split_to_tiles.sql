@@ -87,6 +87,10 @@ $$
 			);',
 			table_name, grid_table_name, geom_column_name
 		);
+		execute format(
+			'create index %s_tiles_index on %1$s_tiles using gist(the_geom)',
+			table_name
+		);
 
 		execute 'drop table ' || grid_table_name;
 	end

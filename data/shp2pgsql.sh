@@ -22,3 +22,8 @@ import_shapefile ne_10m_land-tiled-merc.shp ne_10m_land
 import_shapefile ne_50m_land-merc.shp ne_50m_land
 import_shapefile ne_110m_land-merc.shp ne_110m_land
 import_shapefile ne_10m_populated_places-merc.shp ne_10m_populated_places
+import_shapefile -W UTF-8 ne_110m_admin_0_boundary_lines_land-merc.shp ne_110m_admin_0_boundary_lines_land
+import_shapefile -W UTF-8 ne_50m_admin_0_boundary_lines_land-merc.shp ne_50m_admin_0_boundary_lines_land
+import_shapefile -W UTF-8 ne_50m_admin_1_states_provinces_lines-merc.shp ne_50m_admin_1_states_provinces_lines
+import_shapefile -W UTF-8 ne_10m_admin_0_boundary_lines_land-merc.shp ne_10m_admin_0_boundary_lines_land
+import_shapefile -W UTF-8 ne_10m_admin_1_states_provinces_lines-merc.shp ne_10m_admin_1_states_provinces_lines
