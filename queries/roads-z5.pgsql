@@ -13,4 +13,4 @@ SELECT
 
 FROM ne_10m_roads
 
-WHERE scalerank <= 7
+WHERE scalerank <= 5
