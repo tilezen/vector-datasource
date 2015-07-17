@@ -1,16 +1,16 @@
 SELECT
-    way AS __geometry__,
+    gid AS __id__,
+    the_geom AS __geometry__,
+    'naturalearthdata.com' AS source,
     name,
-    osm_id AS __id__,
-    aeroway,
-    bridge,
-    highway,
-    layer,
-    railway,
-    tunnel,
-    oneway
+    namealt,
+    namealtt,
+    featurecla AS kind,
+    scalerank,
+    labelrank,
+    level,
+    type
 
-FROM planet_osm_line
+FROM ne_10m_roads
 
-WHERE
-    mz_calculate_road_level(highway, railway, aeroway) <= 7
+WHERE scalerank <= 7
