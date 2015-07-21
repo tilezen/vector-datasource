@@ -6,7 +6,7 @@ SELECT
     namealt,
     namealtt,
     featurecla AS kind,
-    scalerank,
+    scalerank::float,
     labelrank,
     level,
     type
