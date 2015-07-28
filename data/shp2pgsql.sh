@@ -4,7 +4,7 @@
 #
 
 import_shapefile(){
-	shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom "$1" "$2"
+	shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom "$@"
 }
 
 import_shapefile ne_10m_lakes-merc.shp ne_10m_lakes
