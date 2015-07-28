@@ -12,9 +12,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql VOLATILE;
 
-DO $$
-BEGIN
-
-PERFORM mz_create_trigger_if_not_exists('mz_trigger_landuse', 'planet_osm_polygon', 'mz_trigger_function_landuse');
-
-END $$;
+CREATE TRIGGER mz_trigger_landuse BEFORE INSERT OR UPDATE ON planet_osm_polygon FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_landuse();
