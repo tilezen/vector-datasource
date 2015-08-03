@@ -81,9 +81,9 @@ BEGIN
                                  'greengrocer', 'hairdresser', 'jewelry', 'mobile_phone',
                                  'optician', 'pet')
                    OR tourism_val IN ('bed_and_breakfast', 'chalet', 'guest_house',
-                                    'hostel', 'hotel', 'motel', 'museum')) THEN 17
-             WHEN (amenity_val IN ('bench', 'waste_basket')
-                   OR railway_val IN ('subway_entrance')) THEN 18
+                                    'hostel', 'hotel', 'motel', 'museum')
+                   OR railway_val IN ('subway_entrance')) THEN 17
+             WHEN (amenity_val IN ('bench', 'waste_basket')) THEN 18
              ELSE NULL END
     );
 END;
