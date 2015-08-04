@@ -1,0 +1,143 @@
+all:
+  - water
+  - earth
+  - places
+  - landuse
+  - landuse_labels
+  - roads
+  - buildings
+  - pois
+  - boundaries
+  - transit
+layers:
+  water:
+    template: water.jinja2
+    start_zoom: 0
+    geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
+    simplify_before_intersect: true
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.water
+  earth:
+    template: earth.jinja2
+    start_zoom: 0
+    geometry_types: [Polygon, MultiPolygon]
+    simplify_before_intersect: true
+    transform:
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.earth
+  places:
+    template: places.jinja2
+    start_zoom: 0
+    geometry_types: [Point, MultiPoint]
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.places
+  landuse:
+    template: landuse.jinja2
+    start_zoom: 4
+    geometry_types: [Polygon, MultiPolygon]
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.landuse
+  landuse_labels:
+    template: landuse_labels.jinja2
+    start_zoom: 9
+    geometry_types: [Point, MultiPoint]
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.landuse
+  roads:
+    template: roads.jinja2
+    start_zoom: 5
+    geometry_types: [LineString, MultiLineString]
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.road_kind
+      - TileStache.Goodies.VecTiles.transform.road_classifier
+      - TileStache.Goodies.VecTiles.transform.road_sort_key
+      - TileStache.Goodies.VecTiles.transform.road_oneway
+      - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
+      - TileStache.Goodies.VecTiles.transform.route_name
+      - TileStache.Goodies.VecTiles.transform.road_trim_properties
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.roads
+  buildings:
+    template: buildings.jinja2
+    start_zoom: 13
+    geometry_types: [Polygon, MultiPolygon]
+    clip: false
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.building_kind
+      - TileStache.Goodies.VecTiles.transform.building_height
+      - TileStache.Goodies.VecTiles.transform.building_min_height
+      - TileStache.Goodies.VecTiles.transform.building_trim_properties
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.buildings
+  pois:
+    template: pois.jinja2
+    start_zoom: 9
+    geometry_types: [Point, MultiPoint]
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.pois
+  boundaries:
+    template: boundaries.jinja2
+    start_zoom: 0
+    geometry_types: [LineString, MultiLineString]
+    simplify_before_intersect: true
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+  transit:
+    template: transit.jinja2
+    start_zoom: 6
+    geometry_types: [LineString, MultiLineString]
+    transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.route_name
+      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    sort: TileStache.Goodies.VecTiles.sort.transit

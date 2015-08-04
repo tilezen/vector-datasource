@@ -1,0 +1,18 @@
+SELECT
+    'base' AS land,
+    {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
+    max(gid) AS __id__
+FROM
+
+{% if zoom < 4 %}
+    ne_110m_land
+{% elif 4 <= zoom < 7 %}
+    ne_50m_land
+{% elif 7 <= zoom < 9 %}
+    ne_10m_land
+{% else %}
+    land_polygons
+{% endif %}
+
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}

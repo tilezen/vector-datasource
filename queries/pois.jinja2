@@ -1,0 +1,48 @@
+SELECT
+    name,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+    %#tags AS tags,
+{% if zoom < 11 %}
+    aeroway AS kind
+{% elif zoom == 11 %}
+    COALESCE("aeroway", "natural") AS kind
+{% elif zoom == 12 %}
+    COALESCE("aeroway", "natural", "railway") AS kind
+{% elif zoom == 13 or zoom == 14 %}
+    COALESCE("aerialway", "aeroway", "natural", "railway", "tourism") AS kind
+{% elif zoom == 15 %}
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "highway",
+             "lock", "man_made", "natural", "power", "railway", "tourism",
+             "waterway") AS kind
+{% elif zoom == 16 %}
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "highway", "historic",
+             "lock", "man_made", "natural", "power", "railway", "shop",
+             "tourism", "waterway") AS kind
+{% elif zoom >= 17 %}
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "highway", "historic",
+             "leisure", "lock", "man_made", "natural", "power", "railway", "shop",
+             "tourism", "waterway") AS kind
+{% endif %}
+
+FROM planet_osm_point
+
+WHERE
+    {{ bounds|bbox_filter('way') }}
+    AND mz_calculate_poi_level(
+        "aerialway",
+        "aeroway",
+        "amenity",
+        "barrier",
+        "highway",
+        "historic",
+        "leisure",
+        "lock",
+        "man_made",
+        "natural",
+        "power",
+        "railway",
+        "shop",
+        "tourism",
+        "waterway"
+    ) <= {{ zoom }}

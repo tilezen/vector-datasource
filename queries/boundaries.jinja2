@@ -1,0 +1,72 @@
+{% macro ne_boundary_cols(type) %}
+    gid AS __id__,
+    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    scalerank::float,
+    featurecla AS kind,
+    '{{ type }}' AS type
+{% endmacro %}
+
+{% if zoom < 3 %}
+
+SELECT
+    {{ ne_boundary_cols('country') }}
+FROM
+    ne_110m_admin_0_boundary_lines_land
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+{% elif 3 <= zoom < 7 %}
+
+SELECT
+    {{ ne_boundary_cols('country') }}
+FROM
+    ne_50m_admin_0_boundary_lines_land
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+UNION
+
+SELECT
+    {{ ne_boundary_cols('state') }}
+FROM
+    ne_50m_admin_1_states_provinces_lines
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+{% elif 7 <= zoom < 8 %}
+
+SELECT
+    name,
+    labelrank,
+    {{ ne_boundary_cols('country') }}
+FROM
+    ne_10m_admin_0_boundary_lines_land
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+UNION
+
+SELECT
+    name,
+    NULL AS labelrank,
+    {{ ne_boundary_cols('state') }}
+FROM
+    ne_10m_admin_1_states_provinces_lines
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+{% else %}
+
+SELECT
+    osm_id AS __id__,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    tags->'border_type' AS kind,
+    name,
+    %#tags AS tags
+FROM
+    planet_osm_line
+WHERE
+    boundary='administrative'
+    AND {{ bounds|bbox_filter('way') }}
+
+{% endif %}

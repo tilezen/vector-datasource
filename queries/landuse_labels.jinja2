@@ -1,0 +1,30 @@
+SELECT
+    name,
+    way_area::bigint AS area,
+    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}mz_centroid{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+    %#tags AS tags
+FROM
+    planet_osm_polygon
+WHERE
+    mz_is_landuse = TRUE
+    AND name IS NOT NULL
+    AND {{ bounds|bbox_filter('way') }}
+
+    {% if zoom == 9 %}
+    AND way_area::bigint > 409600
+    {% elif zoom == 10 %}
+    AND way_area::bigint > 102400
+    {% elif zoom == 11 %}
+    AND way_area::bigint > 25600
+    {% elif zoom == 12 %}
+    AND way_area::bigint > 6400
+    {% elif zoom == 13 %}
+    AND way_area::bigint > 1600
+    {% elif zoom == 14 %}
+    AND way_area::bigint > 400
+    {% elif zoom == 15 %}
+    AND way_area::bigint > 100
+    {% endif %}
