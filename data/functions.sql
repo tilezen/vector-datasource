@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION mz_calculate_is_landuse(
-    landuse_val text, leisure_val text, natural_val text, highway_val text, amenity_val text, aeroway_val text)
+    landuse_val text, leisure_val text, natural_val text, highway_val text, amenity_val text, aeroway_val text, tourism_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN
@@ -13,7 +13,8 @@ BEGIN
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
                         'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
-     OR aeroway_val IN ('runway', 'taxiway', 'apron');
+     OR aeroway_val IN ('runway', 'taxiway', 'apron')
+     OR tourism_val IN ('zoo');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
