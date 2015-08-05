@@ -13,7 +13,7 @@ BEGIN
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
                         'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
-     OR aeroway_val IN ('runway', 'taxiway', 'apron')
+     OR aeroway_val IN ('runway', 'taxiway', 'apron', 'aerodrome')
      OR tourism_val IN ('zoo');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
