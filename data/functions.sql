@@ -43,7 +43,7 @@ BEGIN
              WHEN railway_val IN ('station') THEN 12
              WHEN (aerialway_val IN ('station')
                    OR railway_val IN ('halt', 'tram_stop')
-                   OR tourism_val IN ('alpine_hut')) THEN 13
+                   OR tourism_val IN ('alpine_hut', 'zoo')) THEN 13
              WHEN (natural_val IN ('spring')
                    OR railway_val IN ('level_crossing')) THEN 14
              WHEN (amenity_val IN ('hospital')
