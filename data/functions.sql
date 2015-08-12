@@ -54,11 +54,11 @@ BEGIN
                    OR power_val IN ('generator')
                    OR waterway_val IN ('lock')) THEN 15
              WHEN (aeroway_val IN ('helipad')
-                   OR amenity_val IN ('biergarten', 'bus_station', 'bus_stop', 'car_sharing',
-                                    'picnic_site', 'place_of_worship',
-                                    'prison', 'pub', 'recycling', 'shelter')
+                   OR amenity_val IN ('biergarten', 'bus_station', 'car_sharing',
+                                      'picnic_site', 'place_of_worship',
+                                      'prison', 'pub', 'recycling', 'shelter')
                    OR barrier_val IN ('block', 'bollard', 'lift_gate')
-                   OR highway_val IN ('bus_stop', 'ford')
+                   OR highway_val IN ('ford')
                    OR historic_val IN ('archaeological_site')
                    OR man_made_val IN ('windmill')
                    OR natural_val IN ('tree')
@@ -66,12 +66,12 @@ BEGIN
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
              WHEN (aeroway_val IN ('gate')
                    OR amenity_val IN (
-                 'atm', 'bank', 'bar', 'bicycle_rental', 'bicycle_parking',
+                 'atm', 'bank', 'bar', 'bicycle_rental', 'bicycle_parking', 'bus_stop',
                  'cafe', 'cinema', 'courthouse', 'drinking_water', 'embassy', 'emergency_phone',
                  'fast_food', 'fire_station', 'fuel', 'library', 'parking', 'pharmacy',
                  'police', 'post_box', 'post_office', 'restaurant', 'telephone', 'theatre',
                  'toilets', 'veterinary')
-                   OR highway_val IN ('traffic_signals')
+                   OR highway_val IN ('bus_stop', 'traffic_signals')
                    OR historic_val IN ('memorial')
                    OR leisure_val IN ('playground', 'slipway')
                    OR man_made_val IN ('mast', 'water_tower')
