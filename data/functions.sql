@@ -45,7 +45,7 @@ BEGIN
                    OR tourism_val IN ('alpine_hut')) THEN 13
              WHEN (natural_val IN ('spring')
                    OR railway_val IN ('level_crossing')) THEN 14
-             WHEN (amenity_val IN ('hospital', 'parking')
+             WHEN (amenity_val IN ('hospital')
                    OR barrier_val IN ('gate')
                    OR highway_val IN ('gate', 'mini_roundabout')
                    OR lock_val IN ('yes')
@@ -68,7 +68,7 @@ BEGIN
                    OR amenity_val IN (
                  'atm', 'bank', 'bar', 'bicycle_rental', 'bicycle_parking',
                  'cafe', 'cinema', 'courthouse', 'drinking_water', 'embassy', 'emergency_phone',
-                 'fast_food', 'fire_station', 'fuel', 'library', 'pharmacy',
+                 'fast_food', 'fire_station', 'fuel', 'library', 'parking', 'pharmacy',
                  'police', 'post_box', 'post_office', 'restaurant', 'telephone', 'theatre',
                  'toilets', 'veterinary')
                    OR highway_val IN ('traffic_signals')
