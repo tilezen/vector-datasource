@@ -1,19 +1,20 @@
 CREATE OR REPLACE FUNCTION mz_calculate_is_landuse(
-    landuse_val text, leisure_val text, natural_val text, highway_val text, amenity_val text, aeroway_val text)
+    landuse_val text, leisure_val text, natural_val text, highway_val text, amenity_val text, aeroway_val text, tourism_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN
         landuse_val IN ('park', 'forest', 'residential', 'retail', 'commercial',
                         'industrial', 'railway', 'cemetery', 'grass', 'farmyard',
                         'farm', 'farmland', 'wood', 'meadow', 'village_green',
-                        'recreation_ground', 'allotments', 'quarry')
+                        'recreation_ground', 'allotments', 'quarry', 'urban', 'rural')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
      OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier')
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
                         'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
-     OR aeroway_val IN ('runway', 'taxiway', 'apron');
+     OR aeroway_val IN ('runway', 'taxiway', 'apron', 'aerodrome')
+     OR tourism_val IN ('zoo');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -42,7 +43,7 @@ BEGIN
              WHEN railway_val IN ('station') THEN 12
              WHEN (aerialway_val IN ('station')
                    OR railway_val IN ('halt', 'tram_stop')
-                   OR tourism_val IN ('alpine_hut')) THEN 13
+                   OR tourism_val IN ('alpine_hut', 'zoo')) THEN 13
              WHEN (natural_val IN ('spring')
                    OR railway_val IN ('level_crossing')) THEN 14
              WHEN (amenity_val IN ('hospital')
