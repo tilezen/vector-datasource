@@ -41,7 +41,7 @@ WHERE
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
+    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
