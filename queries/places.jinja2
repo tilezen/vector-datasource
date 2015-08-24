@@ -1,0 +1,51 @@
+SELECT
+    name,
+    featurecla AS kind,
+    'naturalearthdata.com' AS source,
+    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    gid AS __id__,
+
+    NULL as admin_level,
+
+    scalerank,
+    labelrank,
+    pop_max AS population,
+    NULL as tags
+
+FROM ne_10m_populated_places
+
+WHERE
+    scalerank <= {{ zoom }}
+    AND {{ bounds|bbox_filter('the_geom') }}
+
+UNION
+
+SELECT
+    name,
+    place AS kind,
+    'openstreetmap' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+
+    admin_level,
+
+    NULL AS scalerank,
+    NULL AS labelrank,
+    NULL AS population,
+
+    %#tags AS tags
+
+FROM planet_osm_point
+
+WHERE
+    name IS NOT NULL
+    AND place IN (
+        'continent',
+        'ocean',
+        'country'
+        {% if zoom >= 3 %}, 'sea'{% endif %}
+        {% if zoom >= 4 %}, 'state', 'province'{% endif %}
+        {% if zoom >= 11 %}, 'hamlet', 'village', 'town'{% endif %}
+        {% if zoom >= 12 %}, 'neighbourhood', 'suburb', 'quarter'{% endif %}
+    )
+    AND {{ bounds|bbox_filter('way') }}

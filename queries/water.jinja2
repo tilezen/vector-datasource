@@ -1,0 +1,125 @@
+{% macro ne_water_cols(kind) %}
+    sum(way_area)::bigint AS area,
+    '{{ kind }}' AS kind,
+    'naturalearthdata.com' AS source,
+    {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
+    max(gid) AS __id__
+{% endmacro %}
+
+{% if zoom < 9 %}
+SELECT
+    '' AS name,
+    {{ ne_water_cols('ocean') }}
+
+{% if zoom < 4 %}
+FROM ne_110m_ocean
+{% elif 4 <= zoom < 7 %}
+FROM ne_50m_ocean
+{% elif 7 <= zoom < 9 %}
+FROM ne_10m_ocean
+{% endif %}
+
+WHERE {{ bounds|bbox_filter('the_geom') }}
+
+UNION
+
+SELECT
+    name,
+    {{ ne_water_cols('lake') }}
+
+{% if zoom < 4 %}
+FROM ne_110m_lakes
+{% elif 4 <= zoom < 7 %}
+FROM ne_50m_lakes
+{% elif 7 <= zoom < 9 %}
+FROM ne_10m_lakes
+{% endif %}
+
+WHERE {{ bounds|bbox_filter('the_geom') }}
+GROUP BY name
+
+{% if 4 <= zoom < 9 %}
+UNION
+
+SELECT
+    name,
+    {{ ne_water_cols('playa') }}
+
+{% if 4 <= zoom < 7 %}
+FROM ne_50m_playas
+{% elif 7 <= zoom < 9 %}
+FROM ne_10m_playas
+{% endif %}
+
+WHERE {{ bounds|bbox_filter('the_geom') }}
+GROUP BY name
+
+{% endif %}
+
+{% elif 9 <= zoom %}
+SELECT
+    '' AS name,
+    way_area::bigint AS area,
+    'ocean' AS kind,
+    'openstreetmapdata.com' AS source,
+    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    gid AS __id__,
+    NULL AS tags
+
+FROM water_polygons
+
+WHERE {{ bounds|bbox_filter('the_geom') }}
+
+UNION
+
+SELECT
+    name,
+    way_area::bigint AS area,
+    COALESCE("waterway", "natural", "landuse") AS kind,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+    %#tags AS tags
+
+FROM planet_osm_polygon
+
+WHERE
+    mz_calculate_is_water("waterway", "natural", "landuse") = TRUE
+    AND {{ bounds|bbox_filter('way') }}
+{% if 9 <= zoom < 11 %}
+    AND way_area::bigint > 102400
+{% elif zoom == 11 %}
+    AND way_area::bigint > 25600
+{% elif zoom == 12 %}
+    AND way_area::bigint > 6400
+{% elif zoom == 13 %}
+    AND way_area::bigint > 1600
+{% elif zoom == 14 %}
+    AND way_area::bigint > 400
+{% elif zoom == 15 %}
+    AND way_area::bigint > 100
+{% endif %}
+
+UNION
+
+SELECT
+    name,
+    NULL AS area,
+    waterway AS kind,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+    %#tags AS tags
+
+FROM planet_osm_line
+
+WHERE
+    {{ bounds|bbox_filter('way') }}
+    AND waterway IN (
+    'canal', 'river'
+{% if 11 <= zoom %}, 'stream'{% endif %}
+{% if 13 <= zoom %}, 'dam'{% endif %}
+{% if 16 <= zoom %}, 'ditch', 'drain'{% endif %}
+    )
+
+{% endif %}

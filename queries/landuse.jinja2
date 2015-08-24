@@ -1,0 +1,71 @@
+{% macro ne_landuse_cols(kind) %}
+    way_area::bigint AS area,
+    '{{ kind }}' AS kind,
+    'naturalearthdata.com' AS source,
+    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    gid AS __id__
+{% endmacro %}
+
+{% if 4 <= zoom < 6 %}
+
+SELECT
+    '' AS name,
+    {{ ne_landuse_cols('urban area') }}
+FROM
+    ne_50m_urban_areas
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+{% elif 6 <= zoom < 9 %}
+
+SELECT
+    '' AS name,
+    {{ ne_landuse_cols('urban area') }}
+FROM
+    ne_10m_urban_areas
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+UNION
+
+SELECT
+    name,
+    {{ ne_landuse_cols('park or protected land') }}
+FROM
+    ne_10m_parks_and_protected_lands
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+{% else %}
+
+SELECT
+    name,
+    way_area::bigint AS area,
+    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity") AS kind,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+    %#tags AS tags
+FROM
+    planet_osm_polygon
+WHERE
+    mz_is_landuse = TRUE
+    AND {{ bounds|bbox_filter('way') }}
+
+    {% if zoom == 9 %}
+    AND way_area::bigint > 409600
+    {% elif zoom == 10 %}
+    AND way_area::bigint > 102400
+    {% elif zoom == 11 %}
+    AND way_area::bigint > 25600
+    {% elif zoom == 12 %}
+    AND way_area::bigint > 6400
+    {% elif zoom == 13 %}
+    AND way_area::bigint > 1600
+    {% elif zoom == 14 %}
+    AND way_area::bigint > 400
+    {% elif zoom == 15 %}
+    AND way_area::bigint > 100
+    {% endif %}
+
+{% endif %}
