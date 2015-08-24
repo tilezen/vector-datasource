@@ -11,6 +11,9 @@ FROM
 WHERE
     mz_is_landuse = TRUE
     AND name IS NOT NULL
+    {% if zoom < 17 %}
+    AND (amenity IS NULL OR amenity != 'parking')
+    {% endif %}
     AND {{ bounds|bbox_filter('way') }}
 
     {% if zoom == 9 %}
