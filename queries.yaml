@@ -15,6 +15,7 @@ layers:
     start_zoom: 0
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
+    simplify_start: 9
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -28,6 +29,7 @@ layers:
     start_zoom: 0
     geometry_types: [Polygon, MultiPolygon]
     simplify_before_intersect: true
+    simplify_start: 9
     transform:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
@@ -48,6 +50,7 @@ layers:
     template: landuse.jinja2
     start_zoom: 4
     geometry_types: [Polygon, MultiPolygon]
+    simplify_start: 9
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -72,6 +75,7 @@ layers:
     template: roads.jinja2
     start_zoom: 5
     geometry_types: [LineString, MultiLineString]
+    simplify_start: 9
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -121,6 +125,7 @@ layers:
     start_zoom: 0
     geometry_types: [LineString, MultiLineString]
     simplify_before_intersect: true
+    simplify_start: 8
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
