@@ -8,7 +8,9 @@ SELECT
     NULL as admin_level,
     scalerank,
     labelrank,
-    pop_max AS population,
+    pop_max::text AS population,
+    NULL AS capital,
+    NULL as state_capital,
     NULL as tags
 
 FROM ne_10m_populated_places
