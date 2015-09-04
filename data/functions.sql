@@ -80,19 +80,19 @@ BEGIN
                  'fast_food', 'fire_station', 'fuel', 'library', 'parking', 'pharmacy',
                  'police', 'post_box', 'post_office', 'restaurant', 'telephone', 'theatre',
                  'toilets', 'veterinary')
-                   OR craft_val IN ('brewery', 'carpenter', 'confectionery', 'dressmaker', 
-                'electrician', 'gardener', 'handicraft', 'hvac', 'metal_construction', 
-                'painter', 'photographer', 'photographic_laboratory', 'plumber', 
+                   OR craft_val IN ('brewery', 'carpenter', 'confectionery', 'dressmaker',
+                'electrician', 'gardener', 'handicraft', 'hvac', 'metal_construction',
+                'painter', 'photographer', 'photographic_laboratory', 'plumber',
                 'pottery', 'sawmill', 'shoemaker', 'stonemason', 'tailor', 'winery')
                    OR highway_val IN ('bus_stop', 'traffic_signals')
                    OR historic_val IN ('memorial')
                    OR leisure_val IN ('playground', 'slipway')
                    OR man_made_val IN ('mast', 'water_tower')
-                   OR office_val IN ('accountant', 'administrative', 'advertising_agency', 
-                'architect', 'association', 'company', 'consulting', 'educational_institution', 
-                'employment_agency', 'estate_agent', 'financial', 'foundation', 'government', 
-                'insurance', 'it', 'lawyer', 'newspaper', 'ngo', 'notary', 'physician', 
-                'political_party', 'religion', 'research', 'tax_advisor', 'telecommunication', 
+                   OR office_val IN ('accountant', 'administrative', 'advertising_agency',
+                'architect', 'association', 'company', 'consulting', 'educational_institution',
+                'employment_agency', 'estate_agent', 'financial', 'foundation', 'government',
+                'insurance', 'it', 'lawyer', 'newspaper', 'ngo', 'notary', 'physician',
+                'political_party', 'religion', 'research', 'tax_advisor', 'telecommunication',
                 'therapist', 'travel_agent', 'yes')
                    OR shop_val IN ('bakery', 'bicycle', 'books', 'butcher', 'car', 'car_repair',
                                  'clothes', 'computer', 'convenience',
