@@ -31,7 +31,7 @@ SELECT
     NULL AS labelrank,
     population,
     capital,
-    state_capital,
+    tags->'state_capital' AS state_capital,
     %#tags AS tags
 
 FROM planet_osm_point
