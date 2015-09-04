@@ -9,7 +9,7 @@ SELECT
     scalerank,
     labelrank,
     pop_max::text AS population,
-    NULL AS capital,
+    CASE WHEN adm0cap = 1 THEN 'yes' ELSE 'no' END AS capital,
     NULL as state_capital,
     NULL as tags
 
