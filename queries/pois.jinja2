@@ -2,6 +2,9 @@ SELECT
     name,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    cuisine,
+    religion,
+    sport,
     %#tags AS tags,
 {% if zoom < 11 %}
     aeroway AS kind
@@ -12,16 +15,16 @@ SELECT
 {% elif zoom == 13 or zoom == 14 %}
     COALESCE("aerialway", "aeroway", "natural", "railway", "tourism") AS kind
 {% elif zoom == 15 %}
-    COALESCE("aerialway", "aeroway", "amenity", "barrier", "highway",
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway",
              "lock", "man_made", "natural", "power", "railway", "tourism",
              "waterway") AS kind
 {% elif zoom == 16 %}
-    COALESCE("aerialway", "aeroway", "amenity", "barrier", "highway", "historic",
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
              "lock", "man_made", "natural", "power", "railway", "shop",
              "tourism", "waterway") AS kind
 {% elif zoom >= 17 %}
-    COALESCE("aerialway", "aeroway", "amenity", "barrier", "highway", "historic",
-             "leisure", "lock", "man_made", "natural", "power", "railway", "shop",
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
+             "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop",
              "tourism", "waterway") AS kind
 {% endif %}
 
@@ -34,12 +37,14 @@ WHERE
         "aeroway",
         "amenity",
         "barrier",
+        "craft",
         "highway",
         "historic",
         "leisure",
         "lock",
         "man_made",
         "natural",
+        "office",
         "power",
         "railway",
         "shop",

@@ -7,7 +7,8 @@ BEGIN
         landuse_val IN ('park', 'forest', 'residential', 'retail', 'commercial',
                         'industrial', 'railway', 'cemetery', 'grass', 'farmyard',
                         'farm', 'farmland', 'wood', 'meadow', 'village_green',
-                        'recreation_ground', 'allotments', 'quarry', 'urban', 'rural')
+                        'recreation_ground', 'allotments', 'quarry', 'urban', 'rural'
+                        'military')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
      OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier')
@@ -26,12 +27,14 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     aeroway_val text,
     amenity_val text,
     barrier_val text,
+    craft_val text,
     highway_val text,
     historic_val text,
     leisure_val text,
     lock_val text,
     man_made_val text,
     natural_val text,
+    office_val text,
     power_val text,
     railway_val text,
     shop_val text,
@@ -51,6 +54,7 @@ BEGIN
                    OR railway_val IN ('level_crossing')) THEN 14
              WHEN (amenity_val IN ('hospital')
                    OR barrier_val IN ('gate')
+                   OR craft_val IN ('sawmill')
                    OR highway_val IN ('gate', 'mini_roundabout')
                    OR lock_val IN ('yes')
                    OR man_made_val IN ('lighthouse', 'power_wind')
@@ -62,6 +66,7 @@ BEGIN
                                       'picnic_site', 'place_of_worship',
                                       'prison', 'pub', 'recycling', 'shelter')
                    OR barrier_val IN ('block', 'bollard', 'lift_gate')
+                   OR craft_val IN ('brewery', 'winery', 'sawmill')
                    OR highway_val IN ('ford')
                    OR historic_val IN ('archaeological_site')
                    OR man_made_val IN ('windmill')
@@ -75,10 +80,20 @@ BEGIN
                  'fast_food', 'fire_station', 'fuel', 'library', 'parking', 'pharmacy',
                  'police', 'post_box', 'post_office', 'restaurant', 'telephone', 'theatre',
                  'toilets', 'veterinary')
+                   OR craft_val IN ('brewery', 'carpenter', 'confectionery', 'dressmaker',
+                'electrician', 'gardener', 'handicraft', 'hvac', 'metal_construction',
+                'painter', 'photographer', 'photographic_laboratory', 'plumber',
+                'pottery', 'sawmill', 'shoemaker', 'stonemason', 'tailor', 'winery')
                    OR highway_val IN ('bus_stop', 'traffic_signals')
                    OR historic_val IN ('memorial')
                    OR leisure_val IN ('playground', 'slipway')
                    OR man_made_val IN ('mast', 'water_tower')
+                   OR office_val IN ('accountant', 'administrative', 'advertising_agency',
+                'architect', 'association', 'company', 'consulting', 'educational_institution',
+                'employment_agency', 'estate_agent', 'financial', 'foundation', 'government',
+                'insurance', 'it', 'lawyer', 'newspaper', 'ngo', 'notary', 'physician',
+                'political_party', 'religion', 'research', 'tax_advisor', 'telecommunication',
+                'therapist', 'travel_agent', 'yes')
                    OR shop_val IN ('bakery', 'bicycle', 'books', 'butcher', 'car', 'car_repair',
                                  'clothes', 'computer', 'convenience',
                                  'doityourself', 'dry_cleaning', 'fashion', 'florist', 'gift',

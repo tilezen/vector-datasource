@@ -45,6 +45,8 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    sport,
+    religion,
     %#tags AS tags
 FROM
     planet_osm_polygon
