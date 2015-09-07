@@ -4,9 +4,7 @@ SELECT
     max(gid) AS __id__
 FROM
 
-{% if zoom < 3 %}
-    ne_110m_land
-{% elif 3 <= zoom < 5 %}
+{% if zoom < 5 %}
     ne_50m_land
 {% elif 5 <= zoom < 9 %}
     ne_10m_land

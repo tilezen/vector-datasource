@@ -6,16 +6,7 @@
     '{{ type }}' AS type
 {% endmacro %}
 
-{% if zoom < 3 %}
-
-SELECT
-    {{ ne_boundary_cols('country') }}
-FROM
-    ne_110m_admin_0_boundary_lines_land
-WHERE
-    {{ bounds|bbox_filter('the_geom') }}
-
-{% elif 3 <= zoom < 5 %}
+{% if zoom < 5 %}
 
 SELECT
     {{ ne_boundary_cols('country') }}
