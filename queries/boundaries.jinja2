@@ -6,7 +6,7 @@
     '{{ type }}' AS type
 {% endmacro %}
 
-{% if zoom < 3 %}
+{% if zoom < 2 %}
 
 SELECT
     {{ ne_boundary_cols('country') }}
@@ -15,7 +15,7 @@ FROM
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
 
-{% elif 3 <= zoom < 7 %}
+{% elif 2 <= zoom < 5 %}
 
 SELECT
     {{ ne_boundary_cols('country') }}
@@ -33,7 +33,7 @@ FROM
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
 
-{% elif 7 <= zoom < 8 %}
+{% elif 5 <= zoom < 8 %}
 
 SELECT
     name,

@@ -4,11 +4,11 @@ SELECT
     max(gid) AS __id__
 FROM
 
-{% if zoom < 4 %}
+{% if zoom < 2 %}
     ne_110m_land
-{% elif 4 <= zoom < 7 %}
+{% elif 2 <= zoom < 5 %}
     ne_50m_land
-{% elif 7 <= zoom < 9 %}
+{% elif 5 <= zoom < 9 %}
     ne_10m_land
 {% else %}
     land_polygons

@@ -11,11 +11,11 @@ SELECT
     '' AS name,
     {{ ne_water_cols('ocean') }}
 
-{% if zoom < 4 %}
+{% if zoom < 2 %}
 FROM ne_110m_ocean
-{% elif 4 <= zoom < 7 %}
+{% elif 2 <= zoom < 5 %}
 FROM ne_50m_ocean
-{% elif 7 <= zoom < 9 %}
+{% elif 5 <= zoom < 9 %}
 FROM ne_10m_ocean
 {% endif %}
 
@@ -27,11 +27,11 @@ SELECT
     name,
     {{ ne_water_cols('lake') }}
 
-{% if zoom < 4 %}
+{% if zoom < 2 %}
 FROM ne_110m_lakes
-{% elif 4 <= zoom < 7 %}
+{% elif 2 <= zoom < 5 %}
 FROM ne_50m_lakes
-{% elif 7 <= zoom < 9 %}
+{% elif 5 <= zoom < 9 %}
 FROM ne_10m_lakes
 {% endif %}
 
