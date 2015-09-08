@@ -58,7 +58,7 @@ FROM planet_osm_line
 
 WHERE
     {{ bounds|bbox_filter('way') }}
-    AND mz_calculate_road_level(highway, railway, aeroway, tags->'network') <= {{ zoom }}
+    AND mz_calculate_road_level(highway, railway, aeroway) <= {{ zoom }}
     -- the below is to filter out any relations-as-roads, since instead we are
     -- projecting the network attribute onto the ways. it might need some finessing
     -- if we're rendering other stuff from relations like cycle routes.
