@@ -37,7 +37,13 @@ SELECT
     route,
     tags->'type' AS type,
     tags->'colour' AS colour,
-    tags->'network' AS network,
+    CASE WHEN highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
+                          'primary', 'primary_link', 'secondary', 'secondary_link',
+                          'tertiary', 'tertiary_link')
+              OR railway IN ('rail', 'tram', 'light_rail', 'narrow_gauge', 'monorail')
+              THEN mz_get_rel_network(osm_id)
+         ELSE tags->'network'
+         END AS network,
     tags->'state' AS state,
     tags->'symbol' AS symbol,
     tags->'description' AS description,
@@ -52,6 +58,10 @@ FROM planet_osm_line
 
 WHERE
     {{ bounds|bbox_filter('way') }}
-    AND mz_calculate_road_level(highway, railway, aeroway, tags->'network') <= {{ zoom }}
+    AND mz_calculate_road_level(highway, railway, aeroway) <= {{ zoom }}
+    -- the below is to filter out any relations-as-roads, since instead we are
+    -- projecting the network attribute onto the ways. it might need some finessing
+    -- if we're rendering other stuff from relations like cycle routes.
+    AND osm_id > 0
 
 {% endif %}

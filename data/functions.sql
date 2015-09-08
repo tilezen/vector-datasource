@@ -108,11 +108,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, network_val text)
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
-        CASE WHEN (highway_val IN ('motorway', 'trunk', 'primary', 'motorway_link') OR network_val='US:I') THEN 9
+        CASE WHEN highway_val IN ('motorway', 'trunk', 'primary', 'motorway_link') THEN 9
              WHEN highway_val IN ('secondary') THEN 10
              WHEN (highway_val IN ('tertiary')
                 OR aeroway_val IN ('runway', 'taxiway')) THEN 11
@@ -155,5 +155,74 @@ BEGIN
              WHEN route_val IN ('subway', 'light_rail', 'tram') THEN 10
              ELSE NULL END
     );
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- mz_rel_get_tag returns the tag value associated with a given
+-- key, or NULL if the tag is not set in the array.
+--
+-- tags in the planet_osm_rels table are stored in a flat array
+-- rather than in an hstore variable. so this function makes it
+-- easier to extract values from that array as if it were
+-- associative.
+--
+CREATE OR REPLACE FUNCTION mz_rel_get_tag(
+  tags text[],
+  k text)
+RETURNS text AS $$
+DECLARE
+  lo CONSTANT integer := array_lower(tags, 1);
+  hi CONSTANT integer := array_upper(tags, 1);
+BEGIN
+  -- tags is an array of key-value pairs inline, so to get the
+  -- keys only we want each odd offset.
+  FOR i IN 0 .. ((hi - lo - 1) / 2)
+  LOOP
+    IF tags[2 * i + lo] = k THEN
+      RETURN tags[2 * i + lo + 1];
+    END IF;
+  END LOOP;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- mz_first_dedup returns the lexicographically first non-NULL
+-- entry in an array of text.
+--
+-- this is used to get a single value from the array of perhaps
+-- many relations that a way can be a member of. we're not
+-- interested in NULL values, so those can be discarded. it
+-- remains to be seen if lexicographic ordering is any good for
+-- network names, but in the limited testing i've done so far,
+-- it seems to do okay.
+--
+CREATE OR REPLACE FUNCTION mz_first_dedup(
+  arr text[])
+RETURNS text AS $$
+DECLARE
+  rv text;
+BEGIN
+  SELECT DISTINCT y.x INTO rv FROM (SELECT unnest(arr) as x) y
+    WHERE y.x IS NOT NULL LIMIT 1;
+  RETURN rv;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- mz_get_rel_network returns a network tag, or NULL, for a
+-- given way ID.
+--
+-- it does this by joining onto the relations slim table, so it
+-- won't work if you dropped the slim tables, or didn't use slim
+-- mode in osm2pgsql.
+--
+CREATE OR REPLACE FUNCTION mz_get_rel_network(
+  way_id bigint)
+RETURNS text AS $$
+BEGIN
+  RETURN mz_first_dedup(ARRAY(
+    SELECT mz_rel_get_tag(tags, 'network')
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[way_id]
+      AND parts[way_off+1:rel_off] && ARRAY[way_id]));
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
