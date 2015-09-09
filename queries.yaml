@@ -149,3 +149,9 @@ layers:
       - TileStache.Goodies.VecTiles.transform.route_name
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
+post_process:
+  TileStache.Goodies.VecTiles.transform.intercut:
+    base_layer: roads
+    cutting_layer: landuse
+    attribute: kind
+    target_attribute: landuse_kind
