@@ -1,3 +1,4 @@
+{% if zoom < 9 %}
 SELECT
     name,
     featurecla AS kind,
@@ -19,7 +20,7 @@ WHERE
     scalerank <= {{ zoom }}
     AND {{ bounds|bbox_filter('the_geom') }}
 
-UNION
+{% else %}
 
 SELECT
     name,
@@ -53,3 +54,5 @@ WHERE
         {% if zoom >= 13 %}, 'locality', 'isolated_dwelling', 'farm'{% endif %}
     )
     AND {{ bounds|bbox_filter('way') }}
+
+{% endif %}
