@@ -174,6 +174,11 @@ DECLARE
   lo CONSTANT integer := array_lower(tags, 1);
   hi CONSTANT integer := array_upper(tags, 1);
 BEGIN
+  -- if tags is null, then we're not going to find any values
+  -- in it, so just short-circuit and return NULL.
+  IF tags IS NULL THEN
+    RETURN NULL;
+  END IF;
   -- tags is an array of key-value pairs inline, so to get the
   -- keys only we want each odd offset.
   FOR i IN 0 .. ((hi - lo - 1) / 2)
