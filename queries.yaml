@@ -9,6 +9,7 @@ all:
   - pois
   - boundaries
   - transit
+  - water_boundaries
 layers:
   water:
     template: water.jinja2
@@ -156,3 +157,6 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
+  TileStache.Goodies.VecTiles.transform.exterior_boundaries:
+    base_layer: water
+    new_layer_name: water_boundaries
