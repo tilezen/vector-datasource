@@ -47,3 +47,40 @@ WHERE
 {% endif %}
 
     AND {{ bounds|bbox_filter('way') }}
+
+{% if zoom >= 17 %}
+
+UNION
+
+SELECT
+    name,
+    NULL AS area,
+    osm_id AS __id__,
+    NULL AS "building:part",
+    NULL AS building,
+    amenity,
+    shop,
+    tourism,
+    NULL AS "building:levels",
+    NULL AS "building:min_levels",
+    NULL AS height,
+    NULL AS min_height,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    NULL AS roof_color,
+    NULL AS roof_material,
+    NULL AS roof_shape,
+    NULL AS roof_height,
+    NULL AS roof_orientation,
+    "addr:housenumber" AS addr_housenumber,
+    "addr:street" AS addr_street,
+    %#tags AS tags
+
+FROM
+    planet_osm_point
+
+WHERE
+
+    "addr:housenumber" IS NOT NULL AND
+    {{ bounds|bbox_filter('way') }}
+
+{% endif %}
