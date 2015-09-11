@@ -159,4 +159,14 @@ post_process:
     target_attribute: landuse_kind
   TileStache.Goodies.VecTiles.transform.exterior_boundaries:
     base_layer: water
-    new_layer_name: water_boundaries
+    prop_transform:
+      kind:
+        ocean: shoreline
+        riverbank: riverbank
+        dock: dock
+        water: water
+        basin: basin
+        reservoir: reservoir
+      id: true
+      source: true
+      boundary: "yes"
