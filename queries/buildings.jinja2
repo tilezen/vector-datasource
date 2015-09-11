@@ -80,6 +80,7 @@ FROM
 
 WHERE
 
+    "addr:housenumber" IS NOT NULL AND
     {{ bounds|bbox_filter('way') }}
 
 {% endif %}
