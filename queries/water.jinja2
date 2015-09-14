@@ -3,7 +3,8 @@
     '{{ kind }}' AS kind,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
-    max(gid) AS __id__
+    max(gid) AS __id__,
+    NULL AS boundary
 {% endmacro %}
 
 {% if zoom < 9 %}
@@ -37,6 +38,28 @@ FROM ne_10m_lakes
 
 WHERE {{ bounds|bbox_filter('the_geom') }}
 GROUP BY name
+
+UNION
+
+SELECT
+    NULL AS name,
+    NULL AS area,
+    'shoreline' AS kind,
+    'naturalearthdata.com' AS source,
+    the_geom AS __geometry__,
+    gid AS __id__,
+    'yes' AS boundary
+
+FROM
+{% if zoom < 2 %}
+    ne_110m_coastline
+{% elif 2 <= zoom < 5 %}
+    ne_50m_coastline
+{% elif 5 <= zoom < 9 %}
+    ne_10m_coastline
+{% endif %}
+
+WHERE {{ bounds|bbox_filter('the_geom') }}
 
 {% if 4 <= zoom < 9 %}
 UNION
