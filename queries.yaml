@@ -159,6 +159,7 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
+    cutting_attrs: { sort_key: 'order', reverse: True }
   TileStache.Goodies.VecTiles.transform.exterior_boundaries:
     base_layer: water
     prop_transform:
