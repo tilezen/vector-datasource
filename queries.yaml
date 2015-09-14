@@ -167,3 +167,9 @@ post_process:
       id: true
       source: true
       boundary: "yes"
+  TileStache.Goodies.VecTiles.transform.overlap:
+    base_layer: buildings
+    cutting_layer: landuse
+    attribute: kind
+    target_attribute: landuse_kind
+    cutting_attrs: { sort_key: 'order', reverse: True }
