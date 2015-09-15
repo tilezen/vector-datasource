@@ -1,2 +1,3 @@
 *.local.cfg
 cache
+.DS_Store
