@@ -162,6 +162,7 @@ post_process:
     cutting_attrs: { sort_key: 'order', reverse: True }
   TileStache.Goodies.VecTiles.transform.exterior_boundaries:
     base_layer: water
+    start_zoom: 9
     prop_transform:
       kind: true
       id: true

@@ -28,3 +28,6 @@ import_shapefile -W UTF-8 ne_50m_admin_1_states_provinces_lines-merc.shp ne_50m_
 import_shapefile -W UTF-8 ne_10m_admin_0_boundary_lines_land-merc.shp ne_10m_admin_0_boundary_lines_land
 import_shapefile -W UTF-8 ne_10m_admin_1_states_provinces_lines-merc.shp ne_10m_admin_1_states_provinces_lines
 import_shapefile ne_10m_roads-merc.shp ne_10m_roads
+import_shapefile ne_10m_coastline-merc.shp ne_10m_coastline
+import_shapefile ne_50m_coastline-merc.shp ne_50m_coastline
+import_shapefile ne_110m_coastline-merc.shp ne_110m_coastline
