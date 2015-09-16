@@ -233,3 +233,18 @@ BEGIN
       AND parts[way_off+1:rel_off] && ARRAY[way_id]));
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- adds the prefix onto every key in an hstore value
+CREATE OR REPLACE FUNCTION mz_hstore_add_prefix(
+  tags hstore,
+  prefix text)
+RETURNS hstore AS $$
+DECLARE
+  new_tags hstore;
+BEGIN
+  SELECT hstore(array_agg(prefix || key), array_agg(value))
+    INTO STRICT new_tags
+    FROM each(tags);
+  RETURN new_tags;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
