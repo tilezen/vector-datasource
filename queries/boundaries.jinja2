@@ -27,6 +27,8 @@ WHERE
 UNION
 
 SELECT
+    name_l AS lhs_name,
+    name_r AS rhs_name,
     {{ ne_boundary_cols('state') }}
 FROM
     ne_50m_admin_1_states_provinces_lines
