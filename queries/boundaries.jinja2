@@ -57,16 +57,37 @@ WHERE
 
 {% else %}
 
+WITH admin_polygons AS (
+  SELECT *
+  FROM planet_osm_polygon
+  WHERE
+    {{ bounds|bbox_filter('way') }}
+  AND boundary='administrative'
+)
+
 SELECT
-    osm_id AS __id__,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
-    tags->'border_type' AS kind,
-    name,
-    %#tags AS tags
+    rhs.osm_id AS __id__,
+-- this is taking the right hand polygon, forcing the direction of its
+-- boundary to be clockwise (i.e: polygon on the right). this makes
+-- sure we have a consistent idea of what is to the right. it then
+-- tries to intersect that with each of the left-hand polygons (now
+-- direction doesn't matter, as it should keep the first operand's
+-- direction). it then merges the result to try and keep a smaller
+-- number of line segments.
+    {% filter geometry %}st_linemerge(st_intersection(st_boundary(st_forcerhr(rhs.way)), st_boundary(lhs.way))){% endfilter %} AS __geometry__,
+    coalesce(rhs.tags->'border_type', lhs.tags->'border_type') AS kind,
+    rhs.admin_level as admin_level,
+    (lhs.name || ' - ' || rhs.name) AS name,
+    lhs.name AS lhs_name,
+    rhs.name AS rhs_name,
+    %#(mz_hstore_add_prefix(rhs.tags, 'right:') ||
+       mz_hstore_add_prefix(lhs.tags, 'left:')) AS tags
 FROM
-    planet_osm_line
-WHERE
-    boundary='administrative'
-    AND {{ bounds|bbox_filter('way') }}
+    admin_polygons rhs
+    JOIN admin_polygons lhs
+    ON rhs.osm_id > lhs.osm_id
+    AND rhs.admin_level = lhs.admin_level
+ORDER BY
+    rhs.osm_id ASC, lhs.osm_id ASC
 
 {% endif %}
