@@ -84,8 +84,8 @@ SELECT
     (lhs.name || ' - ' || rhs.name) AS name,
     lhs.name AS lhs_name,
     rhs.name AS rhs_name,
-    %#(mz_hstore_add_prefix(rhs.tags, 'right:') ||
-       mz_hstore_add_prefix(lhs.tags, 'left:')) AS tags
+    %#(mz_hstore_add_infix(rhs.tags, 'right') ||
+       mz_hstore_add_infix(lhs.tags, 'left')) AS tags
 FROM
     admin_polygons rhs
     JOIN admin_polygons lhs
