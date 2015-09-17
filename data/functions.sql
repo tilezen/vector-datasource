@@ -248,3 +248,38 @@ BEGIN
   RETURN new_tags;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- OSM tags are often structured as a list separated by ':'s.
+-- to preserve some kind of ordering information, we want to
+-- insert an element in this "list" after the first element.
+-- i.e: mz_insert_one_level('foo:bar', 'x') -> 'foo:x:bar'.
+CREATE OR REPLACE FUNCTION mz_insert_one_level(
+  tag text,
+  str text)
+RETURNS text AS $$
+DECLARE
+  arr text[] = string_to_array(tag, ':');
+  fst text   = arr[1];
+  len int    = array_upper(arr, 1);
+  rst text[] = arr[2:len];
+BEGIN
+  RETURN array_to_string(ARRAY[fst, str] || rst, ':');
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- adds an infix value into every key in an hstore value after
+-- the first element. so 'foo:bar=>bat' with infix 'x' becomes
+-- 'foo:x:bar=>bat'.
+CREATE OR REPLACE FUNCTION mz_hstore_add_infix(
+  tags hstore,
+  infix text)
+RETURNS hstore AS $$
+DECLARE
+  new_tags hstore;
+BEGIN
+  SELECT hstore(array_agg(mz_insert_one_level(key, infix)), array_agg(value))
+    INTO STRICT new_tags
+    FROM each(tags);
+  RETURN new_tags;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
