@@ -37,6 +37,8 @@ WHERE
 
 SELECT
     name,
+    NULL AS lhs_name, -- these aren't NULL, but we don't have the data yet
+    NULL AS rhs_name, -- and the columns need to match the admin-1 below.
     labelrank,
     {{ ne_boundary_cols('country') }}
 FROM
