@@ -41,15 +41,18 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     railway_val text,
     shop_val text,
     tourism_val text,
-    waterway_val text
+    waterway_val text,
+    way_area real
 )
 RETURNS SMALLINT AS $$
+DECLARE
+  zoom smallint;
 BEGIN
-    RETURN (
-        CASE WHEN aeroway_val IN ('aerodrome', 'airport') THEN 9
-             WHEN natural_val IN ('peak', 'volcano') THEN 11
+  zoom =
+        CASE WHEN natural_val IN ('peak', 'volcano') THEN 11
              WHEN railway_val IN ('station') THEN 12
-             WHEN (aerialway_val IN ('station')
+             WHEN (aeroway_val IN ('aerodrome', 'airport')
+                   OR aerialway_val IN ('station')
                    OR railway_val IN ('halt', 'tram_stop')
                    OR tourism_val IN ('alpine_hut', 'zoo')) THEN 13
              WHEN (natural_val IN ('spring')
@@ -105,8 +108,13 @@ BEGIN
                                     'hostel', 'hotel', 'motel', 'museum')
                    OR railway_val IN ('subway_entrance')) THEN 17
              WHEN (amenity_val IN ('bench', 'waste_basket')) THEN 18
-             ELSE NULL END
-    );
+             ELSE NULL END;
+  RETURN (CASE
+    WHEN way_area > 1.0e7 THEN zoom - 4
+    WHEN way_area > 1.0e6 THEN zoom - 3
+    WHEN way_area > 1.0e5 THEN zoom - 2
+    WHEN way_area > 1.0e4 THEN zoom - 1
+    ELSE zoom END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 

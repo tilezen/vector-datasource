@@ -6,48 +6,40 @@ SELECT
     religion,
     sport,
     %#tags AS tags,
-{% if zoom < 11 %}
-    aeroway AS kind
-{% elif zoom == 11 %}
-    COALESCE("aeroway", "natural") AS kind
-{% elif zoom == 12 %}
-    COALESCE("aeroway", "natural", "railway") AS kind
-{% elif zoom == 13 or zoom == 14 %}
-    COALESCE("aerialway", "aeroway", "natural", "railway", "tourism") AS kind
-{% elif zoom == 15 %}
-    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway",
-             "lock", "man_made", "natural", "power", "railway", "tourism",
-             "waterway") AS kind
-{% elif zoom == 16 %}
-    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
-             "lock", "man_made", "natural", "power", "railway", "shop",
-             "tourism", "waterway") AS kind
-{% elif zoom >= 17 %}
     COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
              "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop",
              "tourism", "waterway") AS kind
-{% endif %}
 
-FROM planet_osm_point
+FROM (
 
-WHERE
+  SELECT
+    name, way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
+    osm_id,
+    cuisine, religion, sport,
+    aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    tags
+
+  FROM
+    planet_osm_point
+
+  WHERE
     {{ bounds|bbox_filter('way') }}
-    AND mz_calculate_poi_level(
-        "aerialway",
-        "aeroway",
-        "amenity",
-        "barrier",
-        "craft",
-        "highway",
-        "historic",
-        "leisure",
-        "lock",
-        "man_made",
-        "natural",
-        "office",
-        "power",
-        "railway",
-        "shop",
-        "tourism",
-        "waterway"
-    ) <= {{ zoom }}
+    AND mz_poi_min_zoom <= {{ zoom }}
+
+UNION ALL
+
+  SELECT
+    name, mz_centroid AS way, way_area, mz_poi_min_zoom AS min_zoom,
+    osm_id,
+    cuisine, religion, sport,
+    aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    tags
+
+  FROM
+    planet_osm_polygon
+
+  WHERE
+    {{ bounds|bbox_filter('way') }}
+    AND mz_poi_min_zoom <= {{ zoom }}
+
+) points_and_centroids
