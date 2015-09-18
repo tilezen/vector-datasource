@@ -26,7 +26,7 @@ FROM
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
 
-UNION
+UNION ALL
 
 SELECT
     name,
