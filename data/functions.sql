@@ -49,10 +49,10 @@ DECLARE
   zoom smallint;
 BEGIN
   zoom =
-        CASE WHEN aeroway_val IN ('aerodrome', 'airport') THEN 13
-             WHEN natural_val IN ('peak', 'volcano') THEN 11
+        CASE WHEN natural_val IN ('peak', 'volcano') THEN 11
              WHEN railway_val IN ('station') THEN 12
-             WHEN (aerialway_val IN ('station')
+             WHEN (aeroway_val IN ('aerodrome', 'airport')
+                   OR aerialway_val IN ('station')
                    OR railway_val IN ('halt', 'tram_stop')
                    OR tourism_val IN ('alpine_hut', 'zoo')) THEN 13
              WHEN (natural_val IN ('spring')
