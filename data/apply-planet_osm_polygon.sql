@@ -19,7 +19,7 @@ ALTER TABLE planet_osm_polygon ADD COLUMN mz_poi_min_zoom SMALLINT;
 
 UPDATE planet_osm_polygon SET
     mz_is_landuse = TRUE
-    WHERE mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway", "tourism", "man_made", "power") = TRUE;
+    WHERE mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway", "tourism", "man_made", "power", "boundary") = TRUE;
 
 -- the coalesce here is just an optimisation, as the poi level
 -- will always be NULL if all of the arguments are NULL.

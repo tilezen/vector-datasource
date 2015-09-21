@@ -1,7 +1,7 @@
 CREATE OR REPLACE FUNCTION mz_calculate_is_landuse(
     landuse_val text, leisure_val text, natural_val text, highway_val text,
     amenity_val text, aeroway_val text, tourism_val text, man_made_val text,
-    power_val text)
+    power_val text, boundary_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN
@@ -20,7 +20,8 @@ BEGIN
      OR tourism_val IN ('zoo')
      OR man_made_val IN ('pier', 'wastewater_plant', 'works', 'bridge', 'tower',
                          'breakwater', 'water_works', 'groyne', 'dike', 'cutline')
-     OR power_val IN   ('plant', 'generator', 'substation', 'station', 'sub_station');
+     OR power_val IN   ('plant', 'generator', 'substation', 'station', 'sub_station')
+     OR boundary_val IN ('national_park');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 

@@ -10,16 +10,35 @@
 
 SELECT
     '' AS name,
+    NULL as operator,
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_50m_urban_areas
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
 
+UNION ALL
+
+SELECT
+  name,
+  operator,
+  way_area::bigint AS area,
+  COALESCE("boundary", "landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power") AS kind,
+  'openstreetmap.org' AS source,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  osm_id AS __id__
+FROM
+  planet_osm_polygon
+WHERE
+  {{ bounds|bbox_filter('way') }}
+  AND boundary='national_park'
+  AND (17.256-ln(way_area)/ln(4)) <= {{ zoom }}
+
 {% elif 6 <= zoom < 9 %}
 
 SELECT
     '' AS name,
+    NULL as operator,
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_10m_urban_areas
@@ -29,19 +48,27 @@ WHERE
 UNION ALL
 
 SELECT
-    name,
-    {{ ne_landuse_cols('park or protected land') }}
+  name,
+  operator,
+  way_area::bigint AS area,
+  COALESCE("boundary", "landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power") AS kind,
+  'openstreetmap.org' AS source,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  osm_id AS __id__
 FROM
-    ne_10m_parks_and_protected_lands
+  planet_osm_polygon
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+  {{ bounds|bbox_filter('way') }}
+  AND boundary='national_park'
+  AND (17.256-ln(way_area)/ln(4)) <= {{ zoom }}
 
 {% else %}
 
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power") AS kind,
+    operator,
+    COALESCE("boundary", "landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -53,21 +80,8 @@ FROM
 WHERE
     mz_is_landuse = TRUE
     AND {{ bounds|bbox_filter('way') }}
-
-    {% if zoom == 9 %}
-    AND way_area::bigint > 409600
-    {% elif zoom == 10 %}
-    AND way_area::bigint > 102400
-    {% elif zoom == 11 %}
-    AND way_area::bigint > 25600
-    {% elif zoom == 12 %}
-    AND way_area::bigint > 6400
-    {% elif zoom == 13 %}
-    AND way_area::bigint > 1600
-    {% elif zoom == 14 %}
-    AND way_area::bigint > 400
-    {% elif zoom == 15 %}
-    AND way_area::bigint > 100
+    {% if zoom <= 15 %}
+    AND (17.256-ln(way_area)/ln(4)) <= {{ zoom }}
     {% endif %}
 
 {% endif %}
