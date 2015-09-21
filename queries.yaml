@@ -53,7 +53,7 @@ layers:
     template: landuse.jinja2
     start_zoom: 4
     geometry_types: [Polygon, MultiPolygon]
-    simplify_start: 9
+    simplify_start: 8
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
