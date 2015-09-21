@@ -18,7 +18,9 @@ WHERE
     {% endif %}
     AND {{ bounds|bbox_filter('way') }}
 
-    {% if zoom == 9 %}
+    {% if zoom == 8 %}
+    AND way_area::bigint > 1638400
+    {% elif zoom == 9 %}
     AND way_area::bigint > 409600
     {% elif zoom == 10 %}
     AND way_area::bigint > 102400
