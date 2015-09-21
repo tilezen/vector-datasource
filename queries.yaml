@@ -66,7 +66,7 @@ layers:
     sort: TileStache.Goodies.VecTiles.sort.landuse
   landuse_labels:
     template: landuse_labels.jinja2
-    start_zoom: 9
+    start_zoom: 8
     geometry_types: [Point, MultiPoint]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
