@@ -72,4 +72,20 @@ WHERE
     AND way_area::bigint > 100
     {% endif %}
 
+{% if zoom < 10 %}
+UNION ALL
+
+-- "cross-fade" NE urban area polygons for a couple of zooms.
+SELECT
+  '' AS name,
+  {{ ne_landuse_cols('urban area') }},
+  NULL AS sport,
+  NULL AS religion,
+  NULL AS tags
+FROM
+  ne_10m_urban_areas
+WHERE
+  {{ bounds|bbox_filter('the_geom') }}
+{% endif %}
+
 {% endif %}
