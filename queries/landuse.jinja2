@@ -17,7 +17,6 @@ FROM
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
 
-<<<<<<< HEAD
 UNION ALL
 
 SELECT
@@ -35,10 +34,7 @@ WHERE
   AND boundary='national_park'
   AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
 
-{% elif 6 <= zoom < 9 %}
-=======
 {% elif 6 <= zoom < 8 %}
->>>>>>> origin/master
 
 SELECT
     '' AS name,
