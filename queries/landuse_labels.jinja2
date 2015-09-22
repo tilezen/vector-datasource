@@ -1,7 +1,28 @@
+{% if 4 <= zoom < 9 %}
+
+SELECT
+  name,
+  tags->'protect_class' AS protect_class,
+  way_area::bigint AS area,
+  mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
+  'openstreetmap.org' AS source,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  osm_id AS __id__
+FROM
+  planet_osm_polygon
+WHERE
+  {{ bounds|bbox_filter('way') }}
+  AND name IS NOT NULL
+  AND boundary IN ('national_park', 'protected_area')
+  AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
+
+{% else %}
+
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("boundary", "landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power") AS kind,
+    tags->'protect_class' AS protect_class,
+    mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}mz_centroid{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -17,19 +38,8 @@ WHERE
     AND (amenity IS NULL OR amenity != 'parking')
     {% endif %}
     AND {{ bounds|bbox_filter('way') }}
-
-    {% if zoom == 9 %}
-    AND way_area::bigint > 409600
-    {% elif zoom == 10 %}
-    AND way_area::bigint > 102400
-    {% elif zoom == 11 %}
-    AND way_area::bigint > 25600
-    {% elif zoom == 12 %}
-    AND way_area::bigint > 6400
-    {% elif zoom == 13 %}
-    AND way_area::bigint > 1600
-    {% elif zoom == 14 %}
-    AND way_area::bigint > 400
-    {% elif zoom == 15 %}
-    AND way_area::bigint > 100
+    {% if zoom <= 15 %}
+    AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
     {% endif %}
+
+{% endif %}

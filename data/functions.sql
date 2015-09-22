@@ -21,7 +21,7 @@ BEGIN
      OR man_made_val IN ('pier', 'wastewater_plant', 'works', 'bridge', 'tower',
                          'breakwater', 'water_works', 'groyne', 'dike', 'cutline')
      OR power_val IN   ('plant', 'generator', 'substation', 'station', 'sub_station')
-     OR boundary_val IN ('national_park');
+     OR boundary_val IN ('national_park', 'protected_area');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -304,5 +304,65 @@ CREATE OR REPLACE FUNCTION mz_one_pixel_zoom(
 RETURNS real AS $$
 BEGIN
   RETURN (17.256-ln(way_area)/ln(4));
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- calculate the collapse of several properties onto one string
+-- 'kind'. this involves a series of precedence choices, as
+-- it's possible for a feature to have values in several of
+-- these categories. in general, the "most important" should go
+-- first, or its presence should modify the later.
+CREATE OR REPLACE FUNCTION mz_calculate_landuse_kind(
+  landuse_val text,
+  leisure_val text,
+  natural_val text,
+  highway_val text,
+  aeroway_val text,
+  amenity_val text,
+  tourism_val text,
+  man_made_val text,
+  power_val text,
+  boundary_val text)
+RETURNS text AS $$
+BEGIN
+  RETURN
+    CASE
+      WHEN boundary_val IN (
+        'national_park', 'protected_area')
+	THEN boundary_val
+      WHEN landuse_val IN (
+        'park', 'forest', 'residential', 'retail', 'commercial', 'industrial',
+	'railway', 'cemetery', 'grass', 'farmyard', 'farm', 'farmland', 'wood',
+	'meadow', 'village_green', 'recreation_ground', 'allotments', 'quarry',
+	'urban', 'rural', 'military')
+        THEN landuse_val
+      WHEN leisure_val IN (
+        'park', 'garden', 'playground', 'golf_course', 'sports_centre', 'pitch',
+	'stadium', 'common', 'nature_reserve')
+	THEN leisure_val
+      WHEN natural_val IN (
+        'wood', 'land', 'scrub', 'wetland', 'glacier')
+	THEN natural_val
+      WHEN highway_val IN (
+        'pedestrian', 'footway')
+	THEN highway_val
+      WHEN amenity_val IN (
+        'university', 'school', 'college', 'library', 'fuel', 'parking',
+	'cinema', 'theatre', 'place_of_worship', 'hospital')
+	THEN amenity_val
+      WHEN aeroway_val IN (
+        'runway', 'taxiway', 'apron', 'aerodrome')
+	THEN aeroway_val
+      WHEN tourism_val IN (
+        'zoo')
+	THEN tourism_val
+      WHEN man_made_val IN (
+        'pier', 'wastewater_plant', 'works', 'bridge', 'tower', 'breakwater',
+	'water_works', 'groyne', 'dike', 'cutline')
+	THEN man_made_val
+      WHEN power_val IN (
+        'plant', 'generator', 'substation', 'station', 'sub_station')
+	THEN power_val
+      ELSE NULL END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
