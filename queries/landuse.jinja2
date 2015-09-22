@@ -32,7 +32,7 @@ FROM
 WHERE
   {{ bounds|bbox_filter('way') }}
   AND boundary='national_park'
-  AND (17.256-ln(way_area)/ln(4)) <= {{ zoom }}
+  AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
 
 {% elif 6 <= zoom < 9 %}
 
@@ -60,7 +60,7 @@ FROM
 WHERE
   {{ bounds|bbox_filter('way') }}
   AND boundary='national_park'
-  AND (17.256-ln(way_area)/ln(4)) <= {{ zoom }}
+  AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
 
 {% else %}
 
@@ -81,7 +81,7 @@ WHERE
     mz_is_landuse = TRUE
     AND {{ bounds|bbox_filter('way') }}
     {% if zoom <= 15 %}
-    AND (17.256-ln(way_area)/ln(4)) <= {{ zoom }}
+    AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
     {% endif %}
 
 {% endif %}

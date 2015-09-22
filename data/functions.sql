@@ -292,3 +292,17 @@ BEGIN
   RETURN new_tags;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- returns the (possibly fractional) zoom at which the given way
+-- area will be one square pixel nominally on screen (assuming
+-- that tiles are 256x256px at integer zooms). sadly, features
+-- aren't always rectangular and axis-aligned, but this should
+-- still give a reasonable approximation to the zoom that it
+-- would be appropriate to show them.
+CREATE OR REPLACE FUNCTION mz_one_pixel_zoom(
+  way_area real)
+RETURNS real AS $$
+BEGIN
+  RETURN (17.256-ln(way_area)/ln(4));
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
