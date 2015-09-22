@@ -17,6 +17,7 @@ FROM
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
 
+<<<<<<< HEAD
 UNION ALL
 
 SELECT
@@ -35,6 +36,9 @@ WHERE
   AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
 
 {% elif 6 <= zoom < 9 %}
+=======
+{% elif 6 <= zoom < 8 %}
+>>>>>>> origin/master
 
 SELECT
     '' AS name,
@@ -83,5 +87,21 @@ WHERE
     {% if zoom <= 15 %}
     AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
     {% endif %}
+
+{% if zoom < 10 %}
+UNION ALL
+
+-- "cross-fade" NE urban area polygons for a couple of zooms.
+SELECT
+  '' AS name,
+  {{ ne_landuse_cols('urban area') }},
+  NULL AS sport,
+  NULL AS religion,
+  NULL AS tags
+FROM
+  ne_10m_urban_areas
+WHERE
+  {{ bounds|bbox_filter('the_geom') }}
+{% endif %}
 
 {% endif %}
