@@ -53,6 +53,11 @@ BEGIN
       WHEN boundary_val IN (
         'national_park', 'protected_area')
 	THEN boundary_val
+      -- promote this above landuse as it's more specific, and we
+      -- don't want to lump nature reserves in with all of the
+      -- generic forests.
+      WHEN leisure_val = 'nature_reserve'
+        THEN leisure_val
       WHEN landuse_val IN (
         'park', 'forest', 'residential', 'retail', 'commercial', 'industrial',
 	'railway', 'cemetery', 'grass', 'farmyard', 'farm', 'farmland', 'wood',
@@ -61,7 +66,7 @@ BEGIN
         THEN landuse_val
       WHEN leisure_val IN (
         'park', 'garden', 'playground', 'golf_course', 'sports_centre', 'pitch',
-	'stadium', 'common', 'nature_reserve')
+	'stadium', 'common')
 	THEN leisure_val
       WHEN natural_val IN (
         'wood', 'land', 'scrub', 'wetland', 'glacier')
