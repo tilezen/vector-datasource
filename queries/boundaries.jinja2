@@ -67,9 +67,9 @@ WITH admin_polygons AS (
   WHERE
     {{ bounds|bbox_filter('way') }}
   AND boundary='administrative'
-)
-
-SELECT
+),
+boundaries AS (
+  SELECT
     rhs.osm_id AS __id__,
 -- this is taking the right hand polygon, forcing the direction of its
 -- boundary to be clockwise (i.e: polygon on the right). this makes
@@ -78,7 +78,7 @@ SELECT
 -- direction doesn't matter, as it should keep the first operand's
 -- direction). it then merges the result to try and keep a smaller
 -- number of line segments.
-    {% filter geometry %}st_linemerge(st_intersection(st_boundary(st_forcerhr(rhs.way)), st_boundary(lhs.way))){% endfilter %} AS __geometry__,
+    st_linemerge(st_intersection(st_boundary(st_forcerhr(rhs.way)), st_boundary(lhs.way))) AS way,
     coalesce(rhs.tags->'border_type', lhs.tags->'border_type') AS kind,
     rhs.admin_level as admin_level,
     (lhs.name || ' - ' || rhs.name) AS name,
@@ -86,13 +86,55 @@ SELECT
     rhs.name AS rhs_name,
     %#(mz_hstore_add_infix(rhs.tags, 'right') ||
        mz_hstore_add_infix(lhs.tags, 'left')) AS tags
-FROM
+  FROM
     admin_polygons rhs
     JOIN admin_polygons lhs
     ON rhs.osm_id > lhs.osm_id
     AND rhs.admin_level = lhs.admin_level
     AND rhs.way && lhs.way
-ORDER BY
+  ORDER BY
     rhs.admin_level ASC
+),
+maritime_boundaries AS (
+  SELECT
+    st_linemerge(st_collect(way)) AS way
+  FROM
+    planet_osm_line
+  WHERE
+    {{ bounds|bbox_filter('way') }} AND
+    boundary = 'administrative' AND
+    tags->'maritime' = 'yes'
+)
+
+SELECT
+  boundaries.__id__,
+  {% filter geometry %}boundaries.way{% endfilter %} AS __geometry__,
+  boundaries.kind AS kind,
+  boundaries.admin_level AS admin_level,
+  boundaries.name AS name,
+  boundaries.lhs_name AS lhs_name,
+  boundaries.rhs_name AS rhs_name,
+  boundaries.tags AS tags,
+  NULL AS maritime
+FROM
+  boundaries
+
+UNION ALL
+
+-- NOTE: we select these here, but we don't actually put them
+-- in the tiles as-is. instead, we project their attributes
+-- onto parts of the existing boundaries selected above.
+SELECT
+  0::bigint AS __id__,
+  {% filter geometry %}maritime_boundaries.way{% endfilter %} AS __geometry__,
+  NULL AS kind,
+  NULL AS admin_level,
+  NULL AS name,
+  NULL AS lhs_name,
+  NULL AS rhs_name,
+  NULL AS tags,
+  'yes' AS maritime
+FROM
+  maritime_boundaries
 
 {% endif %}
