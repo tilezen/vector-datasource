@@ -108,41 +108,33 @@ maritime_boundaries AS (
 
 SELECT
   boundaries.__id__,
-  {% filter geometry %}st_intersection(boundaries.way,maritime_boundaries.way){% endfilter %} AS __geometry__,
+  {% filter geometry %}boundaries.way{% endfilter %} AS __geometry__,
   boundaries.kind AS kind,
   boundaries.admin_level AS admin_level,
   boundaries.name AS name,
   boundaries.lhs_name AS lhs_name,
   boundaries.rhs_name AS rhs_name,
   boundaries.tags AS tags,
-  'yes' AS maritime
+  NULL AS maritime
 FROM
   boundaries
-  JOIN maritime_boundaries
-  ON boundaries.way && maritime_boundaries.way
 
 UNION ALL
 
+-- NOTE: we select these here, but we don't actually put them
+-- in the tiles as-is. instead, we project their attributes
+-- onto parts of the existing boundaries selected above.
 SELECT
-  boundaries.__id__,
-  {% filter geometry %}
-    CASE
-      WHEN maritime_boundaries.way IS NULL
-        THEN boundaries.way
-      ELSE
-        st_difference(boundaries.way,maritime_boundaries.way)
-    END
-  {% endfilter %} AS __geometry__,
-  boundaries.kind AS kind,
-  boundaries.admin_level AS admin_level,
-  boundaries.name AS name,
-  boundaries.lhs_name AS lhs_name,
-  boundaries.rhs_name AS rhs_name,
-  boundaries.tags AS tags,
-  'no' AS maritime
+  0::bigint AS __id__,
+  {% filter geometry %}maritime_boundaries.way{% endfilter %} AS __geometry__,
+  NULL AS kind,
+  NULL AS admin_level,
+  NULL AS name,
+  NULL AS lhs_name,
+  NULL AS rhs_name,
+  NULL AS tags,
+  'yes' AS maritime
 FROM
-  boundaries
-  LEFT OUTER JOIN maritime_boundaries
-  ON TRUE
+  maritime_boundaries
 
 {% endif %}
