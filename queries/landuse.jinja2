@@ -1,4 +1,6 @@
 {% macro ne_landuse_cols(kind) %}
+    NULL AS protect_class,
+    NULL AS operator,
     way_area::bigint AS area,
     '{{ kind }}' AS kind,
     'naturalearthdata.com' AS source,
@@ -10,7 +12,6 @@
 
 SELECT
     '' AS name,
-    NULL AS protect_class,
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_50m_urban_areas
@@ -22,6 +23,7 @@ UNION ALL
 SELECT
   name,
   tags->'protect_class' AS protect_class,
+  operator,
   way_area::bigint AS area,
   mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
   'openstreetmap.org' AS source,
@@ -31,14 +33,13 @@ FROM
   planet_osm_polygon
 WHERE
   {{ bounds|bbox_filter('way') }}
-  AND boundary='national_park'
+  AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
 
 {% elif 6 <= zoom < 8 %}
 
 SELECT
     '' AS name,
-    NULL AS protect_class,
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_10m_urban_areas
@@ -50,6 +51,7 @@ UNION ALL
 SELECT
   name,
   tags->'protect_class' AS protect_class,
+  operator,
   way_area::bigint AS area,
   mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
   'openstreetmap.org' AS source,
@@ -59,7 +61,7 @@ FROM
   planet_osm_polygon
 WHERE
   {{ bounds|bbox_filter('way') }}
-  AND boundary IN ('national_park', 'protected_area')
+  AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
 
 {% else %}
@@ -68,6 +70,7 @@ SELECT
     name,
     way_area::bigint AS area,
     tags->'protect_class' AS protect_class,
+    operator,
     mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
