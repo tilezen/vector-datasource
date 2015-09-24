@@ -374,6 +374,15 @@ CREATE OR REPLACE FUNCTION mz_one_pixel_zoom(
   way_area real)
 RETURNS real AS $$
 BEGIN
-  RETURN (17.256-ln(way_area)/ln(4));
+  RETURN
+    -- can't take logarithm of zero, and some ways have
+    -- incredibly tiny areas, down to even zero. also, by z16
+    -- all features really should be visible, so we clamp the
+    -- computation at the way area which would result in 16
+    -- being returned.
+    CASE WHEN way_area < 5.704
+           THEN 16.0
+         ELSE (17.256-ln(way_area)/ln(4))
+    END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
