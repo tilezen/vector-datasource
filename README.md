@@ -196,13 +196,11 @@ Tiles can be returned in the following formats.
    * Use the `.vtm` extension
 
 # How it Works
-Vector tiles are served from a [TileStache](http://tilestache.org/) provider that clips geometries to the tile bounding box,  and simplifies them to match the zoom level (to avoid unnecessary complexity at lower zoom levels).
-
-Tiles are currently served from a [fork of TileStache](https://github.com/mapzen/TileStache/tree/integration-1/TileStache/Goodies/VecTiles) that extends the VecTiles provider, using [this configuration](https://github.com/mapzen/vector-datasource). Have a question about whether a specific property is included? Check [the queries](https://github.com/mapzen/vector-datasource/tree/master/queries) behind the tiles.
+Vector tiles are served by clipping geometries to the tile bounding box, and then simplified to match the zoom level (to avoid unnecessary complexity at lower zoom levels). These geometries and features are also further processed to facilitate styling.
 
 This is based on the work of [Michal Migurski](http://mike.teczno.com/), and extends his [OSM.US-hosted vector tile service](http://openstreetmap.us/~migurski/vector-datasource/) with additional data and format support.
 
-If you are interested in setting up your own version of this service, look at our [installation instructions](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or you can also try this [Vagrant VM](https://github.com/meetar/tangram-vm). You may also be interested in our [Metro Extracts](https://mapzen.com/metro-extracts), which provide weekly, city-sized chunks of OSM data in several formats for over 200 cities.
+If you are interested in setting up your own version of this service, look at our [installation instructions](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or you can also try this [Vagrant VM](https://github.com/mapzen/vagrant-tiles), which will additionally set up other tile components as well. You may also be interested in our [Metro Extracts](https://mapzen.com/metro-extracts), which provide weekly, city-sized chunks of OSM data in several formats for over 200 cities.
 
 # How to Display Vector Tiles
 You can use Mapzen’s vector tile service with a variety of browser-based rendering software packages. According to the syntax of the library you are using, you need to specify the URL to the Mapzen vector tile service, the layers that you want to draw on the map, and styling information about how to draw the features. 
