@@ -15,7 +15,7 @@ CREATE INDEX planet_osm_polygon_is_water_index ON planet_osm_polygon(mz_calculat
 -- update polygon table to add centroids
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_is_landuse BOOLEAN;
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_centroid GEOMETRY;
-ALTER TABLE planet_osm_polygon ADD COLUMN mz_poi_min_zoom SMALLINT;
+ALTER TABLE planet_osm_polygon ADD COLUMN mz_poi_min_zoom REAL;
 
 UPDATE planet_osm_polygon SET
     mz_is_landuse = TRUE

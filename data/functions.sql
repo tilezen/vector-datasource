@@ -115,9 +115,9 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     waterway_val text,
     way_area real
 )
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
-  zoom smallint;
+  zoom REAL;
 BEGIN
   zoom =
         CASE WHEN natural_val IN ('peak', 'volcano') THEN 11
