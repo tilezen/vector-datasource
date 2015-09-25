@@ -151,7 +151,7 @@ BEGIN
         THEN LEAST(zoom + 3.3, 17)
       WHEN amenity_val = 'nursing_home'     THEN LEAST(zoom + 1.25, 16)
       WHEN shop_val    = 'music'            THEN LEAST(zoom + 1.27, 17)
-      WHEN amenity_val = 'community_centre' THEN LEAST(zoom + 1.31, 16)
+      WHEN amenity_val = 'community_centre' THEN LEAST(zoom + 3.98, 17)
       WHEN shop_val    = 'sports'           THEN LEAST(zoom + 1.53, 17)
       WHEN amenity_val = 'college'          THEN LEAST(zoom + 2.35, 16)
       WHEN shop_val    = 'mall'             THEN LEAST(zoom + 2.98, 17)
