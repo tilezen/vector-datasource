@@ -11,6 +11,8 @@ SELECT
     "building:min_levels",
     height,
     min_height,
+    tags->'layer' AS layer,
+    tags->'location' AS location,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
 {% if zoom >= 15 %}
     "roof:color" AS roof_color,
@@ -22,6 +24,8 @@ SELECT
 {% if zoom >= 17 %}
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
+    NULL AS addr_floor,
+    NULL AS level,
 {% endif %}
     %#tags AS tags
 
@@ -65,6 +69,8 @@ SELECT
     NULL AS "building:min_levels",
     NULL AS height,
     NULL AS min_height,
+    NULL AS layer,
+    NULL AS location,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     NULL AS roof_color,
     NULL AS roof_material,
@@ -73,6 +79,8 @@ SELECT
     NULL AS roof_orientation,
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
+    tags->'addr:floor' AS addr_floor,
+    tags->'level' as level,
     %#tags AS tags
 
 FROM
