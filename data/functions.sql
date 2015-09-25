@@ -406,3 +406,31 @@ BEGIN
     END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_landuse_label_min_zoom(
+  landuse_val TEXT,
+  leisure_val TEXT,
+  natural_val TEXT,
+  highway_val TEXT,
+  amenity_val TEXT,
+  aeroway_val TEXT,
+  tourism_val TEXT,
+  man_made_val TEXT,
+  power_val TEXT,
+  boundary_val TEXT,
+  way_area REAL)
+RETURNS REAL AS $$
+DECLARE
+  zoom REAL;
+BEGIN
+  zoom = mz_one_pixel_zoom(way_area);
+  RETURN
+    CASE
+      WHEN (boundary_val IN ('national_park', 'protected_area')
+            OR leisure_val = 'nature_reserve')
+        THEN zoom
+      ELSE
+        GREATEST(LEAST(zoom, 16), 9)
+    END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

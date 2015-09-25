@@ -1,4 +1,4 @@
-{% if 4 <= zoom < 9 %}
+{% if 4 <= zoom < 8 %}
 
 SELECT
   name,
@@ -12,9 +12,7 @@ FROM
   planet_osm_polygon
 WHERE
   {{ bounds|bbox_filter('way') }}
-  AND name IS NOT NULL
-  AND boundary IN ('national_park', 'protected_area')
-  AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
+  AND mz_landuse_label_min_zoom <= {{ zoom }}
 
 {% else %}
 
@@ -32,14 +30,7 @@ SELECT
 FROM
     planet_osm_polygon
 WHERE
-    mz_is_landuse = TRUE
-    AND name IS NOT NULL
-    {% if zoom < 17 %}
-    AND (amenity IS NULL OR amenity != 'parking')
-    {% endif %}
-    AND {{ bounds|bbox_filter('way') }}
-    {% if zoom <= 15 %}
-    AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
-    {% endif %}
+    {{ bounds|bbox_filter('way') }}
+    AND mz_landuse_label_min_zoom <= {{ zoom }}
 
 {% endif %}
