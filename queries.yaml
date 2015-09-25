@@ -174,6 +174,7 @@ post_process:
     attribute: kind
     target_attribute: landuse_kind
     cutting_attrs: { sort_key: 'order', reverse: True }
-  TileStache.Goodies.VecTiles.transform.intracut:
-    base_layer: boundaries
-    attribute: maritime
+# Temporarily disabled
+#  TileStache.Goodies.VecTiles.transform.intracut:
+#    base_layer: boundaries
+#    attribute: maritime
