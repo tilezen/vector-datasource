@@ -1,12 +1,9 @@
 SELECT
     name,
     way_area::bigint AS area,
+    COALESCE("building", "amenity", "shop", "tourism") AS kind,
     osm_id AS __id__,
     "building:part",
-    building,
-    amenity,
-    shop,
-    tourism,
     "building:levels",
     "building:min_levels",
     height,
@@ -55,6 +52,7 @@ UNION ALL
 SELECT
     name,
     NULL AS area,
+    'addr' AS kind,
     osm_id AS __id__,
     NULL AS "building:part",
     NULL AS building,
