@@ -154,7 +154,7 @@ BEGIN
       WHEN amenity_val  = 'community_centre' THEN LEAST(zoom + 3.98, 17)
       WHEN shop_val     = 'sports'           THEN LEAST(zoom + 1.53, 17)
       WHEN amenity_val  = 'college'          THEN LEAST(zoom + 2.35, 16)
-      WHEN shop_val     = 'mall'             THEN LEAST(zoom + 2.98, 17)
+      WHEN shop_val     = 'mall'             THEN LEAST(zoom + 2.74, 17)
       WHEN leisure_val  = 'stadium'          THEN LEAST(zoom + 2.30, 15)
       WHEN amenity_val  = 'university'       THEN LEAST(zoom + 2.55, 15)
       WHEN tourism_val  = 'museum'           THEN LEAST(zoom + 1.43, 16)
