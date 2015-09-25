@@ -193,8 +193,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
-        CASE WHEN highway_val IN ('motorway', 'trunk', 'motorway_link') THEN 8
-             WHEN highway_val IN ('primary') THEN 9
+        CASE WHEN highway_val IN ('motorway', 'trunk', 'motorway_link', 'primary') THEN 8
              WHEN highway_val IN ('secondary') THEN 10
              WHEN (highway_val IN ('tertiary')
                 OR aeroway_val IN ('runway', 'taxiway')) THEN 11
