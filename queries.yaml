@@ -9,7 +9,6 @@ all:
   - pois
   - boundaries
   - transit
-  - water_boundaries
 layers:
   water:
     template: water.jinja2
