@@ -157,6 +157,7 @@ BEGIN
       WHEN shop_val    = 'mall'             THEN LEAST(zoom + 2.98, 17)
       WHEN leisure_val = 'stadium'          THEN LEAST(zoom + 2.30, 15)
       WHEN amenity_val = 'university'       THEN LEAST(zoom + 2.55, 15)
+      WHEN tourism_val = 'museum'           THEN LEAST(zoom + 1.43, 16)
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
@@ -203,7 +204,7 @@ BEGIN
                                  'greengrocer', 'hairdresser', 'jewelry', 'mobile_phone',
                                  'optician', 'pet')
                    OR tourism_val IN ('bed_and_breakfast', 'chalet', 'guest_house',
-                                    'hostel', 'hotel', 'motel', 'museum')
+                                    'hostel', 'hotel', 'motel')
                    OR railway_val IN ('subway_entrance')) THEN 17
              WHEN (amenity_val IN ('bench', 'waste_basket')) THEN 18
              ELSE NULL END;
