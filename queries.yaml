@@ -159,7 +159,7 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'order', reverse: True }
+    cutting_attrs: { sort_key: 'sort_key', reverse: True }
   TileStache.Goodies.VecTiles.transform.exterior_boundaries:
     base_layer: water
     start_zoom: 9
@@ -173,7 +173,7 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'order', reverse: True }
+    cutting_attrs: { sort_key: 'sort_key', reverse: True }
 # Temporarily disabled
 #  TileStache.Goodies.VecTiles.transform.intracut:
 #    base_layer: boundaries
