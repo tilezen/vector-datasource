@@ -130,10 +130,8 @@ BEGIN
       WHEN natural_val IN ('peak', 'volcano')
         THEN 11 -- these are generally point features
       WHEN railway_val IN ('station')
-        THEN LEAST(zoom + 0.38, 16)
-      WHEN (aerialway_val IN ('station')
-            OR railway_val IN ('halt', 'tram_stop')
-            OR tourism_val IN ('alpine_hut', 'zoo'))
+        THEN LEAST(zoom + 0.38, 13)
+      WHEN tourism_val = 'zoo'
         THEN LEAST(zoom + 3.00, 15)
       WHEN (natural_val IN ('spring')
             OR railway_val IN ('level_crossing'))
@@ -166,7 +164,10 @@ BEGIN
             OR man_made_val IN ('lighthouse', 'power_wind')
             OR natural_val IN ('cave_entrance')
             OR power_val IN ('generator')
-            OR waterway_val IN ('lock'))
+            OR waterway_val IN ('lock')
+            OR aerialway_val IN ('station')
+            OR railway_val IN ('halt', 'tram_stop')
+            OR tourism_val IN ('alpine_hut'))
         THEN 15
       WHEN (aeroway_val IN ('helipad')
                    OR amenity_val IN ('bus_station', 'car_sharing',
