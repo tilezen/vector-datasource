@@ -24,8 +24,6 @@ SELECT
 {% if zoom >= 17 %}
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
-    NULL AS addr_floor,
-    NULL AS level,
 {% endif %}
     %#tags AS tags
 
@@ -79,8 +77,6 @@ SELECT
     NULL AS roof_orientation,
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
-    tags->'addr:floor' AS addr_floor,
-    tags->'level' as level,
     %#tags AS tags
 
 FROM
