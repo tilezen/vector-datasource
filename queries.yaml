@@ -3,7 +3,6 @@ all:
   - earth
   - places
   - landuse
-  - landuse_labels
   - roads
   - buildings
   - pois
@@ -54,20 +53,6 @@ layers:
     start_zoom: 4
     geometry_types: [Polygon, MultiPolygon]
     simplify_start: 4
-    transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.remap_deprecated_landuse_kinds
-      - TileStache.Goodies.VecTiles.transform.landuse_sort_key
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.landuse
-  landuse_labels:
-    template: landuse_labels.jinja2
-    start_zoom: 4
-    geometry_types: [Point, MultiPoint]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -178,3 +163,6 @@ post_process:
 #  TileStache.Goodies.VecTiles.transform.intracut:
 #    base_layer: boundaries
 #    attribute: maritime
+  TileStache.Goodies.VecTiles.transform.generate_label_layer:
+    source_layer: landuse
+    new_layer_name: landuse_labels
