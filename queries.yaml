@@ -163,6 +163,7 @@ post_process:
 #  TileStache.Goodies.VecTiles.transform.intracut:
 #    base_layer: boundaries
 #    attribute: maritime
-  TileStache.Goodies.VecTiles.transform.generate_label_layer:
+  TileStache.Goodies.VecTiles.transform.generate_label_features:
     source_layer: landuse
-    new_layer_name: landuse_labels
+    label_property_name: label_position
+    label_property_value: "yes"
