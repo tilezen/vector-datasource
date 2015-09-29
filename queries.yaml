@@ -9,7 +9,6 @@ all:
   - pois
   - boundaries
   - transit
-  - water_boundaries
 layers:
   water:
     template: water.jinja2
@@ -21,6 +20,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.water_tunnel
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
@@ -137,6 +137,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.boundary_kind
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
@@ -159,7 +160,7 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'order', reverse: True }
+    cutting_attrs: { sort_key: 'sort_key', reverse: True }
   TileStache.Goodies.VecTiles.transform.exterior_boundaries:
     base_layer: water
     start_zoom: 9
@@ -173,7 +174,8 @@ post_process:
     cutting_layer: landuse
     attribute: kind
     target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'order', reverse: True }
-  TileStache.Goodies.VecTiles.transform.intracut:
-    base_layer: boundaries
-    attribute: maritime
+    cutting_attrs: { sort_key: 'sort_key', reverse: True }
+# Temporarily disabled
+#  TileStache.Goodies.VecTiles.transform.intracut:
+#    base_layer: boundaries
+#    attribute: maritime

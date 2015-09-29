@@ -6,7 +6,7 @@ SELECT
   way_area::bigint AS area,
   mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
   'openstreetmap.org' AS source,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  {% filter geometry %}mz_centroid{% endfilter %} AS __geometry__,
   osm_id AS __id__
 FROM
   planet_osm_polygon
