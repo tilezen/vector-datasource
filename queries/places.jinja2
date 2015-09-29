@@ -19,7 +19,7 @@ WHERE
     scalerank <= {{ zoom }}
     AND {{ bounds|bbox_filter('the_geom') }}
 
-UNION
+UNION ALL
 
 SELECT
     name,
