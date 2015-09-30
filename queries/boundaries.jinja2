@@ -81,15 +81,13 @@ SELECT
   NULL AS name,
   'yes' AS maritime_boundary,
   NULL AS admin_level,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
-  osm_id AS __id__,
-  %#tags AS tags
+  {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+  gid AS __id__,
+  NULL AS tags
 
-FROM planet_osm_line
+FROM buffered_land
 
 WHERE
-  {{ bounds|bbox_filter('way') }}
-  AND boundary = 'administrative'
-  AND tags->'maritime' = 'yes'
+  {{ bounds|bbox_filter('the_geom') }}
 
 {% endif %}
