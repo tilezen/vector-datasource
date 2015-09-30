@@ -168,7 +168,8 @@ post_process:
     source_layer: landuse
     label_property_name: label_position
     label_property_value: "yes"
-  TileStache.Goodies.VecTiles.transform.generate_label_features:
-    source_layer: buildings
-    label_property_name: label_position
-    label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+    params:
+      source_layer: buildings
+      label_property_name: label_position
+      label_property_value: "yes"
