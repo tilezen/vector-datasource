@@ -6,10 +6,8 @@ DECLARE
 BEGIN
     IF mz_is_landuse THEN
         NEW.mz_is_landuse := TRUE;
-	NEW.mz_landuse_label_min_zoom := mz_calculate_landuse_label_min_zoom(NEW."landuse", NEW."leisure", NEW."natural", NEW."highway", NEW."amenity", NEW."aeroway", NEW."tourism", NEW."man_made", NEW."power", NEW."boundary", NEW.way_area);
     ELSE
         NEW.mz_is_landuse := NULL;
-	NEW.mz_landuse_label_min_zoom := NULL;
     END IF;
 
     NEW.mz_poi_min_zoom := mz_poi_min_zoom;
