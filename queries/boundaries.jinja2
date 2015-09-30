@@ -58,15 +58,32 @@ WHERE
 {% else %}
 
 SELECT
-    osm_id AS __id__,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
-    tags->'border_type' AS kind,
-    name,
-    %#tags AS tags
-FROM
-    planet_osm_line
+  name,
+  NULL AS maritime_boundary,
+  admin_level,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  osm_id AS __id__,
+  %#tags AS tags
+
+FROM planet_osm_polygon
+
 WHERE
-    boundary='administrative'
-    AND {{ bounds|bbox_filter('way') }}
+  {{ bounds|bbox_filter('way') }}
+  AND boundary='administrative'
+
+UNION ALL
+
+SELECT
+  NULL AS name,
+  'yes' AS maritime_boundary,
+  NULL AS admin_level,
+  {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+  gid AS __id__,
+  NULL AS tags
+
+FROM buffered_land
+
+WHERE
+  {{ bounds|bbox_filter('the_geom') }}
 
 {% endif %}

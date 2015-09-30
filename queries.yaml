@@ -115,7 +115,7 @@ layers:
   boundaries:
     template: boundaries.jinja2
     start_zoom: 0
-    geometry_types: [LineString, MultiLineString]
+    geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 8
     transform:
@@ -160,10 +160,9 @@ post_process:
     attribute: kind
     target_attribute: landuse_kind
     cutting_attrs: { sort_key: 'sort_key', reverse: True }
-# Temporarily disabled
-#  TileStache.Goodies.VecTiles.transform.intracut:
-#    base_layer: boundaries
-#    attribute: maritime
+  TileStache.Goodies.VecTiles.transform.admin_boundaries:
+    base_layer: boundaries
+    start_zoom: 8
   TileStache.Goodies.VecTiles.transform.generate_label_features:
     source_layer: landuse
     label_property_name: label_position
