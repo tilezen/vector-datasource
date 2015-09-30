@@ -160,6 +160,7 @@ BEGIN
       WHEN tourism_val  = 'museum'           THEN LEAST(zoom + 1.43, 16)
       WHEN historic_val = 'landmark'         THEN LEAST(zoom + 1.76, 15)
       WHEN leisure_val  = 'marina'           THEN LEAST(zoom + 3.45, 17)
+      WHEN amenity_val  = 'place_of_worship' THEN LEAST(2 * zoom - 10.55, 17)
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
@@ -174,7 +175,7 @@ BEGIN
         THEN 15
       WHEN (aeroway_val IN ('helipad')
                    OR amenity_val IN ('bus_station', 'car_sharing',
-                                      'picnic_site', 'place_of_worship',
+                                      'picnic_site',
                                       'prison', 'recycling', 'shelter')
                    OR barrier_val IN ('block', 'bollard', 'lift_gate')
                    OR craft_val IN ('brewery', 'winery', 'sawmill')
