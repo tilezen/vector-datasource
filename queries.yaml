@@ -140,30 +140,35 @@ layers:
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
-  TileStache.Goodies.VecTiles.transform.intercut:
-    base_layer: roads
-    cutting_layer: landuse
-    attribute: kind
-    target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'sort_key', reverse: True }
-  TileStache.Goodies.VecTiles.transform.exterior_boundaries:
-    base_layer: water
-    start_zoom: 9
-    prop_transform:
-      kind: true
-      id: true
-      source: true
-      boundary: "yes"
-  TileStache.Goodies.VecTiles.transform.overlap:
-    base_layer: buildings
-    cutting_layer: landuse
-    attribute: kind
-    target_attribute: landuse_kind
-    cutting_attrs: { sort_key: 'sort_key', reverse: True }
-  TileStache.Goodies.VecTiles.transform.admin_boundaries:
-    base_layer: boundaries
-    start_zoom: 8
-  TileStache.Goodies.VecTiles.transform.generate_label_features:
-    source_layer: landuse
-    label_property_name: label_position
-    label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.intercut
+    params:
+      base_layer: roads
+      cutting_layer: landuse
+      attribute: kind
+      target_attribute: landuse_kind
+      cutting_attrs: { sort_key: 'sort_key', reverse: True }
+  - fn: TileStache.Goodies.VecTiles.transform.exterior_boundaries
+    params:
+      base_layer: water
+      start_zoom: 9
+      prop_transform:
+        kind: true
+        id: true
+        source: true
+        boundary: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.overlap
+    params:
+      base_layer: buildings
+      cutting_layer: landuse
+      attribute: kind
+      target_attribute: landuse_kind
+      cutting_attrs: { sort_key: 'sort_key', reverse: True }
+  - fn: TileStache.Goodies.VecTiles.transform.admin_boundaries
+    params:
+      base_layer: boundaries
+      start_zoom: 8
+  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+    params:
+      source_layer: landuse
+      label_property_name: label_position
+      label_property_value: "yes"
