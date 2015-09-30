@@ -160,7 +160,7 @@ BEGIN
       WHEN tourism_val  = 'museum'           THEN LEAST(zoom + 1.43, 16)
       WHEN historic_val = 'landmark'         THEN LEAST(zoom + 1.76, 15)
       WHEN leisure_val  = 'marina'           THEN LEAST(zoom + 3.45, 17)
-      WHEN amenity_val  = 'place_of_worship' THEN LEAST(2 * zoom - 10.55, 17)
+      WHEN amenity_val  = 'place_of_worship' THEN LEAST(2 * zoom - 9.55, 17)
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
