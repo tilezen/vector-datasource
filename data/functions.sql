@@ -115,32 +115,68 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     waterway_val text,
     way_area real
 )
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
-  zoom smallint;
+  zoom REAL;
 BEGIN
-  zoom =
-        CASE WHEN natural_val IN ('peak', 'volcano') THEN 11
-             WHEN railway_val IN ('station') THEN 12
-             WHEN (aeroway_val IN ('aerodrome', 'airport')
-                   OR aerialway_val IN ('station')
-                   OR railway_val IN ('halt', 'tram_stop')
-                   OR tourism_val IN ('alpine_hut', 'zoo')) THEN 13
-             WHEN (natural_val IN ('spring')
-                   OR railway_val IN ('level_crossing')) THEN 14
-             WHEN (amenity_val IN ('hospital')
-                   OR barrier_val IN ('gate')
-                   OR craft_val IN ('sawmill')
-                   OR highway_val IN ('gate', 'mini_roundabout')
-                   OR lock_val IN ('yes')
-                   OR man_made_val IN ('lighthouse', 'power_wind')
-                   OR natural_val IN ('cave_entrance')
-                   OR power_val IN ('generator')
-                   OR waterway_val IN ('lock')) THEN 15
-             WHEN (aeroway_val IN ('helipad')
-                   OR amenity_val IN ('biergarten', 'bus_station', 'car_sharing',
-                                      'picnic_site', 'place_of_worship',
-                                      'prison', 'pub', 'recycling', 'shelter')
+  zoom = mz_one_pixel_zoom(way_area);
+  RETURN
+    CASE
+      WHEN aeroway_val IN ('aerodrome', 'airport')
+        THEN LEAST(zoom + 4.12, 13)
+      WHEN amenity_val = 'hospital'
+        THEN LEAST(zoom + 3.32, 15)
+
+      WHEN natural_val IN ('peak', 'volcano')
+        THEN 11 -- these are generally point features
+      WHEN railway_val IN ('station')
+        THEN LEAST(zoom + 0.38, 13)
+      WHEN tourism_val = 'zoo'
+        THEN LEAST(zoom + 3.00, 15)
+      WHEN (natural_val IN ('spring')
+            OR railway_val IN ('level_crossing'))
+        THEN 14 -- these are generally points
+      WHEN amenity_val IN ('bank', 'cinema', 'courthouse', 'embassy',
+          'fire_station', 'fuel', 'library', 'police', 'post_office',
+	  'theatre')
+        THEN LEAST(zoom + 2.7, 16)
+      WHEN amenity_val IN ('biergarten', 'pub', 'bar', 'restaurant',
+          'fast_food', 'cafe')
+        THEN LEAST(zoom + 2.50, 17)
+      WHEN (amenity_val IN ('pharmacy', 'veterinary')
+            OR craft_val IN ('brewery', 'carpenter', 'confectionery', 'dressmaker',
+                'electrician', 'gardener', 'handicraft', 'hvac', 'metal_construction',
+                'painter', 'photographer', 'photographic_laboratory', 'plumber',
+                'pottery', 'sawmill', 'shoemaker', 'stonemason', 'tailor', 'winery'))
+        THEN LEAST(zoom + 3.3, 17)
+      WHEN amenity_val  = 'nursing_home'     THEN LEAST(zoom + 1.25, 16)
+      WHEN shop_val     = 'music'            THEN LEAST(zoom + 1.27, 17)
+      WHEN amenity_val  = 'community_centre' THEN LEAST(zoom + 3.98, 17)
+      WHEN shop_val     = 'sports'           THEN LEAST(zoom + 1.53, 17)
+      WHEN amenity_val  = 'college'          THEN LEAST(zoom + 2.35, 16)
+      WHEN shop_val     = 'mall'             THEN LEAST(zoom + 2.74, 17)
+      WHEN leisure_val  = 'stadium'          THEN LEAST(zoom + 2.30, 15)
+      WHEN amenity_val  = 'university'       THEN LEAST(zoom + 2.55, 15)
+      WHEN tourism_val  = 'museum'           THEN LEAST(zoom + 1.43, 16)
+      WHEN historic_val = 'landmark'         THEN LEAST(zoom + 1.76, 15)
+      WHEN leisure_val  = 'marina'           THEN LEAST(zoom + 3.45, 17)
+      WHEN amenity_val  = 'place_of_worship' THEN LEAST(2 * zoom - 9.55, 17)
+      WHEN (barrier_val IN ('gate')
+            OR craft_val IN ('sawmill')
+            OR highway_val IN ('gate', 'mini_roundabout')
+            OR lock_val IN ('yes')
+            OR man_made_val IN ('lighthouse', 'power_wind')
+            OR natural_val IN ('cave_entrance')
+            OR power_val IN ('generator')
+            OR waterway_val IN ('lock')
+            OR aerialway_val IN ('station')
+            OR railway_val IN ('halt', 'tram_stop')
+            OR tourism_val IN ('alpine_hut'))
+        THEN 15
+      WHEN (aeroway_val IN ('helipad')
+                   OR amenity_val IN ('bus_station', 'car_sharing',
+                                      'picnic_site',
+                                      'prison', 'recycling', 'shelter')
                    OR barrier_val IN ('block', 'bollard', 'lift_gate')
                    OR craft_val IN ('brewery', 'winery', 'sawmill')
                    OR highway_val IN ('ford')
@@ -151,15 +187,10 @@ BEGIN
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
              WHEN (aeroway_val IN ('gate')
                    OR amenity_val IN (
-                 'atm', 'bank', 'bar', 'bicycle_rental', 'bicycle_parking', 'bus_stop',
-                 'cafe', 'cinema', 'courthouse', 'drinking_water', 'embassy', 'emergency_phone',
-                 'fast_food', 'fire_station', 'fuel', 'library', 'parking', 'pharmacy',
-                 'police', 'post_box', 'post_office', 'restaurant', 'telephone', 'theatre',
-                 'toilets', 'veterinary')
-                   OR craft_val IN ('brewery', 'carpenter', 'confectionery', 'dressmaker',
-                'electrician', 'gardener', 'handicraft', 'hvac', 'metal_construction',
-                'painter', 'photographer', 'photographic_laboratory', 'plumber',
-                'pottery', 'sawmill', 'shoemaker', 'stonemason', 'tailor', 'winery')
+                 'atm', 'bicycle_rental', 'bicycle_parking', 'bus_stop',
+                 'drinking_water', 'emergency_phone',
+                 'parking', 'post_box', 'telephone', 'theatre',
+                 'toilets')
                    OR highway_val IN ('bus_stop', 'traffic_signals')
                    OR historic_val IN ('memorial')
                    OR leisure_val IN ('playground', 'slipway')
@@ -176,16 +207,10 @@ BEGIN
                                  'greengrocer', 'hairdresser', 'jewelry', 'mobile_phone',
                                  'optician', 'pet')
                    OR tourism_val IN ('bed_and_breakfast', 'chalet', 'guest_house',
-                                    'hostel', 'hotel', 'motel', 'museum')
+                                    'hostel', 'hotel', 'motel')
                    OR railway_val IN ('subway_entrance')) THEN 17
              WHEN (amenity_val IN ('bench', 'waste_basket')) THEN 18
              ELSE NULL END;
-  RETURN (CASE
-    WHEN way_area > 1.0e7 THEN zoom - 4
-    WHEN way_area > 1.0e6 THEN zoom - 3
-    WHEN way_area > 1.0e5 THEN zoom - 2
-    WHEN way_area > 1.0e4 THEN zoom - 1
-    ELSE zoom END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -385,3 +410,4 @@ BEGIN
     END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
