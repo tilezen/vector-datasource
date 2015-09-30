@@ -12,7 +12,7 @@
 
 SELECT
     '' AS name,
-    4::smallint AS min_zoom,
+    4::real AS min_zoom,
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_50m_urban_areas
@@ -23,7 +23,7 @@ UNION ALL
 
 SELECT
   name,
-  (floor(mz_landuse_min_zoom))::smallint AS min_zoom,
+  mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
@@ -42,7 +42,7 @@ WHERE
 
 SELECT
     '' AS name,
-    4::smallint AS min_zoom, -- we show urban areas at 4, even if it's not from this table
+    4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_10m_urban_areas
@@ -53,7 +53,7 @@ UNION ALL
 
 SELECT
   name,
-  (floor(mz_landuse_min_zoom))::smallint AS min_zoom,
+  mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
@@ -72,7 +72,7 @@ WHERE
 
 SELECT
     name,
-    (least(16, floor(mz_landuse_min_zoom)))::smallint AS min_zoom,
+    least(16, mz_landuse_min_zoom)::real AS min_zoom,
     tags->'protect_class' AS protect_class,
     operator,
     way_area::bigint AS area,
@@ -98,7 +98,7 @@ UNION ALL
 -- "cross-fade" NE urban area polygons for a couple of zooms.
 SELECT
   '' AS name,
-  4::smallint AS min_zoom, -- we show urban areas at 4, even if it's not from this table
+  4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
   {{ ne_landuse_cols('urban area') }},
   NULL AS sport,
   NULL AS religion,
