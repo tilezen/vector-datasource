@@ -31,3 +31,4 @@ import_shapefile ne_10m_roads-merc.shp ne_10m_roads
 import_shapefile ne_10m_coastline-merc.shp ne_10m_coastline
 import_shapefile ne_50m_coastline-merc.shp ne_50m_coastline
 import_shapefile ne_110m_coastline-merc.shp ne_110m_coastline
+import_shapefile buffered_land buffered_land

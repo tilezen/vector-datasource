@@ -12,6 +12,7 @@
 
 SELECT
     '' AS name,
+    4::real AS min_zoom,
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_50m_urban_areas
@@ -22,6 +23,7 @@ UNION ALL
 
 SELECT
   name,
+  mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
@@ -34,12 +36,13 @@ FROM
 WHERE
   {{ bounds|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
-  AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
+  AND mz_landuse_min_zoom <= {{ zoom }}
 
 {% elif 6 <= zoom < 8 %}
 
 SELECT
     '' AS name,
+    4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
     {{ ne_landuse_cols('urban area') }}
 FROM
     ne_10m_urban_areas
@@ -50,6 +53,7 @@ UNION ALL
 
 SELECT
   name,
+  mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
@@ -62,12 +66,13 @@ FROM
 WHERE
   {{ bounds|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
-  AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
+  AND mz_landuse_min_zoom <= {{ zoom }}
 
 {% else %}
 
 SELECT
     name,
+    least(16, mz_landuse_min_zoom)::real AS min_zoom,
     tags->'protect_class' AS protect_class,
     operator,
     way_area::bigint AS area,
@@ -84,7 +89,7 @@ WHERE
     mz_is_landuse = TRUE
     AND {{ bounds|bbox_filter('way') }}
     {% if zoom <= 15 %}
-    AND mz_one_pixel_zoom(way_area) <= {{ zoom }}
+    AND mz_landuse_min_zoom <= {{ zoom }}
     {% endif %}
 
 {% if zoom < 10 %}
@@ -93,6 +98,7 @@ UNION ALL
 -- "cross-fade" NE urban area polygons for a couple of zooms.
 SELECT
   '' AS name,
+  4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
   {{ ne_landuse_cols('urban area') }},
   NULL AS sport,
   NULL AS religion,
