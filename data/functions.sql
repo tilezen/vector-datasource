@@ -219,9 +219,10 @@ RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
         CASE WHEN highway_val IN ('motorway', 'trunk', 'motorway_link', 'primary') THEN 8
+	     WHEN aeroway_val IN ('runway') THEN 9
              WHEN highway_val IN ('secondary') THEN 10
              WHEN (highway_val IN ('tertiary')
-                OR aeroway_val IN ('runway', 'taxiway')) THEN 11
+                OR aeroway_val IN ('taxiway')) THEN 11
              WHEN highway_val IN ('trunk_link', 'residential', 'unclassified', 'road') THEN 12
              WHEN highway_val IN ('primary_link', 'secondary_link') THEN 13
              WHEN (highway_val IN ('tertiary_link', 'minor')
