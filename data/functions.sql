@@ -214,7 +214,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text)
+CREATE OR REPLACE FUNCTION mz_calculate_ferry_level(way geometry)
+RETURNS SMALLINT AS $$
+DECLARE
+  way_length real := st_length(way);
+BEGIN
+  RETURN (
+    CASE
+      WHEN way_length > 51356 THEN  9
+      WHEN way_length > 17215 THEN 10
+      WHEN way_length >  3400 THEN 11
+      WHEN way_length >  1700 THEN 12
+      ELSE                         13
+    END);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, way geometry)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
@@ -228,6 +244,7 @@ BEGIN
                 OR railway_val='rail') THEN 14
              WHEN (highway_val IN ('service', 'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway', 'living_street')
                 OR railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail')) THEN 15
+             WHEN route_val = 'ferry' THEN mz_calculate_ferry_level(way)
              ELSE NULL END
     );
 END;
