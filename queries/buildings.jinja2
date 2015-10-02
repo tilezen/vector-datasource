@@ -12,7 +12,7 @@ SELECT
     "building:min_levels",
     height,
     min_height,
-    tags->'layer' AS layer,
+    layer,
     tags->'location' AS location,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
 {% if zoom >= 15 %}
