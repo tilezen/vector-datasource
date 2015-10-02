@@ -127,6 +127,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.boundary_kind
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
+      - TileStache.Goodies.VecTiles.transform.boundary_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
   transit:
     template: transit.jinja2
