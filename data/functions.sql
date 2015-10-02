@@ -221,11 +221,13 @@ DECLARE
 BEGIN
   RETURN (
     CASE
-      WHEN way_length > 51356 THEN  9
-      WHEN way_length > 17215 THEN 10
-      WHEN way_length >  3400 THEN 11
-      WHEN way_length >  1700 THEN 12
-      ELSE                         13
+      -- this is about when the way is >= 2px in length
+      WHEN way_length > 1223 THEN  8
+      WHEN way_length >  611 THEN  9
+      WHEN way_length >  306 THEN 10
+      WHEN way_length >  153 THEN 11
+      WHEN way_length >   76 THEN 12
+      ELSE                        13
     END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
