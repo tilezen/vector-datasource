@@ -28,6 +28,7 @@ SELECT
     aeroway,
     bridge,
     highway,
+    tags->'ferry' AS ferry,
     layer,
     railway,
     tunnel,
@@ -52,16 +53,17 @@ SELECT
     tags->'descent' AS descent,
     tags->'roundtrip' AS roundtrip,
     tags->'route_name' AS route_name,
+    tags->'motor_vehicle' AS motor_vehicle,
     %#tags AS tags
 
 FROM planet_osm_line
 
 WHERE
     {{ bounds|bbox_filter('way') }}
-    AND mz_calculate_road_level(highway, railway, aeroway) <= {{ zoom }}
+    AND mz_calculate_road_level(highway, railway, aeroway, route, way) <= {{ zoom }}
     -- the below is to filter out any relations-as-roads, since instead we are
-    -- projecting the network attribute onto the ways. it might need some finessing
-    -- if we're rendering other stuff from relations like cycle routes.
-    AND osm_id > 0
+    -- projecting the network attribute onto the ways. it needs some adjustment as
+    -- other features, in this case ferry routes, are routinely mapped as relations.
+    AND (osm_id > 0 OR route = 'ferry')
 
 {% endif %}
