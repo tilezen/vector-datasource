@@ -31,3 +31,4 @@ v0.2.0
 * Add house addresses points to `buildings` layer with `kind` = `address`.
 * Resolve duplicate populated places from `places` layer. Natural Earth only used in low zooms, OSM only used in mid and high zooms.
 * Stop generating tiny invalid geoms that were making D3.js cry.
+* Requires: [tileserver v0.2.0](https://github.com/mapzen/tileserver/releases/tag/v0.2.0) and [tilequeue v0.2.0](https://github.com/mapzen/tilequeue/releases/tag/v0.2.0) and [TileStache v0.2.0](https://github.com/mapzen/TileStache/releases/tag/v0.2.0)
