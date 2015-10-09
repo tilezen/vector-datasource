@@ -45,3 +45,8 @@ v0.2.0-prehistory
 * Less linework geometry simplification on Natural Earth geometries at low zooms.
 * Move to query templates to reduce code complexity.
 * Start [managing issues](https://waffle.io/mapzen/vector-datasource) across all Mapzen vector tile repos with Waffle.io.
+
+v0.1.0
+------
+* Release date: 12 May 2015
+* See also: [inquagral Mapzen Vector Tiles blog post](https://mapzen.com/blog/look-upon-our-squares-of-math-in-three-dimensions)
