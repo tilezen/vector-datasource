@@ -1,6 +1,6 @@
 v0.4.0
 ------
-* Fix regression in v0.3.0 where zooms 0 to zoom 8 country and region (state, province) features from OpenStreetMap were dropped from tiles.
+* Fix regression in v0.3.0 where zooms 0 to zoom 8 country and region (state, province) features from OpenStreetMap were dropped from tiles (rolling back a change in v0.2.0)
 * Greater diversity of label placements for POIs, landuse, and buildings result in more balanced selection of features visible at mid and high (neighborhood) zooms. The feature's minimum recommended visible zoom is now included as a property (eg: `min_zoom=10.7763`), useful for determining feature priority in client-side label collisions. Currently visibility should be calculated combined with area filters, we'll move that serverside in later releases.
 * Add label positions for water bodies to the `water` layer noted as `label_position=yes`.
 * Add label positions for buildings to the `buildings` layer noted as `label_position=yes`.
@@ -23,6 +23,11 @@ v0.3.0
 * Other minor bug fixes and optimizations.
 * Requires: [tileserver v0.3.0](https://github.com/mapzen/tileserver/releases/tag/v0.3.0) and [tilequeue v0.3.0](https://github.com/mapzen/tilequeue/releases/tag/v0.3.0) and [TileStache v0.3.0](https://github.com/mapzen/TileStache/releases/tag/v0.3.0)
 
-0.2.0
+v0.2.0
 -----
-* Stable
+* Add `landuse_kind` to features in `roads` and `buildings` layers based on the intersection with `landuse` layer features. **TIP:** custom style roads and buildings over parks and other area features to improves contrast.
+* Add calculated water `boundary=yes` line features to `water` layer to resolve funky "coastlines" crossing water polygons (where river and ocean polygons meet, and where adjacent river polygons meet). There are already stream lines in the water layer, but this might require an style update. **TIP:** In D3.js, set `fill: none` on linear features like streams and `boundary=yes` feeatures. 
+* Added power station polygons to `landuse` layer with `kind` = `plant`, `generator`, or `substation`.
+* Add house addresses points to `buildings` layer with `kind` = `address`.
+* Resolve duplicate populated places from `places` layer. Natural Earth only used in low zooms, OSM only used in mid and high zooms.
+* Stop generating tiny invalid geoms that were making D3.js cry.
