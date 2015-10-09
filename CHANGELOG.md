@@ -49,4 +49,4 @@ v0.2.0-prehistory
 v0.1.0
 ------
 * Release date: 12 May 2015
-* See also: [inquagral Mapzen Vector Tiles blog post](https://mapzen.com/blog/look-upon-our-squares-of-math-in-three-dimensions)
+* See also: [inaugural Mapzen Vector Tiles blog post](https://mapzen.com/blog/look-upon-our-squares-of-math-in-three-dimensions)
