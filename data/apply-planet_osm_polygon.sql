@@ -39,4 +39,12 @@ UPDATE planet_osm_polygon SET
 CREATE INDEX planet_osm_polygon_is_landuse_col_index ON planet_osm_polygon(mz_is_landuse) WHERE mz_is_landuse=TRUE;
 CREATE INDEX planet_osm_polygon_centroid_landuse_index ON planet_osm_polygon USING gist(mz_centroid) WHERE mz_is_landuse=TRUE;
 
+CREATE INDEX planet_osm_polygon_landuse_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND mz_landuse_min_zoom <= 9;
+CREATE INDEX planet_osm_polygon_landuse_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND mz_landuse_min_zoom <= 12;
+CREATE INDEX planet_osm_polygon_landuse_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND mz_landuse_min_zoom <= 15;
+
+CREATE INDEX planet_osm_polygon_water_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_calculate_is_water("waterway", "natural", "landuse") = TRUE;
+
 END $$;
+
+ANALYZE planet_osm_polygon;
