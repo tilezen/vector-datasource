@@ -269,7 +269,11 @@ CREATE OR REPLACE FUNCTION mz_calculate_is_building_or_part(
     building_val text, buildingpart_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
-    RETURN (building_val IS NOT NULL OR buildingpart_val IS NOT NULL);
+    -- there are 12,000 uses of building=no, so we ought to take that into
+    -- account when figuring out if something is a building or not. also,
+    -- returning "kind=no" is a bit weird.
+    RETURN ((building_val IS NOT NULL AND building_val <> 'no') OR
+            (buildingpart_val IS NOT NULL AND buildingpart_val <> 'no'));
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 

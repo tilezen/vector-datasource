@@ -191,3 +191,6 @@ post_process:
       source_layer: water
       label_property_name: label_placement
       label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
+    params:
+      source_layer: buildings
