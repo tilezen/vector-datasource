@@ -35,3 +35,13 @@ END;
 $$ LANGUAGE plpgsql VOLATILE;
 
 CREATE TRIGGER mz_trigger_point BEFORE INSERT OR UPDATE ON planet_osm_point FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_point();
+
+CREATE OR REPLACE FUNCTION mz_trigger_function_line()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.mz_road_level := mz_calculate_road_level(highway, railway, aeroway, route, way);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql VOLATILE;
+
+CREATE TRIGGER mz_trigger_line BEFORE INSERT OR UPDATE ON planet_osm_line FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_line();
