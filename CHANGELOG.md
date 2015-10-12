@@ -1,5 +1,6 @@
 v0.4.0
 ------
+* Release date: 2015-10-06
 * Fix regression in v0.3.0 where zooms 0 to zoom 8 country and region (state, province) features from OpenStreetMap were dropped from tiles (rolling back a change in v0.2.0)
 * Greater diversity of label placements for POIs, landuse, and buildings result in more balanced selection of features visible at mid and high (neighborhood) zooms. The feature's minimum recommended visible zoom is now included as a property (eg: `min_zoom=10.7763`), useful for determining feature priority in client-side label collisions. Currently visibility should be calculated combined with area filters, we'll move that serverside in later releases.
 * Add label positions for water bodies to the `water` layer noted as `label_position=yes`.
@@ -14,6 +15,7 @@ v0.4.0
 
 v0.3.0
 ------
+* Release date: 2015-09-25
 * Source `national_park`, `protected_area` and other significant landuse boundaries from OpenStreetMap to generate AOI polygons and labels earlier starting at zoom 4 globally (was zoom 9). These features also gain  `protect_class` and `operator` properties.
 * Add OSM roads and other features starting at zoom 8 (transition from Natural Earth data was zoom 9 in earlier releases). Natural Earth urban areas remain until zoom 9, though.
 * Add water boundaries for low zooms (from Natural Earth), to match earlier `v0.2.0` work for OSM water boundaries at mid and high zooms.
@@ -25,6 +27,7 @@ v0.3.0
 
 v0.2.0
 -----
+* Release date: 2015-09-18
 * Add `landuse_kind` to features in `roads` and `buildings` layers based on the intersection with `landuse` layer features. **TIP:** custom style roads and buildings over parks and other area features to improves contrast.
 * Add calculated water `boundary=yes` line features to `water` layer to resolve funky "coastlines" crossing water polygons (where river and ocean polygons meet, and where adjacent river polygons meet). There are already stream lines in the water layer, but this might require an style update. **TIP:** In D3.js, set `fill: none` on linear features like streams and `boundary=yes` feeatures. 
 * Added power station polygons to `landuse` layer with `kind` = `plant`, `generator`, or `substation`.
@@ -35,6 +38,7 @@ v0.2.0
 
 v0.2.0-prehistory
 ------
+* Release date: July-August 2015
 * Add missing OSM `city` features to `places` layer in mid and high zooms.
 * Add `kind` = `aerodrome` (airport AOI), `military`, `zoo`; man made features of `kind` = `pier`, `wastewater_plant`, `works`, `bridge`, `tower`, `breakwater`, `water_works`, `groyne`, `dike`, `cutline`; and `urban` & `rural` polygons to `landuse` and points to `landuse-labels` layers.
 * Add `sport` and `religion` tags to `landuse` layer polygon and `landuse-labels` point features to distinguish different kinds of sport pitches and places of worship. **TIP:** use these to stylize custome icons.
@@ -48,5 +52,7 @@ v0.2.0-prehistory
 
 v0.1.0
 ------
-* Release date: 12 May 2015
+* Release date: 2015-05-12
 * See also: [inaugural Mapzen Vector Tiles blog post](https://mapzen.com/blog/look-upon-our-squares-of-math-in-three-dimensions)
+
+NOTE: Release dates reflect date repo was tagged or otherwise released. Date that production tiles reflect same changes may lag (up to a week, usually less).
