@@ -9,6 +9,7 @@ BEGIN
 CREATE INDEX planet_osm_polygon_wayarea_index ON planet_osm_polygon(way_area);
 CREATE INDEX planet_osm_polygon_building_index ON planet_osm_polygon(building) WHERE building IS NOT NULL;
 CREATE INDEX planet_osm_polygon_admin_level_index ON planet_osm_polygon(admin_level) WHERE boundary = 'administrative';
+CREATE INDEX planet_osm_polygon_admin_level_geom_index ON planet_osm_polygon USING gist(way) WHERE boundary = 'administrative';
 CREATE INDEX planet_osm_polygon_is_building_or_part_index ON planet_osm_polygon(mz_calculate_is_building_or_part(building, "building:part")) WHERE mz_calculate_is_building_or_part(building, "building:part") = TRUE;
 CREATE INDEX planet_osm_polygon_is_water_index ON planet_osm_polygon(mz_calculate_is_water("waterway", "natural", "landuse")) WHERE mz_calculate_is_water("waterway", "natural", "landuse") = TRUE;
 
