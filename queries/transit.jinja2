@@ -22,4 +22,4 @@ FROM planet_osm_line
 
 WHERE
     {{ bounds|bbox_filter('way') }}
-    AND mz_calculate_transit_level(route) <= {{ zoom }}
+    AND mz_transit_level <= {{ zoom }}

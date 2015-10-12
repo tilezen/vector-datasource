@@ -40,6 +40,7 @@ CREATE OR REPLACE FUNCTION mz_trigger_function_line()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.mz_road_level := mz_calculate_road_level(highway, railway, aeroway, route, way);
+    NEW.mz_transit_level := mz_calculate_transit_level(route);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
