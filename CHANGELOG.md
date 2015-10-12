@@ -55,4 +55,4 @@ v0.1.0
 * **Release date:** 2015-05-12
 * See also: [inaugural Mapzen Vector Tiles blog post](https://mapzen.com/blog/look-upon-our-squares-of-math-in-three-dimensions)
 
-NOTE: Release dates reflect date repo was tagged or otherwise released. Date that production tiles reflect same changes may lag (up to a week, usually less).
+NOTE: Release dates reflect date repo was tagged or otherwise released. Date that production tiles reflect same changes may lag (around a week, usually less).
