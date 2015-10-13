@@ -75,7 +75,7 @@ FROM planet_osm_polygon
 WHERE
   {{ bounds|bbox_filter('way') }}
   AND boundary='administrative'
-  AND admin_level IN ('2', '4' {% if zoom >= 10 %}, '8'{% endif %})
+  AND admin_level IN ('2', '4' {% if zoom >= 10 %}, '6', '8'{% endif %})
 
 UNION ALL
 
