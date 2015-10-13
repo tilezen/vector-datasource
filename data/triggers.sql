@@ -39,8 +39,8 @@ CREATE TRIGGER mz_trigger_point BEFORE INSERT OR UPDATE ON planet_osm_point FOR 
 CREATE OR REPLACE FUNCTION mz_trigger_function_line()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.mz_road_level := mz_calculate_road_level(highway, railway, aeroway, route, way);
-    NEW.mz_transit_level := mz_calculate_transit_level(route);
+    NEW.mz_road_level := mz_calculate_road_level(NEW.highway, NEW.railway, NEW.aeroway, NEW.route, NEW.way);
+    NEW.mz_transit_level := mz_calculate_transit_level(NEW.route);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
