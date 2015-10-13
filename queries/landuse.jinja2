@@ -64,7 +64,10 @@ SELECT
 FROM
   planet_osm_polygon
 WHERE
-  {{ bounds|bbox_filter('way') }}
+  mz_is_landuse = TRUE
+  AND mz_calculate_is_building_or_part(building, "building:part") <> TRUE
+  AND mz_poi_min_zoom IS NULL
+  AND {{ bounds|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
@@ -87,6 +90,8 @@ FROM
     planet_osm_polygon
 WHERE
     mz_is_landuse = TRUE
+    AND mz_calculate_is_building_or_part(building, "building:part") <> TRUE
+    AND mz_poi_min_zoom IS NULL
     AND {{ bounds|bbox_filter('way') }}
     {% if zoom <= 15 %}
     AND mz_landuse_min_zoom <= {{ zoom }}
