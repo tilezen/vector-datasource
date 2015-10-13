@@ -183,14 +183,15 @@ post_process:
       label_property_value: "yes"
   - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
     params:
-      source_layer: buildings
-      label_property_name: label_placement
-      label_property_value: "yes"
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
-    params:
       source_layer: water
       label_property_name: label_placement
       label_property_value: "yes"
   - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
     params:
       source_layer: buildings
+      start_zoom: 17
+  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+    params:
+      source_layer: buildings
+      label_property_name: label_placement
+      label_property_value: "yes"
