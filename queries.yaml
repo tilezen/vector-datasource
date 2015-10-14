@@ -195,3 +195,9 @@ post_process:
       source_layer: buildings
       label_property_name: label_placement
       label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+    params:
+      source_layer: landuse
+      property_name: mz_is_building
+      drop_property: true
+      geom_types: [Polygon, MultiPolygon]
