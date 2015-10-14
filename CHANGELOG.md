@@ -1,3 +1,9 @@
+v0.4.2
+------
+* **Release date:** 2015-10-14
+* Fix invalid Antarctica polygon in buffered land.
+* **Requires:** [tileserver v0.4.0](https://github.com/mapzen/tileserver/releases/tag/v0.4.0) and [tilequeue v0.4.1](https://github.com/mapzen/tilequeue/releases/tag/v0.4.1) and [TileStache v0.4.1](https://github.com/mapzen/TileStache/releases/tag/v0.4.1)
+
 v0.4.1
 ------
 * **Release date:** 2015-10-13
