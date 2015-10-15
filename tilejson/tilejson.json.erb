@@ -19,7 +19,7 @@
     "scheme" : "xyz",
     "tilejson" : "2.0.0",
     "tiles" : [
-        "http://<%= node[:tilejson][:host] %>/osm/all/{z}/{x}/{y}.<%= @params[:extension] %>"
+        "http://<%= node[:tilejson][:host] %>/osm/all/{z}/{x}/{y}.<%= @params[:extension] %>?api_key={api_key}"
     ],
     "type" : "overlay",
     "vector_layers" : [
