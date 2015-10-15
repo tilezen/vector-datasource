@@ -1,13 +1,20 @@
 SELECT
-    name,
+    -- drop name when the item is a POI - in that case the name
+    -- probably refers to the POI. instead, we can use the house
+    -- name tag, if it has been set. likewise for landuse areas
+    -- where we might want to label the landuse rather than the
+    -- building.
+    CASE WHEN mz_poi_min_zoom IS NULL AND
+              (mz_is_landuse IS NULL OR mz_is_landuse = FALSE)
+         THEN name
+         ELSE "addr:housename"
+    END AS name,
     way_area::bigint AS area,
     osm_id AS __id__,
-    "building:part",
+    'openstreetmap.org' AS source,
     NULL AS kind,
     building,
-    amenity,
-    shop,
-    tourism,
+    "building:part",
     "building:levels",
     "building:min_levels",
     height,
@@ -15,17 +22,13 @@ SELECT
     layer,
     tags->'location' AS location,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-{% if zoom >= 15 %}
     "roof:color" AS roof_color,
     "roof:material" AS roof_material,
     "roof:shape" AS roof_shape,
     "roof:height" AS roof_height,
     "roof:orientation" AS roof_orientation,
-{% endif %}
-{% if zoom >= 17 %}
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
-{% endif %}
     %#tags AS tags
 
 FROM
@@ -33,20 +36,22 @@ FROM
 
 WHERE
 
-{% if zoom < 15 %}
-    building IS NOT NULL
-  {% if zoom == 13 %}
-    AND way_area::bigint > 1600
-  {% elif zoom == 14 %}
-    AND way_area::bigint > 100
-  {% endif %}
-{% else %}
+    -- note: this is the first filter, as we use this to determine if
+    -- something should be a POI, a building or a landuse polygon, and
+    -- the logic needs to be consistent across all branches.
     mz_calculate_is_building_or_part(building, "building:part") = TRUE
-  {% if zoom == 15 %}
+{% if zoom < 15 %}
+    AND building IS NOT NULL AND building <> 'no'
+{% endif %}
+
+{% if zoom == 13 %}
+    AND way_area::bigint > 1600
+{% elif zoom == 14 %}
     AND way_area::bigint > 100
-  {% elif zoom == 16 %}
+{% elif zoom == 15 %}
+    AND way_area::bigint > 100
+{% elif zoom == 16 %}
     AND way_area::bigint > 25
-  {% endif %}
 {% endif %}
 
     AND {{ bounds|bbox_filter('way') }}
@@ -59,12 +64,10 @@ SELECT
     name,
     NULL AS area,
     osm_id AS __id__,
-    NULL AS "building:part",
+    'openstreetmap.org' AS source,
     'address' AS kind,
     NULL AS building,
-    NULL AS amenity,
-    NULL AS shop,
-    NULL AS tourism,
+    NULL AS "building:part",
     NULL AS "building:levels",
     NULL AS "building:min_levels",
     NULL AS height,

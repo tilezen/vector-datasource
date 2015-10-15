@@ -43,7 +43,8 @@ WHERE
 SELECT
     '' AS name,
     4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
-    {{ ne_landuse_cols('urban area') }}
+    {{ ne_landuse_cols('urban area') }},
+    NULL AS mz_is_building
 FROM
     ne_10m_urban_areas
 WHERE
@@ -52,7 +53,7 @@ WHERE
 UNION ALL
 
 SELECT
-  name,
+  CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
   mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
   operator,
@@ -60,18 +61,20 @@ SELECT
   mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
   'openstreetmap.org' AS source,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
-  osm_id AS __id__
+  osm_id AS __id__,
+  mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building
 FROM
   planet_osm_polygon
 WHERE
-  {{ bounds|bbox_filter('way') }}
+  mz_is_landuse = TRUE
+  AND {{ bounds|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
 {% else %}
 
 SELECT
-    name,
+    CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
     least(16, mz_landuse_min_zoom)::real AS min_zoom,
     tags->'protect_class' AS protect_class,
     operator,
@@ -82,6 +85,7 @@ SELECT
     osm_id AS __id__,
     sport,
     religion,
+    mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
     %#tags AS tags
 FROM
     planet_osm_polygon
@@ -102,6 +106,7 @@ SELECT
   {{ ne_landuse_cols('urban area') }},
   NULL AS sport,
   NULL AS religion,
+  NULL AS mz_is_building,
   NULL AS tags
 FROM
   ne_10m_urban_areas
