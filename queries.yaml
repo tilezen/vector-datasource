@@ -182,6 +182,18 @@ post_process:
       new_layer_name: landuse_labels
       label_property_name: label_placement
       label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+    params:
+      source_layer: landuse
+      property_keys: [name, kind]
+      geometry_types: [Point]
+      min_distance: 256.0
+  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+    params:
+      source_layer: landuse_labels
+      property_keys: [name, kind]
+      geometry_types: [Point]
+      min_distance: 256.0
   - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
     params:
       source_layer: water
@@ -196,6 +208,18 @@ post_process:
       source_layer: buildings
       label_property_name: label_placement
       label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+    params:
+      source_layer: buildings
+      property_keys: [name, kind]
+      geometry_types: [Point]
+      min_distance: 256.0
+  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+    params:
+      source_layer: pois
+      property_keys: [name, kind]
+      geometry_types: [Point]
+      min_distance: 256.0
   - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
       source_layer: landuse
