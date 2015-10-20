@@ -226,3 +226,14 @@ post_process:
       property_name: mz_is_building
       drop_property: true
       geom_types: [Polygon, MultiPolygon]
+  - fn: TileStache.Goodies.VecTiles.transform.normalize_and_merge_duplicate_stations
+    params:
+      source_layer: pois
+      end_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+    params:
+      source_layer: pois
+      end_zoom: 16
+      items_matching:
+        kind: station
+      max_items: 8
