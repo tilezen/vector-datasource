@@ -1,19 +1,19 @@
 v0.4.2
 ------
-* **Release date:** 2015-10-14
+* **Release date:** 2015-10-14. Live in prod: 2015-10-20.
 * Fix invalid Antarctica polygon in buffered land.
 * **Requires:** [tileserver v0.4.0](https://github.com/mapzen/tileserver/releases/tag/v0.4.0) and [tilequeue v0.4.1](https://github.com/mapzen/tilequeue/releases/tag/v0.4.1) and [TileStache v0.4.1](https://github.com/mapzen/TileStache/releases/tag/v0.4.1)
 
 v0.4.1
 ------
-* **Release date:** 2015-10-13
+* **Release date:** 2015-10-13. Live in prod: 2015-10-20.
 * Create new indexes to speed up query times
 * Reduce `boundaries` query payload size
 * **Requires:** [tileserver v0.4.0](https://github.com/mapzen/tileserver/releases/tag/v0.4.0) and [tilequeue v0.4.1](https://github.com/mapzen/tilequeue/releases/tag/v0.4.1) and [TileStache v0.4.1](https://github.com/mapzen/TileStache/releases/tag/v0.4.1)
 
 v0.4.0
 ------
-* **Release date:** 2015-10-06
+* **Release date:** 2015-10-06. Live in prod: 2015-10-20.
 * Fix regression in v0.3.0 where zooms 0 to zoom 8 country and region (state, province) features from OpenStreetMap were dropped from tiles (rolling back a change in v0.2.0)
 * Greater diversity of label placements for POIs, landuse, and buildings result in more balanced selection of features visible at mid and high (neighborhood) zooms. The feature's minimum recommended visible zoom is now included as a property (eg: `min_zoom=10.7763`), useful for determining feature priority in client-side label collisions. Currently visibility should be calculated combined with area filters, we'll move that serverside in later releases.
 * Add label positions for water bodies to the `water` layer noted as `label_position=yes`.
