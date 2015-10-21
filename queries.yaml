@@ -230,10 +230,9 @@ post_process:
     params:
       source_layer: pois
       end_zoom: 16
-  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+  - fn: TileStache.Goodies.VecTiles.transform.rank_features
     params:
       source_layer: pois
-      end_zoom: 16
       items_matching:
         kind: station
-      max_items: 8
+      rank_key: rank
