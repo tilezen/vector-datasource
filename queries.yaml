@@ -226,3 +226,13 @@ post_process:
       property_name: mz_is_building
       drop_property: true
       geom_types: [Polygon, MultiPolygon]
+  - fn: TileStache.Goodies.VecTiles.transform.normalize_and_merge_duplicate_stations
+    params:
+      source_layer: pois
+      end_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+    params:
+      source_layer: pois
+      items_matching:
+        kind: station
+      rank_key: rank
