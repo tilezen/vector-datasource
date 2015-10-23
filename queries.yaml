@@ -160,6 +160,7 @@ post_process:
         id: true
         source: true
         boundary: "yes"
+      snap_tolerance: 0.125
   - fn: TileStache.Goodies.VecTiles.transform.overlap
     params:
       base_layer: buildings
