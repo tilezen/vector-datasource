@@ -54,6 +54,7 @@ SELECT
     tags->'roundtrip' AS roundtrip,
     tags->'route_name' AS route_name,
     tags->'motor_vehicle' AS motor_vehicle,
+    service,
     %#tags AS tags
 
 FROM planet_osm_line
