@@ -235,4 +235,4 @@ post_process:
       source_layer: pois
       items_matching:
         kind: station
-      rank_key: rank
+      rank_key: tile_rank
