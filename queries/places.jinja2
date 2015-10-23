@@ -53,3 +53,27 @@ WHERE
         {% if zoom >= 13 %}, 'locality', 'isolated_dwelling', 'farm'{% endif %}
     )
     AND {{ bounds|bbox_filter('way') }}
+
+{% if zoom >= 12 %}
+UNION ALL
+
+SELECT
+    name,
+    'neighbourhood' AS kind,
+    'whosonfirst' AS source,
+    {% filter geometry %}label_position{% endfilter %} AS __geometry__,
+    wof_id AS __id__,
+
+    NULL AS admin_level,
+    NULL AS scalerank,
+    NULL AS labelrank,
+    NULL AS population,
+    NULL AS capital,
+    NULL AS state_capital,
+    NULL AS tags
+
+FROM wof_neighbourhood
+
+WHERE {{ bounds|bbox_filter('label_position') }}
+
+{% endif %}
