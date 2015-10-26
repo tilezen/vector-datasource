@@ -95,7 +95,7 @@ FROM buffered_land
 WHERE
   {{ bounds|bbox_filter('the_geom') }}
 
-{% if zoom >= 14 %}
+{% if zoom >= 12 %}
 
 UNION ALL
 
