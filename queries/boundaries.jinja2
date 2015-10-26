@@ -62,6 +62,7 @@ SELECT
   NULL AS maritime_boundary,
   admin_level,
   tags->'boundary:type' AS boundary_type,
+  NULL AS kind,
   -- note that we force the RHR, which makes outers clockwise,
   -- then take the boundary, then reverse and intersect with
   -- the query bbox. this is needed because Shapely expects a
@@ -84,6 +85,7 @@ SELECT
   'yes' AS maritime_boundary,
   NULL AS admin_level,
   NULL AS boundary_type,
+  NULL AS kind,
   {% filter geometry %}{{ bounds|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
   gid AS __id__,
   NULL AS tags
@@ -92,5 +94,35 @@ FROM buffered_land
 
 WHERE
   {{ bounds|bbox_filter('the_geom') }}
+
+{% if zoom >= 12 %}
+
+UNION ALL
+
+SELECT
+  name,
+  NULL AS maritime_boundary,
+  NULL AS admin_level,
+  NULL AS boundary_type,
+  CASE WHEN barrier='retaining_wall' THEN 'retaining_wall'
+       ELSE 'city_wall'
+  END AS kind,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  osm_id AS __id__,
+  %#tags AS tags
+
+FROM
+  planet_osm_line
+
+WHERE
+  {{ bounds|bbox_filter('way') }}
+  AND (
+    barrier='city_wall' OR historic='citywalls'
+{% if zoom >= 15 %}
+    OR barrier='retaining_wall'
+{% endif %}
+  )
+
+{% endif %}
 
 {% endif %}
