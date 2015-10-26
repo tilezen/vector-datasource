@@ -236,24 +236,73 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, way geometry)
+CREATE OR REPLACE FUNCTION mz_calculate_railway_level(railway_val text, service_val text)
 RETURNS SMALLINT AS $$
 BEGIN
-    RETURN (
-        CASE WHEN highway_val IN ('motorway', 'trunk', 'motorway_link', 'primary') THEN 8
-	     WHEN aeroway_val IN ('runway') THEN 9
-             WHEN highway_val IN ('secondary') THEN 10
-             WHEN (highway_val IN ('tertiary')
-                OR aeroway_val IN ('taxiway')) THEN 11
-             WHEN highway_val IN ('trunk_link', 'residential', 'unclassified', 'road') THEN 12
-             WHEN highway_val IN ('primary_link', 'secondary_link') THEN 13
-             WHEN (highway_val IN ('tertiary_link', 'minor')
-                OR railway_val='rail') THEN 14
-             WHEN (highway_val IN ('service', 'footpath', 'track', 'footway', 'steps', 'pedestrian', 'path', 'cycleway', 'living_street')
-                OR railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail')) THEN 15
-             WHEN route_val = 'ferry' THEN mz_calculate_ferry_level(way)
-             ELSE NULL END
-    );
+  RETURN CASE
+    WHEN railway_val = 'rail' THEN CASE
+      WHEN service_val IS NULL               THEN 11
+      WHEN service_val IN ('spur', 'siding') THEN 12
+      WHEN service_val IN ('yard')           THEN 13
+      WHEN service_val IN ('crossover')      THEN 14
+      ELSE                                        15
+    END
+    WHEN railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail') THEN 15
+    ELSE NULL
+  END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_highway_level(highway_val text, service_val text)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN CASE
+    WHEN highway_val IN ('motorway', 'trunk', 'motorway_link', 'primary')     THEN  8
+    WHEN highway_val IN ('secondary')                                         THEN 10
+    WHEN highway_val IN ('tertiary')                                          THEN 11
+    WHEN highway_val IN ('trunk_link', 'residential', 'unclassified', 'road') THEN 12
+    WHEN highway_val IN ('primary_link', 'secondary_link', 'track',
+                         'pedestrian', 'living_street')                       THEN 13
+    WHEN highway_val IN ('tertiary_link', 'minor', 'footpath', 'footway',
+                         'steps', 'path', 'cycleway')                         THEN 14
+    WHEN highway_val = 'service' THEN CASE
+      WHEN service_val IS NULL                                                THEN 14
+      WHEN service_val = 'alley'                                              THEN 13
+      WHEN service_val IN ('driveway', 'parking aisle', 'drive-through')      THEN 15
+      ELSE NULL
+    END
+    ELSE NULL
+  END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_aeroway_level(aeroway_val text)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN CASE
+    WHEN aeroway_val IN ('runway') THEN 9
+    WHEN aeroway_val IN ('taxiway') THEN 11
+    ELSE NULL
+  END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, way geometry)
+RETURNS SMALLINT AS $$
+BEGIN
+    RETURN LEAST(
+      CASE WHEN highway_val IS NOT NULL
+        THEN mz_calculate_highway_level(highway_val, service_val)
+        ELSE NULL END,
+      CASE WHEN aeroway_val IS NOT NULL
+        THEN mz_calculate_aeroway_level(aeroway_val)
+        ELSE NULL END,
+      CASE WHEN railway_val IS NOT NULL
+        THEN mz_calculate_railway_level(railway_val, service_val)
+        ELSE NULL END,
+      CASE WHEN route_val = 'ferry'
+        THEN mz_calculate_ferry_level(way)
+        ELSE NULL END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
