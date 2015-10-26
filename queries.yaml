@@ -81,6 +81,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.road_oneway
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
       - TileStache.Goodies.VecTiles.transform.route_name
+      - TileStache.Goodies.VecTiles.transform.normalize_aerialways
       - TileStache.Goodies.VecTiles.transform.road_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.roads
