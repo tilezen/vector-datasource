@@ -534,12 +534,12 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 
--- calculate the list of refs (or names) of subway lines that a
--- particular station is part of. this ends up being a very
+-- calculate the list of refs (or names) of transit routes that
+-- a particular station is part of. this ends up being a very
 -- complex function because it's bouncing around between the
 -- nodes, ways and relations to calculate membership of various
 -- sets.
-CREATE OR REPLACE FUNCTION mz_calculate_subway_lines(
+CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
   station_node_id BIGINT)
 RETURNS text[] AS $$
 DECLARE
@@ -555,8 +555,8 @@ DECLARE
 
   -- IDs of ways which contain any of the stations and stops.
   -- these are included because sometimes the stop node isn't
-  -- directly included in the subway route relation, only the
-  -- way representing the track itself.
+  -- directly included in the route relation, only the way
+  -- representing the track itself.
   lines              bigint[];
 
 BEGIN
