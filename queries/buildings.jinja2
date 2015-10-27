@@ -44,14 +44,14 @@ WHERE
     AND building IS NOT NULL AND building <> 'no'
 {% endif %}
 
-{% if zoom == 13 %}
-    AND way_area::bigint > 1600
+{% if   zoom == 13 %}
+   AND mz_building_filter(tags->'building:height', "building:levels", way_area, 300000, 1600)
 {% elif zoom == 14 %}
-    AND way_area::bigint > 100
+   AND mz_building_filter(tags->'building:height', "building:levels", way_area, 200000,  100)
 {% elif zoom == 15 %}
-    AND way_area::bigint > 100
+   AND mz_building_filter(tags->'building:height', "building:levels", way_area, 100000,  100)
 {% elif zoom == 16 %}
-    AND way_area::bigint > 25
+   AND mz_building_filter(tags->'building:height', "building:levels", way_area,  50000,   25)
 {% endif %}
 
     AND {{ bounds|bbox_filter('way') }}

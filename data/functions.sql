@@ -592,3 +592,46 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- returns true if the text is numeric and can be cast
+-- to a float without error.
+CREATE OR REPLACE FUNCTION mz_is_numeric(
+  t text)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN t ~ '^([0-9]+[.]?[0-9]*|[.][0-9]+)$';
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- replicate some of the backend logic for filtering
+-- buildings, as there are lots and lots and lots of
+-- these, often with quite complex geometries, and
+-- we don't want to saturate the network with lots of
+-- buildings at z13 that we're going to filter out.
+CREATE OR REPLACE FUNCTION mz_building_filter(
+  height text, levels text, way_area FLOAT, min_volume FLOAT, min_area FLOAT)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN CASE
+    -- if height is present, and can be parsed as a
+    -- float, then we can filter right here.
+    WHEN mz_is_numeric(height)
+      THEN (height::float * way_area) >= min_volume
+
+    -- looks like we assume each level is 3m, plus
+    -- 2 overall.
+    WHEN mz_is_numeric(levels)
+      THEN ((GREATEST(levels::bigint, 1) * 3 + 2) * way_area) >= min_volume
+
+    -- if height is present, but not numeric, then
+    -- we have no idea what it could be, and we must
+    -- assume it could be very large.
+    WHEN height IS NOT NULL OR levels IS NOT NULL
+      THEN TRUE
+
+    -- height isn't present, so just filter on area
+    -- as we did before.
+    ELSE way_area >= min_area
+  END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
