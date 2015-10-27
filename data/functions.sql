@@ -534,12 +534,12 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 
--- calculate the list of refs (or names) of subway lines that a
--- particular station is part of. this ends up being a very
+-- calculate the list of refs (or names) of transit routes that
+-- a particular station is part of. this ends up being a very
 -- complex function because it's bouncing around between the
 -- nodes, ways and relations to calculate membership of various
 -- sets.
-CREATE OR REPLACE FUNCTION mz_calculate_subway_lines(
+CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
   station_node_id BIGINT)
 RETURNS text[] AS $$
 DECLARE
@@ -555,8 +555,8 @@ DECLARE
 
   -- IDs of ways which contain any of the stations and stops.
   -- these are included because sometimes the stop node isn't
-  -- directly included in the subway route relation, only the
-  -- way representing the track itself.
+  -- directly included in the route relation, only the way
+  -- representing the track itself.
   lines              bigint[];
 
 BEGIN
@@ -587,25 +587,28 @@ BEGIN
     SELECT DISTINCT w.id
     FROM planet_osm_ways w
     WHERE w.nodes && stations_and_stops
-    AND mz_rel_get_tag(w.tags, 'railway') = 'subway'
+    AND mz_rel_get_tag(w.tags, 'railway') IN ('subway', 'light_rail', 'tram', 'rail')
   );
 
   RETURN ARRAY(
-    SELECT DISTINCT COALESCE(
-        -- prefer ref as it's less likely to contain the destination name
-        mz_rel_get_tag(tags, 'ref'),
-        mz_rel_get_tag(tags, 'name')
-      ) AS "name"
-    FROM planet_osm_rels
-    WHERE ((
-        parts && stations_and_stops AND
-        parts[1:way_off] && stations_and_stops
-      ) OR (
-        parts && lines AND
-        parts[way_off+1:rel_off] && lines
-      )) AND
-      mz_rel_get_tag(tags, 'type') = 'route' AND
-      mz_rel_get_tag(tags, 'route') = 'subway'
+    SELECT DISTINCT trim(both from "name")
+    FROM (
+      SELECT unnest(string_to_array(COALESCE(
+          -- prefer ref as it's less likely to contain the destination name
+          mz_rel_get_tag(tags, 'ref'),
+          mz_rel_get_tag(tags, 'name')
+        ), ',')) AS "name"
+      FROM planet_osm_rels
+      WHERE ((
+          parts && stations_and_stops AND
+          parts[1:way_off] && stations_and_stops
+        ) OR (
+          parts && lines AND
+          parts[way_off+1:rel_off] && lines
+        )) AND
+        mz_rel_get_tag(tags, 'type') = 'route' AND
+        mz_rel_get_tag(tags, 'route') IN ('subway', 'light_rail', 'tram', 'train')
+      ) subquery
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;

@@ -6,7 +6,7 @@ SELECT
     cuisine,
     religion,
     sport,
-    subway_lines,
+    transit_routes,
     %#tags AS tags,
     COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
              "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop",
@@ -19,13 +19,13 @@ FROM (
     osm_id,
     cuisine, religion, sport,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
-    -- note: the mz_calculate_subway_lines function is pretty expensive,
+    -- note: the mz_calculate_transit_routes function is pretty expensive,
     -- so we only want to calculate it when we actually need the result.
     CASE
       WHEN railway='station' AND osm_id > 0
-        THEN mz_calculate_subway_lines(osm_id)
+        THEN mz_calculate_transit_routes(osm_id)
       ELSE NULL::text[]
-    END AS subway_lines,
+    END AS transit_routes,
     tags
 
   FROM
@@ -42,7 +42,7 @@ UNION ALL
     osm_id,
     cuisine, religion, sport,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
-    NULL AS subway_lines,
+    NULL AS transit_routes,
     tags
 
   FROM
