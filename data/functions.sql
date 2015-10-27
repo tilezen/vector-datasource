@@ -587,25 +587,28 @@ BEGIN
     SELECT DISTINCT w.id
     FROM planet_osm_ways w
     WHERE w.nodes && stations_and_stops
-    AND mz_rel_get_tag(w.tags, 'railway') = 'subway'
+    AND mz_rel_get_tag(w.tags, 'railway') IN ('subway', 'light_rail', 'tram', 'rail')
   );
 
   RETURN ARRAY(
-    SELECT DISTINCT COALESCE(
-        -- prefer ref as it's less likely to contain the destination name
-        mz_rel_get_tag(tags, 'ref'),
-        mz_rel_get_tag(tags, 'name')
-      ) AS "name"
-    FROM planet_osm_rels
-    WHERE ((
-        parts && stations_and_stops AND
-        parts[1:way_off] && stations_and_stops
-      ) OR (
-        parts && lines AND
-        parts[way_off+1:rel_off] && lines
-      )) AND
-      mz_rel_get_tag(tags, 'type') = 'route' AND
-      mz_rel_get_tag(tags, 'route') = 'subway'
+    SELECT DISTINCT trim(both from "name")
+    FROM (
+      SELECT unnest(string_to_array(COALESCE(
+          -- prefer ref as it's less likely to contain the destination name
+          mz_rel_get_tag(tags, 'ref'),
+          mz_rel_get_tag(tags, 'name')
+        ), ',')) AS "name"
+      FROM planet_osm_rels
+      WHERE ((
+          parts && stations_and_stops AND
+          parts[1:way_off] && stations_and_stops
+        ) OR (
+          parts && lines AND
+          parts[way_off+1:rel_off] && lines
+        )) AND
+        mz_rel_get_tag(tags, 'type') = 'route' AND
+        mz_rel_get_tag(tags, 'route') IN ('subway', 'light_rail', 'tram', 'train')
+      ) subquery
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
