@@ -189,12 +189,14 @@ post_process:
       source_layer: landuse
       label_property_name: label_placement
       label_property_value: "yes"
+      drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
     params:
       source_layer: landuse
       new_layer_name: landuse_labels
       label_property_name: label_placement
       label_property_value: "yes"
+      drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
