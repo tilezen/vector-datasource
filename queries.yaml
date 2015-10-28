@@ -251,3 +251,9 @@ post_process:
       items_matching:
         kind: station
       rank_key: tile_rank
+  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+    params:
+      source_layers: [pois, buildings, landuse_labels]
+      property_keys: [name]
+      geometry_types: [Point]
+      min_distance: 32.0
