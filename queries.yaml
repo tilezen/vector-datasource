@@ -190,22 +190,9 @@ post_process:
       label_property_name: label_placement
       label_property_value: "yes"
       drop_keys: [ mz_is_building ]
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
-    params:
-      source_layer: landuse
-      new_layer_name: landuse_labels
-      label_property_name: label_placement
-      label_property_value: "yes"
-      drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
-      property_keys: [name, kind]
-      geometry_types: [Point]
-      min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
-    params:
-      source_layer: landuse_labels
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -253,7 +240,14 @@ post_process:
       rank_key: tile_rank
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
-      source_layers: [pois, buildings, landuse_labels]
+      source_layers: [pois, landuse, buildings]
       property_keys: [name]
       geometry_types: [Point]
-      min_distance: 32.0
+      min_distance: 64.0
+  - fn: TileStache.Goodies.VecTiles.transform.copy_features
+    params:
+      source_layer: landuse
+      target_layer: landuse_labels
+      where:
+        label_placement: yes
+      geometry_types: [Point]
