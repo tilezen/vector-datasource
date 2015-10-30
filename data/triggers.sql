@@ -14,12 +14,6 @@ BEGIN
 
     NEW.mz_poi_min_zoom := mz_poi_min_zoom;
 
-    IF mz_is_landuse OR mz_poi_min_zoom IS NOT NULL THEN
-        NEW.mz_centroid := ST_Centroid(NEW.way);
-    ELSE
-        NEW.mz_centroid := NULL;
-    END IF;
-
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
