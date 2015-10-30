@@ -641,7 +641,7 @@ BEGIN
     -- looks like we assume each level is 3m, plus
     -- 2 overall.
     WHEN mz_is_numeric(levels)
-      THEN ((GREATEST(levels::bigint, 1) * 3 + 2) * way_area) >= min_volume
+      THEN ((GREATEST(levels::float, 1) * 3 + 2) * way_area) >= min_volume
 
     -- if height is present, but not numeric, then
     -- we have no idea what it could be, and we must
