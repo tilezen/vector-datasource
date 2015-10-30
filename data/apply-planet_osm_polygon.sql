@@ -15,7 +15,6 @@ CREATE INDEX planet_osm_polygon_is_water_index ON planet_osm_polygon(mz_calculat
 
 -- update polygon table to add centroids
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_is_landuse BOOLEAN;
-ALTER TABLE planet_osm_polygon ADD COLUMN mz_centroid GEOMETRY;
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_poi_min_zoom REAL;
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_landuse_min_zoom REAL;
 
@@ -30,15 +29,7 @@ UPDATE planet_osm_polygon SET
     mz_poi_min_zoom = mz_calculate_poi_level("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", way_area)
     WHERE coalesce("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway") IS NOT NULL;
 
--- at the moment we only add centroids to landuse or POI features
-UPDATE planet_osm_polygon SET
-    mz_centroid = ST_Centroid(way)
-    WHERE mz_is_landuse = TRUE
-       OR mz_poi_min_zoom IS NOT NULL;
-
-
 CREATE INDEX planet_osm_polygon_is_landuse_col_index ON planet_osm_polygon(mz_is_landuse) WHERE mz_is_landuse=TRUE;
-CREATE INDEX planet_osm_polygon_centroid_landuse_index ON planet_osm_polygon USING gist(mz_centroid) WHERE mz_is_landuse=TRUE;
 
 CREATE INDEX planet_osm_polygon_landuse_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND mz_landuse_min_zoom <= 9;
 CREATE INDEX planet_osm_polygon_landuse_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND mz_landuse_min_zoom <= 12;
