@@ -49,7 +49,7 @@ WHERE
         {% if zoom >= 8 %},  'city', 'town'{% endif %}
         {% if zoom >= 10 %}, 'borough', 'suburb', 'quarter'{% endif %}
         {% if zoom >= 11 %}, 'village'{% endif %}
-        {% if zoom >= 12 %}, 'hamlet', 'neighbourhood'{% endif %}
+        {% if zoom >= 12 %}, 'hamlet'{% endif %}
         {% if zoom >= 13 %}, 'locality', 'isolated_dwelling', 'farm'{% endif %}
     )
     AND {{ bounds|bbox_filter('way') }}
