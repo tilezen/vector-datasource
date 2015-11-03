@@ -239,6 +239,20 @@ post_process:
       items_matching:
         kind: station
       rank_key: tile_rank
+  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+    params:
+      source_layer: places
+      items_matching:
+        kind: [neighbourhood, microhood, macrohood]
+      rank_key: kind_tile_rank
+      start_zoom: 11
+  # not sure if we want to drop n_photos or not, might be useful for
+  # testing in the interim
+  # - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+  #   params:
+  #     source_layer: places
+  #     property_name: n_photos
+  #     drop_property: true
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
