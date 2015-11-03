@@ -1,5 +1,6 @@
 CREATE TABLE wof_neighbourhood (
   wof_id BIGINT UNIQUE NOT NULL,
+  placetype SMALLINT NOT NULL,
   name TEXT NOT NULL,
   hash TEXT NOT NULL,
   n_photos INTEGER,
