@@ -5,13 +5,15 @@ SELECT
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
 
-    NULL as admin_level,
+    NULL AS admin_level,
     scalerank,
     labelrank,
     pop_max::text AS population,
     NULL AS capital,
-    NULL as state_capital,
-    NULL as tags
+    NULL AS state_capital,
+    NULL::integer AS n_photos,
+    NULL::bigint AS area,
+    NULL AS tags
 
 FROM ne_10m_populated_places
 
@@ -34,6 +36,8 @@ SELECT
     population,
     capital,
     tags->'state_capital' AS state_capital,
+    NULL::integer AS n_photos,
+    NULL::bigint AS area,
     %#tags AS tags
 
 FROM planet_osm_point
@@ -59,7 +63,7 @@ UNION ALL
 
 SELECT
     name,
-    'neighbourhood' AS kind,
+    wnp.placetype_string AS kind,
     'whosonfirst' AS source,
     {% filter geometry %}label_position{% endfilter %} AS __geometry__,
     wof_id AS __id__,
@@ -70,9 +74,13 @@ SELECT
     NULL AS population,
     NULL AS capital,
     NULL AS state_capital,
+    n_photos,
+    area::bigint AS area,
     NULL AS tags
 
-FROM wof_neighbourhood
+FROM wof_neighbourhood wn
+
+INNER JOIN wof_neighbourhood_placetype wnp ON wn.placetype = wnp.placetype_code
 
 WHERE {{ bounds|bbox_filter('label_position') }}
 
