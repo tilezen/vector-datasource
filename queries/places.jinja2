@@ -54,7 +54,7 @@ WHERE
     )
     AND {{ bounds|bbox_filter('way') }}
 
-{% if zoom >= 12 %}
+{% if zoom >= 11 %}
 UNION ALL
 
 SELECT
