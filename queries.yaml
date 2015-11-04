@@ -250,6 +250,7 @@ post_process:
   #   params:
   #     source_layer: places
   #     properties: [mz_n_photos]
+  #     start_zoom: 11
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
