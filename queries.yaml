@@ -238,7 +238,7 @@ post_process:
       source_layer: pois
       items_matching:
         kind: station
-      rank_key: tile_rank
+      rank_key: kind_tile_rank
   - fn: TileStache.Goodies.VecTiles.transform.rank_features
     params:
       source_layer: places
