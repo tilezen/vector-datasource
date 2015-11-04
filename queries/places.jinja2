@@ -5,13 +5,15 @@ SELECT
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
 
-    NULL as admin_level,
+    NULL AS admin_level,
     scalerank,
     labelrank,
     pop_max::text AS population,
     NULL AS capital,
-    NULL as state_capital,
-    NULL as tags
+    NULL AS state_capital,
+    NULL::integer AS mz_n_photos,
+    NULL::bigint AS area,
+    NULL AS tags
 
 FROM ne_10m_populated_places
 
@@ -34,6 +36,8 @@ SELECT
     population,
     capital,
     tags->'state_capital' AS state_capital,
+    NULL::integer AS mz_n_photos,
+    NULL::bigint AS area,
     %#tags AS tags
 
 FROM planet_osm_point
@@ -49,17 +53,17 @@ WHERE
         {% if zoom >= 8 %},  'city', 'town'{% endif %}
         {% if zoom >= 10 %}, 'borough', 'suburb', 'quarter'{% endif %}
         {% if zoom >= 11 %}, 'village'{% endif %}
-        {% if zoom >= 12 %}, 'hamlet', 'neighbourhood'{% endif %}
+        {% if zoom >= 12 %}, 'hamlet'{% endif %}
         {% if zoom >= 13 %}, 'locality', 'isolated_dwelling', 'farm'{% endif %}
     )
     AND {{ bounds|bbox_filter('way') }}
 
-{% if zoom >= 12 %}
+{% if zoom >= 11 %}
 UNION ALL
 
 SELECT
     name,
-    'neighbourhood' AS kind,
+    wof_np.placetype_string AS kind,
     'whosonfirst' AS source,
     {% filter geometry %}label_position{% endfilter %} AS __geometry__,
     wof_id AS __id__,
@@ -70,9 +74,13 @@ SELECT
     NULL AS population,
     NULL AS capital,
     NULL AS state_capital,
+    n_photos AS mz_n_photos,
+    area::bigint AS area,
     NULL AS tags
 
-FROM wof_neighbourhood
+FROM wof_neighbourhood wof_n
+
+INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placetype_code
 
 WHERE {{ bounds|bbox_filter('label_position') }}
 
