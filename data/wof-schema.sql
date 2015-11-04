@@ -4,6 +4,7 @@ CREATE TABLE wof_neighbourhood (
   name TEXT NOT NULL,
   hash TEXT NOT NULL,
   n_photos INTEGER,
+  area BIGINT,
   label_position geometry(Point, 900913) NOT NULL,
   geometry geometry(Geometry, 900913) NOT NULL
 );
