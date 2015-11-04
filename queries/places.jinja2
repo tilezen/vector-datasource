@@ -11,7 +11,7 @@ SELECT
     pop_max::text AS population,
     NULL AS capital,
     NULL AS state_capital,
-    NULL::integer AS n_photos,
+    NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
     NULL AS tags
 
@@ -36,7 +36,7 @@ SELECT
     population,
     capital,
     tags->'state_capital' AS state_capital,
-    NULL::integer AS n_photos,
+    NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
     %#tags AS tags
 
@@ -74,7 +74,7 @@ SELECT
     NULL AS population,
     NULL AS capital,
     NULL AS state_capital,
-    n_photos,
+    n_photos AS mz_n_photos,
     area::bigint AS area,
     NULL AS tags
 
