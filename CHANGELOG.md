@@ -20,7 +20,7 @@ v0.4.0
 * Add label positions for buildings to the `buildings` layer noted as `label_position=yes`.
 * Landuse label positions are now additionally available in the `landuse` layer directly, noted with `label_position=yes`.
 * **WARNING:** The existing `landuse-labels` layer will be depreciated in a later release.
-* Add `location` and `level` tags to buildings features in the `buildings` layer to determine if something is `location=underground` or `level=-1` (like BART stations in San Francisco).
+* Add `location` and `layer` tags to buildings features in the `buildings` layer to determine if something is `location=underground` or `layer=-1` (like BART stations in San Francisco).
 * Administrative boundary line improvements are back in the `boundaries` layer: now based on OSM relations, includes localized left- and right-names, and adds `maritime_boundary=yes` when the boundary is out in the deep sea. Note that this is slightly different than the `maritime=yes` tag that comes directly from OSM as we're calculating it using a custom spatial mask that will be improved over time.
 * Add `ferry` lines starting at zoom 8 to `road` layer.
 * Add airport `runway` lines starting at zoom 9 in the `roads` layer. Can be combined with `landuse_kind` attributes to throttle visibility.
