@@ -13,6 +13,9 @@ SELECT
     NULL AS state_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
+    NULL::smallint AS min_zoom,
+    NULL::smallint AS max_zoom,
+    NULL::text AS is_landuse_aoi,
     NULL AS tags
 
 FROM ne_10m_populated_places
@@ -38,6 +41,9 @@ SELECT
     tags->'state_capital' AS state_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
+    NULL::smallint AS min_zoom,
+    NULL::smallint AS max_zoom,
+    NULL::text AS is_landuse_aoi,
     %#tags AS tags
 
 FROM planet_osm_point
@@ -76,12 +82,18 @@ SELECT
     NULL AS state_capital,
     n_photos AS mz_n_photos,
     area::bigint AS area,
+    min_zoom,
+    max_zoom,
+    CASE WHEN is_landuse_aoi = true THEN 'yes' ELSE NULL END AS is_landuse_aoi,
     NULL AS tags
 
 FROM wof_neighbourhood wof_n
 
 INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placetype_code
 
-WHERE {{ bounds|bbox_filter('label_position') }}
+WHERE
+  {{ bounds|bbox_filter('label_position') }} AND
+  {{ zoom + 1 }} >= min_zoom AND
+  {{ zoom - 1 }} <= max_zoom
 
 {% endif %}
