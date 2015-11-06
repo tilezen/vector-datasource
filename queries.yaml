@@ -246,11 +246,11 @@ post_process:
         kind: [neighbourhood, microhood, macrohood]
       rank_key: kind_tile_rank
       start_zoom: 11
-  # - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-  #   params:
-  #     source_layer: places
-  #     properties: [mz_n_photos]
-  #     start_zoom: 11
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: places
+      properties: [mz_n_photos]
+      start_zoom: 11
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
