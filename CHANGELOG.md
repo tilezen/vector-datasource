@@ -1,3 +1,25 @@
+v0.5.0
+------
+* **Release date**: 2015-11-13.
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.1) and [tilequeue v0.5.0](https://github.com/mapzen/tilequeue/releases/tag/v0.5.0) and [TileStache v0.5.0](https://github.com/mapzen/TileStache/releases/tag/v0.5.0)
+* Filter out duplicate POIs in `pois`, `landuse`, and `buildings` layers, preferring poi layer features. Includes density filter.
+* Add neighbourhoods (and macrohoods and microhoods) from Who's On First in the `places` layer. New properties: `min_zoom`, `max_zoom`, `kind_tile_rank`, `is_landuse_aoi`.
+* Remove neighbourhoods from OpenStreetMap.
+* Add `kind_tile_rank` to `kind=station` features to enable filtering out of less important transit stations at low zooms (to reduce crowding). Weights stations that are shown at lower zoom levels by lines going through them. Lower numbers = more important.
+* Stop duplicating building footprints into the landuse layer, and exclude building=no features. Include all building properties at all zooms (was limited to high zooms).
+* Use addr:housename as building name if feature is a POI
+* Add aerialway line features into the `roads` layer.
+* Add back missing roads on park and other landuse boundaries that went missing when `landuse_kind` intercut was added.
+* Add service levels to railroads features in `roads` layer to distinguish importance.
+* Updated High Road classifier (zoom range, sort order) for `service` roads, including pedestrian streets, paths, and forest tracks so they are visible earlier.
+* Add `volume` on `building` layer polygons to enable more sophisticated client-side filtering at mid zooms.
+* Add `city_wall` lines and `barrier` lines to `boundaries` layer.
+* Fix minor bug around missing `water` layer boundary lines.
+* Add `area` to water boundary lines (so filtering of boundary lines can match polygons).
+* Add `townhall`, `laundry`, `dry_cleaner`, and `ferry_terminal` to `pois` layer.
+* Move centroid calculation out of database to post-processing step
+* Updated formats to contain `api_key` parameter in tilejson metadata URL
+
 v0.4.2
 ------
 * **Release date:** 2015-10-14. _Live in prod: 2015-10-20._
