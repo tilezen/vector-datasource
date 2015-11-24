@@ -1,3 +1,8 @@
+v0.5.1
+------
+* **Release date**: 2015-11-24. _Live in prod: 2015-11-24._
+* Update landuse query to use existing index
+
 v0.5.0
 ------
 * **Release date**: 2015-11-13. _Live in prod: 2015-11-20._
