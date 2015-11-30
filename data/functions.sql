@@ -268,7 +268,7 @@ BEGIN
     WHEN highway_val = 'service' THEN CASE
       WHEN service_val IS NULL                                                THEN 14
       WHEN service_val = 'alley'                                              THEN 13
-      WHEN service_val IN ('driveway', 'parking aisle', 'drive-through')      THEN 15
+      WHEN service_val IN ('driveway', 'parking_aisle', 'drive-through')      THEN 15
       ELSE NULL
     END
     ELSE NULL
