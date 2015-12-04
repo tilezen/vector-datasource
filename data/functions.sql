@@ -165,6 +165,7 @@ BEGIN
       WHEN shop_val     = 'laundry'          THEN LEAST(zoom + 4.90, 17)
       WHEN shop_val     = 'dry_cleaning'     THEN LEAST(zoom + 4.90, 17)
       WHEN amenity_val  = 'ferry_terminal'   THEN LEAST(zoom + 3.20, 15)
+      WHEN amenity_val  = 'school'           THEN LEAST(zoom + 2.30, 15)
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
