@@ -125,7 +125,7 @@ BEGIN
       WHEN aeroway_val IN ('aerodrome', 'airport')
         THEN LEAST(zoom + 4.12, 13)
       WHEN amenity_val = 'hospital'
-        THEN LEAST(zoom + 3.32, 15)
+        THEN LEAST(zoom + 3.32, 14)
 
       WHEN natural_val IN ('peak', 'volcano')
         THEN 11 -- these are generally point features
