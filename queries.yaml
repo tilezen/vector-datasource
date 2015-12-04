@@ -265,3 +265,7 @@ post_process:
       where:
         label_placement: yes
       geometry_types: [Point]
+  - fn: TileStache.Goodies.VecTiles.transform.remove_abandoned_pistes
+    params:
+      source_layer: roads
+      start_zoom: 9

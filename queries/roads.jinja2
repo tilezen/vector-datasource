@@ -43,6 +43,7 @@ SELECT
                           'primary', 'primary_link', 'secondary', 'secondary_link',
                           'tertiary', 'tertiary_link')
               OR railway IN ('rail', 'tram', 'light_rail', 'narrow_gauge', 'monorail')
+	      OR tags ? 'piste:type'
               THEN mz_get_rel_network(osm_id)
          ELSE tags->'network'
          END AS network,
@@ -56,6 +57,15 @@ SELECT
     tags->'route_name' AS route_name,
     tags->'motor_vehicle' AS motor_vehicle,
     service,
+    tags->'piste:type' AS piste_type,
+    tags->'piste:difficulty' AS piste_difficulty,
+    tags->'piste:grooming' AS piste_grooming,
+    tags->'piste:name' AS piste_name,
+    tags->'piste:abandoned' AS piste_abandoned,
+    tags->'ski' AS ski,
+    tags->'snowshoe' AS snowshoe,
+    tags->'distance' AS distance,
+    tags->'symbol' AS symbol,
     %#tags AS tags
 
 FROM planet_osm_line
