@@ -301,20 +301,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
--- note: values are top 10 from taginfo for piste:type.
-CREATE OR REPLACE FUNCTION mz_calculate_piste_level(piste_type_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN piste_type_val IN ('nordic', 'downhill', 'sleigh', 'skitour',
-         'hike', 'sled', 'yes')                                      THEN 13
-    WHEN piste_type_val IN ('snow_park', 'playground', 'ski_jump')   THEN 15
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, piste_type_val text, way geometry)
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, way geometry)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN LEAST(
@@ -332,9 +319,6 @@ BEGIN
         ELSE NULL END,
       CASE WHEN aerialway_val IS NOT NULL
         THEN mz_calculate_aerialway_level(aerialway_val)
-        ELSE NULL END,
-      CASE WHEN piste_type_val IS NOT NULL
-        THEN mz_calculate_piste_level(piste_type_val)
         ELSE NULL END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;

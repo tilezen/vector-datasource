@@ -9,7 +9,7 @@ ALTER TABLE planet_osm_line ADD COLUMN mz_road_level SMALLINT;
 ALTER TABLE planet_osm_line ADD COLUMN mz_transit_level SMALLINT;
 
 UPDATE planet_osm_line
-  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, tags->'piste:type', way)
+  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, way)
   WHERE mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, tags->'piste:type', way) IS NOT NULL;
 
 UPDATE planet_osm_line
@@ -32,6 +32,8 @@ CREATE INDEX planet_osm_line_transit_geom_12_index ON planet_osm_line USING gist
 CREATE INDEX planet_osm_line_transit_geom_15_index ON planet_osm_line USING gist(way) WHERE mz_transit_level <= 15;
 
 CREATE INDEX planet_osm_line_waterway_geom_index ON planet_osm_line USING gist(way) WHERE waterway IN ('canal', 'river', 'stream', 'dam', 'ditch', 'drain');
+
+CREATE INDEX planet_osm_line_piste_geom_index ON planet_osm_line USING gist(way) WHERE tags ? 'piste:type';
 
 END $$;
 
