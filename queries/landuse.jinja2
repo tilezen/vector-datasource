@@ -86,6 +86,7 @@ SELECT
     osm_id AS __id__,
     sport,
     religion,
+    surface,
     mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
     %#tags AS tags
 FROM
