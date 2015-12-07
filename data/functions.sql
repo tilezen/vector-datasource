@@ -14,7 +14,7 @@ BEGIN
                         'military')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
-     OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier')
+     OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier', 'beach')
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
                         'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
@@ -69,7 +69,7 @@ BEGIN
 	'stadium', 'common')
 	THEN leisure_val
       WHEN natural_val IN (
-        'wood', 'land', 'scrub', 'wetland', 'glacier')
+        'wood', 'land', 'scrub', 'wetland', 'glacier', 'beach')
 	THEN natural_val
       WHEN highway_val IN (
         'pedestrian', 'footway')
@@ -166,6 +166,7 @@ BEGIN
       WHEN shop_val     = 'dry_cleaning'     THEN LEAST(zoom + 4.90, 17)
       WHEN amenity_val  = 'ferry_terminal'   THEN LEAST(zoom + 3.20, 15)
       WHEN amenity_val  = 'school'           THEN LEAST(zoom + 2.30, 15)
+      WHEN natural_val  = 'beach'            THEN LEAST(zoom + 3.20, 14)
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
