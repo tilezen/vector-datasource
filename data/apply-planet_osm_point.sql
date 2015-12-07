@@ -18,6 +18,8 @@ CREATE INDEX planet_osm_point_min_zoom_way_9_index ON planet_osm_point USING gis
 CREATE INDEX planet_osm_point_min_zoom_way_12_index ON planet_osm_point USING gist(way) WHERE mz_poi_min_zoom <= 12;
 CREATE INDEX planet_osm_point_min_zoom_way_15_index ON planet_osm_point USING gist(way) WHERE mz_poi_min_zoom <= 15;
 
+CREATE INDEX planet_osm_point_motorway_junction_index ON planet_osm_point USING gist(way) WHERE highway='motorway_junction';
+
 END $$;
 
 ANALYZE planet_osm_point;
