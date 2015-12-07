@@ -67,7 +67,7 @@ layers:
   roads:
     template: roads.jinja2
     start_zoom: 5
-    geometry_types: [LineString, MultiLineString]
+    geometry_types: [Point, MultiPoint, LineString, MultiLineString]
     simplify_start: 8
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
