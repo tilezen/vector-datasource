@@ -137,7 +137,7 @@ layers:
   transit:
     template: transit.jinja2
     start_zoom: 6
-    geometry_types: [LineString, MultiLineString]
+    geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
@@ -145,6 +145,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.route_name
+      - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
