@@ -1,3 +1,8 @@
+v0.5.3
+------
+* **Release date**: 2015-12-07. _Live in prod: 2015-12-07._
+* Fix bug where school points were not being exported as POIs. [Ticket](https://github.com/mapzen/vector-datasource/issues/417).
+
 v0.5.2
 ------
 * **Release date**: 2015-12-04. _Live in prod: 2015-12-04._
