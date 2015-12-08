@@ -41,6 +41,8 @@ CREATE INDEX planet_osm_polygon_landuse_boundary_geom_8_index ON planet_osm_poly
 
 CREATE INDEX planet_osm_polygon_water_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_calculate_is_water("waterway", "natural", "landuse") = TRUE;
 
+CREATE INDEX planet_osm_polygon_railway_platform_index ON planet_osm_polygon USING gist(way) WHERE railway='platform';
+
 END $$;
 
 ANALYZE planet_osm_polygon;
