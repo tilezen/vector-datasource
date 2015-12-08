@@ -1,3 +1,9 @@
+v0.5.2
+------
+* **Release date**: 2015-12-04. _Live in prod: 2015-12-04._
+* Make hospital POIs visible at zoom 14 by default, instead of 15. [Ticket](https://github.com/mapzen/vector-datasource/issues/420).
+* Fix regression which dropped parking aisles. [Ticket](https://github.com/mapzen/vector-datasource/issues/412).
+
 v0.5.1
 ------
 * **Release date**: 2015-11-24. _Live in prod: 2015-11-24._
