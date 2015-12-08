@@ -11,7 +11,7 @@ BEGIN
                         'industrial', 'railway', 'cemetery', 'grass', 'farmyard',
                         'farm', 'farmland', 'wood', 'meadow', 'village_green',
                         'recreation_ground', 'allotments', 'quarry', 'urban', 'rural'
-                        'military')
+                        'military', 'winter_sports')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
      OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier', 'beach')
@@ -62,7 +62,7 @@ BEGIN
         'park', 'forest', 'residential', 'retail', 'commercial', 'industrial',
 	'railway', 'cemetery', 'grass', 'farmyard', 'farm', 'farmland', 'wood',
 	'meadow', 'village_green', 'recreation_ground', 'allotments', 'quarry',
-	'urban', 'rural', 'military')
+	'urban', 'rural', 'military', 'winter_sports')
         THEN landuse_val
       WHEN leisure_val IN (
         'park', 'garden', 'playground', 'golf_course', 'sports_centre', 'pitch',
