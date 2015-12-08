@@ -13,6 +13,7 @@ v0.5.1
 ------
 * **Release date**: 2015-11-24. _Live in prod: 2015-11-24._
 * Update landuse query to use existing index
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.2) and [tilequeue v0.5.1](https://github.com/mapzen/tilequeue/releases/tag/v0.5.1) and [TileStache v0.5.1](https://github.com/mapzen/TileStache/releases/tag/v0.5.1)
 
 v0.5.0
 ------

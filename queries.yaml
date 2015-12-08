@@ -43,6 +43,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.place_ne_capital
+      - TileStache.Goodies.VecTiles.transform.place_population_int
       - TileStache.Goodies.VecTiles.transform.calculate_default_place_scalerank
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -66,7 +67,7 @@ layers:
   roads:
     template: roads.jinja2
     start_zoom: 5
-    geometry_types: [LineString, MultiLineString]
+    geometry_types: [Point, MultiPoint, LineString, MultiLineString]
     simplify_start: 8
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
@@ -264,3 +265,7 @@ post_process:
       where:
         label_placement: yes
       geometry_types: [Point]
+  - fn: TileStache.Goodies.VecTiles.transform.remove_abandoned_pistes
+    params:
+      source_layer: roads
+      start_zoom: 9
