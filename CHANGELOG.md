@@ -2,12 +2,14 @@ v0.5.3
 ------
 * **Release date**: 2015-12-07. _Live in prod: 2015-12-07._
 * Fix bug where school points were not being exported as POIs. [Ticket](https://github.com/mapzen/vector-datasource/issues/417).
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.2) and [tilequeue v0.5.1](https://github.com/mapzen/tilequeue/releases/tag/v0.5.1) and [TileStache v0.5.1](https://github.com/mapzen/TileStache/releases/tag/v0.5.1)
 
 v0.5.2
 ------
 * **Release date**: 2015-12-04. _Live in prod: 2015-12-04._
 * Make hospital POIs visible at zoom 14 by default, instead of 15. [Ticket](https://github.com/mapzen/vector-datasource/issues/420).
 * Fix regression which dropped parking aisles. [Ticket](https://github.com/mapzen/vector-datasource/issues/412).
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.2) and [tilequeue v0.5.1](https://github.com/mapzen/tilequeue/releases/tag/v0.5.1) and [TileStache v0.5.1](https://github.com/mapzen/TileStache/releases/tag/v0.5.1)
 
 v0.5.1
 ------
@@ -18,7 +20,6 @@ v0.5.1
 v0.5.0
 ------
 * **Release date**: 2015-11-13. _Live in prod: 2015-11-20._
-* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.1) and [tilequeue v0.5.0](https://github.com/mapzen/tilequeue/releases/tag/v0.5.0) and [TileStache v0.5.0](https://github.com/mapzen/TileStache/releases/tag/v0.5.0)
 * Filter out duplicate POIs in `pois`, `landuse`, and `buildings` layers, preferring poi layer features. Includes density filter.
 * Add neighbourhoods (and macrohoods and microhoods) from Who's On First in the `places` layer. New properties: `min_zoom`, `max_zoom`, `kind_tile_rank`, `is_landuse_aoi`.
 * Remove neighbourhoods from OpenStreetMap.
@@ -36,6 +37,7 @@ v0.5.0
 * Add `townhall`, `laundry`, `dry_cleaner`, and `ferry_terminal` to `pois` layer.
 * Move centroid calculation out of database to post-processing step
 * Updated formats to contain `api_key` parameter in tilejson metadata URL
+* **Requires:** [tileserver v0.4.1](https://github.com/mapzen/tileserver/releases/tag/v0.4.1) and [tilequeue v0.5.0](https://github.com/mapzen/tilequeue/releases/tag/v0.5.0) and [TileStache v0.5.0](https://github.com/mapzen/TileStache/releases/tag/v0.5.0)
 
 v0.4.2
 ------
