@@ -16,6 +16,7 @@ SELECT
     tags->'descent' AS descent,
     tags->'roundtrip' AS roundtrip,
     tags->'route_name' AS route_name,
+    layer,
     %#tags AS tags
 
 FROM planet_osm_line
@@ -23,3 +24,47 @@ FROM planet_osm_line
 WHERE
     {{ bounds|bbox_filter('way') }}
     AND mz_transit_level <= {{ zoom }}
+
+{% if zoom > 15 %}
+
+UNION ALL
+
+SELECT
+    osm_id AS __id__,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    name,
+    ref,
+    operator,
+    'platform' AS kind,
+    tags->'type' AS type,
+    tags->'colour' AS colour,
+    tags->'network' AS network,
+    tags->'state' AS state,
+    tags->'symbol' AS symbol,
+    tags->'description' AS description,
+    tags->'distance' AS distance,
+    tags->'ascent' AS ascent,
+    tags->'descent' AS descent,
+    tags->'roundtrip' AS roundtrip,
+    tags->'route_name' AS route_name,
+    layer,
+    %#tags AS tags
+
+FROM (
+  SELECT osm_id, way, name, ref, operator, route, railway, layer, tags
+  FROM planet_osm_line
+  WHERE
+    {{ bounds|bbox_filter('way') }}
+    AND railway='platform'
+
+  UNION ALL
+
+  SELECT osm_id, way, name, ref, operator, route, railway, layer, tags
+  FROM planet_osm_polygon
+  WHERE
+    {{ bounds|bbox_filter('way') }}
+    AND railway='platform'
+
+) platforms
+
+{% endif %}

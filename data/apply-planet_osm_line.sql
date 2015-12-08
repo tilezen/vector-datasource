@@ -35,6 +35,8 @@ CREATE INDEX planet_osm_line_waterway_geom_index ON planet_osm_line USING gist(w
 
 CREATE INDEX planet_osm_line_piste_geom_index ON planet_osm_line USING gist(way) WHERE tags ? 'piste:type';
 
+CREATE INDEX planet_osm_line_railway_platform_index ON planet_osm_line USING gist(way) WHERE railway='platform';
+
 END $$;
 
 ANALYZE planet_osm_line;
