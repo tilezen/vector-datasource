@@ -9,8 +9,8 @@ ALTER TABLE planet_osm_line ADD COLUMN mz_road_level SMALLINT;
 ALTER TABLE planet_osm_line ADD COLUMN mz_transit_level SMALLINT;
 
 UPDATE planet_osm_line
-  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, way)
-  WHERE mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, tags->'piste:type', way) IS NOT NULL;
+  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, way)
+  WHERE mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, way) IS NOT NULL;
 
 UPDATE planet_osm_line
   SET mz_transit_level = mz_calculate_transit_level(route)

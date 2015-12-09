@@ -65,6 +65,8 @@ SELECT
     NULL AS snowshoe,
     NULL AS symbol,
     NULL AS exit_to,
+    leisure,
+    sport,
     %#tags AS tags
 
 FROM planet_osm_line
@@ -121,6 +123,8 @@ SELECT
     tags->'snowshoe' AS snowshoe,
     tags->'symbol' AS symbol,
     NULL AS exit_to,
+    leisure,
+    sport,
     %#tags AS tags
 
 FROM planet_osm_line
@@ -173,6 +177,8 @@ SELECT
     NULL AS snowshoe,
     NULL AS symbol,
     tags->'exit_to' AS exit_to,
+    NULL AS leisure,
+    NULL AS sport,
     %#tags AS tags
 
 FROM planet_osm_point
