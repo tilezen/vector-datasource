@@ -136,57 +136,6 @@ WHERE
         'hike', 'sled', 'yes', 'snow_park', 'playground', 'ski_jump')
     AND (osm_id > 0 OR route = 'piste')
 
-UNION ALL
-
-SELECT
-    osm_id AS __id__,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
-    'openstreetmap' AS source,
-    name,
-    NULL AS aeroway,
-    NULL AS aerialway,
-    NULL AS bridge,
-    highway,
-    NULL AS ferry,
-    layer,
-    NULL AS railway,
-    NULL AS tunnel,
-    NULL AS oneway,
-    ref,
-    operator,
-    route,
-    tags->'type' AS type,
-    tags->'colour' AS colour,
-    NULL AS network,
-    tags->'state' AS state,
-    tags->'symbol' AS symbol,
-    tags->'description' AS description,
-    NULL AS distance,
-    NULL AS ascent,
-    NULL AS descent,
-    NULL AS roundtrip,
-    NULL AS route_name,
-    NULL AS motor_vehicle,
-    NULL AS service,
-    NULL AS piste_type,
-    NULL AS piste_difficulty,
-    NULL AS piste_grooming,
-    NULL AS piste_name,
-    NULL AS piste_abandoned,
-    NULL AS ski,
-    NULL AS snowshoe,
-    NULL AS symbol,
-    tags->'exit_to' AS exit_to,
-    NULL AS leisure,
-    NULL AS sport,
-    %#tags AS tags
-
-FROM planet_osm_point
-
-WHERE
-    {{ bounds|bbox_filter('way') }}
-    AND highway = 'motorway_junction'
-
 {% endif %}
 
 {% endif %}

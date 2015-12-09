@@ -7,6 +7,8 @@ SELECT
     religion,
     sport,
     transit_routes,
+    ref,
+    tags->'exit_to' AS exit_to,
     %#tags AS tags,
     COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
              "leisure", "lock", "man_made", "natural", "office", "power", "railway",
@@ -17,7 +19,7 @@ FROM (
   SELECT
     name, way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
-    cuisine, religion, sport,
+    cuisine, religion, sport, ref,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     -- note: the mz_calculate_transit_routes function is pretty expensive,
     -- so we only want to calculate it when we actually need the result.
@@ -40,7 +42,7 @@ UNION ALL
   SELECT
     name, way, way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
-    cuisine, religion, sport,
+    cuisine, religion, sport, ref,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     NULL AS transit_routes,
     tags
