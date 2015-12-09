@@ -110,6 +110,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     office_val text,
     power_val text,
     railway_val text,
+    rental_val text,
     shop_val text,
     tourism_val text,
     waterway_val text,
@@ -167,6 +168,11 @@ BEGIN
       WHEN amenity_val  = 'ferry_terminal'   THEN LEAST(zoom + 3.20, 15)
       WHEN amenity_val  = 'school'           THEN LEAST(zoom + 2.30, 15)
       WHEN natural_val  = 'beach'            THEN LEAST(zoom + 3.20, 14)
+      WHEN rental_val   = 'ski'              THEN LEAST(zoom + 1.27, 17)
+      WHEN shop_val     = 'ski'              THEN LEAST(zoom + 1.27, 17)
+      WHEN amenity_val  = 'ski_rental'       THEN LEAST(zoom + 1.27, 17)
+      WHEN amenity_val  = 'ski_school'       THEN LEAST(zoom + 2.30, 15)
+      WHEN man_made_val = 'snow_cannon'      THEN LEAST(zoom + 4.90, 18)
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
@@ -303,7 +309,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, way geometry)
+CREATE OR REPLACE FUNCTION mz_calculate_leisure_level(leisure_val text, sport_val text)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN CASE
+    WHEN leisure_val IN ('track') THEN
+      CASE
+        WHEN sport_val IN ('athletics', 'running', 'horse_racing', 'bmx',
+	  'disc_golf', 'cycling', 'ski_jumping', 'motor', 'karting',
+	  'obstacle_course', 'equestrian', 'alpine_slide', 'soap_box_derby',
+	  'mud_truck_racing', 'skiing', 'drag_racing', 'archery') THEN 14
+	ELSE NULL
+      END
+    ELSE NULL
+  END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, leisure_val text, sport_val text, way geometry)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN LEAST(
@@ -321,6 +344,9 @@ BEGIN
         ELSE NULL END,
       CASE WHEN aerialway_val IS NOT NULL
         THEN mz_calculate_aerialway_level(aerialway_val)
+        ELSE NULL END,
+      CASE WHEN leisure_val IS NOT NULL
+        THEN mz_calculate_leisure_level(leisure_val, sport_val)
         ELSE NULL END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;

@@ -105,6 +105,7 @@ SELECT
   NULL AS admin_level,
   NULL AS boundary_type,
   CASE WHEN barrier='retaining_wall' THEN 'retaining_wall'
+       WHEN man_made='snow_fence' THEN 'snow_fence'
        ELSE 'city_wall'
   END AS kind,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
@@ -120,6 +121,7 @@ WHERE
     barrier='city_wall' OR historic='citywalls'
 {% if zoom >= 15 %}
     OR barrier='retaining_wall'
+    OR man_made='snow_fence'
 {% endif %}
   )
 

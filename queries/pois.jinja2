@@ -9,8 +9,8 @@ SELECT
     transit_routes,
     %#tags AS tags,
     COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
-             "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop",
-             "tourism", "waterway") AS kind
+             "leisure", "lock", "man_made", "natural", "office", "power", "railway",
+             "tags"->'rental', "shop", "tourism", "waterway") AS kind
 
 FROM (
 
