@@ -25,7 +25,7 @@ WHERE
     {{ bounds|bbox_filter('way') }}
     AND mz_transit_level <= {{ zoom }}
 
-{% if zoom > 15 %}
+{% if zoom >= 14 %}
 
 UNION ALL
 
