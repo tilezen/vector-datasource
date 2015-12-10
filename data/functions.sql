@@ -10,7 +10,7 @@ BEGIN
         landuse_val IN ('park', 'forest', 'residential', 'retail', 'commercial',
                         'industrial', 'railway', 'cemetery', 'grass', 'farmyard',
                         'farm', 'farmland', 'wood', 'meadow', 'village_green',
-                        'recreation_ground', 'allotments', 'quarry', 'urban', 'rural'
+                        'recreation_ground', 'allotments', 'quarry', 'urban', 'rural',
                         'military', 'winter_sports')
      OR leisure_val IN ('park', 'garden', 'playground', 'golf_course', 'sports_centre',
                         'pitch', 'stadium', 'common', 'nature_reserve')
