@@ -111,6 +111,7 @@ layers:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
