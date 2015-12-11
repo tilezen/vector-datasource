@@ -133,7 +133,7 @@ BEGIN
       WHEN railway_val IN ('station')
         THEN LEAST(zoom + 0.38, 12)
       WHEN tourism_val = 'zoo'
-        THEN LEAST(zoom + 3.00, 15)
+        THEN LEAST(zoom + 3.00, 13)
       WHEN (natural_val IN ('spring')
             OR railway_val IN ('level_crossing'))
         THEN 14 -- these are generally points
