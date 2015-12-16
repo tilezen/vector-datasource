@@ -18,7 +18,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql VOLATILE;
 
+-- do a drop-if-exists + create in a transaction to ensure that the script
+-- is idempotent.
+BEGIN;
+DROP TRIGGER IF EXISTS mz_trigger_polygon ON planet_osm_polygon;
 CREATE TRIGGER mz_trigger_polygon BEFORE INSERT OR UPDATE ON planet_osm_polygon FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_polygon();
+COMMIT;
 
 CREATE OR REPLACE FUNCTION mz_trigger_function_point()
 RETURNS TRIGGER AS $$
@@ -28,7 +33,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql VOLATILE;
 
+-- do a drop-if-exists + create in a transaction to ensure that the script
+-- is idempotent.
+BEGIN;
+DROP TRIGGER IF EXISTS mz_trigger_point ON planet_osm_point;
 CREATE TRIGGER mz_trigger_point BEFORE INSERT OR UPDATE ON planet_osm_point FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_point();
+COMMIT;
 
 CREATE OR REPLACE FUNCTION mz_trigger_function_line()
 RETURNS TRIGGER AS $$
@@ -39,4 +49,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql VOLATILE;
 
+-- do a drop-if-exists + create in a transaction to ensure that the script
+-- is idempotent.
+BEGIN;
+DROP TRIGGER IF EXISTS mz_trigger_line ON planet_osm_line;
 CREATE TRIGGER mz_trigger_line BEFORE INSERT OR UPDATE ON planet_osm_line FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_line();
+COMMIT;
