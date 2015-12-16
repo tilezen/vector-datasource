@@ -13,6 +13,10 @@ v0.6.0
 * Military (and rural) landuse areas were not being output due to a bug. This has been fixed and both landuse types are now being output. [Ticket](https://github.com/mapzen/vector-datasource/issues/367).
 * Pier lines are now included in the roads layer with `kind:path, man_made:pier`. [Ticket](https://github.com/mapzen/vector-datasource/issues/382).
 * Zoos now show up by zoom 13 at the latest. [Ticket](https://github.com/mapzen/vector-datasource/issues/421).
+* Wine shops are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/448)
+* Wine shops are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/448)
+* Ice cream shops and stands are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/447)
+* **Requires:** [tileserver v0.5.0](https://github.com/mapzen/tileserver/releases/tag/v0.5.0) and [tilequeue v0.6.0](https://github.com/mapzen/tilequeue/releases/tag/v0.6.0) and [TileStache v0.6.0](https://github.com/mapzen/TileStache/releases/tag/v0.6.0)
 
 v0.5.3
 ------
