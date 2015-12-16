@@ -17,7 +17,11 @@ done
 # run updates in parallel. note that we don't bail here, as we want to
 # re-enable the triggers regardless of whether we failed or not.
 for sql in ${migration_dir}/*.sql; do
-    psql -f "$sql" $* &
+    if [[ $sql = *migrate*.sql ]]; then
+        echo "SKIPPING $sql - run this after the code migration."
+    else
+        psql -f "$sql" $* &
+    fi
 done
 
 wait
