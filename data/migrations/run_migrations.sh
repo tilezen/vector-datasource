@@ -24,5 +24,5 @@ wait
 
 # re-enable triggers
 for table in planet_osm_point planet_osm_line planet_osm_polygon; do
-    psql -c "ALTER TABLE ${table} DISABLE TRIGGER USER" $*
+    psql -c "ALTER TABLE ${table} ENABLE TRIGGER USER" $*
 done
