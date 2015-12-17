@@ -1,21 +1,20 @@
 v0.6.0
 ------
 * **Release date**: 2015-12-14.
-* The `population` attribute is now always an integer. [Ticket](https://github.com/mapzen/vector-datasource/issues/230).
-* Hospital POIs show up earlier, at least by zoom 14. [Ticket](https://github.com/mapzen/vector-datasource/issues/420).
-* Highway exits are now present in the POIs layer, with `kind:motorway_junction` and, if the data is available, properties for `exit_to` directions and `ref` reference number. [Ticket](https://github.com/mapzen/vector-datasource/issues/160).
-* Beach polygons are now present in the landuse layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/366).
-* Railway platforms are now present in the transit layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/244).
-* Features related to winter sports are now present; with pistes in the roads layer as `kind:piste`, winter sports areas / resorts in the landuse layer with `kind:winter_sports` and various POIs related to ski/snowboard hire available in the POIs layer. [Pistes ticket](https://github.com/mapzen/vector-datasource/issues/342). [Areas ticket](https://github.com/mapzen/vector-datasource/issues/343), [POIs ticket](https://github.com/mapzen/vector-datasource/issues/344).
-* Subway stations show at zoom 12. [Ticket](https://github.com/mapzen/vector-datasource/issues/369).
-* Toy shops are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/404).
-* IATA codes are included as the `iata` property on airports for which the data is available. [Ticket](https://github.com/mapzen/vector-datasource/issues/398).
-* Military (and rural) landuse areas were not being output due to a bug. This has been fixed and both landuse types are now being output. [Ticket](https://github.com/mapzen/vector-datasource/issues/367).
-* Pier lines are now included in the roads layer with `kind:path, man_made:pier`. [Ticket](https://github.com/mapzen/vector-datasource/issues/382).
-* Zoos now show up by zoom 13 at the latest. [Ticket](https://github.com/mapzen/vector-datasource/issues/421).
-* Wine shops are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/448)
-* Wine shops are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/448)
-* Ice cream shops and stands are now included in the POIs layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/447)
+* Highway exits are now present in the `pois` layer, with `kind:motorway_junction` and, if the data is available, properties for `exit_to` directions and `ref` reference number. [Ticket](https://github.com/mapzen/vector-datasource/issues/160).
+* Beach polygons are now present in the `landuse` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/366).
+* Military (and rural) `landuse` areas were not being output due to a bug. This has been fixed and both landuse types are now being output. [Ticket](https://github.com/mapzen/vector-datasource/issues/367).
+* Railway platforms are now present in the `transit` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/244).
+* Features related to winter sports are now present; with pistes in the `roads` layer as `kind:piste`, winter sports areas / resorts in the `landuse` layer with `kind:winter_sports` and various `pois` related to ski/snowboard hire available in the `pois` layer. [Pistes ticket](https://github.com/mapzen/vector-datasource/issues/342). [Areas ticket](https://github.com/mapzen/vector-datasource/issues/343), [POIs ticket](https://github.com/mapzen/vector-datasource/issues/344).
+* IATA codes are included as the `iata` property on airports for which the data is available in the `pois` and `landuse` layers. [Ticket](https://github.com/mapzen/vector-datasource/issues/398).
+* Pier lines are now included in the `roads` layer with `kind:path, man_made:pier`. [Ticket](https://github.com/mapzen/vector-datasource/issues/382).
+* Subway stations show at zoom 12 in the `pois` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/369).
+* Zoos now show up by zoom 13 at the latest in the `pois` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/421).
+* Ice cream shops and stands are now included in the `pois` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/447)
+* Toy shops are now included in the `pois` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/404).
+* Wine shops are now included in the `pois` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/448)
+* Alcohol shops are now included in the `pois` layer. [Ticket](https://github.com/mapzen/vector-datasource/issues/448)
+* The `population` attribute in the `places` layer is now always an integer. [Ticket](https://github.com/mapzen/vector-datasource/issues/230).
 * **Requires:** [tileserver v0.5.0](https://github.com/mapzen/tileserver/releases/tag/v0.5.0) and [tilequeue v0.6.0](https://github.com/mapzen/tilequeue/releases/tag/v0.6.0) and [TileStache v0.6.0](https://github.com/mapzen/TileStache/releases/tag/v0.6.0)
 
 v0.5.3
