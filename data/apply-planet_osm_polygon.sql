@@ -38,7 +38,7 @@ CREATE INDEX planet_osm_polygon_landuse_boundary_geom_4_index ON planet_osm_poly
 CREATE INDEX planet_osm_polygon_landuse_boundary_geom_6_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve') AND mz_landuse_min_zoom <= 6;
 CREATE INDEX planet_osm_polygon_landuse_boundary_geom_8_index ON planet_osm_polygon USING gist(way) WHERE mz_is_landuse=TRUE AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve') AND mz_landuse_min_zoom <= 8;
 
-CREATE INDEX planet_osm_polygon_water_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_calculate_is_water("waterway", "natural", "landuse", "amenity", "leisure") = TRUE;
+CREATE INDEX planet_osm_polygon_water_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_calculate_is_water("amenity", "landuse", "leisure", "natural", "waterway") = TRUE;
 
 CREATE INDEX planet_osm_polygon_railway_platform_index ON planet_osm_polygon USING gist(way) WHERE railway='platform';
 
