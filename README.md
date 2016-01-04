@@ -248,3 +248,25 @@ See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen v
 
 See https://github.com/mapzen/hoverboard for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt). The Leaflet tile layer is defined in example.js, where you specify the Mapzen vector tile layers you want to render and the colors and symbols used to draw them.
 
+## Tests
+
+There is a suite of tests which can be run against a tile server. You will need to install the [AppDirs](https://pypi.python.org/pypi/appdirs) Python package. First, set up a configuration file telling the test suite which server URL to use. The location of the configuration file will vary depending on your platform. To find out, either run the test suite and read the error message, or read the docs for [AppDirs](https://pypi.python.org/pypi/appdirs). This file should be a YAML dictionary of name to URL pattern pairs. For example:
+
+```yaml
+---
+local: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
+```
+
+This defines a server called `local` which runs on port 8080 of your local machine. This is suitable for testing against a locally-running instance of [tileserver](https://github.com/mapzen/tileserver). You can now run the tests:
+
+```
+python test.py local
+```
+
+Note that you can configure as many servers as you like. Remember to include any necessary API keys as part of the URL. You can run subsets of the tests, or single tests, by listing them after the server name like this:
+
+```
+python test.py local test/160-motorway-junctions.py
+```
+
+Verbose test output is placed in a file called `test.log` in the current directory.
