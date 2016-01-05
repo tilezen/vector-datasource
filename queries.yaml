@@ -271,3 +271,8 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 9
+  - fn: TileStache.Goodies.VecTiles.transform.merge_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 16
