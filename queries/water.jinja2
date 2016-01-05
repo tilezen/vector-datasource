@@ -141,7 +141,7 @@ UNION ALL
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("waterway", "natural", "landuse") AS kind,
+    COALESCE("amenity", "landuse", "leisure", "natural", "waterway") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
