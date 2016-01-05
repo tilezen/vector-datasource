@@ -18,10 +18,16 @@ from appdirs import AppDirs
 # e.g:
 #
 #     ---
-#     local: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
+#     local:
+#       url: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
+#       use_all_layers: false
 #
 # Then you will be able to run `test.py local` and it will run against the local
 # server defined above. You can define as many different servers as you like.
+#
+# Note that setting `use_all_layers` to `true` will cause the test to fetch all
+# the layers, which may take more time than just the layers it needs. However,
+# this makes it possible to run against the raw storage.
 #
 dirs = AppDirs("vector-datasource", "Mapzen")
 config_file = path_join(dirs.user_config_dir, 'config.yaml')
@@ -29,7 +35,12 @@ config_data = load_yaml(open(config_file).read())
 if len(sys.argv) < 2:
     print>>sys.stderr, "Usage: test.py <server name>. See test.py for more information."
     sys.exit(1)
-config_url = config_data[sys.argv[1]]
+config = config_data[sys.argv[1]]
+config_url = config.get('url', None)
+if config_url is None:
+    print>>sys.stderr, "A URL is not configured for server %r, please check your config at %r." % (sys.argv[1], config_file)
+    sys.exit(1)
+config_all_layers = config.get('use_all_layers', False)
 
 
 ##
@@ -85,7 +96,16 @@ def assert_has_feature(z, x, y, layer, properties):
                         % (url, r.headers['content-type']))
 
     data = json.loads(r.text)
-    features = data['features']
+
+    if config_all_layers:
+        layer_data = data.get(layer, None)
+        if layer_data is not None:
+            features = layer_data['features']
+        else:
+            features = []
+    else:
+        features = data['features']
+
     if len(features) == 0:
         raise Exception("Layer %r empty in tile %r" % (layer, url))
 

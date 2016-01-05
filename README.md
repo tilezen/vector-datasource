@@ -254,7 +254,9 @@ There is a suite of tests which can be run against a tile server. You will need 
 
 ```yaml
 ---
-local: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
+local:
+  url: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
+  use_all_layers: false
 ```
 
 This defines a server called `local` which runs on port 8080 of your local machine. This is suitable for testing against a locally-running instance of [tileserver](https://github.com/mapzen/tileserver). You can now run the tests:
