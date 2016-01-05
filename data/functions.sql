@@ -17,7 +17,8 @@ BEGIN
      OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier', 'beach')
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
-                        'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
+                        'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital',
+                        'prison')
      OR aeroway_val IN ('runway', 'taxiway', 'apron', 'aerodrome')
      OR tourism_val IN ('zoo')
      OR man_made_val IN ('pier', 'wastewater_plant', 'works', 'bridge', 'tower',
@@ -76,7 +77,7 @@ BEGIN
 	THEN highway_val
       WHEN amenity_val IN (
         'university', 'school', 'college', 'library', 'fuel', 'parking',
-	'cinema', 'theatre', 'place_of_worship', 'hospital')
+	'cinema', 'theatre', 'place_of_worship', 'hospital', 'prison')
 	THEN amenity_val
       WHEN aeroway_val IN (
         'runway', 'taxiway', 'apron', 'aerodrome')
@@ -158,6 +159,7 @@ BEGIN
       WHEN shop_val     = 'mall'             THEN LEAST(zoom + 2.74, 17)
       WHEN leisure_val  = 'stadium'          THEN LEAST(zoom + 2.30, 15)
       WHEN amenity_val  = 'university'       THEN LEAST(zoom + 2.55, 15)
+      WHEN amenity_val  = 'prison'           THEN LEAST(zoom + 2.55, 15)
       WHEN tourism_val  = 'museum'           THEN LEAST(zoom + 1.43, 16)
       WHEN historic_val = 'landmark'         THEN LEAST(zoom + 1.76, 15)
       WHEN leisure_val  = 'marina'           THEN LEAST(zoom + 3.45, 17)
@@ -189,8 +191,7 @@ BEGIN
             OR waterway_val IN ('lock')
             OR aerialway_val IN ('station')
             OR railway_val IN ('halt', 'tram_stop')
-            OR tourism_val IN ('alpine_hut')
-            OR amenity_val='prison')
+            OR tourism_val IN ('alpine_hut'))
         THEN 15
       WHEN (aeroway_val IN ('helipad')
                    OR amenity_val IN ('bus_station', 'car_sharing',
