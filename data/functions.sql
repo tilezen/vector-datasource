@@ -375,13 +375,16 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_is_water(
-    waterway_val text, natural_val text, landuse_val text)
+    amenity_val text, landuse_val text, leisure_val text,
+    natural_val text, waterway_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
         waterway_val IN ('riverbank', 'dock')
      OR natural_val IN ('water')
      OR landuse_val IN ('basin', 'reservoir')
+     OR amenity_val='swimming_pool'
+     OR leisure_val='swimming_pool'
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
