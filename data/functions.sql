@@ -17,7 +17,8 @@ BEGIN
      OR natural_val IN ('wood', 'land', 'scrub', 'wetland', 'glacier', 'beach')
      OR highway_val IN ('pedestrian', 'footway')
      OR amenity_val IN ('university', 'school', 'college', 'library', 'fuel',
-                        'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital')
+                        'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital',
+                        'prison')
      OR aeroway_val IN ('runway', 'taxiway', 'apron', 'aerodrome')
      OR tourism_val IN ('zoo')
      OR man_made_val IN ('pier', 'wastewater_plant', 'works', 'bridge', 'tower',
@@ -76,7 +77,7 @@ BEGIN
 	THEN highway_val
       WHEN amenity_val IN (
         'university', 'school', 'college', 'library', 'fuel', 'parking',
-	'cinema', 'theatre', 'place_of_worship', 'hospital')
+	'cinema', 'theatre', 'place_of_worship', 'hospital', 'prison')
 	THEN amenity_val
       WHEN aeroway_val IN (
         'runway', 'taxiway', 'apron', 'aerodrome')
@@ -158,6 +159,7 @@ BEGIN
       WHEN shop_val     = 'mall'             THEN LEAST(zoom + 2.74, 17)
       WHEN leisure_val  = 'stadium'          THEN LEAST(zoom + 2.30, 15)
       WHEN amenity_val  = 'university'       THEN LEAST(zoom + 2.55, 15)
+      WHEN amenity_val  = 'prison'           THEN LEAST(zoom + 2.55, 15)
       WHEN tourism_val  = 'museum'           THEN LEAST(zoom + 1.43, 16)
       WHEN historic_val = 'landmark'         THEN LEAST(zoom + 1.76, 15)
       WHEN leisure_val  = 'marina'           THEN LEAST(zoom + 3.45, 17)
@@ -179,6 +181,10 @@ BEGIN
       WHEN amenity_val  = 'ski_rental'       THEN LEAST(zoom + 1.27, 17)
       WHEN amenity_val  = 'ski_school'       THEN LEAST(zoom + 2.30, 15)
       WHEN man_made_val = 'snow_cannon'      THEN LEAST(zoom + 4.90, 18)
+      WHEN leisure_val  = 'sports_centre'    THEN LEAST(zoom + 3.98, 17)
+      WHEN leisure_val  = 'fitness_centre'   THEN LEAST(zoom + 3.98, 17)
+      WHEN leisure_val  = 'fitness_station'  THEN LEAST(zoom + 3.98, 17)
+      WHEN amenity_val  = 'gym'              THEN LEAST(zoom + 3.98, 17)
       WHEN highway_val  = 'motorway_junction' THEN 12
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
@@ -194,8 +200,7 @@ BEGIN
         THEN 15
       WHEN (aeroway_val IN ('helipad')
                    OR amenity_val IN ('bus_station', 'car_sharing',
-                                      'picnic_site',
-                                      'prison', 'recycling', 'shelter')
+                                      'picnic_site', 'recycling', 'shelter')
                    OR barrier_val IN ('block', 'bollard', 'lift_gate')
                    OR craft_val IN ('brewery', 'winery', 'sawmill')
                    OR highway_val IN ('ford')
@@ -372,13 +377,16 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_is_water(
-    waterway_val text, natural_val text, landuse_val text)
+    amenity_val text, landuse_val text, leisure_val text,
+    natural_val text, waterway_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
         waterway_val IN ('riverbank', 'dock')
      OR natural_val IN ('water')
      OR landuse_val IN ('basin', 'reservoir')
+     OR amenity_val='swimming_pool'
+     OR leisure_val='swimming_pool'
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
