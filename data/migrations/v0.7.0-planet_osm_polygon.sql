@@ -8,7 +8,8 @@ UPDATE planet_osm_polygon SET
   WHERE
     "leisure" IN ('sports_centre', 'fitness_centre', 'fitness_station') OR
     "amenity" IN ('gym', 'prison') OR
-    "shop" = 'electronics';
+    "shop" = 'electronics' OR
+    "aeroway" = 'gate';
 
 CREATE INDEX CONCURRENTLY new_planet_osm_polygon_water_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_calculate_is_water("amenity", "landuse", "leisure", "natural", "waterway") = TRUE;
 
