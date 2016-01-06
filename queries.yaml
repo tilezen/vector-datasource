@@ -273,6 +273,26 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 9
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties: [is_bridge, is_tunnel, oneway]
+      where: >-
+        (kind == 'path' and zoom < 15) or
+        (kind in ['minor_road', 'major_road', 'highway', 'rail'] and zoom < 13)
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 16
+      properties: [name, ref, network]
+      where: >-
+        (kind == 'path' and zoom < 17) or
+        (kind in ['minor_road', 'rail'] and zoom < 15) or
+        (kind == 'major_road' and zoom < 12) or
+        (kind == 'highway' and zoom < 7)
   - fn: TileStache.Goodies.VecTiles.transform.merge_features
     params:
       source_layer: roads
