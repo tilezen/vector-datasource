@@ -178,6 +178,10 @@ BEGIN
       WHEN amenity_val  = 'ski_rental'       THEN LEAST(zoom + 1.27, 17)
       WHEN amenity_val  = 'ski_school'       THEN LEAST(zoom + 2.30, 15)
       WHEN man_made_val = 'snow_cannon'      THEN LEAST(zoom + 4.90, 18)
+      WHEN leisure_val  = 'sports_centre'    THEN LEAST(zoom + 3.98, 17)
+      WHEN leisure_val  = 'fitness_centre'   THEN LEAST(zoom + 3.98, 17)
+      WHEN leisure_val  = 'fitness_station'  THEN LEAST(zoom + 3.98, 17)
+      WHEN amenity_val  = 'gym'              THEN LEAST(zoom + 3.98, 17)
       WHEN highway_val  = 'motorway_junction' THEN 12
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
