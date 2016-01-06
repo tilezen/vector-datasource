@@ -198,7 +198,7 @@ BEGIN
             OR railway_val IN ('halt', 'tram_stop')
             OR tourism_val IN ('alpine_hut'))
         THEN 15
-      WHEN (aeroway_val IN ('helipad')
+      WHEN (aeroway_val IN ('helipad', 'gate')
                    OR amenity_val IN ('bus_station', 'car_sharing',
                                       'picnic_site', 'recycling', 'shelter')
                    OR barrier_val IN ('block', 'bollard', 'lift_gate')
@@ -209,8 +209,7 @@ BEGIN
                    OR natural_val IN ('tree')
                    OR shop_val IN ('department_store', 'supermarket')
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
-             WHEN (aeroway_val IN ('gate')
-                   OR amenity_val IN (
+             WHEN (amenity_val IN (
                  'atm', 'bicycle_rental', 'bicycle_parking', 'bus_stop',
                  'drinking_water', 'emergency_phone',
                  'parking', 'post_box', 'telephone', 'theatre',

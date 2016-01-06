@@ -3,4 +3,5 @@ UPDATE planet_osm_point SET
   WHERE
     "leisure" IN ('sports_centre', 'fitness_centre', 'fitness_station') OR
     "amenity" IN ('gym', 'prison') OR
-    "shop" = 'electronics';
+    "shop" = 'electronics' OR
+    "aeroway" = 'gate';
