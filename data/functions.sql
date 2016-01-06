@@ -180,6 +180,10 @@ BEGIN
       WHEN amenity_val  = 'ski_rental'       THEN LEAST(zoom + 1.27, 17)
       WHEN amenity_val  = 'ski_school'       THEN LEAST(zoom + 2.30, 15)
       WHEN man_made_val = 'snow_cannon'      THEN LEAST(zoom + 4.90, 18)
+      WHEN leisure_val  = 'sports_centre'    THEN LEAST(zoom + 3.98, 17)
+      WHEN leisure_val  = 'fitness_centre'   THEN LEAST(zoom + 3.98, 17)
+      WHEN leisure_val  = 'fitness_station'  THEN LEAST(zoom + 3.98, 17)
+      WHEN amenity_val  = 'gym'              THEN LEAST(zoom + 3.98, 17)
       WHEN highway_val  = 'motorway_junction' THEN 12
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
@@ -372,13 +376,16 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_is_water(
-    waterway_val text, natural_val text, landuse_val text)
+    amenity_val text, landuse_val text, leisure_val text,
+    natural_val text, waterway_val text)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
         waterway_val IN ('riverbank', 'dock')
      OR natural_val IN ('water')
      OR landuse_val IN ('basin', 'reservoir')
+     OR amenity_val='swimming_pool'
+     OR leisure_val='swimming_pool'
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
