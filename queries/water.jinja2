@@ -141,7 +141,7 @@ UNION ALL
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("waterway", "natural", "landuse") AS kind,
+    COALESCE("amenity", "landuse", "leisure", "natural", "waterway") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -151,7 +151,7 @@ SELECT
 FROM planet_osm_polygon
 
 WHERE
-    mz_calculate_is_water("waterway", "natural", "landuse") = TRUE
+    mz_calculate_is_water("amenity", "landuse", "leisure", "natural", "waterway") = TRUE
     AND {{ bounds|bbox_filter('way') }}
 {% if 9 <= zoom < 11 %}
     AND way_area::bigint > 102400
