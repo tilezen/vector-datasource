@@ -306,8 +306,8 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: roads
-      start_zoom: 10
-      end_zoom: 7
+      start_zoom: 7
+      end_zoom: 10
       properties: [name]
       where: >-
         kind == 'highway'
