@@ -7,6 +7,7 @@ from os.path import join as path_join
 import sys
 from yaml import load as load_yaml
 from appdirs import AppDirs
+from contextlib import contextmanager
 
 
 ##
@@ -83,7 +84,8 @@ def match_properties(actual, expected):
     return True
 
 
-def assert_has_feature(z, x, y, layer, properties):
+@contextmanager
+def features_in_tile_layer(z, x, y, layer):
     url = config_url % {'layer': layer, 'z': z, 'x': x, 'y': y}
     r = requests.get(url)
 
@@ -106,15 +108,24 @@ def assert_has_feature(z, x, y, layer, properties):
     else:
         features = data['features']
 
-    if len(features) == 0:
-        raise Exception("Layer %r empty in tile %r" % (layer, url))
+    try:
+        yield features
 
-    for f in features:
-        if match_properties(f['properties'], properties):
-            return
+    except Exception as e:
+        raise Exception, "Tile %r: %s" % (url, e.message), sys.exc_info()[2]
 
-    raise Exception("Tile %r: did not find feature including properties %r"
-                    % (url, properties))
+
+def assert_has_feature(z, x, y, layer, properties):
+    with features_in_tile_layer(z, x, y, layer) as features:
+        if len(features) == 0:
+            raise Exception, "Layer %r empty" % layer
+
+        for f in features:
+            if match_properties(f['properties'], properties):
+                return
+
+        raise Exception, "Did not find feature including properties %r" \
+            % properties
 
 
 def run_test(f, log, idx, num_tests):
@@ -122,7 +133,8 @@ def run_test(f, log, idx, num_tests):
 
     try:
         runpy.run_path(f, init_globals={
-            'assert_has_feature': assert_has_feature
+            'assert_has_feature': assert_has_feature,
+            'features_in_tile_layer': features_in_tile_layer
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
     except:
