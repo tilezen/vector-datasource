@@ -112,12 +112,14 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
+      - TileStache.Goodies.VecTiles.transform.normalize_leisure_kind
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
       - TileStache.Goodies.VecTiles.transform.remove_zero_area
+      - TileStache.Goodies.VecTiles.transform.pois_kind_aeroway_gate
       - TileStache.Goodies.VecTiles.transform.make_representative_point
     sort: TileStache.Goodies.VecTiles.sort.pois
   boundaries:
@@ -271,3 +273,46 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 9
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties: [is_bridge, is_tunnel]
+      where: >-
+        (kind == 'path' and zoom < 15) or
+        (kind in ['minor_road', 'major_road', 'highway', 'rail'] and zoom < 13)
+  # drop all oneway tags below zoom 14 (i.e: zoom >= 15) for all types.
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties: [oneway]
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 16
+      properties: [name, ref, network]
+      where: >-
+        (kind == 'path' and zoom < 16) or
+        (kind == 'rail' and zoom < 15) or
+        (kind == 'minor_road' and zoom < 14) or
+        (kind == 'major_road' and zoom < 11) or
+        (kind == 'highway' and zoom < 7)
+  # this is a patch to get rid of name, but keep ref & network, for highways
+  # when zoom < 11.
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 7
+      end_zoom: 10
+      properties: [name]
+      where: >-
+        kind == 'highway'
+  - fn: TileStache.Goodies.VecTiles.transform.merge_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 16

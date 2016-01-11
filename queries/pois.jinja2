@@ -9,6 +9,7 @@ SELECT
     transit_routes,
     ref,
     tags->'exit_to' AS exit_to,
+    aeroway,
     %#tags AS tags,
     COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
              "leisure", "lock", "man_made", "natural", "office", "power", "railway",
