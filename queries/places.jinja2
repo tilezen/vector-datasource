@@ -92,6 +92,7 @@ FROM wof_neighbourhood wof_n
 INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placetype_code
 
 WHERE
+  wof_n.is_visible AND
   {{ bounds|bbox_filter('label_position') }} AND
   {{ zoom + 1 }} >= min_zoom AND
   {{ zoom - 1 }} <= max_zoom
