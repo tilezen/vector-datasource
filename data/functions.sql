@@ -710,3 +710,22 @@ BEGIN
   END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Update the wof_neighbourhood table so that the `is_visible` field
+-- is correct as of the given date `d`. The function returns the set
+-- of WOF IDs which have been updated, and the locations of which
+-- should be expired.
+CREATE OR REPLACE FUNCTION wof_update_visible_ids(
+  d DATE)
+RETURNS SETOF BIGINT AS $$
+UPDATE wof_neighbourhood a
+  SET is_visible = b.new_visible
+  FROM (
+    SELECT wof_id, inception < d AND cessation >= d AS new_visible
+    FROM wof_neighbourhood
+  ) b
+  WHERE
+    a.wof_id = b.wof_id AND
+    b.new_visible <> a.is_visible
+  RETURNING a.wof_id;
+$$ LANGUAGE sql VOLATILE;
