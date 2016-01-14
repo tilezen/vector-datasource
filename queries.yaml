@@ -90,7 +90,6 @@ layers:
     template: buildings.jinja2
     start_zoom: 13
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
-    clip: false
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
