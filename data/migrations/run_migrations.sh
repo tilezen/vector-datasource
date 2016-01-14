@@ -2,7 +2,18 @@
 
 migration_dir=${0%/*}
 
-# first run functions and triggers, bailing if either of these fail, as they
+# first, run any "pre-function" migrations. these might be necessary if the
+# migration alters tables to add columns referenced in the functions, in
+# which case the function creation would fail.
+for sql in ${migration_dir}/*.sql; do
+    if [[ $sql = *prefunction*.sql ]]; then
+        psql -f "$sql" $*
+    else
+        echo "SKIPPING $sql - this will be run after the functions."
+    fi
+done
+
+# next run functions and triggers, bailing if either of these fail, as they
 # are required by later steps.
 psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../functions.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new functions failed.">&2; exit 1; fi
@@ -19,6 +30,8 @@ done
 for sql in ${migration_dir}/*.sql; do
     if [[ $sql = *cleanup*.sql ]]; then
         echo "SKIPPING $sql - run this after the code migration."
+    elif [[ $sql = *prefunction*.sql ]]; then
+        echo "SKIPPING $sql - this was already run before the functions."
     else
         psql -f "$sql" $* &
     fi
