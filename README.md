@@ -265,8 +265,6 @@ For example, to read against a local server [proxying](https://github.com/mapzen
 
 ```yaml
 ---
-local:
-  url: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
 proxy:
   url: http://localhost:8081/all/%(z)d/%(x)d/%(y)d.json
   use_all_layers: true
