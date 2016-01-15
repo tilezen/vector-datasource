@@ -118,7 +118,8 @@ def features_in_tile_layer(z, x, y, layer):
 def assert_has_feature(z, x, y, layer, properties):
     with features_in_tile_layer(z, x, y, layer) as features:
         if len(features) == 0:
-            raise Exception, "Layer %r empty" % layer
+            raise Exception, "Did not find feature including properties " \
+                "%r (because layer %r was empty)" % (properties, layer)
 
         for f in features:
             if match_properties(f['properties'], properties):
