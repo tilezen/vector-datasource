@@ -1,0 +1,16 @@
+---
+# For a local tileserver, use something like this.
+local:
+  url: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
+# To test against Mapzen's public development API, use something like this
+# (remembering to replace YOUR_API_KEY with a valid development API key).
+dev:
+  url: http://vector.dev.mapzen.com/osm/%(layer)s/%(z)d/%(x)d/%(y)d.json?api_key=YOUR_API_KEY
+# To test against Mapzen's public production API, for example:
+prod:
+  url: http://vector.mapzen.com/osm/%(layer)s/%(z)d/%(x)d/%(y)d.json?api_key=YOUR_API_KEY
+# To use something like the tile-hash-proxy to go directly to an S3 bucket
+# for your own production instance of tileserver, use something like this:
+proxy:
+  url: http://localhost:8080/osm/all/%(z)d/%(x)d/%(y)d.json
+  use_all_layers: true

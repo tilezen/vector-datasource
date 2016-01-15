@@ -250,7 +250,7 @@ See https://github.com/mapzen/hoverboard for more information. This repository h
 
 ## Tests
 
-There is a suite of tests which can be run against a tile server. You will need to install the [AppDirs](https://pypi.python.org/pypi/appdirs) Python package. First, set up a configuration file telling the test suite which server URL to use. The location of the configuration file will vary depending on your platform. To find out, either run the test suite and read the error message, or read the docs for [AppDirs](https://pypi.python.org/pypi/appdirs). This file should be a YAML dictionary of name to URL pattern pairs. For example:
+There is a suite of tests which can be run against a tile server. You will need to install the [AppDirs](https://pypi.python.org/pypi/appdirs) Python package. First, set up a configuration file telling the test suite which server URL to use. The location of the configuration file will vary depending on your platform. To find out, either run the test suite and read the error message, or read the docs for [AppDirs](https://pypi.python.org/pypi/appdirs). This file should be a YAML dictionary of name to URL pattern pairs. An example config file is included as `test_config.example.yaml`. For example:
 
 ```yaml
 ---

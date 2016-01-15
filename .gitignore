@@ -1,3 +1,9 @@
 *.local.cfg
 cache
 .DS_Store
+
+# file output when tests fail
+test.log
+
+# editor temporaries
+*~
