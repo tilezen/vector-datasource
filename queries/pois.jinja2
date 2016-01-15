@@ -8,6 +8,8 @@ SELECT
     sport,
     transit_routes,
     ref,
+    attraction,
+    zoo,
     tags->'exit_to' AS exit_to,
     aeroway,
     %#tags AS tags,
@@ -22,6 +24,8 @@ FROM (
     osm_id,
     cuisine, religion, sport, ref,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    tags->'attraction' AS attraction,
+    tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes function is pretty expensive,
     -- so we only want to calculate it when we actually need the result.
     CASE
@@ -45,6 +49,8 @@ UNION ALL
     osm_id,
     cuisine, religion, sport, ref,
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    tags->'attraction' AS attraction,
+    tags->'zoo' AS zoo,
     NULL AS transit_routes,
     tags
 
