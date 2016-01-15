@@ -298,8 +298,18 @@ post_process:
         (kind == 'path' and zoom < 16) or
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
-        (kind == 'major_road' and zoom < 11) or
+        (kind == 'major_road' and zoom <  7) or
         (kind == 'highway' and zoom < 7)
+  # this is a patch because we still want to drop name, network from major_road
+  # features between zoom 7 and 10
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 7
+      end_zoom: 10
+      properties: [name, network]
+      where: >-
+        kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways
   # when zoom < 11.
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
