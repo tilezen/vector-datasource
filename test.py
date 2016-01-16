@@ -129,12 +129,22 @@ def assert_has_feature(z, x, y, layer, properties):
             % properties
 
 
+def assert_no_matching_feature(z, x, y, layer, properties):
+    with features_in_tile_layer(z, x, y, layer) as features:
+        for f in features:
+            if match_properties(f['properties'], properties):
+                raise Exception, "Found feature matching properties " \
+                    "%r in layer %r, but was supposed to find none." \
+                    % (properties, layer)
+
+
 def run_test(f, log, idx, num_tests):
     fails = 0
 
     try:
         runpy.run_path(f, init_globals={
             'assert_has_feature': assert_has_feature,
+            'assert_no_matching_feature': assert_no_matching_feature,
             'features_in_tile_layer': features_in_tile_layer
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
