@@ -80,13 +80,16 @@ SELECT
     tags->'protect_class' AS protect_class,
     operator,
     way_area::bigint AS area,
-    mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary") AS kind,
+    mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary", "tags") AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     sport,
     religion,
     surface,
+    "natural",
+    tags->'attraction' AS attraction,
+    tags->'zoo' AS zoo,
     mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
     %#tags AS tags
 FROM
@@ -109,6 +112,9 @@ SELECT
   NULL AS sport,
   NULL AS religion,
   NULL AS surface,
+  NULL AS "natural",
+  NULL AS attraction,
+  NULL AS zoo,
   NULL AS mz_is_building,
   NULL AS tags
 FROM

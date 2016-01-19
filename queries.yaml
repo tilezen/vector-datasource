@@ -59,6 +59,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.remap_deprecated_landuse_kinds
+      - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.landuse_sort_key
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -102,6 +103,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.building_height
       - TileStache.Goodies.VecTiles.transform.building_min_height
       - TileStache.Goodies.VecTiles.transform.synthesize_volume
+      - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.building_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.buildings
@@ -113,6 +115,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
       - TileStache.Goodies.VecTiles.transform.normalize_leisure_kind
+      - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties

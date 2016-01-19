@@ -106,6 +106,7 @@ SELECT
   NULL AS boundary_type,
   CASE WHEN barrier='retaining_wall' THEN 'retaining_wall'
        WHEN man_made='snow_fence' THEN 'snow_fence'
+       WHEN barrier='fence' THEN 'fence'
        ELSE 'city_wall'
   END AS kind,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
@@ -123,7 +124,37 @@ WHERE
     OR barrier='retaining_wall'
     OR man_made='snow_fence'
 {% endif %}
+{% if zoom >= 17 %}
+    OR barrier='fence'
+{% endif %}
   )
+
+{% endif %}
+
+{% if zoom >= 17 %}
+-- also add boundaries from polygon which have boundary=fence.
+
+UNION ALL
+
+SELECT
+  name,
+  NULL AS maritime_boundary,
+  NULL AS admin_level,
+  NULL AS boundary_type,
+  'fence' AS kind,
+  {% filter geometry %}st_boundary(way){% endfilter %} AS __geometry__,
+  osm_id AS __id__,
+  %#tags AS tags
+
+FROM
+  planet_osm_polygon
+
+WHERE
+  {{ bounds|bbox_filter('way') }}
+  -- don't want to match any rows which are entirely inside or entirely
+  -- outside the bounding box.
+  AND st_intersects(st_boundary(way), {{ bounds|bbox }})
+  AND barrier='fence';
 
 {% endif %}
 

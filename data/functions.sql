@@ -3,7 +3,7 @@
 CREATE OR REPLACE FUNCTION mz_calculate_is_landuse(
     landuse_val text, leisure_val text, natural_val text, highway_val text,
     amenity_val text, aeroway_val text, tourism_val text, man_made_val text,
-    power_val text, boundary_val text)
+    power_val text, boundary_val text, tags hstore)
 RETURNS BOOLEAN AS $$
 BEGIN
     RETURN
@@ -20,7 +20,13 @@ BEGIN
                         'parking', 'cinema', 'theatre', 'place_of_worship', 'hospital',
                         'prison')
      OR aeroway_val IN ('runway', 'taxiway', 'apron', 'aerodrome')
-     OR tourism_val IN ('zoo')
+     OR tourism_val IN ('zoo', 'attraction', 'artwork', 'theme_park',
+                        'wilderness_hut', 'hanami', 'resort',
+                        'trail_riding_station', 'aquarium', 'winery')
+     OR tags->'zoo' IN ('enclosure', 'petting_zoo', 'aviary', 'wildlife_park')
+     OR tags->'attraction' IN ('animal', 'water_slide', 'roller_coaster',
+                               'summer_toboggan', 'carousel', 'amusement_ride',
+                               'maze')
      OR man_made_val IN ('pier', 'wastewater_plant', 'works', 'bridge', 'tower',
                          'breakwater', 'water_works', 'groyne', 'dike', 'cutline')
      OR power_val IN   ('plant', 'generator', 'substation', 'station', 'sub_station')
@@ -46,7 +52,8 @@ CREATE OR REPLACE FUNCTION mz_calculate_landuse_kind(
   tourism_val text,
   man_made_val text,
   power_val text,
-  boundary_val text)
+  boundary_val text,
+  tags hstore)
 RETURNS text AS $$
 BEGIN
   RETURN
@@ -82,9 +89,17 @@ BEGIN
       WHEN aeroway_val IN (
         'runway', 'taxiway', 'apron', 'aerodrome')
 	THEN aeroway_val
+      WHEN tags->'zoo' IN (
+        'enclosure', 'petting_zoo', 'aviary', 'wildlife_park')
+        THEN tags->'zoo'
+      WHEN tags->'attraction' IN (
+        'animal', 'water_slide', 'roller_coaster', 'summer_toboggan',
+        'carousel', 'amusement_ride', 'maze')
+        THEN tags->'attraction'
       WHEN tourism_val IN (
-        'zoo')
-	THEN tourism_val
+        'zoo', 'attraction', 'artwork', 'theme_park', 'wilderness_hut',
+        'hanami', 'resort', 'trail_riding_station', 'aquarium', 'winery')
+        THEN tourism_val
       WHEN man_made_val IN (
         'pier', 'wastewater_plant', 'works', 'bridge', 'tower', 'breakwater',
 	'water_works', 'groyne', 'dike', 'cutline')
@@ -111,10 +126,10 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     office_val text,
     power_val text,
     railway_val text,
-    rental_val text,
     shop_val text,
     tourism_val text,
     waterway_val text,
+    tags hstore,
     way_area real
 )
 RETURNS REAL AS $$
@@ -176,7 +191,7 @@ BEGIN
       WHEN amenity_val  = 'school'           THEN LEAST(zoom + 2.30, 15)
       WHEN shop_val     = 'electronics'      THEN LEAST(zoom + 3.30, 17)
       WHEN natural_val  = 'beach'            THEN LEAST(zoom + 3.20, 14)
-      WHEN rental_val   = 'ski'              THEN LEAST(zoom + 1.27, 17)
+      WHEN tags->'rental' = 'ski'            THEN LEAST(zoom + 1.27, 17)
       WHEN shop_val     = 'ski'              THEN LEAST(zoom + 1.27, 17)
       WHEN amenity_val  = 'ski_rental'       THEN LEAST(zoom + 1.27, 17)
       WHEN amenity_val  = 'ski_school'       THEN LEAST(zoom + 2.30, 15)
@@ -186,6 +201,26 @@ BEGIN
       WHEN leisure_val  = 'fitness_station'  THEN LEAST(zoom + 3.98, 17)
       WHEN amenity_val  = 'gym'              THEN LEAST(zoom + 3.98, 17)
       WHEN highway_val  = 'motorway_junction' THEN 12
+      WHEN tags->'zoo'        = 'enclosure'        THEN 17
+      WHEN tags->'zoo'        = 'petting_zoo'      THEN 17
+      WHEN tags->'zoo'        = 'aviary'           THEN 17
+      WHEN tags->'zoo'        = 'wildlife_park'    THEN 17
+      WHEN tags->'attraction' = 'animal'           THEN 17
+      WHEN tags->'attraction' = 'water_slide'      THEN 17
+      WHEN tags->'attraction' = 'roller_coaster'   THEN 17
+      WHEN tags->'attraction' = 'summer_toboggan'  THEN 17
+      WHEN tags->'attraction' = 'carousel'         THEN 17
+      WHEN tags->'attraction' = 'amusement_ride'   THEN 17
+      WHEN tags->'attraction' = 'maze'             THEN 17
+      WHEN tourism_val        = 'attraction'       THEN 17
+      WHEN tourism_val        = 'artwork'          THEN 17
+      WHEN tourism_val        = 'theme_park'       THEN GREATEST(13, LEAST(zoom + 6.32, 17))
+      WHEN tourism_val        = 'wilderness_hut'   THEN 15
+      WHEN tourism_val        = 'hanami'           THEN 17
+      WHEN tourism_val        = 'resort'           THEN GREATEST(14, LEAST(zoom + 5.32, 17))
+      WHEN tourism_val        = 'trail_riding_station' THEN 17
+      WHEN tourism_val        = 'aquarium'         THEN GREATEST(14, LEAST(zoom + 3.09, 17))
+      WHEN tourism_val        = 'winery'           THEN GREATEST(14, LEAST(zoom + 2.85, 17))
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
