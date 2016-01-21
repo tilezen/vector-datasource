@@ -1,3 +1,18 @@
+v0.7.0
+------
+
+* **Release date**: 2016-01-19.
+* At mid and low zooms, roads have some properties dropped and are then merged together. This produces a huge reduction in the number of features in a tile and helps reduce both tile size and rendering time. [Issue](https://github.com/mapzen/vector-datasource/issues/358), [Issue](https://github.com/mapzen/vector-datasource/issues/489).
+* Gym / fitness POIs are now available with `kind: fitness` in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/465).
+* Swimming pools are now available with `kind: swimming_pool` in the `water` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/443).
+* Prisons are now available with `kind: prison` in both the `pois` and `landuse` layers. [Issue](https://github.com/mapzen/vector-datasource/issues/370).
+* Electronics shops are now available with `kind: electronics` in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/374).
+* Aeroway gates are now available with `kind: gate` and `aeroway: gate` in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/454).
+* Motorway links no longer show at zooms 10 and below. [Issue](https://github.com/mapzen/vector-datasource/issues/488).
+* Buildings are now clipped to a 3x expanded tile boundary. This limits the maximum extent of buildings and can help if you've been experiencing rendering artefacts with very large buildings. [Issue](https://github.com/mapzen/vector-datasource/issues/490), [Issue](https://github.com/mapzen/vector-datasource/issues/197).
+* Zoos and other tourist attractions have been "fixed up", and now contain a much wider range of features, as well as including more attributes such as surface type. [Issue](https://github.com/mapzen/vector-datasource/issues/440).
+* **Requires:** [tileserver v0.5.0](https://github.com/mapzen/tileserver/releases/tag/v0.5.0) and [tilequeue v0.7.0](https://github.com/mapzen/tilequeue/releases/tag/v0.7.0) and [TileStache v0.7.0](https://github.com/mapzen/TileStache/releases/tag/v0.7.0)
+
 v0.6.0
 ------
 * **Release date**: 2015-12-16.
