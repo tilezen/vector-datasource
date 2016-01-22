@@ -659,15 +659,15 @@ BEGIN
   );
 
   stations_and_stops := ARRAY(
-    SELECT DISTINCT n.id
-    FROM planet_osm_nodes n
+    SELECT DISTINCT p.osm_id AS id
+    FROM planet_osm_point p
     JOIN (SELECT DISTINCT unnest(r.parts[1:r.way_off]) AS node_id
           FROM planet_osm_rels r
 	  WHERE r.id = ANY(stop_area_ids)) r
-    ON r.node_id = n.id
+    ON r.node_id = p.osm_id
     WHERE (
-      mz_rel_get_tag(n.tags, 'railway') IN ('station', 'stop') OR
-      mz_rel_get_tag(n.tags, 'public_transport') IN ('stop', 'stop_position'))
+      p.railway IN ('station', 'stop') OR
+      p.public_transport IN ('stop', 'stop_position'))
     -- manually re-include the original station node, in case it's
     -- not part of a public_transport=stop_area relation.
     UNION SELECT station_node_id AS id
