@@ -1,5 +1,5 @@
 stations = [
-    (17, 38596, 49262, 'Penn Station', 895371274L, 1, [
+    (13, 2412, 3078, 'Penn Station', 895371274L, 1, [
         '2100-2297', # Acela Express
         '68-69', # Adirondack
         '50-51', # Cardinal
@@ -15,9 +15,9 @@ stations = [
         '91-92', # Silver Star
         '54-57', # Vermonter
     ]),
-    (17, 37639, 49960, 'Camden Station', 845910705L, 2, ['Camden Line']),
-    (17, 20958, 50667, 'Castro MUNI',    297863017L, 1, ['K', 'L', 'M', 'T']),
-    (17, 38163, 49642, '30th Street',     32272623L, 1, [
+    (13, 2352, 3122, 'Camden Station', 845910705L, 5, ['Camden Line']),
+    (13, 1309, 3166, 'Castro MUNI',    297863017L, 1, ['K', 'L', 'M', 'T']),
+    (13, 2385, 3102, '30th Street',     32272623L, 1, [
         '2100-2297', # Acela Express
         '79-80', # Carolinian
         '19-20', # Crescent
