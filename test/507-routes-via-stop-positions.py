@@ -1,5 +1,5 @@
 stations = [
-    (17, 38596, 49262, 'Penn Station', 895371274L, [
+    (17, 38596, 49262, 'Penn Station', 895371274L, 1, [
         '2100-2297', # Acela Express
         '68-69', # Adirondack
         '50-51', # Cardinal
@@ -15,9 +15,9 @@ stations = [
         '91-92', # Silver Star
         '54-57', # Vermonter
     ]),
-    (17, 37639, 49960, 'Camden Station', 845910705L, ['Camden Line']),
-    (17, 20958, 50667, 'Castro MUNI',    297863017L, ['K', 'L', 'M', 'T']),
-    (17, 38163, 49642, '30th Street',     32272623L, [
+    (17, 37639, 49960, 'Camden Station', 845910705L, 2, ['Camden Line']),
+    (17, 20958, 50667, 'Castro MUNI',    297863017L, 1, ['K', 'L', 'M', 'T']),
+    (17, 38163, 49642, '30th Street',     32272623L, 1, [
         '2100-2297', # Acela Express
         '79-80', # Carolinian
         '19-20', # Crescent
@@ -33,7 +33,7 @@ stations = [
     ])
 ]
 
-for z, x, y, name, osm_id, expected_routes in stations:
+for z, x, y, name, osm_id, expected_rank, expected_routes in stations:
     with features_in_tile_layer(z, x, y, 'pois') as pois:
         found = False
 
@@ -42,6 +42,12 @@ for z, x, y, name, osm_id, expected_routes in stations:
             if props['id'] == osm_id:
                 found = True
                 routes = props.get('transit_routes', list())
+                rank = props['kind_tile_rank']
+
+                if rank > expected_rank:
+                    raise Exception("Found %r, and was expecting a rank "
+                                    "of %r or less, but got %r."
+                                    % (name, expected_rank, rank))
 
                 for r in expected_routes:
                     count = 0
