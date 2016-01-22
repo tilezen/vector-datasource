@@ -6,6 +6,11 @@ migration_dir=${0%/*}
 # migration alters tables to add columns referenced in the functions, in
 # which case the function creation would fail.
 for sql in ${migration_dir}/*.sql; do
+    # break the loop if the file doesn't exist - this is generally the case
+    # if the glob matches nothing and we end up looking for a file which is
+    # called literally '*.sql'.
+    [ -f $sql ] || break
+
     if [[ $sql = *prefunction*.sql ]]; then
         psql -f "$sql" $*
     else
@@ -28,6 +33,11 @@ done
 # run updates in parallel. note that we don't bail here, as we want to
 # re-enable the triggers regardless of whether we failed or not.
 for sql in ${migration_dir}/*.sql; do
+    # break the loop if the file doesn't exist - this is generally the case
+    # if the glob matches nothing and we end up looking for a file which is
+    # called literally '*.sql'.
+    [ -f $sql ] || break
+
     if [[ $sql = *cleanup*.sql ]]; then
         echo "SKIPPING $sql - run this after the code migration."
     elif [[ $sql = *prefunction*.sql ]]; then
