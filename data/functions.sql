@@ -630,12 +630,14 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- nodes, ways and relations to calculate membership of various
 -- sets.
 CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
-  station_node_id BIGINT)
+  station_node_id BIGINT,
+  station_way_id BIGINT)
 RETURNS text[] AS $$
 DECLARE
-  -- IDs of "stop area" relations which contain the station nodes.
-  -- each individual line may have its own stop node, and this is
-  -- the relation which groups the stops together with the station.
+  -- IDs of "stop area" relations which contain the station nodes
+  -- or ways. each individual line may have its own stop node, and
+  -- this is the relation which groups the stops together with the
+  -- station.
   stop_area_ids      bigint[];
 
   -- IDs of nodes which are tagged as stations or stops and are
@@ -653,8 +655,9 @@ BEGIN
   stop_area_ids := ARRAY(
     SELECT DISTINCT r.id
     FROM planet_osm_rels r
-    WHERE r.parts && ARRAY[station_node_id]
-    AND r.parts[1:r.way_off] && ARRAY[station_node_id]
+    WHERE r.parts && ARRAY[station_node_id, station_way_id]
+    AND ((r.parts[1:r.way_off] && ARRAY[station_node_id]) OR
+         (r.parts[way_off+1:rel_off] && ARRAY[station_way_id]))
     AND mz_rel_get_tag(r.tags, 'public_transport') = 'stop_area'
   );
 
