@@ -30,7 +30,7 @@ FROM (
     -- so we only want to calculate it when we actually need the result.
     CASE
       WHEN railway='station' AND osm_id > 0
-        THEN mz_calculate_transit_routes(osm_id)
+        THEN mz_calculate_transit_routes(osm_id, NULL)
       ELSE NULL::text[]
     END AS transit_routes,
     tags
@@ -51,7 +51,13 @@ UNION ALL
     aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
-    NULL AS transit_routes,
+    -- note: the mz_calculate_transit_routes function is pretty expensive,
+    -- so we only want to calculate it when we actually need the result.
+    CASE
+      WHEN railway='station' AND osm_id > 0
+        THEN mz_calculate_transit_routes(NULL, osm_id)
+      ELSE NULL::text[]
+    END AS transit_routes,
     tags
 
   FROM

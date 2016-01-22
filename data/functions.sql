@@ -630,12 +630,14 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- nodes, ways and relations to calculate membership of various
 -- sets.
 CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
-  station_node_id BIGINT)
+  station_node_id BIGINT,
+  station_way_id BIGINT)
 RETURNS text[] AS $$
 DECLARE
-  -- IDs of "stop area" relations which contain the station nodes.
-  -- each individual line may have its own stop node, and this is
-  -- the relation which groups the stops together with the station.
+  -- IDs of "stop area" relations which contain the station nodes
+  -- or ways. each individual line may have its own stop node, and
+  -- this is the relation which groups the stops together with the
+  -- station.
   stop_area_ids      bigint[];
 
   -- IDs of nodes which are tagged as stations or stops and are
@@ -646,38 +648,43 @@ DECLARE
   -- IDs of ways which contain any of the stations and stops.
   -- these are included because sometimes the stop node isn't
   -- directly included in the route relation, only the way
-  -- representing the track itself.
-  lines              bigint[];
+  -- representing the track itself. this also contains the original
+  -- `station_way_id` in case it's directly included in any routes.
+  stations_and_lines bigint[];
 
 BEGIN
   stop_area_ids := ARRAY(
     SELECT DISTINCT r.id
     FROM planet_osm_rels r
-    WHERE r.parts && ARRAY[station_node_id]
-    AND r.parts[1:r.way_off] && ARRAY[station_node_id]
+    WHERE r.parts && ARRAY[station_node_id, station_way_id]
+    AND ((r.parts[1:r.way_off] && ARRAY[station_node_id]) OR
+         (r.parts[way_off+1:rel_off] && ARRAY[station_way_id]))
     AND mz_rel_get_tag(r.tags, 'public_transport') = 'stop_area'
   );
 
   stations_and_stops := ARRAY(
-    SELECT DISTINCT n.id
-    FROM planet_osm_nodes n
+    SELECT DISTINCT p.osm_id AS id
+    FROM planet_osm_point p
     JOIN (SELECT DISTINCT unnest(r.parts[1:r.way_off]) AS node_id
           FROM planet_osm_rels r
 	  WHERE r.id = ANY(stop_area_ids)) r
-    ON r.node_id = n.id
+    ON r.node_id = p.osm_id
     WHERE (
-      mz_rel_get_tag(n.tags, 'railway') IN ('station', 'stop') OR
-      mz_rel_get_tag(n.tags, 'public_transport') IN ('stop', 'stop_position'))
+      p.railway IN ('station', 'stop') OR
+      p.public_transport IN ('stop', 'stop_position'))
     -- manually re-include the original station node, in case it's
     -- not part of a public_transport=stop_area relation.
-    UNION SELECT station_node_id AS id
+    UNION SELECT station_node_id AS id WHERE station_node_id IS NOT NULL
   );
 
-  lines := ARRAY(
+  stations_and_lines := ARRAY(
     SELECT DISTINCT w.id
     FROM planet_osm_ways w
     WHERE w.nodes && stations_and_stops
     AND mz_rel_get_tag(w.tags, 'railway') IN ('subway', 'light_rail', 'tram', 'rail')
+    -- manually re-include the original station way, in case it's
+    -- not part of a public_transport=stop_area relation.
+    UNION SELECT station_way_id AS id WHERE station_way_id IS NOT NULL
   );
 
   RETURN ARRAY(
@@ -693,8 +700,8 @@ BEGIN
           parts && stations_and_stops AND
           parts[1:way_off] && stations_and_stops
         ) OR (
-          parts && lines AND
-          parts[way_off+1:rel_off] && lines
+          parts && stations_and_lines AND
+          parts[way_off+1:rel_off] && stations_and_lines
         )) AND
         mz_rel_get_tag(tags, 'type') = 'route' AND
         mz_rel_get_tag(tags, 'route') IN ('subway', 'light_rail', 'tram', 'train')
