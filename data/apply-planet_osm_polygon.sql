@@ -19,7 +19,7 @@ ALTER TABLE planet_osm_polygon ADD COLUMN mz_landuse_min_zoom REAL;
 
 UPDATE planet_osm_polygon SET
     mz_is_landuse = TRUE,
-    mz_landuse_min_zoom = mz_calculate_landuse_min_zoom("landuse", "leisure", "natural", "highway", "amenity", "aeroway", "tourism", "man_made", "power", "boundary", "tags", way_area)
+    mz_landuse_min_zoom = mz_calculate_landuse_min_zoom("landuse", "leisure", "natural", "highway", "amenity", "aeroway", "tourism", "man_made", "power", "boundary", way_area)
     WHERE mz_calculate_is_landuse("landuse", "leisure", "natural", "highway", "amenity", "aeroway", "tourism", "man_made", "power", "boundary", "tags") = TRUE;
 
 -- the coalesce here is just an optimisation, as the poi level
