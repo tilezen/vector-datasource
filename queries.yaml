@@ -231,12 +231,11 @@ post_process:
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: landuse
-      property_name: mz_is_building
-      drop_property: true
-      geom_types: [Polygon, MultiPolygon]
+      properties: [mz_is_building]
+      start_zoom: 13
   - fn: TileStache.Goodies.VecTiles.transform.normalize_and_merge_duplicate_stations
     params:
       source_layer: pois
