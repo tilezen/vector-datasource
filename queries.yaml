@@ -237,11 +237,12 @@ post_process:
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
       source_layer: landuse
-      properties: [mz_is_building]
       start_zoom: 13
+      where: >-
+        properties.get('mz_is_building') is True
   - fn: TileStache.Goodies.VecTiles.transform.normalize_and_merge_duplicate_stations
     params:
       source_layer: pois
