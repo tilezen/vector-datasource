@@ -417,7 +417,7 @@ RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
         waterway_val IN ('riverbank', 'dock')
-     OR natural_val IN ('water')
+     OR natural_val IN ('water', 'bay', 'strait', 'fjord')
      OR landuse_val IN ('basin', 'reservoir')
      OR amenity_val='swimming_pool'
      OR leisure_val='swimming_pool'
