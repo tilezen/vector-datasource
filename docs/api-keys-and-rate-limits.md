@@ -20,7 +20,3 @@ We pre-generate popular map areas and those tiles are highly available and serve
 If you experience slow tile loading in a map area, it's likely because you are a first requester using on-demand tile generation. Subsequent loads of the same map area should be much faster because the tile is now available in the cache, and when the source OSM data changes in that map area we will update the tiles automatically for you.
 
 If you have questions, contact [tiles@mapzen.com](mailto:tiles@mapzen.com). You can also set up your own instance of [Vector Tiles](https://github.com/mapzen/vector-datasource), which has access to the same data used in the Mapzen Vector Tiles service.
-
-## Security
-
-Mapzen Vector Tiles works over HTTPS, in addition to HTTP. You are strongly encouraged to use HTTPS for all requests, especially for queries involving potentially sensitive information.
