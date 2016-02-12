@@ -56,7 +56,7 @@ No permission is needed to use Natural Earth. Crediting the authors is
 unnecessary.
 ```
 
-More details can be found on the Natural Earth [Term of Use](http://www.naturalearthdata.com/about/terms-of-use/) page.
+More details can be found on the Natural Earth [Terms of Use](http://www.naturalearthdata.com/about/terms-of-use/) page.
 
 
 ### Who's On First
