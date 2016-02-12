@@ -11,9 +11,9 @@ To use the Mapzen Vector Tile service, you should first obtain a free developer 
 
 ## Rate limits
 
-Mapzen Vector Tiles is a free, shared service. Mapzen Vector Tiles does not currently enforce rate limits. 
+Mapzen Vector Tiles is a free, shared service and rate limits are not currently enforced. 
 
-If an individual user abuses the service (especially by "vacuuming" or "scraping" tiles not pre-generated), the overall system performance will be degraded for the on-demand portion of the service for all users.
+If an individual user abuses the service (especially by "vacuuming" or "scraping" tiles not pre-generated), the overall system performance will be degraded for the on-demand portion of the service for all users. Cached tiles will continue to be highly available for all users.
 
 We pre-generate popular map areas and those tiles are highly available and served directly via Fastly's edge cache. But map areas with low traffic are generated on-demand. 
 
