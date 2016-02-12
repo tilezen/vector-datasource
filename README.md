@@ -1,6 +1,6 @@
 #Mapzen Vector Tiles
 
-The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily.
+The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](http://www.openstreetmap.org) and other open data projects, updated daily.
 
 ### Quick links
 
@@ -23,7 +23,7 @@ With vector tiles you have the power to customize the content and visual appeara
 To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/developers). API keys come in the pattern: `vector-tiles-xxxxxxx`.
 
 * [API keys and rate limits](docs/api-keys-and-rate-limits.md) - Don't abuse the shared service!
-* [Attribution requirements](attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
+* [Attribution requirements](docs/attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
 
 #### Requestiong tiles
 
@@ -51,7 +51,7 @@ How to [draw the tile](docs/display-tiles.md) in a browser is up to the vector-f
 
 Vector tiles are served by clipping geometries to the tile bounding box, and then simplified to match the zoom level to avoid unnecessary complexity at lower zoom levels. These geometries and features are also further processed to facilitate styling. 
 
-When changes are made to OpenStreetMap or another map [data sources](data-sources.md), rather than waiting for an image tile to be redrawn, only the geometry coordinates and feature attributes for that particular building or road need to be updated in the vector tile. 
+When changes are made to OpenStreetMap or another map [data sources](docs/data-sources.md), rather than waiting for an image tile to be redrawn, only the geometry coordinates and feature attributes for that particular building or road need to be updated in the vector tile. 
 
 Depending on the URL syntax, Mapzen vector tiles can return all of the map data, or just individual [layers](docs/layers.md), or combinations of layers, including water, earth, landuse, roads, buildings and points of interest.
 
