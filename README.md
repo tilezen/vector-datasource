@@ -55,10 +55,13 @@ When changes are made to OpenStreetMap or another map [data sources](docs/data-s
 
 Depending on the URL syntax, Mapzen vector tiles can return all of the map data, or just individual [layers](docs/layers.md), or combinations of layers, including water, earth, landuse, roads, buildings and points of interest.
 
-
 ### Build from source
 
 If you are interested in setting up your own version of this service, follow these [installation instructions](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or you can also try this [Vagrant VM](https://github.com/mapzen/vagrant-tiles), which will additionally set up other tile components as well.
+
+### Tests
+
+There is a suite of [tests](TESTS.md) which can be run against a tile server to verify query results in well known tiles.
 
 ### Credits
 
