@@ -196,6 +196,7 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 
 **Earth properties:**
 
+* `id`: suspicious provenance
 * `land`: `base`
 
 ### Landuse
