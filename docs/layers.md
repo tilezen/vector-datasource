@@ -477,7 +477,7 @@ Also includes water `line` geometries for river and stream centerlines and "labe
 
 * `area`: for `polygon` features area
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
-* `tunnel`: for `line` features only
+* `is_tunnel`: for `line` features only (`yes` values only)
 * `boundary`: special Mapzen calculation to find the exterior edge of overlapping water polygons, set to `yes` when present on `line` geometry, or from Natural Earth line source.
 
 **Water kind values (point, polygon):**
