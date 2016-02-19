@@ -3,7 +3,7 @@
 ![image](http://)
 REUSE ALL IMAGE
 
-The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects (list of [sources](sources.md)), updated daily as a free & shared service.
+The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
 
 Data is organized into several layers, grouped into an `all` layer comprising the elements typically used for base map rendering. This is a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
