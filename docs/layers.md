@@ -358,29 +358,29 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 
 **Road properties (optional):**
 
-* `ascent`: for OpenStreetMap ski pistes
-* `colour`: for OpenStreetMap ski pistes
-* `descent`: for OpenStreetMap ski pistes
-* `description`: for OpenStreetMap features
-* `distance`: for OpenStreetMap ski pistes
-* `labelrank`: from Natural Earth
-* `level`:  from Natural Earth
-* `motor_vehicle`: for OpenStreetMap features
-* `namealt`: from Natural Earth
-* `namealtt`: from Natural Earth
-* `operator`: for OpenStreetMap features
-* `piste_abandoned`: For OpenStreetMap ski pistes
-* `piste_difficulty`: For OpenStreetMap ski pistes
-* `piste_grooming`: For OpenStreetMap ski pistes
-* `piste_name`: For OpenStreetMap ski pistes
-* `roundtrip`: for OpenStreetMap features 
-* `route_name`: for OpenStreetMap features
-* `scalerank`: from Natural Earth
-* `ski`: For piste features coming from OpenStreetMap
-* `snowshoe`: For piste features coming from OpenStreetMap
-* `sport`: for OpenStreetMap features
-* `state`: for OpenStreetMap features
-* `symbol`: For piste features coming from OpenStreetMap
+* `ascent`: ski pistes from OpenStreetMap
+* `colour`: ski pistes from OpenStreetMap
+* `descent`: ski pistes from OpenStreetMap
+* `description`: OpenStreetMap features
+* `distance`: ski pistes from OpenStreetMap
+* `labelrank`: Natural Earth features
+* `level`: Natural Earth features
+* `motor_vehicle`: OpenStreetMap features
+* `namealt`: Natural Earth features
+* `namealtt`: Natural Earth features
+* `operator`: OpenStreetMap features
+* `piste_abandoned`: ski pistes from OpenStreetMap
+* `piste_difficulty`: ski pistes from OpenStreetMap
+* `piste_grooming`: ski pistes from OpenStreetMap
+* `piste_name`: ski pistes from OpenStreetMap
+* `roundtrip`: OpenStreetMap features 
+* `route_name`: OpenStreetMap features
+* `scalerank`: Natural Earth features
+* `ski`: ski pistes from OpenStreetMap
+* `snowshoe`: ski pistes from OpenStreetMap
+* `sport`: OpenStreetMap features
+* `state`: OpenStreetMap features
+* `symbol`: ski pistes from OpenStreetMap
 
 #### Transportation kind values and zoom ranges
 
