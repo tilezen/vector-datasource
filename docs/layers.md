@@ -19,7 +19,7 @@ Mapzen primarily sources from OpenStreetMap, but includes a variety of other ope
 
 Mapzen vector tile features include all source names in the default `name` property, and variants in the `name:*` properties. When different than `name`, we also include `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization. Tangram supports all scripts.
 
-For features in the Boundaries layer, we support two additional variants `left:name:*'` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
+For features in the Boundaries layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
 
 #### Geometry types
 
