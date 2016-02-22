@@ -124,14 +124,14 @@ WHERE
     OR barrier='retaining_wall'
     OR man_made='snow_fence'
 {% endif %}
-{% if zoom >= 17 %}
+{% if zoom >= 16 %}
     OR barrier='fence'
 {% endif %}
   )
 
 {% endif %}
 
-{% if zoom >= 17 %}
+{% if zoom >= 16 %}
 -- also add boundaries from polygon which have boundary=fence.
 
 UNION ALL
