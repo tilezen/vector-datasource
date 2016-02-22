@@ -219,7 +219,7 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
     params:
       source_layer: buildings
-      start_zoom: 17
+      start_zoom: 16
   - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
     params:
       source_layer: buildings
