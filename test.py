@@ -115,27 +115,64 @@ def features_in_tile_layer(z, x, y, layer):
         raise Exception, "Tile %r: %s" % (url, e.message), sys.exc_info()[2]
 
 
+def count_matching(features, properties):
+    """
+    Returns a tuple containing the total number of features in the argument
+    `features` and the number of features matching the properties.
+    """
+
+    num_features = len(features)
+    num_matching = 0
+
+    for f in features:
+        if match_properties(f['properties'], properties):
+            num_matching += 1
+
+    return (num_features, num_matching)
+
+
 def assert_has_feature(z, x, y, layer, properties):
     with features_in_tile_layer(z, x, y, layer) as features:
-        if len(features) == 0:
+        num_features, num_matching = count_matching(
+            features, properties)
+
+        if num_features == 0:
             raise Exception, "Did not find feature including properties " \
                 "%r (because layer %r was empty)" % (properties, layer)
 
-        for f in features:
-            if match_properties(f['properties'], properties):
-                return
+        if num_matching == 0:
+            raise Exception, "Did not find feature including properties %r" \
+                % properties
 
-        raise Exception, "Did not find feature including properties %r" \
-            % properties
+
+def assert_at_least_n_features(z, x, y, layer, properties, n):
+    """
+    Downloads a tile and checks that it contains at least `n` features which
+    match the given `properties`.
+    """
+    with features_in_tile_layer(z, x, y, layer) as features:
+        num_features, num_matching = count_matching(
+            features, properties)
+
+        if num_features < n:
+            raise Exception, "Found fewer than %d features including " \
+                "properties %r (because layer %r had %d features)" % \
+                (n, properties, layer, num_features)
+
+        if num_matching < n:
+            raise Exception, "Did not find %d features including properties " \
+                "%r, found only %d" % (n, properties, num_matching)
 
 
 def assert_no_matching_feature(z, x, y, layer, properties):
     with features_in_tile_layer(z, x, y, layer) as features:
-        for f in features:
-            if match_properties(f['properties'], properties):
-                raise Exception, "Found feature matching properties " \
-                    "%r in layer %r, but was supposed to find none." \
-                    % (properties, layer)
+        num_features, num_matching = count_matching(
+            features, properties)
+
+        if num_matching > 0:
+            raise Exception, "Found feature matching properties " \
+                "%r in layer %r, but was supposed to find none." \
+                % (properties, layer)
 
 
 def run_test(f, log, idx, num_tests):
