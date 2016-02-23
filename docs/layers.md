@@ -153,18 +153,18 @@ TIP: While not provided in the data, your stylesheet will need to set an effecti
 **Building properties (common optional):**
 
 * `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
-* `addr_street`:  value from `addr:street`
+* `addr_street`: value from OpenStreetMap's `addr:street` tag
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 * `height`: in meters, where available
 * `layer`:
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
-* `min_height`: value from `min_height` in meters, where available, estimated from `building:min_levels` if present
+* `min_height`: value from `min_height` in meters, where available, otherwise estimated from `building:min_levels` if present
 * `roof_color`: from `roof:color` tag
 * `roof_height`: from `roof:height` tag
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
-* `volume`: calculated on feature's `area` and `height`, when height or `min_height` is available.
+* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available.
 
 **Building kind values:**
 
@@ -178,8 +178,8 @@ TIP: While not provided in the data, your stylesheet will need to set an effecti
 * `id`: osm_id
 * `source`: `openstreetmap.org`
 * `kind`: `address`
-* `addr_housenumber`: "addr:housenumber"
-* `addr_street`: "addr:street",
+* `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
+* `addr_street`: value from OpenStreetMap's `addr:street` tag
 
 ### Earth
 
