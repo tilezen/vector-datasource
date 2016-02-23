@@ -25,8 +25,8 @@ UPDATE planet_osm_polygon SET
 -- the coalesce here is just an optimisation, as the poi level
 -- will always be NULL if all of the arguments are NULL.
 UPDATE planet_osm_polygon SET
-    mz_poi_min_zoom = mz_calculate_poi_level("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", "tags", way_area)
-    WHERE coalesce("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", "tags"->'rental', "tags"->'zoo', "tags"->'attraction') IS NOT NULL;
+    mz_poi_min_zoom = mz_calculate_poi_level("aerialway", "aeroway", "amenity", "barrier", "craft", "emergency", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", "tags", way_area)
+    WHERE coalesce("aerialway", "aeroway", "amenity", "barrier", "craft", "emergency", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", "tags"->'rental', "tags"->'zoo', "tags"->'attraction', tags->'healthcare') IS NOT NULL;
 
 CREATE INDEX planet_osm_polygon_is_landuse_col_index ON planet_osm_polygon(mz_is_landuse) WHERE mz_is_landuse=TRUE;
 

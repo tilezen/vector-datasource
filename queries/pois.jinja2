@@ -13,8 +13,9 @@ SELECT
     tags->'exit_to' AS exit_to,
     aeroway,
     %#tags AS tags,
-    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "highway", "historic",
-             "leisure", "lock", "man_made", "natural", "office", "power", "railway",
+    COALESCE("aerialway", "aeroway", "amenity", "barrier", "craft", "emergency",
+             "tags"->'healthcare', "highway", "historic", "leisure", "lock",
+             "man_made", "natural", "office", "power", "railway",
              "tags"->'rental', "shop", "tourism", "waterway") AS kind
 
 FROM (
@@ -23,7 +24,7 @@ FROM (
     name, way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
     cuisine, religion, sport, ref,
-    aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    aerialway, aeroway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes function is pretty expensive,
@@ -48,7 +49,7 @@ UNION ALL
     name, way, way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
     cuisine, religion, sport, ref,
-    aerialway, aeroway, amenity, barrier, craft, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    aerialway, aeroway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes function is pretty expensive,
