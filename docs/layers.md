@@ -156,7 +156,7 @@ TIP: While not provided in the data, your stylesheet will need to set an effecti
 * `addr_street`: value from OpenStreetMap's `addr:street` tag
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 * `height`: in meters, where available
-* `layer`:
+* `layer`
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
 * `min_height`: value from `min_height` in meters, where available, otherwise estimated from `building:min_levels` if present
 * `roof_color`: from `roof:color` tag
