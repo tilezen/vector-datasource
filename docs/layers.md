@@ -416,11 +416,11 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 ![image](images/mapzen-vector-tile-docs-transit.png)
 
 * Layer name: `transit`
-* Geometry types: `line`
+* Geometry types: `line`, `polygon`
 
-Transit features from OpenStreetMap start appearing at zoom 6+ for basic rail of `train`, and `railway`. Then `subway`,`light_rail`, and `tram` are added at zoom 10+. Platforms are added zoom 14+.
+Transit line features from OpenStreetMap start appearing at zoom 6+ for basic rail of `train`, and `railway`. Then `subway`,`light_rail`, and `tram` are added at zoom 10+. Platform polygons are added zoom 14+.
 
-_TIP: If you're looking for transit station points and station_entrance features, look in the POIs layer instead._
+_TIP: If you're looking for transit `station` and `station_entrance` features, look in the `pois` layer instead._
 
 **Transit properties (common):**
 
