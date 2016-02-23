@@ -61,7 +61,7 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 #### Changelog
 
-The current version of Mapzen vector tiles is v0.7. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interesting in your feedback at hello@mapzen.com!
+The current version of Mapzen vector tiles is v0.7. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
 If you're signed up for a Mapzen Vector Tiles API key you should receive an email notifying you of upcoming changes before they are rolled out to production.
 
@@ -501,7 +501,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
     * Some values are label position only (point, not polygon): `bay`, `strait`, and `fjord`.
     * `Alkaline Lake` and `Playa` only exist in Natural Earth. Zooming in, your feature may disappear. Beware the desert around Great Salt Lake in Utah!
     * `ocean` and `Ocean` are equivelant, **both** should be used in filters.
-    * `reservoir` and `Reservoir` are equivelant, **both** should be used in filters.
+    * `reservoir` and `Reservoir` are equivalent, **both** should be used in filters.
     * Some of the minor kinds (like `bay` and `fjord`) are used for label_placement only, as their area would duplicate water polygons already present from openstreetmapdata.com.
     * The (capitalized) Natural Earth values don't seem to be coming thru, but should be, instead they're being grouped into `lake`, `playa`, and `ocean`.
 
