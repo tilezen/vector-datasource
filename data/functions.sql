@@ -117,6 +117,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     amenity_val text,
     barrier_val text,
     craft_val text,
+    emergency_val text,
     highway_val text,
     historic_val text,
     leisure_val text,
@@ -221,6 +222,15 @@ BEGIN
       WHEN tourism_val        = 'trail_riding_station' THEN 17
       WHEN tourism_val        = 'aquarium'         THEN GREATEST(14, LEAST(zoom + 3.09, 17))
       WHEN tourism_val        = 'winery'           THEN GREATEST(14, LEAST(zoom + 2.85, 17))
+      WHEN amenity_val        = 'social_facility'  THEN 17
+      WHEN amenity_val        = 'clinic'           THEN 17
+      WHEN amenity_val        = 'doctors'          THEN 17
+      WHEN amenity_val        = 'dentist'          THEN 17
+      WHEN tags->'healthcare' = 'midwife'          THEN 17
+      WHEN amenity_val        = 'kindergarten'     THEN 17
+      WHEN amenity_val        = 'childcare'        THEN 17
+      WHEN emergency_val      = 'phone'            THEN 18
+      WHEN amenity_val        = 'toilets'          THEN 18
       WHEN (barrier_val IN ('gate')
             OR craft_val IN ('sawmill')
             OR highway_val IN ('gate', 'mini_roundabout')
