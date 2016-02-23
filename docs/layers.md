@@ -1,7 +1,6 @@
 # Layers in Mapzen's vector tiles
 
-![image](http://)
-REUSE ALL IMAGE
+![image](images/mapzen-vector-tile-docs-all-layers.png)
 
 The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
 
@@ -71,24 +70,24 @@ Read the full details in the project [CHANGELOG](../CHANGELOG.md).
 
 ## Layer reference
 
-### All
+Mapzen vector tiles include 9 layers:   
 
-![image](http://)
+* `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
-* Layer name: `all`
-* Geometry types: None. Parents `layers`.
+These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
 
-A special grouping "layer" that includes all the following layers. Use this layer for all your general purpose mapping needs.
+### Boundaries & Barriers
 
-### Boundaries
-
-![image](http://)
-SIDE A / SIDE B
+![image](images/mapzen-vector-tile-docs-boundaries.png)
 
 * Layer name: `boundaries`
 * Geometry types: `line`
 
 Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Earth boundaries (zoom < 8), and some other `barrier` like goodies at high zooms.
+
+(below) Fence lines around the petting zoo in San Francisco are included in the `boundaries` layer.
+
+![image](images/mapzen-vector-tile-docs-barriers.png)
 
 **Gotchas:** Boundary `kind` values are not yet normalized between OpenStreetMap and Natural Earth. See Boundary kind values (line) gotchas section below for more detail.
 
@@ -114,7 +113,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `scalerank`: from Natural Earth
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
-**Boundary kind values (line):**
+**Boundary kind values:**
 
 * `Admin-0 country`, `Admin-1 boundary`, `Admin-1 region boundary`, `Admin-1 statistical boundary`, `Admin-1 statistical meta bounds`, `city_wall`, `country`, `county`, `fence`, `municipality`, `retaining_wall`, `snow_fence`, `state`
 
@@ -124,15 +123,13 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
     * `Admin-1 boundary` and `state` are equivelant, **both** should be used in filters.
     * Don't rely on `Admin-1 statistical boundary`, `Admin-1 statistical meta bounds`, those will probably be removed in future tile versions.
 
-**Boundary type values (line):**
+**Boundary type values:**
 
 * `Country`, `Dependency`, `Disputed`, `Indeterminate`, `Lease`, `Sovereign country`, `Metropolitan county`, `Modern administrative boundary`
 
-### Buildings and addresses
+### Buildings and Addresses
 
-![image](http://)
-SIDE A buildings / SIDE B labels
-
+![image](images/mapzen-vector-tile-docs-buildings.png)
 
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
@@ -141,7 +138,7 @@ Polygons from OpenStreetMap representing building footprint, building label_plac
 
 Individual `building:part` geometries following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels.
 
-![image](http://)
+Mapzen calculates the `landuse_kind` value by intercutting buildings with the landuse layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match the landuse).
 
 **Building properties (common):**
 
@@ -149,6 +146,7 @@ Individual `building:part` geometries following the [Simple 3D Buildings](http:/
 * `id`: from OpenStreetMap
 * `kind`: see below
 * `source`: `openstreetmap.org`
+* `landuse_kind`: See description above, values match values in the landuse layer.
 
 TIP: While not provided in the data, your stylesheet will need to set an effective  `sort_key` to indicating correct z-order for GL rendering that stacks between landuse and road layers.
 
@@ -156,7 +154,7 @@ TIP: While not provided in the data, your stylesheet will need to set an effecti
 
 * `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
 * `addr_street`:  value from `addr:street`
-* `area`: in square meters
+* `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 * `height`: in meters, where available
 * `layer`:
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
@@ -185,7 +183,7 @@ TIP: While not provided in the data, your stylesheet will need to set an effecti
 
 ### Earth
 
-![image](http://)
+![image](images/mapzen-vector-tile-docs-earth.png)
 
 * Layer name: `earth`
 * Geometry types: `polygon`
@@ -201,8 +199,7 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 
 ### Landuse
 
-![image](http://)
-SIDE A / SIDE B
+![image](images/mapzen-vector-tile-docs-landuse.png)
 
 * Layer name: `landuse`
 * Geometry types: `point` and `polygon`
@@ -219,7 +216,7 @@ _TIP: Some "landuse" features only exist as point features in OpenStreetMap. Fin
 * `id`: osm_id
 * `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban area` and `park or protected land` for Natural Earth areas.
 * `sort_key`: numeric value indicating correct z-order for GL rendering
-* `area`: polygon area in square meters
+* `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 
 **Landuse properties (common optional):**
 
@@ -232,7 +229,7 @@ _TIP: Some "landuse" features only exist as point features in OpenStreetMap. Fin
 
 ### Landuse labels
 
-![image](http://)
+![image](images/mapzen-vector-tile-docs-landuse.png)
 
 * Layer name: `landuse_labels`
 * Geometry types: `point`
@@ -243,8 +240,7 @@ This layer is included to support legacy uses, but is not recommended for new pr
 
 ### Places
 
-![image](http://)
-SIDE A (country, state, city) / SIDE B (neighbourhoods)
+![image](images/mapzen-vector-tile-docs-places.png)
 
 * Layer name: `places`
 * Geometry types: `point`
@@ -282,7 +278,7 @@ Starting at zoom 12 `neighbourhood` and `macrohood` features are added from Who'
 
 ### Points of interest
 
-![image](http://)
+![image](images/mapzen-vector-tile-docs-pois.png)
 
 * Layer name: `pois`
 * Geometry types: `point`
@@ -316,25 +312,33 @@ Implied but not stated: `source`: `openstreetmap.org`.
 
 **POI kind values:**
 
-* `accountant`, `administrative`, `advertising_agency`, `aerodrome`, `airport`, `alcohol`, `alpine_hut`, `amusement_ride`, `animal`, `aquarium`, `archaeological_site`, `architect`, `artwork`, `association`, `atm`, `attraction`, `aviary`, `bakery`, `bank`, `bar`, `beach`, `bed_and_breakfast`, `bench`, `bicycle`, `bicycle_parking`, `bicycle_rental`, `biergarten`, `block`, `bollard`, `books`, `brewery`, `bus_station`, `bus_stop`, `butcher`, `cafe`, `camp_site`, `car`, `car_repair`, `car_sharing`, `caravan_site`, `carousel`, `carpenter`, `cave_entrance`, `chalet`, `cinema`, `clothes`, `college`, `community_centre`, `company`, `computer`, `confectionery`, `consulting`, `convenience`, `courthouse`, `department_store`, `doityourself`, `dressmaker`, `drinking_water`, `dry_cleaning`, `educational_institution`, `electrician`, `electronics`, `embassy`, `emergency_phone`, `employment_agency`, `enclosure`, `estate_agent`, `fashion`, `fast_food`, `ferry_terminal`, `financial`, `fire_station`, `fitness_centre`, `fitness_station`, `florist`, `ford`, `foundation`, `fuel`, `gardener`, `gate`, `generator`, `gift`, `government`, `greengrocer`, `guest_house`, `gym`, `hairdresser`, `halt`, `hanami`, `handicraft`, `helipad`, `hospital`, `hostel`, `hotel`, `hvac`, `ice_cream`, `information`, `insurance`, `it`, `jewelry`, `landmark`, `laundry`, `lawyer`, `level_crossing`, `library`, `lift_gate`, `lighthouse`, `lock`, `mall`, `marina`, `mast`, `maze`, `memorial`, `metal_construction`, `mini_roundabout`, `mobile_phone`, `motel`, `motorway_junction`, `museum`, `music`, `newspaper`, `ngo`, `notary`, `nursing_home`, `optician`, `painter`, `parking`, `peak`, `pet`, `petting_zoo`, `pharmacy`, `photographer`, `photographic_laboratory`, `physician`, `picnic_site`, `place_of_worship`, `playground`, `plumber`, `police`, `political_party`, `post_box`, `post_office`, `pottery`, `power_wind`, `prison`, `pub`, `recycling`, `religion`, `research`, `resort`, `restaurant`, `roller_coaster`, `sawmill`, `school`, `shelter`, `shoemaker`, `ski`, `ski_rental`, `ski_school`, `slipway`, `snow_cannon`, `sports`, `sports_centre`, `spring`, `stadium`, `station`, `stonemason`, `subway_entrance`, `summer_toboggan`, `supermarket`, `tailor`, `tax_advisor`, `telecommunication`, `telephone`, `theatre`, `theme_park`, `therapist`, `toilets`, `townhall`, `toys`, `traffic_signals`, `trail_riding_station`, `tram_stop`, `travel_agent`, `tree`, `university`, `veterinary`, `viewpoint`, `volcano`, `waste_basket`, `water_slide`, `water_tower`, `wilderness_hut`, `wildlife_park`, `windmill`, `wine`, `winery`, `yes`, `zoo`
+* `accountant`, `administrative`, `advertising_agency`, `aerodrome`, `airport`, `alcohol`, `alpine_hut`, `amusement_ride`, `animal`, `aquarium`, `archaeological_site`, `architect`, `artwork`, `association`, `atm`, `attraction`, `aviary`, `bakery`, `bank`, `bar`, `beach`, `bed_and_breakfast`, `bench`, `bicycle`, `bicycle_parking`, `bicycle_rental`, `biergarten`, `block`, `bollard`, `books`, `brewery`, `bus_station`, `bus_stop`, `butcher`, `cafe`, `camp_site`, `car`, `car_repair`, `car_sharing`, `caravan_site`, `carousel`, `carpenter`, `cave_entrance`, `chalet`, `cinema`, `clothes`, `college`, `community_centre`, `company`, `computer`, `confectionery`, `consulting`, `convenience`, `courthouse`, `department_store`, `doityourself`, `dressmaker`, `drinking_water`, `dry_cleaning`, `educational_institution`, `electrician`, `electronics`, `embassy`, `emergency_phone`, `employment_agency`, `enclosure`, `estate_agent`, `fashion`, `fast_food`, `ferry_terminal`, `financial`, `fire_station`, `fitness`, `fitness_station`, `florist`, `ford`, `foundation`, `fuel`, `gardener`, `gate`, `generator`, `gift`, `government`, `greengrocer`, `guest_house`, `hairdresser`, `halt`, `hanami`, `handicraft`, `helipad`, `hospital`, `hostel`, `hotel`, `hvac`, `ice_cream`, `information`, `insurance`, `it`, `jewelry`, `landmark`, `laundry`, `lawyer`, `level_crossing`, `library`, `lift_gate`, `lighthouse`, `lock`, `mall`, `marina`, `mast`, `maze`, `memorial`, `metal_construction`, `mini_roundabout`, `mobile_phone`, `motel`, `motorway_junction`, `museum`, `music`, `newspaper`, `ngo`, `notary`, `nursing_home`, `optician`, `painter`, `parking`, `peak`, `pet`, `petting_zoo`, `pharmacy`, `photographer`, `photographic_laboratory`, `physician`, `picnic_site`, `place_of_worship`, `playground`, `plumber`, `police`, `political_party`, `post_box`, `post_office`, `pottery`, `power_wind`, `prison`, `pub`, `recycling`, `religion`, `research`, `resort`, `restaurant`, `roller_coaster`, `sawmill`, `school`, `shelter`, `shoemaker`, `ski`, `ski_rental`, `ski_school`, `slipway`, `snow_cannon`, `sports`, `sports_centre`, `spring`, `stadium`, `station`, `stonemason`, `subway_entrance`, `summer_toboggan`, `supermarket`, `tailor`, `tax_advisor`, `telecommunication`, `telephone`, `theatre`, `theme_park`, `therapist`, `toilets`, `townhall`, `toys`, `traffic_signals`, `trail_riding_station`, `tram_stop`, `travel_agent`, `tree`, `university`, `veterinary`, `viewpoint`, `volcano`, `waste_basket`, `water_slide`, `water_tower`, `wilderness_hut`, `wildlife_park`, `windmill`, `wine`, `winery`, `yes`, `zoo`
 
 
 ### Roads (transportation)
 
-![image](http://)
-MATRIX IMAGE?
+![image](images/mapzen-vector-tile-docs-roads.png)
 
 * Layer name: `roads`
 * Geometry types: `line`
 
 More than just roads, this OpenStreetMap and Natural Earth based transportation layer includes highways, major roads, minor roads, paths, railways, ferries, and ski pistes matching the selection found in High Road. Sort them with `sort_key` to correctly represent layered overpasses, bridges and tunnels. Natural Earth roads at zooms < 8 and OpenStreetMap at zooms 8+. See zoom ranges section below for more information per kind.
 
+Road names are **abbreviated** so directionals like `North` is replaced with `N`, `Northeast` is replaced with `NE`, and common street suffixes like `Avenue` to `Ave.` and `Street` to `St.`. Full details in the [StreetNames](https://github.com/nvkelso/map-label-style-manual/blob/master/tools/street_names/StreetNames/__init__.py) library.
+
+Mapzen calculates the `landuse_kind` value by intercutting roads with the landuse layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened. 
+
+To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
+
 **Road properties (common):**
 
-* `name`
+* `name`: From OpenStreetMap, but transformed to abbreviated names as detailed above.
+* `id`: From OpenStreetMap or Natural Earth
 * `source`: `openstreetmap` or `naturalearthdata.com`
 * `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `exit` (eg: "motorway_junction"), `racetrack`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
 * `sort_key`: numeric value indicating correct z-order for GL rendering
+* `landuse_kind`: See description above, values match values in the landuse layer.
+* `ref`: Used for road shields. Related, see `symbol` for pistes.
 
 **Road properties (common optional):**
 
@@ -342,7 +346,6 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 * `aeroway`: See kind list below.
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
-* `id`: From OpenStreetMap or Natural Earth
 * `is_bridge`: `yes` or `no`
 * `is_link`: `yes` or `no`
 * `is_tunnel`: `yes` or `no`
@@ -352,7 +355,6 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 * `oneway`: `yes` or `no`
 * `piste_type`: See kind list below.
 * `railway`: the original OSM railway tag value
-* `ref`: Used for road shields. Related, see `symbol` for pistes.
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
 
@@ -369,7 +371,6 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 * `namealt`: Natural Earth features
 * `namealtt`: Natural Earth features
 * `operator`: OpenStreetMap features
-* `piste_abandoned`: ski pistes from OpenStreetMap
 * `piste_difficulty`: ski pistes from OpenStreetMap
 * `piste_grooming`: ski pistes from OpenStreetMap
 * `piste_name`: ski pistes from OpenStreetMap
@@ -392,17 +393,17 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 
 **Airport** aeroways with `kind` values of `runway` show up at zoom 9, with `taxiway` at zoom 11+.
 
-**Aerialways** with `kind` values of `gondola`, `cable_car` show up zoom 12+. `chair_lift` is added at zoom 13+, and by zoom 15 all are visible adding `drag_lift`, `platter`, `t-bar`, `goods`, `magic_carpet`, `rope_tow`, `yes`, `zip_line`, `j-bar`, `unknown`, `mixed_lift`, `canopy`, `cableway`.
+**Aerialways** with `kind` values of `gondola`, `cable_car` show up zoom 12+. `chair_lift` is added at zoom 13+, and by zoom 15 all are visible adding `drag_lift`, `platter`, `t-bar`, `goods`, `magic_carpet`, `rope_tow`, `yes`, `zip_line`, `j-bar`, `unknown`, `mixed_lift`, and `canopy`.
 
 **Leisure** lines for various recreation tracks start showing up at zoom 14  with `kind` values of sport_values of `athletics`, `running`, `horse_racing`, `bmx`, `disc_golf`, `cycling`, `ski_jumping`, `motor`, `karting`,`obstacle_course`, `equestrian`, `alpine_slide`, `soap_box_derby`,`mud_truck_racing`, `skiing`, `drag_racing`, `archery`.
 
-**Piste** type with `kind` values of `piste_type` including `nordic`, `downhill`, `sleigh`, `skitour`, `hike`, `sled`, `yes`, `snow_park`, `playground`, `ski_jump`.
+**Piste** type with `kind` values of `piste_type` including `nordic`, `downhill`, `sleigh`, `skitour`, `hike`, `sled`, `yes`, `snow_park`, `playground`, `ski_jump`. Abandoned pistes are not included in tiles.
 
 **Piers** start showing up at zoom 13+ with `kind` values of `pier`.
 
 ### Transit
 
-![image](http://)
+![image](images/mapzen-vector-tile-docs-transit.png)
 
 * Layer name: `transit`
 * Geometry types: `line`
@@ -457,8 +458,7 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 
 ### Water
 
-![image](http://)
-SIDE A / SIDE B
+![image](images/mapzen-vector-tile-docs-water.png)
 
 * Layer name: `water`
 * Geometry types: `point`, `line`, and `polygon`
@@ -467,18 +467,20 @@ Water `polygons` representing oceans, riverbanks and lakes. Derived from a combi
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11, adding `dam` (zoom 13+), and `ditch`, `drain` (zoom 16+).
 
+Mapzen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=yes`. Set to `yes` when present on `line` geometry, or from Natural Earth line source.
+
 **Water properties (common):**
 
 * `name`: including localized name variants
 * `kind`: detailed below, per geometry type
 * `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
+* `boundary`: `yes`, on lines only. See description above.
 
 **Water properties (common optional):**
 
-* `area`: for `polygon` features area
+* `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
 * `is_tunnel`: for `line` features only (`yes` values only)
-* `boundary`: special Mapzen calculation to find the exterior edge of overlapping water polygons, set to `yes` when present on `line` geometry, or from Natural Earth line source.
 
 **Water kind values (point, polygon):**
 
@@ -486,6 +488,7 @@ Also includes water `line` geometries for river and stream centerlines and "labe
 
     Gotchas:
 
+    * Some values are label position only (point, not polygon): `bay`, `strait`, and `fjord`.
     * `Alkaline Lake` and `Playa` only exist in Natural Earth. Zooming in, your feature may disappear. Beware the desert around Great Salt Lake in Utah!
     * `ocean` and `Ocean` are equivelant, **both** should be used in filters.
     * `reservoir` and `Reservoir` are equivelant, **both** should be used in filters.
