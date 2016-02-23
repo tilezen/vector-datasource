@@ -4,7 +4,7 @@
 
 The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
 
-Data is organized into several layers, grouped into an `all` layer comprising the elements typically used for base map rendering. This is a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
+Data is organized into several thematic layers, each of which is named, for example; `buildings`, `pois`, and `water`. A selection of these layers are typically used for base map rendering, and are provided under the short-hand name `all`. Each layer includes a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
 Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and Hoverboard.
 
@@ -16,13 +16,13 @@ Mapzen primarily sources from OpenStreetMap, but includes a variety of other ope
 
 #### Name localization
 
-Mapzen vector tile features include all source names in the default `name` property, and variants in the `name:*` properties. When different than `name`, we also include `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization. Tangram supports all scripts.
+Mapzen vector tile features include the default `name` property. We include all language variants of the `name:*`, `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization (when different than `name`). Tangram supports all language scripts.
 
-For features in the Boundaries layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
+For features in the `boundaries` layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
 
 #### Geometry types
 
-Individual Mapzen vector tile layers can include mixed geometry types. This is common in the landuse, water, and building layers.
+Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
 A tile geometry can be one of 3 types:
 
@@ -61,11 +61,11 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 #### Changelog
 
-The current version of Mapzen vector tiles is v0.7. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
+The current version of Mapzen vector tiles is **v0.7.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
-If you're signed up for a Mapzen Vector Tiles API key you should receive an email notifying you of upcoming changes before they are rolled out to production.
+If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
 
-Read the full details in the project [CHANGELOG](../CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/v0.7.0/CHANGELOG.md).
 
 
 ## Layer reference
@@ -75,6 +75,8 @@ Mapzen vector tiles include 9 layers:
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
 These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
+
+We include one deprecated layer, `landuse-labels`, for backwards compatibility. Please don't build new maps against this layer, it will be removed in the v1.0 version of tiles.
 
 ### Boundaries & Barriers
 
@@ -138,7 +140,7 @@ Polygons from OpenStreetMap representing building footprint, building label_plac
 
 Individual `building:part` geometries following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels.
 
-Mapzen calculates the `landuse_kind` value by intercutting buildings with the landuse layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match the landuse).
+Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
 **Building properties (common):**
 
@@ -146,9 +148,9 @@ Mapzen calculates the `landuse_kind` value by intercutting buildings with the la
 * `id`: from OpenStreetMap
 * `kind`: see below
 * `source`: `openstreetmap.org`
-* `landuse_kind`: See description above, values match values in the landuse layer.
+* `landuse_kind`: See description above, values match values in the `landuse` layer.
 
-TIP: While not provided in the data, your stylesheet will need to set an effective  `sort_key` to indicating correct z-order for GL rendering that stacks between landuse and road layers.
+TIP: While not provided in the data, your stylesheet will need to set an effective  `sort_key` to indicating correct z-order for GL rendering that stacks between `landuse` and `roads` layers.
 
 **Building properties (common optional):**
 
@@ -208,7 +210,7 @@ Landuse polygons from OpenStreetMap representing parks, forests, residential, co
 
 Zooms 4 and 5, 6 and 7 includes a mix of Natural Earth `urban area` (zooms 0-9 only) features and OpenStreetMap data for `national_park`, `protected_area`, and `nature_reserve` only. After that more more feature kinds are included, and they have a richer set of properties including `sport`, `religion`, `surface`, `attraction`, `zoo`, and `natural`. Feature selection is filtered per zoom until zoom 15.
 
-_TIP: Some "landuse" features only exist as point features in OpenStreetMap. Find those in the POIs layer._
+_TIP: Some `landuse` features only exist as point features in OpenStreetMap. Find those in the `pois` layer._
 
 **Landuse properties (common):**
 
@@ -252,7 +254,7 @@ Places with `kind` values of `continent`, `ocean`, `country`, with others added 
 Starting at zoom 12 `neighbourhood` and `macrohood` features are added from Who's On First. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
 
 
-**Gotchas:** There are a few water label like features (`ocean`, `sea`) included in this layer.
+**Gotchas:** There are a few water label features (`ocean`, `sea`) included in this layer, they will be moved to the `water` layer in a future release.
 
 **Place properties (common):**
 
@@ -283,9 +285,9 @@ Starting at zoom 12 `neighbourhood` and `macrohood` features are added from Who'
 * Layer name: `pois`
 * Geometry types: `point`
 
-Over 200 POI kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 17 almost all local features are added, like `amusement_ride`, `atm`, and `bus_stop`. Only a couple things are held back for zoom 18: `bench` and `waste_basket`.
+Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 17 almost all local features are added, like `amusement_ride`, `atm`, and `bus_stop`. Only a couple things are held back for zoom 18: `bench` and `waste_basket`.
 
-The POIs layer should be used in conjuction with `landuse` (parks, etc) label_position features and `buildings` label_position features, throttled by area.
+The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_position features and `buildings` label_position features, throttled by area.
 
 Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
 
@@ -326,7 +328,7 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 
 Road names are **abbreviated** so directionals like `North` is replaced with `N`, `Northeast` is replaced with `NE`, and common street suffixes like `Avenue` to `Ave.` and `Street` to `St.`. Full details in the [StreetNames](https://github.com/nvkelso/map-label-style-manual/blob/master/tools/street_names/StreetNames/__init__.py) library.
 
-Mapzen calculates the `landuse_kind` value by intercutting roads with the landuse layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened. 
+Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened. 
 
 To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
@@ -337,7 +339,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `source`: `openstreetmap` or `naturalearthdata.com`
 * `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `exit` (eg: "motorway_junction"), `racetrack`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
 * `sort_key`: numeric value indicating correct z-order for GL rendering
-* `landuse_kind`: See description above, values match values in the landuse layer.
+* `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `ref`: Used for road shields. Related, see `symbol` for pistes.
 
 **Road properties (common optional):**
@@ -391,7 +393,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 ![image](images/mapzen-vector-tile-docs-roads-railway.png)
 
-**Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Additional properties are available for rail features in the **transit** layer.
+**Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Additional properties are available for rail features in the `transit` layer.
 
 ![image](images/mapzen-vector-tile-docs-roads-airport.png)
 
@@ -430,7 +432,7 @@ _TIP: If you're looking for transit `station` and `station_entrance` features, l
 
 Implied but not stated: `source`: `openstreetmap.org`.
 
-_TIP: While not provided in the data, your stylesheet will need to set an effective  `sort_key` to indicating correct z-order for GL rendering that stacks above the road layer and below the buildings layer._
+_TIP: While not provided in the data, your stylesheet will need to set an effective  `sort_key` to indicating correct z-order for GL rendering that stacks above the `roads` layer and below the `buildings` layer._
 
 
 **Transit properties (common optional):**
