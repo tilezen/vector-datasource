@@ -389,15 +389,25 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind` values are limited to `Road` and `Ferry` at these zooms. It's more useful to look at `type` values: `Beltway`, `Bypass`, `Ferry Route`, `Ferry, seasonal`, `Major Highway`, `Road`, `Secondary Highway`, `Track`, and `Unknown`.
 
+![image](images/mapzen-vector-tile-docs-roads-railway.png)
+
 **Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Additional properties are available for rail features in the **transit** layer.
 
+![image](images/mapzen-vector-tile-docs-roads-airport.png)
+
 **Airport** aeroways with `kind` values of `runway` show up at zoom 9, with `taxiway` at zoom 11+.
+
+![image](images/mapzen-vector-tile-docs-roads-aerialways.png)
 
 **Aerialways** with `kind` values of `gondola`, `cable_car` show up zoom 12+. `chair_lift` is added at zoom 13+, and by zoom 15 all are visible adding `drag_lift`, `platter`, `t-bar`, `goods`, `magic_carpet`, `rope_tow`, `yes`, `zip_line`, `j-bar`, `unknown`, `mixed_lift`, and `canopy`.
 
 **Leisure** lines for various recreation tracks start showing up at zoom 14  with `kind` values of sport_values of `athletics`, `running`, `horse_racing`, `bmx`, `disc_golf`, `cycling`, `ski_jumping`, `motor`, `karting`,`obstacle_course`, `equestrian`, `alpine_slide`, `soap_box_derby`,`mud_truck_racing`, `skiing`, `drag_racing`, `archery`.
 
+![image](images/mapzen-vector-tile-docs-roads-pistes.png)
+
 **Piste** type with `kind` values of `piste_type` including `nordic`, `downhill`, `sleigh`, `skitour`, `hike`, `sled`, `yes`, `snow_park`, `playground`, `ski_jump`. Abandoned pistes are not included in tiles.
+
+![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
 **Piers** start showing up at zoom 13+ with `kind` values of `pier`.
 
@@ -445,12 +455,12 @@ A smaller set is also available for non-`platform` features:
 
 Depending on OpenStreetMap tagging, the following properties may be present for non-`platform` features.
 
-* `ascent`,
-* `descent`,
-* `description`,
-* `distance`,
-* `roundtrip`,
-* `route_name`,
+* `ascent`
+* `descent`
+* `description`
+* `distance`
+* `roundtrip`
+* `route_name`
 
 **Transit kind values (line):**
 
