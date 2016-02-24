@@ -201,6 +201,7 @@ BEGIN
       WHEN leisure_val  = 'fitness_centre'   THEN LEAST(zoom + 3.98, 17)
       WHEN leisure_val  = 'fitness_station'  THEN LEAST(zoom + 3.98, 17)
       WHEN amenity_val  = 'gym'              THEN LEAST(zoom + 3.98, 17)
+      WHEN tourism_val IN ('hotel', 'motel') THEN LEAST(zoom + 4.30, 17)
       WHEN highway_val  = 'motorway_junction' THEN 12
       WHEN tags->'zoo'        = 'enclosure'        THEN 17
       WHEN tags->'zoo'        = 'petting_zoo'      THEN 17
@@ -274,8 +275,7 @@ BEGIN
                                  'doityourself', 'dry_cleaning', 'fashion', 'florist', 'gift',
                                  'greengrocer', 'hairdresser', 'jewelry', 'mobile_phone',
                                  'optician', 'pet')
-                   OR tourism_val IN ('bed_and_breakfast', 'chalet', 'guest_house',
-                                    'hostel', 'hotel', 'motel')
+                   OR tourism_val IN ('bed_and_breakfast', 'chalet', 'guest_house', 'hostel')
                    OR railway_val IN ('subway_entrance')) THEN 17
              WHEN (amenity_val IN ('bench', 'waste_basket')) THEN 18
              ELSE NULL END;
