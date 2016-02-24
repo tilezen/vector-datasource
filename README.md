@@ -6,6 +6,7 @@ The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provi
 
 * [Documentation for Mapzen Vector Tile service](https://mapzen.com/documentation/vector-tiles/)
 * [Get a Mapzen developer API key](https://mapzen.com/developers)
+* [Build from source](https://github.com/mapzen/vector-datasource#build-from-source)
 
 ![Contents of an example vector tile](docs/images/vector-tile-example.png)
 
