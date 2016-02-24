@@ -191,6 +191,8 @@ BEGIN
       WHEN amenity_val  = 'ferry_terminal'   THEN LEAST(zoom + 3.20, 15)
       WHEN amenity_val  = 'school'           THEN LEAST(zoom + 2.30, 15)
       WHEN shop_val     = 'electronics'      THEN LEAST(zoom + 3.30, 17)
+      WHEN shop_val IN ('department_store', 'supermarket', 'doityourself',
+                        'hardware', 'trade') THEN LEAST(zoom + 3.29, 17)
       WHEN natural_val  = 'beach'            THEN LEAST(zoom + 3.20, 14)
       WHEN tags->'rental' = 'ski'            THEN LEAST(zoom + 1.27, 17)
       WHEN shop_val     = 'ski'              THEN LEAST(zoom + 1.27, 17)
@@ -253,7 +255,6 @@ BEGIN
                    OR historic_val IN ('archaeological_site')
                    OR man_made_val IN ('windmill')
                    OR natural_val IN ('tree')
-                   OR shop_val IN ('department_store', 'supermarket')
                    OR tourism_val IN ('camp_site', 'caravan_site', 'information', 'viewpoint')) THEN 16
              WHEN (amenity_val IN (
                  'atm', 'bicycle_rental', 'bicycle_parking', 'bus_stop',
@@ -272,7 +273,7 @@ BEGIN
                 'therapist', 'travel_agent', 'yes')
                    OR shop_val IN ('bakery', 'bicycle', 'books', 'butcher', 'car', 'car_repair',
                                  'clothes', 'computer', 'convenience',
-                                 'doityourself', 'dry_cleaning', 'fashion', 'florist', 'gift',
+                                 'dry_cleaning', 'fashion', 'florist', 'gift',
                                  'greengrocer', 'hairdresser', 'jewelry', 'mobile_phone',
                                  'optician', 'pet')
                    OR tourism_val IN ('bed_and_breakfast', 'chalet', 'guest_house', 'hostel')
