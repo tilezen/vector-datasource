@@ -2,6 +2,7 @@ SELECT
     name,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    min_zoom,
     way_area AS area,
     cuisine,
     religion,
@@ -41,7 +42,11 @@ FROM (
 
   WHERE
     {{ bounds|bbox_filter('way') }}
+{% if zoom >= 16 %}
+    AND mz_poi_min_zoom IS NOT NULL
+{% else %}
     AND mz_poi_min_zoom <= {{ zoom }}
+{% endif %}
 
 UNION ALL
 
@@ -66,6 +71,10 @@ UNION ALL
 
   WHERE
     {{ bounds|bbox_filter('way') }}
+{% if zoom >= 16 %}
+    AND mz_poi_min_zoom IS NOT NULL
+{% else %}
     AND mz_poi_min_zoom <= {{ zoom }}
+{% endif %}
 
-) points_and_centroids
+) pois
