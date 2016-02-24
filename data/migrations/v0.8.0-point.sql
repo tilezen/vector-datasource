@@ -7,4 +7,5 @@ UPDATE planet_osm_point SET
     "emergency" = 'phone' OR
     "amenity" IN ('social_facility', 'clinic', 'doctors', 'dentist',
       'kindergarten', 'childcare', 'toilets') OR
-    "tags"->'healthcare' = 'midwife';
+    "tags"->'healthcare' = 'midwife' OR
+    "tourism" IN ('hotel', 'motel');

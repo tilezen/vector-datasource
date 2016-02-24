@@ -63,7 +63,7 @@ def match_properties(actual, expected):
         v = actual.get(exp_k, None)
         # normalise unicode values
         if isinstance(v, unicode):
-            v = str(v)
+            v = v.encode('utf-8')
 
         if exp_v is not None:
             if isinstance(exp_v, set):
