@@ -277,7 +277,7 @@ Starting at zoom 12 `neighbourhood` and `macrohood` features are added from Who'
 
 * `Admin-0 capital alt`, `Admin-0 capital`, `Admin-0 region capital`, `Admin-1 capital`, `Admin-1 region capital`, `borough`, `city`, `continent`, `country`, `farm`, `hamlet`, `Historic place`, `isolated_dwelling`, `locality`, `macrohood`, `Meteorological Station`, `neighbourhood`, `ocean`, `Populated place`, `province`, `quarter`, `Scientific station`, `sea`, `state`, `suburb`, `town`, `village`
 
-## Points of interest
+## Points of Interest
 
 ![image](images/mapzen-vector-tile-docs-pois.png)
 
@@ -316,7 +316,7 @@ Implied but not stated: `source`: `openstreetmap.org`.
 * `accountant`, `administrative`, `advertising_agency`, `aerodrome`, `airport`, `alcohol`, `alpine_hut`, `amusement_ride`, `animal`, `aquarium`, `archaeological_site`, `architect`, `artwork`, `association`, `atm`, `attraction`, `aviary`, `bakery`, `bank`, `bar`, `beach`, `bed_and_breakfast`, `bench`, `bicycle`, `bicycle_parking`, `bicycle_rental`, `biergarten`, `block`, `bollard`, `books`, `brewery`, `bus_station`, `bus_stop`, `butcher`, `cafe`, `camp_site`, `car`, `car_repair`, `car_sharing`, `caravan_site`, `carousel`, `carpenter`, `cave_entrance`, `chalet`, `cinema`, `clothes`, `college`, `community_centre`, `company`, `computer`, `confectionery`, `consulting`, `convenience`, `courthouse`, `department_store`, `doityourself`, `dressmaker`, `drinking_water`, `dry_cleaning`, `educational_institution`, `electrician`, `electronics`, `embassy`, `emergency_phone`, `employment_agency`, `enclosure`, `estate_agent`, `fashion`, `fast_food`, `ferry_terminal`, `financial`, `fire_station`, `fitness`, `fitness_station`, `florist`, `ford`, `foundation`, `fuel`, `gardener`, `gate`, `generator`, `gift`, `government`, `greengrocer`, `guest_house`, `hairdresser`, `halt`, `hanami`, `handicraft`, `helipad`, `hospital`, `hostel`, `hotel`, `hvac`, `ice_cream`, `information`, `insurance`, `it`, `jewelry`, `landmark`, `laundry`, `lawyer`, `level_crossing`, `library`, `lift_gate`, `lighthouse`, `lock`, `mall`, `marina`, `mast`, `maze`, `memorial`, `metal_construction`, `mini_roundabout`, `mobile_phone`, `motel`, `motorway_junction`, `museum`, `music`, `newspaper`, `ngo`, `notary`, `nursing_home`, `optician`, `painter`, `parking`, `peak`, `pet`, `petting_zoo`, `pharmacy`, `photographer`, `photographic_laboratory`, `physician`, `picnic_site`, `place_of_worship`, `playground`, `plumber`, `police`, `political_party`, `post_box`, `post_office`, `pottery`, `power_wind`, `prison`, `pub`, `recycling`, `religion`, `research`, `resort`, `restaurant`, `roller_coaster`, `sawmill`, `school`, `shelter`, `shoemaker`, `ski`, `ski_rental`, `ski_school`, `slipway`, `snow_cannon`, `sports`, `sports_centre`, `spring`, `stadium`, `station`, `stonemason`, `subway_entrance`, `summer_toboggan`, `supermarket`, `tailor`, `tax_advisor`, `telecommunication`, `telephone`, `theatre`, `theme_park`, `therapist`, `toilets`, `townhall`, `toys`, `traffic_signals`, `trail_riding_station`, `tram_stop`, `travel_agent`, `tree`, `university`, `veterinary`, `viewpoint`, `volcano`, `waste_basket`, `water_slide`, `water_tower`, `wilderness_hut`, `wildlife_park`, `windmill`, `wine`, `winery`, `yes`, `zoo`
 
 
-## Roads (transportation)
+## Roads (Transportation)
 
 ![image](images/mapzen-vector-tile-docs-roads.png)
 
