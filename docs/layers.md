@@ -8,19 +8,19 @@ Data is organized into several thematic layers, each of which is named, for exam
 
 Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and Hoverboard.
 
-## Overview
+### Overview
 
-### Data sources and attribution
+#### Data sources and attribution
 
 Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](attribution.md) in your project.
 
-### Name localization
+#### Name localization
 
 Mapzen vector tile features include the default `name` property. We include all language variants of the `name:*`, `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization (when different than `name`). Tangram supports all language scripts.
 
 For features in the `boundaries` layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
 
-### Geometry types
+#### Geometry types
 
 Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
@@ -54,11 +54,11 @@ Mapnik supports geometry filtering via the special `mapnik::geometry_type` keywo
 #layer['mapnik::geometry_type'=3] { /* polygon styles */ }
 ```
 
-### Data updates
+#### Data updates
 
 Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and mid-zoom tiles are updated approximately monthly. Some source data rarely updates – Natural Earth updates approximately yearly.
 
-### Changelog
+#### Changelog
 
 The current version of Mapzen vector tiles is **v0.7.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
@@ -67,7 +67,7 @@ If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/devel
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/v0.7.0/CHANGELOG.md).
 
 
-# Layer reference
+### Layer reference
 
 Mapzen vector tiles include 9 layers:   
 
