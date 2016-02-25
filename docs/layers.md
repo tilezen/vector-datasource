@@ -41,7 +41,7 @@ In Tangram, Mapzen's GL graphics library, the keyword `$geometry` matches the fe
 ```
 filter: { $geometry: polygon }            # matches polygons only
 filter: { $geometry: [point, line] }      # matches points & lines
-filter: function() { return $geometry === 'line' }  # matches lines only
+filter: function() { return $geometry === 'line' }  # matches lines
 ```
 
 Mapnik supports geometry filtering via the special `mapnik::geometry_type` keyword.
