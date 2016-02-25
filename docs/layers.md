@@ -8,19 +8,19 @@ Data is organized into several thematic layers, each of which is named, for exam
 
 Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and Hoverboard.
 
-## Overview
+# Overview
 
-#### Data sources and attribution
+## Data sources and attribution
 
 Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](attribution.md) in your project.
 
-#### Name localization
+## Name localization
 
 Mapzen vector tile features include the default `name` property. We include all language variants of the `name:*`, `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization (when different than `name`). Tangram supports all language scripts.
 
 For features in the `boundaries` layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
 
-#### Geometry types
+## Geometry types
 
 Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
@@ -54,12 +54,11 @@ Mapnik supports geometry filtering via the special `mapnik::geometry_type` keywo
 #layer['mapnik::geometry_type'=3] { /* polygon styles */ }
 ```
 
-
-#### Data updates
+## Data updates
 
 Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and mid-zoom tiles are updated approximately monthly. Some source data rarely updates – Natural Earth updates approximately yearly.
 
-#### Changelog
+## Changelog
 
 The current version of Mapzen vector tiles is **v0.7.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
@@ -68,7 +67,7 @@ If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/devel
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/v0.7.0/CHANGELOG.md).
 
 
-## Layer reference
+# Layer reference
 
 Mapzen vector tiles include 9 layers:   
 
@@ -78,7 +77,7 @@ These individual layers are grouped into an `all` layer – use this special la
 
 We include one deprecated layer, `landuse-labels`, for backwards compatibility. Please don't build new maps against this layer, it will be removed in the v1.0 version of tiles.
 
-### Boundaries & Barriers
+## Boundaries & Barriers
 
 ![image](images/mapzen-vector-tile-docs-boundaries.png)
 
@@ -129,7 +128,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 
 * `Country`, `Dependency`, `Disputed`, `Indeterminate`, `Lease`, `Sovereign country`, `Metropolitan county`, `Modern administrative boundary`
 
-### Buildings and Addresses
+## Buildings and Addresses
 
 ![image](images/mapzen-vector-tile-docs-buildings.png)
 
@@ -183,7 +182,7 @@ TIP: While not provided in the data, your stylesheet will need to set an effecti
 * `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
 * `addr_street`: value from OpenStreetMap's `addr:street` tag
 
-### Earth
+## Earth
 
 ![image](images/mapzen-vector-tile-docs-earth.png)
 
@@ -199,7 +198,7 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 * `id`: suspicious provenance
 * `land`: `base`
 
-### Landuse
+## Landuse
 
 ![image](images/mapzen-vector-tile-docs-landuse.png)
 
@@ -229,7 +228,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `aerodrome`, `allotments`, `amusement_ride`, `animal`, `apron`, `aquarium`, `artwork`, `attraction`, `aviary`, `beach`, `breakwater`, `bridge`, `carousel`, `cemetery`, `cinema`, `college`, `commercial`, `common`, `cutline`, `dike`, `enclosure`, `farm`, `farmland`, `farmyard`, `footway`, `forest`, `fuel`, `garden`, `generator`, `glacier`, `golf_course`, `grass`, `groyne`, `hanami`, `hospital`, `industrial`, `land`, `library`, `maze`, `meadow`, `military`, `national_park`, `nature_reserve`, `park`, `park or protected land`, `parking`, `pedestrian`, `petting_zoo`, `pier`, `pitch`, `place_of_worship`, `plant`, `playground`, `prison`, `protected_area`, `quarry`, `railway`, `recreation_ground`, `residential`, `resort`, `retail`, `roller_coaster`, `runway`, `rural`, `school`, `scrub`, `sports_centre`, `stadium`, `substation`, `summer_toboggan`, `taxiway`, `theatre`, `theme_park`, `tower`, `trail_riding_station`, `university`, `urban`, `urban area`, `village_green`, `wastewater_plant`, `water_slide`, `water_works`, `wetland`, `wilderness_hut`, `wildlife_park`, `winery`, `winter_sports`, `wood`, `works`, `zoo`
 
-### Landuse labels
+## Landuse labels
 
 ![image](images/mapzen-vector-tile-docs-landuse.png)
 
@@ -240,7 +239,7 @@ This layer also includes the same landuse `label_placement` points for labeling 
 
 This layer is included to support legacy uses, but is not recommended for new projects.
 
-### Places
+## Places
 
 ![image](images/mapzen-vector-tile-docs-places.png)
 
@@ -278,7 +277,7 @@ Starting at zoom 12 `neighbourhood` and `macrohood` features are added from Who'
 
 * `Admin-0 capital alt`, `Admin-0 capital`, `Admin-0 region capital`, `Admin-1 capital`, `Admin-1 region capital`, `borough`, `city`, `continent`, `country`, `farm`, `hamlet`, `Historic place`, `isolated_dwelling`, `locality`, `macrohood`, `Meteorological Station`, `neighbourhood`, `ocean`, `Populated place`, `province`, `quarter`, `Scientific station`, `sea`, `state`, `suburb`, `town`, `village`
 
-### Points of interest
+## Points of interest
 
 ![image](images/mapzen-vector-tile-docs-pois.png)
 
@@ -317,7 +316,7 @@ Implied but not stated: `source`: `openstreetmap.org`.
 * `accountant`, `administrative`, `advertising_agency`, `aerodrome`, `airport`, `alcohol`, `alpine_hut`, `amusement_ride`, `animal`, `aquarium`, `archaeological_site`, `architect`, `artwork`, `association`, `atm`, `attraction`, `aviary`, `bakery`, `bank`, `bar`, `beach`, `bed_and_breakfast`, `bench`, `bicycle`, `bicycle_parking`, `bicycle_rental`, `biergarten`, `block`, `bollard`, `books`, `brewery`, `bus_station`, `bus_stop`, `butcher`, `cafe`, `camp_site`, `car`, `car_repair`, `car_sharing`, `caravan_site`, `carousel`, `carpenter`, `cave_entrance`, `chalet`, `cinema`, `clothes`, `college`, `community_centre`, `company`, `computer`, `confectionery`, `consulting`, `convenience`, `courthouse`, `department_store`, `doityourself`, `dressmaker`, `drinking_water`, `dry_cleaning`, `educational_institution`, `electrician`, `electronics`, `embassy`, `emergency_phone`, `employment_agency`, `enclosure`, `estate_agent`, `fashion`, `fast_food`, `ferry_terminal`, `financial`, `fire_station`, `fitness`, `fitness_station`, `florist`, `ford`, `foundation`, `fuel`, `gardener`, `gate`, `generator`, `gift`, `government`, `greengrocer`, `guest_house`, `hairdresser`, `halt`, `hanami`, `handicraft`, `helipad`, `hospital`, `hostel`, `hotel`, `hvac`, `ice_cream`, `information`, `insurance`, `it`, `jewelry`, `landmark`, `laundry`, `lawyer`, `level_crossing`, `library`, `lift_gate`, `lighthouse`, `lock`, `mall`, `marina`, `mast`, `maze`, `memorial`, `metal_construction`, `mini_roundabout`, `mobile_phone`, `motel`, `motorway_junction`, `museum`, `music`, `newspaper`, `ngo`, `notary`, `nursing_home`, `optician`, `painter`, `parking`, `peak`, `pet`, `petting_zoo`, `pharmacy`, `photographer`, `photographic_laboratory`, `physician`, `picnic_site`, `place_of_worship`, `playground`, `plumber`, `police`, `political_party`, `post_box`, `post_office`, `pottery`, `power_wind`, `prison`, `pub`, `recycling`, `religion`, `research`, `resort`, `restaurant`, `roller_coaster`, `sawmill`, `school`, `shelter`, `shoemaker`, `ski`, `ski_rental`, `ski_school`, `slipway`, `snow_cannon`, `sports`, `sports_centre`, `spring`, `stadium`, `station`, `stonemason`, `subway_entrance`, `summer_toboggan`, `supermarket`, `tailor`, `tax_advisor`, `telecommunication`, `telephone`, `theatre`, `theme_park`, `therapist`, `toilets`, `townhall`, `toys`, `traffic_signals`, `trail_riding_station`, `tram_stop`, `travel_agent`, `tree`, `university`, `veterinary`, `viewpoint`, `volcano`, `waste_basket`, `water_slide`, `water_tower`, `wilderness_hut`, `wildlife_park`, `windmill`, `wine`, `winery`, `yes`, `zoo`
 
 
-### Roads (transportation)
+## Roads (transportation)
 
 ![image](images/mapzen-vector-tile-docs-roads.png)
 
@@ -385,7 +384,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `state`: OpenStreetMap features
 * `symbol`: ski pistes from OpenStreetMap
 
-#### Transportation kind values and zoom ranges
+### Transportation kind values and zoom ranges
 
 **Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, `road`). Zoom 13 adds (`primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`). Zoom 14 adds (`tertiary_link`, `minor`, `footpath`, `footway`, `steps`, `path`, `cycleway`) and `alley` service roads. By zoom 15 all service roads are added, including driveway, `parking_aisle`, `drive-through`.
 
@@ -413,7 +412,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Piers** start showing up at zoom 13+ with `kind` values of `pier`.
 
-### Transit
+## Transit
 
 ![image](images/mapzen-vector-tile-docs-transit.png)
 
@@ -468,7 +467,7 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 
 * `light_rail`, `platform`, `railway`, `subway`, `train`, and `tram`
 
-### Water
+## Water
 
 ![image](images/mapzen-vector-tile-docs-water.png)
 
