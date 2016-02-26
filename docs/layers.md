@@ -339,7 +339,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `exit` (eg: "motorway_junction"), `racetrack`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `ref`: Used for road shields. Related, see `symbol` for pistes.
-* `sort_key`: numeric value indicating correct z-order for GL rendering
+* `sort_key`: numeric value indicating correct z-order for GL rendering. At zooms >= 15, the `sort_key` is adjusted to realistically model bridge, tunnel, and layer ordering.
 
 **Road properties (common optional):**
 
