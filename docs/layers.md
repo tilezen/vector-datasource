@@ -250,7 +250,9 @@ Combination of OpenStreetMap `place` points, Natural Earth populated places, and
 
 Places with `kind` values of `continent`, `ocean`, `country`, with others added starting at zoom 3 for `sea`, zoom 4 for `state`, `province`, and `city`, `town` at zoom 8. A few more each zoom are added until zoom 13+ includes, `borough`, `suburb`, `quarter`, `village`, `hamlet`, `locality`, `isolated_dwelling`, and `farm`.
 
-Starting at zoom 12 `neighbourhood` and `macrohood` features are added from Who's On First. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
+![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
+
+**Neighbourhoods:** [Who's On First](http://whosonfirst.mapzen.com) `neighbourhood` and `macrohood` features are added starting at zoom 12. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
 
 
 **Gotchas:** There are a few water label features (`ocean`, `sea`) included in this layer, they will be moved to the `water` layer in a future release.
