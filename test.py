@@ -84,6 +84,47 @@ def match_properties(actual, expected):
     return True
 
 
+# quantify how different a feature is from the expected feature properties.
+# this metric can be used to figure out what is a "near miss" in terms of
+# the match and output a more helpful error message.
+#
+# returns a pair of:
+#   - a numeric metric of the distance, where 0 is a match and larger
+#     numbers are further from a match.
+#   - an explanation of the "miss".
+def match_distance(actual, expected):
+    distance = 0
+    misses = dict()
+
+    for exp_k, exp_v in expected.iteritems():
+        v = actual.get(exp_k, None)
+        # normalise unicode values
+        if isinstance(v, unicode):
+            v = v.encode('utf-8')
+
+        if exp_v is not None:
+            if isinstance(exp_v, set):
+                if v not in exp_v:
+                    misses[exp_k] = "%r not in %r" % (v, exp_v)
+                    distance += 1
+
+            elif isinstance(exp_v, type):
+                if not isinstance(v, exp_v):
+                    misses[exp_k] = "%r not an instance of %r" % (v, exp_v)
+                    distance += 1
+
+            elif v != exp_v:
+                misses[exp_k] = "%r != %r" % (v, exp_v)
+                distance += 1
+
+        else:
+            if v is None:
+                misses[exp_k] = "missing"
+                distance += 1
+
+    return (distance, misses)
+
+
 @contextmanager
 def features_in_tile_layer(z, x, y, layer):
     url = config_url % {'layer': layer, 'z': z, 'x': x, 'y': y}
@@ -131,6 +172,26 @@ def count_matching(features, properties):
     return (num_features, num_matching)
 
 
+def closest_matching(features, properties):
+    """
+    Returns a pair containing the feature which most closely matches the
+    properties and a dict explaining the ways in which it didn't match.
+    """
+
+    min_distance = None
+    min_feature = None
+    min_misses = None
+
+    for f in features:
+        distance, misses = match_distance(f['properties'], properties)
+        if min_distance is None or distance < min_distance:
+            min_distance = distance
+            min_feature = f
+            min_misses = misses
+
+    return (min_feature, min_misses)
+
+
 def assert_has_feature(z, x, y, layer, properties):
     with features_in_tile_layer(z, x, y, layer) as features:
         num_features, num_matching = count_matching(
@@ -141,8 +202,10 @@ def assert_has_feature(z, x, y, layer, properties):
                 "%r (because layer %r was empty)" % (properties, layer)
 
         if num_matching == 0:
-            raise Exception, "Did not find feature including properties %r" \
-                % properties
+            closest, misses = closest_matching(features, properties)
+            raise Exception, "Did not find feature including properties " \
+                "%r. The closest match was %r: missed %r." \
+                % (properties, closest['properties'], misses)
 
 
 def assert_at_least_n_features(z, x, y, layer, properties, n):
