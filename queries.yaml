@@ -78,7 +78,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
       - TileStache.Goodies.VecTiles.transform.road_kind
       - TileStache.Goodies.VecTiles.transform.road_classifier
-      - TileStache.Goodies.VecTiles.transform.road_sort_key
       - TileStache.Goodies.VecTiles.transform.road_oneway
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
       - TileStache.Goodies.VecTiles.transform.route_name
@@ -165,6 +164,19 @@ post_process:
     params:
       source_layer: landuse
       target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/roads.csv
+    params:
+      source_layer: roads
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      properties: [layer]
   - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
     params:
       source_layer: buildings
