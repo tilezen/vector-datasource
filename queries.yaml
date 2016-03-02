@@ -157,9 +157,13 @@ layers:
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
   - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/landuse.csv
     params:
       source_layer: landuse
-      csv_file: spreadsheets/landuse.csv
       target_value_type: int
   - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
     params:
