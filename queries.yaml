@@ -173,6 +173,51 @@ post_process:
     params:
       source_layer: roads
       target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/earth.csv
+    params:
+      source_layer: earth
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/boundaries.csv
+    params:
+      source_layer: boundaries
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/transit.csv
+    params:
+      source_layer: transit
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/water.csv
+    params:
+      source_layer: water
+      target_value_type: int
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: roads
