@@ -60,7 +60,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.remap_deprecated_landuse_kinds
       - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
-      - TileStache.Goodies.VecTiles.transform.landuse_sort_key
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
@@ -79,7 +78,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
       - TileStache.Goodies.VecTiles.transform.road_kind
       - TileStache.Goodies.VecTiles.transform.road_classifier
-      - TileStache.Goodies.VecTiles.transform.road_sort_key
       - TileStache.Goodies.VecTiles.transform.road_oneway
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
       - TileStache.Goodies.VecTiles.transform.route_name
@@ -157,6 +155,73 @@ layers:
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/landuse.csv
+    params:
+      source_layer: landuse
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/roads.csv
+    params:
+      source_layer: roads
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/earth.csv
+    params:
+      source_layer: earth
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/boundaries.csv
+    params:
+      source_layer: boundaries
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/transit.csv
+    params:
+      source_layer: transit
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/water.csv
+    params:
+      source_layer: water
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      properties: [layer]
   - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
     params:
       source_layer: buildings
