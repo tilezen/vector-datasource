@@ -9,6 +9,8 @@ artwork,92
 attraction,93
 aviary,71
 beach,86
+breakwater,221
+bridge,226
 carousel,94
 cemetery,65
 cinema,68
@@ -16,6 +18,8 @@ college,32
 commercial,35
 common,56
 conservation,24
+cutline,223
+dike,224
 enclosure,73
 farm,28
 farmland,29
@@ -28,19 +32,23 @@ generator,83
 glacier,12
 golf_course,47
 grass,77
+groyne,222
 hanami,85
 hospital,45
 industrial,23
+land,220
 library,69
 maze,84
 meadow,78
 military,37
+national_park,19
 nature_reserve,25
 park or protected land,17
 park,33
 parking,97
 pedestrian,88
 petting_zoo,72
+pier,225
 pitch,90
 place_of_worship,64
 plant,76
