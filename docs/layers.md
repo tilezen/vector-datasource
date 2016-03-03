@@ -488,6 +488,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `kind`: detailed below, per geometry type
 * `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
 * `boundary`: `yes`, on lines only. See description above.
+* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 **Water properties (common optional):**
 
