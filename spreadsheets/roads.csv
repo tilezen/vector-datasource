@@ -30,6 +30,7 @@ layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_bridge,is_tunn
 -,*,*,Unknown,*,*,*,*,-,-,360
 -,minor_road,service;minor,*,*,*,-,*,-,-,358
 -,minor_road,service;minor,*,*,*,*,*,-,-,356
+-,path;piste,*,*,*,*,*,*,-,-,354
 -,aerialway,*,*,*,*,*,gondola;cable_car,*,*,442
 -,aerialway,*,*,*,*,*,chair_lift,*,*,441
 -,aerialway,*,*,*,*,*,+,*,*,440
@@ -51,6 +52,8 @@ layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_bridge,is_tunn
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,spur;siding,*,yes,-,411
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,yard,*,yes,-,409
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,+,*,yes,-,407
+-,path;piste,*,*,*,*,*,*,yes,-,404
+-,+,*,*,*,*,*,*,yes,-,405
 -,highway,motorway,*,*,*,*,*,-,yes,331
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,-,*,-,yes,330
 -,major_road,trunk,*,*,*,*,*,-,yes,329
@@ -66,4 +69,6 @@ layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_bridge,is_tunn
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,spur;siding,*,-,yes,311
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,yard,*,-,yes,309
 -,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,+,*,-,yes,307
+-,path;piste,*,*,*,*,*,*,-,yes,304
+-,+,*,*,*,*,*,*,-,yes,305
 -,*,*,*,*,*,*,*,*,*,355
