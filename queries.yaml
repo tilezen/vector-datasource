@@ -221,7 +221,6 @@ post_process:
         13: { area: 1600, volume: 300000 }
         14: { area:  100, volume: 200000 }
         15: { area:  100, volume: 100000 }
-        16: { area:   25, volume:  50000 }
   - fn: TileStache.Goodies.VecTiles.transform.intercut
     params:
       base_layer: roads
