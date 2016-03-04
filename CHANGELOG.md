@@ -1,3 +1,26 @@
+v0.8.0
+------
+* **Release date**: 2016-03-04.
+* Fixed migration loop to handle the case where there are no explicit migrations to run.
+* Railway route extraction no longer relies on the `planet_osm_nodes` table, which may be missing if flat nodes is enabled.
+* Add labels for bay water features
+* Add inclusive pois
+* Include all z17-18 pois at z16
+* Return min_zoom from pois query
+* Move building addresses to z16
+* Move boundaries at z17 to z16
+* Include large hotels earlier
+* Make larger 'big box' stores appear at lower zooms.
+* Add spreadsheet based properties for sort_key
+* Update sort_key values across all layers
+* Move parking topside, and remove duplicate park
+* Fix regressions for `man_made`, `national_park`, `natural`
+* Show all buildings at z16
+* Disable area/volume filter at z16
+* Add min_zoom property to buildings
+* Update road brunnel, level sorting for z>=15
+
+
 v0.7.0
 ------
 
