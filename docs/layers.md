@@ -510,11 +510,10 @@ These are intended for label placement, and are included as points only.
 
     Gotchas:
 
-    * Some values are label position only (point, not polygon): `bay`, `strait`, and `fjord`.
     * `Alkaline Lake` and `Playa` only exist in Natural Earth. Zooming in, your feature may disappear. Beware the desert around Great Salt Lake in Utah!
     * `ocean` and `Ocean` are equivalent, **both** should be used in filters.
     * `reservoir` and `Reservoir` are equivalent, **both** should be used in filters.
-    * Some of the minor kinds (like `bay` and `fjord`) are used for label_placement only, as their area would duplicate water polygons already present from openstreetmapdata.com.
+    * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
     * The (capitalized) Natural Earth values don't seem to be coming thru, but should be, instead they're being grouped into `lake`, `playa`, and `ocean`.
 
 **Water kind values (lines):**
