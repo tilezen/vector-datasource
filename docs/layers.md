@@ -99,7 +99,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 
 * `name`
 * `id`
-* `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and inclusive of some barrier and man_made tags: `city_wall` (zoom 12+), `retaining_wall`, `snow_fence` (zoom 15+), and `fence` (zoom 17+ only). Also includes raw Natural Earth values.
+* `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and inclusive of some barrier and man_made tags: `city_wall` (zoom 12+), `retaining_wall`, `snow_fence` (zoom 15+), and `fence` (zoom 16+ only). Also includes raw Natural Earth values.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 **Boundary properties (common optional):**
@@ -139,7 +139,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprint, building label_placment points, building:part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 17+. Address points are available at zoom 17+.
+Polygons from OpenStreetMap representing building footprint, building label_placment points, building:part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
 Individual `building:part` geometries following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels.
 
@@ -163,6 +163,7 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `layer`
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
 * `min_height`: value from `min_height` in meters, where available, otherwise estimated from `building:min_levels` if present
+* `min_zoom`: a suggested minimum zoom at which the building should become visible based on area and volume limits. This is only present on buildings in tiles at zoom 16 and below.
 * `roof_color`: from `roof:color` tag
 * `roof_height`: from `roof:height` tag
 * `roof_material`: from `roof:material` tag
@@ -290,7 +291,7 @@ Places with `kind` values of `continent`, `ocean`, `country`, with others added 
 * Layer name: `pois`
 * Geometry types: `point`
 
-Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 17 almost all local features are added, like `amusement_ride`, `atm`, and `bus_stop`. Only a couple things are held back for zoom 18: `bench` and `waste_basket`.
+Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 16 all local features are added, like `amusement_ride`, `atm`, and `bus_stop`, but may be marked with a `min_zoom` property to suggest at which zoom levels they are suitable for display. For example, `bench` and `waste_basket` features may be marked `min_zoom: 18` to suggest that they are displayed at zoom 18 and higher.
 
 The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_position features and `buildings` label_position features, throttled by area.
 
