@@ -741,6 +741,11 @@ CREATE OR REPLACE FUNCTION mz_building_filter(
 RETURNS BOOLEAN AS $$
 BEGIN
   RETURN CASE
+    -- if the min area is satisfied, then there's no
+    -- need to check the area.
+    WHEN way_area >= min_area
+      THEN TRUE
+
     -- if height is present, and can be parsed as a
     -- float, then we can filter right here.
     WHEN mz_is_numeric(height)
@@ -757,9 +762,9 @@ BEGIN
     WHEN height IS NOT NULL OR levels IS NOT NULL
       THEN TRUE
 
-    -- height isn't present, so just filter on area
-    -- as we did before.
-    ELSE way_area >= min_area
+    -- height isn't present, and area doesn't satisfy
+    -- the minimum bound, so don't show this building.
+    ELSE FALSE
   END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
