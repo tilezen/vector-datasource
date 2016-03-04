@@ -29,6 +29,12 @@ SELECT
     "roof:orientation" AS roof_orientation,
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
+{% if zoom >= 16 %}
+    CASE WHEN mz_building_filter(tags->'building:height', "building:levels", way_area, 50000, 25)
+      THEN 16
+      ELSE 17
+    END AS min_zoom,
+{% endif %}
     %#tags AS tags
 
 FROM
@@ -50,8 +56,6 @@ WHERE
    AND mz_building_filter(tags->'building:height', "building:levels", way_area, 200000,  100)
 {% elif zoom == 15 %}
    AND mz_building_filter(tags->'building:height', "building:levels", way_area, 100000,  100)
-{% elif zoom == 16 %}
-   AND mz_building_filter(tags->'building:height', "building:levels", way_area,  50000,   25)
 {% endif %}
 
     AND {{ bounds|bbox_filter('way') }}
@@ -82,6 +86,9 @@ SELECT
     NULL AS roof_orientation,
     "addr:housenumber" AS addr_housenumber,
     "addr:street" AS addr_street,
+{% if zoom >= 16 %}
+    16 AS min_zoom,
+{% endif %}
     %#tags AS tags
 
 FROM
