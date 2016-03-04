@@ -1,30 +1,27 @@
 v0.8.0
 ------
 * **Release date**: 2016-03-04.
-* Fixed migration loop to handle the case where there are no explicit migrations to run.
-* Railway route extraction no longer relies on the `planet_osm_nodes` table, which may be missing if flat nodes is enabled.
-* Add labels for bay water features
-* Add inclusive pois
-* Include all z17-18 pois at z16
-* Return min_zoom from pois query
-* Move building addresses to z16
-* Move boundaries at z17 to z16
-* Include large hotels earlier
-* Make larger 'big box' stores appear at lower zooms.
-* Add spreadsheet based properties for sort_key
-* Update sort_key values across all layers
-* Move parking topside, and remove duplicate park
-* Fix regressions for `man_made`, `national_park`, `natural`
-* Show all buildings at z16
-* Disable area/volume filter at z16
-* Add min_zoom property to buildings
-* Update road brunnel, level sorting for z>=15
+* Add new label placements in the `water` layer for `bay`, `strait`, and `fjord`. [Issue #400](https://github.com/mapzen/vector-datasource/issues/400)
+* Add new kinds in the `pois` layer for `hardware` and `trade` to capture more types of "big box" stores. [Issue #520](https://github.com/mapzen/vector-datasource/issues/520)
+* Additions to the `pois` layer to celebrate [International Women's Day](http://www.internationalwomensday.com). [Issue #526](https://github.com/mapzen/vector-datasource/issues/526)
+
+     * Basic mappings: `childcare`, `clinic`, `dentist`, `doctors`, `kindergarten`, `midwife`, `phone`, `social_facility`, and `toilets`. 
+     * Most social facility are indicated by their detailed kind. Common kinds: `ambulatory_care`, `assisted_living`, `food_bank`, `group_home`, `outreach`, `shelter`, `workshop`, see [TagInfo](https://taginfo.openstreetmap.org/keys/social_facility#values) for full set. 
+* Large hotels and "big box" stores now appear at earlier zooms in the `pois` layer. Issues [520](https://github.com/mapzen/vector-datasource/issues/520) and [522](https://github.com/mapzen/vector-datasource/issues/522)
+* The `pois` layer now inludels all features at zoom 16 that were only available in zoom 17 and 18 previously. But we now include a recommended `min_zoom` to replicate the earlier behavior. [Issue #478](https://github.com/mapzen/vector-datasource/issues/478)
+* Improved station `tile_kind_rank` values in the `pois` layer by including more data. Railway route extraction no longer relies on the `planet_osm_nodes` table, which may be missing if flat nodes is enabled. [Issue #507](https://github.com/mapzen/vector-datasource/issues/507)
+* The `buildings` layer now includes all buildings (no filter) at zoom 16, with `min_zoom` properties being added at zoom >= 16. Addresses are included at zoom 16 but are marked `min_zoom:17`. [Issue #557](https://github.com/mapzen/vector-datasource/issues/557)
+* In the `boundaries` layer `fences` are now included at zoom 16 (was 17). [Issue #478](https://github.com/mapzen/vector-datasource/issues/478)
+* The `roads` and `landuse` layers receive a significant overhall to `sort_key` values. The `sort_key` value is a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. Issues [364](https://github.com/mapzen/vector-datasource/issues/364) and [546](https://github.com/mapzen/vector-datasource/issues/546)
+* More layers include `sort_key` values including `boundaries`, `buildings`, `earth`, `transit`, and `water` that are compatible with the values in the `roads` and `landuse` layers. [Issue #550](https://github.com/mapzen/vector-datasource/pull/550)
+* Fixed migration loop to handle the case where there are no explicit migrations to run. [Issue #514](https://github.com/mapzen/vector-datasource/issues/514)
+
 
 
 v0.7.0
 ------
 
-* **Release date**: 2016-01-19.
+* **Release date**: 2016-01-19. _Live in prod: 2015-01-25._
 * At mid and low zooms, roads have some properties dropped and are then merged together. This produces a huge reduction in the number of features in a tile and helps reduce both tile size and rendering time. [Issue](https://github.com/mapzen/vector-datasource/issues/358), [Issue](https://github.com/mapzen/vector-datasource/issues/489).
 * Gym / fitness POIs are now available with `kind: fitness` in the `pois` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/465).
 * Swimming pools are now available with `kind: swimming_pool` in the `water` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/443).
@@ -38,7 +35,7 @@ v0.7.0
 
 v0.6.0
 ------
-* **Release date**: 2015-12-16.
+* **Release date**: 2015-12-16. _Live in prod: 2015-01-08._
 * Highway exits are now present in the `pois` layer, with `kind:motorway_junction` and, if the data is available, properties for `exit_to` directions and `ref` reference number. [Issue](https://github.com/mapzen/vector-datasource/issues/160).
 * Beach polygons are now present in the `landuse` layer. [Issue](https://github.com/mapzen/vector-datasource/issues/366).
 * Military (and rural) `landuse` areas were not being output due to a bug. This has been fixed and both landuse types are now being output. [Issue](https://github.com/mapzen/vector-datasource/issues/367).
