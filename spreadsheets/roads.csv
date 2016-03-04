@@ -47,28 +47,28 @@ zoom::int,layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_brid
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,+,*,-,yes,307
 >=15,-,path;piste,*,*,*,*,*,*,-,yes,304
 >=15,-,+,*,*,*,*,*,*,-,yes,305
-*,*,highway,motorway,*,*,*,*,*,-,-,381
-*,*,*,*,Major Highway;Beltway;Bypass,*,*,*,*,-,-,381
-*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,-,*,-,-,380
-*,*,major_road,trunk,*,*,*,*,*,-,-,379
-*,*,*,*,Secondary Highway,*,*,*,*,-,-,379
-*,*,major_road,primary,*,*,*,*,*,-,-,378
-*,*,*,*,Road,*,*,*,*,-,-,378
-*,*,major_road,secondary,*,*,*,*,*,-,-,377
-*,*,minor_road,*,*,*,runway,*,*,-,-,377
-*,*,major_road,tertiary,*,*,*,*,*,-,-,376
-*,*,minor_road,*,*,*,taxiway,*,*,-,-,376
-*,*,*,*,Track,*,*,*,*,-,-,376
-*,*,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,*,*,-,-,375
-*,*,minor_road,residential;unclassified;road;living_street,*,*,*,*,*,-,-,360
-*,*,*,*,Unknown,*,*,*,*,-,-,360
-*,*,minor_road,service;minor,*,*,*,-,*,-,-,358
-*,*,minor_road,service;minor,*,*,*,*,*,-,-,356
+*,*,highway,motorway,*,*,*,*,*,*,*,381
+*,*,*,*,Major Highway;Beltway;Bypass,*,*,*,*,*,*,381
+*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,-,*,*,*,380
+*,*,major_road,trunk,*,*,*,*,*,*,*,379
+*,*,*,*,Secondary Highway,*,*,*,*,*,*,379
+*,*,major_road,primary,*,*,*,*,*,*,*,378
+*,*,*,*,Road,*,*,*,*,*,*,378
+*,*,major_road,secondary,*,*,*,*,*,*,*,377
+*,*,minor_road,*,*,*,runway,*,*,*,*,377
+*,*,major_road,tertiary,*,*,*,*,*,*,*,376
+*,*,minor_road,*,*,*,taxiway,*,*,*,*,376
+*,*,*,*,Track,*,*,*,*,*,*,376
+*,*,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,*,*,*,*,375
+*,*,minor_road,residential;unclassified;road;living_street,*,*,*,*,*,*,*,360
+*,*,*,*,Unknown,*,*,*,*,*,*,360
+*,*,minor_road,service;minor,*,*,*,-,*,*,*,358
+*,*,minor_road,service;minor,*,*,*,*,*,*,*,356
 *,*,aerialway,*,*,*,*,*,gondola;cable_car,*,*,442
 *,*,aerialway,*,*,*,*,*,chair_lift,*,*,441
 *,*,aerialway,*,*,*,*,*,+,*,*,440
-*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,spur;siding,*,-,-,361
-*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,yard,*,-,-,359
-*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,+,*,-,-,357
-*,*,path;piste,*,*,*,*,*,*,-,-,354
+*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,spur;siding,*,*,*,361
+*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,yard,*,*,*,359
+*,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail,*,+,*,*,*,357
+*,*,path;piste,*,*,*,*,*,*,*,*,354
 *,*,*,*,*,*,*,*,*,*,*,355
