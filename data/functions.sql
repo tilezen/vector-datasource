@@ -117,6 +117,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_poi_level(
     amenity_val text,
     barrier_val text,
     craft_val text,
+    disused_val text,
     emergency_val text,
     highway_val text,
     historic_val text,
@@ -140,6 +141,9 @@ BEGIN
   zoom = mz_one_pixel_zoom(way_area);
   RETURN
     CASE
+      -- drop anything which is tagged as disused
+      WHEN disused_val <> 'no'
+        THEN NULL
       WHEN aeroway_val IN ('aerodrome', 'airport')
         THEN LEAST(zoom + 4.12, 13)
       WHEN amenity_val = 'hospital'

@@ -297,6 +297,8 @@ The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_
 
 Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
 
+Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data.
+
 **POI properties (common):**
 
 * `name`
