@@ -398,7 +398,9 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 ![image](images/mapzen-vector-tile-docs-roads-railway.png)
 
-**Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Additional properties are available for rail features in the `transit` layer.
+**Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Features for rail tracks are included in this layer, whereas geometries and further information about rail lines or routes is available in the `transit` layer.
+
+Railway values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gauge`, `monorail` and `subway`.
 
 ![image](images/mapzen-vector-tile-docs-roads-airport.png)
 
