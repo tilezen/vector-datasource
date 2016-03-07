@@ -317,7 +317,7 @@ BEGIN
       ELSE                                        15
     END
     WHEN railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail',
-      'subway') THEN 15
+      'subway', 'funicular') THEN 15
     ELSE NULL
   END;
 END;
