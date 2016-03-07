@@ -312,7 +312,8 @@ BEGIN
       WHEN service_val IN ('crossover')      THEN 14
       ELSE                                        15
     END
-    WHEN railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail') THEN 15
+    WHEN railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail',
+      'subway') THEN 15
     ELSE NULL
   END;
 END;
