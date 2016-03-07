@@ -29,7 +29,7 @@ UNION ALL
 SELECT
     name,
     place AS kind,
-    'openstreetmap' AS source,
+    'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
 
@@ -70,7 +70,7 @@ UNION ALL
 SELECT
     name,
     wof_np.placetype_string AS kind,
-    'whosonfirst' AS source,
+    'whosonfirst.mapzen.com' AS source,
     {% filter geometry %}label_position{% endfilter %} AS __geometry__,
     wof_id AS __id__,
 
