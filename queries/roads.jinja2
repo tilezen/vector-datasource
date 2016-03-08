@@ -23,7 +23,7 @@ WHERE
 SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    'openstreetmap' AS source,
+    'openstreetmap.org' AS source,
     name,
     aeroway,
     aerialway,
@@ -88,7 +88,7 @@ UNION ALL
 SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    'openstreetmap' AS source,
+    'openstreetmap.org' AS source,
     COALESCE(tags->'piste:name', name) AS name,
     NULL AS aeroway,
     NULL AS aerialway,
