@@ -316,6 +316,7 @@ Implied but not stated: `source`: `openstreetmap.org`.
 * `ref`: generally only for `gate` and `station_entrance` features
 * `religion`:
 * `sport`:
+* `state`: only on `kind:station`, status of the station. Values include: `proposed`, `connection`, `inuse`, `alternate`, `temporary`.
 * `transit_routes`: only on `kind:station` transit related features
 * `zoo`:
 
