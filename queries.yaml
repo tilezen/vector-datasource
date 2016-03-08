@@ -403,3 +403,15 @@ post_process:
       source_layer: roads
       start_zoom: 8
       end_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.update_parenthetical_properties
+    params:
+      source_layer: pois
+      values: ['closed', 'historical']
+      target_min_zoom: 17
+      drop_below_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.update_parenthetical_properties
+    params:
+      source_layer: buildings
+      values: ['closed', 'historical']
+      target_min_zoom: 17
+      drop_below_zoom: 16

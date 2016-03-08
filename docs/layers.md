@@ -173,7 +173,7 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 
 **Building kind values:**
 
-* Buildings polygons and label_position points have `kind` values that are a straight passthru of the raw OpenStreetMap `building=*` and `building:part` values.
+* Buildings polygons and label_position points either have `kind` values that are a straight passthru of the raw OpenStreetMap `building=*` and `building:part` values. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
 * If either of `building=*` and `building:part` is `yes`, the `kind` property is dropped (and `kind:building` is implied).
 * Address points are `kind` of value `address`.
 
@@ -297,13 +297,13 @@ The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_
 
 Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
 
-Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data.
+Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data. Features which have certain parenthetical comments after their name are suppressed until zoom 17 and have their `kind` property set to that comment. Currently anything with a name ending in '(closed)' or '(historical)' will be suppressed in this manner.
 
 **POI properties (common):**
 
 * `name`
 * `id`: osm_id
-* `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attraction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags.
+* `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attraction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags. Can also be one of `closed` or `historical` if the original feature was parenthetically commented as closed or historical.
 
 Implied but not stated: `source`: `openstreetmap.org`.
 
