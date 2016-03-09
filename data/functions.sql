@@ -457,7 +457,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_transit_level(route_val text)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
-        CASE WHEN route_val IN ('train', 'railway') THEN 6
+        CASE WHEN route_val = 'train' THEN 6
              WHEN route_val IN ('subway', 'light_rail', 'tram') THEN 10
              ELSE NULL END
     );

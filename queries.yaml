@@ -416,3 +416,8 @@ post_process:
       values: ['closed', 'historical']
       target_min_zoom: 17
       drop_below_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.merge_features
+    params:
+      source_layer: transit
+      start_zoom: 0
+      end_zoom: 15
