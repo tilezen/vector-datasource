@@ -233,9 +233,15 @@ def assert_no_matching_feature(z, x, y, layer, properties):
             features, properties)
 
         if num_matching > 0:
-            raise Exception, "Found feature matching properties " \
-                "%r in layer %r, but was supposed to find none." \
-                % (properties, layer)
+            feature = None
+            for f in features:
+                if match_properties(f['properties'], properties):
+                    feature = f
+                    break
+
+            raise Exception, "Found feature matching properties %r in " \
+                "layer %r, but was supposed to find none. For example: " \
+                "%r" % (properties, layer, feature['properties'])
 
 
 def run_test(f, log, idx, num_tests):
