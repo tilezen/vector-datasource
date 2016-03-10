@@ -18,7 +18,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.water_tunnel
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -41,7 +40,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.place_ne_capital
       - TileStache.Goodies.VecTiles.transform.place_population_int
       - TileStache.Goodies.VecTiles.transform.calculate_default_place_scalerank
@@ -57,8 +55,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.remap_deprecated_landuse_kinds
       - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -72,7 +68,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
@@ -93,7 +88,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
@@ -118,7 +112,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.normalize_medical_kind
       - TileStache.Goodies.VecTiles.transform.add_state_to_stations
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
@@ -135,7 +128,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.boundary_kind
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -148,7 +140,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.route_name
@@ -156,6 +147,17 @@ layers:
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
 post_process:
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/kind/landuse.csv
+        params:
+          ignore_columns: [min_zoom]
+    params:
+      source_layer: landuse
+      target_value_type: int
   - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
     resources:
       matcher:
@@ -416,3 +418,5 @@ post_process:
       values: ['closed', 'historical']
       target_min_zoom: 17
       drop_below_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.drop_tags
+    params: {}

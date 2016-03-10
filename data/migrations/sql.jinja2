@@ -1,0 +1,12 @@
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse(
+        landuse text, leisure text, natural text, highway text,
+        amenity text, aeroway text, tourism text, man_made text,
+        power text, boundary text, tags hstore, way_area real)
+RETURNS REAL AS $$
+DECLARE
+  zoom REAL;
+BEGIN
+  zoom = mz_one_pixel_zoom(way_area);
+  RETURN {{ case_statement }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
