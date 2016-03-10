@@ -9,8 +9,8 @@ ALTER TABLE planet_osm_point ADD COLUMN mz_poi_min_zoom REAL;
 -- the coalesce here is just an optimisation, as the poi level
 -- will always be NULL if all of the arguments are NULL.
 UPDATE planet_osm_point SET
-    mz_poi_min_zoom = mz_calculate_poi_level("aerialway", "aeroway", "amenity", "barrier", "craft", "disused", "emergency", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", "tags", 0::real)
-    WHERE coalesce("aerialway", "aeroway", "amenity", "barrier", "craft", "emergency", "highway", "historic", "leisure", "lock", "man_made", "natural", "office", "power", "railway", "shop", "tourism", "waterway", "tags"->'rental', "tags"->'zoo', "tags"->'attraction', tags->'healthcare') IS NOT NULL;
+    mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
+    WHERE mz_calculate_min_zoom_pois(planet_osm_point.*) IS NOT NULL;
 
 CREATE INDEX planet_osm_point_place_index ON planet_osm_point(place) WHERE name IS NOT NULL AND place IN ('borough', 'city', 'continent', 'country', 'county', 'district', 'farm', 'hamlet', 'island', 'isolated_dwelling', 'lake', 'locality', 'neighbourhood', 'ocean', 'province', 'quarter', 'sea', 'state', 'suburb', 'town', 'village');
 

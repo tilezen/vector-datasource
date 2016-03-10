@@ -27,15 +27,14 @@ SELECT
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
-  mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary", "tags") AS kind,
+  mz_calculate_kind_landuse(planet_osm_polygon.*) AS kind,
   'openstreetmap.org' AS source,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__
 FROM
   planet_osm_polygon
 WHERE
-  mz_is_landuse = TRUE
-  AND {{ bounds|bbox_filter('way') }}
+  {{ bounds|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
@@ -59,7 +58,7 @@ SELECT
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
-  mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary", "tags") AS kind,
+  mz_calculate_kind_landuse(planet_osm_polygon.*) AS kind,
   'openstreetmap.org' AS source,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
@@ -67,8 +66,7 @@ SELECT
 FROM
   planet_osm_polygon
 WHERE
-  mz_is_landuse = TRUE
-  AND {{ bounds|bbox_filter('way') }}
+  {{ bounds|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
@@ -80,7 +78,7 @@ SELECT
     tags->'protect_class' AS protect_class,
     operator,
     way_area::bigint AS area,
-    mz_calculate_landuse_kind("landuse", "leisure", "natural", "highway", "aeroway", "amenity", "tourism", "man_made", "power", "boundary", "tags") AS kind,
+    mz_calculate_kind_landuse(planet_osm_polygon.*) AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -95,10 +93,11 @@ SELECT
 FROM
     planet_osm_polygon
 WHERE
-    mz_is_landuse = TRUE
-    AND {{ bounds|bbox_filter('way') }}
+    {{ bounds|bbox_filter('way') }}
     {% if zoom <= 15 %}
     AND mz_landuse_min_zoom <= {{ zoom }}
+    {% else %}
+    AND mz_landuse_min_zoom IS NOT NULL
     {% endif %}
 
 {% if zoom < 10 %}

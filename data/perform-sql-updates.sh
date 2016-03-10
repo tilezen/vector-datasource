@@ -10,6 +10,11 @@ echo "Creating functions..."
 psql $@ -f functions.sql
 echo "done."
 
+# dynamic functions generated from csv
+echo "Generating functions from csv..."
+(cd migrations && python create-sql-functions.py) | psql $@
+echo "done."
+
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."
 psql $@ -f apply-updates-non-planet-tables.sql &

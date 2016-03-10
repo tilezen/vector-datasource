@@ -1,0 +1,175 @@
+-------------
+-- landuse --
+-------------
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore,
+        way_area real)
+RETURNS REAL AS $$
+DECLARE
+  zoom REAL;
+BEGIN
+  zoom = mz_one_pixel_zoom(way_area);
+  RETURN {{ layers['landuse']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse(
+       planet_osm_point)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags,
+        0::real);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse(
+       planet_osm_polygon)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN {{ layers['landuse']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_landuse(
+       planet_osm_point)
+RETURNS TEXT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_landuse(
+       planet_osm_polygon)
+RETURNS TEXT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+----------
+-- pois --
+----------
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_pois_(
+{%- for param in layers['pois']['params'] %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore,
+        way_area real)
+RETURNS REAL AS $$
+DECLARE
+  zoom REAL;
+BEGIN
+  zoom = mz_one_pixel_zoom(way_area);
+  RETURN {{ layers['pois']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_pois(
+       planet_osm_point)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_pois_(
+{%- for param in layers['pois']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags,
+        0::real);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_pois(
+       planet_osm_polygon)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_pois_(
+{%- for param in layers['pois']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_pois_(
+{%- for param in layers['pois']['params'] %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN {{ layers['pois']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_pois(
+       planet_osm_point)
+RETURNS TEXT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_pois_(
+{%- for param in layers['pois']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_pois(
+       planet_osm_polygon)
+RETURNS TEXT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_pois_(
+{%- for param in layers['pois']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
