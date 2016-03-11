@@ -18,6 +18,14 @@ def format_key(key):
     return key
 
 
+def column_for_key(key):
+    if key.startswith('tags->'):
+        key = "tags"
+    else:
+        key = '"%s"' % key
+    return key
+
+
 def format_value(value):
     formatted_value = "'%s'" % value
     return formatted_value
@@ -104,6 +112,25 @@ def create_case_statement(rules):
     return case_statement
 
 
+def used_params(rules):
+    used = set()
+
+    for rule in rules:
+        if rule.equals:
+            for key, matcher in rule.equals:
+                used.add(column_for_key(key))
+
+        if rule.not_exists:
+            for key, matcher in rule.not_exists:
+                used.add(column_for_key(key))
+
+        if rule.set_memberships:
+            for key, candidates in rule.set_memberships:
+                used.add(column_for_key(key))
+
+    return used
+
+
 kind_rules = []
 min_zoom_rules = []
 with open('../../spreadsheets/kind/landuse.csv') as fh:
@@ -147,6 +174,7 @@ with open('../../spreadsheets/kind/landuse.csv') as fh:
                 kind_rule = create_rule(keys, row, kind_calc)
                 kind_rules.append(kind_rule)
 
+landuse_params = (used_params(kind_rules) | used_params(min_zoom_rules)) - set(['tags'])
 landuse_kind_case = create_case_statement(kind_rules)
 landuse_min_zoom_case = create_case_statement(min_zoom_rules)
 template_name = 'sql.jinja2'
@@ -155,5 +183,6 @@ template = environment.get_template(template_name)
 sql = template.render(
     landuse_kind=landuse_kind_case,
     landuse_level=landuse_min_zoom_case,
+    landuse_params=landuse_params,
 )
 print sql

@@ -1,7 +1,39 @@
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse(
-        landuse text, leisure text, natural text, highway text,
-        amenity text, aeroway text, tourism text, man_made text,
-        power text, boundary text, tags hstore, way_area real)
+       planet_osm_point)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_landuse_(
+{%- for param in landuse_params %}
+        row.{{param}},
+{%- endfor %}
+        row.tags,
+        0::real);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse(
+       planet_osm_polygon)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_landuse_(
+{%- for param in landuse_params %}
+        row.{{param}},
+{%- endfor %}
+        row.tags,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse_(
+{%- for param in landuse_params %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore,
+        way_area real)
 RETURNS REAL AS $$
 DECLARE
   zoom REAL;
@@ -12,9 +44,38 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_landuse_kind(
-        landuse text, leisure text, natural text, highway text,
-        amenity text, aeroway text, tourism text, man_made text,
-        power text, boundary text, tags hstore, way_area real)
+       planet_osm_point)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_landuse_kind_(
+{%- for param in landuse_params %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_landuse_kind(
+       planet_osm_polygon)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_landuse_kind_(
+{%- for param in landuse_params %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_landuse_kind_(
+{%- for param in landuse_params %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore)
 RETURNS TEXT AS $$
 BEGIN
   RETURN {{ landuse_kind }};
