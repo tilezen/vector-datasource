@@ -91,3 +91,4 @@ protected_area,*,*,*,*,*,*,*,*,*,*,*,${zoom},protected_area
 *,*,*,*,*,*,*,*,*,*,*,substation,"${GREATEST(LEAST(zoom, 16), 9)}",substation
 *,*,*,*,*,*,*,*,*,*,*,station,"${GREATEST(LEAST(zoom, 16), 9)}",substation
 *,*,*,*,*,*,*,*,*,*,*,sub_station,"${GREATEST(LEAST(zoom, 16), 9)}",substation
+*,*,*,*,*,*,*,*,*,*,*,*,*,landuse

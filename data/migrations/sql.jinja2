@@ -7,6 +7,16 @@ DECLARE
   zoom REAL;
 BEGIN
   zoom = mz_one_pixel_zoom(way_area);
-  RETURN {{ case_statement }};
+  RETURN {{ landuse_level }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_landuse_kind(
+        landuse text, leisure text, natural text, highway text,
+        amenity text, aeroway text, tourism text, man_made text,
+        power text, boundary text, tags hstore, way_area real)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN {{ landuse_kind }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
