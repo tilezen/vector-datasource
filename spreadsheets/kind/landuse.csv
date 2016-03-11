@@ -89,5 +89,5 @@ protected_area,*,*,*,*,*,*,*,*,*,*,*,${zoom},protected_area
 *,*,*,*,*,*,*,*,*,*,*,plant,"${GREATEST(LEAST(zoom, 16), 9)}",plant
 *,*,*,*,*,*,*,*,*,*,*,generator,"${GREATEST(LEAST(zoom, 16), 9)}",generator
 *,*,*,*,*,*,*,*,*,*,*,substation,"${GREATEST(LEAST(zoom, 16), 9)}",substation
-*,*,*,*,*,*,*,*,*,*,*,station,"${GREATEST(LEAST(zoom, 16), 9)}",station
-*,*,*,*,*,*,*,*,*,*,*,sub_station,"${GREATEST(LEAST(zoom, 16), 9)}",sub_station
+*,*,*,*,*,*,*,*,*,*,*,station,"${GREATEST(LEAST(zoom, 16), 9)}",substation
+*,*,*,*,*,*,*,*,*,*,*,sub_station,"${GREATEST(LEAST(zoom, 16), 9)}",substation
