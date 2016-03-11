@@ -4,7 +4,23 @@ from jinja2 import FileSystemLoader
 from TileStache.Goodies.VecTiles.transform import _parse_kt
 import csv
 
-Rule = namedtuple('Rule', 'calc equals not_exists set_memberships default_rule')
+Rule = namedtuple(
+    'Rule',
+    'calc equals not_exists set_memberships default_rule'
+)
+
+
+def format_key(key):
+    if key.startswith('tags->'):
+        key = 'tags->\'%s\'' % (key[len('tags->'):])
+    else:
+        key = '"%s"' % key
+    return key
+
+
+def format_value(value):
+    formatted_value = "'%s'" % value
+    return formatted_value
 
 
 def create_rule(keys, row, calc):
@@ -30,14 +46,6 @@ def create_rule(keys, row, calc):
         calc, equals, not_exists, set_memberships, default_rule)
 
 
-def format_key(key):
-    if key.startswith('tags->'):
-        key = 'tags->\'%s\'' % (key[len('tags->'):])
-    else:
-        key = '"%s"' % key
-    return key
-
-
 def create_case_statement(rules):
     when_parts = []
     default_rule = None
@@ -51,7 +59,8 @@ def create_case_statement(rules):
         # TODO consider splitting this up into separate functions to
         # more easily test
         if rule.equals:
-            when_equals_parts = ['%s = \'%s\'' % (format_key(key), matcher)
+            when_equals_parts = ['%s = %s' % (format_key(key),
+                                              format_value(matcher))
                                  for key, matcher in rule.equals]
             when_equals = ' AND '.join(when_equals_parts)
             when_conds.append(when_equals)
@@ -63,9 +72,15 @@ def create_case_statement(rules):
             when_conds.append(when_not_exists)
 
         if rule.set_memberships:
-            when_in_parts = ['%s IN (%s)' % (format_key(key),
-                                             ', '.join(candidates))
-                             for key, candidates in rule.set_memberships]
+            when_in_parts = []
+            for key, candidates in rule.set_memberships:
+                formatted_key = format_key(key)
+                formatted_candidates = map(format_value, candidates)
+                formatted_candidates = ', '.join(formatted_candidates)
+                when_in_part = '%s IN (%s)' % (formatted_key,
+                                               formatted_candidates)
+                when_in_parts.append(when_in_part)
+
             when_in = ' AND '.join(when_in_parts)
             when_conds.append(when_in)
 
@@ -128,7 +143,7 @@ with open('../../spreadsheets/kind/landuse.csv') as fh:
                 # TODO we might want to allow the ability to execute
                 # arbitrary sql here. For now we will assume it's a plain
                 # string though
-                kind_calc = "'%s'" % kind_calc
+                kind_calc = format_value(kind_calc)
                 kind_rule = create_rule(keys, row, kind_calc)
                 kind_rules.append(kind_rule)
 
