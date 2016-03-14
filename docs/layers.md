@@ -316,9 +316,16 @@ Implied but not stated: `source`: `openstreetmap.org`.
 * `ref`: generally only for `gate` and `station_entrance` features
 * `religion`:
 * `sport`:
-* `state`: only on `kind:station`, status of the station. Values include: `proposed`, `connection`, `inuse`, `alternate`, `temporary`.
-* `transit_routes`: only on `kind:station` transit related features
 * `zoo`:
+
+**POI properties (only on `kind:station`)
+* `state`: only on `kind:station`, status of the station. Values include: `proposed`, `connection`, `inuse`, `alternate`, `temporary`.
+* `*_routes`: a list of the reference name/number or full name (if there is no `ref`) of the OSM route relations which are reachable by exploring the local public transport relations or site relations. These are:
+  * `train_routes` a list of train routes, generally above-ground and commuter or inter-city "heavy" rail.
+  * `subway_routes` a list of subway or underground routes, generally underground commuter rail.
+  * `light_rail_routes` a list of light rail or rapid-transit passenger train routes.
+  * `tram_routes` a list of tram routes.
+* `is_*` a set of boolean flags indicating whether this station has any routes of the given type. These are: `is_train`, `is_subway`, `is_light_rail`, `is_tram`, corresponding to the above `*_routes`. This is provided as a convenience for styling.
 
 
 **POI kind values:**
