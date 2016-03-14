@@ -15,8 +15,7 @@ v0.8.0
 * The `roads` and `landuse` layers receive a significant overhall to `sort_key` values. The `sort_key` value is a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. Issues [364](https://github.com/mapzen/vector-datasource/issues/364) and [546](https://github.com/mapzen/vector-datasource/issues/546)
 * More layers include `sort_key` values including `boundaries`, `buildings`, `earth`, `transit`, and `water` that are compatible with the values in the `roads` and `landuse` layers. [Issue #550](https://github.com/mapzen/vector-datasource/pull/550)
 * Fixed migration loop to handle the case where there are no explicit migrations to run. [Issue #514](https://github.com/mapzen/vector-datasource/issues/514)
-
-
+* **Requires:** [tileserver v0.6.0](https://github.com/mapzen/tileserver/releases/tag/v0.6.0) and [tilequeue v0.8.0](https://github.com/mapzen/tilequeue/releases/tag/v0.8.0) and [TileStache v0.8.0](https://github.com/mapzen/TileStache/releases/tag/v0.8.0)
 
 v0.7.0
 ------
