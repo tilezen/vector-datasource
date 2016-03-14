@@ -4,4 +4,5 @@ UPDATE planet_osm_point SET
     "leisure", "lock", "man_made", "natural", "office", "power", "railway",
     "shop", "tourism", "waterway", "tags", 0::real)
   WHERE
-    "disused" <> 'no';
+    "disused" <> 'no' OR
+    "railway" = 'station';

@@ -4,4 +4,5 @@ UPDATE planet_osm_polygon SET
     "leisure", "lock", "man_made", "natural", "office", "power", "railway",
     "shop", "tourism", "waterway", "tags", way_area)
   WHERE
-    "disused" <> 'no';
+    "disused" <> 'no' OR
+    "railway" = 'station';

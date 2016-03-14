@@ -152,7 +152,7 @@ BEGIN
       WHEN natural_val IN ('peak', 'volcano')
         THEN 11 -- these are generally point features
       WHEN railway_val IN ('station')
-        THEN LEAST(zoom + 0.38, 12)
+        THEN 10
       WHEN tourism_val = 'zoo'
         THEN LEAST(zoom + 3.00, 13)
       WHEN (natural_val IN ('spring')
