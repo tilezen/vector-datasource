@@ -1,6 +1,6 @@
 v0.8.0
 ------
-* **Release date**: 2016-03-04.
+* **Release date**: 2016-03-04. _Live in prod: 2015-03-08._
 * Add new label placements in the `water` layer for `bay`, `strait`, and `fjord`. [Issue #400](https://github.com/mapzen/vector-datasource/issues/400)
 * Add new kinds in the `pois` layer for `hardware` and `trade` to capture more types of "big box" stores. [Issue #520](https://github.com/mapzen/vector-datasource/issues/520)
 * Additions to the `pois` layer to celebrate [International Women's Day](http://www.internationalwomensday.com). [Issue #526](https://github.com/mapzen/vector-datasource/issues/526)
