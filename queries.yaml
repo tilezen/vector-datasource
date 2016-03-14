@@ -312,10 +312,13 @@ post_process:
       start_zoom: 13
       where: >-
         properties.get('mz_is_building') is True
-  - fn: TileStache.Goodies.VecTiles.transform.normalize_and_merge_duplicate_stations
+  - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
       source_layer: pois
       end_zoom: 16
+  - fn: TileStache.Goodies.VecTiles.transform.normalize_station_properties
+    params:
+      source_layer: pois
   - fn: TileStache.Goodies.VecTiles.transform.rank_features
     params:
       source_layer: pois
