@@ -318,7 +318,8 @@ Implied but not stated: `source`: `openstreetmap.org`.
 * `sport`:
 * `zoo`:
 
-**POI properties (only on `kind:station`)
+**POI properties (only on `kind:station`):**
+
 * `state`: only on `kind:station`, status of the station. Values include: `proposed`, `connection`, `inuse`, `alternate`, `temporary`.
 * `*_routes`: a list of the reference name/number or full name (if there is no `ref`) of the OSM route relations which are reachable by exploring the local public transport relations or site relations. These are:
   * `train_routes` a list of train routes, generally above-ground and commuter or inter-city "heavy" rail.
@@ -326,6 +327,7 @@ Implied but not stated: `source`: `openstreetmap.org`.
   * `light_rail_routes` a list of light rail or rapid-transit passenger train routes.
   * `tram_routes` a list of tram routes.
 * `is_*` a set of boolean flags indicating whether this station has any routes of the given type. These are: `is_train`, `is_subway`, `is_light_rail`, `is_tram`, corresponding to the above `*_routes`. This is provided as a convenience for styling.
+* `root_relation_id` an integer ID (of an OSM relation) which can be used to link or group together features which are related by being part of a larger feature. A full explanation of [relations](http://wiki.openstreetmap.org/wiki/Relation) wouldn't fit here, but the general idea is that all the station features which are part of the same [site](http://wiki.openstreetmap.org/wiki/Relation:site), [stop area](http://wiki.openstreetmap.org/wiki/Tag:public_transport%3Dstop_area) or [stop area group](http://wiki.openstreetmap.org/wiki/Relation:public_transport) should have the same ID to show they're related. Note that this information is only present on some stations.
 
 
 **POI kind values:**
