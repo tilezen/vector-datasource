@@ -41,7 +41,9 @@ for z, x, y, name, osm_id, expected_rank, expected_routes in stations:
             props = poi['properties']
             if props['id'] == osm_id:
                 found = True
-                routes = props.get('transit_routes', list())
+                routes = list()
+                for typ in ['train', 'subway', 'light_rail', 'tram']:
+                    routes.extend(props.get('%s_routes' % typ, list()))
                 rank = props['kind_tile_rank']
 
                 if rank > expected_rank:

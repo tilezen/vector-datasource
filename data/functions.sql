@@ -152,7 +152,7 @@ BEGIN
       WHEN natural_val IN ('peak', 'volcano')
         THEN 11 -- these are generally point features
       WHEN railway_val IN ('station')
-        THEN LEAST(zoom + 0.38, 12)
+        THEN 10
       WHEN tourism_val = 'zoo'
         THEN LEAST(zoom + 3.00, 13)
       WHEN (natural_val IN ('spring')
@@ -536,7 +536,7 @@ BEGIN
     WHERE parts && ARRAY[way_id]
       AND parts[way_off+1:rel_off] && ARRAY[way_id]));
 END;
-$$ LANGUAGE plpgsql IMMUTABLE;
+$$ LANGUAGE plpgsql STABLE;
 
 -- adds the prefix onto every key in an hstore value
 CREATE OR REPLACE FUNCTION mz_hstore_add_prefix(
@@ -640,21 +640,94 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 
--- calculate the list of refs (or names) of transit routes that
--- a particular station is part of. this ends up being a very
--- complex function because it's bouncing around between the
--- nodes, ways and relations to calculate membership of various
--- sets.
-CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
-  station_node_id BIGINT,
-  station_way_id BIGINT)
-RETURNS text[] AS $$
+-- for the purposes of sweeping for related public transit features,
+-- "interesting" tags are ones which define relations which group public
+-- transport features, or group features together in a "site". these are:
+--   * public_transport = stop_area
+--   * public_transport = stop_area_group
+--   * type = stop_area
+--   * type = stop_area_group
+--   * type = site
+--
+CREATE OR REPLACE FUNCTION mz_is_interesting_transit_relation(
+  tags hstore)
+RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN
+    tags->'public_transport' IN ('stop_area', 'stop_area_group') OR
+    tags->'type' IN ('stop_area', 'stop_area_group', 'site');
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- extract a name for a transit route relation. this can expand comma
+-- separated lists and prefers to use the ref rather than the name.
+CREATE OR REPLACE FUNCTION mz_transit_route_name(
+  tags hstore)
+RETURNS text AS $$
 DECLARE
-  -- IDs of "stop area" relations which contain the station nodes
-  -- or ways. each individual line may have its own stop node, and
-  -- this is the relation which groups the stops together with the
-  -- station.
-  stop_area_ids      bigint[];
+  route_name text;
+BEGIN
+  SELECT TRIM(BOTH FROM "name") INTO route_name
+    FROM (
+      SELECT UNNEST(string_to_array(COALESCE(
+        -- prefer ref as it's less likely to contain the destination name
+        tags->'ref',
+        tags->'name'
+      ), ',')) AS "name"
+    ) refs_and_names
+    LIMIT 1;
+  RETURN route_name;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'mz_transit_routes_rettype') THEN
+    DROP TYPE mz_transit_routes_rettype CASCADE;
+  END IF;
+
+  CREATE TYPE mz_transit_routes_rettype AS (
+    -- the "top-most" site or public_transport relation found while exploring
+    -- the graph of objects around the station.
+    root_relation_id BIGINT,
+
+    -- the "score" of the station. this takes the number of rail routes, the
+    -- sum of the number of subway and light rail routes, and the sum of the
+    -- number of tram and railway routes. if it is an interchange (i.e: both
+    -- rail and subway / light_rail routes) then doubling both those numbers.
+    -- these then get maxed out at 9, and turned into a 3-digit number.
+    score SMALLINT,
+
+    -- the list of distinct refs (or names if refs aren't present) on each
+    -- type of route.
+    train_routes      text[],
+    subway_routes     text[],
+    light_rail_routes text[],
+    tram_routes       text[],
+    railway_routes    text[]
+  );
+END$$;
+
+-- examines a point or polygon (by OSM ID) and tries to determine if it is
+-- related to a wider set of public transport features, including rail,
+-- light rail, subway and tram routes. information about these is returned
+-- in the returned type.
+--
+CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
+  -- the station OSM ID from the point table, or NULL
+  IN station_point_osm_id BIGINT,
+
+  -- the station OSM ID from the polygon table, or NULL. may be negative to
+  -- indicate a relation.
+  IN station_polygon_osm_id BIGINT,
+
+  -- the returned data - see the type definition for details.
+  OUT retval mz_transit_routes_rettype)
+AS $$
+DECLARE
+  -- the IDs of a "seed" set of relations which directly include any
+  -- station node, way or relation passed as input.
+  seed_relations bigint[];
 
   -- IDs of nodes which are tagged as stations or stops and are
   -- members of the stop area relations. these will contain the
@@ -668,63 +741,200 @@ DECLARE
   -- `station_way_id` in case it's directly included in any routes.
   stations_and_lines bigint[];
 
+  -- all the relation IDs as an array for intersecting with the
+  -- "parts" array in planet_osm_rels.
+  all_rel_ids bigint[];
+
+  -- all the IDs of everything to intersect with the "parts" of
+  -- planet_osm_rels when looking for route relations.
+  all_interesting_ids bigint[];
+
+  -- the IDs of all the route relations found
+  all_routes bigint[];
+
+  -- number of each type of route.
+  num_train_routes smallint;
+  num_subway_routes smallint;
+  num_light_rail_routes smallint;
+  num_tram_routes smallint;
+  num_railway_routes smallint;
+
+  -- a 'bonus' is given to the score of stations which are interchanges
+  -- between mainline railway and subway or light rail.
+  bonus smallint;
+
 BEGIN
-  stop_area_ids := ARRAY(
-    SELECT DISTINCT r.id
-    FROM planet_osm_rels r
-    WHERE r.parts && ARRAY[station_node_id, station_way_id]
-    AND ((r.parts[1:r.way_off] && ARRAY[station_node_id]) OR
-         (r.parts[way_off+1:rel_off] && ARRAY[station_way_id]))
-    AND mz_rel_get_tag(r.tags, 'public_transport') = 'stop_area'
-  );
+  -- find any "interesting" relations which contain the given station
+  -- features as members.
+  seed_relations := ARRAY(
+    SELECT id
+    FROM planet_osm_rels
+    WHERE
+      (ARRAY[station_point_osm_id, station_polygon_osm_id,
+             -station_polygon_osm_id] && parts) AND
+      (ARRAY[station_point_osm_id] && parts[1:way_off] OR
+       ARRAY[station_polygon_osm_id] && parts[way_off+1:rel_off] OR
+       ARRAY[-station_polygon_osm_id] && parts[rel_off+1:array_upper(parts,1)]) AND
+      mz_is_interesting_transit_relation(hstore(tags))
+    UNION
+    -- manually include the station multipolygon relation so that we can
+    -- sweep down its members too.
+    SELECT -station_polygon_osm_id AS id WHERE station_polygon_osm_id < 0
+    );
 
+  -- this complex query does two recursive sweeps of the relations
+  -- table starting from a seed set of relations which are or contain
+  -- the original station.
+  --
+  -- the first sweep goes "upwards" from relations to "parent" relations. if
+  -- a relation R1 is a member of relation R2, then R2 will be included in
+  -- this sweep as long as it has "interesting" tags, as defined by the
+  -- function mz_is_interesting_transit_relation.
+  --
+  -- the second sweep goes "downwards" from relations to "child" relations.
+  -- if a relation R1 has a member R2 which is also a relation, then R2 will
+  -- be included in this sweep as long as it also has "interesting" tags.
+  --
+  all_rel_ids := ARRAY(
+    WITH RECURSIVE upward_search(level,path,id,parts,rel_off,cycle) AS (
+        SELECT 0,ARRAY[id],id,parts,rel_off,false
+        FROM planet_osm_rels WHERE id = ANY(seed_relations)
+      UNION
+        SELECT
+          level + 1,
+          path || r.id,
+          r.id,
+          r.parts,
+          r.rel_off,
+          r.id = ANY(path)
+        FROM
+          planet_osm_rels r JOIN upward_search s
+        ON
+          ARRAY[s.id] && r.parts
+        WHERE
+          ARRAY[s.id] && r.parts[r.rel_off+1:array_upper(r.parts,1)] AND
+          mz_is_interesting_transit_relation(hstore(r.tags)) AND
+          NOT cycle
+      )
+    SELECT id FROM upward_search ORDER BY level DESC);
+
+  IF array_upper(all_rel_ids, 1) > 0 THEN
+    retval.root_relation_id := all_rel_ids[1];
+  ELSE
+    retval.root_relation_id := NULL;
+  END IF;
+
+  all_rel_ids := ARRAY(
+    WITH RECURSIVE downward_search(path,id,parts,rel_off,cycle) AS (
+        SELECT ARRAY[id],id,parts,rel_off,false
+        FROM planet_osm_rels WHERE id = ANY(all_rel_ids)
+      UNION
+        SELECT
+          path || r.id,
+          r.id,
+          r.parts,
+          r.rel_off,
+          r.id = ANY(path)
+        FROM
+          planet_osm_rels r JOIN downward_search s
+        ON
+          r.id = ANY(s.parts[s.rel_off+1:array_upper(s.parts,1)])
+        WHERE
+          mz_is_interesting_transit_relation(hstore(r.tags)) AND
+          NOT cycle
+    ) SELECT id FROM downward_search WHERE NOT cycle);
+
+  -- collect all the interesting nodes - this includes the station node (if
+  -- any) and any nodes which are members of found relations which have
+  -- public transport tags indicating that they're stations or stops.
   stations_and_stops := ARRAY(
-    SELECT DISTINCT p.osm_id AS id
-    FROM planet_osm_point p
-    JOIN (SELECT DISTINCT unnest(r.parts[1:r.way_off]) AS node_id
-          FROM planet_osm_rels r
-	  WHERE r.id = ANY(stop_area_ids)) r
-    ON r.node_id = p.osm_id
-    WHERE (
-      p.railway IN ('station', 'stop') OR
-      p.public_transport IN ('stop', 'stop_position'))
-    -- manually re-include the original station node, in case it's
-    -- not part of a public_transport=stop_area relation.
-    UNION SELECT station_node_id AS id WHERE station_node_id IS NOT NULL
-  );
+    SELECT DISTINCT id
+    FROM
+      (SELECT UNNEST(parts[1:way_off]) AS id
+       FROM planet_osm_rels
+       WHERE id = ANY(all_rel_ids)) n
+    JOIN planet_osm_point p
+    ON n.id = p.osm_id
+    WHERE
+      (p.railway IN ('station', 'stop', 'tram_stop') OR
+       p.public_transport IN ('stop', 'stop_position', 'tram_stop'))
+    -- re-include the station node, if there was one.
+    UNION
+    SELECT station_point_osm_id AS id
+    WHERE station_point_osm_id IS NOT NULL);
 
+  -- collect any physical railway which includes any of the above
+  -- nodes.
   stations_and_lines := ARRAY(
     SELECT DISTINCT w.id
     FROM planet_osm_ways w
     WHERE w.nodes && stations_and_stops
-    AND mz_rel_get_tag(w.tags, 'railway') IN ('subway', 'light_rail', 'tram', 'rail')
+    AND hstore(w.tags)->'railway' IN ('subway', 'light_rail', 'tram', 'rail')
     -- manually re-include the original station way, in case it's
     -- not part of a public_transport=stop_area relation.
-    UNION SELECT station_way_id AS id WHERE station_way_id IS NOT NULL
+    UNION SELECT station_polygon_osm_id AS id
+    WHERE station_polygon_osm_id > 0
   );
 
-  RETURN ARRAY(
-    SELECT DISTINCT trim(both from "name")
-    FROM (
-      SELECT unnest(string_to_array(COALESCE(
-          -- prefer ref as it's less likely to contain the destination name
-          mz_rel_get_tag(tags, 'ref'),
-          mz_rel_get_tag(tags, 'name')
-        ), ',')) AS "name"
-      FROM planet_osm_rels
-      WHERE ((
-          parts && stations_and_stops AND
-          parts[1:way_off] && stations_and_stops
-        ) OR (
-          parts && stations_and_lines AND
-          parts[way_off+1:rel_off] && stations_and_lines
-        )) AND
-        mz_rel_get_tag(tags, 'type') = 'route' AND
-        mz_rel_get_tag(tags, 'route') IN ('subway', 'light_rail', 'tram', 'train')
-      ) subquery
-    );
+  -- collect all IDs together in one array to intersect with the parts arrays
+  -- of route relations which may include them.
+  all_interesting_ids = stations_and_stops || stations_and_lines || all_rel_ids;
+
+  all_routes := ARRAY(
+    SELECT DISTINCT id
+    FROM planet_osm_rels
+    WHERE
+      parts && all_interesting_ids AND
+      (parts[1:way_off] && stations_and_stops OR
+       parts[way_off+1:rel_off] && stations_and_lines OR
+       parts[rel_off+1:array_upper(parts,1)] && all_rel_ids) AND
+      hstore(tags)->'type' = 'route' AND
+      hstore(tags)->'route' IN ('subway', 'light_rail', 'tram', 'train',
+        'railway'));
+
+  -- extract the route ref/name for routes
+  retval.train_routes := ARRAY(
+    SELECT DISTINCT mz_transit_route_name(hstore(tags)) FROM planet_osm_rels
+    WHERE id = ANY(all_routes) AND hstore(tags)->'route' = 'train');
+
+  retval.subway_routes := ARRAY(
+    SELECT DISTINCT mz_transit_route_name(hstore(tags)) FROM planet_osm_rels
+    WHERE id = ANY(all_routes) AND hstore(tags)->'route' = 'subway');
+
+  retval.light_rail_routes := ARRAY(
+    SELECT DISTINCT mz_transit_route_name(hstore(tags)) FROM planet_osm_rels
+    WHERE id = ANY(all_routes) AND hstore(tags)->'route' = 'light_rail');
+
+  retval.tram_routes := ARRAY(
+    SELECT DISTINCT mz_transit_route_name(hstore(tags)) FROM planet_osm_rels
+    WHERE id = ANY(all_routes) AND hstore(tags)->'route' = 'tram');
+
+  retval.railway_routes := ARRAY(
+    SELECT DISTINCT mz_transit_route_name(hstore(tags)) FROM planet_osm_rels
+    WHERE id = ANY(all_routes) AND hstore(tags)->'route' = 'railway');
+
+  -- calculate a score between 0 and 999 for stations.
+  num_train_routes := COALESCE(array_upper(retval.train_routes, 1), 0);
+  num_subway_routes := COALESCE(array_upper(retval.subway_routes, 1), 0);
+  num_light_rail_routes := COALESCE(array_upper(retval.light_rail_routes, 1), 0);
+  num_tram_routes := COALESCE(array_upper(retval.tram_routes, 1), 0);
+  num_railway_routes := COALESCE(array_upper(retval.railway_routes, 1), 0);
+
+  -- if a station is an interchange between mainline rail and subway or light
+  -- rail, then give it a "bonus" boost of importance.
+  IF num_train_routes > 0 AND
+    (num_subway_routes + num_light_rail_routes) > 0 THEN
+    bonus := 2;
+  ELSE
+    bonus := 1;
+  END IF;
+
+  retval.score :=
+    100 * LEAST(9, bonus * num_train_routes) +
+    10 * LEAST(9, bonus * (num_subway_routes + num_light_rail_routes)) +
+    LEAST(9, num_tram_routes + num_railway_routes);
 END;
-$$ LANGUAGE plpgsql IMMUTABLE;
+$$ LANGUAGE plpgsql STABLE;
 
 -- returns true if the text is numeric and can be cast
 -- to a float without error.
