@@ -3,7 +3,7 @@ disused,aerialway,aeroway,amenity,barrier,craft,emergency,highway,historic,leisu
 *,*,aerodrome;airport,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,"${LEAST(zoom + 4.12, 13)}",${aeroway}
 *,*,*,hospital,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,"${LEAST(zoom + 3.32, 14)}",hospital
 *,*,*,*,*,*,*,*,*,*,*,*,peak;volcano,*,*,*,*,*,*,*,*,*,*,${11},"${""natural""}"
-*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,station,*,*,*,*,*,*,*,"${LEAST(zoom + 0.38, 12)}",station
+*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,station,*,*,*,*,*,*,*,${10},station
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,zoo,*,"${LEAST(zoom + 3.00, 13)}",zoo
 *,*,*,*,*,*,*,*,*,*,*,*,spring,*,*,*,*,*,*,*,*,*,*,${14},spring
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,level_crossing,*,*,*,*,*,*,*,${14},level_crossing
