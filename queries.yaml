@@ -427,12 +427,14 @@ post_process:
   # only keep all stations below z12, then cut it down to the top few.
   - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
     params:
+      source_layer: transit
       start_zoom: 9
       end_zoom: 11
       items_matching: { kind: station }
       max_items: 20
   - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
     params:
+      source_layer: transit
       start_zoom: 12
       end_zoom: 13
       items_matching: { kind: station }
