@@ -65,7 +65,7 @@ UNION ALL
     -- expensive, so we only want to calculate it when we actually need the
     -- result.
     CASE
-      WHEN railway='station' AND osm_id > 0
+      WHEN railway='station'
         THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
