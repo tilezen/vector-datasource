@@ -4,8 +4,7 @@ SELECT
     -- name tag, if it has been set. likewise for landuse areas
     -- where we might want to label the landuse rather than the
     -- building.
-    CASE WHEN mz_poi_min_zoom IS NULL AND
-              (mz_is_landuse IS NULL OR mz_is_landuse = FALSE)
+    CASE WHEN mz_poi_min_zoom IS NULL AND mz_landuse_min_zoom IS NULL
          THEN name
          ELSE "addr:housename"
     END AS name,
