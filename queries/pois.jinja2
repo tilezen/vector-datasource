@@ -30,11 +30,12 @@ FROM (
     aerialway, aeroway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
-    -- note: the mz_calculate_transit_routes function is pretty expensive,
-    -- so we only want to calculate it when we actually need the result.
+    -- note: the mz_calculate_transit_routes_and_score function is pretty
+    -- expensive, so we only want to calculate it when we actually need the
+    -- result.
     CASE
       WHEN railway='station' AND osm_id > 0
-        THEN mz_calculate_transit_routes(osm_id, NULL)
+        THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
       ELSE NULL
     END AS transit_routes,
     mz_calculate_kind_pois(planet_osm_point.*) AS kind,
@@ -60,11 +61,12 @@ UNION ALL
     aerialway, aeroway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
-    -- note: the mz_calculate_transit_routes function is pretty expensive,
-    -- so we only want to calculate it when we actually need the result.
+    -- note: the mz_calculate_transit_routes_and_score function is pretty
+    -- expensive, so we only want to calculate it when we actually need the
+    -- result.
     CASE
-      WHEN railway='station' AND osm_id > 0
-        THEN mz_calculate_transit_routes(NULL, osm_id)
+      WHEN railway='station'
+        THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
     mz_calculate_kind_pois(planet_osm_polygon.*) AS kind,

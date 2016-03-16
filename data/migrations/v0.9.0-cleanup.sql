@@ -10,6 +10,11 @@ DROP FUNCTION IF EXISTS mz_calculate_landuse_kind(text, text, text, text, text, 
 
 ALTER TABLE planet_osm_polygon DROP COLUMN IF EXISTS mz_is_landuse;
 
+-- new queries don't use this function, so once the tilequeue/tileserver
+-- instances are updated, it should be safe to drop. the new function is
+-- called "mz_calculate_transit_routes_and_score".
+DROP FUNCTION IF EXISTS mz_calculate_transit_routes(bigint,bigint);
+
 BEGIN;
 
 DROP INDEX planet_osm_polygon_landuse_geom_9_index;
