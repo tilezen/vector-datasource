@@ -55,3 +55,15 @@ wait
 for table in planet_osm_point planet_osm_line planet_osm_polygon; do
     psql -c "ALTER TABLE ${table} ENABLE TRIGGER USER" $*
 done
+
+for python in ${migration_dir}/*.py; do
+    # break the loop if the file doesn't exist - this is generally the case
+    # if the glob matches nothing and we end up looking for a file which is
+    # called literally '*.py'.
+    [ -f $python ] || break
+
+    if [ $python != "${migration_dir}/create-sql-functions.py" ]; then
+        echo "executing python: $python"
+        python $python
+    fi
+done
