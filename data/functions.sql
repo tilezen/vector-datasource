@@ -395,7 +395,7 @@ END$$;
 -- light rail, subway and tram routes. information about these is returned
 -- in the returned type.
 --
-CREATE OR REPLACE FUNCTION mz_calculate_transit_routes(
+CREATE OR REPLACE FUNCTION mz_calculate_transit_routes_and_score(
   -- the station OSM ID from the point table, or NULL
   IN station_point_osm_id BIGINT,
 
