@@ -1,7 +1,12 @@
--- old version of the POI level calculation without the 'disused' parameter.
+-- drop no longer used functions, supplanted by generated functions
 DROP FUNCTION IF EXISTS mz_calculate_poi_level(
   text, text, text, text, text, text, text, text, text, text, text, text, text,
   text, text, text, text, text, hstore, real);
+DROP FUNCTION IF EXISTS mz_calculate_landuse_min_zoom(text, text, text, text, text, text, text, text, text, text, real);
+DROP FUNCTION IF EXISTS mz_calculate_landuse_kind(text, text, text, text, text, text, text, text, text, text);
+DROP FUNCTION IF EXISTS mz_calculate_is_landuse(text, text, text, text, text, text, text, text, text, text);
+DROP FUNCTION IF EXISTS mz_calculate_is_landuse(text, text, text, text, text, text, text, text, text, text, hstore);
+DROP FUNCTION IF EXISTS mz_calculate_landuse_kind(text, text, text, text, text, text, text, text, text, text, hstore);
 
 ALTER TABLE planet_osm_polygon DROP COLUMN IF EXISTS mz_is_landuse;
 
