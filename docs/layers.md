@@ -439,7 +439,7 @@ Railway values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gaug
 * Layer name: `transit`
 * Geometry types: `line`, `polygon`
 
-Transit line features from OpenStreetMap start appearing at zoom 5+ for regional and national trains. Then `subway`,`light_rail`, and `tram` are added at zoom 10+. Platform polygons are added zoom 14+.
+Transit line features from OpenStreetMap start appearing at zoom 5+ for national trains, with regional trains addded at zoom 6+. Then `subway`,`light_rail`, and `tram` are added at zoom 10+. Platform polygons are added zoom 14+.
 
 _TIP: If you're looking for transit `station` and `station_entrance` features, look in the `pois` layer instead._
 
