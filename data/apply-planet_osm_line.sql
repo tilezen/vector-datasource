@@ -13,8 +13,8 @@ UPDATE planet_osm_line
   WHERE mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way) IS NOT NULL;
 
 UPDATE planet_osm_line
-  SET mz_transit_level = mz_calculate_transit_level(route)
-  WHERE mz_calculate_transit_level(route) IS NOT NULL;
+  SET mz_transit_level = mz_calculate_transit_level(route, service)
+  WHERE mz_calculate_transit_level(route, service) IS NOT NULL;
 
 CREATE INDEX planet_osm_line_waterway_index ON planet_osm_line(waterway) WHERE waterway IS NOT NULL;
 CREATE INDEX planet_osm_line_road_level_index ON planet_osm_line(mz_road_level) WHERE mz_road_level IS NOT NULL;
