@@ -173,6 +173,7 @@ BEGIN
              WHEN route_val = 'train' THEN 6
              WHEN route_val = 'subway' THEN 8
              WHEN route_val IN ('light_rail', 'tram') THEN 9
+             WHEN route_val IN ('funicular', 'monorail') THEN 12
              ELSE NULL END
     );
 END;

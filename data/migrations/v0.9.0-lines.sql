@@ -7,5 +7,5 @@ UPDATE planet_osm_line
 UPDATE planet_osm_line
   SET mz_transit_level = mz_calculate_transit_level(route, service)
   WHERE
-    route IN ('railway', 'subway', 'light_rail', 'tram')
+    route IN ('railway', 'subway', 'light_rail', 'tram', 'funicular', 'monorail')
     OR (route = 'train' AND service IN ('high_speed', 'long_distance', 'international'));
