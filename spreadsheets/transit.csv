@@ -1,5 +1,7 @@
 kind,sort_key
-tram,415
-light_rail,415
+light_rail,418
+tram,417
+funicular,416
+monorail,415
 platform,385
 *,275
