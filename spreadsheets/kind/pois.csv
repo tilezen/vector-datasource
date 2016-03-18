@@ -62,8 +62,8 @@ disused,aerialway,aeroway,amenity,barrier,craft,emergency,highway,historic,leisu
 *,*,*,*,*,*,*,*,*,*,*,*,cave_entrance,*,*,*,*,*,*,*,*,*,*,${15},cave_entrance
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,generator,*,*,*,*,*,*,*,*,${15},generator
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,lock,${15},lock
-*,station,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${15},station
-*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,halt;tram_stop,*,*,*,*,*,*,*,${15},${railway}
+*,station,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${13},station
+*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,halt;tram_stop,*,*,*,*,*,*,*,${13},${railway}
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,alpine_hut,*,${15},alpine_hut
 *,*,helipad;gate,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${16},${aeroway}
 *,*,*,bus_station;car_sharing;picnic_site;recycling;shelter,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${16},${amenity}
