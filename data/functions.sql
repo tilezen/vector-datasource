@@ -169,7 +169,8 @@ RETURNS SMALLINT AS $$
 BEGIN
     RETURN (
         CASE WHEN route_val = 'train' THEN 6
-             WHEN route_val IN ('subway', 'light_rail', 'tram') THEN 10
+             WHEN route_val = 'subway' THEN 8
+             WHEN route_val IN ('light_rail', 'tram') THEN 9
              ELSE NULL END
     );
 END;
