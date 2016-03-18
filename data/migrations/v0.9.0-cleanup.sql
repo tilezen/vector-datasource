@@ -8,6 +8,8 @@ DROP FUNCTION IF EXISTS mz_calculate_is_landuse(text, text, text, text, text, te
 DROP FUNCTION IF EXISTS mz_calculate_is_landuse(text, text, text, text, text, text, text, text, text, text, hstore);
 DROP FUNCTION IF EXISTS mz_calculate_landuse_kind(text, text, text, text, text, text, text, text, text, text, hstore);
 
+DROP FUNCTION IF EXISTS mz_calculate_transit_level(text);
+
 ALTER TABLE planet_osm_polygon DROP COLUMN IF EXISTS mz_is_landuse;
 
 -- new queries don't use this function, so once the tilequeue/tileserver

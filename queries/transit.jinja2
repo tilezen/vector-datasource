@@ -17,6 +17,7 @@ SELECT
     tags->'roundtrip' AS roundtrip,
     tags->'route_name' AS route_name,
     layer,
+    service,
     %#tags AS tags
 
 FROM planet_osm_line
@@ -48,10 +49,11 @@ SELECT
     tags->'roundtrip' AS roundtrip,
     tags->'route_name' AS route_name,
     layer,
+    service,
     %#tags AS tags
 
 FROM (
-  SELECT osm_id, way, name, ref, operator, route, railway, layer, tags
+  SELECT osm_id, way, name, ref, operator, route, railway, layer, service, tags
   FROM planet_osm_line
   WHERE
     {{ bounds|bbox_filter('way') }}
@@ -59,7 +61,7 @@ FROM (
 
   UNION ALL
 
-  SELECT osm_id, way, name, ref, operator, route, railway, layer, tags
+  SELECT osm_id, way, name, ref, operator, route, railway, layer, service, tags
   FROM planet_osm_polygon
   WHERE
     {{ bounds|bbox_filter('way') }}
