@@ -19,19 +19,65 @@ DROP FUNCTION IF EXISTS mz_calculate_transit_routes(bigint,bigint);
 
 BEGIN;
 
-DROP INDEX planet_osm_polygon_landuse_geom_9_index;
-ALTER INDEX new_planet_osm_polygon_landuse_geom_9_index RENAME TO planet_osm_polygon_landuse_geom_9_index;;
-DROP INDEX planet_osm_polygon_landuse_geom_12_index;
-ALTER INDEX new_planet_osm_polygon_landuse_geom_12_index RENAME TO planet_osm_polygon_landuse_geom_12_index;
-DROP INDEX planet_osm_polygon_landuse_geom_15_index;
-ALTER INDEX new_planet_osm_polygon_landuse_geom_15_index RENAME TO planet_osm_polygon_landuse_geom_15_index;
+DO $$
+BEGIN
+IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+           WHERE c.relname = 'new_planet_osm_polygon_landuse_geom_9_index'
+           AND n.nspname = 'public') THEN
+  DROP INDEX IF EXISTS planet_osm_polygon_landuse_geom_9_index;
+  ALTER INDEX new_planet_osm_polygon_landuse_geom_9_index RENAME TO planet_osm_polygon_landuse_geom_9_index;
+END IF;
+END$$;
 
-DROP INDEX planet_osm_polygon_landuse_boundary_geom_4_index;
-ALTER INDEX new_planet_osm_polygon_landuse_boundary_geom_4_index RENAME TO planet_osm_polygon_landuse_boundary_geom_4_index;
-DROP INDEX planet_osm_polygon_landuse_boundary_geom_6_index;
-ALTER INDEX new_planet_osm_polygon_landuse_boundary_geom_6_index RENAME TO planet_osm_polygon_landuse_boundary_geom_6_index;
-DROP INDEX planet_osm_polygon_landuse_boundary_geom_8_index;
-ALTER INDEX new_planet_osm_polygon_landuse_boundary_geom_8_index RENAME TO planet_osm_polygon_landuse_boundary_geom_8_index;
+DO $$
+BEGIN
+IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+           WHERE c.relname = 'new_planet_osm_polygon_landuse_geom_12_index'
+           AND n.nspname = 'public') THEN
+  DROP INDEX IF EXISTS planet_osm_polygon_landuse_geom_12_index;
+  ALTER INDEX new_planet_osm_polygon_landuse_geom_12_index RENAME TO planet_osm_polygon_landuse_geom_12_index;
+END IF;
+END$$;
+
+DO $$
+BEGIN
+IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+           WHERE c.relname = 'new_planet_osm_polygon_landuse_geom_15_index'
+           AND n.nspname = 'public') THEN
+  DROP INDEX IF EXISTS planet_osm_polygon_landuse_geom_15_index;
+  ALTER INDEX new_planet_osm_polygon_landuse_geom_15_index RENAME TO planet_osm_polygon_landuse_geom_15_index;
+END IF;
+END$$;
+
+DO $$
+BEGIN
+IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+           WHERE c.relname = 'new_planet_osm_polygon_landuse_boundary_geom_4_index'
+           AND n.nspname = 'public') THEN
+  DROP INDEX IF EXISTS planet_osm_polygon_landuse_boundary_geom_4_index;
+  ALTER INDEX new_planet_osm_polygon_landuse_boundary_geom_4_index RENAME TO planet_osm_polygon_landuse_boundary_geom_4_index;
+END IF;
+END$$;
+
+DO $$
+BEGIN
+IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+           WHERE c.relname = 'new_planet_osm_polygon_landuse_boundary_geom_6_index'
+           AND n.nspname = 'public') THEN
+  DROP INDEX IF EXISTS planet_osm_polygon_landuse_boundary_geom_6_index;
+  ALTER INDEX new_planet_osm_polygon_landuse_boundary_geom_6_index RENAME TO planet_osm_polygon_landuse_boundary_geom_6_index;
+END IF;
+END$$;
+
+DO $$
+BEGIN
+IF EXISTS (SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+           WHERE c.relname = 'new_planet_osm_polygon_landuse_boundary_geom_8_index'
+           AND n.nspname = 'public') THEN
+  DROP INDEX IF EXISTS planet_osm_polygon_landuse_boundary_geom_8_index;
+  ALTER INDEX new_planet_osm_polygon_landuse_boundary_geom_8_index RENAME TO planet_osm_polygon_landuse_boundary_geom_8_index;
+END IF;
+END$$;
 
 COMMIT;
 
