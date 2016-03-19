@@ -2,8 +2,14 @@ from redis import StrictRedis
 from tilequeue.cache import RedisCacheIndex
 from tilequeue.config import make_config_from_argparse
 from tilequeue.tile import coord_unmarshall_int
+import os.path
+import sys
 
-cfg = make_config_from_argparse('/etc/tilequeue/config.yaml')
+cfg_file = '/etc/tilequeue/config.yaml'
+if not os.path.exists(cfg_file):
+    sys.exit(0)
+
+cfg = make_config_from_argparse(cfg_file)
 redis_client = StrictRedis(cfg.redis_host)
 cache_index = RedisCacheIndex(redis_client)
 
