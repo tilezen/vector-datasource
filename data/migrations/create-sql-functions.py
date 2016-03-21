@@ -2,6 +2,7 @@ from collections import namedtuple
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from TileStache.Goodies.VecTiles.transform import _parse_kt
+import os.path
 import csv
 
 Rule = namedtuple(
@@ -156,11 +157,13 @@ def used_params(rules):
 
 
 layers = {}
+script_root = os.path.dirname(__file__)
 
 for layer in ('landuse', 'pois'):
     kind_rules = []
     min_zoom_rules = []
-    file_path = '../../spreadsheets/kind/%s.csv' % layer
+    csv_file = '../../spreadsheets/kind/%s.csv' % layer
+    file_path = os.path.join(script_root, csv_file)
     with open(file_path) as fh:
         reader = csv.reader(fh, skipinitialspace=True)
         keys = None
@@ -206,7 +209,7 @@ for layer in ('landuse', 'pois'):
         min_zoom_case_statement=min_zoom_case_statement,
     )
 
-template_name = 'sql.jinja2'
+template_name = os.path.join(script_root, 'sql.jinja2')
 environment = Environment(loader=FileSystemLoader('.'))
 template = environment.get_template(template_name)
 sql = template.render(
