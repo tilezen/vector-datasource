@@ -366,6 +366,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
 * `is_bridge`: `yes` or `no`
+* `is_bus_route`: If present and `true`, then buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation.
 * `is_link`: `yes` or `no`
 * `is_tunnel`: `yes` or `no`
 * `leisure`: See kind list below.
