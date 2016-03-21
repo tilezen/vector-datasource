@@ -70,6 +70,21 @@ Read the full details in the project [CHANGELOG](https://github.com/mapzen/vecto
 
 Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, we export a `sort_key` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_key` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
 
+To facilitate **data visualization** overlays and underlays, the following client-side `order` ranges are suggested:
+
+* `0-9`: Under everything. _Tip: disable earth layer._
+* `190-199`: Under water. Above earth and most landuse.
+* `290-299`: Under roads. Above borders, water, landuse, and earth. **Your classic "underlay".**
+* `490-499`: Over all line and polygon features. Under map labels (icons and text), under UI elements (like routeline and search result pins). **Your classic raster map overlay.**  
+
+**Tangram scene file example:**
+
+```
+draw:
+    polygons:
+        order: 490
+```
+
 ### Layer reference
 
 Mapzen vector tiles include 9 layers:   
