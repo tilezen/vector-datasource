@@ -74,8 +74,8 @@ To facilitate **data visualization** overlays and underlays, the following clien
 
 * `0-9`: Under everything. _Tip: disable earth layer._
 * `190-199`: Under water. Above earth and most landuse.
-* `290-299`: Under roads. Above borders, water, landuse, and earth.
-* `490-499`: Over everything. Under UI elements, like routeline and current location gem. Your classic raster map overlay.
+* `290-299`: Under roads. Above borders, water, landuse, and earth. **Your classic "underlay".**
+* `490-499`: Over all line and polygons features. Under map labels (icons and text), under UI elements (like routeline and search result pins). **Your classic raster map overlay.**  
 
 **Tangram scene file example:**
 
