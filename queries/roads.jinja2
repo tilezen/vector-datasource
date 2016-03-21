@@ -68,6 +68,14 @@ SELECT
     leisure,
     sport,
     man_made,
+{% if zoom >= 11 %}
+    -- try to only calculate whether this is a bus route when we already know
+    -- that it's a road, as joining onto the rels table can be expensive.
+    CASE WHEN mz_calculate_highway_level(highway, service) IS NOT NULL
+      THEN mz_calculate_is_bus_route(osm_id)
+      ELSE NULL
+    END AS is_bus_route,
+{% endif %}
     %#tags AS tags
 
 FROM planet_osm_line
@@ -127,6 +135,7 @@ SELECT
     leisure,
     sport,
     man_made,
+    NULL AS is_bus_route,
     %#tags AS tags
 
 FROM planet_osm_line

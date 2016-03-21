@@ -688,3 +688,21 @@ UPDATE wof_neighbourhood a
     b.new_visible <> a.is_visible
   RETURNING a.wof_id;
 $$ LANGUAGE sql VOLATILE;
+
+-- returns TRUE if the given way ID (osm_id) is part of a bus route relation,
+-- or NULL otherwise.
+CREATE OR REPLACE FUNCTION mz_calculate_is_bus_route(osm_id BIGINT)
+RETURNS BOOLEAN AS $$
+BEGIN
+  IF EXISTS(
+    SELECT 1 FROM planet_osm_rels
+    WHERE
+      parts && ARRAY[osm_id] AND
+      parts[way_off+1:rel_off] && ARRAY[osm_id] AND
+      hstore(tags)->'type' = 'route' AND
+      hstore(tags)->'route' = 'bus') THEN
+    RETURN TRUE;
+  END IF;
+  RETURN NULL;
+END;
+$$ LANGUAGE plpgsql STABLE;
