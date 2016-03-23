@@ -1,0 +1,14 @@
+highway,public_transport,railway,route,service,tags->rail,tags->site,min_zoom,kind
+*,*,*,train,high_speed;long_distance;international,*,*,${5},${route}
+*,*,*,train,*,*,*,${6},train
+*,*,*,subway,*,*,*,${8},subway
+*,*,*,light_rail;tram,*,*,*,${9},${route}
+*,*,halt;stop;tram_stop,*,*,*,*,${11},${railway}
+*,*,*,funicular;monorail,*,*,*,${12},${route}
+platform,*,*,*,*,*,*,${15},platform
+*,platform,*,*,*,yes,*,${15},platform
+*,stop_area,*,*,*,*,*,${15},stop_area
+*,*,platform;station,*,*,*,*,${15},${railway}
+*,*,*,*,*,*,stop_area,${15},stop_area
+bus_stop,*,*,*,*,*,*,${17},bus_stop
+*,platform,*,*,*,*,*,${17},platform

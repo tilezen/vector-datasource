@@ -173,3 +173,85 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-------------
+-- transit --
+-------------
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_transit_(
+{%- for param in layers['transit']['params'] %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore)
+RETURNS REAL AS $$
+BEGIN
+  RETURN {{ layers['transit']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_transit(
+       planet_osm_line)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_transit_(
+{%- for param in layers['transit']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_transit(
+       planet_osm_polygon)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_transit_(
+{%- for param in layers['transit']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_transit_(
+{%- for param in layers['transit']['params'] %}
+        {{param}} text,
+{%- endfor %}
+        tags hstore)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN {{ layers['transit']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_transit(
+       planet_osm_line)
+RETURNS TEXT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_transit_(
+{%- for param in layers['transit']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_transit(
+       planet_osm_polygon)
+RETURNS TEXT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_transit_(
+{%- for param in layers['transit']['params'] %}
+        row.{{param}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

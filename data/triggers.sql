@@ -3,6 +3,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     NEW.mz_poi_min_zoom := mz_calculate_min_zoom_pois(NEW.*);
     NEW.mz_landuse_min_zoom := mz_calculate_min_zoom_landuse(NEW.*);
+    NEW.mz_transit_level := mz_calculate_min_zoom_transit(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
@@ -33,7 +34,7 @@ CREATE OR REPLACE FUNCTION mz_trigger_function_line()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.mz_road_level := mz_calculate_road_level(NEW."highway", NEW."railway", NEW."aeroway", NEW."route", NEW."service", NEW."aerialway", NEW."leisure", NEW."sport", NEW."man_made", NEW."way");
-    NEW.mz_transit_level := mz_calculate_transit_level(NEW."route", NEW."service");
+    NEW.mz_transit_level := mz_calculate_min_zoom_transit(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;

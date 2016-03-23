@@ -164,21 +164,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_transit_level(route_val text, service_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-    RETURN (
-        CASE WHEN route_val = 'train'
-                  AND service_val IN ('high_speed', 'long_distance', 'international') THEN 5
-             WHEN route_val = 'train' THEN 6
-             WHEN route_val = 'subway' THEN 8
-             WHEN route_val IN ('light_rail', 'tram') THEN 9
-             WHEN route_val IN ('funicular', 'monorail') THEN 12
-             ELSE NULL END
-    );
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
 -- mz_rel_get_tag returns the tag value associated with a given
 -- key, or NULL if the tag is not set in the array.
 --

@@ -117,6 +117,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.normalize_medical_kind
       - TileStache.Goodies.VecTiles.transform.add_state_to_stations
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.add_uic_ref
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
@@ -147,6 +148,7 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.add_uic_ref
       - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
