@@ -244,6 +244,32 @@ def assert_no_matching_feature(z, x, y, layer, properties):
                 "%r" % (properties, layer, feature['properties'])
 
 
+def print_coord(z, x, y, *ignored):
+    print '%d/%d/%d' % (z, x, y)
+
+
+@contextmanager
+def print_coord_with_context(z, x, y, *ignored):
+    """
+    This function only exists to allow tests which call `features_in_tile_layer`
+    directly, and need to use it in a `with` context.
+    """
+    print_coord(z, x, y, *ignored)
+    yield []
+
+
+def print_coords(f, log, idx, num_tests):
+    try:
+        runpy.run_path(f, init_globals={
+            'assert_has_feature': print_coord,
+            'assert_no_matching_feature': print_coord,
+            'features_in_tile_layer': print_coord_with_context,
+        })
+    except:
+        pass
+    return 0
+
+
 def run_test(f, log, idx, num_tests):
     fails = 0
 
@@ -263,15 +289,19 @@ def run_test(f, log, idx, num_tests):
 
     return fails
 
+if len(sys.argv) > 2 and sys.argv[2] == '-printcoords':
+    tests = sys.argv[3:]
+    mode = 'print'
+    runner = print_coords
+else:
+    tests = sys.argv[2:]
+    mode = 'test'
+    runner = run_test
 
 fail_count = 0
 with open('test.log', 'w') as log:
-    tests = []
 
-    if len(sys.argv) > 2:
-        tests = sys.argv[2:len(sys.argv)]
-
-    else:
+    if not tests:
         for (dirpath, dirs, files) in walk('test'):
             for f in files:
                 if f.endswith('.py'):
@@ -279,12 +309,13 @@ with open('test.log', 'w') as log:
 
     num_tests = len(tests)
     for i, t in enumerate(sorted(tests)):
-        fails = run_test(t, log, i + 1, num_tests)
+        fails = runner(t, log, i + 1, num_tests)
         fail_count = fail_count + fails
 
-if fail_count > 0:
-    print "FAILED %d TESTS. For more information, see 'test.log'" % fail_count
-    sys.exit(1)
+if mode == 'test':
+    if fail_count > 0:
+        print "FAILED %d TESTS. For more information, see 'test.log'" % fail_count
+        sys.exit(1)
 
-else:
-    print "PASSED ALL TESTS."
+    else:
+        print "PASSED ALL TESTS."
