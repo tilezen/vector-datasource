@@ -321,7 +321,7 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
       source_layer: pois
-      end_zoom: 16
+      end_zoom: 15
   - fn: TileStache.Goodies.VecTiles.transform.normalize_station_properties
     params:
       source_layer: pois
