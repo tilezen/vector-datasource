@@ -1,3 +1,26 @@
+v0.9.0
+------
+* Don't include disused POIs
+* Add subway lines to roads layer
+* Remove disused railway stations
+* Add funicular to the roads layer
+* Normalize source property
+* Enable suppression of pois and buildings where they end with '(closed)' or '(historical)'
+* Add state of stations
+* Drop physical railways from transit
+* Adjust tile rank for stations
+* Trim station features at mid zooms
+* Adjust zoom ranges for subway, light_rail, tram
+* Categorize regional/national public transit trains
+* Add funicular and monorail to tranit layer
+* Promote station and stop pois to z13
+* Start including transit features at z5
+* Add bus route property
+* Add new features to transit layer
+* Move bus routes to z12
+* Make trolleybus a kind of bus
+
+
 v0.8.0
 ------
 * **Release date**: 2016-03-04. _Live in prod: 2015-03-08._
