@@ -6,7 +6,7 @@ highway,public_transport,railway,route,service,tags->bus,tags->site,min_zoom,kin
 *,*,*,funicular;monorail,*,*,*,${12},${route}
 *,*,halt;stop;tram_stop,*,*,*,*,${13},${railway}
 platform,*,*,*,*,*,*,${15},platform
-*,platform,*,*,*,yes,*,${17},platform
+*,platform,*,*,*,yes,*,${17},bus_stop
 *,platform,*,*,*,*,*,${15},platform
 *,stop_area,*,*,*,*,*,${15},stop_area
 *,*,platform;station,*,*,*,*,${15},${railway}
