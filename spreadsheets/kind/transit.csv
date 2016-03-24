@@ -5,7 +5,7 @@ highway,public_transport,railway,route,service,tags->light_rail,tags->rail,tags-
 *,*,*,light_rail;tram,*,*,*,*,${9},${route}
 *,*,*,funicular;monorail,*,*,*,*,${12},${route}
 *,*,halt;stop;tram_stop,*,*,*,*,*,${13},${railway}
-platform,*,*,*,*,*,*,*,${15},platform
+platform,*,*,*,*,*,*,*,${17},bus_stop
 *,platform,*,*,*,*,yes,*,${15},platform
 *,platform,*,*,*,yes,*,*,${15},platform
 *,platform,*,*,*,*,*,*,${17},bus_stop
