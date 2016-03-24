@@ -685,7 +685,7 @@ BEGIN
       parts && ARRAY[osm_id] AND
       parts[way_off+1:rel_off] && ARRAY[osm_id] AND
       hstore(tags)->'type' = 'route' AND
-      hstore(tags)->'route' = 'bus') THEN
+      hstore(tags)->'route' IN ('bus', 'trolleybus')) THEN
     RETURN TRUE;
   END IF;
   RETURN NULL;
