@@ -3,7 +3,7 @@ tiles = [
     ['17/21000/44983', {'kind': 'midwife'}],
 
     # amenity={kindergarten, childcare}
-    ['17/20943/50677', {'kind': 'kindergarten'}],
+    ['16/10470/25342', {'kind': 'kindergarten'}],
     ['17/20956/50676', {'kind': 'childcare'}],
 
     # emergency=phone
