@@ -3,8 +3,8 @@ highway,public_transport,railway,route,service,tags->rail,tags->site,min_zoom,ki
 *,*,*,train,*,*,*,${6},train
 *,*,*,subway,*,*,*,${8},subway
 *,*,*,light_rail;tram,*,*,*,${9},${route}
-*,*,halt;stop;tram_stop,*,*,*,*,${11},${railway}
 *,*,*,funicular;monorail,*,*,*,${12},${route}
+*,*,halt;stop;tram_stop,*,*,*,*,${13},${railway}
 platform,*,*,*,*,*,*,${15},platform
 *,platform,*,*,*,yes,*,${15},platform
 *,stop_area,*,*,*,*,*,${15},stop_area
