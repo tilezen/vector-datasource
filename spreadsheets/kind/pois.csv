@@ -1,4 +1,4 @@
-disused,aerialway,aeroway,amenity,barrier,craft,emergency,highway,historic,leisure,lock,man_made,natural,office,power,public_transport,railway,shop,tags->attraction,tags->healthcare,tags->rail,tags->rental,tags->site,tags->zoo,tourism,waterway,min_zoom,kind
+disused,aerialway,aeroway,amenity,barrier,craft,emergency,highway,historic,leisure,lock,man_made,natural,office,power,public_transport,railway,shop,tags->attraction,tags->bus,tags->healthcare,tags->rental,tags->site,tags->zoo,tourism,waterway,min_zoom,kind
 -no,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${NULL},${NULL}
 *,*,aerodrome;airport,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,"${LEAST(zoom + 4.12, 13)}",${aeroway}
 *,*,*,hospital,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,"${LEAST(zoom + 3.32, 14)}",hospital
@@ -50,7 +50,7 @@ disused,aerialway,aeroway,amenity,barrier,craft,emergency,highway,historic,leisu
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,aquarium,*,"${GREATEST(14, LEAST(zoom + 3.09, 17))}",aquarium
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,winery,*,"${GREATEST(14, LEAST(zoom + 2.85, 17))}",winery
 *,*,*,social_facility;clinic;doctors;dentist,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${17},${amenity}
-*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,midwife,*,*,*,*,*,*,${17},midwife
+*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,midwife,*,*,*,*,*,${17},midwife
 *,*,*,kindergarten;childcare,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${17},${amenity}
 *,*,*,*,*,*,phone,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${18},phone
 *,*,*,toilets,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${18},toilets
@@ -66,8 +66,8 @@ disused,aerialway,aeroway,amenity,barrier,craft,emergency,highway,historic,leisu
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,halt;tram_stop;stop,*,*,*,*,*,*,*,*,*,${13},${railway}
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,platform,*,*,*,*,*,*,*,*,*,${15},platform
 *,*,*,*,*,*,*,platform,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,${15},platform
-*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,platform,*,*,*,*,yes,*,*,*,*,*,${15},platform
-*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,platform,*,*,*,*,*,*,*,*,*,*,${17},platform
+*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,platform,*,*,*,yes,*,*,*,*,*,*,${17},bus_stop
+*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,platform,*,*,*,*,*,*,*,*,*,*,${15},platform
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,stop_area,*,*,*,*,*,*,*,*,*,*,${15},stop_area
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,stop_area,*,*,*,${15},stop_area
 *,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,alpine_hut,*,${15},alpine_hut
