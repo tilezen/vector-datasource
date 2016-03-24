@@ -2,17 +2,17 @@ v0.9.0
 ------
 * **Release date**: 2016-03-24.
 * Adjust tile rank for `station` features in the `pois` layer, emphasizing rail stations over other types of transit. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
-* Remove long tail of less important `station features from mid-zooms in the `pois` layer. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
+* Remove long tail of less important `station` features from mid-zooms in the `pois` layer. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
 * Show more `station` features in the `pois` layer by limiting "merging" to zooms less than 15. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
 * Show existing aerialway `station` & railway `tram_stop` features in the `pois` layer earlier at zoom 13. See [#587](https://github.com/mapzen/vector-datasource/issues/587).
 * Add several boolean values to indicate `station` transit service types in `pois` layer. See [#352](https://github.com/mapzen/vector-datasource/issues/352).
-* Add `state` property to `station` features in the `pois` layer to indicated planned and under construction features. See [#484](https://github.com/mapzen/vector-datasource/issues/484).
+* Add `state` property to `station` features in the `pois` layer to indicate planned and under construction features. See [#484](https://github.com/mapzen/vector-datasource/issues/484).
 * Add optional `osm_site_relation` ID value on transit `station` features in the `pois` layer. See [#590](https://github.com/mapzen/vector-datasource/issues/590).
 * Add optional `uic_ref` to `station` features in the `pois` layer.
 * Add additional transit points to `pois` layer and lines to the `transit` layer for grab bag of stops, halts, stop areas, and platforms. See [#469](https://github.com/mapzen/vector-datasource/issues/469).
 * Show `transit` layer features at earlier zoom levels, including international `train`, `subway`, `light_rail`, and `tram`. See [#472](https://github.com/mapzen/vector-datasource/issues/472).
 * Add `funicular` and `monorail` features to the `transit` layer. See [#588](https://github.com/mapzen/vector-datasource/issues/588).
-* Remove physical `railway` from the `transit` layer, they don't have passenger service. See [#501](https://github.com/mapzen/vector-datasource/issues/501). 
+* Remove physical `railway` from the `transit` layer; they don't have passenger service. See [#501](https://github.com/mapzen/vector-datasource/issues/501).
 * Add `service` values to `transit` layer line features to indicate international, national, and regional importance. See [#471](https://github.com/mapzen/vector-datasource/issues/471).
 * Add a new boolean `is_bus_route` property to features in the `roads` layer starting at zoom 12 if any `bus` or `trolley_bus` route passes along the way. No indication is provided for which bus routes at this time. See [#611](https://github.com/mapzen/vector-datasource/issues/611).
 * Add `subway` and `funicular` lines to `roads` layer as a type of `rail`. See [#549](https://github.com/mapzen/vector-datasource/issues/549) and [#510](https://github.com/mapzen/vector-datasource/issues/510).
