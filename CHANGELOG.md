@@ -19,9 +19,9 @@ v0.9.0
 * Remove `disused` features from the `pois` layer, for instance disused railway stations. See [#368](https://github.com/mapzen/vector-datasource/issues/368).
 * Limit visibility of `closed` and `historical` features to zoom 17+ in the `pois` and `buildings` layers. See [#291](https://github.com/mapzen/vector-datasource/issues/291) and [#483](https://github.com/mapzen/vector-datasource/issues/483).
 * Remove internal `mz_is_building` property from features in the `landuse` layer. See [#333](https://github.com/mapzen/vector-datasource/issues/333).
-* Document recommended **overlay** and **underlay** sort_key orders. See [#586](https://github.com/mapzen/vector-datasource/issues/586)
+* Document recommended **overlay** and **underlay** sort_key orders. See [#586](https://github.com/mapzen/vector-datasource/issues/586).
 * Move much of the `kind` calculation logic from pure SQL to CSV spreadsheets for easier config and address outstanding SQL coalesce bugs. See [#580](https://github.com/mapzen/vector-datasource/issues/580) and [#282](https://github.com/mapzen/vector-datasource/issues/282).
-* Normalize `source` property across all layers. If you have custom place filters, this will be a breaking change. See [#503](https://github.com/mapzen/vector-datasource/issues/503)
+* Normalize `source` property across all layers. If you have custom place filters, this will be a breaking change. See [#503](https://github.com/mapzen/vector-datasource/issues/503).
 
 
 v0.8.0
