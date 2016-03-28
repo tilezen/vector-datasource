@@ -60,11 +60,11 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 #### Changelog
 
-The current version of Mapzen vector tiles is **v0.8.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
+The current version of Mapzen vector tiles is **v0.9**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
 If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/v0.8.0/CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/v0.9/CHANGELOG.md).
 
 #### Feature ordering
 
