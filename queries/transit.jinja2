@@ -25,7 +25,11 @@ FROM {{ table }}
 
 WHERE
     {{ bounds|bbox_filter('way') }}
+{% if zoom >= 16 %}
+    AND mz_transit_level IS NOT NULL
+{% else %}
     AND mz_transit_level <= {{ zoom }}
+{% endif %}
 {% endmacro %}
 
 {{ transit_query('planet_osm_line') }}
