@@ -248,12 +248,26 @@ def print_coord(z, x, y, *ignored):
     print '%d/%d/%d' % (z, x, y)
 
 
+@contextmanager
+def print_coord_with_context(z, x, y, *ignored):
+    """
+    This function only exists to allow tests which call `features_in_tile_layer`
+    directly, and need to use it in a `with` context.
+    """
+
+    print_coord(z, x, y, *ignored)
+    try:
+        yield []
+    except:
+        pass
+
+
 def print_coords(f, log, idx, num_tests):
     try:
         runpy.run_path(f, init_globals={
             'assert_has_feature': print_coord,
             'assert_no_matching_feature': print_coord,
-            'features_in_tile_layer': print_coord,
+            'features_in_tile_layer': print_coord_with_context,
         })
     except:
         pass
