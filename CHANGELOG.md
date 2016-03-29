@@ -1,3 +1,8 @@
+v0.9.1
+------
+* **Release date**: 2016-03-28.
+* Ensure all `transit` layer features are included at zoom 16+. See [commit](https://github.com/mapzen/vector-datasource/commit/9a279d9c29dc63e4e7270a3d846e96a7843bb86b).
+
 v0.9.0
 ------
 * **Release date**: 2016-03-24.
