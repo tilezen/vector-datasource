@@ -2,6 +2,7 @@ v0.9.1
 ------
 * **Release date**: 2016-03-28.
 * Ensure all `transit` layer features are included at zoom 16+. See [commit](https://github.com/mapzen/vector-datasource/commit/9a279d9c29dc63e4e7270a3d846e96a7843bb86b).
+* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.8.0](https://github.com/mapzen/tilequeue/releases/tag/v0.8.0) and [TileStache v0.9.0](https://github.com/mapzen/TileStache/releases/tag/v0.9.0)
 
 v0.9.0
 ------
@@ -27,6 +28,7 @@ v0.9.0
 * Document recommended **overlay** and **underlay** sort_key orders. See [#586](https://github.com/mapzen/vector-datasource/issues/586).
 * Move much of the `kind` calculation logic from pure SQL to CSV spreadsheets for easier config and address outstanding SQL coalesce bugs. See [#580](https://github.com/mapzen/vector-datasource/issues/580) and [#282](https://github.com/mapzen/vector-datasource/issues/282).
 * Normalize `source` property across all layers. If you have custom place filters, this will be a breaking change. See [#503](https://github.com/mapzen/vector-datasource/issues/503).
+* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.8.0](https://github.com/mapzen/tilequeue/releases/tag/v0.8.0) and [TileStache v0.9.0](https://github.com/mapzen/TileStache/releases/tag/v0.9.0)
 
 
 v0.8.0
