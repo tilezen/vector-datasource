@@ -12,7 +12,7 @@ layers:
   water:
     template: water.jinja2
     start_zoom: 0
-    geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
+    geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
     transform:

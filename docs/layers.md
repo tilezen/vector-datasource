@@ -268,14 +268,12 @@ This layer is included to support legacy uses, but is not recommended for new pr
 
 Combination of OpenStreetMap `place` points, Natural Earth populated places, and Who's On First neighbourhoods.
 
-Places with `kind` values of `continent`, `ocean`, `country`, with others added starting at zoom 3 for `sea`, zoom 4 for `state`, `province`, and `city`, `town` at zoom 8. A few more each zoom are added until zoom 13+ includes, `borough`, `suburb`, `quarter`, `village`, `hamlet`, `locality`, `isolated_dwelling`, and `farm`.
+Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `state`, `province`, and `city`, `town` at zoom 8. A few more each zoom are added until zoom 13+ includes, `borough`, `suburb`, `quarter`, `village`, `hamlet`, `locality`, `isolated_dwelling`, and `farm`.
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
 **Neighbourhoods:** [Who's On First](http://whosonfirst.mapzen.com) `neighbourhood` and `macrohood` features are added starting at zoom 12. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
 
-
-**Gotchas:** There are a few water label features (`ocean`, `sea`) included in this layer, they will be moved to the `water` layer in a future release.
 
 **Place properties (common):**
 
@@ -297,7 +295,7 @@ Places with `kind` values of `continent`, `ocean`, `country`, with others added 
 
 **Place kind values:**
 
-* `Admin-0 capital alt`, `Admin-0 capital`, `Admin-0 region capital`, `Admin-1 capital`, `Admin-1 region capital`, `borough`, `city`, `continent`, `country`, `farm`, `hamlet`, `Historic place`, `isolated_dwelling`, `locality`, `macrohood`, `Meteorological Station`, `neighbourhood`, `ocean`, `Populated place`, `province`, `quarter`, `Scientific station`, `sea`, `state`, `suburb`, `town`, `village`
+* `Admin-0 capital alt`, `Admin-0 capital`, `Admin-0 region capital`, `Admin-1 capital`, `Admin-1 region capital`, `borough`, `city`, `continent`, `country`, `farm`, `hamlet`, `Historic place`, `isolated_dwelling`, `locality`, `macrohood`, `Meteorological Station`, `neighbourhood`, `Populated place`, `province`, `quarter`, `Scientific station`, `state`, `suburb`, `town`, `village`
 
 ## Points of Interest
 
@@ -536,7 +534,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 
 These are intended for label placement, and are included as points only.
 
-* `bay`, `fjord`, `strait`
+* `bay`, `fjord`, `strait`, `sea`
 
     Gotchas:
 

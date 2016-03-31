@@ -5,3 +5,14 @@ WHERE
   shop = 'boat_rental' OR
   tags->'rental' = 'boat' OR
   (shop = 'boat' AND tags->'rental' = 'yes');
+
+-- create index if it doesn't already exist.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE c.relname = 'planet_osm_point_water_index') THEN
+
+    CREATE INDEX planet_osm_point_water_index ON planet_osm_point USING gist(way) WHERE name IS NOT NULL AND place IN ('ocean', 'sea');
+  END IF;
+END$$;

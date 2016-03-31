@@ -52,9 +52,7 @@ WHERE
     name IS NOT NULL
     AND place IN (
         'continent',
-        'ocean',
         'country'
-        {% if zoom >= 3 %}, 'sea'{% endif %}
         {% if zoom >= 4 %}, 'state', 'province'{% endif %}
         {% if zoom >= 8 %},  'city', 'town'{% endif %}
         {% if zoom >= 10 %}, 'borough', 'suburb', 'quarter'{% endif %}
