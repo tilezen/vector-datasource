@@ -64,7 +64,7 @@ The current version of Mapzen vector tiles is **v0.9**. Our tiles are still in a
 
 If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/v0.9/CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/blob/master/CHANGELOG.md).
 
 #### Feature ordering
 
