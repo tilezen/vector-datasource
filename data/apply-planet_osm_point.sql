@@ -14,6 +14,8 @@ UPDATE planet_osm_point SET
 
 CREATE INDEX planet_osm_point_place_index ON planet_osm_point(place) WHERE name IS NOT NULL AND place IN ('borough', 'city', 'continent', 'country', 'county', 'district', 'farm', 'hamlet', 'island', 'isolated_dwelling', 'lake', 'locality', 'neighbourhood', 'ocean', 'province', 'quarter', 'sea', 'state', 'suburb', 'town', 'village');
 
+CREATE INDEX planet_osm_point_water_index ON planet_osm_point USING gist(way) WHERE name IS NOT NULL AND place IN ('ocean', 'sea');
+
 CREATE INDEX planet_osm_point_min_zoom_way_9_index ON planet_osm_point USING gist(way) WHERE mz_poi_min_zoom <= 9;
 CREATE INDEX planet_osm_point_min_zoom_way_12_index ON planet_osm_point USING gist(way) WHERE mz_poi_min_zoom <= 12;
 CREATE INDEX planet_osm_point_min_zoom_way_15_index ON planet_osm_point USING gist(way) WHERE mz_poi_min_zoom <= 15;

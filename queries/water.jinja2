@@ -4,6 +4,7 @@
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
+    NULL AS label_placement,
     NULL AS boundary
 {% endmacro %}
 
@@ -48,6 +49,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
+    NULL AS label_placement,
     'yes' AS boundary
 
 FROM
@@ -70,6 +72,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
+    NULL AS label_placement,
     'yes' AS boundary
 
 FROM
@@ -108,6 +111,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
+    NULL AS label_placement,
     'yes' AS boundary
 
 FROM
@@ -129,6 +133,7 @@ SELECT
     'openstreetmapdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
+    NULL AS label_placement,
     NULL AS tunnel,
     NULL AS tags
 
@@ -145,6 +150,7 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    NULL AS label_placement,
     tunnel,
     %#tags AS tags
 
@@ -176,6 +182,7 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    NULL AS label_placement,
     tunnel,
     %#tags AS tags
 
@@ -191,3 +198,30 @@ WHERE
     )
 
 {% endif %}
+
+UNION ALL
+
+SELECT
+  name,
+  NULL AS area,
+  place AS kind,
+  'openstreetmap.org' AS source,
+  way AS __geometry__,
+  osm_id AS __id__,
+  'yes' AS label_placement,
+{% if zoom < 9 %}
+  NULL AS boundary
+{% else %}
+  NULL AS tunnel,
+  %#tags AS tags
+{% endif %}
+
+FROM
+  planet_osm_point
+
+WHERE
+  name IS NOT NULL AND
+  place IN ('ocean'
+    {% if zoom >= 3 %}, 'sea'{% endif %}
+  ) AND
+  {{ bounds|bbox_filter('way') }}
