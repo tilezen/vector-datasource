@@ -1,12 +1,12 @@
 v0.9.1
 ------
-* **Release date**: 2016-03-28.
+* **Release date**: 2016-03-28. _Live in prod: 2015-03-30._
 * Ensure all `transit` layer features are included at zoom 16+. See [commit](https://github.com/mapzen/vector-datasource/commit/9a279d9c29dc63e4e7270a3d846e96a7843bb86b).
 * **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.8.0](https://github.com/mapzen/tilequeue/releases/tag/v0.8.0) and [TileStache v0.9.0](https://github.com/mapzen/TileStache/releases/tag/v0.9.0)
 
 v0.9.0
 ------
-* **Release date**: 2016-03-24.
+* **Release date**: 2016-03-24. _Live in prod: 2015-03-30._
 * Adjust tile rank for `station` features in the `pois` layer, emphasizing rail stations over other types of transit. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
 * Remove long tail of less important `station` features from mid-zooms in the `pois` layer. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
 * Show more `station` features in the `pois` layer by limiting "merging" to zooms less than 15. See [#506](https://github.com/mapzen/vector-datasource/issues/506).
