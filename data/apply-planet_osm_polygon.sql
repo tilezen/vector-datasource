@@ -12,11 +12,6 @@ CREATE INDEX planet_osm_polygon_admin_level_index ON planet_osm_polygon(admin_le
 CREATE INDEX planet_osm_polygon_admin_level_geom_index ON planet_osm_polygon USING gist(way) WHERE boundary = 'administrative';
 CREATE INDEX planet_osm_polygon_is_building_or_part_index ON planet_osm_polygon(mz_calculate_is_building_or_part(building, "building:part")) WHERE mz_calculate_is_building_or_part(building, "building:part") = TRUE;
 
--- update polygon table to add centroids
-ALTER TABLE planet_osm_polygon ADD COLUMN mz_poi_min_zoom REAL;
-ALTER TABLE planet_osm_polygon ADD COLUMN mz_landuse_min_zoom REAL;
-ALTER TABLE planet_osm_polygon ADD COLUMN mz_transit_level REAL;
-
 UPDATE planet_osm_polygon SET
     mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
     WHERE mz_calculate_min_zoom_landuse(planet_osm_polygon.*) IS NOT NULL;

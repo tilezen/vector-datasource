@@ -10,6 +10,11 @@ echo "Creating functions..."
 psql $@ -f functions.sql
 echo "done."
 
+# update the schema of the tables
+echo "Updating table schemas..."
+psql $@ -f apply-schema-update.sql
+echo "done."
+
 # dynamic functions generated from csv
 echo "Generating functions from csv..."
 (cd migrations && python create-sql-functions.py) | psql $@

@@ -5,9 +5,6 @@ BEGIN
 -- planet_osm_line
 --------------------------------------------------------------------------------
 
-ALTER TABLE planet_osm_line ADD COLUMN mz_road_level SMALLINT;
-ALTER TABLE planet_osm_line ADD COLUMN mz_transit_level SMALLINT;
-
 UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way)
   WHERE mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way) IS NOT NULL;
