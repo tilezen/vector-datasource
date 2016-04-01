@@ -7,3 +7,8 @@ WHERE
   (shop = 'boat' AND tags->'rental' = 'yes') OR
   man_made IN ('beacon', 'cross', 'mineshaft', 'adit', 'water_well') OR
   "natural" IN ('saddle', 'dune', 'geyser', 'sinkhole', 'hot_spring', 'rock', 'stone');
+
+UPDATE planet_osm_polygon
+SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+WHERE
+  "natural" = 'scree';
