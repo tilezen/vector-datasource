@@ -7,7 +7,7 @@ import csv
 
 Rule = namedtuple(
     'Rule',
-    'calc equals not_equals not_exists set_memberships default_rule'
+    'calc equals not_equals not_exists set_memberships exists default_rule'
 )
 
 
@@ -45,14 +45,17 @@ def create_rule(keys, row, calc):
     not_equals = []
     not_exists = []
     set_memberships = []
+    exists = []
     default_rule = None
     for key, matcher in zip(keys, row):
         assert matcher, 'Invalid value for row: %s' % row
         # skip all * values
         if matcher == '*':
             continue
-        if matcher == '-':
+        elif matcher == '-':
             not_exists.append(key)
+        elif matcher == '+':
+            exists.append(key)
         elif matcher.startswith('-'):
             not_equals.append((key, matcher[1:]))
         elif ';' in matcher:
@@ -60,10 +63,11 @@ def create_rule(keys, row, calc):
             set_memberships.append((key, candidates))
         else:
             equals.append((key, matcher))
-    if not (equals or not_equals or not_exists or set_memberships):
+    if not (equals or not_equals or not_exists or set_memberships or exists):
         default_rule = calc
     return Rule(
-        calc, equals, not_equals, not_exists, set_memberships, default_rule)
+        calc, equals, not_equals, not_exists, set_memberships, exists,
+        default_rule)
 
 
 def create_case_statement(rules):
@@ -113,6 +117,12 @@ def create_case_statement(rules):
             when_in = ' AND '.join(when_in_parts)
             when_conds.append(when_in)
 
+        if rule.exists:
+            when_exists_parts = ['%s IS NOT NULL' % format_key(key)
+                                 for key in rule.exists]
+            when_exists = ' AND '.join(when_exists_parts)
+            when_conds.append(when_exists)
+
         if rule.default_rule:
             assert not default_rule, 'Multiple default rules detected'
             # indent
@@ -146,11 +156,15 @@ def used_params(rules):
                 used.add(column_for_key(key))
 
         if rule.not_exists:
-            for key, matcher in rule.not_exists:
+            for key in rule.not_exists:
                 used.add(column_for_key(key))
 
         if rule.set_memberships:
             for key, candidates in rule.set_memberships:
+                used.add(column_for_key(key))
+
+        if rule.exists:
+            for key in rule.exists:
                 used.add(column_for_key(key))
 
     return used
