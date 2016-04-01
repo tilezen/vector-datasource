@@ -11,3 +11,8 @@ WHERE
 UPDATE planet_osm_polygon
 SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_polygon.*)
 WHERE mz_calculate_min_zoom_water(planet_osm_polygon.*) IS NOT NULL;
+
+UPDATE planet_osm_polygon
+SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+WHERE
+  "natural" = 'scree';
