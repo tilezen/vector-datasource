@@ -1,0 +1,26 @@
+osm:amenity,osm:landuse,osm:leisure,osm:natural,osm:waterway,osm:name,osm:place,ne:featurecla,shp:gid::int,min_zoom,kind
+*,*,*,*,riverbank,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",riverbank
+*,*,*,*,dock,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",dock
+*,*,*,water,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",water
+*,*,*,bay,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",bay
+*,*,*,strait,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",strait
+*,*,*,fjord,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",fjord
+*,basin,*,*,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",basin
+*,reservoir,*,*,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",reservoir
+swimming_pool,*,*,*,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",swimming_pool
+*,*,swimming_pool,*,*,*,*,*,*,"${CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint, 16), 9) END}",swimming_pool
+*,*,*,*,canal,*,*,*,*,${9},canal
+*,*,*,*,river,*,*,*,*,${9},river
+*,*,*,*,stream,*,*,*,*,${11},stream
+*,*,*,*,dam,*,*,*,*,${13},dam
+*,*,*,*,ditch,*,*,*,*,${16},ditch
+*,*,*,*,drain,*,*,*,*,${16},drain
+*,*,*,*,*,*,*,Coastline,*,${0},ocean
+*,*,*,*,*,*,*,Alkaline Lake,*,${0},lake
+*,*,*,*,*,*,*,Lake,*,${0},lake
+*,*,*,*,*,*,*,Reservoir,*,${0},lake
+*,*,*,*,*,*,*,Playa,*,${0},playa
+*,*,*,*,*,*,*,Ocean,*,${0},ocean
+*,*,*,*,*,+,ocean,*,*,${0},ocean
+*,*,*,*,*,+,sea,*,*,${3},sea
+*,*,*,*,*,*,*,*,+,${0},ocean

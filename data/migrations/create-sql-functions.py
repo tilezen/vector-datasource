@@ -11,7 +11,34 @@ Rule = namedtuple(
 )
 
 
-def format_key(key):
+Key = namedtuple(
+    'Key',
+    'table key typ'
+)
+
+
+def _parse_kt_table(kt):
+    table = None
+
+    if kt.startswith("osm:"):
+        table = "osm"
+        kt = kt[4:]
+
+    elif kt.startswith("ne:"):
+        table = "ne"
+        kt = kt[3:]
+
+    elif kt.startswith("shp:"):
+        table = "shp"
+        kt = kt[4:]
+
+    key, typ = _parse_kt(kt)
+
+    return Key(table=table, key=key, typ=typ)
+
+
+def format_key(kt):
+    key = kt.key
     if key.startswith('tags->'):
         key = 'tags->\'%s\'' % (key[len('tags->'):])
     else:
@@ -19,12 +46,19 @@ def format_key(key):
     return key
 
 
-def column_for_key(key):
+SQL_TYPE_LOOKUP = {
+    float: "real",
+    int: "integer",
+    str: "text"
+}
+
+
+def column_for_key(kt):
+    key = kt.key
     if key.startswith('tags->'):
-        key = "tags"
-    else:
-        key = '"%s"' % key
-    return key
+        return Key(table=kt.table, key="tags", typ="hstore")
+    sql_type = SQL_TYPE_LOOKUP[kt.typ]
+    return Key(table=kt.table, key=('"%s"' % key), typ=sql_type)
 
 
 def format_string_value(value):
@@ -173,7 +207,7 @@ def used_params(rules):
 layers = {}
 script_root = os.path.dirname(__file__)
 
-for layer in ('landuse', 'pois', 'transit'):
+for layer in ('landuse', 'pois', 'transit', 'water'):
     kind_rules = []
     min_zoom_rules = []
     csv_file = '../../spreadsheets/kind/%s.csv' % layer
@@ -193,7 +227,7 @@ for layer in ('landuse', 'pois', 'transit'):
                 assert min_zoom == 'min_zoom'
                 keys = []
                 for key_type in row:
-                    key, typ = _parse_kt(key_type)
+                    key = _parse_kt_table(key_type)
                     keys.append(key)
             else:
                 # assume kind is last
@@ -211,8 +245,10 @@ for layer in ('landuse', 'pois', 'transit'):
                     kind_rule = create_rule(keys, row, kind_calc)
                     kind_rules.append(kind_rule)
 
+    osm_tags = set([Key(table='osm', key='tags', typ='hstore'),
+                    Key(table=None, key='tags', typ='hstore')])
     params = ((used_params(kind_rules) | used_params(min_zoom_rules))
-              - set(['tags']))
+              - osm_tags)
     # sorted params is nicer to read in the sql
     params = sorted(params)
     kind_case_statement = create_case_statement(kind_rules)
