@@ -3,9 +3,9 @@ assert_has_feature(
     15, 5293, 12734, 'pois',
     { 'kind': 'mineshaft' })
 
-# node 1071144152
+# node 369156437
 assert_has_feature(
-    16, 10583, 25289, 'pois',
+    16, 11932, 25298, 'pois',
     { 'kind': 'adit' })
 
 # node 2794798164
