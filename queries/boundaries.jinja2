@@ -60,6 +60,7 @@ FROM
     ne_10m_admin_1_states_provinces_lines
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
+    AND featurecla NOT IN ('Admin-1 statistical boundary', 'Admin-1 statistical meta bounds');
 
 {% else %}
 
