@@ -6,7 +6,8 @@ WHERE
   tags->'rental' = 'boat' OR
   (shop = 'boat' AND tags->'rental' = 'yes') OR
   man_made IN ('beacon', 'cross', 'mineshaft', 'adit', 'water_well') OR
-  "natural" IN ('saddle', 'dune', 'geyser', 'sinkhole', 'hot_spring', 'rock', 'stone');
+  "natural" IN ('saddle', 'dune', 'geyser', 'sinkhole', 'hot_spring', 'rock', 'stone') OR
+  highway = 'trailhead';
 
 -- create index if it doesn't already exist.
 DO $$
