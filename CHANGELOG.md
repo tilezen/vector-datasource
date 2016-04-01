@@ -13,7 +13,7 @@ v0.9.0
 * Show existing aerialway `station` & railway `tram_stop` features in the `pois` layer earlier at zoom 13. See [#587](https://github.com/mapzen/vector-datasource/issues/587).
 * Add several boolean values to indicate `station` transit service types in `pois` layer. See [#352](https://github.com/mapzen/vector-datasource/issues/352).
 * Add `state` property to `station` features in the `pois` layer to indicate planned and under construction features. See [#484](https://github.com/mapzen/vector-datasource/issues/484).
-* Add optional `osm_site_relation` ID value on transit `station` features in the `pois` layer. See [#590](https://github.com/mapzen/vector-datasource/issues/590).
+* Add optional `root_relation_id` ID value on transit `station` features in the `pois` layer. See [#590](https://github.com/mapzen/vector-datasource/issues/590). CORRECTED 9/31: earlier documention said `osm_site_relation`.
 * Add optional `uic_ref` to `station` features in the `pois` layer.
 * Add additional transit points to `pois` layer and lines to the `transit` layer for grab bag of stops, halts, stop areas, and platforms. See [#469](https://github.com/mapzen/vector-datasource/issues/469).
 * Show `transit` layer features at earlier zoom levels, including international `train`, `subway`, `light_rail`, and `tram`. See [#472](https://github.com/mapzen/vector-datasource/issues/472).
