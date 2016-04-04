@@ -1,6 +1,6 @@
-{% macro ne_water_cols(kind) %}
+{% macro ne_water_cols() %}
     sum(way_area)::bigint AS area,
-    '{{ kind }}' AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
@@ -11,41 +11,46 @@
 {% if zoom < 9 %}
 SELECT
     '' AS name,
-    {{ ne_water_cols('ocean') }}
+    {{ ne_water_cols() }}
 
 {% if zoom < 2 %}
-FROM ne_110m_ocean
+FROM ne_110m_ocean t
 {% elif 2 <= zoom < 5 %}
-FROM ne_50m_ocean
+FROM ne_50m_ocean t
 {% elif 5 <= zoom < 9 %}
-FROM ne_10m_ocean
+FROM ne_10m_ocean t
 {% endif %}
 
-WHERE {{ bounds|bbox_filter('the_geom') }}
+WHERE
+  mz_water_min_zoom <= {{ zoom }} AND
+  {{ bounds|bbox_filter('the_geom') }}
+GROUP BY kind
 
 UNION ALL
 
 SELECT
     name,
-    {{ ne_water_cols('lake') }}
+    {{ ne_water_cols() }}
 
 {% if zoom < 2 %}
-FROM ne_110m_lakes
+FROM ne_110m_lakes t
 {% elif 2 <= zoom < 5 %}
-FROM ne_50m_lakes
+FROM ne_50m_lakes t
 {% elif 5 <= zoom < 9 %}
-FROM ne_10m_lakes
+FROM ne_10m_lakes t
 {% endif %}
 
-WHERE {{ bounds|bbox_filter('the_geom') }}
-GROUP BY name
+WHERE
+  mz_water_min_zoom <= {{ zoom }} AND
+  {{ bounds|bbox_filter('the_geom') }}
+GROUP BY name, kind
 
 UNION ALL
 
 SELECT
     NULL AS name,
     NULL AS area,
-    'ocean' AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -54,21 +59,23 @@ SELECT
 
 FROM
 {% if zoom < 2 %}
-    ne_110m_coastline
+    ne_110m_coastline t
 {% elif 2 <= zoom < 5 %}
-    ne_50m_coastline
+    ne_50m_coastline t
 {% elif 5 <= zoom < 9 %}
-    ne_10m_coastline
+    ne_10m_coastline t
 {% endif %}
 
-WHERE {{ bounds|bbox_filter('the_geom') }}
+WHERE
+  mz_water_min_zoom <= {{ zoom }} AND
+  {{ bounds|bbox_filter('the_geom') }}
 
 UNION ALL
 
 SELECT
     NULL AS name,
     NULL AS area,
-    'lake' AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -77,37 +84,41 @@ SELECT
 
 FROM
 {% if zoom < 2 %}
-    ne_110m_lakes
+    ne_110m_lakes t
 {% elif 2 <= zoom < 5 %}
-    ne_50m_lakes
+    ne_50m_lakes t
 {% elif 5 <= zoom < 9 %}
-    ne_10m_lakes
+    ne_10m_lakes t
 {% endif %}
 
-WHERE {{ bounds|bbox_filter('the_geom') }}
+WHERE
+  mz_water_min_zoom <= {{ zoom }} AND
+  {{ bounds|bbox_filter('the_geom') }}
 
 {% if 4 <= zoom < 9 %}
 UNION ALL
 
 SELECT
     name,
-    {{ ne_water_cols('playa') }}
+    {{ ne_water_cols() }}
 
 {% if 4 <= zoom < 5 %}
-FROM ne_50m_playas
+FROM ne_50m_playas t
 {% elif 5 <= zoom < 9 %}
-FROM ne_10m_playas
+FROM ne_10m_playas t
 {% endif %}
 
-WHERE {{ bounds|bbox_filter('the_geom') }}
-GROUP BY name
+WHERE
+  mz_water_min_zoom <= {{ zoom }} AND
+  {{ bounds|bbox_filter('the_geom') }}
+GROUP BY name, kind
 
 UNION ALL
 
 SELECT
     NULL AS name,
     NULL AS area,
-    'playa' AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -116,12 +127,14 @@ SELECT
 
 FROM
 {% if 4 <= zoom < 5 %}
-    ne_50m_playas
+    ne_50m_playas t
 {% elif 5 <= zoom < 9 %}
-    ne_10m_playas
+    ne_10m_playas t
 {% endif %}
 
-WHERE {{ bounds|bbox_filter('the_geom') }}
+WHERE
+  mz_water_min_zoom <= {{ zoom }} AND
+  {{ bounds|bbox_filter('the_geom') }}
 
 {% endif %}
 
@@ -129,7 +142,7 @@ WHERE {{ bounds|bbox_filter('the_geom') }}
 SELECT
     '' AS name,
     way_area::bigint AS area,
-    'ocean' AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'openstreetmapdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -137,7 +150,7 @@ SELECT
     NULL AS tunnel,
     NULL AS tags
 
-FROM water_polygons
+FROM water_polygons t
 
 WHERE {{ bounds|bbox_filter('the_geom') }}
 
@@ -146,7 +159,7 @@ UNION ALL
 SELECT
     name,
     way_area::bigint AS area,
-    COALESCE("amenity", "landuse", "leisure", "natural", "waterway") AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -154,31 +167,18 @@ SELECT
     tunnel,
     %#tags AS tags
 
-FROM planet_osm_polygon
+FROM planet_osm_polygon t
 
 WHERE
-    mz_calculate_is_water("amenity", "landuse", "leisure", "natural", "waterway") = TRUE
-    AND {{ bounds|bbox_filter('way') }}
-{% if 9 <= zoom < 11 %}
-    AND way_area::bigint > 102400
-{% elif zoom == 11 %}
-    AND way_area::bigint > 25600
-{% elif zoom == 12 %}
-    AND way_area::bigint > 6400
-{% elif zoom == 13 %}
-    AND way_area::bigint > 1600
-{% elif zoom == 14 %}
-    AND way_area::bigint > 400
-{% elif zoom == 15 %}
-    AND way_area::bigint > 100
-{% endif %}
+    mz_water_min_zoom <= {{ zoom }} AND
+    {{ bounds|bbox_filter('way') }}
 
 UNION ALL
 
 SELECT
     name,
     NULL AS area,
-    waterway AS kind,
+    mz_calculate_kind_water(t.*) AS kind,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -186,16 +186,11 @@ SELECT
     tunnel,
     %#tags AS tags
 
-FROM planet_osm_line
+FROM planet_osm_line t
 
 WHERE
+    mz_water_min_zoom <= {{ zoom }} AND
     {{ bounds|bbox_filter('way') }}
-    AND waterway IN (
-    'canal', 'river'
-{% if 11 <= zoom %}, 'stream'{% endif %}
-{% if 13 <= zoom %}, 'dam'{% endif %}
-{% if 16 <= zoom %}, 'ditch', 'drain'{% endif %}
-    )
 
 {% endif %}
 
@@ -204,7 +199,7 @@ UNION ALL
 SELECT
   name,
   NULL AS area,
-  place AS kind,
+  mz_calculate_kind_water(t.*) AS kind,
   'openstreetmap.org' AS source,
   way AS __geometry__,
   osm_id AS __id__,
@@ -217,11 +212,8 @@ SELECT
 {% endif %}
 
 FROM
-  planet_osm_point
+  planet_osm_point t
 
 WHERE
-  name IS NOT NULL AND
-  place IN ('ocean'
-    {% if zoom >= 3 %}, 'sea'{% endif %}
-  ) AND
+  mz_water_min_zoom <= {{ zoom }} AND
   {{ bounds|bbox_filter('way') }}

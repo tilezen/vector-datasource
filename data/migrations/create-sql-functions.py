@@ -7,11 +7,38 @@ import csv
 
 Rule = namedtuple(
     'Rule',
-    'calc equals not_equals not_exists set_memberships default_rule'
+    'calc equals not_equals not_exists set_memberships exists default_rule'
 )
 
 
-def format_key(key):
+Key = namedtuple(
+    'Key',
+    'table key typ'
+)
+
+
+def _parse_kt_table(kt):
+    table = None
+
+    if kt.startswith("osm:"):
+        table = "osm"
+        kt = kt[4:]
+
+    elif kt.startswith("ne:"):
+        table = "ne"
+        kt = kt[3:]
+
+    elif kt.startswith("shp:"):
+        table = "shp"
+        kt = kt[4:]
+
+    key, typ = _parse_kt(kt)
+
+    return Key(table=table, key=key, typ=typ)
+
+
+def format_key(kt):
+    key = kt.key
     if key.startswith('tags->'):
         key = 'tags->\'%s\'' % (key[len('tags->'):])
     else:
@@ -19,12 +46,19 @@ def format_key(key):
     return key
 
 
-def column_for_key(key):
+SQL_TYPE_LOOKUP = {
+    float: "real",
+    int: "integer",
+    str: "text"
+}
+
+
+def column_for_key(kt):
+    key = kt.key
     if key.startswith('tags->'):
-        key = "tags"
-    else:
-        key = '"%s"' % key
-    return key
+        return Key(table=kt.table, key="tags", typ="hstore")
+    sql_type = SQL_TYPE_LOOKUP[kt.typ]
+    return Key(table=kt.table, key=('"%s"' % key), typ=sql_type)
 
 
 def format_string_value(value):
@@ -45,6 +79,7 @@ def create_rule(keys, row, calc):
     not_equals = []
     not_exists = []
     set_memberships = []
+    exists = []
     default_rule = None
     for key, matcher in zip(keys, row):
         assert matcher, 'Invalid value for row: %s' % row
@@ -55,10 +90,12 @@ def create_rule(keys, row, calc):
         # should be an equals value matcher with what is inside the
         # quotes. This allows us to handle values that have a ;
         # character in them
-        if matcher.startswith('"') and matcher.endswith('"'):
+        elif matcher.startswith('"') and matcher.endswith('"'):
             equals.append((key, matcher[1:-1]))
         elif matcher == '-':
             not_exists.append(key)
+        elif matcher == '+':
+            exists.append(key)
         elif matcher.startswith('-'):
             not_equals.append((key, matcher[1:]))
         elif ';' in matcher:
@@ -66,10 +103,11 @@ def create_rule(keys, row, calc):
             set_memberships.append((key, candidates))
         else:
             equals.append((key, matcher))
-    if not (equals or not_equals or not_exists or set_memberships):
+    if not (equals or not_equals or not_exists or set_memberships or exists):
         default_rule = calc
     return Rule(
-        calc, equals, not_equals, not_exists, set_memberships, default_rule)
+        calc, equals, not_equals, not_exists, set_memberships, exists,
+        default_rule)
 
 
 def create_case_statement(rules):
@@ -119,6 +157,12 @@ def create_case_statement(rules):
             when_in = ' AND '.join(when_in_parts)
             when_conds.append(when_in)
 
+        if rule.exists:
+            when_exists_parts = ['%s IS NOT NULL' % format_key(key)
+                                 for key in rule.exists]
+            when_exists = ' AND '.join(when_exists_parts)
+            when_conds.append(when_exists)
+
         if rule.default_rule:
             assert not default_rule, 'Multiple default rules detected'
             # indent
@@ -152,11 +196,15 @@ def used_params(rules):
                 used.add(column_for_key(key))
 
         if rule.not_exists:
-            for key, matcher in rule.not_exists:
+            for key in rule.not_exists:
                 used.add(column_for_key(key))
 
         if rule.set_memberships:
             for key, candidates in rule.set_memberships:
+                used.add(column_for_key(key))
+
+        if rule.exists:
+            for key in rule.exists:
                 used.add(column_for_key(key))
 
     return used
@@ -165,7 +213,7 @@ def used_params(rules):
 layers = {}
 script_root = os.path.dirname(__file__)
 
-for layer in ('landuse', 'pois', 'transit'):
+for layer in ('landuse', 'pois', 'transit', 'water'):
     kind_rules = []
     min_zoom_rules = []
     csv_file = '../../spreadsheets/kind/%s.csv' % layer
@@ -185,7 +233,7 @@ for layer in ('landuse', 'pois', 'transit'):
                 assert min_zoom == 'min_zoom'
                 keys = []
                 for key_type in row:
-                    key, typ = _parse_kt(key_type)
+                    key = _parse_kt_table(key_type)
                     keys.append(key)
             else:
                 # assume kind is last
@@ -203,8 +251,10 @@ for layer in ('landuse', 'pois', 'transit'):
                     kind_rule = create_rule(keys, row, kind_calc)
                     kind_rules.append(kind_rule)
 
+    osm_tags = set([Key(table='osm', key='tags', typ='hstore'),
+                    Key(table=None, key='tags', typ='hstore')])
     params = ((used_params(kind_rules) | used_params(min_zoom_rules))
-              - set(['tags']))
+              - osm_tags)
     # sorted params is nicer to read in the sql
     params = sorted(params)
     kind_case_statement = create_case_statement(kind_rules)
