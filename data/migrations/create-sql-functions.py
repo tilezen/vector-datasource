@@ -86,6 +86,12 @@ def create_rule(keys, row, calc):
         # skip all * values
         if matcher == '*':
             continue
+        # if the matcher is surrounded by quotes, we assume that
+        # should be an equals value matcher with what is inside the
+        # quotes. This allows us to handle values that have a ;
+        # character in them
+        elif matcher.startswith('"') and matcher.endswith('"'):
+            equals.append((key, matcher[1:-1]))
         elif matcher == '-':
             not_exists.append(key)
         elif matcher == '+':
