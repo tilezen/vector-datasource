@@ -19,9 +19,9 @@ SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
 WHERE
   "natural" = 'scree';
 
-CREATE INDEX CONCURRENTLY new_planet_osm_polygon_water_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 9;
-CREATE INDEX CONCURRENTLY new_planet_osm_polygon_water_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 12;
-CREATE INDEX CONCURRENTLY new_planet_osm_polygon_water_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 15;
+CREATE INDEX new_planet_osm_polygon_water_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 9;
+CREATE INDEX new_planet_osm_polygon_water_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 12;
+CREATE INDEX new_planet_osm_polygon_water_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 15;
 
 BEGIN;
   DROP INDEX IF EXISTS planet_osm_polygon_water_geom_9_index;
