@@ -43,9 +43,9 @@ BEGIN
     WHEN highway_val IN ('motorway_link', 'tertiary')                         THEN 11
     WHEN highway_val IN ('trunk_link', 'residential', 'unclassified', 'road') THEN 12
     WHEN highway_val IN ('primary_link', 'secondary_link', 'track',
-                         'pedestrian', 'living_street')                       THEN 13
+                         'pedestrian', 'living_street', 'path')               THEN 13
     WHEN highway_val IN ('tertiary_link', 'minor', 'footpath', 'footway',
-                         'steps', 'path', 'cycleway')                         THEN 14
+                         'steps', 'cycleway')                                 THEN 14
     WHEN highway_val = 'service' THEN CASE
       WHEN service_val IS NULL                                                THEN 14
       WHEN service_val = 'alley'                                              THEN 13
