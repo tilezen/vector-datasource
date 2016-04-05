@@ -23,8 +23,8 @@ zoom::int,layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_brid
 >=15,-,minor_road,*,*,*,taxiway,*,*,yes,-,426
 >=15,-,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,*,*,yes,-,425
 >=15,-,minor_road,residential;unclassified;road;living_street,*,*,*,*,*,yes,-,410
->=15,-,minor_road,service;minor,*,*,*,-,*,yes,-,408
->=15,-,minor_road,service;minor,*,*,*,*,*,yes,-,406
+>=15,-,minor_road,service,*,*,*,-,*,yes,-,408
+>=15,-,minor_road,service,*,*,*,*,*,yes,-,406
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,spur;siding,*,yes,-,411
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,yard,*,yes,-,409
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,+,*,yes,-,407
@@ -40,8 +40,8 @@ zoom::int,layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_brid
 >=15,-,minor_road,*,*,*,taxiway,*,*,-,yes,326
 >=15,-,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,*,*,-,yes,325
 >=15,-,minor_road,residential;unclassified;road;living_street,*,*,*,*,*,-,yes,310
->=15,-,minor_road,service;minor,*,*,*,-,*,-,yes,308
->=15,-,minor_road,service;minor,*,*,*,*,*,-,yes,306
+>=15,-,minor_road,service,*,*,*,-,*,-,yes,308
+>=15,-,minor_road,service,*,*,*,*,*,-,yes,306
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,spur;siding,*,-,yes,311
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,yard,*,-,yes,309
 >=15,-,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,+,*,-,yes,307
@@ -62,8 +62,8 @@ zoom::int,layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_brid
 *,*,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,*,*,*,*,375
 *,*,minor_road,residential;unclassified;road;living_street,*,*,*,*,*,*,*,360
 *,*,*,*,Unknown,*,*,*,*,*,*,360
-*,*,minor_road,service;minor,*,*,*,-,*,*,*,358
-*,*,minor_road,service;minor,*,*,*,*,*,*,*,356
+*,*,minor_road,service,*,*,*,-,*,*,*,358
+*,*,minor_road,service,*,*,*,*,*,*,*,356
 *,*,aerialway,*,*,*,*,*,gondola;cable_car,*,*,442
 *,*,aerialway,*,*,*,*,*,chair_lift,*,*,441
 *,*,aerialway,*,*,*,*,*,+,*,*,440

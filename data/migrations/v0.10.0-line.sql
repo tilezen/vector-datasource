@@ -6,7 +6,7 @@ UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route,
     service, aerialway, leisure, sport, man_made, way)
   WHERE
-    highway = 'path';
+    highway IN ('path', 'footpath', 'footway', 'steps', 'cycleway', 'minor');
 
 CREATE INDEX new_planet_osm_line_water_geom_9_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 9;
 CREATE INDEX new_planet_osm_line_water_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 12;
@@ -33,4 +33,3 @@ BEGIN;
   ALTER INDEX new_planet_osm_line_boundary_geom_12_index RENAME TO planet_osm_line_boundary_geom_12_index;
   ALTER INDEX new_planet_osm_line_boundary_geom_15_index RENAME TO planet_osm_line_boundary_geom_15_index;
 COMMIT;
-
