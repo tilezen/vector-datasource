@@ -702,3 +702,87 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+----------------------------------------------------------------------
+-- PLACES
+----------------------------------------------------------------------
+
+-- places kind "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_places_(
+{%- for param in layers['places']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN {{ layers['places']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- places min_zoom "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places_(
+{%- for param in layers['places']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN {{ layers['places']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- places kind table adaptors
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_places(planet_osm_point)
+RETURNS text AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_places_(
+{%- for param in layers['places']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_places(ne_10m_populated_places)
+RETURNS text AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_places_(
+{%- for param in layers['places']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places(planet_osm_point)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_places_(
+{%- for param in layers['places']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places(ne_10m_populated_places)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_places_(
+{%- for param in layers['places']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

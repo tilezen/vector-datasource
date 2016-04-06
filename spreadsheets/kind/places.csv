@@ -1,0 +1,23 @@
+ne:featurecla,ne:scalerank,osm:name,osm:place,min_zoom,kind
+*,*,+,continent,${0},continent
+*,*,+,country,${0},country
+*,*,+,state,${4},state
+*,*,+,province,${4},province
+*,*,+,city,${8},city
+*,*,+,town,${8},town
+*,*,+,borough,${10},borough
+*,*,+,suburb,${10},suburb
+*,*,+,quarter,${10},quarter
+*,*,+,village,${11},village
+*,*,+,hamlet,${12},hamlet
+*,*,+,locality,${13},locality
+*,*,+,isolated_dwelling,${13},isolated_dwelling
+*,*,+,farm,${13},farm
+Admin-0 region capital,+,*,*,${scalerank},Admin-0 region capital
+Admin-0 capital alt,+,*,*,${scalerank},Admin-0 capital alt
+Admin-1 capital,+,*,*,${scalerank},Admin-1 capital
+Admin-1 region capital,+,*,*,${scalerank},Admin-1 region capital
+Historic place,+,*,*,${scalerank},Historic place
+Populated place,+,*,*,${scalerank},Populated place
+Admin-0 capital,+,*,*,${scalerank},Admin-0 capital
+Scientific station,+,*,*,${scalerank},Scientific station
