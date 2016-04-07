@@ -8,8 +8,6 @@ BEGIN
 -- indexes on existing columns
 CREATE INDEX planet_osm_polygon_wayarea_index ON planet_osm_polygon(way_area);
 CREATE INDEX planet_osm_polygon_building_index ON planet_osm_polygon(building) WHERE building IS NOT NULL;
-CREATE INDEX planet_osm_polygon_admin_level_index ON planet_osm_polygon(admin_level) WHERE boundary = 'administrative';
-CREATE INDEX planet_osm_polygon_admin_level_geom_index ON planet_osm_polygon USING gist(way) WHERE boundary = 'administrative';
 CREATE INDEX planet_osm_polygon_is_building_or_part_index ON planet_osm_polygon(mz_calculate_is_building_or_part(building, "building:part")) WHERE mz_calculate_is_building_or_part(building, "building:part") = TRUE;
 
 UPDATE planet_osm_polygon SET
@@ -28,13 +26,13 @@ UPDATE planet_osm_polygon
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_polygon.*)
   WHERE mz_calculate_min_zoom_water(planet_osm_polygon.*) IS NOT NULL;
 
+UPDATE planet_osm_polygon
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_polygon.*)
+  WHERE mz_calculate_min_zoom_boundaries(planet_osm_polygon.*) IS NOT NULL;
+
 CREATE INDEX planet_osm_polygon_landuse_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_landuse_min_zoom <= 9;
 CREATE INDEX planet_osm_polygon_landuse_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_landuse_min_zoom <= 12;
 CREATE INDEX planet_osm_polygon_landuse_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_landuse_min_zoom <= 15;
-
-CREATE INDEX planet_osm_polygon_landuse_boundary_geom_4_index ON planet_osm_polygon USING gist(way) WHERE (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve') AND mz_landuse_min_zoom <= 4;
-CREATE INDEX planet_osm_polygon_landuse_boundary_geom_6_index ON planet_osm_polygon USING gist(way) WHERE (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve') AND mz_landuse_min_zoom <= 6;
-CREATE INDEX planet_osm_polygon_landuse_boundary_geom_8_index ON planet_osm_polygon USING gist(way) WHERE (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve') AND mz_landuse_min_zoom <= 8;
 
 CREATE INDEX planet_osm_polygon_railway_platform_index ON planet_osm_polygon USING gist(way) WHERE railway='platform';
 
@@ -47,6 +45,10 @@ CREATE INDEX planet_osm_polygon_transit_geom_15_index ON planet_osm_polygon USIN
 CREATE INDEX planet_osm_polygon_water_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 9;
 CREATE INDEX planet_osm_polygon_water_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 12;
 CREATE INDEX planet_osm_polygon_water_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 15;
+
+CREATE INDEX planet_osm_polygon_boundary_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 9;
+CREATE INDEX planet_osm_polygon_boundary_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 12;
+CREATE INDEX planet_osm_polygon_boundary_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 15;
 
 END $$;
 

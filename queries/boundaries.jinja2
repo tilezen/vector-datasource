@@ -2,7 +2,7 @@
     gid AS __id__,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     scalerank::float,
-    featurecla AS kind,
+    mz_calculate_kind_boundaries(t.*) AS kind,
     '{{ type }}' AS type
 {% endmacro %}
 
@@ -11,27 +11,30 @@
 SELECT
     {{ ne_boundary_cols('country') }}
 FROM
-    ne_110m_admin_0_boundary_lines_land
+    ne_110m_admin_0_boundary_lines_land t
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds|bbox_filter('the_geom') }} AND
+    mz_boundary_min_zoom <= {{ zoom }}
 
 {% elif 2 <= zoom < 5 %}
 
 SELECT
     {{ ne_boundary_cols('country') }}
 FROM
-    ne_50m_admin_0_boundary_lines_land
+    ne_50m_admin_0_boundary_lines_land t
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds|bbox_filter('the_geom') }} AND
+    mz_boundary_min_zoom <= {{ zoom }}
 
 UNION ALL
 
 SELECT
     {{ ne_boundary_cols('state') }}
 FROM
-    ne_50m_admin_1_states_provinces_lines
+    ne_50m_admin_1_states_provinces_lines t
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds|bbox_filter('the_geom') }} AND
+    mz_boundary_min_zoom <= {{ zoom }}
 
 {% elif 5 <= zoom < 8 %}
 
@@ -40,9 +43,10 @@ SELECT
     labelrank,
     {{ ne_boundary_cols('country') }}
 FROM
-    ne_10m_admin_0_boundary_lines_land
+    ne_10m_admin_0_boundary_lines_land t
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds|bbox_filter('the_geom') }} AND
+    mz_boundary_min_zoom <= {{ zoom }}
 
 UNION ALL
 
@@ -51,9 +55,10 @@ SELECT
     NULL AS labelrank,
     {{ ne_boundary_cols('state') }}
 FROM
-    ne_10m_admin_1_states_provinces_lines
+    ne_10m_admin_1_states_provinces_lines t
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds|bbox_filter('the_geom') }} AND
+    mz_boundary_min_zoom <= {{ zoom }}
 
 {% else %}
 
@@ -62,7 +67,7 @@ SELECT
   NULL AS maritime_boundary,
   admin_level,
   tags->'boundary:type' AS boundary_type,
-  NULL AS kind,
+  mz_calculate_kind_boundaries(planet_osm_polygon.*) AS kind,
   -- note that we force the RHR, which makes outers clockwise,
   -- then take the boundary, then reverse and intersect with
   -- the query bbox. this is needed because Shapely expects a
@@ -74,9 +79,8 @@ SELECT
 FROM planet_osm_polygon
 
 WHERE
-  {{ bounds|bbox_filter('way') }}
-  AND boundary='administrative'
-  AND admin_level IN ('2', '4' {% if zoom >= 10 %}, '6', '8'{% endif %})
+  {{ bounds|bbox_filter('way') }} AND
+  mz_boundary_min_zoom <= {{ zoom }}
 
 UNION ALL
 
@@ -95,8 +99,6 @@ FROM buffered_land
 WHERE
   {{ bounds|bbox_filter('the_geom') }}
 
-{% if zoom >= 12 %}
-
 UNION ALL
 
 SELECT
@@ -104,11 +106,7 @@ SELECT
   NULL AS maritime_boundary,
   NULL AS admin_level,
   NULL AS boundary_type,
-  CASE WHEN barrier='retaining_wall' THEN 'retaining_wall'
-       WHEN man_made='snow_fence' THEN 'snow_fence'
-       WHEN barrier='fence' THEN 'fence'
-       ELSE 'city_wall'
-  END AS kind,
+  mz_calculate_kind_boundaries(planet_osm_line.*) AS kind,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
   %#tags AS tags
@@ -117,44 +115,8 @@ FROM
   planet_osm_line
 
 WHERE
-  {{ bounds|bbox_filter('way') }}
-  AND (
-    barrier='city_wall' OR historic='citywalls'
-{% if zoom >= 15 %}
-    OR barrier='retaining_wall'
-    OR man_made='snow_fence'
-{% endif %}
-{% if zoom >= 16 %}
-    OR barrier='fence'
-{% endif %}
-  )
-
-{% endif %}
-
-{% if zoom >= 16 %}
--- also add boundaries from polygon which have boundary=fence.
-
-UNION ALL
-
-SELECT
-  name,
-  NULL AS maritime_boundary,
-  NULL AS admin_level,
-  NULL AS boundary_type,
-  'fence' AS kind,
-  {% filter geometry %}st_boundary(way){% endfilter %} AS __geometry__,
-  osm_id AS __id__,
-  %#tags AS tags
-
-FROM
-  planet_osm_polygon
-
-WHERE
-  {{ bounds|bbox_filter('way') }}
-  -- don't want to match any rows which are entirely inside or entirely
-  -- outside the bounding box.
-  AND st_intersects(st_boundary(way), {{ bounds|bbox }})
-  AND barrier='fence';
+  {{ bounds|bbox_filter('way') }} AND
+  mz_boundary_min_zoom <= {{ zoom }}
 
 {% endif %}
 

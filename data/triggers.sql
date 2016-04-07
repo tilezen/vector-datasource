@@ -5,6 +5,7 @@ BEGIN
     NEW.mz_landuse_min_zoom := mz_calculate_min_zoom_landuse(NEW.*);
     NEW.mz_transit_level := mz_calculate_min_zoom_transit(NEW.*);
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
+    NEW.mz_boundary_min_zoom := mz_calculate_min_zoom_boundaries(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
@@ -39,6 +40,7 @@ BEGIN
     NEW.mz_road_level := mz_calculate_road_level(NEW."highway", NEW."railway", NEW."aeroway", NEW."route", NEW."service", NEW."aerialway", NEW."leisure", NEW."sport", NEW."man_made", NEW."way");
     NEW.mz_transit_level := mz_calculate_min_zoom_transit(NEW.*);
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
+    NEW.mz_boundary_min_zoom := mz_calculate_min_zoom_boundaries(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;

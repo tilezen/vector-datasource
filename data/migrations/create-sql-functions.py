@@ -213,7 +213,7 @@ def used_params(rules):
 layers = {}
 script_root = os.path.dirname(__file__)
 
-for layer in ('landuse', 'pois', 'transit', 'water', 'places'):
+for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries'):
     kind_rules = []
     min_zoom_rules = []
     csv_file = '../../spreadsheets/kind/%s.csv' % layer

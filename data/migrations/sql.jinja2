@@ -2,6 +2,21 @@
   {% if param.table == tbl or not param.table %}row.{{param.key}}{% else %}NULL{% endif %}
 {%- endmacro -%}
 
+{%- macro table_func(func_kind, param, tbl, table_name) -%}
+CREATE OR REPLACE FUNCTION mz_calculate_{{ func_kind }}_boundaries({{ table_name }})
+RETURNS text AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_{{ func_kind }}_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{ table_param(param, tbl) }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+{%- endmacro -%}
+
 -------------
 -- landuse --
 -------------
@@ -786,3 +801,99 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+----------------------------------------------------------------------
+-- BOUNDARIES
+----------------------------------------------------------------------
+
+-- boundaries kind "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN {{ layers['boundaries']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- boundaries min_zoom "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN {{ layers['boundaries']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- boundaries kind table adaptors
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_boundaries(planet_osm_line)
+RETURNS text AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_kind_boundaries(planet_osm_polygon)
+RETURNS text AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_kind_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+{{ table_func('kind', param, 'ne', 'ne_110m_admin_0_boundary_lines_land') }}
+{{ table_func('kind', param, 'ne', 'ne_50m_admin_0_boundary_lines_land') }}
+{{ table_func('kind', param, 'ne', 'ne_50m_admin_1_states_provinces_lines') }}
+{{ table_func('kind', param, 'ne', 'ne_10m_admin_0_boundary_lines_land') }}
+{{ table_func('kind', param, 'ne', 'ne_10m_admin_1_states_provinces_lines') }}
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries(planet_osm_line)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries(planet_osm_polygon)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+{{ table_func('min_zoom', param, 'ne', 'ne_110m_admin_0_boundary_lines_land') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_0_boundary_lines_land') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines') }}
