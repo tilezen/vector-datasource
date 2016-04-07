@@ -46,4 +46,4 @@ BEGIN
   PERFORM tmp_add_col('public.ne_10m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom');
 END$$;
 
-DROP FUNCTION tmp_add_col(regclass);
+DROP FUNCTION tmp_add_col(regclass, text);

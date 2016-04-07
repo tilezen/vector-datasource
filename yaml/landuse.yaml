@@ -1,0 +1,279 @@
+- filter: {boundary: national_park}
+  min_zoom: zoom
+  output: {kind: national_park}
+- filter: {boundary: protected_area}
+  min_zoom: zoom
+  output: {kind: protected_area}
+- filter: {leisure: nature_reserve}
+  min_zoom: zoom
+  output: {kind: nature_reserve}
+- filter: {leisure: park}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: park}
+- filter: {leisure: garden}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: garden}
+- filter: {leisure: playground}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: playground}
+- filter: {leisure: golf_course}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: golf_course}
+- filter: {leisure: sports_centre}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: sports_centre}
+- filter: {leisure: pitch}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: pitch}
+- filter: {leisure: stadium}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: stadium}
+- filter: {leisure: common}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: common}
+- filter: {landuse: park}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: park}
+- filter: {landuse: forest}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: forest}
+- filter: {landuse: residential}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: residential}
+- filter: {landuse: retail}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: retail}
+- filter: {landuse: commercial}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: commercial}
+- filter: {landuse: industrial}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: industrial}
+- filter: {landuse: railway}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: railway}
+- filter: {landuse: cemetery}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: cemetery}
+- filter: {landuse: grass}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: grass}
+- filter: {landuse: farmyard}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: farmyard}
+- filter: {landuse: farm}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: farm}
+- filter: {landuse: farmland}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: farmland}
+- filter: {landuse: wood}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: wood}
+- filter: {landuse: meadow}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: meadow}
+- filter: {landuse: village_green}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: village_green}
+- filter: {landuse: recreation_ground}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: recreation_ground}
+- filter: {landuse: allotments}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: allotments}
+- filter: {landuse: quarry}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: quarry}
+- filter: {landuse: urban}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: urban}
+- filter: {landuse: rural}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: rural}
+- filter: {landuse: military}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: military}
+- filter: {landuse: winter_sports}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: winter_sports}
+- filter: {natural: wood}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: wood}
+- filter: {natural: land}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: land}
+- filter: {natural: scrub}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: scrub}
+- filter: {natural: wetland}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: wetland}
+- filter: {natural: glacier}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: glacier}
+- filter: {natural: beach}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: beach}
+- filter: {highway: pedestrian}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: pedestrian}
+- filter: {highway: footway}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: footway}
+- filter: {amenity: university}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: university}
+- filter: {amenity: school}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: school}
+- filter: {amenity: college}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: college}
+- filter: {amenity: library}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: library}
+- filter: {amenity: fuel}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: fuel}
+- filter: {amenity: parking}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: parking}
+- filter: {amenity: cinema}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: cinema}
+- filter: {amenity: theatre}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: theatre}
+- filter: {amenity: place_of_worship}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: place_of_worship}
+- filter: {amenity: hospital}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: hospital}
+- filter: {amenity: prison}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: prison}
+- filter: {aeroway: runway}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: runway}
+- filter: {aeroway: taxiway}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: taxiway}
+- filter: {aeroway: apron}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: apron}
+- filter: {aeroway: aerodrome}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: aerodrome}
+- filter: {tags->zoo: enclosure}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: enclosure}
+- filter: {tags->zoo: petting_zoo}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: petting_zoo}
+- filter: {tags->zoo: aviary}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: aviary}
+- filter: {tags->zoo: wildlife_park}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: wildlife_park}
+- filter: {tags->attraction: animal}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: animal}
+- filter: {tags->attraction: water_slide}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: water_slide}
+- filter: {tags->attraction: roller_coaster}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: roller_coaster}
+- filter: {tags->attraction: summer_toboggan}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: summer_toboggan}
+- filter: {tags->attraction: carousel}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: carousel}
+- filter: {tags->attraction: amusement_ride}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: amusement_ride}
+- filter: {tags->attraction: maze}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: maze}
+- filter: {tourism: zoo}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: zoo}
+- filter: {tourism: attraction}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: attraction}
+- filter: {tourism: artwork}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: artwork}
+- filter: {tourism: theme_park}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: theme_park}
+- filter: {tourism: wilderness_hut}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: wilderness_hut}
+- filter: {tourism: hanami}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: hanami}
+- filter: {tourism: resort}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: resort}
+- filter: {tourism: trail_riding_station}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: trail_riding_station}
+- filter: {tourism: aquarium}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: aquarium}
+- filter: {tourism: winery}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: winery}
+- filter: {man_made: pier}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: pier}
+- filter: {man_made: wastewater_plant}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: wastewater_plant}
+- filter: {man_made: works}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: works}
+- filter: {man_made: bridge}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: bridge}
+- filter: {man_made: tower}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: tower}
+- filter: {man_made: breakwater}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: breakwater}
+- filter: {man_made: water_works}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: water_works}
+- filter: {man_made: groyne}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: groyne}
+- filter: {man_made: dike}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: dike}
+- filter: {man_made: cutline}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: cutline}
+- filter: {power: plant}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: plant}
+- filter: {power: generator}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: generator}
+- filter: {power: substation}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: substation}
+- filter: {power: station}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: substation}
+- filter: {power: sub_station}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: substation}
+- filter: {natural: scree}
+  min_zoom: GREATEST(LEAST(zoom, 16), 9)
+  output: {kind: scree}
