@@ -65,8 +65,6 @@ WHERE
 SELECT
   name,
   NULL AS maritime_boundary,
-  admin_level,
-  tags->'boundary:type' AS boundary_type,
   mz_calculate_output_boundaries(planet_osm_polygon.*) AS mz_properties,
   -- note that we force the RHR, which makes outers clockwise,
   -- then take the boundary, then reverse and intersect with
@@ -87,8 +85,6 @@ UNION ALL
 SELECT
   NULL AS name,
   'yes' AS maritime_boundary,
-  NULL AS admin_level,
-  NULL AS boundary_type,
   HSTORE('') as mz_properties,
   {% filter geometry %}{{ bounds|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
   gid AS __id__,
@@ -104,8 +100,6 @@ UNION ALL
 SELECT
   name,
   NULL AS maritime_boundary,
-  NULL AS admin_level,
-  NULL AS boundary_type,
   mz_calculate_output_boundaries(planet_osm_line.*) AS mz_properties,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
