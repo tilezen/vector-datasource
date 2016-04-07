@@ -40,3 +40,12 @@ ALTER TABLE ne_10m_playas ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE water_polygons ADD COLUMN mz_water_min_zoom SMALLINT;
 
 ALTER TABLE ne_10m_populated_places ADD COLUMN mz_places_min_zoom SMALLINT;
+
+ALTER TABLE planet_osm_polygon ADD COLUMN mz_boundary_min_zoom SMALLINT;
+ALTER TABLE planet_osm_line ADD COLUMN mz_boundary_min_zoom SMALLINT;
+
+ALTER TABLE ne_110m_admin_0_boundary_lines_land ADD COLUMN mz_boundary_min_zoom SMALLINT;
+ALTER TABLE ne_50m_admin_0_boundary_lines_land ADD COLUMN mz_boundary_min_zoom SMALLINT;
+ALTER TABLE ne_50m_admin_1_states_provinces_lines ADD COLUMN mz_boundary_min_zoom SMALLINT;
+ALTER TABLE ne_10m_admin_0_boundary_lines_land ADD COLUMN mz_boundary_min_zoom SMALLINT;
+ALTER TABLE ne_10m_admin_1_states_provinces_lines ADD COLUMN mz_boundary_min_zoom SMALLINT;
