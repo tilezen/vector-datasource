@@ -2,8 +2,14 @@
     gid AS __id__,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     scalerank::float,
-    featurecla AS kind,
-    '{{ type }}' AS type
+    '{{ type }}' AS kind,
+{% if type == 'country' %}
+    2 AS admin_level
+{% elif type == 'state' %}
+    4 AS admin_level
+{% else %}
+    NULL AS admin_level
+{% endif %}
 {% endmacro %}
 
 {% if zoom < 2 %}
@@ -54,6 +60,7 @@ FROM
     ne_10m_admin_1_states_provinces_lines
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
+    AND featurecla NOT IN ('Admin-1 statistical boundary', 'Admin-1 statistical meta bounds');
 
 {% else %}
 
