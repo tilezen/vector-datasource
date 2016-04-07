@@ -1,16 +1,32 @@
 - filter:
     admin_level: ['2', '4']
     boundary: administrative
+    'tags->boundary:type': aboriginal_lands
   min_zoom: 8
-  output:
-    kind: {expr: null}
+  output: {kind: aboriginal_lands, admin_level: {col: admin_level}}
   table: osm
 - filter:
     admin_level: ['6', '8']
     boundary: administrative
+    'tags->boundary:type': aboriginal_lands
   min_zoom: 10
-  output:
-    kind: {expr: null}
+  output: {kind: aboriginal_lands, admin_level: {col: admin_level}}
+  table: osm
+- filter: {admin_level: 2, boundary: administrative}
+  min_zoom: 8
+  output: {kind: country, admin_level: {col: admin_level}}
+  table: osm
+- filter: {admin_level: 4, boundary: administrative}
+  min_zoom: 8
+  output: {kind: state, admin_level: {col: admin_level}}
+  table: osm
+- filter: {admin_level: 6, boundary: administrative}
+  min_zoom: 10
+  output: {kind: county, admin_level: {col: admin_level}}
+  table: osm
+- filter: {admin_level: 8, boundary: administrative}
+  min_zoom: 10
+  output: {kind: municipality, admin_level: {col: admin_level}}
   table: osm
 - filter: {barrier: city_wall}
   min_zoom: 12
@@ -34,15 +50,15 @@
   table: osm
 - filter: {featurecla: 1st Order Admin Lines}
   min_zoom: 0
-  output: {kind: 1st_order_admin_lines}
+  output: {kind: state, admin_level: 4}
   table: ne
 - filter: {featurecla: Admin-1 boundary}
   min_zoom: 0
-  output: {kind: admin-1_boundary}
+  output: {kind: state, admin_level: 4}
   table: ne
 - filter: {featurecla: Admin-1 region boundary}
   min_zoom: 0
-  output: {kind: admin-1_region_boundary}
+  output: {kind: macroregion}
   table: ne
 - filter: {featurecla: Disputed (please verify)}
   min_zoom: 0
@@ -54,11 +70,11 @@
   table: ne
 - filter: {featurecla: Indeterminant frontier}
   min_zoom: 0
-  output: {kind: indeterminant_frontier}
+  output: {kind: indeterminate}
   table: ne
 - filter: {featurecla: International boundary (verify)}
   min_zoom: 0
-  output: {kind: international_boundary}
+  output: {kind: country, admin_level: 2}
   table: ne
 - filter: {featurecla: Lease limit}
   min_zoom: 0
