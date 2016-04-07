@@ -528,7 +528,9 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 
 **Water kind values (point, polygon):**
 
-* `Alkaline Lake`, `basin`, `dock`, `lake`, `Lake`, `ocean`, `Ocean`, `playa`, `Playa`, `reservoir`, `Reservoir`, `riverbank`, `swimming_pool`, and `water`
+* `basin`, `dock`, `lake`, `ocean`, `playa`, `riverbank`, `swimming_pool`, and `water`
+
+Additionally, a `reservoir=yes` or `alkaline=yes` value can be present on the appropriate `kind=lake` features.
 
 **Water kind values (point only):**
 

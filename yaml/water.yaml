@@ -36,7 +36,7 @@
 - filter: {landuse: reservoir}
   min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
     16), 9) END
-  output: {kind: reservoir}
+  output: {kind: lake, reservoir: 'yes'}
   table: osm
 - filter: {amenity: swimming_pool}
   min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
@@ -78,7 +78,7 @@
   table: ne
 - filter: {featurecla: Alkaline Lake}
   min_zoom: 0
-  output: {kind: lake}
+  output: {kind: lake, alkaline: 'yes'}
   table: ne
 - filter: {featurecla: Lake}
   min_zoom: 0
@@ -86,7 +86,7 @@
   table: ne
 - filter: {featurecla: Reservoir}
   min_zoom: 0
-  output: {kind: lake}
+  output: {kind: lake, reservoir: 'yes'}
   table: ne
 - filter: {featurecla: Playa}
   min_zoom: 0
