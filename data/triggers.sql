@@ -21,6 +21,7 @@ RETURNS TRIGGER AS $$
 BEGIN
     NEW.mz_poi_min_zoom := mz_calculate_min_zoom_pois(NEW.*);
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
+    NEW.mz_places_min_zoom := mz_calculate_min_zoom_places(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
