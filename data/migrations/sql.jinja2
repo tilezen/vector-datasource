@@ -2,9 +2,9 @@
   {% if param.table == tbl or not param.table %}row.{{param.key}}{% else %}NULL{% endif %}
 {%- endmacro -%}
 
-{%- macro table_func(func_kind, param, tbl, table_name) -%}
+{%- macro table_func(func_kind, param, tbl, table_name, ret_type) -%}
 CREATE OR REPLACE FUNCTION mz_calculate_{{ func_kind }}_boundaries({{ table_name }})
-RETURNS text AS $$
+RETURNS {{ ret_type }} AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -66,24 +66,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_landuse_(
+CREATE OR REPLACE FUNCTION mz_calculate_output_landuse_(
 {%- for param in layers['landuse']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['landuse']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_landuse(
+CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
        planet_osm_point)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_landuse_(
+  RETURN mz_calculate_output_landuse_(
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -91,13 +91,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_landuse(
+CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
        planet_osm_polygon)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_landuse_(
+  RETURN mz_calculate_output_landuse_(
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -154,24 +154,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_pois_(
+CREATE OR REPLACE FUNCTION mz_calculate_output_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['pois']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_pois(
+CREATE OR REPLACE FUNCTION mz_calculate_output_pois(
        planet_osm_point)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_pois_(
+  RETURN mz_calculate_output_pois_(
 {%- for param in layers['pois']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -179,13 +179,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_pois(
+CREATE OR REPLACE FUNCTION mz_calculate_output_pois(
        planet_osm_polygon)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_pois_(
+  RETURN mz_calculate_output_pois_(
 {%- for param in layers['pois']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -236,24 +236,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_transit_(
+CREATE OR REPLACE FUNCTION mz_calculate_output_transit_(
 {%- for param in layers['transit']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['transit']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_transit(
+CREATE OR REPLACE FUNCTION mz_calculate_output_transit(
        planet_osm_line)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_transit_(
+  RETURN mz_calculate_output_transit_(
 {%- for param in layers['transit']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -261,13 +261,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_transit(
+CREATE OR REPLACE FUNCTION mz_calculate_output_transit(
        planet_osm_polygon)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_transit_(
+  RETURN mz_calculate_output_transit_(
 {%- for param in layers['transit']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -281,12 +281,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water_(
+CREATE OR REPLACE FUNCTION mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['water']['kind_case_statement'] }};
 END;
@@ -311,12 +311,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(planet_osm_polygon)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(planet_osm_polygon)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -324,12 +324,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(planet_osm_line)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(planet_osm_line)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -337,12 +337,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(planet_osm_point)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(planet_osm_point)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -350,12 +350,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_10m_coastline)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_coastline)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -363,12 +363,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_50m_coastline)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_coastline)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -376,12 +376,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_110m_coastline)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_110m_coastline)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -389,12 +389,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_10m_ocean)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_ocean)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -402,12 +402,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_50m_ocean)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_ocean)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -415,12 +415,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_110m_ocean)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_110m_ocean)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -428,12 +428,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_10m_lakes)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_lakes)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -441,12 +441,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_50m_lakes)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_lakes)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -454,12 +454,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_110m_lakes)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_110m_lakes)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -467,12 +467,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_10m_playas)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_playas)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -480,12 +480,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(ne_50m_playas)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_playas)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -493,12 +493,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_water(water_polygons)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_water(water_polygons)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_water_(
+  RETURN mz_calculate_output_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'shp') }},
 {%- endfor %}
@@ -724,12 +724,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_places_(
+CREATE OR REPLACE FUNCTION mz_calculate_output_places_(
 {%- for param in layers['places']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['places']['kind_case_statement'] }};
 END;
@@ -750,12 +750,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_places(planet_osm_point)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_places(planet_osm_point)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_places_(
+  RETURN mz_calculate_output_places_(
 {%- for param in layers['places']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -763,12 +763,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_places(ne_10m_populated_places)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_places(ne_10m_populated_places)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_places_(
+  RETURN mz_calculate_output_places_(
 {%- for param in layers['places']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -808,12 +808,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_boundaries_(
+CREATE OR REPLACE FUNCTION mz_calculate_output_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS TEXT AS $$
+RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['boundaries']['kind_case_statement'] }};
 END;
@@ -834,12 +834,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_boundaries(planet_osm_line)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_boundaries(planet_osm_line)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_boundaries_(
+  RETURN mz_calculate_output_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -847,12 +847,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_kind_boundaries(planet_osm_polygon)
-RETURNS text AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_output_boundaries(planet_osm_polygon)
+RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_kind_boundaries_(
+  RETURN mz_calculate_output_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -860,11 +860,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{{ table_func('kind', param, 'ne', 'ne_110m_admin_0_boundary_lines_land') }}
-{{ table_func('kind', param, 'ne', 'ne_50m_admin_0_boundary_lines_land') }}
-{{ table_func('kind', param, 'ne', 'ne_50m_admin_1_states_provinces_lines') }}
-{{ table_func('kind', param, 'ne', 'ne_10m_admin_0_boundary_lines_land') }}
-{{ table_func('kind', param, 'ne', 'ne_10m_admin_1_states_provinces_lines') }}
+{{ table_func('output', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'HSTORE') }}
+{{ table_func('output', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'HSTORE') }}
+{{ table_func('output', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'HSTORE') }}
+{{ table_func('output', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'HSTORE') }}
+{{ table_func('output', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'HSTORE') }}
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries(planet_osm_line)
 RETURNS SMALLINT AS $$
@@ -892,8 +892,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{{ table_func('min_zoom', param, 'ne', 'ne_110m_admin_0_boundary_lines_land') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_0_boundary_lines_land') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'SMALLINT') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'SMALLINT') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'SMALLINT') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'SMALLINT') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'SMALLINT') }}
