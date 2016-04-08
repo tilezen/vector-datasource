@@ -34,7 +34,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_highway_level(highway_val text, service_val text)
+CREATE OR REPLACE FUNCTION mz_calculate_highway_level(highway_val text, service_val text, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text, osm_id BIGINT)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN CASE
@@ -42,16 +42,20 @@ BEGIN
     WHEN highway_val IN ('secondary')                                         THEN 10
     WHEN highway_val IN ('motorway_link', 'tertiary')                         THEN 11
     WHEN highway_val IN ('trunk_link', 'residential', 'unclassified', 'road') THEN 12
-    WHEN highway_val IN ('primary_link', 'secondary_link',
-                         'pedestrian', 'living_street', 'track',
-                         'path', 'footway', 'steps', 'cycleway')              THEN 13
+    WHEN highway_val IN ('primary_link', 'secondary_link', 'living_street' )  THEN 13
+    WHEN highway_val IN ('pedestrian', 'living_street', 'track', 'cycleway')  THEN 13
+    WHEN highway_val IN ('path') THEN COALESCE(mz_calculate_path_major_route(osm_id), 13)
+    WHEN highway_val IN ('footway', 'steps') THEN COALESCE(mz_calculate_path_major_route(osm_id),
+        CASE WHEN mz_is_path_named_or_designated(highway_val, name_val, bicycle_val, foot_val, horse_val, snowmobile_val, ski_val) THEN 13
+        ELSE 14
+        END)
     WHEN highway_val IN ('tertiary_link')                                     THEN 14
     WHEN highway_val = 'service' THEN CASE
       WHEN service_val IS NULL                                                THEN 14
       WHEN service_val = 'alley'                                              THEN 13
       WHEN service_val IN ('driveway', 'parking_aisle', 'drive-through')      THEN 15
       ELSE NULL
-    END
+      END
     ELSE NULL
   END;
 END;
@@ -109,12 +113,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, leisure_val text, sport_val text, man_made_val text, way geometry)
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, leisure_val text, sport_val text, man_made_val text, way geometry, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text, osm_id BIGINT)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN LEAST(
       CASE WHEN highway_val IS NOT NULL
-        THEN mz_calculate_highway_level(highway_val, service_val)
+        THEN mz_calculate_highway_level(highway_val, service_val, name_val, bicycle_val, foot_val, horse_val, snowmobile_val, ski_val, osm_id)
         ELSE NULL END,
       CASE WHEN aeroway_val IS NOT NULL
         THEN mz_calculate_aeroway_level(aeroway_val)
@@ -676,3 +680,49 @@ BEGIN
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+-- returns TRUE if the given way ID (osm_id) is part of a path route relation,
+-- or NULL otherwise.
+-- This function is meant to be called for something that we already know is a path.
+-- Please ensure input is already a path, or output will be undefined.
+CREATE OR REPLACE FUNCTION mz_calculate_path_major_route(osm_id BIGINT)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN (
+    SELECT
+        MIN(
+            CASE WHEN hstore(tags)->'network' IN ('iwn','nwn') THEN 11
+                WHEN hstore(tags)->'network' IN ('rwn') THEN 12
+                WHEN hstore(tags)->'network' IN ('lwn') THEN 13
+            ELSE NULL
+            END
+        )
+        AS p
+     FROM planet_osm_rels
+    WHERE
+      parts && ARRAY[osm_id] AND
+      parts[way_off+1:rel_off] && ARRAY[osm_id] AND
+      hstore(tags)->'type' = 'route' AND
+      hstore(tags)->'route' IN ('hiking', 'foot') AND
+      hstore(tags)->'network' IN ('iwn','nwn','rwn','lwn'));
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+-- returns TRUE if the given way ID (osm_id) is part of a path route relation,
+-- or NULL otherwise.
+-- This function is meant to be called for something that we already know is a path.
+-- Please ensure input is already a path, or output will be undefined.
+CREATE OR REPLACE FUNCTION mz_is_path_named_or_designated(highway_val text, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN CASE
+      WHEN name_val IS NOT NULL            THEN TRUE
+      WHEN bicycle_val    = 'designated'   THEN TRUE
+      WHEN foot_val       = 'designated'   THEN TRUE
+      WHEN horse_val      = 'designated'   THEN TRUE
+      WHEN snowmobile_val = 'designated'   THEN TRUE
+      WHEN ski_val        = 'designated'   THEN TRUE
+    ELSE NULL
+  END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
