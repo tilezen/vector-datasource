@@ -692,8 +692,8 @@ BEGIN
     SELECT
         MIN(
             CASE WHEN hstore(tags)->'network' IN ('iwn','nwn') THEN 11
-                WHEN hstore(tags)->'network' IN ('rwn') THEN 12
-                WHEN hstore(tags)->'network' IN ('lwn') THEN 13
+                 WHEN hstore(tags)->'network' IN ('rwn') THEN 12
+                 WHEN hstore(tags)->'network' IN ('lwn') THEN 13
             ELSE NULL
             END
         )
