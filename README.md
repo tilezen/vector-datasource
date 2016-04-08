@@ -40,9 +40,14 @@ More information is available about how to [use the vector tile service](docs/us
 
 ##### Formats
 
-The Mapzen vector tile service provides [tiles in a variety of formats](docs/use-service.md#formats), including GeoJSON, TopoJSON, and MVT binary.
+The Mapzen vector tile stack provides tiles in a variety of formats ([service docs](docs/use-service.md#formats)):
 
-**We recommend** `TopoJSON` format for desktop web development, and `MVT` format for native mobile development. The Mapzen server gzips tiles automatically, so the TopoJSON file format is comparable in file size to MVT over the wire, and it's much friendlier to debug.
+* [Mapbox Vector Tile](https://github.com/mapbox/vector-tile-spec): use the `.mvt` extension. This is a compact format using protocol buffers that is used for raster tile rendering in TileMill2 and vector rendering in MapboxGL.
+* [TopoJSON](https://github.com/mbostock/topojson): use the `.topojson` extension. TopoJSON is an optimized form of GeoJSON that saves space by encoding topology and reducing replication of shared geometry.
+* [GeoJSON](http://geojson.org): use the `.json` extension. GeoJSON is easy to get started with, human-readable, and compatible with many tools.
+* [OpenScienceMap-format binary tiles](https://github.com/opensciencemap/vtm): use the `.vtm` extension. This is a compact format using protocol buffers that is used in the [OpenScienceMap](http://www.opensciencemap.org/) vector rendering library for Android. This legacy format is no longer available in Mapzen's vector tile service.
+
+  **We recommend** `TopoJSON` format for desktop web development, and `MVT` format for native mobile development. The Mapzen vector tile service gzips tiles automatically, so the TopoJSON file format is comparable in file size to MVT over the wire, and it's much friendlier to debug.
 
 ##### Drawing a map
 
