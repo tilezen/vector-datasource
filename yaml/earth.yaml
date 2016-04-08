@@ -1,0 +1,16 @@
+- filter: {natural: cliff}
+  min_zoom: 13
+  output: {kind: cliff}
+- filter: {natural: arete}
+  min_zoom: 13
+  output: {kind: arete}
+- filter: {natural: ridge, name: true}
+  min_zoom: 13
+  output: {kind: ridge, label_placement: 'yes'}
+- filter: {natural: valley, name: true}
+  min_zoom: 13
+  output: {kind: valley, label_placement: 'yes'}
+- filter: {gid: true}
+  min_zoom: 0
+  output: {kind: base}
+  table: land_polygons
