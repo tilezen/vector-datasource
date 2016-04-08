@@ -21,7 +21,7 @@ FROM
 WHERE
 
     {{ bounds|bbox_filter('way') }} AND
-	 mz_building_min_zoom <= {{ zoom }}
+    mz_building_min_zoom <= {{ zoom }}
 
 {% if zoom >= 16 %}
 
@@ -42,6 +42,6 @@ FROM
 WHERE
 
     {{ bounds|bbox_filter('way') }} AND
-	 mz_building_min_zoom <= {{ zoom }}
+    mz_building_min_zoom <= {{ zoom }}
 
 {% endif %}
