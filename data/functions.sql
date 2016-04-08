@@ -681,6 +681,17 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 
+CREATE OR REPLACE FUNCTION mz_is_path_major_route_relation(tags hstore)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN (
+      tags->'type' = 'route' AND
+      tags->'route' IN ('hiking', 'foot') AND
+      tags->'network' IN ('iwn','nwn','rwn','lwn')
+    );
+END;
+$$ LANGUAGE plpgsql STABLE;
+
 -- returns TRUE if the given way ID (osm_id) is part of a path route relation,
 -- or NULL otherwise.
 -- This function is meant to be called for something that we already know is a path.
@@ -702,9 +713,8 @@ BEGIN
     WHERE
       parts && ARRAY[osm_id] AND
       parts[way_off+1:rel_off] && ARRAY[osm_id] AND
-      hstore(tags)->'type' = 'route' AND
-      hstore(tags)->'route' IN ('hiking', 'foot') AND
-      hstore(tags)->'network' IN ('iwn','nwn','rwn','lwn'));
+      mz_is_path_major_route_relation(hstore(tags))
+  );
 END;
 $$ LANGUAGE plpgsql STABLE;
 
