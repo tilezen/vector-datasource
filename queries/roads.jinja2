@@ -71,7 +71,10 @@ SELECT
 {% if zoom >= 12 %}
     -- try to only calculate whether this is a bus route when we already know
     -- that it's a road, as joining onto the rels table can be expensive.
-    CASE WHEN mz_calculate_highway_level(highway, service) IS NOT NULL
+    CASE WHEN highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
+                          'primary', 'primary_link', 'secondary', 'secondary_link',
+                          'tertiary', 'tertiary_link',
+                          'residential', 'unclassified', 'road', 'living_street')
       THEN mz_calculate_is_bus_route(osm_id)
       ELSE NULL
     END AS is_bus_route,

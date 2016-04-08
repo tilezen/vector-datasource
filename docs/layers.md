@@ -418,7 +418,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 ### Transportation kind values and zoom ranges
 
-**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, `road`). Zoom 13 adds (`primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`). Zoom 14 adds (`tertiary_link`, `minor`, `footpath`, `footway`, `steps`, `path`, `cycleway`) and `alley` service roads. By zoom 15 all service roads are added, including driveway, `parking_aisle`, `drive-through`.
+**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`, and internationally and nationally significant paths (`path`, `footway`, `steps`). Zoom 13 adds `primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`, and  `cycleway` and regionally significant and/or named or designated paths. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive-through`.
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind` values are limited to `Road` and `Ferry` at these zooms. It's more useful to look at `type` values: `Beltway`, `Bypass`, `Ferry Route`, `Ferry, seasonal`, `Major Highway`, `Road`, `Secondary Highway`, `Track`, and `Unknown`.
 
