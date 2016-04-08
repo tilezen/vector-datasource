@@ -1,0 +1,105 @@
+# what is this for?
+globals:
+  - &building_standard_properties
+      building_part: {col: "building:part"}
+      building_levels: {col: "building:levels"}
+      building_min_levels: {col: "building:min_levels"}
+      height: {col: height}
+      min_height: {col: min_height}
+      layer: {col: layer}
+      location: {col: tags->location}
+      roof_color: {col: "roof:color"}
+      roof_material: {col: "roof:material"}
+      roof_shape: {col: "roof:shape"}
+      roof_height: {col: "roof:height"}
+      roof_orientation: {col: "roof:orientation"}
+      addr_housenumber: {col: "addr:housenumber"}
+      addr_street: {col: "addr:street"}
+  - &is_building
+      all:
+        - building: true
+        - not: { building: 'no' }
+  - &is_building_part
+      all:
+        - "building:part": true
+        - not: { "building:part": 'no' }
+  - &z13_area_volume
+      any:
+        way_area: { min: 1600 }
+        $volume: { min: 300000 }
+  - &z14_area_volume
+      any:
+        way_area: { min: 100 }
+        $volume: { min: 200000 }
+  - &z15_area_volume
+      any:
+        way_area: { min: 100 }
+        $volume: { min: 100000 }
+  - &z16_area_volume
+      any:
+        way_area: { min: 25 }
+        $volume: { min: 50000 }
+filters:
+  - filter:
+      <<: *is_building
+      <<: *z13_area_volume
+    min_zoom: 13
+    output:
+      <<: *building_standard_properties
+      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+  - filter:
+      <<: *is_building
+      <<: *z14_area_volume
+    min_zoom: 14
+    output:
+      <<: *building_standard_properties
+      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+  - filter:
+      <<: *is_building
+      <<: *z15_area_volume
+    min_zoom: 15
+    output:
+      <<: *building_standard_properties
+      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+  - filter:
+      <<: *is_building
+      <<: *z16_area_volume
+    min_zoom: 16
+    output:
+      <<: *building_standard_properties
+      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+  - filter:
+      <<: *is_building
+    min_zoom: 17
+    output:
+      <<: *building_standard_properties
+      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+  # building part
+  - filter:
+      <<: *is_building_part
+      <<: *z15_area_volume
+    min_zoom: 15
+    output:
+      <<: *building_standard_properties
+      kind: {expr: "CASE WHEN \"building:part\" = 'yes' THEN 'building' ELSE \"building:part\" END"}
+  - filter:
+      <<: *is_building_part
+      <<: *z16_area_volume
+    min_zoom: 16
+    output:
+      <<: *building_standard_properties
+      kind: {expr: "CASE WHEN \"building:part\" = 'yes' THEN 'building' ELSE \"building:part\" END"}
+  - filter:
+      <<: *is_building_part
+    min_zoom: 17
+    output:
+      <<: *building_standard_properties
+      kind: {expr: "CASE WHEN \"building:part\" = 'yes' THEN 'building' ELSE \"building:part\" END"}
+  # address points
+  - filter:
+      "addr:housenumber": true
+    min_zoom: 17
+    output:
+      kind: address
+      addr_housenumber: {col: 'addr:housenumber'}
+      addr_street: {col: 'addr:street'}

@@ -897,3 +897,95 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 {{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'SMALLINT') }}
 {{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'SMALLINT') }}
 {{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'SMALLINT') }}
+
+----------------------------------------------------------------------
+-- BUILDINGS
+----------------------------------------------------------------------
+
+-- buildings kind "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        way_area real,
+        tags hstore)
+RETURNS HSTORE AS $$
+DECLARE
+  volume REAL := mz_building_height("height", "building:levels") * way_area;
+BEGIN
+  RETURN {{ layers['buildings']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- buildings min_zoom "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        way_area real,
+        tags hstore)
+RETURNS SMALLINT AS $$
+DECLARE
+  volume REAL := mz_building_height("height", "building:levels") * way_area;
+BEGIN
+  RETURN {{ layers['buildings']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings(planet_osm_polygon)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.way_area,
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings(planet_osm_point)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        0::real,
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_buildings(planet_osm_polygon)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.way_area,
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_buildings(planet_osm_point)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        0::real,
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

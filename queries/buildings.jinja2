@@ -11,29 +11,8 @@ SELECT
     way_area::bigint AS area,
     osm_id AS __id__,
     'openstreetmap.org' AS source,
-    NULL AS kind,
-    building,
-    "building:part",
-    "building:levels",
-    "building:min_levels",
-    height,
-    min_height,
-    layer,
-    tags->'location' AS location,
+    mz_calculate_output_buildings(planet_osm_polygon.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    "roof:color" AS roof_color,
-    "roof:material" AS roof_material,
-    "roof:shape" AS roof_shape,
-    "roof:height" AS roof_height,
-    "roof:orientation" AS roof_orientation,
-    "addr:housenumber" AS addr_housenumber,
-    "addr:street" AS addr_street,
-{% if zoom >= 16 %}
-    CASE WHEN mz_building_filter(tags->'building:height', "building:levels", way_area, 50000, 25)
-      THEN 16
-      ELSE 17
-    END AS min_zoom,
-{% endif %}
     %#tags AS tags
 
 FROM
@@ -41,23 +20,8 @@ FROM
 
 WHERE
 
-    -- note: this is the first filter, as we use this to determine if
-    -- something should be a POI, a building or a landuse polygon, and
-    -- the logic needs to be consistent across all branches.
-    mz_calculate_is_building_or_part(building, "building:part") = TRUE
-{% if zoom < 15 %}
-    AND building IS NOT NULL AND building <> 'no'
-{% endif %}
-
-{% if   zoom == 13 %}
-   AND mz_building_filter(tags->'building:height', "building:levels", way_area, 300000, 1600)
-{% elif zoom == 14 %}
-   AND mz_building_filter(tags->'building:height', "building:levels", way_area, 200000,  100)
-{% elif zoom == 15 %}
-   AND mz_building_filter(tags->'building:height', "building:levels", way_area, 100000,  100)
-{% endif %}
-
-    AND {{ bounds|bbox_filter('way') }}
+    {{ bounds|bbox_filter('way') }} AND
+    mz_building_min_zoom <= {{ zoom }}
 
 {% if zoom >= 16 %}
 
@@ -68,26 +32,8 @@ SELECT
     NULL AS area,
     osm_id AS __id__,
     'openstreetmap.org' AS source,
-    'address' AS kind,
-    NULL AS building,
-    NULL AS "building:part",
-    NULL AS "building:levels",
-    NULL AS "building:min_levels",
-    NULL AS height,
-    NULL AS min_height,
-    NULL AS layer,
-    NULL AS location,
+    mz_calculate_output_buildings(planet_osm_polygon.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    NULL AS roof_color,
-    NULL AS roof_material,
-    NULL AS roof_shape,
-    NULL AS roof_height,
-    NULL AS roof_orientation,
-    "addr:housenumber" AS addr_housenumber,
-    "addr:street" AS addr_street,
-{% if zoom >= 16 %}
-    17 AS min_zoom,
-{% endif %}
     %#tags AS tags
 
 FROM
@@ -95,7 +41,7 @@ FROM
 
 WHERE
 
-    "addr:housenumber" IS NOT NULL AND
-    {{ bounds|bbox_filter('way') }}
+    {{ bounds|bbox_filter('way') }} AND
+    mz_building_min_zoom <= {{ zoom }}
 
 {% endif %}

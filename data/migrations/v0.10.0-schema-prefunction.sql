@@ -44,6 +44,9 @@ BEGIN
   PERFORM tmp_add_col('public.ne_50m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom');
   PERFORM tmp_add_col('public.ne_10m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom');
   PERFORM tmp_add_col('public.ne_10m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom');
+
+  PERFORM tmp_add_col('public.planet_osm_point', 'mz_building_min_zoom');
+  PERFORM tmp_add_col('public.planet_osm_polygon', 'mz_building_min_zoom');
 END$$;
 
 DROP FUNCTION tmp_add_col(regclass, text);

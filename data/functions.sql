@@ -606,41 +606,31 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
--- replicate some of the backend logic for filtering
--- buildings, as there are lots and lots and lots of
--- these, often with quite complex geometries, and
--- we don't want to saturate the network with lots of
--- buildings at z13 that we're going to filter out.
-CREATE OR REPLACE FUNCTION mz_building_filter(
-  height text, levels text, way_area FLOAT, min_volume FLOAT, min_area FLOAT)
-RETURNS BOOLEAN AS $$
+-- Calculate the height of a building by looking at either the
+-- height tag, if one is set explicitly, or by calculating the
+-- approximate height from the number of levels, if that is
+-- set.
+CREATE OR REPLACE FUNCTION mz_building_height(
+  height text, levels text)
+RETURNS REAL AS $$
 BEGIN
   RETURN CASE
-    -- if the min area is satisfied, then there's no
-    -- need to check the area.
-    WHEN way_area >= min_area
-      THEN TRUE
-
     -- if height is present, and can be parsed as a
     -- float, then we can filter right here.
-    WHEN mz_is_numeric(height)
-      THEN (height::float * way_area) >= min_volume
+    WHEN mz_is_numeric(height) THEN
+      height::float
 
     -- looks like we assume each level is 3m, plus
     -- 2 overall.
-    WHEN mz_is_numeric(levels)
-      THEN ((GREATEST(levels::float, 1) * 3 + 2) * way_area) >= min_volume
+    WHEN mz_is_numeric("levels") THEN
+      (GREATEST(levels::float, 1) * 3 + 2)
 
     -- if height is present, but not numeric, then
     -- we have no idea what it could be, and we must
     -- assume it could be very large.
-    WHEN height IS NOT NULL OR levels IS NOT NULL
-      THEN TRUE
-
-    -- height isn't present, and area doesn't satisfy
-    -- the minimum bound, so don't show this building.
-    ELSE FALSE
-  END;
+    WHEN "height" IS NOT NULL OR "levels" IS NOT NULL THEN
+      1.0e10
+    ELSE NULL END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 

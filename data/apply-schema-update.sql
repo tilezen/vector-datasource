@@ -49,3 +49,6 @@ ALTER TABLE ne_50m_admin_0_boundary_lines_land ADD COLUMN mz_boundary_min_zoom S
 ALTER TABLE ne_50m_admin_1_states_provinces_lines ADD COLUMN mz_boundary_min_zoom SMALLINT;
 ALTER TABLE ne_10m_admin_0_boundary_lines_land ADD COLUMN mz_boundary_min_zoom SMALLINT;
 ALTER TABLE ne_10m_admin_1_states_provinces_lines ADD COLUMN mz_boundary_min_zoom SMALLINT;
+
+ALTER TABLE planet_osm_point ADD COLUMN mz_building_min_zoom SMALLINT;
+ALTER TABLE planet_osm_polygon ADD COLUMN mz_building_min_zoom SMALLINT;
