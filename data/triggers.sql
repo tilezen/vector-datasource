@@ -69,5 +69,5 @@ $$ LANGUAGE plpgsql VOLATILE;
 
 BEGIN;
 DROP TRIGGER IF EXISTS mz_trigger_osm_rels ON planet_osm_rels;
-CREATE TRIGGER mz_trigger_osm_rels BEFORE INSERT OR UPDATE ON planet_osm_rels FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_osm_rels();
+CREATE TRIGGER mz_trigger_osm_rels AFTER INSERT OR UPDATE OR DELETE ON planet_osm_rels FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_osm_rels();
 COMMIT;
