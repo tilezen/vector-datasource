@@ -602,7 +602,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-
+-- Calculate the height of a building by looking at either the
+-- height tag, if one is set explicitly, or by calculating the
+-- approximate height from the number of levels, if that is
+-- set.
 CREATE OR REPLACE FUNCTION mz_building_height(
   height text, levels text)
 RETURNS REAL AS $$
