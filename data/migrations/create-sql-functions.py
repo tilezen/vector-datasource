@@ -1,6 +1,7 @@
 from collections import namedtuple
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
+from numbers import Number
 import os.path
 import yaml
 
@@ -169,6 +170,8 @@ def create_filter_rule(filter_key, filter_value):
                 rule = ExistsRule(filter_key)
             elif filter_value is False:
                 rule = NotExistsRule(filter_key)
+            elif isinstance(filter_value, Number):
+                rule = EqualsRule(filter_key, str(filter_value))
             elif filter_value.startswith('-'):
                 rule = NotEqualsRule(filter_key, filter_value[1:])
             else:
