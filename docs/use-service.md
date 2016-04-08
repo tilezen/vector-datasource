@@ -56,7 +56,6 @@ Mapzen vector tiles can be returned in the following formats.
 * [GeoJSON](http://geojson.org): use the `.json` extension. GeoJSON is easy to get started with, human-readable, and compatible with many tools
 * [TopoJSON](https://github.com/mbostock/topojson): use the `.topojson` extension. TopoJSON is an optimized form of JSON that saves space by encoding topology and reducing replication of shared geometry.
 * [Mapbox-format binary tiles](https://github.com/mapbox/vector-tile-spec): use the `.mvt` extension. This is a compact format using protocol buffers that is used for raster tile rendering in TileMill2 and vector rendering in MapboxGL
-* [OpenScienceMap-format binary tiles](https://github.com/opensciencemap/vtm): use the `.vtm` extension. This is a compact format using protocol buffers that is used in the [OpenScienceMap](http://www.opensciencemap.org/) vector rendering library for Android.
 
 ## Security
 
