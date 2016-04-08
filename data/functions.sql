@@ -342,6 +342,11 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 DO $$
 BEGIN
+
+  -- suppress notice message from drop type cascade
+  -- we re-add the type immediately afterwards
+  SET LOCAL client_min_messages=warning;
+
   IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'mz_transit_routes_rettype') THEN
     DROP TYPE mz_transit_routes_rettype CASCADE;
   END IF;
