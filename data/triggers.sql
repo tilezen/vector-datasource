@@ -52,7 +52,7 @@ DROP TRIGGER IF EXISTS mz_trigger_line ON planet_osm_line;
 CREATE TRIGGER mz_trigger_line BEFORE INSERT OR UPDATE ON planet_osm_line FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_line();
 COMMIT;
 
-CREATE OR REPLACE FUNCTION mz_trigger_function_osm_rels()
+CREATE OR REPLACE FUNCTION mz_trigger_function_osm_rels_update()
 RETURNS TRIGGER AS $$
 DECLARE
   is_old_path_major_route_relation bool := mz_is_path_major_route_relation(hstore(OLD.tags));
@@ -67,7 +67,41 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql VOLATILE;
 
+CREATE OR REPLACE FUNCTION mz_trigger_function_osm_rels_insert()
+RETURNS TRIGGER AS $$
+DECLARE
+  is_new_path_major_route_relation bool := mz_is_path_major_route_relation(hstore(NEW.tags));
+  new_way_ids bigint[] := CASE WHEN is_new_path_major_route_relation THEN NEW.parts[NEW.way_off+1:NEW.rel_off] ELSE ARRAY[]::bigint[] END;
+BEGIN
+  UPDATE planet_osm_line
+    SET mz_road_level = mz_calculate_road_level("highway", "railway", "aeroway", "route", "service", "aerialway", "leisure", "sport", "man_made", "way", "name", "bicycle", "foot", "horse", tags->'snowmobile', tags->'ski', osm_id)
+    WHERE (array[osm_id] <@ new_way_ids);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql VOLATILE;
+
+CREATE OR REPLACE FUNCTION mz_trigger_function_osm_rels_delete()
+RETURNS TRIGGER AS $$
+DECLARE
+  is_old_path_major_route_relation bool := mz_is_path_major_route_relation(hstore(OLD.tags));
+  old_way_ids bigint[] := CASE WHEN is_old_path_major_route_relation THEN OLD.parts[OLD.way_off+1:OLD.rel_off] ELSE ARRAY[]::bigint[] END;
+BEGIN
+  UPDATE planet_osm_line
+    SET mz_road_level = mz_calculate_road_level("highway", "railway", "aeroway", "route", "service", "aerialway", "leisure", "sport", "man_made", "way", "name", "bicycle", "foot", "horse", tags->'snowmobile', tags->'ski', osm_id)
+    WHERE (array[osm_id] <@ old_way_ids);
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql VOLATILE;
+
 BEGIN;
-DROP TRIGGER IF EXISTS mz_trigger_osm_rels ON planet_osm_rels;
-CREATE TRIGGER mz_trigger_osm_rels AFTER INSERT OR UPDATE OR DELETE ON planet_osm_rels FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_osm_rels();
+
+DROP TRIGGER IF EXISTS mz_trigger_osm_rels_insert ON planet_osm_rels;
+CREATE TRIGGER mz_trigger_osm_rels_insert AFTER INSERT ON planet_osm_rels FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_osm_rels_insert();
+
+DROP TRIGGER IF EXISTS mz_trigger_osm_rels_update ON planet_osm_rels;
+CREATE TRIGGER mz_trigger_osm_rels_update AFTER UPDATE ON planet_osm_rels FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_osm_rels_update();
+
+DROP TRIGGER IF EXISTS mz_trigger_osm_rels_delete ON planet_osm_rels;
+CREATE TRIGGER mz_trigger_osm_rels_delete AFTER DELETE ON planet_osm_rels FOR EACH ROW EXECUTE PROCEDURE mz_trigger_function_osm_rels_delete();
+
 COMMIT;
