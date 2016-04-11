@@ -28,7 +28,7 @@ psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../triggers.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new triggers failed.">&2; exit 1; fi
 
 # then disable triggers
-for table in planet_osm_point planet_osm_line planet_osm_polygon; do
+for table in planet_osm_point planet_osm_line planet_osm_polygon planet_osm_rels; do
     psql -c "ALTER TABLE ${table} DISABLE TRIGGER USER" $*
 done
 
@@ -52,7 +52,7 @@ done
 wait
 
 # re-enable triggers
-for table in planet_osm_point planet_osm_line planet_osm_polygon; do
+for table in planet_osm_point planet_osm_line planet_osm_polygon planet_osm_rels; do
     psql -c "ALTER TABLE ${table} ENABLE TRIGGER USER" $*
 done
 
