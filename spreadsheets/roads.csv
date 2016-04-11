@@ -70,5 +70,5 @@ zoom::int,layer::int,kind,highway,type,railway,aeroway,service,aerialway,is_brid
 *,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,spur;siding,*,*,*,361
 *,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,yard,*,*,*,359
 *,*,rail,*,*,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,*,+,*,*,*,357
-*,*,path;piste,*,*,*,*,*,*,*,*,354
+*,*,path;piste;portage_way,*,*,*,*,*,*,*,*,354
 *,*,*,*,*,*,*,*,*,*,*,355

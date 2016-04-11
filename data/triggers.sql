@@ -39,7 +39,7 @@ COMMIT;
 CREATE OR REPLACE FUNCTION mz_trigger_function_line()
 RETURNS TRIGGER AS $$
 BEGIN
-    NEW.mz_road_level := mz_calculate_road_level(NEW."highway", NEW."railway", NEW."aeroway", NEW."route", NEW."service", NEW."aerialway", NEW."leisure", NEW."sport", NEW."man_made", NEW."way", NEW."name", NEW."bicycle", NEW."foot", NEW."horse", NEW.tags->'snowmobile', NEW.tags->'ski', NEW.osm_id);
+    NEW.mz_road_level := mz_calculate_road_level(NEW."highway", NEW."railway", NEW."aeroway", NEW."route", NEW."service", NEW."aerialway", NEW."leisure", NEW."sport", NEW."man_made", NEW."way", NEW."name", NEW."bicycle", NEW."foot", NEW."horse", NEW.tags->'snowmobile', NEW.tags->'ski', NEW.osm_id, NEW.tags->'whitewater');
     NEW.mz_transit_level := mz_calculate_min_zoom_transit(NEW.*);
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
     NEW.mz_boundary_min_zoom := mz_calculate_min_zoom_boundaries(NEW.*);
