@@ -1,3 +1,4 @@
+# node 2356117215
 assert_has_feature(
-    16, 10801, 25320, 'pois',
+    16, 34003, 23060, 'pois',
     { 'kind': 'put_in' })
