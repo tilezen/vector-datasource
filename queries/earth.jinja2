@@ -1,5 +1,10 @@
+{% if zoom < 9 %}
+
 SELECT
-    'base' AS land,
+    NULL AS name,
+    'earth' AS kind,
+    NULL AS label_placement,
+    'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__
 FROM
@@ -10,9 +15,64 @@ FROM
     ne_50m_land
 {% elif 5 <= zoom < 9 %}
     ne_10m_land
-{% else %}
-    land_polygons
 {% endif %}
 
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
+
+{% else %}
+
+SELECT
+    NULL AS name,
+    'earth' AS kind,
+    NULL AS label_placement,
+    'openstreetmapdata.com' AS source,
+    {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
+    max(gid) AS __id__
+
+FROM
+    land_polygons
+
+WHERE
+    {{ bounds|bbox_filter('the_geom') }}
+
+{% if zoom >= 13 %}
+
+UNION ALL
+
+SELECT
+    name,
+    "natural" as kind,
+    NULL AS label_placement,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__
+
+FROM
+    planet_osm_line t
+
+WHERE
+    "natural" IN ('cliff','arete') AND
+    {{ bounds|bbox_filter('way') }}
+
+UNION ALL
+
+SELECT
+    name,
+    "natural" as kind,
+    'yes' AS label_placement,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__
+
+FROM
+    planet_osm_line t
+
+WHERE
+    "natural" IN ('ridge','valley') AND
+    name IS NOT NULL AND
+    {{ bounds|bbox_filter('way') }}
+
+{% endif %}
+
+{% endif %}

@@ -37,6 +37,8 @@ CREATE INDEX planet_osm_line_transit_geom_15_index ON planet_osm_line USING gist
 
 CREATE INDEX planet_osm_line_waterway_geom_index ON planet_osm_line USING gist(way) WHERE waterway IN ('canal', 'river', 'stream', 'dam', 'ditch', 'drain');
 
+CREATE INDEX planet_osm_line_natural_geom_index ON planet_osm_line USING gist(way) WHERE "natural" IN ('cliff','arete','ridge','valley');
+
 CREATE INDEX planet_osm_line_piste_geom_index ON planet_osm_line USING gist(way) WHERE tags ? 'piste:type';
 
 CREATE INDEX planet_osm_line_railway_platform_index ON planet_osm_line USING gist(way) WHERE railway='platform';
