@@ -113,7 +113,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, leisure_val text, sport_val text, man_made_val text, way geometry, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text, osm_id BIGINT)
+CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, leisure_val text, sport_val text, man_made_val text, way geometry, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text, osm_id BIGINT, whitewater_val text)
 RETURNS SMALLINT AS $$
 BEGIN
     RETURN LEAST(
@@ -137,6 +137,9 @@ BEGIN
         ELSE NULL END,
       CASE WHEN man_made_val IS NOT NULL
         THEN mz_calculate_man_made_level(man_made_val)
+        ELSE NULL END,
+      CASE WHEN whitewater_val = 'portage_way'
+        THEN 13
         ELSE NULL END);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
