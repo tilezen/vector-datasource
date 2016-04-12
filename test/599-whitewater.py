@@ -1,7 +1,7 @@
-# node 2356117215
+# node 3134398100
 assert_has_feature(
-    16, 34003, 23060, 'pois',
-    { 'kind': 'put_in' })
+    16, 19591, 23939, 'pois',
+    { 'kind': 'put_in_egress' })
 
 # way 308154534
 assert_has_feature(
