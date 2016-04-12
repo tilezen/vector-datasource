@@ -13,6 +13,7 @@ SELECT
     'openstreetmap.org' AS source,
     mz_calculate_output_buildings(planet_osm_polygon.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
+    mz_building_min_zoom AS min_zoom,
     %#tags AS tags
 
 FROM
@@ -21,7 +22,11 @@ FROM
 WHERE
 
     {{ bounds|bbox_filter('way') }} AND
+{% if zoom >= 16 %}
+    mz_building_min_zoom IS NOT NULL
+{% else %}
     mz_building_min_zoom <= {{ zoom }}
+{% endif %}
 
 {% if zoom >= 16 %}
 
@@ -34,6 +39,7 @@ SELECT
     'openstreetmap.org' AS source,
     mz_calculate_output_buildings(planet_osm_point.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
+    mz_building_min_zoom AS min_zoom,
     %#tags AS tags
 
 FROM
@@ -42,6 +48,6 @@ FROM
 WHERE
 
     {{ bounds|bbox_filter('way') }} AND
-    mz_building_min_zoom <= {{ zoom }}
+    mz_building_min_zoom IS NOT NULL
 
 {% endif %}
