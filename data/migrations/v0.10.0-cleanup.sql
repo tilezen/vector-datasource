@@ -14,3 +14,6 @@ DROP INDEX IF EXISTS planet_osm_polygon_landuse_boundary_geom_6_index;
 DROP INDEX IF EXISTS planet_osm_polygon_landuse_boundary_geom_8_index;
 
 DROP FUNCTION IF EXISTS mz_building_filter(text, text, FLOAT, FLOAT, FLOAT);
+
+DROP FUNCTION IF EXISTS mz_calculate_highway_level(highway_val text, service_val text);
+DROP FUNCTION IF EXISTS mz_calculate_highway_level(highway_val text, service_val text, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text, osm_id bigint);
