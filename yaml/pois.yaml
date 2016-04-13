@@ -414,3 +414,45 @@ filters:
     min_zoom: 15
     output:
       kind: {col: tags->whitewater}
+  - filter: {aerialway: pylon}
+    min_zoom: 17
+    output: {kind: pylon }
+  - filter: {amenity: bbq}
+    min_zoom: 18
+    output: {kind: bbq }
+  - filter: {amenity: bicycle_repair_station}
+    min_zoom: 18
+    output: {kind: bicycle_repair_station }
+  - filter: {amenity: dive_centre}
+    min_zoom: 16
+    output: {kind: dive_centre }
+  - filter: {amenity: life_ring}
+    min_zoom: 18
+    output: {kind: life_ring }
+  - filter: {amenity: picnic_table}
+    min_zoom: 18
+    output: {kind: picnic_table }
+  - filter: {amenity: shower}
+    min_zoom: 18
+    output: {kind: shower }
+  - filter: {amenity: waste_disposal}
+    min_zoom: 18
+    output: {kind: waste_disposal }
+  - filter: {amenity: watering_place}
+    min_zoom: 18
+    output: {kind: watering_place }
+  - filter: {amenity: water_point}
+    min_zoom: 18
+    output: {kind: water_point }
+  - filter: {emergency: lifeguard_tower}
+    min_zoom: 17
+    output: {kind: lifeguard_tower }
+  - filter: {power: pole}
+    min_zoom: 18
+    output: {kind: power_pole }
+  - filter: {power: tower}
+    min_zoom: 16
+    output: {kind: power_tower }
+  - filter: {man_made: petroleum_well}
+    min_zoom: 17
+    output: {kind: petroleum_well }
