@@ -50,3 +50,15 @@ BEGIN
 END$$;
 
 DROP FUNCTION tmp_add_col(regclass, text);
+
+DO $$
+BEGIN
+ IF NOT EXISTS (
+   SELECT 1 FROM pg_class WHERE relname='mz_pending_path_major_route'
+   ) THEN
+
+   CREATE TABLE mz_pending_path_major_route (
+     osm_id BIGINT NOT NULL
+   );
+ END IF;
+END $$;
