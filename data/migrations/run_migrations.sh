@@ -61,6 +61,12 @@ done
 python ${migration_dir}/create-sql-functions.py | psql --set ON_ERROR_STOP=1 $*
 if [ $? -ne 0 ]; then echo "Installing generated functions second time failed.">&2; exit 1; fi
 
+# analyze tables in case index updates influenced query plans
+for table in planet_osm_point planet_osm_line planet_osm_polygon; do
+    psql -c "ANALYZE ${table}" $* &
+done
+wait
+
 for python in ${migration_dir}/*.py; do
     # break the loop if the file doesn't exist - this is generally the case
     # if the glob matches nothing and we end up looking for a file which is
