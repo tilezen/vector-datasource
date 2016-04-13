@@ -64,7 +64,9 @@ DECLARE
 BEGIN
   UPDATE planet_osm_line
     SET mz_road_level = mz_calculate_road_level("highway", "railway", "aeroway", "route", "service", "aerialway", "leisure", "sport", "man_made", "way", "name", "bicycle", "foot", "horse", tags->'snowmobile', tags->'ski', osm_id, tags->'whitewater')
-    WHERE (array[osm_id] <@ old_way_ids) <> (array[osm_id] <@ new_way_ids);
+    WHERE
+      (osm_id = ANY(new_way_ids) AND NOT osm_id = ANY(old_way_ids)) OR
+      (osm_id = ANY(old_way_ids) AND NOT osm_id = ANY(new_way_ids));
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
@@ -77,7 +79,7 @@ DECLARE
 BEGIN
   UPDATE planet_osm_line
     SET mz_road_level = mz_calculate_road_level("highway", "railway", "aeroway", "route", "service", "aerialway", "leisure", "sport", "man_made", "way", "name", "bicycle", "foot", "horse", tags->'snowmobile', tags->'ski', osm_id, tags->'whitewater')
-    WHERE (array[osm_id] <@ new_way_ids);
+    WHERE osm_id = ANY(new_way_ids);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
@@ -90,7 +92,7 @@ DECLARE
 BEGIN
   UPDATE planet_osm_line
     SET mz_road_level = mz_calculate_road_level("highway", "railway", "aeroway", "route", "service", "aerialway", "leisure", "sport", "man_made", "way", "name", "bicycle", "foot", "horse", tags->'snowmobile', tags->'ski', osm_id, tags->'whitewater')
-    WHERE (array[osm_id] <@ old_way_ids);
+    WHERE osm_id = ANY(old_way_ids);
     RETURN NULL;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
