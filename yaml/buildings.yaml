@@ -1,4 +1,7 @@
-# what is this for?
+# globals section allows us to define chunks of YAML to be re-used in later
+# parts of the file, which makes it easier to tell that these parts are used
+# in multiple places, and so should be checked when updated. the actual
+# content of globals is ignored, unless included in later parts of the file.
 globals:
   - &building_standard_properties
       building_part: {col: "building:part"}
