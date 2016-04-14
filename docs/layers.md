@@ -582,6 +582,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `ferry_terminal`
 * `financial`
 * `fire_station`
+* `fishing`
 * `fitness_station`
 * `fitness`
 * `florist`
@@ -590,6 +591,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `foundation`
 * `fuel`
 * `gardener`
+* `gas`
 * `gate`
 * `generator`
 * `geyser`
@@ -609,8 +611,9 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `historical`
 * `hospital`
 * `hostel`
-* `hotel`
 * `hot_spring`
+* `hotel`
+* `hunting`
 * `hvac`
 * `ice_cream`
 * `information`
@@ -637,6 +640,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `mini_roundabout`
 * `mobile_phone`
 * `motel`
+* `motorcycle`
 * `motorway_junction`
 * `museum`
 * `music`
@@ -646,6 +650,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `nursing_home`
 * `nursing_home`
 * `optician`
+* `outdoor`
 * `outreach`
 * `painter`
 * `parking`
@@ -669,8 +674,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `power_wind`
 * `prison`
 * `pub`
-* `put_in`
 * `put_in_egress`
+* `put_in`
 * `rapid`
 * `recycling`
 * `refugee_camp`
@@ -684,6 +689,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `saddle`
 * `sawmill`
 * `school`
+* `scuba_diving`
 * `shelter`
 * `shelter`
 * `shoemaker`
@@ -718,8 +724,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `toys`
 * `trade`
 * `traffic_signals`
-* `trailhead`
 * `trail_riding_station`
+* `trailhead`
 * `tram_stop`
 * `travel_agent`
 * `tree`
