@@ -516,12 +516,14 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bakery`
 * `bank`
 * `bar`
+* `bbq`
 * `beach`
 * `beacon`
 * `bed_and_breakfast`
 * `bench`
 * `bicycle_parking`
 * `bicycle_rental`
+* `bicycle_repair_station`
 * `bicycle`
 * `biergarten`
 * `block`
@@ -563,6 +565,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `day_care`
 * `dentist`
 * `department_store`
+* `dive_centre`
 * `doctors`
 * `doityourself`
 * `dressmaker`
@@ -590,9 +593,9 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `food_bank`
 * `ford`
 * `foundation`
-* `fuel`
+* `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `gardener`
-* `gas`
+* `gas` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate`
 * `generator`
 * `geyser`
@@ -627,6 +630,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `lawyer`
 * `level_crossing`
 * `library`
+* `life_ring`
+* `lifeguard_tower`
 * `lift_gate`
 * `lighthouse`
 * `lock`
@@ -659,6 +664,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `parking`
 * `peak`
 * `pet`
+* `petroleum_well`
 * `petting_zoo`
 * `pharmacy`
 * `phone`
@@ -666,6 +672,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `photographic_laboratory`
 * `physician`
 * `picnic_site`
+* `picnic_table`
 * `place_of_worship`
 * `playground`
 * `plumber`
@@ -674,11 +681,14 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `post_box`
 * `post_office`
 * `pottery`
+* `power_pole`
+* `power_tower`
 * `power_wind`
 * `prison`
 * `pub`
 * `put_in_egress`
 * `put_in`
+* `pylon`
 * `ranger_station`
 * `rapid`
 * `recycling`
@@ -697,6 +707,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `shelter`
 * `shelter`
 * `shoemaker`
+* `shower`
 * `sinkhole`
 * `ski_rental`
 * `ski_school`
@@ -739,9 +750,12 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `viewpoint`
 * `volcano`
 * `waste_basket`
+* `waste_disposal`
+* `water_point`
 * `water_slide`
 * `water_tower`
 * `water_well`
+* `watering_place`
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`
@@ -972,11 +986,8 @@ These are intended for label placement, and are included as points only.
 
 **Gotchas:**
 
-* `Alkaline Lake` and `Playa` only exist in Natural Earth. Zooming in, your feature may disappear. Beware the desert around Great Salt Lake in Utah!
-* `ocean` and `Ocean` are equivalent, **both** should be used in filters.
-* `reservoir` and `Reservoir` are equivalent, **both** should be used in filters.
+* `lake` features with `alkaline=yes` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
-* The (capitalized) Natural Earth values don't seem to be coming thru, but should be, instead they're being grouped into `lake`, `playa`, and `ocean`.
 
 #### Water kind values (lines):
 
