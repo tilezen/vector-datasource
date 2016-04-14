@@ -87,6 +87,9 @@ filters:
   - filter: {leisure: stadium}
     min_zoom: LEAST(zoom + 2.30, 15)
     output: {kind: stadium}
+  - filter: {man_made: observatory}
+    min_zoom: 15
+    output: {kind: observatory}
   - filter: {amenity: university}
     min_zoom: LEAST(zoom + 2.55, 15)
     output: {kind: university}
@@ -325,6 +328,18 @@ filters:
   - filter: {man_made: windmill}
     min_zoom: 16
     output: {kind: windmill}
+  - filter: {man_made: communications_tower}
+    min_zoom: 15
+    output: {kind: communications_tower}
+  - filter: {man_made: telescope}
+    min_zoom: GREATEST(15, LEAST(zoom + 0.1, 16))
+    output: {kind: telescope}
+  - filter: {man_made: offshore_platform}
+    min_zoom: 13
+    output: {kind: offshore_platform}
+  - filter: {man_made: water_tower}
+    min_zoom: 15
+    output: {kind: water_tower}
   - filter: {natural: tree}
     min_zoom: 16
     output: {kind: tree}
@@ -355,11 +370,9 @@ filters:
     min_zoom: 17
     output:
       kind: {col: leisure}
-  - filter:
-      man_made: [mast, water_tower]
+  - filter: {man_made: mast}
     min_zoom: 17
-    output:
-      kind: {col: man_made}
+    output: {kind: mast}
   - filter:
       office: [accountant, administrative, advertising_agency, architect, association,
         company, consulting, educational_institution, employment_agency, estate_agent,
