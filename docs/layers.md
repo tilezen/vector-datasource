@@ -516,12 +516,14 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bakery`
 * `bank`
 * `bar`
+* `bbq`
 * `beach`
 * `beacon`
 * `bed_and_breakfast`
 * `bench`
 * `bicycle_parking`
 * `bicycle_rental`
+* `bicycle_repair_station`
 * `bicycle`
 * `biergarten`
 * `block`
@@ -562,6 +564,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `day_care`
 * `dentist`
 * `department_store`
+* `dive_centre`
 * `doctors`
 * `doityourself`
 * `dressmaker`
@@ -626,6 +629,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `lawyer`
 * `level_crossing`
 * `library`
+* `life_ring`
+* `lifeguard_tower`
 * `lift_gate`
 * `lighthouse`
 * `lock`
@@ -656,6 +661,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `parking`
 * `peak`
 * `pet`
+* `petroleum_well`
 * `petting_zoo`
 * `pharmacy`
 * `phone`
@@ -663,6 +669,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `photographic_laboratory`
 * `physician`
 * `picnic_site`
+* `picnic_table`
 * `place_of_worship`
 * `playground`
 * `plumber`
@@ -671,11 +678,14 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `post_box`
 * `post_office`
 * `pottery`
+* `power_pole`
+* `power_tower`
 * `power_wind`
 * `prison`
 * `pub`
 * `put_in_egress`
 * `put_in`
+* `pylon`
 * `rapid`
 * `recycling`
 * `refugee_camp`
@@ -693,6 +703,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `shelter`
 * `shelter`
 * `shoemaker`
+* `shower`
 * `sinkhole`
 * `ski_rental`
 * `ski_school`
@@ -734,9 +745,12 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `viewpoint`
 * `volcano`
 * `waste_basket`
+* `waste_disposal`
+* `water_point`
 * `water_slide`
 * `water_tower`
 * `water_well`
+* `watering_place`
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`
