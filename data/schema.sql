@@ -1,3 +1,5 @@
+-- wof
+
 CREATE TABLE wof_neighbourhood_placetype (
   placetype_code SMALLINT PRIMARY KEY,
   placetype_string text NOT NULL
@@ -28,3 +30,9 @@ CREATE TABLE wof_neighbourhood (
 CREATE INDEX wof_neighbourhood_label_position_index ON wof_neighbourhood USING GIST(label_position);
 CREATE INDEX wof_neighbourhood_min_zoom_index ON wof_neighbourhood(min_zoom);
 CREATE INDEX wof_neighbourhood_max_zoom_index ON wof_neighbourhood(max_zoom);
+
+-- track way ids to update from trigger
+
+CREATE TABLE mz_pending_path_major_route (
+  osm_id BIGINT NOT NULL
+);
