@@ -550,6 +550,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `clothes`
 * `club`
 * `college`
+* `communications_tower`
 * `community_centre`
 * `company`
 * `computer`
@@ -651,6 +652,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `nursing_home`
 * `optician`
 * `outdoor`
+* `observatory`
+* `offshore_platform`
 * `outreach`
 * `painter`
 * `parking`
@@ -716,6 +719,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `tax_advisor`
 * `telecommunication`
 * `telephone`
+* `telescope`
 * `theatre`
 * `theme_park`
 * `therapist`
