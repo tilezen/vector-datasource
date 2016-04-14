@@ -63,6 +63,21 @@ filters:
   - filter: {shop: sports}
     min_zoom: LEAST(zoom + 1.53, 17)
     output: {kind: sports}
+  - filter: {shop: fishing}
+    min_zoom: 16
+    output: {kind: fishing}
+  - filter: {shop: hunting}
+    min_zoom: 16
+    output: {kind: hunting}
+  - filter: {shop: outdoor}
+    min_zoom: GREATEST(15, LEAST(zoom + 0.1, 16))
+    output: {kind: outdoor}
+  - filter: {shop: scuba_diving}
+    min_zoom: 17
+    output: {kind: scuba_diving}
+  - filter: {shop: motorcycle}
+    min_zoom: 17
+    output: {kind: motorcycle}
   - filter: {amenity: college}
     min_zoom: LEAST(zoom + 2.35, 16)
     output: {kind: college}
@@ -414,3 +429,6 @@ filters:
     min_zoom: 15
     output:
       kind: {col: tags->whitewater}
+  - filter: {shop: gas}
+    min_zoom: 18
+    output: {kind: gas}
