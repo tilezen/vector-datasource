@@ -328,6 +328,9 @@ filters:
   - filter: {natural: tree}
     min_zoom: 16
     output: {kind: tree}
+  - filter: {amenity: ranger_station}
+    min_zoom: 14
+    output: {kind: ranger_station}
   - filter:
       tourism: [camp_site, caravan_site, information, viewpoint]
     min_zoom: 16
