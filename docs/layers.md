@@ -676,6 +676,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `pub`
 * `put_in_egress`
 * `put_in`
+* `ranger_station`
 * `rapid`
 * `recycling`
 * `refugee_camp`
