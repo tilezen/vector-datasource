@@ -4,7 +4,7 @@ WHERE
   amenity IN ('bbq', 'bicycle_repair_station', 'boat_rental', 'dive_centre', 'life_ring', 'picnic_table', 'shower', 'waste_disposal', 'watering_place', 'water_point') OR
   aerialway IN ('pylon') OR
   emergency IN ('lifeguard_tower') OR
-  shop = 'boat_rental' OR
+  shop IN ('boat_rental', 'fishing', 'hunting', 'outdoor', 'scuba_diving', 'gas', 'motorcycle') OR
   tags->'rental' = 'boat' OR
   (shop = 'boat' AND tags->'rental' = 'yes') OR
   man_made IN ('beacon', 'cross', 'mineshaft', 'adit', 'petroleum_well', 'water_well') OR
