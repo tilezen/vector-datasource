@@ -589,9 +589,9 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `food_bank`
 * `ford`
 * `foundation`
-* `fuel`
+* `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `gardener`
-* `gas`
+* `gas` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate`
 * `generator`
 * `geyser`
@@ -967,11 +967,8 @@ These are intended for label placement, and are included as points only.
 
 **Gotchas:**
 
-* `Alkaline Lake` and `Playa` only exist in Natural Earth. Zooming in, your feature may disappear. Beware the desert around Great Salt Lake in Utah!
-* `ocean` and `Ocean` are equivalent, **both** should be used in filters.
-* `reservoir` and `Reservoir` are equivalent, **both** should be used in filters.
+* `lake` features with `alkaline=yes` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
-* The (capitalized) Natural Earth values don't seem to be coming thru, but should be, instead they're being grouped into `lake`, `playa`, and `ocean`.
 
 #### Water kind values (lines):
 
