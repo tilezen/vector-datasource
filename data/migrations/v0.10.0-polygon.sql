@@ -8,6 +8,7 @@ WHERE
   man_made IN ('beacon', 'cross', 'mineshaft', 'adit', 'water_well', 'communications_tower', 'observatory', 'telescope', 'offshore_platform', 'water_tower', 'mast') OR
   "natural" IN ('saddle', 'dune', 'geyser', 'sinkhole', 'hot_spring', 'rock', 'stone') OR
   highway = 'trailhead' OR
+  waterway = 'waterfall' OR
   tags->'whitewater' IN ('put_in;egress', 'put_in', 'egress', 'hazard', 'rapid');
 
 UPDATE planet_osm_polygon
