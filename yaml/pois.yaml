@@ -172,6 +172,14 @@ filters:
     min_zoom: 17
     output:
       kind: {col: tags->zoo}
+  - filter: {waterway: waterfall}
+    min_zoom: CASE WHEN to_number(tags->'height', '9999.99') < 10 THEN 15
+      WHEN to_number(tags->'height', '9999.99') >= 10 and to_number(tags->'height', '9999.99') < 50 THEN 14
+      WHEN to_number(tags->'height', '9999.99') >= 50 and to_number(tags->'height', '9999.99') < 300 THEN 13
+      WHEN to_number(tags->'height', '9999.99') >= 300 THEN 12
+      ELSE GREATEST(LEAST((zoom+1.066)::smallint,
+      14), 12) END
+    output: {kind: waterfall}
   - filter:
       tags->attraction: [animal, water_slide, roller_coaster, summer_toboggan, carousel,
         amusement_ride, maze]
