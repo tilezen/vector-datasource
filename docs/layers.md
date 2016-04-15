@@ -973,7 +973,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `swimming_pool`
 * `water`
 
-Additionally, a `reservoir=yes` or `alkaline=yes` value can be present on the appropriate `kind=lake` features.
+Additionally, a `reservoir=yes` or `alkaline=yes` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent=yes`.
 
 #### Water kind values (point only):
 
