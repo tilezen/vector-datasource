@@ -29,19 +29,24 @@ globals:
   - &z13_area_volume
       any:
         way_area: { min: 1600 }
-        $volume: { min: 300000 }
+        volume: { min: 300000 }
   - &z14_area_volume
       any:
         way_area: { min: 100 }
-        $volume: { min: 200000 }
+        volume: { min: 200000 }
   - &z15_area_volume
       any:
         way_area: { min: 100 }
-        $volume: { min: 100000 }
+        volume: { min: 100000 }
   - &z16_area_volume
       any:
         way_area: { min: 25 }
-        $volume: { min: 50000 }
+        volume: { min: 50000 }
+# synthetic columns are values available to filters and output, but which are
+# generated in the SQL function and not passed in from the tables. in this case,
+# we generate the volume from the building height and way_area, where available.
+synthetic_columns:
+  - volume
 filters:
   - filter:
       <<: *is_building
