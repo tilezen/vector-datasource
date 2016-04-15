@@ -8,6 +8,11 @@ UPDATE planet_osm_line
     highway IN ('path', 'footway', 'steps', 'footpath', 'minor') OR
     tags->'whitewater' = 'portage_way';
 
+UPDATE planet_osm_line
+SET mz_boundary_min_zoom = mz_calculate_output_boundaries(planet_osm_line.*)
+WHERE
+  waterway = 'dam';
+
 CREATE INDEX new_planet_osm_line_water_geom_9_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 9;
 CREATE INDEX new_planet_osm_line_water_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 12;
 CREATE INDEX new_planet_osm_line_water_geom_15_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 15;
