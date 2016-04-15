@@ -278,3 +278,33 @@ filters:
   - filter: {natural: scree}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: scree}
+  - filter: {leisure=water_park}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: water_park}
+  - filter: {historic=battlefield}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: battlefield}
+  - filter: {waterway=dam}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: dam}
+  - filter: {leisure=dog_park}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: dog_park}
+  - filter: {leisure=track}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: recreation_track}
+  - filter: {natural=stone}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: stone}
+  - filter: {natural=rock}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: rock}
+  - filter: {tourism=caravan_site}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: caravan_site}
+  - filter: {tourism=picnic_site}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: picnic_site}
+  - filter: {historic=fort}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: fort}

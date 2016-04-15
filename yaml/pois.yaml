@@ -159,6 +159,9 @@ filters:
   - filter: {amenity: gym}
     min_zoom: LEAST(zoom + 3.98, 17)
     output: {kind: gym}
+  - filter: {leisure: beach_resort}
+    min_zoom: GREATEST(14, LEAST(zoom + 5.32, 16))
+    output: {kind: beach_resort }
   - filter:
       tourism: [hotel, motel]
     min_zoom: LEAST(zoom + 4.30, 17)
@@ -167,6 +170,9 @@ filters:
   - filter: {highway: motorway_junction}
     min_zoom: 12
     output: {kind: motorway_junction}
+  - filter: {historic: monument}
+    min_zoom: GREATEST(16, LEAST(zoom + 1.32, 17))
+    output: {kind: monument }
   - filter:
       tags->zoo: [enclosure, petting_zoo, aviary, wildlife_park]
     min_zoom: 17
@@ -490,3 +496,51 @@ filters:
   - filter: {man_made: petroleum_well}
     min_zoom: 17
     output: {kind: petroleum_well }
+  - filter: {leisure: water_park}
+    min_zoom: GREATEST(13, LEAST(zoom + 6.32, 16))
+    output: {kind: water_park }
+  - filter: {leisure: summer_camp}
+    min_zoom: GREATEST(14, LEAST(zoom + 5.32, 15))
+    output: {kind: summer_camp }
+  - filter: {historic: battlefield}
+    min_zoom: GREATEST(12, LEAST(zoom + 7.32, 17))
+    output: {kind: battlefield }
+  - filter: {amenity: boat_storage}
+    min_zoom: 17
+    output: {kind: boat_storage }
+  - filter: {amenity: boat_storage}
+    min_zoom: 17
+    output: {kind: boat_storage }
+  - filter: {waterway: dam}
+    min_zoom: GREATEST(12, LEAST(zoom + 1, 13))
+    output: {kind: battlefield }
+  - filter: {leisure: dog_park}
+    min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
+    output: {kind: dog_park }
+  - filter: {leisure: track}
+    min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
+    output: {kind: recreation_track }
+  - filter: {leisure: fishing}
+    min_zoom: LEAST(zoom + 1.76, 15)
+    output: {kind: fishing }
+  - filter: {leisure: fishing}
+    min_zoom: LEAST(zoom + 1.76, 15)
+    output: {kind: fishing }
+  - filter: {leisure: swimming_area}
+    min_zoom: LEAST(zoom + 1.76, 15)
+    output: {kind: swimming_area }
+  - filter: {leisure: firepit}
+    min_zoom: 18
+    output: {kind: firepit }
+  - filter: {leisure: firepit}
+    min_zoom: 18
+    output: {kind: firepit }
+  - filter: {tourism: caravan_site}
+    min_zoom: GREATEST(14, LEAST(zoom + 1, 15))
+    output: {kind: caravan_site }
+  - filter: {tourism: picnic_site}
+    min_zoom: 16
+    output: {kind: picnic_site }
+  - filter: {historic: fort}
+    min_zoom: GREATEST(13, LEAST(zoom + 1, 15))
+    output: {kind: fort }
