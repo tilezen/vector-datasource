@@ -1,5 +1,5 @@
 {% macro table_param(param, tbl) -%}
-  {% if param.table == tbl or not param.table %}row.{{param.key}}{% else %}NULL{% endif %}
+  {% if param.table == tbl or not param.table %}row.{{param.key}}::{{param.typ}}{% else %}NULL{% endif %}
 {%- endmacro -%}
 
 {%- macro table_func(func_kind, param, tbl, table_name, ret_type) -%}
@@ -987,5 +987,102 @@ BEGIN
 {%- endfor %}
         0::real,
         row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+----------------------------------------------------------------------
+-- ROADS
+----------------------------------------------------------------------
+
+-- roads kind "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        osm_id bigint,
+        name text,
+        tags hstore)
+RETURNS HSTORE AS $$
+BEGIN
+  RETURN {{ layers['roads']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- roads min_zoom "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        osm_id bigint,
+        name text,
+        way geometry,
+        tags hstore)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN {{ layers['roads']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads(planet_osm_line)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.osm_id,
+        row.name,
+        row.way,
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads(ne_10m_roads)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL,
+        row.name,
+        NULL,
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_roads(planet_osm_line)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.osm_id,
+        row.name,
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_roads(ne_10m_roads)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL,
+        row.name,
+        NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;

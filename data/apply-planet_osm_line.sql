@@ -6,8 +6,8 @@ BEGIN
 --------------------------------------------------------------------------------
 
 UPDATE planet_osm_line
-  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id, tags->'whitewater');
-  WHERE mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id, tags->'whitewater') IS NOT NULL;
+  SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*);
+  WHERE mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL;
 
 UPDATE planet_osm_line
   SET mz_transit_level = mz_calculate_min_zoom_transit(planet_osm_line.*)
