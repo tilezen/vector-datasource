@@ -1,6 +1,9 @@
 global:
   - &osm_highway_properties
-      name: {col: $name}
+      # note that we ignore the name column, because it's used for both the
+      # OSM and NE tables, which means it gets included twice. instead, we
+      # ignore it and include it once manually.
+      name: {col: name, ignore: true}
       aeroway: {col: aeroway}
       aerialway: {col: aerialway}
       bridge: {col: bridge}
@@ -75,7 +78,7 @@ filters:
     table: ne
     output:
       kind: {col: featurecla}
-      name: {col: $name}
+      name: {col: name, ignore: true}
       namealt: {col: namealt}
       namealtt: {col: namealtt}
       labelrank: {col: labelrank}
@@ -501,4 +504,4 @@ filters:
     table: osm
     output:
       <<: *osm_piste_properties
-      name: {col: $name}
+      name: {col: name, ignore: true}

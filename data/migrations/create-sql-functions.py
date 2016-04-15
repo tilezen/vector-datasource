@@ -16,8 +16,6 @@ def format_value(val):
         elif 'col' in val:
             if val['col'].startswith('tags->'):
                 return "tags->'%s'" % val['col'][len('tags->'):]
-            elif val['col'].startswith('$'):
-                return '"%s"' % val['col'][len('$'):]
             else:
                 return '"%s"' % val['col']
         elif 'value' in val:
@@ -38,7 +36,9 @@ def value_columns(val):
             else:
                 return val.get('columns', [])
         elif 'col' in val:
-            if val['col'].startswith('tags->'):
+            if val.get('ignore'):
+                return []
+            elif val['col'].startswith('tags->'):
                 return ['tags']
             else:
                 return [val['col']]
@@ -52,8 +52,6 @@ def value_columns(val):
 def format_column(k):
     if k.startswith('tags->'):
         val = "tags->'%s'" % (k[len('tags->'):])
-    elif k.startswith('$'):
-        val = k[1:]
     else:
         val = '"%s"' % k
     return val
@@ -325,9 +323,14 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
               'buildings', 'roads'):
     kind_rules = []
     min_zoom_rules = []
+    # synthetic columns are ones that we generate in the SQL functions, usually
+    # in the DECLARE section. for example; building volume in the buildings
+    # query.
+    synthetic_columns = set(['way_area'])
     file_path = os.path.join(script_root, '../../yaml/%s.yaml' % layer)
     with open(file_path) as fh:
         yaml_data = yaml.load(fh)
+        synthetic_columns |= set(yaml_data.get('synthetic_columns', []))
         matchers = []
         for yaml_datum in yaml_data['filters']:
             matcher = create_matcher(yaml_datum)
@@ -335,10 +338,14 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
 
     params = set()
     for matcher in matchers:
-        columns = set(matcher.rule.columns()) | set(matcher.output_columns())
+        # columns in the query should be those needed by the rule, union those
+        # needed by the output, minus any which are synthetic and local to the
+        # query function.
+        columns = ((set(matcher.rule.columns()) |
+                    set(matcher.output_columns()))
+                   - synthetic_columns)
         for column in columns:
-            if not column.startswith('tags') and not column.startswith('$') \
-               and column != 'way_area':
+            if not column.startswith('tags'):
                 if column == 'gid':
                     typ = 'integer'
                 elif column == 'scalerank' or column == 'labelrank':
