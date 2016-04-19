@@ -201,7 +201,7 @@ filters:
       kind: minor_road
       highway: {col: highway}
   - filter:
-      highway: [pedestrian, track, cycleway]
+      highway: [pedestrian]
     min_zoom: 13
     table: osm
     output:
@@ -210,17 +210,42 @@ filters:
       kind: path
       highway: {col: highway}
   - filter:
-      highway: [path, footway, steps]
+      highway: [path, track, cycleway]
+    min_zoom: |
+      COALESCE(mz_calculate_path_major_route(osm_id), 13)
+    table: osm
+    extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+  - filter:
+      highway: [footway]
     min_zoom: |
       COALESCE(mz_calculate_path_major_route(osm_id),
-        CASE
-          WHEN highway = 'path' THEN 13
-          WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
-              horse, tags->'snowmobile', tags->'ski') THEN 13
-          ELSE 14
+        CASE WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
+              horse, tags->'snowmobile', tags->'ski')           THEN 13
+             WHEN "tags->footway" IN ('sidewalk', 'crossing')   THEN 15
+        ELSE 14
         END)
     table: osm
-    extra_columns: [bicycle, foot, horse]
+    extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+  - filter:
+      highway: [steps]
+    min_zoom: |
+      COALESCE(mz_calculate_path_major_route(osm_id),
+        CASE WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
+              horse, tags->'snowmobile', tags->'ski')           THEN 14
+        ELSE 15
+        END)
+    table: osm
+    extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
