@@ -112,13 +112,11 @@ filters:
   - filter: {featurecla: Coastline}
     min_zoom: 0
     output:
-        <<: *water_standard_properties_osm
         kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
     min_zoom: 0
     output:
-        <<: *water_standard_properties_osm
         kind: lake
         alkaline: 'yes'
     table: ne
