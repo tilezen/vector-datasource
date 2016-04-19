@@ -21,7 +21,6 @@ UPDATE planet_osm_line
     mz_calculate_min_zoom_roads(planet_osm_line.*) IS NULL AND
     mz_road_level IS NOT NULL;
 
-
 CREATE INDEX new_planet_osm_line_roads_geom_index ON planet_osm_line USING gist(way) WHERE mz_road_level IS NOT NULL;
 CREATE INDEX new_planet_osm_line_roads_geom_9_index ON planet_osm_line USING gist(way) WHERE mz_road_level <= 9;
 CREATE INDEX new_planet_osm_line_roads_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_road_level <= 12;
