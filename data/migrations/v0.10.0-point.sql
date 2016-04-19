@@ -8,7 +8,7 @@ WHERE
   tags->'rental' = 'boat' OR
   (shop = 'boat' AND tags->'rental' = 'yes') OR
   man_made IN ('beacon', 'cross', 'mineshaft', 'adit', 'petroleum_well', 'water_well', 'communications_tower', 'observatory', 'telescope', 'offshore_platform', 'water_tower', 'mast') OR
-  "natural" IN ('saddle', 'dune', 'geyser', 'sinkhole', 'hot_spring', 'rock', 'stone') OR
+  "natural" IN ('saddle', 'dune', 'geyser', 'sinkhole', 'hot_spring', 'rock', 'stone', 'waterfall') OR
   "power" IN ('pole', 'tower') OR
   highway = 'trailhead' OR
   waterway = 'waterfall' OR
