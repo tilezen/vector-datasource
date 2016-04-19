@@ -207,7 +207,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: [pedestrian, track, cycleway]
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
