@@ -5,8 +5,7 @@
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
     NULL AS label_placement,
-    NULL AS boundary,
-    NULL AS intermittent
+    NULL AS boundary
 {% endmacro %}
 
 {% if zoom < 9 %}
@@ -56,8 +55,7 @@ SELECT
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
     NULL AS label_placement,
-    'yes' AS boundary,
-    NULL AS intermittent
+    'yes' AS boundary
 
 FROM
 {% if zoom < 2 %}
@@ -82,8 +80,7 @@ SELECT
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
     NULL AS label_placement,
-    'yes' AS boundary,
-    NULL AS intermittent
+    'yes' AS boundary
 
 FROM
 {% if zoom < 2 %}
@@ -126,8 +123,7 @@ SELECT
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
     NULL AS label_placement,
-    'yes' AS boundary,
-    NULL AS intermittent
+    'yes' AS boundary
 
 FROM
 {% if 4 <= zoom < 5 %}
@@ -152,7 +148,6 @@ SELECT
     gid AS __id__,
     NULL AS label_placement,
     NULL AS tunnel,
-    NULL AS intermittent,
     NULL AS tags
 
 FROM water_polygons t
@@ -170,7 +165,6 @@ SELECT
     osm_id AS __id__,
     NULL AS label_placement,
     tunnel,
-    intermittent,
     %#tags AS tags
 
 FROM planet_osm_polygon t
@@ -190,7 +184,6 @@ SELECT
     osm_id AS __id__,
     NULL AS label_placement,
     tunnel,
-    intermittent,
     %#tags AS tags
 
 FROM planet_osm_line t
@@ -215,7 +208,6 @@ SELECT
   NULL AS boundary
 {% else %}
   NULL AS tunnel,
-  NULL AS intermittent,
   %#tags AS tags
 {% endif %}
 
