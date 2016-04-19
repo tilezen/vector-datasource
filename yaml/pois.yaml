@@ -171,7 +171,7 @@ filters:
     min_zoom: 12
     output: {kind: motorway_junction}
   - filter: {historic: monument}
-    min_zoom: GREATEST(16, LEAST(zoom + 1.32, 17))
+    min_zoom: GREATEST(15, LEAST(zoom + 1.32, 17))
     output: {kind: monument }
   - filter:
       tags->zoo: [enclosure, petting_zoo, aviary, wildlife_park]
@@ -527,7 +527,7 @@ filters:
     min_zoom: LEAST(zoom + 1.76, 15)
     output: {kind: fishing }
   - filter: {leisure: swimming_area}
-    min_zoom: LEAST(zoom + 1.76, 15)
+    min_zoom: 16
     output: {kind: swimming_area }
   - filter: {leisure: firepit}
     min_zoom: 18
@@ -542,5 +542,5 @@ filters:
     min_zoom: 16
     output: {kind: picnic_site }
   - filter: {historic: fort}
-    min_zoom: GREATEST(13, LEAST(zoom + 1, 15))
+    min_zoom: GREATEST(13, LEAST(zoom + 1, 16))
     output: {kind: fort }
