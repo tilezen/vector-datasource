@@ -74,7 +74,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
-      - TileStache.Goodies.VecTiles.transform.road_kind
       - TileStache.Goodies.VecTiles.transform.road_classifier
       - TileStache.Goodies.VecTiles.transform.road_oneway
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
@@ -354,10 +353,6 @@ post_process:
       where:
         label_placement: yes
       geometry_types: [Point]
-  - fn: TileStache.Goodies.VecTiles.transform.remove_abandoned_pistes
-    params:
-      source_layer: roads
-      start_zoom: 9
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: roads

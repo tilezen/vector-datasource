@@ -36,7 +36,9 @@ def value_columns(val):
             else:
                 return val.get('columns', [])
         elif 'col' in val:
-            if val['col'].startswith('tags->'):
+            if val.get('ignore'):
+                return []
+            elif val['col'].startswith('tags->'):
                 return ['tags']
             else:
                 return [val['col']]
@@ -50,8 +52,6 @@ def value_columns(val):
 def format_column(k):
     if k.startswith('tags->'):
         val = "tags->'%s'" % (k[len('tags->'):])
-    elif k.startswith('$'):
-        val = k[1:]
     else:
         val = '"%s"' % k
     return val
@@ -64,9 +64,18 @@ class EqualsRule(object):
         self.value = value
 
     def as_sql(self):
-        return '%s = %s' % (
-            format_column(self.column),
-            format_value(self.value))
+        equals_check = '%s = %s' % (
+                format_column(self.column),
+                format_value(self.value))
+
+        # tags->'foo' is NULL when the hstore doesn't contain that key, which
+        # makes all the following comparisons NULL, so combine the equals
+        # with an exists check.
+        if self.column.startswith('tags->'):
+            exists_check = "tags ? '%s'" % (self.column[len('tags->'):],)
+            return '(%s) AND (%s)' % (exists_check, equals_check)
+        else:
+            return equals_check
 
     def columns(self):
         return [self.column] + value_columns(self.value)
@@ -126,7 +135,10 @@ class ExistsRule(object):
         self.column = column
 
     def as_sql(self):
-        return '%s IS NOT NULL' % format_column(self.column)
+        if self.column.startswith('tags->'):
+            return "tags ? '%s'" % (self.column[len('tags->'):],)
+        else:
+            return '%s IS NOT NULL' % format_column(self.column)
 
     def columns(self):
         return [self.column]
@@ -227,24 +239,25 @@ def create_filter_rule(filter_key, filter_value):
 
 class Matcher(object):
 
-    def __init__(self, rule, min_zoom, output, table):
+    def __init__(self, rule, min_zoom, output, table, extra_columns):
         self.rule = rule
         self.min_zoom = min_zoom
         self.output = output
         self.table = table
+        self.extra_columns = extra_columns
 
     def when_sql_output(self):
         hstore_items = []
         for k, v in self.output.items():
             hstore_key = "'%s'" % k
             hstore_val = format_value(v)
-            hstore_items.append('%s,%s' % (hstore_key, hstore_val))
+            hstore_items.append('%s,%s::text' % (hstore_key, hstore_val))
         hstore_output = 'HSTORE(ARRAY[%s])' % ','.join(hstore_items)
         return "WHEN %s THEN %s" % (
             self.rule.as_sql(), hstore_output)
 
     def output_columns(self):
-        columns = []
+        columns = self.extra_columns
         for k, v in self.output.items():
             columns.extend(value_columns(v))
         return columns
@@ -272,7 +285,8 @@ def create_matcher(yaml_datum):
     output = yaml_datum['output']
 
     table = yaml_datum.get('table')
-    matcher = Matcher(rule, min_zoom, output, table)
+    extra_columns = yaml_datum.get('extra_columns', [])
+    matcher = Matcher(rule, min_zoom, output, table, extra_columns)
     return matcher
 
 
@@ -306,12 +320,17 @@ layers = {}
 script_root = os.path.dirname(__file__)
 
 for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
-              'buildings'):
+              'buildings', 'roads'):
     kind_rules = []
     min_zoom_rules = []
+    # synthetic columns are ones that we generate in the SQL functions, usually
+    # in the DECLARE section. for example; building volume in the buildings
+    # query.
+    synthetic_columns = set(['way_area'])
     file_path = os.path.join(script_root, '../../yaml/%s.yaml' % layer)
     with open(file_path) as fh:
         yaml_data = yaml.load(fh)
+        synthetic_columns |= set(yaml_data.get('synthetic_columns', []))
         matchers = []
         for yaml_datum in yaml_data['filters']:
             matcher = create_matcher(yaml_datum)
@@ -319,13 +338,17 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
 
     params = set()
     for matcher in matchers:
-        columns = set(matcher.rule.columns()) | set(matcher.output_columns())
+        # columns in the query should be those needed by the rule, union those
+        # needed by the output, minus any which are synthetic and local to the
+        # query function.
+        columns = ((set(matcher.rule.columns()) |
+                    set(matcher.output_columns()))
+                   - synthetic_columns)
         for column in columns:
-            if not column.startswith('tags') and not column.startswith('$') \
-               and column != 'way_area':
+            if not column.startswith('tags'):
                 if column == 'gid':
                     typ = 'integer'
-                elif column == 'scalerank':
+                elif column == 'scalerank' or column == 'labelrank':
                     typ = 'smallint'
                 else:
                     typ = 'text'
