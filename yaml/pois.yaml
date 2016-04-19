@@ -186,7 +186,7 @@ filters:
       ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       14), 12) END
     extra_columns: [height]
-    output: {kind: waterfall}
+    output: {kind: waterfall, height: { col: height }}
   - filter:
       tags->attraction: [animal, water_slide, roller_coaster, summer_toboggan, carousel,
         amusement_ride, maze]
