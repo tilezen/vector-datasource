@@ -587,22 +587,3 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql STABLE;
-
--- returns TRUE if the given way ID (osm_id) is part of a path route relation,
--- or NULL otherwise.
--- This function is meant to be called for something that we already know is a path.
--- Please ensure input is already a path, or output will be undefined.
-CREATE OR REPLACE FUNCTION mz_is_path_named_or_designated(highway_val text, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text)
-RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN CASE
-      WHEN name_val IS NOT NULL            THEN TRUE
-      WHEN bicycle_val    = 'designated'   THEN TRUE
-      WHEN foot_val       = 'designated'   THEN TRUE
-      WHEN horse_val      = 'designated'   THEN TRUE
-      WHEN snowmobile_val = 'designated'   THEN TRUE
-      WHEN ski_val        = 'designated'   THEN TRUE
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;

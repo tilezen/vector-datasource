@@ -65,6 +65,11 @@ global:
       sport: {col: sport}
       man_made: {col: man_made}
 
+# name isn't really synthetic, but we use it from both the NE and OSM
+# tables, so to avoid including it twice we fake it as synthetic.
+synthetic_columns:
+  - name
+
 filters:
   #############################################################
   #
@@ -210,17 +215,34 @@ filters:
       kind: path
       highway: {col: highway}
   - filter:
-      highway: [path, footway, steps]
-    min_zoom: |
-      COALESCE(mz_calculate_path_major_route(osm_id),
-        CASE
-          WHEN highway = 'path' THEN 13
-          WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
-              horse, tags->'snowmobile', tags->'ski') THEN 13
-          ELSE 14
-        END)
+      highway: path
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
-    extra_columns: [bicycle, foot, horse]
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+  - filter:
+      highway: [footway, steps]
+      any:
+        - {name: true}
+        - {bicycle: designated}
+        - {foot: designated}
+        - {horse: designated}
+        - {tags->snowmobile: designated}
+        - {tags->ski: designated}
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+  - filter:
+      highway: [footway, steps]
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
+    table: osm
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
