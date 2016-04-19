@@ -41,3 +41,15 @@ assert_has_feature(
 assert_has_feature(
     15, 5265, 12645, 'pois',
     { 'kind': 'waterfall', 'min_zoom': 15 })
+
+#http://www.openstreetmap.org/node/1247873121
+# Lower Chilnualna Fall, no height
+assert_has_feature(
+    14, 2747, 6345, 'pois',
+    { 'kind': 'waterfall', 'min_zoom': 14 })
+
+#http://www.openstreetmap.org/node/1247873121
+# Chilnualna Creek Cascades, no height
+assert_has_feature(
+    14, 2748, 6344, 'pois',
+    { 'kind': 'waterfall', 'min_zoom': 14 })
