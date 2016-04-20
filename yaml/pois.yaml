@@ -179,10 +179,10 @@ filters:
       any:
         - {waterway: waterfall}
         - {natural: waterfall}
-    min_zoom: CASE WHEN to_number("height", '9999.99') < 10 THEN 15
-      WHEN to_number("height", '9999.99') < 50 THEN 14
-      WHEN to_number("height", '9999.99') < 300 THEN 13
-      WHEN to_number("height", '9999.99') >= 300 THEN 12
+    min_zoom: CASE WHEN mz_to_float_meters("height") < 10 THEN 15
+      WHEN mz_to_float_meters("height") < 50 THEN 14
+      WHEN mz_to_float_meters("height") < 300 THEN 13
+      WHEN mz_to_float_meters("height") >= 300 THEN 12
       ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       14), 12) END
     extra_columns: [height]
