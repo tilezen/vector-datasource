@@ -500,7 +500,7 @@ filters:
     min_zoom: 17
     output: {kind: petroleum_well }
   - filter: {leisure: water_park}
-    min_zoom: GREATEST(13, LEAST(zoom + 2.34, 16))
+    min_zoom: GREATEST(13, LEAST(zoom + 2.34, 15))
     output: {kind: water_park }
   - filter: {leisure: summer_camp}
     min_zoom: GREATEST(14, LEAST(zoom + 1.32, 15))
@@ -516,7 +516,7 @@ filters:
     output: {kind: boat_storage }
   - filter: {waterway: dam}
     min_zoom: GREATEST(12, LEAST(zoom + 1, 14))
-    output: {kind: battlefield }
+    output: {kind: dam }
   - filter: {leisure: dog_park}
     min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
     output: {kind: dog_park }
@@ -525,7 +525,7 @@ filters:
     output: {kind: recreation_track }
   - filter: {leisure: fishing}
     min_zoom: GREATEST(16, LEAST(zoom + 1.76, 17))
-    output: {kind: fishing_spot }
+    output: {kind: fishing_area }
   - filter: {leisure: swimming_area}
     min_zoom: 16
     output: {kind: swimming_area }
