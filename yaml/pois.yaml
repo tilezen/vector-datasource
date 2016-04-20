@@ -381,7 +381,7 @@ filters:
     output:
       kind: {col: amenity}
   - filter:
-      amenity: [atm, bus_stop, drinking_water, emergency_phone,
+      amenity: [atm, bicycle_parking, bus_stop, drinking_water, emergency_phone,
         parking, post_box, telephone, toilets]
     min_zoom: 17
     output:
@@ -448,17 +448,61 @@ filters:
     output:
       kind: {col: barrier}
   - filter:
+      tags->icn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: tags->icn_ref
+      network: icn
+  - filter:
+      tags->ncn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: tags->ncn_ref
+      network: ncn
+  - filter:
       tags->rcn_ref: true
     min_zoom: 16
     output:
-      kind: bicycle_signpost
+      kind: bicycle_guidepost
       ref: tags->rcn_ref
+      network: rcn
+  - filter:
+      tags->rcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: tags->lcn_ref
+      network: lcn
+  - filter:
+      tags->iwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: tags->iwn_ref
+      network: iwn
+  - filter:
+      tags->nwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: tags->nwn_ref
+      network: nwn
   - filter:
       tags->rwn_ref: true
     min_zoom: 16
     output:
-      kind: walking_signpost
+      kind: walking_guidepost
       ref: tags->rwn_ref
+      network: rwn
+  - filter:
+      tags->lwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: tags->lwn_ref
+      network: lwn
   - filter:
       shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
         dry_cleaning, fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone,
