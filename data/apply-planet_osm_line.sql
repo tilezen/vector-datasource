@@ -6,7 +6,7 @@ BEGIN
 --------------------------------------------------------------------------------
 
 UPDATE planet_osm_line
-  SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*);
+  SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*)
   WHERE mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL;
 
 UPDATE planet_osm_line
