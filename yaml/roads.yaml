@@ -1,0 +1,507 @@
+global:
+  - &osm_highway_properties
+      # note that we ignore the name column, because it's used for both the
+      # OSM and NE tables, which means it gets included twice. instead, we
+      # ignore it and include it once manually.
+      name: {col: name, ignore: true}
+      aeroway: {col: aeroway}
+      aerialway: {col: aerialway}
+      bridge: {col: bridge}
+      highway: {col: highway}
+      ferry: {col: tags->ferry}
+      layer: {col: layer}
+      railway: {col: railway}
+      tunnel: {col: tunnel}
+      oneway: {col: oneway}
+      ref: {col: ref}
+      operator: {col: operator}
+      route: {col: route}
+      type: {col: tags->type}
+      colour: {col: tags->colour}
+      state: {col: tags->state}
+      symbol: {col: tags->symbol}
+      description: {col: tags->description}
+      distance: {col: tags->distance}
+      ascent: {col: tags->ascent}
+      descent: {col: tags->descent}
+      roundtrip: {col: tags->roundtrip}
+      route_name: {col: tags->route_name}
+      motor_vehicle: {col: tags->motor_vehicle}
+      service: {col: service}
+      leisure: {col: leisure}
+      sport: {col: sport}
+      man_made: {col: man_made}
+  - &osm_network_from_relation
+      network: {expr: "mz_get_rel_network(osm_id)"}
+  - &osm_network_from_tags
+      network: {col: tags->network}
+  - &osm_piste_properties
+      kind: piste
+      layer: {col: layer}
+      tunnel: {col: tunnel}
+      oneway: {col: oneway}
+      ref: {col: ref}
+      operator: {col: operator}
+      route: {col: route}
+      type: {col: tags->type}
+      colour: {col: tags->colour}
+      network: {col: tags->network}
+      state: {col: tags->state}
+      symbol: {col: tags->symbol}
+      description: {col: tags->description}
+      distance: {col: tags->distance}
+      ascent: {col: tags->ascent}
+      descent: {col: tags->descent}
+      roundtrip: {col: tags->roundtrip}
+      route_name: {col: tags->route_name}
+      piste_type: {col: "tags->piste:type"}
+      piste_difficulty: {col: "tags->piste:difficulty"}
+      piste_grooming: {col: "tags->piste:grooming"}
+      piste_name: {col: "tags->piste:name"}
+      ski: {col: tags->ski}
+      snowshoe: {col: tags->snowshoe}
+      symbol: {col: tags->symbol}
+      leisure: {col: leisure}
+      sport: {col: sport}
+      man_made: {col: man_made}
+
+filters:
+  #############################################################
+  #
+  # Natural Earth roads / ferries
+  #
+  #############################################################
+  - filter:
+      featurecla: [Road, Ferry]
+      scalerank: true
+    min_zoom: scalerank
+    table: ne
+    output:
+      kind: {col: featurecla}
+      name: {col: name, ignore: true}
+      namealt: {col: namealt}
+      namealtt: {col: namealtt}
+      labelrank: {col: labelrank}
+      level: {col: level}
+      type: {col: type}
+  #############################################################
+  #
+  # OSM highway
+  #
+  #############################################################
+  - filter:
+      highway: motorway
+    min_zoom: 8
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: highway
+      highway: {col: highway}
+  - filter:
+      highway: [trunk, primary]
+    min_zoom: 8
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: major_road
+      highway: {col: highway}
+  - filter:
+      highway: secondary
+    min_zoom: 10
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: major_road
+      highway: {col: highway}
+  - filter:
+      highway: motorway_link
+    min_zoom: 11
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: highway
+      highway: {col: highway}
+  - filter:
+      highway: tertiary
+    min_zoom: 11
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: major_road
+      highway: {col: highway}
+  - filter:
+      highway: trunk_link
+    min_zoom: 12
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: major_road
+      highway: {col: highway}
+  - filter:
+      highway: [primary_link, secondary_link]
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: major_road
+      highway: {col: highway}
+  - filter:
+      highway: tertiary_link
+    min_zoom: 14
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_relation
+      kind: major_road
+      highway: {col: highway}
+  #############################################################
+  #
+  # OSM whitewater
+  #
+  # This is in the middle of the highways section so that it
+  # overrides residential & service roads.
+  #
+  #############################################################
+  - filter:
+      "tags->whitewater": portage_way
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: portage_way
+  #############################################################
+  #
+  # OSM highways (again)
+  #
+  #############################################################
+  - filter:
+      highway: [residential, unclassified, road]
+    min_zoom: 12
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      highway: {col: highway}
+  - filter:
+      highway: living_street
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      highway: {col: highway}
+  - filter:
+      highway: [pedestrian, track, cycleway]
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+  - filter:
+      highway: [path, footway, steps]
+    min_zoom: |
+      COALESCE(mz_calculate_path_major_route(osm_id),
+        CASE
+          WHEN highway = 'path' THEN 13
+          WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
+              horse, tags->'snowmobile', tags->'ski') THEN 13
+          ELSE 14
+        END)
+    table: osm
+    extra_columns: [bicycle, foot, horse]
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+  - filter:
+      highway: service
+      service: alley
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      highway: {col: highway}
+      service: {col: service}
+  - filter:
+      highway: service
+      service: [driveway, parking_aisle, drive-through]
+    min_zoom: 15
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      highway: {col: highway}
+      service: {col: service}
+  - filter:
+      highway: service
+    min_zoom: 14
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      highway: {col: highway}
+  #############################################################
+  #
+  # OSM aeroway
+  #
+  #############################################################
+  - filter:
+      aeroway: runway
+    min_zoom: 9
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      aeroway: {col: aeroway}
+  - filter:
+      aeroway: taxiway
+    min_zoom: 11
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: minor_road
+      aeroway: {col: aeroway}
+  #############################################################
+  #
+  # OSM railway
+  #
+  #############################################################
+  - filter:
+      railway: rail
+      service: [spur, siding]
+    min_zoom: 12
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: rail
+      railway: {col: railway}
+      service: {col: service}
+  - filter:
+      railway: rail
+      service: yard
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: rail
+      railway: {col: railway}
+      service: {col: service}
+  - filter:
+      railway: rail
+      service: crossover
+    min_zoom: 15
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: rail
+      railway: {col: railway}
+      service: {col: service}
+  - filter:
+      railway: rail
+      service:
+        - branch
+        - connector
+        - wye
+        - runaway
+        - interchange
+        - switch
+        - industrial
+        - disused
+        - driveway
+        - passing_loop
+    min_zoom: 15
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: rail
+      railway: {col: railway}
+      service: {col: service}
+  - filter:
+      railway: rail
+    min_zoom: 11
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: rail
+      railway: {col: railway}
+  - filter:
+      railway: [tram, light_rail, narrow_gauge, monorail, subway, funicular]
+    min_zoom: 15
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: rail
+      railway: {col: railway}
+  #############################################################
+  #
+  # OSM ferry
+  #
+  #############################################################
+  - filter:
+      route: ferry
+    min_zoom: "mz_calculate_ferry_level(way)"
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: ferry
+  #############################################################
+  #
+  # OSM aerialway
+  #
+  #############################################################
+  - filter:
+      aerialway: [gondola, cable_car]
+    min_zoom: 12
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: aerialway
+      aerialway: {col: aerialway}
+  - filter:
+      aerialway: chair_lift
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: aerialway
+      aerialway: {col: aerialway}
+  - filter:
+      aerialway:
+        - drag_lift
+        - platter
+        - t-bar
+        - goods
+        - magic_carpet
+        - rope_tow
+        - "yes"
+        - zip_line
+        - j-bar
+        - unknown
+        - mixed_lift
+        - canopy
+        - cableway
+    min_zoom: 15
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: aerialway
+      aerialway: {col: aerialway}
+  #############################################################
+  #
+  # OSM leisure
+  #
+  #############################################################
+  - filter:
+      leisure: track
+      sport:
+        - athletics
+        - running
+        - horse_racing
+        - bmx
+        - disc_golf
+        - cycling
+        - ski_jumping
+        - motor
+        - karting
+        - obstacle_course
+        - equestrian
+        - alpine_slide
+        - soap_box_derby
+        - mud_truck_racing
+        - skiing
+        - drag_racing
+        - archery
+    min_zoom: 14
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      # note: racetrack rather than track, as track might be confusing
+      # between a track for racing and a track as in a faint trail.
+      kind: racetrack
+      sport: {col: sport}
+  #############################################################
+  #
+  # OSM man_made
+  #
+  #############################################################
+  - filter:
+      man_made: pier
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      man_made: pier
+  #############################################################
+  #
+  # OSM piste
+  #
+  #############################################################
+  - filter:
+      "tags->piste:type":
+        - nordic
+        - downhill
+        - sleigh
+        - skitour
+        - hike
+        - sled
+        - "yes"
+        - snow_park
+        - playground
+        - ski_jump
+      not: {"tags->piste:abandoned": "yes"}
+      "tags->piste:name": true
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_piste_properties
+      name: {col: "tags->piste:name"}
+  - filter:
+      "tags->piste:type":
+        - nordic
+        - downhill
+        - sleigh
+        - skitour
+        - hike
+        - sled
+        - "yes"
+        - snow_park
+        - playground
+        - ski_jump
+      not: {"tags->piste:abandoned": "yes"}
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_piste_properties
+      name: {col: name, ignore: true}

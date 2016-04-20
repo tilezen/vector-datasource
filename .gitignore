@@ -7,3 +7,9 @@ test.log
 
 # editor temporaries
 *~
+# downloaded shapefiles
+data/*.shp
+data/*.cpg
+data/*.dbf
+data/*.prj
+data/*.shx

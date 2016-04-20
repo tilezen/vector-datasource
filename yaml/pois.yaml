@@ -72,6 +72,9 @@ filters:
   - filter: {shop: outdoor}
     min_zoom: GREATEST(15, LEAST(zoom, 16))
     output: {kind: outdoor}
+  - filter: {amenity: dive_centre}
+    min_zoom: 16
+    output: {kind: dive_centre }
   - filter: {shop: scuba_diving}
     min_zoom: 17
     output: {kind: scuba_diving}
@@ -466,9 +469,6 @@ filters:
   - filter: {amenity: bicycle_repair_station}
     min_zoom: 18
     output: {kind: bicycle_repair_station }
-  - filter: {amenity: dive_centre}
-    min_zoom: 16
-    output: {kind: dive_centre }
   - filter: {amenity: life_ring}
     min_zoom: 18
     output: {kind: life_ring }
