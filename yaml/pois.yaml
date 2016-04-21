@@ -381,18 +381,7 @@ filters:
     output:
       kind: {col: amenity}
   - filter:
-      amenity: [bicycle_rental]
-    min_zoom: |
-        CASE
-          WHEN network IS NOT NULL THEN 17
-          ELSE 16
-    output:
-      kind: {col: amenity}
-      network: {col: network}
-      operator: {col: operator}
-      capacity: {col: capacity}
-  - filter:
-      amenity: [atm, bicycle_parking, bus_stop, drinking_water, emergency_phone,
+      amenity: [atm, bus_stop, drinking_water, emergency_phone,
         parking, post_box, telephone, toilets]
     min_zoom: 17
     output:
@@ -430,6 +419,46 @@ filters:
     min_zoom: 15
     output:
       kind: {col: shop}
+  - filter:
+      amenity: [bicycle_rental]
+      operator: false
+    min_zoom: 16
+    output:
+      kind: {col: amenity}
+  - filter:
+      amenity: [bicycle_rental]
+      operator: true
+    min_zoom: 17
+    output:
+      kind: {col: amenity}
+      network:  {col: tags->network}
+      operator: {col: operator}
+      capacity: {col: tags->capacity}
+  - filter:
+      amenity: [bicycle_parking]
+    min_zoom: 17
+    output:
+      kind: {col: amenity}
+      operator: {col: operator}
+      capacity: {col: tags->capacity}
+      covered: {col: tags->covered}
+  - filter:
+      barrier: [cycle_barrier]
+    min_zoom: 18
+    output:
+      kind: {col: barrier}
+  - filter:
+      tags->rcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_signpost
+      ref: tags->rcn_ref
+  - filter:
+      tags->rwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_signpost
+      ref: tags->rwn_ref
   - filter:
       shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
         dry_cleaning, fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone,
