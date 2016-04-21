@@ -755,6 +755,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `water_slide`
 * `water_tower`
 * `water_well`
+* `waterfall`
 * `watering_place`
 * `wilderness_hut`
 * `wildlife_park`
