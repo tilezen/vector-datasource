@@ -1,0 +1,78 @@
+# synthetic columns are values available to filters and output, but which are
+# generated in the SQL function and not passed in from the tables. in this case,
+# we generate the volume from the building height and way_area, where available.
+synthetic_columns:
+  - way_area
+
+filters:
+  - filter:
+      place: continent
+      name: true
+    min_zoom: 0
+    output:
+      kind: continent
+      label_placement: 'yes'
+    table: osm
+  - filter:
+      place: archipelago
+      name: true
+    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
+      16), 9) END
+    output:
+        kind: archipelago
+        label_placement: 'yes'
+    table: osm
+  - filter:
+      place: island
+      name: true
+    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
+      16), 9) END
+    output:
+      kind: island
+      label_placement: 'yes'
+    table: osm
+  - filter:
+      place: islet
+      name: true
+    min_zoom: CASE WHEN way_area > 102400 THEN 15 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
+      16), 15) END
+    output:
+      kind: islet
+      label_placement: 'yes'
+    table: osm
+  - filter: {natural: cliff}
+    min_zoom: 13
+    output: {kind: island}
+    table: osm
+  - filter: {natural: cliff}
+    min_zoom: 13
+    output: {kind: cliff}
+    table: osm
+  - filter: {natural: arete}
+    min_zoom: 13
+    output: {kind: arete}
+    table: osm
+  - filter:
+      natural: ridge
+      name: true
+    min_zoom: 13
+    output:
+      kind: ridge
+      label_placement: 'yes'
+    table: osm
+  - filter: 
+      natural: valley
+      name: true
+    min_zoom: 13
+    output: 
+      kind: valley
+      label_placement: 'yes'
+    table: osm
+  - filter: {gid: true}
+    min_zoom: 0
+    output: {kind: earth}
+    table: ne
+  - filter: {fid: true}
+    min_zoom: 0
+    output: {kind: earth}
+    table: land_polygons
