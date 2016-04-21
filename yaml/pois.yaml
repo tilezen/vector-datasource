@@ -176,6 +176,18 @@ filters:
     output:
       kind: {col: tags->zoo}
   - filter:
+      any:
+        - {waterway: waterfall}
+        - {natural: waterfall}
+    min_zoom: CASE WHEN mz_to_float_meters("height") < 10 THEN 15
+      WHEN mz_to_float_meters("height") < 50 THEN 14
+      WHEN mz_to_float_meters("height") < 300 THEN 13
+      WHEN mz_to_float_meters("height") >= 300 THEN 12
+      ELSE GREATEST(LEAST((zoom+1.066)::smallint,
+      14), 12) END
+    extra_columns: [height]
+    output: {kind: waterfall, height: { col: height }}
+  - filter:
       tags->attraction: [animal, water_slide, roller_coaster, summer_toboggan, carousel,
         amusement_ride, maze]
     min_zoom: 17
