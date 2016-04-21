@@ -11,11 +11,11 @@ SELECT
     NULL AS boundary
 FROM
 {% if zoom < 2 %}
-    ne_110m_land
+    ne_110m_land t
 {% elif 2 <= zoom < 5 %}
-    ne_50m_land
+    ne_50m_land t
 {% elif 5 <= zoom < 9 %}
-    ne_10m_land
+    ne_10m_land t
 {% endif %}
 
 WHERE
@@ -83,6 +83,7 @@ UNION ALL
 
 SELECT
   name,
+  NULL AS area,
   mz_calculate_output_earth(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
   way AS __geometry__,
