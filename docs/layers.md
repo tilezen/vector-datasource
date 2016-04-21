@@ -500,6 +500,17 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `is_*` a set of boolean flags indicating whether this station has any routes of the given type. These are: `is_train`, `is_subway`, `is_light_rail`, `is_tram`, corresponding to the above `*_routes`. This is provided as a convenience for styling.
 * `root_relation_id` an integer ID (of an OSM relation) which can be used to link or group together features which are related by being part of a larger feature. A full explanation of [relations](http://wiki.openstreetmap.org/wiki/Relation) wouldn't fit here, but the general idea is that all the station features which are part of the same [site](http://wiki.openstreetmap.org/wiki/Relation:site), [stop area](http://wiki.openstreetmap.org/wiki/Tag:public_transport%3Dstop_area) or [stop area group](http://wiki.openstreetmap.org/wiki/Relation:public_transport) should have the same ID to show they're related. Note that this information is only present on some stations.
 
+#### POI properties (only on `kind:bicycle_rental`):
+
+* `capacity`: Approximate number of total rental bicycles at the bike share station.
+* `network`: The common (sometimes branded) name of the bike share network, eg: "Citi Bike".
+* `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
+
+#### POI properties (only on `kind:bicycle_parking`):
+
+* `capacity`: Approximate number of total bicycle parking spots.
+* `covered`: Is the parking area covered.
+* `operator`: Who runs the bike parking lot.
 
 #### POI kind values:
 
