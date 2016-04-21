@@ -560,6 +560,29 @@ BEGIN
       tags->'network' IN ('iwn','nwn','rwn','lwn')
     );
 END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Looks up whether the given osm_id is a member of any hiking routes
+-- and, if so, returns the network designation of the most important
+-- (highest in hierarchy) of the networks.
+--
+CREATE OR REPLACE FUNCTION mz_hiking_network(osm_id bigint)
+RETURNS text AS $$
+DECLARE
+  networks text[] := ARRAY(
+    SELECT hstore(tags)->'network'
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[osm_id]
+      AND parts[way_off+1:rel_off] && ARRAY[osm_id]
+      AND mz_is_path_major_route_relation(hstore(tags)));
+BEGIN
+  RETURN CASE
+    WHEN networks && ARRAY['iwn'] THEN 'iwn'
+    WHEN networks && ARRAY['nwn'] THEN 'nwn'
+    WHEN networks && ARRAY['rwn'] THEN 'rwn'
+    WHEN networks && ARRAY['lwn'] THEN 'lwn'
+  END;
+END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- returns TRUE if the given way ID (osm_id) is part of a path route relation,
