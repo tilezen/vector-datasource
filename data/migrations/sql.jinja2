@@ -1086,3 +1086,230 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+----------------------------------------------------------------------
+-- EARTH
+----------------------------------------------------------------------
+
+-- earth kind "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore)
+RETURNS HSTORE AS $$
+BEGIN
+  RETURN {{ layers['earth']['kind_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- earth min_zoom "main" function
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore,
+        way_area real)
+RETURNS SMALLINT AS $$
+DECLARE
+  zoom REAL;
+BEGIN
+  zoom = mz_one_pixel_zoom(way_area);
+  RETURN {{ layers['earth']['min_zoom_case_statement'] }};
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- earth kind table adaptors
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(planet_osm_polygon)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(planet_osm_line)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(planet_osm_point)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(ne_10m_land)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(ne_50m_land)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(ne_110m_land)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_earth(land_polygons)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'shp') }},
+{%- endfor %}
+        NULL);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- earth min_zoom table adaptors
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(planet_osm_polygon)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(planet_osm_line)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags,
+        0::real);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(planet_osm_point)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'osm') }},
+{%- endfor %}
+        row.tags,
+        0::real);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(ne_10m_land)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(ne_50m_land)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(ne_110m_land)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'ne') }},
+{%- endfor %}
+        NULL,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(land_polygons)
+RETURNS SMALLINT AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{ table_param(param, 'shp') }},
+{%- endfor %}
+        NULL,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
