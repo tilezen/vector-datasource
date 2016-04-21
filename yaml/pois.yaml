@@ -381,7 +381,7 @@ filters:
     output:
       kind: {col: amenity}
   - filter:
-      amenity: [atm, bicycle_parking, bus_stop, drinking_water, emergency_phone,
+      amenity: [atm, bus_stop, drinking_water, emergency_phone,
         parking, post_box, telephone, toilets]
     min_zoom: 17
     output:
@@ -469,7 +469,7 @@ filters:
       ref: tags->rcn_ref
       network: rcn
   - filter:
-      tags->rcn_ref: true
+      tags->lcn_ref: true
     min_zoom: 16
     output:
       kind: bicycle_guidepost
