@@ -141,7 +141,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: trunk_link
-    min_zoom: 12
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 12)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -150,7 +150,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: [primary_link, secondary_link]
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -159,7 +159,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: tertiary_link
-    min_zoom: 14
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -176,7 +176,7 @@ filters:
   #############################################################
   - filter:
       "tags->whitewater": portage_way
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -189,7 +189,7 @@ filters:
   #############################################################
   - filter:
       highway: [residential, unclassified, road]
-    min_zoom: 12
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 12)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -198,7 +198,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: living_street
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -251,7 +251,7 @@ filters:
   - filter:
       highway: service
       service: alley
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -262,7 +262,7 @@ filters:
   - filter:
       highway: service
       service: [driveway, parking_aisle, drive-through]
-    min_zoom: 15
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 15)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -272,7 +272,7 @@ filters:
       service: {col: service}
   - filter:
       highway: service
-    min_zoom: 14
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
     table: osm
     output:
       <<: *osm_highway_properties
