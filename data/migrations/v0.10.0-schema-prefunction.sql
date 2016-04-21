@@ -15,6 +15,12 @@ $$ LANGUAGE plpgsql;
 
 DO $$
 BEGIN
+  PERFORM tmp_add_col('public.planet_osm_polygon', 'mz_earth_min_zoom');
+  PERFORM tmp_add_col('public.planet_osm_line',    'mz_earth_min_zoom');
+  PERFORM tmp_add_col('public.planet_osm_point',   'mz_earth_min_zoom');
+
+  PERFORM tmp_add_col('public.land_polygons',      'mz_earth_min_zoom');
+
   PERFORM tmp_add_col('public.planet_osm_polygon', 'mz_water_min_zoom');
   PERFORM tmp_add_col('public.planet_osm_line', 'mz_water_min_zoom');
   PERFORM tmp_add_col('public.planet_osm_point', 'mz_water_min_zoom');
