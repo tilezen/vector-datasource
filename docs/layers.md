@@ -252,6 +252,15 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 * `ridge`
 * `valley`
 
+#### Earth kind values (point only):
+
+These are intended for label placement, and are included as points only.
+
+* `archipelago`
+* `island`
+* `islet`
+
+
 ## Landuse
 
 ![image](images/mapzen-vector-tile-docs-landuse.png)
