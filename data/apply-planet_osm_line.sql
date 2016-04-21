@@ -14,6 +14,10 @@ UPDATE planet_osm_line
   WHERE mz_calculate_min_zoom_transit(planet_osm_line.*) IS NOT NULL;
 
 UPDATE planet_osm_line
+  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_line.*)
+  WHERE mz_calculate_min_zoom_earth(planet_osm_line.*) IS NOT NULL;
+
+UPDATE planet_osm_line
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_line.*)
   WHERE mz_calculate_min_zoom_water(planet_osm_line.*) IS NOT NULL;
 
@@ -37,7 +41,9 @@ CREATE INDEX planet_osm_line_transit_geom_15_index ON planet_osm_line USING gist
 
 CREATE INDEX planet_osm_line_waterway_geom_index ON planet_osm_line USING gist(way) WHERE waterway IN ('canal', 'river', 'stream', 'dam', 'ditch', 'drain');
 
-CREATE INDEX planet_osm_line_natural_geom_index ON planet_osm_line USING gist(way) WHERE "natural" IN ('cliff','arete','ridge','valley');
+CREATE INDEX planet_osm_line_earth_geom_9_index  ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 9;
+CREATE INDEX planet_osm_line_earth_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 12;
+CREATE INDEX planet_osm_line_earth_geom_15_index ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 15;
 
 CREATE INDEX planet_osm_line_piste_geom_index ON planet_osm_line USING gist(way) WHERE tags ? 'piste:type';
 

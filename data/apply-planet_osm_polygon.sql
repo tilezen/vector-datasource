@@ -23,6 +23,10 @@ UPDATE planet_osm_polygon SET
   WHERE mz_calculate_min_zoom_transit(planet_osm_polygon.*) IS NOT NULL;
 
 UPDATE planet_osm_polygon
+  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_polygon.*)
+  WHERE mz_calculate_min_zoom_earth(planet_osm_polygon.*) IS NOT NULL;
+
+UPDATE planet_osm_polygon
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_polygon.*)
   WHERE mz_calculate_min_zoom_water(planet_osm_polygon.*) IS NOT NULL;
 
@@ -45,6 +49,10 @@ CREATE INDEX planet_osm_polygon_transit_geom_6_index ON planet_osm_polygon USING
 CREATE INDEX planet_osm_polygon_transit_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_transit_level <= 9;
 CREATE INDEX planet_osm_polygon_transit_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_transit_level <= 12;
 CREATE INDEX planet_osm_polygon_transit_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_transit_level <= 15;
+
+CREATE INDEX planet_osm_polygon_earth_geom_9_index  ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 9;
+CREATE INDEX planet_osm_polygon_earth_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 12;
+CREATE INDEX planet_osm_polygon_earth_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 15;
 
 CREATE INDEX planet_osm_polygon_water_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 9;
 CREATE INDEX planet_osm_polygon_water_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 12;
