@@ -64,13 +64,12 @@ assert_has_feature(
 assert_has_feature(
     15, 9219, 11714, 'pois',
     { 'kind': 'summer_camp', 'min_zoom': 15 })
-    
+
 #https://www.openstreetmap.org/node/4050178586
-# missing
 # Camp Goodtimes
-# assert_has_feature(
-#     15, 5225, 11211, 'pois',
-#     { 'kind': 'summer_camp', 'min_zoom': 15 })    
+assert_has_feature(
+    15, 5225, 11211, 'pois',
+    { 'kind': 'summer_camp', 'min_zoom': 15 })
 
 
 
