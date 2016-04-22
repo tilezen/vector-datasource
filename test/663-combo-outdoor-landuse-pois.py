@@ -147,11 +147,10 @@ assert_has_feature(
     { 'kind': 'monument', 'min_zoom': 15 })
 
 #https://www.openstreetmap.org/way/66418767
-# huh? this in in the DB, but missing from tiles
 # building, and tourism=attraction, National World War II Memorial
-# assert_has_feature(
-#     15, 9371, 12536, 'pois',
-#     { 'kind': 'monument', 'min_zoom': 15 })
+assert_has_feature(
+    15, 9371, 12536, 'pois',
+    { 'kind': 'monument', 'min_zoom': 15 })
 
 
 
