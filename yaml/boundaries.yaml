@@ -38,7 +38,7 @@ filters:
     output: {kind: city_wall}
     table: osm
   - filter: {waterway: dam}
-    min_zoom: 13
+    min_zoom: 12
     output: {kind: dam}
     table: osm
   - filter: {man_made: snow_fence}

@@ -172,12 +172,11 @@ assert_has_feature(
     { 'kind': 'dam', 'min_zoom': 12 })
 
 #https://www.openstreetmap.org/way/62201624
-# huh, missing in tile, is in DB
 # Named dam line in front of Cherry Lake
 # Should be labeled in the stylesheet, no POI generate
-# assert_has_feature(
-#     12, 683, 1580, 'boundaries',
-#     { 'kind': 'dam', "sort_key": 263 })
+assert_has_feature(
+    12, 683, 1580, 'boundaries',
+    { 'kind': 'dam', "sort_key": 263 })
 
 
 
