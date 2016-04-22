@@ -268,10 +268,10 @@ assert_has_feature(
     16, 10551, 22892, 'pois',
     { 'kind': 'swimming_area', 'min_zoom': 16 })
 
-#https://www.openstreetmap.org/node/3738168752
-# Lake Arrowhead
+#https://www.openstreetmap.org/node/3733554139
+# Swimming hole at Seneca Rocks
 assert_has_feature(
-    16, 14857, 26232, 'pois',
+    16, 18319, 25083, 'pois',
     { 'kind': 'swimming_area', 'min_zoom': 16 })
 
 
