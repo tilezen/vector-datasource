@@ -347,15 +347,14 @@ assert_has_feature(
     { 'kind': 'picnic_site', 'min_zoom': 16 })
 
 #https://www.openstreetmap.org/way/400701941
-# missing landuse feature? needs import?
 # Golden Gate Park, SF
-# assert_has_feature(
-#     16, 10474, 25332, 'landuse',
-#     { 'kind': 'picnic_site', 'sort_key': 103 })
+assert_has_feature(
+    16, 10474, 25332, 'landuse',
+    { 'kind': 'picnic_site', 'sort_key': 103 })
 
-# assert_has_feature(
-#     16, 10474, 25332, 'pois',
-#     { 'kind': 'picnic_site', 'min_zoom': 16 })
+assert_has_feature(
+    16, 10474, 25332, 'pois',
+    { 'kind': 'picnic_site', 'min_zoom': 16 })
 
 #https://www.openstreetmap.org/way/231863022
 # building, South Park, SF
