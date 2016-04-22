@@ -1,4 +1,7 @@
 filters:
+  - filter: {historic: battlefield}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: battlefield}
   - filter: {boundary: national_park}
     min_zoom: zoom
     output: {kind: national_park}
@@ -281,9 +284,6 @@ filters:
   - filter: {leisure: water_park}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: water_park}
-  - filter: {historic: battlefield}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: battlefield}
   - filter: {waterway: dam}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: dam}

@@ -506,7 +506,7 @@ filters:
     min_zoom: GREATEST(14, LEAST(zoom + 1.32, 15))
     output: {kind: summer_camp }
   - filter: {historic: battlefield}
-    min_zoom: GREATEST(10, LEAST(zoom + 5.0, 17))
+    min_zoom: GREATEST(10, LEAST(zoom + 4.0, 17))
     output: {kind: battlefield }
   - filter: {amenity: boat_storage}
     min_zoom: 17

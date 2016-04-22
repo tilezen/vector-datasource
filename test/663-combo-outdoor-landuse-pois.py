@@ -74,41 +74,37 @@ assert_has_feature(
 
 
 #https://www.openstreetmap.org/node/3838356961
-# huh? it's in the DB but not exporting
 # Battle of Blackburn's Ford (1861)
-# assert_has_feature(
-#     16, 18668, 25092, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 17 })
+assert_has_feature(
+    16, 18668, 25092, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 17 })
 
 #https://www.openstreetmap.org/node/3992988013
-# missing, keeping here since we already have one for test, but if the other breaks
 # 2nd Battle of Kernstown
-# assert_has_feature(
-#     16, 18532, 25013, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 17 })
+assert_has_feature(
+    16, 18532, 25013, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 17 })
 
 #https://www.openstreetmap.org/way/231393152
-# huh? it's in the DB but not exporting
 # Antietam National Battlefield
-# assert_has_feature(
-#     10, 290, 389, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 10.4417 })
+assert_has_feature(
+    10, 290, 389, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 10 })
 
-# huh? it's in the DB but not exporting
-# assert_has_feature(
-#     10, 290, 389, 'landuse',
-#     { 'kind': 'battlefield', 'sort_key': 25 })
+assert_has_feature(
+    10, 290, 389, 'landuse',
+    { 'kind': 'battlefield', 'sort_key': 25 })
 
 
 #http://www.openstreetmap.org/way/316054549
 # White Oak Road Battlefield
-# assert_has_feature(
-#     11, 582, 796, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 11.0683 })
-# 
-# assert_has_feature(
-#     11, 582, 796, 'landuse',
-#     { 'kind': 'battlefield', 'sort_key': 25 })
+assert_has_feature(
+    11, 582, 796, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 10.0683 })
+
+assert_has_feature(
+    11, 582, 796, 'landuse',
+    { 'kind': 'battlefield', 'sort_key': 25 })
 
 
 
