@@ -25,11 +25,11 @@ assert_has_feature(
 
 
 # WARNING: this kind of feature is only available in Europe
-# http://www.openstreetmap.org/node/340159623
+# http://www.openstreetmap.org/node/3836406372
 # icn_ref=1
 assert_has_feature(
     16, 32382, 22860, 'pois',
-    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': 1, 'network': 'iwn' })
+    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': '1', 'bicycle_network': 'icn' })
 
 # No known examples in the world for nodes, and ways don't count
 # ncn_ref=1
@@ -39,21 +39,21 @@ assert_has_feature(
 # rcn_ref=1
 assert_has_feature(
     16, 33322, 21990, 'pois',
-    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': 1, 'network': 'rwn' })
+    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': '1', 'bicycle_network': 'rcn' })
 
 # NOTE: this is strangely in Omaha, NE, USA
 # http://www.openstreetmap.org/node/3269815503
 # lcn_ref=1
 assert_has_feature(
     16, 15299, 24506, 'pois',
-    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': 1, 'network': 'lwn' })
+    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': '1', 'bicycle_network': 'lcn' })
 
 # http://www.openstreetmap.org/node/287609621
 # lcn_ref=2
 #    16, 32570, 21059, 'pois',
 assert_has_feature(
     16, 32570, 21058, 'pois',
-    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': 2, 'network': 'lwn' })
+    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': '2', 'bicycle_network': 'lcn' })
 
 
 # No known examples in the world for nodes, and ways don't count
@@ -67,11 +67,11 @@ assert_has_feature(
 # rwn_ref=1
 assert_has_feature(
     16, 33492, 21929, 'pois',
-    { 'kind': 'walking_guidepost', 'min_zoom': 16, 'ref': 1, 'network': 'rwn' })
+    { 'kind': 'walking_guidepost', 'min_zoom': 16, 'ref': '1', 'walking_network': 'rwn' })
 
 # WARNING: this kind of feature is only available in Europe
 # http://www.openstreetmap.org/node/717593380
 # lwn_ref=1
 assert_has_feature(
     16, 34584, 21219, 'pois',
-    { 'kind': 'walking_guidepost', 'min_zoom': 16, 'ref': 'ST', 'network': 'lwn' })
+    { 'kind': 'walking_guidepost', 'min_zoom': 16, 'ref': 'ST', 'walking_network': 'lwn' })
