@@ -48,6 +48,12 @@ assert_has_feature(
     16, 15299, 24506, 'pois',
     { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': 1, 'network': 'lwn' })
 
+# http://www.openstreetmap.org/node/287609621
+# lcn_ref=2
+#    16, 32570, 21059, 'pois',
+assert_has_feature(
+    16, 32570, 21058, 'pois',
+    { 'kind': 'bicycle_guidepost', 'min_zoom': 16, 'ref': 2, 'network': 'lwn' })
 
 
 # No known examples in the world for nodes, and ways don't count
