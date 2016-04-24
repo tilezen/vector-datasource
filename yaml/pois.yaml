@@ -371,7 +371,63 @@ filters:
     min_zoom: 14
     output: {kind: ranger_station}
   - filter:
-      tourism: [camp_site, information, viewpoint]
+      tags->icn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->icn_ref}
+      bicycle_network: icn
+  - filter:
+      tags->ncn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->ncn_ref}
+      bicycle_network: ncn
+  - filter:
+      tags->rcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->rcn_ref}
+      bicycle_network: rcn
+  - filter:
+      tags->lcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->lcn_ref}
+      bicycle_network: lcn
+  - filter:
+      tags->iwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->iwn_ref}
+      walking_network: rwn
+  - filter:
+      tags->nwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->nwn_ref}
+      walking_network: nwn
+  - filter:
+      tags->rwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->rwn_ref}
+      walking_network: rwn
+  - filter:
+      tags->lwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->lwn_ref}
+      walking_network: lwn
+  - filter:
+      tourism: [camp_site, caravan_site, information, viewpoint]
     min_zoom: 16
     output:
       kind: {col: tourism}
@@ -447,62 +503,6 @@ filters:
     min_zoom: 18
     output:
       kind: {col: barrier}
-  - filter:
-      tags->icn_ref: true
-    min_zoom: 16
-    output:
-      kind: bicycle_guidepost
-      ref: tags->icn_ref
-      bicycle_network: icn
-  - filter:
-      tags->ncn_ref: true
-    min_zoom: 16
-    output:
-      kind: bicycle_guidepost
-      ref: tags->ncn_ref
-      bicycle_network: ncn
-  - filter:
-      tags->rcn_ref: true
-    min_zoom: 16
-    output:
-      kind: bicycle_guidepost
-      ref: tags->rcn_ref
-      bicycle_network: rcn
-  - filter:
-      tags->lcn_ref: true
-    min_zoom: 16
-    output:
-      kind: bicycle_guidepost
-      ref: tags->lcn_ref
-      bicycle_network: lcn
-  - filter:
-      tags->iwn_ref: true
-    min_zoom: 16
-    output:
-      kind: walking_guidepost
-      ref: tags->iwn_ref
-      walking_network: rwn
-  - filter:
-      tags->nwn_ref: true
-    min_zoom: 16
-    output:
-      kind: walking_guidepost
-      ref: tags->nwn_ref
-      walking_network: nwn
-  - filter:
-      tags->rwn_ref: true
-    min_zoom: 16
-    output:
-      kind: walking_guidepost
-      ref: tags->rwn_ref
-      walking_network: rwn
-  - filter:
-      tags->lwn_ref: true
-    min_zoom: 16
-    output:
-      kind: walking_guidepost
-      ref: tags->lwn_ref
-      walking_network: lwn
   - filter:
       shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
         dry_cleaning, fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone,
