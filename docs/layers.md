@@ -506,6 +506,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `network`: The common (sometimes branded) name of the bike share network, eg: "Citi Bike".
 * `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
 
+Note: these additional properties are only available on biek share stations, not bicycle rental shops.
+
 #### POI properties (only on `kind:bicycle_parking`):
 
 * `capacity`: Approximate number of total bicycle parking spots.
