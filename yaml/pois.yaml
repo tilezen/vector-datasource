@@ -424,13 +424,13 @@ filters:
       operator: false
     min_zoom: 16
     output:
-      kind: {col: amenity}
+      kind: bicycle_rental
   - filter:
       amenity: [bicycle_rental]
       operator: true
     min_zoom: 17
     output:
-      kind: {col: amenity}
+      kind: bicycle_rental_station
       network:  {col: tags->network}
       operator: {col: operator}
       capacity: {col: tags->capacity}

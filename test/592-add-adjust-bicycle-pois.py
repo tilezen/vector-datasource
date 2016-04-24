@@ -14,7 +14,7 @@ assert_has_feature(
 # Citi Bike - Broadway & W 24 St, with network, operator
 assert_has_feature(
     16, 19298, 24633, 'pois',
-    { 'kind': 'bicycle_rental', 'min_zoom': 17, 'capacity': 52, 'network': 'Citi Bike' })
+    { 'kind': 'bicycle_rental_station', 'min_zoom': 17, 'capacity': 52, 'network': 'Citi Bike' })
 
 # http://www.openstreetmap.org/node/1993249660
 # Cycle barrier in Berkeley
