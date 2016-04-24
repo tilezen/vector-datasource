@@ -546,10 +546,10 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bed_and_breakfast`
 * `bench`
 * `bicycle_parking`
-* `bicycle_rental` - Shop that rents bicycles.
-* `bicycle_rental_station` - Free or low cost bicycle rentals as part of a public bike share scheme.
+* `bicycle_rental` - Bicycle rental shop.
+* `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
 * `bicycle_repair_station`
-* `bicycle` - Shop selling bicycles.
+* `bicycle` - Bicycle sales shop, often with bike repair service.
 * `bicycle_guidepost` - Common in Europe for signed bicycle routes. The posts are numbered with a `ref`.
 * `biergarten`
 * `block`
