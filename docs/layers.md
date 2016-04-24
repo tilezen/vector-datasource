@@ -549,7 +549,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bicycle_rental` - Primarily bike share stations (shown later), with a few bicycle rental shops (shown earlier).
 * `bicycle_repair_station`
 * `bicycle` - Shop selling bicycles.
-* `bicycle_signpost` - Common in Europe for signed bicycle routes. The posts are numbered with a `ref`.
+* `bicycle_guidepost` - Common in Europe for signed bicycle routes. The posts are numbered with a `ref`.
 * `biergarten`
 * `block`
 * `boat_rental`
@@ -786,7 +786,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `veterinary`
 * `viewpoint`
 * `volcano`
-* `walking_signpost` - Common in Europe for signed walking routes. The posts are numbered with a `ref`.
+* `walking_guidepost` - Common in Europe for signed walking routes. The posts are numbered with a `ref`.
 * `waste_basket`
 * `waste_disposal`
 * `water_park`
