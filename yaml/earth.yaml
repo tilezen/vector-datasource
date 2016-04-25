@@ -16,34 +16,26 @@ filters:
   - filter:
       place: archipelago
       name: true
-    min_zoom: GREATEST(15, LEAST((zoom+6)::smallint, 15))
+    # Once more feature are polygons, it would be worthwhile to do
+    # min_zoom: GREATEST(7, LEAST((zoom+6)::smallint, 15))
+    # but for now, it's mostly middling data
+    min_zoom: 15
     output:
         kind: archipelago
-        label_placement: 'yes'
     table: osm
   - filter:
       place: island
       name: true
     min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 16))
-#    min_zoom: CASE WHEN way_area > 352545000 THEN 7 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-#      15), 15) END
     output:
       kind: island
-      label_placement: 'yes'
     table: osm
   - filter:
       place: islet
       name: true
     min_zoom: GREATEST(15, LEAST((zoom+3.5)::smallint, 17))
-#    min_zoom: CASE WHEN way_area > 102400 THEN 15 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-#      17), 17) END
     output:
       kind: islet
-      label_placement: 'yes'
-    table: osm
-  - filter: {natural: cliff}
-    min_zoom: 13
-    output: {kind: island}
     table: osm
   - filter: {natural: cliff}
     min_zoom: 13
