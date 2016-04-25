@@ -21,7 +21,8 @@ filters:
     # but for now, it's mostly middling data
     min_zoom: 15
     output:
-        kind: archipelago
+      kind: archipelago
+      label_placement: 'yes'
     table: osm
   - filter:
       place: island
@@ -29,6 +30,7 @@ filters:
     min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 16))
     output:
       kind: island
+      label_placement: 'yes'
     table: osm
   - filter:
       place: islet
@@ -36,6 +38,7 @@ filters:
     min_zoom: GREATEST(15, LEAST((zoom+3.5)::smallint, 17))
     output:
       kind: islet
+      label_placement: 'yes'
     table: osm
   - filter: {natural: cliff}
     min_zoom: 13
