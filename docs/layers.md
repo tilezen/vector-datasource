@@ -693,7 +693,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `photographic_laboratory`
 * `physician`
 * `picnic_site`
-* `picnic_site`
 * `picnic_table`
 * `place_of_worship`
 * `playground`
