@@ -43,12 +43,6 @@ assert_has_feature(
     { 'kind': 'beach_resort', 'min_zoom': 16 })
 
 
-#https://www.openstreetmap.org/way/257716817
-# Needs to appear **after** natural=beach.
-# Unnamed beach in Maskenthine Lake area
-assert_has_feature(
-    16, 15066, 24333, 'pois',
-    { 'kind': 'beach', 'id': 257716817 })
 
 #https://www.openstreetmap.org/way/257716817
 # Needs to appear **after** natural=beach.
