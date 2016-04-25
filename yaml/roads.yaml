@@ -236,6 +236,7 @@ filters:
       <<: *osm_network_from_tags
       kind: path
       highway: {col: highway}
+      footway: {col: "tags->footway"}
   - filter:
       highway: [steps]
     min_zoom: |
