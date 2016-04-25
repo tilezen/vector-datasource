@@ -7,8 +7,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
-    NULL AS label_placement,
-    NULL AS boundary
+    NULL AS tags
 FROM
 {% if zoom < 2 %}
     ne_110m_land t
@@ -23,7 +22,7 @@ WHERE
     {{ bounds|bbox_filter('the_geom') }}
 GROUP BY mz_properties
 
-{% elif 9 <= zoom %}
+{% else %}
 
 SELECT
     '' AS name,
@@ -31,8 +30,7 @@ SELECT
     mz_calculate_output_earth(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
-    max(gid) AS __id__
-    NULL AS label_placement,
+    max(gid) AS __id__,
     NULL AS tags
 
 FROM
@@ -50,7 +48,6 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    NULL AS label_placement,
     %#tags AS tags
 
 FROM planet_osm_polygon t
@@ -68,7 +65,6 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    NULL AS label_placement,
     %#tags AS tags
 
 FROM planet_osm_line t
@@ -88,7 +84,6 @@ SELECT
   'openstreetmap.org' AS source,
   way AS __geometry__,
   osm_id AS __id__,
-  'yes' AS label_placement,
   %#tags AS tags
 
 FROM
