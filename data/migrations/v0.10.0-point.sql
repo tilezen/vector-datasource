@@ -18,14 +18,14 @@ WHERE
   highway = 'trailhead' OR
   waterway = 'waterfall' OR
   tags->'whitewater' IN ('put_in;egress', 'put_in', 'egress', 'hazard', 'rapid') OR
-  tags->'icn_ref' IS NOT NULL OR
-  tags->'ncn_ref' IS NOT NULL OR
-  tags->'rcn_ref' IS NOT NULL OR
-  tags->'lcn_ref' IS NOT NULL OR
-  tags->'iwn_ref' IS NOT NULL OR
-  tags->'nwn_ref' IS NOT NULL OR
-  tags->'rwn_ref' IS NOT NULL OR
-  tags->'lwn_ref' IS NOT NULL;
+  tags ? 'icn_ref' OR
+  tags ? 'ncn_ref' OR
+  tags ? 'rcn_ref' OR
+  tags ? 'lcn_ref' OR
+  tags ? 'iwn_ref' OR
+  tags ? 'nwn_ref' OR
+  tags ? 'rwn_ref' OR
+  tags ? 'lwn_ref';
 
 UPDATE planet_osm_point
 SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_point.*)
