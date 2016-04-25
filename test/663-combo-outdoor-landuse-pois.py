@@ -64,52 +64,47 @@ assert_has_feature(
 assert_has_feature(
     15, 9219, 11714, 'pois',
     { 'kind': 'summer_camp', 'min_zoom': 15 })
-    
+
 #https://www.openstreetmap.org/node/4050178586
-# missing
 # Camp Goodtimes
-# assert_has_feature(
-#     15, 5225, 11211, 'pois',
-#     { 'kind': 'summer_camp', 'min_zoom': 15 })    
+assert_has_feature(
+    15, 5225, 11211, 'pois',
+    { 'kind': 'summer_camp', 'min_zoom': 15 })
 
 
 
 #https://www.openstreetmap.org/node/3838356961
-# huh? it's in the DB but not exporting
 # Battle of Blackburn's Ford (1861)
-# assert_has_feature(
-#     16, 18668, 25092, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 17 })
+assert_has_feature(
+    16, 18668, 25092, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 17 })
 
 #https://www.openstreetmap.org/node/3992988013
-# missing, keeping here since we already have one for test, but if the other breaks
 # 2nd Battle of Kernstown
-# assert_has_feature(
-#     16, 18532, 25013, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 17 })
+assert_has_feature(
+    16, 18532, 25013, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 17 })
 
 #https://www.openstreetmap.org/way/231393152
-# huh? it's in the DB but not exporting
 # Antietam National Battlefield
-# assert_has_feature(
-#     10, 290, 389, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 10.4417 })
+assert_has_feature(
+    10, 290, 389, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 10 })
 
-# huh? it's in the DB but not exporting
-# assert_has_feature(
-#     10, 290, 389, 'landuse',
-#     { 'kind': 'battlefield', 'sort_key': 25 })
+assert_has_feature(
+    10, 290, 389, 'landuse',
+    { 'kind': 'battlefield', 'sort_key': 25 })
 
 
 #http://www.openstreetmap.org/way/316054549
 # White Oak Road Battlefield
-# assert_has_feature(
-#     11, 582, 796, 'pois',
-#     { 'kind': 'battlefield', 'min_zoom': 11.0683 })
-# 
-# assert_has_feature(
-#     11, 582, 796, 'landuse',
-#     { 'kind': 'battlefield', 'sort_key': 25 })
+assert_has_feature(
+    11, 582, 796, 'pois',
+    { 'kind': 'battlefield', 'min_zoom': 10.0683 })
+
+assert_has_feature(
+    11, 582, 796, 'landuse',
+    { 'kind': 'battlefield', 'sort_key': 25 })
 
 
 
@@ -152,11 +147,10 @@ assert_has_feature(
     { 'kind': 'monument', 'min_zoom': 15 })
 
 #https://www.openstreetmap.org/way/66418767
-# huh? this in in the DB, but missing from tiles
 # building, and tourism=attraction, National World War II Memorial
-# assert_has_feature(
-#     15, 9371, 12536, 'pois',
-#     { 'kind': 'monument', 'min_zoom': 15 })
+assert_has_feature(
+    15, 9371, 12536, 'pois',
+    { 'kind': 'monument', 'min_zoom': 15 })
 
 
 
@@ -178,12 +172,11 @@ assert_has_feature(
     { 'kind': 'dam', 'min_zoom': 12 })
 
 #https://www.openstreetmap.org/way/62201624
-# huh, missing in tile, is in DB
 # Named dam line in front of Cherry Lake
 # Should be labeled in the stylesheet, no POI generate
-# assert_has_feature(
-#     12, 683, 1580, 'boundaries',
-#     { 'kind': 'dam', "sort_key": 263 })
+assert_has_feature(
+    12, 683, 1580, 'boundaries',
+    { 'kind': 'dam', "sort_key": 263 })
 
 
 
@@ -268,10 +261,10 @@ assert_has_feature(
     16, 10551, 22892, 'pois',
     { 'kind': 'swimming_area', 'min_zoom': 16 })
 
-#https://www.openstreetmap.org/node/3738168752
-# Lake Arrowhead
+#https://www.openstreetmap.org/node/3733554139
+# Swimming hole at Seneca Rocks
 assert_has_feature(
-    16, 14857, 26232, 'pois',
+    16, 18319, 25083, 'pois',
     { 'kind': 'swimming_area', 'min_zoom': 16 })
 
 
@@ -347,15 +340,14 @@ assert_has_feature(
     { 'kind': 'picnic_site', 'min_zoom': 16 })
 
 #https://www.openstreetmap.org/way/400701941
-# missing landuse feature? needs import?
 # Golden Gate Park, SF
-# assert_has_feature(
-#     16, 10474, 25332, 'landuse',
-#     { 'kind': 'picnic_site', 'sort_key': 103 })
+assert_has_feature(
+    16, 10474, 25332, 'landuse',
+    { 'kind': 'picnic_site', 'sort_key': 103 })
 
-# assert_has_feature(
-#     16, 10474, 25332, 'pois',
-#     { 'kind': 'picnic_site', 'min_zoom': 16 })
+assert_has_feature(
+    16, 10474, 25332, 'pois',
+    { 'kind': 'picnic_site', 'min_zoom': 16 })
 
 #https://www.openstreetmap.org/way/231863022
 # building, South Park, SF
