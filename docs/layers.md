@@ -797,7 +797,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `aeroway`: See kind list below.
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
-* `hiking_network`: Present if the road is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 * `is_bridge`: `yes` or `no`
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
 * `is_link`: `yes` or `no`
@@ -810,6 +809,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `railway`: the original OSM railway tag value
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
+* `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 
 #### Road properties (optional):
 

@@ -31,7 +31,7 @@ global:
       leisure: {col: leisure}
       sport: {col: sport}
       man_made: {col: man_made}
-      hiking_network: {expr: "mz_hiking_network(osm_id)"}
+      walking_network: {expr: "mz_hiking_network(osm_id)"}
   - &osm_network_from_relation
       network: {expr: "mz_get_rel_network(osm_id)"}
   - &osm_network_from_tags
