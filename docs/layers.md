@@ -142,6 +142,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `city_wall`
 * `country`
 * `county`
+* `dam`
 * `Disputed (please verify)`
 * `fence`
 * `Indefinite (please verify)`
@@ -288,9 +289,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `artwork`
 * `attraction`
 * `aviary`
+* `battlefield`
 * `beach`
 * `breakwater`
 * `bridge`
+* `caravan_site`
 * `carousel`
 * `cemetery`
 * `cinema`
@@ -298,13 +301,16 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `commercial`
 * `common`
 * `cutline`
+* `dam`
 * `dike`
+* `dog_park`
 * `enclosure`
 * `farm`
 * `farmland`
 * `farmyard`
 * `footway`
 * `forest`
+* `fort`
 * `fuel`
 * `garden`
 * `generator`
@@ -322,11 +328,12 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `military`
 * `national_park`
 * `nature_reserve`
-* `park`
 * `park or protected land`
+* `park`
 * `parking`
 * `pedestrian`
 * `petting_zoo`
+* `picnic_site`
 * `pier`
 * `pitch`
 * `place_of_worship`
@@ -337,9 +344,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `quarry`
 * `railway`
 * `recreation_ground`
+* `recreation_track`
 * `residential`
 * `resort`
 * `retail`
+* `rock`
 * `roller_coaster`
 * `runway`
 * `rural`
@@ -348,6 +357,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `scrub`
 * `sports_centre`
 * `stadium`
+* `stone`
 * `substation`
 * `summer_toboggan`
 * `taxiway`
@@ -356,10 +366,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `tower`
 * `trail_riding_station`
 * `university`
-* `urban`
 * `urban area`
+* `urban`
 * `village_green`
 * `wastewater_plant`
+* `water_park`
 * `water_slide`
 * `water_works`
 * `wetland`
@@ -516,7 +527,9 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bakery`
 * `bank`
 * `bar`
+* `battlefield`
 * `bbq`
+* `beach_resort`
 * `beach`
 * `beacon`
 * `bed_and_breakfast`
@@ -528,6 +541,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `biergarten`
 * `block`
 * `boat_rental`
+* `boat_storage`
 * `bollard`
 * `books`
 * `brewery`
@@ -539,6 +553,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `car_repair`
 * `car_sharing`
 * `car`
+* `caravan_site`
 * `caravan_site`
 * `carousel`
 * `carpenter`
@@ -562,11 +577,13 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `courthouse`
 * `cross`
 * `dairy_kitchen`
+* `dam`
 * `day_care`
 * `dentist`
 * `department_store`
 * `dive_centre`
 * `doctors`
+* `dog_park`
 * `doityourself`
 * `dressmaker`
 * `drinking_water`
@@ -586,12 +603,15 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `ferry_terminal`
 * `financial`
 * `fire_station`
+* `firepit`
+* `fishing`
 * `fishing`
 * `fitness_station`
 * `fitness`
 * `florist`
 * `food_bank`
 * `ford`
+* `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `gardener`
@@ -645,6 +665,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `mineshaft`
 * `mini_roundabout`
 * `mobile_phone`
+* `monument`
 * `motel`
 * `motorcycle`
 * `motorway_junction`
@@ -655,10 +676,10 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `notary`
 * `nursing_home`
 * `nursing_home`
-* `optician`
-* `outdoor`
 * `observatory`
 * `offshore_platform`
+* `optician`
+* `outdoor`
 * `outreach`
 * `painter`
 * `parking`
@@ -671,6 +692,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `photographer`
 * `photographic_laboratory`
 * `physician`
+* `picnic_site`
 * `picnic_site`
 * `picnic_table`
 * `place_of_worship`
@@ -691,6 +713,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `pylon`
 * `ranger_station`
 * `rapid`
+* `recreation_track`
 * `recycling`
 * `refugee_camp`
 * `religion`
@@ -724,8 +747,10 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `stone`
 * `stonemason`
 * `subway_entrance`
+* `summer_camp`
 * `summer_toboggan`
 * `supermarket`
+* `swimming_area`
 * `tailor`
 * `tax_advisor`
 * `telecommunication`
@@ -751,6 +776,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `volcano`
 * `waste_basket`
 * `waste_disposal`
+* `water_park`
 * `water_point`
 * `water_slide`
 * `water_tower`
