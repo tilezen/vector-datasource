@@ -19,6 +19,10 @@ ALTER TABLE planet_osm_point ADD COLUMN mz_earth_min_zoom SMALLINT;
 
 -- and pre-calculated areas for all the polygonal NE and static OSM
 -- tables.
+ALTER TABLE ne_10m_urban_areas ADD COLUMN way_area REAL;
+ALTER TABLE ne_50m_urban_areas ADD COLUMN way_area REAL;
+ALTER TABLE ne_10m_parks_and_protected_lands ADD COLUMN way_area REAL;
+
 ALTER TABLE ne_110m_ocean ADD COLUMN way_area REAL;
 ALTER TABLE ne_110m_lakes ADD COLUMN way_area REAL;
 ALTER TABLE ne_50m_ocean ADD COLUMN way_area REAL;
@@ -27,10 +31,6 @@ ALTER TABLE ne_50m_playas ADD COLUMN way_area REAL;
 ALTER TABLE ne_10m_ocean ADD COLUMN way_area REAL;
 ALTER TABLE ne_10m_lakes ADD COLUMN way_area REAL;
 ALTER TABLE ne_10m_playas ADD COLUMN way_area REAL;
-ALTER TABLE ne_10m_urban_areas ADD COLUMN way_area REAL;
-ALTER TABLE ne_50m_urban_areas ADD COLUMN way_area REAL;
-ALTER TABLE ne_10m_parks_and_protected_lands ADD COLUMN way_area REAL;
-
 ALTER TABLE water_polygons ADD COLUMN way_area REAL;
 
 ALTER TABLE ne_110m_ocean ADD COLUMN mz_water_min_zoom SMALLINT;
@@ -46,7 +46,7 @@ ALTER TABLE water_polygons ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_110m_land ADD COLUMN way_area REAL;
 ALTER TABLE ne_50m_land ADD COLUMN way_area REAL;
 ALTER TABLE ne_10m_land ADD COLUMN way_area REAL;
-ALTER TABLE earth_polygons ADD COLUMN way_area REAL;
+ALTER TABLE land_polygons ADD COLUMN way_area REAL;
 
 ALTER TABLE ne_110m_land ADD COLUMN mz_earth_min_zoom SMALLINT;
 ALTER TABLE ne_50m_land ADD COLUMN mz_earth_min_zoom SMALLINT;

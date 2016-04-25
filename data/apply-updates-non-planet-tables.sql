@@ -36,8 +36,6 @@ UPDATE ne_10m_playas SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX ne_10m_playas_wayarea_index ON ne_10m_playas(way_area);
 
 UPDATE water_polygons SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-
-
 CREATE INDEX water_polygons_wayarea_index ON water_polygons(way_area);
 
 
@@ -49,7 +47,6 @@ CREATE INDEX ne_50m_land_wayarea_index ON ne_50m_land(way_area);
 
 UPDATE ne_10m_land SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX ne_10m_land_way_area_index ON ne_10m_land(way_area);
-
 
 UPDATE land_polygons SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX land_polygons_wayarea_index ON land_polygons(way_area);
