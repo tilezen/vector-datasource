@@ -44,7 +44,6 @@ WHERE
 CREATE INDEX new_planet_osm_line_earth_geom_9_index  ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 9;
 CREATE INDEX new_planet_osm_line_earth_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 12;
 CREATE INDEX new_planet_osm_line_earth_geom_15_index ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 15;
->>>>>>> [migration] add custom migration for new earth layer features, including islands, islets & etc
 
 CREATE INDEX new_planet_osm_line_water_geom_9_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 9;
 CREATE INDEX new_planet_osm_line_water_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_water_min_zoom <= 12;
