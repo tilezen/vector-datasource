@@ -1,11 +1,15 @@
 UPDATE planet_osm_line
+  SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_line.*)
+  WHERE mz_calculate_min_zoom_water(planet_osm_line.*) IS NOT NULL;
+
+UPDATE planet_osm_line
+  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_line.*)
+  WHERE mz_calculate_min_zoom_earth(planet_osm_line.*) IS NOT NULL;
+
+UPDATE planet_osm_line
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_line.*)
   WHERE
     "natural" IN ('cliff','arete','ridge','valley');
-
-UPDATE planet_osm_line
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_line.*)
-  WHERE mz_calculate_min_zoom_water(planet_osm_line.*) IS NOT NULL;
 
 -- drop indexes first, so that the update goes faster
 DROP INDEX IF EXISTS planet_osm_line_roads_geom_index;

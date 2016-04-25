@@ -42,8 +42,12 @@ UPDATE planet_osm_point
 -- WHERE mz_calculate_min_zoom_water(planet_osm_point.*) IS NOT NULL;
 
 UPDATE planet_osm_point
-SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_point.*)
-WHERE mz_calculate_min_zoom_water(planet_osm_point.*) IS NOT NULL;
+  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_point.*)
+  WHERE mz_calculate_min_zoom_earth(planet_osm_point.*) IS NOT NULL;
+
+UPDATE planet_osm_point
+  SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_point.*)
+  WHERE mz_calculate_min_zoom_water(planet_osm_point.*) IS NOT NULL;
 
 UPDATE planet_osm_point
   SET mz_places_min_zoom = mz_calculate_min_zoom_places(planet_osm_point.*)
