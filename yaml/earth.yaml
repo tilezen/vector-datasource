@@ -68,4 +68,4 @@ filters:
   - filter: {fid: true}
     min_zoom: 0
     output: {kind: earth}
-    table: land_polygons
+    table: shp
