@@ -346,7 +346,7 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
                    - synthetic_columns)
         for column in columns:
             if not column.startswith('tags'):
-                if column == 'gid':
+                if column == 'gid' or column == 'fid':
                     typ = 'integer'
                 elif column == 'scalerank' or column == 'labelrank':
                     typ = 'smallint'
