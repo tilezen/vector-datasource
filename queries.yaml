@@ -285,6 +285,17 @@ post_process:
       start_zoom: 9
       where: >-
         'label_placement' not in properties and kind in ('bay', 'strait', 'fjord')
+  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+    params:
+      source_layer: earth
+      label_property_name: label_placement
+      label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+    params:
+      source_layer: earth
+      start_zoom: 9
+      where: >-
+        'label_placement' not in properties and kind in ('archipelago', 'island', 'islet')
   - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
     params:
       source_layer: buildings
