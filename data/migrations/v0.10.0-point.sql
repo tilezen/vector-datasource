@@ -2,9 +2,9 @@ UPDATE planet_osm_point
 SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
 WHERE
   amenity IN ('bbq', 'bicycle_repair_station', 'boat_rental', 'boat_storage', 'dive_centre', 'life_ring', 'picnic_table', 'shower', 'waste_disposal', 'watering_place', 'water_point', 'ranger_station', 'bicycle_rental', 'bicycle_parking') OR
-  leisure IN ('water_park', 'beach_resort', 'summer_camp', 'dog_park', 'track', 'fishing', 'swimming_area', 'firepit') OR 
+  leisure IN ('water_park', 'beach_resort', 'summer_camp', 'dog_park', 'track', 'fishing', 'swimming_area', 'firepit') OR
   historic IN ('battlefield', 'fort', 'monument') OR
-  tourism IN ('caravan_site', 'picnic_site' ) OR 
+  tourism IN ('caravan_site', 'picnic_site' ) OR
   waterway IN ('dam') OR
   aerialway IN ('pylon') OR
   barrier IN ('cycle_barrier') OR
