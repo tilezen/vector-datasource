@@ -66,6 +66,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_landuse(
+       planet_osm_line)
+RETURNS REAL AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_min_zoom_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        row.{{param.key}},
+{%- endfor %}
+        row.tags,
+        row.way_area);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
 CREATE OR REPLACE FUNCTION mz_calculate_output_landuse_(
 {%- for param in layers['landuse']['params'] %}
         {{param.key}} {{param.typ}},
@@ -93,6 +108,20 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
        planet_osm_polygon)
+RETURNS HSTORE AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_output_landuse_(
+{%- for param in layers['landuse']['params'] %}
+        row.{{param.key}},
+{%- endfor %}
+        row.tags);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
+       planet_osm_line)
 RETURNS HSTORE AS $$
 DECLARE
   row ALIAS FOR $1;
