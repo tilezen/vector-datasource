@@ -550,7 +550,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
 * `bicycle_repair_station`
 * `bicycle` - Bicycle sales shop, often with bike repair service.
-* `bicycle_guidepost` - Common in Europe for signed bicycle routes. The posts are numbered with a `ref`.
+* `bicycle_guidepost` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
 * `boat_rental`
@@ -787,7 +787,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `veterinary`
 * `viewpoint`
 * `volcano`
-* `walking_guidepost` - Common in Europe for signed walking routes. The posts are numbered with a `ref`.
+* `walking_guidepost` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
 * `water_park`
