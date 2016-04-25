@@ -371,13 +371,74 @@ filters:
     min_zoom: 14
     output: {kind: ranger_station}
   - filter:
-      tourism: [camp_site, information, viewpoint]
+      tags->icn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->icn_ref}
+      bicycle_network: icn
+  - filter:
+      tags->ncn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->ncn_ref}
+      bicycle_network: ncn
+  - filter:
+      tags->rcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->rcn_ref}
+      bicycle_network: rcn
+  - filter:
+      tags->lcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_guidepost
+      ref: {col: tags->lcn_ref}
+      bicycle_network: lcn
+  - filter:
+      tags->iwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->iwn_ref}
+      walking_network: rwn
+  - filter:
+      tags->nwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->nwn_ref}
+      walking_network: nwn
+  - filter:
+      tags->rwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->rwn_ref}
+      walking_network: rwn
+  - filter:
+      tags->lwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_guidepost
+      ref: {col: tags->lwn_ref}
+      walking_network: lwn
+  - filter:
+      tourism: [camp_site, caravan_site, information, viewpoint]
     min_zoom: 16
     output:
       kind: {col: tourism}
   - filter:
-      amenity: [atm, bicycle_rental, bicycle_parking, bus_stop, drinking_water, emergency_phone,
-        parking, post_box, telephone, theatre, toilets]
+      amenity: [theatre]
+    min_zoom: 16
+    output:
+      kind: {col: amenity}
+  - filter:
+      amenity: [atm, bus_stop, drinking_water, emergency_phone,
+        parking, post_box, telephone, toilets]
     min_zoom: 17
     output:
       kind: {col: amenity}
@@ -410,7 +471,40 @@ filters:
     min_zoom: 17
     output: {kind: office}
   - filter:
-      shop: [bakery, bicycle, books, butcher, car, car_repair, clothes, computer, convenience,
+      shop: [bicycle]
+    min_zoom: 15
+    output:
+      kind: {col: shop}
+  - filter:
+      amenity: [bicycle_rental]
+      operator: false
+    min_zoom: 16
+    output:
+      kind: bicycle_rental
+  - filter:
+      amenity: [bicycle_rental]
+      operator: true
+    min_zoom: 17
+    output:
+      kind: bicycle_rental_station
+      network:  {col: tags->network}
+      operator: {col: operator}
+      capacity: {col: tags->capacity}
+  - filter:
+      amenity: [bicycle_parking]
+    min_zoom: 17
+    output:
+      kind: {col: amenity}
+      operator: {col: operator}
+      capacity: {col: tags->capacity}
+      covered: {col: tags->covered}
+  - filter:
+      barrier: [cycle_barrier]
+    min_zoom: 18
+    output:
+      kind: {col: barrier}
+  - filter:
+      shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
         dry_cleaning, fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone,
         optician, pet]
     min_zoom: 17
