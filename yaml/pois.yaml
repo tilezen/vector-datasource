@@ -13,9 +13,15 @@ filters:
     output: {kind: hospital}
   - filter:
       natural: [peak, volcano]
-    min_zoom: 11
+    min_zoom: CASE WHEN mz_to_float_meters("ele") > 4000 THEN 9
+      WHEN mz_to_float_meters("ele") > 3000 THEN 10
+      WHEN mz_to_float_meters("ele") > 2000 THEN 11
+      WHEN mz_to_float_meters("ele") > 1000 THEN 12
+      ELSE 13
+      END
     output:
       kind: {col: natural}
+      elevation: {col: ele}
   - filter: {railway: station}
     min_zoom: 10
     output: {kind: station}

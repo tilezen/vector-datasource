@@ -146,8 +146,12 @@ DECLARE
   row ALIAS FOR $1;
 BEGIN
   RETURN mz_calculate_min_zoom_pois_(
-{%- for param in layers['pois']['params'] %}
+{%- for param in layers['pois']['params'] -%}
+{%- if param.key == '"ele"' %}
+        row.tags->'ele',
+{%- else %}
         row.{{param.key}},
+{%- endif -%}
 {%- endfor %}
         row.tags,
         row.way_area);
@@ -187,7 +191,11 @@ DECLARE
 BEGIN
   RETURN mz_calculate_output_pois_(
 {%- for param in layers['pois']['params'] %}
+{%- if param.key == '"ele"' %}
+        row.tags->'ele',
+{%- else %}
         row.{{param.key}},
+{%- endif -%}
 {%- endfor %}
         row.tags);
 END;
