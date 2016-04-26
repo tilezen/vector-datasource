@@ -308,3 +308,9 @@ filters:
   - filter: {historic: fort}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: fort}
+  - filter: {natural: tree_row}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: tree_row}
+  - filter: {barrier: hedge}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: hedge}
