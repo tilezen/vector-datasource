@@ -108,8 +108,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 
 ![image](images/mapzen-vector-tile-docs-barriers.png)
 
-**Gotchas:** Boundary `kind` values are not yet normalized between OpenStreetMap and Natural Earth. See Boundary kind values (line) gotchas section below for more detail.
-
 #### Boundary properties (common):
 
 * `name`
@@ -135,32 +133,23 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 
 #### Boundary kind values:
 
-* `1st Order Admin Lines`
-* `Admin-0 country`
-* `Admin-1 boundary`
-* `Admin-1 region boundary`
+* `aboriginal lands`
 * `city_wall`
 * `country`
 * `county`
 * `dam`
-* `Disputed (please verify)`
+* `disputed`
 * `fence`
-* `Indefinite (please verify)`
-* `Indeterminant frontier`
-* `International boundary (verify)`
-* `Lease limit`
-* `Line of control (please verify)`
+* `indefinite`
+* `indeterminate`
+* `lease_limit`
+* `line_of_control`
+* `macroregion`
 * `municipality`
-* `Overlay limit`
+* `overlay_limit`
 * `retaining_wall`
 * `snow_fence`
 * `state`
-
-**Gotchas:**
-
-* `Admin-0 country` and `country` are equivalent, **both** should be used in filters.
-* `Admin-1 boundary` and `state` are equivalent, **both** should be used in filters.
-* Don't rely on `Admin-1 statistical boundary`, `Admin-1 statistical meta bounds`, those will probably be removed in future tile versions.
 
 #### Boundary type values:
 
