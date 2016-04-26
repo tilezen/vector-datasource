@@ -377,7 +377,6 @@ post_process:
       end_zoom: 16
       properties: [name, ref, network]
       where: >-
-        (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
         (kind == 'major_road' and zoom <  7) or

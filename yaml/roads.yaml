@@ -207,7 +207,7 @@ filters:
       kind: minor_road
       highway: {col: highway}
   - filter:
-      highway: [pedestrian, track, cycleway]
+      highway: pedestrian
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
@@ -216,9 +216,10 @@ filters:
       kind: path
       highway: {col: highway}
   - filter:
-      highway: path
+      highway: [path, track, cycleway]
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
+    extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
@@ -235,14 +236,26 @@ filters:
         - {tags->ski: designated}
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
+    extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: path
       highway: {col: highway}
+      footway: {col: "tags->footway"}
   - filter:
-      highway: [footway, steps]
-    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
+      highway: footway
+    min_zoom: 14
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+      footway: {col: "tags->footway"}
+  - filter:
+      highway: steps
+    min_zoom: 15
     table: osm
     output:
       <<: *osm_highway_properties

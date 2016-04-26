@@ -13,3 +13,24 @@ for z, x, y in tiles:
     assert_has_feature(
         z, x, y, 'roads',
         {'highway': 'footway'})
+        
+
+#SF State, way/346093021
+assert_no_matching_feature(
+    14, 2617, 6335, 'roads',
+    {'kind': 'path', 'footway': 'sidewalk'})
+
+#SF State, way/346093021
+assert_has_feature(
+    15, 5235, 12671, 'roads',
+    {'kind': 'path', 'footway': 'sidewalk'})
+
+#SF in the Avenues, way/344205837
+assert_no_matching_feature(
+    14, 2617, 6333, 'roads',
+    {'kind': 'path', 'footway': 'sidewalk'})
+
+#SF in the Avenues, way/344205837
+assert_has_feature(
+    15, 5234, 12667, 'roads',
+    {'kind': 'path', 'footway': 'crossing'})

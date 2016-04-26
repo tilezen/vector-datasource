@@ -556,8 +556,8 @@ RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
       tags->'type' = 'route' AND
-      tags->'route' IN ('hiking', 'foot') AND
-      tags->'network' IN ('iwn','nwn','rwn','lwn')
+      tags->'route' IN ('hiking', 'foot', 'bicycle') AND
+      tags->'network' IN ('iwn','nwn','rwn','lwn','icn','ncn','rcn','lcn')
     );
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
@@ -595,9 +595,9 @@ BEGIN
   RETURN (
     SELECT
         MIN(
-            CASE WHEN hstore(tags)->'network' IN ('iwn','nwn') THEN 11
-                 WHEN hstore(tags)->'network' IN ('rwn') THEN 12
-                 WHEN hstore(tags)->'network' IN ('lwn') THEN 13
+            CASE WHEN hstore(tags)->'network' IN ('iwn', 'nwn', 'icn','ncn') THEN 11
+                 WHEN hstore(tags)->'network' IN ('rwn', 'rcn') THEN 12
+                 WHEN hstore(tags)->'network' IN ('lwn', 'lcn') THEN 13
             ELSE NULL
             END
         )
