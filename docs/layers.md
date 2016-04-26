@@ -697,7 +697,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `outreach`
 * `painter`
 * `parking`
-* `peak`
+* `peak` A mountain peak. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
@@ -786,7 +786,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `university`
 * `veterinary`
 * `viewpoint`
-* `volcano`
+* `volcano` The peak of a volcano. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
 * `walking_guidepost` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
