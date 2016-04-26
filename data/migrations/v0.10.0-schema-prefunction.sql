@@ -47,6 +47,9 @@ BEGIN
 
   PERFORM tmp_add_col('public.planet_osm_point', 'mz_building_min_zoom');
   PERFORM tmp_add_col('public.planet_osm_polygon', 'mz_building_min_zoom');
+
+  PERFORM tmp_add_col('public.planet_osm_line', 'mz_landuse_min_zoom');
+
 END$$;
 
 DROP FUNCTION tmp_add_col(regclass, text);
