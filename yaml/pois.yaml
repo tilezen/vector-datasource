@@ -427,7 +427,7 @@ filters:
       ref: {col: tags->lwn_ref}
       walking_network: lwn
   - filter:
-      tourism: [camp_site, caravan_site, information, viewpoint]
+      tourism: [camp_site, information, viewpoint]
     min_zoom: 16
     output:
       kind: {col: tourism}
