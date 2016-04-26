@@ -755,6 +755,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `water_slide`
 * `water_tower`
 * `water_well`
+* `waterfall`
 * `watering_place`
 * `wilderness_hut`
 * `wildlife_park`
@@ -808,6 +809,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `railway`: the original OSM railway tag value
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
+* `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 
 #### Road properties (optional):
 
@@ -973,7 +975,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `swimming_pool`
 * `water`
 
-Additionally, a `reservoir=yes` or `alkaline=yes` value can be present on the appropriate `kind=lake` features.
+Additionally, a `reservoir=yes` or `alkaline=yes` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent=yes`.
 
 #### Water kind values (point only):
 

@@ -31,6 +31,7 @@ global:
       leisure: {col: leisure}
       sport: {col: sport}
       man_made: {col: man_made}
+      walking_network: {expr: "mz_hiking_network(osm_id)"}
   - &osm_network_from_relation
       network: {expr: "mz_get_rel_network(osm_id)"}
   - &osm_network_from_tags
@@ -64,6 +65,11 @@ global:
       leisure: {col: leisure}
       sport: {col: sport}
       man_made: {col: man_made}
+
+# name isn't really synthetic, but we use it from both the NE and OSM
+# tables, so to avoid including it twice we fake it as synthetic.
+synthetic_columns:
+  - name
 
 filters:
   #############################################################
@@ -136,7 +142,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: trunk_link
-    min_zoom: 12
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 12)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -145,7 +151,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: [primary_link, secondary_link]
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -154,7 +160,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: tertiary_link
-    min_zoom: 14
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -171,7 +177,7 @@ filters:
   #############################################################
   - filter:
       "tags->whitewater": portage_way
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -184,7 +190,7 @@ filters:
   #############################################################
   - filter:
       highway: [residential, unclassified, road]
-    min_zoom: 12
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 12)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -193,7 +199,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: living_street
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -201,8 +207,8 @@ filters:
       kind: minor_road
       highway: {col: highway}
   - filter:
-      highway: [pedestrian]
-    min_zoom: 13
+      highway: pedestrian
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -211,8 +217,7 @@ filters:
       highway: {col: highway}
   - filter:
       highway: [path, track, cycleway]
-    min_zoom: |
-      COALESCE(mz_calculate_path_major_route(osm_id), 13)
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
     output:
@@ -221,14 +226,15 @@ filters:
       kind: path
       highway: {col: highway}
   - filter:
-      highway: [footway]
-    min_zoom: |
-      COALESCE(mz_calculate_path_major_route(osm_id),
-        CASE WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
-              horse, tags->'snowmobile', tags->'ski')           THEN 13
-             WHEN "tags->footway" IN ('sidewalk', 'crossing')   THEN 15
-        ELSE 14
-        END)
+      highway: [footway, steps]
+      any:
+        - {name: true}
+        - {bicycle: designated}
+        - {foot: designated}
+        - {horse: designated}
+        - {tags->snowmobile: designated}
+        - {tags->ski: designated}
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
     output:
@@ -238,15 +244,19 @@ filters:
       highway: {col: highway}
       footway: {col: "tags->footway"}
   - filter:
-      highway: [steps]
-    min_zoom: |
-      COALESCE(mz_calculate_path_major_route(osm_id),
-        CASE WHEN mz_is_path_named_or_designated(highway, name, bicycle, foot,
-              horse, tags->'snowmobile', tags->'ski')           THEN 14
-        ELSE 15
-        END)
+      highway: footway
+    min_zoom: 14
     table: osm
-    extra_columns: [bicycle, foot, horse, tracktype, "tags->incline", "tags->trail_visibility", "tags->sac_scale"]
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      kind: path
+      highway: {col: highway}
+      footway: {col: "tags->footway"}
+  - filter:
+      highway: steps
+    min_zoom: 15
+    table: osm
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
@@ -255,7 +265,7 @@ filters:
   - filter:
       highway: service
       service: alley
-    min_zoom: 13
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -266,7 +276,7 @@ filters:
   - filter:
       highway: service
       service: [driveway, parking_aisle, drive-through]
-    min_zoom: 15
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 15)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -276,7 +286,7 @@ filters:
       service: {col: service}
   - filter:
       highway: service
-    min_zoom: 14
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
     table: osm
     output:
       <<: *osm_highway_properties

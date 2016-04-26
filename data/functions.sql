@@ -560,6 +560,29 @@ BEGIN
       tags->'network' IN ('iwn','nwn','rwn','lwn','icn','ncn','rcn','lcn')
     );
 END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Looks up whether the given osm_id is a member of any hiking routes
+-- and, if so, returns the network designation of the most important
+-- (highest in hierarchy) of the networks.
+--
+CREATE OR REPLACE FUNCTION mz_hiking_network(osm_id bigint)
+RETURNS text AS $$
+DECLARE
+  networks text[] := ARRAY(
+    SELECT hstore(tags)->'network'
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[osm_id]
+      AND parts[way_off+1:rel_off] && ARRAY[osm_id]
+      AND mz_is_path_major_route_relation(hstore(tags)));
+BEGIN
+  RETURN CASE
+    WHEN networks && ARRAY['iwn'] THEN 'iwn'
+    WHEN networks && ARRAY['nwn'] THEN 'nwn'
+    WHEN networks && ARRAY['rwn'] THEN 'rwn'
+    WHEN networks && ARRAY['lwn'] THEN 'lwn'
+  END;
+END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- returns TRUE if the given way ID (osm_id) is part of a path route relation,
@@ -588,21 +611,39 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 
--- returns TRUE if the given way ID (osm_id) is part of a path route relation,
--- or NULL otherwise.
--- This function is meant to be called for something that we already know is a path.
--- Please ensure input is already a path, or output will be undefined.
-CREATE OR REPLACE FUNCTION mz_is_path_named_or_designated(highway_val text, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text)
-RETURNS BOOLEAN AS $$
+-- Returns a floating point number in meters for the given unit input text,
+-- which must be of the form of a number (in which case it's assumed it's
+-- meters), or a number followed by a unit (m, ft, '). The distance is
+-- converted into meters and returned, or NULL is returned if the input
+-- could not be understood.
+--
+CREATE OR REPLACE FUNCTION mz_to_float_meters(txt text)
+RETURNS REAL AS $$
+DECLARE
+  decimal_matches text[] :=
+    regexp_matches(txt, '([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)');
+  imperial_matches text[] :=
+    regexp_matches(txt, E'([0-9]+(\\.[0-9]*)?)\' *(([0-9]+)")?');
+  numeric_matches text[] :=
+    regexp_matches(txt, '([0-9]+(\.[0-9]*)?)');
 BEGIN
-    RETURN CASE
-      WHEN name_val IS NOT NULL            THEN TRUE
-      WHEN bicycle_val    = 'designated'   THEN TRUE
-      WHEN foot_val       = 'designated'   THEN TRUE
-      WHEN horse_val      = 'designated'   THEN TRUE
-      WHEN snowmobile_val = 'designated'   THEN TRUE
-      WHEN ski_val        = 'designated'   THEN TRUE
-    ELSE NULL
-  END;
+  RETURN CASE
+    WHEN decimal_matches IS NOT NULL THEN
+      CASE
+        WHEN decimal_matches[3] = 'mi'  THEN 1609.3440 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'km'  THEN 1000.0000 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'm'   THEN    1.0000 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'nmi' THEN 1852.0000 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'ft'  THEN    0.3048 * decimal_matches[1]::real
+      END
+    WHEN imperial_matches IS NOT NULL THEN
+      CASE WHEN imperial_matches[4] IS NULL THEN
+        0.0254 * (imperial_matches[1]::real * 12)
+      ELSE
+        0.0254 * (imperial_matches[1]::real * 12 + imperial_matches[4]::real)
+      END
+    WHEN numeric_matches IS NOT NULL THEN
+      numeric_matches[1]::real
+    END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
