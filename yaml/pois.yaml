@@ -374,56 +374,56 @@ filters:
       tags->icn_ref: true
     min_zoom: 16
     output:
-      kind: bicycle_guidepost
+      kind: bicycle_junction
       ref: {col: tags->icn_ref}
       bicycle_network: icn
   - filter:
       tags->ncn_ref: true
     min_zoom: 16
     output:
-      kind: bicycle_guidepost
+      kind: bicycle_junction
       ref: {col: tags->ncn_ref}
       bicycle_network: ncn
   - filter:
       tags->rcn_ref: true
     min_zoom: 16
     output:
-      kind: bicycle_guidepost
+      kind: bicycle_junction
       ref: {col: tags->rcn_ref}
       bicycle_network: rcn
   - filter:
       tags->lcn_ref: true
     min_zoom: 16
     output:
-      kind: bicycle_guidepost
+      kind: bicycle_junction
       ref: {col: tags->lcn_ref}
       bicycle_network: lcn
   - filter:
       tags->iwn_ref: true
     min_zoom: 16
     output:
-      kind: walking_guidepost
+      kind: walking_junction
       ref: {col: tags->iwn_ref}
       walking_network: rwn
   - filter:
       tags->nwn_ref: true
     min_zoom: 16
     output:
-      kind: walking_guidepost
+      kind: walking_junction
       ref: {col: tags->nwn_ref}
       walking_network: nwn
   - filter:
       tags->rwn_ref: true
     min_zoom: 16
     output:
-      kind: walking_guidepost
+      kind: walking_junction
       ref: {col: tags->rwn_ref}
       walking_network: rwn
   - filter:
       tags->lwn_ref: true
     min_zoom: 16
     output:
-      kind: walking_guidepost
+      kind: walking_junction
       ref: {col: tags->lwn_ref}
       walking_network: lwn
   - filter:
@@ -490,14 +490,20 @@ filters:
       network:  {col: tags->network}
       operator: {col: operator}
       capacity: {col: tags->capacity}
+      ref: {col: ref}
   - filter:
       amenity: [bicycle_parking]
     min_zoom: 17
     output:
       kind: {col: amenity}
+      access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {col: tags->covered}
+      covered: {col: covered}
+      fee: {col: tags->fee}
+      cyclestreets_id: {col: tags->cyclestreets_id}
+      maxstay: {col: tags->maxstay}
+      surveillance: {col: tags->surveillance}
   - filter:
       barrier: [cycle_barrier]
     min_zoom: 18
