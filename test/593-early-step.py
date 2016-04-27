@@ -12,9 +12,9 @@ for z, x, y in tiles:
 # way 25292070   highway=steps, no route, but has name (Esmeralda, Bernal, SF)
 assert_no_matching_feature(
     13, 1310, 3167, 'roads',
-    {'kind': 'path', 'footway': 'sidewalk'})
+    {'kind': 'path', 'highway': 'steps', 'name': 'Esmeralda Ave.'})
 
 # way 25292070   highway=steps, no route, but has name (Esmeralda, Bernal, SF)
 assert_has_feature(
     14, 2620, 6334, 'roads',
-    {'kind': 'path', 'footway': 'sidewalk'})
+    {'kind': 'path', 'highway': 'steps', 'name': 'Esmeralda Ave.'})
