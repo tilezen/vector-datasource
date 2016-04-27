@@ -142,6 +142,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `city_wall`
 * `country`
 * `county`
+* `dam`
 * `Disputed (please verify)`
 * `fence`
 * `Indefinite (please verify)`
@@ -288,9 +289,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `artwork`
 * `attraction`
 * `aviary`
+* `battlefield`
 * `beach`
 * `breakwater`
 * `bridge`
+* `caravan_site`
 * `carousel`
 * `cemetery`
 * `cinema`
@@ -298,13 +301,16 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `commercial`
 * `common`
 * `cutline`
+* `dam`
 * `dike`
+* `dog_park`
 * `enclosure`
 * `farm`
 * `farmland`
 * `farmyard`
 * `footway`
 * `forest`
+* `fort`
 * `fuel`
 * `garden`
 * `generator`
@@ -322,11 +328,12 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `military`
 * `national_park`
 * `nature_reserve`
-* `park`
 * `park or protected land`
+* `park`
 * `parking`
 * `pedestrian`
 * `petting_zoo`
+* `picnic_site`
 * `pier`
 * `pitch`
 * `place_of_worship`
@@ -337,9 +344,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `quarry`
 * `railway`
 * `recreation_ground`
+* `recreation_track`
 * `residential`
 * `resort`
 * `retail`
+* `rock`
 * `roller_coaster`
 * `runway`
 * `rural`
@@ -348,6 +357,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `scrub`
 * `sports_centre`
 * `stadium`
+* `stone`
 * `substation`
 * `summer_toboggan`
 * `taxiway`
@@ -356,10 +366,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `tower`
 * `trail_riding_station`
 * `university`
-* `urban`
 * `urban area`
+* `urban`
 * `village_green`
 * `wastewater_plant`
+* `water_park`
 * `water_slide`
 * `water_works`
 * `wetland`
@@ -489,6 +500,22 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `is_*` a set of boolean flags indicating whether this station has any routes of the given type. These are: `is_train`, `is_subway`, `is_light_rail`, `is_tram`, corresponding to the above `*_routes`. This is provided as a convenience for styling.
 * `root_relation_id` an integer ID (of an OSM relation) which can be used to link or group together features which are related by being part of a larger feature. A full explanation of [relations](http://wiki.openstreetmap.org/wiki/Relation) wouldn't fit here, but the general idea is that all the station features which are part of the same [site](http://wiki.openstreetmap.org/wiki/Relation:site), [stop area](http://wiki.openstreetmap.org/wiki/Tag:public_transport%3Dstop_area) or [stop area group](http://wiki.openstreetmap.org/wiki/Relation:public_transport) should have the same ID to show they're related. Note that this information is only present on some stations.
 
+#### POI properties (only on `kind:bicycle_rental_station`):
+
+* `capacity`: Approximate number of total rental bicycles at the bike share station.
+* `network`: The common (sometimes branded) name of the bike share network, eg: "Citi Bike".
+* `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
+* `ref`: The reference of this rental station, if one is available.
+
+#### POI properties (only on `kind:bicycle_parking`):
+
+* `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
+* `capacity`: Approximate number of total bicycle parking spots.
+* `covered`: Is the parking area covered.
+* `fee`: Whether a fee must be paid to use the bicycle parking (`yes`/`no`).
+* `operator`: Who runs the bike parking lot.
+* `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
+* `surveillance`: If present, then indicates that there is surveillance (value`yes`), or has a more specific value, e.g: `outdoor`, `public`, `indoor`.
 
 #### POI kind values:
 
@@ -516,18 +543,23 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bakery`
 * `bank`
 * `bar`
+* `battlefield`
 * `bbq`
+* `beach_resort`
 * `beach`
 * `beacon`
 * `bed_and_breakfast`
 * `bench`
 * `bicycle_parking`
-* `bicycle_rental`
+* `bicycle_rental` - Bicycle rental shop.
+* `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
 * `bicycle_repair_station`
-* `bicycle`
+* `bicycle` - Bicycle sales shop, often with bike repair service.
+* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
 * `boat_rental`
+* `boat_storage`
 * `bollard`
 * `books`
 * `brewery`
@@ -539,6 +571,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `car_repair`
 * `car_sharing`
 * `car`
+* `caravan_site`
 * `caravan_site`
 * `carousel`
 * `carpenter`
@@ -561,12 +594,15 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `convenience`
 * `courthouse`
 * `cross`
+* `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
+* `dam`
 * `day_care`
 * `dentist`
 * `department_store`
 * `dive_centre`
 * `doctors`
+* `dog_park`
 * `doityourself`
 * `dressmaker`
 * `drinking_water`
@@ -586,12 +622,15 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `ferry_terminal`
 * `financial`
 * `fire_station`
+* `firepit`
+* `fishing`
 * `fishing`
 * `fitness_station`
 * `fitness`
 * `florist`
 * `food_bank`
 * `ford`
+* `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `gardener`
@@ -645,6 +684,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `mineshaft`
 * `mini_roundabout`
 * `mobile_phone`
+* `monument`
 * `motel`
 * `motorcycle`
 * `motorway_junction`
@@ -655,14 +695,14 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `notary`
 * `nursing_home`
 * `nursing_home`
-* `optician`
-* `outdoor`
 * `observatory`
 * `offshore_platform`
+* `optician`
+* `outdoor`
 * `outreach`
 * `painter`
 * `parking`
-* `peak`
+* `peak` A mountain peak. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
@@ -691,6 +731,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `pylon`
 * `ranger_station`
 * `rapid`
+* `recreation_track`
 * `recycling`
 * `refugee_camp`
 * `religion`
@@ -724,8 +765,10 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `stone`
 * `stonemason`
 * `subway_entrance`
+* `summer_camp`
 * `summer_toboggan`
 * `supermarket`
+* `swimming_area`
 * `tailor`
 * `tax_advisor`
 * `telecommunication`
@@ -748,9 +791,11 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `university`
 * `veterinary`
 * `viewpoint`
-* `volcano`
+* `volcano` The peak of a volcano. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
+* `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
+* `water_park`
 * `water_point`
 * `water_slide`
 * `water_tower`

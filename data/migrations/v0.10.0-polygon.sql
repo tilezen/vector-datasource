@@ -1,7 +1,11 @@
 UPDATE planet_osm_polygon
 SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
 WHERE
-  amenity IN ('boat_rental', 'ranger_station') OR
+  amenity IN ('boat_rental', 'ranger_station', 'boat_storage') OR
+  leisure IN ('water_park', 'beach_resort', 'summer_camp', 'dog_park', 'track', 'fishing', 'swimming_area', 'firepit') OR 
+  historic IN ('battlefield', 'fort', 'monument') OR
+  tourism IN ('caravan_site', 'picnic_site' ) OR 
+  waterway IN ('dam') OR
   shop IN ('boat_rental', 'fishing', 'hunting', 'outdoor', 'scuba_diving', 'gas', 'motorcycle') OR
   tags->'rental' = 'boat' OR
   (shop = 'boat' AND tags->'rental' = 'yes') OR
@@ -18,7 +22,11 @@ WHERE mz_calculate_min_zoom_water(planet_osm_polygon.*) IS NOT NULL;
 UPDATE planet_osm_polygon
 SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
 WHERE
-  "natural" = 'scree';
+  "natural" IN ('scree', 'stone', 'rock') OR
+  leisure IN ('water_park', 'dog_park', 'track') OR
+  historic IN ('battlefield', 'fort') OR
+  tourism IN ('caravan_site', 'picnic_site') OR
+  waterway IN ('dam');
 
 UPDATE planet_osm_polygon
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_polygon.*)
