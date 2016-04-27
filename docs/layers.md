@@ -808,7 +808,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `wine`
 * `winery`
 * `workshop`
-* `yes`
 * `zoo`
 
 ## Roads (Transportation)
