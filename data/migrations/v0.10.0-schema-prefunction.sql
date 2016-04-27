@@ -19,9 +19,9 @@ BEGIN
   PERFORM tmp_add_col('public.planet_osm_line',    'mz_earth_min_zoom');
   PERFORM tmp_add_col('public.planet_osm_point',   'mz_earth_min_zoom');
 
-  PERFORM tmp_add_col('public.ne_10m_land',  'mz_water_min_zoom');
-  PERFORM tmp_add_col('public.ne_50m_land',  'mz_water_min_zoom');
-  PERFORM tmp_add_col('public.ne_110m_land', 'mz_water_min_zoom');
+  PERFORM tmp_add_col('public.ne_10m_land',  'mz_earth_min_zoom');
+  PERFORM tmp_add_col('public.ne_50m_land',  'mz_earth_min_zoom');
+  PERFORM tmp_add_col('public.ne_110m_land', 'mz_earth_min_zoom');
 
   PERFORM tmp_add_col('public.land_polygons',      'mz_earth_min_zoom');
 
