@@ -556,9 +556,32 @@ RETURNS BOOLEAN AS $$
 BEGIN
     RETURN (
       tags->'type' = 'route' AND
-      tags->'route' IN ('hiking', 'foot') AND
-      tags->'network' IN ('iwn','nwn','rwn','lwn')
+      tags->'route' IN ('hiking', 'foot', 'bicycle') AND
+      tags->'network' IN ('iwn','nwn','rwn','lwn','icn','ncn','rcn','lcn')
     );
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Looks up whether the given osm_id is a member of any hiking routes
+-- and, if so, returns the network designation of the most important
+-- (highest in hierarchy) of the networks.
+--
+CREATE OR REPLACE FUNCTION mz_hiking_network(osm_id bigint)
+RETURNS text AS $$
+DECLARE
+  networks text[] := ARRAY(
+    SELECT hstore(tags)->'network'
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[osm_id]
+      AND parts[way_off+1:rel_off] && ARRAY[osm_id]
+      AND mz_is_path_major_route_relation(hstore(tags)));
+BEGIN
+  RETURN CASE
+    WHEN networks && ARRAY['iwn'] THEN 'iwn'
+    WHEN networks && ARRAY['nwn'] THEN 'nwn'
+    WHEN networks && ARRAY['rwn'] THEN 'rwn'
+    WHEN networks && ARRAY['lwn'] THEN 'lwn'
+  END;
 END;
 $$ LANGUAGE plpgsql STABLE;
 
@@ -572,9 +595,9 @@ BEGIN
   RETURN (
     SELECT
         MIN(
-            CASE WHEN hstore(tags)->'network' IN ('iwn','nwn') THEN 11
-                 WHEN hstore(tags)->'network' IN ('rwn') THEN 12
-                 WHEN hstore(tags)->'network' IN ('lwn') THEN 13
+            CASE WHEN hstore(tags)->'network' IN ('iwn', 'nwn', 'icn','ncn') THEN 11
+                 WHEN hstore(tags)->'network' IN ('rwn', 'rcn') THEN 12
+                 WHEN hstore(tags)->'network' IN ('lwn', 'lcn') THEN 13
             ELSE NULL
             END
         )
@@ -587,25 +610,6 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql STABLE;
-
--- returns TRUE if the given way ID (osm_id) is part of a path route relation,
--- or NULL otherwise.
--- This function is meant to be called for something that we already know is a path.
--- Please ensure input is already a path, or output will be undefined.
-CREATE OR REPLACE FUNCTION mz_is_path_named_or_designated(highway_val text, name_val text, bicycle_val text, foot_val text, horse_val text, snowmobile_val text, ski_val text)
-RETURNS BOOLEAN AS $$
-BEGIN
-    RETURN CASE
-      WHEN name_val IS NOT NULL            THEN TRUE
-      WHEN bicycle_val    = 'designated'   THEN TRUE
-      WHEN foot_val       = 'designated'   THEN TRUE
-      WHEN horse_val      = 'designated'   THEN TRUE
-      WHEN snowmobile_val = 'designated'   THEN TRUE
-      WHEN ski_val        = 'designated'   THEN TRUE
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
 
 -- Returns a floating point number in meters for the given unit input text,
 -- which must be of the form of a number (in which case it's assumed it's

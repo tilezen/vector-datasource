@@ -25,6 +25,10 @@ UPDATE planet_osm_line
   SET mz_water_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_line.*)
   WHERE mz_calculate_min_zoom_boundaries(planet_osm_line.*) IS NOT NULL;
 
+UPDATE planet_osm_line
+  SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_line.*)
+  WHERE mz_calculate_min_zoom_landuse(planet_osm_line.*) IS NOT NULL;
+
 CREATE INDEX planet_osm_line_road_level_index ON planet_osm_line(mz_road_level) WHERE mz_road_level IS NOT NULL;
 CREATE INDEX planet_osm_line_transit_level_index ON planet_osm_line(mz_transit_level) WHERE mz_transit_level IS NOT NULL;
 

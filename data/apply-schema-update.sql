@@ -10,6 +10,7 @@ ALTER TABLE planet_osm_line ADD COLUMN mz_road_level SMALLINT;
 ALTER TABLE planet_osm_line ADD COLUMN mz_transit_level SMALLINT;
 ALTER TABLE planet_osm_line ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE planet_osm_line ADD COLUMN mz_earth_min_zoom SMALLINT;
+ALTER TABLE planet_osm_line ADD COLUMN mz_landuse_min_zoom SMALLINT;
 
 -- same for point
 ALTER TABLE planet_osm_point ADD COLUMN mz_poi_min_zoom REAL;

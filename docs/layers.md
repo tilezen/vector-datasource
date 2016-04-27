@@ -514,12 +514,17 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `capacity`: Approximate number of total rental bicycles at the bike share station.
 * `network`: The common (sometimes branded) name of the bike share network, eg: "Citi Bike".
 * `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
+* `ref`: The reference of this rental station, if one is available.
 
 #### POI properties (only on `kind:bicycle_parking`):
 
+* `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
 * `capacity`: Approximate number of total bicycle parking spots.
 * `covered`: Is the parking area covered.
+* `fee`: Whether a fee must be paid to use the bicycle parking (`yes`/`no`).
 * `operator`: Who runs the bike parking lot.
+* `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
+* `surveillance`: If present, then indicates that there is surveillance (value`yes`), or has a more specific value, e.g: `outdoor`, `public`, `indoor`.
 
 #### POI kind values:
 
@@ -559,7 +564,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
 * `bicycle_repair_station`
 * `bicycle` - Bicycle sales shop, often with bike repair service.
-* `bicycle_guidepost` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
+* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
 * `boat_rental`
@@ -706,7 +711,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `outreach`
 * `painter`
 * `parking`
-* `peak`
+* `peak` A mountain peak. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
@@ -795,8 +800,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `university`
 * `veterinary`
 * `viewpoint`
-* `volcano`
-* `walking_guidepost` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
+* `volcano` The peak of a volcano. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
+* `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
 * `water_park`
@@ -812,7 +817,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `wine`
 * `winery`
 * `workshop`
-* `yes`
 * `zoo`
 
 ## Roads (Transportation)
@@ -858,6 +862,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `railway`: the original OSM railway tag value
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
+* `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 
 #### Road properties (optional):
 

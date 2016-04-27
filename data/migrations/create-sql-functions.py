@@ -283,6 +283,7 @@ def create_matcher(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
 
     output = yaml_datum['output']
+    assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
 
     table = yaml_datum.get('table')
     extra_columns = yaml_datum.get('extra_columns', [])
