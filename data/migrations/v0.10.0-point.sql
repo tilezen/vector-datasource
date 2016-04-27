@@ -74,7 +74,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_point_min_zoom_earth_12_index;
   DROP INDEX IF EXISTS planet_osm_point_min_zoom_earth_15_index;
 
-  ALTER INDEX new_planet_osm_point_min_zoom_earth_9_index RENAME  TO planet_osm_point_min_zoom_earth_9_index;
+  ALTER INDEX new_planet_osm_point_min_zoom_earth_9_index RENAME TO planet_osm_point_min_zoom_earth_9_index;
   ALTER INDEX new_planet_osm_point_min_zoom_earth_12_index RENAME TO planet_osm_point_min_zoom_earth_12_index;
   ALTER INDEX new_planet_osm_point_min_zoom_earth_15_index RENAME TO planet_osm_point_min_zoom_earth_15_index;
 
@@ -82,7 +82,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_point_min_zoom_water_12_index;
   DROP INDEX IF EXISTS planet_osm_point_min_zoom_water_15_index;
 
-  ALTER INDEX new_planet_osm_point_min_zoom_water_9_index RENAME  TO planet_osm_point_min_zoom_water_9_index;
+  ALTER INDEX new_planet_osm_point_min_zoom_water_9_index RENAME TO planet_osm_point_min_zoom_water_9_index;
   ALTER INDEX new_planet_osm_point_min_zoom_water_12_index RENAME TO planet_osm_point_min_zoom_water_12_index;
   ALTER INDEX new_planet_osm_point_min_zoom_water_15_index RENAME TO planet_osm_point_min_zoom_water_15_index;
 
@@ -90,7 +90,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_point_min_zoom_places_12_index;
   DROP INDEX IF EXISTS planet_osm_point_min_zoom_places_15_index;
 
-  ALTER INDEX new_planet_osm_point_min_zoom_places_9_index RENAME  TO planet_osm_point_min_zoom_places_9_index;
+  ALTER INDEX new_planet_osm_point_min_zoom_places_9_index RENAME TO planet_osm_point_min_zoom_places_9_index;
   ALTER INDEX new_planet_osm_point_min_zoom_places_12_index RENAME TO planet_osm_point_min_zoom_places_12_index;
   ALTER INDEX new_planet_osm_point_min_zoom_places_15_index RENAME TO planet_osm_point_min_zoom_places_15_index;
 COMMIT;

@@ -56,11 +56,11 @@ filters:
       kind: ridge
       label_placement: 'yes'
     table: osm
-  - filter: 
+  - filter:
       natural: valley
       name: true
     min_zoom: 13
-    output: 
+    output:
       kind: valley
       label_placement: 'yes'
     table: osm

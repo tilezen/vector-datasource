@@ -77,7 +77,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_line_earth_geom_12_index;
   DROP INDEX IF EXISTS planet_osm_line_earth_geom_15_index;
 
-  ALTER INDEX new_planet_osm_line_earth_geom_9_index RENAME  TO planet_osm_line_earth_geom_9_index;
+  ALTER INDEX new_planet_osm_line_earth_geom_9_index RENAME TO planet_osm_line_earth_geom_9_index;
   ALTER INDEX new_planet_osm_line_earth_geom_12_index RENAME TO planet_osm_line_earth_geom_12_index;
   ALTER INDEX new_planet_osm_line_earth_geom_15_index RENAME TO planet_osm_line_earth_geom_15_index;
 

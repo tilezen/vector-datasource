@@ -35,11 +35,11 @@ UPDATE planet_osm_polygon
 UPDATE ne_110m_land
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(ne_110m_land.*)
   WHERE mz_calculate_min_zoom_earth(ne_110m_land.*) IS NOT NULL;
-  
+
 UPDATE ne_50m_land
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(ne_50m_land.*)
   WHERE mz_calculate_min_zoom_earth(ne_50m_land.*) IS NOT NULL;
-  
+
 UPDATE ne_10m_land
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(ne_10m_land.*)
   WHERE mz_calculate_min_zoom_earth(ne_10m_land.*) IS NOT NULL;
@@ -56,11 +56,11 @@ UPDATE planet_osm_polygon
 UPDATE ne_110m_ocean
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_ocean.*)
   WHERE mz_calculate_min_zoom_water(ne_110m_ocean.*) IS NOT NULL;
-  
+
 UPDATE ne_50m_ocean
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_ocean.*)
   WHERE mz_calculate_min_zoom_water(ne_50m_ocean.*) IS NOT NULL;
-  
+
 UPDATE ne_10m_ocean
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_ocean.*)
   WHERE mz_calculate_min_zoom_water(ne_10m_ocean.*) IS NOT NULL;
@@ -68,11 +68,11 @@ UPDATE ne_10m_ocean
 UPDATE ne_110m_lakes
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_lakes.*)
   WHERE mz_calculate_min_zoom_water(ne_110m_lakes.*) IS NOT NULL;
-  
+
 UPDATE ne_50m_lakes
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_lakes.*)
   WHERE mz_calculate_min_zoom_water(ne_50m_lakes.*) IS NOT NULL;
-  
+
 UPDATE ne_10m_lakes
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_lakes.*)
   WHERE mz_calculate_min_zoom_water(ne_10m_lakes.*) IS NOT NULL;
@@ -80,7 +80,7 @@ UPDATE ne_10m_lakes
 UPDATE ne_50m_playas
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_playas.*)
   WHERE mz_calculate_min_zoom_water(ne_50m_playas.*) IS NOT NULL;
-  
+
 UPDATE ne_10m_playas
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_playas.*)
   WHERE mz_calculate_min_zoom_water(ne_10m_playas.*) IS NOT NULL;
@@ -110,15 +110,15 @@ UPDATE planet_osm_polygon
   SET mz_building_min_zoom = mz_calculate_min_zoom_buildings(planet_osm_polygon.*)
   WHERE mz_calculate_min_zoom_buildings(planet_osm_polygon.*) IS NOT NULL;
 
-CREATE INDEX new_planet_osm_polygon_earth_geom_9_index  ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 9;
+CREATE INDEX new_planet_osm_polygon_earth_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 9;
 CREATE INDEX new_planet_osm_polygon_earth_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 12;
 CREATE INDEX new_planet_osm_polygon_earth_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 15;
 
-CREATE INDEX new_planet_osm_polygon_water_geom_9_index  ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 9;
+CREATE INDEX new_planet_osm_polygon_water_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 9;
 CREATE INDEX new_planet_osm_polygon_water_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 12;
 CREATE INDEX new_planet_osm_polygon_water_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_water_min_zoom <= 15;
 
-CREATE INDEX new_planet_osm_polygon_boundary_geom_9_index  ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 9;
+CREATE INDEX new_planet_osm_polygon_boundary_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 9;
 CREATE INDEX new_planet_osm_polygon_boundary_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 12;
 CREATE INDEX new_planet_osm_polygon_boundary_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_boundary_min_zoom <= 15;
 
@@ -129,7 +129,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_polygon_earth_geom_12_index;
   DROP INDEX IF EXISTS planet_osm_polygon_earth_geom_15_index;
 
-  ALTER INDEX new_planet_osm_polygon_earth_geom_9_index RENAME  TO planet_osm_polygon_earth_geom_9_index;
+  ALTER INDEX new_planet_osm_polygon_earth_geom_9_index RENAME TO planet_osm_polygon_earth_geom_9_index;
   ALTER INDEX new_planet_osm_polygon_earth_geom_12_index RENAME TO planet_osm_polygon_earth_geom_12_index;
   ALTER INDEX new_planet_osm_polygon_earth_geom_15_index RENAME TO planet_osm_polygon_earth_geom_15_index;
 
@@ -137,7 +137,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_polygon_water_geom_12_index;
   DROP INDEX IF EXISTS planet_osm_polygon_water_geom_15_index;
 
-  ALTER INDEX new_planet_osm_polygon_water_geom_9_index RENAME  TO planet_osm_polygon_water_geom_9_index;
+  ALTER INDEX new_planet_osm_polygon_water_geom_9_index RENAME TO planet_osm_polygon_water_geom_9_index;
   ALTER INDEX new_planet_osm_polygon_water_geom_12_index RENAME TO planet_osm_polygon_water_geom_12_index;
   ALTER INDEX new_planet_osm_polygon_water_geom_15_index RENAME TO planet_osm_polygon_water_geom_15_index;
 
@@ -145,7 +145,7 @@ BEGIN;
   DROP INDEX IF EXISTS planet_osm_polygon_boundary_geom_12_index;
   DROP INDEX IF EXISTS planet_osm_polygon_boundary_geom_15_index;
 
-  ALTER INDEX new_planet_osm_polygon_boundary_geom_9_index RENAME  TO planet_osm_polygon_boundary_geom_9_index;
+  ALTER INDEX new_planet_osm_polygon_boundary_geom_9_index RENAME TO planet_osm_polygon_boundary_geom_9_index;
   ALTER INDEX new_planet_osm_polygon_boundary_geom_12_index RENAME TO planet_osm_polygon_boundary_geom_12_index;
   ALTER INDEX new_planet_osm_polygon_boundary_geom_15_index RENAME TO planet_osm_polygon_boundary_geom_15_index;
 

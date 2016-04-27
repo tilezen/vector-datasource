@@ -1,14 +1,14 @@
-# Natural Earth 110m 
+# Natural Earth 110m
 assert_has_feature(
     1, 0, 0, 'earth',
     { 'kind': 'earth', 'source': 'naturalearthdata.com' })
 
-# Natural Earth 50m 
+# Natural Earth 50m
 assert_has_feature(
     2, 0, 1, 'earth',
     { 'kind': 'earth', 'source': 'naturalearthdata.com' })
 
-# Natural Earth 10m 
+# Natural Earth 10m
 assert_has_feature(
     8, 40, 98, 'earth',
     { 'kind': 'earth', 'source': 'naturalearthdata.com' })
@@ -85,7 +85,7 @@ assert_has_feature(
 assert_has_feature(
     7, 34, 45, 'earth',
     { 'kind': 'island', 'label_placement': 'yes', 'name': 'Manitoulin Island' })
-    
+
 # LARGE island labels (from place polygons)
 # http://www.openstreetmap.org/relation/5176042
 # Trinidad, the island of the nation
