@@ -830,6 +830,11 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 * `aerialway`: See kind list below.
 * `aeroway`: See kind list below.
+* `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
+* `cycleway`: `cycleway` tag from feature
+* `cycleway_left`: `cycleway_left` tag from feature
+* `cycleway_right`: `cycleway_right` tag from feature
+* `cycleway_both`: `cycleway_both` tag from feature
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
 * `is_bridge`: `yes` or `no`
@@ -839,9 +844,11 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `leisure`: See kind list below.
 * `man_made`: See kind list below.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections.
+* `oneway_bicycle`: `oneway:bicycle` tag from feature
 * `oneway`: `yes` or `no`
 * `piste_type`: See kind list below.
 * `railway`: the original OSM railway tag value
+* `segregated`: `segregated` tag from feature.
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
