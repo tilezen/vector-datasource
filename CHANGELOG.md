@@ -1,3 +1,7 @@
+v0.10.0
+-------
+* remove `type` property from Natural Earth `boundaries` layer features
+
 v0.9.1
 ------
 * **Release date**: 2016-03-28. _Live in prod: 2015-03-30._

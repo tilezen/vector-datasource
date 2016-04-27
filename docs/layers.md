@@ -87,7 +87,7 @@ draw:
 
 ### Layer reference
 
-Mapzen vector tiles include 9 layers:   
+Mapzen vector tiles include 9 layers:
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
@@ -123,7 +123,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `name:left`: See name section above, other variants like `old_name` also supported.
 * `name:right`: See name section above, other variants like `old_name` also supported.
 * `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
-* `type`: required at zooms less than 8 coming from Natural Earth for country and state (zoom 2+) boundaries, roughly equivalent to OSM's `admin_level` values.
 
 #### Boundary properties (optional):
 
@@ -150,17 +149,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `retaining_wall`
 * `snow_fence`
 * `state`
-
-#### Boundary type values:
-
-* `Country`
-* `Dependency`
-* `Disputed`
-* `Indeterminate`
-* `Lease`
-* `Sovereign country`
-* `Metropolitan county`
-* `Modern administrative boundary`
 
 ## Buildings and Addresses
 

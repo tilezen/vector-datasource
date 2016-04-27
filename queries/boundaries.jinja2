@@ -1,15 +1,14 @@
-{% macro ne_boundary_cols(type) %}
+{% macro ne_boundary_cols() %}
     gid AS __id__,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     scalerank::float,
-    mz_calculate_output_boundaries(t.*) AS mz_properties,
-    '{{ type }}' AS type
+    mz_calculate_output_boundaries(t.*) AS mz_properties
 {% endmacro %}
 
 {% if zoom < 2 %}
 
 SELECT
-    {{ ne_boundary_cols('country') }}
+    {{ ne_boundary_cols() }}
 FROM
     ne_110m_admin_0_boundary_lines_land t
 WHERE
@@ -19,7 +18,7 @@ WHERE
 {% elif 2 <= zoom < 5 %}
 
 SELECT
-    {{ ne_boundary_cols('country') }}
+    {{ ne_boundary_cols() }}
 FROM
     ne_50m_admin_0_boundary_lines_land t
 WHERE
@@ -29,7 +28,7 @@ WHERE
 UNION ALL
 
 SELECT
-    {{ ne_boundary_cols('state') }}
+    {{ ne_boundary_cols() }}
 FROM
     ne_50m_admin_1_states_provinces_lines t
 WHERE
@@ -41,7 +40,7 @@ WHERE
 SELECT
     name,
     labelrank,
-    {{ ne_boundary_cols('country') }}
+    {{ ne_boundary_cols() }}
 FROM
     ne_10m_admin_0_boundary_lines_land t
 WHERE
@@ -53,7 +52,7 @@ UNION ALL
 SELECT
     name,
     NULL AS labelrank,
-    {{ ne_boundary_cols('state') }}
+    {{ ne_boundary_cols() }}
 FROM
     ne_10m_admin_1_states_provinces_lines t
 WHERE
