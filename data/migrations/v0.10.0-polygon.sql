@@ -36,13 +36,13 @@ SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_polygon.*)
 WHERE mz_calculate_min_zoom_water(planet_osm_polygon.*) IS NOT NULL;
 
 UPDATE planet_osm_polygon
-  SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
-  WHERE
-    "natural" IN ('scree', 'stone', 'rock') OR
-    leisure IN ('water_park', 'dog_park', 'track') OR
-    historic IN ('battlefield', 'fort') OR
-    tourism IN ('caravan_site', 'picnic_site') OR
-    waterway IN ('dam');
+SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+WHERE
+  "natural" IN ('scree', 'stone', 'rock') OR
+  leisure IN ('water_park', 'dog_park', 'track') OR
+  historic IN ('battlefield', 'fort') OR
+  tourism IN ('caravan_site', 'picnic_site') OR
+  waterway IN ('dam');
 
 UPDATE planet_osm_polygon
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_polygon.*)
