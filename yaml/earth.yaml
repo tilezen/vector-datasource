@@ -27,7 +27,7 @@ filters:
   - filter:
       place: island
       name: true
-    min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 16))
+    min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 15))
     output:
       kind: island
       label_placement: 'yes'

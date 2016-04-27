@@ -2,11 +2,12 @@
 
 SELECT
     NULL AS name,
-    sum(way_area)::bigint AS area,
+    NULL AS area,
     mz_calculate_output_earth(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
+    MIN(mz_earth_min_zoom) AS min_zoom,
     NULL AS tags
 FROM
 {% if zoom < 2 %}
@@ -26,11 +27,12 @@ GROUP BY mz_properties
 
 SELECT
     NULL AS name,
-    sum(way_area)::bigint AS area,
+    NULL AS area,
     mz_calculate_output_earth(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
+    NULL AS min_zoom,
     NULL AS tags
 
 FROM
@@ -53,12 +55,17 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    mz_earth_min_zoom AS min_zoom,
     %#tags AS tags
 
 FROM planet_osm_polygon t
 
 WHERE
+{% if zoom < 16 %}
     mz_earth_min_zoom <= {{ zoom }} AND
+{% else %}
+    mz_earth_min_zoom IS NOT NULL AND
+{% endif %}
     {{ bounds|bbox_filter('way') }}
 
 UNION ALL
@@ -70,12 +77,17 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    mz_earth_min_zoom AS min_zoom,
     %#tags AS tags
 
 FROM planet_osm_line t
 
 WHERE
+{% if zoom < 16 %}
     mz_earth_min_zoom <= {{ zoom }} AND
+{% else %}
+    mz_earth_min_zoom IS NOT NULL AND
+{% endif %}
     {{ bounds|bbox_filter('way') }}
 
 {% endif %}
@@ -90,11 +102,16 @@ SELECT
   'openstreetmap.org' AS source,
   way AS __geometry__,
   osm_id AS __id__,
+  mz_earth_min_zoom AS min_zoom,
   %#tags AS tags
 
 FROM
   planet_osm_point t
 
 WHERE
+{% if zoom < 16 %}
   mz_earth_min_zoom <= {{ zoom }} AND
+{% else %}
+  mz_earth_min_zoom IS NOT NULL AND
+{% endif %}
   {{ bounds|bbox_filter('way') }}

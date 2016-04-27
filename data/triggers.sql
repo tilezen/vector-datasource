@@ -7,6 +7,7 @@ BEGIN
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
     NEW.mz_boundary_min_zoom := mz_calculate_min_zoom_boundaries(NEW.*);
     NEW.mz_building_min_zoom := mz_calculate_min_zoom_buildings(NEW.*);
+    NEW.mz_earth_min_zoom := mz_calculate_min_zoom_earth(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
@@ -25,6 +26,7 @@ BEGIN
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
     NEW.mz_places_min_zoom := mz_calculate_min_zoom_places(NEW.*);
     NEW.mz_building_min_zoom := mz_calculate_min_zoom_buildings(NEW.*);
+    NEW.mz_earth_min_zoom := mz_calculate_min_zoom_earth(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
@@ -44,6 +46,7 @@ BEGIN
     NEW.mz_water_min_zoom := mz_calculate_min_zoom_water(NEW.*);
     NEW.mz_boundary_min_zoom := mz_calculate_min_zoom_boundaries(NEW.*);
     NEW.mz_landuse_min_zoom := mz_calculate_min_zoom_landuse(NEW.*);
+    NEW.mz_earth_min_zoom := mz_calculate_min_zoom_earth(NEW.*);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql VOLATILE;
