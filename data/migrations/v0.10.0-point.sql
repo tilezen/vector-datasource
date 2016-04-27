@@ -34,15 +34,6 @@ UPDATE planet_osm_point
 
 UPDATE planet_osm_point
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_point.*)
-  WHERE
-    place IN ('continent', 'archipelago', 'island', 'islet');
-
--- UPDATE planet_osm_point
--- SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_point.*)
--- WHERE mz_calculate_min_zoom_water(planet_osm_point.*) IS NOT NULL;
-
-UPDATE planet_osm_point
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_point.*)
   WHERE mz_calculate_min_zoom_earth(planet_osm_point.*) IS NOT NULL;
 
 UPDATE planet_osm_point

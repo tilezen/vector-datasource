@@ -29,65 +29,7 @@ WHERE
 
 UPDATE planet_osm_polygon
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_polygon.*)
-  WHERE
-    place IN ('archipelago', 'island', 'islet');
-
-UPDATE ne_110m_land
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(ne_110m_land.*)
-  WHERE mz_calculate_min_zoom_earth(ne_110m_land.*) IS NOT NULL;
-
-UPDATE ne_50m_land
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(ne_50m_land.*)
-  WHERE mz_calculate_min_zoom_earth(ne_50m_land.*) IS NOT NULL;
-
-UPDATE ne_10m_land
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(ne_10m_land.*)
-  WHERE mz_calculate_min_zoom_earth(ne_10m_land.*) IS NOT NULL;
-
-UPDATE land_polygons
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(land_polygons.*)
-  WHERE mz_calculate_min_zoom_earth(land_polygons.*) IS NOT NULL;
-
-UPDATE planet_osm_polygon
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_polygon.*)
   WHERE mz_calculate_min_zoom_earth(planet_osm_polygon.*) IS NOT NULL;
-
-
-UPDATE ne_110m_ocean
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_ocean.*)
-  WHERE mz_calculate_min_zoom_water(ne_110m_ocean.*) IS NOT NULL;
-
-UPDATE ne_50m_ocean
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_ocean.*)
-  WHERE mz_calculate_min_zoom_water(ne_50m_ocean.*) IS NOT NULL;
-
-UPDATE ne_10m_ocean
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_ocean.*)
-  WHERE mz_calculate_min_zoom_water(ne_10m_ocean.*) IS NOT NULL;
-
-UPDATE ne_110m_lakes
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_lakes.*)
-  WHERE mz_calculate_min_zoom_water(ne_110m_lakes.*) IS NOT NULL;
-
-UPDATE ne_50m_lakes
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_lakes.*)
-  WHERE mz_calculate_min_zoom_water(ne_50m_lakes.*) IS NOT NULL;
-
-UPDATE ne_10m_lakes
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_lakes.*)
-  WHERE mz_calculate_min_zoom_water(ne_10m_lakes.*) IS NOT NULL;
-
-UPDATE ne_50m_playas
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_playas.*)
-  WHERE mz_calculate_min_zoom_water(ne_50m_playas.*) IS NOT NULL;
-
-UPDATE ne_10m_playas
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_playas.*)
-  WHERE mz_calculate_min_zoom_water(ne_10m_playas.*) IS NOT NULL;
-
-UPDATE water_polygons
-  SET mz_water_min_zoom = mz_calculate_min_zoom_water(water_polygons.*)
-  WHERE mz_calculate_min_zoom_water(water_polygons.*) IS NOT NULL;
 
 UPDATE planet_osm_polygon
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_polygon.*)
