@@ -27,4 +27,4 @@ DROP FUNCTION IF EXISTS mz_calculate_man_made_level(text);
 DROP FUNCTION IF EXISTS mz_calculate_road_level(text, text, text, text, text, text, text, text, text, geometry, text, text, text, text, text, text, BIGINT, text);
 
 -- function was re-implemented in YAML
-DROP FUNCTION mz_is_path_named_or_designated(text, text, text, text, text, text, text);
+DROP FUNCTION IF EXISTS mz_is_path_named_or_designated(text, text, text, text, text, text, text);
