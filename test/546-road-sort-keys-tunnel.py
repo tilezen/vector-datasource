@@ -5,10 +5,9 @@ assert_has_feature(
      "name": "Presidio Pkwy.", "is_tunnel": "yes", "sort_key": 331})
 
 # http://www.openstreetmap.org/way/89912879
-# http://www.openstreetmap.org/way/89911760
 assert_has_feature(
     16, 19829, 24234, "roads",
-    {"kind": "major_road", "highway": "trunk", "id": set([89912879, 89911760]),
+    {"kind": "major_road", "highway": "trunk", "id": 89912879,
      "name": "Sullivan Square Underpass", "is_tunnel": "yes", "sort_key": 329})
 
 assert_has_feature(
