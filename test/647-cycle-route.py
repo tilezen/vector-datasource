@@ -1,4 +1,6 @@
-#  Way: The Embarcadero (24335490) http://www.openstreetmap.org/way/24335490
+#  Way: The Embarcadero (24335490)
+# http://www.openstreetmap.org/way/24335490
+# http://www.openstreetmap.org/relation/32386
 assert_has_feature(
     16, 10487, 25327, 'roads',
     { 'kind': 'major_road', 'cycleway': 'lane', 'network': 'lcn', 'bicycle_network': 'lcn' })
@@ -48,22 +50,30 @@ assert_has_feature(
     16, 10483, 25332, 'roads',
     { 'kind': 'major_road', 'bicycle_network': 'lcn', 'cycleway': 'lane'})
 
-# Way: County Road 53 (17125595) http://www.openstreetmap.org/way/17125595
+# Way: County Road 53 (17125595)
+# http://www.openstreetmap.org/way/17125595
+# http://www.openstreetmap.org/relation/3161159
 assert_has_feature(
     16, 13512, 25076, 'roads',
     { 'kind': 'minor_road', 'bicycle_network': 'icn'})
 
-# Way: West National Ave (95578389) http://www.openstreetmap.org/way/95578389
+# Way: West National Ave (95578389)
+# http://www.openstreetmap.org/way/95578389
+# http://www.openstreetmap.org/relation/3318923
 assert_has_feature(
     16, 16842, 24939, 'roads',
     { 'kind': 'major_road', 'bicycle_network': 'ncn'})
 
-# Way: Kananaskis Trail (385652955) http://www.openstreetmap.org/way/385652955
+# Way: Kananaskis Trail (385652955)
+# http://www.openstreetmap.org/way/385652955
+# http://www.openstreetmap.org/relation/5737942
 assert_has_feature(
     16, 11818, 22039, 'roads',
     { 'kind': 'major_road', 'bicycle_network': 'rcn'})
 
-# Way: Foothill Expressway (173846425) http://www.openstreetmap.org/way/173846425
+# Way: Foothill Expressway (173846425)
+# http://www.openstreetmap.org/way/173846425
+# http://www.openstreetmap.org/relation/1204994
 assert_has_feature(
     16, 10535, 25419, 'roads',
     { 'kind': 'major_road', 'bicycle_network': 'lcn'})
