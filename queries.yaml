@@ -353,6 +353,13 @@ post_process:
         kind: [neighbourhood, microhood, macrohood]
       rank_key: kind_tile_rank
       start_zoom: 11
+  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+    params:
+      source_layer: pois
+      items_matching:
+        kind: [peak, volcano]
+      rank_key: kind_tile_rank
+      start_zoom: 9
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: places
@@ -455,3 +462,10 @@ post_process:
       end_zoom: 13
       items_matching: { kind: station }
       max_items: 30
+  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+    params:
+      source_layer: pois
+      start_zoom: 9
+      end_zoom: 15
+      items_matching: { kind: [peak, volcano] }
+      max_items: 5
