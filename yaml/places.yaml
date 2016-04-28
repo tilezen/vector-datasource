@@ -1,8 +1,4 @@
 filters:
-  - filter: {name: true, place: continent}
-    min_zoom: 0
-    output: {kind: continent}
-    table: osm
   - filter: {name: true, place: country}
     min_zoom: 0
     output: {kind: country}

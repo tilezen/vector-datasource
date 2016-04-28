@@ -27,10 +27,14 @@ layers:
   earth:
     template: earth.jinja2
     start_zoom: 0
-    geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
+    geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
     transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.earth
@@ -286,6 +290,17 @@ post_process:
       start_zoom: 9
       where: >-
         'label_placement' not in properties and kind in ('bay', 'strait', 'fjord')
+  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+    params:
+      source_layer: earth
+      label_property_name: label_placement
+      label_property_value: "yes"
+  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+    params:
+      source_layer: earth
+      start_zoom: 9
+      where: >-
+        'label_placement' not in properties and kind in ('archipelago', 'island', 'islet')
   - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
     params:
       source_layer: buildings
