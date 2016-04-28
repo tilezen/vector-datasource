@@ -368,8 +368,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
         min_zoom_case_statement=min_zoom_case_statement,
     )
 
-template_name = os.path.join(script_root, 'sql.jinja2')
-environment = Environment(loader=FileSystemLoader('.'))
+template_name = 'sql.jinja2'
+environment = Environment(loader=FileSystemLoader(script_root))
 template = environment.get_template(template_name)
 sql = template.render(
     layers=layers,
