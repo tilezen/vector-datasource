@@ -398,7 +398,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 16
+      end_zoom: 14
       properties: [name, ref, network]
       where: >-
         (kind == 'rail' and zoom < 15) or
@@ -429,7 +429,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 16
+      end_zoom: 15
   - fn: TileStache.Goodies.VecTiles.transform.update_parenthetical_properties
     params:
       source_layer: pois
