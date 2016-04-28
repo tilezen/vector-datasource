@@ -8,6 +8,7 @@ import sys
 from yaml import load as load_yaml
 from appdirs import AppDirs
 from contextlib import contextmanager
+import shapely.geometry
 
 
 ##
@@ -244,6 +245,18 @@ def assert_no_matching_feature(z, x, y, layer, properties):
                 "%r" % (properties, layer, feature['properties'])
 
 
+def assert_feature_geom_type(z, x, y, layer, feature_id, exp_geom_type):
+    with features_in_tile_layer(z, x, y, layer) as features:
+        for feature in features:
+            if feature['properties']['id'] == feature_id:
+                shape = shapely.geometry.shape(feature['geometry'])
+                assert shape.type == exp_geom_type, \
+                    'Unexpected geometry type: %s' % shape.type
+                break
+        else:
+            assert 0, 'No feature with id: %d found' % feature_id
+
+
 def print_coord(z, x, y, *ignored):
     print '%d/%d/%d' % (z, x, y)
 
@@ -264,6 +277,7 @@ def print_coords(f, log, idx, num_tests):
             'assert_has_feature': print_coord,
             'assert_no_matching_feature': print_coord,
             'features_in_tile_layer': print_coord_with_context,
+            'assert_feature_geom_type': print_coord,
         })
     except:
         pass
@@ -277,7 +291,8 @@ def run_test(f, log, idx, num_tests):
         runpy.run_path(f, init_globals={
             'assert_has_feature': assert_has_feature,
             'assert_no_matching_feature': assert_no_matching_feature,
-            'features_in_tile_layer': features_in_tile_layer
+            'features_in_tile_layer': features_in_tile_layer,
+            'assert_feature_geom_type': assert_feature_geom_type,
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
     except:
