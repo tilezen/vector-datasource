@@ -357,7 +357,7 @@ post_process:
     params:
       source_layer: pois
       items_matching:
-        kind: peak
+        kind: [peak, volcano]
       rank_key: kind_tile_rank
       start_zoom: 9
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
@@ -467,5 +467,5 @@ post_process:
       source_layer: pois
       start_zoom: 9
       end_zoom: 15
-      items_matching: { kind: peak }
+      items_matching: { kind: [peak, volcano] }
       max_items: 5

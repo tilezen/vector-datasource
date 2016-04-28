@@ -76,3 +76,17 @@ with features_in_tile_layer(16, 12372, 26269, 'pois') as features:
     num = count_matching(features, {'kind': 'peak'})
     if num != 7:
         raise Exception, "Found %d peaks, but expected seven." % num
+
+# check that volcanos are sorted along with other kinds of peak
+with features_in_tile_layer(12, 662, 1443, 'pois') as features:
+    def assert_peak(rank, elevation, kind, name):
+        properties = {'kind': kind, 'elevation': elevation, 'name': name,
+                      'kind_tile_rank': rank}
+        num_matching = count_matching(features, properties)
+        if num_matching != 1:
+            raise Exception, "Did not find %s matching properties %r." \
+                % (kind, properties)
+
+    assert_peak(1, 4392, 'volcano', 'Mount Rainier')
+    assert_peak(2, 4302, 'peak',    'Point Success')
+    assert_peak(3, 3863, 'peak',    'Gibraltar Rock')
