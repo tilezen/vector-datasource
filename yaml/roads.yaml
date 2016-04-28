@@ -12,7 +12,6 @@ global:
       layer: {col: layer}
       railway: {col: railway}
       tunnel: {col: tunnel}
-      oneway: {col: oneway}
       ref: {col: ref}
       operator: {col: operator}
       route: {col: route}
@@ -32,6 +31,14 @@ global:
       sport: {col: sport}
       man_made: {col: man_made}
       walking_network: {expr: "mz_hiking_network(osm_id)"}
+      bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
+      oneway: {col: oneway}
+      oneway_bicycle: {col: "tags->oneway:bicycle"}
+      cycleway: {col: tags->cycleway}
+      cycleway_left: {col: "tags->cycleway:left"}
+      cycleway_right: {col: "tags->cycleway:right"}
+      cycleway_both: {col: "tags->cycleway:both"}
+      segregated: {col: tags->segregated}
   - &osm_network_from_relation
       network: {expr: "mz_get_rel_network(osm_id)"}
   - &osm_network_from_tags

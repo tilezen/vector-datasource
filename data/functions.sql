@@ -585,6 +585,38 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 
+CREATE OR REPLACE FUNCTION mz_cycling_network_(way_tags hstore, osm_id bigint)
+RETURNS text AS $$
+DECLARE
+  networks text[] := ARRAY(
+    SELECT hstore(tags)->'network'
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[osm_id]
+      AND parts[way_off+1:rel_off] && ARRAY[osm_id]
+      AND mz_is_path_major_route_relation(hstore(tags)));
+BEGIN
+  RETURN CASE
+    WHEN networks && ARRAY['icn'] THEN 'icn'
+    WHEN networks && ARRAY['ncn'] THEN 'ncn'
+    WHEN way_tags->'ncn'='yes' OR way_tags ? 'ncn_ref' THEN 'ncn'
+    WHEN networks && ARRAY['rcn'] THEN 'rcn'
+    WHEN way_tags->'rcn'='yes' OR way_tags ? 'rcn_ref' THEN 'rcn'
+    WHEN networks && ARRAY['lcn'] THEN 'lcn'
+    WHEN way_tags->'lcn'='yes' OR way_tags ? 'lcn_ref' THEN 'lcn'
+  END;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+CREATE OR REPLACE FUNCTION mz_cycling_network(way_tags hstore, osm_id bigint)
+RETURNS text AS $$
+BEGIN
+  RETURN CASE
+    WHEN way_tags->'icn' = 'yes' OR way_tags ? 'icn_ref' THEN 'icn'
+    ELSE mz_cycling_network_(way_tags, osm_id)
+  END;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
 -- returns TRUE if the given way ID (osm_id) is part of a path route relation,
 -- or NULL otherwise.
 -- This function is meant to be called for something that we already know is a path.
