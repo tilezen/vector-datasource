@@ -526,6 +526,11 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
 * `surveillance`: If present, then indicates that there is surveillance (value`yes`), or has a more specific value, e.g: `outdoor`, `public`, `indoor`.
 
+#### POI properties (only on `kind:peak` and `kind:volcano`):
+
+* `elevation`: Elevation of the peak or volcano in meters, where available.
+* `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
+
 #### POI kind values:
 
 * `accountant`
@@ -711,7 +716,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `outreach`
 * `painter`
 * `parking`
-* `peak` A mountain peak. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
+* `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
@@ -800,7 +805,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `university`
 * `veterinary`
 * `viewpoint`
-* `volcano` The peak of a volcano. This may additionally have an `elevation` property giving the elevation in meters, where that information is available.
+* `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
