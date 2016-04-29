@@ -848,7 +848,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `oneway`: `yes` or `no`
 * `piste_type`: See kind list below.
 * `railway`: the original OSM railway tag value
-* `segregated`: `segregated` tag from feature.
+* `segregated`: Set to `yes` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
