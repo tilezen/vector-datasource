@@ -38,7 +38,9 @@ global:
       cycleway_left: {col: "tags->cycleway:left"}
       cycleway_right: {col: "tags->cycleway:right"}
       cycleway_both: {col: "tags->cycleway:both"}
-      segregated: {col: tags->segregated}
+      segregated:
+        expr: |
+          CASE WHEN tags->'segregated' = 'yes' THEN 'yes' END
   - &osm_network_from_relation
       network: {expr: "mz_get_rel_network(osm_id)"}
   - &osm_network_from_tags

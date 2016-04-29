@@ -77,3 +77,12 @@ assert_has_feature(
 assert_has_feature(
     16, 10535, 25419, 'roads',
     { 'kind': 'major_road', 'bicycle_network': 'lcn'})
+
+# http://www.openstreetmap.org/way/255652148
+assert_has_feature(
+    16, 10487, 25333, 'roads',
+    { 'kind': 'path', 'segregated': 'yes'})
+
+# http://www.openstreetmap.org/way/215528939
+assert_no_matching_feature(
+    16, 10486, 25331, 'roads', { 'segregated': 'no'})
