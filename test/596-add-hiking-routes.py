@@ -32,11 +32,11 @@ assert_has_feature(
     { 'kind': 'minor_road', 'highway': 'residential', 'walking_network': 'nwn' })
 
 # http://www.openstreetmap.org/way/5254587
-# Mount Baker Highway - secondary_link - part of Pacific Northwest Trail (nwn)
+# Mount Baker Highway - secondary - part of Pacific Northwest Trail (nwn)
 # should be visible at z11
 assert_has_feature(
     11, 331, 704, 'roads',
-    { 'kind': 'major_road', 'highway': 'secondary_link',
+    { 'kind': 'major_road', 'highway': 'secondary',
       'walking_network': 'nwn' })
 
 # http://www.openstreetmap.org/way/5857215
