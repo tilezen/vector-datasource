@@ -276,6 +276,7 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
+      end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -313,12 +314,14 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: buildings
+      end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: pois
+      end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -368,6 +371,7 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
+      end_zoom: 15
       property_keys: [name]
       geometry_types: [Point]
       min_distance: 64.0
