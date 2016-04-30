@@ -563,7 +563,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `car_sharing`
 * `car`
 * `caravan_site`
-* `caravan_site`
 * `carousel`
 * `carpenter`
 * `cave_entrance`
@@ -615,7 +614,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `fire_station`
 * `firepit`
 * `fishing`
-* `fishing`
+* `fishing_area`
 * `fitness_station`
 * `fitness`
 * `florist`
