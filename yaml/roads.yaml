@@ -34,10 +34,18 @@ global:
       bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
       oneway: {col: oneway}
       oneway_bicycle: {col: "tags->oneway:bicycle"}
-      cycleway: {col: tags->cycleway}
-      cycleway_left: {col: "tags->cycleway:left"}
-      cycleway_right: {col: "tags->cycleway:right"}
-      cycleway_both: {col: "tags->cycleway:both"}
+      cycleway:
+        expr: |
+          CASE WHEN tags->'cycleway' NOT IN ('no', 'none') THEN tags->'cycleway' END
+      cycleway_left:
+        expr: |
+          CASE WHEN tags->'cycleway:left' NOT IN ('no', 'none') THEN tags->'cycleway:left' END
+      cycleway_right:
+        expr: |
+          CASE WHEN tags->'cycleway:right' NOT IN ('no', 'none') THEN tags->'cycleway:right' END
+      cycleway_both:
+        expr: |
+          CASE WHEN tags->'cycleway:both' NOT IN ('no', 'none') THEN tags->'cycleway:both' END
       segregated:
         expr: |
           CASE WHEN tags->'segregated' = 'yes' THEN 'yes' END
