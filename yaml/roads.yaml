@@ -34,7 +34,9 @@ global:
       bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
       oneway: {col: oneway}
       oneway_bicycle: {col: "tags->oneway:bicycle"}
-      cycleway: {col: tags->cycleway}
+      cycleway:
+        expr: |
+          CASE WHEN tags->'cycleway' <> 'no' THEN tags->'cycleway' END
       cycleway_left: {col: "tags->cycleway:left"}
       cycleway_right: {col: "tags->cycleway:right"}
       cycleway_both: {col: "tags->cycleway:both"}
