@@ -86,3 +86,8 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/215528939
 assert_no_matching_feature(
     16, 10486, 25331, 'roads', { 'segregated': 'no'})
+
+# Way: Post Street (28841123) http://www.openstreetmap.org/way/28841123
+assert_has_feature(
+    16, 10484, 25327, 'roads',
+    { 'id': 28841123, 'is_bicycle_route': 'yes' })
