@@ -83,6 +83,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
       - TileStache.Goodies.VecTiles.transform.route_name
       - TileStache.Goodies.VecTiles.transform.normalize_aerialways
+      - TileStache.Goodies.VecTiles.transform.add_is_bicycle_route
       - TileStache.Goodies.VecTiles.transform.road_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
       - TileStache.Goodies.VecTiles.transform.tags_remove
