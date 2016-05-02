@@ -172,14 +172,10 @@ filters:
       way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: taxiway}
-  - filter:
-      aeroway: apron
-      way_area: {expr: "way_area > 0"}
+  - filter: {aeroway: apron}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: apron}
-  - filter:
-      aeroway: aerodrome
-      way_area: {expr: "way_area > 0"}
+  - filter: {aeroway: aerodrome}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: aerodrome}
   - filter: {tags->zoo: enclosure}
@@ -250,24 +246,16 @@ filters:
       way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: pier}
-  - filter:
-      man_made: wastewater_plant
-      way_area: {expr: "way_area > 0"}
+  - filter: {man_made: wastewater_plant}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: wastewater_plant}
-  - filter:
-      man_made: works
-      way_area: {expr: "way_area > 0"}
+  - filter: {man_made: works}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: works}
-  - filter:
-      man_made: bridge
-      way_area: {expr: "way_area > 0"}
+  - filter: {man_made: bridge}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: bridge}
-  - filter:
-      man_made: tower
-      way_area: {expr: "way_area > 0"}
+  - filter: {man_made: tower}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: tower}
   - filter:
@@ -275,9 +263,7 @@ filters:
       way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: breakwater}
-  - filter:
-      man_made: water_works
-      way_area: {expr: "way_area > 0"}
+  - filter: {man_made: water_works}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: water_works}
   - filter:
