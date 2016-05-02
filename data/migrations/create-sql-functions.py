@@ -192,6 +192,23 @@ class NotRule(object):
         return self.rule.columns()
 
 
+class ExpressionRule(object):
+
+    def __init__(self, column, expr, extra_columns=None):
+        self.column = column
+        self.expr = expr
+        self.extra_columns = extra_columns
+
+    def as_sql(self):
+        return self.expr
+
+    def columns(self):
+        cols = [self.column]
+        if self.extra_columns:
+            cols.extend(self.extra_columns)
+        return cols
+
+
 def create_level_filter_rule(filter_level, combinator=AndRule):
     rules = []
     if not isinstance(filter_level, list):
@@ -232,6 +249,9 @@ def create_filter_rule(filter_key, filter_value):
                 rule = NotEqualsRule(filter_key, filter_value[1:])
             elif isinstance(filter_value, dict) and 'min' in filter_value:
                 rule = GreaterOrEqualsRule(filter_key, filter_value['min'])
+            elif isinstance(filter_value, dict) and 'expr' in filter_value:
+                rule = ExpressionRule(
+                    filter_key, filter_value['expr'], filter_value.get('cols'))
             else:
                 rule = EqualsRule(filter_key, filter_value)
     return rule
