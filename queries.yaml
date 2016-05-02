@@ -328,13 +328,13 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
       source_layer: landuse
-      start_zoom: 13
+      start_zoom: 6
       where: >-
         properties.get('mz_is_building') is True
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: landuse
-      start_zoom: 13
+      start_zoom: 6
       properties: [mz_is_building]
   - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
