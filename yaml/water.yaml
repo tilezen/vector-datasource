@@ -91,12 +91,6 @@ filters:
         <<: *water_standard_properties_osm
         kind: stream
     table: osm
-  - filter: {waterway: dam}
-    min_zoom: 13
-    output:
-        <<: *water_standard_properties_osm
-        kind: dam
-    table: osm
   - filter: {waterway: ditch}
     min_zoom: 16
     output:
