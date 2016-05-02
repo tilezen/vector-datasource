@@ -119,10 +119,14 @@ filters:
   - filter: {natural: beach}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: beach}
-  - filter: {highway: pedestrian}
+  - filter:
+      highway: pedestrian
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: pedestrian}
-  - filter: {highway: footway}
+  - filter:
+      highway: footway
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: footway}
   - filter: {amenity: university}
