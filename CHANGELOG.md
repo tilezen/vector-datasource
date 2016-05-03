@@ -27,7 +27,7 @@ v0.10.0
 * **Add outdoor related lines** to the `roads` layer.
   * `portage_way`
   * See [#677](https://github.com/mapzen/vector-datasource/issues/677).
-* Add `dam` to the `boundaries` layer. See [#663](https://github.com/mapzen/vector-datasource/issues/663).
+* Add `dam` to the `boundaries` layer, and removed it from the `water` layer. See [#663](https://github.com/mapzen/vector-datasource/issues/663) and [#773](https://github.com/mapzen/vector-datasource/issues/773).
 * Add `waterfall` features to the `pois` layer:
   * Includes `height` value in integer meters.
   * Zoom visibility is based on waterfall height: taller than 300 meters are visible at zoom 12 and waterfalls with height less than 50 meters are visible at zoom 14.
