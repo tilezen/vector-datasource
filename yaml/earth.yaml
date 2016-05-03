@@ -5,7 +5,6 @@ filters:
     min_zoom: 0
     output:
       kind: continent
-      label_placement: 'yes'
     table: osm
   - filter:
       place: archipelago
@@ -16,7 +15,6 @@ filters:
     min_zoom: 15
     output:
       kind: archipelago
-      label_placement: 'yes'
     table: osm
   - filter:
       place: island
@@ -24,7 +22,6 @@ filters:
     min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 15))
     output:
       kind: island
-      label_placement: 'yes'
     table: osm
   - filter:
       place: islet
@@ -32,7 +29,6 @@ filters:
     min_zoom: GREATEST(15, LEAST((zoom+3.5)::smallint, 17))
     output:
       kind: islet
-      label_placement: 'yes'
     table: osm
   - filter: {natural: cliff}
     min_zoom: 13
@@ -48,7 +44,6 @@ filters:
     min_zoom: 13
     output:
       kind: ridge
-      label_placement: 'yes'
     table: osm
   - filter:
       natural: valley
@@ -56,7 +51,6 @@ filters:
     min_zoom: 13
     output:
       kind: valley
-      label_placement: 'yes'
     table: osm
   - filter: {gid: true}
     min_zoom: 0
