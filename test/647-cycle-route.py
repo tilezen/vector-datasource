@@ -90,4 +90,9 @@ assert_no_matching_feature(
 # Way: Post Street (28841123) http://www.openstreetmap.org/way/28841123
 assert_has_feature(
     16, 10484, 25327, 'roads',
-    { 'id': 28841123, 'is_bicycle_route': 'yes' })
+    { 'id': 28841123, 'is_bicycle_related': True })
+
+# Way: 367767273 http://www.openstreetmap.org/way/367767273
+assert_has_feature(
+    16, 10479, 25331, 'roads',
+    { 'id': 367767273, 'is_bicycle_related': True })
