@@ -187,3 +187,50 @@ assert_has_feature(
 assert_has_feature(
     16, 10465, 25326, 'earth',
     { 'kind': 'islet', 'label_placement': 'yes', 'name': 'Little Mile Rock', 'min_zoom': 17 })
+
+# LARGE island labels (from place polygons)
+# http://www.openstreetmap.org/relation/4227580
+# Manitoulin Island, Canada
+assert_has_feature(
+    7, 34, 45, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Manitoulin Island' })
+
+# LARGE island labels (from place polygons)
+# http://www.openstreetmap.org/relation/5176042
+# Trinidad, the island of the nation
+assert_has_feature(
+    7, 42, 60, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Trinidad' })
+
+# island polygon split across multiple tiles shouldn't get a label placement
+# in each tile, only one.
+# http://www.openstreetmap.org/way/26767313
+# Treasure Island, San Francisco
+assert_has_feature(
+    14, 2622, 6329, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Treasure Island' })
+# neighbouring tiles should not have a placement
+assert_no_matching_feature(
+    14, 2623, 6329, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Treasure Island' })
+assert_no_matching_feature(
+    14, 2622, 6340, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Treasure Island' })
+assert_no_matching_feature(
+    14, 2623, 6340, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Treasure Island' })
+
+# multi-polygonal islands
+# http://www.openstreetmap.org/relation/5344925
+# Islas Marietas
+# main island should get label
+assert_has_feature(
+    15, 6773, 14457, 'earth',
+    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Islas Marietas' })
+# FUTURE: smaller island parts should not
+#assert_no_matching_feature(
+#    15, 6774, 14457, 'earth',
+#    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Islas Marietas' })
+#assert_no_matching_feature(
+#    15, 6775, 14457, 'earth',
+#    { 'kind': 'island', 'label_placement': 'yes', 'name': 'Islas Marietas' })

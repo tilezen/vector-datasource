@@ -298,12 +298,14 @@ post_process:
       source_layer: earth
       label_property_name: label_placement
       label_property_value: "yes"
+      geom_types: [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
   - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
       source_layer: earth
-      start_zoom: 9
+      start_zoom: 0
       where: >-
-        'label_placement' not in properties and kind in ('archipelago', 'island', 'islet')
+        'label_placement' not in properties and kind in
+        ('archipelago', 'island', 'islet', 'continent', 'valley', 'ridge')
   - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
     params:
       source_layer: buildings
