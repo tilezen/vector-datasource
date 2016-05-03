@@ -832,12 +832,12 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `aerialway`: See kind list below.
 * `aeroway`: See kind list below.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
-* `cycleway`: `cycleway` tag from feature
+* `cycleway`: `cycleway` tag from feature. If no `cycleway` tag is present but `cycleway:both` exists, we source from that tag instead.
 * `cycleway_left`: `cycleway_left` tag from feature
 * `cycleway_right`: `cycleway_right` tag from feature
-* `cycleway_both`: `cycleway_both` tag from feature
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
+* `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
 * `is_bridge`: `yes` or `no`
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
 * `is_link`: `yes` or `no`
