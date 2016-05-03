@@ -85,7 +85,8 @@ CREATE OR REPLACE FUNCTION mz_calculate_output_landuse_(
 {%- for param in layers['landuse']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
-        tags hstore)
+        tags hstore,
+        way_area real)
 RETURNS HSTORE AS $$
 BEGIN
   RETURN {{ layers['landuse']['kind_case_statement'] }};
@@ -102,7 +103,8 @@ BEGIN
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
-        row.tags);
+        row.tags,
+        0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -116,7 +118,8 @@ BEGIN
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
-        row.tags);
+        row.tags,
+        row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -130,7 +133,8 @@ BEGIN
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
-        row.tags);
+        row.tags,
+        0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 

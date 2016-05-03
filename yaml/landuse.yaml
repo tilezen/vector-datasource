@@ -119,10 +119,14 @@ filters:
   - filter: {natural: beach}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: beach}
-  - filter: {highway: pedestrian}
+  - filter:
+      highway: pedestrian
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: pedestrian}
-  - filter: {highway: footway}
+  - filter:
+      highway: footway
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: footway}
   - filter: {amenity: university}
@@ -158,10 +162,14 @@ filters:
   - filter: {amenity: prison}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: prison}
-  - filter: {aeroway: runway}
+  - filter:
+      aeroway: runway
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: runway}
-  - filter: {aeroway: taxiway}
+  - filter:
+      aeroway: taxiway
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: taxiway}
   - filter: {aeroway: apron}
@@ -233,7 +241,9 @@ filters:
   - filter: {tourism: winery}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: winery}
-  - filter: {man_made: pier}
+  - filter:
+      man_made: pier
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: pier}
   - filter: {man_made: wastewater_plant}
@@ -248,19 +258,27 @@ filters:
   - filter: {man_made: tower}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: tower}
-  - filter: {man_made: breakwater}
+  - filter:
+      man_made: breakwater
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: breakwater}
   - filter: {man_made: water_works}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: water_works}
-  - filter: {man_made: groyne}
+  - filter:
+      man_made: groyne
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: groyne}
-  - filter: {man_made: dike}
+  - filter:
+      man_made: dike
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: dike}
-  - filter: {man_made: cutline}
+  - filter:
+      man_made: cutline
+      way_area: {expr: "way_area > 0"}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: cutline}
   - filter: {power: plant}
