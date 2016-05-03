@@ -11,9 +11,9 @@ v0.10.0
   * Most paths are now named on introduction, before they were only available at zoom 14+.
   * See [#593](https://github.com/mapzen/vector-datasource/issues/593), [#596](https://github.com/mapzen/vector-datasource/issues/596), and [#775](https://github.com/mapzen/vector-datasource/issues/775).
 * **Add bicycle properties** to the `roads` layer:
-  * Add `is_bicycle_route` property, set to `yes` when road is a part of a cycling network or has bicyle lanes or other cycling related infrastrucure.
+  * Add `is_bicycle_related` property, set to `true` when road is a cycleway, part of a cycling network, or has bicyle lanes or other cycling related infrastrucure.
   * Add `bicycle_network` property with values in `icn`, `ncn`, `rcn`, and `lcn` to indicate features's international to local significance.
-  * Add properties for `cycleway`, `cycleway_left`, `cycleway_right`, `cycleway_both`, `oneway_bicycle`, and `segregated`.
+  * Add properties for `cycleway`, `cycleway_left`, `cycleway_right`, `oneway_bicycle`, and `segregated`.
   * See [#647](https://github.com/mapzen/vector-datasource/issues/647).
 * **Add new outdoors related polygons** to the `landuse` layer:
   * `battlefield`, `beach_resort`, `boat_storage`, `caravan_site`, `dam`, `dog_park`, `firepit`, `fishing_area`, `fort`, `monument`, `picnic_site`, `recreation_track`, `rock`, `scree`, `stone`, `summer_camp`, `swimming_area`, and `water_park`.
