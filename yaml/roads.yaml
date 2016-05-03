@@ -289,8 +289,8 @@ filters:
       footway: {col: tags->footway}
   - filter:
       highway: footway
-      not: {tags->footway: [sidewalk, crossing]}
-    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
+      tags->footway: [sidewalk, crossing]
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 15)'
     table: osm
     output:
       <<: *osm_highway_properties
@@ -300,20 +300,8 @@ filters:
       highway: footway
       footway: {col: tags->footway}
   - filter:
-      highway: steps
-      name: true
-    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
-    table: osm
-    output:
-      <<: *osm_highway_properties
-      <<: *osm_network_from_tags
-      <<: *osm_footway_properties
-      kind: path
-      highway: steps
-      footway: {col: tags->footway}
-  - filter:
       highway: [footway, steps]
-    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 15)'
+    min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
     table: osm
     output:
       <<: *osm_highway_properties
