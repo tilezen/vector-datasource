@@ -34,14 +34,13 @@ assert_has_feature(
 assert_has_feature(
     16, 19314, 24677, 'pois',
     { 'kind': 'beach_resort', 'min_zoom': 16 })
-  
-#https://www.openstreetmap.org/node/1500943741
-# Needs to appear **before** tourism=hotel
-# Best Western Plus Blue Sea Lodge
-assert_has_feature(
-    16, 11422, 26443, 'pois',
-    { 'kind': 'beach_resort', 'min_zoom': 16 })
 
+# https://www.openstreetmap.org/way/381817391
+# Terrasol Beach Resort
+# Needs to appear **before** tourism=hotel
+assert_has_feature(
+    16, 12760, 28488, 'pois',
+    { 'id': 381817391, 'kind': 'beach_resort'})
 
 
 #https://www.openstreetmap.org/way/257716817
