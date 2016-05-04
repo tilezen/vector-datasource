@@ -1,6 +1,6 @@
 v0.10.0
 -------
-* **Release date**: 2016-05-03.
+* **Release date**: 2016-05-04.
 * **Paths get a significant makeover** in the `roads` layer:
   * Many `path`, `footway`, and `cycleway` features are visible earlier up to zoom 11, based on their designation as or inclusion in walking and cycling networks.
   * If a track, major road, or minor road is part of a walking or cycling network it is also visible earlier.
