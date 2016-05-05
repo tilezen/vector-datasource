@@ -19,7 +19,7 @@ SELECT
     tags->'exit_to' AS exit_to,
     aeroway,
     %#tags AS tags,
-    kind
+    mz_properties
 
 FROM (
 
@@ -38,7 +38,7 @@ FROM (
         THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_kind_pois(planet_osm_point.*) AS kind,
+    mz_calculate_output_pois(planet_osm_point.*) AS mz_properties,
     tags
 
   FROM
@@ -69,7 +69,7 @@ UNION ALL
         THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_kind_pois(planet_osm_polygon.*) AS kind,
+    mz_calculate_output_pois(planet_osm_polygon.*) AS mz_properties,
     tags
 
   FROM

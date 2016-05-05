@@ -28,7 +28,7 @@ psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../triggers.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new triggers failed.">&2; exit 1; fi
 
 # then disable triggers
-for table in planet_osm_point planet_osm_line planet_osm_polygon; do
+for table in planet_osm_point planet_osm_line planet_osm_polygon planet_osm_rels; do
     psql -c "ALTER TABLE ${table} DISABLE TRIGGER USER" $*
 done
 
@@ -52,7 +52,7 @@ done
 wait
 
 # re-enable triggers
-for table in planet_osm_point planet_osm_line planet_osm_polygon; do
+for table in planet_osm_point planet_osm_line planet_osm_polygon planet_osm_rels; do
     psql -c "ALTER TABLE ${table} ENABLE TRIGGER USER" $*
 done
 
@@ -60,6 +60,12 @@ done
 # the schema
 python ${migration_dir}/create-sql-functions.py | psql --set ON_ERROR_STOP=1 $*
 if [ $? -ne 0 ]; then echo "Installing generated functions second time failed.">&2; exit 1; fi
+
+# analyze tables in case index updates influenced query plans
+for table in planet_osm_point planet_osm_line planet_osm_polygon; do
+    psql -c "ANALYZE ${table}" $* &
+done
+wait
 
 for python in ${migration_dir}/*.py; do
     # break the loop if the file doesn't exist - this is generally the case

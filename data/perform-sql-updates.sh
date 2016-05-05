@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# apply wof schema first, as functions now depend on it.
-echo "Creating WOF schema..."
-psql $@ -f wof-schema.sql
+# apply schema updates first, some functions now depend on it.
+echo "Creating custom schema..."
+psql $@ -f schema.sql
 echo "done."
 
 # subsequent sql depends on functions installed

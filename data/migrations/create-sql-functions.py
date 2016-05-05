@@ -1,272 +1,395 @@
 from collections import namedtuple
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
-from TileStache.Goodies.VecTiles.transform import _parse_kt
+from numbers import Number
 import os.path
-import csv
-
-Rule = namedtuple(
-    'Rule',
-    'calc equals not_equals not_exists set_memberships exists default_rule'
-)
+import yaml
 
 
-Key = namedtuple(
-    'Key',
-    'table key typ'
-)
-
-
-def _parse_kt_table(kt):
-    table = None
-
-    if kt.startswith("osm:"):
-        table = "osm"
-        kt = kt[4:]
-
-    elif kt.startswith("ne:"):
-        table = "ne"
-        kt = kt[3:]
-
-    elif kt.startswith("shp:"):
-        table = "shp"
-        kt = kt[4:]
-
-    key, typ = _parse_kt(kt)
-
-    return Key(table=table, key=key, typ=typ)
-
-
-def format_key(kt):
-    key = kt.key
-    if key.startswith('tags->'):
-        key = 'tags->\'%s\'' % (key[len('tags->'):])
-    else:
-        key = '"%s"' % key
-    return key
-
-
-SQL_TYPE_LOOKUP = {
-    float: "real",
-    int: "integer",
-    str: "text"
-}
-
-
-def column_for_key(kt):
-    key = kt.key
-    if key.startswith('tags->'):
-        return Key(table=kt.table, key="tags", typ="hstore")
-    sql_type = SQL_TYPE_LOOKUP[kt.typ]
-    return Key(table=kt.table, key=('"%s"' % key), typ=sql_type)
-
-
-def format_string_value(value):
-    formatted_value = "'%s'" % value
-    return formatted_value
-
-
-def format_calc_value(value):
-    if value.startswith('${') and value.endswith('}'):
-        calc_value = value[2:-1]
-    else:
-        calc_value = format_string_value(value)
-    return calc_value
-
-
-def create_rule(keys, row, calc):
-    equals = []
-    not_equals = []
-    not_exists = []
-    set_memberships = []
-    exists = []
-    default_rule = None
-    for key, matcher in zip(keys, row):
-        assert matcher, 'Invalid value for row: %s' % row
-        # skip all * values
-        if matcher == '*':
-            continue
-        # if the matcher is surrounded by quotes, we assume that
-        # should be an equals value matcher with what is inside the
-        # quotes. This allows us to handle values that have a ;
-        # character in them
-        elif matcher.startswith('"') and matcher.endswith('"'):
-            equals.append((key, matcher[1:-1]))
-        elif matcher == '-':
-            not_exists.append(key)
-        elif matcher == '+':
-            exists.append(key)
-        elif matcher.startswith('-'):
-            not_equals.append((key, matcher[1:]))
-        elif ';' in matcher:
-            candidates = matcher.split(';')
-            set_memberships.append((key, candidates))
+def format_value(val):
+    if isinstance(val, dict):
+        if 'expr' in val:
+            if val['expr'] is None:
+                return 'NULL'
+            else:
+                return val['expr']
+        elif 'col' in val:
+            if val['col'].startswith('tags->'):
+                return "tags->'%s'" % val['col'][len('tags->'):]
+            else:
+                return '"%s"' % val['col']
+        elif 'value' in val:
+            return "'%s'" % val['value']
         else:
-            equals.append((key, matcher))
-    if not (equals or not_equals or not_exists or set_memberships or exists):
-        default_rule = calc
-    return Rule(
-        calc, equals, not_equals, not_exists, set_memberships, exists,
-        default_rule)
+            assert 0, 'Unknown dict value: %r' % val
+    if isinstance(val, int):
+        return "%s" % val
+    else:
+        return "'%s'" % val
 
 
-def create_case_statement(rules):
+def value_columns(val):
+    if isinstance(val, dict):
+        if 'expr' in val:
+            if val['expr'] is None:
+                return []
+            else:
+                return val.get('columns', [])
+        elif 'col' in val:
+            if val.get('ignore'):
+                return []
+            elif val['col'].startswith('tags->'):
+                return ['tags']
+            else:
+                return [val['col']]
+        elif 'value' in val:
+            return []
+        else:
+            assert 0, 'Unknown dict value: %r' % val
+    return []
+
+
+def format_column(k):
+    if k.startswith('tags->'):
+        val = "tags->'%s'" % (k[len('tags->'):])
+    else:
+        val = '"%s"' % k
+    return val
+
+
+class EqualsRule(object):
+
+    def __init__(self, column, value):
+        self.column = column
+        self.value = value
+
+    def as_sql(self):
+        equals_check = '%s = %s' % (
+                format_column(self.column),
+                format_value(self.value))
+
+        # tags->'foo' is NULL when the hstore doesn't contain that key, which
+        # makes all the following comparisons NULL, so combine the equals
+        # with an exists check.
+        if self.column.startswith('tags->'):
+            exists_check = "tags ? '%s'" % (self.column[len('tags->'):],)
+            return '(%s) AND (%s)' % (exists_check, equals_check)
+        else:
+            return equals_check
+
+    def columns(self):
+        return [self.column] + value_columns(self.value)
+
+
+class GreaterOrEqualsRule(object):
+    def __init__(self, column, value):
+        self.column = column
+        self.value = value
+
+    def as_sql(self):
+        return '%s >= %s' % (
+            format_column(self.column),
+            format_value(self.value))
+
+    def columns(self):
+        return [self.column] + value_columns(self.value)
+
+
+class NotEqualsRule(object):
+
+    def __init__(self, column, value):
+        self.column = column
+        self.value = value
+
+    def as_sql(self):
+        return '%s <> %s' % (
+            format_column(self.column),
+            format_value(self.value))
+
+    def columns(self):
+        return [self.column] + value_columns(self.value)
+
+
+class SetRule(object):
+
+    def __init__(self, column, values):
+        self.column = column
+        self.values = values
+
+    def as_sql(self):
+        formatted_values = map(format_value, self.values)
+        return '%s IN (%s)' % (
+            format_column(self.column),
+            ', '.join(formatted_values))
+
+    def columns(self):
+        cols = [self.column]
+        for val in self.values:
+            cols.extend(value_columns(val))
+        return cols
+
+
+class ExistsRule(object):
+
+    def __init__(self, column):
+        self.column = column
+
+    def as_sql(self):
+        if self.column.startswith('tags->'):
+            return "tags ? '%s'" % (self.column[len('tags->'):],)
+        else:
+            return '%s IS NOT NULL' % format_column(self.column)
+
+    def columns(self):
+        return [self.column]
+
+
+class NotExistsRule(object):
+
+    def __init__(self, column):
+        self.column = column
+
+    def as_sql(self):
+        return '%s IS NULL' % format_column(self.column)
+
+    def columns(self):
+        return [self.column]
+
+
+class AndRule(object):
+
+    def __init__(self, rules):
+        self.rules = rules
+
+    def as_sql(self):
+        return ' AND '.join(['(%s)' % x.as_sql() for x in self.rules])
+
+    def columns(self):
+        return sum([x.columns() for x in self.rules], [])
+
+
+class OrRule(object):
+
+    def __init__(self, rules):
+        self.rules = rules
+
+    def as_sql(self):
+        return ' OR '.join(['(%s)' % x.as_sql() for x in self.rules])
+
+    def columns(self):
+        return sum([x.columns() for x in self.rules], [])
+
+
+class NotRule(object):
+
+    def __init__(self, rule):
+        self.rule = rule
+
+    def as_sql(self):
+        return 'NOT (%s)' % self.rule.as_sql()
+
+    def columns(self):
+        return self.rule.columns()
+
+
+class ExpressionRule(object):
+
+    def __init__(self, column, expr, extra_columns=None):
+        self.column = column
+        self.expr = expr
+        self.extra_columns = extra_columns
+
+    def as_sql(self):
+        return self.expr
+
+    def columns(self):
+        cols = [self.column]
+        if self.extra_columns:
+            cols.extend(self.extra_columns)
+        return cols
+
+
+def create_level_filter_rule(filter_level, combinator=AndRule):
+    rules = []
+    if not isinstance(filter_level, list):
+        filter_level = [filter_level]
+    for filter_level_item in filter_level:
+        for k, v in filter_level_item.items():
+            rule = create_filter_rule(k, v)
+            rules.append(rule)
+    assert rules, 'No rules specified in level: %s' % filter_level
+    if len(rules) > 1:
+        rule = combinator(rules)
+    else:
+        rule = rules[0]
+    return rule
+
+
+def create_filter_rule(filter_key, filter_value):
+    # check for the composite rules first
+    if filter_key == 'not':
+        rule = create_level_filter_rule(filter_value)
+        rule = NotRule(rule)
+    elif filter_key == 'all':
+        rule = create_level_filter_rule(filter_value)
+    elif filter_key == 'any':
+        rule = create_level_filter_rule(filter_value, combinator=OrRule)
+    else:
+        # leaf rules
+        if isinstance(filter_value, list):
+            rule = SetRule(filter_key, filter_value)
+        else:
+            if filter_value is True:
+                rule = ExistsRule(filter_key)
+            elif filter_value is False:
+                rule = NotExistsRule(filter_key)
+            elif isinstance(filter_value, Number):
+                rule = EqualsRule(filter_key, filter_value)
+            elif isinstance(filter_value, str) and filter_value.startswith('-'):
+                rule = NotEqualsRule(filter_key, filter_value[1:])
+            elif isinstance(filter_value, dict) and 'min' in filter_value:
+                rule = GreaterOrEqualsRule(filter_key, filter_value['min'])
+            elif isinstance(filter_value, dict) and 'expr' in filter_value:
+                rule = ExpressionRule(
+                    filter_key, filter_value['expr'], filter_value.get('cols'))
+            else:
+                rule = EqualsRule(filter_key, filter_value)
+    return rule
+
+
+class Matcher(object):
+
+    def __init__(self, rule, min_zoom, output, table, extra_columns):
+        self.rule = rule
+        self.min_zoom = min_zoom
+        self.output = output
+        self.table = table
+        self.extra_columns = extra_columns
+
+    def when_sql_output(self):
+        hstore_items = []
+        for k, v in self.output.items():
+            hstore_key = "'%s'" % k
+            hstore_val = format_value(v)
+            hstore_items.append('%s,%s::text' % (hstore_key, hstore_val))
+        hstore_output = 'HSTORE(ARRAY[%s])' % ','.join(hstore_items)
+        return "WHEN %s THEN %s" % (
+            self.rule.as_sql(), hstore_output)
+
+    def output_columns(self):
+        columns = self.extra_columns
+        for k, v in self.output.items():
+            columns.extend(value_columns(v))
+        return columns
+
+    def when_sql_min_zoom(self):
+        if self.min_zoom is None:
+            min_zoom = 'NULL'
+        else:
+            min_zoom = self.min_zoom
+        return 'WHEN %s THEN %s' % (self.rule.as_sql(), min_zoom)
+
+
+def create_matcher(yaml_datum):
+    rules = []
+    for k, v in yaml_datum['filter'].items():
+        rule = create_filter_rule(k, v)
+        rules.append(rule)
+    assert rules, 'No filter rules found in %s' % yaml_datum
+    if len(rules) > 1:
+        rule = AndRule(rules)
+    else:
+        rule = rules[0]
+    min_zoom = yaml_datum['min_zoom']
+
+    output = yaml_datum['output']
+    assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
+
+    table = yaml_datum.get('table')
+    extra_columns = yaml_datum.get('extra_columns', [])
+    matcher = Matcher(rule, min_zoom, output, table, extra_columns)
+    return matcher
+
+
+def create_case_statement_min_zoom(matchers):
     when_parts = []
-    default_rule = None
-    for rule in rules:
-        when_equals = ''
-        when_not_equals = ''
-        when_not_exists = ''
-        when_in = ''
-
-        when_conds = []
-
-        # TODO consider splitting this up into separate functions to
-        # more easily test
-        if rule.equals:
-            when_equals_parts = ['%s = %s' % (format_key(key),
-                                              format_string_value(matcher))
-                                 for key, matcher in rule.equals]
-            when_equals = ' AND '.join(when_equals_parts)
-            when_conds.append(when_equals)
-
-        if rule.not_equals:
-            when_not_equals_parts = ['%s <> %s' % (format_key(key),
-                                                   format_string_value(
-                                                       matcher))
-                                     for key, matcher in rule.not_equals]
-            when_not_equals = ' AND '.join(when_not_equals_parts)
-            when_conds.append(when_not_equals)
-
-        if rule.not_exists:
-            when_not_exists_parts = ['%s IS NULL' % format_key(key)
-                                     for key in rule.not_exists]
-            when_not_exists = ' AND '.join(when_not_exists_parts)
-            when_conds.append(when_not_exists)
-
-        if rule.set_memberships:
-            when_in_parts = []
-            for key, candidates in rule.set_memberships:
-                formatted_key = format_key(key)
-                formatted_candidates = map(format_string_value, candidates)
-                formatted_candidates = ', '.join(formatted_candidates)
-                when_in_part = '%s IN (%s)' % (formatted_key,
-                                               formatted_candidates)
-                when_in_parts.append(when_in_part)
-
-            when_in = ' AND '.join(when_in_parts)
-            when_conds.append(when_in)
-
-        if rule.exists:
-            when_exists_parts = ['%s IS NOT NULL' % format_key(key)
-                                 for key in rule.exists]
-            when_exists = ' AND '.join(when_exists_parts)
-            when_conds.append(when_exists)
-
-        if rule.default_rule:
-            assert not default_rule, 'Multiple default rules detected'
-            # indent
-            default_rule = '    ELSE %s' % rule.default_rule
-            continue
-
-        when_cond = ' AND '.join(when_conds)
-        when_part = 'WHEN %s THEN %s' % (when_cond, rule.calc)
+    for matcher in matchers:
+        when_sql_part = matcher.when_sql_min_zoom()
         # indent
-        when_part = '    %s' % when_part
-        when_parts.append(when_part)
-
-    if default_rule:
-        when_parts.append(default_rule)
-    when_block = '\n'.join(when_parts)
-
-    case_statement = 'CASE\n%s\n  END' % when_block
-    return case_statement
+        when_sql_part = '    %s' % when_sql_part
+        when_parts.append(when_sql_part)
+    when_sql = '\n'.join(when_parts)
+    case_sql = 'CASE\n%s\n  END' % when_sql
+    return case_sql
 
 
-def used_params(rules):
-    used = set()
+def create_case_statement_output(matchers):
+    when_parts = []
+    for matcher in matchers:
+        when_sql_part = matcher.when_sql_output()
+        # indent
+        when_sql_part = '    %s' % when_sql_part
+        when_parts.append(when_sql_part)
+    when_sql = '\n'.join(when_parts)
+    case_sql = 'CASE\n%s\n  END' % when_sql
+    return case_sql
 
-    for rule in rules:
-        if rule.equals:
-            for key, matcher in rule.equals:
-                used.add(column_for_key(key))
-
-        if rule.not_equals:
-            for key, matcher in rule.not_equals:
-                used.add(column_for_key(key))
-
-        if rule.not_exists:
-            for key in rule.not_exists:
-                used.add(column_for_key(key))
-
-        if rule.set_memberships:
-            for key, candidates in rule.set_memberships:
-                used.add(column_for_key(key))
-
-        if rule.exists:
-            for key in rule.exists:
-                used.add(column_for_key(key))
-
-    return used
+Key = namedtuple('Key', 'table key typ')
 
 
 layers = {}
 script_root = os.path.dirname(__file__)
 
-for layer in ('landuse', 'pois', 'transit', 'water'):
+for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
+              'buildings', 'roads', 'earth'):
     kind_rules = []
     min_zoom_rules = []
-    csv_file = '../../spreadsheets/kind/%s.csv' % layer
-    file_path = os.path.join(script_root, csv_file)
+    # synthetic columns are ones that we generate in the SQL functions, usually
+    # in the DECLARE section. for example; building volume in the buildings
+    # query.
+    synthetic_columns = set(['way_area'])
+    file_path = os.path.join(script_root, '../../yaml/%s.yaml' % layer)
     with open(file_path) as fh:
-        reader = csv.reader(fh, skipinitialspace=True)
-        keys = None
-        for row in reader:
-            if keys is None:
-                # assume the last key is the kind value
-                kind = row.pop(-1)
-                assert kind == 'kind'
-                # assume the second to last key is the min_zoom
-                # TODO this might need to be changed once we have more
-                # files in play
-                min_zoom = row.pop(-1)
-                assert min_zoom == 'min_zoom'
-                keys = []
-                for key_type in row:
-                    key = _parse_kt_table(key_type)
-                    keys.append(key)
-            else:
-                # assume kind is last
-                kind_calc = row.pop(-1)
-                # and next is the min_zoom calculation
-                min_zoom_calc = row.pop(-1)
+        yaml_data = yaml.load(fh)
+        synthetic_columns |= set(yaml_data.get('synthetic_columns', []))
+        matchers = []
+        for yaml_datum in yaml_data['filters']:
+            matcher = create_matcher(yaml_datum)
+            matchers.append(matcher)
 
-                if min_zoom_calc and min_zoom_calc != '*':
-                    min_zoom_calc = format_calc_value(min_zoom_calc)
-                    min_zoom_rule = create_rule(keys, row, min_zoom_calc)
-                    min_zoom_rules.append(min_zoom_rule)
+    params = set()
+    for matcher in matchers:
+        # columns in the query should be those needed by the rule, union those
+        # needed by the output, minus any which are synthetic and local to the
+        # query function.
+        columns = ((set(matcher.rule.columns()) |
+                    set(matcher.output_columns()))
+                   - synthetic_columns)
+        for column in columns:
+            if not column.startswith('tags'):
+                if column == 'gid' or column == 'fid':
+                    typ = 'integer'
+                elif column == 'scalerank' or column == 'labelrank':
+                    typ = 'smallint'
+                else:
+                    typ = 'text'
+                key = Key(
+                    table=matcher.table, key=format_column(column), typ=typ)
+                params.add(key)
 
-                if kind_calc and kind_calc != '*':
-                    kind_calc = format_calc_value(kind_calc)
-                    kind_rule = create_rule(keys, row, kind_calc)
-                    kind_rules.append(kind_rule)
-
-    osm_tags = set([Key(table='osm', key='tags', typ='hstore'),
-                    Key(table=None, key='tags', typ='hstore')])
-    params = ((used_params(kind_rules) | used_params(min_zoom_rules))
-              - osm_tags)
     # sorted params is nicer to read in the sql
     params = sorted(params)
-    kind_case_statement = create_case_statement(kind_rules)
-    min_zoom_case_statement = create_case_statement(min_zoom_rules)
+
+    min_zoom_case_statement = create_case_statement_min_zoom(matchers)
+    kind_case_statement = create_case_statement_output(matchers)
     layers[layer] = dict(
         params=params,
         kind_case_statement=kind_case_statement,
         min_zoom_case_statement=min_zoom_case_statement,
     )
 
-template_name = os.path.join(script_root, 'sql.jinja2')
-environment = Environment(loader=FileSystemLoader('.'))
+template_name = 'sql.jinja2'
+environment = Environment(loader=FileSystemLoader(script_root))
 template = environment.get_template(template_name)
 sql = template.render(
     layers=layers,

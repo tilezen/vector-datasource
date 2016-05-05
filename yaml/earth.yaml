@@ -1,0 +1,62 @@
+filters:
+  - filter:
+      place: continent
+      name: true
+    min_zoom: 0
+    output:
+      kind: continent
+    table: osm
+  - filter:
+      place: archipelago
+      name: true
+    # Once more feature are polygons, it would be worthwhile to do
+    # min_zoom: GREATEST(7, LEAST((zoom+6)::smallint, 15))
+    # but for now, it's mostly middling data
+    min_zoom: 15
+    output:
+      kind: archipelago
+    table: osm
+  - filter:
+      place: island
+      name: true
+    min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 15))
+    output:
+      kind: island
+    table: osm
+  - filter:
+      place: islet
+      name: true
+    min_zoom: GREATEST(15, LEAST((zoom+3.5)::smallint, 17))
+    output:
+      kind: islet
+    table: osm
+  - filter: {natural: cliff}
+    min_zoom: 13
+    output: {kind: cliff}
+    table: osm
+  - filter: {natural: arete}
+    min_zoom: 13
+    output: {kind: arete}
+    table: osm
+  - filter:
+      natural: ridge
+      name: true
+    min_zoom: 13
+    output:
+      kind: ridge
+    table: osm
+  - filter:
+      natural: valley
+      name: true
+    min_zoom: 13
+    output:
+      kind: valley
+    table: osm
+  - filter: {gid: true}
+    min_zoom: 0
+    output: {kind: earth}
+    table: ne
+  - filter: {fid: true}
+    min_zoom: 0
+    output: {kind: earth}
+    table: shp

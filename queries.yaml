@@ -27,10 +27,14 @@ layers:
   earth:
     template: earth.jinja2
     start_zoom: 0
-    geometry_types: [Polygon, MultiPolygon]
+    geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
     transform:
+      - TileStache.Goodies.VecTiles.transform.tags_create_dict
+      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
+      - TileStache.Goodies.VecTiles.transform.tags_remove
+      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.earth
@@ -52,7 +56,7 @@ layers:
   landuse:
     template: landuse.jinja2
     start_zoom: 4
-    geometry_types: [Polygon, MultiPolygon]
+    geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_start: 4
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
@@ -71,18 +75,19 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
-      - TileStache.Goodies.VecTiles.transform.road_kind
       - TileStache.Goodies.VecTiles.transform.road_classifier
       - TileStache.Goodies.VecTiles.transform.road_oneway
       - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
       - TileStache.Goodies.VecTiles.transform.route_name
       - TileStache.Goodies.VecTiles.transform.normalize_aerialways
+      - TileStache.Goodies.VecTiles.transform.normalize_cycleway
+      - TileStache.Goodies.VecTiles.transform.add_is_bicycle_related
       - TileStache.Goodies.VecTiles.transform.road_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
+      - TileStache.Goodies.VecTiles.transform.tags_remove
     sort: TileStache.Goodies.VecTiles.sort.roads
   buildings:
     template: buildings.jinja2
@@ -96,7 +101,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
-      - TileStache.Goodies.VecTiles.transform.building_kind
       - TileStache.Goodies.VecTiles.transform.building_height
       - TileStache.Goodies.VecTiles.transform.building_min_height
       - TileStache.Goodies.VecTiles.transform.synthesize_volume
@@ -125,6 +129,9 @@ layers:
       - TileStache.Goodies.VecTiles.transform.remove_zero_area
       - TileStache.Goodies.VecTiles.transform.pois_kind_aeroway_gate
       - TileStache.Goodies.VecTiles.transform.make_representative_point
+      - TileStache.Goodies.VecTiles.transform.height_to_meters
+      - TileStache.Goodies.VecTiles.transform.pois_capacity_int
+      - TileStache.Goodies.VecTiles.transform.elevation_to_meters
     sort: TileStache.Goodies.VecTiles.sort.pois
   boundaries:
     template: boundaries.jinja2
@@ -136,10 +143,9 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.boundary_kind
+      - TileStache.Goodies.VecTiles.transform.admin_level_as_int
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.boundary_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
   transit:
     template: transit.jinja2
@@ -272,6 +278,7 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
+      end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -286,6 +293,19 @@ post_process:
       start_zoom: 9
       where: >-
         'label_placement' not in properties and kind in ('bay', 'strait', 'fjord')
+  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+    params:
+      source_layer: earth
+      label_property_name: label_placement
+      label_property_value: "yes"
+      geom_types: [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
+  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+    params:
+      source_layer: earth
+      start_zoom: 0
+      where: >-
+        'label_placement' not in properties and kind in
+        ('archipelago', 'island', 'islet', 'continent', 'valley', 'ridge')
   - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
     params:
       source_layer: buildings
@@ -298,25 +318,27 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: buildings
+      end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: pois
+      end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
   - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
       source_layer: landuse
-      start_zoom: 13
+      start_zoom: 6
       where: >-
         properties.get('mz_is_building') is True
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: landuse
-      start_zoom: 13
+      start_zoom: 6
       properties: [mz_is_building]
   - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
@@ -338,6 +360,13 @@ post_process:
         kind: [neighbourhood, microhood, macrohood]
       rank_key: kind_tile_rank
       start_zoom: 11
+  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+    params:
+      source_layer: pois
+      items_matching:
+        kind: [peak, volcano]
+      rank_key: kind_tile_rank
+      start_zoom: 9
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: places
@@ -346,6 +375,7 @@ post_process:
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
+      end_zoom: 15
       property_keys: [name]
       geometry_types: [Point]
       min_distance: 64.0
@@ -356,10 +386,6 @@ post_process:
       where:
         label_placement: yes
       geometry_types: [Point]
-  - fn: TileStache.Goodies.VecTiles.transform.remove_abandoned_pistes
-    params:
-      source_layer: roads
-      start_zoom: 9
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:
       source_layer: roads
@@ -380,10 +406,9 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 16
+      end_zoom: 14
       properties: [name, ref, network]
       where: >-
-        (kind == 'path' and zoom < 16) or
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
         (kind == 'major_road' and zoom <  7) or
@@ -412,7 +437,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 16
+      end_zoom: 15
   - fn: TileStache.Goodies.VecTiles.transform.update_parenthetical_properties
     params:
       source_layer: pois
@@ -445,3 +470,10 @@ post_process:
       end_zoom: 13
       items_matching: { kind: station }
       max_items: 30
+  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+    params:
+      source_layer: pois
+      start_zoom: 9
+      end_zoom: 15
+      items_matching: { kind: [peak, volcano] }
+      max_items: 5

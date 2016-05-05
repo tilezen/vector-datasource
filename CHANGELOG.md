@@ -1,3 +1,96 @@
+v0.10.0
+-------
+* **Release date**: 2016-05-04.
+* **Paths get a significant makeover** in the `roads` layer:
+  * Many `path`, `footway`, and `cycleway` features are visible earlier up to zoom 11, based on their designation as or inclusion in walking and cycling networks.
+  * If a track, major road, or minor road is part of a walking or cycling network it is also visible earlier.
+  * Some `footway` and `stair` features are visible later than before at zoom 15.
+  * Add `footway` property to disentangle `sidewalk` and `crossing` features from other footways.
+  * Add `walking_network` property with values in `iwn`, `nwn`, `rwn`, and `lwn` to indicate features's international to local significance.
+  * Add other additional properties: `bicycle`, `foot`, `horse`, `tracktype`, `incline`, `trail_visibility` and `sac_scale`.
+  * Most paths are now named on introduction, before they were only available at zoom 14+.
+  * See [#593](https://github.com/mapzen/vector-datasource/issues/593), [#596](https://github.com/mapzen/vector-datasource/issues/596), and [#775](https://github.com/mapzen/vector-datasource/issues/775).
+* **Add bicycle properties** to the `roads` layer:
+  * Add `is_bicycle_related` property, set to `true` when road is a cycleway, part of a cycling network, or has bicyle lanes or other cycling related infrastrucure.
+  * Add `bicycle_network` property with values in `icn`, `ncn`, `rcn`, and `lcn` to indicate features's international to local significance.
+  * Add properties for `cycleway`, `cycleway_left`, `cycleway_right`, `oneway_bicycle`, and `segregated`.
+  * See [#647](https://github.com/mapzen/vector-datasource/issues/647).
+* **Add new outdoors related polygons** to the `landuse` layer:
+  * `battlefield`, `beach_resort`, `boat_storage`, `caravan_site`, `dam`, `dog_park`, `firepit`, `fishing_area`, `fort`, `monument`, `picnic_site`, `recreation_track`, `rock`, `scree`, `stone`, `summer_camp`, `swimming_area`, and `water_park`.
+  * See [#663](https://github.com/mapzen/vector-datasource/issues/663) and [#655](https://github.com/mapzen/vector-datasource/issues/655).
+* **Add new natural lines** to the `landuse` layer:
+  * `tree_row` and `hedge`.
+  * See [#566](https://github.com/mapzen/vector-datasource/issues/566).
+* **Add outdoor related points** to the `pois` layer:
+  * `adit`, `battlefield`, `bbq`, `beach_resort`, `beacon`, `bicycle_repair_station`, `boat_rental`, `boat_storage`, `caravan_site`, `communications_tower`, `cross`, `dam`, `dive_centre`, `dog_park`, `dune`, `egress`, `firepit`, `fishing_area`, `fishing`, `fort`, `gas`, `geyser`, `hazard`, `hot_spring`, `hunting`, `life_ring`, `mast`, `mineshaft`, `monument`, `motorcycle`, `observatory`, `offshore_platform`, `outdoor`, `petroleum_well`, `picnic_site`, `picnic_table`, `power_pole`, `power_tower`, `put_in_egress`, `putin`, `pylon`, `ranger_station`, `rapid`, `recreation_track`, `rock`, `saddle`, `scuba_diving`, `shower`, `sinkhole`, `stone`, `summer_camp`, `swimming_area`, `telescope`, `trailhead`, `waterfall`, `waste_disposal`, `water_park`, `water_point`, `water_tower`, `water_well`, and `watering_place`.
+  * See [#594](https://github.com/mapzen/vector-datasource/issues/594), [#599](https://github.com/mapzen/vector-datasource/issues/599), [#602](https://github.com/mapzen/vector-datasource/issues/602), [#657](https://github.com/mapzen/vector-datasource/issues/657), [#662](https://github.com/mapzen/vector-datasource/issues/662), [#663](https://github.com/mapzen/vector-datasource/issues/663), [#671](https://github.com/mapzen/vector-datasource/issues/671), [#674](https://github.com/mapzen/vector-datasource/issues/674), and [#675](https://github.com/mapzen/vector-datasource/issues/675).
+* **Add outdoor related lines** to the `roads` layer.
+  * `portage_way`
+  * See [#677](https://github.com/mapzen/vector-datasource/issues/677).
+* Add `dam` to the `boundaries` layer, and removed it from the `water` layer. See [#663](https://github.com/mapzen/vector-datasource/issues/663) and [#773](https://github.com/mapzen/vector-datasource/issues/773).
+* Add `waterfall` features to the `pois` layer:
+  * Includes `height` value in integer meters.
+  * Zoom visibility is based on waterfall height: taller than 300 meters are visible at zoom 12 and waterfalls with height less than 50 meters are visible at zoom 14.
+  * See
+[#677](https://github.com/mapzen/vector-datasource/issues/677).
+* Modified `peak` features in the `pois` layer:
+  * Add new `elevation` value in integer meters.
+  * Show some tall peaks at earlier zooms.
+  * Add `tile_kind_rank` for peaks to throttle visibility of dense peak clusters.
+  * See [#523](https://github.com/mapzen/vector-datasource/issues/523) and [#524](https://github.com/mapzen/vector-datasource/issues/524).
+* Add `intermittent` property to `water` layer features:
+  * Value of `yes` allows styling to distingish streams that do not run year round.
+  * See
+[#668](https://github.com/mapzen/vector-datasource/issues/668).
+* Add **whitewater** related points to the `pois` layer:
+  * `putin`, `egress`, `put_in_egress`, `hazard` and `rapid`.
+  * Related: `portage_way` features added in the `roads` layer.
+  * See [#599](https://github.com/mapzen/vector-datasource/issues/599).
+* Add `bicycle_junction` features in `pois` layer:
+  * A common European feature in signed bicycle routes with named junctions, these features are added at zoom 16.
+  * The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
+  * See [#592](https://github.com/mapzen/vector-datasource/issues/592).
+* Add `cycle_barrier` features to the `pois` layer at zoom 18. See [#592](https://github.com/mapzen/vector-datasource/issues/592).
+* Modify existing bicycle related features in `pois` layer:
+  * `bicycle` shops are now visible earlier at zoom 15.
+  * `bicycle_rental` is now visible at zoom 16.
+  * `bicycle_rental_station` are split off from `bicycle_rental` shops and are visible at zoom 17. They include additional properties for `capacity` (an integer value), `network`, `operator`, and `ref`.
+  * Features of kind `bicycle_parking` gain additional properties for `access`, `capacity`, `covered`, `fee`, `operator`, `maxstay`, and `surveillance`.
+  * See [#592](https://github.com/mapzen/vector-datasource/issues/592).
+* Add features of kind `walking_junction` to the `pois` layer:
+  * Walking junctions are common in Europe for signed walking routes with named junctions, added at zoom 16.
+  * The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
+  * See [#592](https://github.com/mapzen/vector-datasource/issues/592).
+* Add `island`, `islet`, and `archipelago` label placement points to the `earth` layer. See [#399](https://github.com/mapzen/vector-datasource/issues/399).
+* Add `cliff` and `arete` lines to `earth` layer. See [#601](https://github.com/mapzen/vector-datasource/issues/601).
+* Add label placement lines for `ridge` and `valley` to the `earth` layer. See [#601](https://github.com/mapzen/vector-datasource/issues/601).
+* Move `continent` label placements to the `earth` layer from the `places` layer, a breaking change. See [#703](https://github.com/mapzen/vector-datasource/issues/703).
+* Move `ocean` and `sea` label positions to the `water` layer from the `places` layer, a breaking change. See [#148](https://github.com/mapzen/vector-datasource/issues/148).
+* Normalize `kind` values in the `boundaries` layer, a breaking change:
+  * Match Natural Earth `kind` values to those coming from OpenStreetMap.
+  * Remove junk statistical boundaries.
+  * Remove Natural Earth's `type` property.
+  * See [#517](https://github.com/mapzen/vector-datasource/issues/517) and [#687](https://github.com/mapzen/vector-datasource/issues/687).
+* Normalize `kind` values in the `water` layer, a breaking change:
+  * Match Natural Earth `kind` valeus to those coming from OpenStreetMap.
+  * Example 1: use kind `ocean` instead of `Ocean`
+  * Example 2: use kind `lake` with `reservoir:yes` instead of `Reservoir`.
+  * Example 3: use kind `ocean` with `boundary:yes` instead of `Coastline`.
+  * See [#628](https://github.com/mapzen/vector-datasource/issues/628) and
+[#680](https://github.com/mapzen/vector-datasource/issues/680)
+* Add `sources` to the `earth` layer:
+  * Indicate `naturalearth.com`, `openstreetmapdata.com`, or `openstreetmap.org` as source.
+  * See [#737](https://github.com/mapzen/vector-datasource/pull/737)
+* Bug fixes:
+  * Identify `yes` kind `pois` to their respective values, including generic `office`. See [#705](https://github.com/mapzen/vector-datasource/issues/705).
+  * Don't merging lines in the `roads` layer at zoom 16 (the max zoom). See [#766](https://github.com/mapzen/vector-datasource/issues/766).
+  * Line merging in the `roads` layer should produce long lines, not many 2 segment lines. See [#768](https://github.com/mapzen/vector-datasource/issues/768).
+  * Removed reference to non-existant `highway=minor` and `highway=footpath` in `roads` layer queries. See [#680](https://github.com/mapzen/vector-datasource/issues/680).
+* Refactor how we calculate `kind` values using YAML config files across all layers to provide more determinism and eliminate `yes` values. Follow on to v0.9 changes in [#580](https://github.com/mapzen/vector-datasource/issues/580) and [#282](https://github.com/mapzen/vector-datasource/issues/282). See [#646](https://github.com/mapzen/vector-datasource/issues/646) and [#687](https://github.com/mapzen/vector-datasource/issues/687)
+* Update how we handle OpenStreetMap data updates via planet_osm_rels triggers. See [#711](https://github.com/mapzen/vector-datasource/issues/711).
+* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.9.0](https://github.com/mapzen/tilequeue/releases/tag/v0.9.0) and [TileStache v0.10.0](https://github.com/mapzen/TileStache/releases/tag/v0.10.0)
+
+
 v0.9.1
 ------
 * **Release date**: 2016-03-28. _Live in prod: 2015-03-30._
@@ -37,8 +130,8 @@ v0.8.0
 * Add new label placements in the `water` layer for `bay`, `strait`, and `fjord`. [Issue #400](https://github.com/mapzen/vector-datasource/issues/400)
 * Add new kinds in the `pois` layer for `hardware` and `trade` to capture more types of "big box" stores. [Issue #520](https://github.com/mapzen/vector-datasource/issues/520)
 * Additions to the `pois` layer to celebrate [International Women's Day](http://www.internationalwomensday.com). [Issue #526](https://github.com/mapzen/vector-datasource/issues/526)
-     * Basic mappings: `childcare`, `clinic`, `dentist`, `doctors`, `kindergarten`, `midwife`, `phone`, `social_facility`, and `toilets`. 
-     * Most social facility are indicated by their detailed kind. Common kinds: `ambulatory_care`, `assisted_living`, `food_bank`, `group_home`, `outreach`, `shelter`, `workshop`, see [TagInfo](https://taginfo.openstreetmap.org/keys/social_facility#values) for full set. 
+     * Basic mappings: `childcare`, `clinic`, `dentist`, `doctors`, `kindergarten`, `midwife`, `phone`, `social_facility`, and `toilets`.
+     * Most social facility are indicated by their detailed kind. Common kinds: `ambulatory_care`, `assisted_living`, `food_bank`, `group_home`, `outreach`, `shelter`, `workshop`, see [TagInfo](https://taginfo.openstreetmap.org/keys/social_facility#values) for full set.
 * Large hotels and "big box" stores now appear at earlier zooms in the `pois` layer. Issues [520](https://github.com/mapzen/vector-datasource/issues/520) and [522](https://github.com/mapzen/vector-datasource/issues/522)
 * The `pois` layer now inludels all features at zoom 16 that were only available in zoom 17 and 18 previously. But we now include a recommended `min_zoom` to replicate the earlier behavior. [Issue #478](https://github.com/mapzen/vector-datasource/issues/478)
 * Improved station `tile_kind_rank` values in the `pois` layer by including more data. Railway route extraction no longer relies on the `planet_osm_nodes` table, which may be missing if flat nodes is enabled. [Issue #507](https://github.com/mapzen/vector-datasource/issues/507)
@@ -113,7 +206,7 @@ v0.5.0
 * Use addr:housename as building name if feature is a POI
 * Add aerialway line features into the `roads` layer.
 * Add back missing roads on park and other landuse boundaries that went missing when `landuse_kind` intercut was added.
-* Add service levels to railroads features in `roads` layer to distinguish importance. 
+* Add service levels to railroads features in `roads` layer to distinguish importance.
 * Updated High Road classifier (zoom range, sort order) for `service` roads, including pedestrian streets, paths, and forest tracks so they are visible earlier.
 * Add `volume` on `building` layer polygons to enable more sophisticated client-side filtering at mid zooms.
 * Add `city_wall` lines and `barrier` lines to `boundaries` layer.
@@ -168,7 +261,7 @@ v0.2.0
 -----
 * **Release date:** 2015-09-18
 * Add `landuse_kind` to features in `roads` and `buildings` layers based on the intersection with `landuse` layer features. **TIP:** custom style roads and buildings over parks and other area features to improves contrast.
-* Add calculated water `boundary=yes` line features to `water` layer to resolve funky "coastlines" crossing water polygons (where river and ocean polygons meet, and where adjacent river polygons meet). There are already stream lines in the water layer, but this might require an style update. **TIP:** In D3.js, set `fill: none` on linear features like streams and `boundary=yes` feeatures. 
+* Add calculated water `boundary=yes` line features to `water` layer to resolve funky "coastlines" crossing water polygons (where river and ocean polygons meet, and where adjacent river polygons meet). There are already stream lines in the water layer, but this might require an style update. **TIP:** In D3.js, set `fill: none` on linear features like streams and `boundary=yes` feeatures.
 * Added power station polygons to `landuse` layer with `kind` = `plant`, `generator`, or `substation`.
 * Add house addresses points to `buildings` layer with `kind` = `address`.
 * Resolve duplicate populated places from `places` layer. Natural Earth only used in low zooms, OSM only used in mid and high zooms.

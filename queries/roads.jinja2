@@ -3,14 +3,7 @@ SELECT
     gid AS __id__,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     'naturalearthdata.com' AS source,
-    name,
-    namealt,
-    namealtt,
-    featurecla AS kind,
-    scalerank::float,
-    labelrank,
-    level,
-    type
+    mz_calculate_output_roads(ne_10m_roads.*) AS mz_properties
 
 FROM ne_10m_roads
 
@@ -24,57 +17,19 @@ SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     'openstreetmap.org' AS source,
-    name,
-    aeroway,
-    aerialway,
-    bridge,
-    highway,
-    tags->'ferry' AS ferry,
-    layer,
-    railway,
-    tunnel,
-    oneway,
-    ref,
-    operator,
-    route,
-    tags->'type' AS type,
-    tags->'colour' AS colour,
-    CASE WHEN highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
-                          'primary', 'primary_link', 'secondary', 'secondary_link',
-                          'tertiary', 'tertiary_link')
-              OR railway IN ('rail', 'tram', 'light_rail', 'narrow_gauge', 'monorail')
-              THEN mz_get_rel_network(osm_id)
-         ELSE tags->'network'
-         END AS network,
-    tags->'state' AS state,
-    tags->'symbol' AS symbol,
-    tags->'description' AS description,
-    tags->'distance' AS distance,
-    tags->'ascent' AS ascent,
-    tags->'descent' AS descent,
-    tags->'roundtrip' AS roundtrip,
-    tags->'route_name' AS route_name,
-    tags->'motor_vehicle' AS motor_vehicle,
-    service,
-    NULL AS piste_type,
-    NULL AS piste_difficulty,
-    NULL AS piste_grooming,
-    NULL AS piste_name,
-    NULL AS piste_abandoned,
-    NULL AS ski,
-    NULL AS snowshoe,
-    NULL AS symbol,
-    NULL AS exit_to,
-    leisure,
-    sport,
-    man_made,
+    mz_calculate_output_roads(planet_osm_line.*) AS mz_properties,
 {% if zoom >= 12 %}
     -- try to only calculate whether this is a bus route when we already know
     -- that it's a road, as joining onto the rels table can be expensive.
-    CASE WHEN mz_calculate_highway_level(highway, service) IS NOT NULL
+    CASE WHEN highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
+                          'primary', 'primary_link', 'secondary', 'secondary_link',
+                          'tertiary', 'tertiary_link',
+                          'residential', 'unclassified', 'road', 'living_street')
       THEN mz_calculate_is_bus_route(osm_id)
       ELSE NULL
     END AS is_bus_route,
+{% else %}
+    NULL AS is_bus_route,
 {% endif %}
     %#tags AS tags
 
@@ -83,70 +38,5 @@ FROM planet_osm_line
 WHERE
     {{ bounds|bbox_filter('way') }}
     AND mz_road_level <= {{ zoom }}
-    -- the below is to filter out any relations-as-roads, since instead we are
-    -- projecting the network attribute onto the ways. it needs some adjustment as
-    -- other features, in this case ferry routes, are routinely mapped as relations.
-    AND (osm_id > 0 OR route = 'ferry')
-
-
-{% if zoom >= 13 %}
-
-UNION ALL
-
-SELECT
-    osm_id AS __id__,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
-    'openstreetmap.org' AS source,
-    COALESCE(tags->'piste:name', name) AS name,
-    NULL AS aeroway,
-    NULL AS aerialway,
-    NULL AS bridge,
-    NULL AS highway,
-    NULL AS ferry,
-    layer,
-    NULL AS railway,
-    tunnel,
-    oneway,
-    ref,
-    operator,
-    route,
-    tags->'type' AS type,
-    tags->'colour' AS colour,
-    COALESCE(mz_get_rel_network(osm_id), tags->'network') AS network,
-    tags->'state' AS state,
-    tags->'symbol' AS symbol,
-    tags->'description' AS description,
-    tags->'distance' AS distance,
-    tags->'ascent' AS ascent,
-    tags->'descent' AS descent,
-    tags->'roundtrip' AS roundtrip,
-    tags->'route_name' AS route_name,
-    NULL AS motor_vehicle,
-    NULL AS service,
-    tags->'piste:type' AS piste_type,
-    tags->'piste:difficulty' AS piste_difficulty,
-    tags->'piste:grooming' AS piste_grooming,
-    tags->'piste:name' AS piste_name,
-    tags->'piste:abandoned' AS piste_abandoned,
-    tags->'ski' AS ski,
-    tags->'snowshoe' AS snowshoe,
-    tags->'symbol' AS symbol,
-    NULL AS exit_to,
-    leisure,
-    sport,
-    man_made,
-    NULL AS is_bus_route,
-    %#tags AS tags
-
-FROM planet_osm_line
-
-WHERE
-    {{ bounds|bbox_filter('way') }}
-    AND tags ? 'piste:type'
-    AND tags->'piste:type' IN ('nordic', 'downhill', 'sleigh', 'skitour',
-        'hike', 'sled', 'yes', 'snow_park', 'playground', 'ski_jump')
-    AND (osm_id > 0 OR route = 'piste')
-
-{% endif %}
 
 {% endif %}

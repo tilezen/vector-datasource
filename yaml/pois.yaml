@@ -1,0 +1,652 @@
+filters:
+  - filter: {disused: -no}
+    min_zoom: null
+    output:
+      kind: {expr: null}
+  - filter:
+      aeroway: [aerodrome, airport]
+    min_zoom: LEAST(zoom + 4.12, 13)
+    output:
+      kind: {col: aeroway}
+  - filter: {amenity: hospital}
+    min_zoom: LEAST(zoom + 3.32, 14)
+    output: {kind: hospital}
+  - filter:
+      natural: [peak, volcano]
+    min_zoom: CASE WHEN mz_to_float_meters("ele") > 4000 THEN 9
+      WHEN mz_to_float_meters("ele") > 3000 THEN 10
+      WHEN mz_to_float_meters("ele") > 2000 THEN 11
+      WHEN mz_to_float_meters("ele") > 1000 THEN 12
+      ELSE 13
+      END
+    output:
+      kind: {col: natural}
+      elevation: {col: ele}
+  - filter: {railway: station}
+    min_zoom: 10
+    output: {kind: station}
+  - filter: {tourism: zoo}
+    min_zoom: LEAST(zoom + 3.00, 13)
+    output: {kind: zoo}
+  - filter: {natural: spring}
+    min_zoom: 14
+    output: {kind: spring}
+  - filter: {railway: level_crossing}
+    min_zoom: 14
+    output: {kind: level_crossing}
+  - filter:
+      amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
+        post_office, theatre]
+    min_zoom: LEAST(zoom + 2.7, 16)
+    output:
+      kind: {col: amenity}
+  - filter:
+      amenity: [biergarten, pub, bar, restaurant, fast_food, cafe]
+    min_zoom: LEAST(zoom + 2.50, 17)
+    output:
+      kind: {col: amenity}
+  - filter:
+      amenity: [pharmacy, veterinary]
+    min_zoom: LEAST(zoom + 3.3, 17)
+    output:
+      kind: {col: amenity}
+  - filter:
+      craft: [brewery, carpenter, confectionery, dressmaker, electrician, gardener,
+        handicraft, hvac, metal_construction, painter, photographer, photographic_laboratory,
+        plumber, pottery, sawmill, shoemaker, stonemason, tailor, winery]
+    min_zoom: LEAST(zoom + 3.3, 17)
+    output:
+      kind: {col: craft}
+  - filter: {amenity: nursing_home}
+    min_zoom: LEAST(zoom + 1.25, 16)
+    output: {kind: nursing_home}
+  - filter: {shop: music}
+    min_zoom: LEAST(zoom + 1.27, 17)
+    output: {kind: music}
+  - filter: {amenity: community_centre}
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output: {kind: community_centre}
+  - filter: {shop: sports}
+    min_zoom: LEAST(zoom + 1.53, 17)
+    output: {kind: sports}
+  - filter: {shop: fishing}
+    min_zoom: 16
+    output: {kind: fishing}
+  - filter: {shop: hunting}
+    min_zoom: 16
+    output: {kind: hunting}
+  - filter: {shop: outdoor}
+    min_zoom: GREATEST(15, LEAST(zoom, 16))
+    output: {kind: outdoor}
+  - filter: {amenity: dive_centre}
+    min_zoom: 16
+    output: {kind: dive_centre }
+  - filter: {shop: scuba_diving}
+    min_zoom: 17
+    output: {kind: scuba_diving}
+  - filter: {shop: motorcycle}
+    min_zoom: 17
+    output: {kind: motorcycle}
+  - filter: {amenity: college}
+    min_zoom: LEAST(zoom + 2.35, 16)
+    output: {kind: college}
+  - filter: {shop: mall}
+    min_zoom: LEAST(zoom + 2.74, 17)
+    output: {kind: mall}
+  - filter: {leisure: stadium}
+    min_zoom: LEAST(zoom + 2.30, 15)
+    output: {kind: stadium}
+  - filter: {man_made: observatory}
+    min_zoom: 15
+    output: {kind: observatory}
+  - filter: {amenity: university}
+    min_zoom: LEAST(zoom + 2.55, 15)
+    output: {kind: university}
+  - filter: {amenity: prison}
+    min_zoom: LEAST(zoom + 2.55, 15)
+    output: {kind: prison}
+  - filter: {tourism: museum}
+    min_zoom: LEAST(zoom + 1.43, 16)
+    output: {kind: museum}
+  - filter: {historic: landmark}
+    min_zoom: LEAST(zoom + 1.76, 15)
+    output: {kind: landmark}
+  - filter: {leisure: marina}
+    min_zoom: LEAST(zoom + 3.45, 17)
+    output: {kind: marina}
+  - filter: {amenity: place_of_worship}
+    min_zoom: LEAST(2 * zoom - 9.55, 17)
+    output: {kind: place_of_worship}
+  - filter: {amenity: townhall}
+    min_zoom: LEAST(zoom + 1.85, 16)
+    output: {kind: townhall}
+  - filter:
+      shop: [laundry, dry_cleaning, toys, ice_cream, wine, alcohol]
+    min_zoom: LEAST(zoom + 4.90, 17)
+    output:
+      kind: {col: shop}
+  - filter: {amenity: ice_cream}
+    min_zoom: LEAST(zoom + 4.90, 17)
+    output: {kind: ice_cream}
+  - filter: {amenity: ferry_terminal}
+    min_zoom: LEAST(zoom + 3.20, 15)
+    output: {kind: ferry_terminal}
+  - filter: {amenity: school}
+    min_zoom: LEAST(zoom + 2.30, 15)
+    output: {kind: school}
+  - filter: {shop: electronics}
+    min_zoom: LEAST(zoom + 3.30, 17)
+    output: {kind: electronics}
+  - filter:
+      shop: [department_store, supermarket, doityourself, hardware, trade]
+    min_zoom: LEAST(zoom + 3.29, 17)
+    output:
+      kind: {col: shop}
+  - filter: {natural: beach}
+    min_zoom: LEAST(zoom + 3.20, 14)
+    output: {kind: beach}
+  - filter: {tags->rental: ski}
+    min_zoom: LEAST(zoom + 1.27, 17)
+    output: {kind: ski}
+  - filter: {shop: ski}
+    min_zoom: LEAST(zoom + 1.27, 17)
+    output: {kind: ski}
+  - filter: {amenity: ski_rental}
+    min_zoom: LEAST(zoom + 1.27, 17)
+    output: {kind: ski_rental}
+  - filter: {amenity: ski_school}
+    min_zoom: LEAST(zoom + 2.30, 15)
+    output: {kind: ski_school}
+  - filter: {man_made: snow_cannon}
+    min_zoom: LEAST(zoom + 4.90, 18)
+    output: {kind: snow_cannon}
+  - filter:
+      leisure: [sports_centre, fitness_centre, fitness_station]
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output:
+      kind: {col: leisure}
+  - filter: {amenity: gym}
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output: {kind: gym}
+  - filter: {leisure: beach_resort}
+    min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
+    output: {kind: beach_resort }
+  - filter:
+      tourism: [hotel, motel]
+    min_zoom: LEAST(zoom + 4.30, 17)
+    output:
+      kind: {col: tourism}
+  - filter: {highway: motorway_junction}
+    min_zoom: 12
+    output: {kind: motorway_junction}
+  - filter: {historic: monument}
+    min_zoom: GREATEST(15, LEAST(zoom + 2.24, 17))
+    output: {kind: monument }
+  - filter:
+      tags->zoo: [enclosure, petting_zoo, aviary, wildlife_park]
+    min_zoom: 17
+    output:
+      kind: {col: tags->zoo}
+  - filter:
+      any:
+        - {waterway: waterfall}
+        - {natural: waterfall}
+    min_zoom: CASE WHEN mz_to_float_meters("height") < 10 THEN 15
+      WHEN mz_to_float_meters("height") < 50 THEN 14
+      WHEN mz_to_float_meters("height") < 300 THEN 13
+      WHEN mz_to_float_meters("height") >= 300 THEN 12
+      ELSE GREATEST(LEAST((zoom+1.066)::smallint,
+      14), 12) END
+    extra_columns: [height]
+    output: {kind: waterfall, height: {col: height}}
+  - filter:
+      tags->attraction: [animal, water_slide, roller_coaster, summer_toboggan, carousel,
+        amusement_ride, maze]
+    min_zoom: 17
+    output:
+      kind: {col: tags->attraction}
+  - filter: {natural: geyser}
+    min_zoom: 15
+    output: {kind: geyser}
+  - filter: {natural: hot_spring}
+    min_zoom: 16
+    output: {kind: hot_spring}
+  - filter: {historic: fort}
+    min_zoom: GREATEST(13, LEAST(zoom + 2.5, 16))
+    output: {kind: fort }
+  - filter:
+      tourism: [attraction, artwork, hanami, trail_riding_station]
+    min_zoom: 17
+    output:
+      kind: {col: tourism}
+  - filter: {tourism: theme_park}
+    min_zoom: GREATEST(13, LEAST(zoom + 6.32, 17))
+    output: {kind: theme_park}
+  - filter: {tourism: wilderness_hut}
+    min_zoom: 15
+    output: {kind: wilderness_hut}
+  - filter: {tourism: resort}
+    min_zoom: GREATEST(14, LEAST(zoom + 5.32, 17))
+    output: {kind: resort}
+  - filter: {tourism: aquarium}
+    min_zoom: GREATEST(14, LEAST(zoom + 3.09, 17))
+    output: {kind: aquarium}
+  - filter: {tourism: winery}
+    min_zoom: GREATEST(14, LEAST(zoom + 2.85, 17))
+    output: {kind: winery}
+  - filter:
+      amenity: [social_facility, clinic, doctors, dentist]
+    min_zoom: 17
+    output:
+      kind: {col: amenity}
+  - filter: {tags->healthcare: midwife}
+    min_zoom: 17
+    output: {kind: midwife}
+  - filter:
+      amenity: [kindergarten, childcare]
+    min_zoom: 17
+    output:
+      kind: {col: amenity}
+  - filter: {amenity: boat_rental}
+    min_zoom: 16
+    output: {kind: boat_rental}
+  - filter: {shop: boat_rental}
+    min_zoom: 16
+    output: {kind: boat_rental}
+  - filter: {tags->rental: boat}
+    min_zoom: 16
+    output: {kind: boat_rental}
+  - filter: {shop: boat, tags->rental: 'yes'}
+    min_zoom: 16
+    output: {kind: boat_rental}
+  - filter: {emergency: phone}
+    min_zoom: 18
+    output: {kind: phone}
+  - filter: {amenity: toilets}
+    min_zoom: 18
+    output: {kind: toilets}
+  - filter: {barrier: gate}
+    min_zoom: 15
+    output: {kind: gate}
+  - filter: {craft: sawmill}
+    min_zoom: 15
+    output: {kind: sawmill}
+  - filter:
+      highway: [gate, mini_roundabout]
+    min_zoom: 15
+    output:
+      kind: {col: highway}
+  - filter: {lock: 'yes'}
+    min_zoom: 15
+    output: {kind: lock}
+  - filter:
+      man_made: [lighthouse, power_wind]
+    min_zoom: 15
+    output:
+      kind: {col: man_made}
+  - filter: {natural: cave_entrance}
+    min_zoom: 15
+    output: {kind: cave_entrance}
+  - filter: {power: generator}
+    min_zoom: 15
+    output: {kind: generator}
+  - filter: {waterway: lock}
+    min_zoom: 15
+    output: {kind: lock}
+  - filter: {aerialway: station}
+    min_zoom: 13
+    output: {kind: station}
+  - filter:
+      railway: [halt, tram_stop, stop]
+    min_zoom: 13
+    output:
+      kind: {col: railway}
+  - filter: {railway: platform}
+    min_zoom: 15
+    output: {kind: platform}
+  - filter: {highway: platform}
+    min_zoom: 17
+    output: {kind: bus_stop}
+  - filter: {public_transport: platform, tags->rail: 'yes'}
+    min_zoom: 15
+    output: {kind: platform}
+  - filter: {public_transport: platform, tags->light_rail: 'yes'}
+    min_zoom: 15
+    output: {kind: platform}
+  - filter: {public_transport: platform, tags->bus: 'yes'}
+    min_zoom: 17
+    output: {kind: bus_stop}
+  - filter: {public_transport: platform}
+    min_zoom: 15
+    output: {kind: platform}
+  - filter: {public_transport: stop_area}
+    min_zoom: 15
+    output: {kind: stop_area}
+  - filter: {tags->site: stop_area}
+    min_zoom: 15
+    output: {kind: stop_area}
+  - filter: {tourism: alpine_hut}
+    min_zoom: 15
+    output: {kind: alpine_hut}
+  - filter:
+      aeroway: [helipad, gate]
+    min_zoom: 16
+    output:
+      kind: {col: aeroway}
+  - filter:
+      amenity: [bus_station, car_sharing, picnic_site, recycling, shelter]
+    min_zoom: 16
+    output:
+      kind: {col: amenity}
+  - filter:
+      barrier: [block, bollard, lift_gate]
+    min_zoom: 16
+    output:
+      kind: {col: barrier}
+  - filter:
+      craft: [brewery, winery, sawmill]
+    min_zoom: 16
+    output:
+      kind: {col: craft}
+  - filter: {highway: ford}
+    min_zoom: 16
+    output: {kind: ford}
+  - filter: {historic: archaeological_site}
+    min_zoom: 16
+    output: {kind: archaeological_site}
+  - filter: {man_made: windmill}
+    min_zoom: 16
+    output: {kind: windmill}
+  - filter: {man_made: communications_tower}
+    min_zoom: 15
+    output: {kind: communications_tower}
+  - filter: {man_made: telescope}
+    min_zoom: GREATEST(15, LEAST(zoom + 0.1, 16))
+    output: {kind: telescope}
+  - filter: {man_made: offshore_platform}
+    min_zoom: 13
+    output: {kind: offshore_platform}
+  - filter: {man_made: water_tower}
+    min_zoom: 15
+    output: {kind: water_tower}
+  - filter: {natural: tree}
+    min_zoom: 16
+    output: {kind: tree}
+  - filter: {amenity: ranger_station}
+    min_zoom: 14
+    output: {kind: ranger_station}
+  - filter:
+      tags->icn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_junction
+      ref: {col: tags->icn_ref}
+      bicycle_network: icn
+  - filter:
+      tags->ncn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_junction
+      ref: {col: tags->ncn_ref}
+      bicycle_network: ncn
+  - filter:
+      tags->rcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_junction
+      ref: {col: tags->rcn_ref}
+      bicycle_network: rcn
+  - filter:
+      tags->lcn_ref: true
+    min_zoom: 16
+    output:
+      kind: bicycle_junction
+      ref: {col: tags->lcn_ref}
+      bicycle_network: lcn
+  - filter:
+      tags->iwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_junction
+      ref: {col: tags->iwn_ref}
+      walking_network: rwn
+  - filter:
+      tags->nwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_junction
+      ref: {col: tags->nwn_ref}
+      walking_network: nwn
+  - filter:
+      tags->rwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_junction
+      ref: {col: tags->rwn_ref}
+      walking_network: rwn
+  - filter:
+      tags->lwn_ref: true
+    min_zoom: 16
+    output:
+      kind: walking_junction
+      ref: {col: tags->lwn_ref}
+      walking_network: lwn
+  - filter:
+      tourism: [camp_site, information, viewpoint]
+    min_zoom: 16
+    output:
+      kind: {col: tourism}
+  - filter: {amenity: theatre}
+    min_zoom: 16
+    output: {kind: theatre}
+  - filter:
+      amenity: [atm, bus_stop, drinking_water, emergency_phone,
+        parking, post_box, telephone, toilets]
+    min_zoom: 17
+    output:
+      kind: {col: amenity}
+  - filter:
+      highway: [bus_stop, traffic_signals]
+    min_zoom: 17
+    output:
+      kind: {col: highway}
+  - filter: {historic: memorial}
+    min_zoom: 17
+    output: {kind: memorial}
+  - filter:
+      leisure: [playground, slipway]
+    min_zoom: 17
+    output:
+      kind: {col: leisure}
+  - filter: {man_made: mast}
+    min_zoom: 17
+    output: {kind: mast}
+  - filter:
+      office: [accountant, administrative, advertising_agency, architect, association,
+        company, consulting, educational_institution, employment_agency, estate_agent,
+        financial, foundation, government, insurance, it, lawyer, newspaper, ngo, notary,
+        physician, political_party, religion, research, tax_advisor, telecommunication,
+        therapist, travel_agent]
+    min_zoom: 17
+    output:
+      kind: {col: office}
+  - filter: {office: 'yes'}
+    min_zoom: 17
+    output: {kind: office}
+  - filter: {shop: bicycle}
+    min_zoom: 15
+    output: {kind: bicycle}
+  - filter:
+      amenity: bicycle_rental
+      operator: false
+    min_zoom: 16
+    output: {kind: bicycle_rental}
+  - filter:
+      amenity: bicycle_rental
+      operator: true
+    min_zoom: 17
+    output:
+      kind: bicycle_rental_station
+      network:  {col: tags->network}
+      operator: {col: operator}
+      capacity: {col: tags->capacity}
+      ref: {col: ref}
+  - filter: {amenity: bicycle_parking}
+    min_zoom: 17
+    output:
+      kind: bicycle_parking
+      access: {col: access}
+      operator: {col: operator}
+      capacity: {col: tags->capacity}
+      covered: {col: covered}
+      fee: {col: tags->fee}
+      cyclestreets_id: {col: tags->cyclestreets_id}
+      maxstay: {col: tags->maxstay}
+      surveillance: {col: tags->surveillance}
+  - filter: {barrier: cycle_barrier}
+    min_zoom: 18
+    output: {kind: cycle_barrier}
+  - filter:
+      shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
+        dry_cleaning, fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone,
+        optician, pet]
+    min_zoom: 17
+    output:
+      kind: {col: shop}
+  - filter:
+      tourism: [bed_and_breakfast, chalet, guest_house, hostel]
+    min_zoom: 17
+    output:
+      kind: {col: tourism}
+  - filter: {railway: subway_entrance}
+    min_zoom: 17
+    output: {kind: subway_entrance}
+  - filter:
+      amenity: [bench, waste_basket]
+    min_zoom: 18
+    output:
+      kind: {col: amenity}
+  - filter:
+      man_made: [beacon, cross, mineshaft]
+    min_zoom: 15
+    output:
+      kind: {col: man_made}
+  - filter: {man_made: adit}
+    min_zoom: 16
+    output: {kind: adit}
+  - filter: {man_made: water_well}
+    min_zoom: 17
+    output: {kind: water_well}
+  - filter: {natural: saddle}
+    min_zoom: 14
+    output: {kind: saddle}
+  - filter:
+      natural: [dune, sinkhole]
+    min_zoom: 15
+    output:
+      kind: {col: natural}
+  - filter:
+      natural: [rock, stone]
+    min_zoom: 17
+    output:
+      kind: {col: natural}
+  - filter: {highway: trailhead}
+    min_zoom: 15
+    output: {kind: trailhead}
+  - filter: {tags->whitewater: put_in;egress}
+    min_zoom: 14
+    output: {kind: put_in_egress}
+  - filter:
+      tags->whitewater: [put_in, egress]
+    min_zoom: 14
+    output:
+      kind: {col: tags->whitewater}
+  - filter:
+      tags->whitewater: [hazard, rapid]
+    min_zoom: 15
+    output:
+      kind: {col: tags->whitewater}
+  - filter: {shop: gas}
+    min_zoom: 18
+    output: {kind: gas}
+  - filter: {aerialway: pylon}
+    min_zoom: 17
+    output: {kind: pylon}
+  - filter: {amenity: bbq}
+    min_zoom: 18
+    output: {kind: bbq}
+  - filter: {amenity: bicycle_repair_station}
+    min_zoom: 18
+    output: {kind: bicycle_repair_station}
+  - filter: {amenity: life_ring}
+    min_zoom: 18
+    output: {kind: life_ring}
+  - filter: {amenity: picnic_table}
+    min_zoom: 18
+    output: {kind: picnic_table}
+  - filter: {amenity: shower}
+    min_zoom: 18
+    output: {kind: shower}
+  - filter: {amenity: waste_disposal}
+    min_zoom: 18
+    output: {kind: waste_disposal}
+  - filter: {amenity: watering_place}
+    min_zoom: 18
+    output: {kind: watering_place}
+  - filter: {amenity: water_point}
+    min_zoom: 18
+    output: {kind: water_point}
+  - filter: {emergency: lifeguard_tower}
+    min_zoom: 17
+    output: {kind: lifeguard_tower}
+  - filter: {power: pole}
+    min_zoom: 18
+    output: {kind: power_pole}
+  - filter: {power: tower}
+    min_zoom: 16
+    output: {kind: power_tower}
+  - filter: {man_made: petroleum_well}
+    min_zoom: 17
+    output: {kind: petroleum_well}
+  - filter: {leisure: water_park}
+    min_zoom: GREATEST(13, LEAST(zoom + 2.34, 15))
+    output: {kind: water_park}
+  - filter: {leisure: summer_camp}
+    min_zoom: GREATEST(14, LEAST(zoom + 1.32, 15))
+    output: {kind: summer_camp}
+  - filter: {historic: battlefield}
+    min_zoom: GREATEST(10, LEAST(zoom + 4.0, 17))
+    output: {kind: battlefield}
+  - filter: {amenity: boat_storage}
+    min_zoom: 17
+    output: {kind: boat_storage}
+  - filter: {amenity: boat_storage}
+    min_zoom: 17
+    output: {kind: boat_storage}
+  - filter: {waterway: dam}
+    min_zoom: GREATEST(12, LEAST(zoom + 1, 14))
+    output: {kind: dam}
+  - filter: {leisure: dog_park}
+    min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
+    output: {kind: dog_park}
+  - filter: {leisure: track}
+    min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
+    output: {kind: recreation_track}
+  - filter: {leisure: fishing}
+    min_zoom: GREATEST(16, LEAST(zoom + 1.76, 17))
+    output: {kind: fishing_area}
+  - filter: {leisure: swimming_area}
+    min_zoom: 16
+    output: {kind: swimming_area}
+  - filter: {leisure: firepit}
+    min_zoom: 18
+    output: {kind: firepit}
+  - filter: {leisure: firepit}
+    min_zoom: 18
+    output: {kind: firepit}
+  - filter: {tourism: caravan_site}
+    min_zoom: GREATEST(14, LEAST(zoom, 15))
+    output: {kind: caravan_site}
+  - filter: {tourism: picnic_site}
+    min_zoom: 16
+    output: {kind: picnic_site}

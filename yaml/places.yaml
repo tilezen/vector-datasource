@@ -1,0 +1,85 @@
+filters:
+  - filter: {name: true, place: country}
+    min_zoom: 0
+    output: {kind: country}
+    table: osm
+  - filter: {name: true, place: state}
+    min_zoom: 4
+    output: {kind: state}
+    table: osm
+  - filter: {name: true, place: province}
+    min_zoom: 4
+    output: {kind: province}
+    table: osm
+  - filter: {name: true, place: city}
+    min_zoom: 8
+    output: {kind: city}
+    table: osm
+  - filter: {name: true, place: town}
+    min_zoom: 8
+    output: {kind: town}
+    table: osm
+  - filter: {name: true, place: borough}
+    min_zoom: 10
+    output: {kind: borough}
+    table: osm
+  - filter: {name: true, place: suburb}
+    min_zoom: 10
+    output: {kind: suburb}
+    table: osm
+  - filter: {name: true, place: quarter}
+    min_zoom: 10
+    output: {kind: quarter}
+    table: osm
+  - filter: {name: true, place: village}
+    min_zoom: 11
+    output: {kind: village}
+    table: osm
+  - filter: {name: true, place: hamlet}
+    min_zoom: 12
+    output: {kind: hamlet}
+    table: osm
+  - filter: {name: true, place: locality}
+    min_zoom: 13
+    output: {kind: locality}
+    table: osm
+  - filter: {name: true, place: isolated_dwelling}
+    min_zoom: 13
+    output: {kind: isolated_dwelling}
+    table: osm
+  - filter: {name: true, place: farm}
+    min_zoom: 13
+    output: {kind: farm}
+    table: osm
+  - filter: {featurecla: Admin-0 region capital, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Admin-0 region capital}
+    table: ne
+  - filter: {featurecla: Admin-0 capital alt, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Admin-0 capital alt}
+    table: ne
+  - filter: {featurecla: Admin-1 capital, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Admin-1 capital}
+    table: ne
+  - filter: {featurecla: Admin-1 region capital, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Admin-1 region capital}
+    table: ne
+  - filter: {featurecla: Historic place, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Historic place}
+    table: ne
+  - filter: {featurecla: Populated place, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Populated place}
+    table: ne
+  - filter: {featurecla: Admin-0 capital, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Admin-0 capital}
+    table: ne
+  - filter: {featurecla: Scientific station, scalerank: true}
+    min_zoom: scalerank
+    output: {kind: Scientific station}
+    table: ne

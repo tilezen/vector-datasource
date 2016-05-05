@@ -2,10 +2,44 @@
     NULL AS protect_class,
     NULL AS operator,
     way_area::bigint AS area,
-    '{{ kind }}' AS kind,
+    HSTORE('kind=>"{{ kind }}"') AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__
+{% endmacro %}
+
+{% macro osm_landuse_detailed_query(table) %}
+SELECT
+{% if table == 'planet_osm_polygon' %}
+    CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
+{% else %}
+    name,
+{% endif %}
+    least(16, mz_landuse_min_zoom)::real AS min_zoom,
+    tags->'protect_class' AS protect_class,
+    operator,
+    way_area::bigint AS area,
+    mz_calculate_output_landuse({{ table }}.*) AS mz_properties,
+    'openstreetmap.org' AS source,
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    osm_id AS __id__,
+    sport,
+    religion,
+    surface,
+    "natural",
+    tags->'attraction' AS attraction,
+    tags->'zoo' AS zoo,
+    mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
+    %#tags AS tags
+FROM
+    {{ table }}
+WHERE
+    {{ bounds|bbox_filter('way') }}
+    {% if zoom <= 15 %}
+    AND mz_landuse_min_zoom <= {{ zoom }}
+    {% else %}
+    AND mz_landuse_min_zoom IS NOT NULL
+    {% endif %}
 {% endmacro %}
 
 {% if 4 <= zoom < 6 %}
@@ -27,7 +61,7 @@ SELECT
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
-  mz_calculate_kind_landuse(planet_osm_polygon.*) AS kind,
+  mz_calculate_output_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__
@@ -58,7 +92,7 @@ SELECT
   tags->'protect_class' AS protect_class,
   operator,
   way_area::bigint AS area,
-  mz_calculate_kind_landuse(planet_osm_polygon.*) AS kind,
+  mz_calculate_output_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
@@ -72,33 +106,11 @@ WHERE
 
 {% else %}
 
-SELECT
-    CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
-    least(16, mz_landuse_min_zoom)::real AS min_zoom,
-    tags->'protect_class' AS protect_class,
-    operator,
-    way_area::bigint AS area,
-    mz_calculate_kind_landuse(planet_osm_polygon.*) AS kind,
-    'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
-    osm_id AS __id__,
-    sport,
-    religion,
-    surface,
-    "natural",
-    tags->'attraction' AS attraction,
-    tags->'zoo' AS zoo,
-    mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
-    %#tags AS tags
-FROM
-    planet_osm_polygon
-WHERE
-    {{ bounds|bbox_filter('way') }}
-    {% if zoom <= 15 %}
-    AND mz_landuse_min_zoom <= {{ zoom }}
-    {% else %}
-    AND mz_landuse_min_zoom IS NOT NULL
-    {% endif %}
+{{ osm_landuse_detailed_query('planet_osm_polygon') }}
+
+UNION ALL
+
+{{ osm_landuse_detailed_query('planet_osm_line') }}
 
 {% if zoom < 10 %}
 UNION ALL

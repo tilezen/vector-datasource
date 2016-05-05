@@ -4,10 +4,11 @@ assert_has_feature(
     {"kind": "highway", "highway": "motorway", "id": 167952621,
      "name": "Presidio Pkwy.", "is_tunnel": "yes", "sort_key": 331})
 
+# http://www.openstreetmap.org/way/89912879
 assert_has_feature(
-    18, 45540, 87380, "roads",
-    {"kind": "major_road", "highway": "trunk", "id": 268517418,
-     "name": "Trans-Canada Hwy.", "is_tunnel": "yes", "sort_key": 329})
+    16, 19829, 24234, "roads",
+    {"kind": "major_road", "highway": "trunk", "id": 89912879,
+     "name": "Sullivan Square Underpass", "is_tunnel": "yes", "sort_key": 329})
 
 assert_has_feature(
     18, 67234, 97737, "roads",

@@ -16,127 +16,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_railway_level(railway_val text, service_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN railway_val = 'rail' THEN CASE
-      WHEN service_val IS NULL               THEN 11
-      WHEN service_val IN ('spur', 'siding') THEN 12
-      WHEN service_val IN ('yard')           THEN 13
-      WHEN service_val IN ('crossover')      THEN 14
-      ELSE                                        15
-    END
-    WHEN railway_val IN ('tram', 'light_rail', 'narrow_gauge', 'monorail',
-      'subway', 'funicular') THEN 15
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_highway_level(highway_val text, service_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN highway_val IN ('motorway', 'trunk', 'primary')                      THEN  8
-    WHEN highway_val IN ('secondary')                                         THEN 10
-    WHEN highway_val IN ('motorway_link', 'tertiary')                         THEN 11
-    WHEN highway_val IN ('trunk_link', 'residential', 'unclassified', 'road') THEN 12
-    WHEN highway_val IN ('primary_link', 'secondary_link', 'track',
-                         'pedestrian', 'living_street')                       THEN 13
-    WHEN highway_val IN ('tertiary_link', 'minor', 'footpath', 'footway',
-                         'steps', 'path', 'cycleway')                         THEN 14
-    WHEN highway_val = 'service' THEN CASE
-      WHEN service_val IS NULL                                                THEN 14
-      WHEN service_val = 'alley'                                              THEN 13
-      WHEN service_val IN ('driveway', 'parking_aisle', 'drive-through')      THEN 15
-      ELSE NULL
-    END
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_aeroway_level(aeroway_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN aeroway_val IN ('runway') THEN 9
-    WHEN aeroway_val IN ('taxiway') THEN 11
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_aerialway_level(aerialway_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN aerialway_val IN ('gondola', 'cable_car')                   THEN 12
-    WHEN aerialway_val IN ('chair_lift')                             THEN 13
-    WHEN aerialway_val IN ('drag_lift', 'platter', 't-bar', 'goods',
-         'magic_carpet', 'rope_tow', 'yes', 'zip_line', 'j-bar',
-         'unknown', 'mixed_lift', 'canopy', 'cableway')              THEN 15
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_leisure_level(leisure_val text, sport_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN leisure_val IN ('track') THEN
-      CASE
-        WHEN sport_val IN ('athletics', 'running', 'horse_racing', 'bmx',
-	  'disc_golf', 'cycling', 'ski_jumping', 'motor', 'karting',
-	  'obstacle_course', 'equestrian', 'alpine_slide', 'soap_box_derby',
-	  'mud_truck_racing', 'skiing', 'drag_racing', 'archery') THEN 14
-	ELSE NULL
-      END
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_man_made_level(man_made_val text)
-RETURNS SMALLINT AS $$
-BEGIN
-  RETURN CASE
-    WHEN man_made_val IN ('pier') THEN 13
-    ELSE NULL
-  END;
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
-CREATE OR REPLACE FUNCTION mz_calculate_road_level(highway_val text, railway_val text, aeroway_val text, route_val text, service_val text, aerialway_val text, leisure_val text, sport_val text, man_made_val text, way geometry)
-RETURNS SMALLINT AS $$
-BEGIN
-    RETURN LEAST(
-      CASE WHEN highway_val IS NOT NULL
-        THEN mz_calculate_highway_level(highway_val, service_val)
-        ELSE NULL END,
-      CASE WHEN aeroway_val IS NOT NULL
-        THEN mz_calculate_aeroway_level(aeroway_val)
-        ELSE NULL END,
-      CASE WHEN railway_val IS NOT NULL
-        THEN mz_calculate_railway_level(railway_val, service_val)
-        ELSE NULL END,
-      CASE WHEN route_val = 'ferry'
-        THEN mz_calculate_ferry_level(way)
-        ELSE NULL END,
-      CASE WHEN aerialway_val IS NOT NULL
-        THEN mz_calculate_aerialway_level(aerialway_val)
-        ELSE NULL END,
-      CASE WHEN leisure_val IS NOT NULL
-        THEN mz_calculate_leisure_level(leisure_val, sport_val)
-        ELSE NULL END,
-      CASE WHEN man_made_val IS NOT NULL
-        THEN mz_calculate_man_made_level(man_made_val)
-        ELSE NULL END);
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
-
 CREATE OR REPLACE FUNCTION mz_calculate_is_building_or_part(
     building_val text, buildingpart_val text)
 RETURNS BOOLEAN AS $$
@@ -338,6 +217,11 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 DO $$
 BEGIN
+
+  -- suppress notice message from drop type cascade
+  -- we re-add the type immediately afterwards
+  SET LOCAL client_min_messages=warning;
+
   IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'mz_transit_routes_rettype') THEN
     DROP TYPE mz_transit_routes_rettype CASCADE;
   END IF;
@@ -602,41 +486,31 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
--- replicate some of the backend logic for filtering
--- buildings, as there are lots and lots and lots of
--- these, often with quite complex geometries, and
--- we don't want to saturate the network with lots of
--- buildings at z13 that we're going to filter out.
-CREATE OR REPLACE FUNCTION mz_building_filter(
-  height text, levels text, way_area FLOAT, min_volume FLOAT, min_area FLOAT)
-RETURNS BOOLEAN AS $$
+-- Calculate the height of a building by looking at either the
+-- height tag, if one is set explicitly, or by calculating the
+-- approximate height from the number of levels, if that is
+-- set.
+CREATE OR REPLACE FUNCTION mz_building_height(
+  height text, levels text)
+RETURNS REAL AS $$
 BEGIN
   RETURN CASE
-    -- if the min area is satisfied, then there's no
-    -- need to check the area.
-    WHEN way_area >= min_area
-      THEN TRUE
-
     -- if height is present, and can be parsed as a
     -- float, then we can filter right here.
-    WHEN mz_is_numeric(height)
-      THEN (height::float * way_area) >= min_volume
+    WHEN mz_is_numeric(height) THEN
+      height::float
 
     -- looks like we assume each level is 3m, plus
     -- 2 overall.
-    WHEN mz_is_numeric(levels)
-      THEN ((GREATEST(levels::float, 1) * 3 + 2) * way_area) >= min_volume
+    WHEN mz_is_numeric("levels") THEN
+      (GREATEST(levels::float, 1) * 3 + 2)
 
     -- if height is present, but not numeric, then
     -- we have no idea what it could be, and we must
     -- assume it could be very large.
-    WHEN height IS NOT NULL OR levels IS NOT NULL
-      THEN TRUE
-
-    -- height isn't present, and area doesn't satisfy
-    -- the minimum bound, so don't show this building.
-    ELSE FALSE
-  END;
+    WHEN "height" IS NOT NULL OR "levels" IS NOT NULL THEN
+      1.0e10
+    ELSE NULL END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -676,3 +550,132 @@ BEGIN
   RETURN NULL;
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+CREATE OR REPLACE FUNCTION mz_is_path_major_route_relation(tags hstore)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN (
+      tags->'type' = 'route' AND
+      tags->'route' IN ('hiking', 'foot', 'bicycle') AND
+      tags->'network' IN ('iwn','nwn','rwn','lwn','icn','ncn','rcn','lcn')
+    );
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- Looks up whether the given osm_id is a member of any hiking routes
+-- and, if so, returns the network designation of the most important
+-- (highest in hierarchy) of the networks.
+--
+CREATE OR REPLACE FUNCTION mz_hiking_network(osm_id bigint)
+RETURNS text AS $$
+DECLARE
+  networks text[] := ARRAY(
+    SELECT hstore(tags)->'network'
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[osm_id]
+      AND parts[way_off+1:rel_off] && ARRAY[osm_id]
+      AND mz_is_path_major_route_relation(hstore(tags)));
+BEGIN
+  RETURN CASE
+    WHEN networks && ARRAY['iwn'] THEN 'iwn'
+    WHEN networks && ARRAY['nwn'] THEN 'nwn'
+    WHEN networks && ARRAY['rwn'] THEN 'rwn'
+    WHEN networks && ARRAY['lwn'] THEN 'lwn'
+  END;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+CREATE OR REPLACE FUNCTION mz_cycling_network_(way_tags hstore, osm_id bigint)
+RETURNS text AS $$
+DECLARE
+  networks text[] := ARRAY(
+    SELECT hstore(tags)->'network'
+    FROM planet_osm_rels
+    WHERE parts && ARRAY[osm_id]
+      AND parts[way_off+1:rel_off] && ARRAY[osm_id]
+      AND mz_is_path_major_route_relation(hstore(tags)));
+BEGIN
+  RETURN CASE
+    WHEN networks && ARRAY['icn'] THEN 'icn'
+    WHEN networks && ARRAY['ncn'] THEN 'ncn'
+    WHEN way_tags->'ncn'='yes' OR way_tags ? 'ncn_ref' THEN 'ncn'
+    WHEN networks && ARRAY['rcn'] THEN 'rcn'
+    WHEN way_tags->'rcn'='yes' OR way_tags ? 'rcn_ref' THEN 'rcn'
+    WHEN networks && ARRAY['lcn'] THEN 'lcn'
+    WHEN way_tags->'lcn'='yes' OR way_tags ? 'lcn_ref' THEN 'lcn'
+  END;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+CREATE OR REPLACE FUNCTION mz_cycling_network(way_tags hstore, osm_id bigint)
+RETURNS text AS $$
+BEGIN
+  RETURN CASE
+    WHEN way_tags->'icn' = 'yes' OR way_tags ? 'icn_ref' THEN 'icn'
+    ELSE mz_cycling_network_(way_tags, osm_id)
+  END;
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+-- returns TRUE if the given way ID (osm_id) is part of a path route relation,
+-- or NULL otherwise.
+-- This function is meant to be called for something that we already know is a path.
+-- Please ensure input is already a path, or output will be undefined.
+CREATE OR REPLACE FUNCTION mz_calculate_path_major_route(osm_id BIGINT)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN (
+    SELECT
+        MIN(
+            CASE WHEN hstore(tags)->'network' IN ('iwn', 'nwn', 'icn','ncn') THEN 11
+                 WHEN hstore(tags)->'network' IN ('rwn', 'rcn') THEN 12
+                 WHEN hstore(tags)->'network' IN ('lwn', 'lcn') THEN 13
+            ELSE NULL
+            END
+        )
+        AS p
+     FROM planet_osm_rels
+    WHERE
+      parts && ARRAY[osm_id] AND
+      parts[way_off+1:rel_off] && ARRAY[osm_id] AND
+      mz_is_path_major_route_relation(hstore(tags))
+  );
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+-- Returns a floating point number in meters for the given unit input text,
+-- which must be of the form of a number (in which case it's assumed it's
+-- meters), or a number followed by a unit (m, ft, '). The distance is
+-- converted into meters and returned, or NULL is returned if the input
+-- could not be understood.
+--
+CREATE OR REPLACE FUNCTION mz_to_float_meters(txt text)
+RETURNS REAL AS $$
+DECLARE
+  decimal_matches text[] :=
+    regexp_matches(txt, '([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)');
+  imperial_matches text[] :=
+    regexp_matches(txt, E'([0-9]+(\\.[0-9]*)?)\' *(([0-9]+)")?');
+  numeric_matches text[] :=
+    regexp_matches(txt, '([0-9]+(\.[0-9]*)?)');
+BEGIN
+  RETURN CASE
+    WHEN decimal_matches IS NOT NULL THEN
+      CASE
+        WHEN decimal_matches[3] = 'mi'  THEN 1609.3440 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'km'  THEN 1000.0000 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'm'   THEN    1.0000 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'nmi' THEN 1852.0000 * decimal_matches[1]::real
+        WHEN decimal_matches[3] = 'ft'  THEN    0.3048 * decimal_matches[1]::real
+      END
+    WHEN imperial_matches IS NOT NULL THEN
+      CASE WHEN imperial_matches[4] IS NULL THEN
+        0.0254 * (imperial_matches[1]::real * 12)
+      ELSE
+        0.0254 * (imperial_matches[1]::real * 12 + imperial_matches[4]::real)
+      END
+    WHEN numeric_matches IS NOT NULL THEN
+      numeric_matches[1]::real
+    END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
