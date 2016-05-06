@@ -57,7 +57,11 @@ filters:
     min_zoom: 0
     output: {kind: state, admin_level: '4'}
     table: ne
-  - filter: {featurecla: Admin-1 boundary}
+  - filter:
+      featurecla:
+        - Admin-1 boundary
+        - Admin-1 statistical boundary
+        - Admin-1 statistical meta bounds
     min_zoom: 0
     output: {kind: state, admin_level: '4'}
     table: ne
@@ -92,14 +96,4 @@ filters:
   - filter: {featurecla: Overlay limit}
     min_zoom: 0
     output: {kind: overlay_limit}
-    table: ne
-  - filter: {featurecla: Admin-1 statistical boundary}
-    min_zoom: null
-    output:
-      kind: {expr: null}
-    table: ne
-  - filter: {featurecla: Admin-1 statistical meta bounds}
-    min_zoom: null
-    output:
-      kind: {expr: null}
     table: ne
