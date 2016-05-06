@@ -120,7 +120,6 @@ CREATE INDEX ne_10m_land_way_area_index ON ne_10m_land(way_area);
 UPDATE land_polygons SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX land_polygons_wayarea_index ON land_polygons(way_area);
 
-
-CREATE INDEX ne_10m_populated_places_scalerank_index ON ne_10m_populated_places(scalerank);
+UPDATE ne_10m_populated_places SET mz_places_min_zoom = mz_calculate_min_zoom_places(ne_10m_populated_places.*);
 
 END $$;
