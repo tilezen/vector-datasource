@@ -1,3 +1,4 @@
+# http://www.openstreetmap.org/node/733619113
 assert_has_feature(
     18, 41935, 101329, 'pois',
     { 'kind': 'motorway_junction' })
