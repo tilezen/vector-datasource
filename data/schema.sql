@@ -8,7 +8,8 @@ CREATE TABLE wof_neighbourhood_placetype (
 INSERT INTO wof_neighbourhood_placetype VALUES
   (1, 'neighbourhood'),
   (2, 'microhood'),
-  (3, 'macrohood');
+  (3, 'macrohood'),
+  (4, 'borough');
 
 CREATE TABLE wof_neighbourhood (
   wof_id BIGINT PRIMARY KEY,
