@@ -1,4 +1,5 @@
 ## Best buy (closed)
+# https://www.openstreetmap.org/way/241643507
 
 # building should be present at z15
 assert_has_feature(
@@ -16,6 +17,7 @@ assert_has_feature(
     {'id': 241643507, 'kind': 'closed', 'min_zoom': 17})
 
 ## US Naval Hospital (historical)
+# https://www.openstreetmap.org/relation/317369
 
 # original polygon should be present at z15
 assert_has_feature(
