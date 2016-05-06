@@ -444,7 +444,7 @@ elif len(sys.argv) > 1 and sys.argv[1] == '-dumpdata':
     data_dumper = DataDumper()
     runner = data_dumper.test_function()
 else:
-    get_config()
+    config_url, config_all_layers = get_config()
     assert config_url, "Tile URL not configured, but is necessary for " \
         "running the tests. Please check your configuration file."
     tests = sys.argv[2:]
