@@ -357,6 +357,9 @@ class DataDumper(object):
         self.relations = set()
         self.pattern = re.compile('#.*(node|way|rel(ation)?)[ /]+([0-9]+)')
 
+        self.raw_queries = list()
+        self.raw_pattern = re.compile('#.*RAW QUERY:(.*)')
+
     def add_object(self, typ, id_str):
         id = int(id_str)
         if typ == 'node':
@@ -369,6 +372,9 @@ class DataDumper(object):
             assert typ.startswith('rel'), \
                 "Expected 'rel' or 'relation', got %r" % typ
             self.relations.add(id)
+
+    def add_query(self, raw):
+        self.raw_queries.append(raw)
 
     def build_query(self, fmt, ids):
         query = "("
@@ -386,6 +392,8 @@ class DataDumper(object):
             osc.add_query(self.build_query("way(%d);>;", w_ids))
         for r_ids in chunks(10, self.relations):
             osc.add_query(self.build_query("relation(%d);>;",  r_ids))
+        for raw_query in self.raw_queries:
+            osc.add_query(raw_query)
 
         osc.flush()
 
@@ -399,6 +407,10 @@ class DataDumper(object):
                         m = self.pattern.match(line)
                         if m:
                             self.add_object(m.group(1), m.group(3))
+                        else:
+                            m = self.raw_pattern.match(line)
+                            if m:
+                                self.add_query(m.group(1).rstrip())
             except:
                 print "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
                 fails = 1
