@@ -1,3 +1,9 @@
+v0.10.1
+-------
+* **Release date**: 2016-05-06.
+* Update state boundaries from NE to include statistical boundaries. See [#797](https://github.com/mapzen/vector-datasource/issues/797).
+* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.9.0](https://github.com/mapzen/tilequeue/releases/tag/v0.9.0) and [TileStache v0.10.0](https://github.com/mapzen/TileStache/releases/tag/v0.10.0)
+
 v0.10.0
 -------
 * **Release date**: 2016-05-04.
