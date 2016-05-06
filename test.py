@@ -393,7 +393,7 @@ class DataDumper(object):
         for r_ids in chunks(10, self.relations):
             osc.add_query(self.build_query("relation(%d);>;",  r_ids))
         for raw_query in self.raw_queries:
-            osc.add_query(raw_query)
+            osc.add_query("(" + raw_query + ");out;")
 
         osc.flush()
 
@@ -404,11 +404,11 @@ class DataDumper(object):
             try:
                 with open(f) as fh:
                     for line in fh:
-                        m = self.pattern.match(line)
+                        m = self.pattern.search(line)
                         if m:
                             self.add_object(m.group(1), m.group(3))
                         else:
-                            m = self.raw_pattern.match(line)
+                            m = self.raw_pattern.search(line)
                             if m:
                                 self.add_query(m.group(1).rstrip())
             except:
