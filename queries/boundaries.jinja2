@@ -84,7 +84,7 @@ UNION ALL
 SELECT
   NULL AS name,
   'yes' AS maritime_boundary,
-  HSTORE('') as mz_properties,
+  HSTORE('kind=>"maritime"') as mz_properties,
   {% filter geometry %}{{ bounds|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
   gid AS __id__,
   NULL AS tags

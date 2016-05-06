@@ -43,6 +43,18 @@ UPDATE ne_10m_lakes
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_lakes.*)
   WHERE mz_calculate_min_zoom_water(ne_10m_lakes.*) IS NOT NULL;
 
+UPDATE ne_110m_coastline
+  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_coastline.*)
+  WHERE mz_calculate_min_zoom_water(ne_110m_coastline.*) IS NOT NULL;
+
+UPDATE ne_50m_coastline
+  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_coastline.*)
+  WHERE mz_calculate_min_zoom_water(ne_50m_coastline.*) IS NOT NULL;
+
+UPDATE ne_10m_coastline
+  SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_10m_coastline.*)
+  WHERE mz_calculate_min_zoom_water(ne_10m_coastline.*) IS NOT NULL;
+
 UPDATE ne_50m_playas
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_50m_playas.*)
   WHERE mz_calculate_min_zoom_water(ne_50m_playas.*) IS NOT NULL;

@@ -36,11 +36,14 @@ ALTER TABLE water_polygons ADD COLUMN way_area REAL;
 
 ALTER TABLE ne_110m_ocean ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_110m_lakes ADD COLUMN mz_water_min_zoom SMALLINT;
+ALTER TABLE ne_110m_coastline ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_50m_ocean ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_50m_lakes ADD COLUMN mz_water_min_zoom SMALLINT;
+ALTER TABLE ne_50m_coastline ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_50m_playas ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_10m_ocean ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_10m_lakes ADD COLUMN mz_water_min_zoom SMALLINT;
+ALTER TABLE ne_10m_coastline ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE ne_10m_playas ADD COLUMN mz_water_min_zoom SMALLINT;
 ALTER TABLE water_polygons ADD COLUMN mz_water_min_zoom SMALLINT;
 
