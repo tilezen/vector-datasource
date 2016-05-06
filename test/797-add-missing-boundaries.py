@@ -6,5 +6,5 @@ assert_has_feature(
 
 # boundary between MT and ND is _also_ a "statistical meta" boundary
 assert_has_feature(
-    7, 21, 49, 'boundaries',
+    7, 27, 44, 'boundaries',
     { 'kind': 'state' })
