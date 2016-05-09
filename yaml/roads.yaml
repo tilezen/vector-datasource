@@ -341,6 +341,13 @@ filters:
       <<: *osm_network_from_tags
       kind: minor_road
       highway: service
+  - filter: {highway: raceway}
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      kind: minor_road
+      highway: raceway
   #############################################################
   #
   # OSM aeroway
