@@ -27,7 +27,7 @@ assert_has_feature(
 assert_has_feature(
     18, 41890, 101390, "roads",
     {"kind": "highway", "highway": "motorway_link", "id": 123456285,
-     "name": "Junipero Serra Blvd.", "is_link": "yes", "sort_key": 375})
+     "name": "Junipero Serra Blvd.", "is_link": "yes", "sort_key": 374})
 
 assert_has_feature(
     18, 41942, 101379, "roads",
