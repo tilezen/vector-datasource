@@ -10,7 +10,7 @@ function die {
    exit 1
 }
 
-for prog in createdb cat dropdb python osm2pgsql xargs zip; do
+for prog in createdb cat dropdb python osm2pgsql shp2pgsql xargs zip; do
    which "${prog}" >/dev/null || die "Unable to find '${prog}' program in PATH."
 done
 
@@ -52,26 +52,38 @@ osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
   -d "${dbname}" -k --append data.osc
 
 echo "=== Loading external data..."
-pushd "${basedir}/data"
-# Load external data
-#./add-external-data.sh -d "${dbname}"
+# mock these tables - the shapefiles are _huge_ and we don't want to
+# spend time downloading and importing them - we use smaller extracts
+# in test/fixtures/ to handle specific test cases.
 psql "${dbname}" <<EOF
 CREATE TABLE water_polygons (
-    gid integer NOT NULL,
+    gid SERIAL,
     fid double precision,
     the_geom geometry(MultiPolygon,900913)
 );
 CREATE TABLE land_polygons (
-    gid integer NOT NULL,
+    gid SERIAL,
     fid double precision,
     the_geom geometry(MultiPolygon,900913)
 );
 CREATE TABLE simplified_land_polygons (
-    gid integer NOT NULL,
+    gid SERIAL,
     fid double precision,
     the_geom geometry(MultiPolygon,900913)
 );
 EOF
+# load up shapefile fixtures into the appropriate tables
+for tbl in `ls ${basedir}/test/fixtures/`; do
+    if [[ -d "${basedir}/test/fixtures/${tbl}" ]]; then
+        for shp in "${basedir}/test/fixtures/${tbl}"/*.shp; do
+            shp2pgsql -a -s 900913 -W Windows-1252 -g the_geom \
+                      "${shp}" "${tbl}" \
+                | psql -d "${dbname}"
+        done
+    fi
+done
+
+pushd "${basedir}/data"
 # Unzip all zip
 ls *.zip | xargs -n1 unzip -o
 # Load data from zips
