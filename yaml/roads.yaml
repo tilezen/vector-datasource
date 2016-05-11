@@ -49,6 +49,10 @@ global:
       segregated:
         expr: |
           CASE WHEN tags->'segregated' = 'yes' THEN 'yes' END
+      crossing:
+        expr: |
+          CASE WHEN tags->'crossing' <> 'no' THEN tags->'crossing' END
+      sidewalk: {col: tags->sidewalk}
   - &osm_network_from_relation
       network: {expr: "mz_get_rel_network(osm_id)"}
   - &osm_network_from_tags
