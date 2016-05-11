@@ -24,6 +24,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.water
+    area-inclusion-threshold: 1
   earth:
     template: earth.jinja2
     start_zoom: 0
@@ -38,6 +39,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.earth
+    area-inclusion-threshold: 1
   places:
     template: places.jinja2
     start_zoom: 0
@@ -52,6 +54,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.places
+    area-inclusion-threshold: 1
   landuse:
     template: landuse.jinja2
     start_zoom: 4
@@ -66,6 +69,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.landuse
+    area-inclusion-threshold: 1
   roads:
     template: roads.jinja2
     start_zoom: 5
@@ -88,6 +92,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
       - TileStache.Goodies.VecTiles.transform.tags_remove
     sort: TileStache.Goodies.VecTiles.sort.roads
+    area-inclusion-threshold: 1
   buildings:
     template: buildings.jinja2
     start_zoom: 13
@@ -107,6 +112,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.building_trim_properties
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.buildings
+    area-inclusion-threshold: 1
   pois:
     template: pois.jinja2
     start_zoom: 9
@@ -132,6 +138,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.pois_capacity_int
       - TileStache.Goodies.VecTiles.transform.elevation_to_meters
     sort: TileStache.Goodies.VecTiles.sort.pois
+    area-inclusion-threshold: 1
   boundaries:
     template: boundaries.jinja2
     start_zoom: 0
@@ -146,6 +153,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
+    area-inclusion-threshold: 1
   transit:
     template: transit.jinja2
     start_zoom: 5
@@ -161,6 +169,7 @@ layers:
       - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
     sort: TileStache.Goodies.VecTiles.sort.transit
+    area-inclusion-threshold: 1
 post_process:
   - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
     resources:
