@@ -72,12 +72,22 @@ with features_in_tile_layer(11, 420, 779, 'pois') as features:
             % num_matching
 
 # this tile has 7 peaks in it, and at z16 we should keep all of them
+#https://www.openstreetmap.org/node/767614798
+#https://www.openstreetmap.org/node/767614799
+#https://www.openstreetmap.org/node/767614800
+#https://www.openstreetmap.org/node/767614801
+#https://www.openstreetmap.org/node/774446221
+#https://www.openstreetmap.org/node/774446223
+#https://www.openstreetmap.org/node/774446224
 with features_in_tile_layer(16, 12372, 26269, 'pois') as features:
     num = count_matching(features, {'kind': 'peak'})
     if num != 7:
         raise Exception, "Found %d peaks, but expected seven." % num
 
 # check that volcanos are sorted along with other kinds of peak
+#https://www.openstreetmap.org/node/1744903493
+#https://www.openstreetmap.org/node/356546139
+#https://www.openstreetmap.org/node/348179123
 with features_in_tile_layer(12, 662, 1443, 'pois') as features:
     def assert_peak(rank, elevation, kind, name):
         properties = {'kind': kind, 'elevation': elevation, 'name': name,
