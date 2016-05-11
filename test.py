@@ -13,6 +13,7 @@ import shapely.geometry
 import re
 import lxml.etree as ET
 
+OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 
 ##
 # App configuration:
@@ -329,7 +330,7 @@ class OsmChange(object):
         self.fh.write("</osmChange>\n")
 
     def add_query(self, query):
-        r = requests.get("http://overpass-api.de/api/interpreter",
+        r = requests.get("http://%s/api/interpreter" % OVERPASS_SERVER,
                          params=dict(data=query))
 
         if r.status_code != 200:
@@ -340,7 +341,7 @@ class OsmChange(object):
             raise RuntimeError("Expected XML, but got %r"
                                % r.headers['content-type'])
 
-        root = ET.fromstring(r.text.encode('utf8'))
+        root = ET.fromstring(r.content)
         root.tag = 'modify'
         del root.attrib['version']
         del root.attrib['generator']
