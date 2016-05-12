@@ -1,4 +1,5 @@
 # https://www.openstreetmap.org/way/12188550
+# https://www.openstreetmap.org/relation/2684235
 assert_has_feature(
     12, 654, 1582, 'roads',
     { 'kind': 'path', 'highway': 'track' })
@@ -25,6 +26,7 @@ assert_has_feature(
     { 'kind': 'path', 'highway': 'footway' })
 
 # http://www.openstreetmap.org/way/5260896
+# http://www.openstreetmap.org/relation/3718820
 # Baker River Road - residential - part of Pacific Northwest Trail (nwn)
 # should be visible at z11
 assert_has_feature(
@@ -32,6 +34,7 @@ assert_has_feature(
     { 'kind': 'minor_road', 'highway': 'residential', 'walking_network': 'nwn' })
 
 # http://www.openstreetmap.org/way/5254587
+# http://www.openstreetmap.org/relation/3718820
 # Mount Baker Highway - secondary - part of Pacific Northwest Trail (nwn)
 # should be visible at z11
 assert_has_feature(
@@ -40,6 +43,7 @@ assert_has_feature(
       'walking_network': 'nwn' })
 
 # http://www.openstreetmap.org/way/5857215
+# http://www.openstreetmap.org/relation/3718820
 # Whiskey Bend Road - unclassified - part of Pacific Northwest Trail (nwn)
 # should be visible at z11
 assert_has_feature(
@@ -48,6 +52,7 @@ assert_has_feature(
       'walking_network': 'nwn' })
 
 # http://www.openstreetmap.org/way/6671321
+# http://www.openstreetmap.org/relation/2381423
 # Matz Road - service - part of Ice Age National Scenic Trail (nwn)
 # should be visible at z11
 assert_has_feature(
@@ -55,6 +60,7 @@ assert_has_feature(
     { 'kind': 'minor_road', 'highway': 'service', 'walking_network': 'nwn' })
 
 # http://www.openstreetmap.org/way/16000421
+# http://www.openstreetmap.org/relation/1544944
 # Dogbane - service=driveway - part of American Discovery Trail (nwn)
 # should be visible at z11
 assert_has_feature(
