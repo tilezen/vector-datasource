@@ -3,7 +3,8 @@
 set -e
 
 dbname="vector_datasource_$$"
-basedir="$(dirname ${BASH_SOURCE[0]})"
+basedir="$(dirname ${BASH_SOURCE[0]})/.."
+server_pid=0
 
 function die {
    echo "$@" 1>&2;
@@ -23,6 +24,10 @@ cat >empty.osm <<EOF
 EOF
 
 function cleanup {
+   if [[ $server_pid -ne 0 ]]; then
+      echo "=== Killing test server ==="
+      kill -HUP "${server_pid}"
+   fi
    echo "=== Dropping database \"${dbname}\" and cleaning up..."
    dropdb --if-exists "${dbname}"
    rm -f empty.osm data.osc
@@ -92,12 +97,35 @@ ls *.zip | xargs -n1 unzip -o
 ./perform-sql-updates.sh -d "${dbname}"
 popd
 
-echo "=== Loading Who's on First data..."
+#echo "=== Loading Who's on First data..."
 # Finally, neighbourhood data is required to be loaded from Who's on First.
 #wget https://s3.amazonaws.com/mapzen-tiles-prod-us-east/data/wof/wof_neighbourhoods.pgdump
 #pg_restore --clean --if-exists -d "${dbname}" -O wof_neighbourhoods.pgdump
 
-# TODO: make config for tileserver and serve
+# make config for tileserver and serve
+test_server_port="${basedir}/test_server.port"
+rm -f "${test_server_port}"
+python scripts/test_server.py "${dbname}" "${USER}" "${test_server_port}" &
+server_pid=$!
 
-# TODO: run tests
-#VECTOR_DATASOURCE_CONFIG_URL=
+# wait for file to exist
+if [[ ! -f "${test_server_port}" ]]; then
+    sleep 1
+fi
+
+if [[ ! -f "${test_server_port}" ]]; then
+    echo "Test server didn't start up within 1s."
+    exit 1
+fi
+
+# run tests
+port=`cat "${test_server_port}"`
+export VECTOR_DATASOURCE_CONFIG_URL="http://localhost:${port}/%(layer)s/%(z)d/%(x)d/%(y)d.json"
+python "${basedir}/test.py" || (cat test.log; exit 1)
+
+echo "SUCCESS"
+
+# no longer an error to fail - all tests are done.
+set +e
+kill -HUP "${server_pid}"
+wait

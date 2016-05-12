@@ -67,6 +67,27 @@ UPDATE water_polygons
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(water_polygons.*)
   WHERE mz_calculate_min_zoom_water(water_polygons.*) IS NOT NULL;
 
+UPDATE ne_110m_admin_0_boundary_lines_land
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_110m_admin_0_boundary_lines_land.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_110m_admin_0_boundary_lines_land.*) IS NOT NULL;
+
+UPDATE ne_50m_admin_0_boundary_lines_land
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_50m_admin_0_boundary_lines_land.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_50m_admin_0_boundary_lines_land.*) IS NOT NULL;
+
+UPDATE ne_50m_admin_1_states_provinces_lines
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_50m_admin_1_states_provinces_lines.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_50m_admin_1_states_provinces_lines.*) IS NOT NULL;
+
+UPDATE ne_10m_admin_0_boundary_lines_land
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_land.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_land.*) IS NOT NULL;
+
+UPDATE ne_10m_admin_1_states_provinces_lines
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_1_states_provinces_lines.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_10m_admin_1_states_provinces_lines.*) IS NOT NULL;
+
+
 DO $$
 BEGIN
 

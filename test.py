@@ -38,10 +38,11 @@ OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 def get_config():
     dirs = AppDirs("vector-datasource", "Mapzen")
     config_file = path_join(dirs.user_config_dir, 'config.yaml')
-    config_url = None
-    config_all_layers = None
+    config_url = environ.get('VECTOR_DATASOURCE_CONFIG_URL')
+    config_all_layers = environ.get('VECTOR_DATASOURCE_CONFIG_ALL_LAYERS')
 
-    if path_exists(config_file):
+    print>>sys.stderr, "config_url=%r" % config_url
+    if config_url is None and path_exists(config_file):
         config_data = load_yaml(open(config_file).read())
         if len(sys.argv) < 2:
             print>>sys.stderr, "Usage: test.py <server name>. See test.py for more information."
@@ -53,9 +54,9 @@ def get_config():
             sys.exit(1)
         config_all_layers = config.get('use_all_layers', False)
 
-    else:
-        config_url = environ['VECTOR_DATASOURCE_CONFIG_URL']
-        config_all_layers = environ['VECTOR_DATASOURCE_CONFIG_ALL_LAYERS']
+    elif config_url is None:
+        print>>sys.stderr, "A config URL can be set up using either a config file at %r, or using the environment variable VECTOR_DATASOURCE_CONFIG_URL. Neither of these was found." % config_file
+        sys.exit(1)
 
     return (config_url, config_all_layers)
 
