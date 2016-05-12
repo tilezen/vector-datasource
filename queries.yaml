@@ -46,7 +46,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.place_ne_capital
       - TileStache.Goodies.VecTiles.transform.place_population_int
       - TileStache.Goodies.VecTiles.transform.calculate_default_place_scalerank
       - TileStache.Goodies.VecTiles.transform.add_id_to_properties

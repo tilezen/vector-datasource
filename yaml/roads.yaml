@@ -49,6 +49,10 @@ global:
       segregated:
         expr: |
           CASE WHEN tags->'segregated' = 'yes' THEN 'yes' END
+      crossing:
+        expr: |
+          CASE WHEN tags->'crossing' <> 'no' THEN tags->'crossing' END
+      sidewalk: {col: tags->sidewalk}
   - &osm_network_from_relation
       network: {expr: "mz_get_rel_network(osm_id)"}
   - &osm_network_from_tags
@@ -310,6 +314,15 @@ filters:
       kind: path
       highway: {col: highway}
       footway: {col: tags->footway}
+  - filter: {highway: corridor}
+    min_zoom: 16
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network_from_tags
+      <<: *osm_footway_properties
+      kind: path
+      highway: corridor
   - filter:
       highway: service
       service: alley
@@ -341,6 +354,13 @@ filters:
       <<: *osm_network_from_tags
       kind: minor_road
       highway: service
+  - filter: {highway: raceway}
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      kind: minor_road
+      highway: raceway
   #############################################################
   #
   # OSM aeroway
