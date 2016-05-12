@@ -131,7 +131,7 @@ assert_has_feature(
 # polygon but no landuse / Netherlands Carillon near DC
 assert_has_feature(
     16, 18737, 25072, 'pois',
-    { 'kind': 'monument', 'min_zoom': 16.2397 })
+    { 'kind': 'monument', 'min_zoom': (lambda z: z >= 16 and z < 17) })
 
 #https://www.openstreetmap.org/way/248460669
 # building, Jefferson Monument
@@ -364,7 +364,7 @@ assert_has_feature(
 
 assert_has_feature(
     16, 19303, 24607, 'pois',
-    { 'kind': 'fort', 'min_zoom': 15.0036 })
+    { 'kind': 'fort', 'min_zoom': (lambda z: z >= 15 and z < 16) })
 
 #https://www.openstreetmap.org/way/51064272
 # Fort Monroe

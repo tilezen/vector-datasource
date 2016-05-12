@@ -74,6 +74,9 @@ config_all_layers = None
 #                       given set.
 #   {'key': type}     - The key must exist and its value must be an instance of
 #                       the given type.
+#   {'key': callable} - The key must exist and its value is passed to the
+#                       callable predicate, usually a lambda. If that returns
+#                       falsey, the match fails.
 #   {'key': obj}      - The key must exist and its value must be equal to the
 #                       given object.
 #
@@ -93,6 +96,10 @@ def match_properties(actual, expected):
 
             elif isinstance(exp_v, type):
                 if not isinstance(v, exp_v):
+                    return False
+
+            elif hasattr(exp_v, '__call__'):
+                if not exp_v(v):
                     return False
 
             elif v != exp_v:
