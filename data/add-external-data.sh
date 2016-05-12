@@ -1,3 +1,6 @@
+# this function exists to try and avoid downloading the file if it already
+# exists. wget's default behaviour is to download it again with a ".1"
+# added to the end.
 function download {
 	 file="$(basename $1)"
 	 curl $1 -z "${file}" -o "${file}" -L -C -
