@@ -15,7 +15,7 @@ assert_has_feature(
     16, 10623, 25430, 'pois',
     { 'kind': 'telescope', 'min_zoom': 16 })
 
-#http://www.openstreetmap.org/way/258205070
+#https://www.openstreetmap.org/way/53055408
 # If someone took the time to digitize a building, promote it up
 assert_has_feature(
     15, 5324, 12781, 'pois',
@@ -41,8 +41,8 @@ assert_has_feature(
     15, 5240, 12673, 'pois',
     { 'kind': 'water_tower', 'min_zoom': 15 })
 
-#http://www.openstreetmap.org/node/1501843094
-# This isn't part of the work, but because we split water_tower 
+#https://www.openstreetmap.org/node/3679715072
+# This isn't part of the work, but because we split water_tower
 # off from mast, we should test mast still shows up
 assert_has_feature(
     16, 10588, 25442, 'pois',

@@ -22,19 +22,19 @@ assert_has_feature(
     12, 1148, 1503, 'pois',
     { 'kind': 'waterfall', 'min_zoom': 12 })
 
-# We had considered this for label_placement:yes, 
+# We had considered this for label_placement:yes,
 # but there are only 19 in all of North America
 assert_no_matching_feature(
     12, 1148, 1503, 'water',
     { 'kind': 'waterfall' })
-    
+
 #https://www.openstreetmap.org/node/2375445789
 # Alamere Falls (no height)
 # Assume falls are important, show at zoom 14 default
 assert_has_feature(
     14, 2604, 6322, 'pois',
     { 'kind': 'waterfall', 'min_zoom': 14 })
-    
+
 #http://www.openstreetmap.org/node/3257658773
 # Abrigo Falls, 4.5 meters (less than 8 meters)
 # Allow short waterfalls to be suppressed a zoom
@@ -48,7 +48,7 @@ assert_has_feature(
     14, 2747, 6345, 'pois',
     { 'kind': 'waterfall', 'min_zoom': 14 })
 
-#http://www.openstreetmap.org/node/1247873121
+#https://www.openstreetmap.org/node/1247872815
 # Chilnualna Creek Cascades, no height
 assert_has_feature(
     14, 2748, 6344, 'pois',

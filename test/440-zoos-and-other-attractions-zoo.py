@@ -1,3 +1,14 @@
+# Features used in this test:
+#https://www.openstreetmap.org/way/316623706
+#https://www.openstreetmap.org/way/343269426
+#https://www.openstreetmap.org/way/370123970
+#https://www.openstreetmap.org/way/84422829
+#https://www.openstreetmap.org/way/316623706
+#https://www.openstreetmap.org/way/343269426
+#https://www.openstreetmap.org/way/370123970
+#https://www.openstreetmap.org/way/84422829
+#https://www.openstreetmap.org/way/103256220
+
 # expect these features in _both_ the landuse and POIs layers.
 for layer in ['pois', 'landuse']:
 

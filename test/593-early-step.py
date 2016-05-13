@@ -1,6 +1,11 @@
 tiles = [
-    [12,  653, 1582],   # way 24655593   highway=steps, with route regional (Coastal Trail, Marin, II)
-    [13, 1309, 3166]    # way 38060491   highway=steps, no route, but has name, and designation (Levant St Stairway, SF)
+    # highway=steps, with route regional (Coastal Trail, Marin, II)
+    # https://www.openstreetmap.org/way/24655593
+    # https://www.openstreetmap.org/relation/2260059
+    [12,  653, 1582],
+    # highway=steps, no route, but has name, and designation (Levant St Stairway, SF)
+    # https://www.openstreetmap.org/way/38060491
+    [13, 1309, 3166]
 ]
 
 for z, x, y in tiles:

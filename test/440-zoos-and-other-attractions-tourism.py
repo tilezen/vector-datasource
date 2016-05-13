@@ -1,3 +1,19 @@
+# Ways and relations used in this test.
+#https://www.openstreetmap.org/way/358445798
+#https://www.openstreetmap.org/relation/1228099
+#https://www.openstreetmap.org/way/362327591
+#https://www.openstreetmap.org/relation/4795362
+#https://www.openstreetmap.org/way/200068201
+#https://www.openstreetmap.org/way/358445798
+#https://www.openstreetmap.org/relation/1228099
+#https://www.openstreetmap.org/way/362327591
+#https://www.openstreetmap.org/relation/4795362
+#https://www.openstreetmap.org/relation/4795362
+#https://www.openstreetmap.org/way/200068201
+#https://www.openstreetmap.org/way/220084069
+#https://www.openstreetmap.org/way/242899474
+#https://www.openstreetmap.org/node/1589837084
+
 # expect these features in _both_ the landuse and POIs layers.
 for layer in ['pois', 'landuse']:
 

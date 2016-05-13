@@ -1,6 +1,6 @@
 locations = [
-    (11, 327, 791), # SF
-    (11, 603, 769)  # NYC
+    (11, 327, 791), # SF  https://www.openstreetmap.org/way/8915478
+    (11, 603, 769)  # NYC https://www.openstreetmap.org/way/122633524
 ]
 
 for z, x, y in locations:

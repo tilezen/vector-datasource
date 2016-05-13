@@ -3,6 +3,7 @@ from shapely.geometry import shape
 # this is mid way along the High Line in NYC, which is a huge long
 # "building". we should be clipping it to a buffer of 3x the tile
 # dimensions.
+# http://www.openstreetmap.org/way/37054313
 with features_in_tile_layer(19, 154366, 197054, 'buildings') as buildings:
     # max width and height in degress as 3x the size of the above tile
     max_w = 0.002060

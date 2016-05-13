@@ -214,6 +214,9 @@ filters:
   - filter: {tourism: zoo}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: zoo}
+  - filter: {historic: fort}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: fort}
   - filter: {tourism: attraction}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: attraction}
@@ -323,9 +326,6 @@ filters:
   - filter: {tourism: picnic_site}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: picnic_site}
-  - filter: {historic: fort}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: fort}
   - filter: {natural: tree_row}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: tree_row}

@@ -2,14 +2,18 @@ import runpy
 import requests
 import json
 import traceback
-from os import walk
+from os import walk, environ
 from os.path import join as path_join
+from os.path import exists as path_exists
 import sys
 from yaml import load as load_yaml
 from appdirs import AppDirs
 from contextlib import contextmanager
 import shapely.geometry
+import re
+import lxml.etree as ET
 
+OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 
 ##
 # App configuration:
@@ -31,18 +35,35 @@ import shapely.geometry
 # the layers, which may take more time than just the layers it needs. However,
 # this makes it possible to run against the raw storage.
 #
-dirs = AppDirs("vector-datasource", "Mapzen")
-config_file = path_join(dirs.user_config_dir, 'config.yaml')
-config_data = load_yaml(open(config_file).read())
-if len(sys.argv) < 2:
-    print>>sys.stderr, "Usage: test.py <server name>. See test.py for more information."
-    sys.exit(1)
-config = config_data[sys.argv[1]]
-config_url = config.get('url', None)
-if config_url is None:
-    print>>sys.stderr, "A URL is not configured for server %r, please check your config at %r." % (sys.argv[1], config_file)
-    sys.exit(1)
-config_all_layers = config.get('use_all_layers', False)
+def get_config():
+    dirs = AppDirs("vector-datasource", "Mapzen")
+    config_file = path_join(dirs.user_config_dir, 'config.yaml')
+    config_url = environ.get('VECTOR_DATASOURCE_CONFIG_URL')
+    config_all_layers = environ.get('VECTOR_DATASOURCE_CONFIG_ALL_LAYERS')
+
+    print>>sys.stderr, "config_url=%r" % config_url
+    if config_url is None and path_exists(config_file):
+        config_data = load_yaml(open(config_file).read())
+        if len(sys.argv) < 2:
+            print>>sys.stderr, "Usage: test.py <server name>. See test.py for more information."
+            sys.exit(1)
+        config = config_data[sys.argv[1]]
+        config_url = config.get('url', None)
+        if config_url is None:
+            print>>sys.stderr, "A URL is not configured for server %r, please check your config at %r." % (sys.argv[1], config_file)
+            sys.exit(1)
+        config_all_layers = config.get('use_all_layers', False)
+
+    elif config_url is None:
+        print>>sys.stderr, "A config URL can be set up using either a config file at %r, or using the environment variable VECTOR_DATASOURCE_CONFIG_URL. Neither of these was found." % config_file
+        sys.exit(1)
+
+    return (config_url, config_all_layers)
+
+
+# yuck. global variables. TODO: refactor
+config_url = None
+config_all_layers = None
 
 
 ##
@@ -54,6 +75,9 @@ config_all_layers = config.get('use_all_layers', False)
 #                       given set.
 #   {'key': type}     - The key must exist and its value must be an instance of
 #                       the given type.
+#   {'key': callable} - The key must exist and its value is passed to the
+#                       callable predicate, usually a lambda. If that returns
+#                       falsey, the match fails.
 #   {'key': obj}      - The key must exist and its value must be equal to the
 #                       given object.
 #
@@ -73,6 +97,10 @@ def match_properties(actual, expected):
 
             elif isinstance(exp_v, type):
                 if not isinstance(v, exp_v):
+                    return False
+
+            elif callable(exp_v):
+                if not exp_v(v):
                     return False
 
             elif v != exp_v:
@@ -128,6 +156,7 @@ def match_distance(actual, expected):
 
 @contextmanager
 def features_in_tile_layer(z, x, y, layer):
+    assert config_url, "Tile URL is not configured, is your config file set up?"
     url = config_url % {'layer': layer, 'z': z, 'x': x, 'y': y}
     r = requests.get(url)
 
@@ -284,6 +313,125 @@ def print_coords(f, log, idx, num_tests):
     return 0
 
 
+def chunks(length, iterable):
+    """
+    Converts an iterable into a generator of chunks of size up to length.
+    """
+
+    chunk = []
+    for obj in iterable:
+        chunk.append(obj)
+        if len(chunk) >= length:
+            yield chunk
+            del chunk[:]
+    if chunk:
+        yield chunk
+
+
+class OsmChange(object):
+    def __init__(self, fh):
+        self.fh = fh
+        self.fh.write("<?xml version='1.0' encoding='utf-8'?>\n")
+        self.fh.write("<osmChange version=\"0.6\">\n")
+
+    def flush(self):
+        self.fh.write("</osmChange>\n")
+
+    def add_query(self, query):
+        r = requests.get("http://%s/api/interpreter" % OVERPASS_SERVER,
+                         params=dict(data=query))
+
+        if r.status_code != 200:
+            raise RuntimeError("Unable to fetch data from Overpass: %r"
+                               % r.status_code)
+
+        if r.headers['content-type'] != 'application/osm3s+xml':
+            raise RuntimeError("Expected XML, but got %r"
+                               % r.headers['content-type'])
+
+        root = ET.fromstring(r.content)
+        root.tag = 'modify'
+        del root.attrib['version']
+        del root.attrib['generator']
+        root.remove(root.find('note'))
+        root.remove(root.find('meta'))
+        xml = ET.ElementTree(root)
+        xml.write(self.fh, encoding='utf8', xml_declaration=False)
+
+
+class DataDumper(object):
+    def __init__(self):
+        self.nodes = set()
+        self.ways = set()
+        self.relations = set()
+        self.pattern = re.compile('#.*(node|way|rel(ation)?)[ /]+([0-9]+)')
+
+        self.raw_queries = list()
+        self.raw_pattern = re.compile('#.*RAW QUERY:(.*)')
+
+    def add_object(self, typ, id_str):
+        id = int(id_str)
+        if typ == 'node':
+            self.nodes.add(id)
+
+        elif typ == 'way':
+            self.ways.add(id)
+
+        else:
+            assert typ.startswith('rel'), \
+                "Expected 'rel' or 'relation', got %r" % typ
+            self.relations.add(id)
+
+    def add_query(self, raw):
+        self.raw_queries.append(raw)
+
+    def build_query(self, fmt, ids):
+        query = "("
+        for id in ids:
+            query += fmt % id
+        query += ");out;"
+        return query
+
+    def download_to(self, fh):
+        osc = OsmChange(fh)
+
+        for n_ids in chunks(1000, self.nodes):
+            osc.add_query(self.build_query("node(%d);", n_ids))
+        for w_ids in chunks(100, self.ways):
+            osc.add_query(self.build_query("way(%d);>;", w_ids))
+        for r_ids in chunks(10, self.relations):
+            osc.add_query(self.build_query("relation(%d);>;",  r_ids))
+        for raw_query in self.raw_queries:
+            osc.add_query("(" + raw_query + ");out;")
+
+        osc.flush()
+
+    def test_function(self):
+        def dump_data(f, log, idx, num_tests):
+            fails = 0
+
+            try:
+                with open(f) as fh:
+                    for line in fh:
+                        m = self.pattern.search(line)
+                        if m:
+                            self.add_object(m.group(1), m.group(3))
+                        else:
+                            m = self.raw_pattern.search(line)
+                            if m:
+                                self.add_query(m.group(1).rstrip())
+            except:
+                print "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
+                fails = 1
+                print>>log, "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
+                print>>log, traceback.format_exc()
+                print>>log, ""
+
+            return fails
+
+        return dump_data
+
+
 def run_test(f, log, idx, num_tests):
     fails = 0
 
@@ -304,11 +452,22 @@ def run_test(f, log, idx, num_tests):
 
     return fails
 
-if len(sys.argv) > 2 and sys.argv[2] == '-printcoords':
-    tests = sys.argv[3:]
+
+data_dumper = None
+
+if len(sys.argv) > 1 and sys.argv[1] == '-printcoords':
+    tests = sys.argv[2:]
     mode = 'print'
     runner = print_coords
+elif len(sys.argv) > 1 and sys.argv[1] == '-dumpdata':
+    tests = sys.argv[2:]
+    mode = 'dump'
+    data_dumper = DataDumper()
+    runner = data_dumper.test_function()
 else:
+    config_url, config_all_layers = get_config()
+    assert config_url, "Tile URL not configured, but is necessary for " \
+        "running the tests. Please check your configuration file."
     tests = sys.argv[2:]
     mode = 'test'
     runner = run_test
@@ -334,3 +493,14 @@ if mode == 'test':
 
     else:
         print "PASSED ALL TESTS."
+
+if mode == 'dump':
+    if fail_count > 0:
+        print "FAILED %d TESTS, NOT DUMPING. For more information, " \
+            "see 'test.log'" % fail_count
+        sys.exit(1)
+
+    with open('data.osc', 'w') as fh:
+        data_dumper.download_to(fh)
+
+    print "DATA DOWNLOADED OK."

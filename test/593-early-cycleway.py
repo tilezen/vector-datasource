@@ -1,5 +1,8 @@
 tiles = [
-    [12, 655, 1586]     # way 109993139  cycleway example south of SF, way/109993139, is member of regional cycling network
+    # cycleway example south of SF is member of regional cycling network
+    #https://www.openstreetmap.org/way/158622336
+    #https://www.openstreetmap.org/relation/2263205
+    [12, 655, 1586]
 ]
 
 for z, x, y in tiles:
