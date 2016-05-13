@@ -5,7 +5,7 @@ machine:
 dependencies:
   pre:
     - sudo apt-get update
-    - sudo apt-get install osm2pgsql
+    - sudo apt-get install osm2pgsql proj-data
     - pip install -U python-dateutil
     - pip install -r requirements.txt
 
