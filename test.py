@@ -99,7 +99,7 @@ def match_properties(actual, expected):
                 if not isinstance(v, exp_v):
                     return False
 
-            elif hasattr(exp_v, '__call__'):
+            elif callable(exp_v):
                 if not exp_v(v):
                     return False
 
