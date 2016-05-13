@@ -4,6 +4,7 @@ machine:
 
 dependencies:
   pre:
+    - pip install -U python-dateutil
     - pip install -r requirements.txt
 
 test:
