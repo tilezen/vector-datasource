@@ -21,11 +21,12 @@ CREATE TABLE wof_neighbourhood (
   min_zoom SMALLINT NOT NULL,
   max_zoom SMALLINT NOT NULL,
   is_landuse_aoi BOOLEAN,
+  label_position geometry(Point, 900913) NOT NULL,
+  geometry geometry(Geometry, 900913) NOT NULL,
   inception DATE NOT NULL DEFAULT '0001-01-01',
   cessation DATE NOT NULL DEFAULT '9999-12-31',
   is_visible BOOLEAN NOT NULL DEFAULT true,
-  label_position geometry(Point, 900913) NOT NULL,
-  geometry geometry(Geometry, 900913) NOT NULL
+  l10n_name HSTORE
 );
 
 CREATE INDEX wof_neighbourhood_label_position_index ON wof_neighbourhood USING GIST(label_position);
