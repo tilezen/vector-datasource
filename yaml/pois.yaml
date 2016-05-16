@@ -268,6 +268,9 @@ filters:
   - filter: {barrier: gate}
     min_zoom: 15
     output: {kind: gate}
+  - filter: {barrier: toll_booth}
+    min_zoom: 15
+    output: {kind: toll_booth}
   - filter: {craft: sawmill}
     min_zoom: 15
     output: {kind: sawmill}

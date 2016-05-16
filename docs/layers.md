@@ -771,6 +771,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `therapist`
 * `toilets`
 * `toilets`
+* `toll_booth`
 * `townhall`
 * `toys`
 * `trade`
