@@ -26,7 +26,7 @@ To start integrating vector tiles to your app, you need a [developer API key](ht
 * [API keys and rate limits](docs/api-keys-and-rate-limits.md) - Don't abuse the shared service!
 * [Attribution requirements](docs/attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
 
-#### Requestiong tiles
+#### Requesting tiles
 
 The URL pattern to request tiles is:
 
