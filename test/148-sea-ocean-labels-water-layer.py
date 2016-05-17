@@ -4,7 +4,7 @@
 ## Gulf of California: http://www.openstreetmap.org/node/305639734
 assert_has_feature(
     9, 97, 215, 'water',
-    {'kind': 'sea', 'name': 'Gulf of California', 'label_placement': 'yes'})
+    {'kind': 'sea', 'name': 'Gulf of California', 'label_placement': True})
 assert_no_matching_feature(
     9, 97, 215, 'places',
     {'kind': 'sea', 'name': 'Gulf of California'})
@@ -12,7 +12,7 @@ assert_no_matching_feature(
 ## Greenland Sea: http://www.openstreetmap.org/node/305639396
 assert_has_feature(
     9, 241, 90, 'water',
-    {'kind': 'sea', 'name': 'Greenland Sea', 'label_placement': 'yes'})
+    {'kind': 'sea', 'name': 'Greenland Sea', 'label_placement': True})
 assert_no_matching_feature(
     9, 241, 90, 'places',
     {'kind': 'sea', 'name': 'Greenland Sea'})

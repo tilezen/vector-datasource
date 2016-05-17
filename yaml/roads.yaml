@@ -48,7 +48,7 @@ global:
           CASE WHEN tags->'cycleway:both' NOT IN ('no', 'none') THEN tags->'cycleway:both' END
       segregated:
         expr: |
-          CASE WHEN tags->'segregated' = 'yes' THEN 'yes' END
+          tags->'segregated' = 'yes'
       crossing:
         expr: |
           CASE WHEN tags->'crossing' <> 'no' THEN tags->'crossing' END

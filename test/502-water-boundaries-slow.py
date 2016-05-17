@@ -31,12 +31,12 @@ for z, x, y in no_boundary_tiles:
 
         for f in features:
             geom_type = f['geometry']['type']
-            boundary = f['properties'].get('boundary', 'no')
+            boundary = f['properties'].get('boundary', False)
 
             if geom_type in ['Polygon', 'MultiPolygon']:
                 num_polygons += 1
 
-            elif boundary == 'yes':
+            elif boundary == True:
                 num_boundaries += 1
 
         if num_polygons < 2:
@@ -50,4 +50,4 @@ for z, x, y in no_boundary_tiles:
 for z, x, y in boundary_tiles:
     assert_has_feature(
         z, x, y, 'water',
-        {'boundary': 'yes'})
+        {'boundary': True})

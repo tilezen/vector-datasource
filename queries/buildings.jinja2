@@ -11,7 +11,7 @@ SELECT
     way_area::bigint AS area,
     osm_id AS __id__,
     'openstreetmap.org' AS source,
-    mz_calculate_output_buildings(planet_osm_polygon.*) AS mz_properties,
+    mz_calculate_jsonb_buildings(planet_osm_polygon.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     mz_building_min_zoom AS min_zoom,
     %#tags AS tags
@@ -37,7 +37,7 @@ SELECT
     NULL AS area,
     osm_id AS __id__,
     'openstreetmap.org' AS source,
-    mz_calculate_output_buildings(planet_osm_point.*) AS mz_properties,
+    mz_calculate_jsonb_buildings(planet_osm_point.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     mz_building_min_zoom AS min_zoom,
     %#tags AS tags

@@ -97,14 +97,14 @@ assert_has_feature(
 assert_has_feature(
     16, 12378, 26258, 'pois',
     { 'kind': 'bicycle_parking',
-      'capacity': 10, 'covered': 'yes', 'fee': 'no' })
+      'capacity': 10, 'covered': True, 'fee': False })
 
 #http://www.openstreetmap.org/node/1618586234
 # bicycle parking with access, capacity, covered, fee & operator
 assert_has_feature(
     16, 10413, 22135, 'pois',
     { 'kind': 'bicycle_parking',
-      'capacity': 100, 'covered': 'yes', 'fee': 'no', 'access': 'customers',
+      'capacity': 100, 'covered': True, 'fee': False, 'access': 'customers',
       'operator': 'Pemberton Gateway Village Suites' })
 
 # WARNING - EXAMPLE IS IN EUROPE
@@ -113,7 +113,7 @@ assert_has_feature(
 assert_has_feature(
     16, 31627, 21244, 'pois',
     { 'kind': 'bicycle_parking',
-      'capacity': 200, 'covered': 'yes', 'fee': 'no', 'maxstay': '2 days',
+      'capacity': 200, 'covered': True, 'fee': False, 'maxstay': '2 days',
       'operator': 'Dublin City Council' })
 
 # WARNING - EXAMPLE IS IN EUROPE
@@ -129,5 +129,5 @@ assert_has_feature(
 assert_has_feature(
     16, 17087, 24822, 'pois',
     { 'kind': 'bicycle_parking',
-      'access': 'public', 'capacity': 10, 'covered': 'yes',
-      'operator': 'City of Carmel', 'surveillance': 'yes' })
+      'access': 'public', 'capacity': 10, 'covered': True,
+      'operator': 'City of Carmel', 'surveillance': True })

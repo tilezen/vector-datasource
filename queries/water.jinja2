@@ -1,11 +1,11 @@
 {% macro ne_water_cols() %}
     sum(way_area)::bigint AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
-    NULL AS label_placement,
-    NULL AS boundary
+    NULL::boolean AS label_placement,
+    NULL::boolean AS boundary
 {% endmacro %}
 
 {% if zoom < 9 %}
@@ -50,12 +50,12 @@ UNION ALL
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
-    NULL AS label_placement,
-    'yes' AS boundary
+    NULL::boolean AS label_placement,
+    true AS boundary
 
 FROM
 {% if zoom < 2 %}
@@ -75,12 +75,12 @@ UNION ALL
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
-    NULL AS label_placement,
-    'yes' AS boundary
+    NULL::boolean AS label_placement,
+    true AS boundary
 
 FROM
 {% if zoom < 2 %}
@@ -118,12 +118,12 @@ UNION ALL
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
-    NULL AS label_placement,
-    'yes' AS boundary
+    NULL::boolean AS label_placement,
+    true AS boundary
 
 FROM
 {% if 4 <= zoom < 5 %}
@@ -142,11 +142,11 @@ WHERE
 SELECT
     '' AS name,
     way_area::bigint AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
-    NULL AS label_placement,
+    NULL::boolean AS label_placement,
     NULL AS tunnel,
     NULL AS tags
 
@@ -159,11 +159,11 @@ UNION ALL
 SELECT
     name,
     way_area::bigint AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    NULL AS label_placement,
+    NULL::boolean AS label_placement,
     tunnel,
     %#tags AS tags
 
@@ -178,11 +178,11 @@ UNION ALL
 SELECT
     name,
     NULL AS area,
-    mz_calculate_output_water(t.*) AS mz_properties,
+    mz_calculate_jsonb_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    NULL AS label_placement,
+    NULL::boolean AS label_placement,
     tunnel,
     %#tags AS tags
 
@@ -199,13 +199,13 @@ UNION ALL
 SELECT
   name,
   NULL AS area,
-  mz_calculate_output_water(t.*) AS mz_properties,
+  mz_calculate_jsonb_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
   way AS __geometry__,
   osm_id AS __id__,
-  'yes' AS label_placement,
+  true AS label_placement,
 {% if zoom < 9 %}
-  NULL AS boundary
+  NULL::boolean AS boundary
 {% else %}
   NULL AS tunnel,
   %#tags AS tags
