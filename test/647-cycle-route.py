@@ -81,7 +81,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/255652148
 assert_has_feature(
     16, 10487, 25333, 'roads',
-    { 'kind': 'path', 'segregated': 'yes'})
+    { 'kind': 'path', 'segregated': True})
 
 # http://www.openstreetmap.org/way/215528939
 assert_no_matching_feature(

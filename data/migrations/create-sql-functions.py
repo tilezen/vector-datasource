@@ -267,14 +267,14 @@ class Matcher(object):
         self.extra_columns = extra_columns
 
     def when_sql_output(self):
-        hstore_items = []
+        items = []
         for k, v in self.output.items():
-            hstore_key = "'%s'" % k
-            hstore_val = format_value(v)
-            hstore_items.append('%s,%s::text' % (hstore_key, hstore_val))
-        hstore_output = 'HSTORE(ARRAY[%s])' % ','.join(hstore_items)
+            key = "'%s'::text" % k
+            val = format_value(v)
+            items.append('%s,%s' % (key, val))
+        output = 'json_build_object(%s)::jsonb' % ','.join(items)
         return "WHEN %s THEN %s" % (
-            self.rule.as_sql(), hstore_output)
+            self.rule.as_sql(), output)
 
     def output_columns(self):
         columns = self.extra_columns

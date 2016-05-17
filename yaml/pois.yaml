@@ -501,11 +501,13 @@ filters:
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {col: covered}
-      fee: {col: tags->fee}
+      covered: {expr: "covered = 'yes'"}
+      fee: {expr: "(tags ? 'fee' and tags->'fee' not in ('no', 'Free', 'free', '0', 'No', 'none'))"}
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
-      surveillance: {col: tags->surveillance}
+      surveillance: {expr: "(tags ? 'surveillance' and tags->'surveillance' not in ('no', 'none'))"}
+    extra_columns:
+      - covered
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output: {kind: cycle_barrier}

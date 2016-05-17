@@ -33,7 +33,7 @@ assert_has_feature(
 assert_has_feature(
     18, 41890, 101390, "roads",
     {"kind": "highway", "highway": "motorway_link", "id": 123456285,
-     "name": "Junipero Serra Blvd.", "is_link": "yes", "sort_key": 374})
+     "name": "Junipero Serra Blvd.", "is_link": True, "sort_key": 374})
 
 #https://www.openstreetmap.org/way/8919312
 assert_has_feature(
