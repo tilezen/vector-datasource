@@ -24,7 +24,9 @@ filters:
       elevation: {col: ele}
   - filter: {railway: station}
     min_zoom: 10
-    output: {kind: station}
+    output:
+      kind: station
+      state: {col: tags->'state'}
   - filter: {tourism: zoo}
     min_zoom: LEAST(zoom + 3.00, 13)
     output: {kind: zoo}
@@ -301,7 +303,9 @@ filters:
     output: {kind: lock}
   - filter: {aerialway: station}
     min_zoom: 13
-    output: {kind: station}
+    output:
+      kind: station
+      state: {col: tags->'state'}
   - filter:
       railway: [halt, tram_stop, stop]
     min_zoom: 13

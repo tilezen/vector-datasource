@@ -123,7 +123,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.normalize_social_kind
       - TileStache.Goodies.VecTiles.transform.normalize_medical_kind
-      - TileStache.Goodies.VecTiles.transform.add_state_to_stations
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.add_uic_ref
       - TileStache.Goodies.VecTiles.transform.tags_remove
