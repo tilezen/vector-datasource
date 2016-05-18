@@ -120,7 +120,6 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
-      - TileStache.Goodies.VecTiles.transform.normalize_leisure_kind
       - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.normalize_social_kind
       - TileStache.Goodies.VecTiles.transform.normalize_medical_kind

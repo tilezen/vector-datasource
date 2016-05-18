@@ -161,13 +161,16 @@ filters:
     min_zoom: LEAST(zoom + 4.90, 18)
     output: {kind: snow_cannon}
   - filter:
-      leisure: [sports_centre, fitness_centre, fitness_station]
+      leisure: [fitness_centre, gym, fitness_station]
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output: {kind: fitness}
+  - filter: {leisure: sports_centre}
     min_zoom: LEAST(zoom + 3.98, 17)
     output:
-      kind: {col: leisure}
-  - filter: {amenity: gym}
-    min_zoom: LEAST(zoom + 3.98, 17)
-    output: {kind: gym}
+      kind:
+        expr: CASE WHEN sport IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
+      sport:
+        expr: CASE WHEN sport IN ('fitness', 'gym') THEN NULL ELSE sport END
   - filter: {leisure: beach_resort}
     min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
     output: {kind: beach_resort }
