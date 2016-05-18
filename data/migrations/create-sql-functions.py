@@ -28,6 +28,13 @@ def format_value(val):
         return "'%s'" % val
 
 
+def format_json_value(val):
+    val = format_value(val)
+    if (val.startswith("'") and val.endswith("'") or val == 'NULL'):
+        val = '%s::text' % val
+    return 'mz_to_json_null_safe(%s)' % val
+
+
 def value_columns(val):
     if isinstance(val, dict):
         if 'expr' in val:
@@ -269,10 +276,11 @@ class Matcher(object):
     def when_sql_output(self):
         items = []
         for k, v in self.output.items():
-            key = "'%s'::text" % k
-            val = format_value(v)
-            items.append('%s,%s' % (key, val))
-        output = 'json_build_object(%s)::jsonb' % ','.join(items)
+            key = '"%s"' % k
+            val = format_json_value(v)
+            items.append("%s: ' || %s" % (key, val))
+        items_str = " || ', ".join(items)
+        output = "('{%s || '}')::json" % items_str
         return "WHEN %s THEN %s" % (
             self.rule.as_sql(), output)
 

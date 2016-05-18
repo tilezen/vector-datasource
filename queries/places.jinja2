@@ -1,6 +1,6 @@
 SELECT
     name,
-    mz_calculate_jsonb_places(ne_10m_populated_places.*) AS mz_properties,
+    mz_calculate_json_places(ne_10m_populated_places.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -28,7 +28,7 @@ UNION ALL
 
 SELECT
     name,
-    mz_calculate_jsonb_places(planet_osm_point.*) AS mz_properties,
+    mz_calculate_json_places(planet_osm_point.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -57,7 +57,7 @@ UNION ALL
 
 SELECT
     name,
-    json_build_object('kind',wof_np.placetype_string)::jsonb AS mz_properties,
+    ('{"kind": ' || to_json(wof_np.placetype_string) || '}')::json AS mz_properties,
     'whosonfirst.mapzen.com' AS source,
     {% filter geometry %}label_position{% endfilter %} AS __geometry__,
     wof_id AS __id__,

@@ -3,7 +3,7 @@
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_jsonb_earth(t.*) AS mz_properties,
+    mz_calculate_json_earth(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
@@ -21,14 +21,14 @@ FROM
 WHERE
     mz_earth_min_zoom <= {{ zoom }} AND
     {{ bounds|bbox_filter('the_geom') }}
-GROUP BY mz_properties
+GROUP BY gid
 
 {% else %}
 
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_jsonb_earth(t.*) AS mz_properties,
+    mz_calculate_json_earth(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
@@ -40,7 +40,7 @@ FROM
 
 WHERE
     {{ bounds|bbox_filter('the_geom') }}
-GROUP BY mz_properties
+GROUP BY gid
 
 {% endif %}
 
@@ -51,7 +51,7 @@ UNION ALL
 SELECT
     name,
     way_area::bigint AS area,
-    mz_calculate_jsonb_earth(t.*) AS mz_properties,
+    mz_calculate_json_earth(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -73,7 +73,7 @@ UNION ALL
 SELECT
     name,
     NULL AS area,
-    mz_calculate_jsonb_earth(t.*) AS mz_properties,
+    mz_calculate_json_earth(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -98,7 +98,7 @@ UNION ALL
 SELECT
   name,
   NULL AS area,
-  mz_calculate_jsonb_earth(t.*) AS mz_properties,
+  mz_calculate_json_earth(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
   way AS __geometry__,
   osm_id AS __id__,

@@ -1,6 +1,6 @@
 {% macro ne_water_cols() %}
     sum(way_area)::bigint AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
@@ -50,7 +50,7 @@ UNION ALL
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -75,7 +75,7 @@ UNION ALL
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -118,7 +118,7 @@ UNION ALL
 SELECT
     NULL AS name,
     NULL AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -142,7 +142,7 @@ WHERE
 SELECT
     '' AS name,
     way_area::bigint AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
@@ -159,7 +159,7 @@ UNION ALL
 SELECT
     name,
     way_area::bigint AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -178,7 +178,7 @@ UNION ALL
 SELECT
     name,
     NULL AS area,
-    mz_calculate_jsonb_water(t.*) AS mz_properties,
+    mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
@@ -199,7 +199,7 @@ UNION ALL
 SELECT
   name,
   NULL AS area,
-  mz_calculate_jsonb_water(t.*) AS mz_properties,
+  mz_calculate_json_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
   way AS __geometry__,
   osm_id AS __id__,
