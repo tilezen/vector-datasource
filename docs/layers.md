@@ -498,10 +498,10 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
 * `capacity`: Approximate number of total bicycle parking spots.
 * `covered`: Is the parking area covered.
-* `fee`: Whether a fee must be paid to use the bicycle parking (if `true`, the default is `false`).
+* `fee`: If present, indicates whether a fee must be paid to use the bicycle parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
 * `operator`: Who runs the bike parking lot.
 * `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
-* `surveillance`: If present, then indicates that there is surveillance (value `true`).
+* `surveillance`: If present, then indicates whether there is surveillance. A value of `true` means the parking is covered by surveillance, a value of `false` means it is not. If the property is not present, then it is unknown whether surveillance is in place or not.
 
 #### POI properties (only on `kind:peak` and `kind:volcano`):
 
@@ -837,10 +837,10 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
 * `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
-* `is_bridge`: `true`, default is `false` if not present.
+* `is_bridge`: `true` if the road is part of a bridge. The property will not be present if the road is not part of a bridge.
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
-* `is_link`: `true`, default is `false` if not present.
-* `is_tunnel`: `true`, default is `false` if not present.
+* `is_link`: `true` if the road is part of a highway link or ramp. The property will not be present if the road is not part of a highway link or ramp.
+* `is_tunnel`: `true` if the road is part of a tunnel. The property will not be present if the road is not part of a tunnel.
 * `leisure`: See kind list below.
 * `man_made`: See kind list below.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections.
