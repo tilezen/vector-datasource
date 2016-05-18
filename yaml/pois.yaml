@@ -272,7 +272,9 @@ filters:
     output: {kind: toilets}
   - filter: {barrier: gate}
     min_zoom: 15
-    output: {kind: gate}
+    output:
+      kind: gate
+      aeroway: {col: aeroway}
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output: {kind: toll_booth}
@@ -284,6 +286,8 @@ filters:
     min_zoom: 15
     output:
       kind: {col: highway}
+      aeroway:
+        expr: CASE WHEN highway='gate' THEN aeroway END
   - filter: {lock: 'yes'}
     min_zoom: 15
     output: {kind: lock}
@@ -343,6 +347,8 @@ filters:
     min_zoom: 16
     output:
       kind: {col: aeroway}
+      aeroway:
+        expr: CASE WHEN aeroway='gate' THEN 'gate' END
   - filter:
       amenity: [bus_station, car_sharing, picnic_site, recycling, shelter]
     min_zoom: 16
