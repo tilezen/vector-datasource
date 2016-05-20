@@ -172,12 +172,17 @@ assert_has_feature(
     { 'kind': 'dam', "sort_key": 263 })
 
 
+#http://www.openstreetmap.org/node/262220409
+# Indian Lake Dog Exercise Area, near Madison, WI
+assert_has_feature(
+    16, 16450, 24033, 'pois',
+    { 'kind': 'dog_park', 'min_zoom': 17 })
 
-#https://www.openstreetmap.org/node/3646717009
+#https://www.openstreetmap.org/way/417184097
 # Dog Run at Upper Noe Valley Rec Center, SF
 assert_has_feature(
     16, 10480, 25338, 'pois',
-    { 'kind': 'dog_park', 'min_zoom': 17 })
+    { 'kind': 'dog_park', 'min_zoom': 16 })
 
 #https://www.openstreetmap.org/way/375333476
 # Dog park at Walter Hass Playground, SF
