@@ -172,6 +172,11 @@ assert_has_feature(
     { 'kind': 'dam', "sort_key": 263 })
 
 
+#http://www.openstreetmap.org/node/262220409
+# Indian Lake Dog Exercise Area, near Madison, WI
+assert_has_feature(
+    16, 16450, 24033, 'pois',
+    { 'kind': 'dog_park', 'min_zoom': 17 })
 
 #https://www.openstreetmap.org/way/417184097
 # Dog Run at Upper Noe Valley Rec Center, SF
