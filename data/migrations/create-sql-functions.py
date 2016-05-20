@@ -379,6 +379,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
                     typ = 'integer'
                 elif column == 'scalerank' or column == 'labelrank':
                     typ = 'smallint'
+                elif column == 'way':
+                    typ = 'geometry'
                 else:
                     typ = 'text'
                 key = Key(
