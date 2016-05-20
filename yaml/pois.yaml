@@ -669,3 +669,11 @@ filters:
   - filter: {tourism: picnic_site}
     min_zoom: 16
     output: {kind: picnic_site}
+  - filter: {highway: services}
+    min_zoom: 11
+    output:
+      kind: service_area
+  - filter: {highway: rest_area}
+    min_zoom: 11
+    output:
+      kind: rest_area

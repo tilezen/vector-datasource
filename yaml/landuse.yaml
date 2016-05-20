@@ -332,3 +332,11 @@ filters:
   - filter: {barrier: hedge}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: hedge}
+  - filter: {highway: services}
+    min_zoom: GREATEST(LEAST(zoom, 16), 11)
+    output:
+      kind: service_area
+  - filter: {highway: rest_area}
+    min_zoom: GREATEST(LEAST(zoom, 16), 11)
+    output:
+      kind: rest_area

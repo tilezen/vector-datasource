@@ -333,6 +333,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `recreation_track`
 * `residential`
 * `resort`
+* `rest_area`
 * `retail`
 * `rock`
 * `roller_coaster`
@@ -341,6 +342,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `school`
 * `scree`
 * `scrub`
+* `service_area`
 * `sports_centre`
 * `stadium`
 * `stone`
@@ -728,6 +730,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `research`
 * `residential_home`
 * `resort`
+* `rest_area`
 * `restaurant`
 * `rock`
 * `roller_coaster`
@@ -735,6 +738,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `sawmill`
 * `school`
 * `scuba_diving`
+* `service_area`
 * `shelter`
 * `shelter`
 * `shoemaker`
