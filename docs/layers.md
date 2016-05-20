@@ -686,7 +686,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `ngo`
 * `notary`
 * `nursing_home`
-* `nursing_home`
 * `observatory`
 * `offshore_platform`
 * `optician`
@@ -740,7 +739,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `scuba_diving`
 * `service_area`
 * `shelter`
-* `shelter`
 * `shoemaker`
 * `shower`
 * `sinkhole`
@@ -771,7 +769,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `theatre`
 * `theme_park`
 * `therapist`
-* `toilets`
 * `toilets`
 * `toll_booth`
 * `townhall`
