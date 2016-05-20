@@ -73,7 +73,7 @@ SELECT
     min_zoom,
     max_zoom,
     CASE WHEN is_landuse_aoi = true THEN true ELSE NULL END AS is_landuse_aoi,
-    NULL AS tags
+    %#l10n_name AS tags
 
 FROM wof_neighbourhood wof_n
 
