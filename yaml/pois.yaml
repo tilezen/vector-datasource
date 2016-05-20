@@ -26,7 +26,7 @@ filters:
     min_zoom: 10
     output:
       kind: station
-      state: {col: tags->'state'}
+      state: {col: tags->state}
   - filter: {tourism: zoo}
     min_zoom: LEAST(zoom + 3.00, 13)
     output: {kind: zoo}
@@ -173,6 +173,7 @@ filters:
         expr: CASE WHEN sport IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
       sport:
         expr: CASE WHEN sport IN ('fitness', 'gym') THEN NULL ELSE sport END
+    extra_columns: [sport]
   - filter: {leisure: beach_resort}
     min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
     output: {kind: beach_resort }
@@ -309,7 +310,7 @@ filters:
     min_zoom: 13
     output:
       kind: station
-      state: {col: tags->'state'}
+      state: {col: tags->state}
   - filter:
       railway: [halt, tram_stop, stop]
     min_zoom: 13
