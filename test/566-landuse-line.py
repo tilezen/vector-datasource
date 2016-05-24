@@ -1,9 +1,9 @@
 # way 207142223
 assert_has_feature(
     16, 10454, 25310, 'landuse',
-    { 'kind': 'tree_row', 'sort_key': 229 })
+    { 'kind': 'tree_row', 'sort_key': 231 })
 
 # way 205644321
 assert_has_feature(
     16, 10485, 25332, 'landuse',
-    { 'kind': 'hedge', 'sort_key': 228 })
+    { 'kind': 'hedge', 'sort_key': 230 })

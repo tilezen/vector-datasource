@@ -2,7 +2,7 @@
 # Waterworld in Concord
 assert_has_feature(
     13, 1318, 3160, 'landuse',
-    { 'kind': 'water_park', 'sort_key': 102 })
+    { 'kind': 'water_park', 'sort_key': 104 })
 
 assert_has_feature(
     13, 1318, 3160, 'pois',
@@ -158,7 +158,7 @@ assert_has_feature(
 # 13, 1370, 3161
 assert_has_feature(
     12, 685, 1580, 'landuse',
-    { 'kind': 'dam', 'sort_key': 221 })
+    { 'kind': 'dam', 'sort_key': 223 })
 
 assert_has_feature(
     12, 685, 1580, 'pois',
@@ -192,7 +192,7 @@ assert_has_feature(
 
 assert_has_feature(
     16, 10479, 25338, 'landuse',
-    { 'kind': 'dog_park', 'sort_key': 92 })
+    { 'kind': 'dog_park', 'sort_key': 94 })
 
 
 
@@ -200,7 +200,7 @@ assert_has_feature(
 # Cox Stadium at SF State
 assert_has_feature(
     15, 5235, 12671, 'landuse',
-    { 'kind': 'recreation_track', 'sort_key': 57 })
+    { 'kind': 'recreation_track', 'sort_key': 59 })
 
 assert_has_feature(
     16, 10471, 25342, 'pois',
@@ -316,7 +316,7 @@ assert_has_feature(
 # Pillar Point RV Park
 assert_has_feature(
     14, 2618, 6348, 'landuse',
-    { 'kind': 'caravan_site', 'sort_key': 56 })
+    { 'kind': 'caravan_site', 'sort_key': 58 })
 
 assert_has_feature(
     14, 2618, 6348, 'pois',
@@ -341,7 +341,7 @@ assert_has_feature(
 # Golden Gate Park, SF
 assert_has_feature(
     16, 10474, 25332, 'landuse',
-    { 'kind': 'picnic_site', 'sort_key': 103 })
+    { 'kind': 'picnic_site', 'sort_key': 105 })
 
 assert_has_feature(
     16, 10474, 25332, 'pois',
@@ -365,7 +365,7 @@ assert_has_feature(
 # Battery 2
 assert_has_feature(
     16, 19303, 24607, 'landuse',
-    { 'kind': 'fort', 'sort_key': 45 })
+    { 'kind': 'fort', 'sort_key': 47 })
 
 assert_has_feature(
     16, 19303, 24607, 'pois',
