@@ -17,7 +17,7 @@ assert_has_feature(
       'name:spa': type(None) })
 
 # San Francisco (osm city)
-# https://whosonfirst.mapzen.com/data/858/826/41/85882641.geojson
+# http://www.openstreetmap.org/node/26819236
 assert_has_feature(
     16, 10482, 25330, 'places',
     { 'id': 26819236, 'kind': 'city',
