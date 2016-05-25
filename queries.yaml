@@ -232,17 +232,7 @@ post_process:
     params:
       source_layer: transit
       target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-    params:
-      source_layer: roads
-      properties: [layer]
-  - fn: TileStache.Goodies.VecTiles.transform.intercut
-    params:
-      base_layer: roads
-      cutting_layer: landuse
-      attribute: kind
-      target_attribute: landuse_kind
-      cutting_attrs: { sort_key: 'sort_key', reverse: True }
+  # this needs to run before the water sort_key csv matcher
   - fn: TileStache.Goodies.VecTiles.transform.exterior_boundaries
     params:
       base_layer: water
@@ -265,6 +255,18 @@ post_process:
     params:
       source_layer: water
       target_value_type: int
+
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      properties: [layer]
+  - fn: TileStache.Goodies.VecTiles.transform.intercut
+    params:
+      base_layer: roads
+      cutting_layer: landuse
+      attribute: kind
+      target_attribute: landuse_kind
+      cutting_attrs: { sort_key: 'sort_key', reverse: True }
   - fn: TileStache.Goodies.VecTiles.transform.overlap
     params:
       base_layer: buildings
