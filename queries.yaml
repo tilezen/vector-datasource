@@ -168,6 +168,14 @@ layers:
     sort: TileStache.Goodies.VecTiles.sort.transit
     area-inclusion-threshold: 1
 post_process:
+  - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
+    params:
+      source_layer: buildings
+      mode: any
+      filters:
+        13: { area: 1600, volume: 300000 }
+        14: { area:  100, volume: 200000 }
+        15: { area:  100, volume: 100000 }
 
   # sort key
   - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
@@ -228,14 +236,6 @@ post_process:
     params:
       source_layer: roads
       properties: [layer]
-  - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
-    params:
-      source_layer: buildings
-      mode: any
-      filters:
-        13: { area: 1600, volume: 300000 }
-        14: { area:  100, volume: 200000 }
-        15: { area:  100, volume: 100000 }
   - fn: TileStache.Goodies.VecTiles.transform.intercut
     params:
       base_layer: roads
