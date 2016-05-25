@@ -283,7 +283,6 @@ post_process:
       source_layer: landuse
       label_property_name: label_placement
       label_property_value: true
-      drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
@@ -344,11 +343,6 @@ post_process:
       start_zoom: 6
       where: >-
         properties.get('mz_is_building') is True
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-    params:
-      source_layer: landuse
-      start_zoom: 6
-      properties: [mz_is_building]
   - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
       source_layer: pois
@@ -376,11 +370,6 @@ post_process:
         kind: [peak, volcano]
       rank_key: kind_tile_rank
       start_zoom: 9
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-    params:
-      source_layer: places
-      properties: [mz_n_photos]
-      start_zoom: 11
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
@@ -486,3 +475,5 @@ post_process:
       end_zoom: 15
       items_matching: { kind: [peak, volcano] }
       max_items: 5
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties_with_prefix
+    params: {prefix: mz_}
