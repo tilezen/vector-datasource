@@ -15,6 +15,6 @@ Werkzeug==0.9.6
 wsgiref==0.1.2
 AppDirs==1.4.0
 lxml==3.6.0
-git+https://github.com/mapzen/TileStache@03c72f5#egg=TileStache
-git+https://github.com/mapzen/tilequeue@80b57d9#egg=tilequeue
-git+https://github.com/mapzen/tileserver@5babd91#egg=tileserver
+git+https://github.com/mapzen/TileStache@master#egg=TileStache
+git+https://github.com/mapzen/tilequeue@master#egg=tilequeue
+git+https://github.com/mapzen/tileserver@master#egg=tileserver
