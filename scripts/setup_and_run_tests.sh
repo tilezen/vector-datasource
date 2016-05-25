@@ -78,6 +78,9 @@ CREATE TABLE simplified_land_polygons (
 );
 EOF
 # load up shapefile fixtures into the appropriate tables
+# allow globs to expand to empty strings to make enumerating files in
+# possibly empty directories easier.
+shopt -s nullglob
 for tbl in `ls ${basedir}/test/fixtures/`; do
     if [[ -d "${basedir}/test/fixtures/${tbl}" ]]; then
         for shp in "${basedir}/test/fixtures/${tbl}"/*.shp; do
@@ -87,7 +90,9 @@ for tbl in `ls ${basedir}/test/fixtures/`; do
         done
     fi
 done
+shopt -u nullglob
 
+echo "=== Loading bundled data..."
 pushd "${basedir}/data"
 # Unzip all zip
 ls *.zip | xargs -n1 unzip -o
@@ -97,10 +102,18 @@ ls *.zip | xargs -n1 unzip -o
 ./perform-sql-updates.sh -d "${dbname}"
 popd
 
-#echo "=== Loading Who's on First data..."
-# Finally, neighbourhood data is required to be loaded from Who's on First.
-#wget https://s3.amazonaws.com/mapzen-tiles-prod-us-east/data/wof/wof_neighbourhoods.pgdump
-#pg_restore --clean --if-exists -d "${dbname}" -O wof_neighbourhoods.pgdump
+# load up pgcopy fixtures into the appropriate tables - note that these
+# go into the database _after_ the "apply updates" SQL, so should include
+# any columns (e.g: way_area) that those add.
+shopt -s nullglob
+for tbl in `ls ${basedir}/test/fixtures/`; do
+    if [[ -d "${basedir}/test/fixtures/${tbl}" ]]; then
+        for pgcopy in "${basedir}/test/fixtures/${tbl}"/*.pgcopy; do
+            psql -c "copy ${tbl} from stdin" "${dbname}" < "${pgcopy}"
+        done
+    fi
+done
+shopt -u nullglob
 
 # make config for tileserver and serve
 test_server_port="${basedir}/test_server.port"

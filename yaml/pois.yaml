@@ -163,9 +163,15 @@ filters:
     min_zoom: LEAST(zoom + 4.90, 18)
     output: {kind: snow_cannon}
   - filter:
-      leisure: [fitness_centre, gym, fitness_station]
+      any:
+        leisure: [fitness_centre, gym]
+        amenity: gym
     min_zoom: LEAST(zoom + 3.98, 17)
     output: {kind: fitness}
+  - filter:
+      leisure: fitness_station
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output: {kind: fitness_station}
   - filter: {leisure: sports_centre}
     min_zoom: LEAST(zoom + 3.98, 17)
     output:

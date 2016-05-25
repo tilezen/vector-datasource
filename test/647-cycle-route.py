@@ -50,11 +50,11 @@ assert_has_feature(
     16, 10483, 25332, 'roads',
     { 'kind': 'major_road', 'bicycle_network': 'lcn', 'cycleway': 'lane'})
 
-# Way: County Road 53 (17125595)
-# http://www.openstreetmap.org/way/17125595
-# http://www.openstreetmap.org/relation/3161159
+# Way: Boulge Road
+# http://www.openstreetmap.org/way/50835689
+# http://www.openstreetmap.org/relation/2767188
 assert_has_feature(
-    16, 13512, 25076, 'roads',
+    16, 33002, 21613, 'roads',
     { 'kind': 'minor_road', 'bicycle_network': 'icn'})
 
 # Way: West National Ave (95578389)
