@@ -342,7 +342,8 @@ post_process:
       source_layer: landuse
       start_zoom: 6
       where: >-
-        properties.get('mz_is_building') is True
+        properties.get('mz_is_building') is True and
+        properties.get('label_placement') is None
   - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
       source_layer: pois
