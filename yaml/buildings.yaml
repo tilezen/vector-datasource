@@ -106,6 +106,9 @@ filters:
   # address points
   - filter:
       "addr:housenumber": true
+      way:
+        expr: |
+          GeometryType(way) = 'POINT'
     min_zoom: 17
     output:
       kind: address

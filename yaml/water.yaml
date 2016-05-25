@@ -1,10 +1,11 @@
 globals:
   - &water_standard_properties_osm
-      intermittent: {col: intermittent}
+      intermittent: {expr: "intermittent='yes'"}
 filters:
   - filter: {waterway: riverbank}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: riverbank
@@ -12,6 +13,7 @@ filters:
   - filter: {waterway: dock}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: dock
@@ -19,6 +21,7 @@ filters:
   - filter: {natural: water}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: water
@@ -26,6 +29,7 @@ filters:
   - filter: {natural: bay}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: bay
@@ -33,6 +37,7 @@ filters:
   - filter: {natural: strait}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: strait
@@ -40,6 +45,7 @@ filters:
   - filter: {natural: fjord}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: fjord
@@ -47,6 +53,7 @@ filters:
   - filter: {landuse: basin}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: basin
@@ -54,14 +61,16 @@ filters:
   - filter: {landuse: reservoir}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: lake
-        reservoir: 'yes'
+        reservoir: true
     table: osm
   - filter: {amenity: swimming_pool}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: swimming_pool
@@ -69,36 +78,42 @@ filters:
   - filter: {leisure: swimming_pool}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: swimming_pool
     table: osm
   - filter: {waterway: canal}
     min_zoom: 9
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: canal
     table: osm
   - filter: {waterway: river}
     min_zoom: 9
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: river
     table: osm
   - filter: {waterway: stream}
     min_zoom: 11
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: stream
     table: osm
   - filter: {waterway: ditch}
     min_zoom: 16
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: ditch
     table: osm
   - filter: {waterway: drain}
     min_zoom: 16
+    extra_columns: [intermittent]
     output:
         <<: *water_standard_properties_osm
         kind: drain
@@ -112,7 +127,7 @@ filters:
     min_zoom: 0
     output:
         kind: lake
-        alkaline: 'yes'
+        alkaline: true
     table: ne
   - filter: {featurecla: Lake}
     min_zoom: 0
@@ -120,7 +135,7 @@ filters:
     table: ne
   - filter: {featurecla: Reservoir}
     min_zoom: 0
-    output: {kind: lake, reservoir: 'yes'}
+    output: {kind: lake, reservoir: true}
     table: ne
   - filter: {featurecla: Playa}
     min_zoom: 0

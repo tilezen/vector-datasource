@@ -120,11 +120,9 @@ layers:
     transform:
       - TileStache.Goodies.VecTiles.transform.tags_create_dict
       - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
-      - TileStache.Goodies.VecTiles.transform.normalize_leisure_kind
       - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
       - TileStache.Goodies.VecTiles.transform.normalize_social_kind
       - TileStache.Goodies.VecTiles.transform.normalize_medical_kind
-      - TileStache.Goodies.VecTiles.transform.add_state_to_stations
       - TileStache.Goodies.VecTiles.transform.tags_name_i18n
       - TileStache.Goodies.VecTiles.transform.add_uic_ref
       - TileStache.Goodies.VecTiles.transform.tags_remove
@@ -132,7 +130,6 @@ layers:
       - TileStache.Goodies.VecTiles.transform.detect_osm_relation
       - TileStache.Goodies.VecTiles.transform.remove_feature_id
       - TileStache.Goodies.VecTiles.transform.remove_zero_area
-      - TileStache.Goodies.VecTiles.transform.pois_kind_aeroway_gate
       - TileStache.Goodies.VecTiles.transform.make_representative_point
       - TileStache.Goodies.VecTiles.transform.height_to_meters
       - TileStache.Goodies.VecTiles.transform.pois_capacity_int
@@ -252,7 +249,7 @@ post_process:
         kind: true
         id: true
         source: true
-        boundary: "yes"
+        boundary: [true]
         area: true
       snap_tolerance: 0.125
   # have to do the water properties matching _after_ exterior boundaries
@@ -281,7 +278,7 @@ post_process:
     params:
       source_layer: landuse
       label_property_name: label_placement
-      label_property_value: "yes"
+      label_property_value: true
       drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
@@ -294,7 +291,7 @@ post_process:
     params:
       source_layer: water
       label_property_name: label_placement
-      label_property_value: "yes"
+      label_property_value: true
   - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
       source_layer: water
@@ -305,7 +302,7 @@ post_process:
     params:
       source_layer: earth
       label_property_name: label_placement
-      label_property_value: "yes"
+      label_property_value: true
       geom_types: [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
   - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
     params:
@@ -322,7 +319,7 @@ post_process:
     params:
       source_layer: buildings
       label_property_name: label_placement
-      label_property_value: "yes"
+      label_property_value: true
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: buildings
@@ -392,7 +389,7 @@ post_process:
       source_layer: landuse
       target_layer: landuse_labels
       where:
-        label_placement: yes
+        label_placement: true
       geometry_types: [Point]
   - fn: TileStache.Goodies.VecTiles.transform.drop_properties
     params:

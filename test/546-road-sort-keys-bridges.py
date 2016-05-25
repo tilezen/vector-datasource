@@ -3,31 +3,31 @@
 assert_has_feature(
     18, 41888, 101295, "roads",
     {"kind": "highway", "highway": "motorway", "id": 28412298,
-     "name": "Presidio Pkwy.", "is_bridge": "yes", "sort_key": 443})
+     "name": "Presidio Pkwy.", "is_bridge": True, "sort_key": 443})
 
 #https://www.openstreetmap.org/way/59801274
 assert_has_feature(
     18, 41885, 101327, "roads",
     {"kind": "major_road", "highway": "trunk", "id": 59801274,
-     "name": "Crossover Dr.", "is_bridge": "yes", "sort_key": 443})
+     "name": "Crossover Dr.", "is_bridge": True, "sort_key": 443})
 
 #https://www.openstreetmap.org/way/370954791
 assert_has_feature(
     18, 41903, 101329, "roads",
     {"kind": "major_road", "highway": "primary", "id": 370954791,
-     "name": "Alvord Lake Bridge", "is_bridge": "yes", "sort_key": 428})
+     "name": "Alvord Lake Bridge", "is_bridge": True, "sort_key": 428})
 
 #https://www.openstreetmap.org/way/27613581
 assert_has_feature(
     18, 41946, 101358, "roads",
     {"kind": "major_road", "highway": "secondary", "id": 27613581,
-     "name": "Oakdale Ave.", "is_bridge": "yes", "sort_key": 427})
+     "name": "Oakdale Ave.", "is_bridge": True, "sort_key": 427})
 
 #https://www.openstreetmap.org/way/242940297
 assert_has_feature(
     18, 41946, 101309, "roads",
     {"kind": "major_road", "highway": "tertiary", "id": 242940297,
-     "name": "Beale St.", "is_bridge": "yes", "sort_key": 426})
+     "name": "Beale St.", "is_bridge": True, "sort_key": 426})
 
 #https://www.openstreetmap.org/way/162038104
 assert_has_feature(
@@ -39,4 +39,4 @@ assert_has_feature(
 assert_has_feature(
     18, 41937, 101310, "roads",
     {"kind": "minor_road", "highway": "service", "id": 28843606,
-     "name": "Garage Exit Ramp", "is_bridge": "yes", "sort_key": 408})
+     "name": "Garage Exit Ramp", "is_bridge": True, "sort_key": 408})

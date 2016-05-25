@@ -28,6 +28,13 @@ def format_value(val):
         return "'%s'" % val
 
 
+def format_json_value(val):
+    val = format_value(val)
+    if (val.startswith("'") and val.endswith("'") or val == 'NULL'):
+        val = '%s::text' % val
+    return 'mz_to_json_null_safe(%s)' % val
+
+
 def value_columns(val):
     if isinstance(val, dict):
         if 'expr' in val:
@@ -267,14 +274,15 @@ class Matcher(object):
         self.extra_columns = extra_columns
 
     def when_sql_output(self):
-        hstore_items = []
+        items = []
         for k, v in self.output.items():
-            hstore_key = "'%s'" % k
-            hstore_val = format_value(v)
-            hstore_items.append('%s,%s::text' % (hstore_key, hstore_val))
-        hstore_output = 'HSTORE(ARRAY[%s])' % ','.join(hstore_items)
+            key = '"%s"' % k
+            val = format_json_value(v)
+            items.append("%s: ' || %s" % (key, val))
+        items_str = " || ', ".join(items)
+        output = "('{%s || '}')::json" % items_str
         return "WHEN %s THEN %s" % (
-            self.rule.as_sql(), hstore_output)
+            self.rule.as_sql(), output)
 
     def output_columns(self):
         columns = self.extra_columns
@@ -371,6 +379,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
                     typ = 'integer'
                 elif column == 'scalerank' or column == 'labelrank':
                     typ = 'smallint'
+                elif column == 'way':
+                    typ = 'geometry'
                 else:
                     typ = 'text'
                 key = Key(

@@ -679,3 +679,11 @@ BEGIN
     END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_to_json_null_safe(val anyelement)
+RETURNS JSON AS $$
+DECLARE
+BEGIN
+  RETURN CASE WHEN val IS NULL THEN 'null' ELSE to_json(val) END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

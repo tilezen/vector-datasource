@@ -5,7 +5,7 @@ SELECT
     name,
     ref,
     operator,
-    mz_calculate_output_transit({{ table }}.*) AS mz_properties,
+    mz_calculate_json_transit({{ table }}.*) AS mz_properties,
     tags->'type' AS type,
     tags->'colour' AS colour,
     tags->'network' AS network,

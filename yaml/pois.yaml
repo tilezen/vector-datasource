@@ -24,7 +24,9 @@ filters:
       elevation: {col: ele}
   - filter: {railway: station}
     min_zoom: 10
-    output: {kind: station}
+    output:
+      kind: station
+      state: {col: tags->state}
   - filter: {tourism: zoo}
     min_zoom: LEAST(zoom + 3.00, 13)
     output: {kind: zoo}
@@ -161,13 +163,23 @@ filters:
     min_zoom: LEAST(zoom + 4.90, 18)
     output: {kind: snow_cannon}
   - filter:
-      leisure: [sports_centre, fitness_centre, fitness_station]
+      any:
+        leisure: [fitness_centre, gym]
+        amenity: gym
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output: {kind: fitness}
+  - filter:
+      leisure: fitness_station
+    min_zoom: LEAST(zoom + 3.98, 17)
+    output: {kind: fitness_station}
+  - filter: {leisure: sports_centre}
     min_zoom: LEAST(zoom + 3.98, 17)
     output:
-      kind: {col: leisure}
-  - filter: {amenity: gym}
-    min_zoom: LEAST(zoom + 3.98, 17)
-    output: {kind: gym}
+      kind:
+        expr: CASE WHEN sport IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
+      sport:
+        expr: CASE WHEN sport IN ('fitness', 'gym') THEN NULL ELSE sport END
+    extra_columns: [sport]
   - filter: {leisure: beach_resort}
     min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
     output: {kind: beach_resort }
@@ -267,7 +279,12 @@ filters:
     output: {kind: toilets}
   - filter: {barrier: gate}
     min_zoom: 15
-    output: {kind: gate}
+    output:
+      kind: gate
+      aeroway: {col: aeroway}
+  - filter: {barrier: toll_booth}
+    min_zoom: 15
+    output: {kind: toll_booth}
   - filter: {craft: sawmill}
     min_zoom: 15
     output: {kind: sawmill}
@@ -276,6 +293,8 @@ filters:
     min_zoom: 15
     output:
       kind: {col: highway}
+      aeroway:
+        expr: CASE WHEN highway='gate' THEN aeroway END
   - filter: {lock: 'yes'}
     min_zoom: 15
     output: {kind: lock}
@@ -295,7 +314,9 @@ filters:
     output: {kind: lock}
   - filter: {aerialway: station}
     min_zoom: 13
-    output: {kind: station}
+    output:
+      kind: station
+      state: {col: tags->state}
   - filter:
       railway: [halt, tram_stop, stop]
     min_zoom: 13
@@ -333,6 +354,8 @@ filters:
     min_zoom: 16
     output:
       kind: {col: aeroway}
+      aeroway:
+        expr: CASE WHEN aeroway='gate' THEN 'gate' END
   - filter:
       amenity: [bus_station, car_sharing, picnic_site, recycling, shelter]
     min_zoom: 16
@@ -498,11 +521,13 @@ filters:
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {col: covered}
-      fee: {col: tags->fee}
+      covered: {expr: "covered = 'yes'"}
+      fee: {expr: "(tags ? 'fee' and tags->'fee' not in ('no', 'Free', 'free', '0', 'No', 'none'))"}
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
-      surveillance: {col: tags->surveillance}
+      surveillance: {expr: "(tags ? 'surveillance' and tags->'surveillance' not in ('no', 'none'))"}
+    extra_columns:
+      - covered
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output: {kind: cycle_barrier}
@@ -650,3 +675,11 @@ filters:
   - filter: {tourism: picnic_site}
     min_zoom: 16
     output: {kind: picnic_site}
+  - filter: {highway: services}
+    min_zoom: 11
+    output:
+      kind: service_area
+  - filter: {highway: rest_area}
+    min_zoom: 11
+    output:
+      kind: rest_area

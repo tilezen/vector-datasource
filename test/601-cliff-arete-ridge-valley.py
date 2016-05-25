@@ -17,11 +17,11 @@ assert_has_feature(
 assert_has_feature(
     13, 1317, 3182, "earth",
     {"kind": "ridge", "id": 115675159,
-     "name": "Castle Rock Ridge", "label_placement": 'yes'})
+     "name": "Castle Rock Ridge", "label_placement": True})
 
 #valley with name in Yosemite
 # https://www.openstreetmap.org/way/407467016
 assert_has_feature(
     13, 1381, 3164, "earth",
     {"kind": "valley", "id": 407467016,
-     "name": "Lyell Canyon", "label_placement": 'yes'})
+     "name": "Lyell Canyon", "label_placement": True})

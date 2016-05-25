@@ -81,25 +81,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_landuse_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_landuse_(
 {%- for param in layers['landuse']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore,
         way_area real)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['landuse']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
+CREATE OR REPLACE FUNCTION mz_calculate_json_landuse(
        planet_osm_point)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_landuse_(
+  RETURN mz_calculate_json_landuse_(
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -108,13 +108,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
+CREATE OR REPLACE FUNCTION mz_calculate_json_landuse(
        planet_osm_polygon)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_landuse_(
+  RETURN mz_calculate_json_landuse_(
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -123,13 +123,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_landuse(
+CREATE OR REPLACE FUNCTION mz_calculate_json_landuse(
        planet_osm_line)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_landuse_(
+  RETURN mz_calculate_json_landuse_(
 {%- for param in layers['landuse']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -191,24 +191,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_pois_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['pois']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_pois(
+CREATE OR REPLACE FUNCTION mz_calculate_json_pois(
        planet_osm_point)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_pois_(
+  RETURN mz_calculate_json_pois_(
 {%- for param in layers['pois']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -216,13 +216,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_pois(
+CREATE OR REPLACE FUNCTION mz_calculate_json_pois(
        planet_osm_polygon)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_pois_(
+  RETURN mz_calculate_json_pois_(
 {%- for param in layers['pois']['params'] %}
 {%- if param.key == '"ele"' %}
         row.tags->'ele',
@@ -277,24 +277,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_transit_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_transit_(
 {%- for param in layers['transit']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['transit']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_transit(
+CREATE OR REPLACE FUNCTION mz_calculate_json_transit(
        planet_osm_line)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_transit_(
+  RETURN mz_calculate_json_transit_(
 {%- for param in layers['transit']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -302,13 +302,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_transit(
+CREATE OR REPLACE FUNCTION mz_calculate_json_transit(
        planet_osm_polygon)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_transit_(
+  RETURN mz_calculate_json_transit_(
 {%- for param in layers['transit']['params'] %}
         row.{{param.key}},
 {%- endfor %}
@@ -322,12 +322,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['water']['kind_case_statement'] }};
 END;
@@ -352,12 +352,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(planet_osm_polygon)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(planet_osm_polygon)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -365,12 +365,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(planet_osm_line)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(planet_osm_line)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -378,12 +378,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(planet_osm_point)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(planet_osm_point)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -391,12 +391,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_coastline)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_coastline)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -404,12 +404,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_coastline)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_coastline)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -417,12 +417,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_110m_coastline)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_110m_coastline)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -430,12 +430,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_ocean)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_ocean)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -443,12 +443,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_ocean)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_ocean)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -456,12 +456,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_110m_ocean)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_110m_ocean)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -469,12 +469,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_lakes)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_lakes)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -482,12 +482,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_lakes)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_lakes)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -495,12 +495,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_110m_lakes)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_110m_lakes)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -508,12 +508,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_10m_playas)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_playas)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -521,12 +521,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(ne_50m_playas)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_playas)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -534,12 +534,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_water(water_polygons)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_water(water_polygons)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_water_(
+  RETURN mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{ table_param(param, 'shp') }},
 {%- endfor %}
@@ -765,12 +765,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_places_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_places_(
 {%- for param in layers['places']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['places']['kind_case_statement'] }};
 END;
@@ -791,12 +791,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_places(planet_osm_point)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_places(planet_osm_point)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_places_(
+  RETURN mz_calculate_json_places_(
 {%- for param in layers['places']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -804,12 +804,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_places(ne_10m_populated_places)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_places(ne_10m_populated_places)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_places_(
+  RETURN mz_calculate_json_places_(
 {%- for param in layers['places']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -849,12 +849,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_boundaries_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['boundaries']['kind_case_statement'] }};
 END;
@@ -875,12 +875,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_boundaries(planet_osm_line)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_boundaries(planet_osm_line)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_boundaries_(
+  RETURN mz_calculate_json_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -888,12 +888,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_boundaries(planet_osm_polygon)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_boundaries(planet_osm_polygon)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_boundaries_(
+  RETURN mz_calculate_json_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -901,11 +901,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{{ table_func('output', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'HSTORE') }}
-{{ table_func('output', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'HSTORE') }}
-{{ table_func('output', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'HSTORE') }}
-{{ table_func('output', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'HSTORE') }}
-{{ table_func('output', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'HSTORE') }}
+{{ table_func('json', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'JSON') }}
+{{ table_func('json', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'JSON') }}
+{{ table_func('json', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'JSON') }}
+{{ table_func('json', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'JSON') }}
+{{ table_func('json', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'JSON') }}
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries(planet_osm_line)
 RETURNS SMALLINT AS $$
@@ -945,13 +945,13 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- buildings kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_buildings_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_buildings_(
 {%- for param in layers['buildings']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         way_area real,
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 DECLARE
   volume REAL := mz_building_height("height", "building:levels") * way_area;
 BEGIN
@@ -1003,12 +1003,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_buildings(planet_osm_polygon)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_buildings(planet_osm_polygon)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_buildings_(
+  RETURN mz_calculate_json_buildings_(
 {%- for param in layers['buildings']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -1017,12 +1017,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_buildings(planet_osm_point)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_buildings(planet_osm_point)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_buildings_(
+  RETURN mz_calculate_json_buildings_(
 {%- for param in layers['buildings']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -1037,14 +1037,14 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- roads kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_roads_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_roads_(
 {%- for param in layers['roads']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         osm_id bigint,
         name text,
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['roads']['kind_case_statement'] }};
 END;
@@ -1098,12 +1098,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_roads(planet_osm_line)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_roads(planet_osm_line)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_roads_(
+  RETURN mz_calculate_json_roads_(
 {%- for param in layers['roads']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -1113,12 +1113,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_roads(ne_10m_roads)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_roads(ne_10m_roads)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_roads_(
+  RETURN mz_calculate_json_roads_(
 {%- for param in layers['roads']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -1134,12 +1134,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- earth kind "main" function
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth_(
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS HSTORE AS $$
+RETURNS JSON AS $$
 BEGIN
   RETURN {{ layers['earth']['kind_case_statement'] }};
 END;
@@ -1164,12 +1164,12 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- earth kind table adaptors
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(planet_osm_polygon)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(planet_osm_polygon)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -1177,12 +1177,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(planet_osm_line)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(planet_osm_line)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -1190,12 +1190,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(planet_osm_point)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(planet_osm_point)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'osm') }},
 {%- endfor %}
@@ -1203,12 +1203,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(ne_10m_land)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(ne_10m_land)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -1216,12 +1216,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(ne_50m_land)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(ne_50m_land)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -1229,12 +1229,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(ne_110m_land)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(ne_110m_land)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'ne') }},
 {%- endfor %}
@@ -1242,12 +1242,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION mz_calculate_output_earth(land_polygons)
-RETURNS HSTORE AS $$
+CREATE OR REPLACE FUNCTION mz_calculate_json_earth(land_polygons)
+RETURNS JSON AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz_calculate_output_earth_(
+  RETURN mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{ table_param(param, 'shp') }},
 {%- endfor %}

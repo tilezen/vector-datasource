@@ -53,19 +53,19 @@ filters:
     table: osm
   - filter: {featurecla: Admin-0 region capital, scalerank: true}
     min_zoom: scalerank
-    output: {kind: city, capital: "yes"}
+    output: {kind: city, capital: true}
     table: ne
   - filter: {featurecla: Admin-0 capital alt, scalerank: true}
     min_zoom: scalerank
-    output: {kind: city, capital: "yes"}
+    output: {kind: city, capital: true}
     table: ne
   - filter: {featurecla: Admin-1 capital, scalerank: true}
     min_zoom: scalerank
-    output: {kind: city, state_capital: "yes"}
+    output: {kind: city, state_capital: true}
     table: ne
   - filter: {featurecla: Admin-1 region capital, scalerank: true}
     min_zoom: scalerank
-    output: {kind: city, state_capital: "yes"}
+    output: {kind: city, state_capital: true}
     table: ne
   - filter: {featurecla: Historic place, scalerank: true}
     min_zoom: scalerank
@@ -77,7 +77,7 @@ filters:
     table: ne
   - filter: {featurecla: Admin-0 capital, scalerank: true}
     min_zoom: scalerank
-    output: {kind: city, capital: "yes"}
+    output: {kind: city, capital: true}
     table: ne
   - filter: {featurecla: Scientific station, scalerank: true}
     min_zoom: scalerank

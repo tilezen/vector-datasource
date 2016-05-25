@@ -17,7 +17,6 @@ SELECT
     attraction,
     zoo,
     tags->'exit_to' AS exit_to,
-    aeroway,
     %#tags AS tags,
     mz_properties
 
@@ -27,7 +26,7 @@ FROM (
     name, way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
     cuisine, religion, sport, ref,
-    aerialway, aeroway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    aerialway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes_and_score function is pretty
@@ -38,7 +37,7 @@ FROM (
         THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_output_pois(planet_osm_point.*) AS mz_properties,
+    mz_calculate_json_pois(planet_osm_point.*) AS mz_properties,
     tags
 
   FROM
@@ -58,7 +57,7 @@ UNION ALL
     name, way, way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
     cuisine, religion, sport, ref,
-    aerialway, aeroway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
+    aerialway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes_and_score function is pretty
@@ -69,7 +68,7 @@ UNION ALL
         THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_output_pois(planet_osm_polygon.*) AS mz_properties,
+    mz_calculate_json_pois(planet_osm_polygon.*) AS mz_properties,
     tags
 
   FROM

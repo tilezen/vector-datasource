@@ -7,10 +7,10 @@ for z, x, y in locations:
     assert_has_feature(
         z, x, y, 'roads',
         { 'kind': 'highway',
-          'is_link': 'yes',
+          'is_link': True,
           'highway': 'motorway_link'})
     assert_no_matching_feature(
         z-1, x/2, y/2, 'roads',
         { 'kind': 'highway',
-          'is_link': 'yes',
+          'is_link': True,
           'highway': 'motorway_link'})

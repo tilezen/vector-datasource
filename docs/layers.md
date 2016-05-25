@@ -130,8 +130,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `scalerank`: from Natural Earth
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
-**Gotchas:** * `osm_relation` property values of `true` will later be replaced with `yes`.
-
 #### Boundary kind values:
 
 * `aboriginal lands`
@@ -335,6 +333,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `recreation_track`
 * `residential`
 * `resort`
+* `rest_area`
 * `retail`
 * `rock`
 * `roller_coaster`
@@ -343,6 +342,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `school`
 * `scree`
 * `scrub`
+* `service_area`
 * `sports_centre`
 * `stadium`
 * `stone`
@@ -408,8 +408,8 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 #### Place properties (common optional):
 
-* `capital`: a `yes` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
-* `state_capital`: a `yes` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
+* `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
+* `state_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
 * `labelrank`: labelrank value from Natural Earth
 * `min_zoom`: Currently neighbourhoods only, from Who's On First
 * `max_zoom`: Currently neighbourhoods only, from Who's On First
@@ -500,10 +500,10 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
 * `capacity`: Approximate number of total bicycle parking spots.
 * `covered`: Is the parking area covered.
-* `fee`: Whether a fee must be paid to use the bicycle parking (`yes`/`no`).
+* `fee`: If present, indicates whether a fee must be paid to use the bicycle parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
 * `operator`: Who runs the bike parking lot.
 * `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
-* `surveillance`: If present, then indicates that there is surveillance (value`yes`), or has a more specific value, e.g: `outdoor`, `public`, `indoor`.
+* `surveillance`: If present, then indicates whether there is surveillance. A value of `true` means the parking is covered by surveillance, a value of `false` means it is not. If the property is not present, then it is unknown whether surveillance is in place or not.
 
 #### POI properties (only on `kind:peak` and `kind:volcano`):
 
@@ -686,7 +686,6 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `ngo`
 * `notary`
 * `nursing_home`
-* `nursing_home`
 * `observatory`
 * `offshore_platform`
 * `optician`
@@ -730,6 +729,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `research`
 * `residential_home`
 * `resort`
+* `rest_area`
 * `restaurant`
 * `rock`
 * `roller_coaster`
@@ -737,7 +737,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `sawmill`
 * `school`
 * `scuba_diving`
-* `shelter`
+* `service_area`
 * `shelter`
 * `shoemaker`
 * `shower`
@@ -770,7 +770,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `theme_park`
 * `therapist`
 * `toilets`
-* `toilets`
+* `toll_booth`
 * `townhall`
 * `toys`
 * `trade`
@@ -838,10 +838,10 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ferry`: See kind list below.
 * `highway`: See kind list below.
 * `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
-* `is_bridge`: `yes` or `no`
+* `is_bridge`: `true` if the road is part of a bridge. The property will not be present if the road is not part of a bridge.
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
-* `is_link`: `yes` or `no`
-* `is_tunnel`: `yes` or `no`
+* `is_link`: `true` if the road is part of a highway link or ramp. The property will not be present if the road is not part of a highway link or ramp.
+* `is_tunnel`: `true` if the road is part of a tunnel. The property will not be present if the road is not part of a tunnel.
 * `leisure`: See kind list below.
 * `man_made`: See kind list below.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections.
@@ -849,7 +849,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `oneway`: `yes` or `no`
 * `piste_type`: See kind list below.
 * `railway`: the original OSM railway tag value
-* `segregated`: Set to `yes` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
+* `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
@@ -991,21 +991,21 @@ Water `polygons` representing oceans, riverbanks and lakes. Derived from a combi
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 
-Mapzen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=yes`. Set to `yes` when present on `line` geometry, or from Natural Earth line source.
+Mapzen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=true`. Set to `true` when present on `line` geometry, or from Natural Earth line source.
 
 #### Water properties (common):
 
 * `name`: including localized name variants
 * `kind`: detailed below, per geometry type
 * `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
-* `boundary`: `yes`, on lines only. See description above.
+* `boundary`: `true`, on lines only. See description above.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 #### Water properties (common optional):
 
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
-* `is_tunnel`: for `line` features only (`yes` values only)
+* `is_tunnel`: for `line` features only (`true` values only)
 
 #### Water kind values (point, polygon):
 
@@ -1018,7 +1018,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `swimming_pool`
 * `water`
 
-Additionally, a `reservoir=yes` or `alkaline=yes` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent=yes`.
+Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
 
 #### Water kind values (point only):
 
@@ -1031,7 +1031,7 @@ These are intended for label placement, and are included as points only.
 
 **Gotchas:**
 
-* `lake` features with `alkaline=yes` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
+* `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
 
 #### Water kind values (lines):

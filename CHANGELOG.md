@@ -1,3 +1,8 @@
+v0.10.3
+-------
+* **Release date**: 2016-05-20.
+* Limit addresses to points. See [#834](https://github.com/mapzen/vector-datasource/issues/834).
+
 v0.10.2
 -------
 * **Release date**: 2016-05-10.
