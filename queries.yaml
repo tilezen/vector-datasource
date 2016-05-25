@@ -168,64 +168,6 @@ layers:
     sort: TileStache.Goodies.VecTiles.sort.transit
     area-inclusion-threshold: 1
 post_process:
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/landuse.csv
-    params:
-      source_layer: landuse
-      target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/roads.csv
-    params:
-      source_layer: roads
-      target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/earth.csv
-    params:
-      source_layer: earth
-      target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/boundaries.csv
-    params:
-      source_layer: boundaries
-      target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/buildings.csv
-    params:
-      source_layer: buildings
-      target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/transit.csv
-    params:
-      source_layer: transit
-      target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-    params:
-      source_layer: roads
-      properties: [layer]
   - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
     params:
       source_layer: buildings
@@ -234,13 +176,63 @@ post_process:
         13: { area: 1600, volume: 300000 }
         14: { area:  100, volume: 200000 }
         15: { area:  100, volume: 100000 }
-  - fn: TileStache.Goodies.VecTiles.transform.intercut
+
+  # sort key
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/sort_key/landuse.csv
     params:
-      base_layer: roads
-      cutting_layer: landuse
-      attribute: kind
-      target_attribute: landuse_kind
-      cutting_attrs: { sort_key: 'sort_key', reverse: True }
+      source_layer: landuse
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/sort_key/roads.csv
+    params:
+      source_layer: roads
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/sort_key/earth.csv
+    params:
+      source_layer: earth
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/sort_key/boundaries.csv
+    params:
+      source_layer: boundaries
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/sort_key/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        path: spreadsheets/sort_key/transit.csv
+    params:
+      source_layer: transit
+      target_value_type: int
+  # this needs to run before the water sort_key csv matcher
   - fn: TileStache.Goodies.VecTiles.transform.exterior_boundaries
     params:
       base_layer: water
@@ -259,10 +251,22 @@ post_process:
       matcher:
         type: file
         init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
-        path: spreadsheets/water.csv
+        path: spreadsheets/sort_key/water.csv
     params:
       source_layer: water
       target_value_type: int
+
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+    params:
+      source_layer: roads
+      properties: [layer]
+  - fn: TileStache.Goodies.VecTiles.transform.intercut
+    params:
+      base_layer: roads
+      cutting_layer: landuse
+      attribute: kind
+      target_attribute: landuse_kind
+      cutting_attrs: { sort_key: 'sort_key', reverse: True }
   - fn: TileStache.Goodies.VecTiles.transform.overlap
     params:
       base_layer: buildings
@@ -279,7 +283,6 @@ post_process:
       source_layer: landuse
       label_property_name: label_placement
       label_property_value: true
-      drop_keys: [ mz_is_building ]
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layer: landuse
@@ -340,11 +343,6 @@ post_process:
       start_zoom: 6
       where: >-
         properties.get('mz_is_building') is True
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-    params:
-      source_layer: landuse
-      start_zoom: 6
-      properties: [mz_is_building]
   - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
     params:
       source_layer: pois
@@ -372,11 +370,6 @@ post_process:
         kind: [peak, volcano]
       rank_key: kind_tile_rank
       start_zoom: 9
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
-    params:
-      source_layer: places
-      properties: [mz_n_photos]
-      start_zoom: 11
   - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
@@ -482,3 +475,5 @@ post_process:
       end_zoom: 15
       items_matching: { kind: [peak, volcano] }
       max_items: 5
+  - fn: TileStache.Goodies.VecTiles.transform.drop_properties_with_prefix
+    params: {prefix: mz_}
