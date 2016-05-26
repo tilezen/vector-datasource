@@ -16,14 +16,14 @@ layers:
     simplify_before_intersect: true
     simplify_start: 9
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.water_tunnel
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.water
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.water_tunnel
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.remove_feature_id
+    sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
     template: earth.jinja2
@@ -32,28 +32,28 @@ layers:
     simplify_before_intersect: true
     simplify_start: 9
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.earth
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.remove_feature_id
+    sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
     template: places.jinja2
     start_zoom: 0
     geometry_types: [Point, MultiPoint]
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.place_population_int
-      - TileStache.Goodies.VecTiles.transform.calculate_default_place_scalerank
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.places
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.place_population_int
+      - vectordatasource.transform.calculate_default_place_scalerank
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.remove_feature_id
+    sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
     template: landuse.jinja2
@@ -61,14 +61,14 @@ layers:
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_start: 4
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.landuse
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.normalize_tourism_kind
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.remove_feature_id
+    sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
     template: roads.jinja2
@@ -76,22 +76,22 @@ layers:
     geometry_types: [LineString, MultiLineString]
     simplify_start: 8
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
-      - TileStache.Goodies.VecTiles.transform.road_classifier
-      - TileStache.Goodies.VecTiles.transform.road_oneway
-      - TileStache.Goodies.VecTiles.transform.road_abbreviate_name
-      - TileStache.Goodies.VecTiles.transform.route_name
-      - TileStache.Goodies.VecTiles.transform.normalize_aerialways
-      - TileStache.Goodies.VecTiles.transform.normalize_cycleway
-      - TileStache.Goodies.VecTiles.transform.add_is_bicycle_related
-      - TileStache.Goodies.VecTiles.transform.road_trim_properties
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-    sort: TileStache.Goodies.VecTiles.sort.roads
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.parse_layer_as_float
+      - vectordatasource.transform.road_classifier
+      - vectordatasource.transform.road_oneway
+      - vectordatasource.transform.road_abbreviate_name
+      - vectordatasource.transform.route_name
+      - vectordatasource.transform.normalize_aerialways
+      - vectordatasource.transform.normalize_cycleway
+      - vectordatasource.transform.add_is_bicycle_related
+      - vectordatasource.transform.road_trim_properties
+      - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.tags_remove
+    sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
     template: buildings.jinja2
@@ -99,42 +99,42 @@ layers:
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
-      - TileStache.Goodies.VecTiles.transform.building_height
-      - TileStache.Goodies.VecTiles.transform.building_min_height
-      - TileStache.Goodies.VecTiles.transform.synthesize_volume
-      - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
-      - TileStache.Goodies.VecTiles.transform.building_trim_properties
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.buildings
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.parse_layer_as_float
+      - vectordatasource.transform.building_height
+      - vectordatasource.transform.building_min_height
+      - vectordatasource.transform.synthesize_volume
+      - vectordatasource.transform.normalize_tourism_kind
+      - vectordatasource.transform.building_trim_properties
+      - vectordatasource.transform.remove_feature_id
+    sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
     template: pois.jinja2
     start_zoom: 9
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.add_iata_code_to_airports
-      - TileStache.Goodies.VecTiles.transform.normalize_tourism_kind
-      - TileStache.Goodies.VecTiles.transform.normalize_social_kind
-      - TileStache.Goodies.VecTiles.transform.normalize_medical_kind
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.add_uic_ref
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-      - TileStache.Goodies.VecTiles.transform.remove_zero_area
-      - TileStache.Goodies.VecTiles.transform.make_representative_point
-      - TileStache.Goodies.VecTiles.transform.height_to_meters
-      - TileStache.Goodies.VecTiles.transform.pois_capacity_int
-      - TileStache.Goodies.VecTiles.transform.elevation_to_meters
-    sort: TileStache.Goodies.VecTiles.sort.pois
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.add_iata_code_to_airports
+      - vectordatasource.transform.normalize_tourism_kind
+      - vectordatasource.transform.normalize_social_kind
+      - vectordatasource.transform.normalize_medical_kind
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.add_uic_ref
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.remove_zero_area
+      - vectordatasource.transform.make_representative_point
+      - vectordatasource.transform.height_to_meters
+      - vectordatasource.transform.pois_capacity_int
+      - vectordatasource.transform.elevation_to_meters
+    sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
     template: boundaries.jinja2
@@ -143,32 +143,32 @@ layers:
     simplify_before_intersect: true
     simplify_start: 8
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.admin_level_as_int
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.admin_level_as_int
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
   transit:
     template: transit.jinja2
     start_zoom: 5
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
     transform:
-      - TileStache.Goodies.VecTiles.transform.tags_create_dict
-      - TileStache.Goodies.VecTiles.transform.tags_name_i18n
-      - TileStache.Goodies.VecTiles.transform.add_uic_ref
-      - TileStache.Goodies.VecTiles.transform.tags_remove
-      - TileStache.Goodies.VecTiles.transform.add_id_to_properties
-      - TileStache.Goodies.VecTiles.transform.detect_osm_relation
-      - TileStache.Goodies.VecTiles.transform.route_name
-      - TileStache.Goodies.VecTiles.transform.parse_layer_as_float
-      - TileStache.Goodies.VecTiles.transform.remove_feature_id
-    sort: TileStache.Goodies.VecTiles.sort.transit
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.add_uic_ref
+      - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.detect_osm_relation
+      - vectordatasource.transform.route_name
+      - vectordatasource.transform.parse_layer_as_float
+      - vectordatasource.transform.remove_feature_id
+    sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
 post_process:
-  - fn: TileStache.Goodies.VecTiles.transform.numeric_min_filter
+  - fn: vectordatasource.transform.numeric_min_filter
     params:
       source_layer: buildings
       mode: any
@@ -178,62 +178,62 @@ post_process:
         15: { area:  100, volume: 100000 }
 
   # sort key
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/landuse.csv
     params:
       source_layer: landuse
       target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/roads.csv
     params:
       source_layer: roads
       target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/earth.csv
     params:
       source_layer: earth
       target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/boundaries.csv
     params:
       source_layer: boundaries
       target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/buildings.csv
     params:
       source_layer: buildings
       target_value_type: int
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/transit.csv
     params:
       source_layer: transit
       target_value_type: int
   # this needs to run before the water sort_key csv matcher
-  - fn: TileStache.Goodies.VecTiles.transform.exterior_boundaries
+  - fn: vectordatasource.transform.exterior_boundaries
     params:
       base_layer: water
       start_zoom: 9
@@ -246,146 +246,146 @@ post_process:
       snap_tolerance: 0.125
   # have to do the water properties matching _after_ exterior boundaries
   # as it depends on having the "boundary: yes" property available.
-  - fn: TileStache.Goodies.VecTiles.transform.csv_match_properties
+  - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
-        init_fn: TileStache.Goodies.VecTiles.transform.CSVMatcher
+        init_fn: vectordatasource.transform.CSVMatcher
         path: spreadsheets/sort_key/water.csv
     params:
       source_layer: water
       target_value_type: int
 
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       properties: [layer]
-  - fn: TileStache.Goodies.VecTiles.transform.intercut
+  - fn: vectordatasource.transform.intercut
     params:
       base_layer: roads
       cutting_layer: landuse
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_key', reverse: True }
-  - fn: TileStache.Goodies.VecTiles.transform.overlap
+  - fn: vectordatasource.transform.overlap
     params:
       base_layer: buildings
       cutting_layer: landuse
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_key', reverse: True }
-  - fn: TileStache.Goodies.VecTiles.transform.admin_boundaries
+  - fn: vectordatasource.transform.admin_boundaries
     params:
       base_layer: boundaries
       start_zoom: 8
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+  - fn: vectordatasource.transform.generate_label_features
     params:
       source_layer: landuse
       label_property_name: label_placement
       label_property_value: true
-  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+  - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: landuse
       end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+  - fn: vectordatasource.transform.generate_label_features
     params:
       source_layer: water
       label_property_name: label_placement
       label_property_value: true
-  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+  - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: water
       start_zoom: 9
       where: >-
         'label_placement' not in properties and kind in ('bay', 'strait', 'fjord')
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+  - fn: vectordatasource.transform.generate_label_features
     params:
       source_layer: earth
       label_property_name: label_placement
       label_property_value: true
       geom_types: [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
-  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+  - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: earth
       start_zoom: 0
       where: >-
         'label_placement' not in properties and kind in
         ('archipelago', 'island', 'islet', 'continent', 'valley', 'ridge')
-  - fn: TileStache.Goodies.VecTiles.transform.generate_address_points
+  - fn: vectordatasource.transform.generate_address_points
     params:
       source_layer: buildings
       start_zoom: 16
-  - fn: TileStache.Goodies.VecTiles.transform.generate_label_features
+  - fn: vectordatasource.transform.generate_label_features
     params:
       source_layer: buildings
       label_property_name: label_placement
       label_property_value: true
-  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+  - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: buildings
       end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+  - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: pois
       end_zoom: 15
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
-  - fn: TileStache.Goodies.VecTiles.transform.drop_features_where
+  - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: landuse
       start_zoom: 6
       where: >-
         properties.get('mz_is_building') is True and
         properties.get('label_placement') is None
-  - fn: TileStache.Goodies.VecTiles.transform.merge_duplicate_stations
+  - fn: vectordatasource.transform.merge_duplicate_stations
     params:
       source_layer: pois
       end_zoom: 15
-  - fn: TileStache.Goodies.VecTiles.transform.normalize_station_properties
+  - fn: vectordatasource.transform.normalize_station_properties
     params:
       source_layer: pois
-  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+  - fn: vectordatasource.transform.rank_features
     params:
       source_layer: pois
       items_matching:
         kind: station
       rank_key: kind_tile_rank
-  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+  - fn: vectordatasource.transform.rank_features
     params:
       source_layer: places
       items_matching:
         kind: [neighbourhood, microhood, macrohood]
       rank_key: kind_tile_rank
       start_zoom: 11
-  - fn: TileStache.Goodies.VecTiles.transform.rank_features
+  - fn: vectordatasource.transform.rank_features
     params:
       source_layer: pois
       items_matching:
         kind: [peak, volcano]
       rank_key: kind_tile_rank
       start_zoom: 9
-  - fn: TileStache.Goodies.VecTiles.transform.remove_duplicate_features
+  - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
       end_zoom: 15
       property_keys: [name]
       geometry_types: [Point]
       min_distance: 64.0
-  - fn: TileStache.Goodies.VecTiles.transform.copy_features
+  - fn: vectordatasource.transform.copy_features
     params:
       source_layer: landuse
       target_layer: landuse_labels
       where:
         label_placement: true
       geometry_types: [Point]
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
@@ -395,13 +395,13 @@ post_process:
         (kind == 'path' and zoom < 15) or
         (kind in ['minor_road', 'major_road', 'highway', 'rail'] and zoom < 13)
   # drop all oneway tags below zoom 14 (i.e: zoom >= 15) for all types.
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
       properties: [oneway]
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
@@ -414,7 +414,7 @@ post_process:
         (kind == 'highway' and zoom < 7)
   # this is a patch because we still want to drop name, network from major_road
   # features between zoom 7 and 10
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 7
@@ -424,7 +424,7 @@ post_process:
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways
   # when zoom < 11.
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 7
@@ -432,49 +432,49 @@ post_process:
       properties: [name]
       where: >-
         kind == 'highway'
-  - fn: TileStache.Goodies.VecTiles.transform.merge_features
+  - fn: vectordatasource.transform.merge_features
     params:
       source_layer: roads
       start_zoom: 8
       end_zoom: 15
-  - fn: TileStache.Goodies.VecTiles.transform.update_parenthetical_properties
+  - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: pois
       values: ['closed', 'historical']
       target_min_zoom: 17
       drop_below_zoom: 16
-  - fn: TileStache.Goodies.VecTiles.transform.update_parenthetical_properties
+  - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: buildings
       values: ['closed', 'historical']
       target_min_zoom: 17
       drop_below_zoom: 16
-  - fn: TileStache.Goodies.VecTiles.transform.merge_features
+  - fn: vectordatasource.transform.merge_features
     params:
       source_layer: transit
       start_zoom: 0
       end_zoom: 15
   # only keep all stations below z12, then cut it down to the top few.
-  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+  - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: transit
       start_zoom: 9
       end_zoom: 11
       items_matching: { kind: station }
       max_items: 20
-  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+  - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: transit
       start_zoom: 12
       end_zoom: 13
       items_matching: { kind: station }
       max_items: 30
-  - fn: TileStache.Goodies.VecTiles.transform.keep_n_features
+  - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: pois
       start_zoom: 9
       end_zoom: 15
       items_matching: { kind: [peak, volcano] }
       max_items: 5
-  - fn: TileStache.Goodies.VecTiles.transform.drop_properties_with_prefix
+  - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}

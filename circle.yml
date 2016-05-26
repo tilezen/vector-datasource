@@ -12,4 +12,5 @@ dependencies:
 
 test:
   override:
+    - python setup.py test
     - ./scripts/setup_and_run_tests.sh
