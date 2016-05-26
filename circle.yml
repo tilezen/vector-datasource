@@ -12,5 +12,6 @@ dependencies:
 
 test:
   override:
+    - find . -not -path '*/.eggs/*' -not -path '*/integration-test*' -not -path '*/data/*' -name '*.py' | xargs flake8
     - python setup.py test
     - ./scripts/setup_and_run_tests.sh

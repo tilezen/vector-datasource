@@ -503,7 +503,7 @@ def _sorted_attributes(features, attrs, attribute):
     # grouped (attribute, order) pairs, ordering by
     # the order.
     all_attrs = sorted(group.iteritems(),
-        key=lambda x: x[1], reverse=bool(reverse))
+                       key=lambda x: x[1], reverse=bool(reverse))
 
     # strip out the sort key in return
     return [x[0] for x in all_attrs]
@@ -517,10 +517,10 @@ def _sorted_attributes(features, attrs, attribute):
 # represented by 1, one by 2, etc... this is to support
 # things like geometry collections where the type isn't
 # statically known.
-_NULL_DIMENSION         = 0
-_POINT_DIMENSION        = 1
-_LINE_DIMENSION         = 2
-_POLYGON_DIMENSION      = 4
+_NULL_DIMENSION = 0
+_POINT_DIMENSION = 1
+_LINE_DIMENSION = 2
+_POLYGON_DIMENSION = 4
 
 
 _GEOMETRY_DIMENSIONS = {
@@ -573,7 +573,7 @@ def _flatten_geoms(shape):
     []
     >>> _flatten_geoms(MultiPolygon())
     []
-    """
+    """  # noqa
     if shape.geom_type.startswith('Multi'):
         return shape.geoms
 
@@ -626,7 +626,7 @@ def _filter_geom_types(shape, keep_dim):
     'MULTILINESTRING ((-1 -1, 0 0), (1 1, 2 2), (0 0, 1 1))'
     >>> _filter_geom_types(shapely.wkt.loads('GEOMETRYCOLLECTION (POLYGON((-2 -2, -2 2, 2 2, 2 -2, -2 -2)), GEOMETRYCOLLECTION (LINESTRING(1 1, 2 2), GEOMETRYCOLLECTION (POLYGON((3 3, 0 0, 1 0, 3 3)))), LINESTRING(0 0, 1 1))'), _POLYGON_DIMENSION).wkt
     'MULTIPOLYGON (((-2 -2, -2 2, 2 2, 2 -2, -2 -2)), ((3 3, 0 0, 1 0, 3 3)))'
-    """
+    """  # noqa
 
     # flatten the geometries, and keep the parts with the
     # dimension that we want. each item in the parts list
@@ -648,7 +648,8 @@ def _filter_geom_types(shape, keep_dim):
         constructor = MultiPolygon
 
     else:
-        raise ValueError("Unknown dimension %d in _filter_geom_types" % keep_dim)
+        raise ValueError('Unknown dimension %d in _filter_geom_types'
+                         % keep_dim)
 
     if len(parts) == 0:
         return constructor()
@@ -721,7 +722,6 @@ class _Cutter:
         self.intersect_func = intersect_func
         self.new_features = []
 
-
     # cut up the argument shape, projecting the configured
     # attribute to the properties of the intersecting parts
     # of the shape. adds all the selected bits to the
@@ -748,7 +748,6 @@ class _Cutter:
         # keeps the old, unaltered properties.
         self._add(shape, props, fid, original_geom_dim)
 
-
     # only keep geometries where either the type is the
     # same as the original, or we're not trying to keep the
     # same type.
@@ -771,7 +770,6 @@ class _Cutter:
         # identical.
         self.new_features.append((shape, props, fid))
 
-
     # intersects the shape with the cutting shape and
     # handles attribute projection. anything "inside" is
     # kept as it must have intersected the highest
@@ -791,7 +789,7 @@ class _Cutter:
         # >>> p = g.Point(0,0).buffer(1.0, resolution=2)
         # >>> b = p.boundary
         # >>> b.intersection(p).wkt
-        # 'MULTILINESTRING ((1 0, 0.7071067811865481 -0.7071067811865469), (0.7071067811865481 -0.7071067811865469, 1.615544574432587e-15 -1), (1.615544574432587e-15 -1, -0.7071067811865459 -0.7071067811865491), (-0.7071067811865459 -0.7071067811865491, -1 -3.231089148865173e-15), (-1 -3.231089148865173e-15, -0.7071067811865505 0.7071067811865446), (-0.7071067811865505 0.7071067811865446, -4.624589118372729e-15 1), (-4.624589118372729e-15 1, 0.7071067811865436 0.7071067811865515), (0.7071067811865436 0.7071067811865515, 1 0))'
+        # 'MULTILINESTRING ((1 0, 0.7071067811865481 -0.7071067811865469), (0.7071067811865481 -0.7071067811865469, 1.615544574432587e-15 -1), (1.615544574432587e-15 -1, -0.7071067811865459 -0.7071067811865491), (-0.7071067811865459 -0.7071067811865491, -1 -3.231089148865173e-15), (-1 -3.231089148865173e-15, -0.7071067811865505 0.7071067811865446), (-0.7071067811865505 0.7071067811865446, -4.624589118372729e-15 1), (-4.624589118372729e-15 1, 0.7071067811865436 0.7071067811865515), (0.7071067811865436 0.7071067811865515, 1 0))'  # noqa
         #
         # the result multilinestring could be joined back into
         # the original object. but because it has separate parts,
@@ -825,10 +823,13 @@ class _Cutter:
                   original_geom_dim)
         return outside
 
-# intersect by cutting, so that the cutting shape defines
-# a part of the shape which is inside and a part which is
-# outside as two separate shapes.
+
 def _intersect_cut(shape, cutting_shape):
+    """
+    intersect by cutting, so that the cutting shape defines
+    a part of the shape which is inside and a part which is
+    outside as two separate shapes.
+    """
     inside = shape.intersection(cutting_shape)
     outside = shape.difference(cutting_shape)
     return inside, outside
@@ -855,8 +856,7 @@ def _intersect_overlap(min_fraction):
         # constructor to empty.
         empty = type(shape)()
 
-        if ((area > 0) and
-            (overlap / area) >= min_fraction):
+        if ((area > 0) and (overlap / area) >= min_fraction):
             return shape, empty
         else:
             return empty, shape
@@ -969,7 +969,6 @@ def _intercut_impl(intersect_func, feature_layers,
 def intercut(ctx):
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
     base_layer = ctx.params.get('base_layer')
     assert base_layer, \
         'Parameter base_layer was missing from intercut config'
@@ -985,14 +984,13 @@ def intercut(ctx):
         'should have been an attribute name. Perhaps check ' + \
         'your configuration file and queries.'
 
-
     target_attribute = ctx.params.get('target_attribute')
     cutting_attrs = ctx.params.get('cutting_attrs')
     keep_geom_type = ctx.params.get('keep_geom_type', True)
 
-    return _intercut_impl(_intersect_cut, feature_layers,
-        base_layer, cutting_layer, attribute,
-        target_attribute, cutting_attrs, keep_geom_type)
+    return _intercut_impl(
+        _intersect_cut, feature_layers, base_layer, cutting_layer,
+        attribute, target_attribute, cutting_attrs, keep_geom_type)
 
 
 # overlap measures the area overlap between each feature in
@@ -1013,7 +1011,6 @@ def intercut(ctx):
 def overlap(ctx):
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
     base_layer = ctx.params.get('base_layer')
     assert base_layer, \
         'Parameter base_layer was missing from overlap config'
@@ -1034,9 +1031,10 @@ def overlap(ctx):
     keep_geom_type = ctx.params.get('keep_geom_type', True)
     min_fraction = ctx.params.get('min_fraction', 0.8)
 
-    return _intercut_impl(_intersect_overlap(min_fraction),
-        feature_layers, base_layer, cutting_layer, attribute,
-        target_attribute, cutting_attrs, keep_geom_type)
+    return _intercut_impl(
+        _intersect_overlap(min_fraction), feature_layers, base_layer,
+        cutting_layer, attribute, target_attribute, cutting_attrs,
+        keep_geom_type)
 
 
 # intracut cuts a layer with a set of features from that same
@@ -1050,7 +1048,6 @@ def overlap(ctx):
 def intracut(ctx):
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
     base_layer = ctx.params.get('base_layer')
     assert base_layer, \
         'Parameter base_layer was missing from intracut config'
@@ -1214,7 +1211,7 @@ def _snap_to_grid(shape, grid_size):
     'MULTIPOINT (0 0, 1 1)'
     >>> _snap_to_grid(MultiLineString([LineString([(0.1, 0.1), (0.9, 0.9)]), LineString([(0.9, 0.1),(0.1,0.9)])]), 1).wkt
     'MULTILINESTRING ((0 0, 1 1), (1 0, 0 1))'
-    """
+    """  # noqa
 
     # snap a single coordinate value
     def _snap(c):
@@ -1253,7 +1250,8 @@ def _snap_to_grid(shape, grid_size):
         return MultiPolygon(_snap_multi(shape.geoms))
 
     else:
-        raise ValueError("_snap_to_grid: unimplemented for shape type %s" % repr(shape_type))
+        raise ValueError('_snap_to_grid: unimplemented for shape type %s'
+                         % repr(shape_type))
 
 
 # returns a geometry which is the given bounds expanded by `factor`. that is,
@@ -1439,8 +1437,7 @@ def exterior_boundaries(ctx):
         boundary = _filter_geom_types(boundary, _LINE_DIMENSION)
 
         if not boundary.is_empty:
-            new_props = _make_new_properties(props,
-                prop_transform)
+            new_props = _make_new_properties(props, prop_transform)
             new_features.append((boundary, new_props, fid))
 
     if new_layer_name is None:
@@ -1562,7 +1559,7 @@ def _make_joined_name(props):
     >>> _make_joined_name(x)
     >>> x
     {'name:right': 'Right', 'name': 'Already Exists', 'name:left': 'Left'}
-    """
+    """  # noqa
 
     # don't overwrite an existing name
     if 'name' in props:
@@ -1622,9 +1619,10 @@ def _linemerge(geom):
         # this should help get rid of those. see also:
         # http://lists.gispython.org/pipermail/community/2014-January/003236.html
         #
-        # the tolerance here is hard-coded to a fraction of the coordinate
-        # magnitude. there isn't a perfect way to figure out what this tolerance
-        # should be, so this may require some tweaking.
+        # the tolerance here is hard-coded to a fraction of the
+        # coordinate magnitude. there isn't a perfect way to figure
+        # out what this tolerance should be, so this may require some
+        # tweaking.
         epsilon = max(map(abs, result_geom.bounds)) * float_info.epsilon * 1000
         result_geom = result_geom.simplify(epsilon, True)
 
@@ -1739,7 +1737,7 @@ def admin_boundaries(ctx):
             admin_features[kind].append((shape, props, fid))
 
         elif dims == _POLYGON_DIMENSION and maritime_boundary:
-            maritime_features.append((shape, {'maritime_boundary':False}, 0))
+            maritime_features.append((shape, {'maritime_boundary': False}, 0))
 
     # there are separate polygons for each admin level, and
     # we only want to intersect like with like because it
@@ -1793,7 +1791,6 @@ def admin_boundaries(ctx):
                 new_props = props.copy()
                 _make_joined_name(new_props)
                 new_features.append((boundary, new_props, fid))
-
 
     # use intracut for maritime, but it intersects in a positive
     # way - it sets the tag on anything which intersects, whereas
@@ -2079,29 +2076,6 @@ def drop_properties(ctx):
     return _project_properties(ctx, action)
 
 
-def keep_properties(ctx):
-    """
-    Keep only configured properties for features in source_layer
-    """
-
-    properties = ctx.params.get('properties')
-    assert properties, 'keep_properties: missing properties'
-
-    where = ctx.params.get('where')
-    if where is not None:
-        where = compile(where, 'queries.yaml', 'eval')
-
-    def keep_property(p, props):
-        # copy params to add a 'zoom' one. would prefer '$zoom', but apparently
-        # that's not allowed in python syntax.
-        local = props.copy()
-        local['zoom'] = zoom
-
-        return p in properties and (where is None or eval(where, {}, local))
-
-    return _project_properties(ctx, keep_property)
-
-
 def remove_zero_area(shape, properties, fid, zoom):
     """
     All features get a numeric area tag, but for points this
@@ -2222,14 +2196,17 @@ def remove_duplicate_features(ctx):
     # can use either a single source layer, or multiple source
     # layers, but not both.
     assert bool(source_layer) ^ bool(source_layers), \
-        'remove_duplicate_features: define either source layer or source layers, but not both'
+        ('remove_duplicate_features: define either source layer or source '
+         'layers, but not both')
 
     # note that the property keys or geometry types could be empty,
     # but then this post-process filter would do nothing. so we
     # assume that the user didn't intend this, or they wouldn't have
     # included the filter in the first place.
-    assert property_keys, 'remove_duplicate_features: missing or empty property keys'
-    assert geometry_types, 'remove_duplicate_features: missing or empty geometry types'
+    assert property_keys, \
+        'remove_duplicate_features: missing or empty property keys'
+    assert geometry_types, \
+        'remove_duplicate_features: missing or empty geometry types'
 
     if zoom < start_zoom:
         return None
@@ -2244,7 +2221,8 @@ def remove_duplicate_features(ctx):
     # correct for zoom: min_distance is given in pixels, but we
     # want to do the comparison in coordinate units to avoid
     # repeated conversions.
-    min_distance = min_distance * _MERCATOR_CIRCUMFERENCE / float(1 << (zoom + 8))
+    min_distance = (min_distance * _MERCATOR_CIRCUMFERENCE /
+                    float(1 << (zoom + 8)))
 
     # keep a set of the tuple of the property keys. this will tell
     # us if the feature is unique while allowing us to maintain the
@@ -2317,7 +2295,8 @@ def merge_duplicate_stations(ctx):
     feature_layers = ctx.feature_layers
     zoom = ctx.tile_coord.zoom
     source_layer = ctx.params.get('source_layer')
-    assert source_layer, 'normalize_and_merge_duplicate_stations: missing source layer'
+    assert source_layer, \
+        'normalize_and_merge_duplicate_stations: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
 
@@ -2350,7 +2329,8 @@ def merge_duplicate_stations(ctx):
             m = station_pattern.match(name)
 
             subway_routes = props.get('subway_routes', [])
-            transit_route_relation_id = props.get('mz_transit_root_relation_id')
+            transit_route_relation_id = props.get(
+                'mz_transit_root_relation_id')
 
             if m:
                 # if the lines aren't present or are empty
@@ -2406,16 +2386,18 @@ def merge_duplicate_stations(ctx):
 
 def normalize_station_properties(ctx):
     """
-    Normalise station properties by removing some which are only used during
-    importance calculation. Stations may also have route information, which may
-    appear as empty lists. These are removed. Also, flags are put on the station
-    to indicate what kind(s) of station it might be.
+    Normalise station properties by removing some which are only used
+    during importance calculation. Stations may also have route
+    information, which may appear as empty lists. These are
+    removed. Also, flags are put on the station to indicate what
+    kind(s) of station it might be.
     """
 
     feature_layers = ctx.feature_layers
     zoom = ctx.tile_coord.zoom
     source_layer = ctx.params.get('source_layer')
-    assert source_layer, 'normalize_and_merge_duplicate_stations: missing source layer'
+    assert source_layer, \
+        'normalize_and_merge_duplicate_stations: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
 
@@ -2663,7 +2645,6 @@ def copy_features(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
     source_layer = ctx.params.get('source_layer')
     target_layer = ctx.params.get('target_layer')
     where = ctx.params.get('where')
@@ -2671,8 +2652,12 @@ def copy_features(ctx):
 
     assert source_layer, 'copy_features: source layer not configured'
     assert target_layer, 'copy_features: target layer not configured'
-    assert where, 'copy_features: you must specify how to match features in the where parameter'
-    assert geometry_types, 'copy_features: you must specify at least one type of geometry in geometry_types'
+    assert where, \
+        ('copy_features: you must specify how to match features in the where '
+         'parameter')
+    assert geometry_types, \
+        ('copy_features: you must specify at least one type of geometry in '
+         'geometry_types')
 
     src_layer = _find_layer(feature_layers, source_layer)
     if src_layer is None:
@@ -2802,9 +2787,10 @@ def merge_features(ctx):
     if layer is None:
         return None
 
-    # a dictionary mapping the properties of a feature to a tuple of the feature
-    # IDs and a list of shapes. When we merge the features, they will lose their
-    # individual IDs, so only keep the first.
+    # a dictionary mapping the properties of a feature to a tuple of
+    # the feature IDs and a list of shapes. When we merge the
+    # features, they will lose their individual IDs, so only keep the
+    # first.
     features_by_property = {}
 
     # a list of all the features that we can't currently merge (at this time;
@@ -2833,10 +2819,10 @@ def merge_features(ctx):
 
     new_features = []
     for frozen_props, (fid, p_id, shapes) in features_by_property.iteritems():
-        # we only have lines, so _linemerge is the best we can attempt. however,
-        # the `shapes` we're operating on may be linestrings, multi-linestrings
-        # or even empty, so the first thing to do is to flatten them into a
-        # single geometry.
+        # we only have lines, so _linemerge is the best we can
+        # attempt. however, the `shapes` we're operating on may be
+        # linestrings, multi-linestrings or even empty, so the first
+        # thing to do is to flatten them into a single geometry.
         list_of_linestrings = []
         for shape in shapes:
             list_of_linestrings.extend(_flatten_geoms(shape))
@@ -2859,12 +2845,13 @@ def merge_features(ctx):
 
 def normalize_tourism_kind(shape, properties, fid, zoom):
     """
-    There are many tourism-related tags, including 'zoo=*' and 'attraction=*' in
-    addition to 'tourism=*'. This function promotes things with zoo and
-    attraction tags have those values as their main kind.
+    There are many tourism-related tags, including 'zoo=*' and
+    'attraction=*' in addition to 'tourism=*'. This function promotes
+    things with zoo and attraction tags have those values as their
+    main kind.
 
     See https://github.com/mapzen/vector-datasource/issues/440 for more details.
-    """
+    """  # noqa
 
     zoo = properties.pop('zoo', None)
     if zoo is not None:
@@ -3218,6 +3205,7 @@ def height_to_meters(shape, props, fid, zoom):
 
     props['height'] = _to_float_meters(height)
     return shape, props, fid
+
 
 def elevation_to_meters(shape, props, fid, zoom):
     """
