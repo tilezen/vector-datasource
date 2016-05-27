@@ -2,7 +2,7 @@ AppDirs==1.4.0
 argparse==1.2.1
 boto==2.33.0
 future==0.15.2
-hiredis==0.1.5
+hiredis==0.2.0
 lxml==3.6.0
 ModestMaps==1.4.6
 protobuf==2.6.0
@@ -10,7 +10,7 @@ psycopg2==2.5.4
 pycountry==1.20
 python-dateutil==2.4.2
 PyYAML==3.11
-redis==2.10.3
+redis==2.10.5
 Shapely==1.4.3
 simplejson==3.6.4
 six==1.10.0
