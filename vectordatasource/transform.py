@@ -426,7 +426,7 @@ def tags_name_i18n(shape, properties, fid, zoom):
     is_osm = source == 'openstreetmap.org'
 
     alt_name_prefix_candidates = []
-    convert_fn = lambda x: None
+
     if is_osm:
         alt_name_prefix_candidates = [
             'name:left:', 'name:right:', 'name:', 'alt_name:', 'old_name:'
@@ -3235,8 +3235,9 @@ def normalize_cycleway(shape, props, fid, zoom):
     if cycleway_both and not cycleway:
         props['cycleway'] = cycleway = cycleway_both
 
-    if (cycleway_left and cycleway_right and cycleway_left == cycleway_right
-            and (not cycleway or cycleway_left == cycleway)):
+    if (cycleway_left and cycleway_right and
+            cycleway_left == cycleway_right and
+            (not cycleway or cycleway_left == cycleway)):
         props['cycleway'] = cycleway_left
         del props['cycleway_left']
         del props['cycleway_right']
