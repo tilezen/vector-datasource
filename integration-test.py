@@ -28,7 +28,7 @@ OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 #       url: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
 #       use_all_layers: false
 #
-# Then you will be able to run `test.py local` and it will run against the local
+# Then you will be able to run `integration-test.py local` and it will run against the local
 # server defined above. You can define as many different servers as you like.
 #
 # Note that setting `use_all_layers` to `true` will cause the test to fetch all
@@ -45,7 +45,7 @@ def get_config():
     if config_url is None and path_exists(config_file):
         config_data = load_yaml(open(config_file).read())
         if len(sys.argv) < 2:
-            print>>sys.stderr, "Usage: test.py <server name>. See test.py for more information."
+            print>>sys.stderr, "Usage: integration-test.py <server name>. See integration-test.py for more information."
             sys.exit(1)
         config = config_data[sys.argv[1]]
         config_url = config.get('url', None)
@@ -476,7 +476,7 @@ fail_count = 0
 with open('test.log', 'w') as log:
 
     if not tests:
-        for (dirpath, dirs, files) in walk('test'):
+        for (dirpath, dirs, files) in walk('integration-test'):
             for f in files:
                 if f.endswith('.py'):
                     tests.append(path_join(dirpath, f))

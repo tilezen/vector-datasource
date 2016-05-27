@@ -48,7 +48,7 @@ echo "=== Dumping test data..."
 if [[ -f data.osc ]]; then
     rm -f data.osc
 fi
-python "${basedir}/test.py" -dumpdata
+python "${basedir}/integration-test.py" -dumpdata
 
 echo "=== Loading test data..."
 osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
@@ -81,9 +81,9 @@ EOF
 # allow globs to expand to empty strings to make enumerating files in
 # possibly empty directories easier.
 shopt -s nullglob
-for tbl in `ls ${basedir}/test/fixtures/`; do
-    if [[ -d "${basedir}/test/fixtures/${tbl}" ]]; then
-        for shp in "${basedir}/test/fixtures/${tbl}"/*.shp; do
+for tbl in `ls ${basedir}/integration-test/fixtures/`; do
+    if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
+        for shp in "${basedir}/integration-test/fixtures/${tbl}"/*.shp; do
             shp2pgsql -a -s 900913 -W Windows-1252 -g the_geom \
                       "${shp}" "${tbl}" \
                 | psql -d "${dbname}"
@@ -106,9 +106,9 @@ popd
 # go into the database _after_ the "apply updates" SQL, so should include
 # any columns (e.g: way_area) that those add.
 shopt -s nullglob
-for tbl in `ls ${basedir}/test/fixtures/`; do
-    if [[ -d "${basedir}/test/fixtures/${tbl}" ]]; then
-        for pgcopy in "${basedir}/test/fixtures/${tbl}"/*.pgcopy; do
+for tbl in `ls ${basedir}/integration-test/fixtures/`; do
+    if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
+        for pgcopy in "${basedir}/integration-test/fixtures/${tbl}"/*.pgcopy; do
             psql -c "copy ${tbl} from stdin" "${dbname}" < "${pgcopy}"
         done
     fi
@@ -134,7 +134,7 @@ fi
 # run tests
 port=`cat "${test_server_port}"`
 export VECTOR_DATASOURCE_CONFIG_URL="http://localhost:${port}/%(layer)s/%(z)d/%(x)d/%(y)d.json"
-python "${basedir}/test.py" || (cat test.log; exit 1)
+python "${basedir}/integration-test.py" || (cat test.log; exit 1)
 
 echo "SUCCESS"
 
