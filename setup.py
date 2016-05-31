@@ -23,6 +23,7 @@ setup(name='vector-datasource',
           'pycountry',
           'simplejson',
           'StreetNames',
+          'tilequeue',
       ],
       test_suite='test',
       tests_require=[

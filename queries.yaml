@@ -339,6 +339,80 @@ post_process:
       source_layer: transit
       target_value_type: int
 
+  # add minimum pixel thresholds per layer
+  # this should run after all the `class`es have been assigned to features
+  # these are configured only for layers that contain polygonal
+  # geometries
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/mz_min_pixels/water.csv
+    params:
+      source_layer: water
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/mz_min_pixels/earth.csv
+    params:
+      source_layer: earth
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/mz_min_pixels/landuse.csv
+    params:
+      source_layer: landuse
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/mz_min_pixels/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/mz_min_pixels/boundaries.csv
+    params:
+      source_layer: boundaries
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/mz_min_pixels/transit.csv
+    params:
+      source_layer: transit
+      target_value_type: int
+
+  # drop all polygonal features that don't meet the minimum area
+  # threshold. this depends on the mz_min_pixels property to be set on
+  # features first
+  - fn: vectordatasource.transform.drop_features_mz_min_pixels
+    params:
+      property: mz_min_pixels
+      source_layers:
+        # all layers that have polygonal geometries
+        - boundaries
+        - buildings
+        - earth
+        - landuse
+        - transit
+        - water
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
