@@ -30,7 +30,7 @@ function cleanup {
    fi
    echo "=== Dropping database \"${dbname}\" and cleaning up..."
    dropdb --if-exists "${dbname}"
-   rm -f empty.osm data.osc
+   rm -f empty.osm data.osc test_server.port
 }
 
 # set the env var $NOCLEANUP to anything and the code won't clean up. this is
