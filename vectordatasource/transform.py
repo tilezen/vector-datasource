@@ -425,8 +425,6 @@ def tags_name_i18n(shape, properties, fid, zoom):
     is_wof = source == 'whosonfirst.mapzen.com'
     is_osm = source == 'openstreetmap.org'
 
-    alt_name_prefix_candidates = []
-
     if is_osm:
         alt_name_prefix_candidates = [
             'name:left:', 'name:right:', 'name:', 'alt_name:', 'old_name:'
@@ -435,6 +433,11 @@ def tags_name_i18n(shape, properties, fid, zoom):
     elif is_wof:
         alt_name_prefix_candidates = ['name:']
         convert_fn = _convert_wof_l10n_name
+    else:
+        # conversion function only implemented for things which come from OSM
+        # or WOF - implement more cases here when more localized named sources
+        # become available.
+        return shape, properties, fid
 
     for k, v in tags.items():
         if v == name:
