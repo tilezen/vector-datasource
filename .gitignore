@@ -7,9 +7,14 @@ test.log
 
 # editor temporaries
 *~
+
 # downloaded shapefiles
 data/*.shp
 data/*.cpg
 data/*.dbf
 data/*.prj
 data/*.shx
+
+# python compiled bytecode and development files
+*.pyc
+vector_datasource.egg-info/
