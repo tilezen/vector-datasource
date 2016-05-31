@@ -256,6 +256,89 @@ post_process:
       source_layer: water
       target_value_type: int
 
+  # assign `class` to features
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/water.csv
+    params:
+      source_layer: water
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/earth.csv
+    params:
+      source_layer: earth
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/places.csv
+    params:
+      source_layer: places
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/landuse.csv
+    params:
+      source_layer: landuse
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/roads.csv
+    params:
+      source_layer: roads
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/pois.csv
+    params:
+      source_layer: pois
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/boundaries.csv
+    params:
+      source_layer: boundaries
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/class/transit.csv
+    params:
+      source_layer: transit
+      target_value_type: int
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
