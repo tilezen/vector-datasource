@@ -15,6 +15,7 @@ from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.collection import GeometryCollection
+from tilequeue.process import _find_meters_per_pixel
 from util import to_float
 from sort import pois as sort_pois
 from sys import float_info
@@ -3279,3 +3280,50 @@ def drop_properties_with_prefix(ctx):
             for k in props.keys():
                 if k.startswith(prefix):
                     del props[k]
+
+
+def drop_features_mz_min_pixels(ctx):
+    """
+    Drop all features that have a mz_min_pixels set whose area doesn't
+    meet the threshold.
+    """
+    source_layers = ctx.params.get('source_layers')
+    assert source_layers, 'drop_features_mz_min_pixels: missing source_layers'
+    source_layer_names = set(source_layers)  # set to speed up lookups
+
+    prop_name = ctx.params.get('property')
+    assert prop_name, 'drop_features_mz_min_pixels: missing property'
+
+    meters_per_pixel = _find_meters_per_pixel(ctx.tile_coord.zoom)
+
+    feature_layers = ctx.feature_layers
+    for source_layer_name in source_layer_names:
+        for feature_layer in feature_layers:
+            if feature_layer['name'] not in source_layer_names:
+                continue
+
+            features_to_keep = []
+            for feature in feature_layer['features']:
+                shape, props, fid = feature
+                pixel_threshold = props.get(prop_name)
+                if pixel_threshold is None:
+                    features_to_keep.append(feature)
+                    continue
+
+                assert isinstance(pixel_threshold, Number)
+
+                if shape.type not in ('Polygon', 'MultiPolygon'):
+                    features_to_keep.append(feature)
+                    continue
+
+                area_threshold = meters_per_pixel * pixel_threshold
+                area = props.get('area')
+                if area is None:
+                    area = shape.area
+                else:
+                    assert isinstance(area, Number)
+
+                if area >= area_threshold:
+                    features_to_keep.append(feature)
+
+            feature_layer['features'] = features_to_keep
