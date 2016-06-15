@@ -100,7 +100,6 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
             tile_coord=Coordinate(column=1, row=1, zoom=zoom),
             params=params,
             unpadded_bounds=None,
-            padded_bounds=None,
             resources=None,
         )
         result = drop_features_mz_min_pixels(ctx)

@@ -1231,7 +1231,10 @@ def _snap_to_grid(shape, grid_size):
         return [_snap_to_grid(g, grid_size) for g in geoms]
 
     shape_type = shape.geom_type
-    if shape_type == 'Point':
+    if shape.is_empty or shape_type == 'GeometryCollection':
+        return None
+
+    elif shape_type == 'Point':
         return Point(_snap(shape.x), _snap(shape.y))
 
     elif shape_type == 'LineString':
@@ -1320,10 +1323,6 @@ def exterior_boundaries(ctx):
     assert bounds is not None, \
         "Automatic bounds parameter should have been passed."
 
-    # make a bounding box 3x larger than the original tile, but with the same
-    # centroid.
-    padded_bbox = _calculate_padded_bounds(3, bounds)
-
     # search through all the layers and extract the one
     # which has the name of the base layer we were given
     # as a parameter.
@@ -1337,6 +1336,11 @@ def exterior_boundaries(ctx):
 
     if prop_transform is None:
         prop_transform = {}
+
+    # make a bounding box 3x larger than the original tile, but with the same
+    # centroid.
+    padded_bounds = layer['padded_bounds']
+    padded_bbox = _calculate_padded_bounds(3, padded_bounds)
 
     features = layer['features']
 
@@ -1380,6 +1384,10 @@ def exterior_boundaries(ctx):
             snapped = clipped
             if snap_tolerance is not None:
                 snapped = _snap_to_grid(clipped, snap_tolerance)
+
+            # geometry collections are returned as None
+            if snapped is None:
+                continue
 
             # snapping coordinates and clipping shapes might make the shape
             # invalid, so we need a way to clean them. one simple, but not
@@ -1878,11 +1886,10 @@ def generate_label_features(ctx):
     else:
         label_layer_datum = layer['layer_datum'].copy()
         label_layer_datum['name'] = new_layer_name
-        label_feature_layer = dict(
-            name=new_layer_name,
-            features=new_features,
-            layer_datum=label_layer_datum,
-        )
+        label_feature_layer = layer.copy()
+        label_feature_layer['name'] = new_layer_name
+        label_feature_layer['layer_datum'] = label_layer_datum
+        label_feature_layer['features'] = new_features
         return label_feature_layer
 
 
@@ -2672,11 +2679,10 @@ def copy_features(ctx):
         # create target layer if it doesn't already exist.
         tgt_layer_datum = src_layer['layer_datum'].copy()
         tgt_layer_datum['name'] = target_layer
-        tgt_layer = dict(
-            name=target_layer,
-            features=[],
-            layer_datum=tgt_layer_datum,
-        )
+        tgt_layer = src_layer.copy()
+        tgt_layer['name'] = target_layer
+        tgt_layer['features'] = []
+        tgt_layer['layer_datum'] = tgt_layer_datum
 
     new_features = []
     for feature in src_layer['features']:
