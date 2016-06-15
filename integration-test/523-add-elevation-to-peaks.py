@@ -2,12 +2,6 @@
 ## A selection of very tall peaks which should be visible at zoom 9.
 ##
 
-#http://www.openstreetmap.org/node/358800613
-# Mount Whitney, CA
-assert_has_feature(
-    9, 87, 200, 'pois',
-    { 'kind': 'peak', 'id': 358800613, 'elevation': 4421 })
-
 #http://www.openstreetmap.org/node/358915477
 # Mount Elbert, CO
 assert_has_feature(
