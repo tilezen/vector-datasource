@@ -15,7 +15,7 @@ from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.collection import GeometryCollection
-from tilequeue.process import _find_meters_per_pixel
+from tilequeue.tile import calc_meters_per_pixel_area
 from util import to_float
 from sort import pois as sort_pois
 from sys import float_info
@@ -3300,7 +3300,7 @@ def drop_features_mz_min_pixels(ctx):
     prop_name = ctx.params.get('property')
     assert prop_name, 'drop_features_mz_min_pixels: missing property'
 
-    meters_per_pixel = _find_meters_per_pixel(ctx.tile_coord.zoom)
+    meters_per_pixel_area = calc_meters_per_pixel_area(ctx.tile_coord.zoom)
 
     feature_layers = ctx.feature_layers
     for source_layer_name in source_layer_names:
@@ -3322,7 +3322,7 @@ def drop_features_mz_min_pixels(ctx):
                     features_to_keep.append(feature)
                     continue
 
-                area_threshold = meters_per_pixel * pixel_threshold
+                area_threshold = meters_per_pixel_area * pixel_threshold
                 area = props.get('area')
                 if area is None:
                     area = shape.area
