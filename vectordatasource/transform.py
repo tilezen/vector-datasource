@@ -1231,7 +1231,10 @@ def _snap_to_grid(shape, grid_size):
         return [_snap_to_grid(g, grid_size) for g in geoms]
 
     shape_type = shape.geom_type
-    if shape_type == 'Point':
+    if shape.is_empty or shape_type == 'GeometryCollection':
+        return None
+
+    elif shape_type == 'Point':
         return Point(_snap(shape.x), _snap(shape.y))
 
     elif shape_type == 'LineString':
@@ -1381,6 +1384,10 @@ def exterior_boundaries(ctx):
             snapped = clipped
             if snap_tolerance is not None:
                 snapped = _snap_to_grid(clipped, snap_tolerance)
+
+            # geometry collections are returned as None
+            if snapped is None:
+                continue
 
             # snapping coordinates and clipping shapes might make the shape
             # invalid, so we need a way to clean them. one simple, but not
