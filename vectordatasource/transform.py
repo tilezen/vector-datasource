@@ -2802,6 +2802,9 @@ def merge_features(ctx):
 
     for shape, props, fid in layer['features']:
         dims = _geom_dimensions(shape)
+        if dims != _LINE_DIMENSION:
+            skipped_features.append((shape, props, fid))
+            continue
 
         # keep the 'id' property as well as the feature ID, as these are often
         # distinct.
@@ -2811,12 +2814,8 @@ def merge_features(ctx):
         # transform their items into a frozenset instead.
         frozen_props = frozenset(props.items())
 
-        if dims != _LINE_DIMENSION:
-            skipped_features.append((shape, props, fid))
-
-        elif frozen_props in features_by_property:
+        if frozen_props in features_by_property:
             features_by_property[frozen_props][2].append(shape)
-
         else:
             features_by_property[frozen_props] = (fid, p_id, [shape])
 
