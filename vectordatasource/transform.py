@@ -1,20 +1,22 @@
 # transformation functions to apply to features
 
-from numbers import Number
-from StreetNames import short_street_name
 from collections import defaultdict
-from shapely.strtree import STRtree
+from numbers import Number
+from shapely.geometry.collection import GeometryCollection
+from shapely.geometry import box as Box
+from shapely.geometry import LinearRing
+from shapely.geometry import LineString
+from shapely.geometry import Point
+from shapely.geometry import Polygon
+from shapely.geometry.multilinestring import MultiLineString
+from shapely.geometry.multipoint import MultiPoint
+from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.polygon import orient
 from shapely.ops import linemerge
-from shapely.geometry import Point
-from shapely.geometry import LineString
-from shapely.geometry import LinearRing
-from shapely.geometry import Polygon
-from shapely.geometry import box as Box
-from shapely.geometry.multipoint import MultiPoint
-from shapely.geometry.multilinestring import MultiLineString
-from shapely.geometry.multipolygon import MultiPolygon
-from shapely.geometry.collection import GeometryCollection
+from shapely.strtree import STRtree
+from sort import pois as sort_pois
+from StreetNames import short_street_name
+from sys import float_info
 from tilequeue.command import _create_query_bounds_pad_fn
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
@@ -23,11 +25,9 @@ from tilequeue.tile import calc_meters_per_pixel_dim
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
 from util import to_float
-from sort import pois as sort_pois
-from sys import float_info
+import csv
 import pycountry
 import re
-import csv
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
