@@ -635,3 +635,5 @@ post_process:
       max_items: 5
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
+  - fn: vectordatasource.transform.simplify_and_clip
+    params: {simplify_before: 16}
