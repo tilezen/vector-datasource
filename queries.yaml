@@ -582,11 +582,6 @@ post_process:
       properties: [name]
       where: >-
         kind == 'highway'
-  - fn: vectordatasource.transform.merge_features
-    params:
-      source_layer: roads
-      start_zoom: 8
-      end_zoom: 15
   - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: pois
@@ -637,3 +632,8 @@ post_process:
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_key', reverse: True }
+  - fn: vectordatasource.transform.merge_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
