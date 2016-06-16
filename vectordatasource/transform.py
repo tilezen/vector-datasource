@@ -1,27 +1,33 @@
 # transformation functions to apply to features
 
-from numbers import Number
-from StreetNames import short_street_name
 from collections import defaultdict
-from shapely.strtree import STRtree
+from numbers import Number
+from shapely.geometry.collection import GeometryCollection
+from shapely.geometry import box as Box
+from shapely.geometry import LinearRing
+from shapely.geometry import LineString
+from shapely.geometry import Point
+from shapely.geometry import Polygon
+from shapely.geometry.multilinestring import MultiLineString
+from shapely.geometry.multipoint import MultiPoint
+from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.polygon import orient
 from shapely.ops import linemerge
-from shapely.geometry import Point
-from shapely.geometry import LineString
-from shapely.geometry import LinearRing
-from shapely.geometry import Polygon
-from shapely.geometry import box as Box
-from shapely.geometry.multipoint import MultiPoint
-from shapely.geometry.multilinestring import MultiLineString
-from shapely.geometry.multipolygon import MultiPolygon
-from shapely.geometry.collection import GeometryCollection
-from tilequeue.tile import calc_meters_per_pixel_area
-from util import to_float
+from shapely.strtree import STRtree
 from sort import pois as sort_pois
+from StreetNames import short_street_name
 from sys import float_info
+from tilequeue.command import _create_query_bounds_pad_fn
+from tilequeue.process import _make_valid_if_necessary
+from tilequeue.process import _visible_shape
+from tilequeue.tile import calc_meters_per_pixel_area
+from tilequeue.tile import calc_meters_per_pixel_dim
+from tilequeue.tile import tolerance_for_zoom
+from tilequeue.transform import calculate_padded_bounds
+from util import to_float
+import csv
 import pycountry
 import re
-import csv
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
@@ -1261,16 +1267,6 @@ def _snap_to_grid(shape, grid_size):
                          % repr(shape_type))
 
 
-# returns a geometry which is the given bounds expanded by `factor`. that is,
-# if the original shape was a 1x1 box, the new one will be `factor`x`factor`
-# box, with the same centroid as the original box.
-def _calculate_padded_bounds(factor, bounds):
-    min_x, min_y, max_x, max_y = bounds
-    dx = 0.5 * (max_x - min_x) * (factor - 1.0)
-    dy = 0.5 * (max_y - min_y) * (factor - 1.0)
-    return Box(min_x - dx, min_y - dy, max_x + dx, max_y + dy)
-
-
 def exterior_boundaries(ctx):
     """
     create new fetures from the boundaries of polygons
@@ -1340,7 +1336,7 @@ def exterior_boundaries(ctx):
     # make a bounding box 3x larger than the original tile, but with the same
     # centroid.
     padded_bounds = layer['padded_bounds']
-    padded_bbox = _calculate_padded_bounds(3, padded_bounds)
+    padded_bbox = calculate_padded_bounds(3, padded_bounds)
 
     features = layer['features']
 
@@ -3333,3 +3329,86 @@ def drop_features_mz_min_pixels(ctx):
                     features_to_keep.append(feature)
 
             feature_layer['features'] = features_to_keep
+
+
+def simplify_and_clip(ctx):
+    """simplify geometries according to zoom level and clip"""
+
+    zoom = ctx.tile_coord.zoom
+    buffer_cfg = ctx.buffer_cfg
+    unpadded_bounds = ctx.unpadded_bounds
+    simplify_before = ctx.params.get('simplify_before')
+
+    assert simplify_before, 'simplify_and_clip: missing simplify_before param'
+
+    meters_per_pixel_dim = calc_meters_per_pixel_dim(zoom)
+    meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
+
+    tolerance = tolerance_for_zoom(zoom)
+
+    for feature_layer in ctx.feature_layers:
+        simplified_features = []
+
+        layer_datum = feature_layer['layer_datum']
+        is_clipped = layer_datum['is_clipped']
+        clip_factor = layer_datum.get('clip_factor', 1.0)
+
+        padded_bounds_fn = _create_query_bounds_pad_fn(
+            buffer_cfg, feature_layer['name'])
+        padded_bounds = padded_bounds_fn(unpadded_bounds, meters_per_pixel_dim)
+        layer_padded_bounds = \
+            calculate_padded_bounds(clip_factor, padded_bounds)
+        area_threshold_pixels = layer_datum['area_threshold']
+        area_threshold_meters = meters_per_pixel_area * area_threshold_pixels
+
+        # The logic behind simplifying before intersecting rather than the
+        # other way around is extensively explained here:
+        # https://github.com/mapzen/TileStache/blob/d52e54975f6ec2d11f63db13934047e7cd5fe588/TileStache/Goodies/VecTiles/server.py#L509,L527
+        simplify_before_intersect = layer_datum['simplify_before_intersect']
+
+        # perform any simplification as necessary
+        simplify_start = layer_datum['simplify_start']
+        should_simplify = simplify_start <= zoom < simplify_before
+
+        for shape, props, feature_id in feature_layer['features']:
+
+            if should_simplify and simplify_before_intersect:
+                # To reduce the performance hit of simplifying potentially huge
+                # geometries to extract only a small portion of them when
+                # cutting out the actual tile, we cut out a slightly larger
+                # bounding box first. See here for an explanation:
+                # https://github.com/mapzen/TileStache/blob/d52e54975f6ec2d11f63db13934047e7cd5fe588/TileStache/Goodies/VecTiles/server.py#L509,L527
+
+                min_x, min_y, max_x, max_y = layer_padded_bounds.bounds
+                gutter_bbox_size = (max_x - min_x) * 0.1
+                gutter_bbox = Box(
+                    min_x - gutter_bbox_size,
+                    min_y - gutter_bbox_size,
+                    max_x + gutter_bbox_size,
+                    max_y + gutter_bbox_size)
+                clipped_shape = shape.intersection(gutter_bbox)
+                simplified_shape = clipped_shape.simplify(
+                    tolerance, preserve_topology=True)
+                shape = _make_valid_if_necessary(simplified_shape)
+
+            if is_clipped:
+                shape = shape.intersection(layer_padded_bounds)
+
+            if should_simplify and not simplify_before_intersect:
+                simplified_shape = shape.simplify(tolerance,
+                                                  preserve_topology=True)
+                shape = _make_valid_if_necessary(simplified_shape)
+
+            # this could alter multipolygon geometries
+            if zoom < simplify_before:
+                shape = _visible_shape(shape, area_threshold_meters)
+
+            # don't keep features which have been simplified to empty or
+            # None.
+            if shape is None or shape.is_empty:
+                continue
+
+            simplified_feature = shape, props, feature_id
+            simplified_features.append(simplified_feature)
+
+        feature_layer['features'] = simplified_features
