@@ -417,13 +417,6 @@ post_process:
     params:
       source_layer: roads
       properties: [layer]
-  - fn: vectordatasource.transform.intercut
-    params:
-      base_layer: roads
-      cutting_layer: landuse
-      attribute: kind
-      target_attribute: landuse_kind
-      cutting_attrs: { sort_key: 'sort_key', reverse: True }
   - fn: vectordatasource.transform.overlap
     params:
       base_layer: buildings
@@ -589,11 +582,6 @@ post_process:
       properties: [name]
       where: >-
         kind == 'highway'
-  - fn: vectordatasource.transform.merge_features
-    params:
-      source_layer: roads
-      start_zoom: 8
-      end_zoom: 15
   - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: pois
@@ -637,3 +625,15 @@ post_process:
     params: {prefix: mz_}
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
+  - fn: vectordatasource.transform.intercut
+    params:
+      base_layer: roads
+      cutting_layer: landuse
+      attribute: kind
+      target_attribute: landuse_kind
+      cutting_attrs: { sort_key: 'sort_key', reverse: True }
+  - fn: vectordatasource.transform.merge_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
