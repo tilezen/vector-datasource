@@ -8,7 +8,7 @@
     gid AS __id__
 {% endmacro %}
 
-{% macro osm_landuse_detailed_query(table) %}
+{% macro osm_landuse_detailed_query(table, geom_type) %}
 SELECT
 {% if table == 'planet_osm_polygon' %}
     CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
@@ -34,7 +34,7 @@ SELECT
 FROM
     {{ table }}
 WHERE
-    {{ bounds|bbox_filter('way') }}
+    {{ bounds[geom_type]|bbox_filter('way') }}
     {% if zoom <= 15 %}
     AND mz_landuse_min_zoom <= {{ zoom }}
     {% else %}
@@ -100,17 +100,17 @@ SELECT
 FROM
   planet_osm_polygon
 WHERE
-  {{ bounds|bbox_filter('way') }}
+  {{ bounds['polygon']|bbox_filter('way') }}
   AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
 {% else %}
 
-{{ osm_landuse_detailed_query('planet_osm_polygon') }}
+{{ osm_landuse_detailed_query('planet_osm_polygon', 'polygon') }}
 
 UNION ALL
 
-{{ osm_landuse_detailed_query('planet_osm_line') }}
+{{ osm_landuse_detailed_query('planet_osm_line', 'line') }}
 
 {% if zoom < 10 %}
 UNION ALL
@@ -131,7 +131,7 @@ SELECT
 FROM
   ne_10m_urban_areas
 WHERE
-  {{ bounds|bbox_filter('the_geom') }}
+  {{ bounds['polygon']|bbox_filter('the_geom') }}
 {% endif %}
 
 {% endif %}

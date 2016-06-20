@@ -22,7 +22,7 @@ FROM ne_10m_populated_places
 
 WHERE
     mz_places_min_zoom <= {{ zoom }}
-    AND {{ bounds|bbox_filter('the_geom') }}
+    AND {{ bounds['point']|bbox_filter('the_geom') }}
 
 UNION ALL
 
@@ -50,7 +50,7 @@ FROM planet_osm_point
 
 WHERE
     mz_places_min_zoom <= {{ zoom }}
-    AND {{ bounds|bbox_filter('way') }}
+    AND {{ bounds['point']|bbox_filter('way') }}
 
 {% if zoom >= 11 %}
 UNION ALL
@@ -81,7 +81,7 @@ INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placet
 
 WHERE
   wof_n.is_visible AND
-  {{ bounds|bbox_filter('label_position') }} AND
+  {{ bounds['point']|bbox_filter('label_position') }} AND
   {{ zoom + 1 }} >= min_zoom AND
   {{ zoom - 1 }} <= max_zoom
 

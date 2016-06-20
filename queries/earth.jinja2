@@ -20,7 +20,7 @@ FROM
 
 WHERE
     mz_earth_min_zoom <= {{ zoom }} AND
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds['polygon']|bbox_filter('the_geom') }}
 
 {% else %}
 
@@ -38,7 +38,7 @@ FROM
     land_polygons t
 
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds['polygon']|bbox_filter('the_geom') }}
 
 {% endif %}
 
@@ -64,7 +64,7 @@ WHERE
 {% else %}
     mz_earth_min_zoom IS NOT NULL AND
 {% endif %}
-    {{ bounds|bbox_filter('way') }}
+    {{ bounds['polygon']|bbox_filter('way') }}
 
 UNION ALL
 
@@ -86,10 +86,9 @@ WHERE
 {% else %}
     mz_earth_min_zoom IS NOT NULL AND
 {% endif %}
-    {{ bounds|bbox_filter('way') }}
+    {{ bounds['line']|bbox_filter('way') }}
 
 {% endif %}
-
 
 UNION ALL
 
@@ -112,4 +111,4 @@ WHERE
 {% else %}
   mz_earth_min_zoom IS NOT NULL AND
 {% endif %}
-  {{ bounds|bbox_filter('way') }}
+  {{ bounds['point']|bbox_filter('way') }}
