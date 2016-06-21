@@ -101,7 +101,6 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
             params=params,
             unpadded_bounds=None,
             resources=None,
-            buffer_cfg=None,
         )
         result = drop_features_mz_min_pixels(ctx)
         return result

@@ -21,7 +21,7 @@ FROM
 
 WHERE
 
-    {{ bounds|bbox_filter('way') }} AND
+    {{ bounds['polygon']|bbox_filter('way') }} AND
 {% if zoom >= 16 %}
     mz_building_min_zoom IS NOT NULL
 {% else %}
@@ -47,7 +47,7 @@ FROM
 
 WHERE
 
-    {{ bounds|bbox_filter('way') }} AND
+    {{ bounds['point']|bbox_filter('way') }} AND
     mz_building_min_zoom IS NOT NULL
 
 {% endif %}

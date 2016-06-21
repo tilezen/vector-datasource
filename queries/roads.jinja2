@@ -8,7 +8,7 @@ SELECT
 FROM ne_10m_roads
 
 WHERE
-    {{ bounds|bbox_filter('the_geom') }}
+    {{ bounds['line']|bbox_filter('the_geom') }}
     AND scalerank <= {{ zoom }}
 
 {% else %}
@@ -36,7 +36,7 @@ SELECT
 FROM planet_osm_line
 
 WHERE
-    {{ bounds|bbox_filter('way') }}
+    {{ bounds['line']|bbox_filter('way') }}
     AND mz_road_level <= {{ zoom }}
 
 {% endif %}

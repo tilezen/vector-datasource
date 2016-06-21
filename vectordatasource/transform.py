@@ -17,11 +17,10 @@ from shapely.strtree import STRtree
 from sort import pois as sort_pois
 from StreetNames import short_street_name
 from sys import float_info
-from tilequeue.command import _create_query_bounds_pad_fn
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
 from tilequeue.tile import calc_meters_per_pixel_area
-from tilequeue.tile import calc_meters_per_pixel_dim
+from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
 from util import to_float
@@ -1307,17 +1306,12 @@ def exterior_boundaries(ctx):
     buffer_size = ctx.params.get('buffer_size')
     start_zoom = ctx.params.get('start_zoom', 0)
     snap_tolerance = ctx.params.get('snap_tolerance')
-    bounds = ctx.unpadded_bounds
 
     layer = None
 
     # don't start processing until the start zoom
     if zoom < start_zoom:
         return layer
-
-    # check that the bounds parameter was, in fact, passed.
-    assert bounds is not None, \
-        "Automatic bounds parameter should have been passed."
 
     # search through all the layers and extract the one
     # which has the name of the base layer we were given
@@ -1333,12 +1327,8 @@ def exterior_boundaries(ctx):
     if prop_transform is None:
         prop_transform = {}
 
-    # make a bounding box 3x larger than the original tile, but with the same
-    # centroid.
-    padded_bounds = layer['padded_bounds']
-    padded_bbox = calculate_padded_bounds(3, padded_bounds)
-
     features = layer['features']
+    padded_bounds = layer['padded_bounds']
 
     # this exists to enable a dirty hack to try and work
     # around duplicate geometries in the database. this
@@ -1373,7 +1363,14 @@ def exterior_boundaries(ctx):
     indexable_features = list()
     indexable_shapes = list()
     for shape, props, fid in features:
-        if shape.geom_type in ('Polygon', 'MultiPolygon'):
+        if shape.type in ('Polygon', 'MultiPolygon'):
+
+            # make a bounding box 3x larger than the original tile,
+            # but with the same centroid.
+            geom_type = normalize_geometry_type(shape.type)
+            padded_bounds_by_type = padded_bounds[geom_type]
+            padded_bbox = calculate_padded_bounds(3, padded_bounds_by_type)
+
             # clip the feature to the padded bounds of the tile
             clipped = shape.intersection(padded_bbox)
 
@@ -3335,13 +3332,10 @@ def simplify_and_clip(ctx):
     """simplify geometries according to zoom level and clip"""
 
     zoom = ctx.tile_coord.zoom
-    buffer_cfg = ctx.buffer_cfg
-    unpadded_bounds = ctx.unpadded_bounds
     simplify_before = ctx.params.get('simplify_before')
 
     assert simplify_before, 'simplify_and_clip: missing simplify_before param'
 
-    meters_per_pixel_dim = calc_meters_per_pixel_dim(zoom)
     meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
 
     tolerance = tolerance_for_zoom(zoom)
@@ -3353,11 +3347,7 @@ def simplify_and_clip(ctx):
         is_clipped = layer_datum['is_clipped']
         clip_factor = layer_datum.get('clip_factor', 1.0)
 
-        padded_bounds_fn = _create_query_bounds_pad_fn(
-            buffer_cfg, feature_layer['name'])
-        padded_bounds = padded_bounds_fn(unpadded_bounds, meters_per_pixel_dim)
-        layer_padded_bounds = \
-            calculate_padded_bounds(clip_factor, padded_bounds)
+        padded_bounds = feature_layer['padded_bounds']
         area_threshold_pixels = layer_datum['area_threshold']
         area_threshold_meters = meters_per_pixel_area * area_threshold_pixels
 
@@ -3371,6 +3361,11 @@ def simplify_and_clip(ctx):
         should_simplify = simplify_start <= zoom < simplify_before
 
         for shape, props, feature_id in feature_layer['features']:
+
+            geom_type = normalize_geometry_type(shape.type)
+            padded_bounds_by_type = padded_bounds[geom_type]
+            layer_padded_bounds = calculate_padded_bounds(
+                clip_factor, padded_bounds_by_type)
 
             if should_simplify and simplify_before_intersect:
                 # To reduce the performance hit of simplifying potentially huge
