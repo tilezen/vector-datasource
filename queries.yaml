@@ -256,13 +256,13 @@ post_process:
       source_layer: water
       target_value_type: int
 
-  # assign `class` to features
+  # assign `scalerank` to features
   - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/water.csv
+        path: spreadsheets/scalerank/water.csv
     params:
       source_layer: water
       target_value_type: int
@@ -271,7 +271,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/earth.csv
+        path: spreadsheets/scalerank/earth.csv
     params:
       source_layer: earth
       target_value_type: int
@@ -280,7 +280,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/places.csv
+        path: spreadsheets/scalerank/places.csv
     params:
       source_layer: places
       target_value_type: int
@@ -289,7 +289,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/landuse.csv
+        path: spreadsheets/scalerank/landuse.csv
     params:
       source_layer: landuse
       target_value_type: int
@@ -298,7 +298,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/roads.csv
+        path: spreadsheets/scalerank/roads.csv
     params:
       source_layer: roads
       target_value_type: int
@@ -307,7 +307,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/buildings.csv
+        path: spreadsheets/scalerank/buildings.csv
     params:
       source_layer: buildings
       target_value_type: int
@@ -316,7 +316,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/pois.csv
+        path: spreadsheets/scalerank/pois.csv
     params:
       source_layer: pois
       target_value_type: int
@@ -325,7 +325,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/boundaries.csv
+        path: spreadsheets/scalerank/boundaries.csv
     params:
       source_layer: boundaries
       target_value_type: int
@@ -334,13 +334,13 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/class/transit.csv
+        path: spreadsheets/scalerank/transit.csv
     params:
       source_layer: transit
       target_value_type: int
 
   # add minimum pixel thresholds per layer
-  # this should run after all the `class`es have been assigned to features
+  # this should run after all the `scalerank`s have been assigned to features
   # these are configured only for layers that contain polygonal
   # geometries
   - fn: vectordatasource.transform.csv_match_properties
