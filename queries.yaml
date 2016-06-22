@@ -623,6 +623,21 @@ post_process:
       max_items: 5
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
+
+  - fn: vectordatasource.transform.merge_building_features
+    params:
+      source_layer: buildings
+      start_zoom: 13
+      end_zoom: 15
+      quantize:
+        13: vectordatasource.transform.quantize_height_round_nearest_10_meters
+        14: vectordatasource.transform.quantize_height_round_nearest_5_meters
+        15: vectordatasource.transform.quantize_height_round_nearest_meter
+      drop:
+        - name
+        - addr_housenumber
+        - addr_street
+
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
   - fn: vectordatasource.transform.intercut
