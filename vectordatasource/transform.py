@@ -2961,6 +2961,17 @@ class _ExactMatcher(object):
         return repr(self.value)
 
 
+class _NotEqualsMatcher(object):
+    def __init__(self, value):
+        self.value = value
+
+    def match(self, other):
+        return other != self.value
+
+    def __repr__(self):
+        return repr(self.value)
+
+
 class _SetMatcher(object):
     def __init__(self, values):
         self.values = values
@@ -3086,6 +3097,9 @@ class CSVMatcher(object):
         if v.startswith('<'):
             assert len(v) > 1, 'Invalid > matcher'
             return _LessThanMatcher(typ(v[1:]))
+        if v.startswith('!'):
+            assert len(v) > 1, 'Invalid ! matcher'
+            return _NotEqualsMatcher(typ(v[1:]))
         return _ExactMatcher(typ(v))
 
     def __call__(self, properties, zoom):
