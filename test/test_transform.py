@@ -1,6 +1,53 @@
 import unittest
 
 
+class BuildingsClassTest(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(BuildingsClassTest, self).__init__(*args, **kwargs)
+
+        from vectordatasource.transform import CSVMatcher
+        import os.path
+        buildings_path = os.path.join(
+            os.path.dirname(__file__), '..', 'spreadsheets', 'scalerank',
+            'buildings.csv')
+        with open(buildings_path) as fh:
+            self.matcher = CSVMatcher(fh)
+
+    def _call_fut(self, props):
+        z = -1
+        match_result = self.matcher(props, z)
+        if match_result is None:
+            return None
+        k, v = match_result
+        return float(v)
+
+    def test_area_most_important(self):
+        props = dict(area=1000000)
+        result = self._call_fut(props)
+        self.assertEquals(result, 1.0)
+
+    def test_height_importance(self):
+        props = dict(height=20000)
+        result = self._call_fut(props)
+        self.assertEquals(result, 1.0)
+
+    def test_volume_importance(self):
+        props = dict(volume=1000000)
+        result = self._call_fut(props)
+        self.assertEquals(result, 1.0)
+
+    def test_area_not_important(self):
+        props = dict(area=1)
+        result = self._call_fut(props)
+        self.assertEquals(result, 5)
+
+    def test_address_not_important(self):
+        props = {}
+        result = self._call_fut(props)
+        self.assertIsNone(result)
+
+
 class L10nOsmTransformTest(unittest.TestCase):
 
     def _call_fut(self, x):

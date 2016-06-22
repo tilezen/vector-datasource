@@ -24,9 +24,11 @@ from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
 from util import to_float
+from zope.dottedname.resolve import resolve
 import csv
 import pycountry
 import re
+import shapely.ops
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
@@ -2802,6 +2804,9 @@ def merge_features(ctx):
 
     for shape, props, fid in layer['features']:
         dims = _geom_dimensions(shape)
+        if dims != _LINE_DIMENSION:
+            skipped_features.append((shape, props, fid))
+            continue
 
         # keep the 'id' property as well as the feature ID, as these are often
         # distinct.
@@ -2811,12 +2816,8 @@ def merge_features(ctx):
         # transform their items into a frozenset instead.
         frozen_props = frozenset(props.items())
 
-        if dims != _LINE_DIMENSION:
-            skipped_features.append((shape, props, fid))
-
-        elif frozen_props in features_by_property:
+        if frozen_props in features_by_property:
             features_by_property[frozen_props][2].append(shape)
-
         else:
             features_by_property[frozen_props] = (fid, p_id, [shape])
 
@@ -2843,6 +2844,123 @@ def merge_features(ctx):
     new_features.extend(skipped_features)
     layer['features'] = new_features
 
+    return layer
+
+
+def quantize_val(val, step):
+    result = int(step * round(val / float(step)))
+    return result
+
+
+def quantize_height_round_nearest_5_meters(height):
+    return quantize_val(height, 5)
+
+
+def quantize_height_round_nearest_10_meters(height):
+    return quantize_val(height, 10)
+
+
+def quantize_height_round_nearest_meter(height):
+    return round(height)
+
+
+def merge_building_features(ctx):
+    zoom = ctx.tile_coord.zoom
+    source_layer = ctx.params.get('source_layer')
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    drop = ctx.params.get('drop')
+    exclusions = ctx.params.get('exclude')
+
+    assert source_layer, 'merge_building_features: missing source layer'
+
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom > end_zoom:
+        return None
+
+    layer = _find_layer(ctx.feature_layers, 'buildings')
+    if layer is None:
+        return None
+
+    quantize_height_fn = None
+    quantize_cfg = ctx.params.get('quantize')
+    if quantize_cfg:
+        quantize_fn_dotted_name = quantize_cfg.get(zoom)
+        if quantize_fn_dotted_name:
+            quantize_height_fn = resolve(quantize_fn_dotted_name)
+
+    features_by_property = {}
+    skipped_features = []
+    for feature in layer['features']:
+        shape, props, fid = feature
+        dims = _geom_dimensions(shape)
+        if dims != _POLYGON_DIMENSION:
+            skipped_features.append(feature)
+            continue
+
+        if exclusions:
+            for prop in exclusions:
+                if prop in props:
+                    skipped_features.append(feature)
+                    continue
+
+        orig_props = props.copy()
+
+        p_id = props.pop('id', None)
+        # also drop building properties that we won't want to consider
+        # for merging. area and volume will be re-calculated afterwards
+        props.pop('area', None)
+        props.pop('volume', None)
+
+        if drop:
+            for prop in drop:
+                props.pop(prop, None)
+
+        if quantize_height_fn:
+            height = props.get('height', None)
+            if height is not None:
+                props['height'] = quantize_height_fn(height)
+
+        frozen_props = frozenset(props.items())
+        if frozen_props in features_by_property:
+            features_by_property[frozen_props][-1].append(shape)
+        else:
+            features_by_property[frozen_props] = (
+                (fid, p_id, orig_props, [shape]))
+
+    new_features = []
+    for frozen_props, (fid, p_id, orig_props, shapes) in \
+            features_by_property.iteritems():
+
+        if len(shapes) == 1:
+            # restore original properties if we only have a single shape
+            new_features.append((shapes[0], orig_props, fid))
+            continue
+
+        list_of_polys = []
+        for shape in shapes:
+            list_of_polys.extend(_flatten_geoms(shape))
+
+        merged_shape = shapely.ops.unary_union(list_of_polys)
+
+        # thaw the frozen properties to use in the new feature.
+        props = dict(frozen_props)
+
+        if p_id is not None:
+            props['id'] = p_id
+
+        # add the area and volume back in
+        area = int(merged_shape.area)
+        props['area'] = area
+        height = props.get('height')
+        if height is not None:
+            props['volume'] = height * area
+
+        new_features.append((merged_shape, props, fid))
+
+    new_features.extend(skipped_features)
+    layer['features'] = new_features
     return layer
 
 
@@ -2957,6 +3075,17 @@ class _ExactMatcher(object):
 
     def match(self, other):
         return other == self.value
+
+    def __repr__(self):
+        return repr(self.value)
+
+
+class _NotEqualsMatcher(object):
+    def __init__(self, value):
+        self.value = value
+
+    def match(self, other):
+        return other != self.value
 
     def __repr__(self):
         return repr(self.value)
@@ -3087,6 +3216,9 @@ class CSVMatcher(object):
         if v.startswith('<'):
             assert len(v) > 1, 'Invalid > matcher'
             return _LessThanMatcher(typ(v[1:]))
+        if v.startswith('!'):
+            assert len(v) > 1, 'Invalid ! matcher'
+            return _NotEqualsMatcher(typ(v[1:]))
         return _ExactMatcher(typ(v))
 
     def __call__(self, properties, zoom):

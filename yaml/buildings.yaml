@@ -27,9 +27,11 @@ globals:
         - "building:part": true
         - not: { "building:part": 'no' }
   - &z13_area_volume
-      any:
-        way_area: { min: 1600 }
-        volume: { min: 300000 }
+      all:
+        any:
+          way_area: { min: 1600 }
+          volume: { min: 300000 }
+        "tags->location": "-underground"
   - &z14_area_volume
       any:
         way_area: { min: 100 }
