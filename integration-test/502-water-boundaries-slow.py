@@ -5,7 +5,7 @@ no_boundary_tiles = [
     #https://www.openstreetmap.org/way/51858784
     #https://www.openstreetmap.org/way/21635049
     [18, 74987, 100321], # Near Washington DC. USA
-    #https://www.openstreetmap.org/way/157919154
+    #https://www.openstreetmap.org/relation/6333922
     # other polygon is coastline
     [17, 21224, 50506], # Near Rio Vista, CA, USA
     #https://www.openstreetmap.org/way/72006049

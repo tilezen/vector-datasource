@@ -195,16 +195,16 @@ assert_has_feature(
     { 'kind': 'dog_park', 'sort_key': 94 })
 
 
-
-#https://www.openstreetmap.org/way/387242155
-# Cox Stadium at SF State
+#https://www.openstreetmap.org/relation/6328943
+# Cox Stadium recreation track
 assert_has_feature(
     15, 5235, 12671, 'landuse',
-    { 'kind': 'recreation_track', 'sort_key': 59 })
+    { 'id': -6328943, 'kind': 'recreation_track', 'sort_key': 59 })
 
+# Cox Stadium recreation track
 assert_has_feature(
     16, 10471, 25342, 'pois',
-    { 'kind': 'recreation_track', 'min_zoom': 16 })
+    { 'id': -6328943, 'kind': 'recreation_track', 'min_zoom': 16 })
 
 #https://www.openstreetmap.org/node/3643451363
 # unnamed running track

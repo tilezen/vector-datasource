@@ -19,11 +19,10 @@ assert_has_feature(
     18, 41867, 101362, 'pois',
     { 'kind': 'enclosure' })
 
-#https://www.openstreetmap.org/relation/4792970
-#https://www.openstreetmap.org/way/338699728
+#http://www.openstreetmap.org/way/422270533
 assert_has_feature(
-    18, 41887, 101370, 'landuse',
-    { 'kind': 'forest' })
+    16, 10476, 25324, 'landuse',
+    { 'id': 422270533, 'kind': 'forest' })
 
 #https://www.openstreetmap.org/way/274459406
 #https://www.openstreetmap.org/way/274459420
