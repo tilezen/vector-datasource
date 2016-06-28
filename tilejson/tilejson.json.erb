@@ -12,7 +12,7 @@
     ],
     "description" : "mapzen",
     "format" : "<%= @params[:format] %>",
-    "maxzoom" : 20.000000,
+    "maxzoom" : 16.000000,
     "minzoom" : 0.000000,
     "name" : "<%= @params[:name] %>",
     "private" : true,
@@ -30,16 +30,27 @@
                 "kind" : "String",
                 "area" : "Number"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         },
         {
             "id" : "earth",
             "fields" : {
-                "land" : "String"
+                "kind" : "String"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "places",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String",
+                "admin_level" : "Number"
+            },
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         },
@@ -50,7 +61,7 @@
                 "kind" : "String",
                 "area" : "Number"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         },
@@ -66,7 +77,7 @@
                 "is_link" : "String",
                 "sort_key" : "Number"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         },
@@ -78,7 +89,7 @@
                 "height" : "Number",
                 "minheight" : "Number"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         },
@@ -88,18 +99,27 @@
                 "name" : "String",
                 "kind" : "String"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         },
         {
-            "id" : "places",
+            "id" : "boundaries",
             "fields" : {
                 "name" : "String",
-                "kind" : "String",
-                "admin_level" : "Number"
+                "kind" : "String"
             },
-            "maxzoom" : 20.000000,
+            "maxzoom" : 16.000000,
+            "minzoom" : 0.000000,
+            "description" : ""
+        },
+        {
+            "id" : "transit",
+            "fields" : {
+                "name" : "String",
+                "kind" : "String"
+            },
+            "maxzoom" : 16.000000,
             "minzoom" : 0.000000,
             "description" : ""
         }

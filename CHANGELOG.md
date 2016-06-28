@@ -1,3 +1,8 @@
+v0.10.4
+-------
+* **Release date**: 2016-06-28
+* Update tilejson layers. See [#874](https://github.com/tilezen/vector-datasource/issues/872).
+
 v0.10.3
 -------
 * **Release date**: 2016-05-20.
