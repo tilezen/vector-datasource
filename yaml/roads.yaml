@@ -344,7 +344,9 @@ filters:
       <<: *osm_network_from_tags
       kind: minor_road
       highway: service
-      service: {col: service}
+      service:
+        expr: |
+          CASE WHEN service = 'drive-through' THEN 'drive_through' ELSE service END
   - filter:
       highway: service
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
@@ -518,7 +520,12 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: aerialway
-      aerialway: {col: aerialway}
+      aerialway:
+        expr:
+          CASE WHEN aerialway = 't-bar' THEN 't_bar'
+               WHEN aerialway = 'j-bar' THEN 'j_bar'
+               WHEN aerialway = 'yes' THEN NULL
+               ELSE aerialway END
   #############################################################
   #
   # OSM leisure
