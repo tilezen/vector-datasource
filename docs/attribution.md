@@ -1,7 +1,7 @@
 # Attribution
 
 
-Attribution is required for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources]() page. 
+Attribution is required for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources](data-sources.md) page.
 
 **Required attribution:**
 
