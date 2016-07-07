@@ -186,6 +186,25 @@ def features_in_tile_layer(z, x, y, layer):
         raise Exception, "Tile %r: %s" % (url, e.message), sys.exc_info()[2]
 
 
+@contextmanager
+def layers_in_tile(z, x, y):
+    assert config_url, "Tile URL is not configured, is your config file set up?"
+    url = config_url % {'layer': 'all', 'z': z, 'x': x, 'y': y}
+    r = requests.get(url)
+
+    if r.status_code != 200:
+        raise Exception("Tile %r: error while fetching, status=%d"
+                        % (url, r.status_code))
+
+    if r.headers['content-type'] != 'application/json':
+        raise Exception("Tile %r: expected JSON, but content-type is %r"
+                        % (url, r.headers['content-type']))
+
+    data = json.loads(r.text)
+    layers = data.keys()
+    yield layers
+
+
 def count_matching(features, properties):
     """
     Returns a tuple containing the total number of features in the argument
@@ -307,6 +326,7 @@ def print_coords(f, log, idx, num_tests):
             'assert_no_matching_feature': print_coord,
             'features_in_tile_layer': print_coord_with_context,
             'assert_feature_geom_type': print_coord,
+            'layers_in_tile': print_coord_with_context,
         })
     except:
         pass
@@ -441,6 +461,7 @@ def run_test(f, log, idx, num_tests):
             'assert_no_matching_feature': assert_no_matching_feature,
             'features_in_tile_layer': features_in_tile_layer,
             'assert_feature_geom_type': assert_feature_geom_type,
+            'layers_in_tile': layers_in_tile,
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
     except:

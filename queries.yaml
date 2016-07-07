@@ -528,13 +528,6 @@ post_process:
       property_keys: [name]
       geometry_types: [Point]
       min_distance: 64.0
-  - fn: vectordatasource.transform.copy_features
-    params:
-      source_layer: landuse
-      target_layer: landuse_labels
-      where:
-        label_placement: true
-      geometry_types: [Point]
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
