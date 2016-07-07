@@ -1,6 +1,6 @@
 filters:
   - filter: {name: true, place: country}
-    min_zoom: 0
+    min_zoom: 2
     output: {kind: country}
     table: osm
   - filter: {name: true, place: state}
