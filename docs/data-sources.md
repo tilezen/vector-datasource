@@ -2,7 +2,7 @@
 
 Mapzen Vector Tiles are powered by several major open data sets and we owe a tremendous debt of gratitude to the individuals and communities which produced them.
 
-**Attribution is required** for many of our data providers. See the [Attribution]() document for more information. 
+**Attribution is required** for many of our data providers. See the [Attribution](attribution.md) document for more information.
 
 ## What is sourced at what zooms?
 
