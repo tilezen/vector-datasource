@@ -370,17 +370,6 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `works`
 * `zoo`
 
-### Landuse labels
-
-![image](images/mapzen-vector-tile-docs-landuse.png)
-
-* Layer name: `landuse_labels`
-* Geometry types: `point`
-
-This layer also includes the same landuse `label_placement` points for labeling polygons de-duplicated across tile boundaries as the `landuse` layer.
-
-This layer is included to support legacy uses, but is not recommended for new projects.
-
 ## Places
 
 ![image](images/mapzen-vector-tile-docs-places.png)
