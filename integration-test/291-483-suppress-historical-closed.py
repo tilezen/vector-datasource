@@ -4,7 +4,7 @@
 # building should be present at z15
 assert_has_feature(
     15, 5232, 12654, 'buildings',
-    {'id': 241643507, 'kind': 'retail'})
+    {'id': 241643507, 'kind': 'building', 'kind_detail': 'retail'})
 
 # but POI shouldn't
 assert_no_matching_feature(
