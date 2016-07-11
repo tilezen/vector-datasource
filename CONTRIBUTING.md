@@ -72,6 +72,8 @@ When it hears a request, TileServer asks Postgres for "the stuff" inside that ti
 
 ## Let's do this!
 
+We'll cover the following topics in the next sections:
+
 - Choose an issue to work on
 - Do you work in a local branch
 - Create a new test
@@ -86,9 +88,9 @@ When it hears a request, TileServer asks Postgres for "the stuff" inside that ti
 
 We have a backlog of issues, but they are also grouped into milestones and tracked with [Waffle board](https://waffle.io/tilezen/vector-datasource).
 
-When picking an issue from the Ready column, self assign it to let other people know you'll be working on it.
+When picking an issue from the Ready column for the active milestone, self assign it to let other people know you'll be working on it.
 
-If you propose to work on an issue in the backlog but what to confirm some details add a comment to the issue or ask about it in Slack.
+If you propose to work on an issue in the Backlog but what to confirm some details add a comment to the issue or ask about it in Slack.
 
 ### Create a new branch
 
@@ -161,18 +163,185 @@ The tests require this to be formatted like:
 And run the test to make sure it **fails** using the existing config:
 
     python integration-test.py local integration-test/160-motorway-junctions.py
-    
+
 Once it fails, we'll update our logic in the next section so it passes.
-    
+
 **So what's happening here?** The `integration-test.py` script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's `160-motorway-junctions.py` in the `integration-test` directory.
-    
+
 ### Edit database &/or query logic
 
 Tk tk tk intro
 
 #### Update the database properties
 
-Tk tk tk body
+If you modify the functions:
+
+    psql -f data/functions.sql osm
+
+For example:
+
+    cd data/migrations && python create-sql-functions.py | psql osm
+
+And:
+
+    python create-sql-functions.py | psql osm
+
+##### Update the data migration SQL files
+
+Files in the `data/migrations/` should be updated to ensure someone with an earlier database can catch up with you. They are reset fresh for each release.
+
+* `create-sql-functions.py`
+* `run_migrations.sh`
+* `sql.jinja2`
+* `update-wof-l10n.py`
+* `v1.0.0-cleanup.sql`
+* `v1.0.0-line.sql`
+* `v1.0.0-other-tables.sql`
+* `v1.0.0-point.sql`
+* `v1.0.0-polygon.sql`
+* `v1.0.0-schema-prefunction.sql`
+
+Here's an example out of the `v1.0.0-point.sql` file:
+
+```
+UPDATE
+  planet_osm_point
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
+  WHERE
+    (barrier = 'toll_booth' OR
+     highway IN ('services', 'rest_area'))
+    AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_point.*), 999);
+```
+
+NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.
+
+##### Missing a database feature?
+
+Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
+
+    ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
+
+To do this by hand, you'd download the feature from the OSM API:
+
+    https://www.openstreetmap.org/api/0.6/node/3984333433
+
+Then modify the XML file by hand
+
+`<osm`
+to
+`<osmChange`
+
+mod:
+`</osm`
+to
+`</osmChange`
+
+insert:
+`<modify>`
+
+insert:
+`</modify>`
+
+
+For example, all together now:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<osmChange version="0.6" generator="CGImap 0.4.0 (21232 thorn-02.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <modify>
+ <node id="3984333433" visible="true" version="1" changeset="36959786" timestamp="2016-02-02T15:48:08Z" user="zaphod_beeblebrox" uid="567719" lat="37.6348416" lon="-112.1656853">
+  <tag k="amenity" v="water_point"/>
+ </node>
+ </modify>
+</osmChange>
+```
+
+Then run:
+
+    osm2pgsql -s -C 1024 -S /Users/nvkelso/git-repos/vector-datasource/osm2pgsql.style -k path/to/xml -a -d osm -H localhost
+
+Making sure to add `-a` so the data is appended to existing table!
+
+Alternatively, if your feature exists locally but is missing a neccesary attribute just update the feature in place:
+
+```
+UPDATE planet_osm_polygon
+SET 'name' = "Fort Monroe"
+WHERE
+  osm_id = 51064272;
+```
+
+#### Example database SQL
+
+If you only want to update the database in a certain region (area of interest), here for roads converting a viewport in latitude & longitude to Web Mercator meters:
+
+```
+UPDATE planet_osm_line
+  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id)
+  WHERE
+    highway IN ('pedestrian', 'living_street', 'track', 'path', 'cycleway', 'footway', 'steps') AND
+    way && ST_Transform(ST_SetSrid(ST_MakeBox2D(ST_MakePoint(-124.03564453125, 36.59788913307022), ST_MakePoint(-117.333984375, 39.06184913429154)), 4326), 900913);
+```
+
+Updating a simple **line** feature:
+
+```
+UPDATE planet_osm_line
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_line.*)
+  WHERE
+    waterway = 'dam';
+```
+
+Updating a simple **point** feature:
+
+```
+UPDATE planet_osm_point
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
+  WHERE shop IN ('outdoor');
+```
+
+Updating a simple **polygon** feature:
+
+```
+UPDATE planet_osm_polygon
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
+  WHERE shop IN ('outdoor');
+```
+
+Some features can have a POI "label" and a landuse polygon, so calculate both:
+
+Same as above:
+
+```
+UPDATE planet_osm_polygon
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
+  WHERE shop IN ('outdoor');
+```
+
+Also adding:
+
+```
+UPDATE planet_osm_polygon
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+  WHERE shop IN ('outdoor');
+```
+
+Sometimes you'll want to investigate features in the database:
+
+```
+SELECT name, height, tags from planet_osm_point
+  WHERE waterway = 'waterfall' AND height IS NOT NULL LIMIT 100;
+```
+
+Sometimes you need to debug why a feature appears one of multiple possible representations:
+
+```
+SELECT
+  osm_id, name, place, mz_earth_min_zoom, mz_places_min_zoom from planet_osm_point where osm_id
+IN (3178316462, 358955020, 358796350, 358761955, 358768646, 358795646)
+ORDER BY
+  osm_id;
+```
 
 #### Update the query configuration
 
@@ -185,12 +354,18 @@ This step is not necessary if only database properties were changed.
 Run the test, hopefully it passes now!
 
     python integration-test.py local integration-test/160-motorway-junctions.py
-    
+
 **Example output:**
 
 ```
 tk tk tk
 ```
+
+If the test failed you can investigate why:
+
+    cat test.log
+
+Will print out the full debug.
 
 #### Some tests require TileServer restart
 
@@ -200,9 +375,9 @@ A minority of issues will require updating the `queries.yaml` file. In those cas
 
 Then run your test like in the previous step.
 
-### Perform any modifications, if necessary
+### Perform any modifications, as necessary
 
-Tk tk tk
+Rinse and repeat, rewrite your code.
 
 ### Update documentation
 
@@ -216,23 +391,23 @@ Tk tk tk
 
 ### Push your local branch to the server
 
-First let's commit our changes.
-
-What files changed?
+First let's commit our changes. Let's confirm which files changed:
 
     git status
+
+You can also do a `git diff` on each file to determine if you meant to change or insert logic. Once you've confirmed the changes...
 
 For each, commit using a specific commit message. The first should use the "Connects to #issuenum" format to link up the PR to the original issue in Waffle.io.
 
     git commit -m 'Connects to #713 for urban area kind rename' filename
 
-Subsequent commits can be more generic.
+NOTE: Subsequent commit messages can be more generic.
 
 Then push to the server so other people can see your work. (If this is a large change over multiple days, please push the server once a day so your work is backed up.)
 
     git push
 
-Your first push for a branch might require additional details:
+NOTE: Your first push for a branch might require additional details:
 
     git push --set-upstream origin olga/713-urban-areas
 
