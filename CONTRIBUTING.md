@@ -234,7 +234,7 @@ Then push to the server so other people can see your work. (If this is a large c
 
 Your first push for a branch might require additional details:
 
-    git push ...
+    git push --set-upstream origin olga/713-urban-areas
 
 ### Submit a Pull Request (PR)
 
