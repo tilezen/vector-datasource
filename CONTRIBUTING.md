@@ -182,9 +182,9 @@ Tk tk tk body
 
 This step is not necessary if only database properties were changed.
 
-Run the test, hopefully it passes!
+Run the test, hopefully it passes now!
 
-    tk tk tk
+    python integration-test.py local integration-test/160-motorway-junctions.py
     
 **Example output:**
 
