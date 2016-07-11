@@ -186,10 +186,6 @@ For example:
 
     cd data/migrations && python create-sql-functions.py | psql osm
 
-And:
-
-    python create-sql-functions.py | psql osm
-
 ##### Update the data migration SQL files
 
 Files in the `data/migrations/` should be updated to ensure someone with an earlier database can catch up with you. They are reset fresh for each release.
@@ -370,6 +366,8 @@ If the test failed you can investigate why:
     cat test.log
 
 Will print out the full debug.
+
+NOTE: It's best practice to run your own test, and confirm that all other tests are still passing before submitting a PR. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.
 
 #### Some tests require TileServer restart
 
