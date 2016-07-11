@@ -61,14 +61,18 @@ Map database in Postgres stores data from OpenStreetMap and other projects like 
 
 When data is loaded, database "triggers" calculate if a feature is included in which layer(s), at what "minimum zoom", and other Mapzen specific "mz" properties.
 
-The primary `queries.yaml` details how data is selected from the database and how it is processed via Python transforms. This primary YAML file also refers to several other jinja SQL "templates" in `queries/` (eg: landuse.jinja2) for Postgres SQL code. A change to one of these file requires TileServer to be restarted so the queries.yaml file can be reloaded.
+Most **content filter changes** (eg: adding a new kind of feature) only requires a database modification and doesn't require restarting TileServer. These are done in the `yaml/` filter files, for example: pois.yaml.
 
-Most content changes (eg: adding a new kind of feature) only requires a database modification and doesn't require restarting TileServer. These are done in the YAML files.
+**Query selections from the database** are detailed in queries.yaml and also specifies how it is post-processed via Python transforms. This primary file refers to layer specific `jinja` SQL "templates" in `queries/` (eg: landuse.jinja2) for Postgres SQL code. 
 
 ### TileServer
 
 Listens for API requests on localhost, which are in the format of 0/0/0.ext
-When it hears a request, TileServer asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` file.
+
+When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` file and `.jinja2` files. 
+
+NOTE: A change to one of the query files requires TileServer to be restarted so they can be reloaded.
+
 
 ## Let's do this!
 
