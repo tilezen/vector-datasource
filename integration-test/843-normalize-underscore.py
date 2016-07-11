@@ -14,13 +14,6 @@ assert_has_feature(
     { 'id': 256717307, 'kind': 'aerialway', 'aerialway': 'j_bar' })
 
 # http://www.openstreetmap.org/way/258132198
-# verify that no aerialway subkind exists when its value is yes
-with features_in_tile_layer(16, 10910, 25120, 'roads') as features:
-    for feature in features:
-        props = feature['properties']
-        if props['id'] == 258132198:
-            assert props['kind'] == 'aerialway'
-            assert 'aerialway' not in props
-            break
-    else:
-        assert 0, 'No feature with id 258132198 found'
+assert_has_feature(
+    16, 10910, 25120, 'roads',
+    { 'id': 258132198, 'kind': 'aerialway', 'aerialway': type(None) })
