@@ -1,3 +1,19 @@
+<html lang="en-us">
+  <head>
+    <style>
+		.alert-message {
+			color: #8a6d3b;
+			background-color: #fcf8e3;
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid #faebcc;
+			border-radius: 4px;
+		}
+    </style>
+  </head>
+
+  <body>
+
 **Tilezen** loves contributions from community members like you! Contributions come in many different shapes and sizes. In this file we provide guidance around two of the most common types of contributions: opening issues and opening pull requests.
 
 # Community Values
@@ -55,6 +71,10 @@ Generally speaking there are three aspects of developing vector tiles.
 - Updating database properties (can be done ahead of time or at runtime)
 - Changing how features are selected from the database (requires TileServer restart)
 
+<div class='alert-message'>
+Yellow call-outs like this are meant to draw your attention to an important idea or distinction you should keep in mind.
+</div>
+
 ### vector-datasource
 
 Map database in Postgres stores data from OpenStreetMap and other projects like Natural Earth and Who's On First.
@@ -63,13 +83,13 @@ When data is loaded, database "triggers" calculate if a feature is included in w
 
 Most **content filter changes** (eg: adding a new kind of feature) only requires a database modification and doesn't require restarting TileServer. These are done in the `yaml/` filter files, for example: pois.yaml.
 
-**Query selections from the database** are detailed in queries.yaml and also specifies how it is post-processed via Python transforms. This primary file refers to layer specific `jinja` SQL "templates" in `queries/` (eg: landuse.jinja2) for Postgres SQL code. 
+**Query selections from the database** are detailed in queries.yaml and also specifies how it is post-processed via Python transforms. This primary file refers to layer specific `jinja` SQL "templates" in `queries/` (eg: landuse.jinja2) for Postgres SQL code.
 
 ### TileServer
 
 Listens for API requests on localhost, which are in the format of 0/0/0.ext
 
-When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` file and `.jinja2` files. 
+When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` file and `.jinja2` files.
 
 NOTE: A change to one of the query files requires TileServer to be restarted so they can be reloaded.
 
@@ -424,3 +444,6 @@ A Tilezen team member will review the PR for you, either merging it right away o
 If the review leads to code modifications those should be done in same branch and the PR will automatically update with subsequent commits to the branch.
 
 _Good luck, and **thank you** for contributing!_
+
+  </body>
+</html>
