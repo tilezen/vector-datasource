@@ -247,7 +247,7 @@ These are intended for label placement, and are included as points only.
 
 Landuse polygons from OpenStreetMap representing parks, forests, residential, commercial, industrial, university, sports and other areas. Includes OpenStreetMap data at higher zoom levels, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels. This layer also includes landuse `label_placement` points for labeling polygons de-duplicated across tile boundaries.
 
-Zooms 4 and 5, 6 and 7 includes a mix of Natural Earth `urban area` (zooms 0-9 only) features and OpenStreetMap data for `national_park`, `protected_area`, and `nature_reserve` only. After that more more feature kinds are included, and they have a richer set of properties including `sport`, `religion`, `surface`, `attraction`, `zoo`, and `natural`. Feature selection is filtered per zoom until zoom 15.
+Zooms 4 and 5, 6 and 7 includes a mix of Natural Earth `urban_area` (zooms 0-9 only) features and OpenStreetMap data for `national_park`, `protected_area`, and `nature_reserve` only. After that more more feature kinds are included, and they have a richer set of properties including `sport`, `religion`, `surface`, `attraction`, `zoo`, and `natural`. Feature selection is filtered per zoom until zoom 15.
 
 _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Find those in the `pois` layer._
 
@@ -255,7 +255,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `name`
 * `id`: osm_id
-* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban area` and `park or protected land` for Natural Earth areas.
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 
@@ -314,7 +314,6 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `military`
 * `national_park`
 * `nature_reserve`
-* `park or protected land`
 * `park`
 * `parking`
 * `pedestrian`
@@ -354,7 +353,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `tower`
 * `trail_riding_station`
 * `university`
-* `urban area`
+* `urban_area`
 * `urban`
 * `village_green`
 * `wastewater_plant`
