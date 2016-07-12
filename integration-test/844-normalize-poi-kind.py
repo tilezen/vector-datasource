@@ -1,0 +1,47 @@
+# Node: Gate G102 (1096088604)
+# http://www.openstreetmap.org/node/1096088604
+assert_has_feature(
+    16, 10487, 25366, 'pois',
+    { 'id': 1096088604, 'kind': 'aeroway_gate' })
+
+# Node: Lone Star Sports
+# http://www.openstreetmap.org/node/2122898936
+assert_has_feature(
+    16, 13462, 24933, 'pois',
+    { 'id': 2122898936, 'kind': 'ski_rental' })
+
+# http://www.openstreetmap.org/way/52497271
+assert_has_feature(
+    16, 10566, 25429, 'landuse',
+    { 'id': 52497271, 'kind': 'wood' })
+
+# http://www.openstreetmap.org/way/207859675
+assert_has_feature(
+    16, 11306, 26199, 'landuse',
+    { 'id': 207859675, 'kind': 'wood' })
+
+# http://www.openstreetmap.org/way/417405367
+assert_has_feature(
+    16, 10480, 25323, 'landuse',
+    { 'id': 417405367, 'kind': 'natural_wood' })
+
+# http://www.openstreetmap.org/way/422270533
+assert_has_feature(
+    16, 10476, 25324, 'landuse',
+    { 'id': 422270533, 'kind': 'forest' })
+
+# http://www.openstreetmap.org/way/95360670
+assert_has_feature(
+    16, 17780, 27428, 'landuse',
+    { 'id': 95360670, 'kind': 'natural_forest' })
+
+# Way: Stables & Equestrian Area (393312618)
+# http://www.openstreetmap.org/way/393312618
+assert_has_feature(
+    16, 10294, 25113, 'landuse',
+    { 'id': 393312618, 'kind': 'park' })
+
+# http://www.openstreetmap.org/way/29191880
+assert_has_feature(
+    16, 12393, 26315, 'landuse',
+    { 'id': 29191880, 'kind': 'natural_park' })

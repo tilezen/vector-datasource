@@ -40,7 +40,7 @@ assert_has_feature(
 #http://www.openstreetmap.org/node/2135237099
 assert_has_feature(
     16, 10558, 25443, 'pois',
-    { 'kind': 'gas', 'min_zoom': 18 })
+    { 'kind': 'gas_canister', 'min_zoom': 18 })
 
 #https://www.openstreetmap.org/node/3799971066
 assert_has_feature(
