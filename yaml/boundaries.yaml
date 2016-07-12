@@ -29,30 +29,6 @@ filters:
     min_zoom: 10
     output: {kind: municipality, admin_level: {col: admin_level}}
     table: osm
-  - filter: {barrier: city_wall}
-    min_zoom: 12
-    output: {kind: city_wall}
-    table: osm
-  - filter: {historic: citywalls}
-    min_zoom: 12
-    output: {kind: city_wall}
-    table: osm
-  - filter: {waterway: dam}
-    min_zoom: 12
-    output: {kind: dam}
-    table: osm
-  - filter: {man_made: snow_fence}
-    min_zoom: 15
-    output: {kind: snow_fence}
-    table: osm
-  - filter: {barrier: retaining_wall}
-    min_zoom: 15
-    output: {kind: retaining_wall}
-    table: osm
-  - filter: {barrier: fence}
-    min_zoom: 16
-    output: {kind: fence}
-    table: osm
   - filter: {featurecla: 1st Order Admin Lines}
     min_zoom: 0
     output: {kind: state, admin_level: '4'}

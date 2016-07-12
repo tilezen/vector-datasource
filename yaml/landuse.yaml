@@ -305,7 +305,18 @@ filters:
   - filter: {leisure: water_park}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: water_park}
-  - filter: {waterway: dam}
+  - filter:
+      waterway: dam
+      way:
+        expr: |
+          GeometryType(way) IN ('LINESTRING', 'MULTILINESTRING')
+    min_zoom: 12
+    output: {kind: dam}
+  - filter: 
+      waterway: dam
+      way:
+        expr: |
+          GeometryType(way) IN ('POLYGON', 'MULTIPOLYGON')
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: dam}
   - filter: {leisure: dog_park}
@@ -340,3 +351,18 @@ filters:
     min_zoom: GREATEST(LEAST(zoom, 16), 11)
     output:
       kind: rest_area
+  - filter: {barrier: city_wall}
+    min_zoom: 12
+    output: {kind: city_wall}
+  - filter: {historic: citywalls}
+    min_zoom: 12
+    output: {kind: city_wall}
+  - filter: {man_made: snow_fence}
+    min_zoom: 15
+    output: {kind: snow_fence}
+  - filter: {barrier: retaining_wall}
+    min_zoom: 15
+    output: {kind: retaining_wall}
+  - filter: {barrier: fence}
+    min_zoom: 16
+    output: {kind: fence}
