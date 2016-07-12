@@ -241,56 +241,6 @@ Sometimes you'll find a feature in OverPass that is more recent than your local 
 
     ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
 
-To do this by hand, you'd download the feature from the OSM API:
-
-    https://www.openstreetmap.org/api/0.6/node/3984333433
-
-Then modify the XML file by hand
-
-`<osm`
-to
-`<osmChange`
-
-mod:
-`</osm`
-to
-`</osmChange`
-
-insert:
-`<modify>`
-
-insert:
-`</modify>`
-
-
-For example, all together now:
-
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<osmChange version="0.6" generator="CGImap 0.4.0 (21232 thorn-02.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
- <modify>
- <node id="3984333433" visible="true" version="1" changeset="36959786" timestamp="2016-02-02T15:48:08Z" user="zaphod_beeblebrox" uid="567719" lat="37.6348416" lon="-112.1656853">
-  <tag k="amenity" v="water_point"/>
- </node>
- </modify>
-</osmChange>
-```
-
-Then run:
-
-    osm2pgsql -s -C 1024 -S /Users/nvkelso/git-repos/vector-datasource/osm2pgsql.style -k path/to/xml -a -d osm -H localhost
-
-Making sure to add `-a` so the data is appended to existing table!
-
-Alternatively, if your feature exists locally but is missing a neccesary attribute just update the feature in place:
-
-```
-UPDATE planet_osm_polygon
-SET 'name' = "Fort Monroe"
-WHERE
-  osm_id = 51064272;
-```
-
 #### Example database SQL
 
 If you only want to update the database in a certain region (area of interest), here for roads converting a viewport in latitude & longitude to Web Mercator meters:
