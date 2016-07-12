@@ -104,7 +104,7 @@ We include one deprecated layer, `landuse-labels`, for backwards compatibility. 
 
 Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Earth boundaries (zoom < 8), and some other `barrier` like goodies at high zooms.
 
-(below) Fence lines around the petting zoo in San Francisco are included in the `boundaries` layer.
+(below) Fence lines around the petting zoo in San Francisco are included in the `landuse` layer.
 
 ![image](images/mapzen-vector-tile-docs-barriers.png)
 
@@ -112,7 +112,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 
 * `name`
 * `id`
-* `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and inclusive of some barrier and man_made tags: `city_wall` (zoom 12+), `retaining_wall`, `snow_fence` (zoom 15+), and `fence` (zoom 16+ only). Also includes raw Natural Earth values.
+* `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes raw Natural Earth values.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 #### Boundary properties (common optional):
@@ -133,12 +133,9 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 #### Boundary kind values:
 
 * `aboriginal lands`
-* `city_wall`
 * `country`
 * `county`
-* `dam`
 * `disputed`
-* `fence`
 * `indefinite`
 * `indeterminate`
 * `lease_limit`
@@ -146,8 +143,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Eart
 * `macroregion`
 * `municipality`
 * `overlay_limit`
-* `retaining_wall`
-* `snow_fence`
 * `state`
 
 ## Buildings and Addresses
@@ -255,7 +250,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `name`
 * `id`: osm_id
-* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features.
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some barrier and man_made tags: `city_wall` (zoom 12+), `retaining_wall`, `snow_fence` (zoom 15+), and `fence` (zoom 16+ only).
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 
@@ -283,6 +278,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `carousel`
 * `cemetery`
 * `cinema`
+* `city_wall`
 * `college`
 * `commercial`
 * `common`
@@ -294,6 +290,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `farm`
 * `farmland`
 * `farmyard`
+* `fence`
 * `footway`
 * `forest`
 * `fort`
@@ -334,6 +331,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `resort`
 * `rest_area`
 * `retail`
+* `retaining_wall`
 * `rock`
 * `roller_coaster`
 * `runway`
@@ -342,6 +340,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `scree`
 * `scrub`
 * `service_area`
+* `snow_fence`
 * `sports_centre`
 * `stadium`
 * `stone`
@@ -368,6 +367,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `wood`
 * `works`
 * `zoo`
+
 
 ## Places
 
