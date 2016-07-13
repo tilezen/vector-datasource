@@ -27,18 +27,6 @@ filters:
       kind: locality
       kind_detail: town
     table: osm
-  - filter: {name: true, place: borough}
-    min_zoom: 10
-    output: {kind: borough}
-    table: osm
-  - filter: {name: true, place: suburb}
-    min_zoom: 10
-    output: {kind: suburb}
-    table: osm
-  - filter: {name: true, place: quarter}
-    min_zoom: 10
-    output: {kind: quarter}
-    table: osm
   - filter: {name: true, place: village}
     min_zoom: 11
     output:
