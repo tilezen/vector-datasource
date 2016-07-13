@@ -312,6 +312,7 @@ filters:
         WHEN GeometryType(way) IN ('LINESTRING', 'MULTILINESTRING') THEN 12
         WHEN GeometryType(way) IN ('POLYGON', 'MULTIPOLYGON') THEN GREATEST(LEAST(zoom, 16), 9) END
     output: {kind: dam}
+    extra_columns: [way]
   - filter: {leisure: dog_park}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: dog_park}
