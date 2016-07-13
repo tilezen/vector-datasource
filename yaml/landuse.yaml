@@ -305,19 +305,12 @@ filters:
   - filter: {leisure: water_park}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: water_park}
-  - filter:
-      waterway: dam
-      way:
-        expr: |
-          GeometryType(way) IN ('LINESTRING', 'MULTILINESTRING')
-    min_zoom: 12
-    output: {kind: dam}
   - filter: 
       waterway: dam
-      way:
-        expr: |
-          GeometryType(way) IN ('POLYGON', 'MULTIPOLYGON')
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    min_zoom: |
+      CASE
+        WHEN GeometryType(way) IN ('LINESTRING', 'MULTILINESTRING') THEN 12
+        WHEN GeometryType(way) IN ('POLYGON', 'MULTIPOLYGON') THEN GREATEST(LEAST(zoom, 16), 9) END
     output: {kind: dam}
   - filter: {leisure: dog_park}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
