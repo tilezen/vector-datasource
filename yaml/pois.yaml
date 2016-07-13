@@ -284,13 +284,9 @@ filters:
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output: {kind: toll_booth}
-  - filter:
-      highway: [gate, mini_roundabout]
+  - filter: {highway: mini_roundabout}
     min_zoom: 15
-    output:
-      kind: {col: highway}
-      aeroway:
-        expr: CASE WHEN highway='gate' THEN aeroway END
+    output: {kind: mini_roundabout}
   - filter: {lock: 'yes'}
     min_zoom: 15
     output: {kind: lock}
@@ -352,7 +348,7 @@ filters:
     min_zoom: 16
     output: {kind: helipad}
   - filter:
-      amenity: [bus_station, car_sharing, picnic_site, recycling, shelter]
+      amenity: [bus_station, car_sharing, recycling, shelter]
     min_zoom: 16
     output:
       kind: {col: amenity}
