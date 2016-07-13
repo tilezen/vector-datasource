@@ -35,8 +35,8 @@ assert_has_feature(
     {"kind": "minor_road", "highway": "residential", "id": 162038104,
      "name": "Woodwardia Pl.", "sort_key": 410})
 
-#https://www.openstreetmap.org/way/28843606
+#http://www.openstreetmap.org/way/232303398
 assert_has_feature(
-    18, 41937, 101310, "roads",
-    {"kind": "minor_road", "highway": "service", "id": 28843606,
-     "name": "Garage Exit Ramp", "is_bridge": True, "sort_key": 408})
+    16, 10482, 25363, "roads",
+    {"id": 232303398, "kind": "minor_road", "highway": "service",
+     "is_bridge": True, "sort_key": 408})
