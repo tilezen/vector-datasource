@@ -168,7 +168,7 @@ assert_has_feature(
 # Named dam line in front of Cherry Lake
 # Should be labeled in the stylesheet, no POI generate
 assert_has_feature(
-    12, 683, 1580, 'boundaries',
+    12, 683, 1580, 'landuse',
     { 'kind': 'dam', "sort_key": 263 })
 
 
