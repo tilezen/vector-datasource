@@ -20,7 +20,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/node/26819236
 assert_has_feature(
     16, 10482, 25330, 'places',
-    { 'id': 26819236, 'kind': 'city',
+    { 'id': 26819236, 'kind': 'locality', 'kind_detail': 'city',
       'source': "openstreetmap.org",
       'name': 'San Francisco',
       'name:zho': '\xe8\x88\x8a\xe9\x87\x91\xe5\xb1\xb1\xe5\xb8\x82\xe8\x88\x87\xe7\xb8\xa3' })
