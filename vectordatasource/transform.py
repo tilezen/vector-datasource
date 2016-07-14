@@ -3221,12 +3221,14 @@ class CSVMatcher(object):
             return _NotEqualsMatcher(typ(v[1:]))
         return _ExactMatcher(typ(v))
 
-    def __call__(self, properties, zoom):
+    def __call__(self, shape, properties, zoom):
         vals = []
         for key in self.keys:
-            # NOTE zoom is special cased
+            # NOTE zoom and geometrytype have special meaning
             if key == 'zoom':
                 val = zoom
+            elif key.lower() == 'geometrytype':
+                val = shape.type
             else:
                 val = properties.get(key)
             vals.append(val)
@@ -3270,7 +3272,7 @@ def csv_match_properties(ctx):
         return v
 
     for shape, props, fid in layer['features']:
-        m = matcher(props, zoom)
+        m = matcher(shape, props, zoom)
         if m is not None:
             k, v = m
             props[k] = _type_cast(v)

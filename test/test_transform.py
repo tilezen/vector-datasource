@@ -16,7 +16,8 @@ class BuildingsClassTest(unittest.TestCase):
 
     def _call_fut(self, props):
         z = -1
-        match_result = self.matcher(props, z)
+        shape = None
+        match_result = self.matcher(shape, props, z)
         if match_result is None:
             return None
         k, v = match_result
@@ -181,3 +182,34 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
         self._call_fut(feature_layers, zoom)
         features = feature_layers[0]['features']
         self.assertEquals(1, len(features))
+
+
+class SortKeyTest(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(SortKeyTest, self).__init__(*args, **kwargs)
+
+        from vectordatasource.transform import CSVMatcher
+        import os.path
+        landuse_path = os.path.join(
+            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_key',
+            'landuse.csv')
+        with open(landuse_path) as fh:
+            self.matcher = CSVMatcher(fh)
+
+    def test_geometry_type(self):
+        import shapely.geometry
+
+        shape = shapely.geometry.LineString([(0, 0), (1, 1)])
+        props = dict(kind='dam')
+        zoom = 16
+        sort_key_result = self.matcher(shape, props, zoom)
+        self.assertIsNotNone(sort_key_result)
+        _, sort_key = sort_key_result
+        self.assertEquals(int(sort_key), 263)
+
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (0, 1), (0, 0)])
+        sort_key_result = self.matcher(shape, props, zoom)
+        self.assertIsNotNone(sort_key_result)
+        _, sort_key = sort_key_result
+        self.assertEquals(int(sort_key), 223)
