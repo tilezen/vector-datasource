@@ -12,7 +12,7 @@ UPDATE
      historic = 'citywalls' OR
      man_made = 'snow_fence' OR
      waterway = 'dam')
-    AND COALESCE(mz_boundary_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_boundaries(planet_osm_polygon.*), 999);
+    AND COALESCE(mz_boundary_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_boundaries(planet_osm_line.*), 999);
 
 UPDATE
   planet_osm_line
@@ -22,4 +22,4 @@ UPDATE
      historic = 'citywalls' OR
      man_made = 'snow_fence' OR
      waterway = 'dam')
-    AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
+    AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_line.*), 999);
