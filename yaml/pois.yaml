@@ -278,9 +278,7 @@ filters:
     output: {kind: toilets}
   - filter: {barrier: gate}
     min_zoom: 15
-    output:
-      kind: gate
-      aeroway: {col: aeroway}
+    output: {kind: gate}
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output: {kind: toll_booth}

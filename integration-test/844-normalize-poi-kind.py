@@ -4,6 +4,12 @@ assert_has_feature(
     16, 10487, 25366, 'pois',
     { 'id': 1096088604, 'kind': 'aeroway_gate' })
 
+# Node: Gate 1 (2618197593)
+# http://www.openstreetmap.org/node/2618197593
+assert_has_feature(
+    16, 10309, 22665, 'pois',
+    { 'id': 2618197593, 'kind': 'gate', 'aeroway': type(None) })
+
 # Node: Lone Star Sports
 # http://www.openstreetmap.org/node/2122898936
 assert_has_feature(
