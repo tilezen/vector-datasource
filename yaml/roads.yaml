@@ -91,6 +91,12 @@ global:
       incline: {col: tags->incline}
       trail_visibility: {col: tags->trail_visibility}
       sac_scale: {col: tags->sac_scale}
+  - &ne_properties
+      name: {col: name}
+      namealt: {col: namealt}
+      namealtt: {col: namealtt}
+      labelrank: {col: labelrank}
+      level: {col: level}
 
 # name isn't really synthetic, but we use it from both the NE and OSM
 # tables, so to avoid including it twice we fake it as synthetic.
@@ -103,19 +109,67 @@ filters:
   # Natural Earth roads / ferries
   #
   #############################################################
+
   - filter:
-      featurecla: [Road, Ferry]
       scalerank: true
+      featurecla: Ferry
     min_zoom: scalerank
     table: ne
     output:
-      kind: {col: featurecla}
-      name: {col: name}
-      namealt: {col: namealt}
-      namealtt: {col: namealtt}
-      labelrank: {col: labelrank}
-      level: {col: level}
-      type: {col: type}
+      <<: *ne_properties
+      kind: ferry
+
+  - filter:
+      scalerank: true
+      featurecla: Road
+      expressway: 1
+    min_zoom: scalerank
+    table: ne
+    output:
+      <<: *ne_properties
+      kind: highway
+      kind_detail: motorway
+  - filter:
+      scalerank: true
+      featurecla: Road
+      type: [Major Highway, Beltway, Bypass]
+    min_zoom: scalerank
+    table: ne
+    output:
+      <<: *ne_properties
+      kind: highway
+      kind_detail: trunk
+  - filter:
+      scalerank: true
+      featurecla: Road
+      type: Secondary Highway
+    min_zoom: scalerank
+    table: ne
+    output:
+      <<: *ne_properties
+      kind: major_road
+      kind_detail: primary
+  - filter:
+      scalerank: true
+      featurecla: Road
+      type: Road
+    min_zoom: scalerank
+    table: ne
+    output:
+      <<: *ne_properties
+      kind: major_road
+      kind_detail: secondary
+  - filter:
+      scalerank: true
+      featurecla: Road
+      type: [Track, Unknown]
+    min_zoom: scalerank
+    table: ne
+    output:
+      <<: *ne_properties
+      kind: minor_road
+      kind_detail: tertiary
+
   #############################################################
   #
   # OSM highway
