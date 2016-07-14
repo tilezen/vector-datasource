@@ -17,3 +17,10 @@ UPDATE
   SET mz_places_min_zoom = NULL
   WHERE
     place IN ('borough', 'suburb', 'quarter') AND name IS NOT NULL;
+
+UPDATE
+  planet_osm_point
+  SET mz_places_min_zoom = mz_calculate_min_zoom_places(planet_osm_point.*)
+  WHERE
+    (highway = 'gate' OR amenity = 'picnic_site')
+    AND COALESCE(mz_places_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_places(planet_osm_point.*), 999);
