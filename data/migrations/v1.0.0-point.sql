@@ -11,3 +11,9 @@ UPDATE
   SET mz_places_min_zoom = mz_calculate_min_zoom_places(planet_osm_point.*)
   WHERE
     place = 'country' AND "name" IS NOT NULL;
+
+UPDATE
+  planet_osm_point
+  SET mz_places_min_zoom = NULL
+  WHERE
+    place IN ('borough', 'suburb', 'quarter') AND name IS NOT NULL;
