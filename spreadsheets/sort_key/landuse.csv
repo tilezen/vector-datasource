@@ -8,6 +8,7 @@ cutline,226
 groyne,225
 breakwater,224
 dam,223
+dam,263
 land,222
 footway,109
 tower,108
@@ -107,4 +108,8 @@ placeholder1,15
 rural,14
 urban,13
 urban area,12
+city_wall,264
+retaining_wall,265
+snow_fence,266
+fence,267
 *,11
