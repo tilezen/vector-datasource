@@ -2989,6 +2989,86 @@ def normalize_tourism_kind(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
+def build_fence(ctx):
+    """
+    Some landuse polygons have an extra barrier fence tag, in thouse cases we
+    want to create an additional feature for the fence.
+
+    See https://github.com/mapzen/vector-datasource/issues/857 for more
+    details.
+    """
+    feature_layers = ctx.feature_layers
+    zoom = ctx.tile_coord.zoom
+    base_layer = ctx.params.get('base_layer')
+    new_layer_name = ctx.params.get('new_layer_name')
+    prop_transform = ctx.params.get('prop_transform')
+    assert base_layer, 'Missing base_layer parameter'
+    start_zoom = ctx.params.get('start_zoom', 16)
+
+    layer = None
+
+    # don't start processing until the start zoom
+    if zoom < start_zoom:
+        return layer
+
+    # search through all the layers and extract the one
+    # which has the name of the base layer we were given
+    # as a parameter.
+    layer = _find_layer(feature_layers, base_layer)
+
+    # if we failed to find the base layer then it's
+    # possible the user just didn't ask for it, so return
+    # an empty result.
+    if layer is None:
+        return None
+
+    if prop_transform is None:
+        prop_transform = {}
+
+    features = layer['features']
+
+    new_features = list()
+    # loop through all the polygons, if it's a fence, duplicate it.
+    for feature in features:
+        shape, props, fid = feature
+
+        barrier = props.pop('barrier', None)
+
+        if barrier is not None:
+            if barrier == 'fence':
+                # filter only linestring-like objects. we don't
+                # want any points which might have been created
+                # by the intersection.
+                filtered_shape = _filter_geom_types(shape, _POLYGON_DIMENSION)
+
+                if not filtered_shape.is_empty:
+                    new_props = _make_new_properties(props, prop_transform)
+                    new_props['kind'] = 'fence'
+                    new_features.append((filtered_shape, new_props, fid))
+
+    if new_layer_name is None:
+        # no new layer requested, instead add new
+        # features into the same layer.
+        layer['features'].extend(new_features)
+
+        return layer
+
+    else:
+        # make a copy of the old layer's information - it
+        # shouldn't matter about most of the settings, as
+        # post-processing is one of the last operations.
+        # but we need to override the name to ensure we get
+        # some output.
+        new_layer_datum = layer['layer_datum'].copy()
+        new_layer_datum['name'] = new_layer_name
+        new_layer = layer.copy()
+        new_layer['layer_datum'] = new_layer_datum
+        new_layer['features'] = new_features
+        new_layer['name'] = new_layer_name
+
+        return new_layer
+
+
 def normalize_social_kind(shape, properties, fid, zoom):
     """
     Social facilities have an `amenity=social_facility` tag, but more
@@ -3221,12 +3301,14 @@ class CSVMatcher(object):
             return _NotEqualsMatcher(typ(v[1:]))
         return _ExactMatcher(typ(v))
 
-    def __call__(self, properties, zoom):
+    def __call__(self, shape, properties, zoom):
         vals = []
         for key in self.keys:
-            # NOTE zoom is special cased
+            # NOTE zoom and geometrytype have special meaning
             if key == 'zoom':
                 val = zoom
+            elif key.lower() == 'geometrytype':
+                val = shape.type
             else:
                 val = properties.get(key)
             vals.append(val)
@@ -3270,7 +3352,7 @@ def csv_match_properties(ctx):
         return v
 
     for shape, props, fid in layer['features']:
-        m = matcher(props, zoom)
+        m = matcher(shape, props, zoom)
         if m is not None:
             k, v = m
             props[k] = _type_cast(v)

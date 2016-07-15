@@ -29,6 +29,7 @@ SELECT
     "natural",
     tags->'attraction' AS attraction,
     tags->'zoo' AS zoo,
+    barrier,
     mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
     %#tags AS tags
 FROM
@@ -126,6 +127,7 @@ SELECT
   NULL AS "natural",
   NULL AS attraction,
   NULL AS zoo,
+  NULL AS barrier,
   NULL AS mz_is_building,
   NULL AS tags
 FROM

@@ -177,6 +177,22 @@ post_process:
         14: { area:  100, volume: 200000 }
         15: { area:  100, volume: 100000 }
 
+  - fn: vectordatasource.transform.build_fence
+    params:
+      base_layer: landuse
+      start_zoom: 16
+      prop_transform:
+        kind: true
+        id: true
+        source: true
+        area: true
+        min_zoom: true
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: landuse
+      start_zoom: 4
+      properties: [barrier]
+
   # sort key
   - fn: vectordatasource.transform.csv_match_properties
     resources:
