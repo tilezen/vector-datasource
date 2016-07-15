@@ -2994,8 +2994,9 @@ def build_fence(ctx):
     Some landuse polygons have an extra barrier fence tag, in thouse cases we
     want to create an additional feature for the fence.
 
-    See https://github.com/mapzen/vector-datasource/issues/857 for more details.
-    """ 
+    See https://github.com/mapzen/vector-datasource/issues/857 for more
+    details.
+    """
     feature_layers = ctx.feature_layers
     zoom = ctx.tile_coord.zoom
     base_layer = ctx.params.get('base_layer')
@@ -3021,21 +3022,17 @@ def build_fence(ctx):
     if layer is None:
         return None
 
-
     if prop_transform is None:
         prop_transform = {}
 
     features = layer['features']
 
     new_features = list()
-    # loop through all the polygons, 
-    # if it's a fence, duplicate it.
+    # loop through all the polygons, if it's a fence, duplicate it.
     for feature in features:
         shape, props, fid = feature
 
         barrier = props.pop('barrier', None)
-
-        #print props['kind'], barrier
 
         if barrier is not None:
             if barrier == 'fence':
@@ -3070,6 +3067,7 @@ def build_fence(ctx):
         new_layer['name'] = new_layer_name
 
         return new_layer
+
 
 def normalize_social_kind(shape, properties, fid, zoom):
     """
