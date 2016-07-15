@@ -190,8 +190,7 @@ post_process:
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: landuse
-      start_zoom: 16
-      #end_zoom: 20
+      start_zoom: 4
       properties: [barrier]
 
   # sort key
