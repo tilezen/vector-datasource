@@ -24,7 +24,8 @@ UPDATE
      barrier IN ('city_wall', 'retaining_wall', 'fence') OR
      historic = 'citywalls' OR
      man_made = 'snow_fence' OR
-     waterway = 'dam')
+     waterway = 'dam' OR
+     "natural" IN ('forest', 'park'))
     AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
 
 UPDATE
