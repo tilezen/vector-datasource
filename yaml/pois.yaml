@@ -147,15 +147,17 @@ filters:
   - filter: {natural: beach}
     min_zoom: LEAST(zoom + 3.20, 14)
     output: {kind: beach}
-  - filter: {tags->rental: ski}
+
+  - filter:
+      any:
+        tags->rental: ski
+        amenity: ski_rental
     min_zoom: LEAST(zoom + 1.27, 17)
-    output: {kind: ski}
+    output: {kind: ski_rental}
+
   - filter: {shop: ski}
     min_zoom: LEAST(zoom + 1.27, 17)
     output: {kind: ski}
-  - filter: {amenity: ski_rental}
-    min_zoom: LEAST(zoom + 1.27, 17)
-    output: {kind: ski_rental}
   - filter: {amenity: ski_school}
     min_zoom: LEAST(zoom + 2.30, 15)
     output: {kind: ski_school}
@@ -168,8 +170,7 @@ filters:
         amenity: gym
     min_zoom: LEAST(zoom + 3.98, 17)
     output: {kind: fitness}
-  - filter:
-      leisure: fitness_station
+  - filter: {leisure: fitness_station}
     min_zoom: LEAST(zoom + 3.98, 17)
     output: {kind: fitness_station}
   - filter: {leisure: sports_centre}
@@ -259,18 +260,16 @@ filters:
     min_zoom: 17
     output:
       kind: {col: amenity}
-  - filter: {amenity: boat_rental}
+
+  - filter:
+      any:
+        amenity: boat_rental
+        shop: boat_rental
+        tags->rental: boat
+        all: {shop: boat, tags->rental: 'yes'}
     min_zoom: 16
     output: {kind: boat_rental}
-  - filter: {shop: boat_rental}
-    min_zoom: 16
-    output: {kind: boat_rental}
-  - filter: {tags->rental: boat}
-    min_zoom: 16
-    output: {kind: boat_rental}
-  - filter: {shop: boat, tags->rental: 'yes'}
-    min_zoom: 16
-    output: {kind: boat_rental}
+
   - filter: {emergency: phone}
     min_zoom: 18
     output: {kind: phone}
@@ -279,22 +278,13 @@ filters:
     output: {kind: toilets}
   - filter: {barrier: gate}
     min_zoom: 15
-    output:
-      kind: gate
-      aeroway: {col: aeroway}
+    output: {kind: gate}
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output: {kind: toll_booth}
-  - filter: {craft: sawmill}
+  - filter: {highway: mini_roundabout}
     min_zoom: 15
-    output: {kind: sawmill}
-  - filter:
-      highway: [gate, mini_roundabout]
-    min_zoom: 15
-    output:
-      kind: {col: highway}
-      aeroway:
-        expr: CASE WHEN highway='gate' THEN aeroway END
+    output: {kind: mini_roundabout}
   - filter: {lock: 'yes'}
     min_zoom: 15
     output: {kind: lock}
@@ -349,15 +339,14 @@ filters:
   - filter: {tourism: alpine_hut}
     min_zoom: 15
     output: {kind: alpine_hut}
-  - filter:
-      aeroway: [helipad, gate]
+  - filter: {aeroway: gate}
     min_zoom: 16
-    output:
-      kind: {col: aeroway}
-      aeroway:
-        expr: CASE WHEN aeroway='gate' THEN 'gate' END
+    output: {kind: aeroway_gate}
+  - filter: {aeroway: helipad}
+    min_zoom: 16
+    output: {kind: helipad}
   - filter:
-      amenity: [bus_station, car_sharing, picnic_site, recycling, shelter]
+      amenity: [bus_station, car_sharing, recycling, shelter]
     min_zoom: 16
     output:
       kind: {col: amenity}
@@ -366,11 +355,6 @@ filters:
     min_zoom: 16
     output:
       kind: {col: barrier}
-  - filter:
-      craft: [brewery, winery, sawmill]
-    min_zoom: 16
-    output:
-      kind: {col: craft}
   - filter: {highway: ford}
     min_zoom: 16
     output: {kind: ford}
@@ -432,7 +416,7 @@ filters:
     output:
       kind: walking_junction
       ref: {col: tags->iwn_ref}
-      walking_network: rwn
+      walking_network: iwn
   - filter:
       tags->nwn_ref: true
     min_zoom: 16
@@ -459,12 +443,9 @@ filters:
     min_zoom: 16
     output:
       kind: {col: tourism}
-  - filter: {amenity: theatre}
-    min_zoom: 16
-    output: {kind: theatre}
   - filter:
       amenity: [atm, bus_stop, drinking_water, emergency_phone,
-        parking, post_box, telephone, toilets]
+        parking, post_box, telephone]
     min_zoom: 17
     output:
       kind: {col: amenity}
@@ -533,8 +514,7 @@ filters:
     output: {kind: cycle_barrier}
   - filter:
       shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
-        dry_cleaning, fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone,
-        optician, pet]
+        fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone, optician, pet]
     min_zoom: 17
     output:
       kind: {col: shop}
@@ -593,7 +573,7 @@ filters:
       kind: {col: tags->whitewater}
   - filter: {shop: gas}
     min_zoom: 18
-    output: {kind: gas}
+    output: {kind: gas_canister}
   - filter: {aerialway: pylon}
     min_zoom: 17
     output: {kind: pylon}
@@ -645,9 +625,6 @@ filters:
   - filter: {amenity: boat_storage}
     min_zoom: 17
     output: {kind: boat_storage}
-  - filter: {amenity: boat_storage}
-    min_zoom: 17
-    output: {kind: boat_storage}
   - filter: {waterway: dam}
     min_zoom: GREATEST(12, LEAST(zoom + 1, 14))
     output: {kind: dam}
@@ -663,9 +640,6 @@ filters:
   - filter: {leisure: swimming_area}
     min_zoom: 16
     output: {kind: swimming_area}
-  - filter: {leisure: firepit}
-    min_zoom: 18
-    output: {kind: firepit}
   - filter: {leisure: firepit}
     min_zoom: 18
     output: {kind: firepit}

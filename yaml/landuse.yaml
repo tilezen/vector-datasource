@@ -11,7 +11,10 @@ filters:
   - filter: {leisure: nature_reserve}
     min_zoom: zoom
     output: {kind: nature_reserve}
-  - filter: {leisure: park}
+  - filter:
+      any:
+        leisure: park
+        landuse: park
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: park}
   - filter: {leisure: garden}
@@ -35,9 +38,6 @@ filters:
   - filter: {leisure: common}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: common}
-  - filter: {landuse: park}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: park}
   - filter: {landuse: forest}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: forest}
@@ -103,7 +103,7 @@ filters:
     output: {kind: winter_sports}
   - filter: {natural: wood}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: wood}
+    output: {kind: natural_wood}
   - filter: {natural: land}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: land}
@@ -119,6 +119,12 @@ filters:
   - filter: {natural: beach}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: beach}
+  - filter: {natural: forest}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: natural_forest}
+  - filter: {natural: park}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: natural_park}
   - filter:
       highway: pedestrian
       way_area: {expr: "way_area > 0"}
