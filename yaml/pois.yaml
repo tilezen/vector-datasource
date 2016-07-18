@@ -438,8 +438,11 @@ filters:
       kind: walking_junction
       ref: {col: tags->lwn_ref}
       walking_network: lwn
+  - filter: {tourism: camp_site}
+    min_zoom: GREATEST(13, LEAST(zoom + 4.9, 16))
+    output: {kind: camp_site}
   - filter:
-      tourism: [camp_site, information, viewpoint]
+      tourism: [information, viewpoint]
     min_zoom: 16
     output:
       kind: {col: tourism}
