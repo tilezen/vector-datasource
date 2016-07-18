@@ -381,6 +381,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
                     typ = 'smallint'
                 elif column == 'way':
                     typ = 'geometry'
+                elif matcher.table == 'ne' and column == 'expressway':
+                    typ = 'smallint'
                 else:
                     typ = 'text'
                 key = Key(
