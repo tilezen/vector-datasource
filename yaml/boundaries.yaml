@@ -1,75 +1,77 @@
 filters:
+
+  # osm
   - filter:
-      admin_level: ['2', '4']
-      boundary: administrative
-      'tags->boundary:type': aboriginal_lands
+      any:
+        all:
+          boundary: administrative
+          'tags->boundary:type': aboriginal_lands
+        boundary: aboriginal_lands
     min_zoom: 8
-    output: {kind: aboriginal_lands, admin_level: {col: admin_level}}
-    table: osm
-  - filter:
-      admin_level: ['6', '8']
-      boundary: administrative
-      'tags->boundary:type': aboriginal_lands
-    min_zoom: 10
-    output: {kind: aboriginal_lands, admin_level: {col: admin_level}}
+    output:
+      kind: aboriginal_lands
+      kind_detail:
+        expr: CASE WHEN admin_level IN ('2', '4', '6', '8') THEN admin_level END
     table: osm
   - filter: {admin_level: '2', boundary: administrative}
     min_zoom: 8
-    output: {kind: country, admin_level: {col: admin_level}}
+    output: {kind: country, kind_detail: '2'}
     table: osm
   - filter: {admin_level: '4', boundary: administrative}
     min_zoom: 8
-    output: {kind: state, admin_level: {col: admin_level}}
+    output: {kind: region, kind_detail: '4'}
     table: osm
   - filter: {admin_level: '6', boundary: administrative}
     min_zoom: 10
-    output: {kind: county, admin_level: {col: admin_level}}
+    output: {kind: county, kind_detail: '6'}
     table: osm
   - filter: {admin_level: '8', boundary: administrative}
     min_zoom: 10
-    output: {kind: municipality, admin_level: {col: admin_level}}
+    output: {kind: locality, kind_detail: '8'}
     table: osm
   - filter: {featurecla: 1st Order Admin Lines}
     min_zoom: 0
-    output: {kind: state, admin_level: '4'}
+    output: {kind: region, kind_detail: '4'}
     table: ne
+
+  # ne
   - filter:
       featurecla:
         - Admin-1 boundary
         - Admin-1 statistical boundary
         - Admin-1 statistical meta bounds
     min_zoom: 0
-    output: {kind: state, admin_level: '4'}
+    output: {kind: region, kind_detail: '4'}
     table: ne
   - filter: {featurecla: Admin-1 region boundary}
     min_zoom: 0
-    output: {kind: macroregion}
+    output: {kind: macroregion, kind_detail: '3'}
     table: ne
   - filter: {featurecla: Disputed (please verify)}
     min_zoom: 0
-    output: {kind: disputed}
+    output: {kind: disputed, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Indefinite (please verify)}
     min_zoom: 0
-    output: {kind: indefinite}
+    output: {kind: indefinite, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Indeterminant frontier}
     min_zoom: 0
-    output: {kind: indeterminate}
+    output: {kind: indeterminate, kind_detail: '2'}
     table: ne
   - filter: {featurecla: International boundary (verify)}
     min_zoom: 0
-    output: {kind: country, admin_level: '2'}
+    output: {kind: country, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Lease limit}
     min_zoom: 0
-    output: {kind: lease_limit}
+    output: {kind: lease_limit, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Line of control (please verify)}
     min_zoom: 0
-    output: {kind: line_of_control}
+    output: {kind: line_of_control, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Overlay limit}
     min_zoom: 0
-    output: {kind: overlay_limit}
+    output: {kind: overlay_limit, kind_detail: '2'}
     table: ne
