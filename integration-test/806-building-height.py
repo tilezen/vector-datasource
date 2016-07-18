@@ -1,8 +1,8 @@
-# Way: R5 (161390790)
-# https://www.openstreetmap.org/way/161390790
+# Way: R5 Tower A (431358377)
+# https://www.openstreetmap.org/way/431358377
 assert_has_feature(
     16, 55897, 25449, 'buildings',
-    { 'id': 161390790, 'height': 77.0, 'kind': 'office',
+    { 'id': 431358377, 'height': 77.0, 'kind': 'office',
       'building:levels': type(None), 'building_levels': type(None) })
 
 # http://www.openstreetmap.org/way/336433763
