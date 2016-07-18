@@ -366,3 +366,6 @@ filters:
   - filter: {barrier: fence}
     min_zoom: 16
     output: {kind: fence}
+  - filter: {tourism: camp_site}
+    min_zoom: GREATEST(LEAST(zoom, 16), 13)
+    output: {kind: camp_site}
