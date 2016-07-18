@@ -3,8 +3,7 @@ UPDATE
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
   WHERE
     (barrier = 'toll_booth' OR
-     highway IN ('services', 'rest_area') OR
-     tourism = 'camp_site')
+     highway IN ('services', 'rest_area'))
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_point.*), 999);
 
 UPDATE
@@ -25,4 +24,3 @@ UPDATE
   WHERE
     (highway = 'gate' OR amenity = 'picnic_site')
     AND COALESCE(mz_places_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_places(planet_osm_point.*), 999);
-    
