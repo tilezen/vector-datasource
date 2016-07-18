@@ -3,10 +3,11 @@ assert_has_feature(
     16, 10550, 25297, 'pois',
     { 'kind': 'bbq', 'min_zoom': 18 })
 
-#http://www.openstreetmap.org/node/3497698404
+# Node: Valencia Cyclery (3443701422)
+# http://www.openstreetmap.org/node/3443701422
 assert_has_feature(
-    16, 10471, 25343, 'pois',
-    { 'kind': 'bicycle_repair_station', 'min_zoom': 18 })
+    16, 10481, 25335, 'pois',
+    { 'id': 3443701422, 'kind': 'bicycle_repair_station', 'min_zoom': 18 })
 
 #http://www.openstreetmap.org/node/2910259124
 assert_has_feature(
