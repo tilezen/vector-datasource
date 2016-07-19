@@ -126,11 +126,23 @@ If you propose to work on an issue in the Backlog but what to confirm some detai
 
 ### 2. Create a new branch
 
-Make sure your `master` branch is up-to-date with a `git pull`. Then...
+Ensure you're on the master branch to establish a clean history:
 
-Checkout a new branch, name it something descriptive like the `yourname/#issue-issue title`.
+```bash
+git checkout master
+```
 
-    git checkout -b olga/713-urban-areas
+Ensure your `master` branch is up-to-date with the server:
+
+```bash
+git pull
+```
+
+Then checkout a new branch by naming it something descriptive like the `yourname/#issue-issue title`.
+
+```bash
+git checkout -b olga/875-camp-ground-zoom
+```
 
 ### 3. Create a new test
 
@@ -139,6 +151,9 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 - Create new test file
 - You'll need a specific OpenStreetMap feature ID to test against
 - You'll need a specific map tile (0/0/0) to test with
+- Ensure that test data is loaded into your local database
+- Ensure tileserver is running!
+- Run the test
 
 <div class='alert-message'>Remember to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
 
@@ -151,13 +166,35 @@ assert_has_feature(
    { 'kind': 'camp_site'})
 ```
 
+**Missing a database feature?**
+
+Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
+
+To load that feature, specify the URL and the database to import into:
+
+```bash
+./test-data-update-osm.sh http://www.openstreetmap.org/way/237314510 osm
+```
+
+**Ensure tileserver is running locally:**
+
+Launch tileserver from within the tileserver directory in a new terminal window. As tileserver is usually installed alongside vector-datasource `cd ../tileserver` will usually get you there.
+
+
+```bash
+python tileserver/__init__.py config.yaml
+```
+
 **Example test run:**
 
-And run the test to make sure it **fails** using the existing config:
+Back in the `vector-datasource` directory in your first terminal window, run your new test to make sure it **fails** using the existing config:
 
-    python integration-test.py local integration-test/160-motorway-junctions.py
 
-Once it fails, we'll update our logic in the next section so it passes.
+```bash
+python integration-test.py local integration-test/875-camp-grounds-zoom.py
+```
+
+Once it fails, we'll update our logic in step 4 below so it passes.
 
 <div class='alert-message'>So what's happening here? The <code>integration-test.py</code> script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
 
@@ -165,16 +202,17 @@ Not the gory details...
 
 #### Find example feature in the raw data to test against
 
-There are two options to identify test features.
+There are two options to identify test features:
 
-1. **Query your local database** using psql on the command line or PGAdmin app.
-2. **Query the remote OpenStreetMap database** using [Overpass Turbo](http://overpass-turbo.eu/).
+1. **Query local database** using psql on the command line or PGAdmin app.
+2. **Query remote OpenStreetMap database** using [Overpass Turbo](http://overpass-turbo.eu/).
 
 Confused about which tags to use? Read up on the OSM wiki ([example](https://taginfo.openstreetmap.org/tags/highway=services)) and confirm actual usage in TagInfo.
 
 ##### Overpass Turbo example
 
 To find an example feature in OpenStreetMap search [overpass-turbo](http://overpass-turbo.eu/) for specific tags. Here's a sample query (assuming you've zoomed the map to an interesting area like the greater San Francisco metropolitan area):
+
 
 ```
 /*
@@ -196,21 +234,19 @@ out body;
 out skel qt;
 ```
 
-NOTE: Update the above example for your tag (eg: `"highway"="rest_area"`)!
-
-Once you find a result you like, click on it to pull up the info window, and follow the view on OSM.org link like so:
+<div class='alert-message'>NOTE: Update the above example for your tag (eg: `"highway"="rest_area"`)!</div>
 
 ##### Determine which tile the feature should appear in for your test
 
-Following the link from Overpass, like:
+Once you find a result you like, click on it's map marker to pull up the info window. Following the link from Overpass take you to a page like:
 
 - http://www.openstreetmap.org/node/1114457089
 
-You'll load a new page. Zoom the map out to the desired "min_zoom" of the feature, then right click on the map near the icon, but not on the icon. Then Inspect element, and look for the `leaflet-map-pane` and follow that down till you find the raster tile.
+On that new web page, zoom the map out to the desired **min zoom** of the feature (it's usually specified in the Issue description in Github), then right click on the map near the marker (but not on the marker!). Then you'll use your web browsers debug tools to "Inspect element" and look for the `leaflet-map-pane` and follow that down till you find the named raster tile file which encodes the tile coordinate.
 
 ##### Alternative method if feature is already in Mapzen tiles
 
-Use one of the Mapzen house styles to determine the tile.
+Use one of the Mapzen house styles, like Bubble Wrap, to determine the tile:
 
 - http://tangrams.github.io/bubble-wrap/#7/37.606/-121.943
 
@@ -220,7 +256,7 @@ Click on a feature to "view more", then click "view tile data".
 
 <img width="372" alt="screen shot 2016-07-18 at 18 07 14" src="https://cloud.githubusercontent.com/assets/853051/16935232/8fe83c0e-4d12-11e6-86f7-b16eebc22f84.png">
 
-If you're modifying a feature it can be helpful to search in the JSON response for the thing you want to change to confirm it's the right tile. If you're adding a new feature, you could search for something you know should be in the tile already to confirm you got the right one.
+If you're modifying a feature, it can be helpful to search in the JSON response for the thing you want to change to confirm it's the right tile. If you're adding a new feature, you could search for something you know should be in the tile already to confirm you got the right one.
 
 <div class='alert-message'>It's helpful to install a browser extension to view the JSON formatted. <a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">jsonview</a> for Chrome is pretty good.</div>
 
@@ -228,57 +264,62 @@ If you're modifying a feature it can be helpful to search in the JSON response f
 
 - http://vector.mapzen.com/osm/all/7/20/49.topojson
 
-The tests require this to be formatted like:
+But the tests require this to be formatted like:
 
 - `7, 20, 49`
 
-#### Missing a database feature?
-
-Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
-
-To load that feature, specify the URL and the database to import into:
-
-    ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
-
 ### 4. Edit database &/or query logic
 
-Tk tk tk intro
+Edit the YAML file corresponding to the layer. In this case we're modifying the `landuse.yaml` to add a new filter that looks for OpenStreetMap feature tagged `tourism=camp_site` and assigns them a `min_zoom` based on the feature area of at least 16 but up to zoom 13 depending on the feature's area and assigning a Tilezen kind of **camp_site**.
+
+
+```yaml
+- filter: {tourism: camp_site}
+  min_zoom: GREATEST(LEAST(zoom, 16), 13)
+  output: {kind: camp_site}
+```
 
 #### Update the database properties
 
-Once you make your edits to the YAML files you need to update the database. To recreate SQL functions in Postgres run:
+Once you make your edits to the YAML file you need to update the database. To recreate SQL functions in Postgres run:
 
-    cd data/migrations && python create-sql-functions.py | psql osm
 
-Because some properties in the database are pre-computed, we need to update records to use the new functions. We call this "data migration", see some examples below.
+```bash
+cd data/migrations && python create-sql-functions.py | psql osm
+```
 
-1. Prototype it in PGAdmin
-2. Record it in the migration SQL files, see later step
+Because some properties (like `min_zoom`) in the database are pre-computed, we need to update records to recalculate that using the updated functions. We call this "data migration", see some examples below.
+
+1. Prototype migration in PGAdmin (this step)
+2. Update data migration SQL files for the release (see step 7 below)
 
 <div class='alert-message'>Advanced topic: if you modify any other raw functions in the data directory, you'll also need to run `psql -f data/functions.sql osm`.</div>
 
 #### Update the query configuration
 
-Tk tk tk body
-
-Sometimes you'll want to investigate features in the database:
+Continuing our `camp_site` example from the previous section in Postgres run:
 
 ```sql
-SELECT name, height, tags from planet_osm_point
-  WHERE waterway = 'waterfall' AND height IS NOT NULL LIMIT 100;
+SET
+  mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*),
+  mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+WHERE
+  tourism = 'camp_site';
 ```
+
+##### Debugging filters
 
 Sometimes you need to debug why a feature appears one of multiple possible representations:
 
 ```sql
 SELECT
-  osm_id, name, place, mz_earth_min_zoom, mz_places_min_zoom from planet_osm_point where osm_id
-IN (3178316462, 358955020, 358796350, 358761955, 358768646, 358795646)
-ORDER BY
-  osm_id;
+  osm_id, name, mz_landuse_min_zoom, mz_pois_min_zoom
+FROM planet_osm_polygon
+WHERE
+  osm_id IN (237314510, 417405356)
 ```
 
-If you have a continent or planet sized database sometimes it's helpful to preview the changes in a smaller area of interest. For example: roads using a smaller viewport in latitude & longitude to Web Mercator meters:
+If you have a continent or planet sized database sometimes it's helpful to preview the changes in a smaller area of interest. For example: roads using a smaller viewport in latitude & longitude coordinates to Web Mercator meters:
 
 ```sql
 UPDATE planet_osm_line
@@ -290,11 +331,11 @@ UPDATE planet_osm_line
 
 ### 5. Verify the new logic by running the test
 
-This step is not necessary if only database properties were changed.
-
 Run the test, hopefully it passes now!
 
-    python integration-test.py local integration-test/160-motorway-junctions.py
+```bash
+python integration-test.py local integration-test/875-camp-grounds-zoom.py
+```
 
 **Example output:**
 
@@ -320,13 +361,13 @@ You can investigate why the test failed by printing out the full debug:
 cat test.log
 ```
 
-<div class='alert-message'>NOTE: It's best practice to run your own test, and confirm that all other tests are still passing before submitting a PR. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
+<div class='alert-message'>NOTE: It's best practice to run your own test. Once you've done that, also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
 
 #### Some tests require tileserver restart
 
-A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart TileServer to reload this file.
+A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart TileServer to reload this file (and related `jinja` files).
 
-Kill tileserver with a `contrl-c` keyboard press in terminal.
+First, switch to the Terminal session where tileserver is running and kill it with a `contrl-c` keyboard press.
 
 Then relaunch tileserver from within the tileserver directory:
 
@@ -334,27 +375,55 @@ Then relaunch tileserver from within the tileserver directory:
 python tileserver/__init__.py config.yaml
 ```
 
-Then run your test like in the previous step.
+Then run your test starting at the top of step 5 above.
 
 ### 6. Perform any modifications, as necessary
 
-Rinse and repeat, rewrite your code.
+Rinse and repeat, rewrite your code. Don't be afraid to ask for help!
 
 ### 7. Update data migrations
 
-Once you've finished testing your new database logic in the steps above you need to record that that same SQL in modified form in `data/migrations/` to ensure someone with an earlier database can catch up with you. (They are reset for each release.)
+Once you've finished testing your new database logic in step 4 above you need to record that that same SQL in modified form in `data/migrations/` to ensure someone with an earlier database configuration can catch up with you. (Migrations are reset for each Tilezen release.)
 
-OpenStreetMap related migrations:
+Continuing the `camp_site` example:
+
+```sql
+UPDATE
+   planet_osm_polygon
+    SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
+    WHERE
+     (barrier = 'toll_booth' OR
+      highway IN ('services', 'rest_area') OR
+      tourism = 'camp_site')
+      AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_polygon.*), 999);
+
+UPDATE
+   planet_osm_polygon
+   SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+   WHERE
+     (highway IN  ('services', 'rest_area') OR
+      barrier IN ('city_wall', 'retaining_wall', 'fence') OR
+      historic = 'citywalls' OR
+      man_made = 'snow_fence' OR
+      waterway = 'dam' OR
+      tourism = 'camp_site' OR
+      "natural" IN ('forest', 'park'))
+      AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
+```
+
+<div class='alert-message'>NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
+
+#### Migration details
+
+OpenStreetMap related migrations are recorded in the following files:
 
 * `v1.0.0-point.sql`
 * `v1.0.0-line.sql`
 * `v1.0.0-polygon.sql`
 
-Migrations for other data sources like Natural Earth and Who's On First:
+Migrations for other data sources like Natural Earth and Who's On First go in:
 
 * `v1.0.0-other-tables.sql`
-
-<div class='alert-message'>NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
 
 #### Example database SQL
 
@@ -399,7 +468,7 @@ UPDATE planet_osm_polygon
 
 <div class='alert-message'>Some features can have a POI "label" and a landuse polygon, so calculate both!</div>
 
-When we calculate both the POIs and the landuse min zoom...
+When we calculate both the POIs and the landuse min zoom:
 
 ```sql
 UPDATE planet_osm_polygon
@@ -410,11 +479,17 @@ UPDATE planet_osm_polygon
 
 ### 8. Update documentation
 
-Everything good? time to update the docs!
+Everything good? time to update the docs! Generally this is in the [docs/layer.md](docs/layer.md) file in the various layer sections to specify new properties and new kind values.
 
-Project documentation is [publicly accessable](https://mapzen.com/documentation/vector-tiles/layers/), they document the API promises the service makes.
+Since `camp_site` was already in the `pois` layer, we only need to document it's addition to the list of `landuse` kinds:
 
-Tk tk tk
+```
+  * `bridge`
+ +* `camp_site`
+  * `caravan_site`
+```
+
+<div class='alert-message'>Project documentation is [publicly accessable](https://mapzen.com/documentation/vector-tiles/layers/), they document the API promises the service makes.</div>
 
 ### 9. Push your local branch to the server
 
@@ -458,9 +533,9 @@ NOTE: Your first push for a branch might require additional details:
 
 ### 10. Submit a Pull Request (PR)
 
-Back on Github.com load the project page and notice there's a button suggested you create a PR for your active branch. Press that green button.
+Back on Github.com load the project page and notice there's a button suggested you create a PR for your active branch. Press that green button. Need help? [Github docs](https://help.github.com/articles/creating-a-pull-request/) have you covered.
 
-In the PR form, give it a good title that ties in with the original issue title. In the comment section summarize the work you did to resolve the issue and indicate you added tests and updated the documentation.
+In the PR form, give it a good title that ties in with the original Issue title. In the comment section summarize the work you did to resolve the issue and indicate you added tests, data migrations, and updated the documentation.
 
 A Tilezen team member will review the PR for you, either merging it right away or following up with questions.
 
