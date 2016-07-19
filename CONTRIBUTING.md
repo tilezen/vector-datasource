@@ -382,6 +382,24 @@ For each, commit using a specific commit message. The first should use the "Conn
 
 NOTE: Subsequent commit messages can be more generic.
 
+Make sure you have a clean merge by pulling down the lastest master by checking out master:
+
+    git checkout master
+
+Fetch latest changes from the server:
+
+    git pull origin master
+
+Go back to your branch:
+
+    git checkout olga/713-urban-areas
+
+Rebase (compare) it with master:
+
+    git rebase master
+
+And resolve any funk, as necessary.
+
 Then push to the server so other people can see your work. (If this is a large change over multiple days, please push the server once a day so your work is backed up.)
 
     git push
