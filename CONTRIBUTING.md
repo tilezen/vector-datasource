@@ -239,7 +239,7 @@ Files in the `data/migrations/` should be updated to ensure someone with an earl
 
 Here's an example out of the `v1.0.0-point.sql` file:
 
-```
+```sql
 UPDATE
   planet_osm_point
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
@@ -265,7 +265,7 @@ UPDATE planet_osm_line
 
 Updating a simple **line** feature:
 
-```
+```sql
 UPDATE planet_osm_line
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_line.*)
   WHERE
@@ -274,7 +274,7 @@ UPDATE planet_osm_line
 
 Updating a simple **point** feature:
 
-```
+```sql
 UPDATE planet_osm_point
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
   WHERE shop IN ('outdoor');
@@ -282,7 +282,7 @@ UPDATE planet_osm_point
 
 Updating a simple **polygon** feature:
 
-```
+```sql
 UPDATE planet_osm_polygon
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
   WHERE shop IN ('outdoor');
@@ -292,7 +292,7 @@ Some features can have a POI "label" and a landuse polygon, so calculate both:
 
 Same as above:
 
-```
+```sql
 UPDATE planet_osm_polygon
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
   WHERE shop IN ('outdoor');
@@ -300,7 +300,7 @@ UPDATE planet_osm_polygon
 
 Also adding:
 
-```
+```sql
 UPDATE planet_osm_polygon
   SET mz_poi_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
   WHERE shop IN ('outdoor');
@@ -308,14 +308,14 @@ UPDATE planet_osm_polygon
 
 Sometimes you'll want to investigate features in the database:
 
-```
+```sql
 SELECT name, height, tags from planet_osm_point
   WHERE waterway = 'waterfall' AND height IS NOT NULL LIMIT 100;
 ```
 
 Sometimes you need to debug why a feature appears one of multiple possible representations:
 
-```
+```sql
 SELECT
   osm_id, name, place, mz_earth_min_zoom, mz_places_min_zoom from planet_osm_point where osm_id
 IN (3178316462, 358955020, 358796350, 358761955, 358768646, 358795646)
