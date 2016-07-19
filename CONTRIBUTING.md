@@ -219,7 +219,7 @@ Once you make your edits to the YAML files you need to update the database. To r
 Because some properties in the database are pre-computed, we need to update records to use the new functions. We call this "data migration", see some examples below.
 
 1. Prototype it in PGAdmin
-2. Record it in the migration SQL files
+2. Record it in the migration SQL files, see later step
 
 <div class='alert-message'>Advanced topic: if you modify any other raw functions in the data directory, you'll also need to run `psql -f data/functions.sql osm`.</div>
 
@@ -244,7 +244,15 @@ ORDER BY
   osm_id;
 ```
 
+If you have a continent or planet sized database sometimes it's helpful to preview the changes in a smaller area of interest. For example: roads using a smaller viewport in latitude & longitude to Web Mercator meters:
 
+```sql
+UPDATE planet_osm_line
+  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id)
+  WHERE
+    highway IN ('pedestrian', 'living_street', 'track', 'path', 'cycleway', 'footway', 'steps') AND
+    way && ST_Transform(ST_SetSrid(ST_MakeBox2D(ST_MakePoint(-124.03564453125, 36.59788913307022), ST_MakePoint(-117.333984375, 39.06184913429154)), 4326), 900913);
+```
 
 ### Verify the new logic by running the test
 
@@ -256,23 +264,41 @@ Run the test, hopefully it passes now!
 
 **Example output:**
 
+```python
+python integration-test.py local integration-test/875-camp-grounds-zoom.py
+config_url=None
+[   1/1] PASS: 'integration-test/875-camp-grounds-zoom.py'
+PASSED ALL TESTS.
 ```
-tk tk tk
+
+If the test failed like so:
+
+```python
+python integration-test.py local integration-test/875-camp-grounds-zoom.py
+config_url=None
+[   1/1] FAIL: 'integration-test/875-camp-grounds-zoom.py'
+FAILED 1 TESTS. For more information, see 'test.log'
 ```
 
-If the test failed you can investigate why:
+You can investigate why the test failed by printing out the full debug:
 
-    cat test.log
+```bash
+cat test.log
+```
 
-Will print out the full debug.
+<div class='alert-message'>NOTE: It's best practice to run your own test, and confirm that all other tests are still passing before submitting a PR. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
 
-NOTE: It's best practice to run your own test, and confirm that all other tests are still passing before submitting a PR. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.
-
-#### Some tests require TileServer restart
+#### Some tests require tileserver restart
 
 A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart TileServer to reload this file.
 
-    tk tk tk
+Kill tileserver with a `contrl-c` keyboard press in terminal.
+
+Then relaunch tileserver from within the tileserver directory:
+
+```bash
+python tileserver/__init__.py config.yaml
+```
 
 Then run your test like in the previous step.
 
@@ -280,24 +306,35 @@ Then run your test like in the previous step.
 
 Rinse and repeat, rewrite your code.
 
-### Specify data migrations
+### Update data migrations
 
-##### Update the data migration SQL files
+Once you've finished testing your new database logic in the steps above you need to record that that same SQL in modified form in `data/migrations/` to ensure someone with an earlier database can catch up with you. (They are reset for each release.)
 
-Files in the `data/migrations/` should be updated to ensure someone with an earlier database can catch up with you. They are reset fresh for each release.
+OpenStreetMap related migrations:
 
-* `create-sql-functions.py`
-* `run_migrations.sh`
-* `sql.jinja2`
-* `update-wof-l10n.py`
-* `v1.0.0-cleanup.sql`
-* `v1.0.0-line.sql`
-* `v1.0.0-other-tables.sql`
 * `v1.0.0-point.sql`
+* `v1.0.0-line.sql`
 * `v1.0.0-polygon.sql`
-* `v1.0.0-schema-prefunction.sql`
+
+Migrations for other data sources like Natural Earth and Who's On First:
+
+* `v1.0.0-other-tables.sql`
+
+<div class='alert-message'>NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
+
+#### Example database SQL
 
 Here's an example out of the `v1.0.0-point.sql` file:
+
+Updating a simple **point** feature:
+
+```sql
+UPDATE planet_osm_point
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
+  WHERE shop IN ('outdoor');
+```
+
+A more complicated **point** example:
 
 ```sql
 UPDATE
@@ -309,20 +346,6 @@ UPDATE
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_point.*), 999);
 ```
 
-NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.
-
-#### Example database SQL
-
-If you only want to update the database in a certain region (area of interest), here for roads converting a viewport in latitude & longitude to Web Mercator meters:
-
-```sql
-UPDATE planet_osm_line
-  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id)
-  WHERE
-    highway IN ('pedestrian', 'living_street', 'track', 'path', 'cycleway', 'footway', 'steps') AND
-    way && ST_Transform(ST_SetSrid(ST_MakeBox2D(ST_MakePoint(-124.03564453125, 36.59788913307022), ST_MakePoint(-117.333984375, 39.06184913429154)), 4326), 900913);
-```
-
 Updating a simple **line** feature:
 
 ```sql
@@ -330,14 +353,6 @@ UPDATE planet_osm_line
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_line.*)
   WHERE
     waterway = 'dam';
-```
-
-Updating a simple **point** feature:
-
-```sql
-UPDATE planet_osm_point
-  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
-  WHERE shop IN ('outdoor');
 ```
 
 Updating a simple **polygon** feature:
@@ -348,32 +363,22 @@ UPDATE planet_osm_polygon
   WHERE shop IN ('outdoor');
 ```
 
-Some features can have a POI "label" and a landuse polygon, so calculate both:
+<div class='alert-message'>Some features can have a POI "label" and a landuse polygon, so calculate both!</div>
 
-Same as above:
-
-```sql
-UPDATE planet_osm_polygon
-  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
-  WHERE shop IN ('outdoor');
-```
-
-Also adding:
+When we calculate both the POIs and the landuse min zoom...
 
 ```sql
 UPDATE planet_osm_polygon
-  SET mz_poi_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*),
+      mz_poi_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
   WHERE shop IN ('outdoor');
 ```
-
 
 ### Update documentation
 
 Everything good? time to update the docs!
 
-Project documentation is publicly accessable here, they document the API promises the service makes.
-
-- https://mapzen.com/documentation/vector-tiles/layers/
+Project documentation is [publicly accessable](https://mapzen.com/documentation/vector-tiles/layers/), they document the API promises the service makes.
 
 Tk tk tk
 
