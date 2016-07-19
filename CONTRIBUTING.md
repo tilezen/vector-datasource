@@ -96,7 +96,7 @@ Listens for API requests on localhost, which are in the format of 0/0/0.ext
 
 When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` file and `.jinja2` files.
 
-_**NOTE:** A change to one of the query files requires TileServer to be restarted so they can be reloaded. But content filter changes generally doesn't require restarting TileServer._
+_**NOTE:** A change to one of the query files (jinja) requires TileServer to be restarted so they can be reloaded. But content filter changes (YAML) generally doesn't require restarting TileServer._
 
 
 ## Let's do this!
