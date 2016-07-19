@@ -201,7 +201,7 @@ Click on a feature to "view more", then click "view tile data".
 
 If you're modifying a feature it can be helpful to search in the JSON response for the thing you want to change to confirm it's the right tile. If you're adding a new feature, you could search for something you know should be in the tile already to confirm you got the right one.
 
-<div class='alert-message'>It's helpful to install a browser extension to view the JSON formatted. [jsonview](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) for Chrome is pretty good.</div>
+<div class='alert-message'>It's helpful to install a browser extension to view the JSON formatted. <a href="https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc">jsonview</a> for Chrome is pretty good.</div>
 
 **Specific map tile to test with:**
 
