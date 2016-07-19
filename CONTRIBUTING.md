@@ -168,16 +168,6 @@ assert_has_feature(
    { 'kind': 'camp_site'})
 ```
 
-
-#### Common test types
-
-The python file `integration-test.py` contains several useful tests:
-
-- `assert_has_feature`
-- `assert_no_matching_feature`
-- `assert_at_least_n_features`
-- `assert_feature_geom_type`
-
 #### Missing a database feature?
 
 Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
@@ -280,6 +270,16 @@ If you're modifying a feature, it can be helpful to search in the JSON response 
 But the tests require this to be formatted like:
 
 - `7, 20, 49`
+
+#### Common test types
+
+The python file `integration-test.py` contains several useful tests:
+
+- `assert_has_feature`
+- `assert_no_matching_feature`
+- `assert_at_least_n_features`
+- `assert_feature_geom_type`
+
 
 ### 4. Edit database &/or query logic
 
