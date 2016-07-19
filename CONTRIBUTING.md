@@ -108,13 +108,13 @@ We'll cover the following topics in the next sections:
 - [Choose an issue to work on](CONTRIBUTING.md#1-choose-an-issue-to-work-on)
 - [Do you work in a local branch](CONTRIBUTING.md#2-create-a-new-branch)
 - [Create a new test](CONTRIBUTING.md#3-create-a-new-test)
-- [Edit database &/or query logic](CONTRIBUTING.md#create-a-new-test)
-- [Verify the new logic by running the test](CONTRIBUTING.md#create-a-new-test)
-- [Perform any modifications, if necessary](CONTRIBUTING.md#create-a-new-test)
-- [Specify data migrations](CONTRIBUTING.md#create-a-new-test)
-- [Update documentation](CONTRIBUTING.md#create-a-new-test)
-- [Push your local branch to the server](CONTRIBUTING.md#create-a-new-test)
-- [Submit a Pull Request (PR)](CONTRIBUTING.md#create-a-new-test)
+- [Edit database &/or query logic](CONTRIBUTING.md#4-edit-database-&/or-query-logic)
+- [Verify the new logic by running the test](CONTRIBUTING.md#5-verify-the-new-logic-by-running-the-test)
+- [Perform any modifications, if necessary](CONTRIBUTING.md#6-perform-any-modifications,-as-necessary)
+- [Update data migrations](CONTRIBUTING.md#7-update-data-migrations)
+- [Update documentation](CONTRIBUTING.md#8-update-documentation)
+- [Push your local branch to the server](CONTRIBUTING.md#9-push-your-local-branch-to-the-server)
+- [Submit a Pull Request (PR)](CONTRIBUTING.md#10-submit-a-Pull-Request-PR)
 
 ### 1. Choose an issue to work on
 
@@ -206,7 +206,7 @@ Sometimes you'll find a feature in OverPass that is more recent than your local 
 
     ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
 
-### Edit database &/or query logic
+### 4. Edit database &/or query logic
 
 Tk tk tk intro
 
@@ -254,7 +254,7 @@ UPDATE planet_osm_line
     way && ST_Transform(ST_SetSrid(ST_MakeBox2D(ST_MakePoint(-124.03564453125, 36.59788913307022), ST_MakePoint(-117.333984375, 39.06184913429154)), 4326), 900913);
 ```
 
-### Verify the new logic by running the test
+### 5. Verify the new logic by running the test
 
 This step is not necessary if only database properties were changed.
 
@@ -302,11 +302,11 @@ python tileserver/__init__.py config.yaml
 
 Then run your test like in the previous step.
 
-### Perform any modifications, as necessary
+### 6. Perform any modifications, as necessary
 
 Rinse and repeat, rewrite your code.
 
-### Update data migrations
+### 7. Update data migrations
 
 Once you've finished testing your new database logic in the steps above you need to record that that same SQL in modified form in `data/migrations/` to ensure someone with an earlier database can catch up with you. (They are reset for each release.)
 
@@ -374,7 +374,7 @@ UPDATE planet_osm_polygon
   WHERE shop IN ('outdoor');
 ```
 
-### Update documentation
+### 8. Update documentation
 
 Everything good? time to update the docs!
 
@@ -382,7 +382,7 @@ Project documentation is [publicly accessable](https://mapzen.com/documentation/
 
 Tk tk tk
 
-### Push your local branch to the server
+### 9. Push your local branch to the server
 
 First let's commit our changes. Let's confirm which files changed:
 
@@ -422,7 +422,7 @@ NOTE: Your first push for a branch might require additional details:
 
     git push --set-upstream origin olga/713-urban-areas
 
-### Submit a Pull Request (PR)
+### 10. Submit a Pull Request (PR)
 
 Back on Github.com load the project page and notice there's a button suggested you create a PR for your active branch. Press that green button.
 
