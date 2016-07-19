@@ -105,18 +105,18 @@ _**NOTE:** A change to one of the query files (jinja) requires TileServer to be 
 
 We'll cover the following topics in the next sections:
 
-- Choose an issue to work on
-- Do you work in a local branch
-- Create a new test
-- Edit database &/or query logic
-- Verify the new logic by running the test
-- Perform any modifications, if necessary
-- Specify data migrations
-- Update documentation
-- Push your local branch to the server
-- Submit a Pull Request (PR)
+- [Choose an issue to work on](CONTRIBUTING.md#1.-choose-an-issue-to-work-on)
+- [Do you work in a local branch](CONTRIBUTING.md#create-a-new-test)
+- [Create a new test](CONTRIBUTING.md#create-a-new-test)
+- [Edit database &/or query logic](CONTRIBUTING.md#create-a-new-test)
+- [Verify the new logic by running the test](CONTRIBUTING.md#create-a-new-test)
+- [Perform any modifications, if necessary](CONTRIBUTING.md#create-a-new-test)
+- [Specify data migrations](CONTRIBUTING.md#create-a-new-test)
+- [Update documentation](CONTRIBUTING.md#create-a-new-test)
+- [Push your local branch to the server](CONTRIBUTING.md#create-a-new-test)
+- [Submit a Pull Request (PR)](CONTRIBUTING.md#create-a-new-test)
 
-### Choose an issue to work on
+### 1. Choose an issue to work on
 
 We have a backlog of issues, but they are also grouped into milestones and tracked with [Waffle board](https://waffle.io/tilezen/vector-datasource).
 
