@@ -105,9 +105,9 @@ _**NOTE:** A change to one of the query files (jinja) requires TileServer to be 
 
 We'll cover the following topics in the next sections:
 
-- [Choose an issue to work on](CONTRIBUTING.md#1.-choose-an-issue-to-work-on)
-- [Do you work in a local branch](CONTRIBUTING.md#create-a-new-test)
-- [Create a new test](CONTRIBUTING.md#create-a-new-test)
+- [Choose an issue to work on](CONTRIBUTING.md#1-choose-an-issue-to-work-on)
+- [Do you work in a local branch](CONTRIBUTING.md#2-create-a-new-branch)
+- [Create a new test](CONTRIBUTING.md#3-create-a-new-test)
 - [Edit database &/or query logic](CONTRIBUTING.md#create-a-new-test)
 - [Verify the new logic by running the test](CONTRIBUTING.md#create-a-new-test)
 - [Perform any modifications, if necessary](CONTRIBUTING.md#create-a-new-test)
@@ -124,7 +124,7 @@ When picking an issue from the Ready column for the active milestone, self assig
 
 If you propose to work on an issue in the Backlog but what to confirm some details add a comment to the issue or ask about it in Slack.
 
-### Create a new branch
+### 2. Create a new branch
 
 Make sure your `master` branch is up-to-date with a `git pull`. Then...
 
@@ -132,7 +132,7 @@ Checkout a new branch, name it something descriptive like the `yourname/#issue-i
 
     git checkout -b olga/713-urban-areas
 
-### Create a new test
+### 3. Create a new test
 
 Create a new test for the issue in `integration-test` dir. Sometimes it's helpful to look thru the existing tests to find one that is a close match to the pattern and start there.
 
