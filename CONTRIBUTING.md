@@ -106,7 +106,7 @@ _**NOTE:** A change to one of the query files (jinja) requires TileServer to be 
 We'll cover the following topics in the next sections:
 
 - [Choose an issue to work on](CONTRIBUTING.md#1-choose-an-issue-to-work-on)
-- [Do you work in a local branch](CONTRIBUTING.md#2-create-a-new-branch)
+- [Do your work in a local branch](CONTRIBUTING.md#2-create-a-new-branch)
 - [Create a new test](CONTRIBUTING.md#3-create-a-new-test)
 - [Edit database &/or query logic](CONTRIBUTING.md#4-edit-database-or-query-logic)
 - [Verify the new logic by running the test](CONTRIBUTING.md#5-verify-the-new-logic-by-running-the-test)
@@ -120,7 +120,7 @@ We'll cover the following topics in the next sections:
 
 We have a backlog of issues, but they are also grouped into milestones and tracked with [Waffle board](https://waffle.io/tilezen/vector-datasource).
 
-When picking an issue from the Ready column for the active milestone, self assign it to let other people know you'll be working on it.
+When picking an issue from the Ready column for the active milestone, self assign it to let other people know you'll be working on it and move it to the In Progress column.
 
 If you propose to work on an issue in the Backlog but what to confirm some details add a comment to the issue or ask about it in Slack.
 
@@ -157,7 +157,9 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 
 <div class='alert-message'>Remember to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
 
-**Example test:**
+
+#### Example test
+
 
 ```python
 # http://www.openstreetmap.org/way/431725967
@@ -166,14 +168,25 @@ assert_has_feature(
    { 'kind': 'camp_site'})
 ```
 
-**Missing a database feature?**
+
+#### Common test types
+
+The python file `integration-test.py` contains several useful tests:
+
+- `assert_has_feature`
+- `assert_no_matching_feature`
+- `assert_at_least_n_features`
+- `assert_feature_geom_type`
+
+#### Missing a database feature?
 
 Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
 
 To load that feature, specify the URL and the database to import into:
 
+
 ```bash
-./test-data-update-osm.sh http://www.openstreetmap.org/way/237314510 osm
+./test-data-update-osm.sh http://www.openstreetmap.org/way/431725967 osm
 ```
 
 **Ensure tileserver is running locally:**
@@ -331,7 +344,7 @@ UPDATE planet_osm_line
 
 ### 5. Verify the new logic by running the test
 
-Run the test, hopefully it passes now!
+Run the test, hopefully it passes now! You'll need to run the test from the project's root directory, you may need to `cd ../../` to get back there after step 4 above.
 
 ```bash
 python integration-test.py local integration-test/875-camp-grounds-zoom.py
@@ -385,7 +398,8 @@ Rinse and repeat, rewrite your code. Don't be afraid to ask for help!
 
 Once you've finished testing your new database logic in step 4 above you need to record that that same SQL in modified form in `data/migrations/` to ensure someone with an earlier database configuration can catch up with you. (Migrations are reset for each Tilezen release.)
 
-Continuing the `camp_site` example:
+Continuing the `camp_site` example, edit the following in the `data/migrations/v1.0.0-polygon.sql` file:
+
 
 ```sql
 UPDATE
@@ -412,6 +426,7 @@ UPDATE
 ```
 
 <div class='alert-message'>NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
+
 
 #### Migration details
 
@@ -481,11 +496,11 @@ UPDATE planet_osm_polygon
 
 Everything good? time to update the docs! Generally this is in the [docs/layer.md](docs/layer.md) file in the various layer sections to specify new properties and new kind values.
 
-Since `camp_site` was already in the `pois` layer, we only need to document it's addition to the list of `landuse` kinds:
+Since `camp_site` was already in the `pois` layer, we only need to document it's addition to the alphabetical list of `landuse` kinds:
 
 ```
   * `bridge`
- +* `camp_site`
+  * `camp_site`
   * `caravan_site`
 ```
 
@@ -495,41 +510,65 @@ Since `camp_site` was already in the `pois` layer, we only need to document it's
 
 First let's commit our changes. Let's confirm which files changed:
 
-    git status
+
+```bash
+git status
+```
 
 You can also do a `git diff` on each file to determine if you meant to change or insert logic. Once you've confirmed the changes...
 
 For each, commit using a specific commit message. The first should use the "Connects to #issuenum" format to link up the PR to the original issue in Waffle.io.
 
-    git commit -m 'Connects to #713 for urban area kind rename' filename
 
-NOTE: Subsequent commit messages can be more generic.
+```bash
+git commit -m 'Connects to #875 to add camp_site polygons' filename
+```
+
+_NOTE: Subsequent commit messages can be more generic._
 
 Make sure you have a clean merge by pulling down the lastest master by checking out master:
 
-    git checkout master
+
+```bash
+git checkout master
+```
 
 Fetch latest changes from the server:
 
-    git pull origin master
+
+```bash
+git pull origin master
+```
 
 Go back to your branch:
 
-    git checkout olga/713-urban-areas
+
+```bash
+git checkout olga/875-camp-ground-zoom
+```
 
 Rebase (compare) it with master:
 
-    git rebase master
+
+```bash
+git rebase master
+```
 
 And resolve any funk, as necessary.
 
 Then push to the server so other people can see your work. (If this is a large change over multiple days, please push the server once a day so your work is backed up.)
 
-    git push
+
+```bash
+git push
+```
 
 NOTE: Your first push for a branch might require additional details:
 
-    git push --set-upstream origin olga/713-urban-areas
+
+```bash
+git push --set-upstream origin olga/875-camp-ground-zoom
+```
 
 ### 10. Submit a Pull Request (PR)
 
