@@ -199,19 +199,28 @@ Once it fails, we'll update our logic in the next section so it passes.
 
 **So what's happening here?** The `integration-test.py` script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's `160-motorway-junctions.py` in the `integration-test` directory.
 
+##### Missing a database feature?
+
+Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
+
+    ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
+
 ### Edit database &/or query logic
 
 Tk tk tk intro
 
 #### Update the database properties
 
-If you modify the functions:
-
-    psql -f data/functions.sql osm
-
-For example:
+Once you make your edits to the YAML files you need to update the database. To recreate SQL functions in Postgres run:
 
     cd data/migrations && python create-sql-functions.py | psql osm
+
+Because some properties in the database are pre-computed, we need to update records to use the new functions. We call this "data migration", see some examples below.
+
+1. Prototype it in PGAdmin
+2. Record it in the migration SQL files
+
+<div class='alert-message'>Advanced topic: if you modify any other raw functions in the data directory, you'll also need to run `psql -f data/functions.sql osm`.</div>
 
 ##### Update the data migration SQL files
 
@@ -241,12 +250,6 @@ UPDATE
 ```
 
 NOTE: Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.
-
-##### Missing a database feature?
-
-Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
-
-    ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
 
 #### Example database SQL
 
