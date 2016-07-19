@@ -255,7 +255,7 @@ NOTE: Occasionally two PRs will land at the same time and you'll need to clean u
 
 If you only want to update the database in a certain region (area of interest), here for roads converting a viewport in latitude & longitude to Web Mercator meters:
 
-```
+```sql
 UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id)
   WHERE
