@@ -1,27 +1,27 @@
 # update landuse to include campground features and fix label zoom
 
 # large campground in landuse zoom 16
-# http://www.openstreetmap.org/way/431725967
+# http://www.openstreetmap.org/way/237314510
 assert_has_feature(
-    16, 10959, 25337, 'landuse',
+    16, 10599, 25679, 'landuse',
     { 'kind': 'camp_site'})
 
 # large campground in point zoom 16
-# http://www.openstreetmap.org/way/431725967
+# http://www.openstreetmap.org/way/237314510
 assert_has_feature(
-    16, 10959, 25337, 'pois',
+    16, 10599, 25679, 'pois',
     { 'kind': 'camp_site'})
 
 # large campground in landuse zoom 13
-# http://www.openstreetmap.org/way/431725967
+# http://www.openstreetmap.org/way/237314510
 assert_has_feature(
-    13, 1369, 3167, 'landuse',
+    13, 1324, 3209, 'landuse',
     { 'kind': 'camp_site'})
 
 # large campground in point zoom 13
-# http://www.openstreetmap.org/way/431725967
+# http://www.openstreetmap.org/way/237314510
 assert_has_feature(
-    13, 1369, 3167, 'pois',
+    13, 1324, 3209, 'pois',
     { 'kind': 'camp_site'})
 
 # small campground in landuse zoom 16
