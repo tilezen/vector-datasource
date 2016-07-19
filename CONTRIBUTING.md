@@ -374,7 +374,7 @@ You can investigate why the test failed by printing out the full debug:
 cat test.log
 ```
 
-<div class='alert-message'>NOTE: It's best practice to run your own test. Once you've done that, also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
+<div class='alert-message'>NOTE: It's best practice to run your own test AND to also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
 
 #### Some tests require tileserver restart
 
