@@ -53,9 +53,9 @@ It's important to get feedback about the quality of local tile results. Your loc
 
 Tilezen has several miscellaneous standards:
 
-- we write idomatic Python code and use Flake to QA that code.
+- we follow [PEP8](https://www.python.org/dev/peps/pep-0008/) coding style for Python and use [Flake8](http://flake8.pycqa.org/en/latest/) to enforce those conventions
 - we *love* tests, [check them out](https://github.com/tilezen/vector-datasource/tree/master/integration-test)
-- we use [CircleCI](https://circleci.com/gh/mapzen/vector-datasource) for continuous integration
+- we use [CircleCI](https://circleci.com/gh/mapzen/vector-datasource) for continuous integration testing
 - we use [semver](http://semver.org/) for package versioning
 
 All  unit tests in a project will be automatically invoked when you commit to an existing project; make sure they exit successfully!
