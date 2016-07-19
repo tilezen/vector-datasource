@@ -76,17 +76,13 @@ Generally speaking there are three aspects of developing vector tiles.
 Yellow call-outs like this are meant to draw your attention to an important idea or distinction you should keep in mind.
 </div>
 
-### vector-datasource repo
-
-#### Data in, data out
-
 Map database in Postgres stores data from OpenStreetMap and other projects like Natural Earth and Who's On First.
 
 When data is loaded, database "triggers" calculate if a feature is included in which layer(s), at what "minimum zoom", and other Mapzen specific "mz" properties.
 
 When modifying the logic below, we'll need to update our Postgres functions, migrate the data, and cut new tiles.
 
-#### Changing tile content
+### Changing tile content in the vector-datasource repo
 
 Most **content changes** (eg: adding a new kind of feature) only require a database modification. Content changes are configured using YAML files which specify which database features are "filtered" and outputed in tiles. The location for these content filters is in the `yaml/` directory, for example: [pois.yaml](yaml/pois.yaml).
 
@@ -94,7 +90,7 @@ Some preexisting feature filters are configured using an older raw SQL format in
 
 Additionally, the root `queries.yaml` specifies which `jinja` file to use per layer, and also specifies post-processing via Python transforms.
 
-### TileServer repo
+### Serving tiles in the TileServer repo
 
 Listens for API requests on localhost, which are in the format of 0/0/0.ext
 
