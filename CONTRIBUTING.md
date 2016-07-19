@@ -86,7 +86,9 @@ When modifying the logic below, we'll need to update our Postgres functions, mig
 
 Most **content changes** (eg: adding a new kind of feature) only require a database modification. Content changes are configured using YAML files which specify which database features are "filtered" and outputed in tiles. The location for these content filters is in the `yaml/` directory, for example: [pois.yaml](yaml/pois.yaml).
 
-Some preexisting feature filters are configured using an older raw SQL format in `jinja` files in the `queries/` directory. This older syntax is still helpful to select multiple feature properties across many kinds of features at once. Generally perform maintenance on pre-existing filters or migrate them to the newer YAML format. For example, [pois.jinja](queries/pois.jinja).
+Some preexisting feature filters are configured using an older raw SQL format in `jinja` files in the `queries/` directory. This older syntax is still helpful to select multiple feature properties across many kinds of features at once. For example, [pois.jinja](queries/pois.jinja).
+
+<div class='alert-message'>Generally perform maintenance on pre-existing jinja filters or optionally migrate them to the newer YAML format.</div>
 
 Additionally, the root `queries.yaml` specifies which `jinja` file to use per layer, and also specifies post-processing via Python transforms.
 
