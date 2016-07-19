@@ -426,8 +426,8 @@ filters:
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
-      kind: minor_road
-      aeroway: {col: aeroway}
+      kind: aeroway
+      kind_detail: runway
   - filter:
       aeroway: taxiway
     min_zoom: 11
@@ -435,8 +435,8 @@ filters:
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
-      kind: minor_road
-      aeroway: {col: aeroway}
+      kind: aeroway
+      kind_detail: taxiway
   #############################################################
   #
   # OSM railway
