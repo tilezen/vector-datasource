@@ -110,7 +110,7 @@ We'll cover the following topics in the next sections:
 - [Create a new test](CONTRIBUTING.md#3-create-a-new-test)
 - [Edit database &/or query logic](CONTRIBUTING.md#4-edit-database-or-query-logic)
 - [Verify the new logic by running the test](CONTRIBUTING.md#5-verify-the-new-logic-by-running-the-test)
-- [Perform any modifications, if necessary](CONTRIBUTING.md#6-perform-any-modifications-as-necessary)
+- [Perform any modifications, as necessary](CONTRIBUTING.md#6-perform-any-modifications-as-necessary)
 - [Update data migrations](CONTRIBUTING.md#7-update-data-migrations)
 - [Update documentation](CONTRIBUTING.md#8-update-documentation)
 - [Push your local branch to the server](CONTRIBUTING.md#9-push-your-local-branch-to-the-server)
@@ -139,6 +139,19 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 - Create new test file
 - You'll need a specific OpenStreetMap feature ID to test against
 - You'll need a specific map tile (0/0/0) to test with
+
+<div class='alert-message'>Remember to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
+
+Example test:
+
+```python
+# http://www.openstreetmap.org/way/431725967
+assert_has_feature(
+   16, 10959, 25337, 'landuse',
+   { 'kind': 'camp_site'})
+```
+
+#### Find example feature in the raw data to test against
 
 Much of our data comes from OpenStreetMap. Are you confused about feature tagging there? Read up on it in the OSM Wiki and search TagInfo to see how common it actually is.
 
@@ -180,9 +193,14 @@ Alternatively... Use one of the Mapzen house styles to determine the tile.
 
 - http://tangrams.github.io/bubble-wrap/#7/37.606/-121.943
 
-Click on a feature to "view more", then click "view tile data". It's helpful to install a browser extension to view the JSON formatted. [jsonview](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) for Chrome is pretty good.
+Click on a feature to "view more", then click "view tile data".
+
+<img width="372" alt="screen shot 2016-07-18 at 18 07 14" src="https://cloud.githubusercontent.com/assets/853051/16935232/8fe83c0e-4d12-11e6-86f7-b16eebc22f84.png">
+<img width="375" alt="screen shot 2016-07-18 at 18 07 06" src="https://cloud.githubusercontent.com/assets/853051/16935233/8fe8f6a8-4d12-11e6-9ce0-90ac40b185fa.png">
 
 If you're modifying a feature it can be helpful to search in the JSON response for the thing you want to change to confirm it's the right tile. If you're adding a new feature, you could search for something you know should be in the tile already to confirm you got the right one.
+
+<div class='alert-message'>It's helpful to install a browser extension to view the JSON formatted. [jsonview](https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc) for Chrome is pretty good.</div>
 
 **Specific map tile to test with:**
 
@@ -200,9 +218,11 @@ Once it fails, we'll update our logic in the next section so it passes.
 
 **So what's happening here?** The `integration-test.py` script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's `160-motorway-junctions.py` in the `integration-test` directory.
 
-##### Missing a database feature?
+#### Missing a database feature?
 
 Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
+
+To load that feature, specify the URL and the database to import into:
 
     ./test-data-update-osm.sh https://www.openstreetmap.org/node/418185265 osm
 
