@@ -142,7 +142,7 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 
 <div class='alert-message'>Remember to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
 
-Example test:
+**Example test:**
 
 ```python
 # http://www.openstreetmap.org/way/431725967
@@ -151,11 +151,28 @@ assert_has_feature(
    { 'kind': 'camp_site'})
 ```
 
+**Example test run:**
+
+And run the test to make sure it **fails** using the existing config:
+
+    python integration-test.py local integration-test/160-motorway-junctions.py
+
+Once it fails, we'll update our logic in the next section so it passes.
+
+<div class='alert-message'>So what's happening here? The <code>integration-test.py</code> script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
+
+Not the gory details...
+
 #### Find example feature in the raw data to test against
 
-Much of our data comes from OpenStreetMap. Are you confused about feature tagging there? Read up on it in the OSM Wiki and search TagInfo to see how common it actually is.
+There are two options to identify test features.
 
-- https://taginfo.openstreetmap.org/tags/highway=services
+1. **Query your local database** using psql on the command line or PGAdmin app.
+2. **Query the remote OpenStreetMap database** using [Overpass Turbo](http://overpass-turbo.eu/).
+
+Confused about which tags to use? Read up on the OSM wiki ([example](https://taginfo.openstreetmap.org/tags/highway=services)) and confirm actual usage in TagInfo.
+
+##### Overpass Turbo example
 
 To find an example feature in OpenStreetMap search [overpass-turbo](http://overpass-turbo.eu/) for specific tags. Here's a sample query (assuming you've zoomed the map to an interesting area like the greater San Francisco metropolitan area):
 
@@ -183,13 +200,17 @@ NOTE: Update the above example for your tag (eg: `"highway"="rest_area"`)!
 
 Once you find a result you like, click on it to pull up the info window, and follow the view on OSM.org link like so:
 
-**Specific OSM feature to test for:**
+##### Determine which tile the feature should appear in for your test
+
+Following the link from Overpass, like:
 
 - http://www.openstreetmap.org/node/1114457089
 
-Zoom out to the "min_zoom" of the feature, then right click on the map near the icon, but not on the icon. Then Inspect element, and look for the `leaflet-map-pane` and follow that down till you find the raster tile.
+You'll load a new page. Zoom the map out to the desired "min_zoom" of the feature, then right click on the map near the icon, but not on the icon. Then Inspect element, and look for the `leaflet-map-pane` and follow that down till you find the raster tile.
 
-Alternatively... Use one of the Mapzen house styles to determine the tile.
+##### Alternative method if feature is already in Mapzen tiles
+
+Use one of the Mapzen house styles to determine the tile.
 
 - http://tangrams.github.io/bubble-wrap/#7/37.606/-121.943
 
@@ -210,14 +231,6 @@ If you're modifying a feature it can be helpful to search in the JSON response f
 The tests require this to be formatted like:
 
 - `7, 20, 49`
-
-And run the test to make sure it **fails** using the existing config:
-
-    python integration-test.py local integration-test/160-motorway-junctions.py
-
-Once it fails, we'll update our logic in the next section so it passes.
-
-**So what's happening here?** The `integration-test.py` script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's `160-motorway-junctions.py` in the `integration-test` directory.
 
 #### Missing a database feature?
 
