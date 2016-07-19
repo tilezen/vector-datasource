@@ -206,7 +206,7 @@ class SortKeyTest(unittest.TestCase):
         sort_key_result = self.matcher(shape, props, zoom)
         self.assertIsNotNone(sort_key_result)
         _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 263)
+        self.assertEquals(int(sort_key), 265)
 
         shape = shapely.geometry.Polygon([(0, 0), (1, 1), (0, 1), (0, 0)])
         sort_key_result = self.matcher(shape, props, zoom)

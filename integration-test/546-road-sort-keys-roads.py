@@ -3,31 +3,31 @@
 assert_has_feature(
     18, 41888, 101295, "roads",
     {"kind": "highway", "highway": "motorway", "id": 26765956,
-     "name": "Presidio Pkwy.", "sort_key": 381})
+     "name": "Presidio Pkwy.", "sort_key": 383})
 
 #https://www.openstreetmap.org/way/89802409
 assert_has_feature(
     18, 41887, 101348, "roads",
     {"kind": "major_road", "highway": "trunk", "id": 89802409,
-     "name": "19th Ave.", "sort_key": 379})
+     "name": "19th Ave.", "sort_key": 381})
 
 #https://www.openstreetmap.org/way/160842753
 assert_has_feature(
     18, 41952, 101346, "roads",
     {"kind": "major_road", "highway": "primary", "id": 160842753,
-     "name": "3rd St.", "sort_key": 378})
+     "name": "3rd St.", "sort_key": 380})
 
 #https://www.openstreetmap.org/way/25337673
 assert_has_feature(
     18, 41928, 101328, "roads",
     {"kind": "major_road", "highway": "secondary", "id": 25337673,
-     "name": "Mission St.", "sort_key": 377})
+     "name": "Mission St.", "sort_key": 379})
 
 #https://www.openstreetmap.org/way/255330035
 assert_has_feature(
     18, 41941, 101298, "roads",
     {"kind": "major_road", "highway": "tertiary", "id": 255330035,
-     "name": "Battery St.", "sort_key": 376})
+     "name": "Battery St.", "sort_key": 377})
 
 #https://www.openstreetmap.org/way/123456285
 assert_has_feature(
