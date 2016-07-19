@@ -111,6 +111,7 @@ We'll cover the following topics in the next sections:
 - Edit database &/or query logic
 - Verify the new logic by running the test
 - Perform any modifications, if necessary
+- Specify data migrations
 - Update documentation
 - Push your local branch to the server
 - Submit a Pull Request (PR)
@@ -222,6 +223,65 @@ Because some properties in the database are pre-computed, we need to update reco
 
 <div class='alert-message'>Advanced topic: if you modify any other raw functions in the data directory, you'll also need to run `psql -f data/functions.sql osm`.</div>
 
+#### Update the query configuration
+
+Tk tk tk body
+
+Sometimes you'll want to investigate features in the database:
+
+```sql
+SELECT name, height, tags from planet_osm_point
+  WHERE waterway = 'waterfall' AND height IS NOT NULL LIMIT 100;
+```
+
+Sometimes you need to debug why a feature appears one of multiple possible representations:
+
+```sql
+SELECT
+  osm_id, name, place, mz_earth_min_zoom, mz_places_min_zoom from planet_osm_point where osm_id
+IN (3178316462, 358955020, 358796350, 358761955, 358768646, 358795646)
+ORDER BY
+  osm_id;
+```
+
+
+
+### Verify the new logic by running the test
+
+This step is not necessary if only database properties were changed.
+
+Run the test, hopefully it passes now!
+
+    python integration-test.py local integration-test/160-motorway-junctions.py
+
+**Example output:**
+
+```
+tk tk tk
+```
+
+If the test failed you can investigate why:
+
+    cat test.log
+
+Will print out the full debug.
+
+NOTE: It's best practice to run your own test, and confirm that all other tests are still passing before submitting a PR. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.
+
+#### Some tests require TileServer restart
+
+A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart TileServer to reload this file.
+
+    tk tk tk
+
+Then run your test like in the previous step.
+
+### Perform any modifications, as necessary
+
+Rinse and repeat, rewrite your code.
+
+### Specify data migrations
+
 ##### Update the data migration SQL files
 
 Files in the `data/migrations/` should be updated to ensure someone with an earlier database can catch up with you. They are reset fresh for each release.
@@ -306,60 +366,6 @@ UPDATE planet_osm_polygon
   WHERE shop IN ('outdoor');
 ```
 
-Sometimes you'll want to investigate features in the database:
-
-```sql
-SELECT name, height, tags from planet_osm_point
-  WHERE waterway = 'waterfall' AND height IS NOT NULL LIMIT 100;
-```
-
-Sometimes you need to debug why a feature appears one of multiple possible representations:
-
-```sql
-SELECT
-  osm_id, name, place, mz_earth_min_zoom, mz_places_min_zoom from planet_osm_point where osm_id
-IN (3178316462, 358955020, 358796350, 358761955, 358768646, 358795646)
-ORDER BY
-  osm_id;
-```
-
-#### Update the query configuration
-
-Tk tk tk body
-
-### Verify the new logic by running the test
-
-This step is not necessary if only database properties were changed.
-
-Run the test, hopefully it passes now!
-
-    python integration-test.py local integration-test/160-motorway-junctions.py
-
-**Example output:**
-
-```
-tk tk tk
-```
-
-If the test failed you can investigate why:
-
-    cat test.log
-
-Will print out the full debug.
-
-NOTE: It's best practice to run your own test, and confirm that all other tests are still passing before submitting a PR. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.
-
-#### Some tests require TileServer restart
-
-A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart TileServer to reload this file.
-
-    tk tk tk
-
-Then run your test like in the previous step.
-
-### Perform any modifications, as necessary
-
-Rinse and repeat, rewrite your code.
 
 ### Update documentation
 
