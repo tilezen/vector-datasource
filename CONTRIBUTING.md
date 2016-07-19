@@ -84,7 +84,7 @@ When modifying the logic below, we'll need to update our Postgres functions, mig
 
 ### Changing tile content in the vector-datasource repo
 
-Most **content changes** (eg: adding a new kind of feature) only require a database modification. Content changes are configured using YAML files which specify which database features are "filtered" and outputed in tiles. The location for these content filters is in the `yaml/` directory, for example: [pois.yaml](yaml/pois.yaml).
+Most content changes (eg: adding a new kind of feature) only require a database modification. Content changes are configured using YAML files which specify which database features are "filtered" and outputed in tiles. The location for these content filters is in the `yaml/` directory, for example: [pois.yaml](yaml/pois.yaml).
 
 Some preexisting feature filters are configured using an older raw SQL format in `jinja` files in the `queries/` directory. This older syntax is still helpful to select multiple feature properties across many kinds of features at once. For example, [pois.jinja](queries/pois.jinja).
 
