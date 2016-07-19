@@ -108,13 +108,13 @@ We'll cover the following topics in the next sections:
 - [Choose an issue to work on](CONTRIBUTING.md#1-choose-an-issue-to-work-on)
 - [Do you work in a local branch](CONTRIBUTING.md#2-create-a-new-branch)
 - [Create a new test](CONTRIBUTING.md#3-create-a-new-test)
-- [Edit database &/or query logic](CONTRIBUTING.md#4-edit-database-&/or-query-logic)
+- [Edit database &/or query logic](CONTRIBUTING.md#4-edit-database-or-query-logic)
 - [Verify the new logic by running the test](CONTRIBUTING.md#5-verify-the-new-logic-by-running-the-test)
-- [Perform any modifications, if necessary](CONTRIBUTING.md#6-perform-any-modifications,-as-necessary)
+- [Perform any modifications, if necessary](CONTRIBUTING.md#6-perform-any-modifications-as-necessary)
 - [Update data migrations](CONTRIBUTING.md#7-update-data-migrations)
 - [Update documentation](CONTRIBUTING.md#8-update-documentation)
 - [Push your local branch to the server](CONTRIBUTING.md#9-push-your-local-branch-to-the-server)
-- [Submit a Pull Request (PR)](CONTRIBUTING.md#10-submit-a-Pull-Request-PR)
+- [Submit a Pull Request (PR)](CONTRIBUTING.md#10-submit-a-pull-request-pr)
 
 ### 1. Choose an issue to work on
 
