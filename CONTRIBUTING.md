@@ -195,8 +195,9 @@ Alternatively... Use one of the Mapzen house styles to determine the tile.
 
 Click on a feature to "view more", then click "view tile data".
 
-<img width="372" alt="screen shot 2016-07-18 at 18 07 14" src="https://cloud.githubusercontent.com/assets/853051/16935232/8fe83c0e-4d12-11e6-86f7-b16eebc22f84.png">
 <img width="375" alt="screen shot 2016-07-18 at 18 07 06" src="https://cloud.githubusercontent.com/assets/853051/16935233/8fe8f6a8-4d12-11e6-9ce0-90ac40b185fa.png">
+
+<img width="372" alt="screen shot 2016-07-18 at 18 07 14" src="https://cloud.githubusercontent.com/assets/853051/16935232/8fe83c0e-4d12-11e6-86f7-b16eebc22f84.png">
 
 If you're modifying a feature it can be helpful to search in the JSON response for the thing you want to change to confirm it's the right tile. If you're adding a new feature, you could search for something you know should be in the tile already to confirm you got the right one.
 
