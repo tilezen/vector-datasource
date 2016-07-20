@@ -150,7 +150,7 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 
 - Create new test file
 - You'll need a specific OpenStreetMap feature ID to test against
-- You'll need a specific map tile (0/0/0) to test with
+- You'll need the coordinates (z/x/y) of a map tile containing that feature
 - Ensure that test data is loaded into your local database
 - Ensure tileserver is running!
 - Run the test
