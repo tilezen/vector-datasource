@@ -39,12 +39,14 @@ When submitting bug reports, please be sure to give us as much context as possib
 
 ## Submitting issues around vector tile quality
 
-It's important to get feedback about the quality of local tile results. Your local knowledge will make it easier for us to understand the problem. When submitting issues be sure to include:
+It's important to get feedback about the quality of local tile results. Your local knowledge will make it easier for us to understand the problem. When submitting issues be sure to include details like:
 
-- Where in the world you were looking (a placename &/or zoom, latitude, longitude)
-- Your tile query
-- Your expected result
-- Your actual result
+- Where in the world you were looking:
+  - A placename and zoom, or
+  - Zoom, latitude, and longitude, or
+  - Tile URL, e.g.: http://vector.mapzen.com/osm/all/10/518/352.topojson, with the feature ID and/or tile layer, if available
+- Your expected result!
+- Your actual result :(
 
 
 # Pull Requests Welcome!
