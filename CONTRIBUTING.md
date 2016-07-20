@@ -232,7 +232,7 @@ Once it fails, we'll update our logic in step 4 below so it passes.
 
 <div class='alert-message'>So what's happening here? The <code>integration-test.py</code> script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
 
-Not the gory details...
+Now the gory details...
 
 #### Find example feature in the raw data to test against
 
