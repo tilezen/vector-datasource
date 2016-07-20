@@ -85,7 +85,7 @@ When data is loaded, database [triggers](https://www.postgresql.org/docs/current
 When modifying the logic below, we'll need to update our Postgres functions, migrate the data, and cut new tiles.
 
 <div class='alert-message'>
-<b>COMMON TERMS</b> 
+<b>COMMON TERMS</b>
 <ul>
 <li><b>Vector tiles</b> (or just "tiles") allow bite sized access to large geographic databases with "raw" vector geometries and properties instead of rendered raster images.</li>
 <li><b>Map features</b> (or just "feature") are individual map features, commonly with a name, geometry, and additonal properties like unique ID and source. Example include individual roads, landuse polygons, or business icons.</li>
@@ -98,19 +98,19 @@ Tile **layers** are configured in a root `queries.yaml` file. This file  specifi
 
 Typical tile content changes occur at the **yaml** level, but there are 4 levels total:
 
-- **yaml** files determine which **features** are included in a tile layer by specifying a series of source data _filters_ and _property_ value rules, the most import of which are a feature's `kind` and `min_zoom`. 
+- **yaml** files determine which **features** are included in a tile layer by specifying a series of source data _filters_ and _property_ value rules, the most import of which are a feature's `kind` and `min_zoom`.
 - **jinja templates** These filter & property rules get folded into **sql** functions, which are generated via **layer** templates. Some sql functions are run in the database _before_ a tile is requested (for properties like `min_zoom`) and others are run _as_ a tile is requested (like `kind`).
 - **Python** post-processing occurs per feature and across layers once a set of features has been returned for a given tile, which is useful for more involved logic.
 - **layers** are specified in the root `queries.yaml`. This file  specifies which **jinja** template to use per layer, and also specifies per layer post-processing **Python** transforms.
 
 
-The **yaml** configuration files establish which features are included per layer, and the **jinja** templates are better suited for rules that apply to all features in a layer. 
+The **yaml** configuration files establish which features are included per layer, and the **jinja** templates are better suited for rules that apply to all features in a layer.
 
 To recap, with examples:
 
 - **yaml** files are located in the `yaml/` directory. Example: [pois.yaml](yaml/pois.yaml)
 - **jinja** files are located in the `queries/` directory. Example: [pois.jinja](queries/pois.jinja).
-- **Python** files are located in the `vectordatasource/` directory. Example: [transform.py](vectordatasource/transform.py). 
+- **Python** files are located in the `vectordatasource/` directory. Example: [transform.py](vectordatasource/transform.py).
 - **layers** are specified in [queries.yaml](queries.yaml).
 
 <div class='alert-message'>NOTE: Generally perform maintenance on pre-existing jinja filters or optionally migrate them to the newer YAML format.</div>
