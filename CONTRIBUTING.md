@@ -400,6 +400,7 @@ Once you've finished testing your new database logic in step 4 above you need to
 
 Continuing the `camp_site` example, edit the following in the `data/migrations/v1.0.0-polygon.sql` file:
 
+<div class='alert-message'>NOTE: The exact file name for the migration will change, matching the <i>upcoming</i> release version.</div>
 
 ```sql
 UPDATE
@@ -439,6 +440,8 @@ OpenStreetMap related migrations are recorded in the following files:
 Migrations for other data sources like Natural Earth and Who's On First go in:
 
 * `v1.0.0-other-tables.sql`
+
+<div class='alert-message'>NOTE: The exact file names for the migration will change, matching the <i>upcoming</i> release version.</div>
 
 #### Example database SQL
 
