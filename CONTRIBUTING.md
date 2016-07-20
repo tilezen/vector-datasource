@@ -175,6 +175,20 @@ You will need a descriptive name for your new branch, and one way to do that is 
 git checkout -b olga/875-camp-ground-zoom
 ```
 
+Congratulations, now you have a local branch!
+
+We're going to push our work to the server eventually (so other people can see your work, and so you have a backup), so let's make sure that works now:
+
+```bash
+git push
+```
+
+NOTE: Your first push for a branch might require additional details:
+
+```bash
+git push --set-upstream origin olga/875-camp-ground-zoom
+```
+
 ### 3. Create a new test
 
 Create a new test for the issue in `integration-test` dir. Sometimes it's helpful to look thru the existing tests to find one that is a close match to the pattern and start there.
