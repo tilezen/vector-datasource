@@ -4,14 +4,14 @@
 # https://www.openstreetmap.org/way/423023928
 assert_has_feature(
     14, 2615, 6330, 'pois',
-    {'kind': 'lighthouse'})
+    {'id': 423023928, 'kind': 'lighthouse'})
 
 # lighthouse without tourism = attraction
 # http://www.openstreetmap.org/node/1243877573
 assert_no_matching_feature(
     14, 2617, 6329, 'pois',
-    {'kind': 'lighthouse'})
+    {'id': 1243877573, 'kind': 'lighthouse'})
 
 assert_has_feature(
     15, 5235, 12659, 'pois',
-    {'kind': 'lighthouse'})
+    {'id': 1243877573, 'kind': 'lighthouse'})
