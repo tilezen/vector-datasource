@@ -15,19 +15,19 @@ assert_has_feature(
 assert_has_feature(
     18, 41903, 101329, "roads",
     {"kind": "major_road", "highway": "primary", "id": 370954791,
-     "name": "Alvord Lake Bridge", "is_bridge": True, "sort_key": 428})
+     "name": "Alvord Lake Bridge", "is_bridge": True, "sort_key": 430})
 
 #https://www.openstreetmap.org/way/27613581
 assert_has_feature(
     18, 41946, 101358, "roads",
     {"kind": "major_road", "highway": "secondary", "id": 27613581,
-     "name": "Oakdale Ave.", "is_bridge": True, "sort_key": 427})
+     "name": "Oakdale Ave.", "is_bridge": True, "sort_key": 429})
 
 #https://www.openstreetmap.org/way/242940297
 assert_has_feature(
     18, 41946, 101309, "roads",
     {"kind": "major_road", "highway": "tertiary", "id": 242940297,
-     "name": "Beale St.", "is_bridge": True, "sort_key": 426})
+     "name": "Beale St.", "is_bridge": True, "sort_key": 427})
 
 #https://www.openstreetmap.org/way/162038104
 assert_has_feature(

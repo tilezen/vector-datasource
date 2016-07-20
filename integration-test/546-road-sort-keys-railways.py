@@ -2,30 +2,30 @@
 #https://www.openstreetmap.org/way/8920472
 assert_has_feature(
     18, 41948, 101333, "roads",
-    {"kind": "rail", "railway": "rail", "id": 8920472, "sort_key": 380})
+    {"kind": "rail", "railway": "rail", "id": 8920472, "sort_key": 382})
 
 #https://www.openstreetmap.org/way/95623728
 assert_has_feature(
     18, 41947, 101306, "roads",
-    {"kind": "rail", "railway": "tram", "id": 95623728, "sort_key": 380})
+    {"kind": "rail", "railway": "tram", "id": 95623728, "sort_key": 382})
 
 #https://www.openstreetmap.org/way/160279679
 assert_has_feature(
     18, 41914, 101365, "roads",
     {"kind": "rail", "railway": "light_rail", "id": 160279679,
-     "sort_key": 380})
+     "sort_key": 382})
 
 #https://www.openstreetmap.org/way/105574666
 assert_has_feature(
     18, 76864, 99113, "roads",
     {"kind": "rail", "railway": "narrow_gauge", "id": 105574666,
-     "sort_key": 380})
+     "sort_key": 382})
 
 #https://www.openstreetmap.org/way/296530703
 assert_has_feature(
     18, 70859, 97816, "roads",
     {"kind": "rail", "railway": "monorail", "id": 296530703,
-     "sort_key": 380})
+     "sort_key": 382})
 
 # spurs, sidings, etc...
 #https://www.openstreetmap.org/way/106087318
