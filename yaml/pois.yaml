@@ -228,7 +228,8 @@ filters:
     min_zoom: GREATEST(13, LEAST(zoom + 2.5, 16))
     output: {kind: fort }
   - filter: {man_made: lighthouse}
-    min_zoom: 15
+    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+      ELSE 15 END
     output: {kind: lighthouse}
   - filter:
       tourism: [attraction, artwork, hanami, trail_riding_station]
