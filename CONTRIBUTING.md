@@ -138,7 +138,7 @@ Ensure your `master` branch is up-to-date with the server:
 git pull
 ```
 
-Then checkout a new branch by naming it something descriptive like the `yourname/#issue-issue title`.
+You will need a descriptive name for your new branch, and one way to do that is concatenate your user name, any relevant issue number(s) and a brief description, for example `olga/875-camp-ground-zoom`. Then create a new branch using `git checkout -b <branchname>`, like so:
 
 ```bash
 git checkout -b olga/875-camp-ground-zoom
