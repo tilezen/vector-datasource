@@ -274,6 +274,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `beach`
 * `breakwater`
 * `bridge`
+* `camp_site`
 * `caravan_site`
 * `carousel`
 * `cemetery`
