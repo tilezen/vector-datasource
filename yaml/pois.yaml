@@ -227,6 +227,10 @@ filters:
   - filter: {historic: fort}
     min_zoom: GREATEST(13, LEAST(zoom + 2.5, 16))
     output: {kind: fort }
+  - filter: {man_made: windmill}
+    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+      ELSE 15 END
+    output: {kind: windmill}
   - filter: {man_made: lighthouse}
     min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
       ELSE 15 END
@@ -363,9 +367,6 @@ filters:
   - filter: {historic: archaeological_site}
     min_zoom: 16
     output: {kind: archaeological_site}
-  - filter: {man_made: windmill}
-    min_zoom: 16
-    output: {kind: windmill}
   - filter: {man_made: communications_tower}
     min_zoom: 15
     output: {kind: communications_tower}
