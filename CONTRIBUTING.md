@@ -72,7 +72,7 @@ Generally speaking there are three aspects of developing vector tiles.
 
 - Configuring project setup, see [wiki page](https://github.com/tilezen/vector-datasource/wiki/Mapzen-Vector-Tile-Service)
 - Updating database properties (can be done ahead of time or at runtime)
-- Changing how features are selected from the database (requires TileServer restart)
+- Changing how features are selected from the database (requires tileserver restart)
 
 <div class='alert-message'>
 Yellow call-outs like this are meant to draw your attention to an important idea or distinction you should keep in mind.
@@ -116,11 +116,11 @@ To recap, with examples:
 <div class='alert-message'>NOTE: Generally perform maintenance on pre-existing jinja filters or optionally migrate them to the newer YAML format.</div>
 
 
-### Serving tiles in the TileServer repo
+### Serving tiles in the tileserver repo
 
 Listens for API requests on localhost, which are in the format of `layer/z/x/y.ext`.
 
-When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` layers file, **jinja2** templates, **Python** transforms, and per feature **sql** functions generated from the **yaml** filter files.
+When tileserver hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` layers file, **jinja2** templates, **Python** transforms, and per feature **sql** functions generated from the **yaml** filter files.
 
 <div class='alert-message'>NOTE: You must restart tileserver when vector-datasource <b>layers</b> are updated in <a href="queries.yaml">queries.yaml</a>.</div>
 
@@ -230,7 +230,7 @@ python integration-test.py local integration-test/875-camp-grounds-zoom.py
 
 Once it fails, we'll update our logic in step 4 below so it passes.
 
-<div class='alert-message'>So what's happening here? The <code>integration-test.py</code> script is asking TileServer for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
+<div class='alert-message'>So what's happening here? The <code>integration-test.py</code> script is asking tileserver for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
 
 Now the gory details...
 
@@ -409,7 +409,7 @@ cat test.log
 
 #### Some tests require tileserver restart
 
-A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart TileServer to reload this file (and related `jinja` files).
+A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart tileserver to reload this file.
 
 First, switch to the Terminal session where tileserver is running and kill it with a `contrl-c` keyboard press.
 
