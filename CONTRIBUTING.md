@@ -58,7 +58,7 @@ Generally speaking there are three aspects of developing vector tiles.
 - Updating database properties (can be done ahead of time or at runtime)
 - Changing how features are selected from the database (requires tileserver restart)
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">
+<div class="contributing flash flash-warn">
 <b>Yellow call-outs</b> like this are meant to draw your attention to an important idea or distinction you should keep in mind.
 </div>
 
