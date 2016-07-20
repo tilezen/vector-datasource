@@ -18,7 +18,7 @@
 
 # Community Values
 
-We ask that you are respectful when contributing to Tilezen or engaging with our community. As a community, we appreciate the fact that contributors might be approaching the project from a different perspective and background. We hope that beginners as well as advanced users will be able to use and contribute back to Tilezen. We want to encourage contributions and feedback from all over the world, which means that English might not be a contributor's native language, and sometimes we may encounter cultural differences. Contructive disagreements can be essential to moving a project forward, but disrespectful language or behavior will not be tolerated.
+We ask that you are respectful when contributing to Tilezen or engaging with our community. As a community, we appreciate the fact that contributors might be approaching the project from a different perspective and background. We hope that beginners as well as advanced users will be able to use and contribute back to Tilezen. We want to encourage contributions and feedback from all over the world, which means that English might not be a contributor's native language, and sometimes we may encounter cultural differences. Constructive disagreements can be essential to moving a project forward, but disrespectful language or behavior will not be tolerated.
 
 Above all, be patient, be respectful, and be kind!
 
@@ -30,7 +30,7 @@ Most issues for Tilezen are housed in the [Tilezen/vector-datasource](https://gi
 
 When submitting bug reports, please be sure to give us as much context as possible so that we can reproduce the error you encountered. Be sure to include:
 
-- System conditons (operating system, browser, etc), if you're running from source
+- System conditions (operating system, browser, etc), if you're running from source
 - Steps to reproduce
 - Expected outcome
 - Actual outcome
@@ -84,7 +84,7 @@ When modifying the logic below, we'll need to update our Postgres functions, mig
 
 ### Changing tile content in the vector-datasource repo
 
-Most content changes (eg: adding a new kind of feature) only require a database modification. Content changes are configured using YAML files which specify which database features are "filtered" and outputed in tiles. The location for these content filters is in the `yaml/` directory, for example: [pois.yaml](yaml/pois.yaml).
+Most content changes (e.g.: adding a new kind of feature) only require a database modification. Content changes are configured using YAML files which specify which database features are "filtered" and outputted in tiles. The location for these content filters is in the `yaml/` directory, for example: [pois.yaml](yaml/pois.yaml).
 
 Some preexisting feature filters are configured using an older raw SQL format in `jinja` files in the `queries/` directory. This older syntax is still helpful to select multiple feature properties across many kinds of features at once. For example, [pois.jinja](queries/pois.jinja).
 
@@ -237,7 +237,7 @@ out body;
 out skel qt;
 ```
 
-<div class='alert-message'>NOTE: Update the above example for your tag (eg: `"highway"="rest_area"`)!</div>
+<div class='alert-message'>NOTE: Update the above example for your tag (e.g.: `"highway"="rest_area"`)!</div>
 
 ##### Determine which tile the feature should appear in for your test
 
@@ -374,7 +374,7 @@ You can investigate why the test failed by printing out the full debug:
 cat test.log
 ```
 
-<div class='alert-message'>NOTE: It's best practice to run your own test AND to also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achive this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
+<div class='alert-message'>NOTE: It's best practice to run your own test AND to also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achieve this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
 
 #### Some tests require tileserver restart
 
@@ -504,7 +504,7 @@ Since `camp_site` was already in the `pois` layer, we only need to document it's
   * `caravan_site`
 ```
 
-<div class='alert-message'>Project documentation is [publicly accessable](https://mapzen.com/documentation/vector-tiles/layers/), they document the API promises the service makes.</div>
+<div class='alert-message'>Project documentation is [publicly accessible](https://mapzen.com/documentation/vector-tiles/layers/), they document the API promises the service makes.</div>
 
 ### 9. Push your local branch to the server
 
@@ -526,7 +526,7 @@ git commit -m 'Connects to #875 to add camp_site polygons' filename
 
 _NOTE: Subsequent commit messages can be more generic._
 
-Make sure you have a clean merge by pulling down the lastest master by checking out master:
+Make sure you have a clean merge by pulling down the latest master by checking out master:
 
 
 ```bash
