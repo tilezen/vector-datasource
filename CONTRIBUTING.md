@@ -97,7 +97,7 @@ To recap, with examples:
 - **Python** files are located in the `vectordatasource/` directory. Example: [transform.py](vectordatasource/transform.py).
 - **layers** are specified in [queries.yaml](queries.yaml).
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> Generally perform maintenance on pre-existing jinja filters or optionally migrate them to the newer YAML format.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> Generally perform maintenance on pre-existing jinja filters or optionally migrate them to the newer YAML format.</div>
 
 
 ### Serving tiles in the tileserver repo
@@ -106,7 +106,7 @@ Listens for API requests on localhost, which are in the format of `layer/z/x/y.e
 
 When tileserver hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` layers file, **jinja2** templates, **Python** transforms, and per feature **sql** functions generated from the **yaml** filter files.
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> You must restart tileserver when vector-datasource <b>layers</b> are updated in <a href="queries.yaml">queries.yaml</a>.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> You must restart tileserver when vector-datasource <b>layers</b> are updated in <a href="queries.yaml">queries.yaml</a>.</div>
 
 **Other considerations**
 
@@ -184,7 +184,7 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 - Ensure tileserver is running!
 - Run the test
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>Remember</b> to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>Remember</b> to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
 
 
 #### Example test
@@ -228,7 +228,7 @@ python integration-test.py local integration-test/875-camp-grounds-zoom.py
 
 Once it fails, we'll update our logic in step 4 below so it passes.
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>So what's happening here?</b> The <code>integration-test.py</code> script is asking tileserver for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>So what's happening here?</b> The <code>integration-test.py</code> script is asking tileserver for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
 
 Now the gory details...
 
@@ -266,7 +266,7 @@ out body;
 out skel qt;
 ```
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> Update the above example for your tag (e.g.: `"highway"="rest_area"`)!</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> Update the above example for your tag (e.g.: `"highway"="rest_area"`)!</div>
 
 ##### Determine which tile the feature should appear in for your test
 
@@ -335,7 +335,7 @@ Because some properties (like `min_zoom`) in the database are pre-computed, we n
 1. Prototype migration in PGAdmin (this step)
 2. Update data migration SQL files for the release (see step 7 below)
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>Advanced topic:</b> If you modify any other raw functions in the data directory, you'll also need to run <code>psql -f data/functions.sql osm</code>.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>Advanced topic:</b> If you modify any other raw functions in the data directory, you'll also need to run <code>psql -f data/functions.sql osm</code>.</div>
 
 #### Update the query configuration
 
@@ -403,7 +403,7 @@ You can investigate why the test failed by printing out the full debug:
 cat test.log
 ```
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> It's best practice to run your own test AND to also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achieve this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> It's best practice to run your own test AND to also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achieve this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
 
 #### Some tests require tileserver restart
 
@@ -429,7 +429,7 @@ Once you've finished testing your new database logic in step 4 above you need to
 
 Continuing the `camp_site` example, edit the following in the `data/migrations/v1.0.0-polygon.sql` file:
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> The exact file name for the migration will change, matching the <i>upcoming</i> release version.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> The exact file name for the migration will change, matching the <i>upcoming</i> release version.</div>
 
 ```sql
 UPDATE
@@ -455,7 +455,7 @@ UPDATE
       AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
 ```
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
 
 
 #### Migration details
@@ -470,7 +470,7 @@ Migrations for other data sources like Natural Earth and Who's On First go in:
 
 * `v1.0.0-other-tables.sql`
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> The exact file names for the migration will change, matching the <i>upcoming</i> release version.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> The exact file names for the migration will change, matching the <i>upcoming</i> release version.</div>
 
 #### Example database SQL
 
@@ -513,7 +513,7 @@ UPDATE planet_osm_polygon
   WHERE shop IN ('outdoor');
 ```
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> Some features can have a POI "label" and a landuse polygon, so calculate both!</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> Some features can have a POI "label" and a landuse polygon, so calculate both!</div>
 
 When we calculate both the POIs and the landuse min zoom:
 
@@ -536,7 +536,7 @@ Since `camp_site` was already in the `pois` layer, we only need to document it's
   * `caravan_site`
 ```
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;"><b>NOTE:</b> Project documentation is <a href="https://mapzen.com/documentation/vector-tiles/layers/">publicly accessible</a> and documents the API promises the service makes.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> Project documentation is <a href="https://mapzen.com/documentation/vector-tiles/layers/">publicly accessible</a> and documents the API promises the service makes.</div>
 
 ### 9. Push your local branch to the server
 
@@ -612,4 +612,4 @@ A Tilezen team member will review the PR for you, either merging it right away o
 
 If the review leads to code modifications those should be done in same branch and the PR will automatically update with subsequent commits to the branch.
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">Good luck, and <b>thank you</b> for contributing!</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:clap: Good luck, and <b>thank you</b> for contributing!</div>
