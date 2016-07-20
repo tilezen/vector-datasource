@@ -4,14 +4,14 @@
 # http://www.openstreetmap.org/way/287921407
 assert_has_feature(
     14, 2616, 6333, 'pois',
-    {'kind': 'windmill'})
+    {'id': 287921407, 'kind': 'windmill'})
 
 # windmill without tourism = attraction
 # http://www.openstreetmap.org/node/2304462088
 assert_no_matching_feature(
     14, 2675, 6412, 'pois',
-    {'kind': 'windmill'})
+    {'id': 2304462088, 'kind': 'windmill'})
 
 assert_has_feature(
     15, 5350, 12824, 'pois',
-    {'kind': 'windmill'})
+    {'id': 2304462088, 'kind': 'windmill'})
