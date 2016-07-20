@@ -60,7 +60,7 @@ Tilezen has several miscellaneous standards:
 - we use [CircleCI](https://circleci.com/gh/mapzen/vector-datasource) for continuous integration testing
 - we use [semver](http://semver.org/) for package versioning
 
-All  unit tests in a project will be automatically invoked when you commit to an existing project; make sure they exit successfully!
+All unit tests in a project will be automatically invoked when you commit to an existing project; make sure they exit successfully!
 
 ## Active contributors
 
