@@ -118,12 +118,19 @@ To recap, with examples:
 
 ### Serving tiles in the TileServer repo
 
-Listens for API requests on localhost, which are in the format of 0/0/0.ext
+Listens for API requests on localhost, which are in the format of `layer/z/x/y.ext`.
 
-When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` file and `.jinja2` files.
+When TileServer hears a request it asks Postgres for "the stuff" inside that tile's bounding box, configured via the `queries.yaml` layers file, **jinja2** templates, **Python** transforms, and per feature **sql** functions generated from the **yaml** filter files.
 
-_**NOTE:** A change to one of the query files (jinja) requires TileServer to be restarted so they can be reloaded. But content filter changes (YAML) generally doesn't require restarting TileServer._
+<div class='alert-message'>NOTE: You must restart tileserver when vector-datasource <b>layers</b> are updated in <a href="queries.yaml">queries.yaml</a>.</div>
 
+**Other considerations**
+
+- **yaml** updates don't require restart (but do require a **database migration**, see below).
+- **jinja** updates don't require restarting tileserver; they are re-read on request during development.
+- **Python** updates don't require restarting tileserver; they are re-read on request during development.
+
+**DATA MIGRATION:** Changes to layer **yaml** files will require at a minimum reloading the **sql** functions. This is sufficient if only the `kind` or any output properties have changed. But for `min_zoom` changes the affected features will need to be recalculated, probably via a data migration. This topic is covered in [further detail](CONTRIBUTING.md#4-edit-database-or-query-logic) below.
 
 ## Let's do this!
 
