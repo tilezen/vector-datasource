@@ -59,7 +59,7 @@ Generally speaking there are three aspects of developing vector tiles.
 - Changing how features are selected from the database (requires tileserver restart)
 
 <div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">
-<b>Yellow call-outs</b> like this are meant to draw your attention to an important idea or distinction you should keep in mind.
+:warning: <b>Yellow call-outs</b> like this are meant to draw your attention to an important idea or distinction you should keep in mind.
 </div>
 
 Map database in Postgres stores data from OpenStreetMap and other projects like Natural Earth and Who's On First.
@@ -68,13 +68,13 @@ When data is loaded, database [triggers](https://www.postgresql.org/docs/current
 
 When modifying the logic below, we'll need to update our Postgres functions, migrate the data, and cut new tiles.
 
-<span class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">
-<b>COMMON TERMS</b>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">
+:warning: <b>COMMON TERMS</b>
 <ul>
 <li><b>Vector tiles</b> (or just "tiles") allow bite sized access to large geographic databases with "raw" vector geometries and properties instead of rendered raster images.</li>
 <li><b>Map features</b> (or just "feature") are individual map features, commonly with a name, geometry, and additonal properties like unique ID and source. Example include individual roads, landuse polygons, or business icons.</li>
 </ul>
-</span>
+</div>
 
 ### Changing tile content in the vector-datasource repo
 
