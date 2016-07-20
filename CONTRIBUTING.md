@@ -78,9 +78,17 @@ Yellow call-outs like this are meant to draw your attention to an important idea
 
 Map database in Postgres stores data from OpenStreetMap and other projects like Natural Earth and Who's On First.
 
-When data is loaded, database "triggers" calculate if a feature is included in which layer(s), at what "minimum zoom", and other Mapzen specific "mz" properties.
+When data is loaded, database [triggers](https://www.postgresql.org/docs/current/static/triggers.html) calculate if a feature is included in which layer(s), at what "minimum zoom", and other Mapzen specific "mz" properties.
 
 When modifying the logic below, we'll need to update our Postgres functions, migrate the data, and cut new tiles.
+
+<div class='alert-message'>
+<b>COMMON TERMS</b> 
+<ul>
+<li><b>Vector tiles</b> (or just "tiles") allow bite sized access to large geographic databases with "raw" vector geometries and properties instead of rendered raster images.</li>
+<li><b>Map features</b> (or just "feature") are individual map features, commonly with a name, geometry, and additonal properties like unique ID and source. Example include individual roads, landuse polygons, or business icons.</li>
+</ul>
+</div>
 
 ### Changing tile content in the vector-datasource repo
 
