@@ -15,7 +15,8 @@ UPDATE
     (barrier = 'toll_booth' OR
      highway IN ('services', 'rest_area') OR
      tourism = 'camp_site' OR
-     man_made = 'windmill')
+     man_made = 'windmill' OR
+     man_made = 'lighthouse')
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_polygon.*), 999);
 
 UPDATE

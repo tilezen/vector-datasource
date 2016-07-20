@@ -231,6 +231,10 @@ filters:
     min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
       ELSE 15 END
     output: {kind: windmill}
+  - filter: {man_made: lighthouse}
+    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+      ELSE 15 END
+    output: {kind: lighthouse}
   - filter:
       tourism: [attraction, artwork, hanami, trail_riding_station]
     min_zoom: 17
@@ -292,11 +296,9 @@ filters:
   - filter: {lock: 'yes'}
     min_zoom: 15
     output: {kind: lock}
-  - filter:
-      man_made: [lighthouse, power_wind]
+  - filter: {man_made: power_wind}
     min_zoom: 15
-    output:
-      kind: {col: man_made}
+    output: {kind: power_wind}
   - filter: {natural: cave_entrance}
     min_zoom: 15
     output: {kind: cave_entrance}
