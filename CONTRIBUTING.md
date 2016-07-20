@@ -68,13 +68,13 @@ When data is loaded, database [triggers](https://www.postgresql.org/docs/current
 
 When modifying the logic below, we'll need to update our Postgres functions, migrate the data, and cut new tiles.
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">
+<span class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">
 <b>COMMON TERMS</b>
 <ul>
 <li><b>Vector tiles</b> (or just "tiles") allow bite sized access to large geographic databases with "raw" vector geometries and properties instead of rendered raster images.</li>
 <li><b>Map features</b> (or just "feature") are individual map features, commonly with a name, geometry, and additonal properties like unique ID and source. Example include individual roads, landuse polygons, or business icons.</li>
 </ul>
-</div>
+</span>
 
 ### Changing tile content in the vector-datasource repo
 
