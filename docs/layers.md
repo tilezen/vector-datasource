@@ -614,6 +614,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
+* `garden`
 * `gardener`
 * `gas` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate`
