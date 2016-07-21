@@ -687,3 +687,202 @@ BEGIN
   RETURN CASE WHEN val IS NULL THEN 'null' ELSE to_json(val) END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_building_kind_detail(val TEXT)
+RETURNS TEXT AS $$
+DECLARE
+BEGIN
+  RETURN CASE WHEN val IN (
+                  'bangunan',
+                  'building',
+                  'other',
+                  'rumah',
+                  'Rumah',
+                  'Rumah Masyarakat',
+                  'rumah_penduduk',
+                  'true',
+                  'trullo',
+                  'yes'
+              ) THEN NULL
+              WHEN val IN (
+                  'abandoned',
+                  'administrative',
+                  'agricultural',
+                  'airport',
+                  'allotment_house',
+                  'apartments',
+                  'arbour',
+                  'bank',
+                  'barn',
+                  'basilica',
+                  'beach_hut',
+                  'bell_tower',
+                  'boathouse',
+                  'brewery',
+                  'bridge',
+                  'bungalow',
+                  'bunker',
+                  'cabin',
+                  'carport',
+                  'castle',
+                  'cathedral',
+                  'chapel',
+                  'chimney',
+                  'church',
+                  'civic',
+                  'clinic',
+                  'clubhouse',
+                  'collapsed',
+                  'college',
+                  'commercial',
+                  'construction',
+                  'container',
+                  'convent',
+                  'cowshed',
+                  'dam',
+                  'damaged',
+                  'depot',
+                  'destroyed',
+                  'detached',
+                  'disused',
+                  'dormitory',
+                  'duplex',
+                  'factory',
+                  'farm',
+                  'farm_auxiliary',
+                  'fire_station',
+                  'garage',
+                  'garages',
+                  'gazebo',
+                  'ger',
+                  'glasshouse',
+                  'government',
+                  'grandstand',
+                  'greenhouse',
+                  'hangar',
+                  'healthcare',
+                  'hermitage',
+                  'hospital',
+                  'hotel',
+                  'house',
+                  'houseboat',
+                  'hut',
+                  'industrial',
+                  'kindergarten',
+                  'kiosk',
+                  'library',
+                  'mall',
+                  'manor',
+                  'manufacture',
+                  'mobile_home',
+                  'monastery',
+                  'mortuary',
+                  'mosque',
+                  'museum',
+                  'office',
+                  'outbuilding',
+                  'parking',
+                  'pavilion',
+                  'power',
+                  'prison',
+                  'proposed',
+                  'pub',
+                  'public',
+                  'residential',
+                  'restaurant',
+                  'retail',
+                  'roof',
+                  'ruin',
+                  'ruins',
+                  'school',
+                  'semidetached_house',
+                  'service',
+                  'shed',
+                  'shelter',
+                  'shop',
+                  'shrine',
+                  'silo',
+                  'slurry_tank',
+                  'stable',
+                  'stadium',
+                  'static_caravan',
+                  'storage',
+                  'storage_tank',
+                  'store',
+                  'substation',
+                  'summer_cottage',
+                  'summer_house',
+                  'supermarket',
+                  'synagogue',
+                  'tank',
+                  'temple',
+                  'terrace',
+                  'tower',
+                  'train_station',
+                  'transformer_tower',
+                  'transportation',
+                  'university',
+                  'utility',
+                  'veranda',
+                  'warehouse',
+                  'wayside_shrine',
+                  'works'
+              ) THEN val
+              WHEN val = 'barne' THEN 'barn'
+              WHEN val = 'commercial;residential' THEN 'mixed_use'
+              WHEN val = 'constructie' THEN 'construction'
+              WHEN val = 'dwelling_house' THEN 'house'
+              WHEN val = 'education' THEN 'school'
+              WHEN val = 'greenhouse_horticulture' THEN 'greenhouse'
+              WHEN val IN ('apartment', 'flat') THEN 'apartments'
+              WHEN val IN ('houses', 'residences', 'residence', 'perumahan permukiman', 'residentiel1') THEN 'residential'
+              WHEN val IN ('semi_detached', 'semi-detached', 'semi') THEN 'semidetached_house'
+              WHEN val = 'offices' THEN 'office'
+              WHEN val = 'prefab_container' THEN 'container'
+              WHEN val = 'public_building' THEN 'public'
+              WHEN val = 'railway_station' THEN 'train_station'
+              WHEN val = 'roof=permanent' THEN 'roof'
+              WHEN val = 'stables' THEN 'stable'
+              WHEN val = 'static caravan' THEN 'static_caravan'
+              WHEN val = 'station' THEN 'transportation'
+              WHEN val = 'storage tank' THEN 'storage_tank'
+              WHEN val = 'townhome' THEN 'terrace'
+              ELSE NULL END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION mz_building_part_kind_detail(val TEXT)
+RETURNS TEXT AS $$
+DECLARE
+BEGIN
+  RETURN CASE WHEN val IN ('yes', 'part', 'church:part', 'default') THEN NULL
+              WHEN val IN (
+                'arch',
+                'balcony',
+                'base',
+                'column',
+                'door',
+                'elevator',
+                'entrance',
+                'floor',
+                'hall',
+                'main',
+                'passageway',
+                'pillar',
+                'porch',
+                'ramp',
+                'roof',
+                'room',
+                'steps',
+                'stilobate',
+                'tier',
+                'tower',
+                'verticalpassage',
+                'wall',
+                'window'
+              ) THEN val
+              WHEN val IN ('corridor', 'Corridor', 'vertical', 'verticalpassage') THEN 'verticalpassage'
+              WHEN val IN ('stairs', 'stairway') THEN 'steps'
+              ELSE NULL END;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

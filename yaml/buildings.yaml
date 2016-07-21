@@ -18,6 +18,12 @@ globals:
       roof_orientation: {col: "roof:orientation"}
       addr_housenumber: {col: "addr:housenumber"}
       addr_street: {col: "addr:street"}
+  - &building_kind_detail
+      kind_detail:
+        expr: mz_building_kind_detail(building)
+  - &building_part_kind_detail
+      kind_detail:
+        expr: mz_building_part_kind_detail("building:part")
   - &is_building
       all:
         - building: true
@@ -56,34 +62,39 @@ filters:
     min_zoom: 13
     output:
       <<: *building_standard_properties
-      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+      kind: building
+      <<: *building_kind_detail
   - filter:
       <<: *is_building
       <<: *z14_area_volume
     min_zoom: 14
     output:
       <<: *building_standard_properties
-      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+      kind: building
+      <<: *building_kind_detail
   - filter:
       <<: *is_building
       <<: *z15_area_volume
     min_zoom: 15
     output:
       <<: *building_standard_properties
-      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+      kind: building
+      <<: *building_kind_detail
   - filter:
       <<: *is_building
       <<: *z16_area_volume
     min_zoom: 16
     output:
       <<: *building_standard_properties
-      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+      kind: building
+      <<: *building_kind_detail
   - filter:
       <<: *is_building
     min_zoom: 17
     output:
       <<: *building_standard_properties
-      kind: {expr: CASE WHEN building = 'yes' THEN 'building' ELSE building END}
+      kind: building
+      <<: *building_kind_detail
   # building part
   - filter:
       <<: *is_building_part
@@ -91,20 +102,23 @@ filters:
     min_zoom: 15
     output:
       <<: *building_standard_properties
-      kind: {expr: "CASE WHEN \"building:part\" = 'yes' THEN 'building' ELSE \"building:part\" END"}
+      kind: building_part
+      <<: *building_part_kind_detail
   - filter:
       <<: *is_building_part
       <<: *z16_area_volume
     min_zoom: 16
     output:
       <<: *building_standard_properties
-      kind: {expr: "CASE WHEN \"building:part\" = 'yes' THEN 'building' ELSE \"building:part\" END"}
+      kind: building_part
+      <<: *building_part_kind_detail
   - filter:
       <<: *is_building_part
     min_zoom: 17
     output:
       <<: *building_standard_properties
-      kind: {expr: "CASE WHEN \"building:part\" = 'yes' THEN 'building' ELSE \"building:part\" END"}
+      kind: building_part
+      <<: *building_part_kind_detail
   # address points
   - filter:
       "addr:housenumber": true
