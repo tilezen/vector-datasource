@@ -49,7 +49,11 @@ SELECT
 FROM planet_osm_point
 
 WHERE
+{% if zoom >= 16 %}
+    mz_places_min_zoom IS NOT NULL
+{% else %}
     mz_places_min_zoom <= {{ zoom }}
+{% endif %}
     AND {{ bounds['point']|bbox_filter('way') }}
 
 {% if zoom >= 11 %}
