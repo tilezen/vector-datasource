@@ -296,7 +296,7 @@ filters:
       kind: path
       highway: {col: highway}
   - filter:
-      highway: [path, track, cycleway]
+      highway: [path, track, cycleway, bridleway]
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
     table: osm
     output:
