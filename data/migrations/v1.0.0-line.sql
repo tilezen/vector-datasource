@@ -1,7 +1,11 @@
 UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*)
   WHERE
+<<<<<<< 64eee1bc6ea92baa467be85b3229e6bd1bcd2a0a
     highway IN ('raceway', 'corridor', 'bridleway') AND
+=======
+    highway IN ('raceway', 'corridor', 'pedestrian') AND
+>>>>>>> updated line migrations
     COALESCE(mz_road_level, 999) <> COALESCE(mz_calculate_min_zoom_roads(planet_osm_line.*), 999);
 
 UPDATE
