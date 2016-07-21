@@ -212,6 +212,9 @@ filters:
       14), 12) END
     extra_columns: [height]
     output: {kind: waterfall, height: {col: height}}
+  - filter: {leisure: garden}
+    min_zoom: GREATEST(12, LEAST(zoom, 16))
+    output: {kind: garden}
   - filter:
       tags->attraction: [animal, water_slide, roller_coaster, summer_toboggan, carousel,
         amusement_ride, maze]

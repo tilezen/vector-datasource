@@ -18,7 +18,7 @@ filters:
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: park}
   - filter: {leisure: garden}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    min_zoom: GREATEST(LEAST(zoom, 16), 11)
     output: {kind: garden}
   - filter: {leisure: playground}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
