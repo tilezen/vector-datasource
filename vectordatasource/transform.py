@@ -3473,6 +3473,8 @@ def add_is_bicycle_related(shape, props, fid, zoom):
             'cycleway' in props or
             'cycleway_left' in props or
             'cycleway_right' in props or
+            props.get('bicycle') == 'yes' or
+            props.get('bicycle') == 'designated' or
             props.get('highway') == 'cycleway'):
         props['is_bicycle_related'] = True
     return shape, props, fid
