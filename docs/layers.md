@@ -250,7 +250,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `name`
 * `id`: osm_id
-* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), and `fence` (zoom 16+ only).
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), `fence` (zoom 16+ only) and `gate` (zoom 16+ only).
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 
@@ -297,6 +297,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `fort`
 * `fuel`
 * `garden`
+* `gate`
 * `generator`
 * `glacier`
 * `golf_course`
