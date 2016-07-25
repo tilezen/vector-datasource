@@ -369,3 +369,6 @@ filters:
   - filter: {tourism: camp_site}
     min_zoom: GREATEST(LEAST(zoom, 16), 13)
     output: {kind: camp_site}
+  - filter: {barrier: gate}
+    min_zoom: 16
+    output: {kind: gate}
