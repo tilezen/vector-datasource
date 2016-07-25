@@ -886,3 +886,28 @@ BEGIN
               ELSE NULL END;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+--- Identifies and returns highway level of gate location
+CREATE OR REPLACE FUNCTION mz_get_highway_level_point(val_osm_id BIGINT)
+RETURNS SMALLINT AS $$
+BEGIN
+  RETURN MAX(CASE
+    WHEN highway IN ('motorway', 'trunk', 'primary', 'motorway_link',
+                     'trunk_link', 'primary_link') THEN 3
+    WHEN highway IN ('secondary', 'tertiary', 'secondary_link',
+                     'tertiary_link') THEN 2
+    WHEN highway IN ('residential', 'service', 'path', 'track', 'footway', 'unclassified') THEN 1
+    ELSE 0
+  END) AS highway_level FROM (
+  SELECT
+  p.osm_id,
+  hstore(w.tags)->'highway' AS highway
+  FROM planet_osm_point p
+  JOIN planet_osm_ways w
+  ON ARRAY[p.osm_id] && w.nodes
+  WHERE
+      p.osm_id = val_osm_id
+    ) x
+        GROUP BY osm_id;
+END;
+$$ LANGUAGE plpgsql STABLE;
