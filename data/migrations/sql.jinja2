@@ -146,6 +146,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
+        osm_id bigint,
         tags hstore,
         way_area real)
 RETURNS REAL AS $$
@@ -167,6 +168,7 @@ BEGIN
 {%- for param in layers['pois']['params'] %}
         row.{{param.key}},
 {%- endfor %}
+        row.osm_id,
         row.tags,
         0::real);
 END;
@@ -186,6 +188,7 @@ BEGIN
         row.{{param.key}},
 {%- endif -%}
 {%- endfor %}
+        row.osm_id,
         row.tags,
         row.way_area);
 END;
@@ -195,6 +198,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_json_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
+        osm_id bigint,
         tags hstore)
 RETURNS JSON AS $$
 BEGIN
@@ -212,6 +216,7 @@ BEGIN
 {%- for param in layers['pois']['params'] %}
         row.{{param.key}},
 {%- endfor %}
+        row.osm_id,
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
@@ -230,6 +235,7 @@ BEGIN
         row.{{param.key}},
 {%- endif -%}
 {%- endfor %}
+        row.osm_id,
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
