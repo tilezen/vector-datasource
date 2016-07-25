@@ -293,6 +293,7 @@ filters:
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
+      <<: *osm_footway_properties
       kind: path
       highway: {col: highway}
   - filter:
@@ -623,6 +624,7 @@ filters:
     output:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
+      <<: *osm_footway_properties
       kind: path
       man_made: pier
   #############################################################
