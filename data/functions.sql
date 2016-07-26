@@ -889,7 +889,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --- Identifies and returns the min_zoom for gates 
 --- given the highway level of gate location
-CREATE OR REPLACE FUNCTION mz_get_highway_level_point(val_osm_id BIGINT)
+CREATE OR REPLACE FUNCTION mz_get_min_zoom_highway_level_gate(val_osm_id BIGINT)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN MAX(CASE
