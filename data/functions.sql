@@ -887,17 +887,18 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
---- Identifies and returns highway level of gate location
+--- Identifies and returns the min_zoom for gates 
+--- given the highway level of gate location
 CREATE OR REPLACE FUNCTION mz_get_highway_level_point(val_osm_id BIGINT)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN MAX(CASE
     WHEN highway IN ('motorway', 'trunk', 'primary', 'motorway_link',
-                     'trunk_link', 'primary_link') THEN 3
+                     'trunk_link', 'primary_link') THEN 14
     WHEN highway IN ('secondary', 'tertiary', 'secondary_link',
-                     'tertiary_link') THEN 2
-    WHEN highway IN ('residential', 'service', 'path', 'track', 'footway', 'unclassified') THEN 1
-    ELSE 0
+                     'tertiary_link') THEN 15
+    WHEN highway IN ('residential', 'service', 'path', 'track', 'footway', 'unclassified') THEN 16
+    ELSE 17
   END) AS highway_level FROM (
   SELECT
   p.osm_id,
