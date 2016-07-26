@@ -896,7 +896,8 @@ BEGIN
                      'trunk_link', 'primary_link') THEN 3
     WHEN highway IN ('secondary', 'tertiary', 'secondary_link',
                      'tertiary_link') THEN 2
-    WHEN highway IN ('residential', 'service', 'path', 'track', 'footway', 'unclassified') THEN 1
+    WHEN highway IN ('residential', 'service', 'path', 'track',
+                     'footway', 'unclassified') THEN 1
     ELSE 0
   END) AS highway_level FROM (
   SELECT
