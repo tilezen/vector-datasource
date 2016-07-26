@@ -2,12 +2,14 @@
 
 # Gate on secondary road
 # http://www.openstreetmap.org/node/3608363612
+# http://www.openstreetmap.org/way/83473200
 assert_has_feature(
     15, 5528, 12649, 'pois',
     {'id': 3608363612, 'kind': 'gate', 'min_zoom': 15})
 
 # Gate on minor road
 # http://www.openstreetmap.org/node/2591034891
+# http://www.openstreetmap.org/way/11621900
 assert_has_feature(
     16, 19244, 24628, 'pois',
     {'id': 2591034891, 'kind': 'gate', 'min_zoom': 16})
@@ -18,6 +20,7 @@ assert_no_matching_feature(
 
 # Gate on unclassified road
 # http://www.openstreetmap.org/node/276321344
+# http://www.openstreetmap.org/way/70807512
 assert_has_feature(
     16, 10549, 25415, 'pois',
     {'id': 276321344, 'kind': 'gate', 'min_zoom': 16})
@@ -28,6 +31,7 @@ assert_no_matching_feature(
 
 # Gate on footway
 # http://www.openstreetmap.org/node/302482019
+# http://www.openstreetmap.org/way/27553445
 assert_has_feature(
     16, 10466, 25328, 'pois',
     {'id': 302482019, 'kind': 'gate', 'min_zoom': 16})
@@ -38,6 +42,7 @@ assert_no_matching_feature(
 
 # Gate on a fence
 # http://www.openstreetmap.org/node/4320045170
+# http://www.openstreetmap.org/way/427290222
 assert_has_feature(
     17, 20959, 50689, 'pois',
     {'id': 4320045170, 'kind': 'gate'})
