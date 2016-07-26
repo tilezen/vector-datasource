@@ -317,7 +317,7 @@ filters:
       kind: station
       state: {col: tags->state}
   - filter:
-      railway: [halt, tram_stop, stop]
+      all: {railway: [halt, stop, tram_stop], historic: '-yes'}
     min_zoom: 13
     output:
       kind: {col: railway}
