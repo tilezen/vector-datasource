@@ -288,11 +288,7 @@ filters:
     min_zoom: 18
     output: {kind: toilets}
   - filter: {barrier: gate}
-    min_zoom: CASE WHEN mz_get_highway_level_point(osm_id) = 3 THEN 14
-        WHEN mz_get_highway_level_point(osm_id) = 2 THEN 15
-        WHEN mz_get_highway_level_point(osm_id) = 1 THEN 16
-        ELSE 17
-        END
+    min_zoom: {17 - COALESCE(mz_get_highway_level_point(osm_id), 0)}
     output: {kind: gate}
   - filter: {barrier: toll_booth}
     min_zoom: 15
