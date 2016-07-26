@@ -4,7 +4,7 @@ v1.0.0-pre1
 * See detailed Breaking changes, New features, Bug fixes, and Internal Changes sections below.
 * **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.9.0](https://github.com/mapzen/tilequeue/releases/tag/v0.9.0) and [TileStache v0.10.0](https://github.com/mapzen/TileStache/releases/tag/v0.10.0)
 
-  #### Breaking changes (v1.0.0-pre1)
+  #### BREAKING CHANGES (v1.0.0-pre1)
 
 - **new url scheme**: We've removed `osm/` prefix from Mapzen's default vector tile URL path. See [#652](https://github.com/tilezen/vector-datasource/issues/652). Examples:
   - New URL: `https://tile.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
@@ -45,7 +45,7 @@ v1.0.0-pre1
 - Use boolean values instead of 'yes' for properties like`osm_relation`.  [#778](https://github.com/tilezen/vector-datasource/issues/778)
 
 
-  #### New features (v1.0.0-pre1)
+  #### NEW FEATURES (v1.0.0-pre1)
 
 - **roads** layer: Add `highway=raceway` with kind of `minor_road`. See  [#664](https://github.com/tilezen/vector-datasource/issues/664)
 
@@ -60,7 +60,7 @@ v1.0.0-pre1
 - **places** layer: Add localized names for Who's On First sourced neighbourhoods using _l10n_ conventions. See [#418](https://github.com/tilezen/vector-datasource/issues/418)
 
 
-  #### Bug fixes (v1.0.0-pre1)
+  #### BUG FIXES (v1.0.0-pre1)
 
 - **pois** layer: Some walking network points were wrongly classified as `rwn` when they were actually `iwn`. [#844](https://github.com/tilezen/vector-datasource/issues/844)
 
@@ -78,7 +78,7 @@ v1.0.0-pre1
 
 
 
-  #### Internal changes (v1.0.0-pre1)
+  #### INTERNAL CHANGES (v1.0.0-pre1)
 
 - **pois** layer: Remove several redundant filters for `boat_storage`, `firepit`, `dry_cleaning`, `toilets`, `theatre`, `picnic_site`,
 
