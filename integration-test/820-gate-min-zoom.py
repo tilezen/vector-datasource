@@ -1,10 +1,10 @@
 # Set gate min zoom based on highway type
 
 # Gate on secondary road
-# https://www.openstreetmap.org/node/2784141829
+# http://www.openstreetmap.org/node/3608363612
 assert_has_feature(
-    15, 9237, 12635, 'pois',
-    {'id': 2784141829, 'kind': 'gate', 'min_zoom': 15})
+    15, 5528, 12649, 'pois',
+    {'id': 3608363612, 'kind': 'gate', 'min_zoom': 15})
 
 # Gate on minor road
 # http://www.openstreetmap.org/node/2591034891
