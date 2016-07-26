@@ -288,7 +288,7 @@ filters:
     min_zoom: 18
     output: {kind: toilets}
   - filter: {barrier: gate}
-    min_zoom: 17 - COALESCE(mz_get_highway_level_point(osm_id), 0)
+    min_zoom: COALESCE(mz_get_highway_level_point(osm_id))
     output: {kind: gate}
   - filter: {barrier: toll_booth}
     min_zoom: 15
