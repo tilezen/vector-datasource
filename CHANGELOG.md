@@ -2,7 +2,7 @@ v1.0.0-pre1
 -------
 * **Release date**: 2016-07-22 on dev as public preview
 * See detailed Breaking changes, New features, Bug fixes, and Internal Changes sections below.
-* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.9.0](https://github.com/mapzen/tilequeue/releases/tag/v0.9.0)
+* **Requires:** [tileserver v0.7.0](https://github.com/mapzen/tileserver/releases/tag/v0.7.0) and [tilequeue v0.10.0](https://github.com/mapzen/tilequeue/releases/tag/v0.10.0)
 
   #### BREAKING CHANGES (v1.0.0-pre1)
 
