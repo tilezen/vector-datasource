@@ -154,14 +154,14 @@ WHERE {{ bounds['polygon']|bbox_filter('the_geom') }}
 UNION ALL
 
 SELECT
-    name,
+    tags->'name' AS name,
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     NULL::boolean AS label_placement,
-    tunnel,
+    tags->'tunnel' AS tunnel,
     %#tags AS tags
 
 FROM planet_osm_polygon t
@@ -173,14 +173,14 @@ WHERE
 UNION ALL
 
 SELECT
-    name,
+    tags->'name' AS name,
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     NULL::boolean AS label_placement,
-    tunnel,
+    tags->'tunnel' AS tunnel,
     %#tags AS tags
 
 FROM planet_osm_line t
@@ -194,7 +194,7 @@ WHERE
 UNION ALL
 
 SELECT
-  name,
+  tags->'name' AS name,
   NULL AS area,
   mz_calculate_json_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,

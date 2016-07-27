@@ -62,7 +62,7 @@ WHERE
 {% else %}
 
 SELECT
-  name,
+  tags->'name' AS name,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_polygon.*) AS mz_properties,
   -- note that we force the RHR, which makes outers clockwise,
@@ -97,7 +97,7 @@ WHERE
 UNION ALL
 
 SELECT
-  name,
+  tags->'name' AS name,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_line.*) AS mz_properties,
   {% filter geometry %}way{% endfilter %} AS __geometry__,

@@ -56,12 +56,41 @@ def value_columns(val):
     return []
 
 
-def format_column(k):
-    if k.startswith('tags->'):
-        val = "tags->'%s'" % (k[len('tags->'):])
-    else:
-        val = '"%s"' % k
-    return val
+# TODO! volume isn't a fixed tag, it was just easier to do it this way
+# temporarily...
+FIXED_OSM_COLUMNS = set(['way_area', 'way', 'osm_id', 'volume'])
+
+class Column(object):
+
+    def __init__(self, name, table):
+        startswith_tags = name.startswith('tags->')
+        self._is_tag = startswith_tags or \
+                       ((table is None or table == 'osm') and name not in FIXED_OSM_COLUMNS)
+        if startswith_tags:
+            self._name = name[len('tags->'):]
+        else:
+            self._name = name
+
+    def exists_check(self):
+        if self._is_tag:
+            return "tags ? '%s'" % self._name
+        else:
+            return None
+
+    def format(self):
+        fmt = "tags->'%s'" if self._is_tag else '"%s"'
+        return fmt % self._name
+
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__) and
+                self._is_tag == other._is_tag and
+                self._name == other._name)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return (self._is_tag, self._name).__hash__()
 
 
 class EqualsRule(object):
@@ -72,14 +101,14 @@ class EqualsRule(object):
 
     def as_sql(self):
         equals_check = '%s = %s' % (
-                format_column(self.column),
+                self.column.format(),
                 format_value(self.value))
 
         # tags->'foo' is NULL when the hstore doesn't contain that key, which
         # makes all the following comparisons NULL, so combine the equals
         # with an exists check.
-        if self.column.startswith('tags->'):
-            exists_check = "tags ? '%s'" % (self.column[len('tags->'):],)
+        exists_check = self.column.exists_check()
+        if exists_check:
             return '(%s) AND (%s)' % (exists_check, equals_check)
         else:
             return equals_check
@@ -95,7 +124,7 @@ class GreaterOrEqualsRule(object):
 
     def as_sql(self):
         return '%s >= %s' % (
-            format_column(self.column),
+            self.column.format(),
             format_value(self.value))
 
     def columns(self):
@@ -110,7 +139,7 @@ class NotEqualsRule(object):
 
     def as_sql(self):
         return '%s <> %s' % (
-            format_column(self.column),
+            self.column.format(),
             format_value(self.value))
 
     def columns(self):
@@ -126,7 +155,7 @@ class SetRule(object):
     def as_sql(self):
         formatted_values = map(format_value, self.values)
         return '%s IN (%s)' % (
-            format_column(self.column),
+            self.column.format(),
             ', '.join(formatted_values))
 
     def columns(self):
@@ -142,10 +171,11 @@ class ExistsRule(object):
         self.column = column
 
     def as_sql(self):
-        if self.column.startswith('tags->'):
-            return "tags ? '%s'" % (self.column[len('tags->'):],)
+        exists_check = self.column.exists_check()
+        if exists_check:
+            return exists_check
         else:
-            return '%s IS NOT NULL' % format_column(self.column)
+            return '%s IS NOT NULL' % self.column.format()
 
     def columns(self):
         return [self.column]
@@ -157,7 +187,7 @@ class NotExistsRule(object):
         self.column = column
 
     def as_sql(self):
-        return '%s IS NULL' % format_column(self.column)
+        return '%s IS NULL' % self.column.format()
 
     def columns(self):
         return [self.column]
@@ -216,13 +246,13 @@ class ExpressionRule(object):
         return cols
 
 
-def create_level_filter_rule(filter_level, combinator=AndRule):
+def create_level_filter_rule(filter_level, table, combinator=AndRule):
     rules = []
     if not isinstance(filter_level, list):
         filter_level = [filter_level]
     for filter_level_item in filter_level:
         for k, v in filter_level_item.items():
-            rule = create_filter_rule(k, v)
+            rule = create_filter_rule(k, v, table)
             rules.append(rule)
     assert rules, 'No rules specified in level: %s' % filter_level
     if len(rules) > 1:
@@ -232,35 +262,36 @@ def create_level_filter_rule(filter_level, combinator=AndRule):
     return rule
 
 
-def create_filter_rule(filter_key, filter_value):
+def create_filter_rule(filter_key, filter_value, table):
     # check for the composite rules first
     if filter_key == 'not':
-        rule = create_level_filter_rule(filter_value)
+        rule = create_level_filter_rule(filter_value, table)
         rule = NotRule(rule)
     elif filter_key == 'all':
-        rule = create_level_filter_rule(filter_value)
+        rule = create_level_filter_rule(filter_value, table)
     elif filter_key == 'any':
-        rule = create_level_filter_rule(filter_value, combinator=OrRule)
+        rule = create_level_filter_rule(filter_value, table, combinator=OrRule)
     else:
         # leaf rules
+        col = Column(filter_key, table)
         if isinstance(filter_value, list):
-            rule = SetRule(filter_key, filter_value)
+            rule = SetRule(col, filter_value)
         else:
             if filter_value is True:
-                rule = ExistsRule(filter_key)
+                rule = ExistsRule(col)
             elif filter_value is False:
-                rule = NotExistsRule(filter_key)
+                rule = NotExistsRule(col)
             elif isinstance(filter_value, Number):
-                rule = EqualsRule(filter_key, filter_value)
+                rule = EqualsRule(col, filter_value)
             elif isinstance(filter_value, str) and filter_value.startswith('-'):
-                rule = NotEqualsRule(filter_key, filter_value[1:])
+                rule = NotEqualsRule(col, filter_value[1:])
             elif isinstance(filter_value, dict) and 'min' in filter_value:
-                rule = GreaterOrEqualsRule(filter_key, filter_value['min'])
+                rule = GreaterOrEqualsRule(col, filter_value['min'])
             elif isinstance(filter_value, dict) and 'expr' in filter_value:
                 rule = ExpressionRule(
-                    filter_key, filter_value['expr'], filter_value.get('cols'))
+                    col, filter_value['expr'], filter_value.get('cols'))
             else:
-                rule = EqualsRule(filter_key, filter_value)
+                rule = EqualsRule(col, filter_value)
     return rule
 
 
@@ -299,9 +330,11 @@ class Matcher(object):
 
 
 def create_matcher(yaml_datum):
+    table = yaml_datum.get('table')
+
     rules = []
     for k, v in yaml_datum['filter'].items():
-        rule = create_filter_rule(k, v)
+        rule = create_filter_rule(k, v, table)
         rules.append(rule)
     assert rules, 'No filter rules found in %s' % yaml_datum
     if len(rules) > 1:
@@ -313,7 +346,6 @@ def create_matcher(yaml_datum):
     output = yaml_datum['output']
     assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
 
-    table = yaml_datum.get('table')
     extra_columns = yaml_datum.get('extra_columns', [])
     matcher = Matcher(rule, min_zoom, output, table, extra_columns)
     return matcher
@@ -371,22 +403,23 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
         # needed by the output, minus any which are synthetic and local to the
         # query function.
         columns = ((set(matcher.rule.columns()) |
-                    set(matcher.output_columns()))
-                   - synthetic_columns)
+                    set([Column(c, 'fake') for c in matcher.output_columns()]))
+                   - set([Column(c, matcher.table) for c in synthetic_columns]))
         for column in columns:
-            if not column.startswith('tags'):
-                if column == 'gid' or column == 'fid':
+            assert isinstance(column, Column), "%r is not a Column" % (column,)
+            if not column._is_tag:
+                if column._name == 'gid' or column._name == 'fid':
                     typ = 'integer'
-                elif column == 'scalerank' or column == 'labelrank':
+                elif column._name == 'scalerank' or column._name == 'labelrank':
                     typ = 'smallint'
-                elif column == 'way':
+                elif column._name == 'way':
                     typ = 'geometry'
-                elif matcher.table == 'ne' and column == 'expressway':
+                elif matcher.table == 'ne' and column._name == 'expressway':
                     typ = 'smallint'
                 else:
                     typ = 'text'
                 key = Key(
-                    table=matcher.table, key=format_column(column), typ=typ)
+                    table=matcher.table, key=column.format(), typ=typ)
                 params.add(key)
 
     # sorted params is nicer to read in the sql

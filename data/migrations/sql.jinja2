@@ -953,7 +953,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_json_buildings_(
         tags hstore)
 RETURNS JSON AS $$
 DECLARE
-  volume REAL := mz_building_height("height", "building:levels") * way_area;
+  volume REAL := mz_building_height(tags->'height', tags->'building:levels') * way_area;
 BEGIN
   RETURN {{ layers['buildings']['kind_case_statement'] }};
 END;
@@ -969,7 +969,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings_(
         tags hstore)
 RETURNS SMALLINT AS $$
 DECLARE
-  volume REAL := mz_building_height("height", "building:levels") * way_area;
+  volume REAL := mz_building_height(tags->'height', tags->'building:levels') * way_area;
 BEGIN
   RETURN {{ layers['buildings']['min_zoom_case_statement'] }};
 END;
@@ -1076,7 +1076,7 @@ BEGIN
         {{ table_param(param, 'osm') }},
 {%- endfor %}
         row.osm_id,
-        row.name,
+        row.tags->'name',
         row.way,
         row.tags);
 END;
@@ -1108,7 +1108,7 @@ BEGIN
         {{ table_param(param, 'osm') }},
 {%- endfor %}
         row.osm_id,
-        row.name,
+        row.tags->'name',
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;

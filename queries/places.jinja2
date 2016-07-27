@@ -27,17 +27,17 @@ WHERE
 UNION ALL
 
 SELECT
-    name,
+    tags->'name' AS name,
     mz_calculate_json_places(planet_osm_point.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
 
-    admin_level,
+    tags->'admin_level' AS admin_level,
     NULL AS scalerank,
     NULL AS labelrank,
-    population,
-    capital,
+    tags->'population' AS population,
+    tags->'capital' AS capital,
     tags->'state_capital' AS state_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,

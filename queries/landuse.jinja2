@@ -11,26 +11,19 @@
 {% macro osm_landuse_detailed_query(table, geom_type) %}
 SELECT
 {% if table == 'planet_osm_polygon' %}
-    CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
+    CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END AS name,
 {% else %}
-    name,
+    tags->'name' AS name,
 {% endif %}
     least(16, mz_landuse_min_zoom)::real AS min_zoom,
     tags->'protect_class' AS protect_class,
-    operator,
+    tags->'operator' AS operator,
     way_area::bigint AS area,
     mz_calculate_json_landuse({{ table }}.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    sport,
-    religion,
-    surface,
-    "natural",
-    tags->'attraction' AS attraction,
-    tags->'zoo' AS zoo,
-    barrier,
-    mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building,
+    mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building,
     %#tags AS tags
 FROM
     {{ table }}
@@ -57,10 +50,10 @@ WHERE
 UNION ALL
 
 SELECT
-  name,
+  tags->'name' AS name,
   mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
-  operator,
+  tags->'operator' AS operator,
   way_area::bigint AS area,
   mz_calculate_json_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
@@ -91,13 +84,13 @@ SELECT
   CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
   mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
-  operator,
+  tags->'operator' AS operator,
   way_area::bigint AS area,
   mz_calculate_json_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
-  mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building
+  mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building
 FROM
   planet_osm_polygon
 WHERE
@@ -121,13 +114,6 @@ SELECT
   '' AS name,
   4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
   {{ ne_landuse_cols('urban_area') }},
-  NULL AS sport,
-  NULL AS religion,
-  NULL AS surface,
-  NULL AS "natural",
-  NULL AS attraction,
-  NULL AS zoo,
-  NULL AS barrier,
   NULL AS mz_is_building,
   NULL AS tags
 FROM

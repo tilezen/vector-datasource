@@ -48,13 +48,14 @@ echo "=== Dumping test data..."
 if [[ -f data.osc ]]; then
     rm -f data.osc
 fi
-python "${basedir}/integration-test.py" -dumpdata
+#python "${basedir}/integration-test.py" -dumpdata
+cp saved_data.osc data.osc
 
 echo "=== Loading test data..."
 osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
-  -d "${dbname}" -k --create empty.osm
+  -d "${dbname}" --hstore-all --create empty.osm
 osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
-  -d "${dbname}" -k --append data.osc
+  -d "${dbname}" --hstore-all --append data.osc
 
 echo "=== Loading external data..."
 # mock these tables - the shapefiles are _huge_ and we don't want to
