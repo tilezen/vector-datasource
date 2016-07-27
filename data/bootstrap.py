@@ -22,13 +22,19 @@ cfg_shapefiles = asset_cfg['shapefiles']
 for cfg_shapefile in cfg_shapefiles:
     shapefile = cfg_shapefile.copy()
     name_zip = shapefile['url'].split('/')[-1]
+    shapefile['name_zip'] = name_zip
+
+    # in case the name of the shapefile is different than the zip
     shapefile_name = shapefile.get('shapefile-name')
     if shapefile_name is None:
-        shapefile['name_shp'] = name_shp = name_zip.replace('.zip', '.shp')
+        shapefile['name_shp'] = name_zip.replace('.zip', '.shp')
     else:
-        shapefile['name_shp'] = name_shp = shapefile_name
+        shapefile['name_shp'] = shapefile_name
+
+    # but, we should use base the names of the generated shape files
+    # off the zip file so we're consistent
     name_shp = name_zip.replace('.zip', '.shp')
-    shapefile['name_zip'] = name_zip
+
     if shapefile['prj'] != 3857:
         reproj_zip = name_zip.replace('.zip', '-merc.zip')
         reproj_shp = name_shp.replace('.shp', '-merc.shp')
