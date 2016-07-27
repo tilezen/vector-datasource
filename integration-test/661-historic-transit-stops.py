@@ -24,6 +24,7 @@ assert_no_matching_feature(
     13, 4304, 2906, 'pois',
     {'id': 2468597590})
 
+
 # Current railway stop
 # http://www.openstreetmap.org/node/3721890342
 assert_has_feature(
