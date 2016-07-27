@@ -22,7 +22,7 @@ assert_has_feature(
     15, 16373, 10896, 'pois',
     { 'id': 3638795618, 'kind': 'station'})
 
-assert_has_feature(
+assert_no_matching_feature(
     14, 8186, 5448, 'pois',
     { 'id': 3638795618, 'kind': 'station'})
 
