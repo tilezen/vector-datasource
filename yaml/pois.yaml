@@ -321,6 +321,11 @@ filters:
     min_zoom: 13
     output:
       kind: {col: railway}
+  - filter:
+      public_transport: [stop_position, tram_stop, stop]
+    min_zoom: 13
+    output:
+      kind: {col: public_transport}
   - filter: {railway: platform}
     min_zoom: 15
     output: {kind: platform}
