@@ -2,95 +2,111 @@ v1.0.0-pre1
 -------
 * **Release date**: 2016-07-22 on dev as public preview
 * See detailed Breaking changes, New features, Bug fixes, and Internal Changes sections below.
-* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.9.0](https://github.com/mapzen/tilequeue/releases/tag/v0.9.0) and [TileStache v0.10.0](https://github.com/mapzen/TileStache/releases/tag/v0.10.0)
+* **Requires:** [tileserver v0.6.1](https://github.com/mapzen/tileserver/releases/tag/v0.6.1) and [tilequeue v0.9.0](https://github.com/mapzen/tilequeue/releases/tag/v0.9.0)
 
   #### BREAKING CHANGES (v1.0.0-pre1)
 
-- **new url scheme**: We've removed `osm/` prefix from Mapzen's default vector tile URL path. See [#652](https://github.com/tilezen/vector-datasource/issues/652). Examples:
-  - New URL: `https://tile.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
-  - Old URL was: `https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson`
-  - New TileJSON: `https://tile.mapzen.com/vector/v1/tilejson/mapbox.json`
+- **new url scheme**: Mapzen now offers several different types of tiles in vector and raster formats and we combine data from multiple sources. The URL scheme has been updated to reflect this, and emphasize versions. The old URL will continue to work (~1 year), but updates will stop once v1.0.0 is released to production. ([#652](https://github.com/tilezen/vector-datasource/issues/652))
 
+  - **New prod URL:** `https://tile.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
 
-- **roads** layer: Reclassify airport runway and taxiways as new `aeroway` kind (was `minor_road`), and change their sort order to be under equivelant landuse polygons. [#895](https://github.com/tilezen/vector-datasource/issues/895)
+  - Old prod URL was: `https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson`
 
-- **roads** layer: Reclassify road layer kind values sourced from Natural Earth to use OpenStreetMap style kind values. [#890](https://github.com/tilezen/vector-datasource/issues/890)
+  - **New dev URL:** `https://tile.dev.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
 
-- **roads** layer: Normalize several kind values to remove `-` and replace with `_`, including `drive_through`, `j_bar`, and `t_bar`. See [#843](https://github.com/tilezen/vector-datasource/issues/843)
+  - Old dev URL was: `https://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.topojson`
 
-- **boundaries** layer: Reclassify boundary layer `kind` values for some OpenStreetMap, including `region` (was `state`), `locality` (was `municipality`), and many country related kind changes from Natural Earth at low zooms. [#841](https://github.com/tilezen/vector-datasource/issues/841)
+  - **New TileJSON:** `https://tile.mapzen.com/vector/v1/tilejson/mapbox.json`
 
-- **places** layer: Normalize place layer kinds coming from OpenStreetMap and Natural Earth to more closely match Who's On First (mostly using `locality` kind, with new `kind_detail` storing the original OSM and NE values). See [#840](https://github.com/tilezen/vector-datasource/issues/840) and this [lookup table](https://github.com/tilezen/vector-datasource/blob/master/yaml/places.yaml) for details.
+  - Old TileJSON was: `https://vector.mapzen.com/osm/tilejson/mapbox.json`
 
-- **places** layer: Remove country labels from zoom 0, 1 to reduce tile file size. [#837](https://github.com/tilezen/vector-datasource/issues/837)
+- **roads** layer: Reclassify airport runway and taxiways as new `aeroway` kind (was `minor_road`), and change their sort order to be under equivelant landuse polygons. ([#895](https://github.com/tilezen/vector-datasource/issues/895))
 
-- **places** layer: Remove some types of OpenStreetMap neighbourhoods (`borough`, `suburb`, and `quarter`) in favor of Who's On First neighbourhoods. See [#744](https://github.com/tilezen/vector-datasource/issues/744)
+- **roads** layer: Reclassify road layer kind values sourced from Natural Earth to use OpenStreetMap style kind values. ([#890](https://github.com/tilezen/vector-datasource/issues/890))
 
-- **pois** layer: Rename several kinds to distinguish `aeroway_gate` from `gate`, specify `gas_canister` shops (was `gas` which was confusing with automotive gas stations), and split off `ski_rental` if a `ski` feature was primarily a rental facility.  [#844](https://github.com/tilezen/vector-datasource/issues/844)
+- **roads** layer: Normalize several kind values to remove `-` and replace with `_`, including `drive_through`, `j_bar`, and `t_bar`. ([#843](https://github.com/tilezen/vector-datasource/issues/843))
 
-- **landuse** layer: Rename several kinds to distinguish `natural_wood` from `wood` parks, `natural_forest` from `forest` parks, and `natural_park` from `natural` parks.   [#844](https://github.com/tilezen/vector-datasource/issues/844)
+- **boundaries** layer: Reclassify boundary layer `kind` values for some OpenStreetMap, including `region` (was `state`), `locality` (was `municipality`), and many country related kind changes from Natural Earth at low zooms. ([#841](https://github.com/tilezen/vector-datasource/issues/841))
 
-- **transit** layer: `route_name` on line geometries is now simply `name`. See [#729](https://github.com/tilezen/vector-datasource/issues/729)
+- **places** layer: Normalize place layer kinds coming from OpenStreetMap and Natural Earth to more closely match Who's On First (mostly using `locality` kind, with new `kind_detail` storing the original OSM and NE values). See this [lookup table](https://github.com/tilezen/vector-datasource/blob/master/yaml/places.yaml) for details. ([#840](https://github.com/tilezen/vector-datasource/issues/840))
 
-- **landuse** layer: Normalize `urban_area` landuse kinds from Natural Earth (was `urban area`). See [#713](https://github.com/tilezen/vector-datasource/issues/713)
+- **places** layer: Remove country labels from zoom 0, 1 to reduce tile file size. ([#837](https://github.com/tilezen/vector-datasource/issues/837))
 
-- **landuse** and **boundaries** layers: Move barrier lines from boundaries layer into landuse layer. Includes `city_wall`, `dam`, `fence`, `retaining_wall`, and `snow_fence`. Watch out for `dam` which is now both a polygon and line in the same landuse layer. See [#857](https://github.com/tilezen/vector-datasource/issues/857)
+- **places** layer: Remove some types of OpenStreetMap neighbourhoods (`borough`, `suburb`, and `quarter`) in favor of Who's On First neighbourhoods. ([#744](https://github.com/tilezen/vector-datasource/issues/744))
 
-- **buildings** layer: Reclassify building layer kind values to only have `building` or `building_part`, moved the earlier kind values to newnew `kind_detail` property with a whitelist of values. [#842](https://github.com/tilezen/vector-datasource/issues/842)
+- **pois** layer: Rename several kinds to distinguish `aeroway_gate` from `gate`, specify `gas_canister` shops (was `gas` which was confusing with automotive gas stations), and split off `ski_rental` if a `ski` feature was primarily a rental facility. ([#844](https://github.com/tilezen/vector-datasource/issues/844))
 
-- **buildings** layer: Reduce building payloads by merging buildings of similar type at zooms 13, 14, and 15 by dropping some properties like `name`, `addr_housenumber`, and `addr_street`, and quantizing others like `height` to 10 meters (zoom 13), 5 meters (zoom 14), and nearest meter (zoom 15). Also added new `scalerank` property with large buildings at 1 and small buildings at 5 to improve client-side style filtering & draw performance. See [#845](https://github.com/tilezen/vector-datasource/issues/845)
+- **landuse** layer: Rename several kinds to distinguish `natural_wood` from `wood` parks, `natural_forest` from `forest` parks, and `natural_park` from `natural` parks. ([#844](https://github.com/tilezen/vector-datasource/issues/844))
 
-- Remove **landuse-labels** layer in favor of label placements in `landuse` layer and `pois` features. See [#852](https://github.com/tilezen/vector-datasource/issues/852)
+- **transit** layer: `route_name` on line geometries is now simply `name`. ([#729](https://github.com/tilezen/vector-datasource/issues/729))
 
-- Use boolean values instead of 'yes' for properties like`osm_relation`.  [#778](https://github.com/tilezen/vector-datasource/issues/778)
+- **landuse** layer: Normalize `urban_area` landuse kinds from Natural Earth (was `urban area`). ([#713](https://github.com/tilezen/vector-datasource/issues/713))
+
+- **landuse** and **boundaries** layers: Move barrier lines from boundaries layer into landuse layer. Includes `city_wall`, `dam`, `fence`, `retaining_wall`, and `snow_fence`. Watch out for `dam` which is now both a polygon and line in the same landuse layer. ([#857](https://github.com/tilezen/vector-datasource/issues/857))
+
+- **buildings** layer: Reclassify building layer kind values to only have `building` or `building_part`, moved the earlier kind values to newnew `kind_detail` property with a whitelist of values. ([#842](https://github.com/tilezen/vector-datasource/issues/842))
+
+- **buildings** layer: Reduce building payloads by merging buildings of similar type at zooms 13, 14, and 15 by dropping some properties like `name`, `addr_housenumber`, and `addr_street`, and quantizing others like `height` to 10 meters (zoom 13), 5 meters (zoom 14), and nearest meter (zoom 15). Also added new `scalerank` property with large buildings at 1 and small buildings at 5 to improve client-side style filtering & draw performance. ([#845](https://github.com/tilezen/vector-datasource/issues/845))
+
+- Remove **landuse-labels** layer in favor of label placements in `landuse` layer and `pois` features. ([#852](https://github.com/tilezen/vector-datasource/issues/852))
+
+- Use boolean values instead of 'yes' for properties like`osm_relation`. ([#778](https://github.com/tilezen/vector-datasource/issues/778))
 
 
   #### NEW FEATURES (v1.0.0-pre1)
 
-- **roads** layer: Add `highway=raceway` with kind of `minor_road`. See  [#664](https://github.com/tilezen/vector-datasource/issues/664)
+- **roads** layer: Add racetracks as type of `minor_road` sourced from OpenStreetMap's `highway=raceway`. See  [#664](https://github.com/tilezen/vector-datasource/issues/664))
 
-- **roads** layer: Add `highway=corridor` as new kind of `path`, and add properties for `crossing=*`, `sidewalk=*` to all road layer features. See [#605](https://github.com/tilezen/vector-datasource/issues/605)
+- **roads** layer: Add indoor corridors as type of `path` sourced from OpenStreetMap's `highway=corridor`. ([#605](https://github.com/tilezen/vector-datasource/issues/605))
 
-- **roads** layer: Add missing `bridleway` as kind of path. See [#859](https://github.com/tilezen/vector-datasource/issues/859)
+- **roads** layer: Add properties for `crossing=*`, `sidewalk=*` to all road layer features. ([#605](https://github.com/tilezen/vector-datasource/issues/605))
 
-- **pois** layer: Add `barrier=toll_booth` as kind `toll_booth`. See [#479](https://github.com/tilezen/vector-datasource/issues/479)
+- **roads** layer: Add `bridleway` as type of `path`. ([#859](https://github.com/tilezen/vector-datasource/issues/859))
 
-- **pois** layer: Add `highway=rest_area` and `highway=services`. See [#480](https://github.com/tilezen/vector-datasource/issues/480)
+- **pois** layer: Add `toll_booth` sourced from OpenStreetMap's `barrier=toll_booth`. ([#479](https://github.com/tilezen/vector-datasource/issues/479))
 
-- **places** layer: Add localized names for Who's On First sourced neighbourhoods using _l10n_ conventions. See [#418](https://github.com/tilezen/vector-datasource/issues/418)
+- **pois** and **landuse** layers: Add `rest_area` and `service_area` kinds sourced from OpenStreetMap's `highway=rest_area` and `highway=services`. ([#480](https://github.com/tilezen/vector-datasource/issues/480))
+
+- **places** layer: Add localized names for Who's On First sourced neighbourhoods using _l10n_ conventions. ([#418](https://github.com/tilezen/vector-datasource/issues/418))
+
+- **places** layer: Add `borough` features from Who's On First (e.g.: Manhattan in New York City). ([#654](https://github.com/tilezen/vector-datasource/issues/654))
+
 
 
   #### BUG FIXES (v1.0.0-pre1)
 
-- **pois** layer: Some walking network points were wrongly classified as `rwn` when they were actually `iwn`. [#844](https://github.com/tilezen/vector-datasource/issues/844)
+- **pois** layer: Some walking network points were wrongly classified as `rwn` when they were actually `iwn`. ([#844](https://github.com/tilezen/vector-datasource/issues/844))
 
-- **pois** and **landuse** layers: `garden` kind should win over `attraction`, and add garden point geometries (was previously limited to polygon features). See [#829](https://github.com/tilezen/vector-datasource/issues/829)
+- **pois** and **landuse** layers: `garden` kind should win over `attraction`, and add garden point geometries (was previously limited to polygon features). ([#829](https://github.com/tilezen/vector-datasource/issues/829))
 
-- **pois** layer: Show `windmill` features earlier, especially if they are a tourist attraction. See [#830](https://github.com/tilezen/vector-datasource/issues/830)
+- **pois** layer: Show `windmill` features earlier, especially if they are a tourist attraction. ([#830](https://github.com/tilezen/vector-datasource/issues/830))
 
-- **pois** layer: Show `lighthouse` features earlier, especially if they are a tourist attraction, as lighthouses. See [#860](https://github.com/tilezen/vector-datasource/issues/860)
+- **pois** layer: Show `lighthouse` features earlier, especially if they are a tourist attraction, as lighthouses. ([#860](https://github.com/tilezen/vector-datasource/issues/860))
 
-- **pois** layer: Show camp grounds (`camp_site`) earlier. See [#875](https://github.com/tilezen/vector-datasource/issues/875)
+- **pois** layer: Show camp grounds (`camp_site`) earlier. ([#875](https://github.com/tilezen/vector-datasource/issues/875))
 
-- general: Update JSON encoding to handle invalid geometries (use the python `round` function), improves but does not completely solve invalid geometries in other formats like MVT. See [#698](https://github.com/tilezen/vector-datasource/issues/698)
+- Update JSON encoding to handle invalid geometries (use the python `round` function), improves but does not completely solve invalid geometries in other formats like MVT. ([#698](https://github.com/tilezen/vector-datasource/issues/698))
 
-- general: Drop all internal properties with a custom `mz` prefix, affected `mz_is_building` in **landuse** layer, but could have affected more layers. See [#622](https://github.com/tilezen/vector-datasource/issues/622)
+- Drop all internal properties with a custom `mz` prefix, affected `mz_is_building` in **landuse** layer, but could have affected more layers. ([#622](https://github.com/tilezen/vector-datasource/issues/622))
 
 
 
   #### INTERNAL CHANGES (v1.0.0-pre1)
 
-- **pois** layer: Remove several redundant filters for `boat_storage`, `firepit`, `dry_cleaning`, `toilets`, `theatre`, `picnic_site`,
+- **pois** layer: Remove several redundant filters for `boat_storage`, `firepit`, `dry_cleaning`, `toilets`, `theatre`, and `picnic_site`. ([#844](https://github.com/tilezen/vector-datasource/issues/844))
 
-- Make pixel size threshold configurable for layers like **landuse** and **water**. See [#202](https://github.com/tilezen/vector-datasource/issues/202)
+- Make pixel size threshold configurable for layers like **landuse** and **water**. ([#202](https://github.com/tilezen/vector-datasource/issues/202))
 
-- For label placements, enable configurable pixel size threshold. See [#810](https://github.com/tilezen/vector-datasource/issues/810)
+- For label placements, enable configurable pixel size threshold. ([#810](https://github.com/tilezen/vector-datasource/issues/810))
 
-- Use json types and functions compatible with postgresql 9.3 to support better hstore tag usage. See [#826](https://github.com/tilezen/vector-datasource/issues/826)
+- Use json types and functions compatible with postgresql 9.3 to support better hstore tag usage. ([#826](https://github.com/tilezen/vector-datasource/issues/826))
 
-- Migrate more pois layer transform functions to yaml (leisure, transit station states, aeroway gates). See [#754](https://github.com/tilezen/vector-datasource/issues/754).
+- Migrate more pois layer transform functions to yaml (leisure, transit station states, aeroway gates). ([#754](https://github.com/tilezen/vector-datasource/issues/754).
 
-- Add ability to set configurable buffer for MVT format per layer and geometry type. The default MVT config remains clipped (un-buffered), however. See [#106](https://github.com/tilezen/vector-datasource/issues/106)
+- Add ability to set configurable buffer for MVT format per layer and geometry type. The default MVT config remains clipped (un-buffered), however. ([#106](https://github.com/tilezen/vector-datasource/issues/106))
+
+- Remove **TileStache** dependency, moving Python transforms into **vector-datasource** repo. ([#211](https://github.com/tilezen/vector-datasource/issues/211))
+
 
 
 v0.10.4
