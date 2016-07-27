@@ -6,6 +6,7 @@ assert_has_feature(
 
 # Node: Gate 1 (2618197593)
 # http://www.openstreetmap.org/node/2618197593
+# http://www.openstreetmap.org/way/320595943
 assert_has_feature(
     16, 10309, 22665, 'pois',
     { 'id': 2618197593, 'kind': 'gate', 'aeroway': type(None) })
