@@ -8,6 +8,7 @@ node,way   landuse      text         polygon,nocolumn
 node,way   leisure      text         polygon,nocolumn
 node,way   man_made     text         polygon,nocolumn
 node,way   military     text         polygon,nocolumn
+node,way   natural      text         polygon,nocolumn
 node,way   office       text         polygon,nocolumn
 node,way   place        text         polygon,nocolumn
 node,way   power        text         polygon,nocolumn
