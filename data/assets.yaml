@@ -1,4 +1,5 @@
 bucket: mapzen-tiles-assets
+datestamp: 20160727
 
 shapefiles:
 
@@ -11,9 +12,17 @@ shapefiles:
   - name: water_polygons
     url: http://data.openstreetmapdata.com/water-polygons-split-3857.zip
     prj: 3857
+    shapefile-name: water-polygons-split-3857/water_polygons.shp
+    directory: water-polygons-split-3857
 
   - name: land_polygons
     url: http://data.openstreetmapdata.com/land-polygons-split-3857.zip
+    prj: 3857
+    directory: land-polygons-split-3857
+    shapefile-name: land-polygons-split-3857/land_polygons.shp
+
+  - name: buffered_land
+    url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land.zip
     prj: 3857
 
   - name: ne_110m_lakes

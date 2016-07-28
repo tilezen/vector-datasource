@@ -18,3 +18,7 @@ data/*.shx
 # python compiled bytecode and development files
 *.pyc
 vector_datasource.egg-info/
+
+data/Makefile-import-data
+data/Makefile-prepare-data
+data/import-shapefiles.sh

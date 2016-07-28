@@ -1,38 +1,40 @@
 all: download shapefiles
 
-datestamp = $(shell date +%Y%m%d)
-
 upload: shapefiles
-	aws s3 cp shapefiles.tar.gz s3://{{ bucket }}/$(datestamp)/shapefiles.tar.gz
+	if aws s3 ls s3://{{ bucket }}/{{ datestamp }}/shapefiles.tar.gz; then echo 'shapefiles.tar.gz already exists for {{ datestamp }}'; exit 1; else exit 0; fi
+	aws s3 cp shapefiles.tar.gz s3://{{ bucket }}/{{ datestamp }}/shapefiles.tar.gz
 
 shapefiles: shapefiles.tar.gz
 
-shapefiles.tar.gz: {{ proc_shapefile_zips }}
-	tar czf shapefiles.tar.gz {{ proc_shapefile_zips }}
+shapefiles.tar.gz: {{ tgt_shapefile_zips }}
+	tar czf shapefiles.tar.gz {{ tgt_shapefile_zips }}
 
-download: {{ shapefile_zips }}
+download: {{ src_shapefile_zips }}
 
 {% for shapefile in shapefiles %}
-{{ shapefile.name_zip }}:
-	wget '{{ shapefile.url }}' -O {{ shapefile.name_zip }}
+{{ shapefile.src_zip }}:
+	wget '{{ shapefile.url }}' -O {{ shapefile.src_zip }}
 {% endfor %}
 
 {% for shapefile in reproj_shapefiles %}
-{{ shapefile.name_shp }}: {{ shapefile.name_zip }}
-	unzip -o {{ shapefile.name_zip }}
-	touch {{ shapefile.name_shp }}
+{{ shapefile.src_shp }}: {{ shapefile.src_zip }}
+	unzip -o {{ shapefile.src_zip }}
+	touch {{ shapefile.src_shp }}
 
-{{ shapefile.reproj_shp }}: {{ shapefile.name_shp }}
-	OGR_ENABLE_PARTIAL_REPROJECTION=1 ogr2ogr -wrapdateline -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.reproj_shp }} {{ shapefile.name_shp }}
+{{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
+	OGR_ENABLE_PARTIAL_REPROJECTION=1 ogr2ogr -wrapdateline -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.tgt_shp }} {{ shapefile.src_shp }}
 {% if shapefile.tile %}
-	python tile-shapefile.py {{ shapefile.reproj_shp }} tiled-{{ shapefile.reproj_shp }}
-	rm -f {{ shapefile.reproj_shp_wildcard }}
-	for i in tiled-{{ shapefile.reproj_shp_wildcard }}; do mv -f $$i `echo $$i | sed s/tiled-//`; done
+	python tile-shapefile.py {{ shapefile.tgt_shp }} tiled-{{ shapefile.tgt_shp }}
+	rm -f {{ shapefile.tgt_shp_wildcard }}
+	for i in tiled-{{ shapefile.tgt_shp_wildcard }}; do mv -f $$i `echo $$i | sed s/tiled-//`; done
 {% endif %}
 
-{{ shapefile.reproj_zip }}: {{ shapefile.reproj_shp }}
-	zip {{ shapefile.reproj_zip }} {{ shapefile.reproj_shp_wildcard }}
+{{ shapefile.tgt_zip }}: {{ shapefile.tgt_shp }}
+	zip {{ shapefile.tgt_zip }} {{ shapefile.tgt_shp_wildcard }}
 
 {% endfor %}
 
-.PHONY: download upload shapefiles
+clean:
+	rm -rf shapefiles.tar.gz {{ tgt_shapefile_zips }} {{ tgt_shapefile_wildcards }} {{ src_shapefile_zips }} {{ src_shapefile_wildcards }}
+
+.PHONY: all download upload shapefiles
