@@ -22,7 +22,11 @@ filters:
     output:
       kind: {col: natural}
       elevation: {col: ele}
-  - filter: {railway: station}
+  - filter: 
+      railway: station
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 10
     output:
       kind: station
