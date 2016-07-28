@@ -24,6 +24,11 @@ assert_no_matching_feature(
     13, 4304, 2906, 'pois',
     {'id': 2468597590})
 
+# Historic tram stop
+# http://www.openstreetmap.org/node/3367033945
+assert_no_matching_feature(
+    13, 1312, 2854, 'pois',
+    {'id': 3367033945})
 
 # Current railway stop
 # http://www.openstreetmap.org/node/3721890342
