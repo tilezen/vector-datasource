@@ -52,6 +52,45 @@ assert_no_matching_feature(
     14, 8186, 5448, 'pois',
     { 'id': 3638795618, 'kind': 'station'})
 
+# https://www.openstreetmap.org/node/1802706032
+assert_has_feature(
+    16, 32747, 21793, 'pois',
+    { 'id': 1802706032, 'kind': 'stop_position'})
+
+assert_has_feature(
+    15, 16373, 10896, 'pois',
+    { 'id': 1802706032, 'kind': 'stop_position'})
+
+assert_no_matching_feature(
+    14, 8186, 5448, 'pois',
+    { 'id': 1802706032, 'kind': 'stop_position'})
+
+# https://www.openstreetmap.org/node/70867643
+assert_has_feature(
+    16, 32747, 21793, 'pois',
+    { 'id': 70867643, 'kind': 'stop'})
+
+assert_has_feature(
+    15, 16373, 10896, 'pois',
+    { 'id': 70867643, 'kind': 'stop'})
+
+assert_no_matching_feature(
+    14, 8186, 5448, 'pois',
+    { 'id': 70867643, 'kind': 'stop'})
+
+# https://www.openstreetmap.org/node/492095642
+assert_has_feature(
+    16, 32747, 21793, 'pois',
+    { 'id': 492095642, 'kind': 'stop_position'})
+
+assert_has_feature(
+    15, 16373, 10896, 'pois',
+    { 'id': 492095642, 'kind': 'stop_position'})
+
+assert_no_matching_feature(
+    14, 8186, 5448, 'pois',
+    { 'id': 492095642, 'kind': 'stop_position'})
+
 # http://www.openstreetmap.org/node/178805960
 assert_has_feature(
     16, 32747, 21793, 'pois',
