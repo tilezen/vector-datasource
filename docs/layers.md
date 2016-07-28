@@ -452,7 +452,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 
 * `name`
 * `id`: osm_id
-* `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attracsction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags. Can also be one of `closed` or `historical` if the original feature was parenthetically commented as closed or historical.
+* `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attraction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags. Can also be one of `closed` or `historical` if the original feature was parenthetically commented as closed or historical.
 
 **Gotchas: Implied but not stated: `source`: `openstreetmap.org`.**
 
