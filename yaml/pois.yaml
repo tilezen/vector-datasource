@@ -316,10 +316,12 @@ filters:
     output:
       kind: station
       state: {col: tags->state}
-  - filter: 
-      all:
-        railway: [halt, stop, tram_stop]
-        any: {historic: 'no', historic: false}
+  - filter:
+      railway: [halt, stop, tram_stop]
+# to work around overwriting when using the same key twice
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 13
     output:
       kind: {col: railway}
