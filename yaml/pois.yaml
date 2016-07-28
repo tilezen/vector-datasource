@@ -319,8 +319,7 @@ filters:
   - filter: 
       all:
         railway: [halt, stop, tram_stop]
-        any: 
-        {historic: 'no', historic: false}
+        any: {historic: 'no', historic: false}
     min_zoom: 13
     output:
       kind: {col: railway}
