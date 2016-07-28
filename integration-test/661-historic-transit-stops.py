@@ -18,11 +18,17 @@ assert_no_matching_feature(
     13, 4433, 2416, 'pois',
     {'id': 708144563})
 
- # Historic railway halt
+# Historic railway halt
 # http://www.openstreetmap.org/node/2468597590
 assert_no_matching_feature(
     13, 4304, 2906, 'pois',
     {'id': 2468597590})
+
+# Historic railway station
+# http://www.openstreetmap.org/node/985085275
+assert_no_matching_feature(
+    13, 4275, 2756, 'pois',
+    {'id': 985085275})
 
 # Historic tram stop
 # http://www.openstreetmap.org/node/3367033945
