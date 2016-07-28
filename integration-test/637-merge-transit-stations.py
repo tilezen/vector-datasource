@@ -1,5 +1,31 @@
 # Do not merge transit relations in zoom 15
 
+# Add all Waterloo station relations
+# https://www.openstreetmap.org/relation/1242762
+# https://www.openstreetmap.org/relation/238793
+# https://www.openstreetmap.org/relation/238792
+# https://www.openstreetmap.org/relation/102762
+# https://www.openstreetmap.org/relation/102767
+# https://www.openstreetmap.org/relation/173090
+# https://www.openstreetmap.org/relation/4859971
+# https://www.openstreetmap.org/relation/238792
+# https://www.openstreetmap.org/node/70867643
+# https://www.openstreetmap.org/node/178805960
+# https://www.openstreetmap.org/node/492095642
+# https://www.openstreetmap.org/node/3638795618
+# https://www.openstreetmap.org/node/1802706032
+# https://www.openstreetmap.org/node/344521109
+# https://www.openstreetmap.org/node/492098585
+# https://www.openstreetmap.org/node/492098466
+# https://www.openstreetmap.org/node/495741652
+# https://www.openstreetmap.org/node/495742107
+# https://www.openstreetmap.org/node/492098125
+# https://www.openstreetmap.org/node/3638795617
+# https://www.openstreetmap.org/way/40551344
+# https://www.openstreetmap.org/way/249695786
+# https://www.openstreetmap.org/way/40781754
+# https://www.openstreetmap.org/way/4245075
+
 # https://www.openstreetmap.org/node/3638795617
 assert_has_feature(
     16, 32747, 21793, 'pois',
