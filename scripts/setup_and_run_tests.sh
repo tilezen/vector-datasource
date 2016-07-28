@@ -48,8 +48,7 @@ echo "=== Dumping test data..."
 if [[ -f data.osc ]]; then
     rm -f data.osc
 fi
-#python "${basedir}/integration-test.py" -dumpdata
-cp saved_data.osc data.osc
+python "${basedir}/integration-test.py" -dumpdata
 
 echo "=== Loading test data..."
 osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
