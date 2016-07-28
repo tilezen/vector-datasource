@@ -63,7 +63,7 @@ FROM
   planet_osm_polygon
 WHERE
   {{ bounds['polygon']|bbox_filter('way') }}
-  AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
+  AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
 {% elif 6 <= zoom < 8 %}
@@ -81,7 +81,7 @@ WHERE
 UNION ALL
 
 SELECT
-  CASE WHEN mz_poi_min_zoom IS NULL THEN name ELSE NULL END AS name,
+  CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END AS name,
   mz_landuse_min_zoom AS min_zoom,
   tags->'protect_class' AS protect_class,
   tags->'operator' AS operator,
@@ -95,7 +95,7 @@ FROM
   planet_osm_polygon
 WHERE
   {{ bounds['polygon']|bbox_filter('way') }}
-  AND (boundary IN ('national_park', 'protected_area') OR leisure='nature_reserve')
+  AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
 {% else %}

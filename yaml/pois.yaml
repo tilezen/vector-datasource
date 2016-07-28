@@ -180,7 +180,6 @@ filters:
         expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
       sport:
         expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN NULL ELSE tags->'sport' END
-    extra_columns: [sport]
   - filter: {leisure: beach_resort}
     min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
     output: {kind: beach_resort }
@@ -210,7 +209,6 @@ filters:
       WHEN mz_to_float_meters(tags->'height') >= 300 THEN 12
       ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       14), 12) END
-    extra_columns: [height]
     output: {kind: waterfall, height: {col: height}}
   - filter: {leisure: garden}
     min_zoom: GREATEST(12, LEAST(zoom, 16))
@@ -511,13 +509,11 @@ filters:
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {expr: "covered = 'yes'"}
+      covered: {expr: "tags ? 'covered' and tags->'covered' = 'yes'"}
       fee: {expr: "(tags ? 'fee' and tags->'fee' not in ('no', 'Free', 'free', '0', 'No', 'none'))"}
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
       surveillance: {expr: "(tags ? 'surveillance' and tags->'surveillance' not in ('no', 'none'))"}
-    extra_columns:
-      - covered
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output: {kind: cycle_barrier}

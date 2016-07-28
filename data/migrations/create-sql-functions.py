@@ -56,20 +56,13 @@ def value_columns(val):
     return []
 
 
-# TODO! volume isn't a fixed tag, it was just easier to do it this way
-# temporarily...
-FIXED_OSM_COLUMNS = set(['way_area', 'way', 'osm_id', 'volume'])
-
 class Column(object):
 
-    def __init__(self, name, table):
-        startswith_tags = name.startswith('tags->')
-        self._is_tag = startswith_tags or \
-                       ((table is None or table == 'osm') and name not in FIXED_OSM_COLUMNS)
-        if startswith_tags:
-            self._name = name[len('tags->'):]
-        else:
-            self._name = name
+    def __init__(self, is_tag, name):
+        self._is_tag = is_tag
+        if name.startswith('tags->'):
+            name = name[len('tags->'):]
+        self._name = name
 
     def exists_check(self):
         if self._is_tag:
@@ -91,6 +84,33 @@ class Column(object):
 
     def __hash__(self):
         return (self._is_tag, self._name).__hash__()
+
+
+# TODO! volume isn't a fixed tag, it was just easier to do it this way
+# temporarily...
+FIXED_OSM_COLUMNS = set(['way_area', 'way', 'osm_id'])
+
+class Table(object):
+
+    def __init__(self, name, extra_columns=None, synthetic_columns=None):
+        self._name = name
+
+        # extra columns are columns which are used in expressions or other
+        # places where this script can't see, and therefore need to be
+        # included in the parameters of the function.
+        self._extra_columns = set(extra_columns) if extra_columns else set()
+
+        # synthetic columns are local variables created in sql.jinja2, and
+        # should not be part of the parameters of the function.
+        self._synthetic_columns = set(synthetic_columns) if synthetic_columns \
+                                  else set()
+
+    def create_column(self, name):
+        not_tag = self._name in ('shp', 'ne') or \
+                  name in self._extra_columns or \
+                  name in self._synthetic_columns or \
+                  name in FIXED_OSM_COLUMNS
+        return Column(not not_tag, name)
 
 
 class EqualsRule(object):
@@ -273,7 +293,7 @@ def create_filter_rule(filter_key, filter_value, table):
         rule = create_level_filter_rule(filter_value, table, combinator=OrRule)
     else:
         # leaf rules
-        col = Column(filter_key, table)
+        col = table.create_column(filter_key)
         if isinstance(filter_value, list):
             rule = SetRule(col, filter_value)
         else:
@@ -297,12 +317,22 @@ def create_filter_rule(filter_key, filter_value, table):
 
 class Matcher(object):
 
-    def __init__(self, rule, min_zoom, output, table, extra_columns):
+    def __init__(self, rule, min_zoom, output, table):
         self.rule = rule
         self.min_zoom = min_zoom
         self.output = output
+
+        # horrible hack to try to make all OSM output values from tags
+        for k in self.output.keys():
+            v = self.output[k]
+            if isinstance(v, dict) and \
+               'col' in v and \
+               not v['col'].startswith('tags->'):
+                c = table.create_column(v['col'])
+                if c._is_tag:
+                    v['col'] = 'tags->' + c._name
+
         self.table = table
-        self.extra_columns = extra_columns
 
     def when_sql_output(self):
         items = []
@@ -316,7 +346,7 @@ class Matcher(object):
             self.rule.as_sql(), output)
 
     def output_columns(self):
-        columns = self.extra_columns
+        columns = []
         for k, v in self.output.items():
             columns.extend(value_columns(v))
         return columns
@@ -331,10 +361,18 @@ class Matcher(object):
 
 def create_matcher(yaml_datum):
     table = yaml_datum.get('table')
+    extra_columns = yaml_datum.get('extra_columns', [])
+
+    # synthetic columns are ones that we generate in the SQL functions, usually
+    # in the DECLARE section. for example; building volume in the buildings
+    # query.
+    synthetic_columns = yaml_data.get('synthetic_columns', [])
+
+    table_obj = Table(table, extra_columns, synthetic_columns)
 
     rules = []
     for k, v in yaml_datum['filter'].items():
-        rule = create_filter_rule(k, v, table)
+        rule = create_filter_rule(k, v, table_obj)
         rules.append(rule)
     assert rules, 'No filter rules found in %s' % yaml_datum
     if len(rules) > 1:
@@ -346,8 +384,7 @@ def create_matcher(yaml_datum):
     output = yaml_datum['output']
     assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
 
-    extra_columns = yaml_datum.get('extra_columns', [])
-    matcher = Matcher(rule, min_zoom, output, table, extra_columns)
+    matcher = Matcher(rule, min_zoom, output, table_obj)
     return matcher
 
 
@@ -384,14 +421,9 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
               'buildings', 'roads', 'earth'):
     kind_rules = []
     min_zoom_rules = []
-    # synthetic columns are ones that we generate in the SQL functions, usually
-    # in the DECLARE section. for example; building volume in the buildings
-    # query.
-    synthetic_columns = set(['way_area'])
     file_path = os.path.join(script_root, '../../yaml/%s.yaml' % layer)
     with open(file_path) as fh:
         yaml_data = yaml.load(fh)
-        synthetic_columns |= set(yaml_data.get('synthetic_columns', []))
         matchers = []
         for yaml_datum in yaml_data['filters']:
             matcher = create_matcher(yaml_datum)
@@ -402,25 +434,37 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
         # columns in the query should be those needed by the rule, union those
         # needed by the output, minus any which are synthetic and local to the
         # query function.
-        columns = ((set(matcher.rule.columns()) |
-                    set([Column(c, 'fake') for c in matcher.output_columns()]))
-                   - set([Column(c, matcher.table) for c in synthetic_columns]))
+        columns = set()
+        for col in matcher.rule.columns():
+            if not col._is_tag and col._name not in FIXED_OSM_COLUMNS and \
+               col._name not in matcher.table._synthetic_columns:
+                columns.add(col)
+
+        for col_name in matcher.table._extra_columns:
+            columns.add(Column(False, col_name))
+
+        for col_name in matcher.output_columns():
+            col = matcher.table.create_column(col_name)
+            if not col._is_tag and col._name not in FIXED_OSM_COLUMNS and \
+               col._name not in matcher.table._synthetic_columns:
+                columns.add(col)
+
         for column in columns:
             assert isinstance(column, Column), "%r is not a Column" % (column,)
-            if not column._is_tag:
-                if column._name == 'gid' or column._name == 'fid':
-                    typ = 'integer'
-                elif column._name == 'scalerank' or column._name == 'labelrank':
-                    typ = 'smallint'
-                elif column._name == 'way':
-                    typ = 'geometry'
-                elif matcher.table == 'ne' and column._name == 'expressway':
-                    typ = 'smallint'
-                else:
-                    typ = 'text'
-                key = Key(
-                    table=matcher.table, key=column.format(), typ=typ)
-                params.add(key)
+            assert not column._is_tag, "did not expect tag in column list: %r" % (column,)
+            if column._name == 'gid' or column._name == 'fid':
+                typ = 'integer'
+            elif column._name == 'scalerank' or column._name == 'labelrank':
+                typ = 'smallint'
+            elif column._name == 'way':
+                typ = 'geometry'
+            elif matcher.table._name == 'ne' and column._name == 'expressway':
+                typ = 'smallint'
+            else:
+                typ = 'text'
+            key = Key(
+                table=matcher.table._name, key=column.format(), typ=typ)
+            params.add(key)
 
     # sorted params is nicer to read in the sql
     params = sorted(params)

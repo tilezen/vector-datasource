@@ -125,6 +125,7 @@ filters:
       way:
         expr: |
           GeometryType(way) = 'POINT'
+    extra_columns: [way]
     min_zoom: 17
     output:
       kind: address
