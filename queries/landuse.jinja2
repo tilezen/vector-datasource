@@ -23,6 +23,13 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    tags->'sport' AS sport,
+    tags->'religion' AS religion,
+    tags->'surface' AS surface,
+    tags->'natural' AS "natural",
+    tags->'attraction' AS attraction,
+    tags->'zoo' AS zoo,
+    tags->'barrier' AS barrier,
     mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building,
     %#tags AS tags
 FROM
@@ -114,6 +121,13 @@ SELECT
   '' AS name,
   4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
   {{ ne_landuse_cols('urban_area') }},
+  NULL AS sport,
+  NULL AS religion,
+  NULL AS surface,
+  NULL AS "natural",
+  NULL AS attraction,
+  NULL AS zoo,
+  NULL AS barrier,
   NULL AS mz_is_building,
   NULL AS tags
 FROM
