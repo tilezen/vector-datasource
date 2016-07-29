@@ -22,7 +22,11 @@ filters:
     output:
       kind: {col: natural}
       elevation: {col: ele}
-  - filter: {railway: station}
+  - filter: 
+      railway: station
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 10
     output:
       kind: station
@@ -317,7 +321,11 @@ filters:
       kind: station
       state: {col: tags->state}
   - filter:
-      railway: [halt, tram_stop, stop]
+      railway: [halt, stop, tram_stop]
+# to work around overwriting when using the same key twice
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 13
     output:
       kind: {col: railway}
