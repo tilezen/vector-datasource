@@ -3634,7 +3634,7 @@ def normalize_operator_values(shape, properties, fid, zoom):
     See https://github.com/tilezen/vector-datasource/issues/927.
     """
 
-    operator = properties.pop('operator', None)
+    operator = properties.get('operator', None)
     if operator is not None:
         if operator in (
             'National Park Service',
