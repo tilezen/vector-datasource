@@ -660,8 +660,7 @@ filters:
     output: {kind: picnic_site}
   - filter: {highway: services}
     min_zoom: 11
-    output:
-      
+    output: 
       kind: service_area
   - filter: {highway: rest_area}
     min_zoom: 11
