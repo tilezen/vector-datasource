@@ -77,7 +77,11 @@ FROM planet_osm_polygon
 
 WHERE
   {{ bounds['line']|bbox_filter('way') }} AND
-  mz_boundary_min_zoom <= {{ zoom }}
+{% if zoom >= 16 %}
+    mz_boundary_min_zoom IS NOT NULL
+{% else %}
+    mz_boundary_min_zoom <= {{ zoom }}
+{% endif %}
 
 UNION ALL
 
@@ -109,6 +113,10 @@ FROM
 
 WHERE
   {{ bounds['line']|bbox_filter('way') }} AND
-  mz_boundary_min_zoom <= {{ zoom }}
+{% if zoom >= 16 %}
+    mz_boundary_min_zoom IS NOT NULL
+{% else %}
+    mz_boundary_min_zoom <= {{ zoom }}
+{% endif %}
 
 {% endif %}
