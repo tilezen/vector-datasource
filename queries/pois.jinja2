@@ -1,5 +1,6 @@
 SELECT
     name,
+    'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     min_zoom,
