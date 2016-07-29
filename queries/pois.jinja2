@@ -3,6 +3,7 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    operator,
     min_zoom,
     way_area AS area,
     cuisine,
@@ -26,6 +27,7 @@ FROM (
   SELECT
     name, way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
+    operator,
     cuisine, religion, sport, ref,
     aerialway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
@@ -57,6 +59,7 @@ UNION ALL
   SELECT
     name, way, way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
+    operator,
     cuisine, religion, sport, ref,
     aerialway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
     tags->'attraction' AS attraction,
