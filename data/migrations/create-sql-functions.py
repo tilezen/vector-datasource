@@ -86,8 +86,8 @@ class Column(object):
         return (self._is_tag, self._name).__hash__()
 
 
-# TODO! volume isn't a fixed tag, it was just easier to do it this way
-# temporarily...
+# these are columns which are present in OSM tables as real columns, whereas
+# everything else is in the tags hstore.
 FIXED_OSM_COLUMNS = set(['way_area', 'way', 'osm_id'])
 
 class Table(object):
