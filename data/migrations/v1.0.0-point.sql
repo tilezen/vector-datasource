@@ -8,7 +8,7 @@ UPDATE
      man_made IN ('lighthouse', 'windmill') OR
      leisure = 'garden' OR
      public_transport IN ('stop_position', 'tram_stop', 'stop') OR
-     railway IN ('halt', 'tram_stop', 'stop'))
+     railway IN ('halt', 'tram_stop', 'stop', 'station'))
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_point.*), 999);
 
 UPDATE
