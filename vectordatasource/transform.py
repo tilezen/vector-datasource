@@ -3636,51 +3636,48 @@ def normalize_operator_values(shape, properties, fid, zoom):
 
     operator = properties.get('operator', None)
     if operator is not None:
-        if operator in (
-                'National Park Service',
-                'United States National Park Service',
-                'US National Park Service',
-                'U.S. National Park Service',
-                'National Park Services',
-                'US National Park service',
-                'National Parks and Wildlife Service',
-                'National Parks',
-                'National Park'):
+        if operator in ('National Park Service',
+                        'United States National Park Service',
+                        'US National Park Service',
+                        'U.S. National Park Service',
+                        'National Park Services',
+                        'US National Park service',
+                        'National Parks and Wildlife Service',
+                        'National Parks',
+                        'National Park'):
             properties['operator'] = 'National Park Service'
 
             return (shape, properties, fid)
 
-        if operator in (
-                'United States Forest Service',
-                'US Forest Service',
-                'U.S. Forest Service',
-                'USDA Forest Service',
-                'National Forest Service',
-                'United States Department of Agriculture',
-                'Forest Service',
-                'US National Forest Service',
-                'United State Forest Service',
-                'U.S. National Forest Service'):
+        if operator in ('United States Forest Service',
+                        'US Forest Service',
+                        'U.S. Forest Service',
+                        'USDA Forest Service',
+                        'National Forest Service',
+                        'United States Department of Agriculture',
+                        'Forest Service',
+                        'US National Forest Service',
+                        'United State Forest Service',
+                        'U.S. National Forest Service'):
             properties['operator'] = 'United States Forest Service'
 
             return (shape, properties, fid)
 
-        if operator in (
-                'Department of National Parks NSW',
-                'Dept of NSW National Parks',
-                'Dept of National Parks NSW',
-                'Department of National Parks NSW',
-                'NSW National Parks',
-                'NSW National Parks & Wildlife Service',
-                'NSW National Parks and Wildlife Service',
-                'NSW Parks and Wildlife Service',
-                'NSW Parks and Wildlife Service (NPWS)',
-                'National Parks & Wildife Service NSW',
-                'National Parks and WIldlife Service NSW',
-                'National Parks and Wildlife NSW',
-                'National Parks and Wildlife Service NSW',
-                'National Parks and Wildlife',
-                'National Parks and Wildlife Service'):
+        if operator in ('Department of National Parks NSW',
+                        'Dept of NSW National Parks',
+                        'Dept of National Parks NSW',
+                        'Department of National Parks NSW',
+                        'NSW National Parks',
+                        'NSW National Parks & Wildlife Service',
+                        'NSW National Parks and Wildlife Service',
+                        'NSW Parks and Wildlife Service',
+                        'NSW Parks and Wildlife Service (NPWS)',
+                        'National Parks & Wildife Service NSW',
+                        'National Parks and WIldlife Service NSW',
+                        'National Parks and Wildlife NSW',
+                        'National Parks and Wildlife Service NSW',
+                        'National Parks and Wildlife',
+                        'National Parks and Wildlife Service'):
             properties['operator'] = 'National Parks & Wildife Service NSW'
 
             return (shape, properties, fid)
