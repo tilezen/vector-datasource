@@ -204,7 +204,7 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 ![image](images/mapzen-vector-tile-docs-earth.png)
 
 * Layer name: `earth`
-* Geometry types: `polygon`
+* Geometry types: `polygon`, `line`, `point`.
 
 Polygons representing earth landmass and natural feature lines. Uses coastline-derived land polygons from [openstreetmapdata.com](http://openstreetmapdata.com). Natural lines from OpenStreetMap representing cliffs, aretes. This layer also includes earth `label_placement` lines for ridges and valleys (which should not otherwise be symbolized).
 
