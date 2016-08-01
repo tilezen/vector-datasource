@@ -3624,7 +3624,8 @@ def simplify_and_clip(ctx):
         feature_layer['features'] = simplified_features
 
 
-_lookup_operator_rules = {'United States National Park Service': (
+_lookup_operator_rules = {
+                        'United States National Park Service': (
                             'National Park Service',
                             'US National Park Service',
                             'U.S. National Park Service',
