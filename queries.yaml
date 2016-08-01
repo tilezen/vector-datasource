@@ -135,6 +135,7 @@ layers:
       - vectordatasource.transform.height_to_meters
       - vectordatasource.transform.pois_capacity_int
       - vectordatasource.transform.elevation_to_meters
+      - vectordatasource.transform.normalize_operator_values
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
@@ -166,7 +167,6 @@ layers:
       - vectordatasource.transform.route_name
       - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.normalize_operator_values
     sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
 post_process:
