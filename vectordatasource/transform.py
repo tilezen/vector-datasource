@@ -3624,32 +3624,33 @@ def simplify_and_clip(ctx):
         feature_layer['features'] = simplified_features
 
 
-_lookup_operator = {'United States National Park Service':[
-                            'National Park Service',
-                            'US National Park Service',
-                            'U.S. National Park Service',
-                            'US National Park service'],
-                        'United States Forest Service':[
-                            'US Forest Service',
-                            'U.S. Forest Service',
-                            'USDA Forest Service',
-                            'United States Department of Agriculture',
-                            'US National Forest Service',
-                            'United State Forest Service',
-                            'U.S. National Forest Service'],
-                        'National Parks & Wildife Service NSW':[
-                            'Department of National Parks NSW',
-                            'Dept of NSW National Parks',
-                            'Dept of National Parks NSW',
-                            'Department of National Parks NSW',
-                            'NSW National Parks',
-                            'NSW National Parks & Wildlife Service',
-                            'NSW National Parks and Wildlife Service',
-                            'NSW Parks and Wildlife Service',
-                            'NSW Parks and Wildlife Service (NPWS)',
-                            'National Parks & Wildife Service NSW',
-                            'National Parks and Wildlife NSW',
-                            'National Parks and Wildlife Service NSW']}
+_lookup_operator = {'United States National Park Service': [
+                        'National Park Service',
+                        'US National Park Service',
+                        'U.S. National Park Service',
+                        'US National Park service'],
+                    'United States Forest Service': [
+                        'US Forest Service',
+                        'U.S. Forest Service',
+                        'USDA Forest Service',
+                        'United States Department of Agriculture',
+                        'US National Forest Service',
+                        'United State Forest Service',
+                        'U.S. National Forest Service'],
+                    'National Parks & Wildife Service NSW': [
+                        'Department of National Parks NSW',
+                        'Dept of NSW National Parks',
+                        'Dept of National Parks NSW',
+                        'Department of National Parks NSW',
+                        'NSW National Parks',
+                        'NSW National Parks & Wildlife Service',
+                        'NSW National Parks and Wildlife Service',
+                        'NSW Parks and Wildlife Service',
+                        'NSW Parks and Wildlife Service (NPWS)',
+                        'National Parks & Wildife Service NSW',
+                        'National Parks and Wildlife NSW',
+                        'National Parks and Wildlife Service NSW']}
+
 
 def normalize_operator_values(shape, properties, fid, zoom):
     """
@@ -3672,7 +3673,7 @@ def normalize_operator_values(shape, properties, fid, zoom):
         if operator in flattened:
             for key, sublist in _lookup_operator.iteritems():
                 for val in sublist:
-                    if val==operator:
+                    if val == operator:
                         properties['operator'] = key
             return (shape, properties, fid)
 
