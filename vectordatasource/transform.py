@@ -3640,12 +3640,8 @@ def normalize_operator_values(shape, properties, fid, zoom):
                         'United States National Park Service',
                         'US National Park Service',
                         'U.S. National Park Service',
-                        'National Park Services',
-                        'US National Park service',
-                        'National Parks and Wildlife Service',
-                        'National Parks',
-                        'National Park'):
-            properties['operator'] = 'National Park Service'
+                        'US National Park service'):
+            properties['operator'] = 'United States National Park Service'
 
             return (shape, properties, fid)
 
@@ -3653,9 +3649,7 @@ def normalize_operator_values(shape, properties, fid, zoom):
                         'US Forest Service',
                         'U.S. Forest Service',
                         'USDA Forest Service',
-                        'National Forest Service',
                         'United States Department of Agriculture',
-                        'Forest Service',
                         'US National Forest Service',
                         'United State Forest Service',
                         'U.S. National Forest Service'):
@@ -3675,9 +3669,7 @@ def normalize_operator_values(shape, properties, fid, zoom):
                         'National Parks & Wildife Service NSW',
                         'National Parks and WIldlife Service NSW',
                         'National Parks and Wildlife NSW',
-                        'National Parks and Wildlife Service NSW',
-                        'National Parks and Wildlife',
-                        'National Parks and Wildlife Service'):
+                        'National Parks and Wildlife Service NSW'):
             properties['operator'] = 'National Parks & Wildife Service NSW'
 
             return (shape, properties, fid)
