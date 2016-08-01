@@ -3647,7 +3647,6 @@ _lookup_operator_rules = {'United States National Park Service': (
                             'NSW National Parks and Wildlife Service',
                             'NSW Parks and Wildlife Service',
                             'NSW Parks and Wildlife Service (NPWS)',
-                            'National Parks & Wildife Service NSW',
                             'National Parks and Wildlife NSW',
                             'National Parks and Wildlife Service NSW')}
 
