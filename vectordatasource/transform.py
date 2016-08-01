@@ -3624,32 +3624,37 @@ def simplify_and_clip(ctx):
         feature_layer['features'] = simplified_features
 
 
-_lookup_operator = {'United States National Park Service': [
-                        'National Park Service',
-                        'US National Park Service',
-                        'U.S. National Park Service',
-                        'US National Park service'],
-                    'United States Forest Service': [
-                        'US Forest Service',
-                        'U.S. Forest Service',
-                        'USDA Forest Service',
-                        'United States Department of Agriculture',
-                        'US National Forest Service',
-                        'United State Forest Service',
-                        'U.S. National Forest Service'],
-                    'National Parks & Wildife Service NSW': [
-                        'Department of National Parks NSW',
-                        'Dept of NSW National Parks',
-                        'Dept of National Parks NSW',
-                        'Department of National Parks NSW',
-                        'NSW National Parks',
-                        'NSW National Parks & Wildlife Service',
-                        'NSW National Parks and Wildlife Service',
-                        'NSW Parks and Wildlife Service',
-                        'NSW Parks and Wildlife Service (NPWS)',
-                        'National Parks & Wildife Service NSW',
-                        'National Parks and Wildlife NSW',
-                        'National Parks and Wildlife Service NSW']}
+_lookup_operator_rules = {'United States National Park Service': (
+                            'National Park Service',
+                            'US National Park Service',
+                            'U.S. National Park Service',
+                            'US National Park service'),
+                        'United States Forest Service': (
+                            'US Forest Service',
+                            'U.S. Forest Service',
+                            'USDA Forest Service',
+                            'United States Department of Agriculture',
+                            'US National Forest Service',
+                            'United State Forest Service',
+                            'U.S. National Forest Service'),
+                        'National Parks & Wildife Service NSW': (
+                            'Department of National Parks NSW',
+                            'Dept of NSW National Parks',
+                            'Dept of National Parks NSW',
+                            'Department of National Parks NSW',
+                            'NSW National Parks',
+                            'NSW National Parks & Wildlife Service',
+                            'NSW National Parks and Wildlife Service',
+                            'NSW Parks and Wildlife Service',
+                            'NSW Parks and Wildlife Service (NPWS)',
+                            'National Parks & Wildife Service NSW',
+                            'National Parks and Wildlife NSW',
+                            'National Parks and Wildlife Service NSW')}
+
+normalized_operator_lookup = {}
+for normalized_operator, variants in _lookup_operator_rules.items():
+    for variant in variants:
+        normalized_operator_lookup[variant] = normalized_operator
 
 
 def normalize_operator_values(shape, properties, fid, zoom):
@@ -3665,16 +3670,9 @@ def normalize_operator_values(shape, properties, fid, zoom):
     operator = properties.get('operator', None)
 
     if operator is not None:
-        flattened = []
-        for sublist in _lookup_operator.values():
-            for value in sublist:
-                flattened.append(value)
-
-        if operator in flattened:
-            for key, sublist in _lookup_operator.iteritems():
-                for val in sublist:
-                    if val == operator:
-                        properties['operator'] = key
+        normalized_operator = normalized_operator_lookup.get(operator, None)
+        if normalized_operator:
+            properties['operator'] = normalized_operator
             return (shape, properties, fid)
 
     return (shape, properties, fid)
