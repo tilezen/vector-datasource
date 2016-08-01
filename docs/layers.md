@@ -257,7 +257,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 #### Landuse properties (common optional):
 
 * `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
-* `operator`: e.g. `U.S. National Park Service` and `United States Forest Service`
+* `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
 
 #### Landuse kind values:
 
@@ -448,7 +448,7 @@ Points of interest from OpenStreetMap, with per-zoom selections similar to the p
 
 Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data. Features which have certain parenthetical comments after their name are suppressed until zoom 17 and have their `kind` property set to that comment. Currently anything with a name ending in '(closed)' or '(historical)' will be suppressed in this manner. Railway stops, halts, stations and tram stops from OpenStreetMap tagged with a `historic` tag are also not included in the data.
 
-To promote consistency in data tagging we merged all relevant operator tags for `US National Parks`, under the common tag `United States National Park Service`, for `US Forest Service` under the common tag `United States Forest Service` and all North South Wales National Parks under the common tag `National Parks & Wildife Service NSW`. Generic tags such as `National Park`, `National Forest Service` and `National Parks & Wildife Service` are exported seperately.
+To resolve inconsistency in data tagging in OpenStreetMap we normalize several operator values for United States National Parks as `United States National Park Service`, several United States Forest Service values as `United States Forest Service`, and several values for New South Wales National Parks in Australia as `National Parks & Wildlife Service NSW`.
 
 #### POI properties (common):
 
