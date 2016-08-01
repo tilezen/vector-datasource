@@ -3624,6 +3624,33 @@ def simplify_and_clip(ctx):
         feature_layer['features'] = simplified_features
 
 
+_lookup_operator = {'United States National Park Service':[
+                            'National Park Service',
+                            'US National Park Service',
+                            'U.S. National Park Service',
+                            'US National Park service'],
+                        'United States Forest Service':[
+                            'US Forest Service',
+                            'U.S. Forest Service',
+                            'USDA Forest Service',
+                            'United States Department of Agriculture',
+                            'US National Forest Service',
+                            'United State Forest Service',
+                            'U.S. National Forest Service'],
+                        'National Parks & Wildife Service NSW':[
+                            'Department of National Parks NSW',
+                            'Dept of NSW National Parks',
+                            'Dept of National Parks NSW',
+                            'Department of National Parks NSW',
+                            'NSW National Parks',
+                            'NSW National Parks & Wildlife Service',
+                            'NSW National Parks and Wildlife Service',
+                            'NSW Parks and Wildlife Service',
+                            'NSW Parks and Wildlife Service (NPWS)',
+                            'National Parks & Wildife Service NSW',
+                            'National Parks and Wildlife NSW',
+                            'National Parks and Wildlife Service NSW']}
+
 def normalize_operator_values(shape, properties, fid, zoom):
     """
     There are many operator-related tags, including 'National Park Service',
@@ -3635,43 +3662,18 @@ def normalize_operator_values(shape, properties, fid, zoom):
     """
 
     operator = properties.get('operator', None)
+
     if operator is not None:
-        if operator in ('National Park Service',
-                        'United States National Park Service',
-                        'US National Park Service',
-                        'U.S. National Park Service',
-                        'US National Park service'):
-            properties['operator'] = 'United States National Park Service'
+        flattened = []
+        for sublist in _lookup_operator.values():
+            for value in sublist:
+                flattened.append(value)
 
-            return (shape, properties, fid)
-
-        if operator in ('United States Forest Service',
-                        'US Forest Service',
-                        'U.S. Forest Service',
-                        'USDA Forest Service',
-                        'United States Department of Agriculture',
-                        'US National Forest Service',
-                        'United State Forest Service',
-                        'U.S. National Forest Service'):
-            properties['operator'] = 'United States Forest Service'
-
-            return (shape, properties, fid)
-
-        if operator in ('Department of National Parks NSW',
-                        'Dept of NSW National Parks',
-                        'Dept of National Parks NSW',
-                        'Department of National Parks NSW',
-                        'NSW National Parks',
-                        'NSW National Parks & Wildlife Service',
-                        'NSW National Parks and Wildlife Service',
-                        'NSW Parks and Wildlife Service',
-                        'NSW Parks and Wildlife Service (NPWS)',
-                        'National Parks & Wildife Service NSW',
-                        'National Parks and WIldlife Service NSW',
-                        'National Parks and Wildlife NSW',
-                        'National Parks and Wildlife Service NSW'):
-            properties['operator'] = 'National Parks & Wildife Service NSW'
-
+        if operator in flattened:
+            for key, sublist in _lookup_operator.iteritems():
+                for val in sublist:
+                    if val==operator:
+                        properties['operator'] = key
             return (shape, properties, fid)
 
     return (shape, properties, fid)
