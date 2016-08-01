@@ -4,21 +4,21 @@
 # http://www.openstreetmap.org/node/4285104560
 assert_has_feature(
     16, 15808, 25720, 'pois',
-    {'id': 4285104560, 'operator': 'National Park Service'})
+    {'id': 4285104560, 'operator': 'United States National Park Service'})
 
 assert_no_matching_feature(
     16, 15808, 25720, 'pois',
     {'id': 4285104560, 'operator': 'US National Park Service'})
 
-# United States National Park Service in landuse
-# http://www.openstreetmap.org/way/220076368
+# National Park Service in landuse
+# http://www.openstreetmap.org/way/368766687
 assert_has_feature(
-    13, 1730, 3194, 'landuse',
-    {'id': 220076368, 'operator': 'National Park Service'})
+    16, 13163, 25153, 'landuse',
+    {'id': 368766687, 'operator': 'United States National Park Service'})
 
 assert_no_matching_feature(
-    13, 1730, 3194, 'landuse',
-    {'id': 220076368, 'operator': 'United States National Park Service'})
+    16, 13163, 25153, 'landuse',
+    {'id': 368766687, 'operator': 'National Park Service'})
 
 # US National Forest Service in POIS
 # http://www.openstreetmap.org/node/4216584100
@@ -30,15 +30,15 @@ assert_no_matching_feature(
     16, 15995, 25090, 'pois',
     {'id': 4216584100, 'operator': 'US National Forest Service'})
 
-# National Forest Service in landuse
-# http://www.openstreetmap.org/way/260686310
+# US Forest Service in landuse
+# http://www.openstreetmap.org/way/432302983
 assert_has_feature(
-    16, 12331, 25369, 'landuse',
-    {'id': 260686310, 'operator': 'United States Forest Service'})
+    16, 11252, 25432, 'landuse',
+    {'id': 432302983, 'operator': 'United States Forest Service'})
 
 assert_no_matching_feature(
-    16, 12331, 25369, 'landuse',
-    {'id': 260686310, 'operator': 'National Forest Service'})
+    16, 11252, 25432, 'landuse',
+    {'id': 432302983, 'operator': 'US Forest Service'})
 
 # NSW Parks and Wildlife Service in POIs
 # http://www.openstreetmap.org/node/2514034066
