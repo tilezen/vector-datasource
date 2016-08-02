@@ -167,7 +167,7 @@ SELECT
 FROM planet_osm_polygon t
 
 WHERE
-{% if mz_water_min_zoom >= 16 %}
+{% if zoom >= 16 %}
     mz_water_min_zoom IS NOT NULL
 {% else %}
     mz_water_min_zoom <= {{ zoom }} AND
@@ -190,7 +190,7 @@ SELECT
 FROM planet_osm_line t
 
 WHERE
-{% if mz_water_min_zoom >= 16 %}
+{% if zoom >= 16 %}
     mz_water_min_zoom IS NOT NULL
 {% else %}
     mz_water_min_zoom <= {{ zoom }} AND
@@ -220,7 +220,7 @@ FROM
   planet_osm_point t
 
 WHERE
-{% if mz_water_min_zoom >= 16 %}
+{% if zoom >= 16 %}
   mz_water_min_zoom IS NOT NULL
 {% else %}
   mz_water_min_zoom <= {{ zoom }} AND
