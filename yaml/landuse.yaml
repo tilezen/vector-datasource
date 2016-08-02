@@ -372,3 +372,7 @@ filters:
   - filter: {barrier: gate}
     min_zoom: 16
     output: {kind: gate}
+  - filter: {amenity: grave_yard}
+    min_zoom: GREATEST( LEAST(zoom + 3, 17), 13)
+    output:
+      kind: grave_yard
