@@ -35,7 +35,7 @@ SELECT
 FROM
     {{ table }}
 WHERE
-    {{ bounds[geom_type]|bbox_filter('way') }}
+    {{ bounds[geom_type]|bbox_filter('way',3857) }}
     {% if zoom <= 15 %}
     AND mz_landuse_min_zoom <= {{ zoom }}
     {% else %}
@@ -52,7 +52,7 @@ SELECT
 FROM
     ne_50m_urban_areas
 WHERE
-    {{ bounds['polygon']|bbox_filter('the_geom') }}
+    {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -69,7 +69,7 @@ SELECT
 FROM
   planet_osm_polygon
 WHERE
-  {{ bounds['polygon']|bbox_filter('way') }}
+  {{ bounds['polygon']|bbox_filter('way',3857) }}
   AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
@@ -83,7 +83,7 @@ SELECT
 FROM
     ne_10m_urban_areas
 WHERE
-    {{ bounds['polygon']|bbox_filter('the_geom') }}
+    {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -101,7 +101,7 @@ SELECT
 FROM
   planet_osm_polygon
 WHERE
-  {{ bounds['polygon']|bbox_filter('way') }}
+  {{ bounds['polygon']|bbox_filter('way',3857) }}
   AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
   AND mz_landuse_min_zoom <= {{ zoom }}
 
@@ -133,7 +133,7 @@ SELECT
 FROM
   ne_10m_urban_areas
 WHERE
-  {{ bounds['polygon']|bbox_filter('the_geom') }}
+  {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 {% endif %}
 
 {% endif %}

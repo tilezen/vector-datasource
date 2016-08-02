@@ -22,7 +22,7 @@ FROM ne_10m_populated_places
 
 WHERE
     mz_places_min_zoom <= {{ zoom }}
-    AND {{ bounds['point']|bbox_filter('the_geom') }}
+    AND {{ bounds['point']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -38,7 +38,7 @@ SELECT
     NULL AS labelrank,
     tags->'population' AS population,
     tags->'capital' AS capital,
-    tags->'state_capital' AS state_capital,
+    (tags ? 'state_capital' AND tags->'state_capital' = 'yes') AS state_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
     NULL::smallint AS min_zoom,
@@ -54,7 +54,7 @@ WHERE
 {% else %}
     mz_places_min_zoom <= {{ zoom }}
 {% endif %}
-    AND {{ bounds['point']|bbox_filter('way') }}
+    AND {{ bounds['point']|bbox_filter('way',3857) }}
 
 {% if zoom >= 11 %}
 UNION ALL
@@ -85,7 +85,7 @@ INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placet
 
 WHERE
   wof_n.is_visible AND
-  {{ bounds['point']|bbox_filter('label_position') }} AND
+  {{ bounds['point']|bbox_filter('label_position',3857) }} AND
   {{ zoom + 1 }} >= min_zoom AND
   {{ zoom - 1 }} <= max_zoom
 

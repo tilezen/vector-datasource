@@ -4,11 +4,11 @@
 #
 
 import_shapefile(){
-	shp2pgsql -dID -s 900913 -W Windows-1252 -g the_geom "$@"
+	shp2pgsql -dID -s 3857 -W Windows-1252 -g the_geom "$@"
 }
 
 import_shapefile_slow(){
-        shp2pgsql -dIe -s 900913 -W Windows-1252 -g the_geom "$@"
+        shp2pgsql -dIe -s 3857 -W Windows-1252 -g the_geom "$@"
 }
 
 

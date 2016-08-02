@@ -66,7 +66,7 @@ $$
 			tile_size_meters, tile_size_meters,
 			st_xmin(table_bbox), st_ymin(table_bbox)
 		);
-		perform UpdateGeometrySRID(grid_table_name, 'the_geom', 900913);
+		perform UpdateGeometrySRID(grid_table_name, 'the_geom', 3857);
 		execute format('create index %s_index on %1$s using gist(the_geom)', grid_table_name);
 
 		execute format('create sequence %1$s_ids;', table_name);

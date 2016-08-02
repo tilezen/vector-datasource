@@ -71,7 +71,7 @@ python "${basedir}/integration-test.py" -dumpdata
 
 echo "=== Loading test data..."
 
-OSM2PGSQL_ARGS="-E 900913 -s -C 1024"
+OSM2PGSQL_ARGS="-E 3857 -s -C 1024"
 OSM2PGSQL_ARGS+=" -S ${basedir}/osm2pgsql.style"
 OSM2PGSQL_ARGS+=" -d ${dbname} --hstore-all"
 if [[ ! -z ${NUM_JOBS+x} ]]; then
@@ -92,17 +92,22 @@ psql "${dbname}" <<EOF
 CREATE TABLE water_polygons (
     gid SERIAL,
     fid double precision,
-    the_geom geometry(MultiPolygon,900913)
+    the_geom geometry(MultiPolygon,3857)
 );
 CREATE TABLE land_polygons (
     gid SERIAL,
     fid double precision,
-    the_geom geometry(MultiPolygon,900913)
+    the_geom geometry(MultiPolygon,3857)
 );
 CREATE TABLE simplified_land_polygons (
     gid SERIAL,
     fid double precision,
-    the_geom geometry(MultiPolygon,900913)
+    the_geom geometry(MultiPolygon,3857)
+);
+CREATE TABLE ne_10m_land (
+    gid integer NOT NULL,
+    the_geom geometry(MultiPolygon,3857),
+    mz_earth_min_zoom smallint
 );
 EOF
 # load up shapefile fixtures into the appropriate tables
@@ -112,7 +117,7 @@ shopt -s nullglob
 for tbl in `ls ${basedir}/integration-test/fixtures/`; do
     if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
         for shp in "${basedir}/integration-test/fixtures/${tbl}"/*.shp; do
-            shp2pgsql -a -s 900913 -W Windows-1252 -g the_geom \
+            shp2pgsql -a -s 3857 -W Windows-1252 -g the_geom \
                       "${shp}" "${tbl}" \
                 | psql -d "${dbname}"
         done

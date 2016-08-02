@@ -40,7 +40,7 @@ FROM (
     planet_osm_point
 
   WHERE
-    {{ bounds['point']|bbox_filter('way') }}
+    {{ bounds['point']|bbox_filter('way',3857) }}
 {% if zoom >= 16 %}
     AND mz_poi_min_zoom IS NOT NULL
 {% else %}
@@ -67,7 +67,7 @@ UNION ALL
     planet_osm_polygon
 
   WHERE
-    {{ bounds['point']|bbox_filter('way') }}
+    {{ bounds['point']|bbox_filter('way',3857) }}
 {% if zoom >= 16 %}
     AND mz_poi_min_zoom IS NOT NULL
 {% else %}

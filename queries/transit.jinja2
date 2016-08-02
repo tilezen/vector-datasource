@@ -24,7 +24,7 @@ SELECT
 FROM {{ table }}
 
 WHERE
-    {{ bounds[geom_type]|bbox_filter('way') }}
+    {{ bounds[geom_type]|bbox_filter('way',3857) }}
 {% if zoom >= 16 %}
     AND mz_transit_level IS NOT NULL
 {% else %}
