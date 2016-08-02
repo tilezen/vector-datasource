@@ -302,6 +302,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `glacier`
 * `golf_course`
 * `grass`
+* `grave_yard`
 * `groyne`
 * `hanami`
 * `hospital`
@@ -557,6 +558,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `carousel`
 * `carpenter`
 * `cave_entrance`
+* `cemetery`
 * `chalet`
 * `childcare`
 * `childrens_centre`
@@ -600,6 +602,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `estate_agent`
 * `fashion`
 * `fast_food`
+* `farm`
 * `ferry_terminal`
 * `financial`
 * `fire_station`
@@ -611,6 +614,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `florist`
 * `food_bank`
 * `ford`
+* `forest`
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
@@ -621,6 +625,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `generator`
 * `geyser`
 * `gift`
+* `golf_course`
 * `government`
 * `greengrocer`
 * `group_home`
@@ -663,6 +668,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `memorial`
 * `metal_construction`
 * `midwife`
+* `military`
 * `mineshaft`
 * `mini_roundabout`
 * `mobile_phone`
@@ -672,6 +678,8 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `motorway_junction`
 * `museum`
 * `music`
+* `national_park`
+* `nature_reserve`
 * `newspaper`
 * `ngo`
 * `notary`
@@ -682,6 +690,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `outdoor`
 * `outreach`
 * `painter`
+* `park`
 * `parking`
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `pet`
@@ -694,7 +703,9 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `physician`
 * `picnic_site`
 * `picnic_table`
+* `pitch`
 * `place_of_worship`
+* `plant`
 * `playground`
 * `plumber`
 * `police`
@@ -706,12 +717,15 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `power_tower`
 * `power_wind`
 * `prison`
+* `protected_area`
 * `pub`
 * `put_in_egress`
 * `put_in`
 * `pylon`
+* `quarry`
 * `ranger_station`
 * `rapid`
+* `recreation_ground`
 * `recreation_track`
 * `recycling`
 * `refugee_camp`
@@ -746,6 +760,7 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `station`
 * `stone`
 * `stonemason`
+* `substation`
 * `subway_entrance`
 * `summer_camp`
 * `summer_toboggan`
@@ -773,15 +788,18 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `university`
 * `veterinary`
 * `viewpoint`
+* `village_green`
 * `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
+* `wastewater_plant`
 * `water_park`
 * `water_point`
 * `water_slide`
 * `water_tower`
 * `water_well`
+* `water_works`
 * `waterfall`
 * `watering_place`
 * `wilderness_hut`
@@ -789,6 +807,9 @@ Features from OpenStreetMap which are tagged `disused=*` for any other value tha
 * `windmill`
 * `wine`
 * `winery`
+* `winter_sports`
+* `wood`
+* `works`
 * `workshop`
 * `zoo`
 
