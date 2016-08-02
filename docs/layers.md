@@ -399,7 +399,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place properties (common optional):
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
-* `state_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
+* `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
 * `labelrank`: labelrank value from Natural Earth
 * `min_zoom`: Currently neighbourhoods only, from Who's On First
 * `max_zoom`: Currently neighbourhoods only, from Who's On First
