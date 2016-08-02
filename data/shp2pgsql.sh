@@ -3,12 +3,23 @@
 # After unpacking the contents of each zip archive, pipe this script to psql.
 #
 
+# exit on error
+set -e
+
 import_shapefile(){
-	shp2pgsql -dID -s 3857 -W Windows-1252 -g the_geom "$@"
+    if [[ ! -f $1 ]]; then
+        echo "Unable to find shapefile $1" 1>&2
+        exit 1
+    fi
+    shp2pgsql -dID -s 3857 -W Windows-1252 -g the_geom "$@"
 }
 
 import_shapefile_slow(){
-        shp2pgsql -dIe -s 3857 -W Windows-1252 -g the_geom "$@"
+    if [[ ! -f $1 ]]; then
+        echo "Unable to find shapefile $1" 1>&2
+        exit 1
+    fi
+    shp2pgsql -dIe -s 3857 -W Windows-1252 -g the_geom "$@"
 }
 
 
