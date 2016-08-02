@@ -106,8 +106,9 @@ CREATE TABLE simplified_land_polygons (
 );
 CREATE TABLE ne_10m_land (
     gid integer NOT NULL,
-    the_geom geometry(MultiPolygon,3857),
-    mz_earth_min_zoom smallint
+    featurecla text,
+    scalerank integer,
+    the_geom geometry(MultiPolygon,3857)
 );
 EOF
 # load up shapefile fixtures into the appropriate tables
