@@ -84,14 +84,14 @@ assert_has_feature(
 assert_has_feature(
     16, 60290, 39338, 'places',
     { 'id': 7320, 'name': 'Sydney',
-      'kind': 'city', 'state_capital': True})
+      'kind': 'city', 'region_capital': True})
 assert_has_feature(
     16, 57427, 26013, 'places',
     { 'id': 7281, 'name': 'Osaka',
-      'kind': 'city', 'state_capital': True})
+      'kind': 'city', 'region_capital': True})
 
 # ne populated place
 assert_has_feature(
     16, 10482, 25332, 'places',
     { 'id': 7255, 'name': 'San Francisco',
-      'kind': 'city', 'state_capital': type(None), 'capital': type(None)})
+      'kind': 'city', 'region_capital': type(None), 'capital': type(None)})
