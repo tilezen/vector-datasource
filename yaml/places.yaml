@@ -62,24 +62,32 @@ filters:
       scalerank: true
       featurecla: [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
     min_zoom: scalerank
-    output: {kind: city, capital: true}
+    output: {kind: locality, capital: true}
     table: ne
   - filter:
       scalerank: true
       featurecla: [Admin-1 capital, Admin-1 region capital]
     min_zoom: scalerank
-    output: {kind: city, state_capital: true}
+    output: {kind: locality, region_capital: true}
     table: ne
   - filter: {featurecla: Populated place, scalerank: true}
     min_zoom: scalerank
-    output: {kind: city}
+    output: {kind: locality}
     table: ne
 
   - filter:
       scalerank: true
-      featurecla: [Historic place, Scientific station]
+      featurecla: [Historic place]
     min_zoom: scalerank
     output:
       kind: locality
       kind_detail: hamlet
+    table: ne
+  - filter:
+      scalerank: true
+      featurecla: [Scientific station]
+    min_zoom: scalerank
+    output:
+      kind: locality
+      kind_detail: scientific_station
     table: ne
