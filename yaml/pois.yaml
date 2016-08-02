@@ -674,3 +674,87 @@ filters:
     min_zoom: 11
     output:
       kind: rest_area
+  - filter: {landuse: cemetery}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: cemetery
+  - filter: {amenity: grave_yard}
+    min_zoom: GREATEST( LEAST(zoom + 3, 17), 13)
+    output:
+      kind: grave_yard
+  - filter: {landuse: farm}
+    min_zoom: 15
+    output:
+      kind: farm
+  - filter: {landuse: forest}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: forest
+  - filter: {leisure: golf_course}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: golf_course
+  - filter: {landuse: military}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output:
+      kind: military
+  - filter: {boundary: national_park}
+    min_zoom: LEAST(zoom + 2, 9)
+    output:
+      kind: national_park
+  - filter: {leisure: nature_reserve}
+    min_zoom: LEAST(zoom + 2, 9)
+    output:
+      kind: nature_reserve
+  - filter: {leisure: park}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: park
+  - filter: {power: plant}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: plant
+  - filter: {leisure: pitch}
+    min_zoom: 16
+    output:
+      kind: pitch
+  - filter: {boundary: protected_area}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 7)
+    output:
+      kind: protected_area
+  - filter: {landuse: quarry}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: quarry
+  - filter: {landuse: recreation_ground}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: recreation_ground
+  - filter: {power: substation}
+    min_zoom: 15
+    output:
+      kind: substation
+  - filter: {landuse: village_green}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: village_green
+  - filter: {man_made: wastewater_plant}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: wastewater_plant
+  - filter: {man_made: water_works}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: water_works
+  - filter: {landuse: winter_sports}
+    min_zoom: GREATEST( LEAST(zoom + 1, 13), 10)
+    output:
+      kind: winter_sports
+  - filter: {natural: wood}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: wood
+  - filter: {man_made: works}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: works
