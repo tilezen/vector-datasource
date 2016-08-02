@@ -6,6 +6,25 @@ dbname="vector_datasource_$$"
 basedir="$(dirname ${BASH_SOURCE[0]})/.."
 server_pid=0
 
+# parse arguments
+while [[ $# -gt 1 ]]; do
+    key=$1
+    case $key in
+        -j|--num-jobs)
+            NUM_JOBS=$2
+            shift
+            ;;
+        -H|--db-host)
+            DBHOST=$2
+            shift
+            ;;
+        *)
+            # ignore unknown option
+            ;;
+    esac
+    shift
+done
+
 function die {
    echo "$@" 1>&2;
    exit 1
@@ -51,10 +70,19 @@ fi
 python "${basedir}/integration-test.py" -dumpdata
 
 echo "=== Loading test data..."
-osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
-  -d "${dbname}" --hstore-all --create empty.osm
-osm2pgsql -E 900913 -s -C 1024 -S "${basedir}/osm2pgsql.style" \
-  -d "${dbname}" --hstore-all --append data.osc
+
+OSM2PGSQL_ARGS="-E 900913 -s -C 1024"
+OSM2PGSQL_ARGS+=" -S \"${basedir}/osm2pgsql.style\""
+OSM2PGSQL_ARGS+=" -d \"${dbname}\" --hstore-all"
+if [[ ! -z ${NUM_JOBS+x} ]]; then
+    OSM2PGSQL_ARGS+=" --number-processes=$NUM_JOBS"
+fi
+if [[ ! -z ${DBHOST+x} ]]; then
+    OSM2PGSQL_ARGS+=" -H $DBHOST"
+fi
+
+osm2pgsql $OSM2PGSQL_ARGS --create empty.osm
+osm2pgsql $OSM2PGSQL_ARGS --append data.osc
 
 echo "=== Loading external data..."
 # mock these tables - the shapefiles are _huge_ and we don't want to
