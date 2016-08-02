@@ -92,7 +92,7 @@ assert_has_feature(
     16, 10484, 25327, 'roads',
     { 'id': 28841123, 'is_bicycle_related': True })
 
-# Way: 367767273 http://www.openstreetmap.org/way/367767273
+# Way: 301442215 http://www.openstreetmap.org/way/301442215
 assert_has_feature(
-    16, 10479, 25331, 'roads',
-    { 'id': 367767273, 'is_bicycle_related': True })
+    16, 34748, 22664, 'roads',
+    { 'id': 301442215, 'is_bicycle_related': True })
