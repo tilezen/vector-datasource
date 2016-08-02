@@ -72,8 +72,8 @@ python "${basedir}/integration-test.py" -dumpdata
 echo "=== Loading test data..."
 
 OSM2PGSQL_ARGS="-E 900913 -s -C 1024"
-OSM2PGSQL_ARGS+=" -S \"${basedir}/osm2pgsql.style\""
-OSM2PGSQL_ARGS+=" -d \"${dbname}\" --hstore-all"
+OSM2PGSQL_ARGS+=" -S ${basedir}/osm2pgsql.style"
+OSM2PGSQL_ARGS+=" -d ${dbname} --hstore-all"
 if [[ ! -z ${NUM_JOBS+x} ]]; then
     OSM2PGSQL_ARGS+=" --number-processes=$NUM_JOBS"
 fi
