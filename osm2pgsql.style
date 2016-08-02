@@ -19,7 +19,7 @@ node,way   tourism                       text      polygon,nocolumn
 node,way   water                         text      polygon,nocolumn
 node,way   waterway                      text      polygon,nocolumn
 node,way   wetland                       text      polygon,nocolumn
-way        way_area                      real      nocolumn          # This is calculated during import
+way        way_area                      real                        # This is calculated during import
 
 node,way   building:levels               text      polygon,nocolumn
 node,way   building:min_levels           text      polygon,nocolumn
