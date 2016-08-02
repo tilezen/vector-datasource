@@ -207,7 +207,11 @@ class NotExistsRule(object):
         self.column = column
 
     def as_sql(self):
-        return '%s IS NULL' % self.column.format()
+        exists_check = self.column.exists_check()
+        if exists_check:
+            return 'NOT (%s)' % exists_check
+        else:
+            return '%s IS NULL' % self.column.format()
 
     def columns(self):
         return [self.column]
