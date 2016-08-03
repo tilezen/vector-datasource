@@ -391,7 +391,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 * `name`
 * `id`: osm_id from OpenStreetMap or Natural Earth id
-* `kind`: the original value of the OSM `place` tag and Natural Earth `featurecla`
+* `kind`: normalizes values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
 * `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
@@ -404,32 +404,24 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `min_zoom`: Currently neighbourhoods only, from Who's On First
 * `max_zoom`: Currently neighbourhoods only, from Who's On First
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
+* `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
 
 #### Place kind values:
 
-* `Admin-0 capital alt`
-* `Admin-0 capital`
-* `Admin-0 region capital`
-* `Admin-1 capital`
-* `Admin-1 region capital`
-* `borough`
-* `city`
-* `continent`
 * `country`
+* `locality`
+* `neighbourhood`
+
+#### Place kind_detail values:
+
 * `farm`
 * `hamlet`
-* `Historic place`
 * `isolated_dwelling`
 * `locality`
-* `macrohood`
-* `Meteorological Station`
 * `neighbourhood`
-* `Populated place`
 * `province`
-* `quarter`
-* `Scientific station`
+* `scientific_station`
 * `state`
-* `suburb`
 * `town`
 * `village`
 
