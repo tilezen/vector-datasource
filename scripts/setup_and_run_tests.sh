@@ -88,24 +88,8 @@ echo "=== Loading external data..."
 # mock these tables - the shapefiles are _huge_ and we don't want to
 # spend time downloading and importing them - we use smaller extracts
 # in test/fixtures/ to handle specific test cases.
-psql "${dbname}" <<EOF
-CREATE TABLE water_polygons (
-    gid SERIAL,
-    fid double precision,
-    the_geom geometry(MultiPolygon,3857)
-);
-CREATE TABLE land_polygons (
-    gid SERIAL,
-    fid double precision,
-    the_geom geometry(MultiPolygon,3857)
-);
-CREATE TABLE ne_10m_land (
-    gid integer NOT NULL,
-    featurecla text,
-    scalerank integer,
-    the_geom geometry(MultiPolygon,3857)
-);
-EOF
+psql -f data/shapefile_schema.sql -d "${dbname}"
+
 # load up shapefile fixtures into the appropriate tables
 # allow globs to expand to empty strings to make enumerating files in
 # possibly empty directories easier.
