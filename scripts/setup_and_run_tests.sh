@@ -107,10 +107,7 @@ shopt -u nullglob
 
 echo "=== Loading bundled data..."
 pushd "${basedir}/data"
-# Unzip all zip
-ls *.zip | xargs -n1 unzip -o
-# Load data from zips
-./shp2pgsql.sh | psql -d "${dbname}"
+# NOTE: not loading bundled data! All data should come from fixtures.
 # Add indexes and any required database updates
 ./perform-sql-updates.sh -d "${dbname}"
 popd
