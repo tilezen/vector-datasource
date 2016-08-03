@@ -70,7 +70,7 @@ assert_has_feature(
 assert_has_feature(
     16, 55887, 25378, 'places',
     { 'id': 7274, 'name': 'Seoul',
-      'kind': 'city', 'capital': True})
+      'kind': 'locality', 'capital': True})
 assert_has_feature(
     16, 57480, 25951, 'places',
     { 'id': 6581, 'name': 'Kyoto',
