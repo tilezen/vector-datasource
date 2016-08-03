@@ -99,11 +99,6 @@ CREATE TABLE land_polygons (
     fid double precision,
     the_geom geometry(MultiPolygon,3857)
 );
-CREATE TABLE simplified_land_polygons (
-    gid SERIAL,
-    fid double precision,
-    the_geom geometry(MultiPolygon,3857)
-);
 CREATE TABLE ne_10m_land (
     gid integer NOT NULL,
     featurecla text,
