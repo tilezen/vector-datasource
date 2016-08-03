@@ -7,7 +7,7 @@
 set -e
 
 import_shapefile(){
-    if [[ ! -f $1 ]]; then
+    if [ ! -f $1 ]; then
         echo "Unable to find shapefile $1" 1>&2
         exit 1
     fi
@@ -15,7 +15,7 @@ import_shapefile(){
 }
 
 import_shapefile_slow(){
-    if [[ ! -f $1 ]]; then
+    if [ ! -f $1 ]; then
         echo "Unable to find shapefile $1" 1>&2
         exit 1
     fi
