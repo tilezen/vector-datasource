@@ -63,8 +63,8 @@ assert_has_feature(
 # ne scientific station
 assert_has_feature(
     16, 22209, 47255, 'places',
-    { 'id': int, 'name': 'Elephant Island',
-      'kind': 'locality', 'kind_detail': 'hamlet'})
+    { 'id': 4844, 'name': 'Elephant Island',
+      'kind': 'locality', 'kind_detail': 'scientific_station'})
 
 # ne capitals
 assert_has_feature(
