@@ -15,4 +15,4 @@ test:
     - find . -not -path '*/.eggs/*' -not -path '*/integration-test*' -not -path '*/data/*' -name '*.py' | xargs flake8
     - python setup.py install
     - python setup.py test
-    - ./scripts/setup_and_run_tests.sh -j 4
+    - ./scripts/setup_and_run_tests.sh
