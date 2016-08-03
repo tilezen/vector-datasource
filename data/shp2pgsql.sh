@@ -33,7 +33,6 @@ import_shapefile ne_50m_ocean-merc.shp ne_50m_ocean
 import_shapefile ne_50m_playas-merc.shp ne_50m_playas
 import_shapefile ne_50m_urban_areas-merc.shp ne_50m_urban_areas
 import_shapefile ne_10m_urban_areas-merc.shp ne_10m_urban_areas
-import_shapefile ne_10m_parks_and_protected_lands-merc.shp ne_10m_parks_and_protected_lands
 import_shapefile ne_10m_land-tiled-merc.shp ne_10m_land
 import_shapefile ne_50m_land-merc.shp ne_50m_land
 import_shapefile ne_110m_land-merc.shp ne_110m_land

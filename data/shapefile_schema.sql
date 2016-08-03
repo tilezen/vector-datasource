@@ -371,17 +371,4 @@ CREATE TABLE "ne_10m_playas" (
 ALTER TABLE "ne_10m_playas" ADD PRIMARY KEY (gid);
 SELECT AddGeometryColumn('','ne_10m_playas','the_geom','3857','MULTIPOLYGON',2);
 
-CREATE TABLE "ne_10m_parks_and_protected_lands" (
-  gid serial,
-  "unit_code" varchar(10),
-  "unit_name" varchar(254),
-  "unit_type" varchar(254),
-  "nps_region" varchar(128),
-  "scalerank" numeric(10,0),
-  "featurecla" varchar(30),
-  "note" varchar(50),
-  "name" varchar(100));
-ALTER TABLE "ne_10m_parks_and_protected_lands" ADD PRIMARY KEY (gid);
-SELECT AddGeometryColumn('','ne_10m_parks_and_protected_lands','the_geom','3857','MULTIPOLYGON',2);
-
 COMMIT;
