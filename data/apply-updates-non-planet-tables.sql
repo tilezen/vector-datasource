@@ -14,10 +14,6 @@ UPDATE land_polygons
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(land_polygons.*)
   WHERE mz_calculate_min_zoom_earth(land_polygons.*) IS NOT NULL;
 
-UPDATE planet_osm_polygon
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_polygon.*)
-  WHERE mz_calculate_min_zoom_earth(planet_osm_polygon.*) IS NOT NULL;
-
 
 UPDATE ne_110m_ocean
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_ocean.*)
