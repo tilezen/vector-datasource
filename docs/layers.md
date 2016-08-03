@@ -184,8 +184,8 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 
 #### Building kind values:
 
-* Buildings polygons and label_position points either have `kind` values that are a straight passthru of the raw OpenStreetMap `building=*` and `building:part` values. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
-* If either of `building=*` and `building:part` is `yes`, the `kind` property is dropped (and `kind:building` is implied).
+* Buildings polygons and label_position points, have `kind` values that are either `building` or `building_part`, if `building=*` or `building:part` is `yes` respectively. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
+* If the raw OpenStreetMap `building:part` tag exists with a value, a `kind_detail` tag is added to describe the `building:part` value.
 * Address points are `kind` of value `address`.
 
 #### Address properties and kind value:
