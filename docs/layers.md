@@ -149,7 +149,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprint, building label_placment points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
+Polygons from OpenStreetMap representing building footprint, building label_placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
 Individual `building:part` geometries from OSM following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels are now exported as `building_part` features with specified `kind_detail`.
 
