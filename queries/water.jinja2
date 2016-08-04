@@ -23,7 +23,7 @@ FROM ne_10m_ocean t
 
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
-  {{ bounds['polygon']|bbox_filter('the_geom') }}
+  {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -41,7 +41,7 @@ FROM ne_10m_lakes t
 
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
-  {{ bounds['polygon']|bbox_filter('the_geom') }}
+  {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -66,7 +66,7 @@ FROM
 
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
-  {{ bounds['line']|bbox_filter('the_geom') }}
+  {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -91,7 +91,7 @@ FROM
 
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
-  {{ bounds['line']|bbox_filter('the_geom') }}
+  {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 {% if 4 <= zoom < 9 %}
 UNION ALL
@@ -108,7 +108,7 @@ FROM ne_10m_playas t
 
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
-  {{ bounds['polygon']|bbox_filter('the_geom') }}
+  {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
@@ -131,7 +131,7 @@ FROM
 
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
-  {{ bounds['line']|bbox_filter('the_geom') }}
+  {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 {% endif %}
 
@@ -149,60 +149,60 @@ SELECT
 
 FROM water_polygons t
 
-WHERE {{ bounds['polygon']|bbox_filter('the_geom') }}
+WHERE {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
 SELECT
-    name,
+    tags->'name' AS name,
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     NULL::boolean AS label_placement,
-    tunnel,
+    tags->'tunnel' AS tunnel,
     %#tags AS tags
 
 FROM planet_osm_polygon t
 
 WHERE
-{% if mz_water_min_zoom >= 16 %}
-    mz_water_min_zoom IS NOT NULL
+{% if zoom >= 16 %}
+    mz_water_min_zoom IS NOT NULL AND
 {% else %}
     mz_water_min_zoom <= {{ zoom }} AND
 {% endif %}
-    {{ bounds['polygon']|bbox_filter('way') }}
+    {{ bounds['polygon']|bbox_filter('way',3857) }}
 
 UNION ALL
 
 SELECT
-    name,
+    tags->'name' AS name,
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     NULL::boolean AS label_placement,
-    tunnel,
+    tags->'tunnel' AS tunnel,
     %#tags AS tags
 
 FROM planet_osm_line t
 
 WHERE
-{% if mz_water_min_zoom >= 16 %}
-    mz_water_min_zoom IS NOT NULL
+{% if zoom >= 16 %}
+    mz_water_min_zoom IS NOT NULL AND
 {% else %}
     mz_water_min_zoom <= {{ zoom }} AND
 {% endif %}
-    {{ bounds['line']|bbox_filter('way') }}
+    {{ bounds['line']|bbox_filter('way',3857) }}
 
 {% endif %}
 
 UNION ALL
 
 SELECT
-  name,
+  tags->'name' AS name,
   NULL AS area,
   mz_calculate_json_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
@@ -220,9 +220,9 @@ FROM
   planet_osm_point t
 
 WHERE
-{% if mz_water_min_zoom >= 16 %}
-  mz_water_min_zoom IS NOT NULL
+{% if zoom >= 16 %}
+  mz_water_min_zoom IS NOT NULL AND
 {% else %}
   mz_water_min_zoom <= {{ zoom }} AND
 {% endif %}
-  {{ bounds['point']|bbox_filter('way') }}
+  {{ bounds['point']|bbox_filter('way',3857) }}

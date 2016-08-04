@@ -12,7 +12,7 @@ SELECT
 FROM
     ne_110m_admin_0_boundary_lines_land t
 WHERE
-    {{ bounds['line']|bbox_filter('the_geom') }} AND
+    {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
     mz_boundary_min_zoom <= {{ zoom }}
 
 {% elif 2 <= zoom < 5 %}
@@ -22,7 +22,7 @@ SELECT
 FROM
     ne_50m_admin_0_boundary_lines_land t
 WHERE
-    {{ bounds['line']|bbox_filter('the_geom') }} AND
+    {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
     mz_boundary_min_zoom <= {{ zoom }}
 
 UNION ALL
@@ -32,7 +32,7 @@ SELECT
 FROM
     ne_50m_admin_1_states_provinces_lines t
 WHERE
-    {{ bounds['line']|bbox_filter('the_geom') }} AND
+    {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
     mz_boundary_min_zoom <= {{ zoom }}
 
 {% elif 5 <= zoom < 8 %}
@@ -44,7 +44,7 @@ SELECT
 FROM
     ne_10m_admin_0_boundary_lines_land t
 WHERE
-    {{ bounds['line']|bbox_filter('the_geom') }} AND
+    {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
     mz_boundary_min_zoom <= {{ zoom }}
 
 UNION ALL
@@ -56,27 +56,27 @@ SELECT
 FROM
     ne_10m_admin_1_states_provinces_lines t
 WHERE
-    {{ bounds['line']|bbox_filter('the_geom') }} AND
+    {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
     mz_boundary_min_zoom <= {{ zoom }}
 
 {% else %}
 
 SELECT
-  name,
+  tags->'name' AS name,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_polygon.*) AS mz_properties,
   -- note that we force the RHR, which makes outers clockwise,
   -- then take the boundary, then reverse and intersect with
   -- the query bbox. this is needed because Shapely expects a
   -- correctly-oriented outer to run counter-clockwise.
-  {% filter geometry %}{{ bounds['line']|bbox_intersection('st_reverse(st_boundary(st_forcerhr(way)))') }}{% endfilter %} AS __geometry__,
+  {% filter geometry %}{{ bounds['line']|bbox_intersection('st_reverse(st_boundary(st_forcerhr(way)))',3857) }}{% endfilter %} AS __geometry__,
   osm_id AS __id__,
   %#tags AS tags
 
 FROM planet_osm_polygon
 
 WHERE
-  {{ bounds['line']|bbox_filter('way') }} AND
+  {{ bounds['line']|bbox_filter('way',3857) }} AND
 {% if zoom >= 16 %}
     mz_boundary_min_zoom IS NOT NULL
 {% else %}
@@ -89,19 +89,19 @@ SELECT
   NULL AS name,
   true AS maritime_boundary,
   '{"kind": "maritime"}'::json as mz_properties,
-  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom',3857) }}{% endfilter %} AS __geometry__,
   gid AS __id__,
   NULL AS tags
 
 FROM buffered_land
 
 WHERE
-  {{ bounds['polygon']|bbox_filter('the_geom') }}
+  {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
 SELECT
-  name,
+  tags->'name' AS name,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_line.*) AS mz_properties,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
@@ -112,7 +112,7 @@ FROM
   planet_osm_line
 
 WHERE
-  {{ bounds['line']|bbox_filter('way') }} AND
+  {{ bounds['line']|bbox_filter('way',3857) }} AND
 {% if zoom >= 16 %}
     mz_boundary_min_zoom IS NOT NULL
 {% else %}

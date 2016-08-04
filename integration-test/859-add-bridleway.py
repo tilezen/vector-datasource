@@ -1,0 +1,6 @@
+# Add bridleway from osm
+
+# http://www.openstreetmap.org/way/387216146
+assert_has_feature(
+    16, 19302, 24623, 'roads',
+    { 'id': 387216146, 'kind': 'path', 'highway': 'bridleway'})
