@@ -95,18 +95,15 @@ These individual layers are grouped into an `all` layer – use this special la
 
 We include one deprecated layer, `landuse-labels`, for backwards compatibility. Please don't build new maps against this layer, it will be removed in the v1.0 version of tiles.
 
-## Boundaries & Barriers
+## Boundaries
 
 ![image](images/mapzen-vector-tile-docs-boundaries.png)
 
 * Layer name: `boundaries`
 * Geometry types: `line`
 
-Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Earth boundaries (zoom < 8), and some other `barrier` like goodies at high zooms.
+Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural Earth boundaries (zoom < 8).
 
-(below) Fence lines around the petting zoo in San Francisco are included in the `landuse` layer.
-
-![image](images/mapzen-vector-tile-docs-barriers.png)
 
 #### Boundary properties (common):
 
@@ -245,6 +242,10 @@ Landuse polygons from OpenStreetMap representing parks, forests, residential, co
 Zooms 4 and 5, 6 and 7 includes a mix of Natural Earth `urban_area` (zooms 0-9 only) features and OpenStreetMap data for `national_park`, `protected_area`, and `nature_reserve` only. After that more more feature kinds are included, and they have a richer set of properties including `sport`, `religion`, `surface`, `attraction`, `zoo`, and `natural`. Feature selection is filtered per zoom until zoom 15.
 
 _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Find those in the `pois` layer._
+
+(below) Fence lines around the petting zoo in San Francisco are included in the `landuse` layer.
+
+![image](images/mapzen-vector-tile-docs-barriers.png)
 
 #### Landuse properties (common):
 

@@ -13,10 +13,10 @@ filters:
     output: {kind: hospital}
   - filter:
       natural: [peak, volcano]
-    min_zoom: CASE WHEN mz_to_float_meters("ele") > 4000 THEN 9
-      WHEN mz_to_float_meters("ele") > 3000 THEN 10
-      WHEN mz_to_float_meters("ele") > 2000 THEN 11
-      WHEN mz_to_float_meters("ele") > 1000 THEN 12
+    min_zoom: CASE WHEN mz_to_float_meters(tags->'ele') > 4000 THEN 9
+      WHEN mz_to_float_meters(tags->'ele') > 3000 THEN 10
+      WHEN mz_to_float_meters(tags->'ele') > 2000 THEN 11
+      WHEN mz_to_float_meters(tags->'ele') > 1000 THEN 12
       ELSE 13
       END
     output:
@@ -181,10 +181,9 @@ filters:
     min_zoom: LEAST(zoom + 3.98, 17)
     output:
       kind:
-        expr: CASE WHEN sport IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
+        expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
       sport:
-        expr: CASE WHEN sport IN ('fitness', 'gym') THEN NULL ELSE sport END
-    extra_columns: [sport]
+        expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN NULL ELSE tags->'sport' END
   - filter: {leisure: beach_resort}
     min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
     output: {kind: beach_resort }
@@ -208,13 +207,12 @@ filters:
       any:
         - {waterway: waterfall}
         - {natural: waterfall}
-    min_zoom: CASE WHEN mz_to_float_meters("height") < 10 THEN 15
-      WHEN mz_to_float_meters("height") < 50 THEN 14
-      WHEN mz_to_float_meters("height") < 300 THEN 13
-      WHEN mz_to_float_meters("height") >= 300 THEN 12
+    min_zoom: CASE WHEN mz_to_float_meters(tags->'height') < 10 THEN 15
+      WHEN mz_to_float_meters(tags->'height') < 50 THEN 14
+      WHEN mz_to_float_meters(tags->'height') < 300 THEN 13
+      WHEN mz_to_float_meters(tags->'height') >= 300 THEN 12
       ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       14), 12) END
-    extra_columns: [height]
     output: {kind: waterfall, height: {col: height}}
   - filter: {leisure: garden}
     min_zoom: GREATEST(12, LEAST(zoom, 16))
@@ -235,11 +233,11 @@ filters:
     min_zoom: GREATEST(13, LEAST(zoom + 2.5, 16))
     output: {kind: fort }
   - filter: {man_made: windmill}
-    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+    min_zoom: CASE WHEN tags ? 'tourism' AND tags->'tourism' = 'attraction' THEN 14
       ELSE 15 END
     output: {kind: windmill}
   - filter: {man_made: lighthouse}
-    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+    min_zoom: CASE WHEN tags ? 'tourism' AND tags->'tourism' = 'attraction' THEN 14
       ELSE 15 END
     output: {kind: lighthouse}
   - filter:
@@ -519,13 +517,11 @@ filters:
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {expr: "covered = 'yes'"}
+      covered: {expr: "tags ? 'covered' and tags->'covered' = 'yes'"}
       fee: {expr: "(tags ? 'fee' and tags->'fee' not in ('no', 'Free', 'free', '0', 'No', 'none'))"}
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
       surveillance: {expr: "(tags ? 'surveillance' and tags->'surveillance' not in ('no', 'none'))"}
-    extra_columns:
-      - covered
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output: {kind: cycle_barrier}

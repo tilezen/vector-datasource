@@ -8,7 +8,7 @@ SELECT
 FROM ne_10m_roads
 
 WHERE
-    {{ bounds['line']|bbox_filter('the_geom') }}
+    {{ bounds['line']|bbox_filter('the_geom',3857) }}
     AND scalerank <= {{ zoom }}
 
 {% else %}
@@ -21,7 +21,7 @@ SELECT
 {% if zoom >= 12 %}
     -- try to only calculate whether this is a bus route when we already know
     -- that it's a road, as joining onto the rels table can be expensive.
-    CASE WHEN highway IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
+    CASE WHEN tags->'highway' IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
                           'primary', 'primary_link', 'secondary', 'secondary_link',
                           'tertiary', 'tertiary_link',
                           'residential', 'unclassified', 'road', 'living_street')
@@ -36,7 +36,7 @@ SELECT
 FROM planet_osm_line
 
 WHERE
-    {{ bounds['line']|bbox_filter('way') }}
+    {{ bounds['line']|bbox_filter('way',3857) }}
     AND mz_road_level <= {{ zoom }}
 
 {% endif %}

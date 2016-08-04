@@ -2,9 +2,9 @@
 SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    name,
-    ref,
-    operator,
+    tags->'name' AS name,
+    tags->'ref' AS ref,
+    tags->'operator' AS operator,
     mz_calculate_json_transit({{ table }}.*) AS mz_properties,
     tags->'type' AS type,
     tags->'colour' AS colour,
@@ -17,14 +17,14 @@ SELECT
     tags->'descent' AS descent,
     tags->'roundtrip' AS roundtrip,
     tags->'route_name' AS route_name,
-    layer,
-    service,
+    tags->'layer' AS layer,
+    tags->'service' AS service,
     %#tags AS tags
 
 FROM {{ table }}
 
 WHERE
-    {{ bounds[geom_type]|bbox_filter('way') }}
+    {{ bounds[geom_type]|bbox_filter('way',3857) }}
 {% if zoom >= 16 %}
     AND mz_transit_level IS NOT NULL
 {% else %}

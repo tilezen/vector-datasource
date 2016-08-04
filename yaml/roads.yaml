@@ -398,7 +398,7 @@ filters:
       highway: service
       service:
         expr: |
-          CASE WHEN service = 'drive-through' THEN 'drive_through' ELSE service END
+          CASE WHEN tags->'service' = 'drive-through' THEN 'drive_through' ELSE tags->'service' END
   - filter:
       highway: service
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
@@ -574,10 +574,10 @@ filters:
       kind: aerialway
       aerialway:
         expr:
-          CASE WHEN aerialway = 't-bar' THEN 't_bar'
-               WHEN aerialway = 'j-bar' THEN 'j_bar'
-               WHEN aerialway = 'yes' THEN NULL
-               ELSE aerialway END
+          CASE WHEN tags->'aerialway' = 't-bar' THEN 't_bar'
+               WHEN tags->'aerialway' = 'j-bar' THEN 'j_bar'
+               WHEN tags->'aerialway' = 'yes' THEN NULL
+               ELSE tags->'aerialway' END
   #############################################################
   #
   # OSM leisure
