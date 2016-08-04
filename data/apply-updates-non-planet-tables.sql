@@ -14,10 +14,6 @@ UPDATE land_polygons
   SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(land_polygons.*)
   WHERE mz_calculate_min_zoom_earth(land_polygons.*) IS NOT NULL;
 
-UPDATE planet_osm_polygon
-  SET mz_earth_min_zoom = mz_calculate_min_zoom_earth(planet_osm_polygon.*)
-  WHERE mz_calculate_min_zoom_earth(planet_osm_polygon.*) IS NOT NULL;
-
 
 UPDATE ne_110m_ocean
   SET mz_water_min_zoom = mz_calculate_min_zoom_water(ne_110m_ocean.*)
@@ -96,10 +92,6 @@ CREATE INDEX ne_10m_urban_areas_way_area_index ON ne_10m_urban_areas(way_area);
 
 UPDATE ne_50m_urban_areas SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX ne_50m_urban_areas_way_area_index ON ne_50m_urban_areas(way_area);
-
-UPDATE ne_10m_parks_and_protected_lands SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_10m_parks_and_protected_lands_way_area_index ON ne_10m_parks_and_protected_lands(way_area);
-
 
 UPDATE ne_110m_ocean SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX ne_110m_ocean_wayarea_index ON ne_110m_ocean(way_area);

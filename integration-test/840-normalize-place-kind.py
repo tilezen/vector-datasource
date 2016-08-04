@@ -57,7 +57,7 @@ assert_has_feature(
 # ne historic place
 assert_has_feature(
     16, 38247, 21826, 'places',
-    { 'id': 5489, 'name': 'Chernobyl',
+    { 'id': int, 'name': 'Chernobyl',
       'kind': 'locality', 'kind_detail': 'hamlet'})
 
 # ne scientific station
@@ -79,6 +79,7 @@ assert_has_feature(
     16, 53554, 28600, 'places',
     { 'id': 7322, 'name': 'Hong Kong',
       'kind': 'locality', 'capital': True})
+
 
 # ne state_capitals
 assert_has_feature(

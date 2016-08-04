@@ -396,8 +396,8 @@ BEGIN
     JOIN planet_osm_point p
     ON n.id = p.osm_id
     WHERE
-      (p.railway IN ('station', 'stop', 'tram_stop') OR
-       p.public_transport IN ('stop', 'stop_position', 'tram_stop'))
+      (p.tags->'railway' IN ('station', 'stop', 'tram_stop') OR
+       p.tags->'public_transport' IN ('stop', 'stop_position', 'tram_stop'))
     -- re-include the station node, if there was one.
     UNION
     SELECT station_point_osm_id AS id
