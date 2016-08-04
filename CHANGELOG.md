@@ -54,6 +54,8 @@ v1.0.0-pre1
 
 - Use boolean values instead of 'yes' for properties like`osm_relation`. ([#778](https://github.com/tilezen/vector-datasource/issues/778))
 
+- Names that have been localized now use the _l10n_ language codes (ala Who's On First) for all data sources. For example: `name:en` imported from OpenStreetMap is exported as `name:eng`. ([#418](https://github.com/tilezen/vector-datasource/issues/418))
+
 
   #### NEW FEATURES (v1.0.0-pre1)
 
