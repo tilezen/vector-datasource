@@ -84,12 +84,16 @@ fi
 osm2pgsql $OSM2PGSQL_ARGS --create empty.osm
 osm2pgsql $OSM2PGSQL_ARGS --append data.osc
 
-echo "=== Loading external data..."
+echo "=== Loading shapefile schema..."
 # mock these tables - the shapefiles are _huge_ and we don't want to
 # spend time downloading and importing them - we use smaller extracts
 # in test/fixtures/ to handle specific test cases.
-psql -f data/shapefile_schema.sql -d "${dbname}"
+for sql in `ls ${basedir}/data/shapefile_schema/*.sql`; do
+    echo " >> ${sql}"
+    psql -f ${sql} -d "${dbname}"
+done
 
+echo "=== Loading fixture data..."
 # load up shapefile fixtures into the appropriate tables
 # allow globs to expand to empty strings to make enumerating files in
 # possibly empty directories easier.
@@ -97,7 +101,7 @@ shopt -s nullglob
 for tbl in `ls ${basedir}/integration-test/fixtures/`; do
     if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
         for shp in "${basedir}/integration-test/fixtures/${tbl}"/*.shp; do
-            shp2pgsql -a -s 3857 -g the_geom \
+            shp2pgsql -a -D -s 3857 -g the_geom \
                       "${shp}" "${tbl}" \
                 | psql -d "${dbname}"
         done
