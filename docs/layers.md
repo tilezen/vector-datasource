@@ -391,7 +391,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 * `name`
 * `id`: osm_id from OpenStreetMap or Natural Earth id
-* `kind`: normalizes values between OpenStreetMap and Natural Earth
+* `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
 * `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
@@ -412,6 +412,9 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `region`
 * `locality`
 * `neighbourhood`
+* `microhood`
+* `macrohood`
+* `borough`
 
 #### Place kind_detail values:
 
