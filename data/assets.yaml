@@ -1,0 +1,120 @@
+bucket: mapzen-tiles-assets
+datestamp: 20160729
+
+shapefiles:
+
+  # each entry suppors the keys:
+  #   - name: (required) this will be the postgresql table name
+  #   - url: (required) where to fetch the data
+  #   - prj: source projection (defaults to 4326)
+  #   - tile: whether to tile the data source before importing
+
+  - name: water_polygons
+    url: http://data.openstreetmapdata.com/water-polygons-split-3857.zip
+    prj: 3857
+    shapefile-name: water-polygons-split-3857/water_polygons.shp
+    directory: water-polygons-split-3857
+
+  - name: land_polygons
+    url: http://data.openstreetmapdata.com/land-polygons-split-3857.zip
+    prj: 3857
+    directory: land-polygons-split-3857
+    shapefile-name: land-polygons-split-3857/land_polygons.shp
+
+  - name: buffered_land
+    url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land.zip
+    prj: 3857
+
+  - name: ne_110m_lakes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
+    prj: 4326
+
+  - name: ne_50m_lakes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_lakes.zip
+    prj: 4326
+
+  - name: ne_10m_lakes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes.zip
+    prj: 4326
+
+  - name: ne_110m_ocean
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_ocean.zip
+    prj: 4326
+
+  - name: ne_50m_ocean
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_ocean.zip
+    prj: 4326
+
+  - name: ne_10m_ocean
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_ocean.zip
+    prj: 4326
+
+  - name: ne_50m_playas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_playas.zip
+    prj: 4326
+
+  - name: ne_10m_playas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_playas.zip
+    prj: 4326
+
+  - name: ne_50m_urban_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_urban_areas.zip
+    prj: 4326
+
+  - name: ne_10m_urban_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_urban_areas.zip
+    prj: 4326
+
+  - name: ne_110m_land
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_land.zip
+    prj: 4326
+
+  - name: ne_50m_land
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_land.zip
+    prj: 4326
+
+  - name: ne_10m_land
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_land.zip
+    prj: 4326
+    tile: true
+
+  - name: ne_10m_populated_places
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places.zip
+    prj: 4326
+
+  - name: ne_110m_admin_0_boundary_lines_land
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
+    prj: 4326
+
+  - name: ne_50m_admin_0_boundary_lines_land
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_boundary_lines_land
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
+    prj: 4326
+
+  - name: ne_50m_admin_1_states_provinces_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
+    prj: 4326
+    shapefile-name: ne_50m_admin_1_states_provinces_lines_shp.shp
+
+  - name: ne_10m_admin_1_states_provinces_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
+    prj: 4326
+
+  - name: ne_10m_roads
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_roads.zip
+    prj: 4326
+
+  - name: ne_110m_coastline
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_coastline.zip
+    prj: 4326
+
+  - name: ne_50m_coastline
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_coastline.zip
+    prj: 43267
+
+  - name: ne_10m_coastline
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
+    prj: 43267

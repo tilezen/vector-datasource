@@ -20,10 +20,10 @@ globals:
       addr_street: {col: "addr:street"}
   - &building_kind_detail
       kind_detail:
-        expr: mz_building_kind_detail(building)
+        expr: mz_building_kind_detail(tags->'building')
   - &building_part_kind_detail
       kind_detail:
-        expr: mz_building_part_kind_detail("building:part")
+        expr: mz_building_part_kind_detail(tags->'building:part')
   - &is_building
       all:
         - building: true
@@ -125,6 +125,7 @@ filters:
       way:
         expr: |
           GeometryType(way) = 'POINT'
+    extra_columns: [way]
     min_zoom: 17
     output:
       kind: address

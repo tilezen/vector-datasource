@@ -5,6 +5,12 @@ assert_has_feature(
     {"kind": "highway", "highway": "motorway", "id": 167952621,
      "name": "Presidio Pkwy.", "is_tunnel": True, "sort_key": 333})
 
+# http://www.openstreetmap.org/way/259492762
+assert_has_feature(
+    16, 19267, 24634, "roads",
+    {"kind": "major_road", "highway": "trunk", "id": 259492762,
+     "name": "Raymond Blvd.", "is_tunnel": True, "sort_key": 331})
+
 # http://www.openstreetmap.org/way/277441866
 assert_has_feature(
     16, 17563, 25792, "roads",

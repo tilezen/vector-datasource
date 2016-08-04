@@ -22,7 +22,6 @@ ALTER TABLE planet_osm_point ADD COLUMN mz_earth_min_zoom SMALLINT;
 -- tables.
 ALTER TABLE ne_10m_urban_areas ADD COLUMN way_area REAL;
 ALTER TABLE ne_50m_urban_areas ADD COLUMN way_area REAL;
-ALTER TABLE ne_10m_parks_and_protected_lands ADD COLUMN way_area REAL;
 
 ALTER TABLE ne_110m_ocean ADD COLUMN way_area REAL;
 ALTER TABLE ne_110m_lakes ADD COLUMN way_area REAL;
