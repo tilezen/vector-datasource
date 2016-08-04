@@ -97,7 +97,7 @@ shopt -s nullglob
 for tbl in `ls ${basedir}/integration-test/fixtures/`; do
     if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
         for shp in "${basedir}/integration-test/fixtures/${tbl}"/*.shp; do
-            shp2pgsql -a -s 3857 -W UTF-8 -g the_geom \
+            shp2pgsql -a -s 3857 -g the_geom \
                       "${shp}" "${tbl}" \
                 | psql -d "${dbname}"
         done
