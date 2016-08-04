@@ -8,15 +8,15 @@ v1.0.0-pre1
 
 - **new url scheme**: Mapzen now offers several different types of tiles in vector and raster formats and we combine data from multiple sources. The URL scheme has been updated to reflect this, and emphasize versions. The old URL will continue to work (~1 year), but updates will stop once v1.0.0 is released to production. ([#652](https://github.com/tilezen/vector-datasource/issues/652))
 
-  - **New dev URL:** `https://tile.dev.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
+  - **New dev URL:** `http://tile.dev.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
 
-  - Old dev URL was: `https://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.topojson`
+  - Old dev URL was: `http://vector.dev.mapzen.com/osm/all/{z}/{x}/{y}.topojson`
 
   - **New prod URL will be:** `https://tile.mapzen.com/vector/v1/all/{z}/{x}/{y}.topojson`
 
   - Old prod URL is still: `https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson`
 
-  - **New dev TileJSON is:** `https://tile.dev.mapzen.com/vector/v1/tilejson/mapbox.json`
+  - **New dev TileJSON is:** `http://tile.dev.mapzen.com/vector/v1/tilejson/mapbox.json`
 
   - New prod TileJSON will be: `https://tile.mapzen.com/vector/v1/tilejson/mapbox.json`
 
