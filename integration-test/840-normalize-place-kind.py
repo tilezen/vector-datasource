@@ -57,7 +57,7 @@ assert_has_feature(
 # ne historic place
 assert_has_feature(
     16, 38247, 21826, 'places',
-    { 'id': int, 'name': 'Chernobyl',
+    { 'id': 5489, 'name': 'Chernobyl',
       'kind': 'locality', 'kind_detail': 'hamlet'})
 
 # ne scientific station
