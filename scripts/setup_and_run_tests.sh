@@ -90,7 +90,7 @@ echo "=== Loading shapefile schema..."
 # in test/fixtures/ to handle specific test cases.
 for sql in `ls ${basedir}/data/shapefile_schema/*.sql`; do
     echo " >> ${sql}"
-    psql -f ${sql} -d "${dbname}"
+    cat ${sql} | psql -d "${dbname}"
 done
 
 echo "=== Loading fixture data..."
