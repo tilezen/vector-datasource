@@ -9,6 +9,7 @@ assert_has_feature(
     { 'kind': 'museum' })
 
 #https://www.openstreetmap.org/node/3910307149
+#https://www.openstreetmap.org/way/387798241
 assert_has_feature(
     18, 41951, 101317, 'pois',
     { 'kind': 'gate' })

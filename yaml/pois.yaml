@@ -22,7 +22,11 @@ filters:
     output:
       kind: {col: natural}
       elevation: {col: ele}
-  - filter: {railway: station}
+  - filter: 
+      railway: station
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 10
     output:
       kind: station
@@ -286,7 +290,7 @@ filters:
     min_zoom: 18
     output: {kind: toilets}
   - filter: {barrier: gate}
-    min_zoom: 15
+    min_zoom: mz_get_min_zoom_highway_level_gate(osm_id)
     output: {kind: gate}
   - filter: {barrier: toll_booth}
     min_zoom: 15
@@ -315,7 +319,11 @@ filters:
       kind: station
       state: {col: tags->state}
   - filter:
-      railway: [halt, tram_stop, stop]
+      railway: [halt, stop, tram_stop]
+# to work around overwriting when using the same key twice
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 13
     output:
       kind: {col: railway}
@@ -656,7 +664,7 @@ filters:
     output: {kind: picnic_site}
   - filter: {highway: services}
     min_zoom: 11
-    output:
+    output: 
       kind: service_area
   - filter: {highway: rest_area}
     min_zoom: 11

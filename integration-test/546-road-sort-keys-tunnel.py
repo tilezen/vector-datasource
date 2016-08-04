@@ -11,6 +11,12 @@ assert_has_feature(
     {"kind": "major_road", "highway": "trunk", "id": 259492762,
      "name": "Raymond Blvd.", "is_tunnel": True, "sort_key": 331})
 
+# http://www.openstreetmap.org/way/277441866
+assert_has_feature(
+    16, 17563, 25792, "roads",
+    {"kind": "major_road", "highway": "trunk", "id": 277441866,
+     "name": "Gatlinburg Spur Road (north)", "is_tunnel": True, "sort_key": 331})
+
 #https://www.openstreetmap.org/way/117837633
 assert_has_feature(
     18, 67234, 97737, "roads",

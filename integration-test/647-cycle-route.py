@@ -96,3 +96,8 @@ assert_has_feature(
 assert_has_feature(
     16, 34748, 22664, 'roads',
     { 'id': 301442215, 'is_bicycle_related': True })
+
+# Way: 428306786 http://www.openstreetmap.org/way/428306786
+assert_has_feature(
+    16, 18649, 25417, 'roads',
+    { 'id': 428306786, 'is_bicycle_related': True })

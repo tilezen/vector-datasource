@@ -95,18 +95,15 @@ These individual layers are grouped into an `all` layer – use this special la
 
 We include one deprecated layer, `landuse-labels`, for backwards compatibility. Please don't build new maps against this layer, it will be removed in the v1.0 version of tiles.
 
-## Boundaries & Barriers
+## Boundaries
 
 ![image](images/mapzen-vector-tile-docs-boundaries.png)
 
 * Layer name: `boundaries`
 * Geometry types: `line`
 
-Combination of OpenStreetMap administrative boundaries (zoom >= 8), Natural Earth boundaries (zoom < 8), and some other `barrier` like goodies at high zooms.
+Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural Earth boundaries (zoom < 8).
 
-(below) Fence lines around the petting zoo in San Francisco are included in the `landuse` layer.
-
-![image](images/mapzen-vector-tile-docs-barriers.png)
 
 #### Boundary properties (common):
 
@@ -204,7 +201,7 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 ![image](images/mapzen-vector-tile-docs-earth.png)
 
 * Layer name: `earth`
-* Geometry types: `polygon`
+* Geometry types: `polygon`, `line`, `point`.
 
 Polygons representing earth landmass and natural feature lines. Uses coastline-derived land polygons from [openstreetmapdata.com](http://openstreetmapdata.com). Natural lines from OpenStreetMap representing cliffs, aretes. This layer also includes earth `label_placement` lines for ridges and valleys (which should not otherwise be symbolized).
 
@@ -246,18 +243,22 @@ Zooms 4 and 5, 6 and 7 includes a mix of Natural Earth `urban_area` (zooms 0-9 o
 
 _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Find those in the `pois` layer._
 
+(below) Fence lines around the petting zoo in San Francisco are included in the `landuse` layer.
+
+![image](images/mapzen-vector-tile-docs-barriers.png)
+
 #### Landuse properties (common):
 
 * `name`
 * `id`: osm_id
-* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), and `fence` (zoom 16+ only).
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), `fence` (zoom 16+ only) and `gate` (zoom 16+ only).
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 
 #### Landuse properties (common optional):
 
 * `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
-* `operator`: e.g. `U.S. National Park Service` and `United States Forest Service`
+* `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
 
 #### Landuse kind values:
 
@@ -297,6 +298,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `fort`
 * `fuel`
 * `garden`
+* `gate`
 * `generator`
 * `glacier`
 * `golf_course`
@@ -445,15 +447,16 @@ The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_
 
 Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
 
-Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data. Features which have certain parenthetical comments after their name are suppressed until zoom 17 and have their `kind` property set to that comment. Currently anything with a name ending in '(closed)' or '(historical)' will be suppressed in this manner.
+Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data. Features which have certain parenthetical comments after their name are suppressed until zoom 17 and have their `kind` property set to that comment. Currently anything with a name ending in '(closed)' or '(historical)' will be suppressed in this manner. Railway stops, halts, stations and tram stops from OpenStreetMap tagged with a `historic` tag are also not included in the data.
+
+To resolve inconsistency in data tagging in OpenStreetMap we normalize several operator values for United States National Parks as `United States National Park Service`, several United States Forest Service values as `United States Forest Service`, and several values for New South Wales National Parks in Australia as `National Parks & Wildlife Service NSW`.
 
 #### POI properties (common):
 
 * `name`
 * `id`: osm_id
+* `source`: `openstreetmap.org`
 * `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attraction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags. Can also be one of `closed` or `historical` if the original feature was parenthetically commented as closed or historical.
-
-**Gotchas: Implied but not stated: `source`: `openstreetmap.org`.**
 
 #### POI properties (common optional):
 
