@@ -409,13 +409,13 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 #### Place kind values:
 
-* `country`
-* `region`
-* `locality`
-* `neighbourhood`
-* `microhood`
-* `macrohood`
 * `borough`
+* `country`
+* `locality`
+* `macrohood`
+* `microhood`
+* `neighbourhood`
+* `region`
 
 #### Place kind_detail values:
 
