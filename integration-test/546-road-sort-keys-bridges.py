@@ -11,11 +11,11 @@ assert_has_feature(
     {"kind": "major_road", "highway": "trunk", "id": 59801274,
      "name": "Crossover Dr.", "is_bridge": True, "sort_key": 443})
 
-#https://www.openstreetmap.org/way/370954791
+#http://www.openstreetmap.org/way/163994970
 assert_has_feature(
-    18, 41903, 101329, "roads",
-    {"kind": "major_road", "highway": "primary", "id": 370954791,
-     "name": "Alvord Lake Bridge", "is_bridge": True, "sort_key": 430})
+    18, 70118, 101513, "roads",
+    {"kind": "major_road", "highway": "primary", "id": 163994970,
+     "name": "Broadway", "is_bridge": True, "sort_key": 430})
 
 #https://www.openstreetmap.org/way/27613581
 assert_has_feature(

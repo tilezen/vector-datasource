@@ -14,5 +14,5 @@ assert_has_feature(
 # Sacramento, CA http://www.openstreetmap.org/node/150959789
 assert_has_feature(
     8, 41, 98, 'places',
-    { 'kind': 'locality', 'kind_detail': 'city', 'state_capital': True,
+    { 'kind': 'locality', 'kind_detail': 'city', 'region_capital': True,
       'population': int })

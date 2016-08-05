@@ -64,34 +64,35 @@ assert_has_feature(
 assert_has_feature(
     16, 22209, 47255, 'places',
     { 'id': int, 'name': 'Elephant Island',
-      'kind': 'locality', 'kind_detail': 'hamlet'})
+      'kind': 'locality', 'kind_detail': 'scientific_station'})
 
 # ne capitals
 assert_has_feature(
     16, 55887, 25378, 'places',
     { 'id': int, 'name': 'Seoul',
-      'kind': 'city', 'capital': True})
+      'kind': 'locality', 'capital': True})
 assert_has_feature(
     16, 57480, 25951, 'places',
     { 'id': int, 'name': 'Kyoto',
-      'kind': 'city', 'capital': True})
+      'kind': 'locality', 'capital': True})
 assert_has_feature(
     16, 53554, 28600, 'places',
     { 'id': int, 'name': 'Hong Kong',
-      'kind': 'city', 'capital': True})
+      'kind': 'locality', 'capital': True})
+
 
 # ne state_capitals
 assert_has_feature(
     16, 60290, 39338, 'places',
     { 'id': int, 'name': 'Sydney',
-      'kind': 'city', 'state_capital': True})
+      'kind': 'locality', 'region_capital': True})
 assert_has_feature(
     16, 57427, 26013, 'places',
     { 'id': int, 'name': 'Osaka',
-      'kind': 'city', 'state_capital': True})
+      'kind': 'locality', 'region_capital': True})
 
 # ne populated place
 assert_has_feature(
     16, 10482, 25332, 'places',
     { 'id': int, 'name': 'San Francisco',
-      'kind': 'city', 'state_capital': type(None), 'capital': type(None)})
+      'kind': 'locality', 'region_capital': type(None), 'capital': type(None)})
