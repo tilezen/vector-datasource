@@ -34,6 +34,11 @@ for prog in createdb cat dropdb python osm2pgsql shp2pgsql xargs zip; do
    which "${prog}" >/dev/null || die "Unable to find '${prog}' program in PATH."
 done
 
+shp2pgsql | grep RELEASE: | awk '{split($2,v,"."); if (v[1] < 2) { exit 1; }}'
+if [ $? -ne 0 ]; then
+    die 'Your version of shp2pgsql is too old, we need at least version 2 or later.'
+fi
+
 echo "=== Creating database \"${dbname}\"..."
 createdb -E UTF-8 -T template0 "${dbname}"
 cat >empty.osm <<EOF
