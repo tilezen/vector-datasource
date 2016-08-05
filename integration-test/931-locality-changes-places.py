@@ -27,5 +27,5 @@ assert_no_matching_feature(
 
 # ne Scientific station
 assert_has_feature(
-    7, 44, 91, 'places',
-    { 'kind': 'locality', 'kind_detail': 'scientific_station'})
+    9, 164, 377, 'places',
+    { 'kind': 'locality', 'name': 'Palmer Station', 'kind_detail': 'scientific_station'})
