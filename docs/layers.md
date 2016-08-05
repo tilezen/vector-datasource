@@ -149,9 +149,9 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprint, building label_placment points, building:part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
+Polygons from OpenStreetMap representing building footprint, building label_placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
-Individual `building:part` geometries following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels.
+Individual `building:part` geometries from OSM following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels are now exported as `building_part` features with specified `kind_detail`.
 
 Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
@@ -179,12 +179,13 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
-* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available.
+* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
+* `kind_detail`: value from OpenStreetMap's `building:part` tag.
 
 #### Building kind values:
 
-* Buildings polygons and label_position points either have `kind` values that are a straight passthru of the raw OpenStreetMap `building=*` and `building:part` values. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
-* If either of `building=*` and `building:part` is `yes`, the `kind` property is dropped (and `kind:building` is implied).
+* Buildings polygons and label_position points, have `kind` values that are either `building` or `building_part`, if `building=*` or `building:part` is `yes` respectively. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
+* If the raw OpenStreetMap `building:part` tag exists with a value, a `kind_detail` tag is added to describe the `building:part` value.
 * Address points are `kind` of value `address`.
 
 #### Address properties and kind value:
