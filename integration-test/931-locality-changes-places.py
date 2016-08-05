@@ -17,11 +17,11 @@ assert_no_matching_feature(
 
 # ne country capitals
 assert_has_feature(
-    9, 289, 197, 'places',
+    9, 255, 170, 'places',
     { 'id': int, 'kind': 'locality'})
 
 assert_no_matching_feature(
-    9, 289, 197, 'places',
+    9, 255, 170, 'places',
     { 'id': int, 'kind': 'city'})
 
 # ne populated place
