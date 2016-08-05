@@ -1,19 +1,19 @@
 # ne state capitals
 assert_has_feature(
-    9, 83, 196, 'places',
+    3, 1, 3, 'places',
     { 'id': 6779, 'kind': 'locality', 'name': 'Sacramento', 'region_capital': True})
 
 assert_no_matching_feature(
-    9, 83, 196, 'places',
+    3, 1, 3, 'places',
     { 'id': 6779, 'kind': 'city', 'name': 'Sacramento', 'region_capital': True})
 
 # ne country capitals
 assert_has_feature(
-    9, 289, 197, 'places',
+    6, 36, 24, 'places',
     { 'id': 7252, 'kind': 'locality'})
 
 assert_no_matching_feature(
-    9, 289, 197, 'places',
+    6, 36, 24, 'places',
     { 'id': 7252, 'kind': 'city'})
 
 # ne populated place
