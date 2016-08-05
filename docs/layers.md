@@ -381,7 +381,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 Combination of OpenStreetMap `place` points, Natural Earth populated places, and Who's On First neighbourhoods.
 
-Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `state`, `province`, and `city`, `town` at zoom 8. A few more each zoom are added until zoom 13+ includes, `borough`, `suburb`, `quarter`, `village`, `hamlet`, `locality`, `isolated_dwelling`, and `farm`.
+Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `region` and starting at zoom 8 for `locality`. Specific `locality` types are added to the `kind_detail` tag.
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
@@ -410,6 +410,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place kind values:
 
 * `borough`
+* `continent`
 * `country`
 * `locality`
 * `macrohood`
