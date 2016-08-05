@@ -14,7 +14,7 @@ assert_has_feature(
 
 assert_no_matching_feature(
     3, 7, 4, 'places',
-    { 'kind': 'city', 'name': 'Sydney', 'region_capital': True})
+    { 'kind': 'city', 'name': 'Sydney', 'state_capital': True})
 
 # ne Populated place
 assert_has_feature(
