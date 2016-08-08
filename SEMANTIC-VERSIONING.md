@@ -111,9 +111,9 @@ We do not version data features, but we do attempt to indicate the data source a
 #### Examples:
 
 1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertized.
-    - Generally the **Natural Earth** source we currently use for low zooms (0-8) doesn’t update frequently.
-    - **OpenStreetMap** (used for zooms 9+) updates minutely
-    - **Who’s On First** (used for zooms 12+) updates minutely.
+    - **Natural Earth** (used for zooms 0-8) updates infrequently (often annually)
+    - **OpenStreetMap** (used for zooms 9+) updates frequently (at least daily)
+    - **Who’s On First** (used for zooms 12+) updates frequently (at least daily)
     - When possible, we aspire to advertise when a new version of Natural Earth is loaded into the database or a significant event occurs in another data source either via the Tilezen changelog or another channel.
 1. **Minor** corrections to country names, borders, disputed territories, capitals, and other administrative geography are always possible and will not be tracked or advertised.
 
