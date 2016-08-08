@@ -1,6 +1,7 @@
 {% macro transit_query(table, geom_type) %}
 SELECT
     osm_id AS __id__,
+    'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     tags->'name' AS name,
     tags->'ref' AS ref,
