@@ -2,7 +2,7 @@ UPDATE
   planet_osm_polygon
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
   WHERE
-     man_made IN ('wastewater_plant', 'water_works', 'works') OR
+     (man_made IN ('wastewater_plant', 'water_works', 'works') OR
      leisure IN ('golf_course', 'nature_reserve', 'park', 'pitch') OR
      amenity = 'grave_yard' OR
      landuse IN ('cemetery', 'farm', 'forest', 'military', 'quarry', 'recreation_ground', 'village_green', 'winter_sports') OR
