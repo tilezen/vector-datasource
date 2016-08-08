@@ -35,7 +35,7 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 
 * **common** - These layers, properties, and kinds are common across almost all features in a Tilezen response.
 * **common-optional** - These are meant to be part of a common set but may not be present because they aren't relevant or because we don't have the data.
-* **optional** - These are the properties of a specific kind, or generally present across kinds bit only in exceptional cases.
+* **optional** - These are the properties of a specific kind, or generally present across kinds but only in exceptional cases.
 
 ####MAJOR version increments:
 
