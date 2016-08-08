@@ -47,8 +47,8 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 1. **Move** `kind` from one layer to another
 1. **Additional merging** across `kind` **values** in zooms 14, 15, or 16 (or max zoom) by removing `common`, `common-optional`, and/or `optional` **properties** or other method
 1. **Merging** within `kind` **values** at zooms 16 (or max zoom) by removing `common`, `common-optional`, and `optional` **properties** or other method
-1. **Change** of <= -3 (earlier) to default `min_zoom` or `max_zoom` to determine when `kind` is included
-1. **Change** of >= +2 (later) to default `min_zoom` or `max_zoom` to determine when `kind` is included
+1. **Change** of <= -3 (earlier) to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
+1. **Change** of >= +2 (later) to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
 
 #### MINOR version increments:
 
@@ -74,11 +74,11 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 1. **Reassign** less than 50% of existing `kind` **value** into a new `kind` value, when kind has 10,000 or more features
 1. **Reassign** more than 50% of existing `kind` **value** into a new `kind` value, when kind has less than 10,000 features
 1. **Change** of -1 to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
-1. **Add** unpublicised `kind`
-1. **Remove** unpublicised `kind`
+1. **Add** unpublicised `kind` **value**
+1. **Remove** unpublicised `kind` **value**
 1. **Correct** a regression in the API (to the last good version)
-1. **Correct** a newly added property name
-1. **Correct** a newly added `kind` value
+1. **Correct** a newly added feature **property name**
+1. **Correct** a newly added `kind` **value**
 
 ## Versioning Data
 
@@ -93,8 +93,8 @@ We do not version data features, but we do attempt to indicate the data source a
 1. **Change** feature **name**
 1. **Change** feature **geometry**
 1. **Change** feature **property** values (including property removal if removed from original source)
-1. **Change** feature `kind` (when upstream data source reclassifies them).
-1. **Change** feature `min_zoom` &/or `max_zoom` (when area or other signal changes upstream)
+1. **Change** feature `kind` **value** (when upstream data source reclassifies them).
+1. **Change** feature `min_zoom` &/or `max_zoom` **values** (when area or other signal changes upstream)
 
 **NOTE:** It is possible to query the version of indivdual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen.
 
@@ -103,12 +103,12 @@ We do not version data features, but we do attempt to indicate the data source a
 
 #### Examples:
 
-1. Major additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertized.
+1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertized.
     - Generally the **Natural Earth** source we currently use for low zooms (0-8) doesn’t update frequently.
     - **OpenStreetMap** (used for zooms 9+) updates minutely
     - **Who’s On First** (used for zooms 12+) updates minutely.
     - When possible, we aspire to advertise when a new version of Natural Earth is loaded into the database or a significant event occurs in another data source either via the Tilezen changelog or another channel.
-1. Minor corrections to country names, borders, disputed territories, capitals, and other administrative geography are always possible and will not be tracked or advertised.
+1. **Minor** corrections to country names, borders, disputed territories, capitals, and other administrative geography are always possible and will not be tracked or advertised.
 
 ## Versioning the Service
 
