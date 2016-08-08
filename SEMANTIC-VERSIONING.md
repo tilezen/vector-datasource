@@ -31,6 +31,12 @@ Semantic versioning (or [SemVer](http://semver.org/)) is a formalized way of mak
 
 Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 
+##### Definition of terms
+
+* **common** - These layers, properties, and kinds are common across almost all features in a Tilezen response.
+* **common-optional** - These are meant to be part of a common set but may not be present because they aren't relevant or because we don't have the data.
+* **optional** - These are the properties of a specific kind, or generally present across kinds bit only in exceptional cases.
+
 ####MAJOR version increments:
 
 1. **Remove** `common layer`
@@ -135,3 +141,4 @@ We do not version data features, but we do attempt to indicate the data source a
 - [VERSION](VERSION)
 - http://semver.org
 - https://github.com/nvkelso/natural-earth-vector/blob/master/README.md
+- https://github.com/whosonfirst/whosonfirst-placetypes#roles
