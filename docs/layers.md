@@ -934,8 +934,6 @@ _TIP: If you're looking for transit `station` and `station_entrance` features, l
 * `source`: `openstreetmap.org`
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
-Implied but not stated: `source`: `openstreetmap.org`.
-
 #### Transit properties (common optional):
 
 Depending on upstream OpenStreetMap tagging, the following properties may be present:
