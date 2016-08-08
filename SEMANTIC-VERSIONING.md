@@ -24,7 +24,7 @@ Semantic versioning (or [SemVer](http://semver.org/)) is a formalized way of mak
 
 - Major version X: **high** – significant integration challenges, read the changelog closely
 - Minor version Y: **low** – some integration challenges, read the changelog
-- Bug fixes Z: **none** – simply use the new tiles, ignore the changelog
+- Bug fixes Z: **none** – simply use the new tiles, skim or ignore the changelog
 - Pre-release POSTFIX: **low to high** – some to significant integration challenges, read the changelog
 
 ## Versioning the Tilezen API
