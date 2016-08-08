@@ -70,6 +70,7 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 1. **Change** of <= -2 (earlier) to `min_zoom` or `max_zoom` **values** to determine when `kind` is included
 1. **Change** of >= +1 (later) to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
 1. **Adjustments** to the overall map balance (proportion of features in one layer or another, proportion of `kind`s in a single layer)
+1. **Change** the maximum Tilezen zoom (currently zoom 16).
 
 #### PATCH version increments
 
@@ -120,19 +121,20 @@ We do not version data features, but we do attempt to indicate the data source a
 
 #### MAJOR version increments:
 
-1. Rollup of MAJOR Tilezen API changes
-1. Remove a file format
+1. **Rollup** of MAJOR Tilezen API changes
+1. **Change** the maximum Tilezen zoom (currently zoom 16).
+1. **Remove** a file format
 1. Backwards incompatible change to a file format
 1. Tilezen software dependency has a breaking change to the tile response
 
 #### MINOR version increments:
 
-1. Rollup of MINOR Tilezen API changes
-1. Add a file format
+1. **Rollup** of MINOR Tilezen API changes
+1. **Add** a file format
 
 #### PATCH version increments:
 
-1. Rollup of PATCH Tilezen API changes
+1. **Rollup** of PATCH Tilezen API changes
 1. Backwards compatible change to a file format
 1. Software dependency has a backwards compatible change or bug fix with no change to the tile response
 
