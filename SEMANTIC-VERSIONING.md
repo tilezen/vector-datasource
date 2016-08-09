@@ -81,8 +81,8 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 1. **Reassign** less than 50% of existing `kind` **value** into a new `kind` value, when kind has 10,000 or more features
 1. **Reassign** more than 50% of existing `kind` **value** into a new `kind` value, when kind has less than 10,000 features
 1. **Change** of -1 to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
-1. **Add** unpublicised `kind` **value**
-1. **Remove** unpublicised `kind` **value**
+1. **Add** unpublicized `kind` **value**
+1. **Remove** unpublicized `kind` **value**
 1. **Correct** a regression in the API (to the last good version)
 1. **Correct** a newly added feature **property name**
 1. **Correct** a newly added `kind` **value**
@@ -103,14 +103,37 @@ We do not version data features, but we do attempt to indicate the data source a
 1. **Change** feature `kind` **value** (when upstream data source reclassifies them).
 1. **Change** feature `min_zoom` &/or `max_zoom` **values** (when area or other signal changes upstream)
 
-**NOTE:** It is possible to query the version of indivdual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen.
+**NOTE:** It is possible to query the version of individual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen.
+
+### LANGUAGES are not versioned
+
+In addition to the `common` **name** locals call a place, the following `common` languages are generally available:
+
+#### Common languages:
+
+1. `name:ara` (Arabic)
+1. `name:zho` (Chinese, traditional or simplified)
+1. `name:eng` (English)
+1. `name:fra` (French)
+1. `name:rus` (Russian)
+1. `name:spa` (Spanish)
+1. `name:deu` (German)
+1. `name:gre` (Greek)
+1. `name:ita` (Italian)
+1. `name:jpn` (Japanese)
+1. `name:kor` (Korean)
+1. `name:vie` (Vietnamese)
+
+Arabic, Chinese, English, French, Russian and Spanish are used by the United National for meetings and official documents. The other languages listed are frequently used OpenStreetMap and Who's On First.
+
+Additional localized names are available as `common-optional`, but their actual use is the data is not widespread.
 
 
 ### POLITICAL GEOGRAPHY is not versioned
 
 #### Examples:
 
-1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertized.
+1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertised.
     - **Natural Earth** (used for zooms 0-8) updates infrequently (often annually)
     - **OpenStreetMap** (used for zooms 9+) updates frequently (at least daily)
     - **Who’s On First** (used for zooms 12+) updates frequently (at least daily)
