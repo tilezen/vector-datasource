@@ -651,11 +651,10 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 15
+      end_zoom: 14
       quantize:
         13: vectordatasource.transform.quantize_height_round_nearest_10_meters
         14: vectordatasource.transform.quantize_height_round_nearest_5_meters
-        15: vectordatasource.transform.quantize_height_round_nearest_meter
       drop:
         - name
         - addr_housenumber
@@ -663,6 +662,7 @@ post_process:
 
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
+
   - fn: vectordatasource.transform.intercut
     params:
       base_layer: roads
@@ -670,8 +670,14 @@ post_process:
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_key', reverse: True }
+
   - fn: vectordatasource.transform.merge_features
     params:
       source_layer: roads
       start_zoom: 8
       end_zoom: 15
+
+  - fn: vectordatasource.transform.buildings_unify
+    params:
+      source_layer: buildings
+      start_zoom: 15

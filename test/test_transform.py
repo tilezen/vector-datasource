@@ -213,3 +213,94 @@ class SortKeyTest(unittest.TestCase):
         self.assertIsNotNone(sort_key_result)
         _, sort_key = sort_key_result
         self.assertEquals(int(sort_key), 223)
+
+
+class BuildingsUnifyTest(unittest.TestCase):
+
+    def _call_fut(self, building_shapes, building_part_shapes):
+        from tilequeue.tile import deserialize_coord
+        from tilequeue.process import Context
+
+        building_features = []
+        building_id = 1
+        for building_shape in building_shapes:
+            building_props = dict(
+                id=building_id,
+                kind='building',
+            )
+            building_feature = building_shape, building_props, building_id
+            building_features.append(building_feature)
+            building_id += 1
+
+        part_features = []
+        building_part_id = building_id
+        for part_shape in building_part_shapes:
+            part_props = dict(
+                id=building_part_id,
+                kind='building_part',
+            )
+            part_feature = part_shape, part_props, building_part_id
+            part_features.append(part_feature)
+            building_part_id += 1
+
+        building_features = building_features + part_features
+        building_feature_layer = dict(
+            features=building_features,
+            layer_datum=dict(name='buildings'),
+        )
+        feature_layers = [building_feature_layer]
+
+        ctx = Context(
+            feature_layers=feature_layers,
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=None,
+            params=dict(source_layer='buildings'),
+            resources=None)
+        from vectordatasource.transform import buildings_unify
+        buildings_unify(ctx)
+        return building_feature_layer['features']
+
+    def test_no_overlap(self):
+        import shapely.geometry
+        building_shape = shapely.geometry.Polygon(
+            [(1, 1), (2, 2), (1, 2), (1, 1)])
+        part_shape = shapely.geometry.Polygon(
+            [(10, 10), (20, 20), (10, 20), (10, 10)])
+        result = self._call_fut([building_shape], [part_shape])
+        building, part = result
+        part_props = part[1]
+        assert 'root_id' not in part_props
+
+    def test_overlap(self):
+        import shapely.geometry
+        building_shape = shapely.geometry.Polygon(
+            [(1, 1), (20, 20), (10, 20), (1, 1)])
+        part_shape = shapely.geometry.Polygon(
+            [(10, 10), (20, 20), (10, 20), (10, 10)])
+        result = self._call_fut([building_shape], [part_shape])
+        building, part = result
+        part_props = part[1]
+        root_id = part_props.get('root_id')
+        self.assertEquals(root_id, 1)
+
+    def test_best_overlap(self):
+        import shapely.geometry
+        building1_shape = shapely.geometry.Polygon(
+            [(2, 1), (2, 2), (0, 2), (2, 1)])
+        building2_shape = shapely.geometry.Polygon(
+            [(1, 1), (20, 20), (10, 20), (1, 1)])
+        building3_shape = shapely.geometry.Polygon(
+            [(19, 1), (30, 30), (19, 30), (19, 1)])
+        part_shape = shapely.geometry.Polygon(
+            [(10, 10), (20, 20), (10, 20), (10, 10)])
+
+        building_shapes = [building1_shape, building2_shape, building3_shape]
+        part_shapes = [part_shape]
+        result = self._call_fut(building_shapes, part_shapes)
+        for feature in result:
+            props = feature[1]
+            if props['kind'] == 'building_part':
+                root_id = props.get('root_id')
+                self.assertEquals(root_id, 2)
+            else:
+                assert 'root_id' not in props
