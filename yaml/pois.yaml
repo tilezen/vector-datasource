@@ -682,28 +682,38 @@ filters:
     min_zoom: 15
     output:
       kind: farm
-  - filter: {landuse: forest}
-    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+  - filter: 
+      landuse: forest
+      protect_class: '6'
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 7)
     output:
       kind: forest
+  - filter: {landuse: forest}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output:
+      kind: forest
+  - filter: {natural: forest}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: natural_forest
   - filter: {leisure: golf_course}
     min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
     output:
       kind: golf_course
   - filter: {landuse: military}
-    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 8)
     output:
       kind: military
   - filter: {boundary: national_park}
-    min_zoom: LEAST(zoom + 2, 9)
+    min_zoom: LEAST(zoom + 3.5, 12)
     output:
       kind: national_park
   - filter: {leisure: nature_reserve}
-    min_zoom: LEAST(zoom + 2, 9)
+    min_zoom: LEAST(zoom + 5, 10)
     output:
       kind: nature_reserve
   - filter: {leisure: park}
-    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
     output:
       kind: park
   - filter: {power: plant}
@@ -746,10 +756,14 @@ filters:
     min_zoom: GREATEST( LEAST(zoom + 1, 13), 10)
     output:
       kind: winter_sports
+  - filter: {landuse: wood}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output:
+      kind: wood
   - filter: {natural: wood}
     min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
     output:
-      kind: wood
+      kind: natural_wood
   - filter: {man_made: works}
     min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
     output:
