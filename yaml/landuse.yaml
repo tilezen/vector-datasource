@@ -3,13 +3,13 @@ filters:
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: battlefield}
   - filter: {boundary: national_park}
-    min_zoom: zoom
+    min_zoom: zoom + 2
     output: {kind: national_park}
   - filter: {boundary: protected_area}
-    min_zoom: zoom
+    min_zoom: zoom + 2
     output: {kind: protected_area}
   - filter: {leisure: nature_reserve}
-    min_zoom: zoom
+    min_zoom: zoom + 2
     output: {kind: nature_reserve}
   - filter:
       any:
@@ -96,7 +96,7 @@ filters:
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: rural}
   - filter: {landuse: military}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    min_zoom: GREATEST(LEAST(zoom, 16), 8)
     output: {kind: military}
   - filter: {landuse: winter_sports}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
