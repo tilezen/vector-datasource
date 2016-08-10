@@ -1,7 +1,10 @@
+import os.path
 from setuptools import find_packages
 from setuptools import setup
 
-version = 'v1.0.0.dev0'
+version_path = os.path.join(os.path.dirname(__file__), 'VERSION')
+with open(version_path) as fh:
+    version = fh.read().strip()
 
 setup(name='vector-datasource',
       version=version,
