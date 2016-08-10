@@ -134,10 +134,6 @@ filters:
     min_zoom: 0
     output: {kind: ocean}
     table: osm
-  - filter: {name: true, place: sea}
-    min_zoom: 3
-    output: {kind: sea}
-    table: osm
   - filter: {gid: true}
     min_zoom: 0
     output: {kind: ocean}
