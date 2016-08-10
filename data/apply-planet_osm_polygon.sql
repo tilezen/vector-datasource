@@ -40,6 +40,10 @@ UPDATE planet_osm_polygon
   WHERE mz_calculate_min_zoom_earth(planet_osm_polygon.*) IS NOT NULL;
 
 
+UPDATE planet_osm_polygon
+  SET mz_label_placement = ST_PointOnSurface(way);
+
+
 CREATE INDEX planet_osm_polygon_landuse_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_landuse_min_zoom IS NOT NULL;
 CREATE INDEX planet_osm_polygon_landuse_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_landuse_min_zoom <= 9;
 CREATE INDEX planet_osm_polygon_landuse_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_landuse_min_zoom <= 12;

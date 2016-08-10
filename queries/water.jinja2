@@ -2,15 +2,16 @@
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
-    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     NULL::boolean AS boundary
 {% endmacro %}
 
 {% if zoom < 9 %}
 SELECT
-    '' AS name,
+    NULL AS name,
     {{ ne_water_cols() }}
 
 {% if zoom < 2 %}
@@ -50,8 +51,9 @@ SELECT
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
-    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -77,6 +79,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -119,6 +122,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -141,8 +145,9 @@ SELECT
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
-    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     NULL AS tunnel,
     NULL AS tags
@@ -158,8 +163,9 @@ SELECT
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     tags->'tunnel' AS tunnel,
     %#tags AS tags
@@ -181,8 +187,9 @@ SELECT
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
+    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     tags->'tunnel' AS tunnel,
     %#tags AS tags
@@ -206,8 +213,9 @@ SELECT
   NULL AS area,
   mz_calculate_json_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
-  way AS __geometry__,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
+  NULL AS mz_label_placement,
   true AS label_placement,
 {% if zoom < 9 %}
   NULL::boolean AS boundary
