@@ -3,7 +3,7 @@ assert_has_feature(
     15, 5242, 12663, 'pois',
     { 'kind': 'hotel', 'name': 'Ritz-Carlton' })
 
-#https://www.openstreetmap.org/relation/3827943
+#https://www.openstreetmap.org/relation/6480430
 assert_has_feature(
     16, 10484, 25327, 'pois',
-    { 'kind': 'hotel', 'name': 'The Stanford Court Renaissance' })
+    { 'kind': 'hotel', 'name': 'Stanford Court San Francisco Hotel' })
