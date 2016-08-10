@@ -135,8 +135,9 @@ Additional localized names are available as `common-optional`, but their actual 
 
 1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertised.
     - **Natural Earth** (used for zooms 0-8) updates infrequently (often annually)
-    - **OpenStreetMap** (used for zooms 9+) updates frequently (at least daily)
-    - **Who’s On First** (used for zooms 12+) updates frequently (at least daily)
+    - **OpenStreetMap** (used for zooms 9+ for most everything) updates frequently (at least daily)
+    - **OpenStreetMapData** (used for zooms 9+ in the earth and water layers only) updates infrequently (optimistically monthly)
+    - **Who’s On First** (used for zooms 12+ for places) updates frequently (at least daily)
     - When possible, we aspire to advertise when a new version of Natural Earth is loaded into the database or a significant event occurs in another data source either via the Tilezen changelog or another channel.
 1. **Minor** corrections to country names, borders, disputed territories, capitals, and other administrative geography are always possible and will not be tracked or advertised.
 
