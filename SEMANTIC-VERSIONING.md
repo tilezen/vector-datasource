@@ -91,6 +91,17 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 
 We do not version data features, but we do attempt to indicate the data source and the feature ID as assigned by that source so customers can investigate upstream changes.
 
+
+### Frequency of data updates
+
+Tilezen has 4 primary sources:
+
+- **Natural Earth** (used for zooms 0-8 for most everything) updates infrequently (often annually)
+- **OpenStreetMap** (used for zooms 9+ for most everything) updates frequently (at least daily)
+- **OpenStreetMapData** (used for zooms 9+ in the earth and water layers only) updates infrequently (optimistically monthly)
+- **Who’s On First** (used for zooms 12+ for places layer) updates frequently (at least daily)
+
+
 ### INDIVIDUAL FEATURES are not versioned
 
 #### Examples:
@@ -133,12 +144,7 @@ Additional localized names are available as `common-optional`, but their actual 
 
 #### Examples:
 
-1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertised.
-    - **Natural Earth** (used for zooms 0-8) updates infrequently (often annually)
-    - **OpenStreetMap** (used for zooms 9+ for most everything) updates frequently (at least daily)
-    - **OpenStreetMapData** (used for zooms 9+ in the earth and water layers only) updates infrequently (optimistically monthly)
-    - **Who’s On First** (used for zooms 12+ for places) updates frequently (at least daily)
-    - When possible, we aspire to advertise when a new version of Natural Earth is loaded into the database or a significant event occurs in another data source either via the Tilezen changelog or another channel.
+1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertised but do not bump the Tilezen API version.
 1. **Minor** corrections to country names, borders, disputed territories, capitals, and other administrative geography are always possible and will not be tracked or advertised.
 
 ## Versioning the Service
@@ -159,6 +165,7 @@ Additional localized names are available as `common-optional`, but their actual 
 #### PATCH version increments:
 
 1. **Rollup** of PATCH Tilezen API changes
+1. **Infrequent update** of static data sources like Natural Earth or OpenStreetMapData
 1. Backwards compatible change to a file format
 1. Software dependency has a backwards compatible change or bug fix with no change to the tile response
 
