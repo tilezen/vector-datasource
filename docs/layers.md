@@ -382,7 +382,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 Combination of OpenStreetMap `place` points, Natural Earth populated places, and Who's On First neighbourhoods.
 
-Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `state`, `province`, and `city`, `town` at zoom 8. A few more each zoom are added until zoom 13+ includes, `borough`, `suburb`, `quarter`, `village`, `hamlet`, `locality`, `isolated_dwelling`, and `farm`.
+Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `region` and starting at zoom 8 for `locality`. Specific `locality` types are added to the `kind_detail` tag.
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
@@ -393,7 +393,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 * `name`
 * `id`: osm_id from OpenStreetMap or Natural Earth id
-* `kind`: the original value of the OSM `place` tag and Natural Earth `featurecla`
+* `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
 * `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
@@ -401,37 +401,35 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place properties (common optional):
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
-* `state_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
+* `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
 * `labelrank`: labelrank value from Natural Earth
 * `min_zoom`: Currently neighbourhoods only, from Who's On First
 * `max_zoom`: Currently neighbourhoods only, from Who's On First
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
+* `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
 
 #### Place kind values:
 
-* `Admin-0 capital alt`
-* `Admin-0 capital`
-* `Admin-0 region capital`
-* `Admin-1 capital`
-* `Admin-1 region capital`
 * `borough`
-* `city`
 * `continent`
 * `country`
-* `farm`
-* `hamlet`
-* `Historic place`
-* `isolated_dwelling`
 * `locality`
 * `macrohood`
-* `Meteorological Station`
+* `microhood`
 * `neighbourhood`
-* `Populated place`
+* `region`
+
+#### Place kind_detail values:
+
+* `city`
+* `farm`
+* `hamlet`
+* `isolated_dwelling`
+* `locality`
+* `neighbourhood`
 * `province`
-* `quarter`
-* `Scientific station`
+* `scientific_station`
 * `state`
-* `suburb`
 * `town`
 * `village`
 
@@ -933,9 +931,8 @@ _TIP: If you're looking for transit `station` and `station_entrance` features, l
 * `name`: including localized name variants
 * `id`: OpenStreetMap feature `osm_id`
 * `kind`: detailed below, per geometry type
+* `source`: `openstreetmap.org`
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
-
-Implied but not stated: `source`: `openstreetmap.org`.
 
 #### Transit properties (common optional):
 
