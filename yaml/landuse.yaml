@@ -38,8 +38,13 @@ filters:
   - filter: {leisure: common}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: common}
+  - filter: 
+      landuse: forest
+      protect_class: '6'
+    min_zoom: GREATEST(LEAST(zoom, 14), 7)
+    output: {kind: forest}
   - filter: {landuse: forest}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    min_zoom: GREATEST(LEAST(zoom, 14), 9)
     output: {kind: forest}
   - filter: {landuse: residential}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
@@ -72,7 +77,7 @@ filters:
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: farmland}
   - filter: {landuse: wood}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    min_zoom: GREATEST(LEAST(zoom, 14), 9)
     output: {kind: wood}
   - filter: {landuse: meadow}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
@@ -96,7 +101,7 @@ filters:
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: rural}
   - filter: {landuse: military}
-    min_zoom: GREATEST(LEAST(zoom, 16), 8)
+    min_zoom: GREATEST(LEAST(zoom + 2, 14), 8)
     output: {kind: military}
   - filter: {landuse: winter_sports}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
