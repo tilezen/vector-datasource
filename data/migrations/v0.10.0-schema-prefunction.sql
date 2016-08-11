@@ -13,6 +13,21 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE function tmp_add_col_label_placement(_tbl regclass)
+RETURNS integer AS $$
+BEGIN
+ IF NOT EXISTS (
+   SELECT 1 FROM pg_attribute
+   WHERE attrelid = _tbl
+   AND attname = 'mz_label_placement'
+   AND NOT attisdropped) THEN
+
+   EXECUTE format('ALTER TABLE %s ADD COLUMN mz_label_placement geometry(Geometry, 900913)', _tbl);
+ END IF;
+ RETURN 1;
+END;
+$$ LANGUAGE plpgsql;
+
 DO $$
 BEGIN
   PERFORM tmp_add_col('public.planet_osm_polygon', 'mz_earth_min_zoom');
@@ -65,7 +80,35 @@ BEGIN
 
 END$$;
 
+DO $$
+BEGIN
+
+  PERFORM tmp_add_col_label_placement('public.planet_osm_polygon');
+  PERFORM tmp_add_col_label_placement('public.planet_osm_line');
+
+  PERFORM tmp_add_col_label_placement('public.water_polygons');
+  PERFORM tmp_add_col_label_placement('public.land_polygons');
+  PERFORM tmp_add_col_label_placement('public.ne_110m_ocean');
+  PERFORM tmp_add_col_label_placement('public.ne_50m_ocean');
+  PERFORM tmp_add_col_label_placement('public.ne_10m_ocean');
+  PERFORM tmp_add_col_label_placement('public.ne_110m_coastline');
+  PERFORM tmp_add_col_label_placement('public.ne_50m_coastline');
+  PERFORM tmp_add_col_label_placement('public.ne_10m_coastline');
+  PERFORM tmp_add_col_label_placement('public.ne_110m_lakes');
+  PERFORM tmp_add_col_label_placement('public.ne_50m_lakes');
+  PERFORM tmp_add_col_label_placement('public.ne_10m_lakes');
+  PERFORM tmp_add_col_label_placement('public.ne_50m_playas');
+  PERFORM tmp_add_col_label_placement('public.ne_10m_playas');
+  PERFORM tmp_add_col_label_placement('public.ne_110m_land');
+  PERFORM tmp_add_col_label_placement('public.ne_50m_land');
+  PERFORM tmp_add_col_label_placement('public.ne_10m_land');
+  PERFORM tmp_add_col_label_placement('public.ne_50m_urban_areas');
+  PERFORM tmp_add_col_label_placement('public.ne_10m_urban_areas');
+
+END$$;
+
 DROP FUNCTION tmp_add_col(regclass, text);
+DROP FUNCTION tmp_add_col_label_placement(regclass);
 
 DO $$
 BEGIN

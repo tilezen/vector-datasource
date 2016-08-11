@@ -45,6 +45,8 @@ SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_line.*)
 WHERE
   waterway = 'dam';
 
+UPDATE planet_osm_line SET mz_label_placement = ST_PointOnSurface(way) WHERE mz_label_placement IS NULL;
+
 CREATE INDEX new_planet_osm_line_earth_geom_9_index  ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 9;
 CREATE INDEX new_planet_osm_line_earth_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 12;
 CREATE INDEX new_planet_osm_line_earth_geom_15_index ON planet_osm_line USING gist(way) WHERE mz_earth_min_zoom <= 15;

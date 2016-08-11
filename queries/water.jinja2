@@ -10,7 +10,8 @@
 
 {% if zoom < 9 %}
 SELECT
-    '' AS name,
+    NULL AS name,
+    NULL AS mz_label_placement,
     {{ ne_water_cols() }}
 
 {% if zoom < 2 %}
@@ -30,6 +31,7 @@ UNION ALL
 
 SELECT
     name,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     {{ ne_water_cols() }}
 
 {% if zoom < 2 %}
@@ -43,12 +45,13 @@ FROM ne_10m_lakes t
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
   {{ bounds|bbox_filter('the_geom') }}
-GROUP BY name, mz_properties
+GROUP BY name, mz_properties, mz_label_placement
 
 UNION ALL
 
 SELECT
     NULL AS name,
+    NULL AS mz_label_placement,
     NULL AS area,
     mz_calculate_output_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
@@ -74,6 +77,7 @@ UNION ALL
 
 SELECT
     NULL AS name,
+    NULL AS mz_label_placement,
     NULL AS area,
     mz_calculate_output_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
@@ -100,6 +104,7 @@ UNION ALL
 
 SELECT
     name,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     {{ ne_water_cols() }}
 
 {% if 4 <= zoom < 5 %}
@@ -111,12 +116,13 @@ FROM ne_10m_playas t
 WHERE
   mz_water_min_zoom <= {{ zoom }} AND
   {{ bounds|bbox_filter('the_geom') }}
-GROUP BY name, mz_properties
+GROUP BY name, mz_properties, mz_label_placement
 
 UNION ALL
 
 SELECT
     NULL AS name,
+    NULL AS mz_label_placement,
     NULL AS area,
     mz_calculate_output_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
@@ -140,7 +146,8 @@ WHERE
 
 {% elif 9 <= zoom %}
 SELECT
-    '' AS name,
+    NULL AS name,
+    NULL AS mz_label_placement,
     way_area::bigint AS area,
     mz_calculate_output_water(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
@@ -158,10 +165,11 @@ UNION ALL
 
 SELECT
     name,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     way_area::bigint AS area,
     mz_calculate_output_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     NULL AS label_placement,
     tunnel,
@@ -177,10 +185,11 @@ UNION ALL
 
 SELECT
     name,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL AS area,
     mz_calculate_output_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     NULL AS label_placement,
     tunnel,
@@ -198,6 +207,7 @@ UNION ALL
 
 SELECT
   name,
+  NULL AS mz_label_placement,
   NULL AS area,
   mz_calculate_output_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,

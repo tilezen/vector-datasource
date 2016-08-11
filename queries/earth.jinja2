@@ -8,6 +8,8 @@ SELECT
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
     MIN(mz_earth_min_zoom) AS min_zoom,
+    NULL AS mz_label_placement,
+    NULL AS label_placement,
     NULL AS tags
 FROM
 {% if zoom < 2 %}
@@ -33,6 +35,8 @@ SELECT
     {% filter geometry %}st_union(the_geom){% endfilter %} AS __geometry__,
     max(gid) AS __id__,
     NULL AS min_zoom,
+    NULL AS mz_label_placement,
+    NULL AS label_placement,
     NULL AS tags
 
 FROM
@@ -53,9 +57,11 @@ SELECT
     way_area::bigint AS area,
     mz_calculate_output_earth(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     mz_earth_min_zoom AS min_zoom,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
+    NULL AS label_placement,
     %#tags AS tags
 
 FROM planet_osm_polygon t
@@ -75,9 +81,11 @@ SELECT
     NULL AS area,
     mz_calculate_output_earth(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     mz_earth_min_zoom AS min_zoom,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
+    NULL AS label_placement,
     %#tags AS tags
 
 FROM planet_osm_line t
@@ -103,6 +111,8 @@ SELECT
   way AS __geometry__,
   osm_id AS __id__,
   mz_earth_min_zoom AS min_zoom,
+  NULL AS mz_label_placement,
+  'yes' AS label_placement,
   %#tags AS tags
 
 FROM

@@ -5,6 +5,7 @@
     HSTORE('kind=>"{{ kind }}"') AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     gid AS __id__
 {% endmacro %}
 
@@ -21,7 +22,8 @@ SELECT
     way_area::bigint AS area,
     mz_calculate_output_landuse({{ table }}.*) AS mz_properties,
     'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     osm_id AS __id__,
     sport,
     religion,
@@ -63,7 +65,8 @@ SELECT
   way_area::bigint AS area,
   mz_calculate_output_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
+  {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
   osm_id AS __id__
 FROM
   planet_osm_polygon
@@ -94,7 +97,8 @@ SELECT
   way_area::bigint AS area,
   mz_calculate_output_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  {% filter geometry %}{{ bounds|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
+  {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
   osm_id AS __id__,
   mz_calculate_is_building_or_part(building, "building:part") AS mz_is_building
 FROM
@@ -117,7 +121,7 @@ UNION ALL
 
 -- "cross-fade" NE urban area polygons for a couple of zooms.
 SELECT
-  '' AS name,
+  NULL AS name,
   4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
   {{ ne_landuse_cols('urban area') }},
   NULL AS sport,

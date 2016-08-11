@@ -1,3 +1,8 @@
+v0.10.5
+-------
+* **Release date**: 2016-08-17
+* Backport moving label generation to database. See [#965](https://github.com/tilezen/vector-datasource/issues/965).
+
 v0.10.4
 -------
 * **Release date**: 2016-06-28

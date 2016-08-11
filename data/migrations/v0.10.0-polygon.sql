@@ -52,6 +52,8 @@ UPDATE planet_osm_polygon
   SET mz_building_min_zoom = mz_calculate_min_zoom_buildings(planet_osm_polygon.*)
   WHERE mz_calculate_min_zoom_buildings(planet_osm_polygon.*) IS NOT NULL;
 
+UPDATE planet_osm_polygon SET mz_label_placement = ST_PointOnSurface(way) WHERE mz_label_placement IS NULL;
+
 CREATE INDEX new_planet_osm_polygon_earth_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 9;
 CREATE INDEX new_planet_osm_polygon_earth_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 12;
 CREATE INDEX new_planet_osm_polygon_earth_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_earth_min_zoom <= 15;

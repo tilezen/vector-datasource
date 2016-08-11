@@ -14,6 +14,8 @@ SELECT
     mz_calculate_output_buildings(planet_osm_polygon.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     mz_building_min_zoom AS min_zoom,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
+    NULL AS label_placement,
     %#tags AS tags
 
 FROM
@@ -40,6 +42,8 @@ SELECT
     mz_calculate_output_buildings(planet_osm_point.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     mz_building_min_zoom AS min_zoom,
+    NULL AS mz_label_placement,
+    'yes' AS label_placement,
     %#tags AS tags
 
 FROM
