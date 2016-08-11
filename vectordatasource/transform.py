@@ -1331,7 +1331,6 @@ def exterior_boundaries(ctx):
         prop_transform = {}
 
     features = layer['features']
-    padded_bounds = layer['padded_bounds']
 
     # this exists to enable a dirty hack to try and work
     # around duplicate geometries in the database. this
@@ -1368,18 +1367,12 @@ def exterior_boundaries(ctx):
     for shape, props, fid in features:
         if shape.type in ('Polygon', 'MultiPolygon'):
 
-            # make a bounding box 3x larger than the original tile,
-            # but with the same centroid.
-            geom_type = normalize_geometry_type(shape.type)
-            padded_bounds_by_type = padded_bounds[geom_type]
-            padded_bbox = calculate_padded_bounds(3, padded_bounds_by_type)
+            # the data comes back clipped from the queries now so we
+            # no longer need to clip here
 
-            # clip the feature to the padded bounds of the tile
-            clipped = shape.intersection(padded_bbox)
-
-            snapped = clipped
+            snapped = shape
             if snap_tolerance is not None:
-                snapped = _snap_to_grid(clipped, snap_tolerance)
+                snapped = _snap_to_grid(shape, snap_tolerance)
 
             # geometry collections are returned as None
             if snapped is None:
