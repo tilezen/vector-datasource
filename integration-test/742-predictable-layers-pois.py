@@ -65,7 +65,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/432810821
 assert_has_feature(
     8, 72, 94, 'pois',
-    {'id': 432810821, 'kind': 'forest'})
+    {'id': 432810821, 'kind': 'forest', 'protect_class': '6'})
 
 # Way: natural: Forest in POIS
 # http://www.openstreetmap.org/way/202680509
