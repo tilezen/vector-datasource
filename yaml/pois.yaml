@@ -705,7 +705,7 @@ filters:
     output:
       kind: military
   - filter: {boundary: national_park}
-    min_zoom: LEAST(zoom + 3.5, 12)
+    min_zoom: LEAST(zoom + 3.5, 10)
     output:
       kind: national_park
   - filter: {leisure: nature_reserve}
