@@ -29,10 +29,10 @@ UPDATE planet_osm_line
   SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_line.*)
   WHERE mz_calculate_min_zoom_landuse(planet_osm_line.*) IS NOT NULL;
 
-CREATE INDEX planet_osm_line_roads_geom_index ON planet_osm_line USING gist(way) WHERE (osm_id > 0 OR tags->'route' = 'ferry') AND mz_road_level IS NOT NULL;
-CREATE INDEX planet_osm_line_roads_geom_9_index ON planet_osm_line USING gist(way) WHERE (osm_id > 0 OR tags->'route' = 'ferry') AND mz_road_level <= 9;
-CREATE INDEX planet_osm_line_roads_geom_12_index ON planet_osm_line USING gist(way) WHERE (osm_id > 0 OR tags->'route' = 'ferry') AND mz_road_level <= 12;
-CREATE INDEX planet_osm_line_roads_geom_15_index ON planet_osm_line USING gist(way) WHERE (osm_id > 0 OR tags->'route' = 'ferry') AND mz_road_level <= 15;
+CREATE INDEX planet_osm_line_roads_geom_index ON planet_osm_line USING gist(way) WHERE mz_road_level IS NOT NULL;
+CREATE INDEX planet_osm_line_roads_geom_9_index ON planet_osm_line USING gist(way) WHERE mz_road_level <= 9;
+CREATE INDEX planet_osm_line_roads_geom_12_index ON planet_osm_line USING gist(way) WHERE mz_road_level <= 12;
+CREATE INDEX planet_osm_line_roads_geom_15_index ON planet_osm_line USING gist(way) WHERE mz_road_level <= 15;
 
 CREATE INDEX planet_osm_line_transit_geom_index ON planet_osm_line USING gist(way) WHERE mz_transit_level IS NOT NULL;
 CREATE INDEX planet_osm_line_transit_geom_6_index ON planet_osm_line USING gist(way) WHERE mz_transit_level <= 6;

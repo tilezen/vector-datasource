@@ -149,9 +149,9 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprint, building label_placment points, building:part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
+Polygons from OpenStreetMap representing building footprint, building label_placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
-Individual `building:part` geometries following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels.
+Individual `building:part` geometries from OSM following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels are now exported as `building_part` features with specified `kind_detail`.
 
 Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
@@ -179,12 +179,13 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
-* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available.
+* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
+* `kind_detail`: value from OpenStreetMap's `building:part` tag.
 
 #### Building kind values:
 
-* Buildings polygons and label_position points either have `kind` values that are a straight passthru of the raw OpenStreetMap `building=*` and `building:part` values. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
-* If either of `building=*` and `building:part` is `yes`, the `kind` property is dropped (and `kind:building` is implied).
+* Buildings polygons and label_position points, have `kind` values that are either `building` or `building_part`, if `building=*` or `building:part` is `yes` respectively. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
+* If the raw OpenStreetMap `building:part` tag exists with a value, a `kind_detail` tag is added to describe the `building:part` value.
 * Address points are `kind` of value `address`.
 
 #### Address properties and kind value:
@@ -382,7 +383,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 Combination of OpenStreetMap `place` points, Natural Earth populated places, and Who's On First neighbourhoods.
 
-Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `state`, `province`, and `city`, `town` at zoom 8. A few more each zoom are added until zoom 13+ includes, `borough`, `suburb`, `quarter`, `village`, `hamlet`, `locality`, `isolated_dwelling`, and `farm`.
+Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `region` and starting at zoom 8 for `locality`. Specific `locality` types are added to the `kind_detail` tag.
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
@@ -393,7 +394,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 * `name`
 * `id`: osm_id from OpenStreetMap or Natural Earth id
-* `kind`: the original value of the OSM `place` tag and Natural Earth `featurecla`
+* `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
 * `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
@@ -401,37 +402,35 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place properties (common optional):
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
-* `state_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
+* `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
 * `labelrank`: labelrank value from Natural Earth
 * `min_zoom`: Currently neighbourhoods only, from Who's On First
 * `max_zoom`: Currently neighbourhoods only, from Who's On First
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
+* `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
 
 #### Place kind values:
 
-* `Admin-0 capital alt`
-* `Admin-0 capital`
-* `Admin-0 region capital`
-* `Admin-1 capital`
-* `Admin-1 region capital`
 * `borough`
-* `city`
 * `continent`
 * `country`
-* `farm`
-* `hamlet`
-* `Historic place`
-* `isolated_dwelling`
 * `locality`
 * `macrohood`
-* `Meteorological Station`
+* `microhood`
 * `neighbourhood`
-* `Populated place`
+* `region`
+
+#### Place kind_detail values:
+
+* `city`
+* `farm`
+* `hamlet`
+* `isolated_dwelling`
+* `locality`
+* `neighbourhood`
 * `province`
-* `quarter`
-* `Scientific station`
+* `scientific_station`
 * `state`
-* `suburb`
 * `town`
 * `village`
 
@@ -836,7 +835,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `name`: From OpenStreetMap, but transformed to abbreviated names as detailed above.
 * `id`: From OpenStreetMap or Natural Earth
 * `source`: `openstreetmap` or `naturalearthdata.com`
-* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `exit` (eg: "motorway_junction"), `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
+* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `ref`: Used for road shields. Related, see `symbol` for pistes.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_key` is adjusted to realistically model bridge, tunnel, and layer ordering.
@@ -867,6 +866,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
 * `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
+* `kind_detail`: normalized values describing the kind value, see below.
 
 #### Road properties (optional):
 
@@ -896,7 +896,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 #### Road transportation kind values (lines):
 
 * `aerialway`
-* `exit`
+* `aeroway`
 * `ferry`
 * `highway`
 * `major_road`
@@ -905,6 +905,16 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `piste`
 * `racetrack`
 * `rail`
+
+#### Road transportation kind_detail values:
+
+* `motorway`
+* `trunk`
+* `primary`
+* `secondary`
+* `tertiary`
+* `runway`
+* `taxiway`
 
 #### Road Transportation `subkind` values and zoom ranges:
 
@@ -953,9 +963,8 @@ _TIP: If you're looking for transit `station` and `station_entrance` features, l
 * `name`: including localized name variants
 * `id`: OpenStreetMap feature `osm_id`
 * `kind`: detailed below, per geometry type
+* `source`: `openstreetmap.org`
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
-
-Implied but not stated: `source`: `openstreetmap.org`.
 
 #### Transit properties (common optional):
 
