@@ -4,7 +4,7 @@
 # http://www.openstreetmap.org/way/237314510
 assert_has_feature(
     16, 10599, 25679, 'landuse',
-    { 'kind': 'camp_site'})
+    { 'kind': 'camp_site', 'sort_key': 92})
 
 # large campground in point zoom 16
 # http://www.openstreetmap.org/way/237314510
@@ -16,7 +16,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/237314510
 assert_has_feature(
     13, 1324, 3209, 'landuse',
-    { 'kind': 'camp_site'})
+    { 'kind': 'camp_site', 'sort_key': 92})
 
 # large campground in point zoom 13
 # http://www.openstreetmap.org/way/237314510
@@ -28,7 +28,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/417405356
 assert_has_feature(
     16, 10471, 25326, 'landuse',
-    { 'kind': 'camp_site'})
+    { 'kind': 'camp_site', 'sort_key': 92})
 
 # small campground in point zoom 16
 # http://www.openstreetmap.org/way/417405356
@@ -40,7 +40,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/417405356
 assert_has_feature(
     13, 1308, 3165, 'landuse',
-    { 'kind': 'camp_site'})
+    { 'kind': 'camp_site', 'sort_key': 92})
 
 # small campground in point zoom 13
 # http://www.openstreetmap.org/way/417405356
