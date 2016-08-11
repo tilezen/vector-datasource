@@ -61,7 +61,7 @@ assert_has_feature(
     14, 2842, 6101, 'pois',
     {'id': 357559979, 'kind': 'forest', 'min_zoom': 14})
 
-# Way:64296322 landuse: Forest protect class in POIS
+# Way:432810821 landuse: Forest protect class in POIS
 # http://www.openstreetmap.org/way/432810821
 assert_has_feature(
     8, 72, 94, 'pois',
@@ -132,8 +132,8 @@ assert_no_matching_feature(
 # Node:617506856 national_park in POIS
 # http://www.openstreetmap.org/node/617506856
 assert_has_feature(
-    12, 843, 1546, 'pois',
-    {'id': 617506856, 'kind': 'national_park', 'min_zoom': 12})
+    10, 210, 386, 'pois',
+    {'id': 617506856, 'kind': 'national_park', 'min_zoom': 10})
 
 # Way:40260866 nature_reserve in POIS
 # http://www.openstreetmap.org/way/40260866
