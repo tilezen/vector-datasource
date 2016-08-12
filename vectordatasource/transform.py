@@ -2764,6 +2764,34 @@ def add_uic_ref(shape, properties, fid, zoom):
         return shape, properties, fid
 
 
+def _freeze(thing):
+    """
+    Freezes something to a hashable item.
+    """
+
+    if isinstance(thing, dict):
+        return frozenset([(_freeze(k), _freeze(v)) for k, v in thing.items()])
+
+    elif isinstance(thing, list):
+        return tuple([_freeze(i) for i in thing])
+
+    return thing
+
+
+def _thaw(thing):
+    """
+    Reverse of the freeze operation.
+    """
+
+    if isinstance(thing, frozenset):
+        return dict([_thaw(i) for i in thing])
+
+    elif isinstance(thing, tuple):
+        return list([_thaw(i) for i in thing])
+
+    return thing
+
+
 def merge_features(ctx):
     """
     Merge (linear) features with the same properties together, attempting to
@@ -2814,7 +2842,7 @@ def merge_features(ctx):
 
         # because dicts are mutable and therefore not hashable, we have to
         # transform their items into a frozenset instead.
-        frozen_props = frozenset(props.items())
+        frozen_props = _freeze(props)
 
         if frozen_props in features_by_property:
             features_by_property[frozen_props][2].append(shape)
@@ -2833,7 +2861,7 @@ def merge_features(ctx):
         multi = MultiLineString(list_of_linestrings)
 
         # thaw the frozen properties to use in the new feature.
-        props = dict(frozen_props)
+        props = _thaw(frozen_props)
 
         # restore any 'id' property.
         if p_id is not None:

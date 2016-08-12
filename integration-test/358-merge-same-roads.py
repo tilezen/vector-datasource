@@ -8,11 +8,21 @@
 # RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=primary];>;
 # RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=trunk];>;
 #
+
+def _freeze(thing):
+    if isinstance(thing, dict):
+        return frozenset([(_freeze(k), _freeze(v)) for k, v in thing.items()])
+
+    elif isinstance(thing, list):
+        return tuple([_freeze(i) for i in thing])
+
+    return thing
+
 with features_in_tile_layer(8, 41, 99, 'roads') as roads:
     features = set()
 
     for road in roads:
-        props = frozenset(road['properties'].items())
+        props = frozenset(_freeze(road['properties']))
         if props in features:
             raise Exception("Duplicate properties %r in roads layer, but "
                             "properties should be unique."
