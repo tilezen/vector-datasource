@@ -1,6 +1,6 @@
 #Semantic Versioning
 
-When a new version of Tilezen is released, developers should be able to tell from the version increment how much effort it will take them to integrate the new tiles with their map. We use semantic versioning to communicate this.
+When a new version of the Tilezen is released, developers should be able to tell from the version increment how much effort it will take them to integrate the new tiles with their map. We use semantic versioning to communicate this.
 
 ###What is Semantic Versioning?
 
@@ -34,14 +34,13 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 ##### Definition of terms
 
 * **`common`** - These layers, properties, and kinds are common across almost all features in a Tilezen response.
-  - The arrangement of features into specific layers.
-  - Special bits that make our vector tile content Tilezen, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_key`, `boundary`, and `maritime_boundary`.
-  - Fundamental properties like `name` (including localized names), `ref`, `colour`, `population`, `elevation`, `id`, and `source`.
-  - Extra fundamental properties which are light transforms of original data, including `capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, left & right names and localized names on lines, and left & right id values on lines.
-* **`common-optional`** - These are meant to be part of a common set but may not be present because they aren't relevant or because we don't have the data.
-  - Examples include `cuisine`, `operator`, `protect_class`, and `sport`.
-operator
-* **`optional`** - These are the properties of a specific kind, or generally present across kinds but only in exceptional cases.
+  - The arrangement of features into specific named layers.
+  - Special bits that make vector tile content **interoperably Tilezen**, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_key`, `boundary`, and `maritime_boundary`.
+  - Fundamental properties like `name` (including localized names), `id`, and `source` included on most every feature.
+* **`common-optional`** - These are meant to be part of a common set for one or more specific important `kind`s of features, but may not be present because they aren't relevant or because we don't have the data.
+  - Lightly transformed **interoperable Tilezen** properties based on original data values. Examples include: `capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, left & right names and localized names on lines, and left & right id values on lines.
+  - Fundamental properties like `ref`, `colour`, `population`, `elevation`, `cuisine`, `operator`, `protect_class`, and `sport`.
+* **`optional`** - These are the properties of a specific, less important `kind`, or generally present across kinds but only in exceptional cases.
   - Examples include `capacity` and `covered`.
 
 ####MAJOR version increments:
@@ -58,8 +57,8 @@ operator
 1. **Change** `kind` **value name**
 1. **Remove** `kind` **value** completely from all zooms
 1. **Move** `kind` from one layer to another
-1. **Additional merging** across `kind` **values** in zooms 14, 15, or 16 (or max zoom) by removing `common`, `common-optional`, and/or `optional` **properties** or other method
-1. **Merging** within `kind` **values** at zooms 16 (or max zoom) by removing `common`, `common-optional`, and `optional` **properties** or other method
+1. **Additional simplification** across `kind` **values** in zooms 14, 15, or 16 (or max zoom) by removing `common`, `common-optional`, and/or `optional` **properties** by merging or other method
+1. **Simplification** within `kind` **values** at zooms 16 (or max zoom) by removing `common`, `common-optional`, and `optional` **properties** by merging or other method
 1. **Change** of <= -3 (earlier) to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
 1. **Change** of >= +2 (later) to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
 
@@ -71,12 +70,11 @@ operator
 1. **Add** `common-optional` feature **property**
 1. **Add** `optional` feature **property**
 1. **Add** new `kind` value
-1. **Additional merging** across `kind` **values** at zooms 13 or less by removing `common`, `common-optional`, and `optional` **properties** or other method
-1. **Additional merging** within `kind` **values** at zooms 13, 14, or 15 by removing `common`, `common-optional`, and `optional` **properties** or other method
+1. **Additional simplification** across `kind` **values** at zooms 13 or less by removing `common`, `common-optional`, and `optional` **properties** by merging or other method
+1. **Additional simplification** within `kind` **values** at zooms 13, 14, or 15 by removing `common`, `common-optional`, and `optional` **properties** by merging or other method
 1. **Reassign** 50% or more of existing `kind` **value** into a new `kind` **value**, when kind has 10,000 or more features
 1. **Change** of <= -2 (earlier) to `min_zoom` or `max_zoom` **values** to determine when `kind` is included
 1. **Change** of >= +1 (later) to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
-1. **Adjustments** to the overall map balance (proportion of features in one layer or another, proportion of `kind`s in a single layer)
 1. **Change** the maximum Tilezen zoom (currently zoom 16).
 
 #### PATCH version increments
@@ -84,11 +82,12 @@ operator
 1. **Add** `optional` layer
 1. **Change** `optional` layer **name**
 1. **Remove** `optional` layer
-1. **Additional merging** within `kind` **values** at zooms 12 or less by removing `common`, `common-optional`, and `optional` **properties** or other method
+1. **Additional simplification** within `kind` **values** at zooms 12 or less by removing `common`, `common-optional`, and `optional` **properties** by merging or other method
 1. **Reassign** an existing `kind` **value** to an another existing `kind` value when they are equivalent (e.g. fixing the spelling of a value coming from an upstream data source)
 1. **Reassign** less than 50% of existing `kind` **value** into a new `kind` value, when kind has 10,000 or more features
 1. **Reassign** more than 50% of existing `kind` **value** into a new `kind` value, when kind has less than 10,000 features
 1. **Change** of -1 to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
+1. **Adjustments** to the overall map balance (proportion of features in one layer or another, proportion of `kind`s in a single layer) by adjusting boosting of `min_zoom` values over the `kind`'s default, limiting the number of individual `kind` features in a given tile coordinate, and other means. 
 1. **Add** unpublicized `kind` **value**
 1. **Remove** unpublicized `kind` **value**
 1. **Correct** a regression in the API (to the last good version)
@@ -105,7 +104,7 @@ We do not version data features, but we do attempt to indicate the data source a
 Tilezen has 4 primary sources:
 
 - **Natural Earth** (used for zooms 0-8 for most everything) updates infrequently (often annually)
-- **OpenStreetMap** (used for zooms 9+ for most everything) updates frequently (at least daily)
+- **OpenStreetMap** (used for zooms 9+ for most everything, sometimes earlier) updates frequently (at least daily)
 - **OpenStreetMapData** (used for zooms 9+ in the earth and water layers only) updates infrequently (optimistically monthly)
 - **Who’s On First** (used for zooms 12+ for places layer) updates frequently (at least daily)
 
@@ -120,9 +119,9 @@ Tilezen has 4 primary sources:
 1. **Change** feature **geometry**
 1. **Change** feature **property** values (including property removal if removed from original source)
 1. **Change** feature `kind` **value** (when upstream data source reclassifies them).
-1. **Change** feature `min_zoom` &/or `max_zoom` **values** (when area or other signal changes upstream)
+1. **Change** feature `min_zoom` &/or `max_zoom` **values** (when area or other signal changes upstream).
 
-**NOTE:** It is possible to query the version of individual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen.
+**NOTE:** It is possible to query the version of individual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen. Because of simplification, `id` properties are not always availabe due to feature merging.
 
 ### LANGUAGES are not versioned
 
@@ -130,20 +129,20 @@ In addition to the `common` **name** locals call a place, the following `common`
 
 #### Common languages:
 
-1. `name:ara` (Arabic)
-1. `name:zho` (Chinese, traditional or simplified)
-1. `name:eng` (English)
-1. `name:fra` (French)
-1. `name:rus` (Russian)
-1. `name:spa` (Spanish)
-1. `name:deu` (German)
-1. `name:gre` (Greek)
-1. `name:ita` (Italian)
-1. `name:jpn` (Japanese)
-1. `name:kor` (Korean)
-1. `name:vie` (Vietnamese)
+1. `name:ara` Arabic
+1. `name:zho` Chinese, traditional or simplified
+1. `name:eng` English
+1. `name:fra` French
+1. `name:rus` Russian
+1. `name:spa` Spanish
+1. `name:deu` German
+1. `name:gre` Greek
+1. `name:ita` Italian
+1. `name:jpn` Japanese
+1. `name:kor` Korean
+1. `name:vie` Vietnamese
 
-Arabic, Chinese, English, French, Russian and Spanish are used by the United National for meetings and official documents. The other languages listed are frequently used OpenStreetMap and Who's On First.
+Arabic, Chinese, English, French, Russian and Spanish are used by the United National for meetings and official documents. The other languages listed are frequently used in OpenStreetMap and Who's On First.
 
 Additional localized names are available as `common-optional`, but their actual use is the data is not widespread.
 
@@ -155,12 +154,12 @@ Additional localized names are available as `common-optional`, but their actual 
 1. **Major** additions, deletions to country names, borders, disputed territories, and capitals are possible and may be advertised but do not bump the Tilezen API version.
 1. **Minor** corrections to country names, borders, disputed territories, capitals, and other administrative geography are always possible and will not be tracked or advertised.
 
-## Versioning the Service
+## Versioning the Tilezen Service
 
 #### MAJOR version increments:
 
 1. **Rollup** of MAJOR Tilezen API changes
-1. **Change** the maximum Tilezen zoom (currently zoom 16).
+1. **Change** the maximum Tilezen zoom at which tiles are generated by default (currently zoom 16)
 1. **Remove** a file format
 1. Backwards incompatible change to a file format
 1. Tilezen software dependency has a breaking change to the tile response
