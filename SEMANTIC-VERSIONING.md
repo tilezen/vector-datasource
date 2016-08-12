@@ -33,9 +33,16 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 
 ##### Definition of terms
 
-* **common** - These layers, properties, and kinds are common across almost all features in a Tilezen response.
-* **common-optional** - These are meant to be part of a common set but may not be present because they aren't relevant or because we don't have the data.
-* **optional** - These are the properties of a specific kind, or generally present across kinds but only in exceptional cases.
+* **`common`** - These layers, properties, and kinds are common across almost all features in a Tilezen response.
+  - The arrangement of features into specific layers.
+  - Special bits that make our vector tile content Tilezen, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_key`, `boundary`, and `maritime_boundary`.
+  - Fundamental properties like `name` (including localized names), `ref`, `colour`, `population`, `elevation`, `id`, and `source`.
+  - Extra fundamental properties which are light transforms of original data, including `capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, left & right names and localized names on lines, and left & right id values on lines.
+* **`common-optional`** - These are meant to be part of a common set but may not be present because they aren't relevant or because we don't have the data.
+  - Examples include `cuisine`, `operator`, `protect_class`, and `sport`.
+operator
+* **`optional`** - These are the properties of a specific kind, or generally present across kinds but only in exceptional cases.
+  - Examples include `capacity` and `covered`.
 
 ####MAJOR version increments:
 
