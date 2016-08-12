@@ -29,11 +29,7 @@ SELECT
 {% else %}
     {% filter geometry %}way{% endfilter %} AS __geometry__,
 {% endif %}
-{% if table == 'planet_osm_polygon' %}
     {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
-{% else %}
-    NULL AS mz_label_placement,
-{% endif %}
     osm_id AS __id__,
     tags->'sport' AS sport,
     tags->'religion' AS religion,
