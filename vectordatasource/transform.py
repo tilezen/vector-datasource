@@ -2892,63 +2892,25 @@ def quantize_height_round_nearest_meter(height):
     return round(height)
 
 
-def merge_building_features(ctx):
-    zoom = ctx.tile_coord.zoom
-    source_layer = ctx.params.get('source_layer')
-    start_zoom = ctx.params.get('start_zoom', 0)
-    end_zoom = ctx.params.get('end_zoom')
-    drop = ctx.params.get('drop')
-    exclusions = ctx.params.get('exclude')
-
-    assert source_layer, 'merge_building_features: missing source layer'
-
-    if zoom < start_zoom:
-        return None
-    if end_zoom is not None and zoom > end_zoom:
-        return None
-
-    layer = _find_layer(ctx.feature_layers, 'buildings')
-    if layer is None:
-        return None
-
-    quantize_height_fn = None
-    quantize_cfg = ctx.params.get('quantize')
-    if quantize_cfg:
-        quantize_fn_dotted_name = quantize_cfg.get(zoom)
-        if quantize_fn_dotted_name:
-            quantize_height_fn = resolve(quantize_fn_dotted_name)
-
+def _merge_features_by_property(features, drop_props_fn=None,
+                                update_merged_props_fn=None):
     features_by_property = {}
     skipped_features = []
-    for feature in layer['features']:
+    for feature in features:
         shape, props, fid = feature
         dims = _geom_dimensions(shape)
         if dims != _POLYGON_DIMENSION:
             skipped_features.append(feature)
             continue
 
-        if exclusions:
-            for prop in exclusions:
-                if prop in props:
-                    skipped_features.append(feature)
-                    continue
-
         orig_props = props.copy()
-
         p_id = props.pop('id', None)
-        # also drop building properties that we won't want to consider
-        # for merging. area and volume will be re-calculated afterwards
-        props.pop('area', None)
-        props.pop('volume', None)
+        if drop_props_fn:
+            props = drop_props_fn(props)
 
-        if drop:
-            for prop in drop:
-                props.pop(prop, None)
-
-        if quantize_height_fn:
-            height = props.get('height', None)
-            if height is not None:
-                props['height'] = quantize_height_fn(height)
+        if props is None:
+            skipped_features.append(feature)
+            continue
 
         frozen_props = frozenset(props.items())
         if frozen_props in features_by_property:
@@ -2978,17 +2940,73 @@ def merge_building_features(ctx):
         if p_id is not None:
             props['id'] = p_id
 
+        if update_merged_props_fn:
+            props = update_merged_props_fn(merged_shape, props)
+
+        new_features.append((merged_shape, props, fid))
+
+    new_features.extend(skipped_features)
+    return new_features
+
+
+def merge_building_features(ctx):
+    zoom = ctx.tile_coord.zoom
+    source_layer = ctx.params.get('source_layer')
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    drop = ctx.params.get('drop')
+    exclusions = ctx.params.get('exclude')
+
+    assert source_layer, 'merge_building_features: missing source layer'
+    layer = _find_layer(ctx.feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom > end_zoom:
+        return None
+
+    quantize_height_fn = None
+    quantize_cfg = ctx.params.get('quantize')
+    if quantize_cfg:
+        quantize_fn_dotted_name = quantize_cfg.get(zoom)
+        if quantize_fn_dotted_name:
+            quantize_height_fn = resolve(quantize_fn_dotted_name)
+
+    def _drop_props(props):
+        if exclusions:
+            for prop in exclusions:
+                if prop in props:
+                    return None
+
+        # also drop building properties that we won't want to consider
+        # for merging. area and volume will be re-calculated afterwards
+        props.pop('area', None)
+        props.pop('volume', None)
+
+        if drop:
+            for prop in drop:
+                props.pop(prop, None)
+
+        if quantize_height_fn:
+            height = props.get('height', None)
+            if height is not None:
+                props['height'] = quantize_height_fn(height)
+
+        return props
+
+    def _update_merged_props(merged_shape, props):
         # add the area and volume back in
         area = int(merged_shape.area)
         props['area'] = area
         height = props.get('height')
         if height is not None:
             props['volume'] = height * area
+        return props
 
-        new_features.append((merged_shape, props, fid))
-
-    new_features.extend(skipped_features)
-    layer['features'] = new_features
+    layer['features'] = _merge_features_by_property(
+        layer['features'], _drop_props, _update_merged_props)
     return layer
 
 
