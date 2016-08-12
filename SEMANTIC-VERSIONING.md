@@ -33,15 +33,18 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 
 ##### Definition of terms
 
-* **`common`** - These layers, properties, and kinds are common across almost all features in a Tilezen response.
-  - The arrangement of features into specific named layers.
-  - Special bits that make vector tile content **interoperably Tilezen**, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_key`, `boundary`, and `maritime_boundary`.
-  - Fundamental properties like `name` (including localized names), `id`, and `source` included on most every feature.
-* **`common-optional`** - These are meant to be part of a common set for one or more specific important `kind`s of features, but may not be present because they aren't relevant or because we don't have the data.
-  - Lightly transformed **interoperable Tilezen** properties based on original data values. Examples include: `capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, left & right names and localized names on lines, and left & right id values on lines.
+* **`common`** - These `layer`s, `property`s, and `kind`s are generally available across all features in a Tilezen response.
+  - Establishes basic selection of features and their arrangement into specific named layers.
+  - Core properties needed for display and labeling of features:
+    - Special bits that make vector tile content **interoperably Tilezen**, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_key`, `boundary`, and `maritime_boundary`.
+    - Fundamental properties like `name` (including localized names), `id`, and `source` included on most every feature.
+* **`common-optional`** - These are meant to be part of a common set, but may not be present because they aren't relevant or because we don't have the data (primarily feature `property`s, but could also be `layer`s).
+  - Used to refine feature selection.
+  - Lightly transformed **interoperable Tilezen** properties based on original data values. Examples include: `capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, `area`, left & right names and localized `name:*` values on lines, and left & right `id` values on lines.
   - Fundamental properties like `ref`, `colour`, `population`, `elevation`, `cuisine`, `operator`, `protect_class`, and `sport`.
-* **`optional`** - These are the properties of a specific, less important `kind`, or generally present across kinds but only in exceptional cases.
-  - Examples include `capacity` and `covered`.
+* **`optional`** - These are the properties of a specific, less important `kind`, or generally present across `kind`s but only in exceptional cases.
+  - Often used to decorate features already selected for display.
+  - Additional properties like `capacity` and `covered`.
 
 ####MAJOR version increments:
 
@@ -87,7 +90,7 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 1. **Reassign** less than 50% of existing `kind` **value** into a new `kind` value, when kind has 10,000 or more features
 1. **Reassign** more than 50% of existing `kind` **value** into a new `kind` value, when kind has less than 10,000 features
 1. **Change** of -1 to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
-1. **Adjustments** to the overall map balance (proportion of features in one layer or another, proportion of `kind`s in a single layer) by adjusting boosting of `min_zoom` values over the `kind`'s default, limiting the number of individual `kind` features in a given tile coordinate, and other means. 
+1. **Adjustments** to the overall map balance (proportion of features in one layer or another, proportion of `kind`s in a single layer) by adjusting boosting of `min_zoom` values over the `kind`'s default, limiting the number of individual `kind` features in a given tile coordinate, and other means.
 1. **Add** unpublicized `kind` **value**
 1. **Remove** unpublicized `kind` **value**
 1. **Correct** a regression in the API (to the last good version)
@@ -121,7 +124,7 @@ Tilezen has 4 primary sources:
 1. **Change** feature `kind` **value** (when upstream data source reclassifies them).
 1. **Change** feature `min_zoom` &/or `max_zoom` **values** (when area or other signal changes upstream).
 
-**NOTE:** It is possible to query the version of individual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen. Because of simplification, `id` properties are not always availabe due to feature merging.
+**NOTE:** It is possible to query the version of individual features by looking at a feature's `source` and `id` properties and performing a lookup via the source service, but that is beyond the scope of Tilezen. Because of simplification, `id` properties are not always available due to feature merging.
 
 ### LANGUAGES are not versioned
 
