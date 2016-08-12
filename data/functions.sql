@@ -92,9 +92,9 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 --
 CREATE OR REPLACE FUNCTION mz_get_rel_networks(
   way_id bigint)
-RETURNS text AS $$
+RETURNS text[] AS $$
 SELECT
-  string_agg(unnested, '|')
+  array_agg(unnested)
 FROM (
   SELECT
     unnest(tags) AS unnested

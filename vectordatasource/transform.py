@@ -3721,8 +3721,6 @@ def choose_most_important_network(shape, properties, fid, zoom):
     networks = properties.pop('mz_networks', None)
 
     if networks is not None:
-        networks = networks.split('|')
-
         # take the list and make triples out of it
         itr = iter(networks)
         triples = zip(itr, itr, itr)
