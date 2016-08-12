@@ -45,6 +45,11 @@ filters:
     min_zoom: 15
     output: {kind: stop_area}
   - filter:
+      public_transport: [stop_position, tram_stop, stop]
+    min_zoom: 13
+    output:
+      kind: {col: public_transport}
+  - filter:
       railway: [platform, station]
     min_zoom: 15
     output:
