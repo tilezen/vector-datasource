@@ -16,4 +16,6 @@ assert_has_feature(
 assert_has_feature(
     16, 18022, 25522, 'roads',
     { 'kind': 'highway', 'network': 'US:I', 'id': 51388984,
-      'shield_text': '77' })
+      'shield_text': '77',
+      'all_networks': ['US:I', 'US:I', 'US:US', 'US:US'],
+      'all_shield_texts': ['77', '81', '11', '52'] })

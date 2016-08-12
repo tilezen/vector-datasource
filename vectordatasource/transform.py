@@ -3730,8 +3730,15 @@ def choose_most_important_network(shape, properties, fid, zoom):
             def network_key(t):
                 return network_importance(*t)
 
-            route_type, network, ref = sorted(triples, key=network_key)[0]
+            networks = sorted(triples, key=network_key)
+
+            # expose first network as network/shield_text
+            route_type, network, ref = networks[0]
             properties['network'] = network
             properties['shield_text'] = ref
+
+            # expose all networks as well.
+            properties['all_networks'] = [n[1] for n in networks]
+            properties['all_shield_texts'] = [n[2] for n in networks]
 
     return (shape, properties, fid)
