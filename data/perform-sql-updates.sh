@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # apply schema updates first, some functions now depend on it.
 echo "Creating custom schema..."
 psql $@ -f schema.sql

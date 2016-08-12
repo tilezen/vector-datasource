@@ -1,44 +1,26 @@
 UPDATE
   planet_osm_polygon
-  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_polygon.*)
-  WHERE
-    (barrier IN ('city_wall', 'retaining_wall', 'fence') OR
-     historic = 'citywalls' OR
-     man_made = 'snow_fence' OR
-     waterway = 'dam' OR
-     boundary = 'aboriginal_lands' OR
-     tags->'boundary:type' = 'aboriginal_lands')
-    AND COALESCE(mz_boundary_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_boundaries(planet_osm_polygon.*), 999);
-
-UPDATE
-  planet_osm_polygon
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*)
   WHERE
-    (barrier = 'toll_booth' OR
-     highway IN ('services', 'rest_area') OR
-     tourism = 'camp_site' OR
-     man_made = 'windmill' OR
-     man_made = 'lighthouse' OR
-     leisure = 'garden')
+    (tags -> 'man_made' IN ('wastewater_plant', 'water_works', 'works') OR
+     tags -> 'leisure' IN ('golf_course', 'nature_reserve', 'park', 'pitch') OR
+     tags -> 'amenity' = 'grave_yard' OR
+     tags -> 'landuse' IN ('cemetery', 'farm', 'forest', 'military', 'quarry', 'recreation_ground', 'village_green', 'winter_sports', 'wood') OR
+     tags -> 'boundary' IN ('national_park', 'protected_area') OR
+     tags -> 'power' IN ('plant', 'substation') OR
+     tags -> 'natural' IN ('wood', 'forest'))
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_polygon.*), 999);
 
 UPDATE
   planet_osm_polygon
   SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
   WHERE
-    (highway IN  ('services', 'rest_area') OR
-     barrier IN ('city_wall', 'retaining_wall', 'fence') OR
-     historic = 'citywalls' OR
-     man_made = 'snow_fence' OR
-     waterway = 'dam' OR
-     tourism = 'camp_site' OR
-     leisure = 'garden' OR
-     "natural" IN ('forest', 'park'))
+    (tags -> 'man_made' IN ('wastewater_plant', 'water_works', 'works') OR
+     tags -> 'leisure' IN ('golf_course', 'nature_reserve', 'park', 'pitch') OR
+     tags -> 'natural' IN ('forest', 'park', 'wood') OR
+     tags -> 'amenity' = 'grave_yard' OR
+     tags -> 'landuse' IN ('cemetery', 'farm', 'forest', 'military', 'quarry', 'recreation_ground', 'village_green', 'winter_sports', 'wood') OR
+     tags -> 'boundary' IN ('national_park', 'protected_area') OR
+     tags -> 'power' IN ('plant', 'substation') OR
+     tags -> 'natural' IN ('wood', 'forest'))
     AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
-
-UPDATE
-  planet_osm_polygon
-  SET mz_building_min_zoom = mz_calculate_min_zoom_buildings(planet_osm_polygon.*)
-  WHERE
-    tags->'location' = 'underground'
-    AND COALESCE(mz_building_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_buildings(planet_osm_polygon.*), 999);

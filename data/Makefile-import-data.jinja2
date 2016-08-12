@@ -1,0 +1,36 @@
+all: shapefiles import
+
+import: import-shapefiles.sh
+
+import-shapefiles.sh: {{ tgt_shapefile_shps }}
+	@> import-shapefiles.sh
+	@chmod +x import-shapefiles.sh
+	@echo "#!/bin/sh" >> import-shapefiles.sh
+	@echo "shp2pgsql | grep RELEASE: | awk '{split(\$$2,v,\".\"); if (v[1] < 2) { exit 1; }}'" >> import-shapefiles.sh
+	@echo "if [ \$$? -ne 0 ]; then echo 'Your version of shp2pgsql is too old, we need at least version 2 or later.'; exit 1; fi" >> import-shapefiles.sh
+	@echo "set -e" >> import-shapefiles.sh
+{% for shapefile in shapefiles %}
+	@echo 'shp2pgsql -dID -s 3857 -g the_geom {{ shapefile['tgt_shp'] }} {{ shapefile['name'] }}' >> import-shapefiles.sh
+{% endfor %}
+	@echo './import-shapefiles.sh | psql -d <database>'
+
+shapefiles: shapefiles.tar.gz
+
+shapefiles.tar.gz:
+	wget 'http://s3.amazonaws.com/{{ bucket }}/{{ datestamp }}/shapefiles.tar.gz'
+
+{{ tgt_shapefile_zips }}: shapefiles.tar.gz
+	tar xzf shapefiles.tar.gz
+	touch {{ tgt_shapefile_zips }}
+
+{% for shapefile in shapefiles %}
+{{ shapefile['tgt_shp'] }}: {{ shapefile['tgt_zip'] }}
+	unzip -o {{ shapefile['tgt_zip'] }}
+	test -e {{ shapefile['tgt_shp'] }}
+	touch {{ shapefile['tgt_shp'] }}
+{% endfor %}
+
+clean:
+	rm -rf shapefiles.tar.gz {{ tgt_shapefile_zips }} {{ tgt_shapefile_wildcards }}
+
+.PHONY: all shapefiles import clean

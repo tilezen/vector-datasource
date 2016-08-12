@@ -7,11 +7,12 @@
 # Menlo Park   http://www.openstreetmap.org/node/150981209
 assert_has_feature(
     11, 328, 793, 'places',
-    { 'kind': {'city', 'town'},
+    { 'kind': 'locality',
+      'kind_detail': {'city', 'town'},
       'population': int })
 
 # Sacramento, CA http://www.openstreetmap.org/node/150959789
 assert_has_feature(
-    7, 20, 49, 'places',
-    { 'kind': 'city', 'state_capital': True,
+    8, 41, 98, 'places',
+    { 'kind': 'locality', 'kind_detail': 'city', 'region_capital': True,
       'population': int })

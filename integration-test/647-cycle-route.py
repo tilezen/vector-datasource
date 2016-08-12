@@ -3,17 +3,17 @@
 # http://www.openstreetmap.org/relation/32386
 assert_has_feature(
     16, 10487, 25327, 'roads',
-    { 'kind': 'major_road', 'cycleway': 'lane', 'network': 'lcn', 'bicycle_network': 'lcn' })
+    { 'kind': 'major_road', 'cycleway': 'lane', 'bicycle_network': 'lcn' })
 
 # Way: King Street (8920394) http://www.openstreetmap.org/way/8920394
 assert_has_feature(
     16, 10487, 25329, 'roads',
-    { 'kind': 'major_road', 'cycleway_left': 'lane', 'network': 'lcn', 'bicycle_network': 'lcn'})
+    { 'kind': 'major_road', 'cycleway_left': 'lane', 'bicycle_network': 'lcn'})
 
 # Way: King Street (397270776) http://www.openstreetmap.org/way/397270776
 assert_has_feature(
     16, 10487, 25329, 'roads',
-    { 'kind': 'major_road', 'cycleway_right': 'lane', 'network': 'lcn', 'bicycle_network': 'lcn'})
+    { 'kind': 'major_road', 'cycleway_right': 'lane', 'bicycle_network': 'lcn'})
 
 # Way: Clara-Immerwahr-Straße (287167007) http://www.openstreetmap.org/way/287167007
 assert_has_feature(
@@ -92,7 +92,12 @@ assert_has_feature(
     16, 10484, 25327, 'roads',
     { 'id': 28841123, 'is_bicycle_related': True })
 
-# Way: 367767273 http://www.openstreetmap.org/way/367767273
+# Way: 301442215 http://www.openstreetmap.org/way/301442215
 assert_has_feature(
-    16, 10479, 25331, 'roads',
-    { 'id': 367767273, 'is_bicycle_related': True })
+    16, 34748, 22664, 'roads',
+    { 'id': 301442215, 'is_bicycle_related': True })
+
+# Way: 428306786 http://www.openstreetmap.org/way/428306786
+assert_has_feature(
+    16, 18649, 25417, 'roads',
+    { 'id': 428306786, 'is_bicycle_related': True })

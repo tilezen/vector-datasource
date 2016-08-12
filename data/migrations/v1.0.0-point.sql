@@ -2,30 +2,13 @@ UPDATE
   planet_osm_point
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
   WHERE
-    (barrier IN ('toll_booth', 'gate') OR
-     highway IN ('services', 'rest_area') OR
-     tourism = 'camp_site' OR
-     man_made IN ('lighthouse', 'windmill') OR
-     leisure = 'garden' OR
-     public_transport IN ('stop_position', 'tram_stop', 'stop') OR
-     railway IN ('halt', 'tram_stop', 'stop', 'station'))
+    (tags -> 'man_made' IN ('wastewater_plant', 'water_works', 'works') OR
+     tags -> 'leisure' IN ('golf_course', 'nature_reserve', 'park', 'pitch') OR
+     tags -> 'landuse' IN ('cemetery', 'farm', 'forest', 'military', 'quarry', 'recreation_ground', 'village_green', 'winter_sports', 'wood') OR
+     tags -> 'amenity' = 'grave_yard' OR
+     tags -> 'boundary' IN ('national_park', 'protected_area') OR
+     tags -> 'power' IN ('plant', 'substation') OR
+     tags -> 'natural' IN ('wood', 'forest') OR
+     tags -> 'public_transport' IN ('stop_position', 'tram_stop', 'stop') OR
+     tags -> 'railway' IN ('halt', 'tram_stop', 'stop', 'station'))
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_point.*), 999);
-
-UPDATE
-  planet_osm_point
-  SET mz_places_min_zoom = mz_calculate_min_zoom_places(planet_osm_point.*)
-  WHERE
-    place = 'country' AND "name" IS NOT NULL;
-
-UPDATE
-  planet_osm_point
-  SET mz_places_min_zoom = NULL
-  WHERE
-    place IN ('borough', 'suburb', 'quarter') AND name IS NOT NULL;
-
-UPDATE
-  planet_osm_point
-  SET mz_places_min_zoom = mz_calculate_min_zoom_places(planet_osm_point.*)
-  WHERE
-    (highway = 'gate' OR amenity = 'picnic_site')
-    AND COALESCE(mz_places_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_places(planet_osm_point.*), 999);

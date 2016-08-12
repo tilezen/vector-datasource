@@ -1,21 +1,24 @@
 SELECT
-    name,
+    tags->'name' AS name,
+    'openstreetmap.org' AS source,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     min_zoom,
     way_area AS area,
-    cuisine,
-    religion,
-    sport,
+    tags->'protect_class' AS protect_class,
+    tags->'operator' AS operator,
+    tags->'cuisine' AS cuisine,
+    tags->'religion' AS religion,
+    tags->'sport' AS sport,
     (transit_routes).score AS mz_transit_score,
     (transit_routes).root_relation_id AS mz_transit_root_relation_id,
     (transit_routes).train_routes AS train_routes,
     (transit_routes).subway_routes AS subway_routes,
     (transit_routes).light_rail_routes AS light_rail_routes,
     (transit_routes).tram_routes AS tram_routes,
-    ref,
-    attraction,
-    zoo,
+    tags->'ref' AS ref,
+    tags->'attraction' AS attraction,
+    tags->'zoo' AS zoo,
     tags->'exit_to' AS exit_to,
     %#tags AS tags,
     mz_properties
@@ -23,17 +26,13 @@ SELECT
 FROM (
 
   SELECT
-    name, way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
+    way, 0::real AS way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
-    cuisine, religion, sport, ref,
-    aerialway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
-    tags->'attraction' AS attraction,
-    tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes_and_score function is pretty
     -- expensive, so we only want to calculate it when we actually need the
     -- result.
     CASE
-      WHEN railway='station' AND osm_id > 0
+      WHEN tags ? 'railway' AND tags->'railway'='station' AND osm_id > 0
         THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
       ELSE NULL
     END AS transit_routes,
@@ -44,7 +43,7 @@ FROM (
     planet_osm_point
 
   WHERE
-    {{ bounds['point']|bbox_filter('way') }}
+    {{ bounds['point']|bbox_filter('way',3857) }}
 {% if zoom >= 16 %}
     AND mz_poi_min_zoom IS NOT NULL
 {% else %}
@@ -54,17 +53,13 @@ FROM (
 UNION ALL
 
   SELECT
-    name, way, way_area, mz_poi_min_zoom AS min_zoom,
+    way, way_area, mz_poi_min_zoom AS min_zoom,
     osm_id,
-    cuisine, religion, sport, ref,
-    aerialway, amenity, barrier, craft, emergency, highway, historic, leisure, lock, man_made, "natural", office, power, railway, shop, tourism, waterway,
-    tags->'attraction' AS attraction,
-    tags->'zoo' AS zoo,
     -- note: the mz_calculate_transit_routes_and_score function is pretty
     -- expensive, so we only want to calculate it when we actually need the
     -- result.
     CASE
-      WHEN railway='station'
+      WHEN tags ? 'railway' AND tags->'railway'='station'
         THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
@@ -75,7 +70,7 @@ UNION ALL
     planet_osm_polygon
 
   WHERE
-    {{ bounds['point']|bbox_filter('way') }}
+    {{ bounds['point']|bbox_filter('way',3857) }}
 {% if zoom >= 16 %}
     AND mz_poi_min_zoom IS NOT NULL
 {% else %}

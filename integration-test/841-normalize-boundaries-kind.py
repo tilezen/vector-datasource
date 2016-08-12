@@ -43,52 +43,52 @@ assert_has_feature(
 # Admin-1 boundary
 assert_has_feature(
     7, 75, 70, 'boundaries',
-    {'id': 613, 'kind': 'region', 'kind_detail': '4'})
+    {'id': int, 'kind': 'region', 'kind_detail': '4'})
 # Admin-1 statistical boundary
 assert_has_feature(
     7, 101, 56, 'boundaries',
-    {'id': 694, 'kind': 'region', 'kind_detail': '4'})
+    {'id': int, 'kind': 'region', 'kind_detail': '4'})
 # Admin-1 statistical meta bounds
 assert_has_feature(
     7, 26, 52, 'boundaries',
-    {'id': 1178, 'kind': 'region', 'kind_detail': '4'})
+    {'id': int, 'kind': 'region', 'kind_detail': '4'})
 
 # Admin-1 region boundary
 assert_has_feature(
     7, 99, 57, 'boundaries',
-    {'id': 1232, 'kind': 'macroregion', 'kind_detail': '3'})
+    {'id': int, 'kind': 'macroregion', 'kind_detail': '3'})
 
 # Disputed (please verify)
 assert_has_feature(
     7, 39, 71, 'boundaries',
-    {'id': 20, 'kind': 'disputed', 'kind_detail': '2'})
+    {'id': int, 'kind': 'disputed', 'kind_detail': '2'})
 
 # Indefinite (please verify)
 assert_has_feature(
     7, 20, 44, 'boundaries',
-    {'id': 1, 'kind': 'indefinite', 'kind_detail': '2'})
+    {'id': int, 'kind': 'indefinite', 'kind_detail': '2'})
 
 # Indeterminant frontier
 assert_has_feature(
     7, 91, 50, 'boundaries',
-    {'id': 434, 'kind': 'indeterminate', 'kind_detail': '2'})
+    {'id': int, 'kind': 'indeterminate', 'kind_detail': '2'})
 
 # International boundary (verify)
 assert_has_feature(
     7, 67, 37, 'boundaries',
-    {'id': 2, 'kind': 'country', 'kind_detail': '2'})
+    {'id': int, 'kind': 'country', 'kind_detail': '2'})
 
 # Lease limit
 assert_has_feature(
     7, 86, 45, 'boundaries',
-    {'id': 437, 'kind': 'lease_limit', 'kind_detail': '2'})
+    {'id': int, 'kind': 'lease_limit', 'kind_detail': '2'})
 
 # Line of control (please verify)
 assert_has_feature(
     7, 90, 50, 'boundaries',
-    {'id': 32, 'kind': 'line_of_control', 'kind_detail': '2'})
+    {'id': int, 'kind': 'line_of_control', 'kind_detail': '2'})
 
 # Overlay limit
 assert_has_feature(
     7, 109, 49, 'boundaries',
-    {'id': 436, 'kind': 'overlay_limit', 'kind_detail': '2'})
+    {'id': int, 'kind': 'overlay_limit', 'kind_detail': '2'})

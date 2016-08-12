@@ -2,7 +2,7 @@
 # Waterworld in Concord
 assert_has_feature(
     13, 1318, 3160, 'landuse',
-    { 'kind': 'water_park', 'sort_key': 106 })
+    { 'kind': 'water_park', 'sort_key': 107 })
 
 assert_has_feature(
     13, 1318, 3160, 'pois',
@@ -192,7 +192,7 @@ assert_has_feature(
 
 assert_has_feature(
     16, 10479, 25338, 'landuse',
-    { 'kind': 'dog_park', 'sort_key': 96 })
+    { 'kind': 'dog_park', 'sort_key': 97 })
 
 
 #https://www.openstreetmap.org/relation/6328943
@@ -341,7 +341,7 @@ assert_has_feature(
 # Golden Gate Park, SF
 assert_has_feature(
     16, 10474, 25332, 'landuse',
-    { 'kind': 'picnic_site', 'sort_key': 107 })
+    { 'kind': 'picnic_site', 'sort_key': 108 })
 
 assert_has_feature(
     16, 10474, 25332, 'pois',

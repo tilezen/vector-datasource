@@ -2764,6 +2764,34 @@ def add_uic_ref(shape, properties, fid, zoom):
         return shape, properties, fid
 
 
+def _freeze(thing):
+    """
+    Freezes something to a hashable item.
+    """
+
+    if isinstance(thing, dict):
+        return frozenset([(_freeze(k), _freeze(v)) for k, v in thing.items()])
+
+    elif isinstance(thing, list):
+        return tuple([_freeze(i) for i in thing])
+
+    return thing
+
+
+def _thaw(thing):
+    """
+    Reverse of the freeze operation.
+    """
+
+    if isinstance(thing, frozenset):
+        return dict([_thaw(i) for i in thing])
+
+    elif isinstance(thing, tuple):
+        return list([_thaw(i) for i in thing])
+
+    return thing
+
+
 def merge_features(ctx):
     """
     Merge (linear) features with the same properties together, attempting to
@@ -2814,7 +2842,7 @@ def merge_features(ctx):
 
         # because dicts are mutable and therefore not hashable, we have to
         # transform their items into a frozenset instead.
-        frozen_props = frozenset(props.items())
+        frozen_props = _freeze(props)
 
         if frozen_props in features_by_property:
             features_by_property[frozen_props][2].append(shape)
@@ -2833,7 +2861,7 @@ def merge_features(ctx):
         multi = MultiLineString(list_of_linestrings)
 
         # thaw the frozen properties to use in the new feature.
-        props = dict(frozen_props)
+        props = _thaw(frozen_props)
 
         # restore any 'id' property.
         if p_id is not None:
@@ -3622,3 +3650,123 @@ def simplify_and_clip(ctx):
             simplified_features.append(simplified_feature)
 
         feature_layer['features'] = simplified_features
+
+
+_lookup_operator_rules = {
+                        'United States National Park Service': (
+                            'National Park Service',
+                            'US National Park Service',
+                            'U.S. National Park Service',
+                            'US National Park service'),
+                        'United States Forest Service': (
+                            'US Forest Service',
+                            'U.S. Forest Service',
+                            'USDA Forest Service',
+                            'United States Department of Agriculture',
+                            'US National Forest Service',
+                            'United State Forest Service',
+                            'U.S. National Forest Service'),
+                        'National Parks & Wildife Service NSW': (
+                            'Department of National Parks NSW',
+                            'Dept of NSW National Parks',
+                            'Dept of National Parks NSW',
+                            'Department of National Parks NSW',
+                            'NSW National Parks',
+                            'NSW National Parks & Wildlife Service',
+                            'NSW National Parks and Wildlife Service',
+                            'NSW Parks and Wildlife Service',
+                            'NSW Parks and Wildlife Service (NPWS)',
+                            'National Parks and Wildlife NSW',
+                            'National Parks and Wildlife Service NSW')}
+
+normalized_operator_lookup = {}
+for normalized_operator, variants in _lookup_operator_rules.items():
+    for variant in variants:
+        normalized_operator_lookup[variant] = normalized_operator
+
+
+def normalize_operator_values(shape, properties, fid, zoom):
+    """
+    There are many operator-related tags, including 'National Park Service',
+    'U.S. National Park Service', 'US National Park Service' etc that refer
+    to the same operator tag. This function promotes a normalized value
+    for all alternatives in specific operator values.
+
+    See https://github.com/tilezen/vector-datasource/issues/927.
+    """
+
+    operator = properties.get('operator', None)
+
+    if operator is not None:
+        normalized_operator = normalized_operator_lookup.get(operator, None)
+        if normalized_operator:
+            properties['operator'] = normalized_operator
+            return (shape, properties, fid)
+
+    return (shape, properties, fid)
+
+
+def network_importance(route_type, network, ref):
+    """
+    Returns an integer representing the numeric importance of the network,
+    where lower numbers are more important.
+
+    This is to handle roads which are part of many networks, and ensuring
+    that the most important one is displayed. For example, in the USA many
+    roads can be part of both interstate (US:I) and "US" (US:US) highways,
+    and possibly state ones as well (e.g: US:NY:xxx). In addition, there
+    are international conventions around the use of "CC:national" and
+    "CC:regional:*" where "CC" is an ISO 2-letter country code.
+
+    Here we treat national-level roads as more important than regional or
+    lower, and assume that the deeper the network is in the hierarchy, the
+    less important the road. Roads with lower "ref" numbers are considered
+    more important than higher "ref" numbers, if they are part of the same
+    network.
+    """
+
+    if network == 'US:I' or ':national' in network:
+        network_code = 1
+    elif network == 'US:US' or ':regional' in network:
+        network_code = 2
+    else:
+        network_code = len(network.split(':')) + 3
+
+    try:
+        ref = max(int(ref), 0)
+    except ValueError:
+        ref = 0
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def choose_most_important_network(shape, properties, fid, zoom):
+    """
+    Use the `network_importance` function to select any road networks from
+    `mz_networks` and take the most important one.
+    """
+
+    networks = properties.pop('mz_networks', None)
+
+    if networks is not None:
+        # take the list and make triples out of it
+        itr = iter(networks)
+        triples = zip(itr, itr, itr)
+        triples = [t for t in triples if t[0] == 'road']
+
+        if len(triples) > 0:
+            def network_key(t):
+                return network_importance(*t)
+
+            networks = sorted(triples, key=network_key)
+
+            # expose first network as network/shield_text
+            route_type, network, ref = networks[0]
+            properties['network'] = network
+            properties['shield_text'] = ref
+
+            # expose all networks as well.
+            properties['all_networks'] = [n[1] for n in networks]
+            properties['all_shield_texts'] = [n[2] for n in networks]
+
+    return (shape, properties, fid)

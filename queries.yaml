@@ -68,6 +68,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.normalize_operator_values
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
@@ -88,6 +89,7 @@ layers:
       - vectordatasource.transform.normalize_aerialways
       - vectordatasource.transform.normalize_cycleway
       - vectordatasource.transform.add_is_bicycle_related
+      - vectordatasource.transform.choose_most_important_network
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
@@ -115,7 +117,7 @@ layers:
     area-inclusion-threshold: 1
   pois:
     template: pois.jinja2
-    start_zoom: 9
+    start_zoom: 2
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -134,6 +136,7 @@ layers:
       - vectordatasource.transform.height_to_meters
       - vectordatasource.transform.pois_capacity_int
       - vectordatasource.transform.elevation_to_meters
+      - vectordatasource.transform.normalize_operator_values
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
@@ -464,9 +467,9 @@ post_process:
   - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: water
-      start_zoom: 9
+      start_zoom: 3
       where: >-
-        'label_placement' not in properties and kind in ('bay', 'strait', 'fjord')
+        'label_placement' not in properties and kind in ('sea', 'bay', 'strait', 'fjord')
   - fn: vectordatasource.transform.generate_label_features
     params:
       source_layer: earth
@@ -565,7 +568,7 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
-      properties: [name, ref, network]
+      properties: [name, ref, network, shield_text]
       where: >-
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
@@ -578,7 +581,7 @@ post_process:
       source_layer: roads
       start_zoom: 7
       end_zoom: 10
-      properties: [name, network]
+      properties: [name, network, shield_text]
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways

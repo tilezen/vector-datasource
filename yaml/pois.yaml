@@ -13,16 +13,20 @@ filters:
     output: {kind: hospital}
   - filter:
       natural: [peak, volcano]
-    min_zoom: CASE WHEN mz_to_float_meters("ele") > 4000 THEN 9
-      WHEN mz_to_float_meters("ele") > 3000 THEN 10
-      WHEN mz_to_float_meters("ele") > 2000 THEN 11
-      WHEN mz_to_float_meters("ele") > 1000 THEN 12
+    min_zoom: CASE WHEN mz_to_float_meters(tags->'ele') > 4000 THEN 9
+      WHEN mz_to_float_meters(tags->'ele') > 3000 THEN 10
+      WHEN mz_to_float_meters(tags->'ele') > 2000 THEN 11
+      WHEN mz_to_float_meters(tags->'ele') > 1000 THEN 12
       ELSE 13
       END
     output:
       kind: {col: natural}
       elevation: {col: ele}
-  - filter: {railway: station}
+  - filter: 
+      railway: station
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 10
     output:
       kind: station
@@ -177,10 +181,9 @@ filters:
     min_zoom: LEAST(zoom + 3.98, 17)
     output:
       kind:
-        expr: CASE WHEN sport IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
+        expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
       sport:
-        expr: CASE WHEN sport IN ('fitness', 'gym') THEN NULL ELSE sport END
-    extra_columns: [sport]
+        expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN NULL ELSE tags->'sport' END
   - filter: {leisure: beach_resort}
     min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
     output: {kind: beach_resort }
@@ -204,13 +207,12 @@ filters:
       any:
         - {waterway: waterfall}
         - {natural: waterfall}
-    min_zoom: CASE WHEN mz_to_float_meters("height") < 10 THEN 15
-      WHEN mz_to_float_meters("height") < 50 THEN 14
-      WHEN mz_to_float_meters("height") < 300 THEN 13
-      WHEN mz_to_float_meters("height") >= 300 THEN 12
+    min_zoom: CASE WHEN mz_to_float_meters(tags->'height') < 10 THEN 15
+      WHEN mz_to_float_meters(tags->'height') < 50 THEN 14
+      WHEN mz_to_float_meters(tags->'height') < 300 THEN 13
+      WHEN mz_to_float_meters(tags->'height') >= 300 THEN 12
       ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       14), 12) END
-    extra_columns: [height]
     output: {kind: waterfall, height: {col: height}}
   - filter: {leisure: garden}
     min_zoom: GREATEST(12, LEAST(zoom, 16))
@@ -231,11 +233,11 @@ filters:
     min_zoom: GREATEST(13, LEAST(zoom + 2.5, 16))
     output: {kind: fort }
   - filter: {man_made: windmill}
-    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+    min_zoom: CASE WHEN tags ? 'tourism' AND tags->'tourism' = 'attraction' THEN 14
       ELSE 15 END
     output: {kind: windmill}
   - filter: {man_made: lighthouse}
-    min_zoom: CASE WHEN tourism IN ('attraction') THEN 14
+    min_zoom: CASE WHEN tags ? 'tourism' AND tags->'tourism' = 'attraction' THEN 14
       ELSE 15 END
     output: {kind: lighthouse}
   - filter:
@@ -317,7 +319,11 @@ filters:
       kind: station
       state: {col: tags->state}
   - filter:
-      railway: [halt, tram_stop, stop]
+      railway: [halt, stop, tram_stop]
+# to work around overwriting when using the same key twice
+      any:
+        historic: false
+        all: {historic: 'no'}
     min_zoom: 13
     output:
       kind: {col: railway}
@@ -516,13 +522,11 @@ filters:
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {expr: "covered = 'yes'"}
+      covered: {expr: "tags ? 'covered' and tags->'covered' = 'yes'"}
       fee: {expr: "(tags ? 'fee' and tags->'fee' not in ('no', 'Free', 'free', '0', 'No', 'none'))"}
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
       surveillance: {expr: "(tags ? 'surveillance' and tags->'surveillance' not in ('no', 'none'))"}
-    extra_columns:
-      - covered
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output: {kind: cycle_barrier}
@@ -665,9 +669,107 @@ filters:
     output: {kind: picnic_site}
   - filter: {highway: services}
     min_zoom: 11
-    output:
+    output: 
       kind: service_area
   - filter: {highway: rest_area}
     min_zoom: 11
     output:
       kind: rest_area
+  - filter: {landuse: cemetery}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: cemetery
+  - filter: {amenity: grave_yard}
+    min_zoom: GREATEST( LEAST(zoom + 3, 17), 13)
+    output:
+      kind: grave_yard
+  - filter: {landuse: farm}
+    min_zoom: 15
+    output:
+      kind: farm
+  - filter: 
+      landuse: forest
+      protect_class: '6'
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 7)
+    output:
+      kind: forest
+  - filter: {landuse: forest}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output:
+      kind: forest
+  - filter: {natural: forest}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: natural_forest
+  - filter: {leisure: golf_course}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: golf_course
+  - filter: {landuse: military}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 8)
+    output:
+      kind: military
+  - filter: {boundary: national_park}
+    min_zoom: LEAST(zoom + 3.5, 10)
+    output:
+      kind: national_park
+  - filter: {leisure: nature_reserve}
+    min_zoom: LEAST(zoom + 5, 10)
+    output:
+      kind: nature_reserve
+  - filter: {leisure: park}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output:
+      kind: park
+  - filter: {power: plant}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: plant
+  - filter: {leisure: pitch}
+    min_zoom: 16
+    output:
+      kind: pitch
+  - filter: {boundary: protected_area}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 7)
+    output:
+      kind: protected_area
+  - filter: {landuse: quarry}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: quarry
+  - filter: {landuse: recreation_ground}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: recreation_ground
+  - filter: {power: substation}
+    min_zoom: 15
+    output:
+      kind: substation
+  - filter: {landuse: village_green}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: village_green
+  - filter: {man_made: wastewater_plant}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: wastewater_plant
+  - filter: {man_made: water_works}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: water_works
+  - filter: {landuse: winter_sports}
+    min_zoom: GREATEST( LEAST(zoom + 1, 13), 10)
+    output:
+      kind: winter_sports
+  - filter: {landuse: wood}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output:
+      kind: wood
+  - filter: {natural: wood}
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 12)
+    output:
+      kind: natural_wood
+  - filter: {man_made: works}
+    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    output:
+      kind: works

@@ -2,6 +2,8 @@
 
 The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](http://www.openstreetmap.org) and other open data projects, updated daily.
 
+[![Gitter](https://badges.gitter.im/tilezen/tilezen-chat.svg)](https://gitter.im/tilezen/tilezen-chat?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 ### Quick links
 
 * [Documentation for Mapzen Vector Tile service](https://mapzen.com/documentation/vector-tiles/)

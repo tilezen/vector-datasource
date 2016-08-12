@@ -5,11 +5,17 @@ assert_has_feature(
     {"kind": "highway", "highway": "motorway", "id": 167952621,
      "name": "Presidio Pkwy.", "is_tunnel": True, "sort_key": 333})
 
-# http://www.openstreetmap.org/way/89912879
+# http://www.openstreetmap.org/way/259492762
 assert_has_feature(
-    16, 19829, 24234, "roads",
-    {"kind": "major_road", "highway": "trunk", "id": 89912879,
-     "name": "Sullivan Square Underpass", "is_tunnel": True, "sort_key": 331})
+    16, 19267, 24634, "roads",
+    {"kind": "major_road", "highway": "trunk", "id": 259492762,
+     "name": "Raymond Blvd.", "is_tunnel": True, "sort_key": 331})
+
+# http://www.openstreetmap.org/way/277441866
+assert_has_feature(
+    16, 17563, 25792, "roads",
+    {"kind": "major_road", "highway": "trunk", "id": 277441866,
+     "name": "Gatlinburg Spur Road (north)", "is_tunnel": True, "sort_key": 331})
 
 #https://www.openstreetmap.org/way/117837633
 assert_has_feature(
