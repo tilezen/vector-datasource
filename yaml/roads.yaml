@@ -51,7 +51,7 @@ global:
           CASE WHEN tags->'crossing' <> 'no' THEN tags->'crossing' END
       sidewalk: {col: tags->sidewalk}
   - &osm_network_from_relation
-      network: {expr: "mz_get_rel_network(osm_id)"}
+      mz_networks: {expr: "mz_get_rel_networks(osm_id)"}
   - &osm_network_from_tags
       network: {col: tags->network}
   - &osm_piste_properties

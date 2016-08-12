@@ -837,13 +837,14 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `source`: `openstreetmap` or `naturalearthdata.com`
 * `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
-* `ref`: Used for road shields. Related, see `symbol` for pistes.
+* `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see the common optional properties `network` and `shield_text`. Related, see `symbol` for pistes.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_key` is adjusted to realistically model bridge, tunnel, and layer ordering.
 
 #### Road properties (common optional):
 
 * `aerialway`: See kind list below.
 * `aeroway`: See kind list below.
+* `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
 * `cycleway`: `cycleway` tag from feature. If no `cycleway` tag is present but `cycleway:both` exists, we source from that tag instead.
 * `cycleway_left`: `cycleway_left` tag from feature
@@ -857,13 +858,14 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `is_tunnel`: `true` if the road is part of a tunnel. The property will not be present if the road is not part of a tunnel.
 * `leisure`: See kind list below.
 * `man_made`: See kind list below.
-* `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections.
+* `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
 * `oneway_bicycle`: `oneway:bicycle` tag from feature
 * `oneway`: `yes` or `no`
 * `piste_type`: See kind list below.
 * `railway`: the original OSM railway tag value
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
+* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
 * `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 * `kind_detail`: normalized values describing the kind value, see below.

@@ -83,24 +83,33 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
--- mz_get_rel_network returns a network tag, or NULL, for a
--- given way ID.
+-- mz_get_rel_networks returns a list of triples of route type,
+-- network and ref tags, or NULL, for a given way ID.
 --
 -- it does this by joining onto the relations slim table, so it
 -- won't work if you dropped the slim tables, or didn't use slim
 -- mode in osm2pgsql.
 --
-CREATE OR REPLACE FUNCTION mz_get_rel_network(
+CREATE OR REPLACE FUNCTION mz_get_rel_networks(
   way_id bigint)
-RETURNS text AS $$
-BEGIN
-  RETURN mz_first_dedup(ARRAY(
-    SELECT mz_rel_get_tag(tags, 'network')
-    FROM planet_osm_rels
-    WHERE parts && ARRAY[way_id]
-      AND parts[way_off+1:rel_off] && ARRAY[way_id]));
-END;
-$$ LANGUAGE plpgsql STABLE;
+RETURNS text[] AS $$
+SELECT
+  array_agg(unnested)
+FROM (
+  SELECT
+    unnest(tags) AS unnested
+  FROM (
+    SELECT
+      hstore(tags)->ARRAY['route','network','ref'] AS tags
+    FROM
+      planet_osm_rels
+    WHERE
+      parts && ARRAY[way_id] AND
+      parts[way_off+1:rel_off] && ARRAY[way_id] AND
+      hstore(tags) ?& ARRAY['route','network','ref']
+    ) inner1
+  ) inner2;
+$$ LANGUAGE sql STABLE;
 
 -- adds the prefix onto every key in an hstore value
 CREATE OR REPLACE FUNCTION mz_hstore_add_prefix(
