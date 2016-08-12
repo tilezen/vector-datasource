@@ -85,6 +85,7 @@ operator
 1. **Change** `optional` layer **name**
 1. **Remove** `optional` layer
 1. **Additional merging** within `kind` **values** at zooms 12 or less by removing `common`, `common-optional`, and `optional` **properties** or other method
+1. **Reassign** an existing `kind` **value** to an another existing `kind` value when they are equivalent (e.g. fixing the spelling of a value coming from an upstream data source)
 1. **Reassign** less than 50% of existing `kind` **value** into a new `kind` value, when kind has 10,000 or more features
 1. **Reassign** more than 50% of existing `kind` **value** into a new `kind` value, when kind has less than 10,000 features
 1. **Change** of -1 to default `min_zoom` or `max_zoom` **values** to determine when `kind` is included
