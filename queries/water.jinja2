@@ -4,7 +4,7 @@
     'naturalearthdata.com' AS source,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     NULL::boolean AS boundary
 {% endmacro %}
@@ -53,7 +53,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -79,7 +79,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -122,7 +122,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -147,7 +147,7 @@ SELECT
     'openstreetmapdata.com' AS source,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     NULL AS tunnel,
     NULL AS tags
@@ -165,7 +165,7 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     tags->'tunnel' AS tunnel,
     %#tags AS tags
@@ -189,7 +189,7 @@ SELECT
     'openstreetmap.org' AS source,
     {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     tags->'tunnel' AS tunnel,
     %#tags AS tags

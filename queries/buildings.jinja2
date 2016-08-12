@@ -14,7 +14,7 @@ SELECT
     mz_calculate_json_buildings(planet_osm_polygon.*) AS mz_properties,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     mz_building_min_zoom AS min_zoom,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     %#tags AS tags
 

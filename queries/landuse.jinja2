@@ -5,7 +5,7 @@
     '{"kind": "{{ kind }}"}'::json AS mz_properties,
     'naturalearthdata.com' AS source,
     {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     gid AS __id__
 {% endmacro %}
 
@@ -29,7 +29,7 @@ SELECT
 {% else %}
     {% filter geometry %}way{% endfilter %} AS __geometry__,
 {% endif %}
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     osm_id AS __id__,
     tags->'sport' AS sport,
     tags->'religion' AS religion,
@@ -73,7 +73,7 @@ SELECT
   mz_calculate_json_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
-  {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+  {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
   osm_id AS __id__
 FROM
   planet_osm_polygon
@@ -105,7 +105,7 @@ SELECT
   mz_calculate_json_landuse(planet_osm_polygon.*) AS mz_properties,
   'openstreetmap.org' AS source,
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
-  {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+  {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
   osm_id AS __id__,
   mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building
 FROM

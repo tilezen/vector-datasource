@@ -8,7 +8,7 @@ SELECT
     {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
     mz_earth_min_zoom AS min_zoom,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     NULL AS tags
 FROM
@@ -34,7 +34,7 @@ SELECT
     {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
     NULL AS min_zoom,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     NULL AS tags
 
@@ -58,7 +58,7 @@ SELECT
     {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     mz_earth_min_zoom AS min_zoom,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     %#tags AS tags
 
@@ -82,7 +82,7 @@ SELECT
     {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     mz_earth_min_zoom AS min_zoom,
-    {%filter geometry%}mz_label_placement{% endfilter %} AS mz_label_placement,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
     %#tags AS tags
 
