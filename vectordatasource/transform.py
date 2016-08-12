@@ -3676,3 +3676,68 @@ def normalize_operator_values(shape, properties, fid, zoom):
             return (shape, properties, fid)
 
     return (shape, properties, fid)
+
+
+def network_importance(route_type, network, ref):
+    """
+    Returns an integer representing the numeric importance of the network,
+    where lower numbers are more important.
+
+    This is to handle roads which are part of many networks, and ensuring
+    that the most important one is displayed. For example, in the USA many
+    roads can be part of both interstate (US:I) and "US" (US:US) highways,
+    and possibly state ones as well (e.g: US:NY:xxx). In addition, there
+    are international conventions around the use of "CC:national" and
+    "CC:regional:*" where "CC" is an ISO 2-letter country code.
+
+    Here we treat national-level roads as more important than regional or
+    lower, and assume that the deeper the network is in the hierarchy, the
+    less important the road. Roads with lower "ref" numbers are considered
+    more important than higher "ref" numbers, if they are part of the same
+    network.
+    """
+
+    if network == 'US:I' or ':national' in network:
+        network_code = 1
+    elif network == 'US:US' or ':regional' in network:
+        network_code = 2
+    else:
+        network_code = len(network.split(':')) + 3
+
+    try:
+        ref = max(int(ref), 0)
+    except ValueError:
+        ref = 0
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def choose_most_important_network(shape, properties, fid, zoom):
+    """
+    Use the `network_importance` function to select any road networks from
+    `mz_networks` and take the most important one.
+    """
+
+    networks = properties.pop('mz_networks', None)
+
+    if networks is not None:
+        networks = networks.split('|')
+
+        # take the list and make triples out of it
+        itr = iter(networks)
+        triples = zip(itr, itr, itr)
+
+        def is_road_network(t):
+            return t[0] == 'road'
+
+        triples = filter(is_road_network, triples)
+
+        if len(triples) > 0:
+            def network_key(t):
+                return network_importance(*t)
+
+            route_type, network, ref = sorted(triples, key=network_key)[0]
+            properties['network'] = network
+            properties['shield_text'] = ref
+
+    return (shape, properties, fid)
