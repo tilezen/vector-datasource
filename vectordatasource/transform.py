@@ -3724,11 +3724,7 @@ def choose_most_important_network(shape, properties, fid, zoom):
         # take the list and make triples out of it
         itr = iter(networks)
         triples = zip(itr, itr, itr)
-
-        def is_road_network(t):
-            return t[0] == 'road'
-
-        triples = filter(is_road_network, triples)
+        triples = [t for t in triples if t[0] == 'road']
 
         if len(triples) > 0:
             def network_key(t):
