@@ -2036,6 +2036,7 @@ def _project_properties(ctx, action):
     assert source_layer, '_project_properties: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
+    geom_types = ctx.params.get('geom_types')
 
     if zoom < start_zoom:
         return None
@@ -2053,6 +2054,11 @@ def _project_properties(ctx, action):
     new_features = []
     for feature in layer['features']:
         shape, props, fid = feature
+
+        # skip some types of geometry
+        if geom_types and shape.geom_type not in geom_types:
+            new_features.append((shape, props, fid))
+            continue
 
         # copy params to add a 'zoom' one. would prefer '$zoom', but apparently
         # that's not allowed in python syntax.
