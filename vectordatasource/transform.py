@@ -2065,6 +2065,10 @@ def _project_properties(ctx, action):
         local = props.copy()
         local['zoom'] = zoom
 
+        # allow decisions based on meters per pixel zoom too.
+        meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
+        local['pixel_area'] = meters_per_pixel_area
+
         if where is None or eval(where, {}, local):
             props = action(props)
 
@@ -3009,6 +3013,46 @@ def merge_building_features(ctx):
         height = props.get('height')
         if height is not None:
             props['volume'] = height * area
+        return props
+
+    layer['features'] = _merge_features_by_property(
+        layer['features'], _drop_props, _update_merged_props)
+    return layer
+
+
+def merge_polygon_features(ctx):
+    """
+    Merge polygons having the same properties, apart from 'id' and 'area', in
+    the source_layer between start_zoom and end_zoom inclusive.
+
+    Area is re-calculated post-merge and IDs are preserved for features which
+    are unique in the merge.
+    """
+
+    zoom = ctx.tile_coord.zoom
+    source_layer = ctx.params.get('source_layer')
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+
+    assert source_layer, 'merge_polygon_features: missing source layer'
+    layer = _find_layer(ctx.feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom > end_zoom:
+        return None
+
+    def _drop_props(props):
+        # drop area while merging, as we'll recalculate after.
+        props.pop('area', None)
+        return props
+
+    def _update_merged_props(merged_shape, props):
+        # add the area back in
+        area = int(merged_shape.area)
+        props['area'] = area
         return props
 
     layer['features'] = _merge_features_by_property(
