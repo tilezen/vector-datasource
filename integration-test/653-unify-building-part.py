@@ -25,3 +25,17 @@ assert_has_feature(
 assert_has_feature(
     16, 10486, 25326, 'buildings',
     { 'id': 404449724, 'kind': 'building_part', 'root_id': 24460886 })
+
+
+# http://www.openstreetmap.org/relation/1242762
+# Relation: Waterloo (tube and rail)
+# http://www.openstreetmap.org/relation/238793
+# Relation: Waterloo (tube station)
+# http://www.openstreetmap.org/relation/238792
+# Relation: London Waterloo
+assert_has_feature(
+    16, 32747, 21793, 'pois',
+    { 'id': 3638795617, 'root_id': 1242762, 'root_relation_id': type(None) })
+assert_has_feature(
+    16, 32747, 21793, 'pois',
+    { 'id': 3638795618, 'root_id': 1242762, 'root_relation_id': type(None) })

@@ -2441,7 +2441,7 @@ def normalize_station_properties(ctx):
             # that as a way for the client to link together related
             # features.
             if root_relation_id:
-                props['root_relation_id'] = root_relation_id
+                props['root_id'] = root_relation_id
 
     return layer
 
