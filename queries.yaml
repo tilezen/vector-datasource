@@ -432,13 +432,13 @@ post_process:
         - transit
         - water
 
-  # drop the names of small landuse polygons
+  # drop the names and less important additional tags of small landuse polygons
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: landuse
       start_zoom: 9
       end_zoom: 12
-      properties: [name, operator, sport]
+      properties: [name, sport, religion, surface]
       where: >-
         pixel_area > area
       geom_types: [Polygon, MultiPolygon]
@@ -446,7 +446,7 @@ post_process:
   - fn: vectordatasource.transform.merge_polygon_features
     params:
       source_layer: landuse
-      start_zoom: 9
+      start_zoom: 4
       end_zoom: 12
 
   - fn: vectordatasource.transform.drop_properties
