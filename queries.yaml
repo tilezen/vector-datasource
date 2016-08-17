@@ -447,11 +447,21 @@ post_process:
     params:
       base_layer: boundaries
       start_zoom: 8
-  - fn: vectordatasource.transform.generate_label_features
+
+  - fn: vectordatasource.transform.handle_label_placement
     params:
-      source_layer: landuse
+      layers:
+        - landuse
+        - water
+        - earth
+        - buildings
+      location_property: mz_label_placement
       label_property_name: label_placement
       label_property_value: true
+      label_where: >-
+        'name' in properties or
+        ('sport' in properties and properties.get('kind', 'rock') not in ('rock', 'stone'))
+
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: landuse
@@ -459,23 +469,12 @@ post_process:
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
-  - fn: vectordatasource.transform.generate_label_features
-    params:
-      source_layer: water
-      label_property_name: label_placement
-      label_property_value: true
   - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: water
       start_zoom: 3
       where: >-
         'label_placement' not in properties and kind in ('sea', 'bay', 'strait', 'fjord')
-  - fn: vectordatasource.transform.generate_label_features
-    params:
-      source_layer: earth
-      label_property_name: label_placement
-      label_property_value: true
-      geom_types: [Point, MultiPoint, LineString, MultiLineString, Polygon, MultiPolygon]
   - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: earth
@@ -487,11 +486,6 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 16
-  - fn: vectordatasource.transform.generate_label_features
-    params:
-      source_layer: buildings
-      label_property_name: label_placement
-      label_property_value: true
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: buildings

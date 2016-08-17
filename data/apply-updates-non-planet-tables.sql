@@ -135,4 +135,23 @@ CREATE INDEX land_polygons_wayarea_index ON land_polygons(way_area);
 
 UPDATE ne_10m_populated_places SET mz_places_min_zoom = mz_calculate_min_zoom_places(ne_10m_populated_places.*);
 
+UPDATE water_polygons SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE land_polygons SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_110m_ocean SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_50m_ocean SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_10m_ocean SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_110m_coastline SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_50m_coastline SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_10m_coastline SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_110m_lakes SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_50m_lakes SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_10m_lakes SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_50m_playas SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_10m_playas SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_110m_land SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_50m_land SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_10m_land SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_50m_urban_areas SET mz_label_placement = ST_PointOnSurface(the_geom);
+UPDATE ne_10m_urban_areas SET mz_label_placement = ST_PointOnSurface(the_geom);
+
 END $$;

@@ -28,6 +28,7 @@ from zope.dottedname.resolve import resolve
 import csv
 import pycountry
 import re
+import shapely.wkb
 import shapely.ops
 
 
@@ -1330,7 +1331,6 @@ def exterior_boundaries(ctx):
         prop_transform = {}
 
     features = layer['features']
-    padded_bounds = layer['padded_bounds']
 
     # this exists to enable a dirty hack to try and work
     # around duplicate geometries in the database. this
@@ -1367,18 +1367,12 @@ def exterior_boundaries(ctx):
     for shape, props, fid in features:
         if shape.type in ('Polygon', 'MultiPolygon'):
 
-            # make a bounding box 3x larger than the original tile,
-            # but with the same centroid.
-            geom_type = normalize_geometry_type(shape.type)
-            padded_bounds_by_type = padded_bounds[geom_type]
-            padded_bbox = calculate_padded_bounds(3, padded_bounds_by_type)
+            # the data comes back clipped from the queries now so we
+            # no longer need to clip here
 
-            # clip the feature to the padded bounds of the tile
-            clipped = shape.intersection(padded_bbox)
-
-            snapped = clipped
+            snapped = shape
             if snap_tolerance is not None:
-                snapped = _snap_to_grid(clipped, snap_tolerance)
+                snapped = _snap_to_grid(shape, snap_tolerance)
 
             # geometry collections are returned as None
             if snapped is None:
@@ -1821,71 +1815,64 @@ def admin_boundaries(ctx):
     return layer
 
 
-def generate_label_features(ctx):
+def handle_label_placement(ctx):
+    """
+    Converts a geometry label column into a separate feature.
+    """
+    layers = ctx.params.get('layers', None)
+    location_property = ctx.params.get('location_property', None)
+    label_property_name = ctx.params.get('label_property_name', None)
+    label_property_value = ctx.params.get('label_property_value', None)
+    label_where = ctx.params.get('label_where', None)
 
-    feature_layers = ctx.feature_layers
-    source_layer = ctx.params.get('source_layer')
-    assert source_layer, 'generate_label_features: missing source_layer'
-    label_property_name = ctx.params.get('label_property_name')
-    label_property_value = ctx.params.get('label_property_value')
-    new_layer_name = ctx.params.get('new_layer_name')
-    geom_types = ctx.params.get('geom_types', ['Polygon', 'MultiPolygon'])
+    assert layers, 'handle_label_placement: Missing layers'
+    assert location_property, \
+        'handle_label_placement: Missing location_property'
+    assert label_property_name, \
+        'handle_label_placement: Missing label_property_name'
+    assert label_property_value, \
+        'handle_label_placement: Missing label_property_value'
 
-    layer = _find_layer(feature_layers, source_layer)
-    if layer is None:
-        return None
+    layers = set(layers)
 
-    new_features = []
-    for feature in layer['features']:
-        shape, properties, fid = feature
+    if label_where:
+        label_where = compile(label_where, 'queries.yaml', 'eval')
 
-        # only add the original features if updating an existing layer
-        if new_layer_name is None:
-            new_features.append(feature)
-
-        if shape.geom_type not in geom_types:
+    for feature_layer in ctx.feature_layers:
+        if feature_layer['name'] not in layers:
             continue
 
-        # Additionally, the feature needs to have a name or a sport
-        # tag, oherwise it's not really useful for labelling purposes
-        name = properties.get('name')
-        if not name:
-            sport = properties.get('sport')
-            if not sport:
+        padded_bounds = feature_layer['padded_bounds']
+        point_padded_bounds = padded_bounds['point']
+        clip_bounds = Box(*point_padded_bounds)
+
+        new_features = []
+        for feature in feature_layer['features']:
+            shape, props, fid = feature
+
+            label_wkb = props.pop(location_property, None)
+            new_features.append(feature)
+
+            if not label_wkb:
                 continue
-            # if we have a sport tag but no name, we only want it
-            # included if it's not a rock or stone
-            kind = properties.get('kind')
-            if kind in ('rock', 'stone'):
+
+            local_state = props.copy()
+            local_state['properties'] = props
+            if label_where and not eval(label_where, {}, local_state):
                 continue
 
-        # need to generate a single point for (multi)polygons, but lines and
-        # points can be labelled directly.
-        if shape.geom_type in ('Polygon', 'MultiPolygon'):
-            label_geom = shape.representative_point()
-        else:
-            label_geom = shape
+            label_shape = shapely.wkb.loads(label_wkb)
+            if not (label_shape.type in ('Point', 'MultiPoint') and
+                    clip_bounds.intersects(label_shape)):
+                continue
 
-        label_properties = properties.copy()
+            point_props = props.copy()
+            point_props[label_property_name] = label_property_value
+            point_feature = label_shape, point_props, fid
 
-        if label_property_name:
-            label_properties[label_property_name] = label_property_value
+            new_features.append(point_feature)
 
-        label_feature = label_geom, label_properties, fid
-
-        new_features.append(label_feature)
-
-    if new_layer_name is None:
-        layer['features'] = new_features
-        return layer
-    else:
-        label_layer_datum = layer['layer_datum'].copy()
-        label_layer_datum['name'] = new_layer_name
-        label_feature_layer = layer.copy()
-        label_feature_layer['name'] = new_layer_name
-        label_feature_layer['layer_datum'] = label_layer_datum
-        label_feature_layer['features'] = new_features
-        return label_feature_layer
+        feature_layer['features'] = new_features
 
 
 def generate_address_points(ctx):

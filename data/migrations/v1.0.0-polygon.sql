@@ -24,3 +24,7 @@ UPDATE
      tags -> 'power' IN ('plant', 'substation') OR
      tags -> 'natural' IN ('wood', 'forest'))
     AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
+
+UPDATE planet_osm_polygon
+  SET mz_label_placement = ST_PointOnSurface(way)
+  WHERE mz_label_placement IS NULL;
