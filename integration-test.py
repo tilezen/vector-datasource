@@ -157,7 +157,8 @@ def match_distance(actual, expected):
 @contextmanager
 def features_in_tile_layer(z, x, y, layer):
     assert config_url, "Tile URL is not configured, is your config file set up?"
-    url = config_url % {'layer': layer, 'z': z, 'x': x, 'y': y}
+    request_layer = 'all' if config_all_layers else layer
+    url = config_url % {'layer': request_layer, 'z': z, 'x': x, 'y': y}
     r = requests.get(url)
 
     if r.status_code != 200:
