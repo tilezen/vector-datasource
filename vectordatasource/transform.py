@@ -2441,7 +2441,7 @@ def normalize_station_properties(ctx):
             # that as a way for the client to link together related
             # features.
             if root_relation_id:
-                props['root_relation_id'] = root_relation_id
+                props['root_id'] = root_relation_id
 
     return layer
 
@@ -3825,3 +3825,66 @@ def choose_most_important_network(shape, properties, fid, zoom):
             properties['all_shield_texts'] = [n[2] for n in networks]
 
     return (shape, properties, fid)
+
+
+def buildings_unify(ctx):
+    """
+    Unify buildings with their parts. Building parts will receive a
+    root_id property which will be the id of building parent they are
+    associated with.
+    """
+    zoom = ctx.tile_coord.zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+
+    if zoom < start_zoom:
+        return None
+
+    source_layer = ctx.params.get('source_layer')
+    assert source_layer is not None, 'unify_buildings: missing source_layer'
+    feature_layers = ctx.feature_layers
+    layer = _find_layer(feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    class geom_with_building_id(object):
+        def __init__(self, geom, building_id):
+            self.geom = geom
+            self.building_id = building_id
+            self._geom = geom._geom
+            self.is_empty = geom.is_empty
+
+    indexable_buildings = []
+    parts = []
+    for feature in layer['features']:
+        shape, props, feature_id = feature
+        kind = props.get('kind')
+        if kind == 'building':
+            building_id = props.get('id')
+            if building_id:
+                indexed_building = geom_with_building_id(shape, building_id)
+                indexable_buildings.append(indexed_building)
+        elif kind == 'building_part':
+            parts.append(feature)
+
+    if not (indexable_buildings and parts):
+        return
+
+    buildings_index = STRtree(indexable_buildings)
+
+    for part in parts:
+        best_overlap = 0
+        root_building_id = None
+
+        part_shape, part_props, part_feature_id = part
+
+        indexed_buildings = buildings_index.query(part_shape)
+        for indexed_building in indexed_buildings:
+            building_shape = indexed_building.geom
+            intersection = part_shape.intersection(building_shape)
+            overlap = intersection.area
+            if overlap > best_overlap:
+                best_overlap = overlap
+                root_building_id = indexed_building.building_id
+
+        if root_building_id is not None:
+            part_props['root_id'] = root_building_id
