@@ -366,7 +366,10 @@ def _normalize_osm_lang_code(x):
                 lang = pycountry.languages.get(iso639_3_code=x)
             except KeyError:
                 return None
-    iso639_1_code = lang.iso639_1_code.encode('utf-8')
+    try:
+        iso639_1_code = lang.iso639_1_code.encode('utf-8')
+    except AttributeError:
+        return None
     return iso639_1_code
 
 
@@ -386,22 +389,38 @@ def _normalize_country_code(x):
     return alpha2_code
 
 
+osm_l10n_lookup = set([
+    'zh-min-nan',
+    'zh-yue'
+])
+
+
 def _convert_osm_l10n_name(x):
-    if '_' not in x:
+    if x in osm_l10n_lookup:
         return x
 
-    fields_by_underscore = x.split('_', 1)
-    lang_code_candidate, country_candidate = fields_by_underscore
+    if '_' not in x:
+        lang_code_candidate = x
+        country_candidate = None
+
+    else:
+        fields_by_underscore = x.split('_', 1)
+        lang_code_candidate, country_candidate = fields_by_underscore
 
     lang_code_result = _normalize_osm_lang_code(lang_code_candidate)
     if lang_code_result is None:
         return None
 
-    country_result = _normalize_country_code(country_candidate)
-    if country_result is None:
-        return None
+    if country_candidate:
+        country_result = _normalize_country_code(country_candidate)
+        if country_result is None:
+            return None
 
-    result = '%s_%s' % (lang_code_result, country_result)
+        result = '%s_%s' % (lang_code_result, country_result)
+
+    else:
+        result = lang_code_result
+
     return result
 
 

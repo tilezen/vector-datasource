@@ -58,11 +58,11 @@ class L10nOsmTransformTest(unittest.TestCase):
 
     def test_osm_convert_2_3(self):
         eng = self._call_fut('en')
-        self.assertEquals(eng, 'eng')
+        self.assertEquals(eng, 'en')
 
     def test_osm_convert_3(self):
         eng = self._call_fut('eng')
-        self.assertEquals(eng, 'eng')
+        self.assertEquals(eng, 'en')
 
     def test_osm_convert_not_found(self):
         invalid = self._call_fut('foo')
@@ -70,7 +70,7 @@ class L10nOsmTransformTest(unittest.TestCase):
 
     def test_osm_convert_country(self):
         eng_gb = self._call_fut('en_GB')
-        self.assertEquals(eng_gb, 'eng_GB')
+        self.assertEquals(eng_gb, 'en_GB')
 
     def test_osm_convert_country_invalid(self):
         not_found = self._call_fut('en_foo')
@@ -78,9 +78,9 @@ class L10nOsmTransformTest(unittest.TestCase):
 
     def test_osm_convert_lookup(self):
         zh_min_nan = self._call_fut('zh-min-nan')
-        self.assertEquals(zh_min_nan, 'nan')
+        self.assertEquals(zh_min_nan, 'zh-min-nan')
         zh_min_nan = self._call_fut('zh-yue')
-        self.assertEquals(zh_min_nan, 'yue')
+        self.assertEquals(zh_min_nan, 'zh-yue')
 
 
 class L10nWofTransformTest(unittest.TestCase):
@@ -92,7 +92,7 @@ class L10nWofTransformTest(unittest.TestCase):
 
     def test_osm_convert_valid(self):
         eng = self._call_fut('eng_x')
-        self.assertEquals(eng, 'eng')
+        self.assertEquals(eng, 'en')
 
     def test_osm_convert_invalid(self):
         invalid = self._call_fut('zzz_x')
@@ -118,14 +118,14 @@ class TagsNameI18nTest(unittest.TestCase):
 
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org', 'en', 'foo')
-        self.assertTrue('name:eng' in props)
-        self.assertEquals('foo', props['name:eng'])
+        self.assertTrue('name:en' in props)
+        self.assertEquals('foo', props['name:en'])
 
     def test_wof_source(self):
         shape, props, fid = self._call_fut('whosonfirst.mapzen.com',
                                            'eng_x', 'foo')
-        self.assertTrue('name:eng' in props)
-        self.assertEquals('foo', props['name:eng'])
+        self.assertTrue('name:en' in props)
+        self.assertEquals('foo', props['name:en'])
 
 
 class DropFeaturesMinPixelsTest(unittest.TestCase):
