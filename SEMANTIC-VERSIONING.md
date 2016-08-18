@@ -132,18 +132,18 @@ In addition to the `common` **name** locals call a place, the following `common`
 
 #### Common languages:
 
-1. `name:ara` Arabic
-1. `name:zho` Chinese, traditional or simplified
-1. `name:eng` English
-1. `name:fra` French
-1. `name:rus` Russian
-1. `name:spa` Spanish
-1. `name:deu` German
-1. `name:gre` Greek
-1. `name:ita` Italian
-1. `name:jpn` Japanese
-1. `name:kor` Korean
-1. `name:vie` Vietnamese
+1. `name:ar` Arabic
+1. `name:zh` Chinese, traditional or simplified
+1. `name:en` English
+1. `name:fr` French
+1. `name:ru` Russian
+1. `name:es` Spanish
+1. `name:de` German
+1. `name:gr` Greek
+1. `name:it` Italian
+1. `name:jp` Japanese
+1. `name:ko` Korean
+1. `name:vi` Vietnamese
 
 Arabic, Chinese, English, French, Russian and Spanish are used by the United National for meetings and official documents. The other languages listed are frequently used in OpenStreetMap and Who's On First.
 
