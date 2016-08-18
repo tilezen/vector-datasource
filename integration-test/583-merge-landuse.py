@@ -648,8 +648,13 @@ with features_in_tile_layer(9, 245, 166, 'landuse') as landuse:
     feature_props = set()
 
     for feature in landuse:
-        # ignore ID, area when checking for uniqueness
         p = feature['properties'].copy()
+
+        # ignore label placements
+        if p.get('label_placement'):
+            continue
+
+        # ignore ID, area when checking for uniqueness
         p.pop('id', None)
         p.pop('area', None)
 
