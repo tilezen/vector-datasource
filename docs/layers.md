@@ -837,7 +837,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `name`: From OpenStreetMap, but transformed to abbreviated names as detailed above.
 * `id`: From OpenStreetMap or Natural Earth
 * `source`: `openstreetmap` or `naturalearthdata.com`
-* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
+* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values.
 * `kind_detail`: See kind detail list below.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see the common optional properties `network` and `shield_text`. Related, see `symbol` for pistes.
@@ -866,7 +866,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
-* `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 * `kind_detail`: normalized values describing the kind value, see below.
 
@@ -912,7 +911,9 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`, and internationally and nationally significant paths (`path`, `footway`, `steps`). Zoom 13 adds `primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway` and regionally significant and/or named or designated paths. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`.
 
-**Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary` and `ferry`.
+**Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary`.
+
+**Ferries** from both Natural Earth and OpenStreetMap are shown starting at zoom 5 with `kind` values of `ferry`.
 
 ![image](images/mapzen-vector-tile-docs-roads-railway.png)
 
