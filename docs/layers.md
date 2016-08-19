@@ -862,7 +862,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
 * `oneway_bicycle`: `oneway:bicycle` tag from feature
 * `oneway`: `yes` or `no`
-* `railway`: the original OSM railway tag value
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
@@ -919,7 +918,24 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Features for rail tracks are included in this layer, whereas geometries and further information about rail lines or routes is available in the `transit` layer.
 
-Railway values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gauge`, `monorail`, `subway`, and `funicular`.
+Railway `kind_detail` values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gauge`, `monorail`, `subway`, and `funicular`.
+
+Railway `service` values are:
+
+* `spur`
+* `siding`
+* `yard`
+* `crossover`
+* `branch`
+* `connector`
+* `wye`
+* `runaway`
+* `interchange`
+* `switch`
+* `industrial`
+* `disused`
+* `driveway`
+* `passing_loop`
 
 ![image](images/mapzen-vector-tile-docs-roads-airport.png)
 

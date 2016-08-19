@@ -15,3 +15,5 @@ assert_has_feature(
     { 'kind': 'ferry', 'id': 289694213 })
 
 # kind: rail
+
+# kind: pier

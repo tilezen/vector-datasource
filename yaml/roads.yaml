@@ -452,7 +452,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: rail
-      railway: {col: railway}
+      kind_detail: rail
       service: {col: service}
   - filter:
       railway: rail
@@ -463,7 +463,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: rail
-      railway: {col: railway}
+      kind_detail: rail
       service: {col: service}
   - filter:
       railway: rail
@@ -474,7 +474,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: rail
-      railway: {col: railway}
+      kind_detail: rail
       service: {col: service}
   - filter:
       railway: rail
@@ -495,6 +495,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: rail
+      kind_detail: rail
       railway: {col: railway}
       service: {col: service}
   - filter:
@@ -505,7 +506,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: rail
-      railway: {col: railway}
+      kind_detail: rail
   - filter:
       railway: [tram, light_rail, narrow_gauge, monorail, subway, funicular]
     min_zoom: 15
@@ -514,7 +515,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: rail
-      railway: {col: railway}
+      kind_detail: {col: railway}
   #############################################################
   #
   # OSM ferry
