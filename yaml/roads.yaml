@@ -611,7 +611,7 @@ filters:
       # note: racetrack rather than track, as track might be confusing
       # between a track for racing and a track as in a faint trail.
       kind: racetrack
-      sport: {col: sport}
+      kind_detail: {col: sport}
   #############################################################
   #
   # OSM man_made
