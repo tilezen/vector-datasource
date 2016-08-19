@@ -1,13 +1,8 @@
 global:
   - &osm_highway_properties
       name: {col: name}
-      aeroway: {col: aeroway}
-      aerialway: {col: aerialway}
       bridge: {col: bridge}
-      highway: {col: highway}
-      ferry: {col: tags->ferry}
       layer: {col: layer}
-      railway: {col: railway}
       tunnel: {col: tunnel}
       ref: {col: ref}
       operator: {col: operator}
@@ -24,9 +19,7 @@ global:
       route_name: {col: tags->route_name}
       motor_vehicle: {col: tags->motor_vehicle}
       service: {col: service}
-      leisure: {col: leisure}
       sport: {col: sport}
-      man_made: {col: man_made}
       walking_network: {expr: "mz_hiking_network(osm_id)"}
       bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
       oneway: {col: oneway}
@@ -80,9 +73,6 @@ global:
       ski: {col: tags->ski}
       snowshoe: {col: tags->snowshoe}
       symbol: {col: tags->symbol}
-      leisure: {col: leisure}
-      sport: {col: sport}
-      man_made: {col: man_made}
   - &osm_footway_properties
       bicycle: {col: bicycle}
       foot: {col: foot}
@@ -613,6 +603,7 @@ filters:
       # between a track for racing and a track as in a faint trail.
       kind: racetrack
       kind_detail: {col: sport}
+      leisure: track
   #############################################################
   #
   # OSM man_made
