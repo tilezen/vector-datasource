@@ -73,7 +73,7 @@ global:
       descent: {col: tags->descent}
       roundtrip: {col: tags->roundtrip}
       route_name: {col: tags->route_name}
-      piste_type: {col: "tags->piste:type"}
+      kind_detail: {col: "tags->piste:type"}
       piste_difficulty: {col: "tags->piste:difficulty"}
       piste_grooming: {col: "tags->piste:grooming"}
       piste_name: {col: "tags->piste:name"}

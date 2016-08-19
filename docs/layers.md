@@ -863,7 +863,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
 * `oneway_bicycle`: `oneway:bicycle` tag from feature
 * `oneway`: `yes` or `no`
-* `piste_type`: See kind list below.
 * `railway`: the original OSM railway tag value
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `highway=service` roads.
@@ -945,7 +944,7 @@ Railway values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gaug
 
 ![image](images/mapzen-vector-tile-docs-roads-pistes.png)
 
-**Piste** type with `subkind` values of `piste_type` including `nordic`, `downhill`, `sleigh`, `skitour`, `hike`, `sled`, `yes`, `snow_park`, `playground`, `ski_jump`. Abandoned pistes are not included in tiles.
+**Piste** type with `kind_detail` values of `nordic`, `downhill`, `sleigh`, `skitour`, `hike`, `sled`, `yes`, `snow_park`, `playground`, `ski_jump`. Abandoned pistes are not included in tiles.
 
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
