@@ -852,7 +852,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `cycleway_left`: `cycleway_left` tag from feature
 * `cycleway_right`: `cycleway_right` tag from feature
 * `ferry`: See kind list below.
-* `highway`: See kind list below.
 * `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
 * `is_bridge`: `true` if the road is part of a bridge. The property will not be present if the road is not part of a bridge.
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
@@ -865,7 +864,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `oneway`: `yes` or `no`
 * `railway`: the original OSM railway tag value
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
-* `service`: See value list below, provided for `railway` and `highway=service` roads.
+* `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
 * `type`:  Natural Earth roads and ferry
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
@@ -909,19 +908,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `racetrack`
 * `rail`
 
-#### Road transportation kind_detail values:
-
-* `motorway`
-* `trunk`
-* `primary`
-* `secondary`
-* `tertiary`
-* `runway`
-* `taxiway`
-
 #### Road Transportation `kind_detail` values and zoom ranges:
 
-bridle
 **Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`, and internationally and nationally significant paths (`path`, `footway`, `steps`). Zoom 13 adds `primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway` and regionally significant and/or named or designated paths. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`.
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary` and `ferry`.
