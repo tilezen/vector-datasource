@@ -218,11 +218,11 @@ def road_classifier(shape, properties, fid, zoom):
     properties.pop('is_tunnel', None)
     properties.pop('is_bridge', None)
 
-    highway = properties.get('highway', '')
+    kind_detail = properties.get('kind_detail', '')
     tunnel = properties.get('tunnel', '')
     bridge = properties.get('bridge', '')
 
-    if highway.endswith('_link'):
+    if kind_detail.endswith('_link'):
         properties['is_link'] = True
     if tunnel in ('yes', 'true'):
         properties['is_tunnel'] = True
@@ -3584,7 +3584,7 @@ def add_is_bicycle_related(shape, props, fid, zoom):
             'cycleway_left' in props or
             'cycleway_right' in props or
             props.get('bicycle') in ('yes', 'designated') or
-            props.get('highway') == 'cycleway'):
+            props.get('kind_detail') == 'cycleway'):
         props['is_bicycle_related'] = True
     return shape, props, fid
 

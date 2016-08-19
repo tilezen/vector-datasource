@@ -13,4 +13,4 @@ assert_has_feature(
     16, 19302, 23765, 'roads',
     { 'kind': 'racetrack',
       'leisure': 'track',
-      'sport': 'ski_jumping' })
+      'kind_detail': 'ski_jumping' })

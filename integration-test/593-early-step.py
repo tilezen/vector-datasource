@@ -11,15 +11,15 @@ tiles = [
 for z, x, y in tiles:
     assert_has_feature(
         z, x, y, 'roads',
-        {'highway': 'steps'})
+        {'kind_detail': 'steps'})
 
 
 # way 25292070   highway=steps, no route, but has name (Esmeralda, Bernal, SF)
 assert_no_matching_feature(
     13, 1310, 3167, 'roads',
-    {'kind': 'path', 'highway': 'steps', 'name': 'Esmeralda Ave.'})
+    {'kind': 'path', 'kind_detail': 'steps', 'name': 'Esmeralda Ave.'})
 
 # way 25292070   highway=steps, no route, but has name (Esmeralda, Bernal, SF)
 assert_has_feature(
     14, 2620, 6334, 'roads',
-    {'kind': 'path', 'highway': 'steps', 'name': 'Esmeralda Ave.'})
+    {'kind': 'path', 'kind_detail': 'steps', 'name': 'Esmeralda Ave.'})
