@@ -8,4 +8,4 @@ tiles = [
 for z, x, y in tiles:
     assert_has_feature(
         z, x, y, 'roads',
-        {'highway': 'cycleway'})
+        {'kind_detail': 'cycleway'})

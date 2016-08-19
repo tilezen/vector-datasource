@@ -31,7 +31,7 @@ tiles = [
 for z, x, y in tiles:
     assert_has_feature(
         z, x, y, 'roads',
-        {'highway': 'footway'})
+        {'kind_detail': 'footway'})
 
 
 #SF State, way/346093021

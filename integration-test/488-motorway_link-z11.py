@@ -8,9 +8,9 @@ for z, x, y in locations:
         z, x, y, 'roads',
         { 'kind': 'highway',
           'is_link': True,
-          'highway': 'motorway_link'})
+          'kind_detail': 'motorway_link'})
     assert_no_matching_feature(
         z-1, x/2, y/2, 'roads',
         { 'kind': 'highway',
           'is_link': True,
-          'highway': 'motorway_link'})
+          'kind_detail': 'motorway_link'})

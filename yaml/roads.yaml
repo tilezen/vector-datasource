@@ -183,7 +183,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: highway
-      highway: {col: highway}
+      kind_detail: motorway
   - filter:
       highway: [trunk, primary]
     min_zoom: 8
@@ -192,7 +192,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: major_road
-      highway: {col: highway}
+      kind_detail: {col: highway}
   - filter:
       highway: secondary
     min_zoom: 10
@@ -201,7 +201,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: major_road
-      highway: {col: highway}
+      kind_detail: secondary
   - filter:
       highway: motorway_link
     min_zoom: 11
@@ -210,7 +210,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: highway
-      highway: {col: highway}
+      kind_detail: motorway_link
   - filter:
       highway: tertiary
     min_zoom: 11
@@ -219,7 +219,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: major_road
-      highway: {col: highway}
+      kind_detail: tertiary
   - filter:
       highway: trunk_link
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 12)'
@@ -228,7 +228,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: major_road
-      highway: {col: highway}
+      kind_detail: trunk_link
   - filter:
       highway: [primary_link, secondary_link]
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
@@ -237,7 +237,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: major_road
-      highway: {col: highway}
+      kind_detail: {col: highway}
   - filter:
       highway: tertiary_link
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 14)'
@@ -246,7 +246,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_relation
       kind: major_road
-      highway: {col: highway}
+      kind_detail: tertiary_link
   #############################################################
   #
   # OSM whitewater
@@ -276,7 +276,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: minor_road
-      highway: {col: highway}
+      kind_detail: {col: highway}
   - filter:
       highway: living_street
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
@@ -285,7 +285,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: minor_road
-      highway: {col: highway}
+      kind_detail: living_street
   - filter:
       highway: pedestrian
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
@@ -295,7 +295,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: {col: highway}
+      kind_detail: pedestrian
   - filter:
       highway: [path, track, cycleway, bridleway]
     min_zoom: 'LEAST(mz_calculate_path_major_route(osm_id), 13)'
@@ -305,7 +305,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: {col: highway}
+      kind_detail: {col: highway}
   - filter:
       highway: footway
       any:
@@ -322,7 +322,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: footway
+      kind_detail: footway
       footway: {col: tags->footway}
   - filter:
       highway: steps
@@ -341,7 +341,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: steps
+      kind_detail: steps
       footway: {col: tags->footway}
   - filter:
       highway: footway
@@ -353,7 +353,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: footway
+      kind_detail: footway
       footway: {col: tags->footway}
   - filter:
       highway: [footway, steps]
@@ -364,7 +364,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: {col: highway}
+      kind_detail: {col: highway}
       footway: {col: tags->footway}
   - filter: {highway: corridor}
     min_zoom: 16
@@ -374,7 +374,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      highway: corridor
+      kind_detail: corridor
   - filter:
       highway: service
       service: alley
@@ -384,7 +384,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: minor_road
-      highway: service
+      kind_detail: service
       service: alley
   - filter:
       highway: service
@@ -395,7 +395,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: minor_road
-      highway: service
+      kind_detail: service
       service:
         expr: |
           CASE WHEN tags->'service' = 'drive-through' THEN 'drive_through' ELSE tags->'service' END
@@ -407,14 +407,14 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: minor_road
-      highway: service
+      kind_detail: service
   - filter: {highway: raceway}
     min_zoom: 13
     table: osm
     output:
       <<: *osm_highway_properties
       kind: minor_road
-      highway: raceway
+      kind_detail: raceway
   #############################################################
   #
   # OSM aeroway
