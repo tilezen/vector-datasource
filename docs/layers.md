@@ -939,7 +939,7 @@ Railway `service` values are:
 
 ![image](images/mapzen-vector-tile-docs-roads-airport.png)
 
-**Airport** aeroways with `subkind` values of `runway` show up at zoom 9, with `taxiway` at zoom 11+.
+**Airport** aeroways with `kind_detail` values of `runway` show up at zoom 9, with `taxiway` at zoom 11+.
 
 ![image](images/mapzen-vector-tile-docs-roads-aerialways.png)
 
