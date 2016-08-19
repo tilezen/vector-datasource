@@ -1,6 +1,6 @@
 # transformation functions to apply to features
 
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from numbers import Number
 from shapely.geometry.collection import GeometryCollection
 from shapely.geometry import box as Box
@@ -341,15 +341,29 @@ tag_name_alternates = (
 )
 
 
+def _iso639_1_code_of(lang):
+    try:
+        iso639_1_code = lang.iso639_1_code.encode('utf-8')
+    except AttributeError:
+        return None
+    return iso639_1_code
+
+
+# a structure to return language code lookup results preserving the priority
+# (lower is better) of the result for use in situations where multiple inputs
+# can map to the same output.
+LangResult = namedtuple('LangResult', ['code', 'priority'])
+
+
 def _convert_wof_l10n_name(x):
     lang_str_iso_639_3 = x[:3]
     if len(lang_str_iso_639_3) != 3:
         return None
     try:
-        pycountry.languages.get(iso639_3_code=lang_str_iso_639_3)
+        lang = pycountry.languages.get(iso639_3_code=lang_str_iso_639_3)
     except KeyError:
         return None
-    return lang_str_iso_639_3
+    return LangResult(code=_iso639_1_code_of(lang), priority=0)
 
 
 def _normalize_osm_lang_code(x):
@@ -366,8 +380,7 @@ def _normalize_osm_lang_code(x):
                 lang = pycountry.languages.get(iso639_3_code=x)
             except KeyError:
                 return None
-    iso639_3_code = lang.iso639_3_code.encode('utf-8')
-    return iso639_3_code
+    return _iso639_1_code_of(lang)
 
 
 def _normalize_country_code(x):
@@ -386,39 +399,42 @@ def _normalize_country_code(x):
     return alpha2_code
 
 
-osm_l10n_lookup = {
-    'zh-min-nan': 'nan',
-    'zh-yue': 'yue',
-}
-
-
-def osm_l10n_name_lookup(x):
-    lookup = osm_l10n_lookup.get(x)
-    if lookup is not None:
-        return lookup
-    else:
-        return x
+osm_l10n_lookup = set([
+    'zh-min-nan',
+    'zh-yue'
+])
 
 
 def _convert_osm_l10n_name(x):
-    x = osm_l10n_name_lookup(x)
+    if x in osm_l10n_lookup:
+        return LangResult(code=x, priority=0)
 
     if '_' not in x:
-        return _normalize_osm_lang_code(x)
+        lang_code_candidate = x
+        country_candidate = None
 
-    fields_by_underscore = x.split('_', 1)
-    lang_code_candidate, country_candidate = fields_by_underscore
+    else:
+        fields_by_underscore = x.split('_', 1)
+        lang_code_candidate, country_candidate = fields_by_underscore
 
     lang_code_result = _normalize_osm_lang_code(lang_code_candidate)
     if lang_code_result is None:
         return None
 
-    country_result = _normalize_country_code(country_candidate)
-    if country_result is None:
-        return None
+    priority = 0
+    if country_candidate:
+        country_result = _normalize_country_code(country_candidate)
+        if country_result is None:
+            result = lang_code_result
+            priority = 1
 
-    result = '%s_%s' % (lang_code_result, country_result)
-    return result
+        else:
+            result = '%s_%s' % (lang_code_result, country_result)
+
+    else:
+        result = lang_code_result
+
+    return LangResult(code=result, priority=priority)
 
 
 def tags_name_i18n(shape, properties, fid, zoom):
@@ -448,16 +464,27 @@ def tags_name_i18n(shape, properties, fid, zoom):
         # become available.
         return shape, properties, fid
 
+    langs = {}
     for k, v in tags.items():
         if v == name:
             continue
         for candidate in alt_name_prefix_candidates:
+
             if k.startswith(candidate):
                 lang_code = k[len(candidate):]
                 normalized_lang_code = convert_fn(lang_code)
+
                 if normalized_lang_code:
-                    lang_key = '%s%s' % (candidate, normalized_lang_code)
-                    properties[lang_key] = v
+                    code = normalized_lang_code.code
+                    priority = normalized_lang_code.priority
+                    lang_key = '%s%s' % (candidate, code)
+
+                    if lang_key not in langs or \
+                       priority < langs[lang_key][0].priority:
+                        langs[lang_key] = (normalized_lang_code, v)
+
+    for lang_key, (lang, v) in langs.items():
+        properties[lang_key] = v
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)

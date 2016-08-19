@@ -1,4 +1,5 @@
 import unittest
+from collections import OrderedDict
 
 
 class BuildingsClassTest(unittest.TestCase):
@@ -54,15 +55,17 @@ class L10nOsmTransformTest(unittest.TestCase):
     def _call_fut(self, x):
         from vectordatasource.transform import _convert_osm_l10n_name
         result = _convert_osm_l10n_name(x)
+        if result:
+            result = result.code
         return result
 
     def test_osm_convert_2_3(self):
         eng = self._call_fut('en')
-        self.assertEquals(eng, 'eng')
+        self.assertEquals(eng, 'en')
 
     def test_osm_convert_3(self):
         eng = self._call_fut('eng')
-        self.assertEquals(eng, 'eng')
+        self.assertEquals(eng, 'en')
 
     def test_osm_convert_not_found(self):
         invalid = self._call_fut('foo')
@@ -70,17 +73,17 @@ class L10nOsmTransformTest(unittest.TestCase):
 
     def test_osm_convert_country(self):
         eng_gb = self._call_fut('en_GB')
-        self.assertEquals(eng_gb, 'eng_GB')
+        self.assertEquals(eng_gb, 'en_GB')
 
     def test_osm_convert_country_invalid(self):
-        not_found = self._call_fut('en_foo')
-        self.assertIsNone(not_found)
+        no_country = self._call_fut('en_foo')
+        self.assertEquals(no_country, 'en')
 
     def test_osm_convert_lookup(self):
         zh_min_nan = self._call_fut('zh-min-nan')
-        self.assertEquals(zh_min_nan, 'nan')
+        self.assertEquals(zh_min_nan, 'zh-min-nan')
         zh_min_nan = self._call_fut('zh-yue')
-        self.assertEquals(zh_min_nan, 'yue')
+        self.assertEquals(zh_min_nan, 'zh-yue')
 
 
 class L10nWofTransformTest(unittest.TestCase):
@@ -88,11 +91,13 @@ class L10nWofTransformTest(unittest.TestCase):
     def _call_fut(self, x):
         from vectordatasource.transform import _convert_wof_l10n_name
         result = _convert_wof_l10n_name(x)
+        if result:
+            result = result.code
         return result
 
     def test_osm_convert_valid(self):
         eng = self._call_fut('eng_x')
-        self.assertEquals(eng, 'eng')
+        self.assertEquals(eng, 'en')
 
     def test_osm_convert_invalid(self):
         invalid = self._call_fut('zzz_x')
@@ -118,14 +123,79 @@ class TagsNameI18nTest(unittest.TestCase):
 
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org', 'en', 'foo')
-        self.assertTrue('name:eng' in props)
-        self.assertEquals('foo', props['name:eng'])
+        self.assertTrue('name:en' in props)
+        self.assertEquals('foo', props['name:en'])
 
     def test_wof_source(self):
         shape, props, fid = self._call_fut('whosonfirst.mapzen.com',
                                            'eng_x', 'foo')
-        self.assertTrue('name:eng' in props)
-        self.assertEquals('foo', props['name:eng'])
+        self.assertTrue('name:en' in props)
+        self.assertEquals('foo', props['name:en'])
+
+
+class TagsPriorityI18nTest(unittest.TestCase):
+
+    def _call_fut(self, source, kvs):
+        from vectordatasource.transform import tags_name_i18n
+        shape = fid = zoom = None
+
+        # need to control the order of tags so that we can force the situation
+        # where one key overwrites another.
+        tags = OrderedDict()
+        for k, v in kvs.items():
+            tags['name:%s' % k] = v
+
+        props = dict(
+            source=source,
+            tags=tags,
+            name='unused',
+        )
+        result = tags_name_i18n(shape, props, fid, zoom)
+        return result
+
+    def test_wof_no_two_letter_code(self):
+        # given variants which have no 2-letter code (arq), then we should
+        # just be left with the ones which do (ara).
+        shape, props, fid = self._call_fut('whosonfirst.mapzen.com',
+                                           {'ara': 'foo', 'arq': 'bar'})
+        self.assertTrue('name:ar' in props)
+        self.assertFalse('name:ara' in props)
+        self.assertFalse('name:arq' in props)
+        self.assertEquals('foo', props['name:ar'])
+
+    def test_osm_invalid_country_code(self):
+        # given variants with an invalid or unrecognised country code, then
+        # we should keep any original which had no country code, as it is
+        # more specific.
+        langs = OrderedDict([
+            ('en',    'foo'),  # The One True Flavour of English.
+            ('en_GB', 'bar'),  # Also the correct flavour ;-)
+            ('en_AA', 'baz'),  # User-defined country code.
+            ('en_CT', 'bat'),  # Currently unassigned/deleted code.
+        ])
+        shape, props, fid = self._call_fut('openstreetmap.org', langs)
+
+        self.assertEquals('foo', props.get('name:en'))
+        self.assertEquals('bar', props.get('name:en_GB'))
+        self.assertFalse('name:en_AA' in props)
+        self.assertFalse('name:en_CT' in props)
+
+    def test_osm_invalid_country_code_reverse(self):
+        # same as the previous test, just checking that when the order of
+        # the keys is different (we wouldn't normally have control over it
+        # as it's in a dict), the result is the same.
+        langs = OrderedDict([
+            ('en_GB', 'bar'),
+            ('en_AA', 'baz'),
+            ('en_CT', 'bat'),
+            ('en',    'foo'),
+        ])
+        shape, props, fid = self._call_fut('openstreetmap.org', langs)
+
+        self.assertEquals('foo', props.get('name:en'))
+        self.assertEquals('bar', props.get('name:en_GB'))
+        self.assertFalse('name:en_AA' in props)
+        self.assertFalse('name:en_CT' in props)
 
 
 class DropFeaturesMinPixelsTest(unittest.TestCase):

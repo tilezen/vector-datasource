@@ -16,7 +16,7 @@ Mapzen primarily sources from OpenStreetMap, but includes a variety of other ope
 
 #### Name localization
 
-Mapzen vector tile features include the default `name` property. We include all language variants of the `name:*`, `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization (when different than `name`). Tangram supports all language scripts.
+Mapzen vector tile features include the default `name` property. We include all language variants of the `name:*`, `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization (when different than `name`). Tangram supports all language scripts. Language variants are identified by an ISO 639-1 two-letter language code and optional country, for example `en_GB` for British English.
 
 For features in the `boundaries` layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
 
