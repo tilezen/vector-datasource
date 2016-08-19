@@ -541,7 +541,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: aerialway
-      aerialway: {col: aerialway}
+      kind_detail: {col: aerialway}
   - filter:
       aerialway: chair_lift
     min_zoom: 13
@@ -550,7 +550,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: aerialway
-      aerialway: {col: aerialway}
+      kind_detail: {col: aerialway}
   - filter:
       aerialway:
         - drag_lift
@@ -572,7 +572,7 @@ filters:
       <<: *osm_highway_properties
       <<: *osm_network_from_tags
       kind: aerialway
-      aerialway:
+      kind_detail:
         expr:
           CASE WHEN tags->'aerialway' = 't-bar' THEN 't_bar'
                WHEN tags->'aerialway' = 'j-bar' THEN 'j_bar'

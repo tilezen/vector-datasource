@@ -838,13 +838,13 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `id`: From OpenStreetMap or Natural Earth
 * `source`: `openstreetmap` or `naturalearthdata.com`
 * `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values. At low zooms, Natural Earth `featurecla` kinds of `Road` and `Ferry` are used. Look to `type` for more fidelity.
+* `kind_detail`: See kind detail list below.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see the common optional properties `network` and `shield_text`. Related, see `symbol` for pistes.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_key` is adjusted to realistically model bridge, tunnel, and layer ordering.
 
 #### Road properties (common optional):
 
-* `aerialway`: See kind list below.
 * `aeroway`: See kind list below.
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
@@ -920,12 +920,12 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `runway`
 * `taxiway`
 
-#### Road Transportation `subkind` values and zoom ranges:
+#### Road Transportation `kind_detail` values and zoom ranges:
 
 bridle
 **Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`, and internationally and nationally significant paths (`path`, `footway`, `steps`). Zoom 13 adds `primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway` and regionally significant and/or named or designated paths. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`.
 
-**Roads** from **Natural Earth**  are used at low zooms below 8. Road `subkind` (`type`) values are limited to `Road` and `Ferry` at these zooms. It's more useful to look at `type` values: `Beltway`, `Bypass`, `Ferry Route`, `Ferry, seasonal`, `Major Highway`, `Road`, `Secondary Highway`, `Track`, and `Unknown`.
+**Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary` and `ferry`.
 
 ![image](images/mapzen-vector-tile-docs-roads-railway.png)
 
@@ -939,7 +939,7 @@ Railway values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gaug
 
 ![image](images/mapzen-vector-tile-docs-roads-aerialways.png)
 
-**Aerialways** with `subkind` values of `gondola`, `cable_car` show up zoom 12+. `chair_lift` is added at zoom 13+, and by zoom 15 all are visible adding `drag_lift`, `platter`, `t_bar`, `goods`, `magic_carpet`, `rope_tow`, `zip_line`, `j_bar`, `unknown`, `mixed_lift`, and `canopy`.
+**Aerialways** with `kind_detail` values of `gondola`, `cable_car` show up zoom 12+. `chair_lift` is added at zoom 13+, and by zoom 15 all are visible adding `drag_lift`, `platter`, `t_bar`, `goods`, `magic_carpet`, `rope_tow`, `zip_line`, `j_bar`, `unknown`, `mixed_lift`, and `canopy`.
 
 **Leisure** lines for various recreation tracks start showing up at zoom 14  with `subkind` values of sport_values of `athletics`, `running`, `horse_racing`, `bmx`, `disc_golf`, `cycling`, `ski_jumping`, `motor`, `karting`,`obstacle_course`, `equestrian`, `alpine_slide`, `soap_box_derby`,`mud_truck_racing`, `skiing`, `drag_racing`, `archery`.
 
