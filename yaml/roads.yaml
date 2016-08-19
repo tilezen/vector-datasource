@@ -627,7 +627,7 @@ filters:
       <<: *osm_network_from_tags
       <<: *osm_footway_properties
       kind: path
-      man_made: pier
+      kind_detail: pier
   #############################################################
   #
   # OSM piste

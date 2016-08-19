@@ -13,7 +13,3 @@ assert_has_feature(
 assert_has_feature(
     16, 10487, 25326, 'roads',
     { 'kind': 'ferry', 'id': 289694213 })
-
-# kind: rail
-
-# kind: pier

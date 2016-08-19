@@ -953,7 +953,7 @@ Railway `service` values are:
 
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
-**Piers** start showing up at zoom 13+ with `subkind` values of `pier`.
+**Piers** start showing up at zoom 13+ with `kind_detail` values of `pier`.
 
 ## Transit
 
