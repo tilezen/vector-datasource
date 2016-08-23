@@ -1,1 +1,1 @@
-scalerank::int,mz_min_pixels
+scalerank::int,output:mz_min_pixels::int

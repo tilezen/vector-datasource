@@ -1,4 +1,4 @@
-kind,geometrytype,sort_key
+kind,geometrytype,output:sort_key::int
 fence,*,269
 snow_fence,*,268
 retaining_wall,*,267

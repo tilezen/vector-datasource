@@ -1,4 +1,4 @@
-kind,sort_key
+kind,output:sort_key::int
 municipality,252
 county,254
 Admin-1 boundary,256

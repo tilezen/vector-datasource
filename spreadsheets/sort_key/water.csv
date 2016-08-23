@@ -1,4 +1,4 @@
-kind,boundary,sort_key
+kind,boundary,output:sort_key::int
 river,,201
 canal,,201
 stream,,201

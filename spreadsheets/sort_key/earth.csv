@@ -1,4 +1,4 @@
-kind,sort_key
+kind,output:sort_key::int
 cliff,227
 arete,228
 earth,10
