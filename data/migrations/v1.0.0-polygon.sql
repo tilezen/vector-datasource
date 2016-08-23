@@ -28,3 +28,34 @@ UPDATE
 UPDATE planet_osm_polygon
   SET mz_label_placement = ST_PointOnSurface(way)
   WHERE mz_label_placement IS NULL;
+
+CREATE INDEX new_planet_osm_polygon_pois_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom IS NOT NULL;
+CREATE INDEX new_planet_osm_polygon_pois_geom_6_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 6;
+CREATE INDEX new_planet_osm_polygon_pois_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 9;
+CREATE INDEX new_planet_osm_polygon_pois_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 12;
+CREATE INDEX new_planet_osm_polygon_pois_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 15;
+
+BEGIN;
+DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_index;
+ALTER INDEX new_planet_osm_polygon_pois_geom_index RENAME TO planet_osm_polygon_pois_geom_index;
+COMMIT;
+
+BEGIN;
+DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_6_index;
+ALTER INDEX new_planet_osm_polygon_pois_geom_6_index RENAME TO planet_osm_polygon_pois_geom_6_index;
+COMMIT;
+
+BEGIN;
+DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_9_index;
+ALTER INDEX new_planet_osm_polygon_pois_geom_9_index RENAME TO planet_osm_polygon_pois_geom_9_index;
+COMMIT;
+
+BEGIN;
+DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_12_index;
+ALTER INDEX new_planet_osm_polygon_pois_geom_12_index RENAME TO planet_osm_polygon_pois_geom_12_index;
+COMMIT;
+
+BEGIN;
+DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_15_index;
+ALTER INDEX new_planet_osm_polygon_pois_geom_15_index RENAME TO planet_osm_polygon_pois_geom_15_index;
+COMMIT;

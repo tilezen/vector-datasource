@@ -73,6 +73,12 @@ CREATE INDEX planet_osm_polygon_boundary_geom_15_index ON planet_osm_polygon USI
 CREATE INDEX planet_osm_polygon_building_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_building_min_zoom IS NOT NULL;
 CREATE INDEX planet_osm_polygon_building_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_building_min_zoom <= 15;
 
+CREATE INDEX planet_osm_polygon_pois_geom_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom IS NOT NULL;
+CREATE INDEX planet_osm_polygon_pois_geom_6_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 6;
+CREATE INDEX planet_osm_polygon_pois_geom_9_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 9;
+CREATE INDEX planet_osm_polygon_pois_geom_12_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 12;
+CREATE INDEX planet_osm_polygon_pois_geom_15_index ON planet_osm_polygon USING gist(way) WHERE mz_poi_min_zoom <= 15;
+
 END $$;
 
 ANALYZE planet_osm_polygon;
