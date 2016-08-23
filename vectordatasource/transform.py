@@ -3877,3 +3877,15 @@ def buildings_unify(ctx):
 
         if root_building_id is not None:
             part_props['root_id'] = root_building_id
+
+
+def truncate_min_zoom_to_2dp(shape, properties, fid, zoom):
+    """
+    Truncate the "min_zoom" property to two decimal places.
+    """
+
+    min_zoom = properties.get('min_zoom')
+    if min_zoom:
+        properties['min_zoom'] = round(min_zoom, 2)
+
+    return shape, properties, fid
