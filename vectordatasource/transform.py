@@ -3351,6 +3351,29 @@ def _parse_kt(key_type):
     return (kt[0], fn)
 
 
+def _parse_csv_header(header):
+    """
+    Parse a CSV column header into a tuple containing:
+      * col_is_target: True if the column is an output / target column. This is
+        triggered if the header begins with "output:".
+      * key: The string name of the column.
+      * typ: A function returning the a value of the type of the column given a
+        string. This is used to ensure that integer columns are kept as
+        integers, rather than the strings they're read from the file as.
+    """
+
+    # target (output) columns start with 'output:'
+    col_is_target = header.startswith('output:')
+    if col_is_target:
+        header = header[len('output:'):]
+
+    # all columns can have an optional type after ::,
+    # e.g: key::int if it's supposed to be an integer.
+    key, typ = _parse_kt(header)
+
+    return (col_is_target, key, typ)
+
+
 class CSVMatcher(object):
     def __init__(self, fh):
         # collects together column information in the form of a tuple
@@ -3378,43 +3401,37 @@ class CSVMatcher(object):
         reader = csv.reader(fh, skipinitialspace=True)
         for row in reader:
             if cols is None:
-                cols = []
-                for key_type in row:
-                    # target (output) columns start with 'output:'
-                    col_is_target = key_type.startswith('output:')
-                    if col_is_target:
-                        key_type = key_type[len('output:'):]
-
-                    # all columns can have an optional type after ::,
-                    # e.g: key::int if it's supposed to be an integer.
-                    key, typ = _parse_kt(key_type)
-                    cols.append((col_is_target, key, typ))
+                cols = [_parse_csv_header(hdr) for hdr in row]
 
             else:
-                # match_row is the array of matcher objects which will be
-                # called with each column's value.
-                match_row = []
-                # target_vals is the dict of values to return to the caller
-                # for the first row where all the matchers return true.
-                target_vals = {}
-
-                for i in range(0, len(row)):
-                    is_target, key, typ = cols[i]
-                    val = row[i]
-
-                    if is_target:
-                        target_vals[key] = typ(val)
-
-                    else:
-                        match_row.append(self._match_val(val, typ))
-
-                rows.append((match_row, target_vals))
+                rows.append(self._parse_csv_row(row, cols))
 
         # keys is the string key for each matcher, so that values can be
         # extracted from the object being matched in the same order as the
         # array of matcher objects.
         self.keys = [key for is_target, key, typ in cols]
         self.rows = rows
+
+    def _parse_csv_row(self, row, cols):
+        # match_row is the array of matcher objects which will be
+        # called with each column's value.
+        match_row = []
+
+        # target_vals is the dict of values to return to the caller
+        # for the first row where all the matchers return true.
+        target_vals = {}
+
+        for i in range(0, len(row)):
+            is_target, key, typ = cols[i]
+            val = row[i]
+
+            if is_target:
+                target_vals[key] = typ(val)
+
+            else:
+                match_row.append(self._match_val(val, typ))
+
+        return (match_row, target_vals)
 
     def _match_val(self, v, typ):
         if v == '*':
@@ -3456,7 +3473,6 @@ class CSVMatcher(object):
                 val = properties.get(key)
             vals.append(val)
         for row, target_vals in self.rows:
-            import sys
             if all([a.match(b) for (a, b) in zip(row, vals)]):
                 return target_vals
 
