@@ -788,7 +788,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- change of return type, and can be deleted after the migrations have been
 -- run.
 BEGIN;
-DROP FUNCTION mz_calculate_min_zoom_places_(
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_places_(
 {%- for param in layers['places']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
@@ -839,8 +839,8 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- change of return type, and can be deleted after the migrations have been
 -- run.
 BEGIN;
-DROP FUNCTION mz_calculate_min_zoom_places(planet_osm_point);
-DROP FUNCTION mz_calculate_min_zoom_places(ne_10m_populated_places);
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_places(planet_osm_point);
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_places(ne_10m_populated_places);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places(planet_osm_point)
 RETURNS REAL AS $$
