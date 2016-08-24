@@ -21,8 +21,8 @@ class BuildingsClassTest(unittest.TestCase):
         match_result = self.matcher(shape, props, z)
         if match_result is None:
             return None
-        k, v = match_result
-        return float(v)
+        kvs = match_result
+        return float(kvs.get('scalerank'))
 
     def test_area_most_important(self):
         props = dict(area=1000000)
@@ -275,14 +275,15 @@ class SortKeyTest(unittest.TestCase):
         zoom = 16
         sort_key_result = self.matcher(shape, props, zoom)
         self.assertIsNotNone(sort_key_result)
-        _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 265)
+        sort_key = sort_key_result.get('sort_key')
+        self.assertEquals(type(sort_key), int)
+        self.assertEquals(sort_key, 265)
 
         shape = shapely.geometry.Polygon([(0, 0), (1, 1), (0, 1), (0, 0)])
         sort_key_result = self.matcher(shape, props, zoom)
         self.assertIsNotNone(sort_key_result)
-        _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 223)
+        sort_key = sort_key_result.get('sort_key')
+        self.assertEquals(sort_key, 223)
 
 
 class BuildingsUnifyTest(unittest.TestCase):

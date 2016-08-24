@@ -1,4 +1,4 @@
-kind,sort_key
+kind,output:sort_key::int
 light_rail,418
 tram,417
 funicular,416

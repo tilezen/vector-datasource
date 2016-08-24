@@ -262,6 +262,8 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
 * `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
+* `scalerank`: A positive integer zoom level, usually in the range 0 to 16. If this property is set on a feature at a particular zoom then it indicates that this feature is an appropriate size to display at this zoom. Features without this property set may be too small, or missing "importance raising" properties.
+* `tier`: An integer between 1 and 6, with 1 being "more important" and 6 being "less important".
 
 #### Landuse kind values:
 

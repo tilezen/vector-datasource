@@ -3289,7 +3289,7 @@ class _SetMatcher(object):
         return other in self.values
 
     def __repr__(self):
-        return repr(self.value)
+        return repr(self.values)
 
 
 class _GreaterThanEqualMatcher(object):
@@ -3351,12 +3351,47 @@ def _parse_kt(key_type):
     return (kt[0], fn)
 
 
+def _parse_csv_header(header):
+    """
+    Parse a CSV column header into a tuple containing:
+      * col_is_target: True if the column is an output / target column. This is
+        triggered if the header begins with "output:".
+      * key: The string name of the column.
+      * typ: A function returning the a value of the type of the column given a
+        string. This is used to ensure that integer columns are kept as
+        integers, rather than the strings they're read from the file as.
+    """
+
+    # target (output) columns start with 'output:'
+    col_is_target = header.startswith('output:')
+    if col_is_target:
+        header = header[len('output:'):]
+
+    # all columns can have an optional type after ::,
+    # e.g: key::int if it's supposed to be an integer.
+    key, typ = _parse_kt(header)
+
+    return (col_is_target, key, typ)
+
+
 class CSVMatcher(object):
     def __init__(self, fh):
-        keys = None
-        types = []
+        # collects together column information in the form of a tuple
+        # (is_target, key, typ) where is_target is a boolean which is true
+        # if the column is a target (i.e: output) column, or false if it is
+        # a column to be matched. key is a string key, and typ is a function
+        # which returns a type of that column given a string as input.
+        # typically this is int(), float(), etc...
+        cols = None
+
+        # each row is a potential match, and rows keeps a tuple for each of
+        # (matchers, target values), where matchers is an array of matcher
+        # objects, one for each non-target column.
         rows = []
 
+        # keep a set of static matchers to cut down the number of objects.
+        # these matchers are "constant" and don't take any input, so this is
+        # a safe operation.
         self.static_any = _AnyMatcher()
         self.static_none = _NoneMatcher()
         self.static_some = _SomeMatcher()
@@ -3365,23 +3400,35 @@ class CSVMatcher(object):
         # CSV - allow whitespace after the comma
         reader = csv.reader(fh, skipinitialspace=True)
         for row in reader:
-            if keys is None:
-                target_key = row.pop(-1)
-                keys = []
-                for key_type in row:
-                    key, typ = _parse_kt(key_type)
-                    keys.append(key)
-                    types.append(typ)
+            if cols is None:
+                cols = [_parse_csv_header(hdr) for hdr in row]
 
             else:
-                target_val = row.pop(-1)
-                for i in range(0, len(row)):
-                    row[i] = self._match_val(row[i], types[i])
-                rows.append((row, target_val))
+                rows.append(self._parse_csv_row(row, cols))
 
-        self.keys = keys
+        # keys is the string key for each matcher, so that values can be
+        # extracted from the object being matched in the same order as the
+        # array of matcher objects.
+        self.keys = [key for is_target, key, typ in cols]
         self.rows = rows
-        self.target_key = target_key
+
+    def _parse_csv_row(self, row, cols):
+        # match_row is the array of matcher objects which will be
+        # called with each column's value.
+        match_row = []
+
+        # target_vals is the dict of values to return to the caller
+        # for the first row where all the matchers return true.
+        target_vals = {}
+
+        for (is_target, key, typ), val in zip(cols, row):
+            if is_target:
+                target_vals[key] = typ(val)
+
+            else:
+                match_row.append(self._match_val(val, typ))
+
+        return (match_row, target_vals)
 
     def _match_val(self, v, typ):
         if v == '*':
@@ -3422,9 +3469,9 @@ class CSVMatcher(object):
             else:
                 val = properties.get(key)
             vals.append(val)
-        for row, target_val in self.rows:
+        for row, target_vals in self.rows:
             if all([a.match(b) for (a, b) in zip(row, vals)]):
-                return (self.target_key, target_val)
+                return target_vals
 
         return None
 
@@ -3440,7 +3487,6 @@ def csv_match_properties(ctx):
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
-    target_value_type = ctx.params.get('target_value_type')
     matcher = ctx.resources.get('matcher')
 
     assert source_layer, 'csv_match_properties: missing source layer'
@@ -3456,16 +3502,10 @@ def csv_match_properties(ctx):
     if layer is None:
         return None
 
-    def _type_cast(v):
-        if target_value_type == 'int':
-            return int(v)
-        return v
-
     for shape, props, fid in layer['features']:
         m = matcher(shape, props, zoom)
         if m is not None:
-            k, v = m
-            props[k] = _type_cast(v)
+            props.update(m)
 
     return layer
 
