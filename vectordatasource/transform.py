@@ -3421,10 +3421,7 @@ class CSVMatcher(object):
         # for the first row where all the matchers return true.
         target_vals = {}
 
-        for i in range(0, len(row)):
-            is_target, key, typ = cols[i]
-            val = row[i]
-
+        for (is_target, key, typ), val in zip(cols, row):
             if is_target:
                 target_vals[key] = typ(val)
 
