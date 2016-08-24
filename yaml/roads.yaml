@@ -42,7 +42,9 @@ global:
       crossing:
         expr: |
           CASE WHEN tags->'crossing' <> 'no' THEN tags->'crossing' END
-      sidewalk: {col: tags->sidewalk}
+      sidewalk: {col: sidewalk}
+      sidewalk_left: {col: 'sidewalk:left'}
+      sidewalk_right: {col: 'sidewalk:right'}
   - &osm_network_from_relation
       mz_networks: {expr: "mz_get_rel_networks(osm_id)"}
   - &osm_network_from_tags
