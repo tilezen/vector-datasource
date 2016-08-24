@@ -36,3 +36,33 @@ PERFORM tmp_add_mz_label_placement('ne_10m_urban_areas');
 END$$;
 
 DROP FUNCTION tmp_add_mz_label_placement(text);
+
+CREATE OR REPLACE function tmp_make_real(tbl_name text, col_name text)
+RETURNS VOID AS $$
+BEGIN
+ IF NOT EXISTS (
+    SELECT data_type FROM information_schema.columns
+    WHERE table_name = tbl_name AND
+          column_name = 'mz_places_min_zoom' AND
+          data_type = 'real'
+    ) THEN
+   EXECUTE format('ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE REAL', tbl_name, col_name);
+ END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+DO $$
+BEGIN
+
+-- note that we don't need to re-run the calculation for min_zoom, because it
+-- currently always returns an integer. that may change in the future, though.
+PERFORM tmp_make_real('planet_osm_point', 'mz_places_min_zoom');
+PERFORM tmp_make_real('ne_10m_populated_places', 'mz_places_min_zoom');
+
+-- and the same for WOF - note that we don't need to run a migration for this
+-- either, since the previous behaviour was to _reject_ anything which has a
+-- fractional zoom, so they won't be in the database!
+PERFORM tmp_make_real('wof_neighbourhood', 'min_zoom');
+PERFORM tmp_make_real('wof_neighbourhood', 'max_zoom');
+
+END$$;

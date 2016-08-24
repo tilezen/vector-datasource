@@ -15,7 +15,7 @@ ALTER TABLE planet_osm_line ADD COLUMN mz_landuse_min_zoom SMALLINT;
 -- same for point
 ALTER TABLE planet_osm_point ADD COLUMN mz_poi_min_zoom REAL;
 ALTER TABLE planet_osm_point ADD COLUMN mz_water_min_zoom SMALLINT;
-ALTER TABLE planet_osm_point ADD COLUMN mz_places_min_zoom SMALLINT;
+ALTER TABLE planet_osm_point ADD COLUMN mz_places_min_zoom REAL;
 ALTER TABLE planet_osm_point ADD COLUMN mz_earth_min_zoom SMALLINT;
 
 -- and pre-calculated areas for all the polygonal NE and static OSM
@@ -56,7 +56,7 @@ ALTER TABLE ne_50m_land ADD COLUMN mz_earth_min_zoom SMALLINT;
 ALTER TABLE ne_10m_land ADD COLUMN mz_earth_min_zoom SMALLINT;
 ALTER TABLE land_polygons ADD COLUMN mz_earth_min_zoom SMALLINT;
 
-ALTER TABLE ne_10m_populated_places ADD COLUMN mz_places_min_zoom SMALLINT;
+ALTER TABLE ne_10m_populated_places ADD COLUMN mz_places_min_zoom REAL;
 
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_boundary_min_zoom SMALLINT;
 ALTER TABLE planet_osm_line ADD COLUMN mz_boundary_min_zoom SMALLINT;

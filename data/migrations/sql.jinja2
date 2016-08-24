@@ -784,16 +784,28 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places min_zoom "main" function
 
+-- NOTE: this transaction including a DROP FUNCTION is here to deal with the
+-- change of return type, and can be deleted after the migrations have been
+-- run.
+BEGIN;
+DROP FUNCTION mz_calculate_min_zoom_places_(
+{%- for param in layers['places']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places_(
 {%- for param in layers['places']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 BEGIN
   RETURN {{ layers['places']['min_zoom_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+COMMIT;
 
 -- places kind table adaptors
 
@@ -823,8 +835,15 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+-- NOTE: this transaction including a DROP FUNCTION is here to deal with the
+-- change of return type, and can be deleted after the migrations have been
+-- run.
+BEGIN;
+DROP FUNCTION mz_calculate_min_zoom_places(planet_osm_point);
+DROP FUNCTION mz_calculate_min_zoom_places(ne_10m_populated_places);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places(planet_osm_point)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -837,7 +856,7 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_places(ne_10m_populated_places)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -848,6 +867,8 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+COMMIT;
 
 ----------------------------------------------------------------------
 -- BOUNDARIES
