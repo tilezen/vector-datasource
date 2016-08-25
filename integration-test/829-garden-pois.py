@@ -9,7 +9,7 @@ assert_has_feature(
 # garden with area in landuse
 # https://www.openstreetmap.org/way/120480164
 assert_has_feature(
-    11, 327, 791, 'landuse',
+    13, 1309, 3166, 'landuse',
     {'id': 120480164, 'kind': 'garden'})
 
 # garden without area in pois
