@@ -59,14 +59,10 @@ filters:
         kind: lake
         reservoir: true
     table: osm
-  - filter: {amenity: swimming_pool}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
-    output:
-        <<: *water_standard_properties_osm
-        kind: swimming_pool
-    table: osm
-  - filter: {leisure: swimming_pool}
+  - filter:
+      any:
+        amenity: swimming_pool
+        leisure: swimming_pool
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
       16), 9) END
     output:
