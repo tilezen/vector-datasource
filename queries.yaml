@@ -117,7 +117,7 @@ layers:
     area-inclusion-threshold: 1
   pois:
     template: pois.jinja2
-    start_zoom: 2
+    start_zoom: 4
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
