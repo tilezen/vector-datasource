@@ -374,3 +374,173 @@ class BuildingsUnifyTest(unittest.TestCase):
                 self.assertEquals(root_id, 2)
             else:
                 assert 'root_id' not in props
+
+
+class DropMergedIdTest(unittest.TestCase):
+
+    def _assert_no_id_in_props(self, features, merge_fn):
+        from tilequeue.process import Context
+        from tilequeue.tile import deserialize_coord
+        layer_name = 'layername'
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name=layer_name),
+        )
+        feature_layers = [feature_layer]
+        ctx = Context(
+            feature_layers=feature_layers,
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=None,
+            params=dict(source_layer=layer_name),
+            resources=None)
+        merged_feature_layer = merge_fn(ctx)
+        merged_features = merged_feature_layer['features']
+        self.assertEquals(1, len(merged_features))
+        merged_feature = merged_features[0]
+        props = merged_feature[1]
+        self.assertTrue('id' not in props)
+
+    def test_merge_buildings(self):
+        import shapely.geometry
+        from vectordatasource.transform import merge_polygon_features
+
+        buildings = []
+        for i in (0, 1):
+            id = i + 1
+            points = [
+                (1, 1),
+                (10 + i, 10 + i),
+                (1, 10 + i),
+                (1, 1),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='building',
+            )
+            building = shape, props, id
+            buildings.append(building)
+
+        self._assert_no_id_in_props(buildings, merge_polygon_features)
+
+    def test_merge_lines(self):
+        import shapely.geometry
+        from vectordatasource.transform import merge_line_features
+
+        roads = []
+        for i in (0, 1):
+            id = i + 1
+            points = [
+                (1, 1),
+                (10 + i, 10 + i),
+            ]
+            shape = shapely.geometry.LineString(points)
+            props = dict(
+                id=id,
+                kind='road',
+            )
+            road = shape, props, id
+            roads.append(road)
+
+        self._assert_no_id_in_props(roads, merge_line_features)
+
+    def test_merge_polygons(self):
+        import shapely.geometry
+        from vectordatasource.transform import merge_polygon_features
+
+        landuses = []
+        for i in (0, 1):
+            id = i + 1
+            points = [
+                (1, 1),
+                (10 + i, 10 + i),
+                (1, 10 + i),
+                (1, 1),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='landuse',
+            )
+            landuse = shape, props, id
+            landuses.append(landuse)
+
+        self._assert_no_id_in_props(landuses, merge_polygon_features)
+
+    def test_no_merge_preserve_props(self):
+        import shapely.geometry
+        from tilequeue.process import Context
+        from tilequeue.tile import deserialize_coord
+        from vectordatasource.transform import merge_polygon_features
+
+        buildings = []
+        for i in (0, 100):
+            id = i + 1
+            points = [
+                (1 + i, 1 + i),
+                (10 + i, 10 + i),
+                (1 + i, 10 + i),
+                (1 + i, 1 + i),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='building',
+                unique_value='value-%d' % id,
+            )
+            building = shape, props, id
+            buildings.append(building)
+
+        layer_name = 'buildings'
+        feature_layer = dict(
+            features=buildings,
+            layer_datum=dict(name=layer_name),
+        )
+        feature_layers = [feature_layer]
+        ctx = Context(
+            feature_layers=feature_layers,
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=None,
+            params=dict(source_layer=layer_name),
+            resources=None)
+        merged_feature_layer = merge_polygon_features(ctx)
+        merged_features = merged_feature_layer['features']
+        self.assertEquals(2, len(merged_features))
+        for f in merged_features:
+            props = f[1]
+            self.assertTrue('id' in props)
+
+    def test_no_merge_preserve_del_props_fn(self):
+        import shapely.geometry
+        from vectordatasource.transform import _merge_features_by_property
+        from vectordatasource.transform import _POLYGON_DIMENSION
+
+        buildings = []
+        for i in (0, 100):
+            id = i + 1
+            points = [
+                (1 + i, 1 + i),
+                (10 + i, 10 + i),
+                (1 + i, 10 + i),
+                (1 + i, 1 + i),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='building',
+                unique_value='value-%d' % id,
+            )
+            building = shape, props, id
+            buildings.append(building)
+
+        def _drop_all_props((shape, props, fid)):
+            return None
+
+        merged_features = _merge_features_by_property(
+            buildings, _POLYGON_DIMENSION, update_props_pre_fn=_drop_all_props)
+
+        self.assertEquals(2, len(merged_features))
+        for f in merged_features:
+            props = f[1]
+            self.assertTrue('id' in props)
+            self.assertTrue('unique_value' in props)

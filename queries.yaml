@@ -618,7 +618,7 @@ post_process:
       values: ['closed', 'historical']
       target_min_zoom: 17
       drop_below_zoom: 16
-  - fn: vectordatasource.transform.merge_features
+  - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: transit
       start_zoom: 0
@@ -672,7 +672,7 @@ post_process:
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_key', reverse: True }
 
-  - fn: vectordatasource.transform.merge_features
+  - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
       start_zoom: 8
