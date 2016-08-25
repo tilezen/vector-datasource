@@ -174,9 +174,18 @@ class SetRule(object):
 
     def as_sql(self):
         formatted_values = map(format_value, self.values)
-        return '%s IN (%s)' % (
+        set_check = '%s IN (%s)' % (
             self.column.format(),
             ', '.join(formatted_values))
+
+        # tags->'foo' is NULL when the hstore doesn't contain that key, which
+        # makes all the following comparisons NULL, so combine the equals
+        # with an exists check.
+        exists_check = self.column.exists_check()
+        if exists_check:
+            return '(%s) AND (%s)' % (exists_check, set_check)
+        else:
+            return set_check
 
     def columns(self):
         cols = [self.column]
@@ -363,6 +372,31 @@ class Matcher(object):
         return 'WHEN %s THEN %s' % (self.rule.as_sql(), min_zoom)
 
 
+def sql_expr(expr):
+    # a literal should be returned as an escaped SQL literal in a string
+    if isinstance(expr, (str, unicode, int)):
+        return format_value(expr)
+
+    # otherwise expr is an AST, so should be tree-structured with a single head.
+    # There may be many children, though.
+    assert len(expr) == 1, "Expect only a single 'head' in expression."
+
+    node_type, value = expr.items()[0]
+
+    if node_type == 'max':
+        assert isinstance(value, list), "Max should have a list of children."
+        sql = 'GREATEST(' + ','.join([sql_expr(v) for v in value]) + ')'
+
+    elif node_type == 'lit':
+        assert isinstance(value, (str, unicode)), "Literal should be a string."
+        sql = value
+
+    else:
+        assert 0, "Unimplemented node type %r" % (node_type,)
+
+    return sql
+
+
 def create_matcher(yaml_datum):
     table = yaml_datum.get('table')
     extra_columns = yaml_datum.get('extra_columns', [])
@@ -384,6 +418,9 @@ def create_matcher(yaml_datum):
     else:
         rule = rules[0]
     min_zoom = yaml_datum['min_zoom']
+
+    if isinstance(min_zoom, dict):
+        min_zoom = sql_expr(min_zoom)
 
     output = yaml_datum['output']
     assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
