@@ -568,13 +568,13 @@ post_process:
       where: >-
         (kind == 'path' and zoom < 15) or
         (kind in ['minor_road', 'major_road', 'highway', 'rail'] and zoom < 13)
-  # drop all oneway tags below zoom 14 (i.e: zoom >= 15) for all types.
+  # drop certain road properties at lower zooms
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
-      properties: [oneway]
+      properties: [oneway, crossing, sidewalk, sidewalk_left, sidewalk_right]
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
