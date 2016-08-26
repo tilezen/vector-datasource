@@ -56,10 +56,11 @@ assert_no_matching_feature(
     {'id': 64296322, 'kind': 'forest', 'label_placement': True})
 
 # Node:357559979 landuse: Forest in POIS
+# now clamped to zoom 16
 # http://www.openstreetmap.org/node/357559979
 assert_has_feature(
-    14, 2842, 6101, 'pois',
-    {'id': 357559979, 'kind': 'forest', 'min_zoom': 14})
+    16, 11371, 24405, 'pois',
+    {'id': 357559979, 'kind': 'forest', 'min_zoom': 16})
 
 # Way:432810821 landuse: Forest protect class in POIS
 # http://www.openstreetmap.org/way/432810821
@@ -68,55 +69,56 @@ assert_has_feature(
     {'id': 432810821, 'kind': 'forest', 'protect_class': '6'})
 
 # Way: natural: Forest in POIS
+# note now clamped to z15
 # http://www.openstreetmap.org/way/202680509
 assert_has_feature(
-    12, 1219, 1527, 'pois',
+    15, 9755, 12218, 'pois',
     {'id': 202680509, 'kind': 'natural_forest'})
 
 # Label placement forest in landuse
 assert_no_matching_feature(
-    12, 1219, 1527, 'landuse',
+    15, 9755, 12218, 'landuse',
     {'id': 202680509, 'kind': 'natural_forest', 'label_placement': True})
 
 # Node:2148541212 natural: Forest in POIS
 # http://www.openstreetmap.org/node/2148541212
 assert_has_feature(
-    14, 3942, 5901, 'pois',
-    {'id': 2148541212, 'kind': 'natural_forest', 'min_zoom': 14})
+    16, 15768, 23604, 'pois',
+    {'id': 2148541212, 'kind': 'natural_forest', 'min_zoom': 16})
 
 # Way:30903221 Golf_course in POIS
 # http://www.openstreetmap.org/way/30903221
 assert_has_feature(
-    12, 654, 1583, 'pois',
+    13, 1308, 3166, 'pois',
     {'id': 30903221, 'kind': 'golf_course'})
 
 # Label placement Golf_course in landuse
 assert_no_matching_feature(
-    12, 654, 1583, 'landuse',
+    13, 1308, 3166, 'landuse',
     {'id': 30903221, 'kind': 'golf_course', 'label_placement': True})
 
 # Node:4035914099 Golf_course in POIS
 # http://www.openstreetmap.org/node/4035914099
 assert_has_feature(
-    14, 2680, 6334, 'pois',
-    {'id': 4035914099, 'kind': 'golf_course', 'min_zoom': 14})
+    16, 10720, 25338, 'pois',
+    {'id': 4035914099, 'kind': 'golf_course', 'min_zoom': 16})
 
 # Way:330274727 Military in POIS
 # http://www.openstreetmap.org/way/330274727
 assert_has_feature(
-    11, 327, 793, 'pois',
+    13, 1308, 3174, 'pois',
     {'id': 330274727, 'kind': 'military'})
 
 # Label placement military in landuse
 assert_no_matching_feature(
-    11, 327, 793, 'landuse',
+    13, 1308, 3174, 'landuse',
     {'id': 330274727, 'kind': 'military', 'label_placement': True})
 
 # Node:369174053 Military in POIS
 # http://www.openstreetmap.org/node/369174053
 assert_has_feature(
-    14, 2617, 6329, 'pois',
-    {'id': 369174053, 'kind': 'military', 'min_zoom': 14})
+    16, 10471, 25317, 'pois',
+    {'id': 369174053, 'kind': 'military', 'min_zoom': 16})
 
 # Way:296096756 national_park in POIS
 # http://www.openstreetmap.org/way/296096756
@@ -132,8 +134,8 @@ assert_no_matching_feature(
 # Node:617506856 national_park in POIS
 # http://www.openstreetmap.org/node/617506856
 assert_has_feature(
-    10, 210, 386, 'pois',
-    {'id': 617506856, 'kind': 'national_park', 'min_zoom': 10})
+    16, 13497, 24739, 'pois',
+    {'id': 617506856, 'kind': 'national_park', 'min_zoom': 16})
 
 # Way:40260866 nature_reserve in POIS
 # http://www.openstreetmap.org/way/40260866
@@ -149,42 +151,42 @@ assert_no_matching_feature(
 # Node:1262562806 nature_reserve in POIS
 # http://www.openstreetmap.org/node/1262562806
 assert_has_feature(
-    10, 247, 388, 'pois',
-    {'id': 1262562806, 'kind': 'nature_reserve', 'min_zoom': 10})
+    16, 15827, 24891, 'pois',
+    {'id': 1262562806, 'kind': 'nature_reserve', 'min_zoom': 16})
 
 # Way:23871270 park in POIS
 # http://www.openstreetmap.org/way/23871270
 assert_has_feature(
-    11, 327, 791, 'pois',
+    13, 1310, 3166, 'pois',
     {'id': 23871270, 'kind': 'park'})
 
 # Label placement park in landuse
 assert_no_matching_feature(
-    11, 327, 791, 'landuse',
+    13, 1310, 3166, 'landuse',
     {'id': 23871270, 'kind': 'park', 'label_placement': True})
 
 # Node:4206408136 park in POIS
 # http://www.openstreetmap.org/node/4206408136
 assert_has_feature(
-    14, 2619, 6333, 'pois',
-    {'id': 4206408136, 'kind': 'park', 'min_zoom': 14})
+    16, 10476, 25335, 'pois',
+    {'id': 4206408136, 'kind': 'park', 'min_zoom': 16})
 
 # Way:26278098 plant in POIS
 # http://www.openstreetmap.org/way/26278098
 assert_has_feature(
-    13, 1308, 3167, 'pois',
+    14, 2617, 6334, 'pois',
     {'id': 26278098, 'kind': 'plant'})
 
 # Label placement plant in landuse
 assert_no_matching_feature(
-    13, 1308, 3167, 'landuse',
+    14, 2617, 6334, 'landuse',
     {'id': 26278098, 'kind': 'plant', 'label_placement': True})
 
 # Node:902365126 plant in POIS
 # http://www.openstreetmap.org/node/902365126
 assert_has_feature(
-    14, 2777, 6374, 'pois',
-    {'id': 902365126, 'kind': 'plant', 'min_zoom': 14})
+    16, 11111, 25499, 'pois',
+    {'id': 902365126, 'kind': 'plant', 'min_zoom': 16})
 
 # Node:2442093493 pitch in POIS
 # http://www.openstreetmap.org/node/2442093493
@@ -195,19 +197,19 @@ assert_has_feature(
 # Way:296573403 protected_area in POIS
 # http://www.openstreetmap.org/way/296573403
 assert_has_feature(
-    9, 82, 198, 'pois',
+    12, 656, 1587, 'pois',
     {'id': 296573403, 'kind': 'protected_area'})
 
 # Label placement protected_area in landuse
 assert_no_matching_feature(
-    9, 82, 198, 'landuse',
+    12, 656, 1587, 'landuse',
     {'id': 296573403, 'kind': 'protected_area', 'label_placement': True})
 
 # Node:4076680383 protected_area in POIS
 # http://www.openstreetmap.org/node/4076680383
 assert_has_feature(
-    14, 2809, 6074, 'pois',
-    {'id': 4076680383, 'kind': 'protected_area', 'min_zoom': 14})
+    16, 11239, 24299, 'pois',
+    {'id': 4076680383, 'kind': 'protected_area', 'min_zoom': 16})
 
 # Way:184367568 quarry in POIS
 # http://www.openstreetmap.org/way/184367568
@@ -229,25 +231,25 @@ assert_has_feature(
 # Way:86285084 recreation_ground in POIS
 # http://www.openstreetmap.org/way/86285084
 assert_has_feature(
-    14, 2619, 6334, 'pois',
-    {'id': 86285084, 'kind': 'recreation_ground', 'min_zoom': 14})
+    16, 10479, 25336, 'pois',
+    {'id': 86285084, 'kind': 'recreation_ground', 'min_zoom': 16})
 
 # Label placement recreation_ground in landuse
 assert_no_matching_feature(
-    14, 2619, 6334, 'landuse',
+    16, 10479, 25336, 'landuse',
     {'id': 86285084, 'kind': 'recreation_ground', 'label_placement': True})
 
 # Node:1868204235 recreation_ground in POIS
 # http://www.openstreetmap.org/node/1868204235
 assert_has_feature(
-    14, 2626, 6326, 'pois',
-    {'id': 1868204235, 'kind': 'recreation_ground', 'min_zoom': 14})
+    16, 10506, 25307, 'pois',
+    {'id': 1868204235, 'kind': 'recreation_ground', 'min_zoom': 16})
 
 # Node:4214350591 substation in POIS
 # http://www.openstreetmap.org/node/4214350591
 assert_has_feature(
-    15, 5233, 12668, 'pois',
-    {'id': 4214350591, 'kind': 'substation', 'min_zoom': 15})
+    16, 10466, 25336, 'pois',
+    {'id': 4214350591, 'kind': 'substation', 'min_zoom': 16})
 
 # Way:28694608 village_green in POIS
 # http://www.openstreetmap.org/way/28694608
@@ -269,36 +271,36 @@ assert_has_feature(
 # Way:239634932 wastewater_plant in POIS
 # http://www.openstreetmap.org/way/239634932
 assert_has_feature(
-    12, 655, 1583, 'pois',
-    {'id': 239634932, 'kind': 'wastewater_plant', 'min_zoom': 12})
+    13, 1310, 3167, 'pois',
+    {'id': 239634932, 'kind': 'wastewater_plant', 'min_zoom': 13})
 
 # Label placement wastewater_plant in landuse
 assert_no_matching_feature(
-    12, 655, 1583, 'landuse',
+    13, 1310, 3167, 'landuse',
     {'id': 239634932, 'kind': 'wastewater_plant', 'label_placement': True})
 
 # Node:2838226695 wastewater_plant in POIS
 # http://www.openstreetmap.org/node/2838226695
 assert_has_feature(
-    14, 2615, 6325, 'pois',
-    {'id': 2838226695, 'kind': 'wastewater_plant', 'min_zoom': 14})
+    16, 10462, 25303, 'pois',
+    {'id': 2838226695, 'kind': 'wastewater_plant', 'min_zoom': 16})
 
 # Way:93703732 water_works in POIS
 # http://www.openstreetmap.org/way/93703732
 assert_has_feature(
-    14, 2620, 6330, 'pois',
-    {'id': 93703732, 'kind': 'water_works', 'min_zoom': 14})
+    16, 10480, 25323, 'pois',
+    {'id': 93703732, 'kind': 'water_works', 'min_zoom': 16})
 
 # Label placement water_works in landuse
 assert_no_matching_feature(
-    14, 2620, 6330, 'landuse',
+    16, 10480, 25323, 'landuse',
     {'id': 93703732, 'kind': 'water_works', 'label_placement': True})
 
 # Node:3367407023 water_works in POIS
 # http://www.openstreetmap.org/node/3367407023
 assert_has_feature(
-    14, 2627, 6346, 'pois',
-    {'id': 3367407023, 'kind': 'water_works', 'min_zoom': 14})
+    16, 10509, 25386, 'pois',
+    {'id': 3367407023, 'kind': 'water_works', 'min_zoom': 16})
 
 # Way:317721523 winter_sports in POIS
 # http://www.openstreetmap.org/way/317721523
@@ -314,50 +316,50 @@ assert_no_matching_feature(
 # Node:4042754024 winter_sports in POIS
 # http://www.openstreetmap.org/node/4042754024
 assert_has_feature(
-    13, 4238, 2938, 'pois',
-    {'id': 4042754024, 'kind': 'winter_sports', 'min_zoom': 13})
+    16, 33906, 23508, 'pois',
+    {'id': 4042754024, 'kind': 'winter_sports', 'min_zoom': 16})
 
 # Way:207859675 landuse: wood in POIS
 # http://www.openstreetmap.org/way/207859675
 assert_has_feature(
-    13, 1413, 3274, 'pois',
+    15, 5653, 13099, 'pois',
     {'id': 207859675, 'kind': 'wood'})
 
 # Label placement landuse: wood in landuse
 assert_no_matching_feature(
-    13, 1413, 3274, 'landuse',
+    15, 5653, 13099, 'landuse',
     {'id': 207859675, 'kind': 'wood', 'label_placement': True})
 
 # Way:372445925 natural: wood in POIS
 # http://www.openstreetmap.org/way/372445925
 assert_has_feature(
-    13, 1309, 3165, 'pois',
+    15, 5236, 12661, 'pois',
     {'id': 372445925, 'kind': 'natural_wood'})
 
 # Label placement natural: wood in landuse
 assert_no_matching_feature(
-    13, 1309, 3165, 'landuse',
+    15, 5236, 12661, 'landuse',
     {'id': 372445925, 'kind': 'natural_wood', 'label_placement': True})
 
 # Node:369162231 natural: wood in POIS
 # http://www.openstreetmap.org/node/369162231
 assert_has_feature(
-    14, 2612, 6298, 'pois',
-    {'id': 369162231, 'kind': 'natural_wood', 'min_zoom': 14})
+    16, 10450, 25194, 'pois',
+    {'id': 369162231, 'kind': 'natural_wood', 'min_zoom': 16})
 
 # Way:164878781 works in POIS
 # http://www.openstreetmap.org/way/164878781
 assert_has_feature(
-    12, 714, 1623, 'pois',
-    {'id': 164878781, 'kind': 'works', 'min_zoom': 12})
+    13, 1429, 3247, 'pois',
+    {'id': 164878781, 'kind': 'works', 'min_zoom': 13})
 
 # Label placement works in landuse
 assert_no_matching_feature(
-    12, 714, 1623, 'landuse',
+    13, 1429, 3247, 'landuse',
     {'id': 164878781, 'kind': 'works', 'label_placement': True})
 
 # Node:1004981713 works in POIS
 # http://www.openstreetmap.org/node/1004981713
 assert_has_feature(
-    14, 3293, 6329, 'pois',
-    {'id': 1004981713, 'kind': 'works', 'min_zoom': 14})
+    16, 13174, 25318, 'pois',
+    {'id': 1004981713, 'kind': 'works', 'min_zoom': 16})

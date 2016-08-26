@@ -1,3 +1,7 @@
+#
+# NOTE: these globals are shared between the POIs and landuse. if you make an
+# update here, please remember to also change it there.
+#
 global:
   - &tier1_min_zoom |
       CASE WHEN way_area >= 300000000 THEN  3
@@ -165,6 +169,13 @@ filters:
     min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
     output: { kind: forest, tier: 2 }
 
+  - filter: {boundary: protected_area}
+    min_zoom: *tier2_min_zoom
+    output: {kind: protected_area, tier: 2}
+  - filter: {leisure: nature_reserve}
+    min_zoom: *tier2_min_zoom
+    output: {kind: nature_reserve, tier: 2}
+
   - filter: { landuse: wood, operator: *us_forest_service }
     min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
     output: { kind: wood, tier: 2 }
@@ -187,12 +198,6 @@ filters:
     output: { kind: natural_wood, tier: 2 }
 
   # TODO: conservation? doesn't seem to be an existing kind.
-  - filter: {boundary: protected_area}
-    min_zoom: *tier2_min_zoom
-    output: {kind: protected_area, tier: 2}
-  - filter: {leisure: nature_reserve}
-    min_zoom: *tier2_min_zoom
-    output: {kind: nature_reserve, tier: 2}
   - filter: {landuse: urban}
     min_zoom: *tier2_min_zoom
     output: {kind: urban, tier: 2}
@@ -453,6 +458,13 @@ filters:
   ############################################################
   # NOT IN ANY TIER
   ############################################################
+  # park w/ US Parks Service operator
+  - filter:
+      any:
+        leisure: park
+        landuse: park
+    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    output: { kind: park }
   - filter: {landuse: grass}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: grass}

@@ -1,9 +1,9 @@
 # update gardens in pois
 
-# garden with area in pois
+# garden with area in pois - note now clamped to landuse zoom
 # https://www.openstreetmap.org/way/120480164
 assert_has_feature(
-    12, 654, 1583, 'pois',
+    13, 1309, 3166, 'pois',
     {'id': 120480164, 'kind': 'garden'})
 
 # garden with area in landuse
