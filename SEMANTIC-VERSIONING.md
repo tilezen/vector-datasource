@@ -141,7 +141,7 @@ In addition to the `common` **name** locals call a place, the following `common`
 1. `name:de` German
 1. `name:gr` Greek
 1. `name:it` Italian
-1. `name:jp` Japanese
+1. `name:ja` Japanese
 1. `name:ko` Korean
 1. `name:vi` Vietnamese
 
