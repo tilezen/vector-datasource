@@ -27,7 +27,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_building_min_zoom IS NOT NULL
 {% else %}
-    mz_building_min_zoom <= {{ zoom }}
+    mz_building_min_zoom < {{ zoom + 1 }}
 {% endif %}
 
 {% if zoom >= 16 %}

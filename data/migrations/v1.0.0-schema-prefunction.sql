@@ -3,7 +3,21 @@ RETURNS VOID AS $$
 BEGIN
  IF NOT EXISTS (
     SELECT column_name FROM information_schema.columns WHERE table_name=tbl_name and column_name='mz_label_placement') THEN
-   EXECUTE format('ALTER TABLE %s ADD COLUMN mz_label_placement geometry(Geometry, 3857)', tbl_name, _col);
+   EXECUTE format('ALTER TABLE %s ADD COLUMN mz_label_placement geometry(Geometry, 3857)', tbl_name);
+ END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE function tmp_make_real(tbl_name text, col_name text)
+RETURNS VOID AS $$
+BEGIN
+ IF NOT EXISTS (
+    SELECT data_type FROM information_schema.columns
+    WHERE table_name = tbl_name AND
+          column_name = 'mz_places_min_zoom' AND
+          data_type = 'real'
+    ) THEN
+   EXECUTE format('ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE REAL', tbl_name, col_name);
  END IF;
 END;
 $$ LANGUAGE plpgsql;
@@ -35,34 +49,51 @@ PERFORM tmp_add_mz_label_placement('ne_10m_urban_areas');
 
 END$$;
 
-DROP FUNCTION tmp_add_mz_label_placement(text);
-
-CREATE OR REPLACE function tmp_make_real(tbl_name text, col_name text)
-RETURNS VOID AS $$
-BEGIN
- IF NOT EXISTS (
-    SELECT data_type FROM information_schema.columns
-    WHERE table_name = tbl_name AND
-          column_name = 'mz_places_min_zoom' AND
-          data_type = 'real'
-    ) THEN
-   EXECUTE format('ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE REAL', tbl_name, col_name);
- END IF;
-END;
-$$ LANGUAGE plpgsql;
-
 DO $$
 BEGIN
 
--- note that we don't need to re-run the calculation for min_zoom, because it
--- currently always returns an integer. that may change in the future, though.
-PERFORM tmp_make_real('planet_osm_point', 'mz_places_min_zoom');
-PERFORM tmp_make_real('ne_10m_populated_places', 'mz_places_min_zoom');
+PERFORM tmp_make_real('planet_osm_line', 'mz_road_level');
+PERFORM tmp_make_real('planet_osm_line', 'mz_transit_level');
+PERFORM tmp_make_real('planet_osm_line', 'mz_water_min_zoom');
+PERFORM tmp_make_real('planet_osm_line', 'mz_earth_min_zoom');
+PERFORM tmp_make_real('planet_osm_line', 'mz_landuse_min_zoom');
+PERFORM tmp_make_real('planet_osm_line', 'mz_boundary_min_zoom');
 
--- and the same for WOF - note that we don't need to run a migration for this
--- either, since the previous behaviour was to _reject_ anything which has a
--- fractional zoom, so they won't be in the database!
+PERFORM tmp_make_real('planet_osm_point', 'mz_water_min_zoom');
+PERFORM tmp_make_real('planet_osm_point', 'mz_places_min_zoom');
+PERFORM tmp_make_real('planet_osm_point', 'mz_earth_min_zoom');
+PERFORM tmp_make_real('planet_osm_point', 'mz_building_min_zoom');
+
+PERFORM tmp_make_real('planet_osm_polygon', 'mz_water_min_zoom');
+PERFORM tmp_make_real('planet_osm_polygon', 'mz_earth_min_zoom');
+PERFORM tmp_make_real('planet_osm_polygon', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('planet_osm_polygon', 'mz_building_min_zoom');
+
+PERFORM tmp_make_real('ne_10m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('ne_10m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('ne_10m_coastline', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_10m_lakes', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_10m_land', 'mz_earth_min_zoom');
+PERFORM tmp_make_real('ne_10m_ocean', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_10m_playas', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_10m_populated_places', 'mz_places_min_zoom');
+PERFORM tmp_make_real('ne_110m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('ne_110m_coastline', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_110m_lakes', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_110m_land', 'mz_earth_min_zoom');
+PERFORM tmp_make_real('ne_110m_ocean', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_50m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('ne_50m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('ne_50m_coastline', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_50m_lakes', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_50m_land', 'mz_earth_min_zoom');
+PERFORM tmp_make_real('ne_50m_ocean', 'mz_water_min_zoom');
+PERFORM tmp_make_real('ne_50m_playas', 'mz_water_min_zoom');
+
 PERFORM tmp_make_real('wof_neighbourhood', 'min_zoom');
 PERFORM tmp_make_real('wof_neighbourhood', 'max_zoom');
 
 END$$;
+
+DROP FUNCTION tmp_add_mz_label_placement(text);
+DROP FUNCTION tmp_make_real(text, text);

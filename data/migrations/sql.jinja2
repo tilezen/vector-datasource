@@ -3,6 +3,7 @@
 {%- endmacro -%}
 
 {%- macro table_func(func_kind, param, tbl, table_name, ret_type) -%}
+DROP FUNCTION IF EXISTS mz_calculate_{{ func_kind }}_boundaries({{ table_name }});
 CREATE OR REPLACE FUNCTION mz_calculate_{{ func_kind }}_boundaries({{ table_name }})
 RETURNS {{ ret_type }} AS $$
 DECLARE
@@ -16,6 +17,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 {%- endmacro -%}
+
+BEGIN;
 
 -------------
 -- landuse --
@@ -341,13 +344,20 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water min_zoom "main" function
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water_(
+{%- for param in layers['water']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore,
+        way_area real);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water_(
 {%- for param in layers['water']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore,
         way_area real)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   zoom REAL;
 BEGIN
@@ -555,8 +565,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water min_zoom table adaptors
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(planet_osm_polygon);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(planet_osm_polygon)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -568,9 +580,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(planet_osm_line);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(planet_osm_line)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -582,9 +596,11 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(planet_osm_point);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(planet_osm_point)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -597,8 +613,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_10m_coastline);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_10m_coastline)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -610,9 +628,11 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_50m_coastline);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_50m_coastline)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -624,9 +644,11 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_110m_coastline);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_110m_coastline)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -639,8 +661,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_10m_ocean);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_10m_ocean)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -652,9 +676,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_50m_ocean);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_50m_ocean)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -666,9 +692,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_110m_ocean);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_110m_ocean)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -680,9 +708,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_10m_lakes);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_10m_lakes)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -694,9 +724,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_50m_lakes);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_50m_lakes)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -708,9 +740,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_110m_lakes);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_110m_lakes)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -722,9 +756,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_10m_playas);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_10m_playas)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -736,9 +772,11 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(ne_50m_playas);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(ne_50m_playas)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -751,8 +789,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_water(water_polygons);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_water(water_polygons)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -787,7 +827,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- NOTE: this transaction including a DROP FUNCTION is here to deal with the
 -- change of return type, and can be deleted after the migrations have been
 -- run.
-BEGIN;
 DROP FUNCTION IF EXISTS mz_calculate_min_zoom_places_(
 {%- for param in layers['places']['params'] %}
         {{param.key}} {{param.typ}},
@@ -804,8 +843,6 @@ BEGIN
   RETURN {{ layers['places']['min_zoom_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-
-COMMIT;
 
 -- places kind table adaptors
 
@@ -838,7 +875,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- NOTE: this transaction including a DROP FUNCTION is here to deal with the
 -- change of return type, and can be deleted after the migrations have been
 -- run.
-BEGIN;
 DROP FUNCTION IF EXISTS mz_calculate_min_zoom_places(planet_osm_point);
 DROP FUNCTION IF EXISTS mz_calculate_min_zoom_places(ne_10m_populated_places);
 
@@ -868,8 +904,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-COMMIT;
-
 ----------------------------------------------------------------------
 -- BOUNDARIES
 ----------------------------------------------------------------------
@@ -889,12 +923,18 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries min_zoom "main" function
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_boundaries_(
+{%- for param in layers['boundaries']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 BEGIN
   RETURN {{ layers['boundaries']['min_zoom_case_statement'] }};
 END;
@@ -934,8 +974,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 {{ table_func('json', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'JSON') }}
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_boundaries(planet_osm_line);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries(planet_osm_line)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -946,9 +988,11 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_boundaries(planet_osm_polygon);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_boundaries(planet_osm_polygon)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -960,11 +1004,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{{ table_func('min_zoom', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'SMALLINT') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'SMALLINT') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'SMALLINT') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'SMALLINT') }}
-{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'SMALLINT') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'REAL') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'REAL') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'REAL') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'REAL') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'REAL') }}
 
 ----------------------------------------------------------------------
 -- BUILDINGS
@@ -988,13 +1032,20 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- buildings min_zoom "main" function
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_buildings_(
+{%- for param in layers['buildings']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        way_area real,
+        tags hstore);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings_(
 {%- for param in layers['buildings']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         way_area real,
         tags hstore)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   volume REAL := mz_building_height(tags->'height', tags->'building:levels') * way_area;
 BEGIN
@@ -1002,8 +1053,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_buildings(planet_osm_polygon);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings(planet_osm_polygon)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1016,8 +1069,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_buildings(planet_osm_point);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_buildings(planet_osm_point)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1079,6 +1134,15 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- roads min_zoom "main" function
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_roads_(
+{%- for param in layers['roads']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        osm_id bigint,
+        name text,
+        way geometry,
+        tags hstore);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads_(
 {%- for param in layers['roads']['params'] %}
         {{param.key}} {{param.typ}},
@@ -1087,14 +1151,16 @@ CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads_(
         name text,
         way geometry,
         tags hstore)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 BEGIN
   RETURN {{ layers['roads']['min_zoom_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_roads(planet_osm_line);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads(planet_osm_line)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1109,8 +1175,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_roads(ne_10m_roads);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads(ne_10m_roads)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1174,13 +1242,20 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- earth min_zoom "main" function
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth_(
+{%- for param in layers['earth']['params'] %}
+        {{param.key}} {{param.typ}},
+{%- endfor %}
+        tags hstore,
+        way_area real);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth_(
 {%- for param in layers['earth']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
         tags hstore,
         way_area real)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   zoom REAL;
 BEGIN
@@ -1284,8 +1359,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- earth min_zoom table adaptors
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(planet_osm_polygon);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(planet_osm_polygon)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1298,8 +1375,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(planet_osm_line);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(planet_osm_line)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1311,9 +1390,11 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(planet_osm_point);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(planet_osm_point)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1326,8 +1407,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(ne_10m_land);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(ne_10m_land)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1339,9 +1422,11 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(ne_50m_land);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(ne_50m_land)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1353,9 +1438,11 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(ne_110m_land);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(ne_110m_land)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1368,8 +1455,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+DROP FUNCTION IF EXISTS mz_calculate_min_zoom_earth(land_polygons);
+
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_earth(land_polygons)
-RETURNS SMALLINT AS $$
+RETURNS REAL AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
@@ -1381,3 +1470,5 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+COMMIT;
