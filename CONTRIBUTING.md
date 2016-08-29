@@ -219,6 +219,15 @@ python tileserver/__init__.py config.yaml
 
 **Example test run:**
 
+The first time you run tests, you need to set up a test config based on the `test_config.example.yaml` in the repo:
+
+
+```bash
+cp test_config.example.yaml test_config.yaml
+# If you are running the tileserver somewhere other than localhost,
+# you'll need to modify test_config.yaml to point to the correct URL.
+```
+
 Back in the `vector-datasource` directory in your first terminal window, run your new test to make sure it **fails** using the existing config:
 
 
