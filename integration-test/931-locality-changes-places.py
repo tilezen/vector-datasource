@@ -29,3 +29,10 @@ assert_no_matching_feature(
 assert_has_feature(
     9, 164, 377, 'places',
     { 'kind': 'locality', 'name': 'Palmer Station', 'kind_detail': 'scientific_station'})
+
+# http://www.openstreetmap.org/node/158368533
+# Washington (158368533)
+# no region_capital false
+assert_has_feature(
+    8, 73, 97, 'places',
+    { 'id': 158368533, 'region_capital': type(None) })

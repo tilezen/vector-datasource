@@ -38,7 +38,7 @@ SELECT
     NULL AS labelrank,
     tags->'population' AS population,
     tags->'capital' AS capital,
-    (tags ? 'state_capital' AND tags->'state_capital' = 'yes') AS region_capital,
+    (CASE WHEN (tags ? 'state_capital' AND tags->'state_capital' = 'yes') THEN true END) AS region_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
     NULL::smallint AS min_zoom,
