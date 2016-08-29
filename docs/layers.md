@@ -123,7 +123,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 #### Boundary properties (optional):
 
-* `labelrank`: from Natural Earth
 * `scalerank`: from Natural Earth
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
@@ -405,7 +404,6 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
 * `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
-* `labelrank`: labelrank value from Natural Earth
 * `min_zoom`: a suggested minimum zoom at which the place should become visible. Note that this is not an integer, and may contain fractional parts.
 * `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
@@ -876,7 +874,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
-* `labelrank`: Natural Earth features
 * `level`: Natural Earth features
 * `motor_vehicle`: OpenStreetMap features
 * `namealt`: Natural Earth features

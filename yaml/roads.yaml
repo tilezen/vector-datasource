@@ -87,7 +87,6 @@ global:
       name: {col: name}
       namealt: {col: namealt}
       namealtt: {col: namealtt}
-      labelrank: {col: labelrank}
       level: {col: level}
       mz_networks:
         expr: |

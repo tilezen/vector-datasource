@@ -39,7 +39,6 @@ WHERE
 
 SELECT
     name,
-    labelrank,
     {{ ne_boundary_cols() }}
 FROM
     ne_10m_admin_0_boundary_lines_land t
@@ -51,7 +50,6 @@ UNION ALL
 
 SELECT
     name,
-    NULL AS labelrank,
     {{ ne_boundary_cols() }}
 FROM
     ne_10m_admin_1_states_provinces_lines t
