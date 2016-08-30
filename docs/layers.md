@@ -123,7 +123,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 #### Boundary properties (optional):
 
-* `scalerank`: from Natural Earth
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
 #### Boundary kind values:
@@ -178,6 +177,7 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
+* `scale_rank`: calculation of a feature's importance
 * `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
 * `kind_detail`: value from OpenStreetMap's `building:part` tag.
 
@@ -397,7 +397,6 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: osm_id from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
-* `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
 
 #### Place properties (common optional):
@@ -884,7 +883,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `piste_name`: ski pistes from OpenStreetMap
 * `roundtrip`: OpenStreetMap features 
 * `route_name`: OpenStreetMap features
-* `scalerank`: Natural Earth features
 * `ski`: ski pistes from OpenStreetMap
 * `snowshoe`: ski pistes from OpenStreetMap
 * `sport`: OpenStreetMap features
