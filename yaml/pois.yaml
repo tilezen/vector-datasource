@@ -51,6 +51,7 @@ filters:
     min_zoom: LEAST(zoom + 2.50, 17)
     output:
       kind: {col: amenity}
+      kind_detail: {col: cuisine}
   - filter:
       amenity: [pharmacy, veterinary]
     min_zoom: LEAST(zoom + 3.3, 17)
@@ -724,6 +725,7 @@ filters:
     min_zoom: 16
     output:
       kind: pitch
+      kind_detail: {col: sport}
   - filter: {boundary: protected_area}
     min_zoom: GREATEST( LEAST(zoom + 2, 14), 7)
     output:
