@@ -23,7 +23,7 @@ FROM ne_10m_ocean t
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -41,7 +41,7 @@ FROM ne_10m_lakes t
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -67,7 +67,7 @@ FROM
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -93,7 +93,7 @@ FROM
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 {% if 4 <= zoom < 9 %}
@@ -110,7 +110,7 @@ FROM ne_10m_playas t
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -134,7 +134,7 @@ FROM
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 {% endif %}
@@ -176,7 +176,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_water_min_zoom IS NOT NULL AND
 {% else %}
-    mz_water_min_zoom <= {{ zoom }} AND
+    mz_water_min_zoom < {{ zoom + 1 }} AND
 {% endif %}
     {{ bounds['polygon']|bbox_filter('way',3857) }}
 
@@ -200,7 +200,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_water_min_zoom IS NOT NULL AND
 {% else %}
-    mz_water_min_zoom <= {{ zoom }} AND
+    mz_water_min_zoom < {{ zoom + 1 }} AND
 {% endif %}
     {{ bounds['line']|bbox_filter('way',3857) }}
 
@@ -231,6 +231,6 @@ WHERE
 {% if zoom >= 16 %}
   mz_water_min_zoom IS NOT NULL AND
 {% else %}
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
 {% endif %}
   {{ bounds['point']|bbox_filter('way',3857) }}

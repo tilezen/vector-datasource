@@ -93,7 +93,7 @@ assert_has_feature(
 # White Oak Road Battlefield
 assert_has_feature(
     11, 582, 796, 'pois',
-    { 'kind': 'battlefield', 'min_zoom': 10.0683 })
+    { 'kind': 'battlefield', 'min_zoom': 10.07 })
 
 assert_has_feature(
     11, 582, 796, 'landuse',

@@ -21,7 +21,7 @@ SELECT
 FROM ne_10m_populated_places
 
 WHERE
-    mz_places_min_zoom <= {{ zoom }}
+    mz_places_min_zoom < {{ zoom + 1 }}
     AND {{ bounds['point']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -52,7 +52,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_places_min_zoom IS NOT NULL
 {% else %}
-    mz_places_min_zoom <= {{ zoom }}
+    mz_places_min_zoom < {{ zoom + 1 }}
 {% endif %}
     AND {{ bounds['point']|bbox_filter('way',3857) }}
 
@@ -86,7 +86,7 @@ INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placet
 WHERE
   wof_n.is_visible AND
   {{ bounds['point']|bbox_filter('label_position',3857) }} AND
-  {{ zoom + 1 }} >= min_zoom AND
-  {{ zoom - 1 }} <= max_zoom
+  min_zoom < {{ zoom + 2 }} AND
+  max_zoom > {{ zoom - 2 }}
 
 {% endif %}

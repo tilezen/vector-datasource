@@ -13,7 +13,7 @@ FROM
     ne_110m_admin_0_boundary_lines_land t
 WHERE
     {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 
 {% elif 2 <= zoom < 5 %}
 
@@ -23,7 +23,7 @@ FROM
     ne_50m_admin_0_boundary_lines_land t
 WHERE
     {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 
 UNION ALL
 
@@ -33,7 +33,7 @@ FROM
     ne_50m_admin_1_states_provinces_lines t
 WHERE
     {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 
 {% elif 5 <= zoom < 8 %}
 
@@ -45,7 +45,7 @@ FROM
     ne_10m_admin_0_boundary_lines_land t
 WHERE
     {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 
 UNION ALL
 
@@ -57,7 +57,7 @@ FROM
     ne_10m_admin_1_states_provinces_lines t
 WHERE
     {{ bounds['line']|bbox_filter('the_geom',3857) }} AND
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 
 {% else %}
 
@@ -80,7 +80,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_boundary_min_zoom IS NOT NULL
 {% else %}
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 {% endif %}
 
 UNION ALL
@@ -116,7 +116,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_boundary_min_zoom IS NOT NULL
 {% else %}
-    mz_boundary_min_zoom <= {{ zoom }}
+    mz_boundary_min_zoom < {{ zoom + 1 }}
 {% endif %}
 
 {% endif %}

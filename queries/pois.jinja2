@@ -47,7 +47,7 @@ FROM (
 {% if zoom >= 16 %}
     AND mz_poi_min_zoom IS NOT NULL
 {% else %}
-    AND mz_poi_min_zoom <= {{ zoom }}
+    AND mz_poi_min_zoom < {{ zoom + 1 }}
 {% endif %}
 
 UNION ALL
@@ -74,7 +74,7 @@ UNION ALL
 {% if zoom >= 16 %}
     AND mz_poi_min_zoom IS NOT NULL
 {% else %}
-    AND mz_poi_min_zoom <= {{ zoom }}
+    AND mz_poi_min_zoom < {{ zoom + 1 }}
 {% endif %}
 
 ) pois

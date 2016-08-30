@@ -23,6 +23,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
@@ -38,6 +39,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
@@ -53,6 +55,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
@@ -69,6 +72,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.normalize_operator_values
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
@@ -93,6 +97,7 @@ layers:
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
@@ -113,6 +118,7 @@ layers:
       - vectordatasource.transform.normalize_tourism_kind
       - vectordatasource.transform.building_trim_properties
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
@@ -137,6 +143,7 @@ layers:
       - vectordatasource.transform.pois_capacity_int
       - vectordatasource.transform.elevation_to_meters
       - vectordatasource.transform.normalize_operator_values
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
@@ -153,6 +160,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     area-inclusion-threshold: 1
   transit:
     template: transit.jinja2
@@ -168,6 +176,7 @@ layers:
       - vectordatasource.transform.route_name
       - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
 post_process:
