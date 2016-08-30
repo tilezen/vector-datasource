@@ -3777,7 +3777,7 @@ def network_importance(route_type, network, ref):
         network_code = len(network.split(':')) + 3
 
     try:
-        ref = max(int(ref), 0)
+        ref = max(int(ref or 0), 0)
     except ValueError:
         ref = 0
 
