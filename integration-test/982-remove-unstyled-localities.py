@@ -55,7 +55,8 @@ assert_has_feature(
     { 'kind': 'locality', 'kind_detail': 'hamlet', 'name': 'Duncans Mills',
       'id': 150966610 })
 
-# example: Inverness 150973394 hamlet with NO population should NOT show up
+# example: http://www.openstreetmap.org/node/150973394 - Inverness
+# hamlet with NO population should NOT show up
 assert_no_matching_feature(
     12, 650, 1578, 'places',
     { 'kind': 'locality', 'id': 150973394 })
