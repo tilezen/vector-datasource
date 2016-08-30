@@ -8,7 +8,8 @@ UPDATE
      tags -> 'landuse' IN ('cemetery', 'farm', 'forest', 'military', 'quarry', 'recreation_ground', 'village_green', 'winter_sports', 'wood') OR
      tags -> 'boundary' IN ('national_park', 'protected_area') OR
      tags -> 'power' IN ('plant', 'substation') OR
-     tags -> 'natural' IN ('wood', 'forest'))
+     tags -> 'natural' IN ('wood', 'forest') OR
+     tags -> 'tourism' = 'gallery')
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_polygon.*), 999);
 
 UPDATE
