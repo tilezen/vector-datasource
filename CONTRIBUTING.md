@@ -537,7 +537,7 @@ UPDATE planet_osm_polygon
 
 ### 8. Update documentation
 
-Everything good? time to update the docs! Generally this is in the [docs/layer.md](docs/layer.md) file in the various layer sections to specify new properties and new kind values.
+Everything good? time to update the docs! Generally this is in the [docs/layers.md](docs/layers.md) file in the various layer sections to specify new properties and new kind values.
 
 Since `camp_site` was already in the `pois` layer, we only need to document it's addition to the alphabetical list of `landuse` kinds:
 
