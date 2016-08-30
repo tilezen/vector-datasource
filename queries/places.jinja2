@@ -23,6 +23,13 @@ FROM ne_10m_populated_places
 WHERE
     mz_places_min_zoom < {{ zoom + 1 }}
     AND {{ bounds['point']|bbox_filter('the_geom',3857) }}
+{% if zoom >= 8 and zoom < 10 %}
+    AND pop_max <= 50000
+{% elif zoom >= 10 and zoom < 11 %}
+    AND pop_max <= 20000
+{% elif zoom >= 11 %}
+    AND pop_max <= 5000
+{% endif %}
 
 UNION ALL
 
