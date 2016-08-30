@@ -261,7 +261,7 @@ filters:
     min_zoom: GREATEST(14, LEAST(zoom + 2.85, 17))
     output: {kind: winery}
   - filter: {tourism: gallery}
-    min_zoom: GREATEST(14, LEAST(zoom, 17))
+    min_zoom: GREATEST(15, LEAST(zoom, 17))
     output: {kind: gallery}
   - filter:
       amenity: [social_facility, clinic, doctors, dentist]
