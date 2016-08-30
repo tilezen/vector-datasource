@@ -1176,7 +1176,7 @@ def calculate_default_place_scalerank(shape, properties, fid, zoom):
     if kind in ('city', 'town'):
         if properties.get('state_capital'):
             scalerank -= 1
-        elif properties.get('capital'):
+        elif properties.get('country_capital'):
             scalerank -= 2
 
     properties['scalerank'] = scalerank
