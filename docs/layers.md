@@ -621,6 +621,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
+* `gallery` - An art gallery.
 * `garden`
 * `gardener`
 * `gas` - Shop selling bottled gas for cooking. Some offer gas canister refills.
