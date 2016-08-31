@@ -399,12 +399,12 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
 * `source`: `openstreetmap` or `naturalearthdata.com`
+* `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
 #### Place properties (common optional):
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
 * `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
-* `min_zoom`: a suggested minimum zoom at which the place should become visible. Note that this is not an integer, and may contain fractional parts.
 * `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
 * `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
