@@ -78,9 +78,6 @@ ALTER TABLE land_polygons ADD COLUMN mz_label_placement geometry(Geometry, 3857)
 ALTER TABLE ne_110m_ocean ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 ALTER TABLE ne_50m_ocean ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 ALTER TABLE ne_10m_ocean ADD COLUMN mz_label_placement geometry(Geometry, 3857);
-ALTER TABLE ne_110m_coastline ADD COLUMN mz_label_placement geometry(Geometry, 3857);
-ALTER TABLE ne_50m_coastline ADD COLUMN mz_label_placement geometry(Geometry, 3857);
-ALTER TABLE ne_10m_coastline ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 ALTER TABLE ne_110m_lakes ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 ALTER TABLE ne_50m_lakes ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 ALTER TABLE ne_10m_lakes ADD COLUMN mz_label_placement geometry(Geometry, 3857);

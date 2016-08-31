@@ -68,7 +68,7 @@ filters:
       scalerank: true
       featurecla: [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
     min_zoom: scalerank
-    output: {kind: locality, capital: true}
+    output: {kind: locality, country_capital: true}
     table: ne
   - filter:
       scalerank: true

@@ -53,7 +53,7 @@ SELECT
     'naturalearthdata.com' AS source,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
+    NULL AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
