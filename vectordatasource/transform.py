@@ -1173,7 +1173,7 @@ def calculate_default_place_min_zoom(shape, properties, fid, zoom):
 
     # adjust min_zoom for state / country capitals
     if kind in ('city', 'town'):
-        if properties.get('state_capital'):
+        if properties.get('region_capital'):
             min_zoom -= 1
         elif properties.get('country_capital'):
             min_zoom -= 2
