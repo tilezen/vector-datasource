@@ -1847,10 +1847,15 @@ def handle_label_placement(ctx):
     Converts a geometry label column into a separate feature.
     """
     layers = ctx.params.get('layers', None)
+    zoom = ctx.tile_coord.zoom
     location_property = ctx.params.get('location_property', None)
     label_property_name = ctx.params.get('label_property_name', None)
     label_property_value = ctx.params.get('label_property_value', None)
     label_where = ctx.params.get('label_where', None)
+    start_zoom = ctx.params.get('start_zoom', 0)
+
+    if zoom < start_zoom:
+        return None
 
     assert layers, 'handle_label_placement: Missing layers'
     assert location_property, \
