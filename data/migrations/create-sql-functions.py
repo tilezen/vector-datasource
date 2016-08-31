@@ -387,6 +387,10 @@ def sql_expr(expr):
         assert isinstance(value, list), "Max should have a list of children."
         sql = 'GREATEST(' + ','.join([sql_expr(v) for v in value]) + ')'
 
+    elif node_type == 'min':
+        assert isinstance(value, list), "Min should have a list of children."
+        sql = 'LEAST(' + ','.join([sql_expr(v) for v in value]) + ')'
+
     elif node_type == 'lit':
         assert isinstance(value, (str, unicode)), "Literal should be a string."
         sql = value

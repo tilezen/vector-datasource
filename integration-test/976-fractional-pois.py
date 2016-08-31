@@ -1,5 +1,5 @@
-#https://www.openstreetmap.org/way/242899474
-# Scharffenberger Winery
+# https://www.openstreetmap.org/way/147689077
+# Apple Store, SF
 assert_has_feature(
-    15, 5148, 12515, 'pois',
-    { 'id': 242899474, 'min_zoom': 15.36 })
+    15, 5242, 12664, 'pois',
+    { 'id': 147689077, 'min_zoom': 15.68 })

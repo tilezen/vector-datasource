@@ -36,7 +36,7 @@ for layer in ['pois', 'landuse']:
 # layer.
 # Wendy Thompson Hut, BC
 assert_has_feature(
-    16, 10472, 22103, 'pois',
+    15, 5236, 11051, 'pois',
     { 'id': 220084069,
       'kind': 'wilderness_hut' })
 # Scharffenberger Winery
