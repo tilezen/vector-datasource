@@ -1,7 +1,7 @@
 # http://www.openstreetmap.org/node/2026996113
 assert_has_feature(
     16, 10485, 25328, 'pois',
-    { 'id': 2026996113, 'kind': 'gallery', 'min_zoom': 16 })
+    { 'id': 2026996113, 'kind': 'gallery', 'min_zoom': 17 })
 
 # http://www.openstreetmap.org/way/31510288
 assert_has_feature(
