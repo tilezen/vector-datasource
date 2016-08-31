@@ -10,7 +10,7 @@ class BuildingsClassTest(unittest.TestCase):
         from vectordatasource.transform import CSVMatcher
         import os.path
         buildings_path = os.path.join(
-            os.path.dirname(__file__), '..', 'spreadsheets', 'scalerank',
+            os.path.dirname(__file__), '..', 'spreadsheets', 'scale_rank',
             'buildings.csv')
         with open(buildings_path) as fh:
             self.matcher = CSVMatcher(fh)

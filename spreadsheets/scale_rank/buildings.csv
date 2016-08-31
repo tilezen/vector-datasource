@@ -1,4 +1,4 @@
-area::int,height::float,volume::int,landuse_kind,scalerank
+area::int,height::float,volume::int,landuse_kind,scale_rank
 >=100000,*,*,*,1
 *,>=250,*,*,1
 *,*,>=300000,*,1

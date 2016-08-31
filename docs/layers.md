@@ -75,7 +75,7 @@ To facilitate **data visualization** overlays and underlays, the following clien
 * `0-9`: Under everything. _Tip: disable earth layer._
 * `190-199`: Under water. Above earth and most landuse.
 * `290-299`: Under roads. Above borders, water, landuse, and earth. **Your classic "underlay".**
-* `490-499`: Over all line and polygon features. Under map labels (icons and text), under UI elements (like routeline and search result pins). **Your classic raster map overlay.**  
+* `490-499`: Over all line and polygon features. Under map labels (icons and text), under UI elements (like routeline and search result pins). **Your classic raster map overlay.**
 
 **Tangram scene file example:**
 
@@ -105,14 +105,15 @@ We include one deprecated layer, `landuse-labels`, for backwards compatibility. 
 Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural Earth boundaries (zoom < 8).
 
 
-#### Boundary properties (common):
+#### Boundaries properties (common):
 
 * `name`
 * `id`
 * `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes raw Natural Earth values.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap.
 
-#### Boundary properties (common optional):
+#### Boundaries properties (common optional):
 
 * `admin_level`: values of `2` for countries, `4` for states (zoom 8+), and `6`, `8` (zoom 10+)
 * `id:left`: For the relation on the left side of the boundary line.
@@ -121,15 +122,13 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `name:right`: See name section above, other variants like `old_name` also supported.
 * `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
 
-#### Boundary properties (optional):
+#### Boundaries properties (optional):
 
-* `labelrank`: from Natural Earth
-* `scalerank`: from Natural Earth
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
 #### Boundary kind values:
 
-* `aboriginal lands`
+* `aboriginal_lands`
 * `country`
 * `county`
 * `disputed`
@@ -140,7 +139,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `macroregion`
 * `municipality`
 * `overlay_limit`
-* `state`
+* `region`
 
 ## Buildings and Addresses
 
@@ -179,6 +178,7 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
+* `scale_rank`: calculation of a feature's importance
 * `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
 * `kind_detail`: value from OpenStreetMap's `building:part` tag.
 
@@ -398,15 +398,13 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: osm_id from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
-* `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
+* `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
 #### Place properties (common optional):
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
 * `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
-* `labelrank`: labelrank value from Natural Earth
-* `min_zoom`: a suggested minimum zoom at which the place should become visible. Note that this is not an integer, and may contain fractional parts.
 * `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
 * `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
@@ -829,7 +827,7 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 
 Road names are **abbreviated** so directionals like `North` is replaced with `N`, `Northeast` is replaced with `NE`, and common street suffixes like `Avenue` to `Ave.` and `Street` to `St.`. Full details in the [StreetNames](https://github.com/nvkelso/map-label-style-manual/blob/master/tools/street_names/StreetNames/__init__.py) library.
 
-Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened. 
+Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
 To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
@@ -876,7 +874,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
-* `labelrank`: Natural Earth features
 * `level`: Natural Earth features
 * `motor_vehicle`: OpenStreetMap features
 * `namealt`: Natural Earth features
@@ -885,9 +882,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `piste_difficulty`: ski pistes from OpenStreetMap
 * `piste_grooming`: ski pistes from OpenStreetMap
 * `piste_name`: ski pistes from OpenStreetMap
-* `roundtrip`: OpenStreetMap features 
+* `roundtrip`: OpenStreetMap features
 * `route_name`: OpenStreetMap features
-* `scalerank`: Natural Earth features
 * `ski`: ski pistes from OpenStreetMap
 * `snowshoe`: ski pistes from OpenStreetMap
 * `sport`: OpenStreetMap features

@@ -1125,9 +1125,9 @@ def intracut(ctx):
 
 
 # place kinds, as used by OSM, mapped to their rough
-# scale_ranks so that we can provide a defaulted,
-# non-curated scale_rank / min_zoom value.
-_default_scalerank_for_place_kind = {
+# min_zoom so that we can provide a defaulted,
+# non-curated min_zoom value.
+_default_min_zoom_for_place_kind = {
     'locality': 13,
     'isolated_dwelling': 13,
     'farm': 13,
@@ -1154,13 +1154,12 @@ _default_scalerank_for_place_kind = {
 }
 
 
-# if the feature does not have a scale_rank attribute already,
+# if the feature does not have a min_zoom attribute already,
 # which would have come from a curated source, then calculate
 # a default one based on the kind of place it is.
-def calculate_default_place_scalerank(shape, properties, fid, zoom):
-    # don't override an existing attribute
-    scalerank = properties.get('scalerank')
-    if scalerank is not None:
+def calculate_default_place_min_zoom(shape, properties, fid, zoom):
+    min_zoom = properties.get('min_zoom')
+    if min_zoom is not None:
         return shape, properties, fid
 
     # base calculation off kind
@@ -1168,18 +1167,18 @@ def calculate_default_place_scalerank(shape, properties, fid, zoom):
     if kind is None:
         return shape, properties, fid
 
-    scalerank = _default_scalerank_for_place_kind.get(kind)
-    if scalerank is None:
+    min_zoom = _default_min_zoom_for_place_kind.get(kind)
+    if min_zoom is None:
         return shape, properties, fid
 
-    # adjust scalerank for state / country capitals
+    # adjust min_zoom for state / country capitals
     if kind in ('city', 'town'):
-        if properties.get('state_capital'):
-            scalerank -= 1
+        if properties.get('region_capital'):
+            min_zoom -= 1
         elif properties.get('country_capital'):
-            scalerank -= 2
+            min_zoom -= 2
 
-    properties['scalerank'] = scalerank
+    properties['min_zoom'] = min_zoom
 
     return shape, properties, fid
 

@@ -6,8 +6,6 @@ SELECT
     gid AS __id__,
 
     NULL AS admin_level,
-    scalerank,
-    labelrank,
     pop_max::text AS population,
     NULL AS country_capital,
     NULL AS region_capital,
@@ -34,8 +32,6 @@ SELECT
     osm_id AS __id__,
 
     tags->'admin_level' AS admin_level,
-    NULL AS scalerank,
-    NULL AS labelrank,
     tags->'population' AS population,
     (CASE WHEN tags->'capital' = 'yes' THEN true END) AS country_capital,
     (CASE WHEN tags->'state_capital' = 'yes' THEN true END) AS region_capital,
@@ -67,8 +63,6 @@ SELECT
     wof_id AS __id__,
 
     NULL AS admin_level,
-    NULL AS scalerank,
-    NULL AS labelrank,
     NULL AS population,
     NULL AS country_capital,
     NULL AS region_capital,
