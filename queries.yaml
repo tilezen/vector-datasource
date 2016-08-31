@@ -23,6 +23,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
@@ -38,6 +39,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
@@ -49,10 +51,11 @@ layers:
       - vectordatasource.transform.tags_name_i18n
       - vectordatasource.transform.tags_remove
       - vectordatasource.transform.place_population_int
-      - vectordatasource.transform.calculate_default_place_scalerank
+      - vectordatasource.transform.calculate_default_place_min_zoom
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
@@ -69,6 +72,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.normalize_operator_values
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
@@ -93,6 +97,7 @@ layers:
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
@@ -113,6 +118,7 @@ layers:
       - vectordatasource.transform.normalize_tourism_kind
       - vectordatasource.transform.building_trim_properties
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
@@ -137,6 +143,7 @@ layers:
       - vectordatasource.transform.pois_capacity_int
       - vectordatasource.transform.elevation_to_meters
       - vectordatasource.transform.normalize_operator_values
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
@@ -153,6 +160,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     area-inclusion-threshold: 1
   transit:
     template: transit.jinja2
@@ -168,6 +176,7 @@ layers:
       - vectordatasource.transform.route_name
       - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.remove_feature_id
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
 post_process:
@@ -275,146 +284,15 @@ post_process:
       source_layer: water
       target_value_type: int
 
-  # assign `scalerank` to features
+  # assign `scale_rank`
   - fn: vectordatasource.transform.csv_match_properties
     resources:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/water.csv
-    params:
-      source_layer: water
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/earth.csv
-    params:
-      source_layer: earth
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/places.csv
-    params:
-      source_layer: places
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/landuse.csv
-    params:
-      source_layer: landuse
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/roads.csv
-    params:
-      source_layer: roads
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/buildings.csv
+        path: spreadsheets/scale_rank/buildings.csv
     params:
       source_layer: buildings
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/pois.csv
-    params:
-      source_layer: pois
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/boundaries.csv
-    params:
-      source_layer: boundaries
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scalerank/transit.csv
-    params:
-      source_layer: transit
-      target_value_type: int
-
-  # add minimum pixel thresholds per layer
-  # this should run after all the `scalerank`s have been assigned to features
-  # these are configured only for layers that contain polygonal
-  # geometries
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/mz_min_pixels/water.csv
-    params:
-      source_layer: water
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/mz_min_pixels/earth.csv
-    params:
-      source_layer: earth
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/mz_min_pixels/landuse.csv
-    params:
-      source_layer: landuse
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/mz_min_pixels/buildings.csv
-    params:
-      source_layer: buildings
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/mz_min_pixels/boundaries.csv
-    params:
-      source_layer: boundaries
-      target_value_type: int
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/mz_min_pixels/transit.csv
-    params:
-      source_layer: transit
       target_value_type: int
 
   # drop all polygonal features that don't meet the minimum area
@@ -580,7 +458,7 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
-      properties: [name, ref, network, shield_text]
+      properties: [name, ref, network, shield_text, all_networks, all_shield_texts]
       where: >-
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
@@ -593,7 +471,7 @@ post_process:
       source_layer: roads
       start_zoom: 7
       end_zoom: 10
-      properties: [name, network, shield_text]
+      properties: [name, all_networks, all_shield_texts]
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways

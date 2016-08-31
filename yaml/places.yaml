@@ -15,35 +15,41 @@ filters:
       kind: region
       kind_detail: province
     table: osm
-  - filter: {name: true, place: city}
+  - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
     output:
       kind: locality
-      kind_detail: city
+      kind_detail: { col: place }
     table: osm
-  - filter: {name: true, place: town}
-    min_zoom: 8
+  - filter: {name: true, place: [city, town]}
+    min_zoom: 9
     output:
       kind: locality
-      kind_detail: town
+      kind_detail: { col: place }
     table: osm
-  - filter: {name: true, place: village}
+  - filter: {name: true, population: true, place: village}
     min_zoom: 11
     output:
       kind: locality
       kind_detail: village
     table: osm
-  - filter: {name: true, place: hamlet}
+  - filter: {name: true, place: village}
+    min_zoom: 12
+    output:
+      kind: locality
+      kind_detail: village
+    table: osm
+  - filter: {name: true, population: true, place: hamlet}
     min_zoom: 12
     output:
       kind: locality
       kind_detail: hamlet
     table: osm
-  - filter: {name: true, place: locality}
+  - filter: {name: true, place: [locality, hamlet]}
     min_zoom: 13
     output:
       kind: locality
-      kind_detail: locality
+      kind_detail: { col: place }
     table: osm
   - filter: {name: true, place: isolated_dwelling}
     min_zoom: 13
@@ -62,7 +68,7 @@ filters:
       scalerank: true
       featurecla: [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
     min_zoom: scalerank
-    output: {kind: locality, capital: true}
+    output: {kind: locality, country_capital: true}
     table: ne
   - filter:
       scalerank: true

@@ -45,7 +45,7 @@ FROM
 WHERE
     {{ bounds[geom_type]|bbox_filter('way',3857) }}
     {% if zoom <= 15 %}
-    AND mz_landuse_min_zoom <= {{ zoom }}
+    AND mz_landuse_min_zoom < {{ zoom + 1 }}
     {% else %}
     AND mz_landuse_min_zoom IS NOT NULL
     {% endif %}
@@ -80,7 +80,7 @@ FROM
 WHERE
   {{ bounds['polygon']|bbox_filter('way',3857) }}
   AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
-  AND mz_landuse_min_zoom <= {{ zoom }}
+  AND mz_landuse_min_zoom < {{ zoom + 1 }}
 
 {% elif 6 <= zoom < 8 %}
 
@@ -113,7 +113,7 @@ FROM
 WHERE
   {{ bounds['polygon']|bbox_filter('way',3857) }}
   AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
-  AND mz_landuse_min_zoom <= {{ zoom }}
+  AND mz_landuse_min_zoom < {{ zoom + 1 }}
 
 {% else %}
 

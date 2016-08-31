@@ -87,8 +87,26 @@ global:
       name: {col: name}
       namealt: {col: namealt}
       namealtt: {col: namealtt}
-      labelrank: {col: labelrank}
       level: {col: level}
+      mz_networks:
+        expr: |
+          CASE WHEN sov_a3 = 'CAN' AND level IN ('Federal', 'Interstate', 'State')
+                    THEN ARRAY['road', 'CA:??:primary', name]
+               WHEN sov_a3 = 'MEX' AND level = 'Interstate'
+                    THEN ARRAY['road', 'MX', name]
+               WHEN sov_a3 = 'MEX' AND level = 'Federal'
+                    THEN ARRAY['road', 'MX:MX', name]
+               WHEN sov_a3 = 'USA' AND level = 'Interstate'
+                    THEN ARRAY['road', 'US:I', name]
+               WHEN sov_a3 = 'USA' AND level = 'Federal'
+                    THEN ARRAY['road', 'US:US', name]
+               WHEN continent = 'Oceania' AND level = 'Federal'
+                    THEN ARRAY['road', 'NZ:SH', trim(leading 'SH' from label)]
+               WHEN continent IN ('Europe', 'Asia') AND level = 'E'
+                    THEN ARRAY['road', 'e-road', name]
+               ELSE NULL
+          END
+        columns: [ sov_a3, continent, label ]
 
 # name isn't really synthetic, but we use it from both the NE and OSM
 # tables, so to avoid including it twice we fake it as synthetic.
