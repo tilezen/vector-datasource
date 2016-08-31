@@ -480,6 +480,15 @@ post_process:
         'name' in properties or
         ('sport' in properties and properties.get('kind', 'rock') not in ('rock', 'stone'))
 
+  # drop mz_label placement at zooms we don't apply handle_label_placement
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: landuse
+      start_zoom: 0
+      end_zoom: 14
+      properties: [mz_label_placement]
+      geom_types: [Polygon, MultiPolygon]
+
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:
@@ -490,6 +499,15 @@ post_process:
       label_property_value: true
       label_where: >-
         'name' in properties
+
+  # drop mz_label placement at zooms we don't apply handle_label_placement
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 15
+      properties: [mz_label_placement]
+      geom_types: [Polygon, MultiPolygon]
 
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
