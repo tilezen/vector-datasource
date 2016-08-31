@@ -460,16 +460,36 @@ post_process:
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:
-        - landuse
         - water
         - earth
-        - buildings
+      location_property: mz_label_placement
+      label_property_name: label_placement
+      label_property_value: true
+      label_where: >-
+        'name' in properties
+
+  - fn: vectordatasource.transform.handle_label_placement
+    params:
+      layers:
+        - landuse
+      start_zoom: 15
       location_property: mz_label_placement
       label_property_name: label_placement
       label_property_value: true
       label_where: >-
         'name' in properties or
         ('sport' in properties and properties.get('kind', 'rock') not in ('rock', 'stone'))
+
+  - fn: vectordatasource.transform.handle_label_placement
+    params:
+      layers:
+        - buildings
+      start_zoom: 16
+      location_property: mz_label_placement
+      label_property_name: label_placement
+      label_property_value: true
+      label_where: >-
+        'name' in properties
 
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
