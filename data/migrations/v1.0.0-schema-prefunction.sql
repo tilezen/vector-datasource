@@ -8,6 +8,16 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE function tmp_drop_mz_label_placement(tbl_name text)
+RETURNS VOID AS $$
+BEGIN
+ IF EXISTS (
+    SELECT 1 FROM information_schema.columns WHERE table_name=tbl_name and column_name='mz_label_placement') THEN
+   EXECUTE format('ALTER TABLE %s DROP COLUMN mz_label_placement', tbl_name);
+ END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE function tmp_make_real(tbl_name text, col_name text)
 RETURNS VOID AS $$
 BEGIN
@@ -33,9 +43,6 @@ PERFORM tmp_add_mz_label_placement('land_polygons');
 PERFORM tmp_add_mz_label_placement('ne_110m_ocean');
 PERFORM tmp_add_mz_label_placement('ne_50m_ocean');
 PERFORM tmp_add_mz_label_placement('ne_10m_ocean');
-PERFORM tmp_add_mz_label_placement('ne_110m_coastline');
-PERFORM tmp_add_mz_label_placement('ne_50m_coastline');
-PERFORM tmp_add_mz_label_placement('ne_10m_coastline');
 PERFORM tmp_add_mz_label_placement('ne_110m_lakes');
 PERFORM tmp_add_mz_label_placement('ne_50m_lakes');
 PERFORM tmp_add_mz_label_placement('ne_10m_lakes');
@@ -95,5 +102,15 @@ PERFORM tmp_make_real('wof_neighbourhood', 'max_zoom');
 
 END$$;
 
+DO $$
+BEGIN
+
+PERFORM tmp_drop_mz_label_placement('ne_110m_coastline');
+PERFORM tmp_drop_mz_label_placement('ne_50m_coastline');
+PERFORM tmp_drop_mz_label_placement('ne_10m_coastline');
+
+END$$;
+
 DROP FUNCTION tmp_add_mz_label_placement(text);
 DROP FUNCTION tmp_make_real(text, text);
+DROP FUNCTION tmp_drop_mz_label_placement(text);

@@ -29,13 +29,6 @@ def _sort_by_area_then_id(features):
     return features
 
 
-def _by_scalerank(feature):
-    wkb, properties, fid = feature
-    value_for_none = 1000
-    scalerank = properties.get('scalerank', value_for_none)
-    return scalerank
-
-
 def _by_population(feature):
     wkb, properties, fid = feature
     default_value = -1000
@@ -83,7 +76,6 @@ def _place_key_desc(feature):
 
 def places(features, zoom):
     features.sort(key=_place_key_desc, reverse=True)
-    features.sort(key=_by_scalerank)
     features.sort(key=_by_feature_property('mz_n_photos'), reverse=True)
     features.sort(key=_by_feature_property('min_zoom'))
     return features

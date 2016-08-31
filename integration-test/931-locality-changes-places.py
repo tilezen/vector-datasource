@@ -1,11 +1,11 @@
 # ne Admin-0 capital
 assert_has_feature(
     3, 6, 3, 'places',
-    { 'kind': 'locality', 'name': 'Seoul', 'capital': True})
+    { 'kind': 'locality', 'name': 'Seoul', 'country_capital': True})
 
 assert_no_matching_feature(
     3, 6, 3, 'places',
-    { 'kind': 'city', 'name': 'Seoul', 'capital': True})
+    { 'kind': 'city', 'name': 'Seoul', 'country_capital': True})
 
 # ne Admin-1 capital
 assert_has_feature(
@@ -29,3 +29,17 @@ assert_no_matching_feature(
 assert_has_feature(
     9, 164, 377, 'places',
     { 'kind': 'locality', 'name': 'Palmer Station', 'kind_detail': 'scientific_station'})
+
+# http://www.openstreetmap.org/node/158368533
+# Washington (158368533)
+# no region_capital false
+assert_has_feature(
+    8, 73, 97, 'places',
+    { 'id': 158368533, 'region_capital': type(None) })
+
+# http://www.openstreetmap.org/node/3441540432
+# Node: Deerfield, Nova Scotia (3441540432)
+# no country_capital when falsey
+assert_has_feature(
+    16, 20752, 23846, 'places',
+    { 'id': 3441540432, 'country_capital': type(None) })

@@ -8,7 +8,8 @@ UPDATE
      tags -> 'amenity' = 'grave_yard' OR
      tags -> 'boundary' IN ('national_park', 'protected_area') OR
      tags -> 'power' IN ('plant', 'substation') OR
-     tags -> 'natural' IN ('wood', 'forest'))
+     tags -> 'natural' IN ('wood', 'forest') OR
+     tags -> 'tourism' = 'gallery')
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(planet_osm_point.*), 999);
 
 CREATE INDEX new_planet_osm_point_min_zoom_pois_index ON planet_osm_point USING gist(way) WHERE mz_poi_min_zoom IS NOT NULL;

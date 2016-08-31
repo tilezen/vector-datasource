@@ -70,15 +70,15 @@ assert_has_feature(
 assert_has_feature(
     7, 109, 49, 'places',
     { 'id': int, 'name': 'Seoul',
-      'kind': 'locality', 'capital': True})
+      'kind': 'locality', 'country_capital': True})
 assert_has_feature(
     7, 112, 50, 'places',
     { 'id': int, 'name': 'Kyoto',
-      'kind': 'locality', 'capital': True})
+      'kind': 'locality', 'country_capital': True})
 assert_has_feature(
     7, 104, 55, 'places',
     { 'id': int, 'name': 'Hong Kong',
-      'kind': 'locality', 'capital': True})
+      'kind': 'locality', 'country_capital': True})
 
 
 # ne state_capitals
@@ -95,4 +95,4 @@ assert_has_feature(
 assert_has_feature(
     7, 20, 49, 'places',
     { 'id': int, 'name': 'San Francisco',
-      'kind': 'locality', 'region_capital': type(None), 'capital': type(None)})
+      'kind': 'locality', 'region_capital': type(None), 'country_capital': type(None)})
