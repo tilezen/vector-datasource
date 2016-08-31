@@ -15,11 +15,11 @@ assert_has_feature(
     16, 10523, 22492, 'boundaries',
     {'id': 55602811, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
-# Way: United States of America (42298798)
-# http://www.openstreetmap.org/way/42298798
+# Relation: United States of America
+# https://www.openstreetmap.org/relation/148838
 assert_has_feature(
     16, 10417, 25370, 'boundaries',
-    {'id': 42298798, 'kind': 'country', 'kind_detail': '2'})
+    {'id': -148838, 'kind': 'country', 'kind_detail': '2'})
 
 # Relation: Wyoming (161991)
 # http://www.openstreetmap.org/relation/161991

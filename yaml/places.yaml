@@ -1,3 +1,15 @@
+global:
+  - &ne_places_min_zoom |
+      CASE WHEN scalerank =   0 THEN  2
+           WHEN scalerank <=  1 THEN  3
+           WHEN scalerank <=  2 THEN  4
+           WHEN scalerank <=  4 THEN  5
+           WHEN scalerank <=  6 THEN  6
+           WHEN scalerank <=  7 THEN  7
+           WHEN scalerank <=  9 THEN  9
+           ELSE                      10
+      END
+
 filters:
   - filter: {name: true, place: country}
     min_zoom: 2
@@ -67,24 +79,24 @@ filters:
   - filter:
       scalerank: true
       featurecla: [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
-    min_zoom: scalerank
+    min_zoom: *ne_places_min_zoom
     output: {kind: locality, country_capital: true}
     table: ne
   - filter:
       scalerank: true
       featurecla: [Admin-1 capital, Admin-1 region capital]
-    min_zoom: scalerank
+    min_zoom: *ne_places_min_zoom
     output: {kind: locality, region_capital: true}
     table: ne
   - filter: {featurecla: Populated place, scalerank: true}
-    min_zoom: scalerank
+    min_zoom: *ne_places_min_zoom
     output: {kind: locality}
     table: ne
 
   - filter:
       scalerank: true
       featurecla: [Historic place]
-    min_zoom: scalerank
+    min_zoom: *ne_places_min_zoom
     output:
       kind: locality
       kind_detail: hamlet
@@ -92,7 +104,7 @@ filters:
   - filter:
       scalerank: true
       featurecla: [Scientific station]
-    min_zoom: scalerank
+    min_zoom: *ne_places_min_zoom
     output:
       kind: locality
       kind_detail: scientific_station
