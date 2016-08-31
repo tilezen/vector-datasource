@@ -329,16 +329,54 @@ post_process:
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:
-        - landuse
         - water
         - earth
-        - buildings
+      location_property: mz_label_placement
+      label_property_name: label_placement
+      label_property_value: true
+      label_where: >-
+        'name' in properties
+
+  - fn: vectordatasource.transform.handle_label_placement
+    params:
+      layers:
+        - landuse
+      start_zoom: 15
       location_property: mz_label_placement
       label_property_name: label_placement
       label_property_value: true
       label_where: >-
         'name' in properties or
         ('sport' in properties and properties.get('kind', 'rock') not in ('rock', 'stone'))
+
+  # drop mz_label placement at zooms we don't apply handle_label_placement
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: landuse
+      start_zoom: 0
+      end_zoom: 14
+      properties: [mz_label_placement]
+      geom_types: [Polygon, MultiPolygon]
+
+  - fn: vectordatasource.transform.handle_label_placement
+    params:
+      layers:
+        - buildings
+      start_zoom: 16
+      location_property: mz_label_placement
+      label_property_name: label_placement
+      label_property_value: true
+      label_where: >-
+        'name' in properties
+
+  # drop mz_label placement at zooms we don't apply handle_label_placement
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 15
+      properties: [mz_label_placement]
+      geom_types: [Polygon, MultiPolygon]
 
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
