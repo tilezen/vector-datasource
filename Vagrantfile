@@ -91,7 +91,8 @@ Vagrant.configure("2") do |config|
     su vagrant
 
     # Download and import OSM data
-    wget -q -P /opt/data/ https://s3.amazonaws.com/metro-extracts.mapzen.com/new-york_new-york.osm.pbf
+    echo "Downloading New York OSM data"
+    wget --quiet -P /opt/data/ https://s3.amazonaws.com/metro-extracts.mapzen.com/new-york_new-york.osm.pbf
     osm2pgsql -s -C 512 -S /opt/src/vector-datasource/osm2pgsql.style -j /opt/data/new-york_new-york.osm.pbf -U osm -d osm -H localhost
 
     # Download and import supporting data
@@ -107,7 +108,8 @@ Vagrant.configure("2") do |config|
     make -f Makefile-import-data clean
     deactivate
 
-    wget -q -P /opt/data/ https://s3.amazonaws.com/mapzen-tiles-assets/wof/dev/wof_neighbourhoods.pgdump
+    echo "Downloading Who's on First neighbourhoods data"
+    wget --quiet -P /opt/data/ https://s3.amazonaws.com/mapzen-tiles-assets/wof/dev/wof_neighbourhoods.pgdump
     pg_restore --clean -d osm -U osm -h localhost -O /opt/data/wof_neighbourhoods.pgdump
 
     # Set up tileserver
