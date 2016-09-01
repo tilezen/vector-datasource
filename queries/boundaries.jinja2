@@ -60,6 +60,7 @@ WHERE
 
 SELECT
   tags->'name' AS name,
+  'openstreetmap.org' AS source,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_polygon.*) AS mz_properties,
   -- note that we force the RHR, which makes outers clockwise,
@@ -84,6 +85,7 @@ UNION ALL
 
 SELECT
   NULL AS name,
+  'openstreetmap.org' AS source,
   true AS maritime_boundary,
   '{"kind": "maritime"}'::json as mz_properties,
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom',3857) }}{% endfilter %} AS __geometry__,
@@ -99,6 +101,7 @@ UNION ALL
 
 SELECT
   tags->'name' AS name,
+  'openstreetmap.org' AS source,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_line.*) AS mz_properties,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
