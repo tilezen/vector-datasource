@@ -13,6 +13,8 @@ download: {{ src_shapefile_zips }}
 
 {% for shapefile in shapefiles %}
 {{ shapefile.src_zip }}:
+	echo "Downloading {{ shapefile.url }}"
+	# Using --quiet here to keep stdout sane during script-based output
 	wget --quiet '{{ shapefile.url }}' -O {{ shapefile.src_zip }}
 {% endfor %}
 

@@ -17,6 +17,8 @@ import-shapefiles.sh: {{ tgt_shapefile_shps }}
 shapefiles: shapefiles.tar.gz
 
 shapefiles.tar.gz:
+	echo "Downloading http://s3.amazonaws.com/{{ bucket }}/{{ datestamp }}/shapefiles.tar.gz"
+	# Using --quiet here to keep stdout sane during script-based output
 	wget --quiet 'http://s3.amazonaws.com/{{ bucket }}/{{ datestamp }}/shapefiles.tar.gz'
 
 {{ tgt_shapefile_zips }}: shapefiles.tar.gz
