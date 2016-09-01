@@ -103,6 +103,9 @@ def match_properties(actual, expected):
                 if not exp_v(v):
                     return False
 
+            elif isinstance(exp_v, unicode):
+                return v == exp_v.encode('utf-8')
+
             elif v != exp_v:
                 return False
 
