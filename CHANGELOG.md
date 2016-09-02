@@ -1,8 +1,133 @@
+v1.0.0-pre2
+-------
+* **Release date**: 2016-09-06 on dev as public preview
+* See detailed Breaking changes, New features, Bug fixes, and Internal Changes sections below.
+* **Requires:** [tileserver v0.8.0-pre2](https://github.com/mapzen/tileserver/releases/tag/v0.8.0-pre2) and [tilequeue v0.11.0-pre2](https://github.com/mapzen/tilequeue/releases/tag/v0.11.0-pre2)
+
+  #### BREAKING CHANGES (v1.0.0-pre2)
+
+- **all** layers: Revert to 2 letter language codes to remove client 3-char to 2-char shim logic, with better fallbacks. ([#972](https://github.com/tilezen/vector-datasource/issues/972))
+
+- **landuse** layer: Remove label placements for `cemetery`, `farm`, `forest`, `forest`, `golf_course`, `grave_yard`, `military`, `national_park`, `natural_forest`, `natural_wood`, `nature_reserve`, `park`, `pitch`, `plant`, `protected_area`, `quarry`, `recreation_ground`, `substation`, `village_green`, `wastewater_plant`, `water_works`, `winter_sports`, `wood`, `works` features, moving them to **pois** layer. Remaining label placements are recommended for text only label treatment.([#742](https://github.com/tilezen/vector-datasource/issues/742))
+
+- **places** layer: Additional locality changes for places layer to normalize place layer kinds: `capital` changes to `country_capital`, `state_capital` changes to `region_capital`, `scientific_station` localities get their own `kind_detail`, and other bug fixes for ([#840](https://github.com/tilezen/vector-datasource/issues/840)). ([#931](https://github.com/tilezen/vector-datasource/issues/931))
+
+- **roads** layer: Remove `aerialway`, `highway`, `piste_type`, `railway`,  in favor of coalescing their values into a new `kind_detail` property (and change incorrect `subkind` reference in documentation to `kind_detail`). ([#970](https://github.com/tilezen/vector-datasource/issues/970))
+
+_PLEASE VERIFY LANDUSE TIERING_
+
+- **landuse** layer: Low- and mid-zoom landuse polygons are now merged within the same `kind` values (but tiered into several scale_rank sizes) to significantly reduce file size. Some properties, like `name`, `id`, `sport`, `religion`, and `surface` are dropped, and the `area` is recalculated for new combo polygons. ([#583](https://github.com/tilezen/vector-datasource/issues/583))
+
+- **transit** layer: rename `root_relation_id` property to `root_id`, matching new **building** layer configuration. ([#969](https://github.com/tilezen/vector-datasource/pull/969) and [#653](https://github.com/tilezen/vector-datasource/issues/653))
+
+- **boundaries**, **places**, and **roads** layers: Remove raw Natural Earth `scalerank` (see `min_zoom` instead) and `labelrank` properties. ([#992](https://github.com/tilezen/vector-datasource/issues/992))
+
+- **pois** layer: Remove the `cuisine` property (see new `kind_detail` instead). ([#719](https://github.com/tilezen/vector-datasource/issues/719))
+
+- **buildings** layer: remove label placements from low- and mid-zooms, keep at zoom 16+. ([#679](https://github.com/tilezen/vector-datasource/issues/679))
+
+- **landuse** layer: remove label placements from low- and mid-zooms, keep at zoom 15+. ([#679](https://github.com/tilezen/vector-datasource/issues/679))
+
+- **pois** layer: `gate` features on major roads are now visible at zoom 14, gates on intermediate roads at zoom 15, gates on minor roads at zoom 16, and gates not on roads at zoom 17 (was all zoom 15). ([#820](https://github.com/tilezen/vector-datasource/issues/820))
+
+- **water** layer: Remove duplicative and poor resolution `sea` polygons (but keep their label centroids) to save Venice and other cities from early global warming! This also addressed excessive sea labels in most Mapzen house styles. ([#951](https://github.com/tilezen/vector-datasource/issues/951))
+
+  #### NEW FEATURES (v1.0.0-pre2)
+
+- **tilejson**: Major upgrade to reflect all layers and properties. ([#938](https://github.com/tilezen/vector-datasource/issues/938))
+
+- **versioning**: Add semantic versioning (semver) document detailing the promises Tilezen makes about major, minor, and patch versions and data model changes. ([#948](https://github.com/tilezen/vector-datasource/issues/948))
+
+- **roads** layer: To support highway shields a new `shield_text` property has been added, `network` values have been normalized (and bicycle networks are now excluded). An example: for "US 101" we now store `network` of  **US:US** and `shield_text` of **101**. Multiple shields are supported via optional `all_networks` and `all_shield_texts` lists (which work in GeoJSON and TopoJSON but not MVT formats, follow [mapbox-vector-tile/#64](https://github.com/tilezen/mapbox-vector-tile/issues/64] for a fix). The `ref` property remains available but is less useful for shield construction. ([#192](https://github.com/tilezen/vector-datasource/issues/192) and [896](https://github.com/tilezen/vector-datasource/issues/896))
+
+- **pois** layer: Add `cemetery`, `farm`, `forest`, `forest`, `golf_course`, `military`, `national_park`, `natural_forest`, `natural_wood`, `nature_reserve`, `park`, `pitch`, `plant`, `protected_area`, `quarry`, `recreation_ground`, `substation`, `village_green`, `wastewater_plant`, `water_works`, `winter_sports`, `wood`, `works` features with adjusted zoom ranges over their previous availability in the **landuse** layer as label placements. All remaining label placements in the **landuse** layer are no longer recommended for icon label treatment. ([#742](https://github.com/tilezen/vector-datasource/issues/742))
+
+- **pois** layer: Add `graveyard` features. ([#742](https://github.com/tilezen/vector-datasource/issues/742))
+
+- **pois** layer: Add art `gallery` features. ([#990](https://github.com/tilezen/vector-datasource/issues/990))
+
+- **landuse** layer: Add `graveyard` features. ([#742](https://github.com/tilezen/vector-datasource/issues/742))
+
+- **landuse** layer: Add `camp_site` features for camp grounds. ([#875](https://github.com/tilezen/vector-datasource/issues/875))
+
+- **pois** layer: Add `kind_detail` property sourced from `sport` for `pitch` features and sourced from `cuisine` for `biergarten`, `pub`, `bar`, `restaurant`, `fast_food`, `cafe` kinds (removing the `cuisine` property). ([#719](https://github.com/tilezen/vector-datasource/issues/719))
+
+- **buildings** layer: Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect. ([#653](https://github.com/tilezen/vector-datasource/issues/653))
+
+
+
+  #### BUG FIXES (v1.0.0-pre2)
+
+- **pois** layer: Show large `camp_site` features at earlier zooms. ([#875](https://github.com/tilezen/vector-datasource/issues/875))
+
+- **pois** and **places** layers: Support fractional zoom for POIs and places which were only appearing at the next whole integer tile, and rounds min_zoom values to 2 decimal places. For example: a feature with `min_zoom` of **14.8** was only appearing in zoom **15** tiles when it should have appeared in the zoom **14** tile. ([#976](https://github.com/tilezen/vector-datasource/issues/976))
+
+- **roads** layer: Pedestrian paths and piers were missing `bicycle: designated` and related tags. Now that they are exported, they are correctly also decorated as `is_bicycle_related: True`. ([#832](https://github.com/tilezen/vector-datasource/issues/832))
+
+- **pois** layer: Removed transit `halt`, `station`, `stop`, and `tram_stop` features marked as historic. ([#661](https://github.com/tilezen/vector-datasource/issues/661))
+
+- **pois** layer: Add OpenStreetMap `source` attribution per feature. ([#922](https://github.com/tilezen/vector-datasource/issues/922))
+
+- **transit** layer: Add OpenStreetMap `source` attribution per feature. ([#935](https://github.com/tilezen/vector-datasource/issues/935))
+
+- **pois** and **landuse** layers: Normalize `operator` values for `United States National Park Service`, `United States Forest Service`, and `National Parks & WildlWildlifeife Service NSW` in the U.S.A. and Australia. ([#927](https://github.com/tilezen/vector-datasource/issues/927))
+
+- **roads** layer: Add additional properties `sidewalk_left` and `sidewalk_right` to all road layer features. ([#605](https://github.com/tilezen/vector-datasource/issues/605) and [#986](https://github.com/tilezen/vector-datasource/issues/986))
+
+- **roads** layer: Remove `crossing`, `sidewalk`, `sidewalk_left` and `sidewalk_right` properties for road merge. ([#993](https://github.com/tilezen/vector-datasource/issues/993))
+
+- **roads** layer: Drop meaningless `id` property on merged features. ([#952](https://github.com/tilezen/vector-datasource/issues/952))
+
+- **pois** layer: Start querying for pois at z4, not z2 (matching the **landuse** layer). ([#994](https://github.com/tilezen/vector-datasource/pull/994))
+
+- **places** layer: Adjust default zoom ranges for Natural Earth localities at the low-zooms and Natural Earth and OpenStreetMap localities at mid- and high-zooms. ([#981](https://github.com/tilezen/vector-datasource/issues/981) and [#982](https://github.com/tilezen/vector-datasource/issues/982))
+
+- **places** layer: Exclude `region_capital=false` properties. ([#1003](https://github.com/tilezen/vector-datasource/pull/1003) and [#931](https://github.com/tilezen/vector-datasource/issues/931))
+
+- **boundaries** layer: Correct bug where `sort_key` mapping wasn't updated for new boundary `kind` values from v1.0.0-pre1. ([#1012](https://github.com/tilezen/vector-datasource/issues/1012))
+
+
+  #### DOCUMENTATION CHANGES (v1.0.0-pre2)
+
+- **documentation**: Update **earth** layer documentation to reflect additional `line` and `point` geometry types. ([#808](https://github.com/tilezen/vector-datasource/issues/808))
+
+- **documentation**: Update **boundaries** and **landuse** layer documentation to reflect barriers moving into the landuse layer. ([#932](https://github.com/tilezen/vector-datasource/issues/932))
+
+- **documentation**: Update **places** layer documentation to reflect new `kind` and `kind_detail` values, locality, suburb, quarter, state, province, region, capital, and other changes. ([#934](https://github.com/tilezen/vector-datasource/issues/934))
+
+- **documentation**: Update **buildings** layer documentation to reflect new `kind` and `kind_detail` values and `building_part` changes. ([#933](https://github.com/tilezen/vector-datasource/issues/933)) and related ([#842](https://github.com/tilezen/vector-datasource/issues/842))
+
+- **documentation**: Update **roads** layer documentation to reflect new `kind` and `kind_detail` values, and remove erroneous reference to `exit`. ([#936](https://github.com/tilezen/vector-datasource/issues/936))
+
+- **contributing**: Adding a step to create a `test_config.yaml` file. ([#1001](https://github.com/tilezen/vector-datasource/pull/1001))
+
+
+  #### INTERNAL CHANGES (v1.0.0-pre2)
+
+- **performance**: Move label centroid calculation to database to reduce network pressure on the database (post processing transform needed to much geometry) in **landuse**, **water**, **earth**, and **buildings** layers. ([#965](https://github.com/tilezen/vector-datasource/issues/965))
+
+- **performance**: Add pois indexes for OpenStreetMap polygon and point tables to improve query time. ([#983](https://github.com/tilezen/vector-datasource/issues/983))
+
+- **database**: Convert Postgres PostGIS database to `h-store` all. ([#876](https://github.com/tilezen/vector-datasource/issues/876))
+
+- **database**: Convert Postgres PostGIS database projection to `EPSG:3857`. ([#908](https://github.com/tilezen/vector-datasource/issues/908))
+
+- **import**: Remove default `-W UTF-8` from data import config for shp2pgsql. ([#946](https://github.com/tilezen/vector-datasource/issues/946))
+
+- **import**: Add shim in apply non planet sql to better accommodate invalid geometries. Track longer term fix in #979. ([#1003](https://github.com/tilezen/vector-datasource/pull/1003))
+
+- **indexes**: Update road indexes to refer to `mz_road_level` alone. ([#956](https://github.com/tilezen/vector-datasource/pull/956))
+
+- **tests**: Correct test failure for hotels as upstream data had changed. ([#959](https://github.com/tilezen/vector-datasource/pull/959))
+
+- **tests**: Ensure that when `config_all_layers` is set, the **all** layer is requested. ([#974](https://github.com/tilezen/vector-datasource/pull/974))
+
+
 v1.0.0-pre1
 -------
 * **Release date**: 2016-07-22 on dev as public preview
 * See detailed Breaking changes, New features, Bug fixes, and Internal Changes sections below.
-* **Requires:** [tileserver v0.7.0](https://github.com/mapzen/tileserver/releases/tag/v0.7.0) and [tilequeue v0.10.0](https://github.com/mapzen/tilequeue/releases/tag/v0.10.0)
+* **Requires:** [tileserver v0.8.0.dev0](https://github.com/mapzen/tileserver/releases/tag/v0.8.0.dev0) and [tilequeue v0.11.0.dev0](https://github.com/mapzen/tilequeue/releases/tag/v0.11.0.dev0)
 
   #### BREAKING CHANGES (v1.0.0-pre1)
 
@@ -22,7 +147,7 @@ v1.0.0-pre1
 
   - Old prod TileJSON is still: `https://vector.mapzen.com/osm/tilejson/mapbox.json`
 
-- **roads** layer: Reclassify airport runway and taxiways as new `aeroway` kind (was `minor_road`), and change their sort order to be under equivelant landuse polygons. ([#895](https://github.com/tilezen/vector-datasource/issues/895))
+- **roads** layer: Reclassify airport runway and taxiways as new `aeroway` kind (was `minor_road`), and change their sort order to be under equivalent landuse polygons. ([#895](https://github.com/tilezen/vector-datasource/issues/895))
 
 - **roads** layer: Reclassify road layer kind values sourced from Natural Earth to use OpenStreetMap style kind values. ([#890](https://github.com/tilezen/vector-datasource/issues/890))
 
@@ -46,7 +171,7 @@ v1.0.0-pre1
 
 - **landuse** and **boundaries** layers: Move barrier lines from boundaries layer into landuse layer. Includes `city_wall`, `dam`, `fence`, `retaining_wall`, and `snow_fence`. Watch out for `dam` which is now both a polygon and line in the same landuse layer. ([#857](https://github.com/tilezen/vector-datasource/issues/857))
 
-- **buildings** layer: Reclassify building layer kind values to only have `building` or `building_part`, moved the earlier kind values to newnew `kind_detail` property with a whitelist of values. ([#842](https://github.com/tilezen/vector-datasource/issues/842))
+- **buildings** layer: Reclassify building layer kind values to only have `building` or `building_part`, moved the earlier kind values to new `kind_detail` property with a whitelist of values. ([#842](https://github.com/tilezen/vector-datasource/issues/842))
 
 - **buildings** layer: Reduce building payloads by merging buildings of similar type at zooms 13, 14, and 15 by dropping some properties like `name`, `addr_housenumber`, and `addr_street`, and quantizing others like `height` to 10 meters (zoom 13), 5 meters (zoom 14), and nearest meter (zoom 15). Also added new `scalerank` property with large buildings at 1 and small buildings at 5 to improve client-side style filtering & draw performance. ([#845](https://github.com/tilezen/vector-datasource/issues/845))
 
@@ -112,6 +237,10 @@ v1.0.0-pre1
 - Remove **TileStache** dependency, moving Python transforms into **vector-datasource** repo. ([#211](https://github.com/tilezen/vector-datasource/issues/211))
 
 
+v0.10.5
+-------
+* **Release date**: 2016-08-17
+* Backport moving label generation to database. See [#965](https://github.com/tilezen/vector-datasource/issues/965).
 
 v0.10.4
 -------
