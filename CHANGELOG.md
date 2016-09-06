@@ -12,6 +12,8 @@ v1.0.0-pre2
 
 - **buildings** layer: remove label placements from low- and mid-zooms, keep at zoom 16+. ([#679](https://github.com/tilezen/vector-datasource/issues/679))
 
+- **landuse** layer: Low- and mid-zoom landuse polygons are now merged within the same `kind` values to significantly reduce file size. Some properties, like `name`, `id`, `sport`, `religion`, and `surface` are dropped, and the `area` is recalculated for new combo polygons. [Planned work](https://github.com/tilezen/vector-datasource/issues/473) will add back some detail by adding `scale_rank` classes pre-merge (matching **buildings** layer behavior). ([#583](https://github.com/tilezen/vector-datasource/issues/583))
+
 - **landuse** layer: Remove label placements for `cemetery`, `farm`, `forest`, `forest`, `golf_course`, `grave_yard`, `military`, `national_park`, `natural_forest`, `natural_wood`, `nature_reserve`, `park`, `pitch`, `plant`, `protected_area`, `quarry`, `recreation_ground`, `substation`, `village_green`, `wastewater_plant`, `water_works`, `winter_sports`, `wood`, `works` features, moving them to **pois** layer. Remaining label placements are recommended for text only label treatment.([#742](https://github.com/tilezen/vector-datasource/issues/742))
 
 - **landuse** layer: remove label placements from low- and mid-zooms, keep at zoom 15+. ([#679](https://github.com/tilezen/vector-datasource/issues/679))
