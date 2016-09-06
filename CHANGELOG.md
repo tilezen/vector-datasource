@@ -14,10 +14,6 @@ v1.0.0-pre2
 
 - **roads** layer: Remove `aerialway`, `highway`, `piste_type`, `railway`,  in favor of coalescing their values into a new `kind_detail` property (and change incorrect `subkind` reference in documentation to `kind_detail`). ([#970](https://github.com/tilezen/vector-datasource/issues/970))
 
-_PLEASE VERIFY LANDUSE TIERING_
-
-- **landuse** layer: Low- and mid-zoom landuse polygons are now merged within the same `kind` values (but tiered into several scale_rank sizes) to significantly reduce file size. Some properties, like `name`, `id`, `sport`, `religion`, and `surface` are dropped, and the `area` is recalculated for new combo polygons. ([#583](https://github.com/tilezen/vector-datasource/issues/583))
-
 - **transit** layer: rename `root_relation_id` property to `root_id`, matching new **building** layer configuration. ([#969](https://github.com/tilezen/vector-datasource/pull/969) and [#653](https://github.com/tilezen/vector-datasource/issues/653))
 
 - **boundaries**, **places**, and **roads** layers: Remove raw Natural Earth `scalerank` (see `min_zoom` instead) and `labelrank` properties. ([#992](https://github.com/tilezen/vector-datasource/issues/992))
