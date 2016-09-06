@@ -50,7 +50,7 @@ v1.0.0-pre2
 
 - **pois** layer: Add `kind_detail` property sourced from `sport` for `pitch` features and sourced from `cuisine` for `biergarten`, `pub`, `bar`, `restaurant`, `fast_food`, `cafe` kinds (removing the `cuisine` property). ([#719](https://github.com/tilezen/vector-datasource/issues/719))
 
-- **roads** layer: To support highway shields a new `shield_text` property has been added, `network` values have been normalized (and bicycle networks are now excluded). An example: for "US 101" we now store `network` of  **US:US** and `shield_text` of **101**. Multiple shields are supported via optional `all_networks` and `all_shield_texts` lists (which work in GeoJSON and TopoJSON but not MVT formats, follow [mapbox-vector-tile/#64](https://github.com/tilezen/mapbox-vector-tile/issues/64] for a fix). The `ref` property remains available but is less useful for shield construction. ([#192](https://github.com/tilezen/vector-datasource/issues/192) and [896](https://github.com/tilezen/vector-datasource/issues/896))
+- **roads** layer: To support highway shields a new `shield_text` property has been added, `network` values have been normalized (and bicycle networks are now excluded). An example: for "US 101" we now store `network` of  **US:US** and `shield_text` of **101**. Multiple shields are supported via optional `all_networks` and `all_shield_texts` lists (which work in GeoJSON and TopoJSON but not MVT formats, follow [mapbox-vector-tile/#64](https://github.com/tilezen/mapbox-vector-tile/issues/64) for a fix). The `ref` property remains available but is less useful for shield construction. ([#192](https://github.com/tilezen/vector-datasource/issues/192) and [#896](https://github.com/tilezen/vector-datasource/issues/896))
 
   #### BUG FIXES (v1.0.0-pre2)
 
@@ -99,11 +99,11 @@ v1.0.0-pre2
 
   #### INTERNAL CHANGES (v1.0.0-pre2)
 
-- **performance**: Move label centroid calculation to database to reduce network pressure on the database (post processing transform needed to much geometry) in **landuse**, **water**, **earth**, and **buildings** layers. ([#965](https://github.com/tilezen/vector-datasource/issues/965))
+- **performance**: Move label centroid calculation to database to reduce network pressure on the database (post processing transform needed too much geometry) in **landuse**, **water**, **earth**, and **buildings** layers. ([#965](https://github.com/tilezen/vector-datasource/issues/965))
 
 - **performance**: Add pois indexes for OpenStreetMap polygon and point tables to improve query time. ([#983](https://github.com/tilezen/vector-datasource/issues/983))
 
-- **database**: Convert Postgres PostGIS database to `h-store` all. ([#876](https://github.com/tilezen/vector-datasource/issues/876))
+- **database**: Convert Postgres PostGIS database to utilize osm2pgsql's `--hstore-all` option. ([#876](https://github.com/tilezen/vector-datasource/issues/876))
 
 - **database**: Convert Postgres PostGIS database projection to `EPSG:3857`. ([#908](https://github.com/tilezen/vector-datasource/issues/908))
 
