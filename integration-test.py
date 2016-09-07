@@ -133,6 +133,8 @@ def match_distance(actual, expected):
         # normalise unicode values
         if isinstance(v, unicode):
             v = v.encode('utf-8')
+        if isinstance(exp_v, unicode):
+            exp_v = exp_v.encode('utf-8')
 
         if exp_v is not None:
             if isinstance(exp_v, set):
