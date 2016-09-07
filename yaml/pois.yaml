@@ -190,8 +190,6 @@ filters:
     min_zoom: { min: [ { max: [ 12, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output: { kind: natural_wood, tier: 2 }
 
-  # TODO: conservation? doesn't seem to be an existing kind.
-
   # farm
   - filter: {landuse: farm}
     min_zoom: { max: [ 15, { lit: *tier2_min_zoom } ] }
