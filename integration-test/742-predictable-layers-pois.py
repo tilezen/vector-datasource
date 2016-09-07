@@ -30,7 +30,7 @@ assert_has_feature(
 # Label placement Cemetery in landuse
 # http://www.openstreetmap.org/way/44580948
 assert_no_matching_feature(
-    12, 683, 1622, 'landuse',
+    15, 5471, 12981, 'landuse',
     {'id': 44580948, 'kind': 'cemetery', 'label_placement': True})
 
 # Way:179213166 Farm in POIs
@@ -75,7 +75,7 @@ assert_has_feature(
 
 # Label placement forest in landuse
 assert_no_matching_feature(
-    14, 4877, 6109, 'landuse',
+    15, 9755, 12218, 'landuse',
     {'id': 202680509, 'kind': 'natural_forest', 'label_placement': True})
 
 # Node:2148541212 natural: Forest in POIS
@@ -92,7 +92,7 @@ assert_has_feature(
 
 # Label placement Golf_course in landuse
 assert_no_matching_feature(
-    13, 1308, 3166, 'landuse',
+    15, 5233, 12666, 'landuse',
     {'id': 30903221, 'kind': 'golf_course', 'label_placement': True})
 
 # Node:4035914099 Golf_course in POIS
@@ -126,7 +126,7 @@ assert_has_feature(
 
 # Label placement national_park in landuse
 assert_no_matching_feature(
-    10, 164, 397, 'landuse',
+    15, 5267, 12722, 'landuse',
     {'id': 296096756, 'kind': 'national_park', 'label_placement': True})
 
 # Node:617506856 national_park in POIS
@@ -143,7 +143,7 @@ assert_has_feature(
 
 # Label placement nature_reserve in landuse
 assert_no_matching_feature(
-    12, 720, 1638, 'landuse',
+    15, 5766, 13111, 'landuse',
     {'id': 40260866, 'kind': 'nature_reserve', 'label_placement': True})
 
 # Node:1262562806 nature_reserve in POIS
@@ -160,7 +160,7 @@ assert_has_feature(
 
 # Label placement park in landuse
 assert_no_matching_feature(
-    13, 1310, 3166, 'landuse',
+    15, 5240, 12667, 'landuse',
     {'id': 23871270, 'kind': 'park', 'label_placement': True})
 
 # Node:4206408136 park in POIS
@@ -177,7 +177,7 @@ assert_has_feature(
 
 # Label placement plant in landuse
 assert_no_matching_feature(
-    14, 2617, 6334, 'landuse',
+    15, 5235, 12668, 'landuse',
     {'id': 26278098, 'kind': 'plant', 'label_placement': True})
 
 # Node:902365126 plant in POIS
@@ -200,7 +200,7 @@ assert_has_feature(
 
 # Label placement protected_area in landuse
 assert_no_matching_feature(
-    9, 82, 198, 'landuse',
+    15, 5249, 12701, 'landuse',
     {'id': 296573403, 'kind': 'protected_area', 'label_placement': True})
 
 # Node:4076680383 protected_area in POIS
@@ -217,7 +217,7 @@ assert_has_feature(
 
 # Label placement quarry in landuse
 assert_no_matching_feature(
-    12, 671, 1583, 'landuse',
+    15, 5372, 12667, 'landuse',
     {'id': 184367568, 'kind': 'quarry', 'label_placement': True})
 
 # Node:585365655 quarry in POIS
@@ -234,7 +234,7 @@ assert_has_feature(
 
 # Label placement recreation_ground in landuse
 assert_no_matching_feature(
-    14, 2619, 6334, 'landuse',
+    15, 5239, 12668, 'landuse',
     {'id': 86285084, 'kind': 'recreation_ground', 'label_placement': True})
 
 # Node:1868204235 recreation_ground in POIS
@@ -257,7 +257,7 @@ assert_has_feature(
 
 # Label placement village_green in landuse
 assert_no_matching_feature(
-    14, 2618, 6334, 'landuse',
+    15, 5237, 12668, 'landuse',
     {'id': 28694608, 'kind': 'village_green', 'label_placement': True})
 
 # Node:3199567035 village_green in POIS
@@ -274,7 +274,7 @@ assert_has_feature(
 
 # Label placement wastewater_plant in landuse
 assert_no_matching_feature(
-    13, 1310, 3167, 'landuse',
+    15, 5243, 12669, 'landuse',
     {'id': 239634932, 'kind': 'wastewater_plant', 'label_placement': True})
 
 # Node:2838226695 wastewater_plant in POIS
@@ -291,7 +291,7 @@ assert_has_feature(
 
 # Label placement water_works in landuse
 assert_no_matching_feature(
-    14, 2620, 6330, 'landuse',
+    15, 5240, 12661, 'landuse',
     {'id': 93703732, 'kind': 'water_works', 'label_placement': True})
 
 # Node:3367407023 water_works in POIS
@@ -308,7 +308,7 @@ assert_has_feature(
 
 # Label placement winter_sports in landuse
 assert_no_matching_feature(
-    10, 170, 391, 'landuse',
+    15, 5470, 12530, 'landuse',
     {'id': 317721523, 'kind': 'winter_sports', 'label_placement': True})
 
 # Node:4042754024 winter_sports in POIS
@@ -325,7 +325,7 @@ assert_has_feature(
 
 # Label placement landuse: wood in landuse
 assert_no_matching_feature(
-    14, 2826, 6549, 'landuse',
+    15, 5653, 13099, 'landuse',
     {'id': 207859675, 'kind': 'wood', 'label_placement': True})
 
 # Way:372445925 natural: wood in POIS
@@ -336,7 +336,7 @@ assert_has_feature(
 
 # Label placement natural: wood in landuse
 assert_no_matching_feature(
-    14, 2618, 6330, 'landuse',
+    15, 5236, 12661, 'landuse',
     {'id': 372445925, 'kind': 'natural_wood', 'label_placement': True})
 
 # Node:369162231 natural: wood in POIS
@@ -353,7 +353,7 @@ assert_has_feature(
 
 # Label placement works in landuse
 assert_no_matching_feature(
-    13, 1429, 3247, 'landuse',
+    15, 5719, 12990, 'landuse',
     {'id': 164878781, 'kind': 'works', 'label_placement': True})
 
 # Node:1004981713 works in POIS
