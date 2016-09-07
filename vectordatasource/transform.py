@@ -1752,6 +1752,10 @@ def admin_boundaries(ctx):
     maritime_features = list()
     new_features = list()
 
+    # Sorting here so that we have consistent ordering of left/right side
+    # on boundaries.
+    layer['features'] = sorted(layer['features'], key=lambda f: f[1]['id'])
+
     for shape, props, fid in layer['features']:
         dims = _geom_dimensions(shape)
         kind = props.get('kind')
