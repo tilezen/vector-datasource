@@ -52,7 +52,7 @@ assert_has_feature(
 
 # Label placement forest in landuse
 assert_no_matching_feature(
-    10, 163, 392, 'landuse',
+    15, 5221, 12555, 'landuse',
     {'id': 64296322, 'kind': 'forest', 'label_placement': True})
 
 # Node:357559979 landuse: Forest in POIS
@@ -109,7 +109,7 @@ assert_has_feature(
 
 # Label placement military in landuse
 assert_no_matching_feature(
-    13, 1308, 3174, 'landuse',
+    15, 5233, 12697, 'landuse',
     {'id': 330274727, 'kind': 'military', 'label_placement': True})
 
 # Node:369174053 Military in POIS
