@@ -197,7 +197,6 @@ filters:
     min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
     output: { kind: natural_wood, tier: 2 }
 
-  # TODO: conservation? doesn't seem to be an existing kind.
   - filter: {landuse: urban}
     min_zoom: *tier2_min_zoom
     output: {kind: urban, tier: 2}
@@ -230,6 +229,10 @@ filters:
   - filter: {amenity: college}
     min_zoom: *tier3_min_zoom
     output: {kind: college, tier: 3}
+  # glacier
+  - filter: {natural: glacier}
+    min_zoom: *tier3_min_zoom
+    output: {kind: glacier, tier: 3}
 
   ############################################################
   # TIER 4
@@ -376,10 +379,6 @@ filters:
   - filter: {natural: beach}
     min_zoom: *tier5_min_zoom
     output: {kind: beach, tier: 5}
-  # glacier
-  - filter: {natural: glacier}
-    min_zoom: *tier5_min_zoom
-    output: {kind: glacier, tier: 5}
 
   ############################################################
   # TIER 6
@@ -434,14 +433,6 @@ filters:
   - filter: {tourism: hanami}
     min_zoom: *tier6_min_zoom
     output: {kind: hanami, tier: 6}
-  # tree_row
-  - filter: {natural: tree_row}
-    min_zoom: *tier6_min_zoom
-    output: {kind: tree_row, tier: 6}
-  # hedge
-  - filter: {barrier: hedge}
-    min_zoom: *tier6_min_zoom
-    output: {kind: hedge, tier: 6}
 
   ############################################################
   # TIER 6 EXTRA - PARKING
@@ -461,8 +452,8 @@ filters:
   # park w/ US Parks Service operator
   - filter:
       any:
-        leisure: park
-        landuse: park
+        leisure: [park, national_park]
+        landuse: [park, national_park]
     min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
     output: { kind: park }
   - filter: {landuse: grass}
@@ -557,6 +548,12 @@ filters:
   - filter: {tourism: picnic_site}
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: picnic_site}
+  - filter: {natural: tree_row}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: tree_row}
+  - filter: {barrier: hedge}
+    min_zoom: GREATEST(LEAST(zoom, 16), 9)
+    output: {kind: hedge}
   - filter: {highway: services}
     min_zoom: GREATEST(LEAST(zoom, 16), 11)
     output:

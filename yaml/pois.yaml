@@ -155,7 +155,7 @@ filters:
   - filter:
       landuse: forest
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output: { kind: forest, tier: 2 }
   - filter: {landuse: forest}
     min_zoom: { min: [ { max: [ 10, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
@@ -201,7 +201,13 @@ filters:
   ############################################################
   # TIER 3
   ############################################################
-  # aerodrome - no POIs
+  # aerodrome
+  - filter:
+      aeroway: [aerodrome, airport]
+    min_zoom: { min: [ { max: [ { lit: zoom + 4.12 }, { lit: *tier3_min_zoom } ] }, 13 ] }
+    output:
+      kind: {col: aeroway}
+      tier: 3
   # military
   - filter: {landuse: military}
     min_zoom: { min: [ { max: [ 8, { lit: zoom + 2 }, { lit: *tier3_min_zoom } ] }, 14 ] }
@@ -281,7 +287,7 @@ filters:
     output:
       kind: substation
       tier: 4
-  # tower - no POI
+  # man_made=tower - no POI
   # wastewater_plant
   - filter: {man_made: wastewater_plant}
     min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
@@ -301,6 +307,12 @@ filters:
       kind: water_works
       tier: 4
   # wildlife_park - no POI
+  - filter:
+      zoo: wildlife_park
+    min_zoom: 17
+    output:
+      kind: wildlife_park
+      tier: 4
   # winter_sports
   - filter: {landuse: winter_sports}
     min_zoom: { min: [ { max: [ 10, { lit: zoom + 1 }, { lit: *tier4_min_zoom } ] }, 13 ] }
@@ -403,7 +415,7 @@ filters:
   ############################################################
   # NOT IN ANY TIER
   ############################################################
-  - filter: {historic: battlefield, operator: *us_forest_service}
+  - filter: {historic: battlefield}
     min_zoom: GREATEST(10, LEAST(zoom + 4.0, 17))
     output: {kind: battlefield}
   # park w/ US Parks Service operator
@@ -414,11 +426,6 @@ filters:
     min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
     output: { kind: park }
 
-  - filter:
-      aeroway: [aerodrome, airport]
-    min_zoom: LEAST(zoom + 4.12, 13)
-    output:
-      kind: {col: aeroway}
   - filter:
       natural: [peak, volcano]
     min_zoom: CASE WHEN mz_to_float_meters(tags->'ele') > 4000 THEN 9
@@ -577,7 +584,7 @@ filters:
     min_zoom: GREATEST(15, LEAST(zoom + 2.24, 17))
     output: {kind: monument }
   - filter:
-      tags->zoo: [enclosure, petting_zoo, aviary, wildlife_park]
+      tags->zoo: [enclosure, petting_zoo, aviary]
     min_zoom: 17
     output:
       kind: {col: tags->zoo}
