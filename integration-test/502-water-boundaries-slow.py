@@ -3,7 +3,7 @@
 # polygon, but zero water boundaries actually in the tile.
 no_boundary_tiles = [
     #https://www.openstreetmap.org/way/51858784
-    #https://www.openstreetmap.org/way/21635049
+    #https://www.openstreetmap.org/way/440165276
     [18, 74987, 100321], # Near Washington DC. USA
     #https://www.openstreetmap.org/relation/6333922
     # other polygon is coastline
