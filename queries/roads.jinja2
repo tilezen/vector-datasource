@@ -3,6 +3,7 @@ SELECT
     gid AS __id__,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     'naturalearthdata.com' AS source,
+    TODO_FIX_ME as min_zoom,
     mz_calculate_json_roads(ne_10m_roads.*) AS mz_properties
 
 FROM ne_10m_roads
@@ -17,6 +18,7 @@ SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     'openstreetmap.org' AS source,
+    mz_road_level as min_zoom,
     mz_calculate_json_roads(planet_osm_line.*) AS mz_properties,
 {% if zoom >= 12 %}
     -- try to only calculate whether this is a bus route when we already know
