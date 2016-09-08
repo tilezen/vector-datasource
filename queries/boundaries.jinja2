@@ -86,7 +86,7 @@ UNION ALL
 
 SELECT
   NULL AS name,
-  0 as min_zoom,
+  8 as min_zoom,
   true AS maritime_boundary,
   '{"kind": "maritime"}'::json as mz_properties,
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom',3857) }}{% endfilter %} AS __geometry__,
