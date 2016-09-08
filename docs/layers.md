@@ -126,7 +126,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
-#### Boundary kind values:
+#### Boundary `kind` values:
 
 * `aboriginal_lands`
 * `country`
@@ -148,17 +148,22 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprint, building label_placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
+Polygons from OpenStreetMap representing building footprints, building label placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
-Individual `building:part` geometries from OSM following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels are now exported as `building_part` features with specified `kind_detail`. Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect.
+Individual `building_part` geometries from OpenStreetMap following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels. Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect.
 
 Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
+
+Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
+
+Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for building footprints and from `building:part` tag for building parts.
 
 #### Building properties (common):
 
 * `name`
 * `id`: from OpenStreetMap
 * `kind`: see below
+* `kind_detail`: see below
 * `source`: `openstreetmap.org`
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
@@ -180,22 +185,166 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `roof_shape`: from `roof:shape` tag
 * `scale_rank`: calculation of a feature's importance
 * `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
-* `kind_detail`: value from OpenStreetMap's `building:part` tag.
 
-#### Building kind values:
+#### Building layer `kind` values:
 
-* Buildings polygons and label_position points, have `kind` values that are either `building` or `building_part`, if `building=*` or `building:part` is `yes` respectively. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
-* If the raw OpenStreetMap `building:part` tag exists with a value, a `kind_detail` tag is added to describe the `building:part` value.
-* Address points are `kind` of value `address`.
+* `building`
+* `building_part`
+* `address`
 
-#### Address properties and kind value:
+#### Building footprint and label placement `kind_detail` values:
 
-* `name`
-* `id`: osm_id
-* `source`: `openstreetmap.org`
-* `kind`: `address`
-* `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
-* `addr_street`: value from OpenStreetMap's `addr:street` tag
+`abandoned`
+* `administrative`
+* `agricultural`
+* `airport`
+* `allotment_house`
+* `apartments`
+* `arbour`
+* `bank`
+* `barn`
+* `basilica`
+* `beach_hut`
+* `bell_tower`
+* `boathouse`
+* `brewery`
+* `bridge`
+* `bungalow`
+* `bunker`
+* `cabin`
+* `carport`
+* `castle`
+* `cathedral`
+* `chapel`
+* `chimney`
+* `church`
+* `civic`
+* `clinic`
+* `closed`
+* `clubhouse`
+* `collapsed`
+* `college`
+* `commercial`
+* `construction`
+* `container`
+* `convent`
+* `cowshed`
+* `dam`
+* `damaged`
+* `depot`
+* `destroyed`
+* `detached`
+* `disused`
+* `dormitory`
+* `duplex`
+* `factory`
+* `farm`
+* `farm_auxiliary`
+* `fire_station`
+* `garage`
+* `garages`
+* `gazebo`
+* `ger`
+* `glasshouse`
+* `government`
+* `grandstand`
+* `greenhouse`
+* `hangar`
+* `healthcare`
+* `hermitage`
+* `historical`
+* `hospital`
+* `hotel`
+* `house`
+* `houseboat`
+* `hut`
+* `industrial`
+* `kindergarten`
+* `kiosk`
+* `library`
+* `mall`
+* `manor`
+* `manufacture`
+* `mixed_use`
+* `mobile_home`
+* `monastery`
+* `mortuary`
+* `mosque`
+* `museum`
+* `office`
+* `outbuilding`
+* `parking`
+* `pavilion`
+* `power`
+* `prison`
+* `proposed`
+* `pub`
+* `public`
+* `residential`
+* `restaurant`
+* `retail`
+* `roof`
+* `ruin`
+* `ruins`
+* `school`
+* `semidetached_house`
+* `service`
+* `shed`
+* `shelter`
+* `shop`
+* `shrine`
+* `silo`
+* `slurry_tank`
+* `stable`
+* `stadium`
+* `static_caravan`
+* `storage`
+* `storage_tank`
+* `store`
+* `substation`
+* `summer_cottage`
+* `summer_house`
+* `supermarket`
+* `synagogue`
+* `tank`
+* `temple`
+* `terrace`
+* `tower`
+* `train_station`
+* `transformer_tower`
+* `transportation`
+* `university`
+* `utility`
+* `veranda`
+* `warehouse`
+* `wayside_shrine`
+* `works`
+
+#### Building part `kind_detail` values:
+
+* `arch`
+* `balcony`
+* `base`
+* `column`
+* `door`
+* `elevator`
+* `entrance`
+* `floor`
+* `hall`
+* `main`
+* `passageway`
+* `pillar`
+* `porch`
+* `ramp`
+* `roof`
+* `room`
+* `steps`
+* `stilobate`
+* `tier`
+* `tower`
+* `verticalpassage`
+* `wall`
+* `window`
 
 ## Earth
 
@@ -214,7 +363,7 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 * `kind`: either `earth` or "natural" value from OSM tag.
 * `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
-#### Earth kind values:
+#### Earth `kind` values:
 
 * `arete`
 * `cliff`
@@ -222,7 +371,7 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 * `ridge`
 * `valley`
 
-#### Earth kind values (point only):
+#### Earth `kind` values (point only):
 
 These are intended for label placement, and are included as points only.
 
@@ -263,7 +412,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
 * `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
 
-#### Landuse kind values:
+#### Landuse `kind` values:
 
 * `aerodrome`
 * `allotments`
@@ -409,7 +558,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
 * `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
 
-#### Place kind values:
+#### Place `kind` values:
 
 * `borough`
 * `continent`
@@ -443,7 +592,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 16 all local features are added, like `amusement_ride`, `atm`, and `bus_stop`, but may be marked with a `min_zoom` property to suggest at which zoom levels they are suitable for display. For example, `bench` and `waste_basket` features may be marked `min_zoom: 18` to suggest that they are displayed at zoom 18 and higher.  Note that `min_zoom` is not an integer, and may contain a fractional component.
 
-The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_position features and `buildings` label_position features, throttled by area.
+The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_position points and `buildings` label_position points, throttled by area.
 
 Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
 
@@ -503,7 +652,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
 
-#### POI kind values:
+#### POI `kind` values:
 
 * `accountant`
 * `adit`
@@ -891,7 +1040,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `state`: OpenStreetMap features
 * `symbol`: ski pistes from OpenStreetMap
 
-#### Road transportation kind values (lines):
+#### Road transportation `kind` values (lines):
 
 * `aerialway`
 * `aeroway`
@@ -1001,7 +1150,7 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 * `roundtrip`
 * `route_name`
 
-#### Transit kind values (line, polygon):
+#### Transit `kind` values (line, polygon):
 
 * `light_rail`
 * `platform`
@@ -1037,7 +1186,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
 * `is_tunnel`: for `line` features only (`true` values only)
 
-#### Water kind values (point, polygon):
+#### Water `kind` values (point, polygon):
 
 * `basin`
 * `dock`
@@ -1050,7 +1199,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 
 Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
 
-#### Water kind values (point only):
+#### Water `kind` values (point only):
 
 These are intended for label placement, and are included as points only.
 
@@ -1064,7 +1213,7 @@ These are intended for label placement, and are included as points only.
 * `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
 
-#### Water kind values (lines):
+#### Water `kind` values (lines):
 
 * `canal`
 * `dam`
