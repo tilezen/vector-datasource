@@ -85,9 +85,6 @@ global:
       sac_scale: {col: tags->sac_scale}
   - &ne_properties
       name: {col: name}
-      namealt: {col: namealt}
-      namealtt: {col: namealtt}
-      level: {col: level}
       mz_networks:
         expr: |
           CASE WHEN sov_a3 = 'CAN' AND level IN ('Federal', 'Interstate', 'State')
@@ -106,7 +103,7 @@ global:
                     THEN ARRAY['road', 'e-road', name]
                ELSE NULL
           END
-        columns: [ sov_a3, continent, label ]
+        columns: [ sov_a3, continent, label, level ]
 
 # name isn't really synthetic, but we use it from both the NE and OSM
 # tables, so to avoid including it twice we fake it as synthetic.
