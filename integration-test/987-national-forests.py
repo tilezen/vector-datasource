@@ -57,10 +57,13 @@ assert_has_feature(
 # a national park. Alternatively boundary:type=protected_area could give us
 # kind: protected_area instead.
 #
+# This feature also has protection_title=National Forest, and the name is
+# "Arapaho National Forest", so it should probably be classed as a forest.
+#
 # http://www.openstreetmap.org/relation/396026
 assert_has_feature(
     13, 1683, 3103, 'landuse',
-    { 'kind': 'park', 'id': -396026 })
+    { 'kind': 'forest', 'id': -396026 })
 
 # leisure=nature_reserve in North Farallon Islands State Marine Reserve has
 # boundary=protected_area with protect_class=4 in tile 11/323/791. It's
@@ -70,7 +73,7 @@ assert_has_feature(
 # https://www.openstreetmap.org/way/436801947
 assert_has_feature(
     11, 323, 791, 'landuse',
-    { 'kind': 'nature_reserve', 'id': -436801947 })
+    { 'kind': 'nature_reserve', 'id': 436801947 })
 
 # leisure=nature_reserve in Mount Tamalpais Watershed has
 # boundary=national_park with boundary:type=protected_area and operator=Marin
@@ -164,9 +167,10 @@ assert_has_feature(
 # boundary=national_park in Adirondack Park should end up with kind:park.
 #
 # https://www.openstreetmap.org/relation/1695394
-assert_has_feature(
-    13, 2410, 3001, 'landuse',
-    { 'kind': 'park', 'id': -1695394 })
+# TODO: not enough information???
+#assert_has_feature(
+#    13, 2410, 3001, 'landuse',
+#    { 'kind': 'park', 'id': -1695394 })
 
 # operator=United States National Park Service and protect_class=2 in
 # Shenandoah National Park with boundary=national_park and leisure=park should

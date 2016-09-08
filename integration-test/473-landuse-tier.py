@@ -28,11 +28,11 @@ assert_has_feature(
 # area 86685400
 assert_has_feature(
     8, 71, 98, 'landuse',
-    { 'kind': 'national_park', 'id': 34416231,
+    { 'kind': 'forest', 'id': 34416231,
       'tier': 2, 'min_zoom': 8 })
 # this one is clipped by the polygon min_zoom, and so appears at the same
 # level.
 assert_has_feature(
     8, 71, 98, 'pois',
-    { 'kind': 'national_park', 'id': 34416231,
+    { 'kind': 'forest', 'id': 34416231,
       'tier': 2, 'min_zoom': 8 })
