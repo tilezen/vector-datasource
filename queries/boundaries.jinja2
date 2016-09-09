@@ -105,6 +105,7 @@ UNION ALL
 
 SELECT
   tags->'name' AS name,
+  'openstreetmap.org' AS source,
   mz_boundary_min_zoom as min_zoom,
   NULL AS maritime_boundary,
   mz_calculate_json_boundaries(planet_osm_line.*) AS mz_properties,
