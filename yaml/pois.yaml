@@ -180,7 +180,14 @@ filters:
     output: {kind: battlefield, tier: 1}
   - filter:
       boundary: national_park
-      not: {operator: *us_forest_service}
+      any:
+        all:
+          not: { operator: *us_forest_service }
+          protect_class: ['2', '3', '5']
+        operator: *us_parks_service
+        operator:en: Parks Canada
+        designation: national_park
+        protection_title: National Park
     min_zoom: { min: [ { max: [ { lit: zoom + 3.5 }, { lit: *tier1_min_zoom } ] }, 10 ] }
     output:
       kind: national_park
@@ -191,7 +198,8 @@ filters:
   ############################################################
   - filter:
       boundary: national_park
-      not: {operator: *us_parks_service}
+      not: { operator: *us_forest_service }
+      protect_class: ['2', '3', '5']
     min_zoom: { min: [ { max: [ { lit: zoom + 3.5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
     output:
       kind: national_park
@@ -200,7 +208,7 @@ filters:
       any:
         leisure: park
         landuse: park
-      not: { operator: *us_parks_service }
+        boundary: national_park
     min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output:
       kind: park
