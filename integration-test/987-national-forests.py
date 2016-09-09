@@ -167,10 +167,9 @@ assert_has_feature(
 # boundary=national_park in Adirondack Park should end up with kind:park.
 #
 # https://www.openstreetmap.org/relation/1695394
-# TODO: not enough information???
-#assert_has_feature(
-#    13, 2410, 3001, 'landuse',
-#    { 'kind': 'park', 'id': -1695394 })
+assert_has_feature(
+    13, 2410, 3001, 'landuse',
+    { 'kind': 'park', 'id': -1695394 })
 
 # operator=United States National Park Service and protect_class=2 in
 # Shenandoah National Park with boundary=national_park and leisure=park should
