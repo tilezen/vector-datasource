@@ -29,25 +29,25 @@ assert_has_feature(
 assert_has_feature(
     9, 150, 192, 'boundaries',
     { 'min_zoom': 8, 'id':  -224951,
-    'source': 'openstretmap.org',
+    'source': 'openstreetmap.org',
     'name': 'New Jersey - New York' })
 
 assert_has_feature(
     9, 150, 192, 'roads',
     { 'min_zoom': 8, 'sort_key':  381,
-    'source': 'openstretmap.org',
-    'kind': 'Major Road',
+    'source': 'openstreetmap.org',
+    'kind': 'major_road',
     'network': 'US:NJ:Hudson' })
 
 assert_has_feature(
     9, 150, 192, 'transit',
     { 'min_zoom': 5, 'ref':  '54-57',
-    'source': 'openstretmap.org',
+    'source': 'openstreetmap.org',
     'name': 'Vermonter' })
 
 assert_has_feature(
     9, 150, 192, 'water',
     { 'min_zoom': 0, 'id':  10613,
-    'source': 'openstretmapdata.com',
+    'source': 'openstreetmapdata.com',
     'kind': 'ocean',
     'name': '' })
