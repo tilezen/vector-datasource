@@ -84,7 +84,7 @@ global:
       trail_visibility: {col: tags->trail_visibility}
       sac_scale: {col: tags->sac_scale}
   - &ne_properties
-      name: {col: name}
+      ref: {col: name}
       mz_networks:
         expr: |
           CASE WHEN sov_a3 = 'CAN' AND level IN ('Federal', 'Interstate', 'State')
