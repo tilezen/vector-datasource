@@ -972,6 +972,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 {{ table_func('json', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'JSON') }}
+{{ table_func('json', param, 'ne', 'ne_10m_admin_0_boundary_lines_map_units', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'JSON') }}
 
 DROP FUNCTION IF EXISTS mz_calculate_min_zoom_boundaries(planet_osm_line);
@@ -1008,6 +1009,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 {{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'REAL') }}
 {{ table_func('min_zoom', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'REAL') }}
 {{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'REAL') }}
+{{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_0_boundary_lines_map_units', 'REAL') }}
 {{ table_func('min_zoom', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'REAL') }}
 
 ----------------------------------------------------------------------

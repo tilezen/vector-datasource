@@ -77,6 +77,7 @@ PERFORM tmp_make_real('planet_osm_polygon', 'mz_boundary_min_zoom');
 PERFORM tmp_make_real('planet_osm_polygon', 'mz_building_min_zoom');
 
 PERFORM tmp_make_real('ne_10m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom');
+PERFORM tmp_make_real('ne_10m_admin_0_boundary_lines_map_units', 'mz_boundary_min_zoom');
 PERFORM tmp_make_real('ne_10m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom');
 PERFORM tmp_make_real('ne_10m_coastline', 'mz_water_min_zoom');
 PERFORM tmp_make_real('ne_10m_lakes', 'mz_water_min_zoom');
