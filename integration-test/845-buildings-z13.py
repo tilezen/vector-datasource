@@ -3,5 +3,5 @@
 # http://www.openstreetmap.org/way/23654700
 # http://www.openstreetmap.org/way/60500069
 assert_has_feature(
-    13, 1310, 3170,
-    {'buildings', 'kind': 'building'})
+    13, 1310, 3170, 'buildings',
+    {'kind': 'building', min_zoom: 13})
