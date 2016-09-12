@@ -87,6 +87,7 @@ filters:
   - filter: {featurecla: Admin-1 region boundary}
     min_zoom: *ne_region_boundaries_min_zoom
     output: {kind: macroregion, kind_detail: '3'}
+    extra_columns: [scalerank]
     table: ne
   - filter:
       featurecla:
@@ -94,5 +95,6 @@ filters:
         - Admin-1 statistical boundary
         - Admin-1 statistical meta bounds
     min_zoom: *ne_region_boundaries_min_zoom
+    extra_columns: [scalerank]
     output: {kind: region, kind_detail: '4'}
     table: ne
