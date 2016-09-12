@@ -27,6 +27,12 @@ UPDATE
     AND COALESCE(mz_landuse_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_landuse(planet_osm_polygon.*), 999);
 
 UPDATE planet_osm_polygon
+  SET mz_building_min_zoom = mz_calculate_min_zoom_buildings(planet_osm_polygon.*)
+  WHERE mz_calculate_min_zoom_buildings(planet_osm_polygon.*) IS NOT NULL;
+    (tags -> 'building' IS NOT NULL AND (way_area >= 1600 OR volume >= 300000 ))
+    AND COALESCE(mz_building_min_zoom, 999) <> COALESCE(mz_building_min_zoom(planet_osm_polygon.*), 999);
+
+UPDATE planet_osm_polygon
   SET mz_label_placement = ST_PointOnSurface(way)
   WHERE mz_label_placement IS NULL;
 
