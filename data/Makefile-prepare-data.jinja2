@@ -22,7 +22,7 @@ download: {{ src_shapefile_zips }}
 	touch {{ shapefile.src_shp }}
 
 {{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
-	OGR_ENABLE_PARTIAL_REPROJECTION=1 ogr2ogr -wrapdateline -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.tgt_shp }} {{ shapefile.src_shp }}
+	OGR_ENABLE_PARTIAL_REPROJECTION=1 ogr2ogr -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.tgt_shp }} {{ shapefile.src_shp }}
 {% if shapefile.tile %}
 	python tile-shapefile.py {{ shapefile.tgt_shp }} tiled-{{ shapefile.tgt_shp }}
 	rm -f {{ shapefile.tgt_shp_wildcard }}
