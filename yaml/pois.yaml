@@ -111,6 +111,66 @@ filters:
     output: {kind: observatory}
 
   ############################################################
+  # TIER 2 OVERRIDES
+  #
+  # These are things which are "more specific" than things in
+  # tier 1, so they should match first.
+  ############################################################
+  - filter:
+      boundary: national_park
+      operator: *us_forest_service
+    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    output:
+      kind: forest
+      tier: 2
+  - filter:
+      any:
+        leisure: park
+        landuse: park
+      park:type: state_recreational_area
+    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    output:
+      kind: park
+      tier: 2
+  - filter:
+      boundary: national_park
+      protect_class: '6'
+      protction_title: National Forest
+    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    output:
+      kind: forest
+      tier: 2
+  - filter:
+      boundary: national_park
+      protect_class: '6'
+      protection_title: National Forest
+    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    output:
+      kind: forest
+      tier: 2
+  - filter:
+      boundary: national_park
+      any:
+        - protect_class: '6'
+        - designation: area_of_outstanding_natural_beauty
+    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    output:
+      kind: park
+      tier: 2
+  - filter:
+      any:
+        - boundary:type: protected_area
+        - boundary: protected_area
+      leisure: nature_reserve
+      protect_class: ['4', '5']
+      not:
+        any:
+          - operator: *us_forest_service
+          - operator: *us_parks_service
+    min_zoom: { min: [ { max: [ { lit: zoom + 5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
+    output: {kind: nature_reserve, tier: 2}
+
+  ############################################################
   # TIER 1
   ############################################################
   - filter:
@@ -120,7 +180,14 @@ filters:
     output: {kind: battlefield, tier: 1}
   - filter:
       boundary: national_park
-      not: {operator: *us_forest_service}
+      any:
+        all:
+          not: { operator: *us_forest_service }
+          protect_class: ['2', '3', '5']
+        operator: *us_parks_service
+        operator:en: Parks Canada
+        designation: national_park
+        protection_title: National Park
     min_zoom: { min: [ { max: [ { lit: zoom + 3.5 }, { lit: *tier1_min_zoom } ] }, 10 ] }
     output:
       kind: national_park
@@ -131,7 +198,8 @@ filters:
   ############################################################
   - filter:
       boundary: national_park
-      not: {operator: *us_parks_service}
+      not: { operator: *us_forest_service }
+      protect_class: ['2', '3', '5']
     min_zoom: { min: [ { max: [ { lit: zoom + 3.5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
     output:
       kind: national_park
@@ -140,7 +208,7 @@ filters:
       any:
         leisure: park
         landuse: park
-      not: { operator: *us_parks_service }
+        boundary: national_park
     min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output:
       kind: park
@@ -161,14 +229,14 @@ filters:
     min_zoom: { min: [ { max: [ 10, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output: { kind: forest, tier: 2 }
 
-  # protected areas
-  - filter: {boundary: protected_area}
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
-    output: { kind: protected_area, tier: 2 }
   # nature reserves
   - filter: {leisure: nature_reserve}
     min_zoom: { min: [ { max: [ { lit: zoom + 5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
     output: { kind: nature_reserve, tier: 2 }
+  # protected areas
+  - filter: {boundary: protected_area}
+    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    output: { kind: protected_area, tier: 2 }
 
   # woods
   - filter:
