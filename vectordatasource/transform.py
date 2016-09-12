@@ -3794,7 +3794,7 @@ def _network_importance(network, ref):
 
 _NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
 _LETTER_THEN_NUMBERS = re.compile('^[^\d\s_]+[ -]?([^\s]+)',
-                                 re.UNICODE | re.IGNORECASE)
+                                  re.UNICODE | re.IGNORECASE)
 _UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
                                 re.UNICODE | re.IGNORECASE)
 
