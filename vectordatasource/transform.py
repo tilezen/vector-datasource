@@ -3758,7 +3758,7 @@ def normalize_operator_values(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
-def network_importance(route_type, network, ref):
+def _network_importance(network, ref):
     """
     Returns an integer representing the numeric importance of the network,
     where lower numbers are more important.
@@ -3792,10 +3792,61 @@ def network_importance(route_type, network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
-def choose_most_important_network(shape, properties, fid, zoom):
+_NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
+_LETTER_THEN_NUMBERS = re.compile('^[^\d\s_]+[ -]?([^\s]+)',
+                                  re.UNICODE | re.IGNORECASE)
+_UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
+                                re.UNICODE | re.IGNORECASE)
+
+
+def _shield_text(network, ref):
     """
-    Use the `network_importance` function to select any road networks from
-    `mz_networks` and take the most important one.
+    Try to extract the string that should be displayed within the road shield,
+    based on the raw ref and the network value.
+    """
+
+    if ref is None:
+        return None
+
+    # FI-PI-LI is just a special case?
+    if ref == 'FI-PI-LI':
+        return ref
+
+    # These "belt" roads have names in the ref which should be in the shield,
+    # there's no number.
+    if network == 'US:PA:Belt':
+        return ref
+
+    # Ukranian roads sometimes have internal dashes which should be removed.
+    if network.startswith('ua:'):
+        m = _UA_TERRITORIAL_RE.match(ref)
+        if m:
+            return m.group(1) + m.group(2) + m.group(3)
+
+    # Greek roads sometimes have alphabetic prefixes which we should _keep_,
+    # unlike for other roads.
+    if network.startswith('GR:') or network.startswith('gr:'):
+        return ref
+
+    # If there's a number at the front (optionally with letters following),
+    # then that's the ref.
+    m = _NUMBER_AT_FRONT.match(ref)
+    if m:
+        return m.group(1)
+
+    # Otherwise, try to match a bunch of letters followed by a number.
+    m = _LETTER_THEN_NUMBERS.match(ref)
+    if m:
+        return m.group(1)
+
+    # Failing that, give up and just return the ref as-is.
+    return ref
+
+
+def extract_network_information(shape, properties, fid, zoom):
+    """
+    Take the triples of (route_type, network, ref) from `mz_networks` and
+    extract them into two arrays of network and shield_text information.
     """
 
     networks = properties.pop('mz_networks', None)
@@ -3807,19 +3858,39 @@ def choose_most_important_network(shape, properties, fid, zoom):
         triples = [t for t in triples if t[0] == 'road']
 
         if len(triples) > 0:
-            def network_key(t):
-                return network_importance(*t)
+            # expose network / shield text pairs
+            properties['all_networks'] = [n[1] for n in triples]
+            shield_texts = list()
+            for road, network, ref in triples:
+                shield_texts.append(_shield_text(network, ref))
+            properties['all_shield_texts'] = shield_texts
 
-            networks = sorted(triples, key=network_key)
+    return (shape, properties, fid)
 
-            # expose first network as network/shield_text
-            route_type, network, ref = networks[0]
-            properties['network'] = network
-            properties['shield_text'] = ref
 
-            # expose all networks as well.
-            properties['all_networks'] = [n[1] for n in networks]
-            properties['all_shield_texts'] = [n[2] for n in networks]
+def choose_most_important_network(shape, properties, fid, zoom):
+    """
+    Use the `_network_importance` function to select any road networks from
+    `all_networks` and `all_shield_texts`, taking the most important one.
+    """
+
+    networks = properties.pop('all_networks', None)
+    shield_texts = properties.pop('all_shield_texts', None)
+
+    if networks and shield_texts:
+        def network_key(t):
+            return _network_importance(*t)
+
+        tuples = sorted(zip(networks, shield_texts), key=network_key)
+
+        # expose first network as network/shield_text
+        network, ref = tuples[0]
+        properties['network'] = network
+        properties['shield_text'] = ref
+
+        # replace properties with sorted versions of themselves
+        properties['all_networks'] = [n[0] for n in tuples]
+        properties['all_shield_texts'] = [n[1] for n in tuples]
 
     return (shape, properties, fid)
 
