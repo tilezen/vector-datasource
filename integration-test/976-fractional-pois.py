@@ -7,13 +7,13 @@ assert_has_feature(
 # Test that source and min_zoom are set properly for boundaries, roads, transit, and water
 assert_has_feature(
     5, 9, 12, 'boundaries',
-    { 'min_zoom': 0 , 'id': 8024,
+    { 'min_zoom': 0 , 'id': int,
     'source': 'naturalearthdata.com',
     'name': 'New Jersey - Pennsylvania' })
 
 assert_has_feature(
     5, 9, 12, 'roads',
-    { 'min_zoom': 5 , 'id': 90,
+    { 'min_zoom': 8 , 'id': int, 'name': '611',
     'source': 'naturalearthdata.com' })
 
 # There is no transit data from Natural Earth
