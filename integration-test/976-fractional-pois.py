@@ -12,15 +12,15 @@ assert_has_feature(
     'name': 'New Jersey - Pennsylvania' })
 
 assert_has_feature(
-    5, 9, 12, 'roads',
-    { 'min_zoom': 3.0 , 'id': int, 'sort_key': 383,
+    7, 37, 48, 'roads',
+    { 'min_zoom': 3 , 'id': int, 'shield_text': '95',
     'source': 'naturalearthdata.com' })
 
 # There is no transit data from Natural Earth
 
 assert_has_feature(
-    5, 9, 12, 'water',
-    { 'min_zoom': 0 , 'id': 1144,
+    7, 36, 50, 'water',
+    { 'min_zoom': 0 , 'id': int,
     'source': 'naturalearthdata.com',
     'name': 'John H. Kerr Reservoir' })
 
@@ -32,6 +32,7 @@ assert_has_feature(
     'source': 'openstreetmap.org',
     'name': 'New Jersey - New York' })
 
+# http://www.openstreetmap.org/relation/568499
 assert_has_feature(
     9, 150, 192, 'roads',
     { 'min_zoom': 8, 'sort_key':  381,
@@ -39,6 +40,7 @@ assert_has_feature(
     'kind': 'major_road',
     'network': 'US:NJ:Hudson' })
 
+# http://www.openstreetmap.org/relation/1359387
 assert_has_feature(
     9, 150, 192, 'transit',
     { 'min_zoom': 5, 'ref':  '54-57',
@@ -47,7 +49,7 @@ assert_has_feature(
 
 assert_has_feature(
     9, 150, 192, 'water',
-    { 'min_zoom': 0, 'id':  10613,
+    { 'min_zoom': 0, 'id': int,
     'source': 'openstreetmapdata.com',
     'kind': 'ocean',
     'name': '' })
