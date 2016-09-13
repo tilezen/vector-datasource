@@ -13,7 +13,7 @@ assert_has_feature(
 
 assert_has_feature(
     5, 9, 12, 'roads',
-    { 'min_zoom': 8 , 'id': int, 'name': '611',
+    { 'min_zoom': 8 , 'id': int, 'name': '95',
     'source': 'naturalearthdata.com' })
 
 # There is no transit data from Natural Earth
