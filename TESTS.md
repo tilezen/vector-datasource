@@ -21,7 +21,7 @@ The tests run against data from all over the world, which can be an onerous amou
 
 ### Running against a testing server
 
-This is the recommended method for running local tests on a laptop or desktop machine. It parses annotations in the tests to find the elements required for the test to complete, and downloads these from an [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) server.
+This is the recommended method for running local tests on a laptop or desktop machine. It parses annotations in the tests to find the elements required for the test to complete, and downloads these from an [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) server. For data which does not come from OpenStreetMap, there are a set of "fixture" shapefiles under the `integration-tests/fixtures/` subdirectory. Please see the section on writing tests for more information.
 
 Before running the tests, make sure that you have installed `tileserver` and `tilequeue` either from git or by running `pip install -r requirements.txt`, and that you have the programs `osm2pgsql` and `shp2pgsql` installed. You will need a recent version of `osm2pgsql`, for example 0.91.0, which may not be available from your operating systems default packages, especially on Debian or Ubuntu systems. In the case that you can't get a recent version from default packages, you may need to install [from source](https://github.com/openstreetmap/osm2pgsql) or [other package sources](https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa).
 
@@ -130,3 +130,40 @@ python test.py local test/160-motorway-junctions.py
 ```
 
 Verbose test output is placed in a file called `test.log` in the current directory.
+
+## Writing tests
+
+Tests should either be unit tests or integration tests. The difference between the two is whether any data is required for them to work. The unit tests do not load any data and do not access the database. The integration tests load up a set of "fixture" data and require a database and a running tile server.
+
+### Unit tests
+
+Unit tests go in the `tests/` subdirectory. Each should be a Python file, and use the `unittest` package to make assertions about the behaviour of code in the `vectordatasource` package. Tests here generally test specific behaviour of transformation functions in isolation from other parts of the stack.
+
+### Integration tests
+
+Integration tests go in the `integration-tests/` subdirectory. Each should be a Python file, but uses a custom test harness which can be found in the `integration-test.py` file in the root directory of the project. Tests are generally named starting with the issue number of any issue which led to the test being written and a short description of the issue. It can he helpful if the description is the same as the git branch on which the issue is being addressed.
+
+The integration test harness has functions such as:
+
+* `assert_has_feature(z, x, y, layer, properties)` fails the test if the tile with coordinate `z/x/y` doesn't contain a feature matching `properties` in layer `layer`.
+* `assert_at_least_n_features(z, x, y, layer, properties, n)` fails the test if the tile layer doesn't contain at least `n` matching features.
+* `assert_no_matching_feature(z, x, y, layer, properties)` fails the test if the tile **does** contain a matching feature.
+* `features_in_tile_layer(z, x, y, layer)` is a context manager, to be used in a `with` statement. This will iterate over all the features in the given `layer` in the tile `z/x/y`. This can be useful for writing more general tests than the assertions above allow.
+* `layers_in_tile(z, x, y)` is a context manager, to be used in a `with` statement. This will iterate over all the layers in the tile `z/x/y`. This can be used to write very general tests about the existence or absence of features in certain layers.
+
+There are two ways to add integration test data:
+
+1. For data which comes from OpenStreetMap, add a comment in the test file with the URL of an OpenStreetMap object.
+2. For other data, add shapefiles under the `integration-test/fixtures/` subdirectory.
+
+#### Adding OpenStreetMap data
+
+When `scripts/setup_and_run_tests.sh` builds the test database, it first scans the files in `integration-tests/*.py` for comments which contain URLs to `http://www.openstreetmap.org/` which reference a page for a node, way or relation object. Then it downloads these from Overpass and uses them to build the database.
+
+It is also possible to put whole Overpass queries into the test by prefixing them with `RAW QUERY:`. For example, see `integration-test/333-mz_is_building.py`.
+
+#### Adding shapefile fixture data
+
+Any shapefiles under `integration-test/fixtures/` are loaded into the database by interpreting the subdirectory as the table name to load into. For example, `integration-test/fixtures/water_polygons/502-water-boundaries.shp` will be loaded into the `water_polygons` table.
+
+Note that these are loaded in without any projection transform. The shapefiles should already be in EPSG:3857. Also, the shapefiles are loaded as-is, so it's important to make sure that the columns of the shapefile match the columns of the table they're loaded into - except for any `mz_*` columns which are added later.
