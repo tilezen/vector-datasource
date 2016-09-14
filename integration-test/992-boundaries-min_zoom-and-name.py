@@ -107,6 +107,13 @@ assert_has_feature(
     { 'kind': 'region', 'name': 'Tirol - Salzburg'})
 
 
+# Switzerland region HAS name, OpenStreetMap
+# http://www.openstreetmap.org/relation/1686447
+# http://www.openstreetmap.org/relation/1685677
+assert_has_feature(
+    8, 133, 89, 'boundaries',
+    { 'kind': 'region', 'name': 'Luzern - Zug'})
+
 # Austria region HAS name, OpenStreetMap
 # http://www.openstreetmap.org/relation/52343
 # http://www.openstreetmap.org/relation/86539
