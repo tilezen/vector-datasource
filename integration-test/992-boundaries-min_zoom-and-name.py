@@ -96,20 +96,20 @@ assert_has_feature(
     5, 17, 10, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
-# Switzerland region NO name, Natural Earth
+# Austria region NO name, Natural Earth
 assert_has_feature(
-    6, 33, 22, 'boundaries',
+    6, 34, 22, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
-# Switzerland region HAS name, Natural Earth
+# Austria region HAS name, Natural Earth
 assert_has_feature(
-    7, 66, 44, 'boundaries',
-    { 'kind': 'region', 'name': 'Zug - Lucerne'})
+    7, 68, 44, 'boundaries',
+    { 'kind': 'region', 'name': 'Tirol - Salzburg'})
 
 
-# Switzerland region HAS name, OpenStreetMap
-# http://www.openstreetmap.org/relation/1686447
-# http://www.openstreetmap.org/relation/1685677
+# Austria region HAS name, OpenStreetMap
+# http://www.openstreetmap.org/relation/52343
+# http://www.openstreetmap.org/relation/86539
 assert_has_feature(
     8, 133, 89, 'boundaries',
-    { 'kind': 'region', 'name': 'Luzern - Zug'})
+    { 'kind': 'region', 'name': 'Tirol - Salzburg'})
