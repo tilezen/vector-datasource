@@ -327,6 +327,14 @@ post_process:
       base_layer: boundaries
       start_zoom: 8
 
+  # drop names on boundary lines (country, region, macroregion) except zoom 7 from Natural Earth
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: boundaries
+      start_zoom: 0
+      end_zoom: 6
+      properties: [name]
+
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:

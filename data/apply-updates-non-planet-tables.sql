@@ -10,6 +10,14 @@ UPDATE ne_10m_admin_0_boundary_lines_land
   WHERE NOT ST_IsValid(the_geom);
 DELETE FROM ne_10m_admin_0_boundary_lines_land WHERE NOT ST_IsValid(the_geom);
 
+UPDATE ne_10m_admin_0_boundary_lines_map_units
+  SET
+    the_geom = (CASE WHEN GeometryType(ST_MakeValid(the_geom)) = 'MULTILINESTRING'
+                          THEN ST_MakeValid(the_geom)
+                     ELSE the_geom END)
+  WHERE NOT ST_IsValid(the_geom);
+DELETE FROM ne_10m_admin_0_boundary_lines_map_units WHERE NOT ST_IsValid(the_geom);
+
 UPDATE ne_10m_admin_1_states_provinces_lines
   SET
     the_geom = (CASE WHEN GeometryType(ST_MakeValid(the_geom)) = 'MULTILINESTRING'
@@ -97,6 +105,10 @@ UPDATE ne_50m_admin_1_states_provinces_lines
 UPDATE ne_10m_admin_0_boundary_lines_land
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_land.*)
   WHERE mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_land.*) IS NOT NULL;
+
+UPDATE ne_10m_admin_0_boundary_lines_map_units
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_map_units.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_map_units.*) IS NOT NULL;
 
 UPDATE ne_10m_admin_1_states_provinces_lines
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_1_states_provinces_lines.*)

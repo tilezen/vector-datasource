@@ -3,6 +3,7 @@ locality,252
 county,254
 region,256
 macroregion,257
+map_unit,258
 indefinite,259
 indeterminate,259
 lease_limit,259

@@ -1,3 +1,24 @@
+global:
+  # NOTE: Natural Earth 1:50 million used zooms 0,1,2,3,4
+  #       and only has USA, Canada, Brazil, and Australia
+  #       all with scalerank of 2 (a documented NE omission).
+  #       Then 1:10 million NE is selected at zooms 5, 6, 7
+  #       and includes most all countries, with various scalerank
+  #       but is inconsistent with 1:50 in scalerank=2 so countries
+  #       like Russia will "pop" in at 5, but with min_zoom of 2
+  #       (and India, China, Indonesia, and South Africa).
+  - &ne_region_boundaries_min_zoom |
+      CASE WHEN scalerank =   0 THEN  7
+           WHEN scalerank <=  2 THEN  2
+           WHEN scalerank <=  3 THEN  3
+           WHEN scalerank <=  4 THEN  5
+           WHEN scalerank <=  5 THEN  5.5
+           WHEN scalerank <=  6 THEN  6
+           WHEN scalerank <=  7 THEN  6.7
+           WHEN scalerank <=  8 THEN  6.8
+           WHEN scalerank <=  9 THEN  7
+      END
+
 filters:
 
   # osm
@@ -29,24 +50,8 @@ filters:
     min_zoom: 10
     output: {kind: locality, kind_detail: '8'}
     table: osm
-  - filter: {featurecla: 1st Order Admin Lines}
-    min_zoom: 0
-    output: {kind: region, kind_detail: '4'}
-    table: ne
 
   # ne
-  - filter:
-      featurecla:
-        - Admin-1 boundary
-        - Admin-1 statistical boundary
-        - Admin-1 statistical meta bounds
-    min_zoom: 0
-    output: {kind: region, kind_detail: '4'}
-    table: ne
-  - filter: {featurecla: Admin-1 region boundary}
-    min_zoom: 0
-    output: {kind: macroregion, kind_detail: '3'}
-    table: ne
   - filter: {featurecla: Disputed (please verify)}
     min_zoom: 0
     output: {kind: disputed, kind_detail: '2'}
@@ -74,4 +79,22 @@ filters:
   - filter: {featurecla: Overlay limit}
     min_zoom: 0
     output: {kind: overlay_limit, kind_detail: '2'}
+    table: ne
+  - filter: {featurecla: Map unit boundary}
+    min_zoom: 5
+    output: {kind: map_unit, kind_detail: '2'}
+    table: ne
+  - filter: {featurecla: Admin-1 region boundary}
+    min_zoom: *ne_region_boundaries_min_zoom
+    output: {kind: macroregion, kind_detail: '3'}
+    extra_columns: [scalerank]
+    table: ne
+  - filter:
+      featurecla:
+        - Admin-1 boundary
+        - Admin-1 statistical boundary
+        - Admin-1 statistical meta bounds
+    min_zoom: *ne_region_boundaries_min_zoom
+    extra_columns: [scalerank]
+    output: {kind: region, kind_detail: '4'}
     table: ne

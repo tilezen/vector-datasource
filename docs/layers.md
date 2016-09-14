@@ -137,6 +137,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `lease_limit`
 * `line_of_control`
 * `macroregion`
+* `map_unit`
 * `municipality`
 * `overlay_limit`
 * `region`
