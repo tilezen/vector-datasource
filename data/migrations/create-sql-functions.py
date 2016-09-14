@@ -413,9 +413,13 @@ def create_matcher(yaml_datum):
     table_obj = Table(table, extra_columns, synthetic_columns)
 
     rules = []
-    for k, v in yaml_datum['filter'].items():
-        rule = create_filter_rule(k, v, table_obj)
-        rules.append(rule)
+    filters = yaml_datum['filter']
+    if not isinstance(filters, list):
+        filters = [filters]
+    for f in filters:
+        for k, v in f.items():
+            rule = create_filter_rule(k, v, table_obj)
+            rules.append(rule)
     assert rules, 'No filter rules found in %s' % yaml_datum
     if len(rules) > 1:
         rule = AndRule(rules)

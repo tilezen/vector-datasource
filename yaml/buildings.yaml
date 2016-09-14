@@ -37,7 +37,7 @@ globals:
         any:
           way_area: { min: 1600 }
           volume: { min: 300000 }
-        "tags->location": "-underground"
+        not: { "tags->location": "underground" }
   - &z14_area_volume
       any:
         way_area: { min: 100 }
@@ -57,32 +57,32 @@ synthetic_columns:
   - volume
 filters:
   - filter:
-      <<: *is_building
-      <<: *z13_area_volume
+      - <<: *is_building
+      - <<: *z13_area_volume
     min_zoom: 13
     output:
       <<: *building_standard_properties
       kind: building
       <<: *building_kind_detail
   - filter:
-      <<: *is_building
-      <<: *z14_area_volume
+      - <<: *is_building
+      - <<: *z14_area_volume
     min_zoom: 14
     output:
       <<: *building_standard_properties
       kind: building
       <<: *building_kind_detail
   - filter:
-      <<: *is_building
-      <<: *z15_area_volume
+      - <<: *is_building
+      - <<: *z15_area_volume
     min_zoom: 15
     output:
       <<: *building_standard_properties
       kind: building
       <<: *building_kind_detail
   - filter:
-      <<: *is_building
-      <<: *z16_area_volume
+      - <<: *is_building
+      - <<: *z16_area_volume
     min_zoom: 16
     output:
       <<: *building_standard_properties
@@ -97,16 +97,16 @@ filters:
       <<: *building_kind_detail
   # building part
   - filter:
-      <<: *is_building_part
-      <<: *z15_area_volume
+      - <<: *is_building_part
+      - <<: *z15_area_volume
     min_zoom: 15
     output:
       <<: *building_standard_properties
       kind: building_part
       <<: *building_part_kind_detail
   - filter:
-      <<: *is_building_part
-      <<: *z16_area_volume
+      - <<: *is_building_part
+      - <<: *z16_area_volume
     min_zoom: 16
     output:
       <<: *building_standard_properties
