@@ -7,9 +7,9 @@ assert_has_feature(
 # Test that source and min_zoom are set properly for boundaries, roads, transit, and water
 assert_has_feature(
     5, 9, 12, 'boundaries',
-    { 'min_zoom': 0 , 'id': int,
+    { 'min_zoom': 2 , 'id': int,
     'source': 'naturalearthdata.com',
-    'name': 'New Jersey - Pennsylvania' })
+    'kind': 'region' })
 
 assert_has_feature(
     7, 37, 48, 'roads',
