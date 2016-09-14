@@ -3,14 +3,14 @@
 assert_has_feature(
     13, 1374, 3166, "earth",
     {"kind": "cliff", "id": 291684864,
-     "sort_key": 227})
+     "sort_rank": 227})
 
 #arete in Yosemite
 # https://www.openstreetmap.org/way/375271242
 assert_has_feature(
     13, 1379, 3164, "earth",
     {"kind": "arete", "id": 375271242,
-     "sort_key": 228})
+     "sort_rank": 228})
 
 #ridge with name in Santa Cruz Mountains, California
 # https://www.openstreetmap.org/way/115675159

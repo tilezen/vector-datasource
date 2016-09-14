@@ -1,4 +1,4 @@
-zoom::int,layer::int,kind,kind_detail,service,is_bridge,is_tunnel,sort_key
+zoom::int,layer::int,kind,kind_detail,service,is_bridge,is_tunnel,sort_rank
 >=15,7,*,*,*,*,*,447
 >=15,6,*,*,*,*,*,447
 >=15,5,*,*,*,*,*,447

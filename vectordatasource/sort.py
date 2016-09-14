@@ -86,7 +86,7 @@ def pois(features, zoom):
 
 
 def roads(features, zoom):
-    return _sort_features_by_key(features, _by_feature_property('sort_key'))
+    return _sort_features_by_key(features, _by_feature_property('sort_rank'))
 
 
 def water(features, zoom):

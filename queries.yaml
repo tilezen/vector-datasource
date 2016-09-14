@@ -212,7 +212,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/landuse.csv
+        path: spreadsheets/sort_rank/landuse.csv
     params:
       source_layer: landuse
       target_value_type: int
@@ -221,7 +221,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/roads.csv
+        path: spreadsheets/sort_rank/roads.csv
     params:
       source_layer: roads
       target_value_type: int
@@ -230,7 +230,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/earth.csv
+        path: spreadsheets/sort_rank/earth.csv
     params:
       source_layer: earth
       target_value_type: int
@@ -239,7 +239,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/boundaries.csv
+        path: spreadsheets/sort_rank/boundaries.csv
     params:
       source_layer: boundaries
       target_value_type: int
@@ -248,7 +248,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/buildings.csv
+        path: spreadsheets/sort_rank/buildings.csv
     params:
       source_layer: buildings
       target_value_type: int
@@ -257,11 +257,11 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/transit.csv
+        path: spreadsheets/sort_rank/transit.csv
     params:
       source_layer: transit
       target_value_type: int
-  # this needs to run before the water sort_key csv matcher
+  # this needs to run before the water sort_rank csv matcher
   - fn: vectordatasource.transform.exterior_boundaries
     params:
       base_layer: water
@@ -280,7 +280,7 @@ post_process:
       matcher:
         type: file
         init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/sort_key/water.csv
+        path: spreadsheets/sort_rank/water.csv
     params:
       source_layer: water
       target_value_type: int
