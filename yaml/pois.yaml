@@ -86,7 +86,9 @@ global:
         - U.S. National Park Service
         - US National Park service
 filters:
-  - filter: {disused: -no}
+  - filter:
+      - disused: true
+      - not: {disused: "no"}
     min_zoom: null
     output:
       kind: {expr: null}

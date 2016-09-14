@@ -113,6 +113,15 @@ class Table(object):
         return Column(not not_tag, name)
 
 
+def ensure_sql_boolean(column, check):
+    # tags->'foo' is NULL when the hstore doesn't contain that key,
+    # which makes all the following comparisons NULL, so use coalesce
+    # to ensure we never evaluate to NULL
+    if column._is_tag:
+        check = 'COALESCE(%s, FALSE)' % check
+    return check
+
+
 class EqualsRule(object):
 
     def __init__(self, column, value):
@@ -124,14 +133,8 @@ class EqualsRule(object):
                 self.column.format(),
                 format_value(self.value))
 
-        # tags->'foo' is NULL when the hstore doesn't contain that key, which
-        # makes all the following comparisons NULL, so combine the equals
-        # with an exists check.
-        exists_check = self.column.exists_check()
-        if exists_check:
-            return '(%s) AND (%s)' % (exists_check, equals_check)
-        else:
-            return equals_check
+        equals_check = ensure_sql_boolean(self.column, equals_check)
+        return equals_check
 
     def columns(self):
         return [self.column] + value_columns(self.value)
@@ -151,21 +154,6 @@ class GreaterOrEqualsRule(object):
         return [self.column] + value_columns(self.value)
 
 
-class NotEqualsRule(object):
-
-    def __init__(self, column, value):
-        self.column = column
-        self.value = value
-
-    def as_sql(self):
-        return '%s <> %s' % (
-            self.column.format(),
-            format_value(self.value))
-
-    def columns(self):
-        return [self.column] + value_columns(self.value)
-
-
 class SetRule(object):
 
     def __init__(self, column, values):
@@ -178,14 +166,8 @@ class SetRule(object):
             self.column.format(),
             ', '.join(formatted_values))
 
-        # tags->'foo' is NULL when the hstore doesn't contain that key, which
-        # makes all the following comparisons NULL, so combine the equals
-        # with an exists check.
-        exists_check = self.column.exists_check()
-        if exists_check:
-            return '(%s) AND (%s)' % (exists_check, set_check)
-        else:
-            return set_check
+        set_check = ensure_sql_boolean(self.column, set_check)
+        return set_check
 
     def columns(self):
         cols = [self.column]
@@ -316,8 +298,6 @@ def create_filter_rule(filter_key, filter_value, table):
                 rule = NotExistsRule(col)
             elif isinstance(filter_value, Number):
                 rule = EqualsRule(col, filter_value)
-            elif isinstance(filter_value, str) and filter_value.startswith('-'):
-                rule = NotEqualsRule(col, filter_value[1:])
             elif isinstance(filter_value, dict) and 'min' in filter_value:
                 rule = GreaterOrEqualsRule(col, filter_value['min'])
             elif isinstance(filter_value, dict) and 'expr' in filter_value:
