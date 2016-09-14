@@ -19,3 +19,12 @@ assert_has_feature(
       'shield_text': '77',
       'all_networks': ['US:I', 'US:I', 'US:US', 'US:US'],
       'all_shield_texts': ['77', '81', '11', '52'] })
+
+# routes with network but no ref should return a null ref.
+# http://www.openstreetmap.org/relation/4069015
+# http://www.openstreetmap.org/relation/6080335
+assert_has_feature(
+    16, 14852, 26071, 'roads',
+    { 'kind': 'highway', 'id': 290908536,
+      'all_networks': ['US:I', 'US:OK:Turnpike'],
+      'all_shield_texts': ['44', None] })

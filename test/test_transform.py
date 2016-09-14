@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 from collections import OrderedDict
 
@@ -544,3 +545,75 @@ class DropMergedIdTest(unittest.TestCase):
             props = f[1]
             self.assertTrue('id' in props)
             self.assertTrue('unique_value' in props)
+
+
+class ShieldTextTransform(unittest.TestCase):
+
+    def _assert_shield_text(self, network, ref, expected_shield_text):
+        from vectordatasource.transform import extract_network_information
+        shape, properties, fid = extract_network_information(
+            None, dict(mz_networks=['road', network, ref]), None, 0)
+        self.assertTrue('all_networks' in properties)
+        self.assertTrue('all_shield_texts' in properties)
+        self.assertEquals([expected_shield_text],
+                          properties['all_shield_texts'])
+
+    def test_a_road(self):
+        # based on http://www.openstreetmap.org/relation/2592
+        # simple pattern, should be just the number.
+        self._assert_shield_text("BAB", "A 66", "66")
+
+        # based on http://www.openstreetmap.org/relation/446270
+        # simple pattern, should be just the number
+        self._assert_shield_text("FR:A-road", "A 66", "66")
+
+    def test_sr70var1(self):
+        # based on http://www.openstreetmap.org/relation/449595
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("IT:Toscana", "SR70var1", "70var1")
+
+    def test_cth_j(self):
+        # based on http://www.openstreetmap.org/relation/4010101
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:WI:CTH", "CTH J", "J")
+
+    def test_purple_belt(self):
+        # based on http://www.openstreetmap.org/relation/544634
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:PA:Belt", "Purple Belt", "Purple Belt")
+
+    def test_t_02_16(self):
+        # based on http://www.openstreetmap.org/relation/1296750
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("ua:territorial", u"Т-02-16", u"Т0216")
+
+    def test_fi_pi_li(self):
+        # based on http://www.openstreetmap.org/relation/1587534
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("IT:B-road", "FI-PI-LI", "FI-PI-LI")
+
+    def test_cr_315a(self):
+        # based on http://www.openstreetmap.org/relation/2564219
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:TX:Guadalupe", "CR 315A", "315A")
+
+    def test_eo1a(self):
+        # based on http://www.openstreetmap.org/relation/5641878
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("GR:national", u"ΕΟ1α", u"ΕΟ1α")
+
+    def test_i5_truck(self):
+        # based on http://www.openstreetmap.org/relation/146933
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        # note: original example was SD 37 Truck, but that wasn't in the 'ref',
+        # so changed to this example.
+        self._assert_shield_text("US:I", "5 Truck", "5")
+
+    def test_cth_pv(self):
+        # based on http://www.openstreetmap.org/relation/5179634
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:WI:Washington", "CTH PV", "PV")
+
+    def test_null(self):
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("something", None, None)

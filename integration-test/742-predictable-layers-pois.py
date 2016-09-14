@@ -122,18 +122,18 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/296096756
 assert_has_feature(
     10, 164, 397, 'pois',
-    {'id': 296096756, 'kind': 'national_park'})
+    {'id': 296096756, 'kind': 'park'})
 
 # Label placement national_park in landuse
 assert_no_matching_feature(
     15, 5267, 12722, 'landuse',
-    {'id': 296096756, 'kind': 'national_park', 'label_placement': True})
+    {'id': 296096756, 'kind': 'park', 'label_placement': True})
 
 # Node:617506856 national_park in POIS
 # http://www.openstreetmap.org/node/617506856
 assert_has_feature(
-    10, 210, 386, 'pois',
-    {'id': 617506856, 'kind': 'national_park', 'min_zoom': 10})
+    14, 3374, 6184, 'pois',
+    {'id': 617506856, 'kind': 'park', 'min_zoom': 14})
 
 # Way:40260866 nature_reserve in POIS
 # http://www.openstreetmap.org/way/40260866

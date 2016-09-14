@@ -138,14 +138,19 @@ In addition to the `common` **name** locals call a place, the following `common`
 1. `name:fr` French
 1. `name:ru` Russian
 1. `name:es` Spanish
+1. `name:bn` Bengali
 1. `name:de` German
 1. `name:gr` Greek
+1. `name:hi` Hindi
+1. `name:id` Indonesian
 1. `name:it` Italian
 1. `name:ja` Japanese
 1. `name:ko` Korean
+1. `name:pt` Portugese
+1. `name:tr` Turkish
 1. `name:vi` Vietnamese
 
-Arabic, Chinese, English, French, Russian and Spanish are used by the United National for meetings and official documents. The other languages listed are frequently used in OpenStreetMap and Who's On First.
+Arabic, Chinese, English, French, Russian and Spanish are used by the United Nations for meetings and official documents. The other languages listed are either proposed as official language of the United Nations (Bengali, Hindi, Portugese, and Portugese) or frequently used in OpenStreetMap and Who's On First.
 
 Additional localized names are available as `common-optional`, but their actual use is the data is not widespread.
 
