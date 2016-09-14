@@ -519,11 +519,11 @@ def _sorted_attributes(features, attrs, attribute):
     None.
     """
 
-    sort_rank = attrs.get('sort_rank')
+    sort_key = attrs.get('sort_key')
     reverse = attrs.get('reverse')
 
-    assert sort_rank is not None, "Configuration " + \
-        "parameter 'sort_rank' is missing, please " + \
+    assert sort_key is not None, "Configuration " + \
+        "parameter 'sort_key' is missing, please " + \
         "check your configuration."
 
     # first, we find the _minimum_ ordering over the
@@ -533,7 +533,7 @@ def _sorted_attributes(features, attrs, attribute):
     # that.
     group = dict()
     for feature in features:
-        val = feature[1].get(sort_rank)
+        val = feature[1].get(sort_key)
         key = feature[1].get(attribute)
         val = _no_none_min(val, group.get(key))
         group[key] = val
