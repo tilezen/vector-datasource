@@ -6,16 +6,16 @@ To use the Mapzen Vector Tile service, you should first obtain a free developer 
 
 1. Go to https://mapzen.com/developers.
 2. Sign in with your GitHub account. If you have not done this before, you need to agree to the terms first.
-3. Create a new key for Mapzen Vector Tiles, and optionally, give it a name so you can remember the purpose of the project.
+3. Create a new key and optionally, give it a name so you can remember the purpose of the project.
 4. Copy the key into your code.
 
 ## Rate limits
 
-Mapzen Vector Tiles is a free, shared service and rate limits are not currently enforced. 
+Mapzen Vector Tiles is a free, shared service and rate limits are not currently enforced.
 
 If an individual user abuses the service (especially by "vacuuming" or "scraping" tiles not pre-generated), the overall system performance will be degraded for the on-demand portion of the service for all users. Cached tiles will continue to be highly available for all users.
 
-We pre-generate popular map areas and those tiles are highly available and served directly via Fastly's edge cache. But map areas with low traffic are generated on-demand. 
+We pre-generate popular map areas and those tiles are highly available and served directly via Fastly's edge cache. But map areas with low traffic are generated on-demand.
 
 If you experience slow tile loading in a map area, it's likely because you are a first requester using on-demand tile generation. Subsequent loads of the same map area should be much faster because the tile is now available in the cache, and when the source OSM data changes in that map area we will update the tiles automatically for you.
 
