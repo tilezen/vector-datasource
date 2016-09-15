@@ -28,7 +28,7 @@
 # Mexico region (scalerank=4, 1:10m NE only)
 assert_has_feature(
     5, 15, 10, 'boundaries',
-    { 'kind': 'map_unit', 'min_zoom': 5, 'sort_key': 258})
+    { 'kind': 'map_unit', 'min_zoom': 5, 'sort_rank': 258})
 
 
 # region min_zoom (via scalerank)

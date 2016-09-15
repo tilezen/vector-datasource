@@ -263,7 +263,7 @@ class SortKeyTest(unittest.TestCase):
         from vectordatasource.transform import CSVMatcher
         import os.path
         landuse_path = os.path.join(
-            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_key',
+            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_rank',
             'landuse.csv')
         with open(landuse_path) as fh:
             self.matcher = CSVMatcher(fh)
@@ -274,16 +274,16 @@ class SortKeyTest(unittest.TestCase):
         shape = shapely.geometry.LineString([(0, 0), (1, 1)])
         props = dict(kind='dam')
         zoom = 16
-        sort_key_result = self.matcher(shape, props, zoom)
-        self.assertIsNotNone(sort_key_result)
-        _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 265)
+        sort_rank_result = self.matcher(shape, props, zoom)
+        self.assertIsNotNone(sort_rank_result)
+        _, sort_rank = sort_rank_result
+        self.assertEquals(int(sort_rank), 265)
 
         shape = shapely.geometry.Polygon([(0, 0), (1, 1), (0, 1), (0, 0)])
-        sort_key_result = self.matcher(shape, props, zoom)
-        self.assertIsNotNone(sort_key_result)
-        _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 223)
+        sort_rank_result = self.matcher(shape, props, zoom)
+        self.assertIsNotNone(sort_rank_result)
+        _, sort_rank = sort_rank_result
+        self.assertEquals(int(sort_rank), 223)
 
 
 class BuildingsUnifyTest(unittest.TestCase):

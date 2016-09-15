@@ -36,7 +36,7 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
 * **`common`** - These `layer`s, `property`s, and `kind`s are generally available across all features in a Tilezen response.
   - Establishes basic selection of features and their arrangement into specific named layers.
   - Core properties needed for display and labeling of features:
-    - Special bits that make vector tile content **interoperably Tilezen**, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_key`, `boundary`, and `maritime_boundary`.
+    - Special bits that make vector tile content **interoperably Tilezen**, including `kind`, `kind_detail`, `landuse_kind`, `kind_tile_rank`, `min_zoom`, `max_zoom`, `is_landuse_aoi`, `sort_rank`, `boundary`, and `maritime_boundary`.
     - Fundamental properties like `name` (including localized names), `id`, and `source` included on most every feature.
 * **`common-optional`** - These are meant to be part of a common set, but may not be present because they aren't relevant or because we don't have the data (primarily feature `property`s, but could also be `layer`s).
   - Used to refine feature selection.

@@ -13,10 +13,10 @@ assert_has_feature(
 # http://www.openstreetmap.org/way/97057565
 assert_has_feature(
     16, 10492, 25385, 'landuse',
-    { 'kind': 'rest_area', 'id': 97057565, 'sort_key': 41 })
+    { 'kind': 'rest_area', 'id': 97057565, 'sort_rank': 41 })
 
 # Way: Nicole Driveway (274732386)
 # http://www.openstreetmap.org/way/274732386
 assert_has_feature(
     16, 10900, 25256, 'landuse',
-    { 'kind': 'service_area', 'id': 274732386, 'sort_key': 42 })
+    { 'kind': 'service_area', 'id': 274732386, 'sort_rank': 42 })

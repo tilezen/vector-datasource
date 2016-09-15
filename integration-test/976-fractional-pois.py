@@ -35,7 +35,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/relation/568499
 assert_has_feature(
     9, 150, 192, 'roads',
-    { 'min_zoom': 8, 'sort_key':  381,
+    { 'min_zoom': 8, 'sort_rank':  381,
     'source': 'openstreetmap.org',
     'kind': 'major_road',
     'network': 'US:NJ:Hudson' })
