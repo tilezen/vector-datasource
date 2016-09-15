@@ -62,7 +62,7 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 The current version of Mapzen vector tiles is **v0.10.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
-If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
+If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
 
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v0.10.0/CHANGELOG.md).
 
