@@ -29,7 +29,9 @@ UPDATE
 UPDATE planet_osm_polygon
   SET mz_building_min_zoom = mz_calculate_min_zoom_buildings(planet_osm_polygon.*)
   WHERE
-    COALESCE(mz_building_min_zoom, 999) <> COALESCE(mz_building_min_zoom(planet_osm_polygon.*), 999);
+    tags ? 'location'
+    AND mz_building_min_zoom IS NOT NULL
+    AND COALESCE(mz_building_min_zoom, 999) <> COALESCE(mz_building_min_zoom(planet_osm_polygon.*), 999);
 
 UPDATE planet_osm_polygon
   SET mz_label_placement = ST_PointOnSurface(way)
