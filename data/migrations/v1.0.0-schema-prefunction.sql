@@ -24,7 +24,7 @@ BEGIN
  IF NOT EXISTS (
     SELECT data_type FROM information_schema.columns
     WHERE table_name = tbl_name AND
-          column_name = 'mz_places_min_zoom' AND
+          column_name = col_name AND
           data_type = 'real'
     ) THEN
    EXECUTE format('ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE REAL', tbl_name, col_name);
