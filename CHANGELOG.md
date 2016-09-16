@@ -1,3 +1,22 @@
+v1.0.0-pre3
+-------
+
+* **Release date**: 2016-09-16 (dev build only as public preview)
+* **Requires:** [tileserver v0.8.0-pre2](https://github.com/mapzen/tileserver/releases/tag/v0.8.0-pre2) and [tilequeue v0.11.0-pre2](https://github.com/mapzen/tilequeue/releases/tag/v0.11.0-pre2) and [mapbox-vector-tile v0.5.0](https://pypi.python.org/pypi/mapbox-vector-tile/0.5.0).
+
+* Removed "not equals" YAML rule, which can be expressed using the other "equals" and "not" operators. [PR #1044](https://github.com/tilezen/vector-datasource/pull/1044).
+* **BREAKING** Rename `sort_key` to `sort_rank`. [PR #1049](https://github.com/tilezen/vector-datasource/pull/1049).
+* **BREAKING** Add `/mapzen` prefix to tilejson tiles URL. [PR #1047](https://github.com/tilezen/vector-datasource/pull/1047).
+* New version of "static" Natural Earth and OSM shapefiles. [PR #1046](https://github.com/tilezen/vector-datasource/pull/1046).
+* Restore buildings to zoom 13. [PR #1036](https://github.com/tilezen/vector-datasource/pull/1036).
+* **BREAKING** Fix scalerank 0 region boundaries. Drop name properties on boundaries at zoom <= 6. Add region boundaries sourced from Natural Earth "map_unit" data. [PR #1037](https://github.com/tilezen/vector-datasource/pull/1037).
+* Add `min_zoom` parameter to all features. [PR #1031](https://github.com/tilezen/vector-datasource/pull/1031).
+* Allow null refs in shield text. Attempt to sanitize shield text by omitting leading text such as `A` or `M` before numeric references. [PR #1039](https://github.com/tilezen/vector-datasource/pull/1039).
+* **BREAKING** Update Natural Earth road properties. Removes `level`, `namealt` and `namealtt`. Adds `network` and `shield_text` for some countries. [PR #1035](https://github.com/tilezen/vector-datasource/pull/1035).
+* **BREAKING** Fix filters for national forests and parks. Features are now required to have additional parameters (e.g: `operator`, `protect_class`, ...) to classify as a `kind: national_park`. [PR #1034](https://github.com/tilezen/vector-datasource/pull/1034).
+* Fix missing localized names on boundaries. Boundaries now include localized `name:left:*` and `name:right:*` where the data is available. [PR #1022](https://github.com/tilezen/vector-datasource/pull/1022).
+* Change min zoom for landuse, POIs to be closer to Bubble Wrap. Adds `tier` parameter to simplify client-side rendering rules. [PR #997](https://github.com/tilezen/vector-datasource/pull/997).
+
 v1.0.0-pre2
 -------
 * **Release date**: 2016-08-31 (dev build only as public preview)
