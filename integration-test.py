@@ -211,6 +211,34 @@ def layers_in_tile(z, x, y):
     yield layers
 
 
+@contextmanager
+def features_in_mvt_layer(z, x, y, layer):
+    assert config_url, "Tile URL is not configured, is your config file set up?"
+    url = config_url % {'layer': layer, 'z': z, 'x': x, 'y': y}
+    url = url.replace(".json", ".mvt")
+    r = requests.get(url)
+
+    if r.status_code != 200:
+        raise Exception("Tile %r: error while fetching, status=%d"
+                        % (url, r.status_code))
+
+    if r.headers['content-type'] != 'application/x-protobuf':
+        raise Exception("Tile %r: expected application/x-protobuf, but "
+                        "content-type is %r"
+                        % (url, r.headers['content-type']))
+
+    from mapbox_vector_tile import decode as mvt_decode
+    msg = mvt_decode(r.content)
+
+    try:
+        data = msg[layer]
+        features = data['features']
+        yield features
+
+    except Exception as e:
+        raise Exception, "Tile %r: %s" % (url, e.message), sys.exc_info()[2]
+
+
 def count_matching(features, properties):
     """
     Returns a tuple containing the total number of features in the argument
@@ -333,6 +361,7 @@ def print_coords(f, log, idx, num_tests):
             'features_in_tile_layer': print_coord_with_context,
             'assert_feature_geom_type': print_coord,
             'layers_in_tile': print_coord_with_context,
+            'features_in_mvt_layer': print_coord_with_context,
         })
     except:
         pass
@@ -468,6 +497,7 @@ def run_test(f, log, idx, num_tests):
             'features_in_tile_layer': features_in_tile_layer,
             'assert_feature_geom_type': assert_feature_geom_type,
             'layers_in_tile': layers_in_tile,
+            'features_in_mvt_layer': features_in_mvt_layer,
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
     except:
