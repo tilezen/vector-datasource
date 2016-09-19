@@ -11,7 +11,9 @@ To use the Mapzen Vector Tile service, you should first obtain a free developer 
 
 ## Rate limits
 
-Mapzen Vector Tiles is a free, shared service and rate limits are not currently enforced.
+Because Mapzen Vector Tiles is a shared service, there are limitations on the numbers of requests to prevent individual users from degrading system performance.
+
+* [Rate limits](https://mapzen.com/documentation/overview/#mapzen-vector-tiles) are detailed in Mapzen's developer overview.
 
 If an individual user abuses the service (especially by "vacuuming" or "scraping" tiles not pre-generated), the overall system performance will be degraded for the on-demand portion of the service for all users. Cached tiles will continue to be highly available for all users.
 
@@ -19,7 +21,7 @@ We pre-generate popular map areas and those tiles are highly available and serve
 
 If you experience slow tile loading in a map area, it's likely because you are a first requester using on-demand tile generation. Subsequent loads of the same map area should be much faster because the tile is now available in the cache, and when the source OSM data changes in that map area we will update the tiles automatically for you.
 
-If you have questions, contact [tiles@mapzen.com](mailto:tiles@mapzen.com). You can also set up your own instance of [Vector Tiles](https://github.com/mapzen/vector-datasource), which has access to the same data used in the Mapzen Vector Tiles service.
+If you have questions, contact [tiles@mapzen.com](mailto:tiles@mapzen.com). You can also set up your own instance of [Tilezen](https://github.com/mapzen/vector-datasource), which has access to the same data used in the Mapzen Vector Tiles service.
 
 ## Caching
 
