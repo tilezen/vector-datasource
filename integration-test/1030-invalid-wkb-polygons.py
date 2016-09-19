@@ -12,8 +12,11 @@ assert_has_feature(
 def area_of_ring(ring):
     area = 0
 
-    for [px, py], [nx, ny] in zip(ring, ring[1:] + [ring[0]]):
-        area += px * ny - nx * py
+    try:
+        for [px, py], [nx, ny] in zip(ring, ring[1:] + [ring[0]]):
+            area += px * ny - nx * py
+    except TypeError:
+        pass
 
     return 0.5 * area
 
