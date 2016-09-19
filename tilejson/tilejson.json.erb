@@ -17,9 +17,9 @@
     "name" : "<%= @params[:name] %>",
     "private" : true,
     "scheme" : "xyz",
-    "tilejson" : "2.0.0",
+    "tilejson" : "<%= node[:tilejson][:tilejson_version] %>",
     "tiles" : [
-        "http://<%= node[:tilejson][:host] %>/mapzen/vector/<%= node[:tilejson][:vector_tiles_version] %>/all/{z}/{x}/{y}.<%= @params[:extension] %>?api_key={api_key}"
+        "http://<%= node[:tilejson][:host] %>/mapzen/vector/<%= node[:tilejson][:url_path_version] %>/all/{z}/{x}/{y}.<%= @params[:extension] %>?api_key={api_key}"
     ],
     "type" : "overlay",
     "vector_layers" : [
@@ -273,5 +273,5 @@
             "description" : "Oceans, riverbanks, lakes, streams, and more. Geometry types: polygon, line, point, label_placement."
         }
     ],
-    "version" : "1.0.0-pre3"
+    "version" : "<%= node[:tilejson][:api_version] %>"
 }
