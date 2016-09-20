@@ -25,7 +25,7 @@
 
 # map_unit min_zoom
 
-# Mexico region (scalerank=4, 1:10m NE only)
+# England-Wales boundary in United Kingdom (scalerank=4, 1:10m NE only)
 assert_has_feature(
     5, 15, 10, 'boundaries',
     { 'kind': 'map_unit', 'min_zoom': 5, 'sort_rank': 258})
