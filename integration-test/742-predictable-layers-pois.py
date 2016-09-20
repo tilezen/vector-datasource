@@ -21,11 +21,14 @@ assert_no_matching_feature(
     15, 5240, 12666, 'landuse',
     {'id': 79457493, 'kind': 'grave_yard', 'label_placement': True})
 
-# Way:41654965 Cemetery in POIs
+# Arlington National Cemetery - there are two objects representing this in
+# the same place. The code will de-duplicate one or the other of them.
+#
 # http://www.openstreetmap.org/way/41654965
+# http://www.openstreetmap.org/relation/2475077
 assert_has_feature(
     12, 1171, 1567, 'pois',
-    {'id': 41654965, 'kind': 'cemetery', 'min_zoom': 12})
+    {'id': set([41654965, -2475077]), 'kind': 'cemetery', 'min_zoom': 12})
 
 # Label placement Cemetery in landuse
 # http://www.openstreetmap.org/way/44580948

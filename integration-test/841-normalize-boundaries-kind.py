@@ -4,10 +4,12 @@ assert_has_feature(
     16, 10237, 24570, 'boundaries',
     {'id': 174550914, 'kind': 'aboriginal_lands', 'kind_detail': '4'})
 
-# http://www.openstreetmap.org/way/286097885
+# use relation instead of way, as osm2pgsql treats the relation as superseding
+# the way and removes its tags when both are present.
+# http://www.openstreetmap.org/relation/3854097
 assert_has_feature(
     16, 10483, 22987, 'boundaries',
-    {'id': 286097885, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
+    {'id': -3854097, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
 # Way: Upper Sumas 6 (55602811)
 # http://www.openstreetmap.org/way/55602811
