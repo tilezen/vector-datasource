@@ -1,3 +1,5 @@
+from mapbox_vector_tile.decoder import POLYGON
+
 # Caspian Sea
 assert_has_feature(
     5, 20, 12, 'water',
@@ -12,11 +14,8 @@ assert_has_feature(
 def area_of_ring(ring):
     area = 0
 
-    try:
-        for [px, py], [nx, ny] in zip(ring, ring[1:] + [ring[0]]):
-            area += px * ny - nx * py
-    except TypeError:
-        pass
+    for [px, py], [nx, ny] in zip(ring, ring[1:] + [ring[0]]):
+        area += px * ny - nx * py
 
     return 0.5 * area
 
@@ -40,6 +39,9 @@ with features_in_mvt_layer(5, 17, 9, 'water') as features:
     ocean_area = 0
 
     for feature in features:
+        if feature['type'] != POLYGON:
+            continue
+
         props = feature['properties']
         if props.get('kind') == 'ocean':
             ocean_area += area_of(feature['geometry'])

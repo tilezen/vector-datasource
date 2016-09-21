@@ -214,7 +214,8 @@ def layers_in_tile(z, x, y):
 @contextmanager
 def features_in_mvt_layer(z, x, y, layer):
     assert config_url, "Tile URL is not configured, is your config file set up?"
-    url = config_url % {'layer': layer, 'z': z, 'x': x, 'y': y}
+    request_layer = 'all' if config_all_layers else layer
+    url = config_url % {'layer': request_layer, 'z': z, 'x': x, 'y': y}
     url = url.replace(".json", ".mvt")
     r = requests.get(url)
 
