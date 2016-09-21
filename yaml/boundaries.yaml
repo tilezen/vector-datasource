@@ -24,10 +24,13 @@ filters:
   # osm
   - filter:
       any:
-        all:
-          boundary: administrative
-          'tags->boundary:type': aboriginal_lands
-        boundary: aboriginal_lands
+        - all:
+            boundary: administrative
+            boundary:type: aboriginal_lands
+        - all:
+            boundary: protected_area
+            protect_class: '24'
+        - boundary: aboriginal_lands
     min_zoom: 8
     output:
       kind: aboriginal_lands

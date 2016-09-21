@@ -112,27 +112,4 @@ FROM buffered_land
 WHERE
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
-UNION ALL
-
-SELECT
-  tags->'name' AS name,
-  'openstreetmap.org' AS source,
-  mz_boundary_min_zoom as min_zoom,
-  NULL AS maritime_boundary,
-  mz_calculate_json_boundaries(planet_osm_line.*) AS mz_properties,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
-  osm_id AS __id__,
-  %#tags AS tags
-
-FROM
-  planet_osm_line
-
-WHERE
-  {{ bounds['line']|bbox_filter('way',3857) }} AND
-{% if zoom >= 16 %}
-    mz_boundary_min_zoom IS NOT NULL
-{% else %}
-    mz_boundary_min_zoom < {{ zoom + 1 }}
-{% endif %}
-
 {% endif %}
