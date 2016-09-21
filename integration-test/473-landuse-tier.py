@@ -32,7 +32,10 @@ assert_has_feature(
       'tier': 2, 'min_zoom': 8 })
 # this one is clipped by the polygon min_zoom, and so appears at the same
 # level.
+#
+# note that the feature _is_ present in the zoom 8 tile, but gets merged
+# with a nearby feature of the same name, so instead we test this at z9.
 assert_has_feature(
-    8, 71, 98, 'pois',
+    9, 142, 196, 'pois',
     { 'kind': 'forest', 'id': 34416231,
       'tier': 2, 'min_zoom': 8 })
