@@ -1781,6 +1781,7 @@ def admin_boundaries(ctx):
 
         for i, feature in enumerate(features):
             boundary, props, fid = feature
+            prop_id = props['id']
             envelope = envelopes[i]
 
             # intersect with *preceding* features to remove
@@ -1788,6 +1789,9 @@ def admin_boundaries(ctx):
             # are no duplicate parts.
             for j in range(0, i):
                 cut_shape, cut_props, cut_fid = features[j]
+                # don't intersect with self
+                if prop_id == cut_props['id']:
+                    continue
                 cut_envelope = envelopes[j]
                 if envelope.intersects(cut_envelope):
                     boundary = boundary.difference(cut_shape)
@@ -1800,6 +1804,9 @@ def admin_boundaries(ctx):
             # that we want to keep.
             for j in range(i+1, num_features):
                 cut_shape, cut_props, cut_fid = features[j]
+                # don't intersect with self
+                if prop_id == cut_props['id']:
+                    continue
                 cut_envelope = envelopes[j]
 
                 if envelope.intersects(cut_envelope):
