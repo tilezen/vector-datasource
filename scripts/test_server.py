@@ -23,9 +23,9 @@ config = {
     'buffer': {
         'mvtb': {
             'layer': {
-                'earth': { 'point': 256 },
-                'water': { 'point': 256 },
-                'places': { 'point': 128 }
+                'earth': {'point': 256},
+                'water': {'point': 256},
+                'places': {'point': 128}
             },
             'geometry': {
                 'point': 64,
