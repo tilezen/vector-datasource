@@ -97,6 +97,7 @@ filters:
         - Admin-1 boundary
         - Admin-1 statistical boundary
         - Admin-1 statistical meta bounds
+        - 1st Order Admin Lines
     min_zoom: *ne_region_boundaries_min_zoom
     extra_columns: [scalerank]
     output: {kind: region, kind_detail: '4'}
