@@ -29,9 +29,13 @@ UPDATE
 UPDATE planet_osm_polygon
   SET mz_building_min_zoom = mz_calculate_min_zoom_buildings(planet_osm_polygon.*)
   WHERE
-    tags ? 'location'
-    AND mz_building_min_zoom IS NOT NULL
-    AND COALESCE(mz_building_min_zoom, 999) <> COALESCE(mz_building_min_zoom(planet_osm_polygon.*), 999);
+    COALESCE(mz_building_min_zoom, 999) <> COALESCE(mz_building_min_zoom(planet_osm_polygon.*), 999);
+
+UPDATE planet_osm_polygon
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(planet_osm_polygon.*)
+  WHERE
+    COALESCE(tags->'boundary' = 'protected_area', FALSE) AND
+    COALESCE(tags->'protect_class' = '24', FALSE);
 
 UPDATE planet_osm_polygon
   SET mz_label_placement = ST_PointOnSurface(way)
