@@ -18,6 +18,21 @@ config = {
         'config': 'queries.yaml',
         'template-path': 'queries',
         'reload-templates': False
+    },
+    'formats': ['json', 'topojson', 'mvt', 'mvtb'],
+    'buffer': {
+        'mvtb': {
+            'layer': {
+                'earth': { 'point': 256 },
+                'water': { 'point': 256 },
+                'places': { 'point': 128 }
+            },
+            'geometry': {
+                'point': 64,
+                'line': 8,
+                'polygon': 8
+            }
+        }
     }
 }
 

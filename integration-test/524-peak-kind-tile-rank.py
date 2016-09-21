@@ -32,6 +32,12 @@
 # 4227, https://www.openstreetmap.org/node/358914519, Pacific Peak
 # 4239, https://www.openstreetmap.org/node/358914419, Fletcher Mountain
 # 4348, https://www.openstreetmap.org/node/358914530, Quandary Peak
+#
+# these are outside of the tile, used to test that the ranking code doesn't
+# consider items which are in the buffer.
+#
+# 4348, http://www.openstreetmap.org/node/358914747, Mount Lincoln
+# 4335, http://www.openstreetmap.org/node/358914751, Mount Cameron
 
 def count_matching(features, props):
     num_matches = 0
