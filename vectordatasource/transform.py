@@ -2569,14 +2569,15 @@ def keep_n_features(ctx):
 
 def rank_features(ctx):
     """
+    Assign a rank to features in `rank_key`.
+
     Enumerate the features matching `items_matching` and insert
     the rank as a property with the key `rank_key`. This is
     useful for the client, so that it can selectively display
     only the top features, or de-emphasise the later features.
 
-    Only features which are within the unpadded bounds of the
-    tile are ranked. Features entirely outside the bounds of
-    the tile are not modified.
+    Note that only features within in the unpadded bounds are ranked.
+    Features entirely outside the bounds of the tile are not modified.
     """
 
     feature_layers = ctx.feature_layers
@@ -2586,7 +2587,7 @@ def rank_features(ctx):
     start_zoom = ctx.params.get('start_zoom', 0)
     items_matching = ctx.params.get('items_matching')
     rank_key = ctx.params.get('rank_key')
-    unpadded_bounds = Box(*ctx.unpadded_bounds)
+    unpadded_bounds_shp = Box(*ctx.unpadded_bounds)
 
     # leaving items_matching or rank_key as None would mean
     # that this filter would do nothing, so assume that this
@@ -2603,8 +2604,8 @@ def rank_features(ctx):
 
     count = 0
     for shape, props, fid in layer['features']:
-        if _match_props(props, items_matching) and \
-           shape.intersects(unpadded_bounds):
+        if (_match_props(props, items_matching) and
+                unpadded_bounds_shp.intersects(shape)):
             count += 1
             props[rank_key] = count
 

@@ -617,3 +617,46 @@ class ShieldTextTransform(unittest.TestCase):
     def test_null(self):
         # see https://github.com/tilezen/vector-datasource/issues/192
         self._assert_shield_text("something", None, None)
+
+
+class RankBoundsTest(unittest.TestCase):
+
+    def _call_fut(self, shape, bounds):
+        from tilequeue.process import Context
+        from tilequeue.tile import deserialize_coord
+        from vectordatasource.transform import rank_features
+        props = dict(foo='bar')
+        feature = shape, props, 1
+        feature_layer = dict(
+            features=[feature],
+            layer_datum=dict(name='layer-name'),
+        )
+        params = dict(
+            source_layer='layer-name',
+            rank_key='rank',
+            items_matching=dict(foo='bar'),
+        )
+        ctx = Context(
+            feature_layers=[feature_layer],
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=bounds,
+            params=params,
+            resources=None,
+        )
+        rank_features(ctx)
+        rank = props.get('rank')
+        return rank
+
+    def test_rank_within_bounds(self):
+        from shapely.geometry import Point
+        shape = Point(1, 1)
+        bounds = (0, 0, 2, 2)
+        rank = self._call_fut(shape, bounds)
+        self.assertEquals(rank, 1)
+
+    def test_rank_outside_bounds(self):
+        from shapely.geometry import Point
+        shape = Point(10, 10)
+        bounds = (0, 0, 2, 2)
+        rank = self._call_fut(shape, bounds)
+        self.assertIsNone(rank)
