@@ -2513,6 +2513,10 @@ def keep_n_features(ctx):
     This is done by counting each feature which matches _all_
     the key-value pairs in `items_matching` and, when the
     count is larger than `max_items`, dropping those features.
+
+    Only features which are within the unpadded bounds of the
+    tile are considered for keeping or dropping. Features
+    entirely outside the bounds of the tile are always kept.
     """
 
     feature_layers = ctx.feature_layers
@@ -2523,6 +2527,7 @@ def keep_n_features(ctx):
     end_zoom = ctx.params.get('end_zoom')
     items_matching = ctx.params.get('items_matching')
     max_items = ctx.params.get('max_items')
+    unpadded_bounds = Box(*ctx.unpadded_bounds)
 
     # leaving items_matching or max_items as None (or zero)
     # would mean that this filter would do nothing, so assume
@@ -2549,7 +2554,8 @@ def keep_n_features(ctx):
     for shape, props, fid in layer['features']:
         keep_feature = True
 
-        if _match_props(props, items_matching):
+        if _match_props(props, items_matching) and \
+           shape.intersects(unpadded_bounds):
             count += 1
             if count > max_items:
                 keep_feature = False
@@ -2571,6 +2577,7 @@ def rank_features(ctx):
     only the top features, or de-emphasise the later features.
 
     Note that only features within in the unpadded bounds are ranked.
+    Features entirely outside the bounds of the tile are not modified.
     """
 
     feature_layers = ctx.feature_layers

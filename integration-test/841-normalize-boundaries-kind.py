@@ -1,8 +1,11 @@
-# Way: Hoopa Valley Tribe (174550914)
-# http://www.openstreetmap.org/way/174550914
+# Relation: Hoopa Valley Tribe
+# http://www.openstreetmap.org/relation/6214773
+#
+# Note: this is tagged as a "protected_area" rather than a political boundary,
+# but it seems that some "protect_class" values indicate political "protection"
 assert_has_feature(
     16, 10237, 24570, 'boundaries',
-    {'id': 174550914, 'kind': 'aboriginal_lands', 'kind_detail': '4'})
+    {'id': -6214773, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
 # use relation instead of way, as osm2pgsql treats the relation as superseding
 # the way and removes its tags when both are present.
@@ -29,10 +32,11 @@ assert_has_feature(
     16, 12553, 24147, 'boundaries',
     {'id': -161991, 'kind': 'region', 'kind_detail': '4'})
 
-# http://www.openstreetmap.org/way/395754575
+# http://www.openstreetmap.org/relation/396487 -- SF City/County
+# http://www.openstreetmap.org/relation/396498 -- San Mateo County
 assert_has_feature(
     16, 10484, 25346, 'boundaries',
-    {'id': 395754575, 'kind': 'county', 'kind_detail': '6'})
+    {'id': set([-396487,-396498]), 'kind': 'county', 'kind_detail': '6'})
 
 # Relation: Brisbane (2834528)
 # http://www.openstreetmap.org/relation/2834528
