@@ -26,11 +26,12 @@ assert_has_feature(
     16, 10417, 25370, 'boundaries',
     {'id': -148838, 'kind': 'country', 'kind_detail': '2'})
 
-# Relation: Wyoming (161991)
+# Relation: Wyoming (161991) & Idaho (162116)
 # http://www.openstreetmap.org/relation/161991
+# http://www.openstreetmap.org/relation/162116
 assert_has_feature(
     16, 12553, 24147, 'boundaries',
-    {'id': -161991, 'kind': 'region', 'kind_detail': '4'})
+    {'id': set([-161991,-162116]), 'kind': 'region', 'kind_detail': '4'})
 
 # http://www.openstreetmap.org/relation/396487 -- SF City/County
 # http://www.openstreetmap.org/relation/396498 -- San Mateo County
