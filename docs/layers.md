@@ -412,7 +412,6 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
 * `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
-* `tier`: An integer between 1 and 6, with 1 being "more important" and 6 being "less important".
 
 #### Landuse `kind` values:
 
@@ -620,7 +619,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `religion`:
 * `sport`:
 * `zoo`:
-* `tier`: An integer between 1 and 6, with 1 being "more important" and 6 being "less important".
 
 #### POI properties (only on `kind:station`):
 
