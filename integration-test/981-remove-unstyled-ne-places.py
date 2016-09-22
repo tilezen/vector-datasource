@@ -2,7 +2,8 @@ def assert_add_place(z, x, y, name):
     assert_has_feature(
         z, x, y, 'places',
         { 'kind': 'locality', 'name': name,
-          'source': 'naturalearthdata.com' })
+          'source': 'naturalearthdata.com',
+          'min_zoom': z })
     assert_no_matching_feature(
         z-1, x/2, y/2, 'places',
         { 'kind': 'locality', 'name': name,
