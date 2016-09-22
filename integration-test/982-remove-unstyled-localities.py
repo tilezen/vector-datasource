@@ -5,7 +5,7 @@
 assert_has_feature(
     8, 39, 96, 'places',
     { 'kind': 'locality', 'kind_detail': 'town', 'name': 'Arcata',
-      'id': 141029389 })
+      'id': 141029389, 'min_zoom': 8 })
 
 # zoom 9 and 10:
 # include only those localities with name and kind_detail IN (city, town)
@@ -19,7 +19,7 @@ assert_no_matching_feature(
 assert_has_feature(
     9, 80, 191, 'places',
     { 'kind': 'locality', 'kind_detail': 'town', 'name': 'Hoopa',
-      'id': 4270230299 })
+      'id': 4270230299, 'min_zoom': 9 })
 
 # zoom 11:
 # include only those localities with name and kind_detail IN (city, town)
@@ -35,7 +35,7 @@ assert_no_matching_feature(
 assert_has_feature(
     11, 326, 790, 'places',
     { 'kind': 'locality', 'kind_detail': 'village', 'name': 'Fairfax',
-      'id': 150949805 })
+      'id': 150949805, 'min_zoom': 11 })
 
 # zoom 12:
 # include only those localities with name and kind_detail IN (city, town,
@@ -53,7 +53,7 @@ assert_no_matching_feature(
 assert_has_feature(
     12, 647, 1573, 'places',
     { 'kind': 'locality', 'kind_detail': 'hamlet', 'name': 'Duncans Mills',
-      'id': 150966610 })
+      'id': 150966610, 'min_zoom': 12 })
 
 # example: http://www.openstreetmap.org/node/150973394 - Inverness
 # hamlet with NO population should NOT show up
@@ -69,4 +69,4 @@ assert_no_matching_feature(
 assert_has_feature(
     13, 1300, 3156, 'places',
     { 'kind': 'locality', 'kind_detail': 'hamlet', 'name': 'Inverness',
-      'id': 150973394 })
+      'id': 150973394, 'min_zoom': 13 })
