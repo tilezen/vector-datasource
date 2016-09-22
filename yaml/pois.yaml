@@ -137,7 +137,7 @@ filters:
   - filter:
       boundary: national_park
       protect_class: '6'
-      protction_title: National Forest
+      protection_title: National Forest
     min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output:
       kind: forest
