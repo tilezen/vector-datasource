@@ -11,7 +11,7 @@ SELECT
     NULL AS region_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
-    NULL::smallint AS min_zoom,
+    mz_places_min_zoom AS min_zoom,
     NULL::smallint AS max_zoom,
     NULL::boolean AS is_landuse_aoi,
     NULL AS tags
@@ -44,7 +44,7 @@ SELECT
     (CASE WHEN tags->'state_capital' = 'yes' THEN true END) AS region_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
-    NULL::smallint AS min_zoom,
+    mz_places_min_zoom AS min_zoom,
     NULL::smallint AS max_zoom,
     NULL::boolean AS is_landuse_aoi,
     %#tags AS tags
