@@ -1,0 +1,14 @@
+kind,sort_rank
+locality,252
+county,254
+region,256
+macroregion,257
+map_unit,258
+indefinite,259
+indeterminate,259
+lease_limit,259
+overlay_limit,259
+line_of_control,260
+disputed,261
+country,262
+*,250

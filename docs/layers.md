@@ -62,20 +62,20 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 The current version of Mapzen vector tiles is **v0.10.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
 
-If you're signed up for a [Mapzen Vector Tiles API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
+If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
 
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v0.10.0/CHANGELOG.md).
 
 #### Feature ordering
 
-Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, we export a `sort_key` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_key` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
+Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, we export a `sort_rank` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_rank` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
 
 To facilitate **data visualization** overlays and underlays, the following client-side `order` ranges are suggested:
 
 * `0-9`: Under everything. _Tip: disable earth layer._
 * `190-199`: Under water. Above earth and most landuse.
 * `290-299`: Under roads. Above borders, water, landuse, and earth. **Your classic "underlay".**
-* `490-499`: Over all line and polygon features. Under map labels (icons and text), under UI elements (like routeline and search result pins). **Your classic raster map overlay.**  
+* `490-499`: Over all line and polygon features. Under map labels (icons and text), under UI elements (like routeline and search result pins). **Your classic raster map overlay.**
 
 **Tangram scene file example:**
 
@@ -105,14 +105,15 @@ We include one deprecated layer, `landuse-labels`, for backwards compatibility. 
 Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural Earth boundaries (zoom < 8).
 
 
-#### Boundary properties (common):
+#### Boundaries properties (common):
 
 * `name`
 * `id`
 * `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes raw Natural Earth values.
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap.
 
-#### Boundary properties (common optional):
+#### Boundaries properties (common optional):
 
 * `admin_level`: values of `2` for countries, `4` for states (zoom 8+), and `6`, `8` (zoom 10+)
 * `id:left`: For the relation on the left side of the boundary line.
@@ -121,15 +122,13 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `name:right`: See name section above, other variants like `old_name` also supported.
 * `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
 
-#### Boundary properties (optional):
+#### Boundaries properties (optional):
 
-* `labelrank`: from Natural Earth
-* `scalerank`: from Natural Earth
 * `osm_relation`: `true`, which can also be deduced from negative `id` values.
 
-#### Boundary kind values:
+#### Boundary `kind` values:
 
-* `aboriginal lands`
+* `aboriginal_lands`
 * `country`
 * `county`
 * `disputed`
@@ -138,9 +137,10 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `lease_limit`
 * `line_of_control`
 * `macroregion`
+* `map_unit`
 * `municipality`
 * `overlay_limit`
-* `state`
+* `region`
 
 ## Buildings and Addresses
 
@@ -149,20 +149,25 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprint, building label_placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
+Polygons from OpenStreetMap representing building footprints, building label placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
-Individual `building:part` geometries from OSM following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels are now exported as `building_part` features with specified `kind_detail`. Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect.
+Individual `building_part` geometries from OpenStreetMap following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels. Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect.
 
 Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
+
+Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
+
+Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for building footprints and from `building:part` tag for building parts.
 
 #### Building properties (common):
 
 * `name`
 * `id`: from OpenStreetMap
 * `kind`: see below
+* `kind_detail`: see below
 * `source`: `openstreetmap.org`
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 #### Building properties (common optional):
 
@@ -179,23 +184,168 @@ Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the 
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
+* `scale_rank`: calculation of a feature's importance
 * `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
-* `kind_detail`: value from OpenStreetMap's `building:part` tag.
 
-#### Building kind values:
+#### Building layer `kind` values:
 
-* Buildings polygons and label_position points, have `kind` values that are either `building` or `building_part`, if `building=*` or `building:part` is `yes` respectively. Label position points may also be one of `closed` or `historical` if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
-* If the raw OpenStreetMap `building:part` tag exists with a value, a `kind_detail` tag is added to describe the `building:part` value.
-* Address points are `kind` of value `address`.
+* `building`
+* `building_part`
+* `address`
 
-#### Address properties and kind value:
+#### Building footprint and label placement `kind_detail` values:
 
-* `name`
-* `id`: osm_id
-* `source`: `openstreetmap.org`
-* `kind`: `address`
-* `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
-* `addr_street`: value from OpenStreetMap's `addr:street` tag
+`abandoned`
+* `administrative`
+* `agricultural`
+* `airport`
+* `allotment_house`
+* `apartments`
+* `arbour`
+* `bank`
+* `barn`
+* `basilica`
+* `beach_hut`
+* `bell_tower`
+* `boathouse`
+* `brewery`
+* `bridge`
+* `bungalow`
+* `bunker`
+* `cabin`
+* `carport`
+* `castle`
+* `cathedral`
+* `chapel`
+* `chimney`
+* `church`
+* `civic`
+* `clinic`
+* `closed`
+* `clubhouse`
+* `collapsed`
+* `college`
+* `commercial`
+* `construction`
+* `container`
+* `convent`
+* `cowshed`
+* `dam`
+* `damaged`
+* `depot`
+* `destroyed`
+* `detached`
+* `disused`
+* `dormitory`
+* `duplex`
+* `factory`
+* `farm`
+* `farm_auxiliary`
+* `fire_station`
+* `garage`
+* `garages`
+* `gazebo`
+* `ger`
+* `glasshouse`
+* `government`
+* `grandstand`
+* `greenhouse`
+* `hangar`
+* `healthcare`
+* `hermitage`
+* `historical`
+* `hospital`
+* `hotel`
+* `house`
+* `houseboat`
+* `hut`
+* `industrial`
+* `kindergarten`
+* `kiosk`
+* `library`
+* `mall`
+* `manor`
+* `manufacture`
+* `mixed_use`
+* `mobile_home`
+* `monastery`
+* `mortuary`
+* `mosque`
+* `museum`
+* `office`
+* `outbuilding`
+* `parking`
+* `pavilion`
+* `power`
+* `prison`
+* `proposed`
+* `pub`
+* `public`
+* `residential`
+* `restaurant`
+* `retail`
+* `roof`
+* `ruin`
+* `ruins`
+* `school`
+* `semidetached_house`
+* `service`
+* `shed`
+* `shelter`
+* `shop`
+* `shrine`
+* `silo`
+* `slurry_tank`
+* `stable`
+* `stadium`
+* `static_caravan`
+* `storage`
+* `storage_tank`
+* `store`
+* `substation`
+* `summer_cottage`
+* `summer_house`
+* `supermarket`
+* `synagogue`
+* `tank`
+* `temple`
+* `terrace`
+* `tower`
+* `train_station`
+* `transformer_tower`
+* `transportation`
+* `university`
+* `utility`
+* `veranda`
+* `warehouse`
+* `wayside_shrine`
+* `works`
+
+#### Building part `kind_detail` values:
+
+* `arch`
+* `balcony`
+* `base`
+* `column`
+* `door`
+* `elevator`
+* `entrance`
+* `floor`
+* `hall`
+* `main`
+* `passageway`
+* `pillar`
+* `porch`
+* `ramp`
+* `roof`
+* `room`
+* `steps`
+* `stilobate`
+* `tier`
+* `tower`
+* `verticalpassage`
+* `wall`
+* `window`
 
 ## Earth
 
@@ -212,9 +362,9 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 
 * `id`: osm_id **or** funky value when from Natural Earth or OpenStreetMapData.com
 * `kind`: either `earth` or "natural" value from OSM tag.
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
-#### Earth kind values:
+#### Earth `kind` values:
 
 * `arete`
 * `cliff`
@@ -222,7 +372,7 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 * `ridge`
 * `valley`
 
-#### Earth kind values (point only):
+#### Earth `kind` values (point only):
 
 These are intended for label placement, and are included as points only.
 
@@ -255,7 +405,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `name`
 * `id`: osm_id
 * `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), `fence` (zoom 16+ only) and `gate` (zoom 16+ only).
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 
 #### Landuse properties (common optional):
@@ -263,7 +413,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
 * `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
 
-#### Landuse kind values:
+#### Landuse `kind` values:
 
 * `aerodrome`
 * `allotments`
@@ -398,20 +548,18 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: osm_id from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
-* `scalerank`: scalerank value from Natural Earth, and invented for OpenStreetMap
 * `source`: `openstreetmap` or `naturalearthdata.com`
+* `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
 #### Place properties (common optional):
 
 * `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
 * `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
-* `labelrank`: labelrank value from Natural Earth
-* `min_zoom`: Currently neighbourhoods only, from Who's On First
-* `max_zoom`: Currently neighbourhoods only, from Who's On First
+* `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
 * `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
 
-#### Place kind values:
+#### Place `kind` values:
 
 * `borough`
 * `continent`
@@ -443,9 +591,9 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * Layer name: `pois`
 * Geometry types: `point`
 
-Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 16 all local features are added, like `amusement_ride`, `atm`, and `bus_stop`, but may be marked with a `min_zoom` property to suggest at which zoom levels they are suitable for display. For example, `bench` and `waste_basket` features may be marked `min_zoom: 18` to suggest that they are displayed at zoom 18 and higher.
+Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 12 for major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Then progressively more features added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features should be included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 16 all local features are added, like `amusement_ride`, `atm`, and `bus_stop`, but may be marked with a `min_zoom` property to suggest at which zoom levels they are suitable for display. For example, `bench` and `waste_basket` features may be marked `min_zoom: 18` to suggest that they are displayed at zoom 18 and higher.  Note that `min_zoom` is not an integer, and may contain a fractional component.
 
-The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_position features and `buildings` label_position features, throttled by area.
+The `pois` layer should be used in conjuction with `landuse` (parks, etc) label_position points and `buildings` label_position points, throttled by area.
 
 Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
 
@@ -459,6 +607,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `id`: osm_id
 * `source`: `openstreetmap.org`
 * `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attraction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags. Can also be one of `closed` or `historical` if the original feature was parenthetically commented as closed or historical.
+* `min_zoom`: a suggested minimum zoom at which the POI should become visible. Note that this is not an integer, and may contain fractional parts.
 
 #### POI properties (common optional):
 
@@ -504,7 +653,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
 
-#### POI kind values:
+#### POI `kind` values:
 
 * `accountant`
 * `adit`
@@ -622,6 +771,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
+* `gallery` - An art gallery.
 * `garden`
 * `gardener`
 * `gas` - Shop selling bottled gas for cooking. Some offer gas canister refills.
@@ -824,11 +974,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * Layer name: `roads`
 * Geometry types: `line`
 
-More than just roads, this OpenStreetMap and Natural Earth based transportation layer includes highways, major roads, minor roads, paths, railways, ferries, and ski pistes matching the selection found in High Road. Sort them with `sort_key` to correctly represent layered overpasses, bridges and tunnels. Natural Earth roads at zooms < 8 and OpenStreetMap at zooms 8+. See zoom ranges section below for more information per kind.
+More than just roads, this OpenStreetMap and Natural Earth based transportation layer includes highways, major roads, minor roads, paths, railways, ferries, and ski pistes matching the selection found in High Road. Sort them with `sort_rank` to correctly represent layered overpasses, bridges and tunnels. Natural Earth roads at zooms < 8 and OpenStreetMap at zooms 8+. See zoom ranges section below for more information per kind.
 
 Road names are **abbreviated** so directionals like `North` is replaced with `N`, `Northeast` is replaced with `NE`, and common street suffixes like `Avenue` to `Ave.` and `Street` to `St.`. Full details in the [StreetNames](https://github.com/nvkelso/map-label-style-manual/blob/master/tools/street_names/StreetNames/__init__.py) library.
 
-Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened. 
+Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
 To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
@@ -837,16 +987,17 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `name`: From OpenStreetMap, but transformed to abbreviated names as detailed above.
 * `id`: From OpenStreetMap or Natural Earth
 * `source`: `openstreetmap` or `naturalearthdata.com`
-* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way` if `whitewater=portage_way`; or Natural Earth's `featurecla` value. You'll want to look at other tags like `highway` and `railway` for raw OpenStreetMap values.
-* `kind_detail`: See kind detail list below.
+* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way`.
+* `kind_detail`: See kind detail list below, sourced from the OpenStreetMap values.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
-* `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see the common optional properties `network` and `shield_text`. Related, see `symbol` for pistes.
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_key` is adjusted to realistically model bridge, tunnel, and layer ordering.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_rank` is adjusted to realistically model bridge, tunnel, and layer ordering.
+* `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see `network` and `shield_text`. Related, see `symbol` for pistes.
+* `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
+* `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
+* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
 
 #### Road properties (common optional):
 
-* `aeroway`: See kind list below.
-* `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
 * `cycleway`: `cycleway` tag from feature. If no `cycleway` tag is present but `cycleway:both` exists, we source from that tag instead.
 * `cycleway_left`: `cycleway_left` tag from feature
@@ -859,14 +1010,11 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `is_tunnel`: `true` if the road is part of a tunnel. The property will not be present if the road is not part of a tunnel.
 * `leisure`: See kind list below.
 * `man_made`: See kind list below.
-* `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
 * `oneway_bicycle`: `oneway:bicycle` tag from feature
 * `oneway`: `yes` or `no`
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
-* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
-* `kind_detail`: normalized values describing the kind value, see below.
 
 #### Road properties (optional):
 
@@ -875,7 +1023,6 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
-* `labelrank`: Natural Earth features
 * `level`: Natural Earth features
 * `motor_vehicle`: OpenStreetMap features
 * `namealt`: Natural Earth features
@@ -884,16 +1031,15 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `piste_difficulty`: ski pistes from OpenStreetMap
 * `piste_grooming`: ski pistes from OpenStreetMap
 * `piste_name`: ski pistes from OpenStreetMap
-* `roundtrip`: OpenStreetMap features 
+* `roundtrip`: OpenStreetMap features
 * `route_name`: OpenStreetMap features
-* `scalerank`: Natural Earth features
 * `ski`: ski pistes from OpenStreetMap
 * `snowshoe`: ski pistes from OpenStreetMap
 * `sport`: OpenStreetMap features
 * `state`: OpenStreetMap features
 * `symbol`: ski pistes from OpenStreetMap
 
-#### Road transportation kind values (lines):
+#### Road transportation `kind` values (lines):
 
 * `aerialway`
 * `aeroway`
@@ -972,7 +1118,7 @@ _TIP: If you're looking for transit `station` and `station_entrance` features, l
 * `id`: OpenStreetMap feature `osm_id`
 * `kind`: detailed below, per geometry type
 * `source`: `openstreetmap.org`
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 #### Transit properties (common optional):
 
@@ -1003,7 +1149,7 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 * `roundtrip`
 * `route_name`
 
-#### Transit kind values (line, polygon):
+#### Transit `kind` values (line, polygon):
 
 * `light_rail`
 * `platform`
@@ -1031,7 +1177,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `kind`: detailed below, per geometry type
 * `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
 * `boundary`: `true`, on lines only. See description above.
-* `sort_key`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 
 #### Water properties (common optional):
 
@@ -1039,7 +1185,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
 * `is_tunnel`: for `line` features only (`true` values only)
 
-#### Water kind values (point, polygon):
+#### Water `kind` values (point, polygon):
 
 * `basin`
 * `dock`
@@ -1052,7 +1198,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 
 Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
 
-#### Water kind values (point only):
+#### Water `kind` values (point only):
 
 These are intended for label placement, and are included as points only.
 
@@ -1066,7 +1212,7 @@ These are intended for label placement, and are included as points only.
 * `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
 
-#### Water kind values (lines):
+#### Water `kind` values (lines):
 
 * `canal`
 * `dam`

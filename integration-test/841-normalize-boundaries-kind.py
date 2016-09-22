@@ -1,13 +1,18 @@
-# Way: Hoopa Valley Tribe (174550914)
-# http://www.openstreetmap.org/way/174550914
+# Relation: Hoopa Valley Tribe
+# http://www.openstreetmap.org/relation/6214773
+#
+# Note: this is tagged as a "protected_area" rather than a political boundary,
+# but it seems that some "protect_class" values indicate political "protection"
 assert_has_feature(
     16, 10237, 24570, 'boundaries',
-    {'id': 174550914, 'kind': 'aboriginal_lands', 'kind_detail': '4'})
+    {'id': -6214773, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
-# http://www.openstreetmap.org/way/286097885
+# use relation instead of way, as osm2pgsql treats the relation as superseding
+# the way and removes its tags when both are present.
+# http://www.openstreetmap.org/relation/3854097
 assert_has_feature(
     16, 10483, 22987, 'boundaries',
-    {'id': 286097885, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
+    {'id': -3854097, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
 # Way: Upper Sumas 6 (55602811)
 # http://www.openstreetmap.org/way/55602811
@@ -15,22 +20,24 @@ assert_has_feature(
     16, 10523, 22492, 'boundaries',
     {'id': 55602811, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
-# Way: United States of America (42298798)
-# http://www.openstreetmap.org/way/42298798
+# Relation: United States of America
+# https://www.openstreetmap.org/relation/148838
 assert_has_feature(
     16, 10417, 25370, 'boundaries',
-    {'id': 42298798, 'kind': 'country', 'kind_detail': '2'})
+    {'id': -148838, 'kind': 'country', 'kind_detail': '2'})
 
-# Relation: Wyoming (161991)
+# Relation: Wyoming (161991) & Idaho (162116)
 # http://www.openstreetmap.org/relation/161991
+# http://www.openstreetmap.org/relation/162116
 assert_has_feature(
     16, 12553, 24147, 'boundaries',
-    {'id': -161991, 'kind': 'region', 'kind_detail': '4'})
+    {'id': set([-161991,-162116]), 'kind': 'region', 'kind_detail': '4'})
 
-# http://www.openstreetmap.org/way/395754575
+# http://www.openstreetmap.org/relation/396487 -- SF City/County
+# http://www.openstreetmap.org/relation/396498 -- San Mateo County
 assert_has_feature(
     16, 10484, 25346, 'boundaries',
-    {'id': 395754575, 'kind': 'county', 'kind_detail': '6'})
+    {'id': set([-396487,-396498]), 'kind': 'county', 'kind_detail': '6'})
 
 # Relation: Brisbane (2834528)
 # http://www.openstreetmap.org/relation/2834528

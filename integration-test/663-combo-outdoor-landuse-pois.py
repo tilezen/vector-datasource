@@ -2,7 +2,7 @@
 # Waterworld in Concord
 assert_has_feature(
     13, 1318, 3160, 'landuse',
-    { 'kind': 'water_park', 'sort_key': 107 })
+    { 'kind': 'water_park', 'sort_rank': 107 })
 
 assert_has_feature(
     13, 1318, 3160, 'pois',
@@ -86,18 +86,18 @@ assert_has_feature(
 
 assert_has_feature(
     10, 290, 389, 'landuse',
-    { 'kind': 'battlefield', 'sort_key': 25 })
+    { 'kind': 'battlefield', 'sort_rank': 25 })
 
 
 #http://www.openstreetmap.org/way/316054549
 # White Oak Road Battlefield
 assert_has_feature(
     11, 582, 796, 'pois',
-    { 'kind': 'battlefield', 'min_zoom': 10.0683 })
+    { 'kind': 'battlefield', 'min_zoom': 10.07 })
 
 assert_has_feature(
     11, 582, 796, 'landuse',
-    { 'kind': 'battlefield', 'sort_key': 25 })
+    { 'kind': 'battlefield', 'sort_rank': 25 })
 
 
 
@@ -158,7 +158,7 @@ assert_has_feature(
 # 13, 1370, 3161
 assert_has_feature(
     12, 685, 1580, 'landuse',
-    { 'kind': 'dam', 'sort_key': 223 })
+    { 'kind': 'dam', 'sort_rank': 223 })
 
 assert_has_feature(
     12, 685, 1580, 'pois',
@@ -169,7 +169,7 @@ assert_has_feature(
 # Should be labeled in the stylesheet, no POI generate
 assert_has_feature(
     12, 683, 1580, 'landuse',
-    { 'kind': 'dam', "sort_key": 265 })
+    { 'kind': 'dam', "sort_rank": 265 })
 
 
 #http://www.openstreetmap.org/node/262220409
@@ -192,14 +192,14 @@ assert_has_feature(
 
 assert_has_feature(
     16, 10479, 25338, 'landuse',
-    { 'kind': 'dog_park', 'sort_key': 97 })
+    { 'kind': 'dog_park', 'sort_rank': 97 })
 
 
 #https://www.openstreetmap.org/relation/6328943
 # Cox Stadium recreation track
 assert_has_feature(
     15, 5235, 12671, 'landuse',
-    { 'id': -6328943, 'kind': 'recreation_track', 'sort_key': 59 })
+    { 'id': -6328943, 'kind': 'recreation_track', 'sort_rank': 59 })
 
 # Cox Stadium recreation track
 assert_has_feature(
@@ -286,7 +286,7 @@ assert_has_feature(
 # Old Man Boulder
 assert_has_feature(
     16, 10442, 25304, 'landuse',
-    { 'kind': 'stone', 'sort_key': 28 })
+    { 'kind': 'stone', 'sort_rank': 28 })
 
 assert_has_feature(
     16, 10442, 25304, 'pois',
@@ -298,7 +298,7 @@ assert_has_feature(
 # Goodrich Pinnacle
 assert_has_feature(
     16, 11001, 25340, 'landuse',
-    { 'kind': 'rock', 'sort_key': 27 })
+    { 'kind': 'rock', 'sort_rank': 27 })
 
 assert_has_feature(
     16, 11001, 25340, 'pois',
@@ -316,7 +316,7 @@ assert_has_feature(
 # Pillar Point RV Park
 assert_has_feature(
     14, 2618, 6348, 'landuse',
-    { 'kind': 'caravan_site', 'sort_key': 58 })
+    { 'kind': 'caravan_site', 'sort_rank': 58 })
 
 assert_has_feature(
     14, 2618, 6348, 'pois',
@@ -341,7 +341,7 @@ assert_has_feature(
 # Golden Gate Park, SF
 assert_has_feature(
     16, 10474, 25332, 'landuse',
-    { 'kind': 'picnic_site', 'sort_key': 108 })
+    { 'kind': 'picnic_site', 'sort_rank': 108 })
 
 assert_has_feature(
     16, 10474, 25332, 'pois',
@@ -365,7 +365,7 @@ assert_has_feature(
 # Battery 2
 assert_has_feature(
     16, 19303, 24607, 'landuse',
-    { 'kind': 'fort', 'sort_key': 47 })
+    { 'kind': 'fort', 'sort_rank': 47 })
 
 assert_has_feature(
     16, 19303, 24607, 'pois',

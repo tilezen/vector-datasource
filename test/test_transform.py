@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import unittest
 from collections import OrderedDict
 
@@ -10,7 +11,7 @@ class BuildingsClassTest(unittest.TestCase):
         from vectordatasource.transform import CSVMatcher
         import os.path
         buildings_path = os.path.join(
-            os.path.dirname(__file__), '..', 'spreadsheets', 'scalerank',
+            os.path.dirname(__file__), '..', 'spreadsheets', 'scale_rank',
             'buildings.csv')
         with open(buildings_path) as fh:
             self.matcher = CSVMatcher(fh)
@@ -262,7 +263,7 @@ class SortKeyTest(unittest.TestCase):
         from vectordatasource.transform import CSVMatcher
         import os.path
         landuse_path = os.path.join(
-            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_key',
+            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_rank',
             'landuse.csv')
         with open(landuse_path) as fh:
             self.matcher = CSVMatcher(fh)
@@ -273,16 +274,16 @@ class SortKeyTest(unittest.TestCase):
         shape = shapely.geometry.LineString([(0, 0), (1, 1)])
         props = dict(kind='dam')
         zoom = 16
-        sort_key_result = self.matcher(shape, props, zoom)
-        self.assertIsNotNone(sort_key_result)
-        _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 265)
+        sort_rank_result = self.matcher(shape, props, zoom)
+        self.assertIsNotNone(sort_rank_result)
+        _, sort_rank = sort_rank_result
+        self.assertEquals(int(sort_rank), 265)
 
         shape = shapely.geometry.Polygon([(0, 0), (1, 1), (0, 1), (0, 0)])
-        sort_key_result = self.matcher(shape, props, zoom)
-        self.assertIsNotNone(sort_key_result)
-        _, sort_key = sort_key_result
-        self.assertEquals(int(sort_key), 223)
+        sort_rank_result = self.matcher(shape, props, zoom)
+        self.assertIsNotNone(sort_rank_result)
+        _, sort_rank = sort_rank_result
+        self.assertEquals(int(sort_rank), 223)
 
 
 class BuildingsUnifyTest(unittest.TestCase):
@@ -374,3 +375,288 @@ class BuildingsUnifyTest(unittest.TestCase):
                 self.assertEquals(root_id, 2)
             else:
                 assert 'root_id' not in props
+
+
+class DropMergedIdTest(unittest.TestCase):
+
+    def _assert_no_id_in_props(self, features, merge_fn):
+        from tilequeue.process import Context
+        from tilequeue.tile import deserialize_coord
+        layer_name = 'layername'
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name=layer_name),
+        )
+        feature_layers = [feature_layer]
+        ctx = Context(
+            feature_layers=feature_layers,
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=None,
+            params=dict(source_layer=layer_name),
+            resources=None)
+        merged_feature_layer = merge_fn(ctx)
+        merged_features = merged_feature_layer['features']
+        self.assertEquals(1, len(merged_features))
+        merged_feature = merged_features[0]
+        props = merged_feature[1]
+        self.assertTrue('id' not in props)
+
+    def test_merge_buildings(self):
+        import shapely.geometry
+        from vectordatasource.transform import merge_polygon_features
+
+        buildings = []
+        for i in (0, 1):
+            id = i + 1
+            points = [
+                (1, 1),
+                (10 + i, 10 + i),
+                (1, 10 + i),
+                (1, 1),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='building',
+            )
+            building = shape, props, id
+            buildings.append(building)
+
+        self._assert_no_id_in_props(buildings, merge_polygon_features)
+
+    def test_merge_lines(self):
+        import shapely.geometry
+        from vectordatasource.transform import merge_line_features
+
+        roads = []
+        for i in (0, 1):
+            id = i + 1
+            points = [
+                (1, 1),
+                (10 + i, 10 + i),
+            ]
+            shape = shapely.geometry.LineString(points)
+            props = dict(
+                id=id,
+                kind='road',
+            )
+            road = shape, props, id
+            roads.append(road)
+
+        self._assert_no_id_in_props(roads, merge_line_features)
+
+    def test_merge_polygons(self):
+        import shapely.geometry
+        from vectordatasource.transform import merge_polygon_features
+
+        landuses = []
+        for i in (0, 1):
+            id = i + 1
+            points = [
+                (1, 1),
+                (10 + i, 10 + i),
+                (1, 10 + i),
+                (1, 1),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='landuse',
+            )
+            landuse = shape, props, id
+            landuses.append(landuse)
+
+        self._assert_no_id_in_props(landuses, merge_polygon_features)
+
+    def test_no_merge_preserve_props(self):
+        import shapely.geometry
+        from tilequeue.process import Context
+        from tilequeue.tile import deserialize_coord
+        from vectordatasource.transform import merge_polygon_features
+
+        buildings = []
+        for i in (0, 100):
+            id = i + 1
+            points = [
+                (1 + i, 1 + i),
+                (10 + i, 10 + i),
+                (1 + i, 10 + i),
+                (1 + i, 1 + i),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='building',
+                unique_value='value-%d' % id,
+            )
+            building = shape, props, id
+            buildings.append(building)
+
+        layer_name = 'buildings'
+        feature_layer = dict(
+            features=buildings,
+            layer_datum=dict(name=layer_name),
+        )
+        feature_layers = [feature_layer]
+        ctx = Context(
+            feature_layers=feature_layers,
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=None,
+            params=dict(source_layer=layer_name),
+            resources=None)
+        merged_feature_layer = merge_polygon_features(ctx)
+        merged_features = merged_feature_layer['features']
+        self.assertEquals(2, len(merged_features))
+        for f in merged_features:
+            props = f[1]
+            self.assertTrue('id' in props)
+
+    def test_no_merge_preserve_del_props_fn(self):
+        import shapely.geometry
+        from vectordatasource.transform import _merge_features_by_property
+        from vectordatasource.transform import _POLYGON_DIMENSION
+
+        buildings = []
+        for i in (0, 100):
+            id = i + 1
+            points = [
+                (1 + i, 1 + i),
+                (10 + i, 10 + i),
+                (1 + i, 10 + i),
+                (1 + i, 1 + i),
+            ]
+            shape = shapely.geometry.Polygon(points)
+            props = dict(
+                id=id,
+                kind='building',
+                unique_value='value-%d' % id,
+            )
+            building = shape, props, id
+            buildings.append(building)
+
+        def _drop_all_props((shape, props, fid)):
+            return None
+
+        merged_features = _merge_features_by_property(
+            buildings, _POLYGON_DIMENSION, update_props_pre_fn=_drop_all_props)
+
+        self.assertEquals(2, len(merged_features))
+        for f in merged_features:
+            props = f[1]
+            self.assertTrue('id' in props)
+            self.assertTrue('unique_value' in props)
+
+
+class ShieldTextTransform(unittest.TestCase):
+
+    def _assert_shield_text(self, network, ref, expected_shield_text):
+        from vectordatasource.transform import extract_network_information
+        shape, properties, fid = extract_network_information(
+            None, dict(mz_networks=['road', network, ref]), None, 0)
+        self.assertTrue('all_networks' in properties)
+        self.assertTrue('all_shield_texts' in properties)
+        self.assertEquals([expected_shield_text],
+                          properties['all_shield_texts'])
+
+    def test_a_road(self):
+        # based on http://www.openstreetmap.org/relation/2592
+        # simple pattern, should be just the number.
+        self._assert_shield_text("BAB", "A 66", "66")
+
+        # based on http://www.openstreetmap.org/relation/446270
+        # simple pattern, should be just the number
+        self._assert_shield_text("FR:A-road", "A 66", "66")
+
+    def test_sr70var1(self):
+        # based on http://www.openstreetmap.org/relation/449595
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("IT:Toscana", "SR70var1", "70var1")
+
+    def test_cth_j(self):
+        # based on http://www.openstreetmap.org/relation/4010101
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:WI:CTH", "CTH J", "J")
+
+    def test_purple_belt(self):
+        # based on http://www.openstreetmap.org/relation/544634
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:PA:Belt", "Purple Belt", "Purple Belt")
+
+    def test_t_02_16(self):
+        # based on http://www.openstreetmap.org/relation/1296750
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("ua:territorial", u"Т-02-16", u"Т0216")
+
+    def test_fi_pi_li(self):
+        # based on http://www.openstreetmap.org/relation/1587534
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("IT:B-road", "FI-PI-LI", "FI-PI-LI")
+
+    def test_cr_315a(self):
+        # based on http://www.openstreetmap.org/relation/2564219
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:TX:Guadalupe", "CR 315A", "315A")
+
+    def test_eo1a(self):
+        # based on http://www.openstreetmap.org/relation/5641878
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("GR:national", u"ΕΟ1α", u"ΕΟ1α")
+
+    def test_i5_truck(self):
+        # based on http://www.openstreetmap.org/relation/146933
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        # note: original example was SD 37 Truck, but that wasn't in the 'ref',
+        # so changed to this example.
+        self._assert_shield_text("US:I", "5 Truck", "5")
+
+    def test_cth_pv(self):
+        # based on http://www.openstreetmap.org/relation/5179634
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("US:WI:Washington", "CTH PV", "PV")
+
+    def test_null(self):
+        # see https://github.com/tilezen/vector-datasource/issues/192
+        self._assert_shield_text("something", None, None)
+
+
+class RankBoundsTest(unittest.TestCase):
+
+    def _call_fut(self, shape, bounds):
+        from tilequeue.process import Context
+        from tilequeue.tile import deserialize_coord
+        from vectordatasource.transform import rank_features
+        props = dict(foo='bar')
+        feature = shape, props, 1
+        feature_layer = dict(
+            features=[feature],
+            layer_datum=dict(name='layer-name'),
+        )
+        params = dict(
+            source_layer='layer-name',
+            rank_key='rank',
+            items_matching=dict(foo='bar'),
+        )
+        ctx = Context(
+            feature_layers=[feature_layer],
+            tile_coord=deserialize_coord('0/0/0'),
+            unpadded_bounds=bounds,
+            params=params,
+            resources=None,
+        )
+        rank_features(ctx)
+        rank = props.get('rank')
+        return rank
+
+    def test_rank_within_bounds(self):
+        from shapely.geometry import Point
+        shape = Point(1, 1)
+        bounds = (0, 0, 2, 2)
+        rank = self._call_fut(shape, bounds)
+        self.assertEquals(rank, 1)
+
+    def test_rank_outside_bounds(self):
+        from shapely.geometry import Point
+        shape = Point(10, 10)
+        bounds = (0, 0, 2, 2)
+        rank = self._call_fut(shape, bounds)
+        self.assertIsNone(rank)

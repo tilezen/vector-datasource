@@ -6,14 +6,12 @@ SELECT
     gid AS __id__,
 
     NULL AS admin_level,
-    scalerank,
-    labelrank,
     pop_max::text AS population,
-    NULL AS capital,
+    NULL AS country_capital,
     NULL AS region_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
-    NULL::smallint AS min_zoom,
+    mz_places_min_zoom AS min_zoom,
     NULL::smallint AS max_zoom,
     NULL::boolean AS is_landuse_aoi,
     NULL AS tags
@@ -21,8 +19,15 @@ SELECT
 FROM ne_10m_populated_places
 
 WHERE
-    mz_places_min_zoom <= {{ zoom }}
+    mz_places_min_zoom < {{ zoom + 1 }}
     AND {{ bounds['point']|bbox_filter('the_geom',3857) }}
+{% if zoom >= 8 and zoom < 10 %}
+    AND pop_max <= 50000
+{% elif zoom >= 10 and zoom < 11 %}
+    AND pop_max <= 20000
+{% elif zoom >= 11 %}
+    AND pop_max <= 5000
+{% endif %}
 
 UNION ALL
 
@@ -34,14 +39,12 @@ SELECT
     osm_id AS __id__,
 
     tags->'admin_level' AS admin_level,
-    NULL AS scalerank,
-    NULL AS labelrank,
     tags->'population' AS population,
-    tags->'capital' AS capital,
-    (tags ? 'state_capital' AND tags->'state_capital' = 'yes') AS region_capital,
+    (CASE WHEN tags->'capital' = 'yes' THEN true END) AS country_capital,
+    (CASE WHEN tags->'state_capital' = 'yes' THEN true END) AS region_capital,
     NULL::integer AS mz_n_photos,
     NULL::bigint AS area,
-    NULL::smallint AS min_zoom,
+    mz_places_min_zoom AS min_zoom,
     NULL::smallint AS max_zoom,
     NULL::boolean AS is_landuse_aoi,
     %#tags AS tags
@@ -52,7 +55,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_places_min_zoom IS NOT NULL
 {% else %}
-    mz_places_min_zoom <= {{ zoom }}
+    mz_places_min_zoom < {{ zoom + 1 }}
 {% endif %}
     AND {{ bounds['point']|bbox_filter('way',3857) }}
 
@@ -67,10 +70,8 @@ SELECT
     wof_id AS __id__,
 
     NULL AS admin_level,
-    NULL AS scalerank,
-    NULL AS labelrank,
     NULL AS population,
-    NULL AS capital,
+    NULL AS country_capital,
     NULL AS region_capital,
     n_photos AS mz_n_photos,
     area::bigint AS area,
@@ -86,7 +87,7 @@ INNER JOIN wof_neighbourhood_placetype wof_np ON wof_n.placetype = wof_np.placet
 WHERE
   wof_n.is_visible AND
   {{ bounds['point']|bbox_filter('label_position',3857) }} AND
-  {{ zoom + 1 }} >= min_zoom AND
-  {{ zoom - 1 }} <= max_zoom
+  min_zoom < {{ zoom + 2 }} AND
+  max_zoom > {{ zoom - 2 }}
 
 {% endif %}

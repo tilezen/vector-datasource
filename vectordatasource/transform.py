@@ -1125,9 +1125,9 @@ def intracut(ctx):
 
 
 # place kinds, as used by OSM, mapped to their rough
-# scale_ranks so that we can provide a defaulted,
-# non-curated scale_rank / min_zoom value.
-_default_scalerank_for_place_kind = {
+# min_zoom so that we can provide a defaulted,
+# non-curated min_zoom value.
+_default_min_zoom_for_place_kind = {
     'locality': 13,
     'isolated_dwelling': 13,
     'farm': 13,
@@ -1154,13 +1154,12 @@ _default_scalerank_for_place_kind = {
 }
 
 
-# if the feature does not have a scale_rank attribute already,
+# if the feature does not have a min_zoom attribute already,
 # which would have come from a curated source, then calculate
 # a default one based on the kind of place it is.
-def calculate_default_place_scalerank(shape, properties, fid, zoom):
-    # don't override an existing attribute
-    scalerank = properties.get('scalerank')
-    if scalerank is not None:
+def calculate_default_place_min_zoom(shape, properties, fid, zoom):
+    min_zoom = properties.get('min_zoom')
+    if min_zoom is not None:
         return shape, properties, fid
 
     # base calculation off kind
@@ -1168,18 +1167,18 @@ def calculate_default_place_scalerank(shape, properties, fid, zoom):
     if kind is None:
         return shape, properties, fid
 
-    scalerank = _default_scalerank_for_place_kind.get(kind)
-    if scalerank is None:
+    min_zoom = _default_min_zoom_for_place_kind.get(kind)
+    if min_zoom is None:
         return shape, properties, fid
 
-    # adjust scalerank for state / country capitals
+    # adjust min_zoom for state / country capitals
     if kind in ('city', 'town'):
-        if properties.get('state_capital'):
-            scalerank -= 1
-        elif properties.get('capital'):
-            scalerank -= 2
+        if properties.get('region_capital'):
+            min_zoom -= 1
+        elif properties.get('country_capital'):
+            min_zoom -= 2
 
-    properties['scalerank'] = scalerank
+    properties['min_zoom'] = min_zoom
 
     return shape, properties, fid
 
@@ -1753,7 +1752,11 @@ def admin_boundaries(ctx):
     maritime_features = list()
     new_features = list()
 
-    for shape, props, fid in layer['features']:
+    # Sorting here so that we have consistent ordering of left/right side
+    # on boundaries.
+    sorted_layer = sorted(layer['features'], key=lambda f: f[1]['id'])
+
+    for shape, props, fid in sorted_layer:
         dims = _geom_dimensions(shape)
         kind = props.get('kind')
         maritime_boundary = props.get('maritime_boundary')
@@ -1778,6 +1781,7 @@ def admin_boundaries(ctx):
 
         for i, feature in enumerate(features):
             boundary, props, fid = feature
+            prop_id = props['id']
             envelope = envelopes[i]
 
             # intersect with *preceding* features to remove
@@ -1785,6 +1789,9 @@ def admin_boundaries(ctx):
             # are no duplicate parts.
             for j in range(0, i):
                 cut_shape, cut_props, cut_fid = features[j]
+                # don't intersect with self
+                if prop_id == cut_props['id']:
+                    continue
                 cut_envelope = envelopes[j]
                 if envelope.intersects(cut_envelope):
                     boundary = boundary.difference(cut_shape)
@@ -1797,6 +1804,9 @@ def admin_boundaries(ctx):
             # that we want to keep.
             for j in range(i+1, num_features):
                 cut_shape, cut_props, cut_fid = features[j]
+                # don't intersect with self
+                if prop_id == cut_props['id']:
+                    continue
                 cut_envelope = envelopes[j]
 
                 if envelope.intersects(cut_envelope):
@@ -1847,10 +1857,15 @@ def handle_label_placement(ctx):
     Converts a geometry label column into a separate feature.
     """
     layers = ctx.params.get('layers', None)
+    zoom = ctx.tile_coord.zoom
     location_property = ctx.params.get('location_property', None)
     label_property_name = ctx.params.get('label_property_name', None)
     label_property_value = ctx.params.get('label_property_value', None)
     label_where = ctx.params.get('label_where', None)
+    start_zoom = ctx.params.get('start_zoom', 0)
+
+    if zoom < start_zoom:
+        return None
 
     assert layers, 'handle_label_placement: Missing layers'
     assert location_property, \
@@ -2505,6 +2520,10 @@ def keep_n_features(ctx):
     This is done by counting each feature which matches _all_
     the key-value pairs in `items_matching` and, when the
     count is larger than `max_items`, dropping those features.
+
+    Only features which are within the unpadded bounds of the
+    tile are considered for keeping or dropping. Features
+    entirely outside the bounds of the tile are always kept.
     """
 
     feature_layers = ctx.feature_layers
@@ -2515,6 +2534,7 @@ def keep_n_features(ctx):
     end_zoom = ctx.params.get('end_zoom')
     items_matching = ctx.params.get('items_matching')
     max_items = ctx.params.get('max_items')
+    unpadded_bounds = Box(*ctx.unpadded_bounds)
 
     # leaving items_matching or max_items as None (or zero)
     # would mean that this filter would do nothing, so assume
@@ -2541,7 +2561,8 @@ def keep_n_features(ctx):
     for shape, props, fid in layer['features']:
         keep_feature = True
 
-        if _match_props(props, items_matching):
+        if _match_props(props, items_matching) and \
+           shape.intersects(unpadded_bounds):
             count += 1
             if count > max_items:
                 keep_feature = False
@@ -2555,10 +2576,15 @@ def keep_n_features(ctx):
 
 def rank_features(ctx):
     """
+    Assign a rank to features in `rank_key`.
+
     Enumerate the features matching `items_matching` and insert
     the rank as a property with the key `rank_key`. This is
     useful for the client, so that it can selectively display
     only the top features, or de-emphasise the later features.
+
+    Note that only features within in the unpadded bounds are ranked.
+    Features entirely outside the bounds of the tile are not modified.
     """
 
     feature_layers = ctx.feature_layers
@@ -2568,6 +2594,7 @@ def rank_features(ctx):
     start_zoom = ctx.params.get('start_zoom', 0)
     items_matching = ctx.params.get('items_matching')
     rank_key = ctx.params.get('rank_key')
+    unpadded_bounds_shp = Box(*ctx.unpadded_bounds)
 
     # leaving items_matching or rank_key as None would mean
     # that this filter would do nothing, so assume that this
@@ -2584,7 +2611,8 @@ def rank_features(ctx):
 
     count = 0
     for shape, props, fid in layer['features']:
-        if _match_props(props, items_matching):
+        if (_match_props(props, items_matching) and
+                unpadded_bounds_shp.intersects(shape)):
             count += 1
             props[rank_key] = count
 
@@ -2816,89 +2844,6 @@ def _thaw(thing):
     return thing
 
 
-def merge_features(ctx):
-    """
-    Merge (linear) features with the same properties together, attempting to
-    make the resulting geometry as large as possible. Note that this will
-    remove the IDs from any merged features.
-
-    At the moment, only merging for linear features is implemented, although
-    it would be possible to extend to other geometry types.
-    """
-
-    feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
-    source_layer = ctx.params.get('source_layer')
-    start_zoom = ctx.params.get('start_zoom', 0)
-    end_zoom = ctx.params.get('end_zoom')
-
-    assert source_layer, 'merge_features: missing source layer'
-
-    if zoom < start_zoom:
-        return None
-
-    if end_zoom is not None and zoom > end_zoom:
-        return None
-
-    layer = _find_layer(feature_layers, source_layer)
-    if layer is None:
-        return None
-
-    # a dictionary mapping the properties of a feature to a tuple of
-    # the feature IDs and a list of shapes. When we merge the
-    # features, they will lose their individual IDs, so only keep the
-    # first.
-    features_by_property = {}
-
-    # a list of all the features that we can't currently merge (at this time;
-    # points and polygons) which will be skipped by this procedure.
-    skipped_features = []
-
-    for shape, props, fid in layer['features']:
-        dims = _geom_dimensions(shape)
-        if dims != _LINE_DIMENSION:
-            skipped_features.append((shape, props, fid))
-            continue
-
-        # keep the 'id' property as well as the feature ID, as these are often
-        # distinct.
-        p_id = props.pop('id', None)
-
-        # because dicts are mutable and therefore not hashable, we have to
-        # transform their items into a frozenset instead.
-        frozen_props = _freeze(props)
-
-        if frozen_props in features_by_property:
-            features_by_property[frozen_props][2].append(shape)
-        else:
-            features_by_property[frozen_props] = (fid, p_id, [shape])
-
-    new_features = []
-    for frozen_props, (fid, p_id, shapes) in features_by_property.iteritems():
-        # we only have lines, so _linemerge is the best we can
-        # attempt. however, the `shapes` we're operating on may be
-        # linestrings, multi-linestrings or even empty, so the first
-        # thing to do is to flatten them into a single geometry.
-        list_of_linestrings = []
-        for shape in shapes:
-            list_of_linestrings.extend(_flatten_geoms(shape))
-        multi = MultiLineString(list_of_linestrings)
-
-        # thaw the frozen properties to use in the new feature.
-        props = _thaw(frozen_props)
-
-        # restore any 'id' property.
-        if p_id is not None:
-            props['id'] = p_id
-
-        new_features.append((_linemerge(multi), props, fid))
-
-    new_features.extend(skipped_features)
-    layer['features'] = new_features
-
-    return layer
-
-
 def quantize_val(val, step):
     result = int(step * round(val / float(step)))
     return result
@@ -2916,27 +2861,53 @@ def quantize_height_round_nearest_meter(height):
     return round(height)
 
 
-def _merge_features_by_property(features, drop_props_fn=None,
-                                update_merged_props_fn=None):
+def _merge_lines(linestring_shapes):
+    list_of_linestrings = []
+    for shape in linestring_shapes:
+        list_of_linestrings.extend(_flatten_geoms(shape))
+    multi = MultiLineString(list_of_linestrings)
+    result = _linemerge(multi)
+    return result
+
+
+def _merge_polygons(polygon_shapes):
+    list_of_polys = []
+    for shape in polygon_shapes:
+        list_of_polys.extend(_flatten_geoms(shape))
+    result = shapely.ops.unary_union(list_of_polys)
+    return result
+
+
+def _merge_features_by_property(
+        features, geom_dim,
+        update_props_pre_fn=None,
+        update_props_post_fn=None):
+
+    assert geom_dim in (_POLYGON_DIMENSION, _LINE_DIMENSION)
+    if geom_dim == _LINE_DIMENSION:
+        _merge_shape_fn = _merge_lines
+    else:
+        _merge_shape_fn = _merge_polygons
+
     features_by_property = {}
     skipped_features = []
     for feature in features:
         shape, props, fid = feature
-        dims = _geom_dimensions(shape)
-        if dims != _POLYGON_DIMENSION:
+        shape_dim = _geom_dimensions(shape)
+        if shape_dim != geom_dim:
             skipped_features.append(feature)
             continue
 
         orig_props = props.copy()
         p_id = props.pop('id', None)
-        if drop_props_fn:
-            props = drop_props_fn(props)
+        if update_props_pre_fn:
+            props = update_props_pre_fn((shape, props, fid))
 
         if props is None:
-            skipped_features.append(feature)
+            skipped_features.append((shape, orig_props, fid))
             continue
 
-        frozen_props = frozenset(props.items())
+        frozen_props = _freeze(props)
         if frozen_props in features_by_property:
             features_by_property[frozen_props][-1].append(shape)
         else:
@@ -2952,20 +2923,13 @@ def _merge_features_by_property(features, drop_props_fn=None,
             new_features.append((shapes[0], orig_props, fid))
             continue
 
-        list_of_polys = []
-        for shape in shapes:
-            list_of_polys.extend(_flatten_geoms(shape))
-
-        merged_shape = shapely.ops.unary_union(list_of_polys)
+        merged_shape = _merge_shape_fn(shapes)
 
         # thaw the frozen properties to use in the new feature.
-        props = dict(frozen_props)
+        props = _thaw(frozen_props)
 
-        if p_id is not None:
-            props['id'] = p_id
-
-        if update_merged_props_fn:
-            props = update_merged_props_fn(merged_shape, props)
+        if update_props_post_fn:
+            props = update_props_post_fn((merged_shape, props, fid))
 
         new_features.append((merged_shape, props, fid))
 
@@ -2998,7 +2962,7 @@ def merge_building_features(ctx):
         if quantize_fn_dotted_name:
             quantize_height_fn = resolve(quantize_fn_dotted_name)
 
-    def _drop_props(props):
+    def _props_pre((shape, props, fid)):
         if exclusions:
             for prop in exclusions:
                 if prop in props:
@@ -3020,7 +2984,7 @@ def merge_building_features(ctx):
 
         return props
 
-    def _update_merged_props(merged_shape, props):
+    def _props_post((merged_shape, props, fid)):
         # add the area and volume back in
         area = int(merged_shape.area)
         props['area'] = area
@@ -3030,7 +2994,7 @@ def merge_building_features(ctx):
         return props
 
     layer['features'] = _merge_features_by_property(
-        layer['features'], _drop_props, _update_merged_props)
+        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post)
     return layer
 
 
@@ -3058,19 +3022,45 @@ def merge_polygon_features(ctx):
     if end_zoom is not None and zoom > end_zoom:
         return None
 
-    def _drop_props(props):
+    def _props_pre((shape, props, fid)):
         # drop area while merging, as we'll recalculate after.
         props.pop('area', None)
         return props
 
-    def _update_merged_props(merged_shape, props):
+    def _props_post((merged_shape, props, fid)):
         # add the area back in
         area = int(merged_shape.area)
         props['area'] = area
         return props
 
     layer['features'] = _merge_features_by_property(
-        layer['features'], _drop_props, _update_merged_props)
+        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post)
+    return layer
+
+
+def merge_line_features(ctx):
+    """
+    Merge linestrings having the same properties, in the source_layer
+    between start_zoom and end_zoom inclusive.
+    """
+
+    zoom = ctx.tile_coord.zoom
+    source_layer = ctx.params.get('source_layer')
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+
+    assert source_layer, 'merge_line_features: missing source layer'
+    layer = _find_layer(ctx.feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom > end_zoom:
+        return None
+
+    layer['features'] = _merge_features_by_property(
+        layer['features'], _LINE_DIMENSION)
     return layer
 
 
@@ -3788,7 +3778,7 @@ def normalize_operator_values(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
-def network_importance(route_type, network, ref):
+def _network_importance(network, ref):
     """
     Returns an integer representing the numeric importance of the network,
     where lower numbers are more important.
@@ -3815,17 +3805,68 @@ def network_importance(route_type, network, ref):
         network_code = len(network.split(':')) + 3
 
     try:
-        ref = max(int(ref), 0)
+        ref = max(int(ref or 0), 0)
     except ValueError:
         ref = 0
 
     return network_code * 10000 + min(ref, 9999)
 
 
-def choose_most_important_network(shape, properties, fid, zoom):
+_NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
+_LETTER_THEN_NUMBERS = re.compile('^[^\d\s_]+[ -]?([^\s]+)',
+                                  re.UNICODE | re.IGNORECASE)
+_UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
+                                re.UNICODE | re.IGNORECASE)
+
+
+def _shield_text(network, ref):
     """
-    Use the `network_importance` function to select any road networks from
-    `mz_networks` and take the most important one.
+    Try to extract the string that should be displayed within the road shield,
+    based on the raw ref and the network value.
+    """
+
+    if ref is None:
+        return None
+
+    # FI-PI-LI is just a special case?
+    if ref == 'FI-PI-LI':
+        return ref
+
+    # These "belt" roads have names in the ref which should be in the shield,
+    # there's no number.
+    if network == 'US:PA:Belt':
+        return ref
+
+    # Ukranian roads sometimes have internal dashes which should be removed.
+    if network.startswith('ua:'):
+        m = _UA_TERRITORIAL_RE.match(ref)
+        if m:
+            return m.group(1) + m.group(2) + m.group(3)
+
+    # Greek roads sometimes have alphabetic prefixes which we should _keep_,
+    # unlike for other roads.
+    if network.startswith('GR:') or network.startswith('gr:'):
+        return ref
+
+    # If there's a number at the front (optionally with letters following),
+    # then that's the ref.
+    m = _NUMBER_AT_FRONT.match(ref)
+    if m:
+        return m.group(1)
+
+    # Otherwise, try to match a bunch of letters followed by a number.
+    m = _LETTER_THEN_NUMBERS.match(ref)
+    if m:
+        return m.group(1)
+
+    # Failing that, give up and just return the ref as-is.
+    return ref
+
+
+def extract_network_information(shape, properties, fid, zoom):
+    """
+    Take the triples of (route_type, network, ref) from `mz_networks` and
+    extract them into two arrays of network and shield_text information.
     """
 
     networks = properties.pop('mz_networks', None)
@@ -3837,19 +3878,39 @@ def choose_most_important_network(shape, properties, fid, zoom):
         triples = [t for t in triples if t[0] == 'road']
 
         if len(triples) > 0:
-            def network_key(t):
-                return network_importance(*t)
+            # expose network / shield text pairs
+            properties['all_networks'] = [n[1] for n in triples]
+            shield_texts = list()
+            for road, network, ref in triples:
+                shield_texts.append(_shield_text(network, ref))
+            properties['all_shield_texts'] = shield_texts
 
-            networks = sorted(triples, key=network_key)
+    return (shape, properties, fid)
 
-            # expose first network as network/shield_text
-            route_type, network, ref = networks[0]
-            properties['network'] = network
-            properties['shield_text'] = ref
 
-            # expose all networks as well.
-            properties['all_networks'] = [n[1] for n in networks]
-            properties['all_shield_texts'] = [n[2] for n in networks]
+def choose_most_important_network(shape, properties, fid, zoom):
+    """
+    Use the `_network_importance` function to select any road networks from
+    `all_networks` and `all_shield_texts`, taking the most important one.
+    """
+
+    networks = properties.pop('all_networks', None)
+    shield_texts = properties.pop('all_shield_texts', None)
+
+    if networks and shield_texts:
+        def network_key(t):
+            return _network_importance(*t)
+
+        tuples = sorted(zip(networks, shield_texts), key=network_key)
+
+        # expose first network as network/shield_text
+        network, ref = tuples[0]
+        properties['network'] = network
+        properties['shield_text'] = ref
+
+        # replace properties with sorted versions of themselves
+        properties['all_networks'] = [n[0] for n in tuples]
+        properties['all_shield_texts'] = [n[1] for n in tuples]
 
     return (shape, properties, fid)
 
@@ -3915,3 +3976,15 @@ def buildings_unify(ctx):
 
         if root_building_id is not None:
             part_props['root_id'] = root_building_id
+
+
+def truncate_min_zoom_to_2dp(shape, properties, fid, zoom):
+    """
+    Truncate the "min_zoom" property to two decimal places.
+    """
+
+    min_zoom = properties.get('min_zoom')
+    if min_zoom:
+        properties['min_zoom'] = round(min_zoom, 2)
+
+    return shape, properties, fid

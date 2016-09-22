@@ -2,6 +2,7 @@
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
@@ -23,7 +24,7 @@ FROM ne_10m_ocean t
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -41,7 +42,7 @@ FROM ne_10m_lakes t
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -51,9 +52,10 @@ SELECT
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
+    NULL AS mz_label_placement,
     NULL::boolean AS label_placement,
     true AS boundary
 
@@ -67,7 +69,7 @@ FROM
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -77,6 +79,7 @@ SELECT
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
@@ -93,7 +96,7 @@ FROM
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 {% if 4 <= zoom < 9 %}
@@ -110,7 +113,7 @@ FROM ne_10m_playas t
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
@@ -120,6 +123,7 @@ SELECT
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'naturalearthdata.com' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
@@ -134,7 +138,7 @@ FROM
 {% endif %}
 
 WHERE
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['line']|bbox_filter('the_geom',3857) }}
 
 {% endif %}
@@ -145,6 +149,7 @@ SELECT
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmapdata.com' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
@@ -163,6 +168,7 @@ SELECT
     way_area::bigint AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
@@ -176,7 +182,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_water_min_zoom IS NOT NULL AND
 {% else %}
-    mz_water_min_zoom <= {{ zoom }} AND
+    mz_water_min_zoom < {{ zoom + 1 }} AND
 {% endif %}
     {{ bounds['polygon']|bbox_filter('way',3857) }}
 
@@ -187,6 +193,7 @@ SELECT
     NULL AS area,
     mz_calculate_json_water(t.*) AS mz_properties,
     'openstreetmap.org' AS source,
+    mz_water_min_zoom as min_zoom,
     {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
@@ -200,7 +207,7 @@ WHERE
 {% if zoom >= 16 %}
     mz_water_min_zoom IS NOT NULL AND
 {% else %}
-    mz_water_min_zoom <= {{ zoom }} AND
+    mz_water_min_zoom < {{ zoom + 1 }} AND
 {% endif %}
     {{ bounds['line']|bbox_filter('way',3857) }}
 
@@ -213,6 +220,7 @@ SELECT
   NULL AS area,
   mz_calculate_json_water(t.*) AS mz_properties,
   'openstreetmap.org' AS source,
+  mz_water_min_zoom as min_zoom,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
   NULL AS mz_label_placement,
@@ -231,6 +239,6 @@ WHERE
 {% if zoom >= 16 %}
   mz_water_min_zoom IS NOT NULL AND
 {% else %}
-  mz_water_min_zoom <= {{ zoom }} AND
+  mz_water_min_zoom < {{ zoom + 1 }} AND
 {% endif %}
   {{ bounds['point']|bbox_filter('way',3857) }}

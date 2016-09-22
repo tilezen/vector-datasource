@@ -1,0 +1,16 @@
+kind,boundary,sort_rank
+river,,201
+canal,,201
+stream,,201
+dam,,201
+ditch,,201
+drain,,201
+playa,,203
+lake,,204
+water,,204
+riverbank,,204
+reservoir,,204
+swimming_pool,,206
+ocean,true,205
+*,true,367
+*,*,200

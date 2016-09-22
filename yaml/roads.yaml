@@ -42,7 +42,9 @@ global:
       crossing:
         expr: |
           CASE WHEN tags->'crossing' <> 'no' THEN tags->'crossing' END
-      sidewalk: {col: tags->sidewalk}
+      sidewalk: {col: sidewalk}
+      sidewalk_left: {col: 'sidewalk:left'}
+      sidewalk_right: {col: 'sidewalk:right'}
   - &osm_network_from_relation
       mz_networks: {expr: "mz_get_rel_networks(osm_id)"}
   - &osm_network_from_tags
@@ -82,11 +84,26 @@ global:
       trail_visibility: {col: tags->trail_visibility}
       sac_scale: {col: tags->sac_scale}
   - &ne_properties
-      name: {col: name}
-      namealt: {col: namealt}
-      namealtt: {col: namealtt}
-      labelrank: {col: labelrank}
-      level: {col: level}
+      ref: {col: name}
+      mz_networks:
+        expr: |
+          CASE WHEN sov_a3 = 'CAN' AND level IN ('Federal', 'Interstate', 'State')
+                    THEN ARRAY['road', 'CA:??:primary', name]
+               WHEN sov_a3 = 'MEX' AND level = 'Interstate'
+                    THEN ARRAY['road', 'MX', name]
+               WHEN sov_a3 = 'MEX' AND level = 'Federal'
+                    THEN ARRAY['road', 'MX:MX', name]
+               WHEN sov_a3 = 'USA' AND level = 'Interstate'
+                    THEN ARRAY['road', 'US:I', name]
+               WHEN sov_a3 = 'USA' AND level = 'Federal'
+                    THEN ARRAY['road', 'US:US', name]
+               WHEN continent = 'Oceania' AND level = 'Federal'
+                    THEN ARRAY['road', 'NZ:SH', trim(leading 'SH' from label)]
+               WHEN continent IN ('Europe', 'Asia') AND level = 'E'
+                    THEN ARRAY['road', 'e-road', name]
+               ELSE NULL
+          END
+        columns: [ sov_a3, continent, label, level ]
 
 # name isn't really synthetic, but we use it from both the NE and OSM
 # tables, so to avoid including it twice we fake it as synthetic.
