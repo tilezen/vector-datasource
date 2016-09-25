@@ -4,6 +4,19 @@ v1.0.0-pre3
 * **Release date**: 2016-09-16 (dev build only as public preview)
 * **Requires:** [tileserver v0.8.0-pre2](https://github.com/mapzen/tileserver/releases/tag/v0.8.0-pre2) and [tilequeue v0.11.0-pre2](https://github.com/mapzen/tilequeue/releases/tag/v0.11.0-pre2) and [mapbox-vector-tile v0.5.0](https://pypi.python.org/pypi/mapbox-vector-tile/0.5.0).
 
+---
+
+* **Developer preview URLs:** API endpoints have generalized for multiple tile sets, accounts, and versions:
+    * **GeoJSON:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json
+    * **TopoJSON:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
+    * **Mapbox Vector Tile:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+* **Production URLs will be (not yet live):** 
+    * **GeoJSON:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json
+    * **TopoJSON:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
+    * **Mapbox Vector Tile:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+
+---
+
 * Removed "not equals" YAML rule, which can be expressed using the other "equals" and "not" operators. [PR #1044](https://github.com/tilezen/vector-datasource/pull/1044).
 * **BREAKING** Rename `sort_key` to `sort_rank`. [PR #1049](https://github.com/tilezen/vector-datasource/pull/1049).
 * **BREAKING** Add `/mapzen` prefix to tilejson tiles URL. [PR #1047](https://github.com/tilezen/vector-datasource/pull/1047).
