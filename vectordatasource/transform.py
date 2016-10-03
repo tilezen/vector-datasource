@@ -338,6 +338,7 @@ tag_name_alternates = (
     'short_name',
     'name_left',
     'name_right',
+    'name:short',
 )
 
 
