@@ -195,7 +195,7 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 
 #### Building footprint and label placement `kind_detail` values:
 
-`abandoned`
+* `abandoned`
 * `administrative`
 * `agricultural`
 * `airport`
