@@ -32,7 +32,7 @@ tiles = [
     ['18/42119/101622', {'kind': 'assisted_living'}],
 
     # amenity={clinic, doctors, dentist}
-    # also with healthcare:specialty -> specialty and turned into a list to make
+    # also with healthcare:speciality -> speciality and turned into a list to make
     # it easier to consume.
     #https://www.openstreetmap.org/node/417237471
     #https://www.openstreetmap.org/way/261102266
@@ -43,7 +43,7 @@ tiles = [
     ['17/20965/50666', {'kind': 'clinic'}],
     ['18/41923/101349', {'kind': 'doctors'}],
     ['18/41923/101350', {'kind': 'dentist'}],
-    ['17/21066/45789', {'kind': 'doctors', 'specialty': ['general']}],
+    ['17/21066/45789', {'kind': 'doctors', 'speciality': ['general']}],
 ]
 
 for loc, props in tiles:

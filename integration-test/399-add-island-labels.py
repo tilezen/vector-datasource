@@ -164,7 +164,7 @@ assert_has_feature(
 # Sugarloaf Island, west of SF
 # 15, 5188, 12673
 assert_has_feature(
-    15, 5187, 12673, 'earth',
+    15, 5188, 12673, 'earth',
     { 'kind': 'islet', 'label_placement': True, 'name': 'Sugarloaf Island' })
 
 # MEDIUM islet labels (from place polygons)
