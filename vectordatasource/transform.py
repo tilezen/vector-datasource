@@ -3202,8 +3202,8 @@ def normalize_social_kind(shape, properties, fid, zoom):
 
 def normalize_medical_kind(shape, properties, fid, zoom):
     """
-    Many medical practices, such as doctors and dentists, have a specialty,
-    which is indicated through the `healthcare:specialty` tag. This is a
+    Many medical practices, such as doctors and dentists, have a speciality,
+    which is indicated through the `healthcare:speciality` tag. This is a
     semi-colon delimited list, so we expand it to an actual list.
     """
 
@@ -3211,9 +3211,9 @@ def normalize_medical_kind(shape, properties, fid, zoom):
     if kind in ['clinic', 'doctors', 'dentist']:
         tags = properties.get('tags', {})
         if tags:
-            specialty = tags.get('healthcare:specialty')
-            if specialty:
-                properties['specialty'] = specialty.split(';')
+            speciality = tags.get('healthcare:speciality')
+            if speciality:
+                properties['speciality'] = speciality.split(';')
 
     return (shape, properties, fid)
 
