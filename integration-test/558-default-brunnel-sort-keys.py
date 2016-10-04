@@ -16,12 +16,6 @@ assert_has_feature(
     {"kind": "path", "kind_detail": "cycleway", "id": 8915047,
      "sort_rank": 404})
 
-#https://www.openstreetmap.org/way/107526288
-assert_has_feature(
-    18, 45203, 104883, "roads",
-    {"kind": "path", "kind_detail": "pedestrian", "id": 107526288,
-     "sort_rank": 404})
-
 #https://www.openstreetmap.org/way/109938341
 assert_has_feature(
     18, 45204, 104883, "roads",
