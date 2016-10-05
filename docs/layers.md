@@ -14,11 +14,43 @@ Need help displaying vector tiles in a map? We have several [examples](display-t
 
 Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](attribution.md) in your project.
 
+#### Feature names
+
+Most Mapzen vector tile features include a basic name property (`common`):
+
+* `name` - Generally the name the locals call the feature, in the local script.
+
+We support several additional name related properties (`optional`):
+
+* `alt_name`
+* `int_name`
+* `loc_name`
+* `name:short` - For example: `CA` for California.
+* `name_left`
+* `name_right`
+* `nat_name`
+* `official_name`
+* `old_name`
+* `reg_name`
+* `short_name`
+
 #### Name localization
 
-Mapzen vector tile features include the default `name` property. We include all language variants of the `name:*`, `alt_name:*`, `alt_name_`, `old_name:*` values to enable full internationalization (when different than `name`). Tangram supports all language scripts. Language variants are identified by an ISO 639-1 two-letter language code and optional country, for example `en_GB` for British English.
+We include all language variants of the `name:*` values to enable full internationalization (when different than `name`).
 
-For features in the `boundaries` layer, we support two additional variants `left:name:*` and `right:name:*` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
+Language variants are identified by an ISO 639-1 two-letter language code and optional country, for example `en_GB` for British English. Mapzen house styles designed in Tangram support displaying all language scripts.
+
+We additionally localize `alt_name:*` and `old_name:*` properties for features across all layers.
+
+For features in the `boundaries` layer, we support two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
+
+**Localized name properties** (`common-optional`)**:**
+
+* `name:*`
+* `alt_name:*`
+* `old_name:*`
+* `name:left:*`
+* `name:right:*`
 
 #### Geometry types
 
@@ -60,11 +92,13 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 #### Changelog
 
-The current version of Mapzen vector tiles is **v0.10.0**. Our tiles are still in active development, but we try to minimize backwards incompatable breaking changes. We're also interested in your feedback at hello@mapzen.com!
+The current version of Mapzen vector tiles is **v1.0.0**.
 
-If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production.
+Our tiles are still in active development, but we promise to minimize backwards incompatable breaking changes. We list data model promises in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/v1.0.0/SEMANTIC-VERSIONING.md) statement.
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v0.10.0/CHANGELOG.md).
+If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. We're also interested in your feedback at hello@mapzen.com!
+
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.0.0/CHANGELOG.md).
 
 #### Feature ordering
 
