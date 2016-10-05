@@ -694,6 +694,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `administrative`
 * `advertising_agency`
 * `aerodrome`
+* `aeroway_gate`
 * `airport`
 * `alcohol`
 * `alpine_hut`
