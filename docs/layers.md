@@ -143,13 +143,13 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 * `name`
 * `id`
-* `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes raw Natural Earth values.
+* `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes normalized Natural Earth values.
+* `kind_detail`: mapping of OpenStreetMap's `admin_level` values. `2` for countries, `4` for regions, and `6`, `8` (zoom 10+)
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap.
 
 #### Boundaries properties (common optional):
 
-* `admin_level`: values of `2` for countries, `4` for states (zoom 8+), and `6`, `8` (zoom 10+)
 * `id:left`: For the relation on the left side of the boundary line.
 * `id:right`: For the relation on the right side of the boundary line.
 * `name:left`: See name section above, other variants like `old_name` also supported.
