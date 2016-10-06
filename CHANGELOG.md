@@ -1,3 +1,22 @@
+v1.0.0
+------
+* **Release date**: 2016-10-04
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.0](https://github.com/mapzen/tilequeue/releases/tag/v1.0.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* Guard against intersecting with same ids during admin boundary processing.
+* Rank only features within the unpadded bounds of the tile. Drop unranked features within the unpadded bounds.
+* Drop linear boundaries (preferring relation boundaries only), as linear boundaries break the admin boundary processing code.
+* Add pyclipper dependency to requirements.
+* Include name:short as a tag name alternate.
+* Fixed bug to restore some missing low-zoom region boundary lines.
+* Fixed bug to fully enable new map_unit boundary lines at low-zooms.
+* Low-zoom boundary lines now have custom min_zoom values.
+* All features in place layer now have custom min_zoom values.
+* Update data query to adapt to upstream OpenStreetMap healthcare speciality bulk edit.
+* Fixed typo for protction_title to protection_title for National Forest features in pois layers.
+* [docs] Cleanup docs generally, clarify relationship between pois and landuse layers, and remove promise about tier property (which will probably be deprecated).
+* [docs] Migrate docs to reference generic Mapzen API keys.
+
+
 v1.0.0-pre3
 -------
 
