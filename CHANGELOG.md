@@ -1,7 +1,20 @@
 v1.0.0
 ------
-* **Release date**: 2016-10-04
+* **Release date**: 2016-10-04. _Live on prod 2016-10-13._
 * **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.0](https://github.com/mapzen/tilequeue/releases/tag/v1.0.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+
+---
+
+* **New production URLs:**
+    * **GeoJSON:**
+      `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json?api_key=mapzen-xxxxxxx`
+    * **TopoJSON:**
+      `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson?api_key=mapzen-xxxxxxx`
+    * **Mapbox Vector Tile:**
+      `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt?api_key=mapzen-xxxxxxx`
+
+---
+
 * Guard against intersecting with same ids during admin boundary processing.
 * Rank only features within the unpadded bounds of the tile. Drop unranked features within the unpadded bounds.
 * Drop linear boundaries (preferring relation boundaries only), as linear boundaries break the admin boundary processing code.
@@ -29,7 +42,7 @@ v1.0.0-pre3
     * **GeoJSON:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json
     * **TopoJSON:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
     * **Mapbox Vector Tile:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
-* **Production URLs will be (not yet live):** 
+* **Production URLs will be (not yet live):**
     * **GeoJSON:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json
     * **TopoJSON:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
     * **Mapbox Vector Tile:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
