@@ -25,7 +25,7 @@ We support several additional name related properties (`optional`):
 * `alt_name`
 * `int_name`
 * `loc_name`
-* `name:short` - For example: `CA` for California.
+* `name:short` - For example: `CA` for California. _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102) and see planned bug fix [#1094](https://github.com/tilezen/vector-datasource/issues/1094) for abbreviated names._
 * `name_left`
 * `name_right`
 * `nat_name`
@@ -38,19 +38,19 @@ We support several additional name related properties (`optional`):
 
 We include all language variants of the `name:*` values to enable full internationalization (when different than `name`).
 
-Language variants are identified by an ISO 639-1 two-letter language code and optional country, for example `en_GB` for British English. Mapzen house styles designed in Tangram support displaying all language scripts.
+Language variants are identified by an ISO 639-1 two-letter language code and optional country code, for example `en` for English and less commonly `en_GB` for British English. Mapzen [house styles](https://mapzen.com/products/maps/) designed in Tangram support displaying all language scripts.
 
 We additionally localize `alt_name:*` and `old_name:*` properties for features across all layers.
 
-For features in the `boundaries` layer, we support two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently).
+For features in the `boundaries` layer, we support two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently). _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 
 **Localized name properties** (`common-optional`)**:**
 
 * `name:*`
 * `alt_name:*`
 * `old_name:*`
-* `name:left:*`
-* `name:right:*`
+* `name:left:*` _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
+* `name:right:*` _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 
 #### Geometry types
 
@@ -145,16 +145,17 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `id`
 * `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes normalized Natural Earth values.
 * `kind_detail`: mapping of OpenStreetMap's `admin_level` values. `2` for countries, `4` for regions, and `6`, `8` (zoom 10+)
+* `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
-* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap.
+* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap, a float.
 
 #### Boundaries properties (common optional):
 
 * `id:left`: For the relation on the left side of the boundary line.
 * `id:right`: For the relation on the right side of the boundary line.
-* `name:left`: See name section above, other variants like `old_name` also supported.
-* `name:right`: See name section above, other variants like `old_name` also supported.
-* `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
+* `name:left`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
+* `name:right`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
+* `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean. _See planned data improvement in [#294](https://github.com/tilezen/vector-datasource/issues/294)._
 
 #### Boundaries properties (optional):
 
@@ -170,9 +171,9 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `indeterminate`
 * `lease_limit`
 * `line_of_control`
+* `locality`
 * `macroregion`
 * `map_unit`
-* `municipality`
 * `overlay_limit`
 * `region`
 
@@ -189,7 +190,7 @@ Individual `building_part` geometries from OpenStreetMap following the [Simple 3
 
 Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
-Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms.
+Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms. _See related bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 
 Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for building footprints and from `building:part` tag for building parts.
 
@@ -202,24 +203,24 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 * `source`: `openstreetmap.org`
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggested minimum zoom at which the building should become visible based on area and volume limits.
 
 #### Building properties (common optional):
 
 * `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
 * `addr_street`: value from OpenStreetMap's `addr:street` tag
-* `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
+* `area`: in square meters (spherical Mercator, no real-world), `polygon` features only. _See planned bug fix in [#1095](https://github.com/tilezen/vector-datasource/issues/1095)._
 * `height`: in meters, where available
 * `layer`
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
 * `min_height`: value from `min_height` in meters, where available, otherwise estimated from `building:min_levels` if present
-* `min_zoom`: a suggested minimum zoom at which the building should become visible based on area and volume limits. This is only present on buildings in tiles at zoom 16 and below.
 * `roof_color`: from `roof:color` tag
 * `roof_height`: from `roof:height` tag
 * `roof_material`: from `roof:material` tag
 * `roof_orientation`: from `roof:orientation` tag
 * `roof_shape`: from `roof:shape` tag
 * `scale_rank`: calculation of a feature's importance
-* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available
+* `volume`: calculated on feature's `area` and `height`, when `height` or `min_height` is available. _See planned bug fix in [#1095](https://github.com/tilezen/vector-datasource/issues/1095)._
 
 #### Building layer `kind` values:
 
@@ -255,7 +256,7 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 * `church`
 * `civic`
 * `clinic`
-* `closed`
+* `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `clubhouse`
 * `collapsed`
 * `college`
@@ -287,7 +288,7 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 * `hangar`
 * `healthcare`
 * `hermitage`
-* `historical`
+* `historical`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `hospital`
 * `hotel`
 * `house`
@@ -394,26 +395,24 @@ _Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
 
 **Earth properties:**
 
-* `id`: osm_id **or** funky value when from Natural Earth or OpenStreetMapData.com
+* `name`: generally only for lines or label placement points
+* `id`: The `osm_id` **or** funky value when from Natural Earth or OpenStreetMapData.com
 * `kind`: either `earth` or "natural" value from OSM tag.
+* `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float. _See planned bug fix in [#1073](https://github.com/tilezen/vector-datasource/issues/1073)._
 
 #### Earth `kind` values:
 
-* `arete`
-* `cliff`
-* `earth`
-* `ridge`
-* `valley`
-
-#### Earth `kind` values (point only):
-
-These are intended for label placement, and are included as points only.
-
-* `archipelago`
-* `island`
-* `islet`
-
+* `archipelago` - point, intended for label placement only
+* `arete` - line
+* `cliff` - line, intended for label placement only
+* `continent` - point, intended for label placement only
+* `earth` - polygon
+* `island` - point, intended for label placement only
+* `islet` - point, intended for label placement only
+* `ridge` - line, intended for label placement only
+* `valley` - line, intended for label placement only
 
 ## Landuse
 
@@ -437,10 +436,12 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 #### Landuse properties (common):
 
 * `name`
-* `id`: osm_id
+* `id`: From OpenStreetMap or Natural Earth. Dropped at low- and mid-zooms when features are merged. _See planned bug fix [#1033](https://github.com/tilezen/vector-datasource/issues/1033)._
 * `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), `fence` (zoom 16+ only) and `gate` (zoom 16+ only).
+* `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
+* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
 
 #### Landuse properties (common optional):
 
@@ -472,7 +473,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `commercial`
 * `common`
 * `cutline`
-* `dam`
+* `dam` - polygon, line
 * `dike`
 * `dog_park`
 * `enclosure`
@@ -502,6 +503,9 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `military`
 * `national_park`
 * `nature_reserve`
+* `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
+* `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
+* `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `park`
 * `parking`
 * `pedestrian`
@@ -569,7 +573,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 Combination of OpenStreetMap `place` points, Natural Earth populated places, and Who's On First neighbourhoods.
 
-Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `region` and starting at zoom 8 for `locality`. Specific `locality` types are added to the `kind_detail` tag.
+Places with `kind` values of `continent`, `country`, with others added starting at zoom 4 for `region` and starting at zoom 8 for `locality`. Specific `locality` and `region` types are added to the `kind_detail` tag.
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
@@ -579,15 +583,15 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place properties (common):
 
 * `name`
-* `id`: osm_id from OpenStreetMap or Natural Earth id
+* `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
-* `population`: population integer values from OpenStreetMap or Natural Earth (`pop_max`)
-* `source`: `openstreetmap` or `naturalearthdata.com`
+* `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
+* `source`: `openstreetmap`, `naturalearthdata.com`, or  `whosonfirst.mapzen.com`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
 #### Place properties (common optional):
 
-* `capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
+* `country_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
 * `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
 * `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
@@ -596,7 +600,6 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place `kind` values:
 
 * `borough`
-* `continent`
 * `country`
 * `locality`
 * `macrohood`
@@ -604,14 +607,15 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `neighbourhood`
 * `region`
 
-#### Place kind_detail values:
+#### Place `kind_detail` values:
+
+Primarily these are available for features of kind `locality` or `region`.
 
 * `city`
 * `farm`
 * `hamlet`
 * `isolated_dwelling`
 * `locality`
-* `neighbourhood`
 * `province`
 * `scientific_station`
 * `state`
@@ -638,20 +642,18 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 #### POI properties (common):
 
 * `name`
-* `id`: osm_id
+* `id`
 * `source`: `openstreetmap.org`
 * `kind`: combination of the `aerialway`, `aeroway`, `amenity`, `attraction`, `barrier`, `craft`, `highway`, `historic`, `leisure`, `lock`, `man_made`, `natural`, `office`, `power`, `railway`, `rental`, `shop`, `tourism`, `waterway`, and `zoo` tags. Can also be one of `closed` or `historical` if the original feature was parenthetically commented as closed or historical.
 * `min_zoom`: a suggested minimum zoom at which the POI should become visible. Note that this is not an integer, and may contain fractional parts.
 
 #### POI properties (common optional):
 
-* `aeroway`:
+* `kind_detail`: cuisine, sport
 * `attraction`:
-* `cuisine`:
 * `exit_to`: only for highway exits
-* `ref`: generally only for `gate` and `station_entrance` features
+* `ref`: generally only for `aeroway_gate` and `station_entrance` features
 * `religion`:
-* `sport`:
 * `zoo`:
 
 #### POI properties (only on `kind:station`):
@@ -704,7 +706,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `aquarium`
 * `archaeological_site`
 * `architect`
-* `are_home`
 * `artwork`
 * `assisted_living`
 * `association`
@@ -737,12 +738,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bus_station`
 * `bus_stop`
 * `butcher`
-* `cafe`
+* `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `camp_site`
 * `car_repair`
 * `car_sharing`
 * `car`
 * `caravan_site`
+* `care_home`
 * `carousel`
 * `carpenter`
 * `cave_entrance`
@@ -752,7 +754,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `childrens_centre`
 * `cinema`
 * `clinic`
-* `closed`
+* `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `clothes`
 * `club`
 * `college`
@@ -786,14 +788,14 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `embassy`
 * `emergency_phone`
 * `employment_agency`
-* `enclosure`
+* `enclosure` - at a zoo
 * `estate_agent`
 * `fashion`
 * `fast_food`
 * `farm`
 * `ferry_terminal`
 * `financial`
-* `fire_station`
+* `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `firepit`
 * `fishing`
 * `fishing_area`
@@ -807,9 +809,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `gallery` - An art gallery.
-* `garden`
+* `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
-* `gas` - Shop selling bottled gas for cooking. Some offer gas canister refills.
+* `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate`
 * `generator`
 * `geyser`
@@ -827,14 +829,14 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hazard`
 * `healthcare`
 * `helipad`
-* `historical`
+* `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `hospital`
 * `hostel`
 * `hot_spring`
 * `hotel`
 * `hunting`
 * `hvac`
-* `ice_cream`
+* `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `information`
 * `insurance`
 * `it`
@@ -868,19 +870,21 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `museum`
 * `music`
 * `national_park`
+* `natural_forest` - _See planned bug fixes in [#1103](https://github.com/tilezen/vector-datasource/issues/1103)._
+* `natural_wood` - _See planned bug fixes in [#1103](https://github.com/tilezen/vector-datasource/issues/1103)._
 * `nature_reserve`
 * `newspaper`
 * `ngo`
 * `notary`
-* `nursing_home`
+* `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `observatory`
 * `offshore_platform`
 * `optician`
 * `outdoor`
 * `outreach`
 * `painter`
-* `park`
-* `parking`
+* `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
+* `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `pet`
 * `petroleum_well`
@@ -893,11 +897,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `picnic_site`
 * `picnic_table`
 * `pitch`
-* `place_of_worship`
-* `plant`
-* `playground`
+* `place_of_worship` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `playground` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plumber`
-* `police`
+* `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `political_party`
 * `post_box`
 * `post_office`
@@ -923,12 +927,12 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `residential_home`
 * `resort`
 * `rest_area`
-* `restaurant`
+* `restaurant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `rock`
 * `roller_coaster`
 * `saddle`
 * `sawmill`
-* `school`
+* `school` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `scuba_diving`
 * `service_area`
 * `shelter`
@@ -946,10 +950,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `sports`
 * `spring`
 * `stadium`
-* `station`
+* `station` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `stone`
 * `stonemason`
-* `substation`
+* `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `subway_entrance`
 * `summer_camp`
 * `summer_toboggan`
@@ -982,20 +986,20 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
-* `wastewater_plant`
+* `wastewater_plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `water_park`
 * `water_point`
 * `water_slide`
 * `water_tower`
 * `water_well`
-* `water_works`
+* `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
 * `watering_place`
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`
 * `wine`
-* `winery`
+* `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `winter_sports`
 * `wood`
 * `works`
@@ -1020,16 +1024,17 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 #### Road properties (common):
 
 * `name`: From OpenStreetMap, but transformed to abbreviated names as detailed above.
-* `id`: From OpenStreetMap or Natural Earth
+* `id`: From OpenStreetMap or Natural Earth. Dropped at low- and mid-zooms when features are merged. _See planned bug fix [#1002](https://github.com/tilezen/vector-datasource/issues/1002)._
 * `source`: `openstreetmap` or `naturalearthdata.com`
 * `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way`.
 * `kind_detail`: See kind detail list below, sourced from the OpenStreetMap values.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_rank` is adjusted to realistically model bridge, tunnel, and layer ordering.
+* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
 * `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see `network` and `shield_text`. Related, see `symbol` for pistes.
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
-* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing.
+* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. _See planned bug fix in [#1062](https://github.com/tilezen/vector-datasource/issues/1062)._
 
 #### Road properties (common optional):
 
@@ -1037,7 +1042,11 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `cycleway`: `cycleway` tag from feature. If no `cycleway` tag is present but `cycleway:both` exists, we source from that tag instead.
 * `cycleway_left`: `cycleway_left` tag from feature
 * `cycleway_right`: `cycleway_right` tag from feature
+* `sidewalk`: `sidewalk` tag from feature. If no `sidewalk` tag is present but `sidewalk:both` exists, we source from that tag instead.
+* `sidewalk_left`: `sidewalk:left` tag from feature
+* `sidewalk_right`: `sidewalk:right` tag from feature
 * `ferry`: See kind list below.
+* `footway`: sidewalk or crossing
 * `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
 * `is_bridge`: `true` if the road is part of a bridge. The property will not be present if the road is not part of a bridge.
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
@@ -1045,8 +1054,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `is_tunnel`: `true` if the road is part of a tunnel. The property will not be present if the road is not part of a tunnel.
 * `leisure`: See kind list below.
 * `man_made`: See kind list below.
-* `oneway_bicycle`: `oneway:bicycle` tag from feature
-* `oneway`: `yes` or `no`
+* `oneway_bicycle`: `oneway:bicycle` tag from feature. _See bug fix planned in [#1028](https://github.com/tilezen/vector-datasource/issues/1028)._
+* `oneway`: `yes` or `no`. _See bug fix planned in [#1028](https://github.com/tilezen/vector-datasource/issues/1028)._
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
@@ -1058,10 +1067,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
-* `level`: Natural Earth features
 * `motor_vehicle`: OpenStreetMap features
-* `namealt`: Natural Earth features
-* `namealtt`: Natural Earth features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
 * `piste_grooming`: ski pistes from OpenStreetMap
@@ -1089,7 +1095,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 #### Road Transportation `kind_detail` values and zoom ranges:
 
-**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`, and internationally and nationally significant paths (`path`, `footway`, `steps`). Zoom 13 adds `primary_link`, `secondary_link`, `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway` and regionally significant and/or named or designated paths. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`.
+**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`, and internationally and nationally significant paths (`path`, `footway`, `steps`). Zoom 13 adds `primary_link`, `secondary_link`, `raceway`, `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway` and regionally significant and/or named or designated paths. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, `corridor`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`.
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary`.
 
@@ -1154,6 +1160,7 @@ _TIP: If you're looking for transit `station` and `station_entrance` features, l
 * `kind`: detailed below, per geometry type
 * `source`: `openstreetmap.org`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
 
 #### Transit properties (common optional):
 
@@ -1182,7 +1189,6 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 * `description`
 * `distance`
 * `roundtrip`
-* `route_name`
 
 #### Transit `kind` values (line, polygon):
 
@@ -1211,8 +1217,9 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `name`: including localized name variants
 * `kind`: detailed below, per geometry type
 * `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
-* `boundary`: `true`, on lines only. See description above.
+* `boundary`: `true`, on lines only. See description above. _See proposed bug fix in [#735](https://github.com/tilezen/vector-datasource/issues/735)._
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
 
 #### Water properties (common optional):
 
@@ -1220,38 +1227,30 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
 * `is_tunnel`: for `line` features only (`true` values only)
 
-#### Water `kind` values (point, polygon):
+#### Water `kind` values:
 
-* `basin`
-* `dock`
-* `lake`
-* `ocean`
-* `playa`
-* `riverbank`
-* `swimming_pool`
-* `water`
+* `basin` - polygon
+* `bay` - point, intended for label placement only
+* `canal` - line
+* `ditch` - line
+* `dock` - polygon
+* `drain` - line
+* `fjord` - point, intended for label placement only
+* `lake` - polygon
+* `ocean` - polygon, point is intended for label placement only
+* `playa` - polygon
+* `river` - line
+* `riverbank` - polygon
+* `sea` - point, intended for label placement only
+* `stream` - line
+* `strait` - point, intended for label placement only
+* `swimming_pool` - polygon
+* `water` - polygon
 
 Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
-
-#### Water `kind` values (point only):
-
-These are intended for label placement, and are included as points only.
-
-* `bay`
-* `fjord`
-* `strait`
-* `sea`
 
 **Gotchas:**
 
 * `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
+* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984)._
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
-
-#### Water `kind` values (lines):
-
-* `canal`
-* `dam`
-* `ditch`
-* `drain`
-* `river`
-* `stream`
