@@ -1,8 +1,8 @@
-#Semantic Versioning
+# Semantic Versioning
 
 When a new version of the Tilezen is released, developers should be able to tell from the version increment how much effort it will take them to integrate the new tiles with their map. We use semantic versioning to communicate this.
 
-###What is Semantic Versioning?
+### What is Semantic Versioning?
 
 Semantic versioning (or [SemVer](http://semver.org/)) is a formalized way of making promises with an X.Y.Z version indicator.
 
@@ -29,7 +29,7 @@ Semantic versioning (or [SemVer](http://semver.org/)) is a formalized way of mak
 
 ## Versioning the Tilezen API
 
-Proposed that upon our `1.0.0` release Tilezen makes the following promises.
+Upon our version `1.0.0` release Tilezen makes the following promises:
 
 ##### Definition of terms
 
@@ -40,13 +40,13 @@ Proposed that upon our `1.0.0` release Tilezen makes the following promises.
     - Fundamental properties like `name` (including localized names), `id`, and `source` included on most every feature.
 * **`common-optional`** - These are meant to be part of a common set, but may not be present because they aren't relevant or because we don't have the data (primarily feature `property`s, but could also be `layer`s).
   - Used to refine feature selection.
-  - Lightly transformed **interoperable Tilezen** properties based on original data values. Examples include: `capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, `area`, left & right names and localized `name:*` values on lines, and left & right `id` values on lines.
+  - Lightly transformed **interoperable Tilezen** properties based on original data values. Examples include: `country_capital`, `region_capital`, `bicycle_network`, `is_bridge`, `is_link`, `is_tunnel`, `is_bicycle_related`, `is_bus_route`, `walking_network`, `area`, left & right names and localized `name:*` values on lines, and left & right `id` values on lines.
   - Fundamental properties like `ref`, `colour`, `population`, `elevation`, `cuisine`, `operator`, `protect_class`, and `sport`.
 * **`optional`** - These are the properties of a specific, less important `kind`, or generally present across `kind`s but only in exceptional cases.
   - Often used to decorate features already selected for display.
   - Additional properties like `capacity` and `covered`.
 
-####MAJOR version increments:
+#### MAJOR version increments:
 
 1. **Remove** `common layer`
 1. **Change** `common layer` **name**
