@@ -6,7 +6,7 @@ The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provi
 
 Data is organized into several thematic layers, each of which is named, for example; `buildings`, `pois`, and `water`. A selection of these layers are typically used for base map rendering, and are provided under the short-hand name `all`. Each layer includes a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
-Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and Hoverboard.
+Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
 
 ### Overview
 
