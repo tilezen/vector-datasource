@@ -22,7 +22,7 @@ D3 is a JavaScript visualization library that you can use to render to SVG forma
 
 With D3, specifying the URL to the Mapzen vector tile service takes the form of
 
-`d3.json("https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.{format}", function(error, json)`
+`d3.json("https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.{format}", function(error, json)`
 
 where .{format} can be .json for GeoJSON, .topojson for TopoJSON, or .mvt for Mapbox Vector Tiles.
 
@@ -50,7 +50,7 @@ To specify Mapzen vector tile server as the source, use the following URL string
 ```  "sources": {
     "osm": {
       "type": "vector",
-      "tiles": ["https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.mvt"]```
+      "tiles": ["https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.mvt"]```
 
 See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen vector tiles displayed in MapboxGL.
 
@@ -60,6 +60,6 @@ See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen v
 
 [Hoverboard](https://libraries.io/bower/hoverboard/v1.0.1) is a JavaScript library created by Tristan Davies to draw vector tiles as a Leaflet tile layer on the `<canvas>` HTML element of a web page. Hoverboard supports the Mapzen vector tiles in GeoJSON, TopoJSON, or Mapbox Vector Tiles format.
 
-```window.xyz_tile_source_url = 'https://vector.mapzen.com/osm/{layers}/{zoom}/{x}/{y}.json';```
+```window.xyz_tile_source_url = 'https://https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.json';```
 
 See https://github.com/mapzen/hoverboard for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt). The Leaflet tile layer is defined in example.js, where you specify the Mapzen vector tile layers you want to render and the colors and symbols used to draw them.

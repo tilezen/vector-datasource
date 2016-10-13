@@ -127,7 +127,7 @@ Mapzen vector tiles include 9 layers:
 
 These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
 
-We include one deprecated layer, `landuse-labels`, for backwards compatibility. Please don't build new maps against this layer, it will be removed in the v1.0 version of tiles.
+While the service can return just a single layer or combination of layers, the `all` layer is more performant.
 
 ## Boundaries
 
