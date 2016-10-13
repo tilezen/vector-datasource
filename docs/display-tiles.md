@@ -54,12 +54,8 @@ To specify Mapzen vector tile server as the source, use the following URL string
 
 See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen vector tiles displayed in MapboxGL.
 
-## Hoverboard
+## OpenLayers
 
-* **Hoverboard demo:** [preview](https://mapzen.github.io/hoverboard) | [source code](https://github.com/mapzen/hoverboard)
+* **OpenLayers demo:** [preview](https://mapzen.github.io/openlayers-mapzen-vector-tile-example/) | [source code](https://github.com/mapzen/openlayers-mapzen-vector-tile-example/)
 
-[Hoverboard](https://libraries.io/bower/hoverboard/v1.0.1) is a JavaScript library created by Tristan Davies to draw vector tiles as a Leaflet tile layer on the `<canvas>` HTML element of a web page. Hoverboard supports the Mapzen vector tiles in GeoJSON, TopoJSON, or Mapbox Vector Tiles format.
-
-```window.xyz_tile_source_url = 'https://https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.json';```
-
-See https://github.com/mapzen/hoverboard for more information. This repository has samples using each input format (see geojson.html, topojson.html, or index.html for .mvt). The Leaflet tile layer is defined in example.js, where you specify the Mapzen vector tile layers you want to render and the colors and symbols used to draw them.
+[OpenLayers](http://openlayers.org) is a high-performance, feature-packed JavaScript library for all your mapping needs. OpenLayers supports the Mapzen vector tiles in GeoJSON format.
