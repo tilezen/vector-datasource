@@ -4,22 +4,22 @@ To use the vector tile service, you first need to obtain an API key from Mapzen.
 
 Now, just append your API key into this URL pattern to get started, where `mapzen-xxxxxxx` represents your key.
 
-`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=mapzen-xxxxxxx`
+`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
 
 The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) has more information on this url scheme.
 
 Here’s a sample tile in GeoJSON:
 
-`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json?api_key=mapzen-xxxxxxx`
+`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json`
 
 ## Specify layers in the service
 
 Layers to return can specified as `all`, or as one or more layer names separated by commas. The `all` layer is more performant.
 
 
-`buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json?api_key=mapzen-xxxxxxx
+`buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json
 
-`earth,landuse`: https://tile.mapzen.com/mapzen/vector/v1/earth,landuse/16/19293/24641.json?api_key=mapzen-xxxxxxx
+`earth,landuse`: https://tile.mapzen.com/mapzen/vector/v1/earth,landuse/16/19293/24641.json
 
 ### Layers in the service's response
 
