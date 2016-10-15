@@ -1,8 +1,6 @@
 # Use the vector tile service
 
-To use the vector tile service, you first need to obtain an API key from Mapzen. Sign in at https://mapzen.com/developers to create and manage your API keys.
-
-Now, just append your API key into this URL pattern to get started, where `mapzen-xxxxxxx` represents your key.
+Request a single tile with this URL pattern to get started:
 
 `https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
 
@@ -11,6 +9,8 @@ The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 Here’s a sample tile in GeoJSON:
 
 `https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json`
+
+To use the vector tile service in a project, [obtain an API key from Mapzen](https://mapzen.com/documentation/overview/).
 
 ## Specify layers in the service
 

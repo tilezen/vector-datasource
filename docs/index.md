@@ -14,7 +14,7 @@ With vector tiles you have the power to customize the content and visual appeara
 
 ### Use Mapzen's Vector Tile Service
 
-To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/developers). API keys come in the pattern: `mapzen-xxxxxxx`.
+To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/documentation/overview/).
 
 * [API keys and rate limits](api-keys-and-rate-limits.md) - Don't abuse the shared service!
 * [Attribution requirements](attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
