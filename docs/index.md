@@ -1,5 +1,3 @@
-#Mapzen Vector Tiles
-
 The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
 
 ![Contents of an example vector tile](images/vector-tile-example.png)
@@ -33,7 +31,7 @@ More information is available about how to [use the vector tile service](use-ser
 
 ##### Formats
 
-The Mapzen vector tile service provides [tiles in a variety of formats](use-service.md#formats), including GeoJSON, TopoJSON, and MVT binary.
+The Mapzen vector tile service provides [tiles in a variety of formats](use-service.md#formats), including [GeoJSON](http://geojson.org), [TopoJSON](https://github.com/mbostock/topojson/wiki), and the binary, protobuf-based [Mapbox Vector Tile (MVT) format](https://www.mapbox.com/vector-tiles/specification/).
 
 **We recommend** `TopoJSON` format for desktop web development, and `MVT` format for native mobile development. The Mapzen server gzips tiles automatically, so the TopoJSON file format is comparable in file size to MVT over the wire, and it's much friendlier to debug.
 
