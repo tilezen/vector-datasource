@@ -12,7 +12,7 @@ With vector tiles you have the power to customize the content and visual appeara
 
 ### Use Mapzen's Vector Tile Service
 
-To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/developers). API keys come in the pattern: `mapzen-xxxxxxx`.
+To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/documentation/overview/).
 
 * [API keys and rate limits](api-keys-and-rate-limits.md) - Don't abuse the shared service!
 * [Attribution requirements](attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
@@ -21,11 +21,11 @@ To start integrating vector tiles to your app, you need a [developer API key](ht
 
 The URL pattern to request tiles is:
 
-`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=mapzen-xxxxxxx`
+`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
 
 Here’s a sample tile in TopoJSON:
 
-`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.topojson?api_key=mapzen-xxxxxxx`
+`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.topojson`
 
 More information is available about how to [use the vector tile service](use-service.md) and specify custom layers in the service (though we recommend the default `all` layer).
 

@@ -2,12 +2,7 @@
 
 ## Obtain an API key
 
-To use the Mapzen Vector Tile service, you should first obtain a free developer API key. Sign in at https://mapzen.com/developers to create and manage your API keys.
-
-1. Go to https://mapzen.com/developers.
-2. Sign in with your GitHub account. If you have not done this before, you need to agree to the terms first.
-3. Create a new key and optionally, give it a name so you can remember the purpose of the project.
-4. Copy the key into your code.
+To use the Mapzen Vector Tile service, you should [first obtain a free developer API key](https://mapzen.com/documentation/overview/).
 
 ## Rate limits
 
