@@ -14,7 +14,7 @@ To use the vector tile service in a project, [obtain an API key from Mapzen](htt
 
 ## Specify layers in the service
 
-Layers to return can specified as `all`, or as one or more layer names separated by commas. Using the `all` layer is
+Layers to return can specified as `all`, or as one or more layer names separated by commas. Using the `all` layer is more performant.
 
 
 `buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json
