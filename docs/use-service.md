@@ -4,7 +4,7 @@ Request a single tile with this URL pattern to get started:
 
 `https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
 
-The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) has more information on this url scheme.
+To learn more about the URL pattern or if you're new to a web tile service, read a quick [overview of what tiles are](what-are-tiles.md).
 
 Here’s a sample tile in GeoJSON:
 
@@ -14,7 +14,7 @@ To use the vector tile service in a project, [obtain an API key from Mapzen](htt
 
 ## Specify layers in the service
 
-Layers to return can specified as `all`, or as one or more layer names separated by commas. The `all` layer is more performant.
+Layers to return can specified as `all`, or as one or more layer names separated by commas. Using the `all` layer is
 
 
 `buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json
