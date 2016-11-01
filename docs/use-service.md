@@ -4,6 +4,7 @@ Request a single tile with this URL pattern to get started:
 
 `https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
 
+The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) has more information on this url scheme.
 To learn more about the URL pattern or if you're new to a web tile service, read a quick [overview of what tiles are](what-are-tiles.md).
 
 Here’s a sample tile in GeoJSON:
