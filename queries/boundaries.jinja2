@@ -88,7 +88,7 @@ SELECT
 FROM planet_osm_polygon
 
 WHERE
-  {{ bounds['line']|bbox_filter('way',3857) }} AND
+  {{ bounds['line']|bbox_overlaps('way',3857) }} AND
 {% if zoom >= 16 %}
     mz_boundary_min_zoom IS NOT NULL
 {% else %}
