@@ -40,7 +40,7 @@ At the time of the 1.0 release, only the `all` and `buildings` layers were archi
 
 Even if tiles are loading and your `vector.mapzen.com` map appears to be working in your area of interest, keep in mind that the content of the tiles reflect the state of OpenStreetMap as of early October 2016. No further changes from OpenStreetMap will be imported into the archived tiles. For example, if you modify a building in OpenStreetMap, you will not see that change in the deprecated service.
 
-If you update to 1.0, all these functions to work properly; tiles in previously uncached areas are generated on demand and the data is fresh. OpenStreetMap data in the 1.0 tiles are updated frequently, often within hours or a day of the edits being made in OSM.
+If you update to 1.0, all these functions to work properly; tiles in previously uncached areas are generated on demand and the data is fresh. OpenStreetMap data in the 1.0 tiles are updated frequently, often within hours or a day of the edits being made in OpenStreetMap.
 
 ## Detailed migration reference
 
