@@ -237,7 +237,7 @@ Below is a summary of the major, breaking changes listed for the vector tiles 1.
 
 * **landuse** layer: `wood`
   * some values are now `natural_wood`
-  * but many values are still work
+  * but many values are still wood
 
 * **earth** layer: `continent` labels
   * If you have not updated for several releases, continent labels moved to the earth layer (from places layer)
