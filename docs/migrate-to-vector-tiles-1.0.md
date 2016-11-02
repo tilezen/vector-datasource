@@ -24,11 +24,11 @@ Mapzen offers several different types of tiles in vector and raster formats and 
 
 A vector tiles request can be for one or more individual layers, such as `roads` or `landuse`, or for `all` layers in the service.
 
-With the 1.0 release, you may find benefits to requesting `all` layers instead of custom ones. You should run benchmark tests for both custom and `all` layers on your target devices and network connections. If you find that one method is clearly faster than the other, then choose it. If the results are about the same, then use `all` because it has a simpler service architecture.
+With the 1.0 release, you may find benefits to requesting `all` layers instead of custom ones. Specifically, the `all` layers option generally loads faster because these tiles are often served directly from Mapzen's global tile cache. Custom layers experience a small lag because they are extracted, on demand, from `all` tiles. However, custom layer tiles generally have a smaller file size than `all` layers.
+
+You should run benchmark tests for both custom and `all` layers on your target devices and network connections. If you find that one method is clearly faster than the other or better suited to your bandwidth requirements, then choose it. If the results are about the same, then use `all` because it has a simpler service architecture.
 
 If you choose `all`, you can use client-side cartography to limit the display of the layers. For example, if you are using Tangram to draw your map, you can use data [filters](https://mapzen.com/documentation/tangram/Filters-Overview/).
-
-Both custom and `all` layers are part of Mapzen's global tile server cache. This is beneficial because tiles from the cache do not count toward your rate limits and can be served faster, yet the map data in the tiles can still be updated regularly.
 
 ## If you continue using vector.mapzen.com
 
