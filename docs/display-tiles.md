@@ -4,18 +4,18 @@ You can use Mapzen’s vector tile service with a variety of browser-based rende
 
 ## Tangram
 
-* **Bubble Wrap demo:** [preview](http://tangrams.github.io/refill-style-more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
-* **Refill demo:** [preview](http://tangrams.github.io/refill-style-more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
-* **Walkabout demo:** [preview](http://tangrams.github.io/refill-style-more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
-* **Tron demo:** [preview](http://tangrams.github.io/refill-style-more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
-* **Cinnabar demo:** [preview](http://tangrams.github.io/cinnabar-style-more-labels) | [source code](http://github.com/tangrams/cinnabar-style-more-labels)
-* **Zinc demo:** [preview](http://tangrams.github.io/zinc-style-more-labels) | [source code](http://github.com/tangrams/zinc-style-more-labels)
+* **Bubble Wrap demo:** [preview](https://mapzen.com/products/maps/bubble-wrap/) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Refill demo:** [preview](https://mapzen.com/products/maps/refill/more-labels/) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Walkabout demo:** [preview](https://mapzen.com/products/maps/walkabout/more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Tron demo:** [preview](https://mapzen.com/products/maps/tron/more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Cinnabar demo:** [preview](https://mapzen.com/products/maps/cinnabar/more-labels) | [source code](http://github.com/tangrams/cinnabar-style-more-labels)
+* **Zinc demo:** [preview](https://mapzen.com/products/maps/zinc/more-labels) | [source code](http://github.com/tangrams/zinc-style-more-labels)
 
 [Tangram](https://mapzen.com/projects/tangram) is a WebGL mapping engine designed for real-time rendering of 2D and 3D maps from vector tiles. More details are available on the [Tangram home  page](https://mapzen.com/projects/tangram).
 
 We offer several free world basemap styles for Tangram, including [Bubble Wrap, Refill, Walkabout, Tron, Cinnabar, and Zinc](https://mapzen.com/blog/updated-house-styles/) and include variants with more or less labels. Please remix them to suite your own designs!
 
-![basemaps image](images/house-styles-tiles.png)
+![basemaps image](images/house-styles-tiles.gif)
 
 ## D3
 
