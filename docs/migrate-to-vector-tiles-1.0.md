@@ -36,11 +36,11 @@ Although Mapzen announced that the deprecated service will be maintained for up 
 
 During this transition period, only tiles that were previously archived on Mapzen's servers will be available. This means that you may encounter locations, such as rural areas or certain zoom levels, where no data is returned. This can result in a 404 HTTP status error code.
 
-At the time of the 1.0 release, only the `all` and `buildings` layers were archived and cached from the deprecated service. If you attempted to query for other layers, you may have been unable to access them and received an error. This was happening because tiles for custom layers were generated only on demand, and no fresh tiles were being served from the previous URLs. However, shortly after the 1.0 release, Mapzen added more custom layers to the server cache, which gives you the ability to query for any layer on the previous URLs.
+At the time of the 1.0 release, only the `all` and `buildings` layers were archived and cached from the deprecated service. If you attempted to query for other layers, you may have been unable to access them and received an error. This was happening because tiles for custom layers were generated only on demand, and no fresh tiles were being served from the previous URLs. However, shortly after the 1.0 release, Mapzen added special handing for custom layers served from the archive, which gives you the ability to query for any layer on the previous URLs.
 
-Even if tiles are loading and your `vector.mapzen.com` map appears to be working in your area of interest, keep in mind that the content of the tiles reflect the state of OpenStreetMap as of early October 2016. No further changes from OSM will be imported into the archived tiles. For example, if you modify a building in OSM, you will not see that change in the deprecated service.
+Even if tiles are loading and your `vector.mapzen.com` map appears to be working in your area of interest, keep in mind that the content of the tiles reflect the state of OpenStreetMap as of early October 2016. No further changes from OpenStreetMap will be imported into the archived tiles. For example, if you modify a building in OpenStreetMap, you will not see that change in the deprecated service.
 
-If you update to 1.0, all these functions to work properly; tiles in previously uncached areas are generated on demand and the OSM data is fresh. OSM data in the 1.0 tiles are updated frequently, often within hours or a day of the edits being made in OSM.
+If you update to 1.0, all these functions to work properly; tiles in previously uncached areas are generated on demand and the data is fresh. OpenStreetMap data in the 1.0 tiles are updated frequently, often within hours or a day of the edits being made in OSM.
 
 ## Detailed migration reference
 
