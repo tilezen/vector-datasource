@@ -32,7 +32,7 @@ Both custom and `all` layers are part of Mapzen's global tile server cache. This
 
 ## If you continue using vector.mapzen.com
 
-Although Mapzen announced that the deprecated service will be maintained for up to a year after the 1.0 release, you should update sooner for the best experience.
+Although Mapzen announced that the deprecated service will be maintained until October 31, 2017, you should update sooner for the best experience.
 
 During this transition period, only tiles that were previously archived on Mapzen's servers will be available. This means that you may encounter locations, such as rural areas or certain zoom levels, where no data is returned. This can result in a 404 HTTP status error code.
 
