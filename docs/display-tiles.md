@@ -4,15 +4,18 @@ You can use Mapzen’s vector tile service with a variety of browser-based rende
 
 ## Tangram
 
-* **Refill demo:** [preview](http://tangrams.github.io/refill-style-more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
-* **Cinnabar demo:** [preview](http://tangrams.github.io/cinnabar-style-more-labels) | [source code](http://github.com/tangrams/cinnabar-style-more-labels)
-* **Zinc demo:** [preview](http://tangrams.github.io/zinc-style-more-labels) | [source code](http://github.com/tangrams/zinc-style-more-labels)
+* **Bubble Wrap demo:** [preview](https://mapzen.com/products/maps/bubble-wrap/) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Refill demo:** [preview](https://mapzen.com/products/maps/refill/more-labels/) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Walkabout demo:** [preview](https://mapzen.com/products/maps/walkabout/more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Tron demo:** [preview](https://mapzen.com/products/maps/tron/more-labels) | [source code](http://github.com/tangrams/refill-style-more-labels)
+* **Cinnabar demo:** [preview](https://mapzen.com/products/maps/cinnabar/more-labels) | [source code](http://github.com/tangrams/cinnabar-style-more-labels)
+* **Zinc demo:** [preview](https://mapzen.com/products/maps/zinc/more-labels) | [source code](http://github.com/tangrams/zinc-style-more-labels)
 
 [Tangram](https://mapzen.com/projects/tangram) is a WebGL mapping engine designed for real-time rendering of 2D and 3D maps from vector tiles. More details are available on the [Tangram home  page](https://mapzen.com/projects/tangram).
 
-We offer several free world basemap styles for Tangram, including [Refill, Cinnabar, and Zinc](https://mapzen.com/blog/introducing-refill-cinnabar-and-zinc-styles-for-tangram) and include variants with more or less labels. Please remix them to suite your own designs!
+We offer several free world basemap styles for Tangram, including [Bubble Wrap, Refill, Walkabout, Tron, Cinnabar, and Zinc](https://mapzen.com/blog/updated-house-styles/) and include variants with more or less labels. Please remix them to suite your own designs!
 
-![image](https://cloud.githubusercontent.com/assets/853051/11137284/13e3a5f0-896b-11e5-9ab9-be51ecb388d8.png)
+![basemaps image](images/house-styles-tiles.gif)
 
 ## D3
 
@@ -28,12 +31,16 @@ where .{format} can be .json for GeoJSON, .topojson for TopoJSON, or .mvt for Ma
 
 D3 uses a different zoom level than other map tiles. Default zoom for a map is set using `d3.geo.mercator` and `.scale()`. In this example, 21 is roughly equivalent to z13.
 
-```var projection = d3.geo.mercator()
-    .scale((1 << 21) / 2 / Math.PI)```
+```
+var projection = d3.geo.mercator()
+    .scale((1 << 21) / 2 / Math.PI)
+```
 
 Upper and lower zoom levels are set using `d3.behavior.zoom()` and `.scaleExtent()`. In this example, the scale extent of 12 to 25 is roughly z4-z5 to z17:
 
-```.scaleExtent([1 << 12, 1 << 25])```
+```
+.scaleExtent([1 << 12, 1 << 25])
+```
 
 See also the [D3 documentation on zoom behavior](https://github.com/mbostock/d3/wiki/Zoom-Behavior).
 
@@ -47,10 +54,12 @@ See the examples in the [d3-vector-tiles](https://github.com/mapzen/d3-vector-ti
 
 To specify Mapzen vector tile server as the source, use the following URL string, where .mvt is the file format.
 
-```  "sources": {
+```
+  "sources": {
     "osm": {
       "type": "vector",
-      "tiles": ["https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.mvt"]```
+      "tiles": ["https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.mvt"]
+```
 
 See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen vector tiles displayed in MapboxGL.
 
