@@ -152,24 +152,23 @@ Below is a summary of the major, breaking changes listed for the vector tiles 1.
         ```
     * Where scale_rank is defined in this table:
 
-  	```
-  	  area,height,volume,landuse_kind,scale_rank
-  	  >=100000,*,*,*,1
-  	  *,>=250,*,*,1
-  	  *,*,>=300000,*,1
-  	  >=20000,*,*,*,2
-  	  >=5000,*,*,+,2
-  	  *,>=150,*,*,2
-  	  *,*,>=150000,*,2
-  	  >=5000,*,*,*,3
-  	  >=3000,*,*,+,3
-  	  *,>=100,*,*,3
-  	  *,*,>=100000,*,3
-  	  >=1000,*,*,*,4
-  	  >=500,*,*,+,4
-  	  *,*,>=50000,*,4
-  	  +,*,*,*,5
-  	```
+  	  |area|height|volume|landuse_kind|scale_rank|
+      |----|------|------|------------|----------|
+  	  |>=100000|*|*|*|1|
+  	  |*|>=250|*|*|1|
+  	  |*|*|>=300000|*|1|
+  	  |>=20000|*|*|*|2|
+  	  |>=5000|*|*|+|2|
+  	  |*|>=150|*|*|2|
+  	  |*|*|>=150000|*|2|
+  	  |>=5000|*|*|*|3|
+  	  |>=3000|*|*|+|3|
+  	  |*|>=100|*|*|3|
+  	  |*|*|>=100000|*|3|
+  	  |>=1000|*|*|*|4|
+  	  |>=500|*|*|+|4|
+  	  |*|*|>=50000|*|4|
+  	  |+|*|*|*|5|
 
 * **buildings** layer: `kind` properties are now `kind_detail`
     * `kind: [university, college, school, kindergarten]` > `kind_detail: [university, college, school, kindergarten]`
