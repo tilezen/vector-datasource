@@ -1,3 +1,9 @@
+#
+# WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING!
+# this repo has permissive fork builds set. DO NOT add any private
+# information into CircleCI for this repo without first making sure
+# that permissive fork builds has been turned off.
+#
 machine:
   python:
     version: 2.7.10
