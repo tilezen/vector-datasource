@@ -1,3 +1,9 @@
+v1.0.1
+------
+* **Release date**: 2016-11-04. _Live on prod 2016-11-04._
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* Update boundaries query to use overlaps filter to improve performance.
+
 v1.0.0
 ------
 * **Release date**: 2016-10-04. _Live on prod 2016-10-13._
