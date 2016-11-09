@@ -1,6 +1,6 @@
 # Attribution
 
-Attribution is required for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources](data-sources.md) page.
+Attribution is required for using Mapzen's hosted vector tile service as well as for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources](data-sources.md) and the [Mapzen rights](https://mapzen.com/rights) pages.
 
 **Required attribution:**
 
@@ -12,7 +12,7 @@ Attribution is required for many of our data providers. Example language is prov
 
 ### Where to attribute
 
-Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](http://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source.
+Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](http://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source. More information on attribution is on our [rights](https://mapzen.com/rights) page.
 
 ## The fine print
 
