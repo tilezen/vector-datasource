@@ -4,11 +4,11 @@ Attribution is required for using Mapzen's hosted vector tile service as well as
 
 **Required attribution:**
 
->  © Mapzen, OpenStreetMap contributors, Who's On First
+>  Mapzen, © OpenStreetMap contributors, Who's On First
 
 **Full attribution for all projects:**
 
->  © Mapzen, OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
+>  Mapzen, © OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
 
 ### Where to attribute
 
