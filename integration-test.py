@@ -311,6 +311,25 @@ def assert_at_least_n_features(z, x, y, layer, properties, n):
                 "%r, found only %d" % (n, properties, num_matching)
 
 
+def assert_less_than_n_features(z, x, y, layer, properties, n):
+    """
+    Downloads a tile and checks that it contains less than `n` features which
+    match the given `properties`.
+    """
+    with features_in_tile_layer(z, x, y, layer) as features:
+        num_features, num_matching = count_matching(
+            features, properties)
+
+        if num_features >= n:
+            raise Exception, "Found %d or more features including " \
+                "properties %r (because layer %r had %d features)" % \
+                (n, properties, layer, num_features)
+
+        if num_matching >= n:
+            raise Exception, "Did not find %d features including properties " \
+                "%r, found only %d" % (n, properties, num_matching)
+
+
 def assert_no_matching_feature(z, x, y, layer, properties):
     with features_in_tile_layer(z, x, y, layer) as features:
         num_features, num_matching = count_matching(
