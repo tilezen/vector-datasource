@@ -6,10 +6,6 @@ Attribution is required for using Mapzen's hosted vector tile service as well as
 
 >  Mapzen, © OpenStreetMap contributors, Who's On First
 
-**Full attribution for all projects:**
-
->  Mapzen, © OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
-
 ### Where to attribute
 
 Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](http://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source. More information on attribution is on our [rights](https://mapzen.com/rights) page.
