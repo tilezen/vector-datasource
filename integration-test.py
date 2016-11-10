@@ -373,8 +373,8 @@ def print_coords(f, log, idx, num_tests):
         runpy.run_path(f, init_globals={
             'assert_has_feature': print_coord,
             'assert_no_matching_feature': print_coord,
-            'assert_at_least_n_features': assert_at_least_n_features,
-            'assert_less_than_n_features': assert_less_than_n_features,
+            'assert_at_least_n_features': print_coord,
+            'assert_less_than_n_features': print_coord,
             'features_in_tile_layer': print_coord_with_context,
             'assert_feature_geom_type': print_coord,
             'layers_in_tile': print_coord_with_context,
