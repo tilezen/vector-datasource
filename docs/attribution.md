@@ -2,9 +2,13 @@
 
 Attribution is required for using Mapzen's hosted vector tile service as well as for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources](data-sources.md) and the [Mapzen rights](https://mapzen.com/rights) pages.
 
-**Required attribution:**
+***Required attribution for Mapzen's hosted service:***
 
->  Mapzen, © OpenStreetMap contributors, Who's On First
+> Mapzen, © OpenStreetMap contributors, Who's On First
+
+***Optional full attribution including all data projects:***
+
+> Mapzen, © OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
 
 ### Where to attribute
 
