@@ -426,13 +426,13 @@ post_process:
         'label_placement' not in properties and kind in
         ('archipelago', 'island', 'islet', 'continent', 'valley', 'ridge')
 
-  # merge ocean and earth polygons, see https://github.com/tilezen/vector-datasource/issues/1106
+  # merge water and earth polygons, see https://github.com/tilezen/vector-datasource/issues/1106
   - fn: vectordatasource.transform.merge_polygon_features
     params:
       source_layer: earth
   - fn: vectordatasource.transform.merge_polygon_features
     params:
-      source_layer: ocean
+      source_layer: water
 
   - fn: vectordatasource.transform.generate_address_points
     params:
