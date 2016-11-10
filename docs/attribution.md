@@ -1,19 +1,18 @@
 # Attribution
 
+Attribution is required for using Mapzen's hosted vector tile service as well as for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources](data-sources.md) and the [Mapzen rights](https://mapzen.com/rights) pages.
 
-Attribution is required for many of our data providers. Example language is provided below, but you are responsible for researching each project to follow their license terms. More details are available on the [Data Sources](data-sources.md) page.
+***Required attribution for Mapzen's hosted service:***
 
-**Required attribution:**
+> Mapzen, © OpenStreetMap contributors, Who's On First
 
->  © OpenStreetMap contributors, Who's On First
+***Optional full attribution including all data projects:***
 
-**Full attribution for all projects:**
-
->  © OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
+> Mapzen, © OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
 
 ### Where to attribute
 
-Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](http://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source.
+Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](http://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source. More information on attribution is on our [rights](https://mapzen.com/rights) page.
 
 ## The fine print
 
@@ -30,7 +29,7 @@ Attribution needs to "appear in a place that is reasonable to the medium or mean
 
 ### openstreetmapdata.com
 
-We include OSM-derived water and earth polygons from [openstreetmapdata.com](http://openstreetmapdata.com) at mid- and high-zooms. This data is under the OSM ODbL license. 
+We include OSM-derived water and earth polygons from [openstreetmapdata.com](http://openstreetmapdata.com) at mid- and high-zooms. This data is under the OSM ODbL license.
 
 ```
 © OpenStreetMap contributors
@@ -63,14 +62,10 @@ More details can be found on the Natural Earth [Terms of Use](http://www.natural
 
 `source:whosonfirst`
 
-Crediting [Who's On First](http://whosonfirst.mapzen.com) is recommended and linking back to their License is required. 
+Crediting [Who's On First](http://whosonfirst.mapzen.com) is recommended and linking back to their License is required.
 
 ```
 Data from Who's On First. <a href="http://whosonfirst.mapzen.com#License">License</a>
 ```
 
 Who's On First makes use of a number of open data sources, some of whom **do** require attribution. Neighbourhood sources include: [Zetashapes](https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md#zetashapes) (geometry), [Quattroshapes](https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md#quattroshapes) (geometry), and [GeoPlanet](https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md#geoplanet) (names). Please note that original sources may be modified.
-
-===
-
-See something funky? Please notify us if you believe that an open data project has not been properly noted!
