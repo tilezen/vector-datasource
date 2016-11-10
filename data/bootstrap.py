@@ -11,16 +11,15 @@ datestamp = asset_cfg['datestamp']
 
 template_path = '.'
 environment = Environment(loader=FileSystemLoader(template_path))
-prepare_data_template = environment.get_template('Makefile-prepare-data.jinja2')
+prepare_data_template = environment.get_template(
+    'Makefile-prepare-data.jinja2')
 
 src_shapefile_zips = []
 src_shapefile_shps = []
 src_shapefile_wildcards = []
 shapefiles = []
-reproj_shapefile_dep_names = []
-reproj_shapefile_tgt_names = []
+tile_shapefiles = []
 reproj_shapefiles = []
-sameproj_shapefile_zips = []
 tgt_shapefile_zips = []
 tgt_shapefile_shps = []
 tgt_shapefile_wildcards = []
@@ -61,13 +60,24 @@ for cfg_shapefile in cfg_shapefiles:
         shapefile['tgt_shp_wildcard'] = tgt_shp_wildcard
 
         reproj_shapefiles.append(shapefile)
-        reproj_shapefile_dep_names.append(src_zip)
-        reproj_shapefile_tgt_names.append(tgt_zip)
         tgt_shapefile_zips.append(tgt_zip)
         tgt_shapefile_shps.append(tgt_shp)
         tgt_shapefile_wildcards.append(tgt_shp_wildcard)
+
+    elif shapefile.get('tile'):
+        tgt_zip = src_zip.replace('.zip', '-tiled.zip')
+        tgt_shp = tgt_zip.replace('.zip', '.shp')
+        shapefile['tgt_zip'] = tgt_zip
+        shapefile['tgt_shp'] = tgt_shp
+        tgt_shp_wildcard = tgt_shp.replace('.shp', '*')
+        shapefile['tgt_shp_wildcard'] = tgt_shp_wildcard
+
+        tile_shapefiles.append(shapefile)
+        tgt_shapefile_zips.append(tgt_zip)
+        tgt_shapefile_shps.append(tgt_shp)
+        tgt_shapefile_wildcards.append(tgt_shp_wildcard)
+
     else:
-        sameproj_shapefile_zips.append(src_zip)
         tgt_zip = src_zip
         tgt_shp = src_shp
         shapefile['tgt_zip'] = tgt_zip
@@ -81,9 +91,6 @@ for cfg_shapefile in cfg_shapefiles:
     shapefiles.append(shapefile)
 
 src_shapefile_zips_str = ' '.join(src_shapefile_zips)
-reproj_shapefile_dep_names_str = ' '.join(reproj_shapefile_dep_names)
-reproj_shapefile_tgt_names_str = ' '.join(reproj_shapefile_tgt_names)
-sameproj_shapefile_zips_str = ' '.join(sameproj_shapefile_zips)
 tgt_shapefile_zips_str = ' '.join(tgt_shapefile_zips)
 tgt_shapefile_shps_str = ' '.join(tgt_shapefile_shps)
 tgt_shapefile_wildcards_str = ' '.join(tgt_shapefile_wildcards)
@@ -92,8 +99,7 @@ prepare_data_makefile = prepare_data_template.render(
     src_shapefile_zips=src_shapefile_zips_str,
     shapefiles=shapefiles,
     reproj_shapefiles=reproj_shapefiles,
-    reproj_shapefile_dep_names=reproj_shapefile_dep_names_str,
-    reproj_shapefile_tgt_names=reproj_shapefile_tgt_names_str,
+    tile_shapefiles=tile_shapefiles,
     tgt_shapefile_zips=tgt_shapefile_zips_str,
     tgt_shapefile_shps=tgt_shapefile_shps_str,
     tgt_shapefile_wildcards=tgt_shapefile_wildcards_str,
