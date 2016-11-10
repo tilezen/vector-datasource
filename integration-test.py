@@ -378,6 +378,8 @@ def print_coords(f, log, idx, num_tests):
         runpy.run_path(f, init_globals={
             'assert_has_feature': print_coord,
             'assert_no_matching_feature': print_coord,
+            'assert_at_least_n_features': assert_at_least_n_features,
+            'assert_less_than_n_features': assert_less_than_n_features,
             'features_in_tile_layer': print_coord_with_context,
             'assert_feature_geom_type': print_coord,
             'layers_in_tile': print_coord_with_context,
@@ -514,6 +516,8 @@ def run_test(f, log, idx, num_tests):
         runpy.run_path(f, init_globals={
             'assert_has_feature': assert_has_feature,
             'assert_no_matching_feature': assert_no_matching_feature,
+            'assert_at_least_n_features': assert_at_least_n_features,
+            'assert_less_than_n_features': assert_less_than_n_features,
             'features_in_tile_layer': features_in_tile_layer,
             'assert_feature_geom_type': assert_feature_geom_type,
             'layers_in_tile': layers_in_tile,
