@@ -1,5 +1,5 @@
 bucket: mapzen-tiles-assets
-datestamp: 20161109
+datestamp: 20161110
 
 shapefiles:
 
@@ -24,7 +24,8 @@ shapefiles:
   - name: buffered_land
     url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land_10272016.zip
     prj: 3857
-    shapefile-name: buffered_land_10272016/buffered_land_10272016.shp
+    shapefile-name: buffered_land_10272016.shp
+    tile: true
 
   - name: ne_110m_lakes
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
