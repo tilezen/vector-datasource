@@ -133,6 +133,12 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
 
+    def test_short_name(self):
+        shape, props, fid = self._call_fut(
+            'openstreetmap.org', 'short', 'foo')
+        self.assertTrue('name:short' in props)
+        self.assertEquals('foo', props['name:short'])
+
 
 class TagsPriorityI18nTest(unittest.TestCase):
 

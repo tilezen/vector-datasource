@@ -18,12 +18,15 @@ assert_has_feature(
 
 # San Francisco (osm city)
 # http://www.openstreetmap.org/node/26819236
+#
+# note: presence of Chinese name tested, but not its value, as that can and
+# does change.
 assert_has_feature(
     16, 10482, 25330, 'places',
     { 'id': 26819236, 'kind': 'locality', 'kind_detail': 'city',
       'source': "openstreetmap.org",
       'name': 'San Francisco',
-      'name:zh': '\xe8\x88\x8a\xe9\x87\x91\xe5\xb1\xb1\xe5\xb8\x82\xe8\x88\x87\xe7\xb8\xa3' })
+      'name:zh': None })
 
 # Node: Londonderry/Derry (267762522)
 # http://www.openstreetmap.org/node/267762522
@@ -33,10 +36,13 @@ assert_has_feature(
 
 # Node: Jerusalem (29090735)
 # http://www.openstreetmap.org/node/29090735
+#
+# note: presence of Chinese name tested, but not its value, as that can and
+# does change.
 assert_has_feature(
     16, 39180, 26661, 'places',
     { 'id': 29090735,
-      'name:zh-min-nan': 'I\xc3\xa2-l\xc5\x8d\xcd\x98-sat-l\xc3\xa9ng',
-      'name:zh': '\xe8\x80\xb6\xe8\xb7\xaf\xe6\x92\x92\xe5\x86\xb7',
-      'name:zh-yue': '\xe8\x80\xb6\xe8\xb7\xaf\xe6\x92\x92\xe5\x86\xb7',
+      'name:zh-min-nan': None,
+      'name:zh': None,
+      'name:zh-yue': None,
       })

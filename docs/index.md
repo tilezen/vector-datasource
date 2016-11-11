@@ -1,5 +1,3 @@
-#Mapzen Vector Tiles
-
 The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
 
 ![Contents of an example vector tile](images/vector-tile-example.png)
@@ -14,7 +12,7 @@ With vector tiles you have the power to customize the content and visual appeara
 
 ### Use Mapzen's Vector Tile Service
 
-To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/developers). API keys come in the pattern: `mapzen-xxxxxxx`.
+To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/documentation/overview/).
 
 * [API keys and rate limits](api-keys-and-rate-limits.md) - Don't abuse the shared service!
 * [Attribution requirements](attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
@@ -23,17 +21,17 @@ To start integrating vector tiles to your app, you need a [developer API key](ht
 
 The URL pattern to request tiles is:
 
-`https://vector.mapzen.com/osm/{layers}/{z}/{x}/{y}.{format}?api_key=mapzen-xxxxxxx`
+`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
 
 Here’s a sample tile in TopoJSON:
 
-`https://vector.mapzen.com/osm/all/16/19293/24641.topojson?api_key=mapzen-xxxxxxx`
+`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.topojson`
 
 More information is available about how to [use the vector tile service](use-service.md) and specify custom layers in the service (though we recommend the default `all` layer).
 
 ##### Formats
 
-The Mapzen vector tile service provides [tiles in a variety of formats](use-service.md#formats), including GeoJSON, TopoJSON, and MVT binary.
+The Mapzen vector tile service provides [tiles in a variety of formats](use-service.md#formats), including [GeoJSON](http://geojson.org), [TopoJSON](https://github.com/mbostock/topojson/wiki), and the binary, protobuf-based [Mapbox Vector Tile (MVT) format](https://www.mapbox.com/vector-tiles/specification/).
 
 **We recommend** `TopoJSON` format for desktop web development, and `MVT` format for native mobile development. The Mapzen server gzips tiles automatically, so the TopoJSON file format is comparable in file size to MVT over the wire, and it's much friendlier to debug.
 
@@ -52,7 +50,7 @@ Depending on the URL syntax, Mapzen vector tiles can return all of the map data,
 
 ### Build from source
 
-If you are interested in setting up your own version of this service, follow these [installation instructions](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or you can also try this [Vagrant VM](https://github.com/mapzen/vagrant-tiles), which will additionally set up other tile components as well.
+If you are interested in setting up your own version of this service, follow these [installation instructions](https://github.com/mapzen/vector-datasource/wiki/Mapzen-Vector-Tile-Service).
 
 ### Credits
 

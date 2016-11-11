@@ -1,7 +1,7 @@
-# http://www.openstreetmap.org/way/367477828
+# http://www.openstreetmap.org/way/444491374
 assert_has_feature(
-    16, 10471, 25331, 'roads',
-    { 'id': 367477828, 'kind': 'path', 'crossing': 'zebra' })
+    16, 10475, 25332, 'roads',
+    { 'id': 444491374, 'kind': 'path', 'crossing': 'traffic_signals' })
 
 # Way: The Embarcadero (397140734)
 # http://www.openstreetmap.org/way/397140734

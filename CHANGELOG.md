@@ -1,8 +1,59 @@
+v1.0.1
+------
+* **Release date**: 2016-11-04. _Live on prod 2016-11-04._
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* Update boundaries query to use overlaps filter to improve performance.
+
+v1.0.0
+------
+* **Release date**: 2016-10-04. _Live on prod 2016-10-13._
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.0](https://github.com/mapzen/tilequeue/releases/tag/v1.0.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+
+---
+
+* **New production URLs:**
+    * **GeoJSON:**
+      `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json?api_key=mapzen-xxxxxxx`
+    * **TopoJSON:**
+      `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson?api_key=mapzen-xxxxxxx`
+    * **Mapbox Vector Tile:**
+      `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt?api_key=mapzen-xxxxxxx`
+
+---
+
+* Guard against intersecting with same ids during admin boundary processing.
+* Rank only features within the unpadded bounds of the tile. Drop unranked features within the unpadded bounds.
+* Drop linear boundaries (preferring relation boundaries only), as linear boundaries break the admin boundary processing code.
+* Add pyclipper dependency to requirements.
+* Include name:short as a tag name alternate.
+* Fixed bug to restore some missing low-zoom region boundary lines.
+* Fixed bug to fully enable new map_unit boundary lines at low-zooms.
+* Low-zoom boundary lines now have custom min_zoom values.
+* All features in place layer now have custom min_zoom values.
+* Update data query to adapt to upstream OpenStreetMap healthcare speciality bulk edit.
+* Fixed typo for protction_title to protection_title for National Forest features in pois layers.
+* [docs] Cleanup docs generally, clarify relationship between pois and landuse layers, and remove promise about tier property (which will probably be deprecated).
+* [docs] Migrate docs to reference generic Mapzen API keys.
+
+
 v1.0.0-pre3
 -------
 
 * **Release date**: 2016-09-16 (dev build only as public preview)
 * **Requires:** [tileserver v0.8.0-pre2](https://github.com/mapzen/tileserver/releases/tag/v0.8.0-pre2) and [tilequeue v0.11.0-pre2](https://github.com/mapzen/tilequeue/releases/tag/v0.11.0-pre2) and [mapbox-vector-tile v0.5.0](https://pypi.python.org/pypi/mapbox-vector-tile/0.5.0).
+
+---
+
+* **Developer preview URLs:** API endpoints have generalized for multiple tile sets, accounts, and versions:
+    * **GeoJSON:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json
+    * **TopoJSON:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
+    * **Mapbox Vector Tile:** http://tile.dev.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+* **Production URLs will be (not yet live):**
+    * **GeoJSON:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.json
+    * **TopoJSON:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
+    * **Mapbox Vector Tile:** http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+
+---
 
 * Removed "not equals" YAML rule, which can be expressed using the other "equals" and "not" operators. [PR #1044](https://github.com/tilezen/vector-datasource/pull/1044).
 * **BREAKING** Rename `sort_key` to `sort_rank`. [PR #1049](https://github.com/tilezen/vector-datasource/pull/1049).

@@ -1,14 +1,14 @@
 # update landuse to include barriers features and delete from boundaries
 
 # city_wall in landuse
-# http://www.openstreetmap.org/way/258909996
+# http://www.openstreetmap.org/way/81522922
 assert_has_feature(
-    12, 3302, 1750, 'landuse',
+    12, 2030, 1300, 'landuse',
     { 'kind': 'city_wall'})
 
 # city_wall not in boundaries
 assert_no_matching_feature(
-    12, 3302, 1750, 'boundaries',
+    12, 2030, 1300, 'boundaries',
     { 'kind': 'city_wall'})
 
 # citywalls in landuse

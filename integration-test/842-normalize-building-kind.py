@@ -29,10 +29,10 @@ assert_has_feature(
     16, 10486, 25326, 'buildings',
     { 'id': 406710839, 'kind': 'building_part', 'kind_detail': type(None) })
 
-# http://www.openstreetmap.org/way/258750666
+# http://www.openstreetmap.org/way/257920199
 assert_has_feature(
-    16, 19302, 24630, 'buildings',
-    { 'id': 258750666, 'kind': 'building_part', 'kind_detail': 'steps' })
+    16, 18743, 25070, 'buildings',
+    { 'id': 257920199, 'kind': 'building_part', 'kind_detail': 'steps' })
 
 # http://www.openstreetmap.org/way/352508405
 assert_has_feature(

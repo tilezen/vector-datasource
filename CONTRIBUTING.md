@@ -28,7 +28,7 @@ It's important to get feedback about the quality of local tile results. Your loc
 - Where in the world you were looking:
   - A placename and zoom, or
   - Zoom, latitude, and longitude, or
-  - Tile URL, e.g.: http://vector.mapzen.com/osm/all/10/518/352.topojson, with the feature ID and/or tile layer, if available
+  - Tile URL, e.g.: https://tile.mapzen.com/mapzen/vector/v1/all/10/518/352.topojson, with the feature ID and/or tile layer, if available
 - Your expected result!
 - Your actual result :(
 
@@ -305,7 +305,7 @@ If you're modifying a feature, it can be helpful to search in the JSON response 
 
 **Specific map tile to test with:**
 
-- http://vector.mapzen.com/osm/all/7/20/49.topojson
+- https://tile.mapzen.com/mapzen/vector/v1/all/7/20/49.topojson
 
 But the tests require this to be formatted like:
 
@@ -318,6 +318,7 @@ The python file `integration-test.py` contains several useful tests:
 - `assert_has_feature`
 - `assert_no_matching_feature`
 - `assert_at_least_n_features`
+- `assert_less_than_n_features`
 - `assert_feature_geom_type`
 
 
