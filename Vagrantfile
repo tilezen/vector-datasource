@@ -86,7 +86,7 @@ Vagrant.configure("2") do |config|
 
     export PGPASSWORD=osmpassword
 
-    rm -f /opt/data
+    rm -rf /opt/data
     mkdir -p /opt/data /opt/src /opt/virtualenv
     chown vagrant:vagrant -R /opt
     su vagrant
