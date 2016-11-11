@@ -86,7 +86,8 @@ Vagrant.configure("2") do |config|
 
     export PGPASSWORD=osmpassword
 
-    mkdir -p /opt/data /opt/src
+    rm -f /opt/data
+    mkdir -p /opt/data /opt/src /opt/virtualenv
     chown vagrant:vagrant -R /opt
     su vagrant
 
@@ -97,8 +98,8 @@ Vagrant.configure("2") do |config|
 
     # Download and import supporting data
     cd /opt/src/vector-datasource
-    virtualenv env
-    source env/bin/activate
+    virtualenv /opt/virtualenv/vector-datasource
+    source /opt/virtualenv/vector-datasource/bin/activate
     pip -q install -U jinja2 pyaml
     cd data
     python bootstrap.py
@@ -114,8 +115,8 @@ Vagrant.configure("2") do |config|
 
     # Set up tileserver
     cd /opt/src/tileserver
-    virtualenv env
-    source env/bin/activate
+    virtualenv /opt/virtualenv/tileserver
+    source /opt/virtualenv/tileserver/bin/activate
     pip -q install -U -r requirements.txt
     python setup.py -q develop
     (cd ../tilequeue && python setup.py -q develop)
