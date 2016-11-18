@@ -92,7 +92,7 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 #### Changelog
 
-The current version of Mapzen vector tiles is **v1.0.0**.
+The current version of Mapzen vector tiles is **v1.0.2**.
 
 Our tiles are still in active development, but we promise to minimize backwards incompatable breaking changes. We list data model promises in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/v1.0.0/SEMANTIC-VERSIONING.md) statement.
 
@@ -155,7 +155,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `id:right`: For the relation on the right side of the boundary line.
 * `name:left`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `name:right`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
-* `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean. _See planned data improvement in [#294](https://github.com/tilezen/vector-datasource/issues/294)._
+* `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
 
 #### Boundaries properties (optional):
 

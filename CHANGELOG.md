@@ -1,3 +1,10 @@
+v1.0.2
+------
+* **Release date**: 2016-11-17.
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* Merge water and earth polygons. See [#1106](https://github.com/tilezen/vector-datasource/issues/1106).
+* Improve maritime_boundary tagging in Europe and globally by updating buffered_land shapefile. See [#294](https://github.com/tilezen/vector-datasource/issues/294).
+
 v1.0.1
 ------
 * **Release date**: 2016-11-04. _Live on prod 2016-11-04._
