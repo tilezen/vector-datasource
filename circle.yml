@@ -22,3 +22,15 @@ test:
     - python setup.py install
     - python setup.py test
     - ./scripts/setup_and_run_tests.sh -j 4
+
+deployment:
+  prerelease:
+    branch: "master"
+    commands:
+      - pip install 'Circle-Tickler == 1.0.1'
+      - tickle-circle mapzen mapzen-docs-generator tilezen-buildbot/tiles-prerelease-docs $CIRCLE_TOKEN
+  release:
+    tag: /.+/
+    commands:
+      - pip install 'Circle-Tickler == 1.0.1'
+      - tickle-circle mapzen mapzen-docs-generator master $CIRCLE_TOKEN
