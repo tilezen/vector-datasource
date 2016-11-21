@@ -54,7 +54,7 @@ for layer in ['pois', 'landuse']:
 # TAGS: attraction=carousel, building=yes, name=King Arthur Carrousel,
 # tourism=attraction
 assert_has_feature(
-    19, 90412, 209763, 'pois',
+    19, 90412, 209764, 'pois',
     { 'id': 129691054,
       'kind': 'carousel' })
 

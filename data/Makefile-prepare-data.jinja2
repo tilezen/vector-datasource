@@ -34,6 +34,19 @@ download: {{ src_shapefile_zips }}
 
 {% endfor %}
 
+{% for shapefile in tile_shapefiles %}
+{{ shapefile.src_shp }}: {{ shapefile.src_zip }}
+	unzip -o {{ shapefile.src_zip }}
+	touch {{ shapefile.src_shp }}
+
+{{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
+	python tile-shapefile.py {{ shapefile.src_shp }} {{ shapefile.tgt_shp }}
+
+{{ shapefile.tgt_zip }}: {{ shapefile.tgt_shp }}
+	zip {{ shapefile.tgt_zip }} {{ shapefile.tgt_shp_wildcard }}
+
+{% endfor %}
+
 clean:
 	rm -rf shapefiles.tar.gz {{ tgt_shapefile_zips }} {{ tgt_shapefile_wildcards }} {{ src_shapefile_zips }} {{ src_shapefile_wildcards }}
 

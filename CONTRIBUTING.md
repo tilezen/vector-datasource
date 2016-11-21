@@ -318,6 +318,7 @@ The python file `integration-test.py` contains several useful tests:
 - `assert_has_feature`
 - `assert_no_matching_feature`
 - `assert_at_least_n_features`
+- `assert_less_than_n_features`
 - `assert_feature_geom_type`
 
 

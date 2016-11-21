@@ -147,6 +147,7 @@ The integration test harness has functions such as:
 
 * `assert_has_feature(z, x, y, layer, properties)` fails the test if the tile with coordinate `z/x/y` doesn't contain a feature matching `properties` in layer `layer`.
 * `assert_at_least_n_features(z, x, y, layer, properties, n)` fails the test if the tile layer doesn't contain at least `n` matching features.
+* `assert_less_than_n_features(z, x, y, layer, properties, n)` fails the test if the tile layer doesn't contain less than `n` matching features.
 * `assert_no_matching_feature(z, x, y, layer, properties)` fails the test if the tile **does** contain a matching feature.
 * `features_in_tile_layer(z, x, y, layer)` is a context manager, to be used in a `with` statement. This will iterate over all the features in the given `layer` in the tile `z/x/y`. This can be useful for writing more general tests than the assertions above allow.
 * `layers_in_tile(z, x, y)` is a context manager, to be used in a `with` statement. This will iterate over all the layers in the tile `z/x/y`. This can be used to write very general tests about the existence or absence of features in certain layers.
