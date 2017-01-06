@@ -16,9 +16,10 @@ assert_has_feature(
 
 # Way: Upper Sumas 6 (55602811)
 # http://www.openstreetmap.org/way/55602811
+# http://www.openstreetmap.org/relation/6791772
 assert_has_feature(
     16, 10523, 22492, 'boundaries',
-    {'id': 55602811, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
+    {'id': -6791772, 'kind': 'aboriginal_lands', 'kind_detail': type(None)})
 
 # Relation: United States of America
 # https://www.openstreetmap.org/relation/148838

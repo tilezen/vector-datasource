@@ -34,19 +34,17 @@ assert_has_feature(
     15, 10776, 14921, 'earth',
     { 'kind': 'archipelago', 'label_placement': True, 'min_zoom': 15, 'name': 'Les Saintes' })
 
-# NODE archipelago labels (from place nodes)
-# http://www.openstreetmap.org/node/358955020
-assert_has_feature(
-    15, 9367, 12534, 'earth',
-    { 'kind': 'archipelago', 'label_placement': True, 'min_zoom': 15, 'name': 'Three Sisters Islands' })
 
 # LARGE archipelago labels (from place polygons)
 # There aren't any today
 # Really these should be lines, but will initially be points
 
 # MEDIUM archipelago labels (from place polygons)
-# There aren't any today
 # Really these should be lines, but will initially be points
+# http://www.openstreetmap.org/relation/6722301
+assert_has_feature(
+    15, 9367, 12534, 'earth',
+    { 'kind': 'archipelago', 'label_placement': True, 'min_zoom': 15, 'name': 'Three Sisters Islands' })
 
 # SMALL archipelago labels (from place polygons)
 # Really these should be lines, but will initially be points
