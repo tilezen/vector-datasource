@@ -14,6 +14,8 @@ assert_has_feature(
 def area_of_ring(ring):
     area = 0
 
+    print(ring, file=sys.stderr)
+
     for [px, py], [nx, ny] in zip(ring, ring[1:] + [ring[0]]):
         area += px * ny - nx * py
 
