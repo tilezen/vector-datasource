@@ -46,6 +46,6 @@ with features_in_mvt_layer(5, 17, 9, 'water') as features:
         if props.get('kind') == 'ocean':
             ocean_area += area_of(feature['geometry'])
 
-    expected = 7936264
+    expected = 1576712559132672   # was 7936264
     if abs(abs(ocean_area) - expected) / expected > 0.05:
         raise Exception("Ocean area %f, expected %f." % (abs(ocean_area), expected))
