@@ -1,4 +1,6 @@
+from __future__ import print_function
 from mapbox_vector_tile.decoder import POLYGON
+import sys
 
 # Caspian Sea
 assert_has_feature(
