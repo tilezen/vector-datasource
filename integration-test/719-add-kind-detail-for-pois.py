@@ -1,6 +1,6 @@
 # https://www.openstreetmap.org/node/1426311638
 assert_has_feature(
-    16, 19298, 24630, 'pois',
+    16, 19298, 24629, 'pois',
     { 'id': 1426311638, 'kind': 'restaurant', 'kind_detail': 'seafood' })
 
 # https://www.openstreetmap.org/way/280288213

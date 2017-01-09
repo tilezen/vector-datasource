@@ -1,7 +1,7 @@
 # Node:358830410 Grave_yard in POIs
 # http://www.openstreetmap.org/node/358830410
 assert_has_feature(
-    17, 20950, 50703, 'pois',
+    17, 20950, 50704, 'pois',
     {'id': 358830410, 'kind': 'grave_yard'})
 
 # Way:79457493 Grave_yard in POIS

@@ -11,11 +11,11 @@ assert_has_feature(
     {"kind": "major_road", "kind_detail": "trunk", "id": 59801274,
      "name": "Crossover Dr.", "is_bridge": True, "sort_rank": 443})
 
-#http://www.openstreetmap.org/way/163994970
+#http://www.openstreetmap.org/way/399640204
 assert_has_feature(
-    18, 70118, 101513, "roads",
-    {"kind": "major_road", "kind_detail": "primary", "id": 163994970,
-     "name": "Broadway", "is_bridge": True, "sort_rank": 430})
+    18, 45061, 104884, "roads",
+    {"kind": "major_road", "kind_detail": "primary", "id": 399640204,
+     "name": "North Los Coyotes Diagonal", "is_bridge": True, "sort_rank": 430})
 
 #https://www.openstreetmap.org/way/27613581
 assert_has_feature(
