@@ -1,8 +1,8 @@
-# https://www.openstreetmap.org/way/147689077
+# https://www.openstreetmap.org/way/332223480
 # Apple Store, SF
 assert_has_feature(
-    15, 5242, 12664, 'pois',
-    { 'id': 147689077, 'min_zoom': 15.68 })
+    15, 5242, 12663, 'pois',
+    { 'id': 332223480, 'min_zoom': 15.31 })
 
 # Test that source and min_zoom are set properly for boundaries, roads, transit, and water
 assert_has_feature(
