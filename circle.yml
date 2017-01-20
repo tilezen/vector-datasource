@@ -28,11 +28,8 @@ deployment:
     branch: "master"
     commands:
       - pip install 'Circle-Tickler == 1.0.1'
-       # remove this soon once new repo is verified
-      - tickle-circle mapzen mapzen-docs-generator tilezen-buildbot/tiles-prerelease-docs $CIRCLE_TOKEN
-       # new new new
-       - tickle-circle mapzen documentation tilezen-buildbot/tiles-prerelease-docs $CIRCLE_TOKEN
-  release:
+      # remove the first run once new repo is verified
+      - tickle-circle mapzen mapzen-docs-generator master $CIRCLE_TOKEN || tickle-circle mapzen documentation master $CIRCLE_TOKEN  release:
     tag: /.+/
     commands:
       - pip install 'Circle-Tickler == 1.0.1'
