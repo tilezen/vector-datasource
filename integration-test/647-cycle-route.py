@@ -3,7 +3,7 @@
 # http://www.openstreetmap.org/relation/32386
 assert_has_feature(
     16, 10487, 25327, 'roads',
-    { 'kind': 'major_road', 'cycleway': 'lane', 'bicycle_network': 'lcn' })
+    { 'id': 24335490, 'kind': 'major_road', 'cycleway_right': 'lane', 'bicycle_network': 'lcn' })
 
 # Way: King Street (8920394) http://www.openstreetmap.org/way/8920394
 assert_has_feature(
