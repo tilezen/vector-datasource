@@ -240,11 +240,11 @@ assert_no_matching_feature(
     15, 5239, 12668, 'landuse',
     {'id': 86285084, 'kind': 'recreation_ground', 'label_placement': True})
 
-# Node:1868204235 recreation_ground in POIS
-# http://www.openstreetmap.org/node/1868204235
+# Node:582131344 recreation_ground in POIS
+# http://www.openstreetmap.org/node/582131344
 assert_has_feature(
-    14, 2626, 6326, 'pois',
-    {'id': 1868204235, 'kind': 'recreation_ground', 'min_zoom': 14})
+    14, 2621, 6331, 'pois',
+    {'id': 582131344, 'kind': 'recreation_ground', 'min_zoom': 14})
 
 # Node:4214350591 substation in POIS
 # http://www.openstreetmap.org/node/4214350591
