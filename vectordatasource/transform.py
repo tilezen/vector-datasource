@@ -1328,7 +1328,7 @@ def exterior_boundaries(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     base_layer = ctx.params.get('base_layer')
     assert base_layer, 'Missing base_layer parameter'
     new_layer_name = ctx.params.get('new_layer_name')
@@ -1729,7 +1729,7 @@ def admin_boundaries(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     base_layer = ctx.params.get('base_layer')
     assert base_layer, 'Parameter base_layer missing.'
     start_zoom = ctx.params.get('start_zoom', 0)
@@ -1858,7 +1858,7 @@ def handle_label_placement(ctx):
     Converts a geometry label column into a separate feature.
     """
     layers = ctx.params.get('layers', None)
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     location_property = ctx.params.get('location_property', None)
     label_property_name = ctx.params.get('label_property_name', None)
     label_property_value = ctx.params.get('label_property_value', None)
@@ -1926,7 +1926,7 @@ def generate_address_points(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, 'generate_address_points: missing source_layer'
     start_zoom = ctx.params.get('start_zoom', 0)
@@ -2021,7 +2021,7 @@ def drop_features_where(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, 'drop_features_where: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
@@ -2060,7 +2060,7 @@ def _project_properties(ctx, action):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     where = ctx.params.get('where')
     source_layer = ctx.params.get('source_layer')
     assert source_layer, '_project_properties: missing source layer'
@@ -2229,7 +2229,7 @@ def remove_duplicate_features(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     source_layers = ctx.params.get('source_layers')
     start_zoom = ctx.params.get('start_zoom', 0)
@@ -2339,7 +2339,7 @@ def merge_duplicate_stations(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, \
         'normalize_and_merge_duplicate_stations: missing source layer'
@@ -2440,7 +2440,7 @@ def normalize_station_properties(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, \
         'normalize_and_merge_duplicate_stations: missing source layer'
@@ -2528,7 +2528,7 @@ def keep_n_features(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, 'keep_n_features: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
@@ -2589,7 +2589,7 @@ def rank_features(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, 'rank_features: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
@@ -2656,7 +2656,7 @@ def numeric_min_filter(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     assert source_layer, 'rank_features: missing source layer'
     filters = ctx.params.get('filters')
@@ -2939,7 +2939,7 @@ def _merge_features_by_property(
 
 
 def merge_building_features(ctx):
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
@@ -3008,7 +3008,7 @@ def merge_polygon_features(ctx):
     are unique in the merge.
     """
 
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
@@ -3045,7 +3045,7 @@ def merge_line_features(ctx):
     between start_zoom and end_zoom inclusive.
     """
 
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
@@ -3099,7 +3099,7 @@ def build_fence(ctx):
     details.
     """
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     base_layer = ctx.params.get('base_layer')
     new_layer_name = ctx.params.get('new_layer_name')
     prop_transform = ctx.params.get('prop_transform')
@@ -3427,7 +3427,7 @@ def csv_match_properties(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
@@ -3468,7 +3468,7 @@ def update_parenthetical_properties(ctx):
     """
 
     feature_layers = ctx.feature_layers
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
@@ -3609,7 +3609,7 @@ def drop_features_mz_min_pixels(ctx):
     prop_name = ctx.params.get('property')
     assert prop_name, 'drop_features_mz_min_pixels: missing property'
 
-    meters_per_pixel_area = calc_meters_per_pixel_area(ctx.tile_coord.zoom)
+    meters_per_pixel_area = calc_meters_per_pixel_area(ctx.nominal_zoom)
 
     feature_layers = ctx.feature_layers
     for source_layer_name in source_layer_names:
@@ -3647,7 +3647,7 @@ def drop_features_mz_min_pixels(ctx):
 def simplify_and_clip(ctx):
     """simplify geometries according to zoom level and clip"""
 
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     simplify_before = ctx.params.get('simplify_before')
 
     assert simplify_before, 'simplify_and_clip: missing simplify_before param'
@@ -3922,7 +3922,7 @@ def buildings_unify(ctx):
     root_id property which will be the id of building parent they are
     associated with.
     """
-    zoom = ctx.tile_coord.zoom
+    zoom = ctx.nominal_zoom
     start_zoom = ctx.params.get('start_zoom', 0)
 
     if zoom < start_zoom:

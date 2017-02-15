@@ -217,12 +217,11 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
 
     def _call_fut(self, feature_layers, zoom):
         from tilequeue.process import Context
-        from ModestMaps.Core import Coordinate
         from vectordatasource.transform import drop_features_mz_min_pixels
         params = dict(property='mz_min_pixels', source_layers=('layer-name',))
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=Coordinate(column=1, row=1, zoom=zoom),
+            nominal_zoom=zoom,
             params=params,
             unpadded_bounds=None,
             resources=None,
@@ -295,7 +294,6 @@ class SortKeyTest(unittest.TestCase):
 class BuildingsUnifyTest(unittest.TestCase):
 
     def _call_fut(self, building_shapes, building_part_shapes):
-        from tilequeue.tile import deserialize_coord
         from tilequeue.process import Context
 
         building_features = []
@@ -329,7 +327,7 @@ class BuildingsUnifyTest(unittest.TestCase):
 
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer='buildings'),
             resources=None)
@@ -387,7 +385,6 @@ class DropMergedIdTest(unittest.TestCase):
 
     def _assert_no_id_in_props(self, features, merge_fn):
         from tilequeue.process import Context
-        from tilequeue.tile import deserialize_coord
         layer_name = 'layername'
         feature_layer = dict(
             features=features,
@@ -396,7 +393,7 @@ class DropMergedIdTest(unittest.TestCase):
         feature_layers = [feature_layer]
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
             resources=None)
@@ -477,7 +474,6 @@ class DropMergedIdTest(unittest.TestCase):
     def test_no_merge_preserve_props(self):
         import shapely.geometry
         from tilequeue.process import Context
-        from tilequeue.tile import deserialize_coord
         from vectordatasource.transform import merge_polygon_features
 
         buildings = []
@@ -506,7 +502,7 @@ class DropMergedIdTest(unittest.TestCase):
         feature_layers = [feature_layer]
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
             resources=None)
@@ -629,7 +625,6 @@ class RankBoundsTest(unittest.TestCase):
 
     def _call_fut(self, shape, bounds):
         from tilequeue.process import Context
-        from tilequeue.tile import deserialize_coord
         from vectordatasource.transform import rank_features
         props = dict(foo='bar')
         feature = shape, props, 1
@@ -644,7 +639,7 @@ class RankBoundsTest(unittest.TestCase):
         )
         ctx = Context(
             feature_layers=[feature_layer],
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=bounds,
             params=params,
             resources=None,

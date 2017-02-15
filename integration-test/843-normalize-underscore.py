@@ -13,7 +13,7 @@ assert_has_feature(
     16, 18763, 24784, 'roads',
     { 'id': 256717307, 'kind': 'aerialway', 'kind_detail': 'j_bar' })
 
-# http://www.openstreetmap.org/way/258132198
+# http://www.openstreetmap.org/way/232074914
 assert_has_feature(
-    16, 10910, 25120, 'roads',
-    { 'id': 258132198, 'kind': 'aerialway', 'kind_detail': type(None) })
+    16, 13304, 24998, 'roads',
+    { 'id': 232074914, 'kind': 'aerialway', 'kind_detail': type(None) })
