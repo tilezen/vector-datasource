@@ -222,7 +222,7 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
         params = dict(property='mz_min_pixels', source_layers=('layer-name',))
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=Coordinate(column=1, row=1, zoom=zoom),
+            nominal_zoom=zoom,
             params=params,
             unpadded_bounds=None,
             resources=None,
@@ -329,7 +329,7 @@ class BuildingsUnifyTest(unittest.TestCase):
 
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer='buildings'),
             resources=None)
@@ -396,7 +396,7 @@ class DropMergedIdTest(unittest.TestCase):
         feature_layers = [feature_layer]
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
             resources=None)
@@ -506,7 +506,7 @@ class DropMergedIdTest(unittest.TestCase):
         feature_layers = [feature_layer]
         ctx = Context(
             feature_layers=feature_layers,
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
             resources=None)
@@ -644,7 +644,7 @@ class RankBoundsTest(unittest.TestCase):
         )
         ctx = Context(
             feature_layers=[feature_layer],
-            tile_coord=deserialize_coord('0/0/0'),
+            nominal_zoom=0,
             unpadded_bounds=bounds,
             params=params,
             resources=None,
