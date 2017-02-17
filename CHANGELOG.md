@@ -1,3 +1,7 @@
+v1.1.0
+------
+* Replace usage of tile coordinate with usage of nominal zoom. (See https://github.com/tilezen/vector-datasource/pull/1166)
+
 v1.0.3
 ------
 * **Release date**: 2017-01-24.
