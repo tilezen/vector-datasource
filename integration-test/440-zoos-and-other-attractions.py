@@ -32,7 +32,7 @@ for layer in ['pois', 'landuse']:
     # NOTE: updated to a feature in North America: MarineLand, Niagara Falls,
     # ON.
     assert_has_feature(
-        17, 36746, 48133, layer,
+        16, 18373, 24066, layer,
         { 'id': 177402901,
           'kind': 'attraction' })
 
@@ -54,7 +54,7 @@ for layer in ['pois', 'landuse']:
 # TAGS: attraction=carousel, building=yes, name=King Arthur Carrousel,
 # tourism=attraction
 assert_has_feature(
-    19, 90412, 209764, 'pois',
+    16, 11301, 26220, 'pois',
     { 'id': 129691054,
       'kind': 'carousel' })
 
@@ -63,6 +63,6 @@ assert_has_feature(
 # tourism=attraction
 ## way 107280556 http://c.tile.openstreetmap.org/17/22603/52441.png
 assert_has_feature(
-    17, 22603, 52441, 'pois',
+    16, 11301, 26220, 'pois',
     { 'id': 107280556,
       'kind': 'roller_coaster' })

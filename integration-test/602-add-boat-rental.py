@@ -1,8 +1,8 @@
 tiles = [
-    [18, 66716, 99052], # node 2420432693 shop=boat_rental
-    [18, 53293, 86717], # node 2911709060 amenity=boat_rental
-    [18, 77832, 98089], # node 3466463119 shop=boat, rental=yes
-    [18, 42014, 101241] # node 3509468126 rental=boat
+    [16, 16679, 24763], # node 2420432693 shop=boat_rental
+    [16, 13323, 21679], # node 2911709060 amenity=boat_rental
+    [16, 19458, 24522], # node 3466463119 shop=boat, rental=yes
+    [16, 10503, 25310], # node 3509468126 rental=boat
 ]
 
 for z, x, y in tiles:

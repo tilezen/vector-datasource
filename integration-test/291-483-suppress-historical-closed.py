@@ -13,5 +13,5 @@ assert_no_matching_feature(
 
 # but POI should be present at z17 and marked as closed
 assert_has_feature(
-    17, 20931, 50616, 'pois',
+    16, 10465, 25308, 'pois',
     {'id': 241643507, 'kind': 'closed', 'min_zoom': 17})

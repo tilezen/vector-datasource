@@ -19,7 +19,7 @@ for layer in ['pois', 'landuse']:
 
     # tourism whitelist
     tourism_values = [
-        (17, 35291, 48485, 358445798, 'artwork'), # City Sculpture, Detroit
+        (16, 17645, 24242, 358445798, 'artwork'), # City Sculpture, Detroit
         (13, 2240, 3421, -1228099, 'theme_park'), # Walt Disney World Resort
         (13, 2351, 3181, 362327591, 'theme_park'), # Busch Gardens Williamsburg
         (14, 2825, 6555, -4795362, 'resort'), # Disneyland Resort
@@ -49,6 +49,6 @@ assert_has_feature(
 # in the landuse layer.
 # unnamed, CO
 assert_has_feature(
-    17, 27372, 49802, 'pois',
+    16, 13686, 24901, 'pois',
     { 'id': 1589837084,
       'kind': 'trail_riding_station' })

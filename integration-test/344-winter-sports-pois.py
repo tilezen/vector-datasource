@@ -1,7 +1,7 @@
 # ski shop in Big Bear Lake, CA
 # https://www.openstreetmap.org/node/2720341705
 assert_has_feature(
-    18, 45955, 104504, 'pois',
+    16, 11488, 26126, 'pois',
     { 'kind': 'ski',
       'name': None })
 

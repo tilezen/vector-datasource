@@ -4,10 +4,10 @@ tiles = [
     (16, 10484, 25332),
     # Sunset gym, leisure=sports_centre + sport=fitness
     #https://www.openstreetmap.org/node/3674255652
-    (17, 20947, 50666),
+    (16, 10473, 25333),
     # Alameda Athletic Club, amenity=gym
     #https://www.openstreetmap.org/node/310972983
-    (17, 21028, 50668)
+    (16, 10514, 25334)
 ]
 
 for z, x, y in tiles:
@@ -18,5 +18,5 @@ for z, x, y in tiles:
 # Pushup, fitness_station
 #https://www.openstreetmap.org/node/3658323774
 assert_has_feature(
-    17, 26332, 50542, 'pois',
+    16, 13166, 25271, 'pois',
     { 'kind': 'fitness_station' })

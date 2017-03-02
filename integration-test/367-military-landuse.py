@@ -1,5 +1,5 @@
 # Naval Weapons Station Concord, CA
 # https://www.openstreetmap.org/way/154836419
 assert_has_feature(
-    17, 21107, 50548, 'landuse',
+    16, 10553, 25274, 'landuse',
     { 'kind': 'military' })

@@ -1,14 +1,14 @@
 tiles = [
-    (17, 20946, 50678), # https://www.openstreetmap.org/way/215472849
-    (17, 20959, 50673), # https://www.openstreetmap.org/node/1713279804
-    (17, 20961, 50675), # https://www.openstreetmap.org/node/3188857553
-    (17, 20969, 50656), # https://www.openstreetmap.org/node/3396659022
-    (17, 21013, 50637), # https://www.openstreetmap.org/node/1467717312
-    (17, 21019, 50617), # https://www.openstreetmap.org/node/2286100659
-    (17, 21028, 50645), # https://www.openstreetmap.org/node/3711137981
-    (17, 38597, 49266), # https://www.openstreetmap.org/node/3810578539
-    (17, 38600, 49261), # https://www.openstreetmap.org/node/1429062988
-    (17, 38601, 49258), # https://www.openstreetmap.org/node/1058296287
+    (16, 10473, 25339), # https://www.openstreetmap.org/way/215472849
+    (16, 10479, 25336), # https://www.openstreetmap.org/node/1713279804
+    (16, 10480, 25337), # https://www.openstreetmap.org/node/3188857553
+    (16, 10484, 25328), # https://www.openstreetmap.org/node/3396659022
+    (16, 10506, 25318), # https://www.openstreetmap.org/node/1467717312
+    (16, 10509, 25308), # https://www.openstreetmap.org/node/2286100659
+    (16, 10514, 25322), # https://www.openstreetmap.org/node/3711137981
+    (16, 19298, 24633), # https://www.openstreetmap.org/node/3810578539
+    (16, 19300, 24630), # https://www.openstreetmap.org/node/1429062988
+    (16, 19300, 24629), # https://www.openstreetmap.org/node/1058296287
 ]
 
 for z, x, y in tiles:
