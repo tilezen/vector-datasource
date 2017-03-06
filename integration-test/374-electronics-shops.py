@@ -1,6 +1,6 @@
 tiles = [
     # https://www.openstreetmap.org/way/25821942
-    (17, 20966, 50665, 'Best Buy'),
+    (16, 10483, 25332, 'Best Buy'),
     # https://www.openstreetmap.org/way/143811375
     (15, 5236, 12676, 'Best Buy'),
     # https://www.openstreetmap.org/way/25821942

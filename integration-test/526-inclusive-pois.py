@@ -1,21 +1,21 @@
 tiles = [
     # healthcare=midwife
     #https://www.openstreetmap.org/node/3761053357
-    ['17/21000/44983', {'kind': 'midwife'}],
+    ['16/10500/22491', {'kind': 'midwife'}],
 
     # amenity={kindergarten, childcare}
     #https://www.openstreetmap.org/node/1460537343
     #https://www.openstreetmap.org/way/378041773
     ['16/10470/25342', {'kind': 'kindergarten'}],
-    ['17/20956/50676', {'kind': 'childcare'}],
+    ['16/10478/25338', {'kind': 'childcare'}],
 
     # emergency=phone
     #https://www.openstreetmap.org/node/2456072777
-    ['18/41978/101284', {'kind': 'phone'}],
+    ['16/10494/25321', {'kind': 'phone'}],
 
     # amenity=toilets
     #https://www.openstreetmap.org/node/3931486668
-    ['18/41923/101323', {'kind': 'toilets'}],
+    ['16/10480/25330', {'kind': 'toilets'}],
 
     # amenity=social_facility + social_facility=*
     # also with social_facility:for -> for and turned into a list to make it
@@ -25,11 +25,11 @@ tiles = [
     #https://www.openstreetmap.org/way/243357053
     #https://www.openstreetmap.org/way/377082896
     #https://www.openstreetmap.org/node/358816623
-    ['18/41920/101328', {'kind': 'social_facility', 'for': ['senior', 'disabled']}],
-    ['18/41928/101328', {'kind': 'shelter', 'for': ['homeless']}],
-    ['17/20967/50661', {'kind': 'shelter', 'for': ['homeless']}],
-    ['17/20960/50808', {'kind': 'group_home', 'for': ['senior']}],
-    ['18/42119/101622', {'kind': 'assisted_living'}],
+    ['16/10480/25332', {'kind': 'social_facility', 'for': ['senior', 'disabled']}],
+    ['16/10482/25332', {'kind': 'shelter', 'for': ['homeless']}],
+    ['16/10483/25330', {'kind': 'shelter', 'for': ['homeless']}],
+    ['16/10480/25404', {'kind': 'group_home', 'for': ['senior']}],
+    ['16/10529/25405', {'kind': 'assisted_living'}],
 
     # amenity={clinic, doctors, dentist}
     # also with healthcare:speciality -> speciality and turned into a list to make
@@ -39,11 +39,11 @@ tiles = [
     #https://www.openstreetmap.org/node/3133693825
     #https://www.openstreetmap.org/node/3163318863
     #https://www.openstreetmap.org/node/3879177193
-    ['18/41936/101301', {'kind': 'clinic'}],
-    ['17/20965/50666', {'kind': 'clinic'}],
-    ['18/41923/101349', {'kind': 'doctors'}],
-    ['18/41923/101350', {'kind': 'dentist'}],
-    ['17/21066/45789', {'kind': 'doctors', 'speciality': ['general']}],
+    ['16/10484/25325', {'kind': 'clinic'}],
+    ['16/10482/25333', {'kind': 'clinic'}],
+    ['16/10480/25337', {'kind': 'doctors'}],
+    ['16/10480/25337', {'kind': 'dentist'}],
+    ['16/10533/22894', {'kind': 'doctors', 'speciality': ['general']}],
 ]
 
 for loc, props in tiles:
