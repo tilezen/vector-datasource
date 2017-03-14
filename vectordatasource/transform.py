@@ -2882,7 +2882,8 @@ def _merge_polygons(polygon_shapes):
 def _merge_features_by_property(
         features, geom_dim,
         update_props_pre_fn=None,
-        update_props_post_fn=None):
+        update_props_post_fn=None,
+        max_merged_features=None):
 
     assert geom_dim in (_POLYGON_DIMENSION, _LINE_DIMENSION)
     if geom_dim == _LINE_DIMENSION:
@@ -2924,15 +2925,25 @@ def _merge_features_by_property(
             new_features.append((shapes[0], orig_props, fid))
             continue
 
-        merged_shape = _merge_shape_fn(shapes)
+        num_shapes = len(shapes)
+        shapes_per_merge = num_shapes
+        if max_merged_features and max_merged_features < shapes_per_merge:
+            shapes_per_merge = max_merged_features
+            # reset fid if we're going to split up features, as we don't want
+            # them all to have duplicate IDs.
+            fid = None
 
-        # thaw the frozen properties to use in the new feature.
-        props = _thaw(frozen_props)
+        for i in range(0, num_shapes, shapes_per_merge):
+            j = min(num_shapes, i + shapes_per_merge)
+            merged_shape = _merge_shape_fn(shapes[i:j])
 
-        if update_props_post_fn:
-            props = update_props_post_fn((merged_shape, props, fid))
+            # thaw the frozen properties to use in the new feature.
+            props = _thaw(frozen_props)
 
-        new_features.append((merged_shape, props, fid))
+            if update_props_post_fn:
+                props = update_props_post_fn((merged_shape, props, fid))
+
+            new_features.append((merged_shape, props, fid))
 
     new_features.extend(skipped_features)
     return new_features
@@ -2945,6 +2956,7 @@ def merge_building_features(ctx):
     end_zoom = ctx.params.get('end_zoom')
     drop = ctx.params.get('drop')
     exclusions = ctx.params.get('exclude')
+    max_merged_features = ctx.params.get('max_merged_features')
 
     assert source_layer, 'merge_building_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -2995,7 +3007,8 @@ def merge_building_features(ctx):
         return props
 
     layer['features'] = _merge_features_by_property(
-        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post)
+        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
+        max_merged_features)
     return layer
 
 
