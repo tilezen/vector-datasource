@@ -48,7 +48,7 @@ assert_has_feature(
     16, 10294, 25113, 'landuse',
     { 'id': 393312618, 'kind': 'park' })
 
-# http://www.openstreetmap.org/way/29191880
+# http://www.openstreetmap.org/way/469494860
 assert_has_feature(
-    16, 12393, 26315, 'landuse',
-    { 'id': 29191880, 'kind': 'natural_park' })
+    16, 17612, 24209, 'landuse',
+    { 'id': 469494860, 'kind': 'natural_park' })

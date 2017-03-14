@@ -28,10 +28,10 @@ assert_has_feature(
      "sort_rank": 382})
 
 # spurs, sidings, etc...
-#https://www.openstreetmap.org/way/106087318
+#https://www.openstreetmap.org/way/135403703
 assert_has_feature(
-    16, 10491, 25342, "roads",
-    {"kind": "rail", "kind_detail": "rail", "service": "spur", "id": 106087318,
+    16, 13353, 25941, "roads",
+    {"kind": "rail", "kind_detail": "rail", "service": "spur", "id": 135403703,
      "sort_rank": 361})
 
 #https://www.openstreetmap.org/way/148018328
