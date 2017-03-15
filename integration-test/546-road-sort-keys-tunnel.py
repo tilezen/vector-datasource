@@ -5,11 +5,11 @@ assert_has_feature(
     {"kind": "highway", "kind_detail": "motorway", "id": 167952621,
      "name": "Presidio Pkwy.", "is_tunnel": True, "sort_rank": 333})
 
-# http://www.openstreetmap.org/way/259492762
+# http://www.openstreetmap.org/way/259492789
 assert_has_feature(
-    16, 19267, 24634, "roads",
-    {"kind": "major_road", "kind_detail": "trunk", "id": 259492762,
-     "name": "Raymond Blvd.", "is_tunnel": True, "sort_rank": 331})
+    16, 19266, 24635, "roads",
+    {"kind": "major_road", "kind_detail": "trunk", "id": 259492789,
+     "name": "McCarter Hwy.", "is_tunnel": True, "sort_rank": 331})
 
 # http://www.openstreetmap.org/way/277441866
 assert_has_feature(
