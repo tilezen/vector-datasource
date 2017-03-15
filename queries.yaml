@@ -603,6 +603,7 @@ post_process:
         - name
         - addr_housenumber
         - addr_street
+      max_merged_features: 1000
 
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
