@@ -405,12 +405,6 @@ post_process:
       where: >-
         pixel_area > area
       geom_types: [Polygon, MultiPolygon]
-  # merge any remaining polygons by their properties.
-  - fn: vectordatasource.transform.merge_polygon_features
-    params:
-      source_layer: landuse
-      start_zoom: 4
-      end_zoom: 12
 
   - fn: vectordatasource.transform.drop_features_where
     params:
@@ -615,6 +609,12 @@ post_process:
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_rank', reverse: True }
+  # merge any remaining polygons by their properties.
+  - fn: vectordatasource.transform.merge_polygon_features
+    params:
+      source_layer: landuse
+      start_zoom: 4
+      end_zoom: 12
 
   - fn: vectordatasource.transform.merge_line_features
     params:
