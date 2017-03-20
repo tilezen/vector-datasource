@@ -27,10 +27,10 @@ deployment:
   prerelease:
     branch: "master"
     commands:
-      - pip install ‘Circle-Beacon == 2.0.0'
+      - pip install 'Circle-Beacon == 2.0.0'
       - alert-circle mapzen documentation master $CIRCLE_TOKEN
   release:
     tag: /.+/
     commands:
-      - pip install ‘Circle-Beacon == 2.0.0'
+      - pip install 'Circle-Beacon == 2.0.0'
       - alert-circle mapzen documentation master $CIRCLE_TOKEN
