@@ -3657,6 +3657,77 @@ def drop_features_mz_min_pixels(ctx):
             feature_layer['features'] = features_to_keep
 
 
+def _drop_small_inners(poly, area_tolerance):
+    ext = poly.exterior
+
+    inners = []
+    for inner in poly.interiors:
+        area = Polygon(inner).area
+        import sys; print>>sys.stderr, "area: %f, area_tolerance: %f" % (area, area_tolerance)
+        if area >= area_tolerance:
+            inners.append(inner)
+
+    return Polygon(ext, inners)
+
+
+def drop_small_inners(ctx):
+    """
+    Drop inners which are smaller than the given scale.
+    """
+
+    zoom = ctx.nominal_zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    pixel_area = ctx.params.get('pixel_area')
+    source_layers = ctx.params.get('source_layers')
+
+    assert source_layers, \
+        "You must provide source_layers (layer names) to drop_small_inners"
+    assert pixel_area, \
+        "You must provide a pixel_area parameter to drop_small_inners"
+
+    if zoom < start_zoom:
+        return None
+
+    if end_zoom and zoom > end_zoom:
+        return None
+
+    meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
+    area_tolerance = meters_per_pixel_area**2 * pixel_area
+
+    for layer in ctx.feature_layers:
+        layer_datum = layer['layer_datum']
+        layer_name = layer_datum['name']
+
+        if layer_name not in source_layers:
+            continue
+
+        new_features = []
+        for feature in layer['features']:
+            shape, props, fid = feature
+
+            geom_type = shape.geom_type
+
+            if geom_type == 'Polygon':
+                new_shape = _drop_small_inners(shape, area_tolerance)
+                if new_shape:
+                    new_features.append((new_shape, props, fid))
+
+            elif geom_type == 'MultiPolygon':
+                polys = []
+                for g in shape.geoms:
+                    new_g = _drop_small_inners(g, area_tolerance)
+                    if new_g:
+                        polys.append(new_g)
+                if polys:
+                    new_features.append((MultiPolygon(polys), props, fid))
+
+            else:
+                new_features.append(feature)
+
+        layer['features'] = new_features
+
+
 def simplify_and_clip(ctx):
     """simplify geometries according to zoom level and clip"""
 
