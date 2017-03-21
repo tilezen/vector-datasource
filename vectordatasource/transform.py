@@ -3663,7 +3663,6 @@ def _drop_small_inners(poly, area_tolerance):
     inners = []
     for inner in poly.interiors:
         area = Polygon(inner).area
-        import sys; print>>sys.stderr, "area: %f, area_tolerance: %f" % (area, area_tolerance)
         if area >= area_tolerance:
             inners.append(inner)
 
