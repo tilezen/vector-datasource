@@ -4,10 +4,10 @@ from shapely.geometry import shape
 # "building". we should be clipping it to a buffer of 3x the tile
 # dimensions.
 # http://www.openstreetmap.org/way/37054313
-with features_in_tile_layer(19, 154366, 197054, 'buildings') as buildings:
+with features_in_tile_layer(16, 19295, 24631, 'buildings') as buildings:
     # max width and height in degress as 3x the size of the above tile
-    max_w = 0.002060
-    max_h = 0.001561
+    max_w = 0.0164794921875
+    max_h = 0.012484410579673977
 
     # need to check that we at least saw the high line
     saw_the_high_line = False
