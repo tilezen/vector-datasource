@@ -13,5 +13,5 @@ assert_has_feature(
 # Horsens Fjord
 # https://www.openstreetmap.org/relation/1451065
 assert_has_feature(
-    14, 8645, 5114, 'water',
+    14, 8646, 5112, 'water',
     { 'kind': 'fjord', 'label_placement': True })
