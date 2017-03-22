@@ -3692,7 +3692,7 @@ def drop_small_inners(ctx):
         return None
 
     meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
-    area_tolerance = meters_per_pixel_area**2 * pixel_area
+    area_tolerance = meters_per_pixel_area * pixel_area
 
     for layer in ctx.feature_layers:
         layer_datum = layer['layer_datum']
@@ -3709,14 +3709,14 @@ def drop_small_inners(ctx):
 
             if geom_type == 'Polygon':
                 new_shape = _drop_small_inners(shape, area_tolerance)
-                if new_shape:
+                if not new_shape.is_empty:
                     new_features.append((new_shape, props, fid))
 
             elif geom_type == 'MultiPolygon':
                 polys = []
                 for g in shape.geoms:
                     new_g = _drop_small_inners(g, area_tolerance)
-                    if new_g:
+                    if not new_g.is_empty:
                         polys.append(new_g)
                 if polys:
                     new_features.append((MultiPolygon(polys), props, fid))
