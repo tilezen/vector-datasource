@@ -47,7 +47,7 @@ assert_has_feature(
 #SF in the Avenues, way/344205837
 assert_no_matching_feature(
     14, 2617, 6333, 'roads',
-    {'kind': 'path', 'footway': 'sidewalk'})
+    {'id': 344205837, 'kind': 'path', 'footway': 'sidewalk'})
 
 #SF in the Avenues, way/344205837
 assert_has_feature(
