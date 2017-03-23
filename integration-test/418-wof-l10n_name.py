@@ -1,7 +1,7 @@
 # Hollywood (wof neighbourhood)
 # https://whosonfirst.mapzen.com/data/858/260/37/85826037.geojson
 assert_has_feature(
-    16, 11227, 26157, 'places',
+    16, 11225, 26158, 'places',
     { 'id': 85826037, 'kind': 'neighbourhood',
       'source': "whosonfirst.mapzen.com",
       'name': 'Hollywood',
