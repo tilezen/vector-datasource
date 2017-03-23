@@ -1,3 +1,10 @@
+v1.2.0
+------
+* Add configuration option to limit the number of shapes that can all be merged into one MultiPolygon.
+* Move merging of landuse polygons after roads intercut.
+* Drop small inner polygons.
+* **Requires:** [tileserver v1.4.0](https://github.com/mapzen/tileserver/releases/tag/v1.4.0) and [tilequeue v1.6.0](https://github.com/mapzen/tilequeue/releases/tag/v1.6.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+
 v1.1.0
 ------
 * Replace usage of tile coordinate with usage of nominal zoom. (See https://github.com/tilezen/vector-datasource/pull/1166)
