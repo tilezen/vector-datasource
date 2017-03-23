@@ -13,11 +13,7 @@ assert_has_feature(
 # area 30089300
 assert_has_feature(
     8, 56, 115, 'landuse',
-    { 'kind': 'national_park', 'id': -921675, 'tier': 1,
-      'min_zoom': 8 })
-assert_no_matching_feature(
-    7, 28, 57, 'landuse',
-    { 'kind': 'national_park', 'id': -921675 })
+    { 'kind': 'national_park', 'tier': 1, 'min_zoom': 8 })
 assert_has_feature(
     8, 56, 115, 'pois',
     { 'kind': 'national_park', 'id': -921675, 'tier': 1,

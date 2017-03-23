@@ -3,7 +3,7 @@
 #
 # http://www.openstreetmap.org/relation/972008
 assert_has_feature(
-    10, 170, 394, 'landuse',
+    11, 340, 788, 'landuse',
     { 'kind': 'forest', 'id': -972008 })
 
 # But this other Humboldt forest in Nevada has protect_class 5 so that's not

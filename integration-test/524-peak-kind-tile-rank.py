@@ -95,14 +95,23 @@ with features_in_tile_layer(16, 12372, 26269, 'pois') as features:
 #https://www.openstreetmap.org/node/356546139
 #https://www.openstreetmap.org/node/348179123
 with features_in_tile_layer(12, 662, 1443, 'pois') as features:
-    def assert_peak(rank, elevation, kind, name):
-        properties = {'kind': kind, 'elevation': elevation, 'name': name,
-                      'kind_tile_rank': rank}
-        num_matching = count_matching(features, properties)
-        if num_matching != 1:
+    def assert_peak(rank_spec, elevation, kind, name):
+        if isinstance(rank_spec, int):
+            possible_ranks = [rank_spec]
+        else:
+            possible_ranks = rank_spec
+        matched_one = False
+        for rank in possible_ranks:
+            properties = {'kind': kind, 'elevation': elevation, 'name': name,
+                          'kind_tile_rank': rank}
+            num_matching = count_matching(features, properties)
+            if num_matching == 1:
+                matched_one = True
+                break
+        if not matched_one:
             raise Exception, "Did not find %s matching properties %r." \
                 % (kind, properties)
 
-    assert_peak(1, 4392, 'volcano', 'Mount Rainier')
-    assert_peak(2, 4302, 'peak',    'Point Success')
-    assert_peak(3, 3863, 'peak',    'Gibraltar Rock')
+    assert_peak(1,      4392, 'volcano', 'Mount Rainier')
+    assert_peak(2,      4302, 'peak',    'Point Success')
+    assert_peak((3, 4), 3863, 'peak',    'Gibraltar Rock')
