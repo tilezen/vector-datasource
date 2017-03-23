@@ -44,9 +44,5 @@ assert_no_matching_feature(
 # http://www.openstreetmap.org/node/4320045170
 # http://www.openstreetmap.org/way/427290222
 assert_has_feature(
-    17, 20959, 50689, 'pois',
-    {'id': 4320045170, 'kind': 'gate'})
-
-assert_has_feature(
     16, 10479, 25344, 'pois',
     {'id': 4320045170, 'kind': 'gate', 'min_zoom': 17})
