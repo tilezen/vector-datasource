@@ -92,9 +92,9 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 #### Changelog
 
-The current version of Mapzen vector tiles is **v1.0.2**.
+The current version of Mapzen vector tile "Tilezen" data model is **v1.2.0**.
 
-Our tiles are still in active development, but we promise to minimize backwards incompatable breaking changes. We list data model promises in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/v1.0.0/SEMANTIC-VERSIONING.md) statement.
+Our tiles are still in active development, but we promise to minimize backwards incompatable breaking changes. We list data model promises in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
 If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. We're also interested in your feedback at hello@mapzen.com!
 
