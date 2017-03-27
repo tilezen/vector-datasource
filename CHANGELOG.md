@@ -1,6 +1,6 @@
 v1.2.0
 ------
-* **Release date**: 2017-03-23.
+* **Release date**: 2017-03-23. _Live on prod 2017-03-27._
 * **Requires:** [tileserver v1.4.0](https://github.com/mapzen/tileserver/releases/tag/v1.4.0) and [tilequeue v1.6.0](https://github.com/mapzen/tilequeue/releases/tag/v1.6.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
 * Generate less-complex MultiPolygons by limiting the number of features that can be merged into a single MultiPolygon (defaults to 1000). This can have a large impact on geometric topology checks for file formats like MVT. See [#1176](https://github.com/tilezen/vector-datasource/pull/1176).
 * Move merging of landuse polygons after roads intercut, to improve intercut performance. See [#1177]( https://github.com/tilezen/vector-datasource/pull/1177).
