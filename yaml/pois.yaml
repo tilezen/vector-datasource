@@ -440,7 +440,7 @@ filters:
   # common - no POI
   # garden
   - filter: {leisure: garden}
-    min_zoom: { min: [ 12, { max: [ { lit: zoom }, { lit: *tier6_min_zoom } ] }, 16 ] }
+    min_zoom: { min: [ { max: [ 12, { lit: zoom }, { lit: *tier6_min_zoom } ] }, 16 ] }
     output: {kind: garden, tier: 6}
   # hedge - no POI
   # pedestrian - no POI
