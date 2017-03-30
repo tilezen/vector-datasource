@@ -29,11 +29,11 @@ assert_has_feature(
 
 
 # NODE archipelago labels (from place nodes)
-# http://www.openstreetmap.org/node/3178316462
+# http://www.openstreetmap.org/node/3860848374
 assert_has_feature(
-    15, 10776, 14921, 'earth',
-    { 'kind': 'archipelago', 'label_placement': True, 'min_zoom': 15, 'name': 'Les Saintes' })
-
+    15, 10817, 11412, 'earth',
+    { 'kind': 'archipelago', 'label_placement': True, 'min_zoom': 15,
+      'name': 'Rochers aux Oiseaux' })
 
 # LARGE archipelago labels (from place polygons)
 # There aren't any today
@@ -99,7 +99,7 @@ assert_has_feature(
     { 'kind': 'island', 'label_placement': True, 'name': 'Cockburn Island' })
 
 # MEDIUM island labels (from place polygons)
-# http://www.openstreetmap.org/way/40500912
+# http://www.openstreetmap.org/relation/7117158
 # San Miguel Island, California
 assert_has_feature(
     10, 169, 408, 'earth',
