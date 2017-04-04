@@ -31,10 +31,10 @@ assert_has_feature(
     13, 1367, 3261, 'pois',
     { 'kind': 'offshore_platform', 'min_zoom': 13 })
 
-#http://www.openstreetmap.org/way/350328482
+#http://www.openstreetmap.org/way/446514311
 assert_has_feature(
-    13, 1942, 3395, 'pois',
-    { 'kind': 'offshore_platform', 'min_zoom': 13 })
+    13, 5399, 1881, 'pois',
+    { 'kind': 'offshore_platform', 'min_zoom': 13, 'id': 446514311 })
 
 #http://www.openstreetmap.org/node/1501843094
 assert_has_feature(

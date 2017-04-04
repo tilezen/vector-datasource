@@ -12,7 +12,6 @@
 #https://www.openstreetmap.org/way/200068201
 #https://www.openstreetmap.org/way/220084069
 #https://www.openstreetmap.org/way/242899474
-#https://www.openstreetmap.org/node/1589837084
 
 # expect these features in _both_ the landuse and POIs layers.
 for layer in ['pois', 'landuse']:
@@ -47,8 +46,8 @@ assert_has_feature(
 
 # this is a POI, but also a point, so as it has no area, it won't show up
 # in the landuse layer.
-# unnamed, CO
+# http://www.openstreetmap.org/node/3095286850
 assert_has_feature(
-    16, 13686, 24901, 'pois',
-    { 'id': 1589837084,
+    16, 34893, 21123, 'pois',
+    { 'id': 3095286850,
       'kind': 'trail_riding_station' })

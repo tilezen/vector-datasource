@@ -195,21 +195,21 @@ assert_has_feature(
     { 'kind': 'dog_park', 'sort_rank': 97 })
 
 
-#https://www.openstreetmap.org/relation/6328943
-# Cox Stadium recreation track
+# Red Gra / Running Track
+# http://www.openstreetmap.org/way/95922608
 assert_has_feature(
-    15, 5235, 12671, 'landuse',
-    { 'id': -6328943, 'kind': 'recreation_track', 'sort_rank': 59 })
+    15, 16384, 10951, 'landuse',
+    { 'id': 95922608, 'kind': 'recreation_track', 'sort_rank': 59 })
 
 # Cox Stadium recreation track
 assert_has_feature(
-    16, 10471, 25342, 'pois',
-    { 'id': -6328943, 'kind': 'recreation_track', 'min_zoom': 16 })
+    16, 32768, 21903, 'pois',
+    { 'id': 95922608, 'kind': 'recreation_track', 'min_zoom': 16 })
 
-#https://www.openstreetmap.org/node/3643451363
-# unnamed running track
+#http://www.openstreetmap.org/node/4218421638
+# Pista de Atletismo
 assert_has_feature(
-    16, 10962, 25007, 'pois',
+    16, 21060, 39942, 'pois',
     { 'kind': 'recreation_track', 'min_zoom': 17 })
 
 #https://www.openstreetmap.org/node/418185265

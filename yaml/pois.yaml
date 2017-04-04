@@ -85,10 +85,78 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  - &no_name_okay
+        - man_made: windmill
+        - man_made: observatory
+        - leisure: pitch
+        - amenity: parking
+        - natural: spring
+        - historic: landmark
+        - natural: geyser
+        - natural: hot_spring
+        - amenity: toilets
+        - barrier: gate
+        - man_made: communications_tower
+        - man_made: water_tower
+        - natural: tree
+        - amenity: ranger_station
+        - tags->icn_ref: true
+        - tags->ncn_ref: true
+        - tags->rcn_ref: true
+        - tags->lcn_ref: true
+        - tags->iwn_ref: true
+        - tags->nwn_ref: true
+        - tags->rwn_ref: true
+        - tags->lwn_ref: true
+        - leisure: slipway
+        - amenity: bicycle_parking
+        - man_made: water_well
+        - natural: saddle
+        - highway: trailhead
+        - tags->whitewater: put_in;egress
+        - aerialway: pylon
+        - amenity: bbq
+        - amenity: bicycle_repair_station
+        - amenity: life_ring
+        - amenity: picnic_table
+        - amenity: shower
+        - amenity: waste_disposal
+        - amenity: watering_place
+        - amenity: water_point
+        - emergency: lifeguard_tower
+        - power: pole
+        - power: tower
+        - man_made: petroleum_well
+        - amenity: boat_storage
+        - waterway: dam
+        - leisure: fishing
+        - leisure: swimming_area
+        - leisure: firepit
+        - tourism: picnic_site
+        - highway: rest_area
+        - man_made: mast
+        - barrier: cycle_barrier
+        - emergency: phone
+        - natural: [peak, volcano]
+        - barrier: toll_booth
+        - aeroway: gate
+        - highway: motorway_junction
+
 filters:
+  # remove disused things, they're not real POIs any more
   - filter:
       - disused: true
       - not: {disused: "no"}
+    min_zoom: null
+    output:
+      kind: {expr: null}
+
+  # remove things without a name, unless they're in the list of things for which
+  # no name is okay.
+  - filter:
+      - name: false
+      - not:
+          any: *no_name_okay
     min_zoom: null
     output:
       kind: {expr: null}
@@ -439,7 +507,9 @@ filters:
       kind: {col: tourism, tier: 6}
   # common - no POI
   # garden
-  - filter: {leisure: garden}
+  - filter:
+      leisure: garden
+      not: { access: [ "private", "no" ] }
     min_zoom: { min: [ { max: [ 12, { lit: zoom }, { lit: *tier6_min_zoom } ] }, 16 ] }
     output: {kind: garden, tier: 6}
   # hedge - no POI

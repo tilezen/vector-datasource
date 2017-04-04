@@ -37,10 +37,10 @@ assert_no_matching_feature(
     {'id': 3367033945})
 
 # Current railway stop
-# http://www.openstreetmap.org/node/3721890342
+# http://www.openstreetmap.org/node/2986320002
 assert_has_feature(
-	13, 1316, 3176, 'pois',
-    {'id': 3721890342})
+    13, 2413, 3081, 'pois',
+    {'id': 2986320002})
 
 # Current tram stop
 # http://www.openstreetmap.org/node/257074010
