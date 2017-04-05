@@ -85,10 +85,48 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  - &no_name_okay
+        - aerialway: pylon
+        - aeroway: gate
+        - amenity: [ bbq, bicycle_parking, bicycle_repair_station, boat_storage,
+            life_ring, parking, picnic_table, ranger_station, shower, toilets,
+            waste_disposal, water_point, watering_place ]
+        - barrier: [ cycle_barrier, gate, toll_booth ]
+        - emergency: [ lifeguard_tower, phone ]
+        - highway: [ motorway_junction, rest_area, trailhead ]
+        - historic: landmark
+        - leisure: [ firepit, fishing, pitch, slipway, swimming_area ]
+        - man_made: [ communications_tower, mast, observatory, petroleum_well,
+            water_tower, water_well, windmill ]
+        - natural: [peak, volcano, geyser, hot_spring, saddle, spring, tree ]
+        - power: [ pole, tower ]
+        - tags->icn_ref: true
+        - tags->iwn_ref: true
+        - tags->lcn_ref: true
+        - tags->lwn_ref: true
+        - tags->ncn_ref: true
+        - tags->nwn_ref: true
+        - tags->rcn_ref: true
+        - tags->rwn_ref: true
+        - tags->whitewater: put_in;egress
+        - tourism: picnic_site
+        - waterway: dam
+
 filters:
+  # remove disused things, they're not real POIs any more
   - filter:
       - disused: true
       - not: {disused: "no"}
+    min_zoom: null
+    output:
+      kind: {expr: null}
+
+  # remove things without a name, unless they're in the list of things for which
+  # no name is okay.
+  - filter:
+      - name: false
+      - not:
+          any: *no_name_okay
     min_zoom: null
     output:
       kind: {expr: null}
@@ -439,7 +477,9 @@ filters:
       kind: {col: tourism, tier: 6}
   # common - no POI
   # garden
-  - filter: {leisure: garden}
+  - filter:
+      leisure: garden
+      not: { access: [ "private", "no" ] }
     min_zoom: { min: [ { max: [ 12, { lit: zoom }, { lit: *tier6_min_zoom } ] }, 16 ] }
     output: {kind: garden, tier: 6}
   # hedge - no POI

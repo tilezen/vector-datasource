@@ -4,9 +4,9 @@ tiles = [
     ['16/10500/22491', {'kind': 'midwife'}],
 
     # amenity={kindergarten, childcare}
-    #https://www.openstreetmap.org/node/1460537343
+    #https://www.openstreetmap.org/node/4105506789
     #https://www.openstreetmap.org/way/378041773
-    ['16/10470/25342', {'kind': 'kindergarten'}],
+    ['16/19302/24658', {'kind': 'kindergarten'}],
     ['16/10478/25338', {'kind': 'childcare'}],
 
     # emergency=phone
@@ -38,12 +38,12 @@ tiles = [
     #https://www.openstreetmap.org/way/261102266
     #https://www.openstreetmap.org/node/3133693825
     #https://www.openstreetmap.org/node/3163318863
-    #https://www.openstreetmap.org/node/3879177193
+    #https://www.openstreetmap.org/node/3366375212
     ['16/10484/25325', {'kind': 'clinic'}],
     ['16/10482/25333', {'kind': 'clinic'}],
     ['16/10480/25337', {'kind': 'doctors'}],
     ['16/10480/25337', {'kind': 'dentist'}],
-    ['16/10533/22894', {'kind': 'doctors', 'speciality': ['general']}],
+    ['16/33281/22391', {'kind': 'doctors', 'speciality': ['general']}],
 ]
 
 for loc, props in tiles:

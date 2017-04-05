@@ -1,6 +1,6 @@
-# node 1328665285
+# http://www.openstreetmap.org/node/4305375025
 assert_has_feature(
-    15, 5293, 12734, 'pois',
+    15, 10394, 19077, 'pois',
     { 'kind': 'mineshaft' })
 
 # node 369156437
@@ -28,7 +28,7 @@ assert_has_feature(
     16, 10805, 25827, 'pois',
     { 'kind': 'hot_spring' })
 
-# node 3150154140
+# http://www.openstreetmap.org/node/1804644217
 assert_has_feature(
-    16, 10482, 25294, 'pois',
+    16, 27431, 36586, 'pois',
     { 'kind': 'rock', 'min_zoom': 17 })

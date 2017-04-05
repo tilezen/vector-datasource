@@ -21,14 +21,14 @@ assert_no_matching_feature(
     {'id': 368766687, 'operator': 'National Park Service'})
 
 # US National Forest Service in POIS
-# http://www.openstreetmap.org/node/4216584100
+# http://www.openstreetmap.org/node/796692690
 assert_has_feature(
-    16, 15995, 25090, 'pois',
-    {'id': 4216584100, 'operator': 'United States Forest Service'})
+    16, 10542, 23271, 'pois',
+    {'id': 796692690, 'operator': 'United States Forest Service'})
 
 assert_no_matching_feature(
-    16, 15995, 25090, 'pois',
-    {'id': 4216584100, 'operator': 'US National Forest Service'})
+    16, 10542, 23271, 'pois',
+    {'id': 796692690, 'operator': 'US National Forest Service'})
 
 # US Forest Service in landuse
 # http://www.openstreetmap.org/way/432302983
