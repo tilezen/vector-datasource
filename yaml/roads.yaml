@@ -81,6 +81,8 @@ global:
       horse: {col: horse}
       tracktype: {col: tracktype}
       incline: {col: tags->incline}
+      ramp: {col: tags->ramp}
+      ramp_bicycle: {col: "tags->ramp:bicycle"}
       trail_visibility: {col: tags->trail_visibility}
       sac_scale: {col: tags->sac_scale}
   - &ne_properties
