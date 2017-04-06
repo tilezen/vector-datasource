@@ -45,10 +45,9 @@ global:
       sidewalk: {col: sidewalk}
       sidewalk_left: {col: 'sidewalk:left'}
       sidewalk_right: {col: 'sidewalk:right'}
-  - &osm_network_from_relation
+  - &osm_network
       mz_networks: {expr: "mz_get_rel_networks(osm_id)"}
-  - &osm_network_from_tags
-      network: {col: tags->network}
+      network: {col: network}
   - &osm_piste_properties
       kind: piste
       layer: {col: layer}
@@ -188,7 +187,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: highway
       kind_detail: motorway
   - filter:
@@ -197,7 +196,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: major_road
       kind_detail: {col: highway}
   - filter:
@@ -206,7 +205,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: major_road
       kind_detail: secondary
   - filter:
@@ -215,7 +214,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: highway
       kind_detail: motorway_link
   - filter:
@@ -224,7 +223,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: major_road
       kind_detail: tertiary
   - filter:
@@ -233,7 +232,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: major_road
       kind_detail: trunk_link
   - filter:
@@ -242,7 +241,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: major_road
       kind_detail: {col: highway}
   - filter:
@@ -251,7 +250,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_relation
+      <<: *osm_network
       kind: major_road
       kind_detail: tertiary_link
   #############################################################
@@ -268,7 +267,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: portage_way
   #############################################################
   #
@@ -281,7 +280,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: minor_road
       kind_detail: {col: highway}
   - filter:
@@ -290,7 +289,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: minor_road
       kind_detail: living_street
   - filter:
@@ -299,7 +298,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: pedestrian
@@ -309,7 +308,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: {col: highway}
@@ -326,7 +325,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: footway
@@ -345,7 +344,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: steps
@@ -357,7 +356,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: footway
@@ -368,7 +367,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: {col: highway}
@@ -378,7 +377,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: corridor
@@ -389,7 +388,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: minor_road
       kind_detail: service
       service: alley
@@ -400,7 +399,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: minor_road
       kind_detail: service
       service:
@@ -412,7 +411,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: minor_road
       kind_detail: service
   - filter: {highway: raceway}
@@ -433,7 +432,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: aeroway
       kind_detail: runway
   - filter:
@@ -442,7 +441,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: aeroway
       kind_detail: taxiway
   #############################################################
@@ -457,7 +456,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: rail
       kind_detail: rail
       service: {col: service}
@@ -468,7 +467,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: rail
       kind_detail: rail
       service: {col: service}
@@ -479,7 +478,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: rail
       kind_detail: rail
       service: {col: service}
@@ -500,7 +499,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: rail
       kind_detail: rail
       railway: {col: railway}
@@ -511,7 +510,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: rail
       kind_detail: rail
   - filter:
@@ -520,7 +519,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: rail
       kind_detail: {col: railway}
   #############################################################
@@ -534,7 +533,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: ferry
   #############################################################
   #
@@ -547,7 +546,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: aerialway
       kind_detail: {col: aerialway}
   - filter:
@@ -556,7 +555,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: aerialway
       kind_detail: {col: aerialway}
   - filter:
@@ -578,7 +577,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       kind: aerialway
       kind_detail:
         expr:
@@ -615,7 +614,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       # note: racetrack rather than track, as track might be confusing
       # between a track for racing and a track as in a faint trail.
       kind: racetrack
@@ -632,7 +631,7 @@ filters:
     table: osm
     output:
       <<: *osm_highway_properties
-      <<: *osm_network_from_tags
+      <<: *osm_network
       <<: *osm_footway_properties
       kind: path
       kind_detail: pier

@@ -3862,7 +3862,46 @@ def normalize_operator_values(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
-def _network_importance(network, ref):
+def _guess_type_from_network(network):
+    """
+    Return a best guess of the type of network (road, hiking, bus, bicycle)
+    from the network tag itself.
+    """
+
+    if network in ['iwn', 'nwn', 'rwn', 'lwn']:
+        return 'hiking'
+
+    elif network in ['icn', 'ncn', 'rcn', 'lcn']:
+        return 'bicycle'
+
+    else:
+        # hack for now - how can we tell bus routes from road routes?
+        # it seems all bus routes are relations, where we have a route type
+        # given, so this should default to roads.
+        return 'road'
+
+
+def merge_networks_from_tags(shape, props, fid, zoom):
+    """
+    Take the network and ref tags from the feature and, if they both exist, add
+    them to the mz_networks list. This is to make handling of networks and refs
+    more consistent across elements.
+    """
+
+    network = props.get('network')
+    ref = props.get('ref')
+    mz_networks = props.get('mz_networks', [])
+
+    if network and ref:
+        props.pop('network')
+        props.pop('ref')
+        mz_networks.extend([_guess_type_from_network(network), network, ref])
+        props['mz_networks'] = mz_networks
+
+    return (shape, props, fid)
+
+
+def _road_network_importance(network, ref):
     """
     Returns an integer representing the numeric importance of the network,
     where lower numbers are more important.
@@ -3896,6 +3935,27 @@ def _network_importance(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
+_WALKING_NETWORK_CODES = {
+    'iwn': 1,
+    'nwn': 2,
+    'rwn': 3,
+    'lwn': 4
+}
+
+
+def _walking_network_importance(network, ref):
+    # get a code based on the "largeness" of the network
+    code = _WALKING_NETWORK_CODES.get(network, len(_WALKING_NETWORK_CODES))
+
+    # get a numeric ref, if one is available.
+    try:
+        ref = max(int(ref or 0), 0)
+    except ValueError:
+        ref = 0
+
+    return code * 10000 + min(ref, 9999)
+
+
 _NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
 _LETTER_THEN_NUMBERS = re.compile('^[^\d\s_]+[ -]?([^\s]+)',
                                   re.UNICODE | re.IGNORECASE)
@@ -3903,7 +3963,7 @@ _UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
                                 re.UNICODE | re.IGNORECASE)
 
 
-def _shield_text(network, ref):
+def _road_shield_text(network, ref):
     """
     Try to extract the string that should be displayed within the road shield,
     based on the raw ref and the network value.
@@ -3947,54 +4007,119 @@ def _shield_text(network, ref):
     return ref
 
 
+def _default_shield_text(network, ref):
+    """
+    Without any special properties of the ref to make the shield text from,
+    just use the 'ref' property.
+    """
+
+    return ref
+
+
+# _Network represents a type of route network.
+# prefix is what we should insert into
+# the property we put on the feature (e.g: prefix + 'network' for
+# 'bicycle_network' and so forth). shield_text_fn is a function called with the
+# network and ref to get the text which should be shown on the shield.
+_Network = namedtuple(
+    '_Network', 'prefix shield_text_fn network_importance_fn')
+
+
+_NETWORKS = {
+    'road': _Network(
+        '',
+        _road_shield_text,
+        _road_network_importance),
+    'hiking': _Network(
+        'walking_',
+        _default_shield_text,
+        _walking_network_importance)
+}
+
+
+def _extract_network_information(properties, networks):
+    """
+    Extract network_type information from mz_networks, and run the
+    shield_text_fn over it to get a list of networks and a list of shield
+    texts to put in properties.
+
+    networks: a dict of network type to _Network
+    """
+
+    mz_networks = properties.pop('mz_networks', None)
+
+    if mz_networks is not None:
+        # take the list and make triples out of it
+        itr = iter(mz_networks)
+
+        groups = defaultdict(list)
+        for (type, network, ref) in zip(itr, itr, itr):
+            if type in networks:
+                groups[type].append([network, ref])
+
+        for type, vals in groups.items():
+            network = networks[type]
+            all_networks = 'all_' + network.prefix + 'networks'
+            all_shield_texts = 'all_' + network.prefix + 'shield_texts'
+
+            shield_texts = list()
+            network_names = list()
+            for network_name, ref in vals:
+                network_names.append(network_name)
+                shield_texts.append(network.shield_text_fn(network_name, ref))
+
+            properties[all_networks] = network_names
+            properties[all_shield_texts] = shield_texts
+
+    return properties
+
+
 def extract_network_information(shape, properties, fid, zoom):
     """
     Take the triples of (route_type, network, ref) from `mz_networks` and
     extract them into two arrays of network and shield_text information.
     """
 
-    networks = properties.pop('mz_networks', None)
-
-    if networks is not None:
-        # take the list and make triples out of it
-        itr = iter(networks)
-        triples = zip(itr, itr, itr)
-        triples = [t for t in triples if t[0] == 'road']
-
-        if len(triples) > 0:
-            # expose network / shield text pairs
-            properties['all_networks'] = [n[1] for n in triples]
-            shield_texts = list()
-            for road, network, ref in triples:
-                shield_texts.append(_shield_text(network, ref))
-            properties['all_shield_texts'] = shield_texts
+    properties = _extract_network_information(properties, _NETWORKS)
 
     return (shape, properties, fid)
 
 
-def choose_most_important_network(shape, properties, fid, zoom):
+def _choose_most_important_network(properties, network):
     """
     Use the `_network_importance` function to select any road networks from
     `all_networks` and `all_shield_texts`, taking the most important one.
     """
 
-    networks = properties.pop('all_networks', None)
-    shield_texts = properties.pop('all_shield_texts', None)
+    prefix = network.prefix
+    all_networks = 'all_' + prefix + 'networks'
+    all_shield_texts = 'all_' + prefix + 'shield_texts'
+
+    networks = properties.pop(all_networks, None)
+    shield_texts = properties.pop(all_shield_texts, None)
 
     if networks and shield_texts:
         def network_key(t):
-            return _network_importance(*t)
+            return network.network_importance_fn(*t)
 
         tuples = sorted(zip(networks, shield_texts), key=network_key)
 
         # expose first network as network/shield_text
         network, ref = tuples[0]
-        properties['network'] = network
-        properties['shield_text'] = ref
+        properties[prefix + 'network'] = network
+        properties[prefix + 'shield_text'] = ref
 
         # replace properties with sorted versions of themselves
-        properties['all_networks'] = [n[0] for n in tuples]
-        properties['all_shield_texts'] = [n[1] for n in tuples]
+        properties[all_networks] = [n[0] for n in tuples]
+        properties[all_shield_texts] = [n[1] for n in tuples]
+
+    return properties
+
+
+def choose_most_important_network(shape, properties, fid, zoom):
+
+    for net in _NETWORKS.values():
+        properties = _choose_most_important_network(properties, net)
 
     return (shape, properties, fid)
 
