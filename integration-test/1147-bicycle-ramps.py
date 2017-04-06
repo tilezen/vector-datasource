@@ -10,4 +10,4 @@ assert_has_feature(
 # https://www.openstreetmap.org/way/346088008
 assert_has_feature(
     15, 5235, 12671, 'roads',
-    { 'id': 10273013, 'kind': 'path', 'kind_detail': 'footway', 'ramp': 'yes'})
+    { 'id': 346088008, 'kind': 'path', 'kind_detail': 'footway', 'ramp': 'yes'})
