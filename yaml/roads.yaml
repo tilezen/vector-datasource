@@ -20,7 +20,6 @@ global:
       motor_vehicle: {col: tags->motor_vehicle}
       service: {col: service}
       sport: {col: sport}
-      walking_network: {expr: "mz_hiking_network(osm_id)"}
       bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
       oneway: {col: oneway}
       oneway_bicycle: {col: "tags->oneway:bicycle"}
