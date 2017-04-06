@@ -1058,6 +1058,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `oneway`: `yes` or `no`. _See bug fix planned in [#1028](https://github.com/tilezen/vector-datasource/issues/1028)._
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
+* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`.
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 
 #### Road properties (optional):
