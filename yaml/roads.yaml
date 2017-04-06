@@ -77,7 +77,6 @@ global:
       snowshoe: {col: tags->snowshoe}
       symbol: {col: tags->symbol}
   - &osm_footway_properties
-      bicycle: {col: bicycle}
       foot: {col: foot}
       horse: {col: horse}
       tracktype: {col: tracktype}
