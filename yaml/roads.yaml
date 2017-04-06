@@ -18,6 +18,7 @@ global:
       roundtrip: {col: tags->roundtrip}
       route_name: {col: tags->route_name}
       motor_vehicle: {col: tags->motor_vehicle}
+      bicycle: {col: bicycle}
       service: {col: service}
       sport: {col: sport}
       walking_network: {expr: "mz_hiking_network(osm_id)"}
