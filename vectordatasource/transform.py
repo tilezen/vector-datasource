@@ -4081,8 +4081,6 @@ def extract_network_information(shape, properties, fid, zoom):
     """
 
     mz_networks = properties.pop('mz_networks', None)
-    if fid == 417097119:
-        import sys; print>>sys.stderr, repr(mz_networks)
 
     if mz_networks is not None:
         # take the list and make triples out of it
