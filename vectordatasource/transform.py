@@ -3939,21 +3939,44 @@ _WALKING_NETWORK_CODES = {
     'iwn': 1,
     'nwn': 2,
     'rwn': 3,
-    'lwn': 4
+    'lwn': 4,
 }
 
 
-def _walking_network_importance(network, ref):
-    # get a code based on the "largeness" of the network
-    code = _WALKING_NETWORK_CODES.get(network, len(_WALKING_NETWORK_CODES))
+_BICYCLE_NETWORK_CODES = {
+    'icn': 1,
+    'ncn': 2,
+    'rcn': 3,
+    'lcn': 4,
+}
 
-    # get a numeric ref, if one is available.
+
+def _generic_network_importance(network, ref, codes):
+    # get a code based on the "largeness" of the network
+    code = codes.get(network, len(codes))
+
+    # get a numeric ref, if one is available. treat things with no ref as if
+    # they had a very high ref, and so reduced importance.
     try:
-        ref = max(int(ref or 0), 0)
+        ref = max(int(ref or 9999), 0)
     except ValueError:
+        # if ref isn't an integer, then it's likely a name, which might be
+        # more important than a number
         ref = 0
 
     return code * 10000 + min(ref, 9999)
+
+
+def _walking_network_importance(network, ref):
+    return _generic_network_importance(network, ref, _WALKING_NETWORK_CODES)
+
+
+def _bicycle_network_importance(network, ref):
+    return _generic_network_importance(network, ref, _BICYCLE_NETWORK_CODES)
+
+
+def _bus_network_importance(network, ref):
+    return _generic_network_importance(network, ref, {})
 
 
 _NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
@@ -4025,28 +4048,41 @@ _Network = namedtuple(
     '_Network', 'prefix shield_text_fn network_importance_fn')
 
 
+_ROAD_NETWORK = _Network(
+    '',
+    _road_shield_text,
+    _road_network_importance)
+_FOOT_NETWORK = _Network(
+    'walking_',
+    _default_shield_text,
+    _walking_network_importance)
+_BIKE_NETWORK = _Network(
+    'bicycle_',
+    _default_shield_text,
+    _bicycle_network_importance)
+_BUS_NETWORK = _Network(
+    'bus_',
+    _default_shield_text,
+    _bus_network_importance)
+
 _NETWORKS = {
-    'road': _Network(
-        '',
-        _road_shield_text,
-        _road_network_importance),
-    'hiking': _Network(
-        'walking_',
-        _default_shield_text,
-        _walking_network_importance)
+    'road': _ROAD_NETWORK,
+    'foot': _FOOT_NETWORK,
+    'hiking': _FOOT_NETWORK,
+    'bicycle': _BIKE_NETWORK,
+    'bus': _BUS_NETWORK,
 }
 
 
-def _extract_network_information(properties, networks):
+def extract_network_information(shape, properties, fid, zoom):
     """
-    Extract network_type information from mz_networks, and run the
-    shield_text_fn over it to get a list of networks and a list of shield
-    texts to put in properties.
-
-    networks: a dict of network type to _Network
+    Take the triples of (route_type, network, ref) from `mz_networks` and
+    extract them into two arrays of network and shield_text information.
     """
 
     mz_networks = properties.pop('mz_networks', None)
+    if fid == 417097119:
+        import sys; print>>sys.stderr, repr(mz_networks)
 
     if mz_networks is not None:
         # take the list and make triples out of it
@@ -4054,11 +4090,11 @@ def _extract_network_information(properties, networks):
 
         groups = defaultdict(list)
         for (type, network, ref) in zip(itr, itr, itr):
-            if type in networks:
-                groups[type].append([network, ref])
+            n = _NETWORKS.get(type)
+            if n:
+                groups[n].append([network, ref])
 
-        for type, vals in groups.items():
-            network = networks[type]
+        for network, vals in groups.items():
             all_networks = 'all_' + network.prefix + 'networks'
             all_shield_texts = 'all_' + network.prefix + 'shield_texts'
 
@@ -4070,17 +4106,6 @@ def _extract_network_information(properties, networks):
 
             properties[all_networks] = network_names
             properties[all_shield_texts] = shield_texts
-
-    return properties
-
-
-def extract_network_information(shape, properties, fid, zoom):
-    """
-    Take the triples of (route_type, network, ref) from `mz_networks` and
-    extract them into two arrays of network and shield_text information.
-    """
-
-    properties = _extract_network_information(properties, _NETWORKS)
 
     return (shape, properties, fid)
 
