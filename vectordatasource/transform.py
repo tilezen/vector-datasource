@@ -3943,6 +3943,14 @@ _WALKING_NETWORK_CODES = {
 }
 
 
+_BICYCLE_NETWORK_CODES = {
+    'icn': 1,
+    'ncn': 2,
+    'rcn': 3,
+    'lcn': 4,
+}
+
+
 def _generic_network_importance(network, ref, codes):
     # get a code based on the "largeness" of the network
     code = codes.get(network, len(codes))
@@ -3961,6 +3969,14 @@ def _generic_network_importance(network, ref, codes):
 
 def _walking_network_importance(network, ref):
     return _generic_network_importance(network, ref, _WALKING_NETWORK_CODES)
+
+
+def _bicycle_network_importance(network, ref):
+    return _generic_network_importance(network, ref, _BICYCLE_NETWORK_CODES)
+
+
+def _bus_network_importance(network, ref):
+    return _generic_network_importance(network, ref, {})
 
 
 _NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
@@ -4040,11 +4056,21 @@ _FOOT_NETWORK = _Network(
     'walking_',
     _default_shield_text,
     _walking_network_importance)
+_BIKE_NETWORK = _Network(
+    'bicycle_',
+    _default_shield_text,
+    _bicycle_network_importance)
+_BUS_NETWORK = _Network(
+    'bus_',
+    _default_shield_text,
+    _bus_network_importance)
 
 _NETWORKS = {
     'road': _ROAD_NETWORK,
     'foot': _FOOT_NETWORK,
     'hiking': _FOOT_NETWORK,
+    'bicycle': _BIKE_NETWORK,
+    'bus': _BUS_NETWORK,
 }
 
 
