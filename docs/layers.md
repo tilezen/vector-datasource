@@ -1019,7 +1019,7 @@ Road names are **abbreviated** so directionals like `North` is replaced with `N`
 
 Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
-To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
+To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, `oneway`, `ref`, and `surface`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
 #### Road properties (common):
 
@@ -1058,6 +1058,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `oneway`: `yes` or `no`. _See bug fix planned in [#1028](https://github.com/tilezen/vector-datasource/issues/1028)._
 * `segregated`: Set to `true` when a path allows both pedestrian and bicycle traffic, but when pedestrian traffic is segregated from bicycle traffic.
 * `service`: See value list below, provided for `railway` and `kind_detail=service` roads.
+* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`.
 * `walking_network`: Present if the feature is part of a hiking network. If so, the value will be one of `iwn` for International Walking Network, `nwn` for National Walking Network, `rwn` for Regional Walking Network, `lwn` for Local Walking Network.
 
 #### Road properties (optional):

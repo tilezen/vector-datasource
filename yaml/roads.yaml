@@ -21,6 +21,7 @@ global:
       bicycle: {col: bicycle}
       service: {col: service}
       sport: {col: sport}
+      surface: {col: tags->surface}
       walking_network: {expr: "mz_hiking_network(osm_id)"}
       bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
       oneway: {col: oneway}
