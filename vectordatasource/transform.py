@@ -3727,6 +3727,39 @@ def drop_small_inners(ctx):
         layer['features'] = new_features
 
 
+def simplify_layer(ctx):
+    feature_layers = ctx.feature_layers
+    zoom = ctx.nominal_zoom
+    source_layer = ctx.params.get('source_layer')
+    assert source_layer, 'simplify_layer: missing source layer'
+    tolerance = ctx.params.get('tolerance', 1.0)
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+
+    if zoom < start_zoom:
+        return None
+
+    if end_zoom is not None and zoom > end_zoom:
+        return None
+
+    layer = _find_layer(feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    # adjust tolerance to be in coordinate units
+    tolerance = tolerance * tolerance_for_zoom(zoom)
+
+    new_features = []
+    for (shape, props, fid) in layer['features']:
+        simplified_shape = shape.simplify(tolerance,
+                                          preserve_topology=True)
+        shape = _make_valid_if_necessary(simplified_shape)
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer
+
+
 def simplify_and_clip(ctx):
     """simplify geometries according to zoom level and clip"""
 
