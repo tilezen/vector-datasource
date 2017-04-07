@@ -1047,7 +1047,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `sidewalk_right`: `sidewalk:right` tag from feature
 * `ferry`: See kind list below.
 * `footway`: sidewalk or crossing
-* `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
+* `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes, or tagged bicycle=yes or bicycle=designated for shared use.
 * `is_bridge`: `true` if the road is part of a bridge. The property will not be present if the road is not part of a bridge.
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
 * `is_link`: `true` if the road is part of a highway link or ramp. The property will not be present if the road is not part of a highway link or ramp.
@@ -1063,6 +1063,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 #### Road properties (optional):
 
 * `ascent`: ski pistes from OpenStreetMap
+* `bicycle`: `yes`, `no`, `designated`, `dismount`, and other values from OpenStreetMap
 * `colour`: ski pistes from OpenStreetMap
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
