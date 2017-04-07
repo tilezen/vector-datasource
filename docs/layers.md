@@ -1072,6 +1072,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `piste_difficulty`: ski pistes from OpenStreetMap
 * `piste_grooming`: ski pistes from OpenStreetMap
 * `piste_name`: ski pistes from OpenStreetMap
+* `ramp`: OpenStreetMap features
+* `ramp_bicycle`: OpenStreetMap features
 * `roundtrip`: OpenStreetMap features
 * `route_name`: OpenStreetMap features
 * `ski`: ski pistes from OpenStreetMap
