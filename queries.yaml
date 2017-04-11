@@ -522,10 +522,6 @@ post_process:
         - all_bicycle_shield_texts
         - all_walking_networks
         - all_walking_shield_texts
-        - trolleybus_network
-        - trolleybus_shield_text
-        - all_trolleybus_networks
-        - all_trolleybus_shield_texts
         - bus_network
         - bus_shield_text
         - all_bus_networks
@@ -561,8 +557,6 @@ post_process:
         - all_bicycle_shield_texts
         - all_walking_networks
         - all_walking_shield_texts
-        - all_trolleybus_networks
-        - all_trolleybus_shield_texts
         - all_bus_networks
         - all_bus_shield_texts
       where: >-
@@ -584,7 +578,32 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 6
-      properties: [name, ref, all_networks, all_shield_texts]
+      properties:
+        - name
+        - ref
+        - all_networks
+        - all_shield_texts
+        - walking_network
+        - walking_shield_text
+      where: >-
+        kind == 'highway'
+  # drop non-road shield stuff a good deal earlier.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 10
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - all_walking_networks
+        - all_walking_shield_texts
+        - bus_network
+        - bus_shield_text
+        - all_bus_networks
+        - all_bus_shield_texts
       where: >-
         kind == 'highway'
   - fn: vectordatasource.transform.update_parenthetical_properties

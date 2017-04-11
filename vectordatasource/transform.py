@@ -4065,10 +4065,6 @@ _BUS_NETWORK = _Network(
     'bus_',
     _default_shield_text,
     _bus_network_importance)
-_TROLLEYBUS_NETWORK = _Network(
-    'trolleybus_',
-    _default_shield_text,
-    _bus_network_importance)
 
 _NETWORKS = {
     'road': _ROAD_NETWORK,
@@ -4076,7 +4072,7 @@ _NETWORKS = {
     'hiking': _FOOT_NETWORK,
     'bicycle': _BIKE_NETWORK,
     'bus': _BUS_NETWORK,
-    'trolleybus': _TROLLEYBUS_NETWORK,
+    'trolleybus': _BUS_NETWORK,
 }
 
 
