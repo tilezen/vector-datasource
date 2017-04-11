@@ -509,7 +509,29 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
-      properties: [name, ref, network, shield_text, all_networks, all_shield_texts]
+      properties:
+        - name
+        - ref
+        - network
+        - shield_text
+        - all_networks
+        - all_shield_texts
+        - bicycle_network
+        - bicycle_shield_text
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - walking_network
+        - walking_shield_text
+        - all_walking_networks
+        - all_walking_shield_texts
+        - trolleybus_network
+        - trolleybus_shield_text
+        - all_trolleybus_networks
+        - all_trolleybus_shield_texts
+        - bus_network
+        - bus_shield_text
+        - all_bus_networks
+        - all_bus_shield_texts
       where: >-
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
@@ -521,7 +543,18 @@ post_process:
       source_layer: roads
       start_zoom: 7
       end_zoom: 10
-      properties: [name, all_networks, all_shield_texts]
+      properties:
+        - name
+        - all_networks
+        - all_shield_texts
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - all_walking_networks
+        - all_walking_shield_texts
+        - all_trolleybus_networks
+        - all_trolleybus_shield_texts
+        - all_bus_networks
+        - all_bus_shield_texts
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways

@@ -28,3 +28,16 @@ assert_has_feature(
       'trolleybus_shield_text': '3',
       'all_trolleybus_networks': [None, None],
       'all_trolleybus_shield_texts': ['3', '3'] })
+
+# make sure the all_* lists are gone by zoom 12 on major roads, but the "most
+# important" network & shield text remain until.
+assert_has_feature(
+    10, 163, 395, 'roads',
+    { 'trolleybus_network': type(None),
+      'trolleybus_shield_text': '3' })
+assert_no_matching_feature(
+    10, 163, 395, 'roads',
+    { 'all_trolleybus_networks': None })
+assert_no_matching_feature(
+    10, 163, 395, 'roads',
+    { 'all_trolleybus_shield_texts': None })
