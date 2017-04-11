@@ -44,24 +44,24 @@ assert_has_feature(
 # Søndervangsvej minor road in Denmark as national cycle route
 # https://www.openstreetmap.org/way/149701891
 # https://www.openstreetmap.org/relation/349521
-assert_has_feature(
-    8, 136, 79, 'roads',
-    { 'kind': 'minor_road', 'bicycle_network': 'ncn'})
+#assert_has_feature(
+#     8, 136, 79, 'roads',
+#     { 'kind': 'minor_road', 'bicycle_network': 'ncn'})
 
 # Part of Bay Trail in South (San Francisco) Bay
 # way is marked rcn=yes, and part of a proper bike relation
 # http://www.openstreetmap.org/way/44422697
 # http://www.openstreetmap.org/relation/325779
-assert_has_feature(
-    10, 164, 396, 'roads',
-    { 'kind': 'path', 'bicycle_network': 'rcn'})
+#assert_has_feature(
+#     10, 164, 396, 'roads',
+#     { 'kind': 'path', 'bicycle_network': 'rcn'})
 
 # Hyltebjerg Allé residential road with rcn in Copenhagen
 # https://www.openstreetmap.org/way/2860759
 # https://www.openstreetmap.org/relation/2087590
 assert_has_feature(
     10, 1095, 641, 'roads',
-    { 'kind': 'minor_road', 'bicycle_network': 'rcn'})
+    { 'kind': 'minor_road', 'is_bicycle_related': True})
 
 # lcn in Seattle (living street that would only be visible at zoom 13 otherwise) at zoom 11
 # https://www.openstreetmap.org/way/6477775
