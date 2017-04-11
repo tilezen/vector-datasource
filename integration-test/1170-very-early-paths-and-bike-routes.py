@@ -52,9 +52,9 @@ assert_has_feature(
 # way is marked rcn=yes, and part of a proper bike relation
 # http://www.openstreetmap.org/way/44422697
 # http://www.openstreetmap.org/relation/325779
-#assert_has_feature(
-#     10, 164, 396, 'roads',
-#     { 'kind': 'path', 'bicycle_network': 'rcn'})
+assert_has_feature(
+    10, 164, 396, 'roads',
+    { 'kind': 'path', 'is_bicycle_related': True})
 
 # Hyltebjerg Allé residential road with rcn in Copenhagen
 # https://www.openstreetmap.org/way/2860759
