@@ -1,3 +1,10 @@
+# GR5-Grand Traverse de Jura between France and Switzerland
+# https://www.openstreetmap.org/way/285975282
+# https://www.openstreetmap.org/relation/6009161
+assert_has_feature(
+    9, 265, 179, 'roads',
+    { 'kind': 'path', 'walking_network': 'iwn'})
+
 # highway=path, with route national (Pacific Crest Trail) at zoom 9
 # https://www.openstreetmap.org/way/236361475
 # https://www.openstreetmap.org/relation/1225378
@@ -27,12 +34,12 @@ assert_has_feature(
    12, 688, 1584, 'roads',
    { 'kind': 'minor_road', 'walking_network': 'lwn'})
 
-# Way: Clara-Immerwahr-Straße (287167007)
-# icn=yes is marked on the way
-# http://www.openstreetmap.org/way/287167007
-# assert_has_feature(
-#     8, 134, 85, 'roads',
-#     { 'kind': 'minor_road', 'bicycle_network': 'icn'})
+# Way: Dreiländerweg part of ICN [EV3] Pilgrim's Route DE_9_03 (Nideggen - Aachen)
+# https://www.openstreetmap.org/way/223428887
+# https://www.openstreetmap.org/relation/6965102
+assert_has_feature(
+    8, 134, 85, 'roads',
+    { 'kind': 'minor_road', 'is_bicycle_related': True})
 
 # Ferry between Denmark and Germany, icn
 # https://www.openstreetmap.org/way/128631318
