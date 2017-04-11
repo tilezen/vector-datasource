@@ -23,9 +23,9 @@ assert_has_feature(
 # part of The Barbary Coast Trail in San Francisco
 # https://www.openstreetmap.org/way/91181758
 # https://www.openstreetmap.org/relation/6322028
-assert_has_feature(
-    12, 688, 1584, 'roads',
-    { 'kind': 'minor_road', 'walking_network': 'lwn'})
+#assert_has_feature(
+#    12, 688, 1584, 'roads',
+#    { 'kind': 'minor_road', 'walking_network': 'lwn'})
 
 # Way: Clara-Immerwahr-Straße (287167007)
 # icn=yes is marked on the way
