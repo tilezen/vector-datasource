@@ -90,3 +90,35 @@ assert_is_linestring(11, 603, 770, 'roads', 'Pitkin Ave.', 8, 2)
 # http://www.openstreetmap.org/way/421092485
 # http://www.openstreetmap.org/way/421092487
 assert_is_linestring(13, 2413, 3081, 'roads', 'Linden Blvd.', 8, 1)
+
+# check that we don't merge across linestrings with different properties. in
+# this case, the central section of this road is a bridge. we currently drop
+# the `is_bridge` property on major roads at zoom < 13, so a z13 tile should
+# still have it.
+#
+# http://www.openstreetmap.org/way/421314247
+# http://www.openstreetmap.org/way/421314246 <-- bridge
+# http://www.openstreetmap.org/way/9678799
+# http://www.openstreetmap.org/relation/1109565 <-- relation for ND 200
+with features_in_tile_layer(13, 1865, 2866, 'roads') as features:
+    # looking for features in US:ND 200 - there should be 3 in this tile,
+    # and one should be the bridge.
+    count_nd_200 = 0
+    count_bridge = 0
+    for feature in features:
+        props = feature['properties']
+        if props.get('network') == 'US:ND' and \
+           props.get('shield_text') == '200':
+            # note that we can merge into multilinestrings, so count each of
+            # those individually
+            if feature['geometry']['type'] == 'MultiLineString':
+                count_nd_200 += len(feature['geometry']['coordinates'])
+            else:
+                count_nd_200 += 1
+            if props.get('is_bridge') == True:
+                count_bridge += 1
+
+    if count_nd_200 != 3:
+        raise Exception('Expecting 3 US:ND 200 roads, got %d' % count_nd_200)
+    if count_bridge != 1:
+        raise Exception('Expecting one bridge, but got %d' % count_bridge)
