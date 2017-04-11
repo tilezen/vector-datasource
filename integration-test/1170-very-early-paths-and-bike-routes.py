@@ -60,7 +60,7 @@ assert_has_feature(
 # https://www.openstreetmap.org/way/2860759
 # https://www.openstreetmap.org/relation/2087590
 assert_has_feature(
-    10, 1095, 641, 'roads',
+    10, 547, 320, 'roads',
     { 'kind': 'minor_road', 'is_bicycle_related': True})
 
 # lcn in Seattle (living street that would only be visible at zoom 13 otherwise) at zoom 11
