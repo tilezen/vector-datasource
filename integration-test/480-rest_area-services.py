@@ -1,13 +1,13 @@
-# Node: Pilot Travel Center #237 (1145095463)
-# http://www.openstreetmap.org/node/1145095463
+# node: Tiffin River
+# http://www.openstreetmap.org/node/200412620
 assert_has_feature(
-    16, 10625, 25584, 'pois',
-    { 'kind': 'service_area', 'id': 1145095463, 'min_zoom': 11 })
+    16, 17401, 24424, 'pois',
+    { 'kind': 'service_area', 'id': 200412620, 'min_zoom': 11 })
 
-# http://www.openstreetmap.org/node/3202314563
+# http://www.openstreetmap.org/node/159773030
 assert_has_feature(
-    16, 10554, 25508, 'pois',
-    { 'kind': 'rest_area', 'id': 3202314563, 'min_zoom': 11 })
+    16, 18798, 24573, 'pois',
+    { 'kind': 'rest_area', 'id': 159773030, 'min_zoom': 11 })
 
 # Way: Crystal Springs Rest Area (97057565)
 # http://www.openstreetmap.org/way/97057565
