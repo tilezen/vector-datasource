@@ -503,7 +503,7 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
-      properties: [oneway, crossing, sidewalk, sidewalk_left, sidewalk_right]
+      properties: [oneway, crossing, sidewalk, sidewalk_left, sidewalk_right, surface]
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads

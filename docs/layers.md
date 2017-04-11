@@ -1019,7 +1019,7 @@ Road names are **abbreviated** so directionals like `North` is replaced with `N`
 
 Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
-To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
+To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, `oneway`, `ref`, and `surface`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
 #### Road properties (common):
 
@@ -1046,7 +1046,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `sidewalk_right`: `sidewalk:right` tag from feature
 * `ferry`: See kind list below.
 * `footway`: sidewalk or crossing
-* `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes or designed for shared use.
+* `is_bicycle_related`: Present and `true` when road features is a dedicated cycleway, part of an OSM bicycle network route relation, or includes cycleway infrastructure like bike lanes, or tagged bicycle=yes or bicycle=designated for shared use.
 * `is_bridge`: `true` if the road is part of a bridge. The property will not be present if the road is not part of a bridge.
 * `is_bus_route`: If present and `true`, then buses or trolley-buses travel down this road. This property is determined based on whether the road is part of an OSM bus route relation, and is only present on roads at zoom 12 and higher.
 * `is_link`: `true` if the road is part of a highway link or ramp. The property will not be present if the road is not part of a highway link or ramp.
@@ -1069,10 +1069,12 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_trolleybus_networks` and `all_trolleybus_shield_texts`: All of the trolleybus routes of which this road is a part, and each corresponding shield text. See `trolleybus_network` and `trolleybus_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `trolleybus_network`: Note that this is often not present for trolley-bus networks / routes.
 * `trolleybus_shield_text`: Contains text intended to be displayed on a shield related to the trolleybus route. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`.
 
 #### Road properties (optional):
 
 * `ascent`: ski pistes from OpenStreetMap
+* `bicycle`: `yes`, `no`, `designated`, `dismount`, and other values from OpenStreetMap
 * `colour`: ski pistes from OpenStreetMap
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
@@ -1082,6 +1084,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `piste_difficulty`: ski pistes from OpenStreetMap
 * `piste_grooming`: ski pistes from OpenStreetMap
 * `piste_name`: ski pistes from OpenStreetMap
+* `ramp`: OpenStreetMap features
+* `ramp_bicycle`: OpenStreetMap features
 * `roundtrip`: OpenStreetMap features
 * `route_name`: OpenStreetMap features
 * `ski`: ski pistes from OpenStreetMap
