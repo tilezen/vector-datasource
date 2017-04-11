@@ -39,14 +39,14 @@ assert_has_feature(
 # https://www.openstreetmap.org/relation/721738
 #assert_has_feature(
 #     8, 136, 81, 'roads',
-#     { 'kind': 'ferry', 'bicycle_network': 'icn'})
+#     { 'kind': 'ferry', 'is_bicycle_related': True})
 
 # Søndervangsvej minor road in Denmark as national cycle route
 # https://www.openstreetmap.org/way/149701891
 # https://www.openstreetmap.org/relation/349521
-#assert_has_feature(
-#     8, 136, 79, 'roads',
-#     { 'kind': 'minor_road', 'bicycle_network': 'ncn'})
+assert_has_feature(
+    8, 136, 79, 'roads',
+    { 'kind': 'minor_road', 'is_bicycle_related': True})
 
 # Part of Bay Trail in South (San Francisco) Bay
 # way is marked rcn=yes, and part of a proper bike relation
