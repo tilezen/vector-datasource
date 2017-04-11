@@ -1,6 +1,12 @@
 UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*)
-  WHERE mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL;
+  WHERE
+      (tags -> 'highway' IN ( 'trunk_link', 'primary_link', 'secondary_link', 'tertiary_link',
+                   'residential', 'unclassified', 'road', 'living_street', 'pedestrian',
+                   'path', 'track', 'cycleway', 'bridleway', 'footway', 'steps',
+                   'service' ) OR
+       tags -> 'whitewater' = 'portage_way')
+      AND mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL;
 
 CREATE INDEX new_planet_osm_line_roads_geom_index ON planet_osm_line USING gist(way) WHERE mz_road_level IS NOT NULL;
 CREATE INDEX new_planet_osm_line_roads_geom_9_index ON planet_osm_line USING gist(way) WHERE mz_road_level <= 9;
