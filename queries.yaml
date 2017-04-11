@@ -520,8 +520,6 @@ post_process:
         - bicycle_shield_text
         - all_bicycle_networks
         - all_bicycle_shield_texts
-        - walking_network
-        - walking_shield_text
         - all_walking_networks
         - all_walking_shield_texts
         - trolleybus_network
@@ -535,6 +533,18 @@ post_process:
       where: >-
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
+        (kind == 'major_road' and zoom <  7)
+  # previous tests assume we keep walking network information until zoom 11
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 10
+      properties:
+        - walking_network
+        - walking_shield_text
+      where: >-
+        (kind == 'rail') or (kind == 'minor_road') or
         (kind == 'major_road' and zoom <  7)
   # this is a patch because we still want to drop name, network from major_road
   # features between zoom 7 and 10
