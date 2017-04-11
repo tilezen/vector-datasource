@@ -1,28 +1,31 @@
-tiles = [
-    # highway=path, with route national (Pacific Crest Trail) at zoom 9
-    # https://www.openstreetmap.org/way/236361475
-    # https://www.openstreetmap.org/relation/1225378
-    [9, 86, 197],
-    # highway=path, with route regional (Merced Pass Trail) at zoom 10
-    # https://www.openstreetmap.org/way/373491941
-    # https://www.openstreetmap.org/relation/5549623
-    [10, 171, 396],
-    # highway=path, with route regional (Merced Pass Trail) at zoom 10
-    # https://www.openstreetmap.org/way/39996451
-    # https://www.openstreetmap.org/relation/5549623
-    [10, 172, 396],
-    # highway=unclassified, with route local (Grant Avenue) at zoom 12
-    # part of The Barbary Coast Trail in San Francisco
-    # https://www.openstreetmap.org/way/91181758
-    # https://www.openstreetmap.org/relation/6322028
-    [12, 688, 1584]
-]
+# highway=path, with route national (Pacific Crest Trail) at zoom 9
+# https://www.openstreetmap.org/way/236361475
+# https://www.openstreetmap.org/relation/1225378
+assert_has_feature(
+    9, 86, 197, 'roads',
+    { 'kind': 'path', 'walking_network': 'nwn'})
 
-for z, x, y in tiles:
-    assert_has_feature(
-        z, x, y, 'roads',
-        {'kind_detail': 'path', 'name': None})
+# highway=path, with route regional (Merced Pass Trail) at zoom 10
+# https://www.openstreetmap.org/way/373491941
+# https://www.openstreetmap.org/relation/5549623
+assert_has_feature(
+    10, 171, 396, 'roads',
+    { 'kind': 'path', 'walking_network': 'rwn'})
 
+# highway=path, with route regional (Merced Pass Trail) at zoom 10
+# https://www.openstreetmap.org/way/39996451
+# https://www.openstreetmap.org/relation/5549623
+assert_has_feature(
+    10, 172, 396, 'roads',
+    { 'kind': 'path', 'walking_network': 'rwn'})
+
+# highway=unclassified, with route local (Grant Avenue) at zoom 12
+# part of The Barbary Coast Trail in San Francisco
+# https://www.openstreetmap.org/way/91181758
+# https://www.openstreetmap.org/relation/6322028
+assert_has_feature(
+    12, 688, 1584, 'roads',
+    { 'kind': 'minor_road', 'walking_network': 'lwn'})
 
 # Way: Clara-Immerwahr-Straße (287167007)
 # icn=yes is marked on the way
