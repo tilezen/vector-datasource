@@ -1,30 +1,31 @@
+# highway=path, with route inter-national
 # GR5-Grand Traverse de Jura between France and Switzerland
 # https://www.openstreetmap.org/way/285975282
 # https://www.openstreetmap.org/relation/6009161
 assert_has_feature(
     9, 265, 179, 'roads',
-    { 'kind': 'path', 'walking_network': 'iwn'})
+    { 'kind': 'path'} )
 
 # highway=path, with route national (Pacific Crest Trail) at zoom 9
 # https://www.openstreetmap.org/way/236361475
 # https://www.openstreetmap.org/relation/1225378
 assert_has_feature(
     9, 86, 197, 'roads',
-    { 'kind': 'path', 'walking_network': 'nwn'})
+    { 'kind': 'path'} )
 
 # highway=path, with route regional (Merced Pass Trail) at zoom 10
 # https://www.openstreetmap.org/way/373491941
 # https://www.openstreetmap.org/relation/5549623
-#assert_has_feature(
-#    10, 171, 396, 'roads',
-#    { 'kind': 'path', 'walking_network': 'rwn'})
+assert_has_feature(
+   10, 171, 396, 'roads',
+   { 'kind': 'path' } )
 
 # highway=path, with route regional (Merced Pass Trail) at zoom 10
 # https://www.openstreetmap.org/way/39996451
 # https://www.openstreetmap.org/relation/5549623
 assert_has_feature(
    10, 172, 396, 'roads',
-   { 'kind': 'path', 'walking_network': 'rwn'})
+   { 'kind': 'path' } )
 
 # highway=unclassified, with route local (Grant Avenue) at zoom 12
 # part of The Barbary Coast Trail in San Francisco
@@ -32,7 +33,7 @@ assert_has_feature(
 # https://www.openstreetmap.org/relation/6322028
 assert_has_feature(
    12, 688, 1584, 'roads',
-   { 'kind': 'minor_road', 'walking_network': 'lwn'})
+   { 'kind': 'minor_road' } )
 
 # Way: Dreiländerweg part of ICN [EV3] Pilgrim's Route DE_9_03 (Nideggen - Aachen)
 # https://www.openstreetmap.org/way/223428887
