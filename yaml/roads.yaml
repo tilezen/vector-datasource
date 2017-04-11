@@ -18,8 +18,10 @@ global:
       roundtrip: {col: tags->roundtrip}
       route_name: {col: tags->route_name}
       motor_vehicle: {col: tags->motor_vehicle}
+      bicycle: {col: bicycle}
       service: {col: service}
       sport: {col: sport}
+      surface: {col: tags->surface}
       walking_network: {expr: "mz_hiking_network(osm_id)"}
       bicycle_network: {expr: "mz_cycling_network(tags, osm_id)"}
       oneway: {col: oneway}
@@ -76,11 +78,12 @@ global:
       snowshoe: {col: tags->snowshoe}
       symbol: {col: tags->symbol}
   - &osm_footway_properties
-      bicycle: {col: bicycle}
       foot: {col: foot}
       horse: {col: horse}
       tracktype: {col: tracktype}
       incline: {col: tags->incline}
+      ramp: {col: tags->ramp}
+      ramp_bicycle: {col: "tags->ramp:bicycle"}
       trail_visibility: {col: tags->trail_visibility}
       sac_scale: {col: tags->sac_scale}
   - &ne_properties
