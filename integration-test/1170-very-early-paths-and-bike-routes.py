@@ -30,9 +30,9 @@ assert_has_feature(
 # Way: Clara-Immerwahr-Straße (287167007)
 # icn=yes is marked on the way
 # http://www.openstreetmap.org/way/287167007
-# assert_has_feature(
-#     8, 134, 85, 'roads',
-#     { 'kind': 'minor_road', 'bicycle_network': 'icn'})
+assert_has_feature(
+    8, 134, 85, 'roads',
+    { 'kind': 'minor_road', 'is_bicycle_related': True})
 
 # Ferry between Denmark and Germany, icn
 # https://www.openstreetmap.org/way/128631318
