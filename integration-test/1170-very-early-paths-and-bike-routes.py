@@ -37,9 +37,9 @@ assert_has_feature(
 # Ferry between Denmark and Germany, icn
 # https://www.openstreetmap.org/way/128631318
 # https://www.openstreetmap.org/relation/721738
-#assert_has_feature(
-#     8, 136, 81, 'roads',
-#     { 'kind': 'ferry', 'is_bicycle_related': True})
+assert_has_feature(
+    8, 136, 81, 'roads',
+    { 'kind': 'ferry', 'is_bicycle_related': True})
 
 # Søndervangsvej minor road in Denmark as national cycle route
 # https://www.openstreetmap.org/way/149701891
