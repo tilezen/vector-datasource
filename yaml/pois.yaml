@@ -288,16 +288,6 @@ filters:
     min_zoom: { min: [ { max: [ 10, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
     output: { kind: wood, tier: 2 }
 
-  # natural forests - note already clamped to z12
-  - filter: {natural: forest}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
-    output: { kind: natural_forest, tier: 2 }
-
-  # natural woods - note already clampted to 12
-  - filter: {natural: wood}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
-    output: { kind: natural_wood, tier: 2 }
-
   # farm
   - filter: {landuse: farm}
     min_zoom: { max: [ 15, { lit: *tier2_min_zoom } ] }
@@ -1130,10 +1120,6 @@ filters:
     min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
     output:
       kind: quarry
-  - filter: {landuse: village_green}
-    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
-    output:
-      kind: village_green
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION
