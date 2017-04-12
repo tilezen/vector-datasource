@@ -257,18 +257,20 @@ assert_has_feature(
 
 # village_green in POIS
 # http://www.openstreetmap.org/way/128479579
-assert_has_feature(
+# note: since #1103, there should be no POIs for village_green, only label
+# placements in the landuse layer.
+assert_no_matching_feature(
     14, 6000, 9246, 'pois',
     {'id': 128479579, 'kind': 'village_green', 'min_zoom': 13.23})
 
 # Label placement village_green in landuse
-assert_no_matching_feature(
+assert_has_feature(
     16, 24002, 36987, 'landuse',
     {'id': 128479579, 'kind': 'village_green', 'label_placement': True})
 
 # Node:3199567035 village_green in POIS
 # http://www.openstreetmap.org/node/3199567035
-assert_has_feature(
+assert_no_matching_feature(
     14, 4186, 6018, 'pois',
     {'id': 3199567035, 'kind': 'village_green', 'min_zoom': 14})
 

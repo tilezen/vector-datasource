@@ -1120,10 +1120,6 @@ filters:
     min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
     output:
       kind: quarry
-  - filter: {landuse: village_green}
-    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
-    output:
-      kind: village_green
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION
