@@ -106,7 +106,9 @@ FROM (
     WHERE
       parts && ARRAY[way_id] AND
       parts[way_off+1:rel_off] && ARRAY[way_id] AND
-      hstore(tags) ?& ARRAY['route','network']
+      hstore(tags) ? 'route' AND
+      (hstore(tags) ? 'network' OR
+       hstore(tags) ? 'ref')
     ) inner1
   ) inner2;
 $$ LANGUAGE sql STABLE;

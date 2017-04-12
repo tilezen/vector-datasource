@@ -93,6 +93,7 @@ layers:
       - vectordatasource.transform.normalize_aerialways
       - vectordatasource.transform.normalize_cycleway
       - vectordatasource.transform.add_is_bicycle_related
+      - vectordatasource.transform.merge_networks_from_tags
       - vectordatasource.transform.extract_network_information
       - vectordatasource.transform.choose_most_important_network
       - vectordatasource.transform.road_trim_properties
@@ -508,10 +509,38 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 14
-      properties: [name, ref, network, shield_text, all_networks, all_shield_texts]
+      properties:
+        - name
+        - ref
+        - network
+        - shield_text
+        - all_networks
+        - all_shield_texts
+        - bicycle_network
+        - bicycle_shield_text
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - all_walking_networks
+        - all_walking_shield_texts
+        - bus_network
+        - bus_shield_text
+        - all_bus_networks
+        - all_bus_shield_texts
       where: >-
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
+        (kind == 'major_road' and zoom <  7)
+  # previous tests assume we keep walking network information until zoom 11
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 10
+      properties:
+        - walking_network
+        - walking_shield_text
+      where: >-
+        (kind == 'rail') or (kind == 'minor_road') or
         (kind == 'major_road' and zoom <  7)
   # this is a patch because we still want to drop name, network from major_road
   # features between zoom 7 and 10
@@ -520,7 +549,16 @@ post_process:
       source_layer: roads
       start_zoom: 7
       end_zoom: 10
-      properties: [name, all_networks, all_shield_texts]
+      properties:
+        - name
+        - all_networks
+        - all_shield_texts
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - all_walking_networks
+        - all_walking_shield_texts
+        - all_bus_networks
+        - all_bus_shield_texts
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways
@@ -540,7 +578,32 @@ post_process:
       source_layer: roads
       start_zoom: 0
       end_zoom: 6
-      properties: [name, ref, all_networks, all_shield_texts]
+      properties:
+        - name
+        - ref
+        - all_networks
+        - all_shield_texts
+        - walking_network
+        - walking_shield_text
+      where: >-
+        kind == 'highway'
+  # drop non-road shield stuff a good deal earlier.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 10
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - all_walking_networks
+        - all_walking_shield_texts
+        - bus_network
+        - bus_shield_text
+        - all_bus_networks
+        - all_bus_shield_texts
       where: >-
         kind == 'highway'
   - fn: vectordatasource.transform.update_parenthetical_properties
