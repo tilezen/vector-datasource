@@ -870,8 +870,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `museum`
 * `music`
 * `national_park`
-* `natural_forest` - _See planned bug fixes in [#1103](https://github.com/tilezen/vector-datasource/issues/1103)._
-* `natural_wood` - _See planned bug fixes in [#1103](https://github.com/tilezen/vector-datasource/issues/1103)._
 * `nature_reserve`
 * `newspaper`
 * `ngo`
@@ -981,7 +979,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `university`
 * `veterinary`
 * `viewpoint`
-* `village_green`
 * `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
