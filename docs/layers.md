@@ -870,8 +870,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `museum`
 * `music`
 * `national_park`
-* `natural_forest` - _See planned bug fixes in [#1103](https://github.com/tilezen/vector-datasource/issues/1103)._
-* `natural_wood` - _See planned bug fixes in [#1103](https://github.com/tilezen/vector-datasource/issues/1103)._
 * `nature_reserve`
 * `newspaper`
 * `ngo`
