@@ -71,18 +71,22 @@ assert_has_feature(
 
 # Way: natural: Forest in POIS
 # http://www.openstreetmap.org/way/202680509
-assert_has_feature(
+# note: since #1103, there should be no POIs for natural_forest, only label
+# placements in the landuse layer.
+assert_no_matching_feature(
     14, 4877, 6109, 'pois',
     {'id': 202680509, 'kind': 'natural_forest'})
 
 # Label placement forest in landuse
-assert_no_matching_feature(
+assert_has_feature(
     15, 9755, 12218, 'landuse',
     {'id': 202680509, 'kind': 'natural_forest', 'label_placement': True})
 
 # natural: Forest in POIS
 # http://www.openstreetmap.org/node/4633280957
-assert_has_feature(
+# note: since #1103, there should be no POIs for natural_forest, only label
+# placements in the landuse layer.
+assert_no_matching_feature(
     14, 11852, 7770, 'pois',
     {'id': 4633280957, 'kind': 'natural_forest', 'min_zoom': 14})
 
@@ -332,20 +336,24 @@ assert_no_matching_feature(
 
 # natural: wood in POIS
 # http://www.openstreetmap.org/way/249171216
-assert_has_feature(
+# note: since #1103, there should be no POIs for natural_wood, only label
+# placements in the landuse layer.
+assert_no_matching_feature(
     14, 8107, 5426, 'pois',
     {'id': 249171216, 'kind': 'natural_wood'})
 
 # Label placement natural: wood in landuse
-assert_no_matching_feature(
+assert_has_feature(
     15, 16214, 10852, 'landuse',
     {'id': 249171216, 'kind': 'natural_wood', 'label_placement': True})
 
 # Node:369162231 natural: wood in POIS
 # http://www.openstreetmap.org/node/369162231
-assert_has_feature(
+# note: since #1103, there should be no POIs for natural_wood, only label
+# placements in the landuse layer.
+assert_no_matching_feature(
     14, 2612, 6298, 'pois',
-    {'id': 369162231, 'kind': 'natural_wood', 'min_zoom': 14})
+    {'id': 369162231, 'kind': 'natural_wood'})
 
 # works in POIS
 # http://www.openstreetmap.org/way/161371157
