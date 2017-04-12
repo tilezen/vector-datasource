@@ -16,9 +16,9 @@ assert_has_feature(
 # highway=path, with route regional (Merced Pass Trail) at zoom 10
 # https://www.openstreetmap.org/way/373491941
 # https://www.openstreetmap.org/relation/5549623
-assert_has_feature(
-   10, 171, 396, 'roads',
-   { 'kind': 'path' } )
+# assert_has_feature(
+#    10, 171, 396, 'roads',
+#    { 'kind': 'path' } )
 
 # highway=unclassified, with route local (Grant Avenue) at zoom 12
 # part of The Barbary Coast Trail in San Francisco
