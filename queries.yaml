@@ -628,6 +628,13 @@ post_process:
       start_zoom: 8
       end_zoom: 15
 
+  - fn: vectordatasource.transform.simplify_layer
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
+      tolerance: 1.0
+
   - fn: vectordatasource.transform.buildings_unify
     params:
       source_layer: buildings
