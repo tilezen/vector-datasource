@@ -25,8 +25,8 @@ assert_has_feature(
 # https://www.openstreetmap.org/way/91181758
 # https://www.openstreetmap.org/relation/6322028
 assert_has_feature(
-   12, 688, 1584, 'roads',
-   { 'kind': 'minor_road' } )
+   12, 655, 1582, 'roads',
+   { 'kind': 'minor_road', 'walking_network': 'lwn' } )
 
 # Way: Dreiländerweg part of ICN [EV3] Pilgrim's Route DE_9_03 (Nideggen - Aachen)
 # https://www.openstreetmap.org/way/223428887
