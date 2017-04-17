@@ -1,4 +1,4 @@
-#Mapzen Vector Tiles
+# Mapzen Vector Tiles
 
 The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](http://www.openstreetmap.org) and other open data projects, updated daily.
 
