@@ -3954,7 +3954,9 @@ def _road_network_importance(network, ref):
     network.
     """
 
-    if network == 'US:I' or ':national' in network:
+    if network is None:
+        network_code = 9999
+    elif network == 'US:I' or ':national' in network:
         network_code = 1
     elif network == 'US:US' or ':regional' in network:
         network_code = 2
@@ -4035,18 +4037,18 @@ def _road_shield_text(network, ref):
 
     # These "belt" roads have names in the ref which should be in the shield,
     # there's no number.
-    if network == 'US:PA:Belt':
+    if network and network == 'US:PA:Belt':
         return ref
 
     # Ukranian roads sometimes have internal dashes which should be removed.
-    if network.startswith('ua:'):
+    if network and network.startswith('ua:'):
         m = _UA_TERRITORIAL_RE.match(ref)
         if m:
             return m.group(1) + m.group(2) + m.group(3)
 
     # Greek roads sometimes have alphabetic prefixes which we should _keep_,
     # unlike for other roads.
-    if network.startswith('GR:') or network.startswith('gr:'):
+    if network and (network.startswith('GR:') or network.startswith('gr:')):
         return ref
 
     # If there's a number at the front (optionally with letters following),
