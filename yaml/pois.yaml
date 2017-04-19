@@ -440,7 +440,8 @@ filters:
     # tier5_min_zoom
     min_zoom: 17
     output:
-      kind: {col: attraction, tier: 5}
+      kind: {col: attraction}
+      tier: 5
   # resort
   - filter: {tourism: resort}
     min_zoom: { min: [ { max: [ 14, { lit: zoom + 5.32 }, { lit: *tier5_min_zoom } ] }, 17 ] }
@@ -464,7 +465,8 @@ filters:
     # already clamped below polygon area min
     min_zoom: 17
     output:
-      kind: {col: tourism, tier: 6}
+      kind: {col: tourism}
+      tier: 6
   # common - no POI
   # garden
   - filter:
@@ -491,7 +493,8 @@ filters:
     # already clamped below area limit
     min_zoom: 17
     output:
-      kind: {col: leisure, tier: 6}
+      kind: playground
+      tier: 6
   # school
   - filter: {amenity: school}
     min_zoom: { min: [ { max: [ { lit: zoom + 2.3 }, { lit: *tier6_min_zoom } ] }, 15 ] }
@@ -1132,4 +1135,5 @@ filters:
     # already clamped below polygon area min
     min_zoom: 17
     output:
-      kind: {col: tourism, tier: 6}
+      kind: attraction
+      tier: 6
