@@ -9,5 +9,5 @@ assert_has_feature(
 # Footway with ramp=yes in San Francisco
 # https://www.openstreetmap.org/way/346088008
 assert_has_feature(
-    15, 5235, 12671, 'roads',
+    16, 10470, 25342, 'roads',
     { 'id': 346088008, 'kind': 'path', 'kind_detail': 'footway', 'ramp': 'yes'})

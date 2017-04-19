@@ -7,15 +7,24 @@ def assert_is_linestring(z, x, y, layer, name, max_coords, max_count):
             if props.get('name') == name:
                 # should have been merged to become a single linestring.
                 geom_type = feature['geometry']['type']
-                if geom_type != 'LineString':
+                if geom_type != 'LineString' and \
+                   geom_type != 'MultiLineString':
                     raise Exception('Expected linestring, got %r' % geom_type)
                 count += 1
                 coords = feature['geometry']['coordinates']
-                if len(coords) > max_coords:
-                    raise Exception(
-                        'Single feature exceeded max coords: %d > %d' %
-                        (len(coords), max_coords))
-                total_coords += len(coords)
+                if geom_type == 'LineString':
+                    if len(coords) > max_coords:
+                        raise Exception(
+                            'Single feature exceeded max coords: %d > %d' %
+                            (len(coords), max_coords))
+                    total_coords += len(coords)
+                else:
+                    for line in coords:
+                        if len(line) > max_coords:
+                            raise Exception('Single part of multi-feature' +
+                                            'exceeded max coords: %d > %d' %
+                                            (len(line), max_coords))
+                        total_coords += len(line)
         if count > max_count:
             raise Exception('Expected at most %d features, found %d' %
                             (max_count, count))
@@ -37,8 +46,8 @@ def assert_is_linestring(z, x, y, layer, name, max_coords, max_count):
 # http://www.openstreetmap.org/way/219606150
 #
 # note that there are 2 Pitkin Ave.s due to cycle path differences
-assert_is_linestring(12, 1207, 1540, 'roads', 'Pitkin Ave.', 8, 2)
-assert_is_linestring(11, 603, 770, 'roads', 'Pitkin Ave.', 8, 2)
+assert_is_linestring(12, 1207, 1540, 'roads', 'Pitkin Ave.', 19, 9)
+assert_is_linestring(11, 603, 770, 'roads', 'Pitkin Ave.', 23, 10)
 
 # Linden Blvd, NYC
 #
@@ -89,7 +98,7 @@ assert_is_linestring(11, 603, 770, 'roads', 'Pitkin Ave.', 8, 2)
 # http://www.openstreetmap.org/way/421092484
 # http://www.openstreetmap.org/way/421092485
 # http://www.openstreetmap.org/way/421092487
-assert_is_linestring(13, 2413, 3081, 'roads', 'Linden Blvd.', 8, 1)
+assert_is_linestring(13, 2413, 3081, 'roads', 'Linden Blvd.', 22, 8)
 
 # check that we don't merge across linestrings with different properties. in
 # this case, the central section of this road is a bridge. we currently drop

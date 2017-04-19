@@ -31,10 +31,13 @@ assert_has_feature(
 
 # make sure the all_* lists are gone by zoom 12 on major roads, but the "most
 # important" network & shield text remain until.
+#
+# note that it doesn't matter what the bus shield is - that's data-dependent.
+# for the purposes of the test, we only care that there _is_ one.
 assert_has_feature(
     10, 163, 395, 'roads',
     { 'bus_network': type(None),
-      'bus_shield_text': '3' })
+      'bus_shield_text': None })
 assert_no_matching_feature(
     10, 163, 395, 'roads',
     { 'all_bus_networks': None })
