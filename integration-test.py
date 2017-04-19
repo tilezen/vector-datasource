@@ -160,8 +160,7 @@ def match_distance(actual, expected):
 
 
 class GatewayTimeout(Exception):
-    def __init__(self, message):
-        self.message = message
+    pass
 
 
 def tile_url(z, x, y, layer):
