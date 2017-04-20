@@ -4031,6 +4031,16 @@ def _road_shield_text(network, ref):
     if ref is None:
         return None
 
+    if isinstance(ref, unicode):
+        # no need to do anything, it's already okay
+        pass
+    elif isinstance(ref, str):
+        # it's UTF-8 encoded bytes, so make it a unicode
+        ref = unicode(ref, 'utf-8')
+    else:
+        # dunno what this is?!!
+        return None
+
     # FI-PI-LI is just a special case?
     if ref == 'FI-PI-LI':
         return ref
