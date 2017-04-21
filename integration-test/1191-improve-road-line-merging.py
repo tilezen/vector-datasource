@@ -98,7 +98,7 @@ assert_is_linestring(11, 603, 770, 'roads', 'Pitkin Ave.', 23, 10)
 # http://www.openstreetmap.org/way/421092484
 # http://www.openstreetmap.org/way/421092485
 # http://www.openstreetmap.org/way/421092487
-assert_is_linestring(13, 2413, 3081, 'roads', 'Linden Blvd.', 22, 8)
+assert_is_linestring(13, 2413, 3081, 'roads', 'Linden Blvd.', 23, 8)
 
 # check that we don't merge across linestrings with different properties. in
 # this case, the central section of this road is a bridge. we currently drop
