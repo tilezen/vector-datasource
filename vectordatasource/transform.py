@@ -4333,7 +4333,8 @@ def palettize_colours(ctx):
         colour = None
         for attr in input_attrs:
             colour = props.get(attr)
-            break if colour
+            if colour:
+                break
         if colour:
             rgb = parse_colour(colour)
             if rgb:

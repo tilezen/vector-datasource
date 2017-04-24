@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import unittest
-from collections import OrderedDict
 
 
 class ColourParsingTest(unittest.TestCase):
@@ -40,4 +39,5 @@ class ColourParsingTest(unittest.TestCase):
         self.assertEquals(parse_colour('thisisnotacolour'), None)
 
         # check that whitespace in names is removed
-        self.assertEquals(parse_colour('Dark Sea Green'), Colour(143, 188, 143))
+        self.assertEquals(
+            parse_colour('Dark Sea Green'), Colour(143, 188, 143))
