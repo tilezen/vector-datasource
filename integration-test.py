@@ -104,7 +104,8 @@ def match_properties(actual, expected):
                     return False
 
             elif isinstance(exp_v, unicode):
-                return v == exp_v.encode('utf-8')
+                if v != exp_v.encode('utf-8'):
+                    return False
 
             elif v != exp_v:
                 return False
@@ -159,21 +160,56 @@ def match_distance(actual, expected):
     return (distance, misses)
 
 
-@contextmanager
-def features_in_tile_layer(z, x, y, layer):
+class GatewayTimeout(Exception):
+    pass
+
+
+def tile_url(z, x, y, layer):
     assert config_url, "Tile URL is not configured, is your config file set up?"
     request_layer = 'all' if config_all_layers else layer
     url = config_url % {'layer': request_layer, 'z': z, 'x': x, 'y': y}
+    return url
+
+
+def fetch_tile_http(url):
     r = requests.get(url)
 
-    if r.status_code != 200:
+    if r.status_code == 504:
+        raise GatewayTimeout("Timeout for tile %r" % url)
+    elif r.status_code != 200:
         raise Exception("Tile %r: error while fetching, status=%d"
                         % (url, r.status_code))
+
+    return r
+
+
+def fetch_tile_http_json(z, x, y, layer):
+    url = tile_url(z, x, y, layer)
+    r = fetch_tile_http(url)
 
     if r.headers['content-type'] != 'application/json':
         raise Exception("Tile %r: expected JSON, but content-type is %r"
                         % (url, r.headers['content-type']))
 
+    return r
+
+
+def fetch_tile_http_mvt(z, x, y, layer):
+    url = tile_url(z, x, y, layer)
+    url = url.replace(".json", ".mvt")
+    r = fetch_tile_http(url)
+
+    if r.headers['content-type'] != 'application/x-protobuf':
+        raise Exception("Tile %r: expected application/x-protobuf, but "
+                        "content-type is %r"
+                        % (url, r.headers['content-type']))
+
+    return r
+
+
+@contextmanager
+def features_in_tile_layer(z, x, y, layer):
+    r = fetch_tile_http_json(z, x, y, layer)
     data = json.loads(r.text)
 
     if config_all_layers:
@@ -189,23 +225,12 @@ def features_in_tile_layer(z, x, y, layer):
         yield features
 
     except Exception as e:
-        raise Exception, "Tile %r: %s" % (url, e.message), sys.exc_info()[2]
+        raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
 
 
 @contextmanager
 def layers_in_tile(z, x, y):
-    assert config_url, "Tile URL is not configured, is your config file set up?"
-    url = config_url % {'layer': 'all', 'z': z, 'x': x, 'y': y}
-    r = requests.get(url)
-
-    if r.status_code != 200:
-        raise Exception("Tile %r: error while fetching, status=%d"
-                        % (url, r.status_code))
-
-    if r.headers['content-type'] != 'application/json':
-        raise Exception("Tile %r: expected JSON, but content-type is %r"
-                        % (url, r.headers['content-type']))
-
+    r = fetch_tile_http_json(z, x, y, 'all')
     data = json.loads(r.text)
     layers = data.keys()
     yield layers
@@ -213,20 +238,7 @@ def layers_in_tile(z, x, y):
 
 @contextmanager
 def features_in_mvt_layer(z, x, y, layer):
-    assert config_url, "Tile URL is not configured, is your config file set up?"
-    request_layer = 'all' if config_all_layers else layer
-    url = config_url % {'layer': request_layer, 'z': z, 'x': x, 'y': y}
-    url = url.replace(".json", ".mvt")
-    r = requests.get(url)
-
-    if r.status_code != 200:
-        raise Exception("Tile %r: error while fetching, status=%d"
-                        % (url, r.status_code))
-
-    if r.headers['content-type'] != 'application/x-protobuf':
-        raise Exception("Tile %r: expected application/x-protobuf, but "
-                        "content-type is %r"
-                        % (url, r.headers['content-type']))
+    r = fetch_tile_http_mvt(z, x, y, layer)
 
     from mapbox_vector_tile import decode as mvt_decode
     msg = mvt_decode(r.content)
@@ -237,7 +249,7 @@ def features_in_mvt_layer(z, x, y, layer):
         yield features
 
     except Exception as e:
-        raise Exception, "Tile %r: %s" % (url, e.message), sys.exc_info()[2]
+        raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
 
 
 def count_matching(features, properties):
@@ -519,6 +531,12 @@ def run_test(f, log, idx, num_tests):
             'features_in_mvt_layer': features_in_mvt_layer,
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
+    except GatewayTimeout, e:
+        print "[%4d/%d] SLOW: %r" % (idx, num_tests, f)
+        fails = 1
+        print>>log, "[%4d/%d] SLOW: %r" % (idx, num_tests, f)
+        print>>log, "Gateway timeout: %s" % e.message
+        print>>log, ""
     except:
         print "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
         fails = 1
