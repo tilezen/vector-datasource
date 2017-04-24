@@ -31,9 +31,13 @@ assert_has_feature(
 # Way: Dreiländerweg part of ICN [EV3] Pilgrim's Route DE_9_03 (Nideggen - Aachen)
 # https://www.openstreetmap.org/way/223428887
 # https://www.openstreetmap.org/relation/6965102
+# https://www.openstreetmap.org/relation/21394
+# https://www.openstreetmap.org/relation/55614
+# https://www.openstreetmap.org/relation/1424819
+# https://www.openstreetmap.org/relation/1735810
 assert_has_feature(
     8, 134, 85, 'roads',
-    { 'kind': 'minor_road', 'is_bicycle_related': True})
+    { 'kind': 'path', 'is_bicycle_related': True})
 
 # Ferry between Denmark and Germany, icn
 # https://www.openstreetmap.org/way/128631318
