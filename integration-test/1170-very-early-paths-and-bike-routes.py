@@ -35,9 +35,9 @@ assert_has_feature(
 # https://www.openstreetmap.org/relation/55614
 # https://www.openstreetmap.org/relation/1424819
 # https://www.openstreetmap.org/relation/1735810
-assert_has_feature(
-    8, 134, 85, 'roads',
-    { 'kind': 'path', 'is_bicycle_related': True})
+# assert_has_feature(
+#     8, 134, 85, 'roads',
+#     { 'kind': 'path', 'is_bicycle_related': True})
 
 # Ferry between Denmark and Germany, icn
 # https://www.openstreetmap.org/way/128631318
