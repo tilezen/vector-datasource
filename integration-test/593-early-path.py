@@ -4,7 +4,7 @@
 assert_has_feature(
     11, 345, 790, 'roads',
     { 'walking_network': 'nwn',
-      'walking_shield_text': 'PCT' })
+      'walking_shield_text': '45' })
 
 tiles = [
     # highway=path, with route regional (Merced Pass Trail)
@@ -23,4 +23,4 @@ tiles = [
 for z, x, y in tiles:
     assert_has_feature(
         z, x, y, 'roads',
-        {'kind_detail': 'path', 'name': None})
+        {'kind_detail': 'path', 'name': None, 'walking_network': None})
