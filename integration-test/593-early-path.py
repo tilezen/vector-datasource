@@ -1,8 +1,12 @@
+# highway=path, with route national (Pacific Crest Trail)
+# https://www.openstreetmap.org/way/236361475
+# https://www.openstreetmap.org/relation/1225378
+assert_has_feature(
+    11, 345, 790, 'roads',
+    { 'walking_network': 'nwn',
+      'walking_shield_text': 'PCT' })
+
 tiles = [
-    # highway=path, with route national (Pacific Crest Trail)
-    # https://www.openstreetmap.org/way/236361475
-    # https://www.openstreetmap.org/relation/1225378
-    [11, 345, 790],
     # highway=path, with route regional (Merced Pass Trail)
     # https://www.openstreetmap.org/way/373491941
     # https://www.openstreetmap.org/relation/5549623
