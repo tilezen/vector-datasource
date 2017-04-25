@@ -504,6 +504,18 @@ post_process:
       start_zoom: 0
       end_zoom: 14
       properties: [oneway, crossing, sidewalk, sidewalk_left, sidewalk_right, surface]
+  # drop name and other properties on early paths to
+  # allow more line merging (use walking network for labeling)
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 12
+      properties:
+        - name
+        - ref
+      where: >-
+        kind == 'path'
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -571,6 +583,8 @@ post_process:
         - all_shield_texts
         - walking_network
         - walking_shield_text
+        - bicycle_network
+        - bicycle_shield_text
       where: >-
         kind == 'highway'
   # drop non-road shield stuff a good deal earlier.
@@ -580,8 +594,6 @@ post_process:
       start_zoom: 0
       end_zoom: 10
       properties:
-        - bicycle_network
-        - bicycle_shield_text
         - all_bicycle_networks
         - all_bicycle_shield_texts
         - all_walking_networks
@@ -592,6 +604,17 @@ post_process:
         - all_bus_shield_texts
       where: >-
         kind == 'highway'
+  # drop walking network related properties on all roads early
+  # as paths are only brought in at zoom 9 and these properties
+  # on other kinds would prevent merging at zoom 8 and earlier
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 9
+      properties:
+        - walking_network
+        - walking_shield_text
   - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: pois
