@@ -11,14 +11,15 @@ assert_has_feature(
       'all_bicycle_shield_texts': ['45'] })
 
 # make sure the all_* lists are gone by zoom 12 on major roads, but the "most
-# important" network & shield text remain until.
+# important", singular network & shield text remain at earlier zooms
 assert_has_feature(
     10, 163, 395, 'roads',
     { 'bicycle_network': 'lcn',
       'bicycle_shield_text': '45' })
+
 assert_no_matching_feature(
-    10, 163, 395, 'roads',
+    12, 655, 1583, 'roads',
     { 'all_bicycle_networks': None })
 assert_no_matching_feature(
-    10, 163, 395, 'roads',
+    12, 655, 1583, 'roads',
     { 'all_bicycle_shield_texts': None })
