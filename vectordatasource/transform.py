@@ -4274,6 +4274,8 @@ class Palette(object):
     """
     A collection of named colours which allows relatively fast lookup of the
     closest named colour to any particular input colour.
+
+    Inspired by https://github.com/cooperhewitt/py-cooperhewitt-swatchbook
     """
 
     def __init__(self, colours):

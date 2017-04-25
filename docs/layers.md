@@ -1210,7 +1210,7 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 
 #### Transit `colour_name` values:
 
-Transit lines may have their colours mapped onto one of these CSS colours. The intention is that designers can take this limited palette set and remap them onto a set which is more appropriate and in keeping with the other colours in the design.
+Transit lines may have their colours mapped onto one of these CSS colours. The intention is that designers can take this limited palette set and remap them onto a set which is more appropriate and in keeping with the other colours in the design. Inspired by [py-cooperhewitt-swatchbook](https://github.com/cooperhewitt/py-cooperhewitt-swatchbook).
 
 * aqua
 * aquamarine
