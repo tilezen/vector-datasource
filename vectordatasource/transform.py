@@ -30,6 +30,7 @@ import pycountry
 import re
 import shapely.wkb
 import shapely.ops
+import kdtree
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
@@ -4267,3 +4268,78 @@ def truncate_min_zoom_to_2dp(shape, properties, fid, zoom):
         properties['min_zoom'] = round(min_zoom, 2)
 
     return shape, properties, fid
+
+
+class Palette(object):
+    """
+    A collection of named colours which allows relatively fast lookup of the
+    closest named colour to any particular input colour.
+
+    Inspired by https://github.com/cooperhewitt/py-cooperhewitt-swatchbook
+    """
+
+    def __init__(self, colours):
+        self.colours = colours
+        self.namelookup = dict()
+        for name, colour in colours.items():
+            assert len(colour) == 3, \
+                "Colours must lists of be of length 3 (%r: %r)" % \
+                (name, colour)
+            for val in colour:
+                assert isinstance(val, int), \
+                    "Colour values must be integers (%r: %r)" % (name, colour)
+                assert val >= 0 and val <= 255, \
+                    "Colour values must be between 0 and 255 (%r: %r)" % \
+                    (name, colour)
+            self.namelookup[tuple(colour)] = name
+        self.tree = kdtree.create(colours.values())
+
+    def __call__(self, colour):
+        """
+        Returns the name of the closest colour in the palette to the input
+        colour.
+        """
+
+        node, dist = self.tree.search_nn(colour)
+        return self.namelookup[tuple(node.data)]
+
+    def get(self, name):
+        return self.colours.get(name)
+
+
+def palettize_colours(ctx):
+    """
+    Derive a colour from each feature by looking at one or more input
+    attributes and match that to a palette of name to colour mappings given
+    in the `colours` parameter. The name of the colour will be output in the
+    feature's properties using a key from the `attribute` paramter.
+    """
+
+    from vectordatasource.colour import parse_colour
+
+    layer_name = ctx.params.get('layer')
+    assert layer_name, \
+        'Parameter layer was missing from palettize config'
+    attr_name = ctx.params.get('attribute')
+    assert attr_name, \
+        'Parameter attribute was missing from palettize config'
+    colours = ctx.params.get('colours')
+    assert colours, \
+        'Dict mapping colour names to RGB triples was missing from config'
+    input_attrs = ctx.params.get('input_attributes', ['colour'])
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    palette = Palette(colours)
+
+    for (shape, props, fid) in layer['features']:
+        colour = None
+        for attr in input_attrs:
+            colour = props.get(attr)
+            if colour:
+                break
+        if colour:
+            rgb = parse_colour(colour)
+            if rgb:
+                props[attr_name] = palette(rgb)
+
+    return layer

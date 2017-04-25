@@ -27,6 +27,8 @@ setup(name='vector-datasource',
           'simplejson',
           'StreetNames',
           'tilequeue',
+          'kdtree',
+          'webcolors',
       ],
       test_suite='test',
       tests_require=[
