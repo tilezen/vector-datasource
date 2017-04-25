@@ -502,8 +502,60 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
+      end_zoom: 12
+      properties:
+        - bicycle
+        - colour
+        - foot
+        - operator
+        - route          # NVK (2017425): this is a suspicious tag
+        - route_name     # NVK (2017425): this is a suspicious tag
+        - sac_scale
+        - state
+        - surface
+        - symbol
+        - tracktype
+        - type           # NVK (2017425): this is a suspicious tag
+  # drop certain road properties at lower zooms
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 13
+      properties:
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+        - all_walking_networks
+        - all_walking_shield_texts
+        - all_bus_networks
+        - all_bus_shield_texts
+  # drop certain road properties at lower zooms
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
       end_zoom: 14
-      properties: [oneway, crossing, sidewalk, sidewalk_left, sidewalk_right, surface]
+      properties:
+        - ascent
+        - crossing
+        - descent
+        - description
+        - distance
+        - horse
+        - incline
+        - motor_vehicle
+        - oneway
+        - oneway_bicycle
+        - ramp
+        - ramp_bicycle
+        - roundtrip
+        - segregated
+        - sidewalk
+        - sidewalk_left
+        - sidewalk_right
+        - sport
+        - surface
+        - trail_visibility
   # drop name and other properties on early paths to
   # allow more line merging (use walking network for labeling)
   - fn: vectordatasource.transform.drop_properties
@@ -534,18 +586,6 @@ post_process:
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
         (kind == 'major_road' and zoom <  7)
-  - fn: vectordatasource.transform.drop_properties
-    params:
-      source_layer: roads
-      start_zoom: 0
-      end_zoom: 13
-      properties:
-        - all_bicycle_networks
-        - all_bicycle_shield_texts
-        - all_walking_networks
-        - all_walking_shield_texts
-        - all_bus_networks
-        - all_bus_shield_texts
   # this is a patch because we still want to drop name, network from major_road
   # features between zoom 7 and 10
   - fn: vectordatasource.transform.drop_properties
