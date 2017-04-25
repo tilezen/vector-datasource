@@ -611,7 +611,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 9
+      end_zoom: 8
       properties:
         - walking_network
         - walking_shield_text
