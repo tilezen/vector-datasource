@@ -1183,8 +1183,8 @@ Depending on upstream OpenStreetMap tagging, the following properties may be pre
 A smaller set is also available for non-`platform` features:
 
 * `colour`: either a `#rrggbb` hex value, or a CSS colour name (like `red`)
-* `layer`
 * `colour_name`: A colour name from a fixed palette, see description below.
+* `layer`
 * `state`
 * `symbol`
 * `type`
