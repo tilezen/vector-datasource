@@ -706,7 +706,7 @@ post_process:
   - fn: vectordatasource.transform.palettize_colours
     params:
       layer: transit
-      attribute: palette
+      attribute: colour_name
       colours:
         aqua: [0, 255, 255]
         aquamarine: [127, 255, 212]

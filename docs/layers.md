@@ -1184,7 +1184,7 @@ A smaller set is also available for non-`platform` features:
 
 * `colour`: either a `#rrggbb` hex value, or a CSS colour name (like `red`)
 * `layer`
-* `palette`: A colour name from a fixed palette, see description below.
+* `colour_name`: A colour name from a fixed palette, see description below.
 * `state`
 * `symbol`
 * `type`
@@ -1208,7 +1208,7 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 * `train`
 * `tram`
 
-#### Transit `palette` values:
+#### Transit `colour_name` values:
 
 Transit lines may have their colours mapped onto one of these CSS colours. The intention is that designers can take this limited palette set and remap them onto a set which is more appropriate and in keeping with the other colours in the design.
 

@@ -12,7 +12,7 @@ def to_hex(colour):
 
 yaml_config_file = None
 output_file = sys.stdout
-mz_colour_key = 'MZ colour'
+output_colour_key = 'Colour name'
 input_colour_key = 'colour'
 
 parser = OptionParser()
@@ -35,7 +35,7 @@ with open(options.config, 'rb') as yaml_fh:
     config = yaml.load(yaml_fh)
 
 if options.colour_key:
-    mz_colour_key = options.colour_key
+    output_colour_key = options.colour_key
 
 palette = Palette(config['colours'])
 
@@ -45,7 +45,7 @@ for file_name in args:
         writer = None
         for row in reader:
             if writer is None:
-                keys = list(row.keys()) + [mz_colour_key]
+                keys = list(row.keys()) + [output_colour_key]
                 if options.output_hex_key:
                     keys.append(options.output_hex_key)
                 writer = csv.DictWriter(output_file, keys)
@@ -53,7 +53,7 @@ for file_name in args:
             colour = parse_colour(row[input_colour_key])
             if colour:
                 c = palette(colour)
-                row[mz_colour_key] = c
+                row[output_colour_key] = c
                 if options.output_hex_key:
                     row[options.output_hex_key] = to_hex(palette.get(c))
             writer.writerow(row)
