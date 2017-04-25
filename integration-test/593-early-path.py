@@ -4,7 +4,7 @@
 assert_has_feature(
     11, 345, 790, 'roads',
     { 'walking_network': 'nwn',
-      'walking_shield_text': '45' })
+      'walking_shield_text': 'PCT' })
 
 tiles = [
     # highway=path, with route regional (Merced Pass Trail)
