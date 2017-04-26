@@ -87,7 +87,7 @@ global:
         - US National Park service
   - &no_name_okay
         - aerialway: pylon
-        - aeroway: [gate,helipad]
+        - aeroway: [ gate, helipad ]
         - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
             bicycle_repair_station, boat_storage, car_sharing, fuel,
             life_ring, parking, picnic_table, post_box, ranger_station, recycling,
