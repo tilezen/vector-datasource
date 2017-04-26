@@ -126,6 +126,12 @@ assert_has_feature(
 assert_has_feature(
     15, 5265, 12615, 'pois',
     {'id': 3356570361})
+# Way:184367568 quarry in POIS
+# http://www.openstreetmap.org/way/184367568
+assert_no_matching_feature(
+    12, 671, 1583, 'pois',
+    {'id': 184367568})
+
 
 # https://www.openstreetmap.org/node/1229112075
 # 15/5235/12669
@@ -162,12 +168,25 @@ assert_has_feature(
     15, 5378, 12607, 'pois',
     {'id': 1818064871})
 
+# originally from 657-natural-man_made.py
+# unnamed rock
+# node 1328665285
+assert_no_matching_feature(
+    15, 5293, 12734, 'pois',
+    { 'id': 1328665285 })
+
 # https://www.openstreetmap.org/node/4239915448
 # 15/7549/13919
 # "man_made"="offshore_platform"
 assert_has_feature(
     15, 7549, 13919, 'pois',
     {'id': 4239915448})
+
+# originally from 675-man_made-outdoor-landmarks.py
+#http://www.openstreetmap.org/way/350328482
+assert_no_matching_feature(
+    13, 1942, 3395, 'pois',
+    { 'id': 350328482 })
 
 # there is only 1 of these in the world!?
 # "man_made"="power_wind"
@@ -227,6 +246,14 @@ assert_has_feature(
 assert_has_feature(
     15, 9381, 12527, 'pois',
     {'id': 1130268570})
+
+# originally from 661-historic-transit-stops.py
+# public_transport=stop_position
+# railway=stop
+# http://www.openstreetmap.org/node/3721890342
+assert_has_feature(
+    13, 1316, 3176, 'pois',
+    {'id': 3721890342})
 
 # https://www.openstreetmap.org/node/3833748147
 # 15/9367/12536
@@ -307,3 +334,12 @@ assert_has_feature(
 assert_has_feature(
     15, 5449, 12526, 'pois',
     {'id': 4319935813})
+
+# originally from 927-normalize-operator-values.py
+# information=guidepost
+# operator=US Forest Service
+# tourism=information
+# http://www.openstreetmap.org/node/4216584100
+assert_has_feature(
+    16, 15995, 25090, 'pois',
+    {'id': 4216584100})
