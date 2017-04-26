@@ -118,7 +118,7 @@ global:
         - tags->rcn_ref: true
         - tags->rwn_ref: true
         - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
-        - tourism: [ alpine_hut, picnic_site, viewpoint, wilderness_hut ]
+        - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
         - waterway: [ dam, lock, waterfall ]
 
 filters:
