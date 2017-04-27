@@ -390,8 +390,8 @@ filters:
   - filter:
       man_made: pier
       way_area: {expr: "way_area > 0"}
-    min_zoom: *tier4_min_zoom
-    output: {kind: pier, tier: 4}
+    min_zoom: GREATEST(LEAST(zoom + 1.81, 16), 11)
+    output: {kind: pier}
   # wastewater_plant
   - filter: {man_made: wastewater_plant}
     min_zoom: *tier4_min_zoom
