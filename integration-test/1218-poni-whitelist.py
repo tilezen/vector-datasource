@@ -133,8 +133,11 @@ assert_has_feature(
 
 # highway=platform
 # https://www.openstreetmap.org/node/1275126569
-assert_has_feature(
+assert_no_matching_feature(
     15, 7539, 11137, 'pois',
+    {'id': 1275126569})
+assert_no_matching_feature(
+    16, 15079, 22275, 'pois',
     {'id': 1275126569})
 
 # highway=traffic_signals
