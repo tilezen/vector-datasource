@@ -502,11 +502,13 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 11
       properties:
         - bicycle
         - colour
         - foot
+        - horse
+        - motor_vehicle
         - operator
         - route          # NVK (2017425): this is a suspicious tag
         - route_name     # NVK (2017425): this is a suspicious tag
@@ -541,9 +543,7 @@ post_process:
         - descent
         - description
         - distance
-        - horse
         - incline
-        - motor_vehicle
         - oneway
         - oneway_bicycle
         - ramp
