@@ -367,7 +367,7 @@ assert_has_feature(
 # node 4013703516
 assert_has_feature(
     16, 10463, 25274, 'pois',
-    { 'id': 1328665285 })
+    { 'id': 4013703516 })
 
 # node 3150154140
 assert_has_feature(
