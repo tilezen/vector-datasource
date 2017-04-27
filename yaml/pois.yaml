@@ -104,8 +104,8 @@ global:
         - man_made: [ adit, communications_tower, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, windmill ]
-        - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, saddle, spring,
-            tree, waterfall ]
+        - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
+            stone, spring, tree, waterfall ]
         - power: [ pole, tower ]
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]

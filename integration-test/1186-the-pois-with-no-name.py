@@ -102,10 +102,3 @@ assert_no_matching_feature(
 assert_no_matching_feature(
     13, 1429, 3247, 'pois',
     {'id': 164878781 })
-
-# originally from 657-natural-man_made.py
-# unnamed rock
-# node 1328665285
-assert_no_matching_feature(
-    15, 5293, 12734, 'pois',
-    { 'id': 1328665285 })

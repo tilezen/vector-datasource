@@ -435,3 +435,10 @@ assert_has_feature(
 assert_has_feature(
     16, 15995, 25090, 'pois',
     {'id': 4216584100})
+
+# originally from 657-natural-man_made.py
+# unnamed rock
+# node 4013703516
+assert_has_feature(
+    16, 10463, 25274, 'pois',
+    { 'id': 1328665285 })
