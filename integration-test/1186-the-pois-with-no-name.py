@@ -24,11 +24,6 @@ assert_no_matching_feature(
 #    [16, 13323, 21679], # node 2911709060 amenity=boat_rental
 #    [16, 10503, 25310], # node 3509468126 rental=boat
 
-# node 3150154140
-assert_no_matching_feature(
-    16, 10482, 25294, 'pois',
-    { 'id': 3150154140 })
-
 # originally from 663-combo-outdoor-landuse-pois.py
 #https://www.openstreetmap.org/relation/6328943
 # Cox Stadium recreation track
