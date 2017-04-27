@@ -157,11 +157,8 @@ assert_has_feature(
 
 # landuse=quarry
 # https://www.openstreetmap.org/node/3356570361
-assert_no_matching_feature(
-    15, 5265, 12615, 'pois',
-    {'id': 3356570361})
 assert_has_feature(
-    16, 10530, 25230, 'pois',
+    15, 5265, 12615, 'pois',
     {'id': 3356570361})
 
 # Way:184367568 quarry in POIS
