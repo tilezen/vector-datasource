@@ -214,7 +214,7 @@ assert_has_feature(
 
 # originally from 675-man_made-outdoor-landmarks.py
 # man_made=offshore_platform
-#https://www.openstreetmap.org/way/350328482
+# https://www.openstreetmap.org/way/350328482
 assert_has_feature(
     13, 1942, 3395, 'pois',
     { 'id': 350328482 })
@@ -225,7 +225,7 @@ assert_has_feature(
 # man_made=telescope
 # https://www.openstreetmap.org/node/3310910810
 assert_has_feature(
-    15, 5334, 12510, 'pois',
+    16, 10668, 25021, 'pois',
     {'id': 3310910810})
 
 # natural=cave_entrance
