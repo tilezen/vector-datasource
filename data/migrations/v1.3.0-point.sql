@@ -5,5 +5,7 @@ UPDATE
     (tags -> 'leisure' = 'garden' OR
      tags -> 'landuse' = 'village_green' OR
      tags -> 'natural' IN ('wood', 'forest') OR
+     tags -> 'railway' = 'level_crossing' OR
+     tags -> 'tourism' IN ('viewpoint') OR
      (NOT tags ? 'name' AND mz_poi_min_zoom IS NOT NULL))
     AND COALESCE(mz_poi_min_zoom, 999) <> COALESCE(mz_calculate_min_zoom_pois(p.*), 999);

@@ -24,22 +24,6 @@ assert_no_matching_feature(
 #    [16, 13323, 21679], # node 2911709060 amenity=boat_rental
 #    [16, 10503, 25310], # node 3509468126 rental=boat
 
-# originally from 657-natural-man_made.py
-# node 1328665285
-assert_no_matching_feature(
-    15, 5293, 12734, 'pois',
-    { 'id': 1328665285 })
-# node 3150154140
-assert_no_matching_feature(
-    16, 10482, 25294, 'pois',
-    { 'id': 3150154140 })
-
-# originally from 661-historic-transit-stops.py
-# http://www.openstreetmap.org/node/3721890342
-assert_no_matching_feature(
-    13, 1316, 3176, 'pois',
-    {'id': 3721890342})
-
 # originally from 663-combo-outdoor-landuse-pois.py
 #https://www.openstreetmap.org/relation/6328943
 # Cox Stadium recreation track
@@ -51,12 +35,6 @@ assert_no_matching_feature(
 assert_no_matching_feature(
     16, 10962, 25007, 'pois',
     { 'id': 3643451363 })
-
-# originally from 675-man_made-outdoor-landmarks.py
-#http://www.openstreetmap.org/way/350328482
-assert_no_matching_feature(
-    13, 1942, 3395, 'pois',
-    { 'id': 350328482 })
 
 # originally from 742-predictable-layers-pois.py
 # Way:79457493 Grave_yard in POIS
@@ -84,11 +62,6 @@ assert_no_matching_feature(
 assert_no_matching_feature(
     14, 2809, 6074, 'pois',
     {'id': 4076680383})
-# Way:184367568 quarry in POIS
-# http://www.openstreetmap.org/way/184367568
-assert_no_matching_feature(
-    12, 671, 1583, 'pois',
-    {'id': 184367568})
 # Way:86285084 recreation_ground in POIS
 # http://www.openstreetmap.org/way/86285084
 assert_no_matching_feature(
@@ -124,9 +97,3 @@ assert_no_matching_feature(
 assert_no_matching_feature(
     13, 1429, 3247, 'pois',
     {'id': 164878781 })
-
-# originally from 927-normalize-operator-values.py
-# http://www.openstreetmap.org/node/4216584100
-assert_no_matching_feature(
-    16, 15995, 25090, 'pois',
-    {'id': 4216584100})
