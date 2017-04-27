@@ -127,20 +127,14 @@ assert_has_feature(
 
 # highway=mini_roundabout
 # https://www.openstreetmap.org/node/110392851
-assert_no_matching_feature(
-    15, 5228, 12650, 'pois',
-    {'id': 110392851})
 assert_has_feature(
-    16, 10457, 25301, 'pois',
+    15, 5228, 12650, 'pois',
     {'id': 110392851})
 
 # highway=platform
 # https://www.openstreetmap.org/node/1275126569
-assert_no_matching_feature(
-    15, 7539, 11137, 'pois',
-    {'id': 1275126569})
 assert_has_feature(
-    16, 15079, 22275, 'pois',
+    15, 7539, 11137, 'pois',
     {'id': 1275126569})
 
 # highway=traffic_signals
@@ -154,11 +148,8 @@ assert_has_feature(
 
 # waterway=lock
 # https://www.openstreetmap.org/node/675426915
-assert_no_matching_feature(
-    15, 9399, 12418, 'pois',
-    {'id': 675426915})
 assert_has_feature(
-    16, 18799, 24836, 'pois',
+    15, 9399, 12418, 'pois',
     {'id': 675426915})
 
 # landuse=quarry
@@ -196,11 +187,8 @@ assert_has_feature(
 
 # lock='yes'
 # https://www.openstreetmap.org/node/365485771
-assert_no_matching_feature(
-    15, 9527, 11985, 'pois',
-    {'id': 365485771})
 assert_has_feature(
-    16, 19054, 23970, 'pois',
+    15, 9527, 11985, 'pois',
     {'id': 365485771})
 
 # man_made=adit
@@ -214,29 +202,21 @@ assert_has_feature(
 
 # man_made=mineshaft
 # https://www.openstreetmap.org/node/1818064871
-assert_no_matching_feature(
-    15, 5378, 12607, 'pois',
-    {'id': 1818064871})
 assert_has_feature(
-    16, 10756, 25214, 'pois',
+    15, 5378, 12607, 'pois',
     {'id': 1818064871})
 
 # man_made=offshore_platform
 # https://www.openstreetmap.org/node/4239915448
-assert_no_matching_feature(
-    15, 7549, 13919, 'pois',
-    {'id': 4239915448})
 assert_has_feature(
-    16, 15099, 27839, 'pois',
+    15, 7549, 13919, 'pois',
     {'id': 4239915448})
 
 # originally from 675-man_made-outdoor-landmarks.py
+# man_made=offshore_platform
 #https://www.openstreetmap.org/way/350328482
-assert_no_matching_feature(
-    13, 1942, 3395, 'pois',
-    { 'id': 350328482 })
 assert_has_feature(
-    16, 15540, 27162, 'pois',
+    13, 1942, 3395, 'pois',
     { 'id': 350328482 })
 
 # there is only 1 of these in the world!?
@@ -244,85 +224,58 @@ assert_has_feature(
 
 # man_made=telescope
 # https://www.openstreetmap.org/node/3310910810
-assert_no_matching_feature(
-    15, 5334, 12510, 'pois',
-    {'id': 3310910810})
 assert_has_feature(
-    16, 10668, 25021, 'pois',
+    15, 5334, 12510, 'pois',
     {'id': 3310910810})
 
 # natural=cave_entrance
 # https://www.openstreetmap.org/node/1050825518
-assert_no_matching_feature(
-    15, 5178, 12346, 'pois',
-    {'id': 1050825518})
 assert_has_feature(
-    16, 10357, 24692, 'pois',
+    15, 5178, 12346, 'pois',
     {'id': 1050825518})
 
 # natural=waterfall
 # https://www.openstreetmap.org/node/4719786091
-assert_no_matching_feature(
-    15, 5491, 12694, 'pois',
-    {'id': 4719786091})
 assert_has_feature(
-    16, 10983, 25389, 'pois',
+    15, 5491, 12694, 'pois',
     {'id': 4719786091})
 
 # public_transport=platform
 # https://www.openstreetmap.org/node/2073000913
-assert_no_matching_feature(
-    15, 5238, 12671, 'pois',
-    {'id': 2073000913})
 assert_has_feature(
-    16, 10476, 25342, 'pois',
+    15, 5238, 12671, 'pois',
     {'id': 2073000913})
 
 # public_transport=stop_area
 # https://www.openstreetmap.org/node/2991866242
-assert_no_matching_feature(
-    15, 5214, 12588, 'pois',
-    {'id': 2991866242})
 assert_has_feature(
-    16, 10428, 25177, 'pois',
+    15, 5214, 12588, 'pois',
     {'id': 2991866242})
 
 # railway=halt
 # https://www.openstreetmap.org/node/2382580308
-assert_no_matching_feature(
-    15, 9545, 12368, 'pois',
-    {'id': 2382580308})
 assert_has_feature(
-    16, 19090, 24737, 'pois',
+    15, 9545, 12368, 'pois',
     {'id': 2382580308})
 
 # railway=platform
 # https://www.openstreetmap.org/node/3987143106
-assert_no_matching_feature(
-    15, 9821, 12242, 'pois',
-    {'id': 3987143106})
 assert_has_feature(
-    16, 19643, 24485, 'pois',
+    15, 9821, 12242, 'pois',
     {'id': 3987143106})
 
 # railway=stop
 # https://www.openstreetmap.org/node/1130268570
-assert_no_matching_feature(
-    15, 9381, 12527, 'pois',
-    {'id': 1130268570})
 assert_has_feature(
-    16, 18762, 25055, 'pois',
+    15, 9381, 12527, 'pois',
     {'id': 1130268570})
 
 # originally from 661-historic-transit-stops.py
 # public_transport=stop_position
 # railway=stop
 # https://www.openstreetmap.org/node/3721890342
-assert_no_matching_feature(
-    13, 1316, 3176, 'pois',
-    {'id': 3721890342})
 assert_has_feature(
-    16, 10530, 25408, 'pois',
+    13, 1316, 3176, 'pois',
     {'id': 3721890342})
 
 # railway=subway_entrance
@@ -336,11 +289,8 @@ assert_has_feature(
 
 # railway=tram_stop
 # https://www.openstreetmap.org/node/1719012916
-assert_no_matching_feature(
-    15, 5239, 12670, 'pois',
-    {'id': 1719012916})
 assert_has_feature(
-    16, 10479, 25340, 'pois',
+    15, 5239, 12670, 'pois',
     {'id': 1719012916})
 
 # railway=level_crossing (but make min_zoom 18)
@@ -357,74 +307,50 @@ assert_has_feature(
 
 # tags->whitewater=egress
 # https://www.openstreetmap.org/node/4696619992
-assert_no_matching_feature(
-    15, 5362, 12461, 'pois',
-    {'id': 4696619992})
 assert_has_feature(
-    16, 10724, 24922, 'pois',
+    15, 5362, 12461, 'pois',
     {'id': 4696619992})
 
 # tags->whitewater=hazard
 # https://www.openstreetmap.org/node/4253919482
-assert_no_matching_feature(
-    15, 5387, 12481, 'pois',
-    {'id': 4253919482})
 assert_has_feature(
-    16, 10774, 24963, 'pois',
+    15, 5387, 12481, 'pois',
     {'id': 4253919482})
 
 # tags->whitewater=put_in
 # https://www.openstreetmap.org/node/3688927027
-assert_no_matching_feature(
-    15, 5541, 12666, 'pois',
-    {'id': 3688927027})
 assert_has_feature(
-    16, 11082, 25332, 'pois',
+    15, 5541, 12666, 'pois',
     {'id': 3688927027})
 
 # tags->whitewater=rapid
 # https://www.openstreetmap.org/node/4253919493
-assert_no_matching_feature(
-    15, 5385, 12482, 'pois',
-    {'id': 4253919493})
 assert_has_feature(
-    16, 10770, 24964, 'pois',
+    15, 5385, 12482, 'pois',
     {'id': 4253919493})
 
 # tourism=alpine_hut
 # https://www.openstreetmap.org/node/1076123765
-assert_no_matching_feature(
-    15, 5433, 12607, 'pois',
-    {'id': 1076123765})
 assert_has_feature(
-    16, 10866, 25214, 'pois',
+    15, 5433, 12607, 'pois',
     {'id': 1076123765})
 
 # tourism=viewpoint
 # https://www.openstreetmap.org/node/3065529317
-assert_no_matching_feature(
-    15, 5236, 12667, 'pois',
-    {'id': 3065529317})
 assert_has_feature(
-    16, 10472, 25335, 'pois',
+    15, 5236, 12667, 'pois',
     {'id': 3065529317})
 
 # tourism=wilderness_hut
 # https://www.openstreetmap.org/node/1837443430
-assert_no_matching_feature(
-    15, 17100, 11564, 'pois',
-    {'id': 1837443430})
 assert_has_feature(
-    16, 34200, 23128, 'pois',
+    15, 17100, 11564, 'pois',
     {'id': 1837443430})
 
 # waterway=waterfall
 # https://www.openstreetmap.org/node/4319935813
-assert_no_matching_feature(
-    15, 5449, 12526, 'pois',
-    {'id': 4319935813})
 assert_has_feature(
-    16, 10898, 25053, 'pois',
+    15, 5449, 12526, 'pois',
     {'id': 4319935813})
 
 # originally from 927-normalize-operator-values.py

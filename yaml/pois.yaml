@@ -912,10 +912,15 @@ filters:
     min_zoom: GREATEST(13, LEAST(zoom + 4.9, 16))
     output: {kind: camp_site}
   - filter:
-      tourism: [information, viewpoint]
+      tourism: viewpoint
+    min_zoom: 15
+    output:
+      kind: viewpoint
+  - filter:
+      tourism: information
     min_zoom: 16
     output:
-      kind: {col: tourism}
+      kind: information
   - filter:
       amenity: [atm, bus_stop, drinking_water, emergency_phone,
         post_box, telephone]
