@@ -14,7 +14,7 @@ assert_has_feature(
 # important", singular network & shield text remain at earlier zooms
 assert_has_feature(
     10, 163, 395, 'roads',
-    { 'bicycle_network': 'lcn',
+    { 'bicycle_network': None,
       'bicycle_shield_text': '45' })
 
 assert_no_matching_feature(
