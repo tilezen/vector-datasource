@@ -87,19 +87,28 @@ global:
         - US National Park service
   - &no_name_okay
         - aerialway: pylon
-        - aeroway: gate
-        - amenity: [ bbq, bicycle_parking, bicycle_repair_station, boat_storage,
-            life_ring, parking, picnic_table, ranger_station, shower, toilets,
-            waste_disposal, water_point, watering_place ]
+        - aeroway: [ gate, helipad ]
+        - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
+            bicycle_repair_station, boat_storage, car_sharing, fuel,
+            life_ring, parking, picnic_table, post_box, ranger_station, recycling,
+            shelter, shower, telephone, toilets, waste_basket, waste_disposal,
+            water_point, watering_place ]
         - barrier: [ cycle_barrier, gate, toll_booth ]
         - emergency: [ lifeguard_tower, phone ]
-        - highway: [ motorway_junction, rest_area, trailhead ]
+        - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
+            rest_area, traffic_signals, trailhead ]
         - historic: landmark
-        - leisure: [ firepit, fishing, pitch, slipway, swimming_area ]
-        - man_made: [ communications_tower, mast, observatory, petroleum_well,
-            water_tower, water_well, windmill ]
-        - natural: [peak, volcano, geyser, hot_spring, saddle, spring, tree ]
+        - landuse: quarry
+        - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
+        - lock: yes
+        - man_made: [ adit, communications_tower, mast, mineshaft, observatory,
+            offshore_platform, petroleum_well, power_wind, telescope, water_tower,
+            water_well, windmill ]
+        - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
+            stone, spring, tree, waterfall ]
         - power: [ pole, tower ]
+        - public_transport: [ platform, stop_area ]
+        - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
         - tags->icn_ref: true
         - tags->iwn_ref: true
         - tags->lcn_ref: true
@@ -108,9 +117,9 @@ global:
         - tags->nwn_ref: true
         - tags->rcn_ref: true
         - tags->rwn_ref: true
-        - tags->whitewater: put_in;egress
-        - tourism: picnic_site
-        - waterway: dam
+        - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
+        - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
+        - waterway: [ dam, lock, waterfall ]
 
 filters:
   # remove disused things, they're not real POIs any more
@@ -538,7 +547,7 @@ filters:
     output:
       kind: {col: natural}
       elevation: {col: ele}
-  - filter: 
+  - filter:
       railway: station
       any:
         historic: false
@@ -551,7 +560,7 @@ filters:
     min_zoom: 14
     output: {kind: spring}
   - filter: {railway: level_crossing}
-    min_zoom: 14
+    min_zoom: 18
     output: {kind: level_crossing}
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
@@ -903,10 +912,15 @@ filters:
     min_zoom: GREATEST(13, LEAST(zoom + 4.9, 16))
     output: {kind: camp_site}
   - filter:
-      tourism: [information, viewpoint]
+      tourism: viewpoint
+    min_zoom: 15
+    output:
+      kind: viewpoint
+  - filter:
+      tourism: information
     min_zoom: 16
     output:
-      kind: {col: tourism}
+      kind: information
   - filter:
       amenity: [atm, bus_stop, drinking_water, emergency_phone,
         post_box, telephone]
@@ -1109,7 +1123,7 @@ filters:
     output: {kind: picnic_site}
   - filter: {highway: services}
     min_zoom: 11
-    output: 
+    output:
       kind: service_area
   - filter: {highway: rest_area}
     min_zoom: 11
