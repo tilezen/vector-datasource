@@ -6,4 +6,6 @@ UPDATE planet_osm_line
                    'path', 'track', 'cycleway', 'bridleway', 'footway', 'steps',
                    'service' ) OR
        tags -> 'whitewater' = 'portage_way')
-      AND mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL;
+      AND mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL
+      AND mz_road_level IS NOT NULL
+      AND mz_road_level <> mz_calculate_min_zoom_roads(planet_osm_line.*);
