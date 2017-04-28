@@ -28,6 +28,28 @@ assert_has_feature(
    12, 655, 1582, 'roads',
    { 'kind': 'minor_road', 'walking_network': 'lwn' } )
 
+
+# Strøby Bygade secondary road part of international cycle network
+# https://www.openstreetmap.org/way/378138944
+# https://www.openstreetmap.org/relation/1737354
+# https://www.openstreetmap.org/relation/28441
+# https://www.openstreetmap.org/relation/2689634
+# https://www.openstreetmap.org/relation/2749837
+# https://www.openstreetmap.org/relation/36778
+# https://www.openstreetmap.org/relation/721738
+assert_has_feature(
+    8, 136, 80, 'roads',
+    { 'kind': 'major_road', 'kind_detail': 'secondary',
+      'is_bicycle_related': True, 'bicycle_network': 'icn' })
+
+# Sundbylillevej tertiary road part of national cycle network
+# https://www.openstreetmap.org/way/28273516
+# https://www.openstreetmap.org/relation/26863
+assert_has_feature(
+    8, 136, 79, 'roads',
+    { 'kind': 'major_road', 'kind_detail': 'tertiary',
+      'is_bicycle_related': True, 'bicycle_network': 'ncn' })
+
 # Way: North Sea Cycle Route - part Netherlands (1977662)
 # A really long highway=cycleway
 # https://www.openstreetmap.org/way/35568189
