@@ -5,7 +5,7 @@ SET
 WHERE
     (
       tags -> 'aerialway' = 'pylon'
-      OR tags -> 'aeroway' IN ('gate, helipad')
+      OR tags -> 'aeroway' IN ('gate', 'helipad')
       OR tags -> 'amenity' IN ('atm', 'bbq', 'bench', 'bicycle_parking', 'bicycle_rental',
         'bicycle_repair_station', 'boat_storage', 'car_sharing', 'fuel',
         'life_ring', 'parking', 'picnic_table', 'post_box', 'ranger_station', 'recycling',
