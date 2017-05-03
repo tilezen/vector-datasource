@@ -29,15 +29,15 @@ WHERE
       OR tags -> 'public_transport' IN ('platform', 'stop_area')
       OR tags -> 'railway' IN ('halt', 'level_crossing', 'platform', 'stop',
         'subway_entrance', 'tram_stop')
-      OR tags -> 'tags->icn_ref' = 'true'
-      OR tags -> 'tags->iwn_ref' = 'true'
-      OR tags -> 'tags->lcn_ref' = 'true'
-      OR tags -> 'tags->lwn_ref' = 'true'
-      OR tags -> 'tags->ncn_ref' = 'true'
-      OR tags -> 'tags->nwn_ref' = 'true'
-      OR tags -> 'tags->rcn_ref' = 'true'
-      OR tags -> 'tags->rwn_ref' = 'true'
-      OR tags -> 'tags->whitewater' IN ('egress', 'hazard', 'put_in', 'put_in;egress',
+      OR tags -> 'icn_ref' = 'true'
+      OR tags -> 'iwn_ref' = 'true'
+      OR tags -> 'lcn_ref' = 'true'
+      OR tags -> 'lwn_ref' = 'true'
+      OR tags -> 'ncn_ref' = 'true'
+      OR tags -> 'nwn_ref' = 'true'
+      OR tags -> 'rcn_ref' = 'true'
+      OR tags -> 'rwn_ref' = 'true'
+      OR tags -> 'whitewater' IN ('egress', 'hazard', 'put_in', 'put_in;egress',
         'rapid')
       OR tags -> 'tourism' IN ('alpine_hut', 'information', 'picnic_site', 'viewpoint',
         'wilderness_hut')
