@@ -1,7 +1,7 @@
 v1.3.0
 ------
 * **Release date**: 2017-05-04. _Live on prod 2017-05-??._
-* **Requires:** [tileserver v1.4.0](https://github.com/mapzen/tileserver/releases/tag/v1.4.0) and [tilequeue v1.6.0](https://github.com/mapzen/tilequeue/releases/tag/v1.6.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+* **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
 
   #### ENHANCEMENTS
 
