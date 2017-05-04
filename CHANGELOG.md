@@ -1,3 +1,7 @@
+v1.2.1
+------
+* Guard against network being None
+
 v1.2.0
 ------
 * **Release date**: 2017-03-23.
