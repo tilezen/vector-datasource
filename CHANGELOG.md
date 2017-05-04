@@ -18,8 +18,8 @@ v1.3.0
 
   #### BUG FIXES
 
-  * Fix spelling of ~60 locality (city) names at low-zooms. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
-  * Small gardens (in Edinburgh and elsewhere) should not be visible at mid-zooms. [#1185](https://github.com/tilezen/vector-datasource/issues/1185).
+  * Fix spelling of ~60 locality (city) names at low-zooms in **places** layer. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
+  * Small gardens (in Edinburgh and elsewhere) should not be visible at mid-zooms in **pois** layer. [#1185](https://github.com/tilezen/vector-datasource/issues/1185).
   * Some **pois** layer features were missing their `tier` property. See [#1208](https://github.com/tilezen/vector-datasource/issues/1208).
   * Remove `natural_forest`, `natural_wood`, and `village_green` from **pois** layer, a documented breaking bug fix associated with the v1.0 release. Their label points are now found in the **landuse** layer. See [#1103](https://github.com/tilezen/vector-datasource/issues/1103).
   * Fix test failures based on upstream OpenStreetMap data changes.
