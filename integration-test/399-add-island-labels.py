@@ -121,13 +121,6 @@ assert_has_feature(
     { 'kind': 'island', 'label_placement': True, 'name': 'Angel Island' })
 
 # SMALL island labels (from place polygons)
-# http://www.openstreetmap.org/way/24433344
-# Alcatraz Island, near SF
-assert_has_feature(
-    15, 5240, 12659, 'earth',
-    { 'kind': 'island', 'label_placement': True, 'name': 'Alcatraz Island' })
-
-# SMALL island labels (from place polygons)
 # http://www.openstreetmap.org/way/22693068
 # Great Gull Island, NY state
 assert_has_feature(
@@ -164,6 +157,13 @@ assert_has_feature(
 assert_has_feature(
     15, 5188, 12673, 'earth',
     { 'kind': 'islet', 'label_placement': True, 'name': 'Sugarloaf Island' })
+
+# LARGE islet labels (from place polygons)
+# http://www.openstreetmap.org/way/24433344
+# Alcatraz Island, near SF
+assert_has_feature(
+    15, 5240, 12659, 'earth',
+    { 'kind': 'islet', 'label_placement': True, 'name': 'Alcatraz Island' })
 
 # MEDIUM islet labels (from place polygons)
 # http://www.openstreetmap.org/way/157449982
