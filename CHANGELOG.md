@@ -1,7 +1,7 @@
 v1.3.0
 ------
 * **Release date**: 2017-05-04. _Live on prod 2017-05-??._
-* **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+* **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.2.0).
 
   #### ENHANCEMENTS
 
@@ -27,7 +27,7 @@ v1.3.0
 v1.2.0
 ------
 * **Release date**: 2017-03-23. _Live on prod 2017-03-27._
-* **Requires:** [tileserver v1.4.0](https://github.com/mapzen/tileserver/releases/tag/v1.4.0) and [tilequeue v1.6.0](https://github.com/mapzen/tilequeue/releases/tag/v1.6.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+* **Requires:** [tileserver v1.4.0](https://github.com/mapzen/tileserver/releases/tag/v1.4.0) and [tilequeue v1.6.0](https://github.com/mapzen/tilequeue/releases/tag/v1.6.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.2.0).
 * Generate less-complex MultiPolygons by limiting the number of features that can be merged into a single MultiPolygon (defaults to 1000). This can have a large impact on geometric topology checks for file formats like MVT. See [#1176](https://github.com/tilezen/vector-datasource/pull/1176).
 * Move merging of landuse polygons after roads intercut, to improve intercut performance. See [#1177]( https://github.com/tilezen/vector-datasource/pull/1177).
 * Drop small inner polygons, to improve downstream performance. See [#1180](https://github.com/tilezen/vector-datasource/pull/1180).
@@ -36,13 +36,13 @@ v1.2.0
 v1.1.0
 ------
 * **Release date**: 2017-02-17.
-* **Requires:** [tileserver v1.3.0](https://github.com/mapzen/tileserver/releases/tag/v1.3.0) and [tilequeue v1.4.0](https://github.com/mapzen/tilequeue/releases/tag/v1.4.0) and [mapbox-vector-tile v1.1.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.1.0).
+* **Requires:** [tileserver v1.3.0](https://github.com/mapzen/tileserver/releases/tag/v1.3.0) and [tilequeue v1.4.0](https://github.com/mapzen/tilequeue/releases/tag/v1.4.0) and [mapbox-vector-tile v1.1.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.1.0).
 * Replace usage of tile coordinate with usage of nominal zoom. (See https://github.com/tilezen/vector-datasource/pull/1166)
 
 v1.0.3
 ------
 * **Release date**: 2017-01-24.
-* **Requires:** [tileserver v1.1.0](https://github.com/mapzen/tileserver/releases/tag/v1.1.0) and [tilequeue v1.2.0](https://github.com/mapzen/tilequeue/releases/tag/v1.2.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* **Requires:** [tileserver v1.1.0](https://github.com/mapzen/tileserver/releases/tag/v1.1.0) and [tilequeue v1.2.0](https://github.com/mapzen/tilequeue/releases/tag/v1.2.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.0.0).
 * Clarify documentation license as CC-BY. See [#1136](https://github.com/tilezen/vector-datasource/issues/1136).
 * Fix test failures. See [#1148](https://github.com/tilezen/vector-datasource/issues/1148), [#1150](https://github.com/tilezen/vector-datasource/pull/1150), [#1152](https://github.com/tilezen/vector-datasource/pull/1152), [#1157](https://github.com/tilezen/vector-datasource/pull/1157).
 
@@ -50,20 +50,20 @@ v1.0.3
 v1.0.2
 ------
 * **Release date**: 2016-11-17. _Live on prod 2016-11-21._
-* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.0.0).
 * Merge water and earth polygons. See [#1106](https://github.com/tilezen/vector-datasource/issues/1106).
 * Improve maritime_boundary tagging in Europe and globally by updating buffered_land shapefile. See [#294](https://github.com/tilezen/vector-datasource/issues/294).
 
 v1.0.1
 ------
 * **Release date**: 2016-11-04. _Live on prod 2016-11-04._
-* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.1](https://github.com/mapzen/tilequeue/releases/tag/v1.0.1) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.0.0).
 * Update boundaries query to use overlaps filter to improve performance.
 
 v1.0.0
 ------
 * **Release date**: 2016-10-04. _Live on prod 2016-10-13._
-* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.0](https://github.com/mapzen/tilequeue/releases/tag/v1.0.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.0.0).
+* **Requires:** [tileserver v1.0.0](https://github.com/mapzen/tileserver/releases/tag/v1.0.0) and [tilequeue v1.0.0](https://github.com/mapzen/tilequeue/releases/tag/v1.0.0) and [mapbox-vector-tile v1.0.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.0.0).
 
 ---
 
