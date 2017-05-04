@@ -3912,6 +3912,9 @@ def _shield_text(network, ref):
     if ref is None:
         return None
 
+    if network is None:
+        return None
+
     # FI-PI-LI is just a special case?
     if ref == 'FI-PI-LI':
         return ref
