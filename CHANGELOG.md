@@ -1,3 +1,29 @@
+v1.3.0
+------
+* **Release date**: 2017-05-04. _Live on prod 2017-05-??._
+* **Requires:** [tileserver v1.4.0](https://github.com/mapzen/tileserver/releases/tag/v1.4.0) and [tilequeue v1.6.0](https://github.com/mapzen/tilequeue/releases/tag/v1.6.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+
+  #### ENHANCEMENTS
+
+* Show important cycling and walking routes at earlier zooms by adjusting the `min_zoom` `path`, `major_road`, and `minor_road` related features in the **roads** layer. See [#1172](https://github.com/tilezen/vector-datasource/issues/1172).
+* Add shields for bicycle, walking, and bus networks with new `bicycle_network`, `walking_network`, `bus_network`, `bicycle_shield_text`, `walking_shield_text`, `bus_shield_text`, and `all_*` variants onto **road** layer features. See [#775](https://github.com/tilezen/vector-datasource/issues/775), [#1175](https://github.com/tilezen/vector-datasource/issues/1175), and [#1214](https://github.com/tilezen/vector-datasource/issues/1214).
+* Add `bicycle` property to non-path **road** layer features to more accurately reflect `is_bicycle_related` routes (eg for ways tagged `bicycle=designated`). See [#1171](https://github.com/tilezen/vector-datasource/issues/1171).
+* Add `surface` property to **roads** layer features. See [#1020](https://github.com/tilezen/vector-datasource/issues/1020).
+* Add `ramp_bicycle` property to **roads** layer features. See  [#1147](https://github.com/tilezen/vector-datasource/issues/1147).
+* Remove `motor_vehicle`, `horse` and some other properties at low- and mid-zooms in **roads** layer. See [#1224](https://github.com/tilezen/vector-datasource/issues/1224).
+* Improve line merging in **roads** and other layers to reduce tile file size and improve rendering performance. See [#1191](https://github.com/tilezen/vector-datasource/issues/1191).
+* Add `colour_name` property for **transit** layer features. See [#1190](https://github.com/tilezen/vector-datasource/issues/1190).
+* Show large piers earlier in **landuse** layer. See [#1178](https://github.com/tilezen/vector-datasource/issues/1178).
+* Remove many **pois** layer features when they lack a name. See [#1186](https://github.com/tilezen/vector-datasource/issues/1186) and [#1218](https://github.com/tilezen/vector-datasource/issues/1218).
+
+  #### BUG FIXES
+
+* Fix spelling of ~70 locality (city) names at low zooms. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
+* Large gardens (in Edinburgh and elsewhere) should be visible at mid-zooms; small gardens should only be included at high zooms. [#1185](https://github.com/tilezen/vector-datasource/issues/1185).
+* Some **pois** layer features were missing their `tier` property. See [#1208](https://github.com/tilezen/vector-datasource/issues/1208).
+* Remove `natural_forest`, `natural_wood` from **pois** layer, a documented breaking bug fix associated with the v1.0 release. Their label points are now found in the **landuse** layer. See [#1103](https://github.com/tilezen/vector-datasource/issues/1103).
+* Fix test failures based on OpenStreetMap data changes.
+
 v1.2.0
 ------
 * **Release date**: 2017-03-23. _Live on prod 2017-03-27._
