@@ -1,25 +1,41 @@
-# Use the vector tile service
+# Get started with Mapzen Vector tiles
+
+Mapzen Vector Tiles provide basemap coverage of the world in several vector tile formats. Tiles are available for zooms 0 through 16 and are available in several spatial data formats including MVT and GeoJSON. Learn more about the [various data formats](#available-tile-formats) offered.
+
+## Get an API key
+
+To use Mapzen's hosted vector tile service in a project, [obtain an API key from Mapzen](https://mapzen.com/documentation/overview/).
+
+Once you have your Mapzen API key you'll need include it with Vector Tile requests as a [URL query string](https://en.wikipedia.org/wiki/Query_string) like:
+
+```
+?api_key=your_mapzen_api_key
+```
+
+# Use the Vector Tile service
 
 Request a single tile with this URL pattern to get started:
 
-`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
+```
+https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key={your_mapzen_api_key}
+```
 
 The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) has more information on this url scheme.
 
 Here’s a sample tile in GeoJSON:
 
-`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json`
-
-To use the vector tile service in a project, [obtain an API key from Mapzen](https://mapzen.com/documentation/overview/).
+```
+https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json?api_key=your_mapzen_api_key
+```
 
 ## Specify layers in the service
 
 Layers to return can specified as `all`, or as one or more layer names separated by commas. Using the `all` layer is more performant.
 
 
-`buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json
+`buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json?api_key=your_mapzen_api_key
 
-`earth,landuse`: https://tile.mapzen.com/mapzen/vector/v1/earth,landuse/16/19293/24641.json
+`earth,landuse`: https://tile.mapzen.com/mapzen/vector/v1/earth,landuse/16/19293/24641.json?api_key=your_mapzen_api_key
 
 ### Layers in the service's response
 
