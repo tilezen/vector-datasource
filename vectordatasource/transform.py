@@ -3881,7 +3881,9 @@ def _network_importance(network, ref):
     network.
     """
 
-    if network == 'US:I' or ':national' in network:
+    if network is None:
+        network_code = 9999
+    elif network == 'US:I' or ':national' in network:
         network_code = 1
     elif network == 'US:US' or ':regional' in network:
         network_code = 2
@@ -3910,6 +3912,16 @@ def _shield_text(network, ref):
     """
 
     if ref is None:
+        return None
+
+    if isinstance(ref, unicode):
+        # no need to do anything, it's already okay
+        pass
+    elif isinstance(ref, str):
+        # it's UTF-8 encoded bytes, so make it a unicode
+        ref = unicode(ref, 'utf-8')
+    else:
+        # dunno what this is?!!
         return None
 
     # FI-PI-LI is just a special case?
