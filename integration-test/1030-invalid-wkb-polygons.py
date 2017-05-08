@@ -46,7 +46,7 @@ with features_in_mvt_layer(5, 17, 9, 'water') as features:
         if props.get('kind') == 'ocean':
             geom = feature['geometry']
             geom_type = geom['type']
-            assert 'Polygon' in geom_type
+            assertTrue('Polygon' in geom_type)
             ocean_area += area_of(geom['coordinates'])
 
     ocean_area = abs(ocean_area)

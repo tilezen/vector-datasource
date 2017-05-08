@@ -374,6 +374,13 @@ def fail(msg):
     raise Exception(msg)
 
 
+def assertTrue(condition, msg=None):
+    if msg is None:
+        assert condition
+    else:
+        assert condition, msg
+
+
 def noop(*args, **kwargs):
     pass
 
@@ -400,6 +407,7 @@ def print_coords(f, log, idx, num_tests):
             'layers_in_tile': print_coord_with_context,
             'features_in_mvt_layer': print_coord_with_context,
             'fail': noop,
+            'assertTrue': noop,
         })
     except:
         pass
@@ -539,6 +547,7 @@ def run_test(f, log, idx, num_tests):
             'layers_in_tile': layers_in_tile,
             'features_in_mvt_layer': features_in_mvt_layer,
             'fail': fail,
+            'assertTrue': assertTrue,
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
     except GatewayTimeout, e:
