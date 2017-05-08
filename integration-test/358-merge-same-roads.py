@@ -24,7 +24,6 @@ with features_in_tile_layer(8, 41, 99, 'roads') as roads:
     for road in roads:
         props = frozenset(_freeze(road['properties']))
         if props in features:
-            raise Exception("Duplicate properties %r in roads layer, but "
-                            "properties should be unique."
-                            % road['properties'])
+            fail('Duplicate properties %r in roads layer, but properties '
+                 'should be unique.' % road['properties'])
         features.add(props)

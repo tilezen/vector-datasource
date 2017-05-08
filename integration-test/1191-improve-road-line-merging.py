@@ -9,29 +9,25 @@ def assert_is_linestring(z, x, y, layer, name, max_coords, max_count):
                 geom_type = feature['geometry']['type']
                 if geom_type != 'LineString' and \
                    geom_type != 'MultiLineString':
-                    raise Exception('Expected linestring, got %r' % geom_type)
+                    fail('Expected linestring, got %r' % geom_type)
                 count += 1
                 coords = feature['geometry']['coordinates']
                 if geom_type == 'LineString':
                     if len(coords) > max_coords:
-                        raise Exception(
-                            'Single feature exceeded max coords: %d > %d' %
-                            (len(coords), max_coords))
+                        fail('Single feature exceeded max coords: %d > %d' %
+                             (len(coords), max_coords))
                     total_coords += len(coords)
                 else:
                     for line in coords:
                         if len(line) > max_coords:
-                            raise Exception('Single part of multi-feature' +
-                                            'exceeded max coords: %d > %d' %
-                                            (len(line), max_coords))
+                            fail('Single part of multi-feature exceeded max '
+                                 'coords: %d > %d' % (len(line), max_coords))
                         total_coords += len(line)
         if count > max_count:
-            raise Exception('Expected at most %d features, found %d' %
-                            (max_count, count))
+            fail('Expected at most %d features, found %d' % (max_count, count))
         if total_coords > max_coords:
-            raise Exception(
-                'Expected at most %d coordinates, found %d in total' %
-                (max_coords, total_coords))
+            fail('Expected at most %d coordinates, found %d in total' %
+                 (max_coords, total_coords))
 
 
 # Pitkin Ave, NYC
@@ -128,6 +124,6 @@ with features_in_tile_layer(13, 1865, 2866, 'roads') as features:
                 count_bridge += 1
 
     if count_nd_200 != 3:
-        raise Exception('Expecting 3 US:ND 200 roads, got %d' % count_nd_200)
+        fail('Expecting 3 US:ND 200 roads, got %d' % count_nd_200)
     if count_bridge != 1:
-        raise Exception('Expecting one bridge, but got %d' % count_bridge)
+        fail('Expecting one bridge, but got %d' % count_bridge)

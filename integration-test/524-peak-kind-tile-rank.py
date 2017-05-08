@@ -63,8 +63,7 @@ with features_in_tile_layer(11, 420, 779, 'pois') as features:
                       'kind_tile_rank': rank}
         num_matching = count_matching(features, properties)
         if num_matching != 1:
-            raise Exception, "Did not find peak matching properties %r." \
-                % properties
+            fail('Did not find peak matching properties %r.' % properties)
 
     assert_peak(1, 4348, 'Quandary Peak')
     assert_peak(2, 4239, 'Fletcher Mountain')
@@ -74,8 +73,7 @@ with features_in_tile_layer(11, 420, 779, 'pois') as features:
 
     num_matching = count_matching(features, {'kind': 'peak'})
     if num_matching > 5:
-        raise Exception, "Found %d peaks, but should only have five." \
-            % num_matching
+        fail('Found %d peaks, but should only have five.' % num_matching)
 
 # this tile has 7 peaks in it, and at z16 we should keep all of them
 #https://www.openstreetmap.org/node/767614798
@@ -88,7 +86,7 @@ with features_in_tile_layer(11, 420, 779, 'pois') as features:
 with features_in_tile_layer(16, 12372, 26269, 'pois') as features:
     num = count_matching(features, {'kind': 'peak'})
     if num != 7:
-        raise Exception, "Found %d peaks, but expected seven." % num
+        fail('Found %d peaks, but expected seven.' % num)
 
 # check that volcanos are sorted along with other kinds of peak
 #https://www.openstreetmap.org/node/1744903493
@@ -109,8 +107,8 @@ with features_in_tile_layer(12, 662, 1443, 'pois') as features:
                 matched_one = True
                 break
         if not matched_one:
-            raise Exception, "Did not find %s matching properties %r." \
-                % (kind, properties)
+            fail('Did not find %s matching properties %r.' %
+                 (kind, properties))
 
     assert_peak(1,      4392, 'volcano', 'Mount Rainier')
     assert_peak(2,      4302, 'peak',    'Point Success')

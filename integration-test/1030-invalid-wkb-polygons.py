@@ -52,8 +52,6 @@ with features_in_mvt_layer(5, 17, 9, 'water') as features:
     ocean_area = abs(ocean_area)
     expected = 7326600
     if ocean_area < expected:
-        raise Exception("Ocean area %f, expected at least %f."
-                        % (ocean_area, expected))
+        fail('Ocean area %f, expected at least %f.' % (ocean_area, expected))
     if ocean_area > 1.5 * expected:
-        raise Exception("Ocean area %f > 1.5 * expected %f"
-                        % (ocean_area, expected))
+        fail('Ocean area %f > 1.5 * expected %f' % (ocean_area, expected))

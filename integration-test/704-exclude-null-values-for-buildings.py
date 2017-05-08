@@ -8,6 +8,5 @@ with features_in_tile_layer(16, 10481, 25319, 'buildings') as features:
     for f in features:
         for k, v in f['properties'].items():
             if v is None:
-                raise AssertionError(
-                    "%r is null, but there should be no null values in "
-                    "feature %r" % (k, f['properties']))
+                fail('%r is null, but there should be no null values in '
+                     'feature %r' % (k, f['properties']))

@@ -12,7 +12,6 @@ with features_in_tile_layer(7, 20, 48, 'transit') as transit:
         if feature['properties'].get('kind') in railway_kinds:
             props = frozenset(feature['properties'].items())
             if props in seen_properties:
-                raise Exception("Duplicate properties %r in transit layer, but "
-                                "properties should be unique."
-                                % feature['properties'])
+                fail('Duplicate properties %r in transit layer, but properties '
+                     'should be unique.' % feature['properties'])
             seen_properties.add(props)

@@ -370,6 +370,14 @@ def print_coord(z, x, y, *ignored):
     print '%d/%d/%d' % (z, x, y)
 
 
+def fail(msg):
+    raise Exception(msg)
+
+
+def noop(*args, **kwargs):
+    pass
+
+
 @contextmanager
 def print_coord_with_context(z, x, y, *ignored):
     """
@@ -391,6 +399,7 @@ def print_coords(f, log, idx, num_tests):
             'assert_feature_geom_type': print_coord,
             'layers_in_tile': print_coord_with_context,
             'features_in_mvt_layer': print_coord_with_context,
+            'fail': noop,
         })
     except:
         pass
@@ -529,6 +538,7 @@ def run_test(f, log, idx, num_tests):
             'assert_feature_geom_type': assert_feature_geom_type,
             'layers_in_tile': layers_in_tile,
             'features_in_mvt_layer': features_in_mvt_layer,
+            'fail': fail,
         })
         print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
     except GatewayTimeout, e:

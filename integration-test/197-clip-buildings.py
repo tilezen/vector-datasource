@@ -21,11 +21,8 @@ with features_in_tile_layer(16, 19295, 24631, 'buildings') as buildings:
             saw_the_high_line = True
 
         if w > max_w or h > max_h:
-            raise Exception("feature %r is %rx%r, larger than the allowed "
-                            "%rx%r."
-                            % (building['properties']['id'],
-                               w, h, max_w, max_h))
+            fail('feature %r is %rx%r, larger than the allowed %rx%r.' %
+                 (building['properties']['id'], w, h, max_w, max_h))
 
     if not saw_the_high_line:
-        raise Exception("Expected to see the High Line in this tile, "
-                        "but didn't.")
+        fail("Expected to see the High Line in this tile, but didn't.")
