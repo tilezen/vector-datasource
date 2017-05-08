@@ -48,4 +48,4 @@ tiles = [
 
 for loc, props in tiles:
     z, x, y = map(int, loc.split('/'))
-    assert_has_feature(z, x, y, 'pois', props)
+    test.assert_has_feature(z, x, y, 'pois', props)

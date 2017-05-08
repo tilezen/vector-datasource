@@ -1,20 +1,20 @@
 def assert_add_place(z, x, y, name):
-    assert_has_feature(
+    test.assert_has_feature(
         z, x, y, 'places',
         { 'kind': 'locality', 'name': name,
           'source': 'naturalearthdata.com',
           'min_zoom': z })
-    assert_no_matching_feature(
+    test.assert_no_matching_feature(
         z-1, x/2, y/2, 'places',
         { 'kind': 'locality', 'name': name,
           'source': 'naturalearthdata.com' })
 
 def assert_remove_place(z, x, y, name):
-    assert_no_matching_feature(
+    test.assert_no_matching_feature(
         z, x, y, 'places',
         { 'kind': 'locality', 'name': name,
           'source': 'naturalearthdata.com' })
-    assert_has_feature(
+    test.assert_has_feature(
         z-1, x/2, y/2, 'places',
         { 'kind': 'locality', 'name': name,
           'source': 'naturalearthdata.com' })
@@ -51,7 +51,7 @@ assert_remove_place(10, 159, 384, 'Arcata')
 assert_remove_place(10, 161, 390, 'Ukiah')
 
 # z11 Mendocino should still be here
-assert_has_feature(
+test.assert_has_feature(
     9, 79, 195, 'places',
     { 'kind': 'locality', 'name': 'Mendocino',
       'source': 'naturalearthdata.com' })

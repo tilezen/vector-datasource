@@ -7,7 +7,7 @@
 #
 # NOTE: it's part of two other relations, but these are not walking/hiking
 # routes.
-assert_has_feature(
+test.assert_has_feature(
     15, 17571, 11449, 'roads',
     { 'id': 127908481, 'kind': 'path', 'bicyle': type(None),
       'walking_network': 'rwn', 'walking_shield_text': '416',
@@ -22,7 +22,7 @@ assert_has_feature(
 #   type=route, route=foot, network=rwn, ref=JMT
 # https://www.openstreetmap.org/relation/1244686
 #   type=route, route=foot, network=rwn, ref="", name="PCT - California Section H"
-assert_has_feature(
+test.assert_has_feature(
     16, 11044, 25309, 'roads',
     { 'id': 373532611,
       'walking_network': 'nwn', 'walking_shield_text': 'PCT',

@@ -2,6 +2,6 @@
 
 # Line barrier:ghate feature
 # http://www.openstreetmap.org/way/391260223
-assert_has_feature(
+test.assert_has_feature(
     16, 10482, 25335, 'landuse',
     { 'id': 391260223, 'kind': 'gate'})

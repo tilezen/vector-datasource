@@ -395,11 +395,22 @@ def print_coord_with_context(z, x, y, *ignored):
     yield []
 
 
+class TestAPI(object):
+
+    def __init__(self, function_table):
+        self.function_table = function_table
+
+    def __getattribute__(self, name):
+        assert name != 'function_table'
+        function_table = object.__getattribute__(self, 'function_table')
+        return function_table[name]
+
+
 class TestRunner(object):
 
     def __init__(self, mode):
         if mode == 'print':
-            self.test_api = {
+            function_table = {
                 'assert_has_feature': print_coord,
                 'assert_no_matching_feature': print_coord,
                 'assert_at_least_n_features': print_coord,
@@ -414,7 +425,7 @@ class TestRunner(object):
 
         else:
             assert mode == 'test'
-            self.test_api = {
+            function_table = {
                 'assert_has_feature': assert_has_feature,
                 'assert_no_matching_feature': assert_no_matching_feature,
                 'assert_at_least_n_features': assert_at_least_n_features,
@@ -426,13 +437,14 @@ class TestRunner(object):
                 'fail': fail,
                 'assertTrue': assertTrue,
             }
+        self.test_api = TestAPI(function_table)
         self.mode = mode
 
     def __call__(self, f, log, idx, num_tests):
         fails = 0
 
         try:
-            runpy.run_path(f, init_globals=self.test_api)
+            runpy.run_path(f, init_globals=dict(test=self.test_api))
             if self.mode == 'test':
                 print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
         except GatewayTimeout, e:

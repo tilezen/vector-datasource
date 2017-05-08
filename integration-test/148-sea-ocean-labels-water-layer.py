@@ -2,18 +2,18 @@
 # layer.
 
 ## Gulf of California: http://www.openstreetmap.org/node/305639734
-assert_has_feature(
+test.assert_has_feature(
     9, 97, 215, 'water',
     {'kind': 'sea', 'name': 'Gulf of California', 'label_placement': True})
-assert_no_matching_feature(
+test.assert_no_matching_feature(
     9, 97, 215, 'places',
     {'kind': 'sea', 'name': 'Gulf of California'})
 
 ## Greenland Sea: http://www.openstreetmap.org/node/305639396
-assert_has_feature(
+test.assert_has_feature(
     9, 241, 90, 'water',
     {'kind': 'sea', 'name': 'Greenland Sea', 'label_placement': True})
-assert_no_matching_feature(
+test.assert_no_matching_feature(
     9, 241, 90, 'places',
     {'kind': 'sea', 'name': 'Greenland Sea'})
 

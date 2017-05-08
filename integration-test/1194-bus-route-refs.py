@@ -5,7 +5,7 @@
 #   type=route, route=bicycle, network=lcn, ref=50
 # https://www.openstreetmap.org/relation/1976278
 #   type=route, route=road, network=US:CA, ref=35
-assert_has_feature(
+test.assert_has_feature(
     16, 10469, 25340, 'roads',
     { 'id': 417097119,
       'network': 'US:CA',
@@ -21,7 +21,7 @@ assert_has_feature(
 #   outbound
 # http://www.openstreetmap.org/relation/2980504
 #   inbound
-assert_has_feature(
+test.assert_has_feature(
     16, 10477, 25327, 'roads',
     { 'id': 225516711,
       'bus_network': type(None),
@@ -34,14 +34,14 @@ assert_has_feature(
 #
 # note that it doesn't matter what the bus shield is - that's data-dependent.
 # for the purposes of the test, we only care that there _is_ one.
-assert_has_feature(
+test.assert_has_feature(
     10, 163, 395, 'roads',
     { 'bus_network': type(None),
       'bus_shield_text': None })
 
-assert_no_matching_feature(
+test.assert_no_matching_feature(
     12, 654, 1583, 'roads',
     { 'all_bus_networks': None })
-assert_no_matching_feature(
+test.assert_no_matching_feature(
     12, 654, 1583, 'roads',
     { 'all_bus_shield_texts': None })

@@ -5,11 +5,11 @@ def assert_no_repeated_points(coords):
     for i in range(1, len(coords)):
         coord = coords[i]
         if coord == last_coord:
-            fail('Coordinate %r (at %d) == %r (at %d), but coordinates should '
+            test.fail('Coordinate %r (at %d) == %r (at %d), but coordinates should '
                  'not be repeated.' % (coord, i, last_coord, i-1))
 
 
-with features_in_tile_layer(16, 17885, 27755, 'roads') as features:
+with test.features_in_tile_layer(16, 17885, 27755, 'roads') as features:
     for feature in features:
         gtype = feature['geometry']['type']
 

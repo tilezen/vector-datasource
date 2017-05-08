@@ -16,7 +16,7 @@ for layer in ['pois', 'landuse']:
     #
     # kind: enclosure, attraction: animal, name: Asian Rhino, natural: sand and
     # tourism: attraction
-    # assert_has_feature(
+    # test.assert_has_feature(
     #     19, 83737, 202725, layer,
     #     { 'id': -5695997,
     #       'osm_relation': True,
@@ -31,14 +31,14 @@ for layer in ['pois', 'landuse']:
     # attraction.
     # NOTE: updated to a feature in North America: MarineLand, Niagara Falls,
     # ON.
-    assert_has_feature(
+    test.assert_has_feature(
         16, 18373, 24066, layer,
         { 'id': 177402901,
           'kind': 'attraction' })
 
     # pipe through religion on resorts
     # La Foret Conference & Retreat Center (way 228716140)
-    assert_has_feature(
+    test.assert_has_feature(
         15, 6852, 12522, layer,
         { 'kind': 'resort',
           'religion': 'christian' })
@@ -53,7 +53,7 @@ for layer in ['pois', 'landuse']:
 #
 # TAGS: attraction=carousel, building=yes, name=King Arthur Carrousel,
 # tourism=attraction
-assert_has_feature(
+test.assert_has_feature(
     16, 11301, 26220, 'pois',
     { 'id': 129691054,
       'kind': 'carousel' })
@@ -62,7 +62,7 @@ assert_has_feature(
 # TAGS: attraction=roller_coaster, building=yes, name=Matterhorn Bobsleds,
 # tourism=attraction
 ## way 107280556 http://c.tile.openstreetmap.org/17/22603/52441.png
-assert_has_feature(
+test.assert_has_feature(
     16, 11301, 26220, 'pois',
     { 'id': 107280556,
       'kind': 'roller_coaster' })

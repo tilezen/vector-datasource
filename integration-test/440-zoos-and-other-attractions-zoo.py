@@ -21,14 +21,14 @@ for layer in ['pois', 'landuse']:
     ]
 
     for z, x, y, osm_id, zoo in zoo_values:
-        assert_has_feature(
+        test.assert_has_feature(
             z, x, y, layer,
             { 'id': osm_id,
               'kind': zoo })
 
 # this is a building, so won't show up in landuse. still should be a POI.
 # Wings of Asia
-assert_has_feature(
+test.assert_has_feature(
     16, 18131, 27942, 'pois',
     { 'id': 103256220,
       'kind': 'aviary' })

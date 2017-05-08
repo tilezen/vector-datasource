@@ -17,4 +17,4 @@ tiles = [
 
 for zxy, id, kind in tiles:
     z, x, y = map(int, zxy.split('/'))
-    assert_has_feature(z, x, y, 'pois', {'kind': kind, 'id': id})
+    test.assert_has_feature(z, x, y, 'pois', {'kind': kind, 'id': id})

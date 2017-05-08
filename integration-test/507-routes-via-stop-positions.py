@@ -115,7 +115,7 @@ stations = [
 ]
 
 for z, x, y, name, osm_id, expected_rank, expected_routes in stations:
-    with features_in_tile_layer(z, x, y, 'pois') as pois:
+    with test.features_in_tile_layer(z, x, y, 'pois') as pois:
         found = False
 
         for poi in pois:
@@ -128,7 +128,7 @@ for z, x, y, name, osm_id, expected_rank, expected_routes in stations:
                 rank = props['kind_tile_rank']
 
                 if rank > expected_rank:
-                    fail('Found %r, and was expecting a rank of %r or less, '
+                    test.fail('Found %r, and was expecting a rank of %r or less, '
                          'but got %r.' % (name, expected_rank, rank))
 
                 for r in expected_routes:
@@ -138,9 +138,9 @@ for z, x, y, name, osm_id, expected_rank, expected_routes in stations:
                             count = count + 1
 
                     if count == 0:
-                        fail('Found %r, and was expecting at least one %r '
+                        test.fail('Found %r, and was expecting at least one %r '
                              'route, but found none. Routes: %r' %
                              (name, r, routes))
 
         if not found:
-            fail('Did not find %r (ID=%r) in tile.' % (name, osm_id))
+            test.fail('Did not find %r (ID=%r) in tile.' % (name, osm_id))

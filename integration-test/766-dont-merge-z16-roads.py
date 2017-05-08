@@ -3,9 +3,9 @@
 #
 # http://www.openstreetmap.org/way/89912879
 # http://www.openstreetmap.org/way/89911760
-assert_has_feature(
+test.assert_has_feature(
     16, 19829, 24234, "roads",
     {"kind": "major_road", "kind_detail": "trunk", "id": 89912879})
-assert_has_feature(
+test.assert_has_feature(
     16, 19829, 24234, "roads",
     {"kind": "major_road", "kind_detail": "trunk", "id": 89911760})

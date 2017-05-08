@@ -57,13 +57,13 @@ def count_matching(features, props):
     return num_matches
 
 
-with features_in_tile_layer(11, 420, 779, 'pois') as features:
+with test.features_in_tile_layer(11, 420, 779, 'pois') as features:
     def assert_peak(rank, elevation, name):
         properties = {'kind': 'peak', 'elevation': elevation, 'name': name,
                       'kind_tile_rank': rank}
         num_matching = count_matching(features, properties)
         if num_matching != 1:
-            fail('Did not find peak matching properties %r.' % properties)
+            test.fail('Did not find peak matching properties %r.' % properties)
 
     assert_peak(1, 4348, 'Quandary Peak')
     assert_peak(2, 4239, 'Fletcher Mountain')
@@ -73,7 +73,7 @@ with features_in_tile_layer(11, 420, 779, 'pois') as features:
 
     num_matching = count_matching(features, {'kind': 'peak'})
     if num_matching > 5:
-        fail('Found %d peaks, but should only have five.' % num_matching)
+        test.fail('Found %d peaks, but should only have five.' % num_matching)
 
 # this tile has 7 peaks in it, and at z16 we should keep all of them
 #https://www.openstreetmap.org/node/767614798
@@ -83,16 +83,16 @@ with features_in_tile_layer(11, 420, 779, 'pois') as features:
 #https://www.openstreetmap.org/node/774446221
 #https://www.openstreetmap.org/node/774446223
 #https://www.openstreetmap.org/node/774446224
-with features_in_tile_layer(16, 12372, 26269, 'pois') as features:
+with test.features_in_tile_layer(16, 12372, 26269, 'pois') as features:
     num = count_matching(features, {'kind': 'peak'})
     if num != 7:
-        fail('Found %d peaks, but expected seven.' % num)
+        test.fail('Found %d peaks, but expected seven.' % num)
 
 # check that volcanos are sorted along with other kinds of peak
 #https://www.openstreetmap.org/node/1744903493
 #https://www.openstreetmap.org/node/356546139
 #https://www.openstreetmap.org/node/348179123
-with features_in_tile_layer(12, 662, 1443, 'pois') as features:
+with test.features_in_tile_layer(12, 662, 1443, 'pois') as features:
     def assert_peak(rank_spec, elevation, kind, name):
         if isinstance(rank_spec, int):
             possible_ranks = [rank_spec]
@@ -107,7 +107,7 @@ with features_in_tile_layer(12, 662, 1443, 'pois') as features:
                 matched_one = True
                 break
         if not matched_one:
-            fail('Did not find %s matching properties %r.' %
+            test.fail('Did not find %s matching properties %r.' %
                  (kind, properties))
 
     assert_peak(1,      4392, 'volcano', 'Mount Rainier')

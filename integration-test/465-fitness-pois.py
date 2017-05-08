@@ -11,12 +11,12 @@ tiles = [
 ]
 
 for z, x, y in tiles:
-    assert_has_feature(
+    test.assert_has_feature(
         z, x, y, 'pois',
         { 'kind': 'fitness' })
 
 # Pushup, fitness_station
 #https://www.openstreetmap.org/node/3658323774
-assert_has_feature(
+test.assert_has_feature(
     16, 13166, 25271, 'pois',
     { 'kind': 'fitness_station' })
