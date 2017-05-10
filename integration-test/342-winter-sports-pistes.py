@@ -1,5 +1,5 @@
 # http://www.openstreetmap.org/way/313466665
-assert_has_feature(
+test.assert_has_feature(
     15, 5467, 12531, 'roads',
     { 'kind': 'piste',
       'kind_detail': 'downhill',
@@ -7,7 +7,7 @@ assert_has_feature(
       'id': 313466665 })
 
 # http://www.openstreetmap.org/way/313466720
-assert_has_feature(
+test.assert_has_feature(
     15, 5467, 12531, 'roads',
     { 'kind': 'piste',
       'kind_detail': 'downhill',
@@ -15,7 +15,7 @@ assert_has_feature(
       'id': 313466720 })
 
 # Way: 49'er (313466490) http://www.openstreetmap.org/way/313466490
-assert_has_feature(
+test.assert_has_feature(
     16, 10939, 25061, 'roads',
     { 'kind': 'piste',
       'kind_detail': 'downhill',

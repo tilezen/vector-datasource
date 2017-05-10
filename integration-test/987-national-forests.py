@@ -2,7 +2,7 @@
 # kind:forest.
 #
 # http://www.openstreetmap.org/relation/972008
-assert_has_feature(
+test.assert_has_feature(
     11, 340, 788, 'landuse',
     { 'kind': 'forest', 'id': -972008 })
 
@@ -10,7 +10,7 @@ assert_has_feature(
 # guaranteed, should be kind:forest.
 #
 # http://www.openstreetmap.org/relation/2389847
-assert_has_feature(
+test.assert_has_feature(
     11, 369, 769, 'landuse',
     { 'kind': 'forest', 'id': -2389847 })
 
@@ -18,7 +18,7 @@ assert_has_feature(
 # (should be kind:forest).
 #
 # http://www.openstreetmap.org/relation/6213964
-assert_has_feature(
+test.assert_has_feature(
     14, 2559, 6099, 'landuse',
     { 'kind': 'forest', 'id': -6213964 })
 
@@ -27,7 +27,7 @@ assert_has_feature(
 # should be kind:national_park).
 #
 # http://www.openstreetmap.org/relation/175098
-assert_has_feature(
+test.assert_has_feature(
     12, 733, 1617, 'landuse',
     { 'kind': 'national_park', 'id': -175098 })
 
@@ -37,7 +37,7 @@ assert_has_feature(
 # kind:nature_reserve?
 #
 # http://www.openstreetmap.org/relation/1250137
-assert_has_feature(
+test.assert_has_feature(
     15, 5192, 12627, 'landuse',
     { 'kind': 'national_park', 'id': -1250137 })
 
@@ -47,7 +47,7 @@ assert_has_feature(
 # kind:park!
 #
 # http://www.openstreetmap.org/relation/3004556
-assert_has_feature(
+test.assert_has_feature(
     15, 5359, 12747, 'landuse',
     { 'kind': 'park', 'id': -3004556 })
 
@@ -61,7 +61,7 @@ assert_has_feature(
 # "Arapaho National Forest", so it should probably be classed as a forest.
 #
 # http://www.openstreetmap.org/relation/396026
-assert_has_feature(
+test.assert_has_feature(
     13, 1683, 3103, 'landuse',
     { 'kind': 'forest', 'id': -396026 })
 
@@ -71,7 +71,7 @@ assert_has_feature(
 # be kind:nature_reserve.
 #
 # https://www.openstreetmap.org/way/436801947
-assert_has_feature(
+test.assert_has_feature(
     11, 323, 791, 'landuse',
     { 'kind': 'nature_reserve', 'id': 436801947 })
 
@@ -81,7 +81,7 @@ assert_has_feature(
 # kind:nature_reserve.
 #
 # https://www.openstreetmap.org/way/297463477
-assert_has_feature(
+test.assert_has_feature(
     13, 1305, 3161, 'landuse',
     { 'kind': 'nature_reserve', 'id': 297463477 })
 
@@ -90,7 +90,7 @@ assert_has_feature(
 # and operator=Marin County Parks should just be kind:common.
 #
 # https://www.openstreetmap.org/way/297452972
-assert_has_feature(
+test.assert_has_feature(
     15, 5229, 12648, 'landuse',
     { 'kind': 'common', 'id': 297452972 })
 
@@ -100,7 +100,7 @@ assert_has_feature(
 # to kind:nature_reserve.
 #
 # http://www.openstreetmap.org/relation/5273153
-assert_has_feature(
+test.assert_has_feature(
     12, 784, 1585, 'landuse',
     { 'kind': 'nature_reserve', 'id': -5273153 })
 
@@ -108,7 +108,7 @@ assert_has_feature(
 # kind:nature_reserve.
 #
 # https://www.openstreetmap.org/way/373769670
-assert_has_feature(
+test.assert_has_feature(
     13, 4003, 3151, 'landuse',
     { 'kind': 'nature_reserve', 'id': 373769670 })
 
@@ -116,7 +116,7 @@ assert_has_feature(
 # should end up with kind: protected_area
 #
 # https://www.openstreetmap.org/relation/3875431
-assert_has_feature(
+test.assert_has_feature(
     13, 4336, 2787, 'landuse',
     { 'kind': 'protected_area', 'id': -3875431 })
 
@@ -125,7 +125,7 @@ assert_has_feature(
 # protect_class=3 should end up with kind:national_park
 #
 # https://www.openstreetmap.org/relation/6229828
-assert_has_feature(
+test.assert_has_feature(
     16, 10452, 25302, 'landuse',
     { 'kind': 'national_park', 'id': -6229828 })
 
@@ -133,7 +133,7 @@ assert_has_feature(
 # protect_class=5 should end up with kind:park.
 #
 # https://www.openstreetmap.org/relation/318202
-assert_has_feature(
+test.assert_has_feature(
     13, 1332, 3184, 'landuse',
     { 'kind': 'park', 'id': -318202 })
 
@@ -142,7 +142,7 @@ assert_has_feature(
 # leisure=nature_reserve should end up with kind:national_park.
 #
 # https://www.openstreetmap.org/relation/1643367
-assert_has_feature(
+test.assert_has_feature(
     13, 1371, 3164, 'landuse',
     { 'kind': 'national_park', 'id': -1643367 })
 
@@ -151,7 +151,7 @@ assert_has_feature(
 # end up with kind:national_park.
 #
 # https://www.openstreetmap.org/relation/215231
-assert_has_feature(
+test.assert_has_feature(
     13, 1274, 3066, 'landuse',
     { 'kind': 'national_park', 'id': -215231 })
 
@@ -160,14 +160,14 @@ assert_has_feature(
 # leisure=nature_reserve should end up with kind:national_park.
 #
 # https://www.openstreetmap.org/relation/1453306
-assert_has_feature(
+test.assert_has_feature(
     13, 1591, 2972, 'landuse',
     { 'kind': 'national_park', 'id': -1453306 })
 
 # boundary=national_park in Adirondack Park should end up with kind:park.
 #
 # https://www.openstreetmap.org/relation/1695394
-assert_has_feature(
+test.assert_has_feature(
     13, 2410, 3001, 'landuse',
     { 'kind': 'park', 'id': -1695394 })
 
@@ -176,7 +176,7 @@ assert_has_feature(
 # end up with kind:national_park.
 #
 # https://www.openstreetmap.org/relation/5548542
-assert_has_feature(
+test.assert_has_feature(
     13, 2313, 3142, 'landuse',
     { 'kind': 'national_park', 'id': -5548542 })
 
@@ -184,7 +184,7 @@ assert_has_feature(
 # boundary=national_park should end up with kind:national_park.
 #
 # https://www.openstreetmap.org/relation/1947603
-assert_has_feature(
+test.assert_has_feature(
     13, 4014, 2512, 'landuse',
     { 'kind': 'national_park', 'id': -1947603 })
 
@@ -192,7 +192,7 @@ assert_has_feature(
 # designation=area_of_outstanding_natural_beauty should end up with kind:park.
 #
 # https://www.openstreetmap.org/relation/2904192
-assert_has_feature(
+test.assert_has_feature(
     13, 4054, 2728, 'landuse',
     { 'kind': 'park', 'id': -2904192 })
 
@@ -200,6 +200,6 @@ assert_has_feature(
 # National Park with leisure=nature_reserve.
 #
 # http://www.openstreetmap.org/way/185735773
-assert_has_feature(
+test.assert_has_feature(
     13, 1812, 2748, 'landuse',
     { 'kind': 'national_park', 'id': 185735773 })

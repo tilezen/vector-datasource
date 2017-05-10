@@ -6,6 +6,6 @@
 # https://www.openstreetmap.org/relation/3406708 -- 14R to Mission
 # https://www.openstreetmap.org/relation/3000713 -- 14R to Downtown
 # ... and many more bus route relations
-assert_has_feature(
+test.assert_has_feature(
     16, 10484, 25329, 'roads',
     {'name': 'Mission St.', 'is_bus_route': True})

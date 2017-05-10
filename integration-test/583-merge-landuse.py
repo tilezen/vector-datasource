@@ -644,7 +644,7 @@ def _freeze(thing):
     return thing
 
 # check that there are no duplicates
-with features_in_tile_layer(9, 245, 166, 'landuse') as landuse:
+with test.features_in_tile_layer(9, 245, 166, 'landuse') as landuse:
     feature_props = set()
 
     for feature in landuse:
@@ -660,7 +660,6 @@ with features_in_tile_layer(9, 245, 166, 'landuse') as landuse:
 
         props = frozenset(_freeze(p))
         if props in feature_props:
-            raise Exception("Duplicate properties %r in landuse layer, but "
-                            "properties should be unique (except ID, area)."
-                            % feature['properties'])
+            test.fail('Duplicate properties %r in landuse layer, but properties '
+                 'should be unique (except ID, area).' % feature['properties'])
         feature_props.add(props)

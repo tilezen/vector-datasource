@@ -4,13 +4,13 @@
 
 #http://www.openstreetmap.org/node/358915477
 # Mount Elbert, CO
-assert_has_feature(
+test.assert_has_feature(
     9, 104, 195, 'pois',
     { 'kind': 'peak', 'id': 358915477, 'elevation': 4397 })
 
 # http://www.openstreetmap.org/node/1744903493
 # Mount Rainier, WA (volcano)
-assert_has_feature(
+test.assert_has_feature(
     9, 82, 180, 'pois',
     { 'kind': 'volcano', 'id': 1744903493, 'elevation': 4392 })
 
@@ -19,8 +19,8 @@ assert_has_feature(
 ##
 
 def assert_feature_min_zoom(z, x, y, layer, props):
-    assert_has_feature(z, x, y, layer, props)
-    assert_no_matching_feature(z-1, x/2, y/2, layer, props)
+    test.assert_has_feature(z, x, y, layer, props)
+    test.assert_no_matching_feature(z-1, x/2, y/2, layer, props)
 
 # http://www.openstreetmap.org/node/358792071
 # San Gorgonio Mountain

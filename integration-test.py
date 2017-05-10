@@ -370,6 +370,21 @@ def print_coord(z, x, y, *ignored):
     print '%d/%d/%d' % (z, x, y)
 
 
+def fail(msg):
+    raise Exception(msg)
+
+
+def assertTrue(condition, msg=None):
+    if msg is None:
+        assert condition
+    else:
+        assert condition, msg
+
+
+def noop(*args, **kwargs):
+    pass
+
+
 @contextmanager
 def print_coord_with_context(z, x, y, *ignored):
     """
@@ -380,21 +395,78 @@ def print_coord_with_context(z, x, y, *ignored):
     yield []
 
 
-def print_coords(f, log, idx, num_tests):
-    try:
-        runpy.run_path(f, init_globals={
-            'assert_has_feature': print_coord,
-            'assert_no_matching_feature': print_coord,
-            'assert_at_least_n_features': print_coord,
-            'assert_less_than_n_features': print_coord,
-            'features_in_tile_layer': print_coord_with_context,
-            'assert_feature_geom_type': print_coord,
-            'layers_in_tile': print_coord_with_context,
-            'features_in_mvt_layer': print_coord_with_context,
-        })
-    except:
-        pass
-    return 0
+class TestAPI(object):
+
+    def __init__(self, function_table):
+        self.function_table = function_table
+
+    def __getattribute__(self, name):
+        assert name != 'function_table'
+        function_table = object.__getattribute__(self, 'function_table')
+        return function_table[name]
+
+
+class TestRunner(object):
+
+    def __init__(self, mode):
+        if mode == 'print':
+            function_table = {
+                'assert_has_feature': print_coord,
+                'assert_no_matching_feature': print_coord,
+                'assert_at_least_n_features': print_coord,
+                'assert_less_than_n_features': print_coord,
+                'features_in_tile_layer': print_coord_with_context,
+                'assert_feature_geom_type': print_coord,
+                'layers_in_tile': print_coord_with_context,
+                'features_in_mvt_layer': print_coord_with_context,
+                'fail': noop,
+                'assertTrue': noop,
+            }
+
+        else:
+            assert mode == 'test'
+            function_table = {
+                'assert_has_feature': assert_has_feature,
+                'assert_no_matching_feature': assert_no_matching_feature,
+                'assert_at_least_n_features': assert_at_least_n_features,
+                'assert_less_than_n_features': assert_less_than_n_features,
+                'features_in_tile_layer': features_in_tile_layer,
+                'assert_feature_geom_type': assert_feature_geom_type,
+                'layers_in_tile': layers_in_tile,
+                'features_in_mvt_layer': features_in_mvt_layer,
+                'fail': fail,
+                'assertTrue': assertTrue,
+            }
+        self.test_api = TestAPI(function_table)
+        self.mode = mode
+
+    def __call__(self, f, log, idx, num_tests):
+        fails = 0
+
+        try:
+            runpy.run_path(f, init_globals=dict(test=self.test_api))
+            if self.mode == 'test':
+                print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
+        except GatewayTimeout, e:
+            if self.mode == 'test':
+                fails = 1
+                print "[%4d/%d] SLOW: %r" % (idx, num_tests, f)
+                print>>log, "[%4d/%d] SLOW: %r" % (idx, num_tests, f)
+                print>>log, "Gateway timeout: %s" % e.message
+                print>>log, ""
+        except:
+            if self.mode == 'test':
+                fails = 1
+                print "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
+                print>>log, "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
+                print>>log, traceback.format_exc()
+                print>>log, ""
+
+        return fails
+
+
+def make_runner(mode):
+    return TestRunner(mode)
 
 
 def chunks(length, iterable):
@@ -516,43 +588,12 @@ class DataDumper(object):
         return dump_data
 
 
-def run_test(f, log, idx, num_tests):
-    fails = 0
-
-    try:
-        runpy.run_path(f, init_globals={
-            'assert_has_feature': assert_has_feature,
-            'assert_no_matching_feature': assert_no_matching_feature,
-            'assert_at_least_n_features': assert_at_least_n_features,
-            'assert_less_than_n_features': assert_less_than_n_features,
-            'features_in_tile_layer': features_in_tile_layer,
-            'assert_feature_geom_type': assert_feature_geom_type,
-            'layers_in_tile': layers_in_tile,
-            'features_in_mvt_layer': features_in_mvt_layer,
-        })
-        print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
-    except GatewayTimeout, e:
-        print "[%4d/%d] SLOW: %r" % (idx, num_tests, f)
-        fails = 1
-        print>>log, "[%4d/%d] SLOW: %r" % (idx, num_tests, f)
-        print>>log, "Gateway timeout: %s" % e.message
-        print>>log, ""
-    except:
-        print "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
-        fails = 1
-        print>>log, "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
-        print>>log, traceback.format_exc()
-        print>>log, ""
-
-    return fails
-
-
 data_dumper = None
 
 if len(sys.argv) > 1 and sys.argv[1] == '-printcoords':
     tests = sys.argv[2:]
     mode = 'print'
-    runner = print_coords
+    runner = make_runner(mode)
 elif len(sys.argv) > 1 and sys.argv[1] == '-dumpdata':
     tests = sys.argv[2:]
     mode = 'dump'
@@ -564,7 +605,7 @@ else:
         "running the tests. Please check your configuration file."
     tests = sys.argv[2:]
     mode = 'test'
-    runner = run_test
+    runner = make_runner(mode)
 
 fail_count = 0
 with open('test.log', 'w') as log:

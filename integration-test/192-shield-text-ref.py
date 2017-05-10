@@ -1,7 +1,7 @@
 # US 101, "James Lick Freeway"
 # http://www.openstreetmap.org/way/27183379
 # http://www.openstreetmap.org/relation/108619
-assert_has_feature(
+test.assert_has_feature(
     16, 10484, 25334, 'roads',
     { 'kind': 'highway', 'network': 'US:US', 'id': 27183379,
       'shield_text': '101' })
@@ -13,7 +13,7 @@ assert_has_feature(
 # http://www.openstreetmap.org/relation/2301037
 # http://www.openstreetmap.org/relation/2297359
 # http://www.openstreetmap.org/relation/1027748
-assert_has_feature(
+test.assert_has_feature(
     16, 18022, 25522, 'roads',
     { 'kind': 'highway', 'network': 'US:I', 'id': 51388984,
       'shield_text': '77',
@@ -23,7 +23,7 @@ assert_has_feature(
 # routes with network but no ref should return a null ref.
 # http://www.openstreetmap.org/relation/4069015
 # http://www.openstreetmap.org/relation/6080335
-assert_has_feature(
+test.assert_has_feature(
     16, 14852, 26071, 'roads',
     { 'kind': 'highway', 'id': 290908536,
       'all_networks': ['US:I', 'US:OK:Turnpike'],

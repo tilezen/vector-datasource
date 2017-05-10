@@ -8,6 +8,6 @@ tiles = [
 ]
 
 for z, x, y in tiles:
-    assert_has_feature(
+    test.assert_has_feature(
         z, x, y, 'water',
         { 'kind': 'swimming_pool' })

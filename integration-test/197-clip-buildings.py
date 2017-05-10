@@ -4,7 +4,7 @@ from shapely.geometry import shape
 # "building". we should be clipping it to a buffer of 3x the tile
 # dimensions.
 # http://www.openstreetmap.org/relation/7141751
-with features_in_tile_layer(16, 19295, 24631, 'buildings') as buildings:
+with test.features_in_tile_layer(16, 19295, 24631, 'buildings') as buildings:
     # max width and height in degress as 3x the size of the above tile
     max_w = 0.0164794921875
     max_h = 0.012484410579673977
@@ -21,11 +21,8 @@ with features_in_tile_layer(16, 19295, 24631, 'buildings') as buildings:
             saw_the_high_line = True
 
         if w > max_w or h > max_h:
-            raise Exception("feature %r is %rx%r, larger than the allowed "
-                            "%rx%r."
-                            % (building['properties']['id'],
-                               w, h, max_w, max_h))
+            test.fail('feature %r is %rx%r, larger than the allowed %rx%r.' %
+                 (building['properties']['id'], w, h, max_w, max_h))
 
     if not saw_the_high_line:
-        raise Exception("Expected to see the High Line in this tile, "
-                        "but didn't.")
+        test.fail("Expected to see the High Line in this tile, but didn't.")

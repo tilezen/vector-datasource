@@ -26,7 +26,7 @@
 # map_unit min_zoom
 
 # England-Wales boundary in United Kingdom (scalerank=4, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     5, 15, 10, 'boundaries',
     { 'kind': 'map_unit', 'min_zoom': 5, 'sort_rank': 258})
 
@@ -34,42 +34,42 @@ assert_has_feature(
 # region min_zoom (via scalerank)
 
 # USA region (scalerank=2, 1:50m NE and 1:10m NE)
-assert_has_feature(
+test.assert_has_feature(
     2, 0, 1, 'boundaries',
     { 'kind': 'region', 'min_zoom': 2})
 
 # Germany region (scalerank=3, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     5, 17, 10, 'boundaries',
     { 'kind': 'region', 'min_zoom': 3})
 
 # Mexico region (scalerank=4, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     5, 7, 14, 'boundaries',
     { 'kind': 'region', 'min_zoom': 5})
 
 # Poland region (scalerank=5, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     5, 17, 10, 'boundaries',
     { 'kind': 'region', 'min_zoom': 5.5})
 
 # Austria region (scalerank=6, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     6, 34, 22, 'boundaries',
     { 'kind': 'region', 'min_zoom': 6})
 
 # Sweden region (scalerank=7, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     6, 35, 18, 'boundaries',
     { 'kind': 'region', 'min_zoom': 6.7})
 
 # United Kingdom region (scalerank=8, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     6, 31, 18, 'boundaries',
     { 'kind': 'region', 'min_zoom': 6.8})
 
 # Switzerland region (scalerank=9, 1:10m NE only)
-assert_has_feature(
+test.assert_has_feature(
     7, 66, 44, 'boundaries',
     { 'kind': 'region', 'min_zoom': 7})
 
@@ -77,32 +77,32 @@ assert_has_feature(
 # dropping of name
 
 # USA region NO name, Natural Earth
-assert_has_feature(
+test.assert_has_feature(
     2, 0, 1, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
 # Germany region NO name, Natural Earth
-assert_has_feature(
+test.assert_has_feature(
     5, 17, 10, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
 # Mexico region NO name, Natural Earth
-assert_has_feature(
+test.assert_has_feature(
     5, 7, 14, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
 # Poland region NO name, Natural Earth
-assert_has_feature(
+test.assert_has_feature(
     5, 17, 10, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
 # Austria region NO name, Natural Earth
-assert_has_feature(
+test.assert_has_feature(
     6, 34, 22, 'boundaries',
     { 'kind': 'region', 'name': type(None)})
 
 # Austria region HAS name, Natural Earth
-assert_has_feature(
+test.assert_has_feature(
     7, 68, 44, 'boundaries',
     { 'kind': 'region', 'name': 'Tirol - Salzburg'})
 
@@ -110,13 +110,13 @@ assert_has_feature(
 # Switzerland region HAS name, OpenStreetMap
 # http://www.openstreetmap.org/relation/1686447
 # http://www.openstreetmap.org/relation/1685677
-assert_has_feature(
+test.assert_has_feature(
     8, 133, 89, 'boundaries',
     { 'kind': 'region', 'name': 'Zug - Luzern'})
 
 # Austria region HAS name, OpenStreetMap
 # http://www.openstreetmap.org/relation/52343
 # http://www.openstreetmap.org/relation/86539
-assert_has_feature(
+test.assert_has_feature(
     8, 136, 89, 'boundaries',
     { 'kind': 'region', 'name': 'Salzburg - Tirol' })

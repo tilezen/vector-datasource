@@ -27,14 +27,14 @@ for layer in ['pois', 'landuse']:
     ]
 
     for z, x, y, osm_id, attraction in attraction_values:
-        assert_has_feature(
+        test.assert_has_feature(
             z, x, y, layer,
             { 'id': osm_id,
               'kind': attraction })
 
 # This is a carousel, but also a building, which keeps it out of the landuse
 # layer. See https://github.com/mapzen/vector-datasource/issues/201
-assert_has_feature(
+test.assert_has_feature(
     16, 17383, 25023, 'pois',
     { 'id': 325824281,
       'kind': 'carousel' })

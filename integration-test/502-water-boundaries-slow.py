@@ -17,7 +17,7 @@ boundary_tiles = [
 ]
 
 for z, x, y in no_boundary_tiles:
-    with features_in_tile_layer(z, x, y, 'water') as features:
+    with test.features_in_tile_layer(z, x, y, 'water') as features:
         num_polygons = 0
         num_boundaries = 0
 
@@ -32,14 +32,14 @@ for z, x, y in no_boundary_tiles:
                 num_boundaries += 1
 
         if num_polygons < 2:
-            raise Exception, "Expected at least 2 polygons in water boundary " \
-                "test tile, but found only %d" % num_polygons
+            test.fail('Expected at least 2 polygons in water boundary '
+                 'test tile, but found only %d' % num_polygons)
 
         if num_boundaries > 0:
-            raise Exception, "Expected an all-water tile with no land " \
-                "boundaries, but found %d boundaries." % num_boundaries
+            test.fail('Expected an all-water tile with no land '
+                 'boundaries, but found %d boundaries.' % num_boundaries)
 
 for z, x, y in boundary_tiles:
-    assert_has_feature(
+    test.assert_has_feature(
         z, x, y, 'water',
         {'boundary': True})

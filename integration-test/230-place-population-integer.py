@@ -5,14 +5,14 @@
 # San Carlos   http://www.openstreetmap.org/node/150975918
 # Redwood City http://www.openstreetmap.org/node/150946345
 # Menlo Park   http://www.openstreetmap.org/node/150981209
-assert_has_feature(
+test.assert_has_feature(
     11, 328, 793, 'places',
     { 'kind': 'locality',
       'kind_detail': {'city', 'town'},
       'population': int })
 
 # Sacramento, CA http://www.openstreetmap.org/node/150959789
-assert_has_feature(
+test.assert_has_feature(
     8, 41, 98, 'places',
     { 'kind': 'locality', 'kind_detail': 'city', 'region_capital': True,
       'population': int })

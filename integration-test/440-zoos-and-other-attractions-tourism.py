@@ -26,7 +26,7 @@ for layer in ['pois', 'landuse']:
     ]
 
     for z, x, y, osm_id, tourism in tourism_values:
-        assert_has_feature(
+        test.assert_has_feature(
             z, x, y, layer,
             { 'id': osm_id,
               'kind': tourism })
@@ -34,12 +34,12 @@ for layer in ['pois', 'landuse']:
 # these are POIs, but also a buildings, so they won't show up in the landuse
 # layer.
 # Wendy Thompson Hut, BC
-assert_has_feature(
+test.assert_has_feature(
     15, 5236, 11051, 'pois',
     { 'id': 220084069,
       'kind': 'wilderness_hut' })
 # Scharffenberger Winery
-assert_has_feature(
+test.assert_has_feature(
     16, 10296, 25030, 'pois',
     { 'id': 242899474,
       'kind': 'winery' })
@@ -47,7 +47,7 @@ assert_has_feature(
 # this is a POI, but also a point, so as it has no area, it won't show up
 # in the landuse layer.
 # http://www.openstreetmap.org/node/3095286850
-assert_has_feature(
+test.assert_has_feature(
     16, 34893, 21123, 'pois',
     { 'id': 3095286850,
       'kind': 'trail_riding_station' })
