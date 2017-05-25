@@ -128,7 +128,7 @@ filters:
       - not: {disused: "no"}
     min_zoom: null
     output:
-      kind: {expr: null}
+      kind: null
 
   # remove things without a name, unless they're in the list of things for which
   # no name is okay.
@@ -138,7 +138,7 @@ filters:
           any: *no_name_okay
     min_zoom: null
     output:
-      kind: {expr: null}
+      kind: null
 
   ############################################################
   # NOT IN ANY TIER
@@ -378,9 +378,17 @@ filters:
     min_zoom: { min: [ { max: [ { lit: zoom + 3.98 }, { lit: *tier4_min_zoom } ] }, 17 ] }
     output:
       kind:
-        expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN 'fitness' ELSE 'sports_centre' END
+        case:
+          - when:
+              sport: ['fitness', 'gym']
+            then: 'fitness'
+          - else: 'sports_centre'
       sport:
-        expr: CASE WHEN tags ? 'sport' AND tags->'sport' IN ('fitness', 'gym') THEN NULL ELSE tags->'sport' END
+        case:
+          - when:
+              sport: ['fitness', 'gym']
+            then: null
+          - else: { col: 'sport' }
       tier: 4
   # stadium
   - filter: {leisure: stadium}
@@ -979,11 +987,27 @@ filters:
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
-      covered: {expr: "tags ? 'covered' and tags->'covered' = 'yes'"}
-      fee: {expr: "(tags ? 'fee' and tags->'fee' not in ('no', 'Free', 'free', '0', 'No', 'none'))"}
+      covered:
+        case:
+          - when:
+              covered: 'yes'
+            then: true
+      fee:
+        case:
+          - when:
+              fee: true
+              not:
+                fee: ['no', 'Free', 'free', '0', 'No', 'none']
+            then: true
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
-      surveillance: {expr: "(tags ? 'surveillance' and tags->'surveillance' not in ('no', 'none'))"}
+      surveillance:
+        case:
+          - when:
+              surveillance: true
+              not:
+                surveillance: ['no', 'none']
+            then: true
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output: {kind: cycle_barrier}
