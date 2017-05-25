@@ -21,6 +21,7 @@ setup(name='vector-datasource',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
+          'ASTFormatter',
           'mapbox-vector-tile',
           'ModestMaps >= 1.3.0',
           'pycountry',
