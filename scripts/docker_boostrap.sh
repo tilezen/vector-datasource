@@ -35,4 +35,5 @@ cd data
     -p "${POSTGRES_PORT:-5432}" \
     -U "${POSTGRES_USER:-osm}" \
     -d "${POSTGRES_DB:-osm}"
+/usr/bin/make -f Makefile-import-data clean
 cd ..
