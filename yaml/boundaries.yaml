@@ -35,7 +35,10 @@ filters:
     output:
       kind: aboriginal_lands
       kind_detail:
-        expr: CASE WHEN tags->'admin_level' IN ('2', '4', '6', '8') THEN tags->'admin_level' END
+        case:
+          - when:
+              admin_level: ['2', '4', '6', '8']
+            then: { col: admin_level }
     table: osm
   - filter: {admin_level: '2', boundary: administrative}
     min_zoom: 8
