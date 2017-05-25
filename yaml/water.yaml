@@ -1,6 +1,10 @@
 globals:
   - &water_standard_properties_osm
-      intermittent: {expr: "tags ? 'intermittent' and tags->'intermittent'='yes'"}
+      intermittent:
+        case:
+          - when:
+              intermittent: 'yes'
+            then: true
 filters:
   - filter: {waterway: riverbank}
     min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
