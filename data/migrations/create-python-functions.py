@@ -3,8 +3,6 @@ import yaml
 from numbers import Number
 import ast
 from astformatter import ASTFormatter
-import sqlparse
-import sqlparse.sql
 
 
 def format_value(val):
@@ -24,10 +22,6 @@ def format_value(val):
         return "%s" % val
     else:
         return "'%s'" % val
-
-
-def parse_sql(s):
-    raise Exception("SQL: " + repr(s))
 
 
 def parse_case(c):
@@ -65,7 +59,7 @@ def ast_value(val):
         if val.keys() == ['col']:
             return ast_column(val['col'])
         elif val.keys() == ['expr']:
-            return parse_sql(val['expr'])
+            raise Exception('parse sql ... ?')
         elif val.keys() == ['case']:
             return parse_case(val['case'])
         elif val.keys() == ['call']:
