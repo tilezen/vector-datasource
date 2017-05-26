@@ -6,7 +6,7 @@ import os.path
 import yaml
 
 
-def format_value(val):
+def format_value(val, table):
     if isinstance(val, dict):
         if 'expr' in val:
             if val['expr'] is None:
@@ -20,6 +20,10 @@ def format_value(val):
                 return '"%s"' % val['col']
         elif 'value' in val:
             return "'%s'" % val['value']
+        elif 'case' in val:
+            return format_case_sql(val['case'], table)
+        elif 'call' in val:
+            return format_call_sql(val['call'], table)
         else:
             assert 0, 'Unknown dict value: %r' % val
     if isinstance(val, int):
@@ -28,8 +32,8 @@ def format_value(val):
         return "'%s'" % val
 
 
-def format_json_value(val):
-    val = format_value(val)
+def format_json_value(val, table):
+    val = format_value(val, table)
     if (val.startswith("'") and val.endswith("'") or val == 'NULL'):
         val = '%s::text' % val
     return 'mz_to_json_null_safe(%s)' % val
@@ -51,9 +55,67 @@ def value_columns(val):
                 return [val['col']]
         elif 'value' in val:
             return []
+        elif 'case' in val:
+            # TODO this is not right, but does it need to be?
+            return ['tags']
+        elif 'call' in val:
+            # TODO this is not right, but does it need to be?
+            return ['tags']
         else:
             assert 0, 'Unknown dict value: %r' % val
     return []
+
+
+def format_case_sql(case_stmt, table):
+    assert isinstance(case_stmt, list)
+    assert len(case_stmt) >= 1
+
+    if 'else' in case_stmt[-1]:
+        else_val = format_value(case_stmt.pop()['else'], table)
+    else:
+        else_val = None
+
+    when_then_sqls = []
+    for when_then in case_stmt:
+        assert set(when_then.keys()) == set(['when', 'then'])
+        when_filters = when_then['when']
+        then_part = when_then['then']
+        then_val = format_value(then_part, table)
+
+        conds = []
+        if not isinstance(when_filters, list):
+            when_filters = [when_filters]
+        for when_filter in when_filters:
+            for k, v in when_filter.items():
+                rule = create_filter_rule(k, v, table)
+                cond_sql = rule.as_sql()
+                cond = cond_sql, then_val
+                conds.append(cond)
+
+        when_sql = ' AND '.join(
+            '%s = %s' % (x, y)
+            for x, y in conds)
+
+        then_sql = format_value(then_part, table)
+
+        when_then_sql = 'WHEN %s THEN %s' % (when_sql, then_sql)
+        when_then_sqls.append(when_then_sql)
+
+    else_sql = ' ELSE %s' % else_val if else_val else ''
+    case_sql = 'CASE %s%s' % (when_then_sql, else_sql)
+    return case_sql
+
+
+def format_call_sql(call_stmt, table):
+    assert isinstance(call_stmt, dict)
+    assert set(call_stmt.keys()) == set(['func', 'args'])
+    fn = call_stmt['func']
+    args = call_stmt['args']
+    sql_args = [
+        format_value(x, table) for x in args
+    ]
+    sql_args_str = ', '.join(sql_args)
+    return '%s(%s)' % (fn, sql_args_str)
 
 
 class Column(object):
@@ -124,14 +186,15 @@ def ensure_sql_boolean(column, check):
 
 class EqualsRule(object):
 
-    def __init__(self, column, value):
+    def __init__(self, table, column, value):
+        self.table = table
         self.column = column
         self.value = value
 
     def as_sql(self):
         equals_check = '%s = %s' % (
                 self.column.format(),
-                format_value(self.value))
+                format_value(self.value, self.table))
 
         equals_check = ensure_sql_boolean(self.column, equals_check)
         return equals_check
@@ -141,14 +204,15 @@ class EqualsRule(object):
 
 
 class GreaterOrEqualsRule(object):
-    def __init__(self, column, value):
+    def __init__(self, table, column, value):
+        self.table = table
         self.column = column
         self.value = value
 
     def as_sql(self):
         return '%s >= %s' % (
             self.column.format(),
-            format_value(self.value))
+            format_value(self.value, self.table))
 
     def columns(self):
         return [self.column] + value_columns(self.value)
@@ -156,12 +220,14 @@ class GreaterOrEqualsRule(object):
 
 class SetRule(object):
 
-    def __init__(self, column, values):
+    def __init__(self, table, column, values):
+        self.table = table
         self.column = column
         self.values = values
 
     def as_sql(self):
-        formatted_values = map(format_value, self.values)
+        formatted_values = [
+            format_value(x, self.table) for x in self.values]
         set_check = '%s IN (%s)' % (
             self.column.format(),
             ', '.join(formatted_values))
@@ -290,21 +356,25 @@ def create_filter_rule(filter_key, filter_value, table):
         # leaf rules
         col = table.create_column(filter_key)
         if isinstance(filter_value, list):
-            rule = SetRule(col, filter_value)
+            rule = SetRule(table, col, filter_value)
         else:
             if filter_value is True:
                 rule = ExistsRule(col)
             elif filter_value is False:
                 rule = NotExistsRule(col)
             elif isinstance(filter_value, Number):
-                rule = EqualsRule(col, filter_value)
+                rule = EqualsRule(table, col, filter_value)
             elif isinstance(filter_value, dict) and 'min' in filter_value:
-                rule = GreaterOrEqualsRule(col, filter_value['min'])
+                rule = GreaterOrEqualsRule(table, col, filter_value['min'])
             elif isinstance(filter_value, dict) and 'expr' in filter_value:
                 rule = ExpressionRule(
-                    col, filter_value['expr'], filter_value.get('cols'))
+                    table, col, filter_value['expr'], filter_value.get('cols'))
+            elif filter_value == 'geom_type':
+                assert filter_value in ('point', 'line', 'polygon')
+                rule = GeomTypeRule(
+                    col, filter_value)
             else:
-                rule = EqualsRule(col, filter_value)
+                rule = EqualsRule(table, col, filter_value)
     return rule
 
 
@@ -331,7 +401,7 @@ class Matcher(object):
         items = []
         for k, v in self.output.items():
             key = '"%s"' % k
-            val = format_json_value(v)
+            val = format_json_value(v, self.table)
             items.append("%s: ' || %s" % (key, val))
         items_str = " || ', ".join(items)
         output = "('{%s || '}')::json" % items_str
@@ -352,10 +422,10 @@ class Matcher(object):
         return 'WHEN %s THEN %s' % (self.rule.as_sql(), min_zoom)
 
 
-def sql_expr(expr):
+def sql_expr(expr, table):
     # a literal should be returned as an escaped SQL literal in a string
     if isinstance(expr, (str, unicode, int)):
-        return format_value(expr)
+        return format_value(expr, table)
 
     # otherwise expr is an AST, so should be tree-structured with a single head.
     # There may be many children, though.
@@ -365,11 +435,11 @@ def sql_expr(expr):
 
     if node_type == 'max':
         assert isinstance(value, list), "Max should have a list of children."
-        sql = 'GREATEST(' + ','.join([sql_expr(v) for v in value]) + ')'
+        sql = 'GREATEST(' + ','.join([sql_expr(v, table) for v in value]) + ')'
 
     elif node_type == 'min':
         assert isinstance(value, list), "Min should have a list of children."
-        sql = 'LEAST(' + ','.join([sql_expr(v) for v in value]) + ')'
+        sql = 'LEAST(' + ','.join([sql_expr(v, table) for v in value]) + ')'
 
     elif node_type == 'lit':
         assert isinstance(value, (str, unicode)), "Literal should be a string."
@@ -408,7 +478,7 @@ def create_matcher(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
 
     if isinstance(min_zoom, dict):
-        min_zoom = sql_expr(min_zoom)
+        min_zoom = sql_expr(min_zoom, table)
 
     output = yaml_datum['output']
     assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
