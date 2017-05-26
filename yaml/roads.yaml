@@ -119,7 +119,7 @@ global:
           - when:
               sov_a3: 'MEX'
               level: 'Federal'
-          - then: ['road', 'MX:MX', { col: name }]
+            then: ['road', 'MX:MX', { col: name }]
           - when:
               sov_a3: 'USA'
               level: 'Interstate'
