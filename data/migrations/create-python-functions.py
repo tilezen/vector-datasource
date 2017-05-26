@@ -60,7 +60,7 @@ def ast_value(val):
             return ast_column(val['col'])
         elif val.keys() == ['expr']:
             raise Exception('parse sql ... ?')
-        elif val.keys() == ['case']:
+        elif 'case' in val.keys():
             return parse_case(val['case'])
         elif val.keys() == ['call']:
             return parse_call(val['call'])
