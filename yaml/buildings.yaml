@@ -128,9 +128,7 @@ filters:
   # address points
   - filter:
       "addr:housenumber": true
-      way:
-        expr: |
-          GeometryType(way) = 'POINT'
+      geom_type: point
     extra_columns: [way]
     min_zoom: 17
     output:

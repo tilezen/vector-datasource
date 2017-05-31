@@ -199,6 +199,31 @@ class ExpressionRule(object):
         return ast.Str(self.expr)
 
 
+def map_geom_type(geom_type):
+    titled = geom_type.title()
+    result = (titled, 'Multi' + titled)
+    return result
+
+
+class GeomTypeRule(object):
+
+    def __init__(self, geom_type):
+        assert geom_type in ('point', 'line', 'polygon')
+        self.geom_type = geom_type
+
+    def as_ast(self):
+        attr = ast.Attribute(
+            ast.Name('geom_info', None),
+            'geom_type',
+            None
+        )
+        geom_types = map_geom_type(self.geom_type)
+        geom_types_ast = map(ast.Str, geom_types)
+        result = ast.Compare(
+            attr, [ast.In()], [ast.Tuple(geom_types_ast, None)])
+        return result
+
+
 def create_level_filter_rule(filter_level, combinator=AndRule):
     rules = []
     if not isinstance(filter_level, list):
@@ -241,6 +266,8 @@ def create_filter_rule(filter_key, filter_value):
             elif isinstance(filter_value, dict) and 'expr' in filter_value:
                 rule = ExpressionRule(
                     col, filter_value['expr'], filter_value.get('cols'))
+            elif col == 'geom_type':
+                rule = GeomTypeRule(filter_value)
             else:
                 rule = EqualsRule(col, filter_value)
     return rule
@@ -339,7 +366,10 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
 
     func = ast.FunctionDef(
         '%s_props' % layer,
-        ast.arguments([ast.Name('tags', None)], [], [], []),
+        ast.arguments([
+            ast.Name('tags', None),
+            ast.Name('geom_info', None),
+        ], [], [], []),
         stmts,
         [])
     print ASTFormatter().format(func, mode='exec')
