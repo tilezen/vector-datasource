@@ -2,7 +2,7 @@ v1.4.0
 ------
 * **Release date**: 2017-05-31.
 * **Requires:** [tileserver v2.1.0](https://github.com/mapzen/tileserver/releases/tag/v2.1.0) and [tilequeue v1.8.0](https://github.com/mapzen/tilequeue/releases/tag/v1.8.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
-- [tests] Add support to capture all test coordinates with -printcoords See [#1245](https://github.com/tilezen/vector-datasource/issues/1245).
+- [tests] Add support to capture all test coordinates with `-printcoords`. This also namespaces all the test assertion functions using `test`. See [#1245](https://github.com/tilezen/vector-datasource/issues/1245).
 - [tests] Publish all test coordinates for master CircleCI builds. See [#1246](https://github.com/tilezen/vector-datasource/pull/1246).
 - [docs] Remove rate limiting note (for Mapzen hosted service).
 
