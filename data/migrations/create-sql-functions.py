@@ -327,6 +327,34 @@ class ExpressionRule(object):
         return cols
 
 
+def map_geom_type(geom_type):
+    """return a sql geometry type(s)"""
+    assert geom_type in ('point', 'line', 'polygon')
+    if geom_type == 'point':
+        return ('POINT', 'MULTIPOINT')
+    elif geom_type == 'line':
+        return ('LINESTRING', 'MULTILINESTRING')
+    elif geom_type == 'polygon':
+        return ('POLYGON', 'MULTIPOLYGON')
+    else:
+        assert 0
+
+
+class GeomTypeRule(object):
+
+    def __init__(self, geom_type):
+        self.geom_type = geom_type
+        self.sql_geom_types = map_geom_type(geom_type)
+
+    def as_sql(self):
+        sql_geom_types_str = ', '.join(
+            "'%s'" % x for x in self.sql_geom_types)
+        return "GeometryType(way) IN (%s)" % sql_geom_types_str
+
+    def columns(self):
+        return []
+
+
 def create_level_filter_rule(filter_level, table, combinator=AndRule):
     rules = []
     if not isinstance(filter_level, list):

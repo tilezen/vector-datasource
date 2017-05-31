@@ -389,7 +389,7 @@ filters:
   # pier
   - filter:
       man_made: pier
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: GREATEST(LEAST(zoom + 1.81, 16), 11)
     output: {kind: pier}
   # wastewater_plant
@@ -411,7 +411,7 @@ filters:
   # breakwater
   - filter:
       man_made: breakwater
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
     output: {kind: breakwater, tier: 4}
   # water_works
@@ -421,19 +421,19 @@ filters:
   # groyne
   - filter:
       man_made: groyne
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
     output: {kind: groyne, tier: 4}
   # dike
   - filter:
       man_made: dike
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
     output: {kind: dike, tier: 4}
   # cutline
   - filter:
       man_made: cutline
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
     output: {kind: cutline, tier: 4}
 
@@ -479,7 +479,7 @@ filters:
   # pedestrian
   - filter:
       highway: pedestrian
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier6_min_zoom
     output: {kind: pedestrian, tier: 6}
   # common
@@ -567,7 +567,7 @@ filters:
     output: {kind: natural_park}
   - filter:
       highway: footway
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: footway}
   - filter: {amenity: library}
@@ -587,12 +587,12 @@ filters:
     output: {kind: prison}
   - filter:
       aeroway: runway
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: runway}
   - filter:
       aeroway: taxiway
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: GREATEST(LEAST(zoom, 16), 9)
     output: {kind: taxiway}
   - filter: {aeroway: apron}
