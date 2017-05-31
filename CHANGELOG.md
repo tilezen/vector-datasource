@@ -1,6 +1,13 @@
+v1.3.1
+------
+* **Release date**: 2017-05-31.
+* **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+- [docs] Remove rate limiting note (for Mapzen hosted service).
+- Update VERSION file to v1.3.1. _NOTE: while the v1.3.0 release was tagged correctly the VERSION file was stuck at v1.2.0 leading to the incorrectly report in Python installs as v1.2.0._
+
 v1.3.0-docs1
 ------
-* **Release date**: 2017-05-05. _Live on prod 2017-05-??._
+* **Release date**: 2017-05-05.
 * **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
 - [docs] Delete api-keys-and-rate-limits.md page
 - [docs] Update attribution.md page with less Mapzen
@@ -10,7 +17,7 @@ v1.3.0-docs1
 
 v1.3.0
 ------
-* **Release date**: 2017-05-04. _Live on prod 2017-05-??._
+* **Release date**: 2017-05-04. _Live on prod 2017-05-08._
 * **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.2.0).
 
   #### ENHANCEMENTS
