@@ -16,7 +16,7 @@ To use vector tiles 1.0, replace your URL with the following scheme, depending o
 - TopoJSON: `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson`
 - Mapbox Vector Tile: `http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt`
 
-You need to append your own [API key](https://mapzen.com/documentation/overview/) at the end for access to the full rate limits.
+You need to append your own [API key](https://mapzen.com/documentation/overview/).
 
 Mapzen offers several different types of tiles in vector and raster formats and the service combines data from multiple sources. Because of data model changes in 1.0, it was not possible to redirect existing queries automatically to use the 1.0 URL.
 
@@ -95,6 +95,7 @@ Below is a summary of the major, breaking changes listed for the vector tiles 1.
   		  * minor_road:
   		  *   * filter: { kind: minor_road }
   	  ```
+     
     * for OSM roads in mid- and high zooms, optionally:
 
         ```
