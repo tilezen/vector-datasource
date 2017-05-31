@@ -1,11 +1,10 @@
-v1.3.1
+v1.4.0
 ------
 * **Release date**: 2017-05-31.
 * **Requires:** [tileserver v2.1.0](https://github.com/mapzen/tileserver/releases/tag/v2.1.0) and [tilequeue v1.8.0](https://github.com/mapzen/tilequeue/releases/tag/v1.8.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
 - [tests] Add support to capture all test coordinates with -printcoords See [#1245](https://github.com/tilezen/vector-datasource/issues/1245).
 - [tests] Publish all test coordinates for master CircleCI builds. See [#1246](https://github.com/tilezen/vector-datasource/pull/1246).
 - [docs] Remove rate limiting note (for Mapzen hosted service).
-- [bug fix] Update VERSION file to v1.3.1. _NOTE: while the v1.3.0 release was tagged correctly the VERSION file was stuck at v1.2.0 leading to the incorrectly report in Python installs as v1.2.0._
 
 v1.3.0-docs1
 ------
@@ -42,6 +41,9 @@ v1.3.0
   * Some **pois** layer features were missing their `tier` property. See [#1208](https://github.com/tilezen/vector-datasource/issues/1208).
   * Remove `natural_forest`, `natural_wood`, and `village_green` from **pois** layer, a documented breaking bug fix associated with the v1.0 release. Their label points are now found in the **landuse** layer. See [#1103](https://github.com/tilezen/vector-datasource/issues/1103).
   * Fix test failures based on upstream OpenStreetMap data changes.
+  * _NOTE: while the v1.3.0 release was tagged correctly the VERSION file was stuck at v1.2.0 leading to the incorrectly report in Python installs as v1.2.0._
+
+  
 
 v1.2.0
 ------
