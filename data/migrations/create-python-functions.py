@@ -85,11 +85,12 @@ def untag_col(col):
         col = col[len(tags):]
     return col
 
+
 def ast_column(col):
     col = untag_col(col)
     return ast.Call(
         ast.Attribute(
-            ast.Name('tags', None),
+            ast.Name('props', None),
             'get',
             None),
         [ast.Str(col)],
@@ -140,7 +141,7 @@ class ExistsRule(object):
     def as_ast(self):
         return ast.Compare(ast.Str(untag_col(self.column)),
                            [ast.In()],
-                           [ast.Name('tags', None)])
+                           [ast.Name('props', None)])
 
 
 class NotExistsRule(object):
@@ -213,8 +214,8 @@ class GeomTypeRule(object):
 
     def as_ast(self):
         attr = ast.Attribute(
-            ast.Name('geom_info', None),
-            'geom_type',
+            ast.Name('shape', None),
+            'type',
             None
         )
         geom_types = map_geom_type(self.geom_type)
@@ -367,8 +368,9 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
     func = ast.FunctionDef(
         '%s_props' % layer,
         ast.arguments([
-            ast.Name('tags', None),
-            ast.Name('geom_info', None),
+            ast.Name('shape', None),
+            ast.Name('props', None),
+            ast.Name('fid', None),
         ], [], [], []),
         stmts,
         [])
