@@ -19,7 +19,7 @@ echo "done."
 
 # dynamic functions generated from csv
 echo "Generating functions from csv..."
-(cd migrations && python create-sql-functions.py) | psql $@
+(cd ../vectordatasource/meta && python sql.py) | psql $@
 echo "done."
 
 # apply updates in parallel across tables

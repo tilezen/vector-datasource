@@ -152,6 +152,7 @@ class Column(object):
 # everything else is in the tags hstore.
 FIXED_OSM_COLUMNS = set(['way_area', 'way', 'osm_id'])
 
+
 class Table(object):
 
     def __init__(self, name, extra_columns=None, synthetic_columns=None):
@@ -164,8 +165,8 @@ class Table(object):
 
         # synthetic columns are local variables created in sql.jinja2, and
         # should not be part of the parameters of the function.
-        self._synthetic_columns = set(synthetic_columns) if synthetic_columns \
-                                  else set()
+        self._synthetic_columns = (
+            set(synthetic_columns) if synthetic_columns else set())
 
     def create_column(self, name):
         not_tag = self._name in ('shp', 'ne') or \
@@ -455,8 +456,8 @@ def sql_expr(expr, table):
     if isinstance(expr, (str, unicode, int)):
         return format_value(expr, table)
 
-    # otherwise expr is an AST, so should be tree-structured with a single head.
-    # There may be many children, though.
+    # otherwise expr is an AST, so should be tree-structured with a
+    # single head. There may be many children, though.
     assert len(expr) == 1, "Expect only a single 'head' in expression."
 
     node_type, value = expr.items()[0]
@@ -509,7 +510,8 @@ def create_matcher(yaml_datum):
         min_zoom = sql_expr(min_zoom, table)
 
     output = yaml_datum['output']
-    assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
+    assert 'kind' in output, \
+        "Matcher for %r doesn't contain kind." % yaml_datum
 
     matcher = Matcher(rule, min_zoom, output, table_obj)
     return matcher
@@ -537,6 +539,7 @@ def create_case_statement_output(matchers):
     when_sql = '\n'.join(when_parts)
     case_sql = 'CASE\n%s\n  END' % when_sql
     return case_sql
+
 
 Key = namedtuple('Key', 'table key typ')
 
@@ -578,7 +581,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
 
         for column in columns:
             assert isinstance(column, Column), "%r is not a Column" % (column,)
-            assert not column._is_tag, "did not expect tag in column list: %r" % (column,)
+            assert not column._is_tag, \
+                'did not expect tag in column list: %r' % (column,)
             if column._name == 'gid' or column._name == 'fid':
                 typ = 'integer'
             elif column._name == 'scalerank' or column._name == 'labelrank':
