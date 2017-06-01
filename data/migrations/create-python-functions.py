@@ -127,7 +127,7 @@ class SetRule(object):
         self.values = values
 
     def as_ast(self):
-        values = ast.List([ast_value(v) for v in self.values], None)
+        values = ast.Tuple([ast_value(v) for v in self.values], None)
         return ast.Compare(ast_column(self.column),
                            [ast.In()],
                            [values])
