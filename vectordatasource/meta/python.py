@@ -49,8 +49,12 @@ def parse_case(c):
 
 
 def parse_call(c):
-    # TODO!
-    return ast.Name('None', None)
+    assert set(c.keys()) == set(('args', 'func'))
+    args = c['args']
+    func = c['func']
+    args_ast = map(ast_value, args)
+    return ast.Call(
+        ast.Name(func, None), args_ast, [], None, None)
 
 
 def ast_value(val):
