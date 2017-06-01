@@ -8,7 +8,8 @@ from astformatter import ASTFormatter
 def format_value(val):
     if isinstance(val, dict):
         if 'expr' in val:
-            raise Exception('expr values not supported any more! value was %r' % val['expr'])
+            raise Exception('expr values not supported any more! '
+                            'value was %r' % val['expr'])
         elif 'col' in val:
             if val['col'].startswith('tags->'):
                 return "tags->'%s'" % val['col'][len('tags->'):]
@@ -182,7 +183,6 @@ class NotRule(object):
     def __init__(self, rule):
         self.rule = rule
 
-
     def as_ast(self):
         return ast.UnaryOp(
             ast.Not(),
@@ -288,13 +288,14 @@ class Matcher(object):
                 ast_value(self.output))],
             [])
 
+
 def sql_expr(expr):
     # a literal should be returned as an escaped SQL literal in a string
     if isinstance(expr, (str, unicode, int)):
         return format_value(expr)
 
-    # otherwise expr is an AST, so should be tree-structured with a single head.
-    # There may be many children, though.
+    # otherwise expr is an AST, so should be tree-structured with a
+    # single head. There may be many children, though.
     assert len(expr) == 1, "Expect only a single 'head' in expression."
 
     node_type, value = expr.items()[0]
@@ -337,7 +338,8 @@ def create_matcher(yaml_datum):
         min_zoom = sql_expr(min_zoom)
 
     output = yaml_datum['output']
-    assert 'kind' in output, "Matcher for %r doesn't contain kind." % yaml_datum
+    assert 'kind' in output, \
+        "Matcher for %r doesn't contain kind." % yaml_datum
 
     matcher = Matcher(rule, min_zoom, output)
     return matcher
