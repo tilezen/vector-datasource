@@ -33,3 +33,15 @@ class CallFuncTest(unittest.TestCase):
             fn = layer_datum.fn
             result = fn(shape, props, fid)
             self.assertTrue(isinstance(result, (dict, None.__class__)))
+
+    def test_building_basic(self):
+        import shapely.geometry
+        buildings_layer_data = self.by_name['buildings']
+        shape = shapely.geometry.Point((0, 0))
+        props = dict(
+            building='yes',
+        )
+        fid = 42
+        new_props = buildings_layer_data.fn(shape, props, fid)
+        self.assertEquals('building', new_props.get('kind'))
+        self.assertIsNone(new_props.get('kind_detail'))

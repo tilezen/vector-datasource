@@ -1,5 +1,6 @@
 from collections import namedtuple
 from numbers import Number
+from vectordatasource.meta import function
 import ast
 import astformatter
 import os.path
@@ -389,7 +390,14 @@ def parse_layers(yaml_path):
     layer_data = []
     layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
               'buildings', 'roads', 'earth')
+
     scope = {}
+    # add in all functions into scope for call availability
+    for func_name in dir(function):
+        fn = getattr(function, func_name)
+        if callable(fn):
+            scope[func_name] = fn
+
     for layer in layers:
         file_path = os.path.join(yaml_path, '%s.yaml' % layer)
         with open(file_path) as fh:
