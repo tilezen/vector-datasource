@@ -20,12 +20,14 @@ tiles = [
     # amenity=social_facility + social_facility=*
     # also with social_facility:for -> for and turned into a list to make it
     # easier to consume.
+    #https://www.openstreetmap.org/node/1126947892
     #https://www.openstreetmap.org/way/121024970
     #https://www.openstreetmap.org/node/3009189224
     #https://www.openstreetmap.org/way/243357053
     #https://www.openstreetmap.org/way/377082896
     #https://www.openstreetmap.org/node/358816623
-    ['16/10480/25332', {'kind': 'social_facility', 'for': ['senior', 'disabled']}],
+    ['16/10482/25332', {'kind': 'social_facility', 'for': ['aids']}],
+    ['16/10480/25332', {'kind': 'group_home', 'for': ['senior', 'disabled']}],
     ['16/10482/25332', {'kind': 'shelter', 'for': ['homeless']}],
     ['16/10483/25330', {'kind': 'shelter', 'for': ['homeless']}],
     ['16/10480/25404', {'kind': 'group_home', 'for': ['senior']}],
