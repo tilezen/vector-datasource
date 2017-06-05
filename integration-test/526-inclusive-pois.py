@@ -26,7 +26,7 @@ tiles = [
     #https://www.openstreetmap.org/way/243357053
     #https://www.openstreetmap.org/way/377082896
     #https://www.openstreetmap.org/node/358816623
-    ['16/10482/25332', {'kind': 'social_facility', 'for': ['aids']}],
+    ['16/10480/25332', {'kind': 'social_facility', 'for': ['aids']}],
     ['16/10480/25332', {'kind': 'group_home', 'for': ['senior', 'disabled']}],
     ['16/10482/25332', {'kind': 'shelter', 'for': ['homeless']}],
     ['16/10483/25330', {'kind': 'shelter', 'for': ['homeless']}],
