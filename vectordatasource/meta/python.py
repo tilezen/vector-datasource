@@ -1,8 +1,16 @@
-import os.path
-import yaml
+from collections import namedtuple
 from numbers import Number
 import ast
-from astformatter import ASTFormatter
+import astformatter
+import os.path
+import sys
+import yaml
+
+
+# this captures the end result of processing a layer's yaml
+# ast: ast parsed function
+# fn: compiled callable
+FunctionData = namedtuple('FunctionData', 'layer ast fn')
 
 
 def format_value(val):
@@ -28,7 +36,7 @@ def format_value(val):
 def parse_case(c):
     assert isinstance(c, list)
 
-    expr = ast.Name('None', None)
+    expr = ast.Name('None', ast.Load())
     if len(c) == 0:
         return expr
 
@@ -54,7 +62,7 @@ def parse_call(c):
     func = c['func']
     args_ast = map(ast_value, args)
     return ast.Call(
-        ast.Name(func, None), args_ast, [], None, None)
+        ast.Name(func, ast.Load()), args_ast, [], None, None)
 
 
 def ast_value(val):
@@ -77,9 +85,9 @@ def ast_value(val):
     elif hasattr(val, 'as_ast') and callable(val.as_ast):
         return val.as_ast()
     elif val is None:
-        return ast.Name('None', None)
+        return ast.Name('None', ast.Load())
     elif isinstance(val, list):
-        return ast.List([ast_value(v) for v in val], None)
+        return ast.List([ast_value(v) for v in val], ast.Load())
     else:
         raise Exception("Don't understand AST value of %r" % val)
 
@@ -95,9 +103,9 @@ def ast_column(col):
     col = untag_col(col)
     return ast.Call(
         ast.Attribute(
-            ast.Name('props', None),
+            ast.Name('props', ast.Load()),
             'get',
-            None),
+            ast.Load()),
         [ast.Str(col)],
         [], None, None)
 
@@ -132,7 +140,7 @@ class SetRule(object):
         self.values = values
 
     def as_ast(self):
-        values = ast.Tuple([ast_value(v) for v in self.values], None)
+        values = ast.Tuple([ast_value(v) for v in self.values], ast.Load())
         return ast.Compare(ast_column(self.column),
                            [ast.In()],
                            [values])
@@ -146,7 +154,7 @@ class ExistsRule(object):
     def as_ast(self):
         return ast.Compare(ast.Str(untag_col(self.column)),
                            [ast.In()],
-                           [ast.Name('props', None)])
+                           [ast.Name('props', ast.Load())])
 
 
 class NotExistsRule(object):
@@ -157,7 +165,7 @@ class NotExistsRule(object):
     def as_ast(self):
         return ast.Compare(ast_column(self.column),
                            [ast.Is()],
-                           [ast.Name('None', None)])
+                           [ast.Name('None', ast.Load())])
 
 
 class AndRule(object):
@@ -218,14 +226,14 @@ class GeomTypeRule(object):
 
     def as_ast(self):
         attr = ast.Attribute(
-            ast.Name('shape', None),
+            ast.Name('shape', ast.Load()),
             'type',
-            None
+            ast.Load()
         )
         geom_types = map_geom_type(self.geom_type)
         geom_types_ast = map(ast.Str, geom_types)
         result = ast.Compare(
-            attr, [ast.In()], [ast.Tuple(geom_types_ast, None)])
+            attr, [ast.In()], [ast.Tuple(geom_types_ast, ast.Load())])
         return result
 
 
@@ -349,21 +357,15 @@ def create_matcher(yaml_datum):
     return matcher
 
 
-layers = {}
-script_root = os.path.dirname(__file__)
+def make_function_name(layer_name):
+    return '%s_props' % layer_name
 
-for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
-              'buildings', 'roads', 'earth'):
-    kind_rules = []
-    min_zoom_rules = []
-    file_path = os.path.join(script_root, '../../yaml/%s.yaml' % layer)
-    with open(file_path) as fh:
-        yaml_data = yaml.load(fh)
-        matchers = []
-        for yaml_datum in yaml_data['filters']:
-            matcher = create_matcher(yaml_datum)
-            matchers.append(matcher)
 
+def parse_layer_from_yaml(yaml_data, layer_name):
+    matchers = []
+    for yaml_datum in yaml_data['filters']:
+        matcher = create_matcher(yaml_datum)
+        matchers.append(matcher)
     stmts = []
     for matcher in matchers:
         # columns in the query should be those needed by the rule, union those
@@ -372,12 +374,47 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
         stmts.append(matcher.as_ast())
 
     func = ast.FunctionDef(
-        '%s_props' % layer,
+        make_function_name(layer_name),
         ast.arguments([
-            ast.Name('shape', None),
-            ast.Name('props', None),
-            ast.Name('fid', None),
-        ], [], [], []),
+            ast.Name('shape', ast.Param()),
+            ast.Name('props', ast.Param()),
+            ast.Name('fid', ast.Param()),
+        ], None, None, []),
         stmts,
         [])
-    print ASTFormatter().format(func, mode='exec')
+    return func
+
+
+def parse_layers(root_path):
+    layer_data = []
+    layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
+              'buildings', 'roads', 'earth')
+    scope = {}
+    for layer in layers:
+        file_path = os.path.join(root_path, '../../yaml/%s.yaml' % layer)
+        with open(file_path) as fh:
+            yaml_data = yaml.load(fh)
+
+            ast_fn = parse_layer_from_yaml(yaml_data, layer)
+            mod = ast.Module([ast_fn])
+            mod_with_linenos = ast.fix_missing_locations(mod)
+            code = compile(mod_with_linenos, '<string>', 'exec')
+            exec code in scope
+            compiled_fn = scope[make_function_name(layer)]
+            layer_datum = FunctionData(layer, ast_fn, compiled_fn)
+            layer_data.append(layer_datum)
+    return layer_data
+
+
+def main(argv=None):
+    if argv is None:
+        argv = sys.argv
+    script_root = os.path.dirname(__file__)
+    layer_data = parse_layers(script_root)
+    for layer_datum in layer_data:
+        ast_fn = layer_datum.ast
+        print astformatter.ASTFormatter().format(ast_fn, mode='exec')
+
+
+if __name__ == '__main__':
+    main()
