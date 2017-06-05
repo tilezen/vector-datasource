@@ -3,7 +3,7 @@
 test.assert_has_feature(
     16, 18819, 24980, "roads",
     {"kind": "highway", "kind_detail": "motorway", "is_bridge": True,
-     "id": 8918870, "sort_rank": 447})
+     "id": 122189460, "sort_rank": 447})
 
 # layer 4
 #https://www.openstreetmap.org/way/27614705
