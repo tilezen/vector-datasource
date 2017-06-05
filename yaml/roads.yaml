@@ -61,7 +61,6 @@ global:
       colour: {col: tags->colour}
       network: {col: tags->network}
       state: {col: tags->state}
-      symbol: {col: tags->symbol}
       description: {col: tags->description}
       distance: {col: tags->distance}
       ascent: {col: tags->ascent}
