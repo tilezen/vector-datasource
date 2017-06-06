@@ -1,7 +1,7 @@
-# http://www.openstreetmap.org/way/25814380
+# http://www.openstreetmap.org/way/52529616
 test.assert_has_feature(
-    16, 10471, 25323, 'pois',
-    { 'id': 25814380, 'kind': 'toll_booth' })
+    16, 10501, 25319, 'pois',
+    { 'id': 52529616, 'kind': 'toll_booth' })
 
 # Node: Main Gate (392430963)
 # http://www.openstreetmap.org/node/392430963
