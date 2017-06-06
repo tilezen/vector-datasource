@@ -3,17 +3,45 @@
 import unittest
 
 
+def memoize(f):
+    result = {}
+
+    def wrapped(*args, **kwargs):
+        cache_key = tuple(args)
+        if not result:
+            result[cache_key] = f(*args, **kwargs)
+        return result[cache_key]
+
+    return wrapped
+
+
+@memoize
+def parse_layers(yaml_path):
+    from vectordatasource.meta.python import parse_layers
+    return parse_layers(yaml_path)
+
+
+@memoize
+def find_yaml_path():
+    from vectordatasource.meta import find_yaml_path
+    return find_yaml_path()
+
+
+@memoize
+def make_layer_data():
+    yaml_path = find_yaml_path()
+    layer_data = parse_layers(yaml_path)
+    by_name = {}
+    for layer_datum in layer_data:
+        by_name[layer_datum.layer] = layer_datum
+    return layer_data, by_name
+
+
 class CallFuncTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        from vectordatasource.meta.python import parse_layers
-        from vectordatasource.meta import find_yaml_path
-        yaml_path = find_yaml_path()
-        cls.layer_data = layer_data = parse_layers(yaml_path)
-        cls.by_name = {}
-        for layer_datum in layer_data:
-            cls.by_name[layer_datum.layer] = layer_datum
+        cls.layer_data, cls.by_name = make_layer_data()
 
     def test_layer_data_count(self):
         self.assertEquals(9, len(self.layer_data))
@@ -34,14 +62,32 @@ class CallFuncTest(unittest.TestCase):
             result = fn(shape, props, fid)
             self.assertTrue(isinstance(result, (dict, None.__class__)))
 
+
+class BuildingsTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.buildings = cls.by_name['buildings']
+
     def test_building_basic(self):
         import shapely.geometry
-        buildings_layer_data = self.by_name['buildings']
         shape = shapely.geometry.Point((0, 0))
-        props = dict(
-            building='yes',
-        )
+        props = dict(building='yes')
         fid = 42
-        new_props = buildings_layer_data.fn(shape, props, fid)
-        self.assertEquals('building', new_props.get('kind'))
-        self.assertIsNone(new_props.get('kind_detail'))
+        out_props = self.buildings.fn(shape, props, fid)
+        self.assertEquals('building', out_props.get('kind'))
+        self.assertIsNone(out_props.get('kind_detail'))
+
+    def test_building_kind_detail(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'building': 'beach_hut',
+            'building:part': 'passageway',
+        }
+        fid = 42
+        out_props = self.buildings.fn(shape, props, fid)
+        self.assertEquals('building', out_props.get('kind'))
+        self.assertEquals('beach_hut', out_props.get('kind_detail'))
+        self.assertEquals('passageway', out_props.get('building_part'))

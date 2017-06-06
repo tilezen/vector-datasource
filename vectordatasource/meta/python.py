@@ -1,5 +1,6 @@
 from collections import namedtuple
 from numbers import Number
+from vectordatasource import util
 from vectordatasource.meta import function
 import ast
 import astformatter
@@ -15,7 +16,15 @@ import yaml
 FunctionData = namedtuple('FunctionData', 'layer ast fn')
 
 
-def parse_case(c):
+# stores any useful state along the way as the values have been parsed
+class AstState(object):
+
+    def __init__(self, has_way_area, has_volume):
+        self.has_way_area = has_way_area
+        self.has_volume = has_volume
+
+
+def parse_case(ast_state, c):
     assert isinstance(c, list)
 
     expr = ast.Name('None', ast.Load())
@@ -25,51 +34,51 @@ def parse_case(c):
     if len(c) > 1:
         if c[-1].keys() == ['else']:
             last = c.pop()
-            expr = ast_value(last['else'])
+            expr = ast_value(ast_state, last['else'])
 
     for case in reversed(c):
         assert isinstance(case, dict)
         assert set(case.keys()) == set(['when', 'then'])
         cond = create_rules_from_branch(case['when'])
-        when = ast_value(cond)
-        then = ast_value(case['then'])
+        when = ast_value(ast_state, cond)
+        then = ast_value(ast_state, case['then'])
         expr = ast.IfExp(when, then, expr)
 
     return expr
 
 
-def parse_call(c):
+def parse_call(ast_state, c):
     assert set(c.keys()) == set(('args', 'func'))
     args = c['args']
     func = c['func']
-    args_ast = map(ast_value, args)
+    args_ast = [ast_value(ast_state, x) for x in args]
     return ast.Call(
         ast.Name(func, ast.Load()), args_ast, [], None, None)
 
 
-def ast_value(val):
+def ast_value(ast_state, val):
     if isinstance(val, str):
         return ast.Str(val)
     elif isinstance(val, dict):
         if val.keys() == ['col']:
-            return ast_column(val['col'])
+            return ast_column(ast_state, val['col'])
         elif val.keys() == ['expr']:
             raise Exception('expr not supported')
         elif 'case' in val.keys():
-            return parse_case(val['case'])
+            return parse_case(ast_state, val['case'])
         elif val.keys() == ['call']:
-            return parse_call(val['call'])
+            return parse_call(ast_state, val['call'])
         else:
-            return ast.Dict([ast_value(k) for k in val.keys()],
-                            [ast_value(v) for v in val.values()])
+            return ast.Dict([ast_value(ast_state, k) for k in val.keys()],
+                            [ast_value(ast_state, v) for v in val.values()])
     elif isinstance(val, int):
         return ast.Num(val)
     elif hasattr(val, 'as_ast') and callable(val.as_ast):
-        return val.as_ast()
+        return val.as_ast(ast_state)
     elif val is None:
         return ast.Name('None', ast.Load())
     elif isinstance(val, list):
-        return ast.List([ast_value(v) for v in val], ast.Load())
+        return ast.List([ast_value(ast_state, v) for v in val], ast.Load())
     else:
         raise Exception("Don't understand AST value of %r" % val)
 
@@ -81,15 +90,24 @@ def untag_col(col):
     return col
 
 
-def ast_column(col):
+def ast_column(ast_state, col):
     col = untag_col(col)
-    return ast.Call(
-        ast.Attribute(
-            ast.Name('props', ast.Load()),
-            'get',
-            ast.Load()),
-        [ast.Str(col)],
-        [], None, None)
+    if col == 'volume':
+        ast_state.has_way_area = True
+        ast_state.has_volume = True
+        result = ast.Name('volume', ast.Load())
+    elif col == 'way_area':
+        ast_state.has_way_area = True
+        result = ast.Name('way_area', ast.Load())
+    else:
+        result = ast.Call(
+            ast.Attribute(
+                ast.Name('props', ast.Load()),
+                'get',
+                ast.Load()),
+            [ast.Str(col)],
+            [], None, None)
+    return result
 
 
 class EqualsRule(object):
@@ -98,10 +116,10 @@ class EqualsRule(object):
         self.column = column
         self.value = value
 
-    def as_ast(self):
-        return ast.Compare(ast_column(self.column),
+    def as_ast(self, ast_state):
+        return ast.Compare(ast_column(ast_state, self.column),
                            [ast.Eq()],
-                           [ast_value(self.value)])
+                           [ast_value(ast_state, self.value)])
 
 
 class GreaterOrEqualsRule(object):
@@ -109,10 +127,10 @@ class GreaterOrEqualsRule(object):
         self.column = column
         self.value = value
 
-    def as_ast(self):
-        return ast.Compare(ast_column(self.column),
+    def as_ast(self, ast_state):
+        return ast.Compare(ast_column(ast_state, self.column),
                            [ast.GtE()],
-                           [ast_value(self.value)])
+                           [ast_value(ast_state, self.value)])
 
 
 class SetRule(object):
@@ -121,9 +139,10 @@ class SetRule(object):
         self.column = column
         self.values = values
 
-    def as_ast(self):
-        values = ast.Tuple([ast_value(v) for v in self.values], ast.Load())
-        return ast.Compare(ast_column(self.column),
+    def as_ast(self, ast_state):
+        values = ast.Tuple(
+            [ast_value(ast_state, v) for v in self.values], ast.Load())
+        return ast.Compare(ast_column(ast_state, self.column),
                            [ast.In()],
                            [values])
 
@@ -133,7 +152,7 @@ class ExistsRule(object):
     def __init__(self, column):
         self.column = column
 
-    def as_ast(self):
+    def as_ast(self, ast_state):
         return ast.Compare(ast.Str(untag_col(self.column)),
                            [ast.In()],
                            [ast.Name('props', ast.Load())])
@@ -144,8 +163,8 @@ class NotExistsRule(object):
     def __init__(self, column):
         self.column = column
 
-    def as_ast(self):
-        return ast.Compare(ast_column(self.column),
+    def as_ast(self, ast_state):
+        return ast.Compare(ast_column(ast_state, self.column),
                            [ast.Is()],
                            [ast.Name('None', ast.Load())])
 
@@ -155,10 +174,10 @@ class AndRule(object):
     def __init__(self, rules):
         self.rules = rules
 
-    def as_ast(self):
+    def as_ast(self, ast_state):
         return ast.BoolOp(
             ast.And(),
-            [ast_value(r) for r in self.rules])
+            [ast_value(ast_state, r) for r in self.rules])
 
 
 class OrRule(object):
@@ -166,10 +185,10 @@ class OrRule(object):
     def __init__(self, rules):
         self.rules = rules
 
-    def as_ast(self):
+    def as_ast(self, ast_state):
         return ast.BoolOp(
             ast.Or(),
-            [ast_value(r) for r in self.rules])
+            [ast_value(ast_state, r) for r in self.rules])
 
 
 class NotRule(object):
@@ -177,10 +196,10 @@ class NotRule(object):
     def __init__(self, rule):
         self.rule = rule
 
-    def as_ast(self):
+    def as_ast(self, ast_state):
         return ast.UnaryOp(
             ast.Not(),
-            ast_value(self.rule))
+            ast_value(ast_state, self.rule))
 
 
 def map_geom_type(geom_type):
@@ -195,7 +214,7 @@ class GeomTypeRule(object):
         assert geom_type in ('point', 'line', 'polygon')
         self.geom_type = geom_type
 
-    def as_ast(self):
+    def as_ast(self, ast_state):
         attr = ast.Attribute(
             ast.Name('shape', ast.Load()),
             'type',
@@ -263,11 +282,11 @@ class Matcher(object):
         self.rule = rule
         self.output = output
 
-    def as_ast(self):
+    def as_ast(self, ast_state):
         return ast.If(
-            self.rule.as_ast(),
+            self.rule.as_ast(ast_state),
             [ast.Return(
-                ast_value(self.output))],
+                ast_value(ast_state, self.output))],
             [])
 
 
@@ -298,7 +317,35 @@ def make_function_name(layer_name):
     return '%s_props' % layer_name
 
 
-def parse_layer_from_yaml(yaml_data, layer_name):
+def make_way_area_assignment():
+    # generates:
+    # way_area = util.calculate_way_area(shape)
+    return ast.Assign(
+        targets=[ast.Name(id='way_area', ctx=ast.Store())],
+        value=ast.Call(
+            func=ast.Attribute(
+                value=ast.Name(id='util', ctx=ast.Load()),
+                attr='calculate_way_area', ctx=ast.Load()),
+            args=[ast.Name(id='shape', ctx=ast.Load())],
+            keywords=[], starargs=None, kwargs=None))
+
+
+def make_volume_assignment():
+    # generates:
+    # volume = util.calculate_volume(way_area, props)
+    return ast.Assign(
+        targets=[ast.Name(id='volume', ctx=ast.Store())],
+        value=ast.Call(
+            func=ast.Attribute(
+                value=ast.Name(id='util', ctx=ast.Load()),
+                attr='calculate_volume', ctx=ast.Load()),
+            args=[
+                ast.Name(id='way_area', ctx=ast.Load()),
+                ast.Name(id='props', ctx=ast.Load())],
+            keywords=[], starargs=None, kwargs=None))
+
+
+def parse_layer_from_yaml(ast_state, yaml_data, layer_name):
     matchers = []
     for yaml_datum in yaml_data['filters']:
         matcher = create_matcher(yaml_datum)
@@ -308,7 +355,16 @@ def parse_layer_from_yaml(yaml_data, layer_name):
         # columns in the query should be those needed by the rule, union those
         # needed by the output, minus any which are synthetic and local to the
         # query function.
-        stmts.append(matcher.as_ast())
+        stmts.append(matcher.as_ast(ast_state))
+
+    prepend_statements = []
+    if ast_state.has_way_area:
+        way_area_stmt = make_way_area_assignment()
+        prepend_statements.append(way_area_stmt)
+    if ast_state.has_volume:
+        volume_stmt = make_volume_assignment()
+        prepend_statements.append(volume_stmt)
+    stmts = prepend_statements + stmts
 
     func = ast.FunctionDef(
         make_function_name(layer_name),
@@ -322,6 +378,10 @@ def parse_layer_from_yaml(yaml_data, layer_name):
     return func
 
 
+def make_empty_ast_state():
+    return AstState(False, False)
+
+
 def parse_layers(yaml_path):
     layer_data = []
     layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
@@ -333,20 +393,23 @@ def parse_layers(yaml_path):
         fn = getattr(function, func_name)
         if callable(fn):
             scope[func_name] = fn
+    scope['util'] = util
 
     for layer in layers:
         file_path = os.path.join(yaml_path, '%s.yaml' % layer)
         with open(file_path) as fh:
             yaml_data = yaml.load(fh)
 
-            ast_fn = parse_layer_from_yaml(yaml_data, layer)
-            mod = ast.Module([ast_fn])
-            mod_with_linenos = ast.fix_missing_locations(mod)
-            code = compile(mod_with_linenos, '<string>', 'exec')
-            exec code in scope
-            compiled_fn = scope[make_function_name(layer)]
-            layer_datum = FunctionData(layer, ast_fn, compiled_fn)
-            layer_data.append(layer_datum)
+        ast_state = make_empty_ast_state()
+        ast_fn = parse_layer_from_yaml(ast_state, yaml_data, layer)
+
+        mod = ast.Module([ast_fn])
+        mod_with_linenos = ast.fix_missing_locations(mod)
+        code = compile(mod_with_linenos, '<string>', 'exec')
+        exec code in scope
+        compiled_fn = scope[make_function_name(layer)]
+        layer_datum = FunctionData(layer, ast_fn, compiled_fn)
+        layer_data.append(layer_datum)
     return layer_data
 
 
