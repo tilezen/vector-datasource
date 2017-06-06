@@ -385,13 +385,13 @@ def parse_layer_from_yaml(yaml_data, layer_name):
     return func
 
 
-def parse_layers(root_path):
+def parse_layers(yaml_path):
     layer_data = []
     layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
               'buildings', 'roads', 'earth')
     scope = {}
     for layer in layers:
-        file_path = os.path.join(root_path, '../../yaml/%s.yaml' % layer)
+        file_path = os.path.join(yaml_path, '%s.yaml' % layer)
         with open(file_path) as fh:
             yaml_data = yaml.load(fh)
 
@@ -407,10 +407,11 @@ def parse_layers(root_path):
 
 
 def main(argv=None):
+    from vectordatasource.meta import find_yaml_path
     if argv is None:
         argv = sys.argv
-    script_root = os.path.dirname(__file__)
-    layer_data = parse_layers(script_root)
+    yaml_path = find_yaml_path()
+    layer_data = parse_layers(yaml_path)
     for layer_datum in layer_data:
         ast_fn = layer_datum.ast
         print astformatter.ASTFormatter().format(ast_fn, mode='exec')
