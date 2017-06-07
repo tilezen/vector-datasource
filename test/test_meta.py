@@ -156,5 +156,31 @@ class LanduseTest(unittest.TestCase):
         self.assertEquals('scree', out_props.get('kind'))
 
 
+class PlacesTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.places = cls.by_name['places']
+
+    def test_osm(self):
+        props = {
+            'name': 'foo',
+            'place': 'isolated_dwelling',
+        }
+        out_props = self.places.fn(None, props, None)
+        self.assertEquals('locality', out_props.get('kind'))
+        self.assertEquals('isolated_dwelling', out_props.get('kind_detail'))
+
+    def test_ne(self):
+        props = {
+            'scalerank': 42,
+            'featurecla': 'Scientific station',
+        }
+        out_props = self.places.fn(None, props, None)
+        self.assertEquals('locality', out_props.get('kind'))
+        self.assertEquals('scientific_station', out_props.get('kind_detail'))
+
+
 if __name__ == '__main__':
     unittest.main()
