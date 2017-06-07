@@ -100,7 +100,7 @@ class BoundariesTest(unittest.TestCase):
         cls.layer_data, cls.by_name = make_layer_data()
         cls.boundaries = cls.by_name['boundaries']
 
-    def test_kind(self):
+    def test_osm(self):
         props = {
             'boundary': 'administrative',
             'boundary:type': 'aboriginal_lands',
@@ -117,6 +117,28 @@ class BoundariesTest(unittest.TestCase):
         out_props = self.boundaries.fn(None, props, None)
         self.assertEquals('macroregion', out_props.get('kind'))
         self.assertEquals('3', out_props.get('kind_detail'))
+
+
+class EarthTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.earth = cls.by_name['earth']
+
+    def test_osm(self):
+        props = {
+            'natural': 'arete',
+        }
+        out_props = self.earth.fn(None, props, None)
+        self.assertEquals('arete', out_props.get('kind'))
+
+    def test_ne(self):
+        props = {
+            'gid': 42,
+        }
+        out_props = self.earth.fn(None, props, None)
+        self.assertEquals('earth', out_props.get('kind'))
 
 
 if __name__ == '__main__':
