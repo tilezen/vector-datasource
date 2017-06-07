@@ -182,5 +182,32 @@ class PlacesTest(unittest.TestCase):
         self.assertEquals('scientific_station', out_props.get('kind_detail'))
 
 
+class PoisTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.pois = cls.by_name['pois']
+
+    def test_disused(self):
+        props = dict(disused='yes')
+        out_props = self.pois.fn(None, props, None)
+        self.assertIsNone(out_props.get('kind'))
+
+        props = dict(disused='no', name='foo', leisure='playground')
+        out_props = self.pois.fn(None, props, None)
+        self.assertEquals('playground', out_props.get('kind'))
+
+    def test_no_name_ok(self):
+        props = dict(historic='landmark')
+        out_props = self.pois.fn(None, props, None)
+        self.assertEquals('landmark', out_props.get('kind'))
+
+    def test_no_name_none(self):
+        props = dict(tourism='aquarium')
+        out_props = self.pois.fn(None, props, None)
+        self.assertIsNone(out_props.get('kind'))
+
+
 if __name__ == '__main__':
     unittest.main()
