@@ -170,8 +170,14 @@ def tile_url(z, x, y, layer):
     url = config_url % {'layer': request_layer, 'z': z, 'x': x, 'y': y}
     return url
 
+global_test_coords_file_handle = None
 
-def fetch_tile_http(url):
+
+def fetch_tile_http(url, z, x, y):
+    global global_test_coords_file_handle
+    if global_test_coords_file_handle:
+        global_test_coords_file_handle.write('%d/%d/%d\n' % (z, x, y))
+
     r = requests.get(url)
 
     if r.status_code == 504:
@@ -185,7 +191,7 @@ def fetch_tile_http(url):
 
 def fetch_tile_http_json(z, x, y, layer):
     url = tile_url(z, x, y, layer)
-    r = fetch_tile_http(url)
+    r = fetch_tile_http(url, z, x, y)
 
     if r.headers['content-type'] != 'application/json':
         raise Exception("Tile %r: expected JSON, but content-type is %r"
@@ -197,7 +203,7 @@ def fetch_tile_http_json(z, x, y, layer):
 def fetch_tile_http_mvt(z, x, y, layer):
     url = tile_url(z, x, y, layer)
     url = url.replace(".json", ".mvt")
-    r = fetch_tile_http(url)
+    r = fetch_tile_http(url, z, x, y)
 
     if r.headers['content-type'] != 'application/x-protobuf':
         raise Exception("Tile %r: expected application/x-protobuf, but "
@@ -590,6 +596,10 @@ class DataDumper(object):
 
 data_dumper = None
 
+if sys.argv[-1] == '-write-test-coords':
+    global_test_coords_file_handle = open('test-coords.txt', 'w')
+    del sys.argv[-1]
+
 if len(sys.argv) > 1 and sys.argv[1] == '-printcoords':
     tests = sys.argv[2:]
     mode = 'print'
@@ -620,6 +630,9 @@ with open('test.log', 'w') as log:
     for i, t in enumerate(sorted(tests)):
         fails = runner(t, log, i + 1, num_tests)
         fail_count = fail_count + fails
+
+if global_test_coords_file_handle:
+    global_test_coords_file_handle.close()
 
 if mode == 'test':
     if fail_count > 0:

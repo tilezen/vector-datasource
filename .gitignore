@@ -22,3 +22,5 @@ vector_datasource.egg-info/
 data/Makefile-import-data
 data/Makefile-prepare-data
 data/import-shapefiles.sh
+
+test-coords.txt
