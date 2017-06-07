@@ -141,5 +141,20 @@ class EarthTest(unittest.TestCase):
         self.assertEquals('earth', out_props.get('kind'))
 
 
+class LanduseTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.landuse = cls.by_name['landuse']
+
+    def test_osm(self):
+        props = {
+            'natural': 'scree',
+        }
+        out_props = self.landuse.fn(None, props, None)
+        self.assertEquals('scree', out_props.get('kind'))
+
+
 if __name__ == '__main__':
     unittest.main()
