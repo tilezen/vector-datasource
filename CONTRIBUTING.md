@@ -93,7 +93,7 @@ The **yaml** configuration files establish which features are included per layer
 To recap, with examples:
 
 - **yaml** files are located in the `yaml/` directory. Example: [pois.yaml](yaml/pois.yaml)
-- **jinja** files are located in the `queries/` directory. Example: [pois.jinja](queries/pois.jinja).
+- **jinja** files are located in the `queries/` directory. Example: [pois.jinja2](queries/pois.jinja2).
 - **Python** files are located in the `vectordatasource/` directory. Example: [transform.py](vectordatasource/transform.py).
 - **layers** are specified in [queries.yaml](queries.yaml).
 
