@@ -91,3 +91,33 @@ class BuildingsTest(unittest.TestCase):
         self.assertEquals('building', out_props.get('kind'))
         self.assertEquals('beach_hut', out_props.get('kind_detail'))
         self.assertEquals('passageway', out_props.get('building_part'))
+
+
+class BoundariesTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.boundaries = cls.by_name['boundaries']
+
+    def test_kind(self):
+        props = {
+            'boundary': 'administrative',
+            'boundary:type': 'aboriginal_lands',
+            'admin_level': '2',
+        }
+        out_props = self.boundaries.fn(None, props, None)
+        self.assertEquals('aboriginal_lands', out_props.get('kind'))
+        self.assertEquals('2', out_props.get('kind_detail'))
+
+    def test_ne(self):
+        props = {
+            'featurecla': 'Admin-1 region boundary',
+        }
+        out_props = self.boundaries.fn(None, props, None)
+        self.assertEquals('macroregion', out_props.get('kind'))
+        self.assertEquals('3', out_props.get('kind_detail'))
+
+
+if __name__ == '__main__':
+    unittest.main()
