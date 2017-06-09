@@ -236,5 +236,20 @@ class RoadsTest(unittest.TestCase):
         self.assertEquals('secondary', out_props.get('kind_detail'))
 
 
+class TransitTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.transit = cls.by_name['transit']
+
+    def test_osm(self):
+        props = {
+            'route': 'subway',
+        }
+        out_props = self.transit.fn(None, props, None)
+        self.assertEquals('subway', out_props.get('kind'))
+
+
 if __name__ == '__main__':
     unittest.main()
