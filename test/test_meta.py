@@ -251,5 +251,29 @@ class TransitTest(unittest.TestCase):
         self.assertEquals('subway', out_props.get('kind'))
 
 
+class WaterTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.water = cls.by_name['water']
+
+    def test_osm(self):
+        props = dict(waterway='riverbank')
+        out_props = self.water.fn(None, props, None)
+        self.assertEquals('riverbank', out_props.get('kind'))
+
+        props = dict(waterway='riverbank', intermittent='yes')
+        out_props = self.water.fn(None, props, None)
+        self.assertEquals('riverbank', out_props.get('kind'))
+        self.assertTrue(out_props.get('intermittent'))
+
+
+    def test_ne(self):
+        props = dict(featurecla='Lake')
+        out_props = self.water.fn(None, props, None)
+        self.assertEquals('lake', out_props.get('kind'))
+
+
 if __name__ == '__main__':
     unittest.main()
