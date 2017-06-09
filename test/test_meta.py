@@ -209,5 +209,32 @@ class PoisTest(unittest.TestCase):
         self.assertIsNone(out_props.get('kind'))
 
 
+class RoadsTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data()
+        cls.roads = cls.by_name['roads']
+
+    def test_osm(self):
+        props = {
+            'name': 'foo',
+            'highway': 'motorway',
+        }
+        out_props = self.roads.fn(None, props, None)
+        self.assertEquals('highway', out_props.get('kind'))
+        self.assertEquals('motorway', out_props.get('kind_detail'))
+
+    def test_ne(self):
+        props = {
+            'featurecla': 'Road',
+            'type': 'Road',
+            'scalerank': 42,
+        }
+        out_props = self.roads.fn(None, props, None)
+        self.assertEquals('major_road', out_props.get('kind'))
+        self.assertEquals('secondary', out_props.get('kind_detail'))
+
+
 if __name__ == '__main__':
     unittest.main()
