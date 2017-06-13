@@ -16,9 +16,18 @@ def memoize(f):
 
 
 @memoize
-def parse_layers(yaml_path):
-    from vectordatasource.meta.python import parse_layers
-    return parse_layers(yaml_path)
+def parse_layers_props(yaml_path):
+    from vectordatasource.meta.python import parse_layers, output_kind, \
+        make_function_name_props
+    return parse_layers(yaml_path, output_kind, make_function_name_props)
+
+
+@memoize
+def parse_layers_min_zoom(yaml_path):
+    from vectordatasource.meta.python import parse_layers, output_min_zoom, \
+        make_function_name_min_zoom
+    return parse_layers(
+        yaml_path, output_min_zoom, make_function_name_min_zoom)
 
 
 @memoize
@@ -28,9 +37,19 @@ def find_yaml_path():
 
 
 @memoize
-def make_layer_data():
+def make_layer_data_props():
     yaml_path = find_yaml_path()
-    layer_data = parse_layers(yaml_path)
+    layer_data = parse_layers_props(yaml_path)
+    by_name = {}
+    for layer_datum in layer_data:
+        by_name[layer_datum.layer] = layer_datum
+    return layer_data, by_name
+
+
+@memoize
+def make_layer_data_min_zoom():
+    yaml_path = find_yaml_path()
+    layer_data = parse_layers_min_zoom(yaml_path)
     by_name = {}
     for layer_datum in layer_data:
         by_name[layer_datum.layer] = layer_datum
@@ -41,7 +60,7 @@ class CallFuncTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
 
     def test_layer_data_count(self):
         self.assertEquals(9, len(self.layer_data))
@@ -67,7 +86,7 @@ class BuildingsTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.buildings = cls.by_name['buildings']
 
     def test_building_basic(self):
@@ -97,7 +116,7 @@ class BoundariesTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.boundaries = cls.by_name['boundaries']
 
     def test_osm(self):
@@ -123,7 +142,7 @@ class EarthTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.earth = cls.by_name['earth']
 
     def test_osm(self):
@@ -145,7 +164,7 @@ class LanduseTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.landuse = cls.by_name['landuse']
 
     def test_osm(self):
@@ -160,7 +179,7 @@ class PlacesTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.places = cls.by_name['places']
 
     def test_osm(self):
@@ -186,7 +205,7 @@ class PoisTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.pois = cls.by_name['pois']
 
     def test_disused(self):
@@ -213,7 +232,7 @@ class RoadsTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.roads = cls.by_name['roads']
 
     def test_osm(self):
@@ -240,7 +259,7 @@ class TransitTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.transit = cls.by_name['transit']
 
     def test_osm(self):
@@ -255,7 +274,7 @@ class WaterTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data()
+        cls.layer_data, cls.by_name = make_layer_data_props()
         cls.water = cls.by_name['water']
 
     def test_osm(self):
@@ -273,6 +292,58 @@ class WaterTest(unittest.TestCase):
         props = dict(featurecla='Lake')
         out_props = self.water.fn(None, props, None)
         self.assertEquals('lake', out_props.get('kind'))
+
+
+class LanduseMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.landuse = cls.by_name['landuse']
+
+    def test_small_zoo(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'zoo': 'enclosure',
+        }
+        out_min_zoom = self.landuse.fn(shape, props, None)
+        self.assertEquals(16, out_min_zoom)
+
+    def test_large_zoo(self):
+        import shapely.geometry
+        s = 100000
+        shape = shapely.geometry.Polygon([(0, 0), (s, s), (s, 0)])
+        props = {
+            'zoo': 'enclosure',
+        }
+        out_min_zoom = self.landuse.fn(shape, props, None)
+        self.assertEquals(9, out_min_zoom)
+
+    def test_medium_zoo(self):
+        import shapely.geometry
+        from vectordatasource.util import calculate_way_area, \
+            calculate_1px_zoom
+        import math
+
+        target_zoom = 11.0
+        # want a zoom 11 feature, so make one with a triangle.
+        target_area = math.exp((17.256 - target_zoom) * math.log(4))
+        # make area with a half-square triangle.
+        s = math.sqrt(target_area * 2.0)
+        shape = shapely.geometry.Polygon([(0, 0), (s, s), (s, 0)])
+        props = {
+            'zoo': 'enclosure',
+        }
+
+        # test the utility functions we're relying on
+        util_way_area = calculate_way_area(shape)
+        self.assertAlmostEqual(target_area, util_way_area)
+        util_min_zoom = calculate_1px_zoom(shape.area)
+        self.assertAlmostEqual(target_zoom, util_min_zoom)
+
+        out_min_zoom = self.landuse.fn(shape, props, None)
+        self.assertAlmostEqual(target_zoom, out_min_zoom)
 
 
 if __name__ == '__main__':
