@@ -926,3 +926,10 @@ BEGIN
         GROUP BY osm_id;
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+CREATE OR REPLACE FUNCTION mz_calculate_building_volume(way_area REAL, tags hstore)
+RETURNS REAL AS $$
+BEGIN
+  RETURN mz_building_height(tags->'height', tags->'building:levels') * way_area;
+END
+$$ LANGUAGE plpgsql IMMUTABLE;
