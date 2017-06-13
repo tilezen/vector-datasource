@@ -45,3 +45,16 @@ def calculate_volume(area, props):
         if height is not None and height > 0:
             result = area * height
     return result
+
+
+def calculate_1px_zoom(way_area):
+    import math
+    # can't take logarithm of zero, and some ways have
+    # incredibly tiny areas, down to even zero. also, by z16
+    # all features really should be visible, so we clamp the
+    # computation at the way area which would result in 16
+    # being returned.
+    if way_area < 5.704:
+        return 16
+    else:
+        return 17.256 - math.log(way_area) / math.log(4)
