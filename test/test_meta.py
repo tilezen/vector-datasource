@@ -346,5 +346,147 @@ class LanduseMinZoomTest(unittest.TestCase):
         self.assertAlmostEqual(target_zoom, out_min_zoom)
 
 
+class BoundariesMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.boundaries = cls.by_name['boundaries']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.LineString([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'boundary': 'administrative',
+            'admin_level': '2',
+        }
+        out_min_zoom = self.boundaries.fn(shape, props, None)
+        self.assertEquals(8, out_min_zoom)
+
+
+class BuildingsMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.buildings = cls.by_name['buildings']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (0, 1), (1, 1), (1, 0)])
+        props = {
+            'building': 'yes',
+        }
+        out_min_zoom = self.buildings.fn(shape, props, None)
+        self.assertEquals(17, out_min_zoom)
+
+
+class EarthMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.earth = cls.by_name['earth']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'place': 'island',
+            'name': 'An Island',
+        }
+        out_min_zoom = self.earth.fn(shape, props, None)
+        self.assertEquals(15, out_min_zoom)
+
+
+class PlacesMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.places = cls.by_name['places']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.Point(0, 0)
+        props = {
+            'place': 'country',
+            'name': 'A Country',
+        }
+        out_min_zoom = self.places.fn(shape, props, None)
+        self.assertEquals(2, out_min_zoom)
+
+
+class PoisMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.pois = cls.by_name['pois']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'boundary': 'national_park',
+            'operator': 'US Forest Service',
+            'name': 'A Forest',
+        }
+        out_min_zoom = self.pois.fn(shape, props, None)
+        self.assertEquals(14, out_min_zoom)
+
+
+class RoadsMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.roads = cls.by_name['roads']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.LineString([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'highway': 'service',
+        }
+        out_min_zoom = self.roads.fn(shape, props, None)
+        self.assertEquals(14, out_min_zoom)
+
+
+class TransitMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.transit = cls.by_name['transit']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.LineString([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'route': 'train',
+            'service': 'high_speed',
+        }
+        out_min_zoom = self.transit.fn(shape, props, None)
+        self.assertEquals(5, out_min_zoom)
+
+
+class WaterMinZoomTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.layer_data, cls.by_name = make_layer_data_min_zoom()
+        cls.water = cls.by_name['water']
+
+    def test_feature(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (1, 0)])
+        props = {
+            'leisure': 'swimming_pool',
+        }
+        out_min_zoom = self.water.fn(shape, props, None)
+        self.assertEquals(16, out_min_zoom)
+
+
 if __name__ == '__main__':
     unittest.main()
