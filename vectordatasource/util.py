@@ -58,3 +58,8 @@ def calculate_1px_zoom(way_area):
         return 16
     else:
         return 17.256 - math.log(way_area) / math.log(4)
+
+
+def calculate_path_major_route(fid):
+    # TODO: implement me! current implementation is a stub.
+    return 18
