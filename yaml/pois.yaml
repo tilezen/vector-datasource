@@ -3,73 +3,91 @@
 # update here, please remember to also change it there.
 #
 global:
-  - &tier1_min_zoom |
-      CASE WHEN way_area >= 300000000 THEN  3
-           WHEN way_area >= 300000000 THEN  4
-           WHEN way_area >= 150000000 THEN  5
-           WHEN way_area >= 150000000 THEN  6
-           WHEN way_area >= 100000000 THEN  7
-           WHEN way_area >=  10000000 THEN  8
-           WHEN way_area >=   5000000 THEN  9
-           WHEN way_area >=   1000000 THEN 10
-           WHEN way_area >=    500000 THEN 11
-           WHEN way_area >=    500000 THEN 12
-           WHEN way_area >=    100000 THEN 13
-           WHEN way_area >=     50000 THEN 14
-           WHEN way_area >=      2000 THEN 15
-           ELSE                            16
-      END
-  - &tier2_min_zoom |
-      CASE WHEN way_area >= 1000000000 THEN  4
-           WHEN way_area >= 1000000000 THEN  5
-           WHEN way_area >=  150000000 THEN  6
-           WHEN way_area >=  100000000 THEN  7
-           WHEN way_area >=   10000000 THEN  8
-           WHEN way_area >=    5000000 THEN  9
-           WHEN way_area >=    1000000 THEN 10
-           WHEN way_area >=     500000 THEN 11
-           WHEN way_area >=     250000 THEN 12
-           WHEN way_area >=     100000 THEN 13
-           WHEN way_area >=      50000 THEN 14
-           WHEN way_area >=       2000 THEN 15
-           ELSE                             16
-      END
-  - &tier3_min_zoom |
-      CASE WHEN way_area >= 10000000 THEN  8
-           WHEN way_area >=  5000000 THEN  9
-           WHEN way_area >=  1000000 THEN 10
-           WHEN way_area >=   500000 THEN 11
-           WHEN way_area >=   500000 THEN 12
-           WHEN way_area >=   100000 THEN 13
-           WHEN way_area >=    50000 THEN 14
-           WHEN way_area >=     2000 THEN 15
-           ELSE                           16
-      END
-  - &tier4_min_zoom |
-      CASE WHEN way_area >= 1000000 THEN 10
-           WHEN way_area >=  500000 THEN 11
-           WHEN way_area >=  500000 THEN 12
-           WHEN way_area >=  100000 THEN 13
-           WHEN way_area >=   50000 THEN 14
-           WHEN way_area >=    2000 THEN 15
-           ELSE                          16
-      END
-  - &tier5_min_zoom |
-      CASE WHEN way_area >= 1000000 THEN 10
-           WHEN way_area >=  400000 THEN 11
-           WHEN way_area >=  200000 THEN 12
-           WHEN way_area >=   50000 THEN 13
-           WHEN way_area >=   20000 THEN 14
-           WHEN way_area >=    2000 THEN 15
-           ELSE                          16
-      END
-  - &tier6_min_zoom |
-      CASE WHEN way_area >= 500000 THEN 12
-           WHEN way_area >= 100000 THEN 13
-           WHEN way_area >=  50000 THEN 14
-           WHEN way_area >=   5000 THEN 15
-           ELSE                         16
-      END
+  - &tier1_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 3,  300000000 ]
+        - [ 4,  300000000 ]
+        - [ 5,  150000000 ]
+        - [ 6,  150000000 ]
+        - [ 7,  100000000 ]
+        - [ 8,   10000000 ]
+        - [ 9,    5000000 ]
+        - [ 10,   1000000 ]
+        - [ 11,    500000 ]
+        - [ 12,    500000 ]
+        - [ 13,    100000 ]
+        - [ 14,     50000 ]
+        - [ 15,      2000 ]
+      default: 16
+  - &tier2_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 4, 1000000000 ]
+        - [ 5, 1000000000 ]
+        - [ 6,  150000000 ]
+        - [ 7,  100000000 ]
+        - [ 8,   10000000 ]
+        - [ 9,    5000000 ]
+        - [ 10,   1000000 ]
+        - [ 11,    500000 ]
+        - [ 12,    250000 ]
+        - [ 13,    100000 ]
+        - [ 14,     50000 ]
+        - [ 15,      2000 ]
+      default: 16
+  - &tier3_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 8,  10000000 ]
+        - [ 9,   5000000 ]
+        - [ 10,  1000000 ]
+        - [ 11,   500000 ]
+        - [ 12,   500000 ]
+        - [ 13,   100000 ]
+        - [ 14,    50000 ]
+        - [ 15,     2000 ]
+      default: 16
+  - &tier4_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 10, 1000000 ]
+        - [ 11,  500000 ]
+        - [ 12,  500000 ]
+        - [ 13,  100000 ]
+        - [ 14,   50000 ]
+        - [ 15,    2000 ]
+      default: 16
+  - &tier5_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 10, 1000000 ]
+        - [ 11,  400000 ]
+        - [ 12,  200000 ]
+        - [ 13,   50000 ]
+        - [ 14,   20000 ]
+        - [ 15,    2000 ]
+      default: 16
+  - &tier6_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 12, 500000 ]
+        - [ 13, 100000 ]
+        - [ 14,  50000 ]
+        - [ 15,   5000 ]
+      default: 16
   - &us_forest_service
         - United States Forest Service
         - US Forest Service
@@ -148,12 +166,18 @@ filters:
   # up here.
   ############################################################
   - filter: {man_made: windmill}
-    min_zoom: CASE WHEN tags ? 'tourism' AND tags->'tourism' = 'attraction' THEN 14
-      ELSE 15 END
+    min_zoom:
+      case:
+        - when: { tourism: attraction }
+          then: 14
+        - else: 15
     output: {kind: windmill}
   - filter: {man_made: lighthouse}
-    min_zoom: CASE WHEN tags ? 'tourism' AND tags->'tourism' = 'attraction' THEN 14
-      ELSE 15 END
+    min_zoom:
+      case:
+        - when: { tourism: attraction }
+          then: 14
+        - else: 15
     output: {kind: lighthouse}
   - filter: {man_made: observatory}
     min_zoom: 15
@@ -168,7 +192,7 @@ filters:
   - filter:
       boundary: national_park
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output:
       kind: forest
       tier: 2
@@ -177,7 +201,7 @@ filters:
         leisure: park
         landuse: park
       park:type: state_recreational_area
-    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output:
       kind: park
       tier: 2
@@ -185,7 +209,7 @@ filters:
       boundary: national_park
       protect_class: '6'
       protection_title: National Forest
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output:
       kind: forest
       tier: 2
@@ -193,7 +217,7 @@ filters:
       boundary: national_park
       protect_class: '6'
       protection_title: National Forest
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output:
       kind: forest
       tier: 2
@@ -202,7 +226,7 @@ filters:
       any:
         - protect_class: '6'
         - designation: area_of_outstanding_natural_beauty
-    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output:
       kind: park
       tier: 2
@@ -216,7 +240,7 @@ filters:
         any:
           - operator: *us_forest_service
           - operator: *us_parks_service
-    min_zoom: { min: [ { max: [ { lit: zoom + 5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 5 ] }, *tier2_min_zoom ] }, 10 ] }
     output: {kind: nature_reserve, tier: 2}
 
   ############################################################
@@ -225,7 +249,7 @@ filters:
   - filter:
       historic: battlefield
       not: {operator: *us_forest_service}
-    min_zoom: { min: [ { max: [ 10, { lit: zoom + 4 }, { lit: *tier1_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 4 ] }, *tier1_min_zoom ] }, 17 ] }
     output: {kind: battlefield, tier: 1}
   - filter:
       boundary: national_park
@@ -237,7 +261,7 @@ filters:
         operator:en: Parks Canada
         designation: national_park
         protection_title: National Park
-    min_zoom: { min: [ { max: [ { lit: zoom + 3.5 }, { lit: *tier1_min_zoom } ] }, 10 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.5 ] }, *tier1_min_zoom ] }, 10 ] }
     output:
       kind: national_park
       tier: 1
@@ -249,7 +273,7 @@ filters:
       boundary: national_park
       not: { operator: *us_forest_service }
       protect_class: ['2', '3', '5']
-    min_zoom: { min: [ { max: [ { lit: zoom + 3.5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.5 ] }, *tier2_min_zoom ] }, 10 ] }
     output:
       kind: national_park
       tier: 2
@@ -258,7 +282,7 @@ filters:
         leisure: park
         landuse: park
         boundary: national_park
-    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output:
       kind: park
       tier: 2
@@ -267,39 +291,39 @@ filters:
   - filter:
       landuse: forest
       protect_class: '6'
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output: { kind: forest, tier: 2 }
   - filter:
       landuse: forest
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output: { kind: forest, tier: 2 }
   - filter: {landuse: forest}
-    min_zoom: { min: [ { max: [ 10, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output: { kind: forest, tier: 2 }
 
   # nature reserves
   - filter: {leisure: nature_reserve}
-    min_zoom: { min: [ { max: [ { lit: zoom + 5 }, { lit: *tier2_min_zoom } ] }, 10 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 5 ] }, *tier2_min_zoom ] }, 10 ] }
     output: { kind: nature_reserve, tier: 2 }
   # protected areas
   - filter: {boundary: protected_area}
-    min_zoom: { min: [ { max: [ 7, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output: { kind: protected_area, tier: 2 }
 
   # woods
   - filter:
       landuse: wood
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 9, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output: { kind: wood, tier: 2 }
   - filter: {landuse: wood}
-    min_zoom: { min: [ { max: [ 10, { lit: zoom + 2 }, { lit: *tier2_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
     output: { kind: wood, tier: 2 }
 
   # farm
   - filter: {landuse: farm}
-    min_zoom: { max: [ 15, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 15, *tier2_min_zoom ] }
     output: { kind: farm, tier: 2 }
   # urban, rural, residential, farmland - no POIs
 
@@ -309,23 +333,23 @@ filters:
   # aerodrome
   - filter:
       aeroway: [aerodrome, airport]
-    min_zoom: { min: [ { max: [ { lit: zoom + 4.12 }, { lit: *tier3_min_zoom } ] }, 13 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 4.12 ] }, *tier3_min_zoom ] }, 13 ] }
     output:
       kind: {col: aeroway}
       tier: 3
   # military
   - filter: {landuse: military}
-    min_zoom: { min: [ { max: [ 8, { lit: zoom + 2 }, { lit: *tier3_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
     output:
       kind: military
       tier: 3
   # university
   - filter: {amenity: university}
-    min_zoom: { min: [ { max: [ { lit: zoom + 2.55 }, { lit: *tier3_min_zoom } ] }, 15 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 15 ] }
     output: {kind: university, tier: 3}
   # college
   - filter: {amenity: college}
-    min_zoom: { min: [ { max: [ { lit: zoom + 2.35 }, { lit: *tier3_min_zoom } ] }, 16 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.35 ] }, *tier3_min_zoom ] }, 16 ] }
     output: {kind: college, tier: 3}
 
   ############################################################
@@ -335,7 +359,7 @@ filters:
   # bridge - no POIs
   # cemetery
   - filter: {landuse: cemetery}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: cemetery
       tier: 4
@@ -344,38 +368,38 @@ filters:
   # dike - no POI
   # generator
   - filter: {power: generator}
-    min_zoom: { max: [15, { lit: *tier4_min_zoom } ] }
+    min_zoom: { max: [15, *tier4_min_zoom ] }
     output: {kind: generator, tier: 4}
   # golf_course
   - filter: {leisure: golf_course}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 2 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 2 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: golf_course
       tier: 4
   # groyne - no POI
   # hospital
   - filter: {amenity: hospital}
-    min_zoom: { min: [ { max: [ { lit: zoom + 3.32 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.32 ] }, *tier4_min_zoom ] }, 14 ] }
     output: {kind: hospital, tier: 4}
   # industrial - no POI
   # pier - no POI
   # plant
   - filter: {power: plant}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: plant
       tier: 4
   # railway - no POI
   # recreation_ground
   - filter: {landuse: recreation_ground}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: recreation_ground
       tier: 4
   # retail - no POI
   # sports_centre
   - filter: {leisure: sports_centre}
-    min_zoom: { min: [ { max: [ { lit: zoom + 3.98 }, { lit: *tier4_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.98 ] }, *tier4_min_zoom ] }, 17 ] }
     output:
       kind:
         case:
@@ -392,7 +416,7 @@ filters:
       tier: 4
   # stadium
   - filter: {leisure: stadium}
-    min_zoom: { min: [ { max: [ { lit: zoom + 2.3 }, { lit: *tier4_min_zoom } ] }, 15 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.3 ] }, *tier4_min_zoom ] }, 15 ] }
     output: {kind: stadium, tier: 4}
   # substation
   - filter: {power: substation}
@@ -403,19 +427,19 @@ filters:
   # man_made=tower - no POI
   # wastewater_plant
   - filter: {man_made: wastewater_plant}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: wastewater_plant
       tier: 4
   # works
   - filter: {man_made: works}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: works
       tier: 4
   # water_works
   - filter: {man_made: water_works}
-    min_zoom: { min: [ { max: [ 12, { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       kind: water_works
       tier: 4
@@ -428,13 +452,13 @@ filters:
       tier: 4
   # winter_sports
   - filter: {landuse: winter_sports}
-    min_zoom: { min: [ { max: [ 10, { lit: zoom + 1 }, { lit: *tier4_min_zoom } ] }, 13 ] }
+    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 1 ] }, *tier4_min_zoom ] }, 13 ] }
     output:
       kind: winter_sports
       tier: 4
   # zoo
   - filter: {tourism: zoo}
-    min_zoom: { min: [ { max: [ { lit: zoom + 3 }, { lit: *tier4_min_zoom } ] }, 13 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
     output: {kind: zoo, tier: 4}
 
   ############################################################
@@ -442,11 +466,11 @@ filters:
   ############################################################
   # aquarium
   - filter: {tourism: aquarium}
-    min_zoom: { min: [ { max: [ 14, { lit: zoom + 3.09 }, { lit: *tier5_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ 14, { sum: [ { col: zoom }, 3.09 ] }, *tier5_min_zoom ] }, 17 ] }
     output: {kind: aquarium, tier: 5}
   # beach
   - filter: {natural: beach}
-    min_zoom: { min: [ { max: [ { lit: zoom + 3.2 }, { lit: *tier5_min_zoom } ] }, 14 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.2 ] }, *tier5_min_zoom ] }, 14 ] }
     output: {kind: beach, tier: 5}
   # glacier - no POI
   # maze
@@ -461,15 +485,15 @@ filters:
       tier: 5
   # resort
   - filter: {tourism: resort}
-    min_zoom: { min: [ { max: [ 14, { lit: zoom + 5.32 }, { lit: *tier5_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ 14, { sum: [ { col: zoom }, 5.32 ] }, *tier5_min_zoom ] }, 17 ] }
     output: {kind: resort, tier: 5}
   # theme_park
   - filter: {tourism: theme_park}
-    min_zoom: { min: [ { max: [ 13, { lit: zoom + 6.32 }, { lit: *tier5_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ 13, { sum: [ { col: zoom }, 6.32 ] }, *tier5_min_zoom ] }, 17 ] }
     output: {kind: theme_park, tier: 5}
   # winery
   - filter: {tourism: winery}
-    min_zoom: { min: [ { max: [ 14, { lit: zoom + 2.85 }, { lit: *tier5_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ 14, { sum: [ { col: zoom }, 2.85 ] }, *tier5_min_zoom ] }, 17 ] }
     output: {kind: winery, tier: 5}
 
   ############################################################
@@ -489,7 +513,7 @@ filters:
   - filter:
       leisure: garden
       not: { access: [ "private", "no" ] }
-    min_zoom: { min: [ { max: [ 12, { lit: zoom }, { lit: *tier6_min_zoom } ] }, 16 ] }
+    min_zoom: { min: [ { max: [ 12, { col: zoom }, *tier6_min_zoom ] }, 16 ] }
     output: {kind: garden, tier: 6}
   # hedge - no POI
   # pedestrian - no POI
@@ -503,7 +527,7 @@ filters:
       tier: 6
   # place_of_worship
   - filter: {amenity: place_of_worship}
-    min_zoom: { min: [ { max: [ { lit: 2 * zoom - 9.55 }, { lit: *tier6_min_zoom } ] }, 17 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { mul: [2, {col: zoom}]}, -9.55 ] }, *tier6_min_zoom ] }, 17 ] }
     output: {kind: place_of_worship, tier: 6 }
   # playground
   - filter: { leisure: playground }
@@ -514,7 +538,7 @@ filters:
       tier: 6
   # school
   - filter: {amenity: school}
-    min_zoom: { min: [ { max: [ { lit: zoom + 2.3 }, { lit: *tier6_min_zoom } ] }, 15 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.3 ] }, *tier6_min_zoom ] }, 15 ] }
     output: {kind: school, tier: 6}
   # tree_row - no POI
   # wilderness_hut
@@ -534,24 +558,28 @@ filters:
   # NOT IN ANY TIER
   ############################################################
   - filter: {historic: battlefield}
-    min_zoom: GREATEST(10, LEAST(zoom + 4.0, 17))
+    min_zoom: { clamp: { min: 10, max: 17, value: { sum: [ { col: zoom }, 4 ] } } }
     output: {kind: battlefield}
   # park w/ US Parks Service operator
   - filter:
       any:
         leisure: park
         landuse: park
-    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    min_zoom: { clamp: { min: 9, max: 14, value: { sum: [ { col: zoom }, 2 ] } } }
     output: { kind: park }
 
   - filter:
       natural: [peak, volcano]
-    min_zoom: CASE WHEN mz_to_float_meters(tags->'ele') > 4000 THEN 9
-      WHEN mz_to_float_meters(tags->'ele') > 3000 THEN 10
-      WHEN mz_to_float_meters(tags->'ele') > 2000 THEN 11
-      WHEN mz_to_float_meters(tags->'ele') > 1000 THEN 12
-      ELSE 13
-      END
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: ele } ] } }
+        op: '>='
+        table:
+          - [ 9,  4000 ]
+          - [ 10, 3000 ]
+          - [ 11, 2000 ]
+          - [ 12, 1000 ]
+        default: 13
     output:
       kind: {col: natural}
       elevation: {col: ele}
@@ -573,38 +601,38 @@ filters:
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
         post_office, theatre]
-    min_zoom: LEAST(zoom + 2.7, 16)
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       kind: {col: amenity}
   - filter:
       amenity: [biergarten, pub, bar, restaurant, fast_food, cafe]
-    min_zoom: LEAST(zoom + 2.50, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       kind: {col: amenity}
       kind_detail: {col: cuisine}
   - filter:
       amenity: [pharmacy, veterinary]
-    min_zoom: LEAST(zoom + 3.3, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       kind: {col: amenity}
   - filter:
       craft: [brewery, carpenter, confectionery, dressmaker, electrician, gardener,
         handicraft, hvac, metal_construction, painter, photographer, photographic_laboratory,
         plumber, pottery, sawmill, shoemaker, stonemason, tailor, winery]
-    min_zoom: LEAST(zoom + 3.3, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       kind: {col: craft}
   - filter: {amenity: nursing_home}
-    min_zoom: LEAST(zoom + 1.25, 16)
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.25 ] } } }
     output: {kind: nursing_home}
   - filter: {shop: music}
-    min_zoom: LEAST(zoom + 1.27, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output: {kind: music}
   - filter: {amenity: community_centre}
-    min_zoom: LEAST(zoom + 3.98, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output: {kind: community_centre}
   - filter: {shop: sports}
-    min_zoom: LEAST(zoom + 1.53, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.53 ] } } }
     output: {kind: sports}
   - filter: {shop: fishing}
     min_zoom: 16
@@ -613,7 +641,7 @@ filters:
     min_zoom: 16
     output: {kind: hunting}
   - filter: {shop: outdoor}
-    min_zoom: GREATEST(15, LEAST(zoom, 16))
+    min_zoom: { clamp: { min: 15, max: 16, value: { col: zoom } } }
     output: {kind: outdoor}
   - filter: {amenity: dive_centre}
     min_zoom: 16
@@ -625,40 +653,40 @@ filters:
     min_zoom: 17
     output: {kind: motorcycle}
   - filter: {shop: mall}
-    min_zoom: LEAST(zoom + 2.74, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
     output: {kind: mall}
   - filter: {amenity: prison}
-    min_zoom: LEAST(zoom + 2.55, 15)
+    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
     output: {kind: prison}
   - filter: {tourism: museum}
-    min_zoom: LEAST(zoom + 1.43, 16)
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.43 ] } } }
     output: {kind: museum}
   - filter: {historic: landmark}
-    min_zoom: LEAST(zoom + 1.76, 15)
+    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 1.76 ] } } }
     output: {kind: landmark}
   - filter: {leisure: marina}
-    min_zoom: LEAST(zoom + 3.45, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.45 ] } } }
     output: {kind: marina}
   - filter: {amenity: townhall}
-    min_zoom: LEAST(zoom + 1.85, 16)
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.85 ] } } }
     output: {kind: townhall}
   - filter:
       shop: [laundry, dry_cleaning, toys, ice_cream, wine, alcohol]
-    min_zoom: LEAST(zoom + 4.90, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output:
       kind: {col: shop}
   - filter: {amenity: ice_cream}
-    min_zoom: LEAST(zoom + 4.90, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output: {kind: ice_cream}
   - filter: {amenity: ferry_terminal}
-    min_zoom: LEAST(zoom + 3.20, 15)
+    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
     output: {kind: ferry_terminal}
   - filter: {shop: electronics}
-    min_zoom: LEAST(zoom + 3.30, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output: {kind: electronics}
   - filter:
       shop: [department_store, supermarket, doityourself, hardware, trade]
-    min_zoom: LEAST(zoom + 3.29, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
     output:
       kind: {col: shop}
 
@@ -666,40 +694,40 @@ filters:
       any:
         tags->rental: ski
         amenity: ski_rental
-    min_zoom: LEAST(zoom + 1.27, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output: {kind: ski_rental}
 
   - filter: {shop: ski}
-    min_zoom: LEAST(zoom + 1.27, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output: {kind: ski}
   - filter: {amenity: ski_school}
-    min_zoom: LEAST(zoom + 2.30, 15)
+    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 2.3 ] } } }
     output: {kind: ski_school}
   - filter: {man_made: snow_cannon}
-    min_zoom: LEAST(zoom + 4.90, 18)
+    min_zoom: { clamp: { min: 0, max: 18, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output: {kind: snow_cannon}
   - filter:
       any:
         leisure: [fitness_centre, gym]
         amenity: gym
-    min_zoom: LEAST(zoom + 3.98, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output: {kind: fitness}
   - filter: {leisure: fitness_station}
-    min_zoom: LEAST(zoom + 3.98, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output: {kind: fitness_station}
   - filter: {leisure: beach_resort}
-    min_zoom: GREATEST(14, LEAST(zoom + 0.5, 16))
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 0.5 ] } } }
     output: {kind: beach_resort }
   - filter:
       tourism: [hotel, motel]
-    min_zoom: LEAST(zoom + 4.30, 17)
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.3 ] } } }
     output:
       kind: {col: tourism}
   - filter: {highway: motorway_junction}
     min_zoom: 12
     output: {kind: motorway_junction}
   - filter: {historic: monument}
-    min_zoom: GREATEST(15, LEAST(zoom + 2.24, 17))
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.24 ] } } }
     output: {kind: monument }
   - filter:
       tags->zoo: [enclosure, petting_zoo, aviary]
@@ -710,12 +738,16 @@ filters:
       any:
         - {waterway: waterfall}
         - {natural: waterfall}
-    min_zoom: CASE WHEN mz_to_float_meters(tags->'height') < 10 THEN 15
-      WHEN mz_to_float_meters(tags->'height') < 50 THEN 14
-      WHEN mz_to_float_meters(tags->'height') < 300 THEN 13
-      WHEN mz_to_float_meters(tags->'height') >= 300 THEN 12
-      ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      14), 12) END
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 12, 300 ]
+          - [ 13,  50 ]
+          - [ 14,  10 ]
+          - [ 15,   1 ]
+        default: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 1.066 ] } } }
     output: {kind: waterfall, height: {col: height}}
   - filter: {natural: geyser}
     min_zoom: 15
@@ -724,10 +756,10 @@ filters:
     min_zoom: 16
     output: {kind: hot_spring}
   - filter: {historic: fort}
-    min_zoom: GREATEST(13, LEAST(zoom + 2.5, 16))
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output: {kind: fort }
   - filter: {tourism: gallery}
-    min_zoom: GREATEST(15, LEAST(zoom + 1.43, 17))
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 1.43 ] } } }
     output: {kind: gallery}
   - filter:
       amenity: [social_facility, clinic, doctors, dentist]
@@ -759,7 +791,7 @@ filters:
     min_zoom: 18
     output: {kind: toilets}
   - filter: {barrier: gate}
-    min_zoom: mz_get_min_zoom_highway_level_gate(osm_id)
+    min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: { col: fid } } }
     output: {kind: gate}
   - filter: {barrier: toll_booth}
     min_zoom: 15
@@ -846,7 +878,7 @@ filters:
     min_zoom: 15
     output: {kind: communications_tower}
   - filter: {man_made: telescope}
-    min_zoom: GREATEST(15, LEAST(zoom + 0.1, 16))
+    min_zoom: { clamp: { min: 15, max: 16, value: { sum: [ { col: zoom }, 0.1 ] } } }
     output: {kind: telescope}
   - filter: {man_made: offshore_platform}
     min_zoom: 13
@@ -917,7 +949,7 @@ filters:
       ref: {col: tags->lwn_ref}
       walking_network: lwn
   - filter: {tourism: camp_site}
-    min_zoom: GREATEST(13, LEAST(zoom + 4.9, 16))
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output: {kind: camp_site}
   - filter:
       tourism: viewpoint
@@ -1113,25 +1145,25 @@ filters:
     min_zoom: 17
     output: {kind: petroleum_well}
   - filter: {leisure: water_park}
-    min_zoom: GREATEST(13, LEAST(zoom + 2.34, 15))
+    min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.34 ] } } }
     output: {kind: water_park}
   - filter: {leisure: summer_camp}
-    min_zoom: GREATEST(14, LEAST(zoom + 1.32, 15))
+    min_zoom: { clamp: { min: 14, max: 15, value: { sum: [ { col: zoom }, 1.32 ] } } }
     output: {kind: summer_camp}
   - filter: {amenity: boat_storage}
     min_zoom: 17
     output: {kind: boat_storage}
   - filter: {waterway: dam}
-    min_zoom: GREATEST(12, LEAST(zoom + 1, 14))
+    min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 1 ] } } }
     output: {kind: dam}
   - filter: {leisure: dog_park}
-    min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
+    min_zoom: { clamp: { min: 16, max: 17, value: { sum: [ { col: zoom }, 1 ] } } }
     output: {kind: dog_park}
   - filter: {leisure: track}
-    min_zoom: GREATEST(16, LEAST(zoom + 1, 17))
+    min_zoom: { clamp: { min: 16, max: 17, value: { sum: [ { col: zoom }, 1 ] } } }
     output: {kind: recreation_track}
   - filter: {leisure: fishing}
-    min_zoom: GREATEST(16, LEAST(zoom + 1.76, 17))
+    min_zoom: { clamp: { min: 16, max: 17, value: { sum: [ { col: zoom }, 1.76 ] } } }
     output: {kind: fishing_area}
   - filter: {leisure: swimming_area}
     min_zoom: 16
@@ -1140,7 +1172,7 @@ filters:
     min_zoom: 18
     output: {kind: firepit}
   - filter: {tourism: caravan_site}
-    min_zoom: GREATEST(14, LEAST(zoom, 15))
+    min_zoom: { clamp: { min: 14, max: 15, value: { col: zoom } } }
     output: {kind: caravan_site}
   - filter: {tourism: picnic_site}
     min_zoom: 16
@@ -1154,11 +1186,11 @@ filters:
     output:
       kind: rest_area
   - filter: {amenity: grave_yard}
-    min_zoom: GREATEST( LEAST(zoom + 3, 17), 13)
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
       kind: grave_yard
   - filter: {landuse: quarry}
-    min_zoom: GREATEST( LEAST(zoom + 3, 14), 12)
+    min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
       kind: quarry
 
