@@ -25,8 +25,13 @@ class AstState(object):
         self.has_zoom = has_zoom
 
 
-def parse_case(ast_state, c):
-    assert isinstance(c, list)
+def parse_case(ast_state, orig):
+    assert isinstance(orig, list)
+
+    # make a copy so that we can modify it and not cause problems with any other
+    # references to the same list which might exist elsewhere (e.g: with YAML
+    # aliases)
+    c = list(orig)
 
     expr = ast.Name('None', ast.Load())
     if len(c) == 0:
@@ -53,8 +58,13 @@ def parse_call(ast_state, c):
     args = c['args']
     func = c['func']
     args_ast = [ast_value(ast_state, x) for x in args]
-    return ast.Call(
-        ast.Name(func, ast.Load()), args_ast, [], None, None)
+    # split function on '.' to allow access to namespaced functions (e.g: util)
+    func_parts = func.split('.')
+    name = ast.Name(func_parts.pop(0), ast.Load())
+    while func_parts:
+        attr = func_parts.pop(0)
+        name = ast.Attribute(value=name, attr=attr, ctx=ast.Load())
+    return ast.Call(name, args_ast, [], None, None)
 
 
 def parse_clamp(ast_state, c):
@@ -77,9 +87,14 @@ def parse_clamp(ast_state, c):
         [], None, None)
 
 
-def parse_sum(ast_state, s):
-    assert isinstance(s, list)
-    assert len(s) > 1
+def parse_sum(ast_state, orig):
+    assert isinstance(orig, list)
+    assert len(orig) > 1
+
+    # make a copy so that we can modify it and not cause problems with any other
+    # references to the same list which might exist elsewhere (e.g: with YAML
+    # aliases)
+    s = list(orig)
 
     left = ast_value(ast_state, s.pop())
     while s:
@@ -127,9 +142,14 @@ def parse_func(ast_state, name, m):
         args, [], None, None)
 
 
-def parse_mul(ast_state, m):
-    assert isinstance(m, list)
-    assert len(m) > 1
+def parse_mul(ast_state, orig):
+    assert isinstance(orig, list)
+    assert len(orig) > 1
+
+    # make a copy so that we can modify it and not cause problems with any other
+    # references to the same list which might exist elsewhere (e.g: with YAML
+    # aliases)
+    m = list(orig)
 
     expr = ast_value(ast_state, m.pop())
     while m:
