@@ -14,6 +14,10 @@ global:
       default: 10
 
 filters:
+  # TODO - is this how we want to do this?
+  - filter: {source: whosonfirst.mapzen.com}
+    min_zoom: {col: min_zoom}
+    output: {kind: {col: kind}}
   - filter: {name: true, place: country}
     min_zoom: 2
     output: {kind: country}

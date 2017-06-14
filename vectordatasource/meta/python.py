@@ -28,9 +28,9 @@ class AstState(object):
 def parse_case(ast_state, orig):
     assert isinstance(orig, list)
 
-    # make a copy so that we can modify it and not cause problems with any other
-    # references to the same list which might exist elsewhere (e.g: with YAML
-    # aliases)
+    # make a copy so that we can modify it and not cause problems with any
+    # other references to the same list which might exist elsewhere (e.g: with
+    # YAML aliases)
     c = list(orig)
 
     expr = ast.Name('None', ast.Load())
@@ -91,9 +91,9 @@ def parse_sum(ast_state, orig):
     assert isinstance(orig, list)
     assert len(orig) > 1
 
-    # make a copy so that we can modify it and not cause problems with any other
-    # references to the same list which might exist elsewhere (e.g: with YAML
-    # aliases)
+    # make a copy so that we can modify it and not cause problems with any
+    # other references to the same list which might exist elsewhere (e.g: with
+    # YAML aliases)
     s = list(orig)
 
     left = ast_value(ast_state, s.pop())
@@ -146,9 +146,9 @@ def parse_mul(ast_state, orig):
     assert isinstance(orig, list)
     assert len(orig) > 1
 
-    # make a copy so that we can modify it and not cause problems with any other
-    # references to the same list which might exist elsewhere (e.g: with YAML
-    # aliases)
+    # make a copy so that we can modify it and not cause problems with any
+    # other references to the same list which might exist elsewhere (e.g: with
+    # YAML aliases)
     m = list(orig)
 
     expr = ast_value(ast_state, m.pop())
@@ -476,7 +476,8 @@ def make_zoom_assignment():
             keywords=[], starargs=None, kwargs=None))
 
 
-def parse_layer_from_yaml(ast_state, yaml_data, layer_name, output_fn, fn_name_fn):
+def parse_layer_from_yaml(
+        ast_state, yaml_data, layer_name, output_fn, fn_name_fn):
     matchers = []
     for yaml_datum in yaml_data['filters']:
         matcher = create_matcher(yaml_datum, output_fn)
@@ -516,18 +517,37 @@ def make_empty_ast_state():
     return AstState(False, False, False)
 
 
+LayerParseResult = namedtuple(
+    'LayerParseResult', 'layer_data import_asts')
+
+
 def parse_layers(yaml_path, output_fn, fn_name_fn):
     layer_data = []
     layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
               'buildings', 'roads', 'earth')
 
     scope = {}
-    # add in all functions into scope for call availability
+    import_asts = []
+
+    # add in required functions into scope for call availability
     for func_name in dir(function):
         fn = getattr(function, func_name)
         if callable(fn):
             scope[func_name] = fn
+            import_ast = ast.ImportFrom(
+                'vectordatasource.meta.function',
+                [ast.alias(func_name, None)],
+                0,
+            )
+            import_asts.append(import_ast)
+
     scope['util'] = util
+    utils_import_ast = ast.ImportFrom(
+        'vectordatasource',
+        [ast.alias('util', None)],
+        0,
+    )
+    import_asts.append(utils_import_ast)
 
     for layer in layers:
         file_path = os.path.join(yaml_path, '%s.yaml' % layer)
@@ -545,11 +565,14 @@ def parse_layers(yaml_path, output_fn, fn_name_fn):
         compiled_fn = scope[fn_name_fn(layer)]
         layer_datum = FunctionData(layer, ast_fn, compiled_fn)
         layer_data.append(layer_datum)
-    return layer_data
+
+    layer_parse_result = LayerParseResult(layer_data, import_asts)
+    return layer_parse_result
 
 
 def make_function_name_props(layer_name):
     return '%s_props' % layer_name
+
 
 def make_function_name_min_zoom(layer_name):
     return '%s_min_zoom' % layer_name
@@ -575,17 +598,19 @@ def main(argv=None):
         argv = sys.argv
     yaml_path = find_yaml_path()
 
-    layer_data = parse_layers(
-        yaml_path, output_kind, make_function_name_props)
-    for layer_datum in layer_data:
-        ast_fn = layer_datum.ast
-        print astformatter.ASTFormatter().format(ast_fn, mode='exec')
+    formatter = astformatter.ASTFormatter()
 
-    layer_data = parse_layers(
-        yaml_path, output_min_zoom, make_function_name_min_zoom)
-    for layer_datum in layer_data:
-        ast_fn = layer_datum.ast
-        print astformatter.ASTFormatter().format(ast_fn, mode='exec')
+    for output_fn, make_fn_name in (
+            (output_kind, make_function_name_props),
+            (output_min_zoom, make_function_name_min_zoom)):
+        layer_parse_result = parse_layers(
+            yaml_path, output_kind, make_function_name_props)
+        for layer_datum in layer_parse_result.layer_data:
+            ast_fn = layer_datum.ast
+            print formatter.format(ast_fn, mode='exec')
+
+    for import_ast in layer_parse_result.import_asts:
+        print formatter.format(import_ast, mode='exec')
 
 
 if __name__ == '__main__':

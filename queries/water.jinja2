@@ -7,7 +7,9 @@
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    NULL::boolean AS boundary
+    NULL::boolean AS boundary,
+    NULL AS tunnel,
+    hstore(t.*) AS tags
 {% endmacro %}
 
 {% if zoom < 9 %}
@@ -57,7 +59,9 @@ SELECT
     gid AS __id__,
     NULL AS mz_label_placement,
     NULL::boolean AS label_placement,
-    true AS boundary
+    true AS boundary,
+    NULL AS tunnel,
+    hstore(t.*) AS tags
 
 FROM
 {% if zoom < 2 %}
@@ -84,7 +88,9 @@ SELECT
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    true AS boundary
+    true AS boundary,
+    NULL AS tunnel,
+    hstore(t.*) AS tags
 
 FROM
 {% if zoom < 2 %}
@@ -128,7 +134,9 @@ SELECT
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    true AS boundary
+    true AS boundary,
+    NULL AS tunnel,
+    hstore(t.*) AS tags
 
 FROM
 {% if 4 <= zoom < 5 %}
@@ -154,8 +162,9 @@ SELECT
     gid AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
+    NULL::boolean AS boundary,
     NULL AS tunnel,
-    NULL AS tags
+    hstore(t.*) AS tags
 
 FROM water_polygons t
 
@@ -173,8 +182,9 @@ SELECT
     osm_id AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
+    NULL::boolean AS boundary,
     tags->'tunnel' AS tunnel,
-    %#tags AS tags
+    tags
 
 FROM planet_osm_polygon t
 
@@ -198,8 +208,9 @@ SELECT
     osm_id AS __id__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
+    NULL::boolean AS boundary,
     tags->'tunnel' AS tunnel,
-    %#tags AS tags
+    tags
 
 FROM planet_osm_line t
 
@@ -225,12 +236,9 @@ SELECT
   osm_id AS __id__,
   NULL AS mz_label_placement,
   true AS label_placement,
-{% if zoom < 9 %}
-  NULL::boolean AS boundary
-{% else %}
+  NULL::boolean AS boundary,
   NULL AS tunnel,
-  %#tags AS tags
-{% endif %}
+  tags
 
 FROM
   planet_osm_point t
