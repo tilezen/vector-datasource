@@ -3,7 +3,8 @@
     'naturalearthdata.com' AS source,
     mz_boundary_min_zoom as min_zoom,
     {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
-    mz_calculate_json_boundaries(t.*) AS mz_properties
+    mz_calculate_json_boundaries(t.*) AS mz_properties,
+    hstore(t.*) AS tags
 {% endmacro %}
 
 {% if zoom < 2 %}
@@ -83,7 +84,7 @@ SELECT
   -- correctly-oriented outer to run counter-clockwise.
   {% filter geometry %}{{ bounds['line']|bbox_intersection('st_reverse(st_boundary(st_forcerhr(way)))',3857) }}{% endfilter %} AS __geometry__,
   osm_id AS __id__,
-  %#tags AS tags
+  tags
 
 FROM planet_osm_polygon
 
