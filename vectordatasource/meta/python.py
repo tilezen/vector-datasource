@@ -592,6 +592,19 @@ def output_min_zoom(yaml_datum):
     return min_zoom
 
 
+def make_function_mapping(generated_dotted_name_module_path):
+    result = {}
+    import importlib
+    mod = importlib.import_module(generated_dotted_name_module_path)
+    fn_names = dir(mod)
+    for fn_name in fn_names:
+        if fn_name.endswith('_props'):
+            fn = getattr(mod, fn_name)
+            layer = fn_name.rsplit('_', 1)[0]
+            result[layer] = fn
+    return result
+
+
 def main(argv=None):
     from vectordatasource.meta import find_yaml_path
     if argv is None:
