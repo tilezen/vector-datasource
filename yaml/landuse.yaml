@@ -4,72 +4,90 @@
 #
 global:
   - &tier1_min_zoom
-    case:
-      - { when: { way_area: { min: 300000000 } }, then:  3 }
-      - { when: { way_area: { min: 300000000 } }, then:  4 }
-      - { when: { way_area: { min: 150000000 } }, then:  5 }
-      - { when: { way_area: { min: 150000000 } }, then:  6 }
-      - { when: { way_area: { min: 100000000 } }, then:  7 }
-      - { when: { way_area: { min:  10000000 } }, then:  8 }
-      - { when: { way_area: { min:   5000000 } }, then:  9 }
-      - { when: { way_area: { min:   1000000 } }, then: 10 }
-      - { when: { way_area: { min:    500000 } }, then: 11 }
-      - { when: { way_area: { min:    500000 } }, then: 12 }
-      - { when: { way_area: { min:    100000 } }, then: 13 }
-      - { when: { way_area: { min:     50000 } }, then: 14 }
-      - { when: { way_area: { min:     10000 } }, then: 15 }
-      - { else:                                         16 }
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 3, 300000000 ]
+        - [ 4, 300000000 ]
+        - [ 5, 150000000 ]
+        - [ 6, 150000000 ]
+        - [ 7, 100000000 ]
+        - [ 8,  10000000 ]
+        - [ 9,   5000000 ]
+        - [ 10,  1000000 ]
+        - [ 11,   500000 ]
+        - [ 12,   500000 ]
+        - [ 13,   100000 ]
+        - [ 14,    50000 ]
+        - [ 15,    10000 ]
+      default: 16
   - &tier2_min_zoom
-    case:
-      - { when: { way_area: { min: 1000000000 } }, then:  4 }
-      - { when: { way_area: { min: 1000000000 } }, then:  5 }
-      - { when: { way_area: { min:  150000000 } }, then:  6 }
-      - { when: { way_area: { min:  100000000 } }, then:  7 }
-      - { when: { way_area: { min:   10000000 } }, then:  8 }
-      - { when: { way_area: { min:    5000000 } }, then:  9 }
-      - { when: { way_area: { min:    1000000 } }, then: 10 }
-      - { when: { way_area: { min:     500000 } }, then: 11 }
-      - { when: { way_area: { min:     250000 } }, then: 12 }
-      - { when: { way_area: { min:     100000 } }, then: 13 }
-      - { when: { way_area: { min:      50000 } }, then: 14 }
-      - { when: { way_area: { min:       2000 } }, then: 15 }
-      - { else:                                          16 }
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 4, 1000000000 ]
+        - [ 5, 1000000000 ]
+        - [ 6,  150000000 ]
+        - [ 7,  100000000 ]
+        - [ 8,   10000000 ]
+        - [ 9,    5000000 ]
+        - [ 10,   1000000 ]
+        - [ 11,    500000 ]
+        - [ 12,    250000 ]
+        - [ 13,    100000 ]
+        - [ 14,     50000 ]
+        - [ 15,      2000 ]
+      default: 16
   - &tier3_min_zoom
-    case:
-      - { when: { way_area: { min: 10000000 } }, then:  8 }
-      - { when: { way_area: { min:  5000000 } }, then:  9 }
-      - { when: { way_area: { min:  1000000 } }, then: 10 }
-      - { when: { way_area: { min:   500000 } }, then: 11 }
-      - { when: { way_area: { min:   500000 } }, then: 12 }
-      - { when: { way_area: { min:   100000 } }, then: 13 }
-      - { when: { way_area: { min:    50000 } }, then: 14 }
-      - { when: { way_area: { min:     2000 } }, then: 15 }
-      - { else:                                        16 }
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 8, 10000000 ]
+        - [ 9,  5000000 ]
+        - [ 10, 1000000 ]
+        - [ 11,  500000 ]
+        - [ 12,  500000 ]
+        - [ 13,  100000 ]
+        - [ 14,   50000 ]
+        - [ 15,    2000 ]
+      default: 16
   - &tier4_min_zoom
-    case:
-      - { when: { way_area: { min: 1000000 } }, then: 10 }
-      - { when: { way_area: { min:  500000 } }, then: 11 }
-      - { when: { way_area: { min:  500000 } }, then: 12 }
-      - { when: { way_area: { min:  100000 } }, then: 13 }
-      - { when: { way_area: { min:   50000 } }, then: 14 }
-      - { when: { way_area: { min:    2000 } }, then: 15 }
-      - { else:                                       16 }
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 10, 1000000 ]
+        - [ 11,  500000 ]
+        - [ 12,  500000 ]
+        - [ 13,  100000 ]
+        - [ 14,   50000 ]
+        - [ 15,    2000 ]
+      default: 16
   - &tier5_min_zoom
-    case:
-      - { when: { way_area: { min: 1000000 } }, then: 10 }
-      - { when: { way_area: { min:  400000 } }, then: 11 }
-      - { when: { way_area: { min:  200000 } }, then: 12 }
-      - { when: { way_area: { min:   50000 } }, then: 13 }
-      - { when: { way_area: { min:   20000 } }, then: 14 }
-      - { when: { way_area: { min:    2000 } }, then: 15 }
-      - { else:                                       16 }
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 10, 1000000 ]
+        - [ 11,  400000 ]
+        - [ 12,  200000 ]
+        - [ 13,   50000 ]
+        - [ 14,   20000 ]
+        - [ 15,    2000 ]
+      default: 16
   - &tier6_min_zoom
-    case:
-      - { when: { way_area: { min: 500000 } }, then: 12 }
-      - { when: { way_area: { min: 100000 } }, then: 13 }
-      - { when: { way_area: { min:  50000 } }, then: 14 }
-      - { when: { way_area: { min:   5000 } }, then: 15 }
-      - { else:                                      16 }
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 12, 500000 ]
+        - [ 13, 100000 ]
+        - [ 14,  50000 ]
+        - [ 15,   5000 ]
+      default: 16
   - &us_forest_service
         - United States Forest Service
         - US Forest Service
@@ -248,10 +266,10 @@ filters:
       tier: 2
 
   - filter: { landuse: forest, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output: { kind: forest, tier: 2 }
   - filter: { landuse: forest }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output: { kind: forest, tier: 2 }
 
   - filter: {leisure: nature_reserve}
@@ -262,24 +280,24 @@ filters:
     output: {kind: protected_area, tier: 2}
 
   - filter: { landuse: wood, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output: { kind: wood, tier: 2 }
   - filter: { landuse: wood }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output: { kind: wood, tier: 2 }
 
   - filter: { natural: forest, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output: { kind: natural_forest, tier: 2 }
   - filter: { natural: forest }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output: { kind: natural_forest, tier: 2 }
 
   - filter: { natural: wood, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output: { kind: natural_wood, tier: 2 }
   - filter: { natural: wood }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output: { kind: natural_wood, tier: 2 }
 
   - filter: {landuse: urban}
@@ -293,10 +311,10 @@ filters:
     output: {kind: residential, tier: 2}
 
   - filter: { landuse: farm }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output: { kind: farm, tier: 2 }
   - filter: { landuse: farmland }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output: { kind: farmland, tier: 2 }
 
   ############################################################
@@ -390,7 +408,7 @@ filters:
   - filter:
       man_made: pier
       geom_type: polygon
-    min_zoom: GREATEST(LEAST(zoom + 1.81, 16), 11)
+    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
     output: {kind: pier}
   # wastewater_plant
   - filter: {man_made: wastewater_plant}
@@ -523,11 +541,14 @@ filters:
   # TIER 6 EXTRA - PARKING
   ############################################################
   - filter: {amenity: parking}
-    min_zoom: |
-      CASE WHEN way_area >= 50000 THEN 14
-           WHEN way_area >=  5000 THEN 15
-           ELSE                        16
-      END
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 14, 50000 ]
+          - [ 15,  5000 ]
+        default: 16
     output: {kind: parking, tier: 6}
 
 
@@ -539,7 +560,7 @@ filters:
       any:
         leisure: [park, national_park]
         landuse: [park, national_park]
-    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
+    min_zoom: { clamp: { min: 9, max: 14, value: { sum: [ { col: zoom }, 2 ] } } }
     output: { kind: park }
   - filter: {landuse: grass}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
@@ -609,10 +630,16 @@ filters:
     output: {kind: water_park}
   - filter:
       waterway: dam
-    min_zoom: |
-      CASE
-        WHEN GeometryType(way) IN ('LINESTRING', 'MULTILINESTRING') THEN 12
-        WHEN GeometryType(way) IN ('POLYGON', 'MULTIPOLYGON') THEN GREATEST(LEAST(zoom, 16), 9) END
+    min_zoom:
+      case:
+        - when: { geom_type: line }
+          then: 12
+        - when: { geom_type: polygon }
+          then:
+            clamp:
+              min: 9
+              max: 16
+              value: { col: zoom }
     output: {kind: dam}
     extra_columns: [way]
   - filter: {leisure: dog_park}
@@ -640,11 +667,11 @@ filters:
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output: {kind: hedge}
   - filter: {highway: services}
-    min_zoom: GREATEST(LEAST(zoom, 16), 11)
+    min_zoom: { clamp: { min: 11, max: 16, value: { col: zoom } } }
     output:
       kind: service_area
   - filter: {highway: rest_area}
-    min_zoom: GREATEST(LEAST(zoom, 16), 11)
+    min_zoom: { clamp: { min: 11, max: 16, value: { col: zoom } } }
     output:
       kind: rest_area
   - filter:
@@ -663,12 +690,12 @@ filters:
     min_zoom: 16
     output: {kind: fence}
   - filter: {tourism: camp_site}
-    min_zoom: GREATEST(LEAST(zoom, 16), 13)
+    min_zoom: { clamp: { min: 13, max: 16, value: { col: zoom } } }
     output: {kind: camp_site}
   - filter: {barrier: gate}
     min_zoom: 16
     output: {kind: gate}
   - filter: {amenity: grave_yard}
-    min_zoom: GREATEST( LEAST(zoom + 3, 17), 13)
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
       kind: grave_yard

@@ -77,6 +77,68 @@ def parse_clamp(ast_state, c):
         [], None, None)
 
 
+def parse_sum(ast_state, s):
+    assert isinstance(s, list)
+    assert len(s) > 1
+
+    left = ast_value(ast_state, s.pop())
+    while s:
+        right = ast_value(ast_state, s.pop())
+        left = ast.BinOp(left, ast.Add(), right)
+
+    return left
+
+
+def parse_lookup(ast_state, l):
+    assert isinstance(l, dict)
+    assert set(l.keys()) >= set(('key', 'op', 'table'))
+
+    key = ast_value(ast_state, l['key'])
+
+    # only support >=, <= for now
+    assert l['op'] in ['>=', '<=']
+    op = ast.GtE() if l['op'] == '>=' else ast.LtE()
+
+    default = ast_value(ast_state, l.get('default'))
+
+    table = l['table']
+    assert isinstance(table, list)
+
+    expr = default
+    for entry in reversed(table):
+        assert isinstance(entry, list)
+        assert len(entry) == 2
+        output, cond = entry
+        test = ast.Compare(key, [op], [ast_value(ast_state, cond)])
+        expr = ast.IfExp(test, ast_value(ast_state, output), expr)
+
+    return expr
+
+
+def parse_func(ast_state, name, m):
+    assert isinstance(m, list)
+
+    args = []
+    for arg in m:
+        args.append(ast_value(ast_state, arg))
+
+    return ast.Call(
+        ast.Name(name, ast.Load()),
+        args, [], None, None)
+
+
+def parse_mul(ast_state, m):
+    assert isinstance(m, list)
+    assert len(m) > 1
+
+    expr = ast_value(ast_state, m.pop())
+    while m:
+        val = ast_value(ast_state, m.pop())
+        expr = ast.BinOp(expr, ast.Mult(), val)
+
+    return expr
+
+
 def ast_value(ast_state, val):
     if isinstance(val, str):
         return ast.Str(val)
@@ -84,17 +146,29 @@ def ast_value(ast_state, val):
         if val.keys() == ['col']:
             return ast_column(ast_state, val['col'])
         elif val.keys() == ['expr']:
-            raise Exception('expr not supported')
+            raise Exception('expr not supported in %r' % val)
+        elif val.keys() == ['lit']:
+            raise Exception('literal SQL not supported in %r' % val)
         elif 'case' in val.keys():
             return parse_case(ast_state, val['case'])
         elif val.keys() == ['call']:
             return parse_call(ast_state, val['call'])
         elif val.keys() == ['clamp']:
             return parse_clamp(ast_state, val['clamp'])
+        elif val.keys() == ['sum']:
+            return parse_sum(ast_state, val['sum'])
+        elif val.keys() == ['lookup']:
+            return parse_lookup(ast_state, val['lookup'])
+        elif val.keys() == ['min']:
+            return parse_func(ast_state, 'min', val['min'])
+        elif val.keys() == ['max']:
+            return parse_func(ast_state, 'max', val['max'])
+        elif val.keys() == ['mul']:
+            return parse_mul(ast_state, val['mul'])
         else:
             return ast.Dict([ast_value(ast_state, k) for k in val.keys()],
                             [ast_value(ast_state, v) for v in val.values()])
-    elif isinstance(val, int):
+    elif isinstance(val, (int, float)):
         return ast.Num(val)
     elif hasattr(val, 'as_ast') and callable(val.as_ast):
         return val.as_ast(ast_state)
@@ -126,6 +200,8 @@ def ast_column(ast_state, col):
         ast_state.has_way_area = True
         ast_state.has_zoom = True
         result = ast.Name('zoom', ast.Load())
+    elif col == 'fid':
+        result = ast.Name('fid', ast.Load())
     else:
         result = ast.Call(
             ast.Attribute(
@@ -467,7 +543,10 @@ def output_kind(yaml_datum):
 
 
 def output_min_zoom(yaml_datum):
-    return yaml_datum['min_zoom']
+    min_zoom = yaml_datum['min_zoom']
+    assert not isinstance(min_zoom, (str, unicode)), \
+        "Min zoom cannot be a string in %r." % yaml_datum
+    return min_zoom
 
 
 def main(argv=None):
