@@ -1,16 +1,23 @@
 global:
-  - &ne_places_min_zoom |
-      CASE WHEN scalerank =   0 THEN  2
-           WHEN scalerank <=  1 THEN  3
-           WHEN scalerank <=  2 THEN  4
-           WHEN scalerank <=  4 THEN  5
-           WHEN scalerank <=  6 THEN  6
-           WHEN scalerank <=  7 THEN  7
-           WHEN scalerank <=  9 THEN  9
-           ELSE                      10
-      END
+  - &ne_places_min_zoom
+    lookup:
+      key: { col: scalerank }
+      op: '<='
+      table:
+        - [ 2, 0 ]
+        - [ 3, 1 ]
+        - [ 4, 2 ]
+        - [ 5, 4 ]
+        - [ 6, 6 ]
+        - [ 7, 7 ]
+        - [ 9, 9 ]
+      default: 10
 
 filters:
+  # TODO - is this how we want to do this?
+  - filter: {source: whosonfirst.mapzen.com}
+    min_zoom: {col: min_zoom}
+    output: {kind: {col: kind}}
   - filter: {name: true, place: country}
     min_zoom: 2
     output: {kind: country}

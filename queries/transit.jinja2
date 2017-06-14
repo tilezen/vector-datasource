@@ -21,7 +21,7 @@ SELECT
     tags->'route_name' AS route_name,
     tags->'layer' AS layer,
     tags->'service' AS service,
-    %#tags AS tags
+    tags
 
 FROM {{ table }}
 

@@ -10,7 +10,7 @@ SELECT
     mz_earth_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    NULL AS tags
+    hstore(t.*) AS tags
 FROM
 {% if zoom < 2 %}
     ne_110m_land t
@@ -36,7 +36,7 @@ SELECT
     NULL AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    NULL AS tags
+    hstore(t.*) AS tags
 
 FROM
     land_polygons t
@@ -60,7 +60,7 @@ SELECT
     mz_earth_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    %#tags AS tags
+    tags
 
 FROM planet_osm_polygon t
 
@@ -84,7 +84,7 @@ SELECT
     mz_earth_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    %#tags AS tags
+    tags
 
 FROM planet_osm_line t
 
@@ -110,7 +110,7 @@ SELECT
   mz_earth_min_zoom AS min_zoom,
   NULL AS mz_label_placement,
   true AS label_placement,
-  %#tags AS tags
+  tags
 
 FROM
   planet_osm_point t

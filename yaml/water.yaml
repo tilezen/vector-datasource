@@ -1,59 +1,60 @@
 globals:
   - &water_standard_properties_osm
-      intermittent: {expr: "tags ? 'intermittent' and tags->'intermittent'='yes'"}
+      intermittent:
+        case:
+          - when:
+              intermittent: 'yes'
+            then: true
+  - &water_standard_min_zoom
+    case:
+      - when: { way_area: { min: 102400 } }
+        then: 9
+      - else: { clamp: { min: 9, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
 filters:
   - filter: {waterway: riverbank}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: riverbank
     table: osm
   - filter: {waterway: dock}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: dock
     table: osm
   - filter: {natural: water}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: water
     table: osm
   - filter: {natural: bay}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: bay
     table: osm
   - filter: {natural: strait}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: strait
     table: osm
   - filter: {natural: fjord}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: fjord
     table: osm
   - filter: {landuse: basin}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: basin
     table: osm
   - filter: {landuse: reservoir}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: lake
@@ -63,8 +64,7 @@ filters:
       any:
         amenity: swimming_pool
         leisure: swimming_pool
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
         <<: *water_standard_properties_osm
         kind: swimming_pool

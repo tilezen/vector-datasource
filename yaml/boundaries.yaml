@@ -7,17 +7,21 @@ global:
   #       but is inconsistent with 1:50 in scalerank=2 so countries
   #       like Russia will "pop" in at 5, but with min_zoom of 2
   #       (and India, China, Indonesia, and South Africa).
-  - &ne_region_boundaries_min_zoom |
-      CASE WHEN scalerank =   0 THEN  7
-           WHEN scalerank <=  2 THEN  2
-           WHEN scalerank <=  3 THEN  3
-           WHEN scalerank <=  4 THEN  5
-           WHEN scalerank <=  5 THEN  5.5
-           WHEN scalerank <=  6 THEN  6
-           WHEN scalerank <=  7 THEN  6.7
-           WHEN scalerank <=  8 THEN  6.8
-           WHEN scalerank <=  9 THEN  7
-      END
+  - &ne_region_boundaries_min_zoom
+    lookup:
+      key: { col: scalerank }
+      op: '<='
+      table:
+        - [ 7,   0 ]
+        - [ 2,   2 ]
+        - [ 3,   3 ]
+        - [ 5,   4 ]
+        - [ 5.5, 5 ]
+        - [ 6,   6 ]
+        - [ 6.7, 7 ]
+        - [ 6.8, 8 ]
+        - [ 7,   9 ]
+      default: null
 
 filters:
 
@@ -35,7 +39,10 @@ filters:
     output:
       kind: aboriginal_lands
       kind_detail:
-        expr: CASE WHEN tags->'admin_level' IN ('2', '4', '6', '8') THEN tags->'admin_level' END
+        case:
+          - when:
+              admin_level: ['2', '4', '6', '8']
+            then: { col: admin_level }
     table: osm
   - filter: {admin_level: '2', boundary: administrative}
     min_zoom: 8
