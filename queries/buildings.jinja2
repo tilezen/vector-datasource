@@ -16,7 +16,7 @@ SELECT
     mz_building_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    %#tags AS tags
+    tags
 
 FROM
     planet_osm_polygon
@@ -44,7 +44,7 @@ SELECT
     mz_building_min_zoom AS min_zoom,
     NULL AS mz_label_placement,
     true AS label_placement,
-    %#tags AS tags
+    tags
 
 FROM
     planet_osm_point

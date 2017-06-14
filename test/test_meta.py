@@ -39,21 +39,21 @@ def find_yaml_path():
 @memoize
 def make_layer_data_props():
     yaml_path = find_yaml_path()
-    layer_data = parse_layers_props(yaml_path)
+    layer_parse_result = parse_layers_props(yaml_path)
     by_name = {}
-    for layer_datum in layer_data:
+    for layer_datum in layer_parse_result.layer_data:
         by_name[layer_datum.layer] = layer_datum
-    return layer_data, by_name
+    return layer_parse_result.layer_data, by_name
 
 
 @memoize
 def make_layer_data_min_zoom():
     yaml_path = find_yaml_path()
-    layer_data = parse_layers_min_zoom(yaml_path)
+    layer_parse_result = parse_layers_min_zoom(yaml_path)
     by_name = {}
-    for layer_datum in layer_data:
+    for layer_datum in layer_parse_result.layer_data:
         by_name[layer_datum.layer] = layer_datum
-    return layer_data, by_name
+    return layer_parse_result.layer_data, by_name
 
 
 class CallFuncTest(unittest.TestCase):

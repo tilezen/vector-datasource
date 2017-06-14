@@ -14,7 +14,7 @@ SELECT
     mz_places_min_zoom AS min_zoom,
     NULL::smallint AS max_zoom,
     NULL::boolean AS is_landuse_aoi,
-    NULL AS tags
+    hstore(ne_10m_populated_places.*) AS tags
 
 FROM ne_10m_populated_places
 
@@ -47,7 +47,7 @@ SELECT
     mz_places_min_zoom AS min_zoom,
     NULL::smallint AS max_zoom,
     NULL::boolean AS is_landuse_aoi,
-    %#tags AS tags
+    tags
 
 FROM planet_osm_point
 
@@ -78,7 +78,8 @@ SELECT
     min_zoom,
     max_zoom,
     CASE WHEN is_landuse_aoi = true THEN true ELSE NULL END AS is_landuse_aoi,
-    %#l10n_name AS tags
+    (hstore(array['source', 'whosonfirst.mapzen.com', 'kind', wof_np.placetype_string]) || l10n_name) AS tags
+    -- %#l10n_name AS tags
 
 FROM wof_neighbourhood wof_n
 
