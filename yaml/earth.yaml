@@ -19,14 +19,14 @@ filters:
   - filter:
       place: island
       name: true
-    min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 15))
+    min_zoom: { clamp: { min: 7, max: 15, value: { sum: [ { col: zoom }, 5.75 ] } } }
     output:
       kind: island
     table: osm
   - filter:
       place: islet
       name: true
-    min_zoom: GREATEST(15, LEAST((zoom+3.5)::smallint, 17))
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 3.5 ] } } }
     output:
       kind: islet
     table: osm
