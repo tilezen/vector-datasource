@@ -1,5 +1,4 @@
 import os.path
-import vectordatasource
 
 
 def find_yaml_path():
