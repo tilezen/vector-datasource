@@ -222,3 +222,9 @@ def mz_cycling_network(props, osm_id):
     # TODO stubbed for now. Probably have queries continue to return
     # this result in a sidecar property
     None
+
+
+def trim_nz_sh(label):
+    if label.startswith('NZ:SH'):
+        label = label[len('NZ:SH'):]
+    return label
