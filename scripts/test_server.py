@@ -33,7 +33,17 @@ config = {
                 'polygon': 8
             }
         }
-    }
+    },
+    'yaml': {
+      'type': 'parse',
+      'parse': {
+        'path': './yaml',
+      },
+      'callable': {
+        'dotted-name': 'vectordatasource.meta.python.make_function_mapping',
+        'args': ['vectordatasource.gen'],
+      },
+    },
 }
 
 tile_server = create_tileserver_from_config(config)
