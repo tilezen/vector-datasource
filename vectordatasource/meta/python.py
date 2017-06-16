@@ -613,17 +613,21 @@ def main(argv=None):
 
     formatter = astformatter.ASTFormatter()
 
+    all_layer_data = []
     for output_fn, make_fn_name in (
             (output_kind, make_function_name_props),
             (output_min_zoom, make_function_name_min_zoom)):
         layer_parse_result = parse_layers(
-            yaml_path, output_kind, make_function_name_props)
-        for layer_datum in layer_parse_result.layer_data:
-            ast_fn = layer_datum.ast
-            print formatter.format(ast_fn, mode='exec')
+            yaml_path, output_fn, make_fn_name)
+        all_layer_data.append(layer_parse_result.layer_data)
 
     for import_ast in layer_parse_result.import_asts:
         print formatter.format(import_ast, mode='exec')
+
+    for layer_data in all_layer_data:
+        for layer_datum in layer_data:
+            ast_fn = layer_datum.ast
+            print formatter.format(ast_fn, mode='exec')
 
 
 if __name__ == '__main__':
