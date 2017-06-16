@@ -488,5 +488,65 @@ class WaterMinZoomTest(unittest.TestCase):
         self.assertEquals(16, out_min_zoom)
 
 
+class RoundTripRuleTest(unittest.TestCase):
+
+    def test_not_rule_roundtrip_through_astformatter(self):
+        yaml_data = dict(
+            filters=[dict(
+                filter={
+                    'foo': 'bar',
+                    'not': {
+                        'any': [
+                            dict(baz='quux'),
+                            dict(fleem='morx'),
+                        ]
+                    }
+                },
+                min_zoom=7,
+                output=dict(kind='triggered')
+            )],
+        )
+        from vectordatasource.meta.python import make_empty_ast_state
+        from vectordatasource.meta.python import output_kind
+        from vectordatasource.meta.python import make_function_name_props
+        from vectordatasource.meta.python import parse_layer_from_yaml
+        ast_state = make_empty_ast_state()
+        ast_fn = parse_layer_from_yaml(
+            ast_state, yaml_data, 'fn_name', output_kind,
+            make_function_name_props)
+
+        # first check that if we compile the function from the ast, we
+        # get an expected result
+        import ast
+        mod = ast.Module([ast_fn])
+        mod_with_linenos = ast.fix_missing_locations(mod)
+        code = compile(mod_with_linenos, '<string>', 'exec')
+        scope = {}
+        exec code in scope
+        fn = scope['fn_name_props']
+
+        shape = None
+        props = dict(some='value')
+        fid = 42
+        result = fn(shape, props, fid)
+        self.assertIsNone(result)
+
+        # now, round trip it through the ast formatter
+        # and see if we get the same result
+        import astformatter
+        formatter = astformatter.ASTFormatter()
+        code_str = formatter.format(ast_fn, mode='exec')
+
+        mod = ast.parse(code_str)
+        mod_with_linenos = ast.fix_missing_locations(mod)
+        code = compile(mod_with_linenos, '<string>', 'exec')
+        scope = {}
+        exec code in scope
+        fn = scope['fn_name_props']
+
+        result = fn(shape, props, fid)
+        self.assertIsNone(result)
+
+
 if __name__ == '__main__':
     unittest.main()
