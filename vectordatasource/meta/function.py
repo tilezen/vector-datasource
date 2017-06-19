@@ -218,10 +218,10 @@ def mz_get_rel_networks(osm_id):
     return []
 
 
-def mz_cycling_network(props, osm_id):
-    # TODO stubbed for now. Probably have queries continue to return
-    # this result in a sidecar property
-    None
+# def mz_cycling_network(props, osm_id):
+#     # TODO stubbed for now. Probably have queries continue to return
+#     # this result in a sidecar property
+#     None
 
 
 def trim_nz_sh(label):
