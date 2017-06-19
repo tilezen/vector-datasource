@@ -1031,6 +1031,8 @@ filters:
               not:
                 fee: ['no', 'Free', 'free', '0', 'No', 'none']
             then: true
+          # TODO tests expect this to be false and not omitted, is that what we want?
+          - else: false
       cyclestreets_id: {col: tags->cyclestreets_id}
       maxstay: {col: tags->maxstay}
       surveillance:
