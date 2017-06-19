@@ -9,7 +9,7 @@ To use Mapzen's hosted vector tile service in a project, [obtain an API key from
 Once you have your Mapzen API key you'll need include it with Vector Tile requests as a [URL query string](https://en.wikipedia.org/wiki/Query_string) like:
 
 ```
-?api_key=your_mapzen_api_key
+?api_key=your-mapzen-api-key
 ```
 
 # Use the Vector Tile service
@@ -17,7 +17,7 @@ Once you have your Mapzen API key you'll need include it with Vector Tile reques
 Request a single tile with this URL pattern to get started:
 
 ```
-https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key={your_mapzen_api_key}
+https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
 ```
 
 The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) has more information on this url scheme.
@@ -25,7 +25,7 @@ The [OpenStreetMap Wiki](http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 Here’s a sample tile in GeoJSON:
 
 ```
-https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json?api_key=your_mapzen_api_key
+https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json?api_key=your-mapzen-api-key
 ```
 
 ## Specify layers in the service
@@ -33,9 +33,9 @@ https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json?api_key=your_ma
 Layers to return can specified as `all`, or as one or more layer names separated by commas. Using the `all` layer is more performant.
 
 
-`buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json?api_key=your_mapzen_api_key
+`buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json?api_key=your-mapzen-api-key
 
-`earth,landuse`: https://tile.mapzen.com/mapzen/vector/v1/earth,landuse/16/19293/24641.json?api_key=your_mapzen_api_key
+`earth,landuse`: https://tile.mapzen.com/mapzen/vector/v1/earth,landuse/16/19293/24641.json?api_key=your-mapzen-api-key
 
 ### Layers in the service's response
 

@@ -6,13 +6,13 @@ The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provi
 
 Data is organized into several thematic layers, each of which is named, for example; `buildings`, `pois`, and `water`. A selection of these layers are typically used for base map rendering, and are provided under the short-hand name `all`. Each layer includes a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
-Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
+Need help displaying vector tiles in a map? Here are several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
 
 ### Overview
 
 #### Data sources and attribution
 
-Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](attribution.md) in your project.
+Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require attribution in your project.
 
 #### Feature names
 
@@ -20,7 +20,7 @@ Most Mapzen vector tile features include a basic name property (`common`):
 
 * `name` - Generally the name the locals call the feature, in the local script.
 
-We support several additional name related properties (`optional`):
+It supports several additional name related properties (`optional`):
 
 * `alt_name`
 * `int_name`
@@ -36,13 +36,13 @@ We support several additional name related properties (`optional`):
 
 #### Name localization
 
-We include all language variants of the `name:*` values to enable full internationalization (when different than `name`).
+Mapzen includes all language variants of the `name:*` values to enable full internationalization (when different from `name`).
 
 Language variants are identified by an ISO 639-1 two-letter language code and optional country code, for example `en` for English and less commonly `en_GB` for British English. Mapzen [house styles](https://mapzen.com/products/maps/) designed in Tangram support displaying all language scripts.
 
 We additionally localize `alt_name:*` and `old_name:*` properties for features across all layers.
 
-For features in the `boundaries` layer, we support two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently). _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
+For features in the `boundaries` layer, there are two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently). _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 
 **Localized name properties** (`common-optional`)**:**
 
@@ -56,7 +56,7 @@ For features in the `boundaries` layer, we support two additional variants `name
 
 Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
-A tile geometry can be one of 3 types:
+A tile geometry can be one of three types:
 
 * Point, MultiPoint
 * LineString, MultiLineString
@@ -94,15 +94,15 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 The current version of Mapzen vector tile "Tilezen" data model is **v1.2.0**.
 
-Our tiles are still in active development, but we promise to minimize backwards incompatable breaking changes. We list data model promises in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
+Tiles are still in active development, but Mapzen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
-If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. We're also interested in your feedback at hello@mapzen.com!
+If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. You can also send your feedback at hello@mapzen.com!
 
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.0.0/CHANGELOG.md).
 
 #### Feature ordering
 
-Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, we export a `sort_rank` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_rank` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
+Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, there is a `sort_rank` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_rank` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
 
 To facilitate **data visualization** overlays and underlays, the following client-side `order` ranges are suggested:
 
