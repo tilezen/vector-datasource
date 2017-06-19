@@ -84,7 +84,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_landuse_(
 {%- for param in layers['landuse']['params'] %}
         {{param.key}} {{param.typ}},
@@ -96,9 +95,7 @@ BEGIN
   RETURN {{ layers['landuse']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_landuse(
        planet_osm_point)
 RETURNS JSON AS $$
@@ -113,9 +110,7 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_landuse(
        planet_osm_polygon)
 RETURNS JSON AS $$
@@ -130,9 +125,7 @@ BEGIN
         row.way_area);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_landuse(
        planet_osm_line)
 RETURNS JSON AS $$
@@ -147,7 +140,6 @@ BEGIN
         0::real);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 ----------
 -- pois --
@@ -205,7 +197,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
@@ -217,9 +208,7 @@ BEGIN
   RETURN {{ layers['pois']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_pois(
        planet_osm_point)
 RETURNS JSON AS $$
@@ -234,9 +223,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_pois(
        planet_osm_polygon)
 RETURNS JSON AS $$
@@ -255,7 +242,6 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -------------
 -- transit --
@@ -300,7 +286,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_transit_(
 {%- for param in layers['transit']['params'] %}
         {{param.key}} {{param.typ}},
@@ -311,9 +296,7 @@ BEGIN
   RETURN {{ layers['transit']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_transit(
        planet_osm_line)
 RETURNS JSON AS $$
@@ -327,9 +310,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_transit(
        planet_osm_polygon)
 RETURNS JSON AS $$
@@ -343,7 +324,6 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 ----------------------------------------------------------------------
 -- WATER
@@ -351,7 +331,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water kind "main" function
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water_(
 {%- for param in layers['water']['params'] %}
         {{param.key}} {{param.typ}},
@@ -362,7 +341,6 @@ BEGIN
   RETURN {{ layers['water']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- water min_zoom "main" function
 
@@ -390,7 +368,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- water kind table adaptors
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(planet_osm_polygon)
 RETURNS JSON AS $$
 DECLARE
@@ -403,9 +380,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(planet_osm_line)
 RETURNS JSON AS $$
 DECLARE
@@ -418,9 +393,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(planet_osm_point)
 RETURNS JSON AS $$
 DECLARE
@@ -433,9 +406,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_coastline)
 RETURNS JSON AS $$
 DECLARE
@@ -448,9 +419,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_coastline)
 RETURNS JSON AS $$
 DECLARE
@@ -463,9 +432,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_110m_coastline)
 RETURNS JSON AS $$
 DECLARE
@@ -478,9 +445,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_ocean)
 RETURNS JSON AS $$
 DECLARE
@@ -493,9 +458,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_ocean)
 RETURNS JSON AS $$
 DECLARE
@@ -508,9 +471,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_110m_ocean)
 RETURNS JSON AS $$
 DECLARE
@@ -523,9 +484,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_lakes)
 RETURNS JSON AS $$
 DECLARE
@@ -538,9 +497,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_lakes)
 RETURNS JSON AS $$
 DECLARE
@@ -553,9 +510,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_110m_lakes)
 RETURNS JSON AS $$
 DECLARE
@@ -568,9 +523,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_10m_playas)
 RETURNS JSON AS $$
 DECLARE
@@ -583,9 +536,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(ne_50m_playas)
 RETURNS JSON AS $$
 DECLARE
@@ -598,9 +549,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_water(water_polygons)
 RETURNS JSON AS $$
 DECLARE
@@ -613,7 +562,6 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- water min_zoom table adaptors
 
@@ -863,7 +811,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places kind "main" function
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_places_(
 {%- for param in layers['places']['params'] %}
         {{param.key}} {{param.typ}},
@@ -874,7 +821,6 @@ BEGIN
   RETURN {{ layers['places']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- places min_zoom "main" function
 
@@ -900,7 +846,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- places kind table adaptors
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_places(planet_osm_point)
 RETURNS JSON AS $$
 DECLARE
@@ -913,9 +858,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_places(ne_10m_populated_places)
 RETURNS JSON AS $$
 DECLARE
@@ -928,7 +871,6 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- NOTE: this transaction including a DROP FUNCTION is here to deal with the
 -- change of return type, and can be deleted after the migrations have been
@@ -968,7 +910,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries kind "main" function
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_boundaries_(
 {%- for param in layers['boundaries']['params'] %}
         {{param.key}} {{param.typ}},
@@ -979,7 +920,6 @@ BEGIN
   RETURN {{ layers['boundaries']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- boundaries min_zoom "main" function
 
@@ -1002,7 +942,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- boundaries kind table adaptors
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_boundaries(planet_osm_line)
 RETURNS JSON AS $$
 DECLARE
@@ -1015,9 +954,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_boundaries(planet_osm_polygon)
 RETURNS JSON AS $$
 DECLARE
@@ -1030,17 +967,13 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
-no longer generating kind calculation
 {{ table_func('json', param, 'ne', 'ne_110m_admin_0_boundary_lines_land', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_50m_admin_0_boundary_lines_land', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_50m_admin_1_states_provinces_lines', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_10m_admin_0_boundary_lines_land', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_10m_admin_0_boundary_lines_map_units', 'JSON') }}
 {{ table_func('json', param, 'ne', 'ne_10m_admin_1_states_provinces_lines', 'JSON') }}
-#}
 
 DROP FUNCTION IF EXISTS mz_calculate_min_zoom_boundaries(planet_osm_line);
 
@@ -1085,7 +1018,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- buildings kind "main" function
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_buildings_(
 {%- for param in layers['buildings']['params'] %}
         {{param.key}} {{param.typ}},
@@ -1099,7 +1031,6 @@ BEGIN
   RETURN {{ layers['buildings']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- buildings min_zoom "main" function
 
@@ -1156,7 +1087,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_buildings(planet_osm_polygon)
 RETURNS JSON AS $$
 DECLARE
@@ -1170,9 +1100,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_buildings(planet_osm_point)
 RETURNS JSON AS $$
 DECLARE
@@ -1186,7 +1114,6 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 ----------------------------------------------------------------------
 -- ROADS
@@ -1194,7 +1121,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- roads kind "main" function
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_roads_(
 {%- for param in layers['roads']['params'] %}
         {{param.key}} {{param.typ}},
@@ -1207,7 +1133,6 @@ BEGIN
   RETURN {{ layers['roads']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- roads min_zoom "main" function
 
@@ -1270,7 +1195,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_roads(planet_osm_line)
 RETURNS JSON AS $$
 DECLARE
@@ -1285,9 +1209,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_roads(ne_10m_roads)
 RETURNS JSON AS $$
 DECLARE
@@ -1302,7 +1224,6 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 ----------------------------------------------------------------------
 -- EARTH
@@ -1310,7 +1231,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- earth kind "main" function
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth_(
 {%- for param in layers['earth']['params'] %}
         {{param.key}} {{param.typ}},
@@ -1321,7 +1241,6 @@ BEGIN
   RETURN {{ layers['earth']['kind_case_statement'] }};
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- earth min_zoom "main" function
 
@@ -1349,7 +1268,6 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- earth kind table adaptors
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(planet_osm_polygon)
 RETURNS JSON AS $$
 DECLARE
@@ -1362,9 +1280,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(planet_osm_line)
 RETURNS JSON AS $$
 DECLARE
@@ -1377,9 +1293,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(planet_osm_point)
 RETURNS JSON AS $$
 DECLARE
@@ -1392,9 +1306,7 @@ BEGIN
         row.tags);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(ne_10m_land)
 RETURNS JSON AS $$
 DECLARE
@@ -1407,9 +1319,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(ne_50m_land)
 RETURNS JSON AS $$
 DECLARE
@@ -1422,9 +1332,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(ne_110m_land)
 RETURNS JSON AS $$
 DECLARE
@@ -1437,9 +1345,7 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
-{#
 CREATE OR REPLACE FUNCTION mz_calculate_json_earth(land_polygons)
 RETURNS JSON AS $$
 DECLARE
@@ -1452,7 +1358,6 @@ BEGIN
         NULL);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-#}
 
 -- earth min_zoom table adaptors
 
