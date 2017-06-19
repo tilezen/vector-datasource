@@ -104,6 +104,10 @@ global:
         - U.S. National Park Service
         - US National Park service
 filters:
+    # TODO: is this how we want to handle it?
+  - filter: {source: naturalearthdata.com}
+    min_zoom: 4
+    output: {kind: urban_area}
   ############################################################
   # NOT IN ANY TIER
   #

@@ -15,7 +15,7 @@
     NULL AS zoo,
     NULL AS barrier,
     NULL AS mz_is_building,
-    hstore(t.*) AS tags
+    hstore(t.*) || hstore('source', 'naturalearthdata.com') AS tags
 {% endmacro %}
 
 {% macro osm_landuse_detailed_query(table, geom_type) %}
