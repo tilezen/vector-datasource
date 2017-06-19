@@ -22,9 +22,13 @@ global:
       service: {col: service}
       sport: {col: sport}
       surface: {col: tags->surface}
-      # NOTE: moved directly to sql
-      # bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
-      bicycle_network: {col: mz_cycling_network}
+      bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
+      bicycle_network:
+        call:
+          func: mz_cycling_network
+          args:
+            - { col: tags }
+            - { col: osm_id }
       oneway: {col: oneway}
       oneway_bicycle: {col: "tags->oneway:bicycle"}
       cycleway:
@@ -66,13 +70,11 @@ global:
       sidewalk_left: {col: 'sidewalk:left'}
       sidewalk_right: {col: 'sidewalk:right'}
   - &osm_network
-      # NOTE: moved directly to sql
-      # mz_networks:
-      #   call:
-      #     func: mz_get_rel_networks
-      #     args:
-      #       - osm_id
-      mz_networks: {col: mz_networks}
+      mz_networks:
+        call:
+          func: mz_get_rel_networks
+          args:
+            - { col: osm_id }
       network: {col: network}
   - &osm_piste_properties
       kind: piste
