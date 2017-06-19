@@ -12,7 +12,7 @@ Need help displaying vector tiles in a map? Here are several [examples](display-
 
 #### Data sources and attribution
 
-Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require attribution in your project.
+Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) in your project.
 
 #### Feature names
 
