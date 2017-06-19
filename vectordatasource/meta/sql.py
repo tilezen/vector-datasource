@@ -24,12 +24,31 @@ def format_value(val, table):
             return format_case_sql(val['case'], table)
         elif 'call' in val:
             return format_call_sql(val['call'], table)
+        elif 'clamp' in val:
+            return format_clamp_sql(val['clamp'], table)
+        elif 'lookup' in val:
+            return format_lookup_sql(val['lookup'], table)
+        elif 'sum' in val:
+            return format_expr_sql(val['sum'], '+', table)
+        elif 'mul' in val:
+            return format_expr_sql(val['mul'], '*', table)
         else:
             assert 0, 'Unknown dict value: %r' % val
     if isinstance(val, int):
-        return "%s" % val
+        return "%d" % val
+    elif isinstance(val, float):
+        return "%f" % val
+    elif isinstance(val, list):
+        return format_array_sql(val, table)
     else:
         return "'%s'" % val
+
+
+def format_array_sql(array, table):
+    sql = []
+    for val in array:
+        sql.append(format_value(val, table))
+    return 'ARRAY[%s]' % (','.join(sql))
 
 
 def format_json_value(val, table):
@@ -56,13 +75,32 @@ def value_columns(val):
         elif 'value' in val:
             return []
         elif 'case' in val:
-            # TODO this is not right, but does it need to be?
-            return ['tags']
+            table = Table('fake table', [], [])
+            cols = set()
+            for item in val['case']:
+                if 'when' in item and 'then' in item:
+                    cols.update(value_columns(item['then']))
+                    when_filters = item['when']
+                    if not isinstance(when_filters, list):
+                        when_filters = [when_filters]
+                    for when_filter in when_filters:
+                        for k, v in when_filter.items():
+                            rule = create_filter_rule(k, v, table)
+                            cols.update(c._name for c in rule.columns())
+            return list(cols)
         elif 'call' in val:
-            # TODO this is not right, but does it need to be?
-            return ['tags']
+            cols = set()
+            for arg in val['call']['args']:
+                cols.update(value_columns(arg))
+            return list(cols)
         else:
             assert 0, 'Unknown dict value: %r' % val
+
+    elif isinstance(val, list):
+        cols = set()
+        for v in val:
+            cols.update(value_columns(v))
+        return list(cols)
     return []
 
 
@@ -89,20 +127,16 @@ def format_case_sql(case_stmt, table):
             for k, v in when_filter.items():
                 rule = create_filter_rule(k, v, table)
                 cond_sql = rule.as_sql()
-                cond = cond_sql, then_val
-                conds.append(cond)
+                conds.append(cond_sql)
 
-        when_sql = ' AND '.join(
-            '%s = %s' % (x, y)
-            for x, y in conds)
-
+        when_sql = ' AND '.join(conds)
         then_sql = format_value(then_part, table)
 
         when_then_sql = 'WHEN %s THEN %s' % (when_sql, then_sql)
         when_then_sqls.append(when_then_sql)
 
     else_sql = ' ELSE %s' % else_val if else_val else ''
-    case_sql = 'CASE %s%s' % (when_then_sql, else_sql)
+    case_sql = 'CASE %s%s END' % (' '.join(when_then_sqls), else_sql)
     return case_sql
 
 
@@ -116,6 +150,40 @@ def format_call_sql(call_stmt, table):
     ]
     sql_args_str = ', '.join(sql_args)
     return '%s(%s)' % (fn, sql_args_str)
+
+
+def format_expr_sql(values, op, table):
+    assert isinstance(values, list), "Values of expression must be a list."
+    exprs = []
+    for val in values:
+        exprs.append(format_value(val, table))
+    return op.join(exprs)
+
+
+def format_clamp_sql(value, table):
+    assert isinstance(value, dict), "Clamp should be a dict."
+    min_val = format_value(value['min'], table)
+    max_val = format_value(value['max'], table)
+    val_expr = format_value(value['value'], table)
+    sql = 'GREATEST(%s, LEAST(%s, %s))' % (min_val, max_val, val_expr)
+    return sql
+
+
+def format_lookup_sql(value, table):
+    assert isinstance(value, dict), "Lookup should be dict."
+    key = format_value(value['key'], table)
+    op = value['op']
+    assert op in ('>=', '<='), "Op must be  >= or <=."
+    default = value.get('default')
+    sql = 'CASE '
+    for (out_val, cmp_val) in value['table']:
+        cmp_expr = format_value(cmp_val, table)
+        out_expr = format_value(out_val, table)
+        sql += 'WHEN %s %s %s THEN %s ' % (key, op, cmp_expr, out_expr)
+    if default:
+        sql += 'ELSE %s ' % (format_value(default, table),)
+    sql += 'END'
+    return sql
 
 
 class Column(object):
@@ -276,7 +344,6 @@ class NotExistsRule(object):
 
 
 class AndRule(object):
-
     def __init__(self, rules):
         self.rules = rules
 
@@ -381,6 +448,9 @@ def create_filter_rule(filter_key, filter_value, table):
         rule = create_level_filter_rule(filter_value, table)
     elif filter_key == 'any':
         rule = create_level_filter_rule(filter_value, table, combinator=OrRule)
+    elif filter_key == 'geom_type':
+        assert filter_value in ('point', 'line', 'polygon')
+        rule = GeomTypeRule(filter_value)
     else:
         # leaf rules
         col = table.create_column(filter_key)
@@ -398,10 +468,6 @@ def create_filter_rule(filter_key, filter_value, table):
             elif isinstance(filter_value, dict) and 'expr' in filter_value:
                 rule = ExpressionRule(
                     table, col, filter_value['expr'], filter_value.get('cols'))
-            elif filter_value == 'geom_type':
-                assert filter_value in ('point', 'line', 'polygon')
-                rule = GeomTypeRule(
-                    col, filter_value)
             else:
                 rule = EqualsRule(table, col, filter_value)
     return rule
@@ -451,9 +517,21 @@ class Matcher(object):
         return 'WHEN %s THEN %s' % (self.rule.as_sql(), min_zoom)
 
 
+def create_matcher_expr(f, table):
+    rules = []
+    for k, v in f.items():
+        rule = create_filter_rule(k, v, table)
+        rules.append(rule)
+    if len(rules) > 1:
+        rule = AndRule(rules)
+    else:
+        rule = rules[0]
+    return rule.as_sql()
+
+
 def sql_expr(expr, table):
     # a literal should be returned as an escaped SQL literal in a string
-    if isinstance(expr, (str, unicode, int)):
+    if isinstance(expr, (str, unicode, int, float)):
         return format_value(expr, table)
 
     # otherwise expr is an AST, so should be tree-structured with a
@@ -473,6 +551,9 @@ def sql_expr(expr, table):
     elif node_type == 'lit':
         assert isinstance(value, (str, unicode)), "Literal should be a string."
         sql = value
+
+    elif node_type in ('clamp', 'col', 'lookup', 'sum', 'case', 'call'):
+        return format_value(expr, table)
 
     else:
         assert 0, "Unimplemented node type %r" % (node_type,)
@@ -507,7 +588,7 @@ def create_matcher(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
 
     if isinstance(min_zoom, dict):
-        min_zoom = sql_expr(min_zoom, table)
+        min_zoom = sql_expr(min_zoom, table_obj)
 
     output = yaml_datum['output']
     assert 'kind' in output, \
@@ -583,6 +664,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
             assert isinstance(column, Column), "%r is not a Column" % (column,)
             assert not column._is_tag, \
                 'did not expect tag in column list: %r' % (column,)
+            assert column._name != 'tags', \
+                "'tags' is not allowed as a column name."
             if column._name == 'gid' or column._name == 'fid':
                 typ = 'integer'
             elif column._name == 'scalerank' or column._name == 'labelrank':

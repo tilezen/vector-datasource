@@ -933,3 +933,10 @@ BEGIN
   RETURN mz_building_height(tags->'height', tags->'building:levels') * way_area;
 END
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE FUNCTION trim_nz_sh(label TEXT)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN trim(leading 'SH' from label);
+END
+$$ LANGUAGE plpgsql IMMUTABLE;
