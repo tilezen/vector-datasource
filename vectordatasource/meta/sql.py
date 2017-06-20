@@ -16,6 +16,8 @@ def format_value(val, table):
         elif 'col' in val:
             if val['col'].startswith('tags->'):
                 return "tags->'%s'" % val['col'][len('tags->'):]
+            elif table.column_is_tag(val['col']):
+                return "tags->'%s'" % val['col']
             else:
                 return '"%s"' % val['col']
         elif 'value' in val:
@@ -58,7 +60,7 @@ def format_json_value(val, table):
     return 'mz_to_json_null_safe(%s)' % val
 
 
-def value_columns(val):
+def value_columns(val, table):
     if isinstance(val, dict):
         if 'expr' in val:
             if val['expr'] is None:
@@ -68,18 +70,18 @@ def value_columns(val):
         elif 'col' in val:
             if val.get('ignore'):
                 return []
-            elif val['col'].startswith('tags->'):
+            elif val['col'].startswith('tags->') or \
+                 table.column_is_tag(val['col']):
                 return ['tags']
             else:
                 return [val['col']]
         elif 'value' in val:
             return []
         elif 'case' in val:
-            table = Table('fake table', [], [])
             cols = set()
             for item in val['case']:
                 if 'when' in item and 'then' in item:
-                    cols.update(value_columns(item['then']))
+                    cols.update(value_columns(item['then'], table))
                     when_filters = item['when']
                     if not isinstance(when_filters, list):
                         when_filters = [when_filters]
@@ -91,7 +93,7 @@ def value_columns(val):
         elif 'call' in val:
             cols = set()
             for arg in val['call']['args']:
-                cols.update(value_columns(arg))
+                cols.update(value_columns(arg, table))
             return list(cols)
         else:
             assert 0, 'Unknown dict value: %r' % val
@@ -99,7 +101,7 @@ def value_columns(val):
     elif isinstance(val, list):
         cols = set()
         for v in val:
-            cols.update(value_columns(v))
+            cols.update(value_columns(v, table))
         return list(cols)
     return []
 
@@ -140,6 +142,11 @@ def format_case_sql(case_stmt, table):
     return case_sql
 
 
+UTIL_FUNCTIONS = {
+    'util.calculate_path_major_route': 'mz_calculate_path_major_route',
+}
+
+
 def format_call_sql(call_stmt, table):
     assert isinstance(call_stmt, dict)
     assert set(call_stmt.keys()) == set(['func', 'args'])
@@ -149,6 +156,8 @@ def format_call_sql(call_stmt, table):
         format_value(x, table) for x in args
     ]
     sql_args_str = ', '.join(sql_args)
+    if fn.startswith('util.'):
+        fn = UTIL_FUNCTIONS[fn]
     return '%s(%s)' % (fn, sql_args_str)
 
 
@@ -218,7 +227,7 @@ class Column(object):
 
 # these are columns which are present in OSM tables as real columns, whereas
 # everything else is in the tags hstore.
-FIXED_OSM_COLUMNS = set(['way_area', 'way', 'osm_id'])
+FIXED_OSM_COLUMNS = set(['way_area', 'way', 'fid', 'tags'])
 
 
 class Table(object):
@@ -236,12 +245,19 @@ class Table(object):
         self._synthetic_columns = (
             set(synthetic_columns) if synthetic_columns else set())
 
-    def create_column(self, name):
-        not_tag = self._name in ('shp', 'ne') or \
+        # we synthesize zoom (1px area) for all tables, so that should be
+        # automatically a synthetic column.
+        self._synthetic_columns.add('zoom')
+
+    def column_is_tag(self, name):
+        not_tag = self._name in ('shp', 'ne', 'wof') or \
                   name in self._extra_columns or \
                   name in self._synthetic_columns or \
                   name in FIXED_OSM_COLUMNS
-        return Column(not not_tag, name)
+        return not not_tag
+
+    def create_column(self, name):
+        return Column(self.column_is_tag(name), name)
 
 
 def ensure_sql_boolean(column, check):
@@ -269,7 +285,7 @@ class EqualsRule(object):
         return equals_check
 
     def columns(self):
-        return [self.column] + value_columns(self.value)
+        return [self.column] + value_columns(self.value, self.table)
 
 
 class GreaterOrEqualsRule(object):
@@ -284,7 +300,7 @@ class GreaterOrEqualsRule(object):
             format_value(self.value, self.table))
 
     def columns(self):
-        return [self.column] + value_columns(self.value)
+        return [self.column] + value_columns(self.value, self.table)
 
 
 class SetRule(object):
@@ -307,7 +323,7 @@ class SetRule(object):
     def columns(self):
         cols = [self.column]
         for val in self.values:
-            cols.extend(value_columns(val))
+            cols.extend(value_columns(val, self.table))
         return cols
 
 
@@ -506,7 +522,7 @@ class Matcher(object):
     def output_columns(self):
         columns = []
         for k, v in self.output.items():
-            columns.extend(value_columns(v))
+            columns.extend(value_columns(v, self.table))
         return columns
 
     def when_sql_min_zoom(self):
@@ -622,6 +638,17 @@ def create_case_statement_output(matchers):
     return case_sql
 
 
+def is_concrete_column(matcher, col):
+    if col._is_tag:
+        return False
+    table_name = matcher.table._name or 'osm'
+    if table_name == 'osm' and col._name in FIXED_OSM_COLUMNS:
+        return False
+    if col._name in matcher.table._synthetic_columns:
+        return False
+    return True
+
+
 Key = namedtuple('Key', 'table key typ')
 
 
@@ -647,8 +674,7 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
         # query function.
         columns = set()
         for col in matcher.rule.columns():
-            if not col._is_tag and col._name not in FIXED_OSM_COLUMNS and \
-               col._name not in matcher.table._synthetic_columns:
+            if is_concrete_column(matcher, col):
                 columns.add(col)
 
         for col_name in matcher.table._extra_columns:
@@ -656,8 +682,7 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
 
         for col_name in matcher.output_columns():
             col = matcher.table.create_column(col_name)
-            if not col._is_tag and col._name not in FIXED_OSM_COLUMNS and \
-               col._name not in matcher.table._synthetic_columns:
+            if is_concrete_column(matcher, col):
                 columns.add(col)
 
         for column in columns:
@@ -674,6 +699,8 @@ for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
                 typ = 'geometry'
             elif matcher.table._name == 'ne' and column._name == 'expressway':
                 typ = 'smallint'
+            elif matcher.table._name == 'wof' and column._name == 'min_zoom':
+                typ = 'real'
             else:
                 typ = 'text'
             key = Key(
