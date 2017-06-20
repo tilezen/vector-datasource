@@ -28,7 +28,7 @@ global:
           func: mz_cycling_network
           args:
             - { col: tags }
-            - { col: osm_id }
+            - { col: fid }
       oneway: {col: oneway}
       oneway_bicycle: {col: "tags->oneway:bicycle"}
       cycleway:
@@ -74,7 +74,7 @@ global:
         call:
           func: mz_get_rel_networks
           args:
-            - { col: osm_id }
+            - { col: fid }
       network: {col: network}
   - &osm_piste_properties
       kind: piste
