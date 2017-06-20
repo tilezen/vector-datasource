@@ -5,7 +5,7 @@ SELECT
     'naturalearthdata.com' AS source,
     scalerank as min_zoom,
     mz_calculate_json_roads(ne_10m_roads.*) AS mz_properties,
-    hstore(ne_10m_roads.*) AS tags
+    row_to_json(ne_10m_roads.*) AS tags
 
 FROM ne_10m_roads
 
