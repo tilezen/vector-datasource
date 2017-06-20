@@ -18,6 +18,8 @@ filters:
   - filter: {source: whosonfirst.mapzen.com}
     min_zoom: {col: min_zoom}
     output: {kind: {col: kind}}
+    table: wof
+    extra_columns: [ min_zoom ]
   - filter: {name: true, place: country}
     min_zoom: 2
     output: {kind: country}
