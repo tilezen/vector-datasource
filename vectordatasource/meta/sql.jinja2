@@ -149,7 +149,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
-        osm_id bigint,
+        fid bigint,
         tags hstore,
         way_area real)
 RETURNS REAL AS $$
@@ -201,7 +201,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_json_pois_(
 {%- for param in layers['pois']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
-        osm_id bigint,
+        fid bigint,
         tags hstore)
 RETURNS JSON AS $$
 BEGIN
@@ -1125,7 +1125,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_json_roads_(
 {%- for param in layers['roads']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
-        osm_id bigint,
+        fid bigint,
         name text,
         tags hstore)
 RETURNS JSON AS $$
@@ -1140,7 +1140,7 @@ DROP FUNCTION IF EXISTS mz_calculate_min_zoom_roads_(
 {%- for param in layers['roads']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
-        osm_id bigint,
+        fid bigint,
         name text,
         way geometry,
         tags hstore);
@@ -1149,7 +1149,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads_(
 {%- for param in layers['roads']['params'] %}
         {{param.key}} {{param.typ}},
 {%- endfor %}
-        osm_id bigint,
+        fid bigint,
         name text,
         way geometry,
         tags hstore)
