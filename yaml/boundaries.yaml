@@ -25,6 +25,12 @@ global:
 
 filters:
 
+  # kind pre-generated for buffered_land
+  - filter:
+      kind: true
+    min_zoom: 8
+    output: {kind: {col: kind}}
+
   # osm
   - filter:
       any:
