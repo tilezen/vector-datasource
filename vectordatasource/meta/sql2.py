@@ -1,4 +1,5 @@
-from vectordatasource.meta.python import parse_layers
+from vectordatasource.meta.python import parse_layers, output_kind, \
+        output_min_zoom, LayerParseResult, FunctionData
 import sys
 import ast
 from cStringIO import StringIO
@@ -16,11 +17,18 @@ CMP_OPS = {
     ast.In:    "IN",
     ast.Is:    "IS",
     ast.GtE:   ">=",
+    ast.LtE:   "<=",
 }
 
 
 UNARY_OPS = {
-    ast.Not: "NOT "
+    ast.Not: "NOT ",
+}
+
+
+BINARY_OPS = {
+    ast.Add:  "+",
+    ast.Mult: "*",
 }
 
 
@@ -30,18 +38,27 @@ VALUES = {
     'volume':   'volume',
     'way_area': 'way_area',
     'shape':    'way',
+    'fid':      'fid',
+    'zoom':     'zoom',
 }
 
 
 KNOWN_FUNCS = {
-    'mz_building_kind_detail':      'mz_building_kind_detail',
-    'mz_building_part_kind_detail': 'mz_building_part_kind_detail',
-    'trim_nz_sh':                   'trim_nz_sh',
-    'mz_get_rel_networks':          'mz_get_rel_networks',
-    'mz_cycling_network':           'mz_cycling_network',
-    'util.calculate_way_area':      'way_area',
-    'util.calculate_volume':        'mz_calculate_building_volume',
-    'ST_GeometryType':              'ST_GeometryType',
+    'mz_building_kind_detail':            'mz_building_kind_detail',
+    'mz_building_part_kind_detail':       'mz_building_part_kind_detail',
+    'trim_nz_sh':                         'trim_nz_sh',
+    'mz_get_rel_networks':                'mz_get_rel_networks',
+    'util.cycling_network':               'mz_cycling_network',
+    'util.calculate_way_area':            'way_area',
+    'util.calculate_volume':              'mz_calculate_building_volume',
+    'ST_GeometryType':                    'ST_GeometryType',
+    'util.calculate_1px_zoom':            'mz_one_pixel_zoom',
+    'min':                                'LEAST',
+    'max':                                'GREATEST',
+    'mz_to_float_meters':                 'mz_to_float_meters',
+    'mz_get_min_zoom_highway_level_gate': 'mz_get_min_zoom_highway_level_gate',
+    'util.calculate_path_major_route':    'mz_calculate_path_major_route',
+    'mz_calculate_ferry_level':           'mz_calculate_ferry_level',
 }
 
 
@@ -167,6 +184,13 @@ class SQLExpression(ast.NodeVisitor):
         self.buf.write("(")
         self.buf.write(instance_lookup(op.op, UNARY_OPS))
         self.visit(op.operand)
+        self.buf.write(")")
+
+    def visit_BinOp(self, op):
+        self.buf.write("(")
+        self.visit(op.left)
+        self.buf.write(instance_lookup(op.op, BINARY_OPS))
+        self.visit(op.right)
         self.buf.write(")")
 
     def visit_Str(self, s):
@@ -384,7 +408,7 @@ class SQLVisitor(ast.NodeVisitor):
         self.indent += n
 
     def visit_FunctionDef(self, defn):
-        self.writeln("CREATE OR REPLACE FUNCTION mz_calculate_%s_"
+        self.writeln("CREATE OR REPLACE FUNCTION %s"
                      "(way geometry, tags hstore, way_area real)"
                      % defn.name)
         self.writeln("RETURNS JSON AS $$")
@@ -458,17 +482,30 @@ class SQLVisitor(ast.NodeVisitor):
                      % (type(node),))
 
 
+def make_function_name_props(layer_name):
+    return 'mz_calculate_json_%s_' % (layer_name,)
+
+
+def make_function_name_min_zoom(layer_name):
+    return 'mz_calculate_min_zoom_%s_' % (layer_name,)
+
+
 def main(argv=None):
     from vectordatasource.meta import find_yaml_path
     if argv is None:
         argv = sys.argv
     yaml_path = find_yaml_path()
-    layer_data = parse_layers(yaml_path)
-    for layer_datum in layer_data:
-        ast_fn = layer_datum.ast
-        ast_fn = GeomTypeTransformer().visit(ast_fn)
-        visitor = SQLVisitor(sys.stdout)
-        visitor.visit(ast_fn)
+    for output_fn, make_fn_name in (
+            (output_kind, make_function_name_props),
+            (output_min_zoom, make_function_name_min_zoom)):
+        layer_result = parse_layers(yaml_path, output_fn, make_fn_name)
+        assert isinstance(layer_result, LayerParseResult)
+        for function_data in layer_result.layer_data:
+            assert isinstance(function_data, FunctionData)
+            ast_fn = function_data.ast
+            ast_fn = GeomTypeTransformer().visit(ast_fn)
+            visitor = SQLVisitor(sys.stdout)
+            visitor.visit(ast_fn)
 
 
 if __name__ == '__main__':
