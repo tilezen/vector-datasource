@@ -9,7 +9,8 @@
     NULL::boolean AS label_placement,
     NULL::boolean AS boundary,
     NULL AS tunnel,
-    hstore(t.*) AS tags
+    hstore('source', 'naturalearthdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 {% endmacro %}
 
 {% if zoom < 9 %}
@@ -61,7 +62,8 @@ SELECT
     NULL::boolean AS label_placement,
     true AS boundary,
     NULL AS tunnel,
-    hstore(t.*) AS tags
+    hstore('source', 'naturalearthdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 
 FROM
 {% if zoom < 2 %}
@@ -90,7 +92,8 @@ SELECT
     NULL::boolean AS label_placement,
     true AS boundary,
     NULL AS tunnel,
-    hstore(t.*) AS tags
+    hstore('source', 'naturalearthdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 
 FROM
 {% if zoom < 2 %}
@@ -136,7 +139,8 @@ SELECT
     NULL::boolean AS label_placement,
     true AS boundary,
     NULL AS tunnel,
-    hstore(t.*) AS tags
+    hstore('source', 'naturalearthdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 
 FROM
 {% if 4 <= zoom < 5 %}
@@ -164,7 +168,8 @@ SELECT
     NULL::boolean AS label_placement,
     NULL::boolean AS boundary,
     NULL AS tunnel,
-    hstore(t.*) AS tags
+    hstore('source', 'openstreetmapdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 
 FROM water_polygons t
 
@@ -184,7 +189,8 @@ SELECT
     NULL::boolean AS label_placement,
     NULL::boolean AS boundary,
     tags->'tunnel' AS tunnel,
-    tags
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+    to_json(tags) AS tags
 
 FROM planet_osm_polygon t
 
@@ -210,7 +216,8 @@ SELECT
     NULL::boolean AS label_placement,
     NULL::boolean AS boundary,
     tags->'tunnel' AS tunnel,
-    tags
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+    to_json(tags) AS tags
 
 FROM planet_osm_line t
 
@@ -238,7 +245,8 @@ SELECT
   true AS label_placement,
   NULL::boolean AS boundary,
   NULL AS tunnel,
-  tags
+  hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+  to_json(tags) AS tags
 
 FROM
   planet_osm_point t

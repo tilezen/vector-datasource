@@ -35,9 +35,10 @@ SELECT
     NULL AS is_bus_route,
 {% endif %}
     tags,
-    ('{"mz_cycling_network": ' || mz_to_json_null_safe(mz_cycling_network(tags, osm_id)) ||
-      ', "network": ' || mz_to_json_null_safe(tags->'network') ||
-      ', "mz_networks": ' || mz_to_json_null_safe(mz_get_rel_networks(osm_id)) ||
+    ('{"mz_cycling_network":' || mz_to_json_null_safe(mz_cycling_network(tags, osm_id)) ||
+      ',"network":' || mz_to_json_null_safe(tags->'network') ||
+      ',"mz_networks":' || mz_to_json_null_safe(mz_get_rel_networks(osm_id)) ||
+      ',"source":"openstreetmap.org"' ||
       '}')::json
     AS mz_additional_tags
 

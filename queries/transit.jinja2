@@ -21,6 +21,7 @@ SELECT
     tags->'route_name' AS route_name,
     tags->'layer' AS layer,
     tags->'service' AS service,
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
     tags
 
 FROM {{ table }}

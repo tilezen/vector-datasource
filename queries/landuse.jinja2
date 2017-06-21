@@ -15,7 +15,8 @@
     NULL AS zoo,
     NULL AS barrier,
     NULL AS mz_is_building,
-    hstore(t.*) || hstore('source', 'naturalearthdata.com') AS tags
+    hstore('source', 'naturalearthdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 {% endmacro %}
 
 {% macro osm_landuse_detailed_query(table, geom_type) %}
@@ -48,7 +49,8 @@ SELECT
     tags->'zoo' AS zoo,
     tags->'barrier' AS barrier,
     mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building,
-    tags
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+    to_json(tags) AS tags
 FROM
     {{ table }} t
 WHERE
@@ -92,7 +94,8 @@ SELECT
   NULL AS zoo,
   NULL AS barrier,
   NULL AS mz_is_building,
-  tags
+  hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+  to_json(tags) AS tags
 FROM
   planet_osm_polygon t
 WHERE
@@ -132,7 +135,8 @@ SELECT
   NULL AS zoo,
   NULL AS barrier,
   mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building,
-  tags
+  hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+  to_json(tags) AS tags
 FROM
   planet_osm_polygon t
 WHERE
