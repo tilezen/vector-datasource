@@ -40,10 +40,12 @@ test.assert_has_feature(
     16, 10509, 25377, 'roads',
     { 'id': 44422697, 'kind': 'path', 'bicycle_network': 'rcn'})
 
-# Way: Adam Clayton Powell Jr. Boulevard (204085723) http://www.openstreetmap.org/way/204085723
+# Way: Cabrini Boulevard.
+# http://www.openstreetmap.org/way/5669719
+# rcn_ref=9, but not part of any relation.
 test.assert_has_feature(
-    16, 19305, 24618, 'roads',
-    { 'id': 204085723, 'kind': 'major_road', 'bicycle_network': 'rcn'})
+    16, 19307, 24607, 'roads',
+    { 'id': 5669719, 'kind': 'minor_road', 'bicycle_network': 'rcn'})
 
 # Way: 11th Street (27029204) http://www.openstreetmap.org/way/27029204#map=16/37.7700/-122.4117
 test.assert_has_feature(
