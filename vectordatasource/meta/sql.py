@@ -151,6 +151,7 @@ def format_case_sql(case_stmt_orig, table):
 
 UTIL_FUNCTIONS = {
     'util.calculate_path_major_route': 'mz_calculate_path_major_route',
+    'util.cycling_network': 'mz_cycling_network',
 }
 
 
