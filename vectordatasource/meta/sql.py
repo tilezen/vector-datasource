@@ -42,6 +42,8 @@ def format_value(val, table):
         return "%f" % val
     elif isinstance(val, list):
         return format_array_sql(val, table)
+    elif val is None:
+        return "NULL"
     else:
         return "'%s'" % val
 
@@ -106,9 +108,14 @@ def value_columns(val, table):
     return []
 
 
-def format_case_sql(case_stmt, table):
-    assert isinstance(case_stmt, list)
-    assert len(case_stmt) >= 1
+def format_case_sql(case_stmt_orig, table):
+    assert isinstance(case_stmt_orig, list)
+    assert len(case_stmt_orig) >= 1
+
+    # copy the case statement so that we can modify it (for the else removal)
+    # without modifying the original in case the original is re-used (for
+    # example in YAML aliases).
+    case_stmt = list(case_stmt_orig)
 
     if 'else' in case_stmt[-1]:
         else_val = format_value(case_stmt.pop()['else'], table)
