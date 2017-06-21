@@ -716,7 +716,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output: {kind: fitness_station}
   - filter: {leisure: beach_resort}
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 0.5 ] } } }
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 0.5 ] } } }
     output: {kind: beach_resort }
   - filter:
       tourism: [hotel, motel]
@@ -727,7 +727,7 @@ filters:
     min_zoom: 12
     output: {kind: motorway_junction}
   - filter: {historic: monument}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.24 ] } } }
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 2.24 ] } } }
     output: {kind: monument }
   - filter:
       tags->zoo: [enclosure, petting_zoo, aviary]
