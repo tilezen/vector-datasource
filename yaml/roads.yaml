@@ -22,13 +22,7 @@ global:
       service: {col: service}
       sport: {col: sport}
       surface: {col: tags->surface}
-      bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
-      bicycle_network:
-        call:
-          func: mz_cycling_network
-          args:
-            - { col: tags }
-            - { col: fid }
+      bicycle_network: {call: { func: util.cycling_network, args: [tags, fid] }}
       oneway: {col: oneway}
       oneway_bicycle: {col: "tags->oneway:bicycle"}
       cycleway:
