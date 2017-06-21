@@ -212,19 +212,17 @@ def mz_building_part_kind_detail(val):
         return 'steps'
 
 
-def mz_get_rel_networks(osm_id):
-    # TODO stubbed for now. Probably have queries continue to return
-    # this result in a sidecar property
-    return []
-
-
+# these functions were used in the yaml, but are worked around at the
+# moment by continuing to call the sql and having the output
+# calculation simply pick up the sql values
+# def mz_get_rel_networks(osm_id):
+#     return []
 # def mz_cycling_network(props, osm_id):
-#     # TODO stubbed for now. Probably have queries continue to return
-#     # this result in a sidecar property
-#     None
+#     pass
 
 
 def trim_nz_sh(label):
+    # TODO is this what the implementation should be?
     if label.startswith('NZ:SH'):
         label = label[len('NZ:SH'):]
     return label

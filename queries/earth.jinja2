@@ -10,7 +10,8 @@ SELECT
     mz_earth_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    hstore(t.*) AS tags
+    hstore('source', 'naturalearthdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 FROM
 {% if zoom < 2 %}
     ne_110m_land t
@@ -36,7 +37,8 @@ SELECT
     NULL AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    hstore(t.*) AS tags
+    hstore('source', 'openstreetmapdata.com') AS mz_additional_tags,
+    row_to_json(t.*) AS tags
 
 FROM
     land_polygons t
@@ -60,7 +62,8 @@ SELECT
     mz_earth_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    tags
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+    to_json(tags) AS tags
 
 FROM planet_osm_polygon t
 
@@ -84,7 +87,8 @@ SELECT
     mz_earth_min_zoom AS min_zoom,
     {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
     NULL::boolean AS label_placement,
-    tags
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+    to_json(tags) AS tags
 
 FROM planet_osm_line t
 
@@ -110,7 +114,8 @@ SELECT
   mz_earth_min_zoom AS min_zoom,
   NULL AS mz_label_placement,
   true AS label_placement,
-  tags
+  hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+  to_json(tags) AS tags
 
 FROM
   planet_osm_point t
