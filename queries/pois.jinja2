@@ -20,6 +20,7 @@ SELECT
     tags->'zoo' AS zoo,
     tags->'exit_to' AS exit_to,
     mz_properties,
+    hstore('source', 'openstreetmap.org') AS mz_additional_tags,
     tags
 
 FROM (
