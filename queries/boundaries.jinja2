@@ -107,7 +107,9 @@ SELECT
   true AS maritime_boundary,
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom',3857) }}{% endfilter %} AS __geometry__,
   '{"kind": "maritime"}'::json as mz_properties,
-  hstore('source', 'openstreetmap.org') AS mz_additional_tags,
+  hstore(ARRAY[
+           'source', 'openstreetmap.org',
+           'kind', 'maritime']) AS mz_additional_tags,
   NULL::json AS tags
 
 FROM buffered_land
