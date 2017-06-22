@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -e
 
@@ -134,12 +134,14 @@ for tbl in `ls ${basedir}/integration-test/fixtures/`; do
 done
 shopt -u nullglob
 
+echo "=== Starting test tile server..."
 # make config for tileserver and serve
 test_server_port="${basedir}/test_server.port"
 rm -f "${test_server_port}"
 python scripts/test_server.py "${dbname}" "${USER}" "${test_server_port}" &
 server_pid=$!
 
+echo "=== Waiting for tile server to start..."
 # wait for file to exist, which means server has started up
 counter=0
 limit=10
