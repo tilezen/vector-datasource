@@ -60,11 +60,18 @@ def calculate_1px_zoom(way_area):
         return 17.256 - math.log(way_area) / math.log(4)
 
 
+# returns the min_zoom for the most important walking or cycling network
+# that the road with the given fid is part of.
 def calculate_path_major_route(fid):
     # TODO: implement me! current implementation is a stub.
     return 18
 
 
+# calculates the "most important" cycle network for a road with the given tags
+# and fid, or None if the road isn't part of a cycle network.
+#
+# cycle networks are considered in the following order of importance: icn,
+# ncn, rcn, lcn.
 def cycling_network(tags, fid):
     # TODO: implement me! current implementation is a stub.
     return None
