@@ -147,7 +147,10 @@ counter=0
 limit=10
 while [[ ! -f "${test_server_port}" ]]; do
     sleep 1
-    let counter++
+    # note: don't use postfix ++ as let returns 1 when the arg evaluates to
+    # zero (as (counter=0)++ would), which makes `set -e` terminate the
+    # program.
+    let counter=counter+1
     if [[ $counter -gt $limit ]]; then
         echo "Test server didn't start up within ${limit}s."
         exit 1
