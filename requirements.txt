@@ -23,3 +23,5 @@ git+https://github.com/tilezen/mapbox-vector-tile@master#egg=mapbox-vector-tile
 # TODO! remember to change this back to 'master' branch!
 git+https://github.com/tilezen/tilequeue@migrate-sql-functions-to-python#egg=tilequeue
 git+https://github.com/tilezen/tileserver@migrate-sql-functions-to-python#egg=tileserver
+# TODO! change this to the released version following https://github.com/darkfoxprime/python-astformatter/pull/8
+git+https://github.com/tilezen/python-astformatter@zerebubuth/add-parens-around-unary-operands-if-necessary#egg=ASTFormatter
