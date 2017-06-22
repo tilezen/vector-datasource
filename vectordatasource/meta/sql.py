@@ -72,8 +72,8 @@ def value_columns(val, table):
         elif 'col' in val:
             if val.get('ignore'):
                 return []
-            elif val['col'].startswith('tags->') or \
-                 table.column_is_tag(val['col']):
+            elif (val['col'].startswith('tags->') or
+                  table.column_is_tag(val['col'])):
                 return ['tags']
             else:
                 return [val['col']]
@@ -127,7 +127,6 @@ def format_case_sql(case_stmt_orig, table):
         assert set(when_then.keys()) == set(['when', 'then'])
         when_filters = when_then['when']
         then_part = when_then['then']
-        then_val = format_value(then_part, table)
 
         conds = []
         if not isinstance(when_filters, list):

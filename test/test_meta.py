@@ -287,7 +287,6 @@ class WaterTest(unittest.TestCase):
         self.assertEquals('riverbank', out_props.get('kind'))
         self.assertTrue(out_props.get('intermittent'))
 
-
     def test_ne(self):
         props = dict(featurecla='Lake')
         out_props = self.water.fn(None, props, None)

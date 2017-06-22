@@ -152,7 +152,8 @@ def mz_building_kind_detail(val):
         return 'greenhouse'
     if val in ('apartment', 'flat'):
         return 'apartments'
-    if val in ('houses', 'residences', 'residence', 'perumahan permukiman', 'residentiel1'):
+    if val in ('houses', 'residences', 'residence', 'perumahan permukiman',
+               'residentiel1'):
         return 'residential'
     if val in ('semi_detached', 'semi-detached', 'semi'):
         return 'semidetached_house'
