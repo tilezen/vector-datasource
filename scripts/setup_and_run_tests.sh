@@ -140,15 +140,17 @@ rm -f "${test_server_port}"
 python scripts/test_server.py "${dbname}" "${USER}" "${test_server_port}" &
 server_pid=$!
 
-# wait for file to exist
-if [[ ! -f "${test_server_port}" ]]; then
+# wait for file to exist, which means server has started up
+counter=0
+limit=10
+while [[ ! -f "${test_server_port}" ]]; do
     sleep 1
-fi
-
-if [[ ! -f "${test_server_port}" ]]; then
-    echo "Test server didn't start up within 1s."
-    exit 1
-fi
+    let counter++
+    if [[ $counter -gt $limit ]]; then
+        echo "Test server didn't start up within ${limit}s."
+        exit 1
+    fi
+done
 
 # run tests
 port=`cat "${test_server_port}"`
