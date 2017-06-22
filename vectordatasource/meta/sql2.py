@@ -111,8 +111,8 @@ def fn_name(node):
     elif isinstance(node, (str, unicode)):
         return node
     else:
-        import pdb; pdb.set_trace()
-        raise RuntimeError("Don't know how to make a function name from %r" % (node,))
+        raise RuntimeError("Don't know how to make a function name from %r"
+                           % (node,))
 
 
 class SQLExpression(ast.NodeVisitor):
@@ -191,7 +191,8 @@ class SQLExpression(ast.NodeVisitor):
             name = fn_name(call.func)
             func = KNOWN_FUNCS.get(name)
             if not func:
-                raise RuntimeError("Call to name not implemented yet: %r" % (name,))
+                raise RuntimeError("Call to name not implemented yet: %r"
+                                   % (name,))
             self.buf.write(func)
             self.buf.write("(")
             first = True
@@ -278,10 +279,10 @@ class SQLExpression(ast.NodeVisitor):
         if name == 'shape' and attr == 'type':
             self.buf.write("ST_GeomType(way)")
         else:
-            raise RuntimeError("Unknown attribute pair (%r, %r)" % (name, attr))
+            raise RuntimeError("Unknown attribute pair (%r, %r)"
+                               % (name, attr))
 
     def generic_visit(self, node):
-        import pdb; pdb.set_trace()
         self.buf.write("<<<%s>>>" % type(node))
 
     def __str__(self):
@@ -306,10 +307,10 @@ def merge_case(stmts):
     for stmt in stmts:
         if isinstance(stmt, ast.Assign):
             assigns.append(stmt)
-        elif isinstance(stmt, ast.If) and \
-           len(stmt.orelse) == 0 and \
-           len(stmt.body) == 1 and \
-           isinstance(stmt.body[0], ast.Return):
+        elif (isinstance(stmt, ast.If) and
+              len(stmt.orelse) == 0 and
+              len(stmt.body) == 1 and
+              isinstance(stmt.body[0], ast.Return)):
             whens.append(stmt)
         else:
             return stmts
@@ -388,7 +389,6 @@ class SQLVisitor(ast.NodeVisitor):
                      % defn.name)
         self.writeln("RETURNS JSON AS $$")
         self.add_indent(2)
-        #import pdb; pdb.set_trace()
         seen_begin = False
         wrote_declare = False
         for stmt in merge_case(defn.body):
@@ -396,7 +396,8 @@ class SQLVisitor(ast.NodeVisitor):
                 if assign_is_global(stmt):
                     continue
                 if seen_begin:
-                    raise RuntimeError("Assignment statement after function body begins.")
+                    raise RuntimeError(
+                        "Assignment statement after function body begins.")
                 if not wrote_declare:
                     self.add_indent(-2)
                     self.writeln("DECLARE")
@@ -453,7 +454,8 @@ class SQLVisitor(ast.NodeVisitor):
         self.writeln("%s REAL := %s;" % (name, expr))
 
     def generic_visit(self, node):
-        self.writeln("<<< don't yet understand what a %s is for... >>>" % (type(node),))
+        self.writeln("<<< don't yet understand what a %s is for... >>>"
+                     % (type(node),))
 
 
 def main(argv=None):

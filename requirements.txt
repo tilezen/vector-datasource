@@ -20,5 +20,6 @@ Werkzeug==0.9.6
 wsgiref==0.1.2
 git+https://github.com/ixc/python-edtf@aad32b8d5cd8848c50fbef92c73697a93cf182ba#edtf
 git+https://github.com/mapzen/mapbox-vector-tile@master#egg=mapbox-vector-tile
-git+https://github.com/mapzen/tilequeue@master#egg=tilequeue
-git+https://github.com/mapzen/tileserver@master#egg=tileserver
+# TODO! remember to change this back to 'master' branch!
+git+https://github.com/mapzen/tilequeue@migrate-sql-functions-to-python#egg=tilequeue
+git+https://github.com/mapzen/tileserver@migrate-sql-functions-to-python#egg=tileserver

@@ -64,6 +64,7 @@ def calculate_path_major_route(fid):
     # TODO: implement me! current implementation is a stub.
     return 18
 
+
 def cycling_network(tags, fid):
     # TODO: implement me! current implementation is a stub.
     return None
