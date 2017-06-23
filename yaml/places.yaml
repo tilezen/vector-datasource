@@ -1,4 +1,17 @@
 global:
+  - &output_properties
+    name: {col: name}
+    source: {col: source}
+    admin_level: {col: admin_level}
+    population: {col: population}
+    country_capital: {col: country_capital}
+    region_capital: {col: region_capital}
+    mz_n_photos: {col: mz_n_photos}
+    area: {col: area}
+    min_zoom: {col: min_zoom}
+    max_zoom: {col: max_zoom}
+    is_landuse_aoi: {col: is_landuse_aoi}
+
   - &ne_places_min_zoom
     lookup:
       key: { col: scalerank }
@@ -14,92 +27,111 @@ global:
       default: 10
 
 filters:
-  # TODO - is this how we want to do this?
   - filter: {source: whosonfirst.mapzen.com}
     min_zoom: {col: min_zoom}
-    output: {kind: {col: kind}}
+    output:
+      - *output_properties
+      - {kind: {col: kind}}
     table: wof
     extra_columns: [ min_zoom ]
   - filter: {name: true, place: country}
     min_zoom: 2
-    output: {kind: country}
+    output:
+      - *output_properties
+      - {kind: country}
     table: osm
   - filter: {name: true, place: state}
     min_zoom: 4
     output:
-      kind: region
-      kind_detail: state
+      - *output_properties
+      - kind: region
+        kind_detail: state
     table: osm
   - filter: {name: true, place: province}
     min_zoom: 4
     output:
-      kind: region
-      kind_detail: province
+      - *output_properties
+      - kind: region
+        kind_detail: province
     table: osm
   - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
     output:
-      kind: locality
-      kind_detail: { col: place }
+      - *output_properties
+      - kind: locality
+        kind_detail: { col: place }
     table: osm
   - filter: {name: true, place: [city, town]}
     min_zoom: 9
     output:
-      kind: locality
-      kind_detail: { col: place }
+      - *output_properties
+      - kind: locality
+        kind_detail: { col: place }
     table: osm
   - filter: {name: true, population: true, place: village}
     min_zoom: 11
     output:
-      kind: locality
-      kind_detail: village
+      - *output_properties
+      - kind: locality
+        kind_detail: village
     table: osm
   - filter: {name: true, place: village}
     min_zoom: 12
     output:
-      kind: locality
-      kind_detail: village
+      - *output_properties
+      - kind: locality
+        kind_detail: village
     table: osm
   - filter: {name: true, population: true, place: hamlet}
     min_zoom: 12
     output:
-      kind: locality
-      kind_detail: hamlet
+      - *output_properties
+      - kind: locality
+        kind_detail: hamlet
     table: osm
   - filter: {name: true, place: [locality, hamlet]}
     min_zoom: 13
     output:
-      kind: locality
-      kind_detail: { col: place }
+      - *output_properties
+      - kind: locality
+        kind_detail: { col: place }
     table: osm
   - filter: {name: true, place: isolated_dwelling}
     min_zoom: 13
     output:
-      kind: locality
-      kind_detail: isolated_dwelling
+      - *output_properties
+      - kind: locality
+        kind_detail: isolated_dwelling
     table: osm
   - filter: {name: true, place: farm}
     min_zoom: 13
     output:
-      kind: locality
-      kind_detail: farm
+      - *output_properties
+      - kind: locality
+        kind_detail: farm
     table: osm
 
   - filter:
       scalerank: true
       featurecla: [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
     min_zoom: *ne_places_min_zoom
-    output: {kind: locality, country_capital: true}
+    output:
+      - *output_properties
+      - {kind: locality, country_capital: true}
     table: ne
   - filter:
       scalerank: true
       featurecla: [Admin-1 capital, Admin-1 region capital]
     min_zoom: *ne_places_min_zoom
-    output: {kind: locality, region_capital: true}
+    output:
+      - *output_properties
+      - {kind: locality, region_capital: true}
     table: ne
   - filter: {featurecla: Populated place, scalerank: true}
     min_zoom: *ne_places_min_zoom
-    output: {kind: locality}
+    output:
+      - *output_properties
+      - {kind: locality}
     table: ne
 
   - filter:
@@ -107,14 +139,16 @@ filters:
       featurecla: [Historic place]
     min_zoom: *ne_places_min_zoom
     output:
-      kind: locality
-      kind_detail: hamlet
+      - *output_properties
+      - kind: locality
+        kind_detail: hamlet
     table: ne
   - filter:
       scalerank: true
       featurecla: [Scientific station]
     min_zoom: *ne_places_min_zoom
     output:
-      kind: locality
-      kind_detail: scientific_station
+      - *output_properties
+      - kind: locality
+        kind_detail: scientific_station
     table: ne

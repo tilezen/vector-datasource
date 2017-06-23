@@ -580,11 +580,37 @@ def make_function_name_min_zoom(layer_name):
     return '%s_min_zoom' % layer_name
 
 
+def has_kind_in_output(yaml_output):
+    if isinstance(yaml_output, dict):
+        return 'kind' in yaml_output
+    elif isinstance(yaml_output, list):
+        for x in yaml_output:
+            if has_kind_in_output(x):
+                return True
+        return False
+    else:
+        assert not 'Unknown yaml output type %s: %s' % (
+            type(yaml_output), yaml_output)
+
+
+def make_yaml_output_dict(yaml_output):
+    result = {}
+    if isinstance(yaml_output, list):
+        for yaml_output_entry in yaml_output:
+            yaml_output_entry_dict = make_yaml_output_dict(yaml_output_entry)
+            result.update(yaml_output_entry_dict)
+    else:
+        assert isinstance(yaml_output, dict)
+        result.update(yaml_output)
+    return result
+
+
 def output_kind(yaml_datum):
-    output = yaml_datum['output']
-    assert 'kind' in output, \
-        "Matcher for %r doesn't contain kind." % yaml_datum
-    return output
+    yaml_output = yaml_datum['output']
+    assert has_kind_in_output(yaml_output), \
+        "Matcher for %r doesn't contain kind." % yaml_output
+    yaml_output_dict = make_yaml_output_dict(yaml_output)
+    return yaml_output_dict
 
 
 def output_min_zoom(yaml_datum):

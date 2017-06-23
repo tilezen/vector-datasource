@@ -1,10 +1,19 @@
+globals:
+  - &output_properties
+    name: {col: name}
+    area: {col: area}
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    mz_label_placement: {col: mz_label_placement}
+    label_placement: {col: label_placement}
 filters:
   - filter:
       place: continent
       name: true
     min_zoom: 0
     output:
-      kind: continent
+      - *output_properties
+      - kind: continent
     table: osm
   - filter:
       place: archipelago
@@ -14,49 +23,72 @@ filters:
     # but for now, it's mostly middling data
     min_zoom: 15
     output:
-      kind: archipelago
+      - *output_properties
+      - {kind: archipelago}
     table: osm
   - filter:
       place: island
       name: true
     min_zoom: { clamp: { min: 7, max: 15, value: { sum: [ { col: zoom }, 5.75 ] } } }
     output:
-      kind: island
+      - *output_properties
+      - {kind: island}
     table: osm
   - filter:
       place: islet
       name: true
     min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 3.5 ] } } }
     output:
-      kind: islet
+      - *output_properties
+      - {kind: islet}
     table: osm
   - filter: {natural: cliff}
     min_zoom: 13
-    output: {kind: cliff}
+    output:
+      - *output_properties
+      - {kind: cliff}
     table: osm
   - filter: {natural: arete}
     min_zoom: 13
-    output: {kind: arete}
+    output:
+      - *output_properties
+      - {kind: arete}
     table: osm
   - filter:
       natural: ridge
       name: true
     min_zoom: 13
     output:
-      kind: ridge
+      - *output_properties
+      - {kind: ridge}
     table: osm
   - filter:
       natural: valley
       name: true
     min_zoom: 13
     output:
-      kind: valley
+      - *output_properties
+      - {kind: valley}
     table: osm
-  - filter: {gid: true}
+
+  # TODO: need to sort out the source
+  - filter:
+      source:
+        - naturalearthdata.com
+        - openstreetmapdata.com
     min_zoom: 0
-    output: {kind: earth}
-    table: ne
-  - filter: {fid: true}
-    min_zoom: 0
-    output: {kind: earth}
-    table: shp
+    output:
+      - *output_properties
+      - {kind: earth}
+  # - filter: {gid: true}
+  #   min_zoom: 0
+  #   output:
+  #     - *output_properties
+  #     - {kind: earth}
+  #   table: ne
+  # - filter: {fid: true}
+  #   min_zoom: 0
+  #   output:
+  #     - *output_properties
+  #     - {kind: earth}
+  #   table: shp

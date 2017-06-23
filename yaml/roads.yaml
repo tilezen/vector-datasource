@@ -1,5 +1,11 @@
 global:
+  - &output_properties
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    is_bus_route: {col: is_bus_route}
+
   - &osm_highway_properties
+      <<: *output_properties
       name: {col: name}
       bridge: {col: bridge}
       layer: {col: layer}
@@ -66,15 +72,10 @@ global:
       sidewalk_left: {col: 'sidewalk:left'}
       sidewalk_right: {col: 'sidewalk:right'}
   - &osm_network
-      # NOTE: moved directly to sql
-      # mz_networks:
-      #   call:
-      #     func: mz_get_rel_networks
-      #     args:
-      #       - osm_id
       mz_networks: {col: mz_networks}
       network: {col: network}
   - &osm_piste_properties
+      <<: *output_properties
       kind: piste
       layer: {col: layer}
       tunnel: {col: tunnel}
@@ -100,6 +101,7 @@ global:
       snowshoe: {col: tags->snowshoe}
       symbol: {col: tags->symbol}
   - &osm_footway_properties
+      <<: *output_properties
       foot: {col: foot}
       horse: {col: horse}
       tracktype: {col: tracktype}
@@ -109,6 +111,7 @@ global:
       trail_visibility: {col: tags->trail_visibility}
       sac_scale: {col: tags->sac_scale}
   - &ne_properties
+      <<: *output_properties
       ref: {col: name}
       mz_networks:
         case:
