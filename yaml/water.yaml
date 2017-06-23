@@ -1,5 +1,15 @@
 globals:
+  - &output_properties
+    name: {col: name}
+    area: {col: area}
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    mz_label_placement: {col: mz_label_placement}
+    label_placement: {col: label_placement}
+    boundary: {col: boundary}
+    tunnel: {col: tunnel}
   - &water_standard_properties_osm
+      <<: *output_properties
       intermittent:
         case:
           - when:
@@ -10,6 +20,7 @@ globals:
       - when: { way_area: { min: 102400 } }
         then: 9
       - else: { clamp: { min: 9, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
+
 filters:
   - filter: {waterway: riverbank}
     min_zoom: *water_standard_min_zoom
@@ -102,39 +113,61 @@ filters:
   - filter: {featurecla: Coastline}
     min_zoom: 0
     output:
-        kind: ocean
+      - *output_properties
+      - kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
     min_zoom: 0
     output:
-        kind: lake
+      - *output_properties
+      - kind: lake
         alkaline: true
     table: ne
   - filter: {featurecla: Lake}
     min_zoom: 0
-    output: {kind: lake}
+    output:
+      - *output_properties
+      - {kind: lake}
     table: ne
   - filter: {featurecla: Reservoir}
     min_zoom: 0
-    output: {kind: lake, reservoir: true}
+    output:
+      - *output_properties
+      - {kind: lake, reservoir: true}
     table: ne
   - filter: {featurecla: Playa}
     min_zoom: 0
-    output: {kind: playa}
+    output:
+      - *output_properties
+      - {kind: playa}
     table: ne
   - filter: {featurecla: Ocean}
     min_zoom: 0
-    output: {kind: ocean}
+    output:
+      - *output_properties
+      - {kind: ocean}
     table: ne
   - filter: {name: true, place: ocean}
     min_zoom: 0
-    output: {kind: ocean}
+    output:
+      - *output_properties
+      - {kind: ocean}
     table: osm
   - filter: {name: true, place: sea}
     min_zoom: 3
-    output: {kind: sea}
+    output:
+      - *output_properties
+      - {kind: sea}
     table: osm
-  - filter: {gid: true}
+  # - filter: {gid: true}
+  #   min_zoom: 0
+  #   output:
+  #     - *output_properties
+  #     - {kind: ocean}
+  #   table: shp
+  - filter: {source: openstreetmapdata.com}
     min_zoom: 0
-    output: {kind: ocean}
+    output:
+      - *output_properties
+      - {kind: ocean}
     table: shp
