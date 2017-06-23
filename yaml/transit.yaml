@@ -1,57 +1,103 @@
+global:
+  - &output_properties
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    name: {col: name}
+    ref: {col: ref}
+    operator: {col: operator}
+    type: {col: type}
+    colour: {col: colour}
+    network: {col: network}
+    state: {col: state}
+    symbol: {col: symbol}
+    description: {col: description}
+    distance: {col: distance}
+    ascent: {col: ascent}
+    descent: {col: descent}
+    roundtrip: {col: roundtrip}
+    route_name: {col: route_name}
+    layer: {col: layer}
+    service: {col: service}
+
 filters:
   - filter:
       route: train
       service: [high_speed, long_distance, international]
     min_zoom: 5
     output:
-      kind: {col: route}
+      - *output_properties
+      - kind: {col: route}
   - filter: {route: train}
     min_zoom: 6
-    output: {kind: train}
+    output:
+      - *output_properties
+      - {kind: train}
   - filter: {route: subway}
     min_zoom: 8
-    output: {kind: subway}
+    output:
+      - *output_properties
+      - {kind: subway}
   - filter:
       route: [light_rail, tram]
     min_zoom: 9
     output:
-      kind: {col: route}
+      - *output_properties
+      - kind: {col: route}
   - filter:
       route: [funicular, monorail]
     min_zoom: 12
     output:
-      kind: {col: route}
+      - *output_properties
+      - kind: {col: route}
   - filter:
       railway: [halt, stop, tram_stop]
     min_zoom: 13
     output:
-      kind: {col: railway}
+      - *output_properties
+      - kind: {col: railway}
   - filter: {highway: platform}
     min_zoom: 17
-    output: {kind: bus_stop}
+    output:
+      - *output_properties
+      - {kind: bus_stop}
   - filter: {public_transport: platform, tags->rail: 'yes'}
     min_zoom: 15
-    output: {kind: platform}
+    output:
+      - *output_properties
+      - {kind: platform}
   - filter: {public_transport: platform, tags->light_rail: 'yes'}
     min_zoom: 15
-    output: {kind: platform}
+    output:
+      - *output_properties
+      - {kind: platform}
   - filter: {public_transport: platform, tags->bus: 'yes'}
     min_zoom: 17
-    output: {kind: bus_stop}
+    output:
+      - *output_properties
+      - {kind: bus_stop}
   - filter: {public_transport: platform}
     min_zoom: 15
-    output: {kind: platform}
+    output:
+      - *output_properties
+      - {kind: platform}
   - filter: {public_transport: stop_area}
     min_zoom: 15
-    output: {kind: stop_area}
+    output:
+      - *output_properties
+      - {kind: stop_area}
   - filter:
       railway: [platform, station]
     min_zoom: 15
     output:
-      kind: {col: railway}
+      - *output_properties
+      - {kind: {col: railway}}
   - filter: {tags->site: stop_area}
     min_zoom: 15
-    output: {kind: stop_area}
+    output:
+      - *output_properties
+      - {kind: stop_area}
   - filter: {highway: bus_stop}
     min_zoom: 17
-    output: {kind: bus_stop}
+    output:
+      - *output_properties
+      - {kind: bus_stop}

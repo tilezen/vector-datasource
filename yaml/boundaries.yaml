@@ -1,4 +1,11 @@
 global:
+
+  - &output_properties
+    source: {col: source}
+    name: {col: name}
+    min_zoom: {col: min_zoom}
+    maritime_boundary: {col: maritime_boundary}
+
   # NOTE: Natural Earth 1:50 million used zooms 0,1,2,3,4
   #       and only has USA, Canada, Brazil, and Australia
   #       all with scalerank of 2 (a documented NE omission).
@@ -29,7 +36,9 @@ filters:
   - filter:
       kind: true
     min_zoom: 8
-    output: {kind: {col: kind}}
+    output:
+      - *output_properties
+      - kind: {col: kind}
 
   # osm
   - filter:
@@ -43,66 +52,93 @@ filters:
         - boundary: aboriginal_lands
     min_zoom: 8
     output:
-      kind: aboriginal_lands
-      kind_detail:
-        case:
-          - when:
-              admin_level: ['2', '4', '6', '8']
-            then: { col: admin_level }
+      - *output_properties
+      - kind: aboriginal_lands
+      - kind_detail:
+          case:
+            - when:
+                admin_level: ['2', '4', '6', '8']
+              then: { col: admin_level }
     table: osm
   - filter: {admin_level: '2', boundary: administrative}
     min_zoom: 8
-    output: {kind: country, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: country, kind_detail: '2'}
     table: osm
   - filter: {admin_level: '4', boundary: administrative}
     min_zoom: 8
-    output: {kind: region, kind_detail: '4'}
+    output:
+      - *output_properties
+      - {kind: region, kind_detail: '4'}
     table: osm
   - filter: {admin_level: '6', boundary: administrative}
     min_zoom: 10
-    output: {kind: county, kind_detail: '6'}
+    output:
+      - *output_properties
+      - {kind: county, kind_detail: '6'}
     table: osm
   - filter: {admin_level: '8', boundary: administrative}
     min_zoom: 10
-    output: {kind: locality, kind_detail: '8'}
+    output:
+      - *output_properties
+      - {kind: locality, kind_detail: '8'}
     table: osm
 
   # ne
   - filter: {featurecla: Disputed (please verify)}
     min_zoom: 0
-    output: {kind: disputed, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: disputed, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Indefinite (please verify)}
     min_zoom: 0
-    output: {kind: indefinite, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: indefinite, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Indeterminant frontier}
     min_zoom: 0
-    output: {kind: indeterminate, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: indeterminate, kind_detail: '2'}
     table: ne
   - filter: {featurecla: International boundary (verify)}
     min_zoom: 0
-    output: {kind: country, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: country, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Lease limit}
     min_zoom: 0
-    output: {kind: lease_limit, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: lease_limit, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Line of control (please verify)}
     min_zoom: 0
-    output: {kind: line_of_control, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: line_of_control, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Overlay limit}
     min_zoom: 0
-    output: {kind: overlay_limit, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: overlay_limit, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Map unit boundary}
     min_zoom: 5
-    output: {kind: map_unit, kind_detail: '2'}
+    output:
+      - *output_properties
+      - {kind: map_unit, kind_detail: '2'}
     table: ne
   - filter: {featurecla: Admin-1 region boundary}
     min_zoom: *ne_region_boundaries_min_zoom
-    output: {kind: macroregion, kind_detail: '3'}
+    output:
+      - *output_properties
+      - {kind: macroregion, kind_detail: '3'}
     extra_columns: [scalerank]
     table: ne
   - filter:
@@ -113,5 +149,7 @@ filters:
         - 1st Order Admin Lines
     min_zoom: *ne_region_boundaries_min_zoom
     extra_columns: [scalerank]
-    output: {kind: region, kind_detail: '4'}
+    output:
+      - *output_properties
+      - {kind: region, kind_detail: '4'}
     table: ne
