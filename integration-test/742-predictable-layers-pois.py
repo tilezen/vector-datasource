@@ -47,15 +47,15 @@ test.assert_no_matching_feature(
     {'id': 179213166, 'kind': 'farm', 'label_placement': True})
 
 # landuse: Forest in POIS
-# http://www.openstreetmap.org/way/444359931
+# http://www.openstreetmap.org/way/375855355
 test.assert_has_feature(
-    14, 2630, 5910, 'pois',
-    {'id': 444359931, 'kind': 'forest'})
+    14, 2597, 5860, 'pois',
+    {'id': 375855355, 'kind': 'forest'})
 
 # Label placement forest in landuse
 test.assert_no_matching_feature(
-    14, 2630, 5910, 'landuse',
-    {'id': 444359931, 'kind': 'forest', 'label_placement': True})
+    14, 2597, 5860, 'landuse',
+    {'id': 375855355, 'kind': 'forest', 'label_placement': True})
 
 # Node:357559979 landuse: Forest in POIS
 # http://www.openstreetmap.org/node/357559979
