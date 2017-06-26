@@ -157,14 +157,22 @@ while [[ ! -f "${test_server_port}" ]]; do
     fi
 done
 
+# no longer an error to fail - all setup is done. if the test suite fails
+# then we only want to print out, not kill the whole process.
+set +e
+
 # run tests
 port=`cat "${test_server_port}"`
 export VECTOR_DATASOURCE_CONFIG_URL="http://localhost:${port}/%(layer)s/%(z)d/%(x)d/%(y)d.json"
-python "${basedir}/integration-test.py" || (cat test.log; exit 1)
+python "${basedir}/integration-test.py"
+success=$?
 
-echo "SUCCESS"
+if [[ $success -eq 0 ]]; then
+    echo "SUCCESS"
 
-# no longer an error to fail - all tests are done.
-set +e
+else
+    cat test.log
+fi
+
 kill -HUP "${server_pid}"
 wait
