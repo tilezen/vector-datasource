@@ -29,11 +29,11 @@ test.assert_has_feature(
     {"kind": "major_road", "kind_detail": "tertiary", "id": 255330035,
      "name": "Battery St.", "sort_rank": 377})
 
-#https://www.openstreetmap.org/way/123456285
+#https://www.openstreetmap.org/way/8923765
 test.assert_has_feature(
     16, 10472, 25347, "roads",
-    {"kind": "highway", "kind_detail": "motorway_link", "id": 123456285,
-     "name": "Junipero Serra Blvd.", "is_link": True, "sort_rank": 374})
+    {"kind": "highway", "kind_detail": "motorway_link", "id": 8923765,
+     "is_link": True, "sort_rank": 374})
 
 #https://www.openstreetmap.org/way/8919312
 test.assert_has_feature(
