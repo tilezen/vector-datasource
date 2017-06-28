@@ -91,12 +91,12 @@ POLYGON_TABLES = [
 
 
 ADAPTOR_QUERY = """
-CREATE OR REPLACE FUNCTION mz2_calculate_%(calc)s_%(layer)s(%(table)s)
+CREATE OR REPLACE FUNCTION mz_calculate_%(calc)s_%(layer)s(%(table)s)
 RETURNS %(return_type)s AS $$
 DECLARE
   row ALIAS FOR $1;
 BEGIN
-  RETURN mz2_calculate_%(calc)s_%(layer)s_(
+  RETURN mz_calculate_%(calc)s_%(layer)s_(
     row.%(fid_column)s, row.%(geom_column)s, %(tags_expr)s, %(way_area)s);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
@@ -626,11 +626,11 @@ class SQLVisitor(ast.NodeVisitor):
 
 
 def make_function_name_props(layer_name):
-    return 'mz2_calculate_json_%s_' % (layer_name,)
+    return 'mz_calculate_json_%s_' % (layer_name,)
 
 
 def make_function_name_min_zoom(layer_name):
-    return 'mz2_calculate_min_zoom_%s_' % (layer_name,)
+    return 'mz_calculate_min_zoom_%s_' % (layer_name,)
 
 
 def table_is_osm(name):
