@@ -5,6 +5,103 @@ import ast
 from cStringIO import StringIO
 
 
+LAYER_TABLES = {
+    'boundaries': [
+        'ne_10m_admin_0_boundary_lines_land',
+        'ne_10m_admin_0_boundary_lines_map_units',
+        'ne_10m_admin_1_states_provinces_lines',
+        'ne_110m_admin_0_boundary_lines_land',
+        'ne_50m_admin_0_boundary_lines_land',
+        'ne_50m_admin_1_states_provinces_lines',
+        'planet_osm_line',
+        'planet_osm_polygon',
+    ],
+    'buildings': [
+        'planet_osm_point',
+        'planet_osm_polygon',
+    ],
+    'earth': [
+        'land_polygons',
+        'ne_10m_land',
+        'ne_110m_land',
+        'ne_50m_land',
+        'planet_osm_line',
+        'planet_osm_point',
+        'planet_osm_polygon',
+    ],
+    'landuse': [
+        'planet_osm_line',
+        'planet_osm_polygon',
+    ],
+    'places': [
+        'ne_10m_populated_places',
+        'planet_osm_point',
+    ],
+    'pois': [
+        'planet_osm_point',
+        'planet_osm_polygon',
+    ],
+    'roads': [
+        'ne_10m_roads',
+        'planet_osm_line',
+    ],
+    'transit': [
+        'planet_osm_line',
+        'planet_osm_polygon',
+    ],
+    'water': [
+        'ne_10m_coastline',
+        'ne_10m_lakes',
+        'ne_10m_ocean',
+        'ne_10m_playas',
+        'ne_110m_coastline',
+        'ne_110m_lakes',
+        'ne_110m_ocean',
+        'ne_50m_coastline',
+        'ne_50m_lakes',
+        'ne_50m_ocean',
+        'ne_50m_playas',
+        'planet_osm_line',
+        'planet_osm_point',
+        'planet_osm_polygon',
+        'water_polygons',
+    ],
+}
+
+
+POLYGON_TABLES = [
+    'planet_osm_polygon',
+    'buffered_land',
+    'land_polygons',
+    'ne_10m_lakes',
+    'ne_10m_land',
+    'ne_10m_ocean',
+    'ne_10m_playas',
+    'ne_10m_urban_areas',
+    'ne_110m_lakes',
+    'ne_110m_land',
+    'ne_110m_ocean',
+    'ne_50m_lakes',
+    'ne_50m_land',
+    'ne_50m_ocean',
+    'ne_50m_playas',
+    'ne_50m_urban_areas',
+    'water_polygons',
+]
+
+
+ADAPTOR_QUERY = """
+CREATE OR REPLACE FUNCTION mz2_calculate_%(calc)s_%(layer)s(%(table)s)
+RETURNS %(return_type)s AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz2_calculate_%(calc)s_%(layer)s_(
+    row.%(fid_column)s, row.%(geom_column)s, %(tags_expr)s, %(way_area)s);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+"""
+
 BOOL_OPS = {
     ast.And: "AND",
     ast.Or:  "OR",
@@ -536,6 +633,36 @@ def make_function_name_min_zoom(layer_name):
     return 'mz2_calculate_min_zoom_%s_' % (layer_name,)
 
 
+def table_is_osm(name):
+    return name.startswith('planet_osm_')
+
+
+def table_is_polygonal(name):
+    return name in POLYGON_TABLES
+
+
+def print_adaptor(layer, table, calc, return_type):
+    var = dict(layer=layer, table=table, calc=calc,
+               return_type=return_type)
+
+    if table_is_polygonal(table):
+        var['way_area'] = 'row.way_area'
+    else:
+        var['way_area'] = '0::real'
+
+    if table_is_osm(table):
+        var['fid_column'] = 'osm_id'
+        var['geom_column'] = 'way'
+        var['tags_expr'] = 'row.tags'
+
+    else:
+        var['fid_column'] = 'gid'
+        var['geom_column'] = 'the_geom'
+        var['tags_expr'] = 'hstore(row)'
+
+    print ADAPTOR_QUERY % var
+
+
 def main(argv=None):
     from vectordatasource.meta import find_yaml_path
     if argv is None:
@@ -552,6 +679,11 @@ def main(argv=None):
             ast_fn = GeomTypeTransformer().visit(ast_fn)
             visitor = SQLVisitor(sys.stdout, force_type, return_type)
             visitor.visit(ast_fn)
+
+    for layer, tables in LAYER_TABLES.items():
+        for table in tables:
+            for calc, return_type in [('json', 'JSON'), ('min_zoom', 'REAL')]:
+                print_adaptor(layer, table, calc, return_type)
 
 
 if __name__ == '__main__':
