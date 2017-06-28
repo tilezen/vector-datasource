@@ -21,6 +21,16 @@ CMP_OPS = {
 }
 
 
+CMP_DEFAULTS = {
+    ast.Eq:    "FALSE",
+    ast.NotEq: "TRUE",
+    ast.In:    "FALSE",
+    ast.Is:    "FALSE",
+    ast.GtE:   "FALSE",
+    ast.LtE:   "FALSE",
+}
+
+
 UNARY_OPS = {
     ast.Not: "NOT ",
 }
@@ -83,6 +93,12 @@ def sql_type(expr):
     if isinstance(expr, ast.Name) and \
        expr.id in ('volume'):
         return int
+    if isinstance(expr, ast.Call) and \
+       isinstance(expr.func, ast.Attribute) and \
+       isinstance(expr.func.value, ast.Name) and \
+       expr.func.value.id == 'props' and \
+       expr.args[0].s == 'scalerank':
+        return float
     return str
 
 
@@ -134,9 +150,9 @@ def fn_name(node):
 
 class SQLExpression(ast.NodeVisitor):
 
-    def __init__(self):
+    def __init__(self, force_type=None):
         self.buf = StringIO()
-        self.force_type = None
+        self.force_type = force_type
         self.in_json = False
 
     def visit_BoolOp(self, op):
@@ -169,13 +185,22 @@ class SQLExpression(ast.NodeVisitor):
             self.visit(cp.left)
 
         else:
-            self.visit(cp.left)
+            if len(cp.comparators) != 1:
+                raise RuntimeError("Expecting only one comparator, got %d" %
+                                   (len(cp.comparators),))
+
+            default = instance_lookup(cp.ops[0], CMP_DEFAULTS)
+            self.buf.write("COALESCE(")
 
             self.force_type = typ
+            self.visit(cp.left)
+
             for (op, v) in zip(cp.ops, cp.comparators):
                 val = instance_lookup(op, CMP_OPS)
                 self.buf.write(" " + val + " ")
                 self.visit(v)
+
+            self.buf.write(",%s)" % (default,))
 
         self.buf.write(")")
         self.force_type = old_type
@@ -197,26 +222,42 @@ class SQLExpression(ast.NodeVisitor):
         # TODO: escaping
         if self.force_type == int:
             self.buf.write("'" + s.s + "'::integer")
+        elif self.force_type == float:
+            self.buf.write("'" + s.s + "'::real")
         else:
             self.buf.write("'" + s.s + "'")
 
     def visit_Num(self, n):
         if self.force_type == str:
-            self.buf.write("'%d'" % n.n)
+            if isinstance(n.n, float):
+                self.buf.write("'%f'" % n.n)
+            else:
+                self.buf.write("'%d'" % n.n)
         else:
-            self.buf.write("%d" % n.n)
+            if isinstance(n.n, float):
+                self.buf.write("%f" % n.n)
+            else:
+                self.buf.write("%d" % n.n)
 
     def visit_Call(self, call):
         if isinstance(call.func, ast.Attribute) and \
            isinstance(call.func.value, ast.Name) and \
            call.func.value.id == 'props':
-            self.buf.write("tags->'%s'" % call.args[0].s)
+            if self.force_type == int:
+                self.buf.write("(tags->'%s')::integer" % call.args[0].s)
+            elif self.force_type == float:
+                self.buf.write("(tags->'%s')::real" % call.args[0].s)
+            else:
+                self.buf.write("tags->'%s'" % call.args[0].s)
         else:
             name = fn_name(call.func)
             func = KNOWN_FUNCS.get(name)
             if not func:
                 raise RuntimeError("Call to name not implemented yet: %r"
                                    % (name,))
+            force_type = self.force_type
+            self.force_type = None
+
             self.buf.write(func)
             self.buf.write("(")
             first = True
@@ -227,6 +268,8 @@ class SQLExpression(ast.NodeVisitor):
                     self.buf.write(", ")
                 self.visit(arg)
             self.buf.write(")")
+
+            self.force_type = force_type
 
     def visit_Name(self, name):
         val = VALUES.get(name.id)
@@ -313,8 +356,8 @@ class SQLExpression(ast.NodeVisitor):
         return self.buf.getvalue()
 
 
-def sql_expression(expr):
-    s = SQLExpression()
+def sql_expression(expr, force_type=None):
+    s = SQLExpression(force_type)
     s.visit(expr)
     return str(s)
 
@@ -395,8 +438,10 @@ class GeomNameTransformer(ast.NodeTransformer):
 
 class SQLVisitor(ast.NodeVisitor):
 
-    def __init__(self, io):
+    def __init__(self, io, force_type, return_type):
         self.io = io
+        self.force_type = force_type
+        self.return_type = return_type
         self.indent = 0
 
     def writeln(self, msg):
@@ -409,9 +454,9 @@ class SQLVisitor(ast.NodeVisitor):
 
     def visit_FunctionDef(self, defn):
         self.writeln("CREATE OR REPLACE FUNCTION %s"
-                     "(way geometry, tags hstore, way_area real)"
+                     "(fid bigint, way geometry, tags hstore, way_area real)"
                      % defn.name)
-        self.writeln("RETURNS JSON AS $$")
+        self.writeln("RETURNS %s AS $$" % (self.return_type,))
         self.add_indent(2)
         seen_begin = False
         wrote_declare = False
@@ -462,7 +507,8 @@ class SQLVisitor(ast.NodeVisitor):
         for when in case.whens:
             self.writeln("WHEN %s" % sql_expression(when.test))
             self.add_indent(2)
-            self.writeln("THEN %s" % sql_expression(when.body[0].value))
+            self.writeln("THEN %s" % sql_expression(when.body[0].value,
+                                                    self.force_type))
             self.add_indent(-2)
         self.writeln("ELSE NULL")
         self.add_indent(-2)
@@ -473,8 +519,8 @@ class SQLVisitor(ast.NodeVisitor):
         assert isinstance(assign.targets[0], ast.Name)
         # name type := expr
         name = assign.targets[0].id
-        expr = sql_expression(assign.value)
         # TODO: need to support variable types other than REAL?
+        expr = sql_expression(assign.value, float)
         self.writeln("%s REAL := %s;" % (name, expr))
 
     def generic_visit(self, node):
@@ -483,11 +529,11 @@ class SQLVisitor(ast.NodeVisitor):
 
 
 def make_function_name_props(layer_name):
-    return 'mz_calculate_json_%s_' % (layer_name,)
+    return 'mz2_calculate_json_%s_' % (layer_name,)
 
 
 def make_function_name_min_zoom(layer_name):
-    return 'mz_calculate_min_zoom_%s_' % (layer_name,)
+    return 'mz2_calculate_min_zoom_%s_' % (layer_name,)
 
 
 def main(argv=None):
@@ -495,16 +541,16 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     yaml_path = find_yaml_path()
-    for output_fn, make_fn_name in (
-            (output_kind, make_function_name_props),
-            (output_min_zoom, make_function_name_min_zoom)):
+    for output_fn, make_fn_name, force_type, return_type in (
+            (output_kind, make_function_name_props, None, 'JSON'),
+            (output_min_zoom, make_function_name_min_zoom, float, 'REAL')):
         layer_result = parse_layers(yaml_path, output_fn, make_fn_name)
         assert isinstance(layer_result, LayerParseResult)
         for function_data in layer_result.layer_data:
             assert isinstance(function_data, FunctionData)
             ast_fn = function_data.ast
             ast_fn = GeomTypeTransformer().visit(ast_fn)
-            visitor = SQLVisitor(sys.stdout)
+            visitor = SQLVisitor(sys.stdout, force_type, return_type)
             visitor.visit(ast_fn)
 
 
