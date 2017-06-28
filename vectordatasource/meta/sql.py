@@ -234,7 +234,7 @@ class Column(object):
 
 # these are columns which are present in OSM tables as real columns, whereas
 # everything else is in the tags hstore.
-FIXED_OSM_COLUMNS = set(['way_area', 'way', 'fid', 'tags'])
+FIXED_OSM_COLUMNS = set(['way_area', 'shape', 'fid', 'tags'])
 
 
 class Table(object):

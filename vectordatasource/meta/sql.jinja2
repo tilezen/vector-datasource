@@ -1142,7 +1142,7 @@ DROP FUNCTION IF EXISTS mz_calculate_min_zoom_roads_(
 {%- endfor %}
         fid bigint,
         name text,
-        way geometry,
+        shape geometry,
         tags hstore);
 
 CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads_(
@@ -1151,7 +1151,7 @@ CREATE OR REPLACE FUNCTION mz_calculate_min_zoom_roads_(
 {%- endfor %}
         fid bigint,
         name text,
-        way geometry,
+        shape geometry,
         tags hstore)
 RETURNS REAL AS $$
 BEGIN
