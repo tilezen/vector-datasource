@@ -222,6 +222,8 @@ def ast_column(ast_state, col):
         result = ast.Name('zoom', ast.Load())
     elif col == 'fid':
         result = ast.Name('fid', ast.Load())
+    elif col == 'shape':
+        result = ast.Name('shape', ast.Load())
     else:
         result = ast.Call(
             ast.Attribute(

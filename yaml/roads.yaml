@@ -572,7 +572,7 @@ filters:
   #############################################################
   - filter:
       route: ferry
-    min_zoom: { call: { func: mz_calculate_ferry_level, args: [ { col: way } ] } }
+    min_zoom: { call: { func: mz_calculate_ferry_level, args: [ { col: shape } ] } }
     table: osm
     output:
       <<: *osm_highway_properties
