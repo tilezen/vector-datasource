@@ -118,12 +118,6 @@ Including tile size in the path is not required. When not specified the default 
 https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
 ```
 
-**256 in path:**
-
-```
-https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
-```
-
 **Example Tangram YAML:**
 
 ```
@@ -134,6 +128,12 @@ sources:
         url_params:
             api_key: your-mapzen-api-key
         max_zoom: 16
+```
+
+**256 in path:**
+
+```
+https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
 ```
 
 ### 512 tile size
