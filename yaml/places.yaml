@@ -27,7 +27,7 @@ global:
       default: 10
 
 filters:
-  - filter: {source: whosonfirst.mapzen.com}
+  - filter: {meta.source: wof}
     min_zoom: {col: min_zoom}
     output:
       - *output_properties
