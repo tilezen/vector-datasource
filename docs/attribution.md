@@ -16,7 +16,7 @@ Attribution is required for most of our data providers. Example language is prov
 
 ### Where to attribute
 
-Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](http://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source.
+Attribution needs to "appear in a place that is reasonable to the medium or means you are utilising." [Specific examples](https://wiki.osmfoundation.org/wiki/License#Where_to_put_it.3F) are given by the OSM Foundation and are generally best practices for giving credit to any source.
 
 ## The fine print
 
@@ -24,7 +24,7 @@ Attribution needs to "appear in a place that is reasonable to the medium or mean
 
 `source:openstreetmap`
 
-[OpenStreetMap](https://www.openstreetmap.org/) is a community-driven, editable map of the world.  All OpenStreetMap data is licensed under the [ODbL](http://opendatacommons.org/licenses/odbl/), a [share-alike](https://en.wikipedia.org/wiki/Share-alike) license which also requires attribution.
+[OpenStreetMap](https://www.openstreetmap.org/) is a community-driven, editable map of the world.  All OpenStreetMap data is licensed under the [ODbL](https://opendatacommons.org/licenses/odbl/), a [share-alike](https://en.wikipedia.org/wiki/Share-alike) license which also requires attribution.
 
 ```
 © OpenStreetMap contributors
@@ -66,10 +66,10 @@ More details can be found on the Natural Earth [Terms of Use](http://www.natural
 
 `source:whosonfirst`
 
-Crediting [Who's On First](http://whosonfirst.mapzen.com) is recommended and linking back to their License is required.
+Crediting [Who's On First](https://whosonfirst.mapzen.com) is recommended and linking back to their License is required.
 
 ```
-Data from Who's On First. <a href="http://whosonfirst.mapzen.com#License">License</a>
+Data from Who's On First. <a href="https://whosonfirst.mapzen.com#License">License</a>
 ```
 
 Who's On First makes use of a number of open data sources, some of whom **do** require attribution. Neighbourhood sources include: [Zetashapes](https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md#zetashapes) (geometry), [Quattroshapes](https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md#quattroshapes) (geometry), and [GeoPlanet](https://github.com/whosonfirst/whosonfirst-data/blob/master/LICENSE.md#geoplanet) (names). Please note that original sources may be modified.
