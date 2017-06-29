@@ -116,6 +116,16 @@ https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=y
 ``` `https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
 ```
 
+**Example Tangram YAML:**
+
+```
+sources:
+    mapzen:
+        type: MVT
+        url:  https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+        max_zoom: 16
+```
+
 ### 512 tile size
 
 The suggest max `{z}` value for 512 pixel tiles is zoom 15. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 15 tile.
@@ -123,6 +133,16 @@ The suggest max `{z}` value for 512 pixel tiles is zoom 15. Requesting `{z}` coo
 **512 in path:**
 
 ``` `https://tile.mapzen.com/mapzen/vector/v1/512/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+
+**Example Tangram YAML:**
+
+```
+sources:
+    mapzen:
+        type: MVT
+        url:  https://tile.mapzen.com/mapzen/vector/v1/512/all/{z}/{x}/{y}.mvt
+        max_zoom: 15
 ```
 
 
