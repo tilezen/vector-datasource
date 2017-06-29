@@ -64,6 +64,7 @@ SELECT
       'source', 'whosonfirst.mapzen.com',
       'mz_n_photos', n_photos,
       'area', area::bigint,
+      'min_zoom', min_zoom,
       'max_zoom', max_zoom,
       'is_landuse_aoi', CASE WHEN is_landuse_aoi = true THEN true ELSE NULL END,
       'kind', wof_np.placetype_string
