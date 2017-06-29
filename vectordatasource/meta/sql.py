@@ -1,734 +1,692 @@
-from collections import namedtuple
-from jinja2 import Environment
-from jinja2 import FileSystemLoader
-from numbers import Number
-import os.path
-import yaml
+from vectordatasource.meta.python import parse_layers, output_kind, \
+        output_min_zoom, LayerParseResult, FunctionData
+import sys
+import ast
+from cStringIO import StringIO
 
 
-def format_value(val, table):
-    if isinstance(val, dict):
-        if 'expr' in val:
-            if val['expr'] is None:
-                return 'NULL'
-            else:
-                return val['expr']
-        elif 'col' in val:
-            if val['col'].startswith('tags->'):
-                return "tags->'%s'" % val['col'][len('tags->'):]
-            elif table.column_is_tag(val['col']):
-                return "tags->'%s'" % val['col']
-            else:
-                return '"%s"' % val['col']
-        elif 'value' in val:
-            return "'%s'" % val['value']
-        elif 'case' in val:
-            return format_case_sql(val['case'], table)
-        elif 'call' in val:
-            return format_call_sql(val['call'], table)
-        elif 'clamp' in val:
-            return format_clamp_sql(val['clamp'], table)
-        elif 'lookup' in val:
-            return format_lookup_sql(val['lookup'], table)
-        elif 'sum' in val:
-            return format_expr_sql(val['sum'], '+', table)
-        elif 'mul' in val:
-            return format_expr_sql(val['mul'], '*', table)
-        else:
-            assert 0, 'Unknown dict value: %r' % val
-    if isinstance(val, int):
-        return "%d" % val
-    elif isinstance(val, float):
-        return "%f" % val
-    elif isinstance(val, list):
-        return format_array_sql(val, table)
-    elif val is None:
-        return "NULL"
-    else:
-        return "'%s'" % val
-
-
-def format_array_sql(array, table):
-    sql = []
-    for val in array:
-        sql.append(format_value(val, table))
-    return 'ARRAY[%s]' % (','.join(sql))
-
-
-def format_json_value(val, table):
-    val = format_value(val, table)
-    if (val.startswith("'") and val.endswith("'") or val == 'NULL'):
-        val = '%s::text' % val
-    return 'mz_to_json_null_safe(%s)' % val
-
-
-def value_columns(val, table):
-    if isinstance(val, dict):
-        if 'expr' in val:
-            if val['expr'] is None:
-                return []
-            else:
-                return val.get('columns', [])
-        elif 'col' in val:
-            if val.get('ignore'):
-                return []
-            elif (val['col'].startswith('tags->') or
-                  table.column_is_tag(val['col'])):
-                return ['tags']
-            else:
-                return [val['col']]
-        elif 'value' in val:
-            return []
-        elif 'case' in val:
-            cols = set()
-            for item in val['case']:
-                if 'when' in item and 'then' in item:
-                    cols.update(value_columns(item['then'], table))
-                    when_filters = item['when']
-                    if not isinstance(when_filters, list):
-                        when_filters = [when_filters]
-                    for when_filter in when_filters:
-                        for k, v in when_filter.items():
-                            rule = create_filter_rule(k, v, table)
-                            cols.update(c._name for c in rule.columns())
-            return list(cols)
-        elif 'call' in val:
-            cols = set()
-            for arg in val['call']['args']:
-                cols.update(value_columns(arg, table))
-            return list(cols)
-        else:
-            assert 0, 'Unknown dict value: %r' % val
-
-    elif isinstance(val, list):
-        cols = set()
-        for v in val:
-            cols.update(value_columns(v, table))
-        return list(cols)
-    return []
-
-
-def format_case_sql(case_stmt_orig, table):
-    assert isinstance(case_stmt_orig, list)
-    assert len(case_stmt_orig) >= 1
-
-    # copy the case statement so that we can modify it (for the else removal)
-    # without modifying the original in case the original is re-used (for
-    # example in YAML aliases).
-    case_stmt = list(case_stmt_orig)
-
-    if 'else' in case_stmt[-1]:
-        else_val = format_value(case_stmt.pop()['else'], table)
-    else:
-        else_val = None
-
-    when_then_sqls = []
-    for when_then in case_stmt:
-        assert set(when_then.keys()) == set(['when', 'then'])
-        when_filters = when_then['when']
-        then_part = when_then['then']
-
-        conds = []
-        if not isinstance(when_filters, list):
-            when_filters = [when_filters]
-        for when_filter in when_filters:
-            for k, v in when_filter.items():
-                rule = create_filter_rule(k, v, table)
-                cond_sql = rule.as_sql()
-                conds.append(cond_sql)
-
-        when_sql = ' AND '.join(conds)
-        then_sql = format_value(then_part, table)
-
-        when_then_sql = 'WHEN %s THEN %s' % (when_sql, then_sql)
-        when_then_sqls.append(when_then_sql)
-
-    else_sql = ' ELSE %s' % else_val if else_val else ''
-    case_sql = 'CASE %s%s END' % (' '.join(when_then_sqls), else_sql)
-    return case_sql
-
-
-UTIL_FUNCTIONS = {
-    'util.calculate_path_major_route': 'mz_calculate_path_major_route',
-    'util.cycling_network': 'mz_cycling_network',
+LAYER_TABLES = {
+    'boundaries': [
+        'ne_10m_admin_0_boundary_lines_land',
+        'ne_10m_admin_0_boundary_lines_map_units',
+        'ne_10m_admin_1_states_provinces_lines',
+        'ne_110m_admin_0_boundary_lines_land',
+        'ne_50m_admin_0_boundary_lines_land',
+        'ne_50m_admin_1_states_provinces_lines',
+        'planet_osm_line',
+        'planet_osm_polygon',
+    ],
+    'buildings': [
+        'planet_osm_point',
+        'planet_osm_polygon',
+    ],
+    'earth': [
+        'land_polygons',
+        'ne_10m_land',
+        'ne_110m_land',
+        'ne_50m_land',
+        'planet_osm_line',
+        'planet_osm_point',
+        'planet_osm_polygon',
+    ],
+    'landuse': [
+        'planet_osm_line',
+        'planet_osm_polygon',
+    ],
+    'places': [
+        'ne_10m_populated_places',
+        'planet_osm_point',
+    ],
+    'pois': [
+        'planet_osm_point',
+        'planet_osm_polygon',
+    ],
+    'roads': [
+        'ne_10m_roads',
+        'planet_osm_line',
+    ],
+    'transit': [
+        'planet_osm_line',
+        'planet_osm_polygon',
+    ],
+    'water': [
+        'ne_10m_coastline',
+        'ne_10m_lakes',
+        'ne_10m_ocean',
+        'ne_10m_playas',
+        'ne_110m_coastline',
+        'ne_110m_lakes',
+        'ne_110m_ocean',
+        'ne_50m_coastline',
+        'ne_50m_lakes',
+        'ne_50m_ocean',
+        'ne_50m_playas',
+        'planet_osm_line',
+        'planet_osm_point',
+        'planet_osm_polygon',
+        'water_polygons',
+    ],
 }
 
 
-def format_call_sql(call_stmt, table):
-    assert isinstance(call_stmt, dict)
-    assert set(call_stmt.keys()) == set(['func', 'args'])
-    fn = call_stmt['func']
-    args = call_stmt['args']
-    sql_args = [
-        format_value(x, table) for x in args
-    ]
-    sql_args_str = ', '.join(sql_args)
-    if fn.startswith('util.'):
-        fn = UTIL_FUNCTIONS[fn]
-    return '%s(%s)' % (fn, sql_args_str)
+POLYGON_TABLES = [
+    'planet_osm_polygon',
+    'buffered_land',
+    'land_polygons',
+    'ne_10m_lakes',
+    'ne_10m_land',
+    'ne_10m_ocean',
+    'ne_10m_playas',
+    'ne_10m_urban_areas',
+    'ne_110m_lakes',
+    'ne_110m_land',
+    'ne_110m_ocean',
+    'ne_50m_lakes',
+    'ne_50m_land',
+    'ne_50m_ocean',
+    'ne_50m_playas',
+    'ne_50m_urban_areas',
+    'water_polygons',
+]
 
 
-def format_expr_sql(values, op, table):
-    assert isinstance(values, list), "Values of expression must be a list."
-    exprs = []
-    for val in values:
-        exprs.append(format_value(val, table))
-    return op.join(exprs)
+ADAPTOR_QUERY = """
+CREATE OR REPLACE FUNCTION mz_calculate_%(calc)s_%(layer)s(%(table)s)
+RETURNS %(return_type)s AS $$
+DECLARE
+  row ALIAS FOR $1;
+BEGIN
+  RETURN mz_calculate_%(calc)s_%(layer)s_(
+    row.%(fid_column)s, row.%(geom_column)s, %(tags_expr)s, %(way_area)s);
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+"""
+
+BOOL_OPS = {
+    ast.And: "AND",
+    ast.Or:  "OR",
+}
 
 
-def format_clamp_sql(value, table):
-    assert isinstance(value, dict), "Clamp should be a dict."
-    min_val = format_value(value['min'], table)
-    max_val = format_value(value['max'], table)
-    val_expr = format_value(value['value'], table)
-    sql = 'GREATEST(%s, LEAST(%s, %s))' % (min_val, max_val, val_expr)
-    return sql
+CMP_OPS = {
+    ast.Eq:    "=",
+    ast.NotEq: "<>",
+    ast.In:    "IN",
+    ast.Is:    "IS",
+    ast.GtE:   ">=",
+    ast.LtE:   "<=",
+}
 
 
-def format_lookup_sql(value, table):
-    assert isinstance(value, dict), "Lookup should be dict."
-    key = format_value(value['key'], table)
-    op = value['op']
-    assert op in ('>=', '<='), "Op must be  >= or <=."
-    default = value.get('default')
-    sql = 'CASE '
-    for (out_val, cmp_val) in value['table']:
-        cmp_expr = format_value(cmp_val, table)
-        out_expr = format_value(out_val, table)
-        sql += 'WHEN %s %s %s THEN %s ' % (key, op, cmp_expr, out_expr)
-    if default:
-        sql += 'ELSE %s ' % (format_value(default, table),)
-    sql += 'END'
-    return sql
+CMP_DEFAULTS = {
+    ast.Eq:    "FALSE",
+    ast.NotEq: "TRUE",
+    ast.In:    "FALSE",
+    ast.Is:    "FALSE",
+    ast.GtE:   "FALSE",
+    ast.LtE:   "FALSE",
+}
 
 
-class Column(object):
+UNARY_OPS = {
+    ast.Not: "NOT ",
+}
 
-    def __init__(self, is_tag, name):
-        self._is_tag = is_tag
-        if name.startswith('tags->'):
-            name = name[len('tags->'):]
-        self._name = name
 
-    def exists_check(self):
-        if self._is_tag:
-            return "tags ? '%s'" % self._name
+BINARY_OPS = {
+    ast.Add:  "+",
+    ast.Mult: "*",
+}
+
+
+VALUES = {
+    'props':    'tags',
+    'None':     'NULL',
+    'volume':   'volume',
+    'way_area': 'way_area',
+    'shape':    'way',
+    'fid':      'fid',
+    'zoom':     'zoom',
+}
+
+
+KNOWN_FUNCS = {
+    'mz_building_kind_detail':            'mz_building_kind_detail',
+    'mz_building_part_kind_detail':       'mz_building_part_kind_detail',
+    'trim_nz_sh':                         'trim_nz_sh',
+    'mz_get_rel_networks':                'mz_get_rel_networks',
+    'util.cycling_network':               'mz_cycling_network',
+    'util.calculate_way_area':            'way_area',
+    'util.calculate_volume':              'mz_calculate_building_volume',
+    'ST_GeometryType':                    'ST_GeometryType',
+    'util.calculate_1px_zoom':            'mz_one_pixel_zoom',
+    'min':                                'LEAST',
+    'max':                                'GREATEST',
+    'mz_to_float_meters':                 'mz_to_float_meters',
+    'mz_get_min_zoom_highway_level_gate': 'mz_get_min_zoom_highway_level_gate',
+    'util.calculate_path_major_route':    'mz_calculate_path_major_route',
+    'mz_calculate_ferry_level':           'mz_calculate_ferry_level',
+}
+
+
+GLOBALS = [
+    'way_area',
+]
+
+
+def instance_lookup(obj, mapping):
+    value = None
+
+    for (klass, val) in mapping.items():
+        if isinstance(obj, klass):
+            value = val
+            break
+
+    assert value, "instance lookup for %s" % type(obj)
+    return value
+
+
+def sql_type(expr):
+    if isinstance(expr, ast.Name) and \
+       expr.id in ('volume'):
+        return int
+    if isinstance(expr, ast.Call) and \
+       isinstance(expr.func, ast.Attribute) and \
+       isinstance(expr.func.value, ast.Name) and \
+       expr.func.value.id == 'props' and \
+       expr.args[0].s == 'scalerank':
+        return float
+    return str
+
+
+def sql_as_json(d):
+    s = StringIO()
+
+    s.write("{")
+    first = True
+    for (k, v) in zip(d.keys, d.values):
+        if first:
+            first = False
         else:
-            return None
-
-    def format(self):
-        fmt = "tags->'%s'" if self._is_tag else '"%s"'
-        return fmt % self._name
-
-    def __eq__(self, other):
-        return (isinstance(other, self.__class__) and
-                self._is_tag == other._is_tag and
-                self._name == other._name)
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __hash__(self):
-        return (self._is_tag, self._name).__hash__()
-
-
-# these are columns which are present in OSM tables as real columns, whereas
-# everything else is in the tags hstore.
-FIXED_OSM_COLUMNS = set(['way_area', 'way', 'fid', 'tags'])
-
-
-class Table(object):
-
-    def __init__(self, name, extra_columns=None, synthetic_columns=None):
-        self._name = name
-
-        # extra columns are columns which are used in expressions or other
-        # places where this script can't see, and therefore need to be
-        # included in the parameters of the function.
-        self._extra_columns = set(extra_columns) if extra_columns else set()
-
-        # synthetic columns are local variables created in sql.jinja2, and
-        # should not be part of the parameters of the function.
-        self._synthetic_columns = (
-            set(synthetic_columns) if synthetic_columns else set())
-
-        # we synthesize zoom (1px area) for all tables, so that should be
-        # automatically a synthetic column.
-        self._synthetic_columns.add('zoom')
-
-    def column_is_tag(self, name):
-        not_tag = self._name in ('shp', 'ne', 'wof') or \
-                  name in self._extra_columns or \
-                  name in self._synthetic_columns or \
-                  name in FIXED_OSM_COLUMNS
-        return not not_tag
-
-    def create_column(self, name):
-        return Column(self.column_is_tag(name), name)
-
-
-def ensure_sql_boolean(column, check):
-    # tags->'foo' is NULL when the hstore doesn't contain that key,
-    # which makes all the following comparisons NULL, so use coalesce
-    # to ensure we never evaluate to NULL
-    if column._is_tag:
-        check = 'COALESCE(%s, FALSE)' % check
-    return check
-
-
-class EqualsRule(object):
-
-    def __init__(self, table, column, value):
-        self.table = table
-        self.column = column
-        self.value = value
-
-    def as_sql(self):
-        equals_check = '%s = %s' % (
-                self.column.format(),
-                format_value(self.value, self.table))
-
-        equals_check = ensure_sql_boolean(self.column, equals_check)
-        return equals_check
-
-    def columns(self):
-        return [self.column] + value_columns(self.value, self.table)
-
-
-class GreaterOrEqualsRule(object):
-    def __init__(self, table, column, value):
-        self.table = table
-        self.column = column
-        self.value = value
-
-    def as_sql(self):
-        return '%s >= %s' % (
-            self.column.format(),
-            format_value(self.value, self.table))
-
-    def columns(self):
-        return [self.column] + value_columns(self.value, self.table)
-
-
-class SetRule(object):
-
-    def __init__(self, table, column, values):
-        self.table = table
-        self.column = column
-        self.values = values
-
-    def as_sql(self):
-        formatted_values = [
-            format_value(x, self.table) for x in self.values]
-        set_check = '%s IN (%s)' % (
-            self.column.format(),
-            ', '.join(formatted_values))
-
-        set_check = ensure_sql_boolean(self.column, set_check)
-        return set_check
-
-    def columns(self):
-        cols = [self.column]
-        for val in self.values:
-            cols.extend(value_columns(val, self.table))
-        return cols
-
-
-class ExistsRule(object):
-
-    def __init__(self, column):
-        self.column = column
-
-    def as_sql(self):
-        exists_check = self.column.exists_check()
-        if exists_check:
-            return exists_check
-        else:
-            return '%s IS NOT NULL' % self.column.format()
-
-    def columns(self):
-        return [self.column]
-
-
-class NotExistsRule(object):
-
-    def __init__(self, column):
-        self.column = column
-
-    def as_sql(self):
-        exists_check = self.column.exists_check()
-        if exists_check:
-            return 'NOT (%s)' % exists_check
-        else:
-            return '%s IS NULL' % self.column.format()
-
-    def columns(self):
-        return [self.column]
-
-
-class AndRule(object):
-    def __init__(self, rules):
-        self.rules = rules
-
-    def as_sql(self):
-        return ' AND '.join(['(%s)' % x.as_sql() for x in self.rules])
-
-    def columns(self):
-        return sum([x.columns() for x in self.rules], [])
-
-
-class OrRule(object):
-
-    def __init__(self, rules):
-        self.rules = rules
-
-    def as_sql(self):
-        return ' OR '.join(['(%s)' % x.as_sql() for x in self.rules])
-
-    def columns(self):
-        return sum([x.columns() for x in self.rules], [])
-
-
-class NotRule(object):
-
-    def __init__(self, rule):
-        self.rule = rule
-
-    def as_sql(self):
-        return 'NOT (%s)' % self.rule.as_sql()
-
-    def columns(self):
-        return self.rule.columns()
-
-
-class ExpressionRule(object):
-
-    def __init__(self, column, expr, extra_columns=None):
-        self.column = column
-        self.expr = expr
-        self.extra_columns = extra_columns
-
-    def as_sql(self):
-        return self.expr
-
-    def columns(self):
-        cols = [self.column]
-        if self.extra_columns:
-            cols.extend(self.extra_columns)
-        return cols
-
-
-def map_geom_type(geom_type):
-    """return a sql geometry type(s)"""
-    assert geom_type in ('point', 'line', 'polygon')
-    if geom_type == 'point':
-        return ('POINT', 'MULTIPOINT')
-    elif geom_type == 'line':
-        return ('LINESTRING', 'MULTILINESTRING')
-    elif geom_type == 'polygon':
-        return ('POLYGON', 'MULTIPOLYGON')
-    else:
-        assert 0
-
-
-class GeomTypeRule(object):
-
-    def __init__(self, geom_type):
-        self.geom_type = geom_type
-        self.sql_geom_types = map_geom_type(geom_type)
-
-    def as_sql(self):
-        sql_geom_types_str = ', '.join(
-            "'%s'" % x for x in self.sql_geom_types)
-        return "GeometryType(way) IN (%s)" % sql_geom_types_str
-
-    def columns(self):
-        return []
-
-
-def create_level_filter_rule(filter_level, table, combinator=AndRule):
-    rules = []
-    if not isinstance(filter_level, list):
-        filter_level = [filter_level]
-    for filter_level_item in filter_level:
-        for k, v in filter_level_item.items():
-            rule = create_filter_rule(k, v, table)
-            rules.append(rule)
-    assert rules, 'No rules specified in level: %s' % filter_level
-    if len(rules) > 1:
-        rule = combinator(rules)
-    else:
-        rule = rules[0]
-    return rule
-
-
-def create_filter_rule(filter_key, filter_value, table):
-    # check for the composite rules first
-    if filter_key == 'not':
-        rule = create_level_filter_rule(filter_value, table)
-        rule = NotRule(rule)
-    elif filter_key == 'all':
-        rule = create_level_filter_rule(filter_value, table)
-    elif filter_key == 'any':
-        rule = create_level_filter_rule(filter_value, table, combinator=OrRule)
-    elif filter_key == 'geom_type':
-        assert filter_value in ('point', 'line', 'polygon')
-        rule = GeomTypeRule(filter_value)
-    else:
-        # leaf rules
-        col = table.create_column(filter_key)
-        if isinstance(filter_value, list):
-            rule = SetRule(table, col, filter_value)
-        else:
-            if filter_value is True:
-                rule = ExistsRule(col)
-            elif filter_value is False:
-                rule = NotExistsRule(col)
-            elif isinstance(filter_value, Number):
-                rule = EqualsRule(table, col, filter_value)
-            elif isinstance(filter_value, dict) and 'min' in filter_value:
-                rule = GreaterOrEqualsRule(table, col, filter_value['min'])
-            elif isinstance(filter_value, dict) and 'expr' in filter_value:
-                rule = ExpressionRule(
-                    table, col, filter_value['expr'], filter_value.get('cols'))
+            s.write(", ")
+        assert isinstance(k, ast.Str)
+        s.write("\"%s\": " % k.s)
+
+        if isinstance(v, ast.Str):
+            s.write("\"%s\"" % v.s)
+        elif isinstance(v, ast.Num):
+            s.write("%d" % v.n)
+        elif isinstance(v, ast.Name):
+            if v.id == 'None':
+                s.write("null")
             else:
-                rule = EqualsRule(table, col, filter_value)
-    return rule
-
-
-class Matcher(object):
-
-    def __init__(self, rule, min_zoom, output, table):
-        self.rule = rule
-        self.min_zoom = min_zoom
-        self.output = output
-
-        # horrible hack to try to make all OSM output values from tags
-        for k in self.output.keys():
-            v = self.output[k]
-            if isinstance(v, dict) and \
-               'col' in v and \
-               not v['col'].startswith('tags->'):
-                c = table.create_column(v['col'])
-                if c._is_tag:
-                    v['col'] = 'tags->' + c._name
-
-        self.table = table
-
-    def when_sql_output(self):
-        items = []
-        for k, v in self.output.items():
-            key = '"%s"' % k
-            val = format_json_value(v, self.table)
-            items.append("%s: ' || %s" % (key, val))
-        items_str = " || ', ".join(items)
-        output = "('{%s || '}')::json" % items_str
-        return "WHEN %s THEN %s" % (
-            self.rule.as_sql(), output)
-
-    def output_columns(self):
-        columns = []
-        for k, v in self.output.items():
-            columns.extend(value_columns(v, self.table))
-        return columns
-
-    def when_sql_min_zoom(self):
-        if self.min_zoom is None:
-            min_zoom = 'NULL'
+                raise RuntimeError("What is a %r?" % v.id)
+        elif isinstance(v, (ast.Call, ast.IfExp)):
+            s.write("' || mz_to_json_null_safe(")
+            s.write(sql_expression(v))
+            s.write(") || '")
         else:
-            min_zoom = self.min_zoom
-        return 'WHEN %s THEN %s' % (self.rule.as_sql(), min_zoom)
+            raise RuntimeError("Don't know what to do with %r" % (v,))
+
+    s.write("}")
+    return s.getvalue()
 
 
-def create_matcher_expr(f, table):
-    rules = []
-    for k, v in f.items():
-        rule = create_filter_rule(k, v, table)
-        rules.append(rule)
-    if len(rules) > 1:
-        rule = AndRule(rules)
+def fn_name(node):
+    if isinstance(node, ast.Name):
+        return node.id
+    elif isinstance(node, ast.Attribute):
+        assert isinstance(node.value, ast.Name)
+        return node.value.id + "." + fn_name(node.attr)
+    elif isinstance(node, (str, unicode)):
+        return node
     else:
-        rule = rules[0]
-    return rule.as_sql()
+        raise RuntimeError("Don't know how to make a function name from %r"
+                           % (node,))
 
 
-def sql_expr(expr, table):
-    # a literal should be returned as an escaped SQL literal in a string
-    if isinstance(expr, (str, unicode, int, float)):
-        return format_value(expr, table)
+class SQLExpression(ast.NodeVisitor):
 
-    # otherwise expr is an AST, so should be tree-structured with a
-    # single head. There may be many children, though.
-    assert len(expr) == 1, "Expect only a single 'head' in expression."
+    def __init__(self, force_type=None):
+        self.buf = StringIO()
+        self.force_type = force_type
+        self.in_json = False
 
-    node_type, value = expr.items()[0]
-
-    if node_type == 'max':
-        assert isinstance(value, list), "Max should have a list of children."
-        sql = 'GREATEST(' + ','.join([sql_expr(v, table) for v in value]) + ')'
-
-    elif node_type == 'min':
-        assert isinstance(value, list), "Min should have a list of children."
-        sql = 'LEAST(' + ','.join([sql_expr(v, table) for v in value]) + ')'
-
-    elif node_type == 'lit':
-        assert isinstance(value, (str, unicode)), "Literal should be a string."
-        sql = value
-
-    elif node_type in ('clamp', 'col', 'lookup', 'sum', 'case', 'call'):
-        return format_value(expr, table)
-
-    else:
-        assert 0, "Unimplemented node type %r" % (node_type,)
-
-    return sql
-
-
-def create_matcher(yaml_datum):
-    table = yaml_datum.get('table')
-    extra_columns = yaml_datum.get('extra_columns', [])
-
-    # synthetic columns are ones that we generate in the SQL functions, usually
-    # in the DECLARE section. for example; building volume in the buildings
-    # query.
-    synthetic_columns = yaml_data.get('synthetic_columns', [])
-
-    table_obj = Table(table, extra_columns, synthetic_columns)
-
-    rules = []
-    filters = yaml_datum['filter']
-    if not isinstance(filters, list):
-        filters = [filters]
-    for f in filters:
-        for k, v in f.items():
-            rule = create_filter_rule(k, v, table_obj)
-            rules.append(rule)
-    assert rules, 'No filter rules found in %s' % yaml_datum
-    if len(rules) > 1:
-        rule = AndRule(rules)
-    else:
-        rule = rules[0]
-    min_zoom = yaml_datum['min_zoom']
-
-    if isinstance(min_zoom, dict):
-        min_zoom = sql_expr(min_zoom, table_obj)
-
-    output = yaml_datum['output']
-    assert 'kind' in output, \
-        "Matcher for %r doesn't contain kind." % yaml_datum
-
-    matcher = Matcher(rule, min_zoom, output, table_obj)
-    return matcher
-
-
-def create_case_statement_min_zoom(matchers):
-    when_parts = []
-    for matcher in matchers:
-        when_sql_part = matcher.when_sql_min_zoom()
-        # indent
-        when_sql_part = '    %s' % when_sql_part
-        when_parts.append(when_sql_part)
-    when_sql = '\n'.join(when_parts)
-    case_sql = 'CASE\n%s\n  END' % when_sql
-    return case_sql
-
-
-def create_case_statement_output(matchers):
-    when_parts = []
-    for matcher in matchers:
-        when_sql_part = matcher.when_sql_output()
-        # indent
-        when_sql_part = '    %s' % when_sql_part
-        when_parts.append(when_sql_part)
-    when_sql = '\n'.join(when_parts)
-    case_sql = 'CASE\n%s\n  END' % when_sql
-    return case_sql
-
-
-def is_concrete_column(matcher, col):
-    if col._is_tag:
-        return False
-    table_name = matcher.table._name or 'osm'
-    if table_name == 'osm' and col._name in FIXED_OSM_COLUMNS:
-        return False
-    if col._name in matcher.table._synthetic_columns:
-        return False
-    return True
-
-
-Key = namedtuple('Key', 'table key typ')
-
-
-layers = {}
-script_root = os.path.dirname(__file__)
-
-for layer in ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
-              'buildings', 'roads', 'earth'):
-    kind_rules = []
-    min_zoom_rules = []
-    file_path = os.path.join(script_root, '../../yaml/%s.yaml' % layer)
-    with open(file_path) as fh:
-        yaml_data = yaml.load(fh)
-        matchers = []
-        for yaml_datum in yaml_data['filters']:
-            matcher = create_matcher(yaml_datum)
-            matchers.append(matcher)
-
-    params = set()
-    for matcher in matchers:
-        # columns in the query should be those needed by the rule, union those
-        # needed by the output, minus any which are synthetic and local to the
-        # query function.
-        columns = set()
-        for col in matcher.rule.columns():
-            if is_concrete_column(matcher, col):
-                columns.add(col)
-
-        for col_name in matcher.table._extra_columns:
-            columns.add(Column(False, col_name))
-
-        for col_name in matcher.output_columns():
-            col = matcher.table.create_column(col_name)
-            if is_concrete_column(matcher, col):
-                columns.add(col)
-
-        for column in columns:
-            assert isinstance(column, Column), "%r is not a Column" % (column,)
-            assert not column._is_tag, \
-                'did not expect tag in column list: %r' % (column,)
-            assert column._name != 'tags', \
-                "'tags' is not allowed as a column name."
-            if column._name == 'gid' or column._name == 'fid':
-                typ = 'integer'
-            elif column._name == 'scalerank' or column._name == 'labelrank':
-                typ = 'smallint'
-            elif column._name == 'way':
-                typ = 'geometry'
-            elif matcher.table._name == 'ne' and column._name == 'expressway':
-                typ = 'smallint'
-            elif matcher.table._name == 'wof' and column._name == 'min_zoom':
-                typ = 'real'
+    def visit_BoolOp(self, op):
+        self.buf.write("(")
+        first = True
+        for v in op.values:
+            if first:
+                first = False
             else:
-                typ = 'text'
-            key = Key(
-                table=matcher.table._name, key=column.format(), typ=typ)
-            params.add(key)
+                val = instance_lookup(op.op, BOOL_OPS)
+                self.buf.write(" " + val + " ")
+            self.visit(v)
+        self.buf.write(")")
 
-    # sorted params is nicer to read in the sql
-    params = sorted(params)
+    def visit_Compare(self, cp):
+        old_type = self.force_type
+        typ = sql_type(cp.left)
+        self.force_type = None
 
-    min_zoom_case_statement = create_case_statement_min_zoom(matchers)
-    kind_case_statement = create_case_statement_output(matchers)
-    layers[layer] = dict(
-        params=params,
-        kind_case_statement=kind_case_statement,
-        min_zoom_case_statement=min_zoom_case_statement,
-    )
+        self.buf.write("(")
 
-template_name = 'sql.jinja2'
-environment = Environment(loader=FileSystemLoader(script_root))
-template = environment.get_template(template_name)
-sql = template.render(
-    layers=layers,
-)
-print sql
+        # special case for IN, since in Python 'x in tuple' and 'x in dict'
+        # are treated the same way, but in SQL we have to use different
+        # syntax to check if something is in a list or in an hstore.
+        if len(cp.ops) == 1 and \
+           isinstance(cp.ops[0], ast.In) and \
+           isinstance(cp.comparators[0], ast.Name):
+            self.visit(cp.comparators[0])
+            self.buf.write(" ? ")
+            self.visit(cp.left)
+
+        else:
+            if len(cp.comparators) != 1:
+                raise RuntimeError("Expecting only one comparator, got %d" %
+                                   (len(cp.comparators),))
+
+            default = instance_lookup(cp.ops[0], CMP_DEFAULTS)
+            self.buf.write("COALESCE(")
+
+            self.force_type = typ
+            self.visit(cp.left)
+
+            for (op, v) in zip(cp.ops, cp.comparators):
+                val = instance_lookup(op, CMP_OPS)
+                self.buf.write(" " + val + " ")
+                self.visit(v)
+
+            self.buf.write(",%s)" % (default,))
+
+        self.buf.write(")")
+        self.force_type = old_type
+
+    def visit_UnaryOp(self, op):
+        self.buf.write("(")
+        self.buf.write(instance_lookup(op.op, UNARY_OPS))
+        self.visit(op.operand)
+        self.buf.write(")")
+
+    def visit_BinOp(self, op):
+        self.buf.write("(")
+        self.visit(op.left)
+        self.buf.write(instance_lookup(op.op, BINARY_OPS))
+        self.visit(op.right)
+        self.buf.write(")")
+
+    def visit_Str(self, s):
+        # TODO: escaping
+        if self.force_type == int:
+            self.buf.write("'" + s.s + "'::integer")
+        elif self.force_type == float:
+            self.buf.write("'" + s.s + "'::real")
+        else:
+            self.buf.write("'" + s.s + "'")
+
+    def visit_Num(self, n):
+        if self.force_type == str:
+            if isinstance(n.n, float):
+                self.buf.write("'%f'" % n.n)
+            else:
+                self.buf.write("'%d'" % n.n)
+        else:
+            if isinstance(n.n, float):
+                self.buf.write("%f" % n.n)
+            else:
+                self.buf.write("%d" % n.n)
+
+    def visit_Call(self, call):
+        if isinstance(call.func, ast.Attribute) and \
+           isinstance(call.func.value, ast.Name) and \
+           call.func.value.id == 'props':
+            if self.force_type == int:
+                self.buf.write("(tags->'%s')::integer" % call.args[0].s)
+            elif self.force_type == float:
+                self.buf.write("(tags->'%s')::real" % call.args[0].s)
+            else:
+                self.buf.write("tags->'%s'" % call.args[0].s)
+        else:
+            name = fn_name(call.func)
+            func = KNOWN_FUNCS.get(name)
+            if not func:
+                raise RuntimeError("Call to name not implemented yet: %r"
+                                   % (name,))
+            force_type = self.force_type
+            self.force_type = None
+
+            self.buf.write(func)
+            self.buf.write("(")
+            first = True
+            for arg in call.args:
+                if first:
+                    first = False
+                else:
+                    self.buf.write(", ")
+                self.visit(arg)
+            self.buf.write(")")
+
+            self.force_type = force_type
+
+    def visit_Name(self, name):
+        val = VALUES.get(name.id)
+        if val:
+            self.buf.write(val)
+        else:
+            raise RuntimeError("Don't know what name %r means" % name.id)
+
+    def visit_Tuple(self, t):
+        self.buf.write("(")
+        first = True
+        for elt in t.elts:
+            if first:
+                first = False
+            else:
+                self.buf.write(", ")
+            self.visit(elt)
+        self.buf.write(")")
+
+    def visit_Dict(self, d):
+        old_in_json = self.in_json
+        self.in_json = True
+        self.buf.write("('")
+        self.buf.write(sql_as_json(d))
+        self.buf.write("')::json")
+        self.in_json = old_in_json
+
+    def visit_IfExp(self, ifexp):
+        self.buf.write("(CASE")
+        while ifexp:
+            self.buf.write(" WHEN ")
+            self.visit(ifexp.test)
+            self.buf.write(" THEN ")
+            self.visit(ifexp.body)
+            if isinstance(ifexp.orelse, ast.IfExp):
+                ifexp = ifexp.orelse
+            elif isinstance(ifexp.orelse, ast.AST):
+                self.buf.write(" ELSE ")
+                self.visit(ifexp.orelse)
+                break
+            else:
+                ifexp = None
+
+        self.buf.write(" END)")
+
+    def visit_List(self, l):
+        if self.in_json:
+            self.buf.write("('[")
+            first = True
+            for elt in l.elts:
+                if first:
+                    first = False
+                else:
+                    self.buf.write(", ")
+                self.buf.write(sql_as_json(elt))
+            self.buf.write("]')")
+
+        else:
+            self.buf.write("ARRAY[")
+            first = True
+            for elt in l.elts:
+                if first:
+                    first = False
+                else:
+                    self.buf.write(", ")
+                self.visit(elt)
+            self.buf.write("]")
+
+    def visit_Attribute(self, a):
+        assert isinstance(a.value, ast.Name)
+        name = a.value.id
+        attr = a.attr
+
+        if name == 'shape' and attr == 'type':
+            self.buf.write("ST_GeomType(way)")
+        else:
+            raise RuntimeError("Unknown attribute pair (%r, %r)"
+                               % (name, attr))
+
+    def generic_visit(self, node):
+        self.buf.write("<<<%s>>>" % type(node))
+
+    def __str__(self):
+        return self.buf.getvalue()
+
+
+def sql_expression(expr, force_type=None):
+    s = SQLExpression(force_type)
+    s.visit(expr)
+    return str(s)
+
+
+class Case(ast.AST):
+
+    def __init__(self, whens=[]):
+        self.whens = whens
+
+
+def merge_case(stmts):
+    assigns = []
+    whens = []
+    for stmt in stmts:
+        if isinstance(stmt, ast.Assign):
+            assigns.append(stmt)
+        elif (isinstance(stmt, ast.If) and
+              len(stmt.orelse) == 0 and
+              len(stmt.body) == 1 and
+              isinstance(stmt.body[0], ast.Return)):
+            whens.append(stmt)
+        else:
+            return stmts
+    # all statements are ifs!
+    return assigns + [Case(whens=whens)]
+
+
+def assign_is_global(assign):
+    assert len(assign.targets) == 1
+    assert isinstance(assign.targets[0], ast.Name)
+    # name type := expr
+    name = assign.targets[0].id
+    return name in GLOBALS
+
+
+# The geometry type string returned by GeometryType is in all upper case, so
+# we scan through the whole tree to rewrite rules where there's a shape.type
+# on the LHS and a geometry type or tuple of geometry types on the RHS.
+class GeomTypeTransformer(ast.NodeTransformer):
+
+    def visit_Compare(self, cp):
+        left = cp.left
+        ops = cp.ops
+        cmps = cp.comparators
+
+        if isinstance(left, ast.Attribute) and \
+           isinstance(left.value, ast.Name) and \
+           left.value.id == 'shape' and \
+           left.attr == 'type':
+            call = ast.Call(
+                ast.Name('ST_GeometryType', ast.Load()),
+                [ast.Name('shape', ast.Load())],
+                [], None, None)
+            left = ast.copy_location(call, left)
+            renamer = GeomNameTransformer()
+            cmps = map(renamer.visit, cmps)
+
+        return ast.copy_location(ast.Compare(left, ops, cmps), cp)
+
+
+class GeomNameTransformer(ast.NodeTransformer):
+
+    GEOM_TYPES = {
+        'Point': 'ST_Point',
+        'MultiPoint': 'ST_MultiPoint',
+        'LineString': 'ST_LineString',
+        'MultiLineString': 'ST_MultiLineString',
+        'Polygon': 'ST_Polygon',
+        'MultiPolygon': 'ST_MultiPolygon',
+        'Line': 'ST_LineString',
+        'MultiLine': 'ST_MultiLineString',
+    }
+
+    def visit_Str(self, s):
+        val = self.GEOM_TYPES.get(s.s)
+        if val:
+            return ast.copy_location(ast.Str(val), s)
+        return s
+
+
+class SQLVisitor(ast.NodeVisitor):
+
+    def __init__(self, io, force_type, return_type):
+        self.io = io
+        self.force_type = force_type
+        self.return_type = return_type
+        self.indent = 0
+
+    def writeln(self, msg):
+        self.io.write(" " * self.indent)
+        self.io.write(msg)
+        self.io.write("\n")
+
+    def add_indent(self, n):
+        self.indent += n
+
+    def visit_FunctionDef(self, defn):
+        self.writeln("CREATE OR REPLACE FUNCTION %s"
+                     "(fid bigint, way geometry, tags hstore, way_area real)"
+                     % defn.name)
+        self.writeln("RETURNS %s AS $$" % (self.return_type,))
+        self.add_indent(2)
+        seen_begin = False
+        wrote_declare = False
+        for stmt in merge_case(defn.body):
+            if isinstance(stmt, ast.Assign):
+                if assign_is_global(stmt):
+                    continue
+                if seen_begin:
+                    raise RuntimeError(
+                        "Assignment statement after function body begins.")
+                if not wrote_declare:
+                    self.add_indent(-2)
+                    self.writeln("DECLARE")
+                    self.add_indent(2)
+                    wrote_declare = True
+                self.visit(stmt)
+            else:
+                if not seen_begin:
+                    seen_begin = True
+                    self.add_indent(-2)
+                    self.writeln("BEGIN")
+                    self.add_indent(2)
+                self.visit(stmt)
+        self.add_indent(-2)
+        self.writeln("END")
+        self.writeln("$$ LANGUAGE plpgsql IMMUTABLE;")
+        self.writeln("")
+        self.writeln("")
+
+    def visit_If(self, if_stmt):
+        condition = sql_expression(if_stmt.test)
+        self.writeln("IF (%s) THEN" % str(condition))
+        self.add_indent(2)
+        for stmt in if_stmt.body:
+            self.visit(stmt)
+        self.add_indent(-2)
+        if if_stmt.orelse:
+            self.writeln("ELSE")
+            self.add_indent(2)
+            for stmt in if_stmt.orelse:
+                self.visit(stmt)
+            self.add_indent(-2)
+        self.writeln("ENDIF")
+
+    def visit_Case(self, case):
+        self.writeln("RETURN CASE")
+        self.add_indent(2)
+        for when in case.whens:
+            self.writeln("WHEN %s" % sql_expression(when.test))
+            self.add_indent(2)
+            self.writeln("THEN %s" % sql_expression(when.body[0].value,
+                                                    self.force_type))
+            self.add_indent(-2)
+        self.writeln("ELSE NULL")
+        self.add_indent(-2)
+        self.writeln("END;")
+
+    def visit_Assign(self, assign):
+        assert len(assign.targets) == 1
+        assert isinstance(assign.targets[0], ast.Name)
+        # name type := expr
+        name = assign.targets[0].id
+        # TODO: need to support variable types other than REAL?
+        expr = sql_expression(assign.value, float)
+        self.writeln("%s REAL := %s;" % (name, expr))
+
+    def generic_visit(self, node):
+        self.writeln("<<< don't yet understand what a %s is for... >>>"
+                     % (type(node),))
+
+
+def make_function_name_props(layer_name):
+    return 'mz_calculate_json_%s_' % (layer_name,)
+
+
+def make_function_name_min_zoom(layer_name):
+    return 'mz_calculate_min_zoom_%s_' % (layer_name,)
+
+
+def table_is_osm(name):
+    return name.startswith('planet_osm_')
+
+
+def table_is_polygonal(name):
+    return name in POLYGON_TABLES
+
+
+def print_adaptor(layer, table, calc, return_type):
+    var = dict(layer=layer, table=table, calc=calc,
+               return_type=return_type)
+
+    if table_is_polygonal(table):
+        var['way_area'] = 'row.way_area'
+    else:
+        var['way_area'] = '0::real'
+
+    if table_is_osm(table):
+        var['fid_column'] = 'osm_id'
+        var['geom_column'] = 'way'
+        var['tags_expr'] = 'row.tags'
+
+    else:
+        var['fid_column'] = 'gid'
+        var['geom_column'] = 'the_geom'
+        var['tags_expr'] = 'hstore(row)'
+
+    print ADAPTOR_QUERY % var
+
+
+def main(argv=None):
+    from vectordatasource.meta import find_yaml_path
+    if argv is None:
+        argv = sys.argv
+    yaml_path = find_yaml_path()
+    for output_fn, make_fn_name, force_type, return_type in (
+            (output_kind, make_function_name_props, None, 'JSON'),
+            (output_min_zoom, make_function_name_min_zoom, float, 'REAL')):
+        layer_result = parse_layers(yaml_path, output_fn, make_fn_name)
+        assert isinstance(layer_result, LayerParseResult)
+        for function_data in layer_result.layer_data:
+            assert isinstance(function_data, FunctionData)
+            ast_fn = function_data.ast
+            ast_fn = GeomTypeTransformer().visit(ast_fn)
+            visitor = SQLVisitor(sys.stdout, force_type, return_type)
+            visitor.visit(ast_fn)
+
+    for layer, tables in LAYER_TABLES.items():
+        for table in tables:
+            for calc, return_type in [('json', 'JSON'), ('min_zoom', 'REAL')]:
+                print_adaptor(layer, table, calc, return_type)
+
+
+if __name__ == '__main__':
+    main()
