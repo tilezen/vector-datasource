@@ -100,7 +100,7 @@ Larger 512 pixel sized tiles offers several benefits:
 - **Less tile requests:** a single 512 request is equivalent to four 256 requests
 - **Better labels:** map rendering software like Tangram and MapboxGL have more room to better place labels
 - **Smaller overall file sizes:** A larger 512 pixel tile compresses to a smaller file size than when split into four 256 tiles
-- **Offline:** Less tiles are needed to cover the same geographic area, and take up less disk space
+- **Offline:** Less 512 tiles are needed to cover the same geographic area, and take up less disk space
 
 ```
 https://tile.mapzen.com/mapzen/vector/v1/{tilesize}/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
