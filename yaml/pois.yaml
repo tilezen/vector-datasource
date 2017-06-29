@@ -17,6 +17,7 @@ global:
     train_routes: {col: train_routes}
     subway_routes: {col: subway_routes}
     light_rail_routes: {col: light_rail_routes}
+    tram_routes: {col: tram_routes}
     ref: {col: ref}
     attraction: {col: attraction}
     zoo: {col: zoo}
