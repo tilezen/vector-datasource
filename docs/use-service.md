@@ -93,7 +93,7 @@ Mapzen vector tiles can be returned in the following formats.
 
 ## Specify tile size
 
-Optionally 256 or 512 pixel tile size be specified. When not specified the size defaults to 256.
+Optionally a 256 or 512 pixel tile size may be specified. When not specified, the size defaults to 256.
 
 ```
 https://tile.mapzen.com/mapzen/vector/v1/{tilesize}/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
@@ -101,7 +101,7 @@ https://tile.mapzen.com/mapzen/vector/v1/{tilesize}/{layers}/{z}/{x}/{y}.{format
 
 ### 256 tile size (default)
 
-The suggest max `{z}` value for 256 pixel tiles is zoom 16. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 16 tile.
+The suggest max `{z}` value for 256 pixel tiles is zoom **16**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 16 tile.
 
 **Default:**
 
@@ -128,7 +128,7 @@ sources:
 
 ### 512 tile size
 
-The suggest max `{z}` value for 512 pixel tiles is zoom 15. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 15 tile.
+The suggest max `{z}` value for 512 pixel tiles is zoom **15**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 15 tile.
 
 **512 in path:**
 
