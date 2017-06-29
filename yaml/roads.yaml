@@ -1,5 +1,6 @@
 global:
   - &output_properties
+    # not all features (e.g. pistes) include names so names are added below
     source: {col: source}
     min_zoom: {col: min_zoom}
     is_bus_route: {col: is_bus_route}
