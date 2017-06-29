@@ -28,10 +28,27 @@ Here’s a sample tile in GeoJSON:
 https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.json?api_key=your-mapzen-api-key
 ```
 
+## Specify z, x, and y tile coordinates
+
+Tiled geographic data enables fast fetching and display of "[slippy maps](https://en.wikipedia.org/wiki/Tiled_web_map)".
+
+Tiling is the process of cutting raw map data from latitude and longitude geographic coordinates ([EPSG:4329](http://spatialreference.org/ref/epsg/4329/)) into a smaller data files using a file naming scheme based on zoom, x, and y in the Web Mercator ([EPSG:3857](http://spatialreference.org/ref/sr-org/6864/)) projection.
+
+### Tile coordinate components
+
+- `{z}` **zoom** ranges from 0 to 20 (but no new information is added after zoom 15)
+- `{x}` **horizontal position**, counting from the "left", ranges from 0 to variable depending on the zoom
+- `{y}` **vertical position**, counting from the "top", ranges from 0 to variable depending on the zoom
+
+### Tile coordinate resources
+
+- MapTiler.org's [Tiles à la Google Maps: Coordinates, Tile Bounds and Projection](http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/) has a great visualization that overlays tile coordinates on an interactive map
+- GeoFabrik's [Tile Calculator](http://tools.geofabrik.de/calc/) charts number of tiles per zoom with a customizable bounding box
+
+
 ## Specify layers in the service
 
 Layers to return can specified as `all`, or as one or more layer names separated by commas. Using the `all` layer is more performant.
-
 
 `buildings`: https://tile.mapzen.com/mapzen/vector/v1/buildings/16/19293/24641.json?api_key=your-mapzen-api-key
 
@@ -73,6 +90,74 @@ Mapzen vector tiles can be returned in the following formats.
 * [GeoJSON](http://geojson.org): use the `.json` extension. GeoJSON is easy to get started with, human-readable, and compatible with many tools
 * [TopoJSON](https://github.com/mbostock/topojson): use the `.topojson` extension. TopoJSON is an optimized form of JSON that saves space by encoding topology and reducing replication of shared geometry.
 * [Mapbox-format binary tiles](https://github.com/mapbox/vector-tile-spec): use the `.mvt` extension. This is a compact format using protocol buffers that is used for raster tile rendering in TileMill2 and vector rendering in MapboxGL
+
+## Specify tile size
+
+Optionally a 256 or 512 pixel tile size may be specified. When not specified, the size defaults to 256. Historically, the first web slippy maps were based on 256 pixel sized tiles. 
+
+Larger 512 pixel sized tiles offers several benefits:
+
+- **Less tiles, less network requests:** a single 512 request is equivalent to four 256 requests
+- **Better labels:** map rendering software like Tangram and MapboxGL have more room to better place labels
+- **Smaller overall file sizes:** A larger 512 pixel tile compresses to a smaller file size than when split into four 256 tiles
+- **Offline:** Less 512 tiles are needed to cover the same geographic area, and take up less disk space
+
+```
+https://tile.mapzen.com/mapzen/vector/v1/{tilesize}/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+
+### 256 tile size (default)
+
+The suggested max `{z}` value for 256 pixel tiles is zoom **16**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 16 tile.
+
+**Default:**
+
+Including tile size in the path is not required. When not specified the default size of 256 is returned.
+
+```
+https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+
+**Example Tangram YAML:**
+
+```
+sources:
+    mapzen:
+        type: MVT
+        url:  https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+        url_params:
+            api_key: your-mapzen-api-key
+        max_zoom: 16
+```
+
+**256 in path:**
+
+```
+https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+
+### 512 tile size
+
+The suggested max `{z}` value for 512 pixel tiles is zoom **15**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 15 tile.
+
+**512 in path:**
+
+```
+https://tile.mapzen.com/mapzen/vector/v1/512/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+
+**Example Tangram YAML:**
+
+```
+sources:
+    mapzen:
+        type: MVT
+        url:  https://tile.mapzen.com/mapzen/vector/v1/512/all/{z}/{x}/{y}.mvt
+        url_params:
+            api_key: your-mapzen-api-key
+        max_zoom: 15
+```
+
 
 ## Security
 
