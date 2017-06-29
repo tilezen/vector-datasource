@@ -113,7 +113,8 @@ https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=y
 
 **256 in path:**
 
-``` `https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
 ```
 
 **Example Tangram YAML:**
@@ -123,6 +124,8 @@ sources:
     mapzen:
         type: MVT
         url:  https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.mvt
+        url_params:
+            api_key: your-mapzen-api-key
         max_zoom: 16
 ```
 
@@ -132,7 +135,8 @@ The suggested max `{z}` value for 512 pixel tiles is zoom **15**. Requesting `{z
 
 **512 in path:**
 
-``` `https://tile.mapzen.com/mapzen/vector/v1/512/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
+```
+https://tile.mapzen.com/mapzen/vector/v1/512/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
 ```
 
 **Example Tangram YAML:**
@@ -142,6 +146,8 @@ sources:
     mapzen:
         type: MVT
         url:  https://tile.mapzen.com/mapzen/vector/v1/512/all/{z}/{x}/{y}.mvt
+        url_params:
+            api_key: your-mapzen-api-key
         max_zoom: 15
 ```
 
