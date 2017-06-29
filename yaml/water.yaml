@@ -165,7 +165,7 @@ filters:
   #     - *output_properties
   #     - {kind: ocean}
   #   table: shp
-  - filter: {source: openstreetmapdata.com}
+  - filter: {meta.source: shp}
     min_zoom: 0
     output:
       - *output_properties
