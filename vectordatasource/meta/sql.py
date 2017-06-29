@@ -524,6 +524,8 @@ class GeomNameTransformer(ast.NodeTransformer):
         'MultiLineString': 'ST_MultiLineString',
         'Polygon': 'ST_Polygon',
         'MultiPolygon': 'ST_MultiPolygon',
+        'Line': 'ST_LineString',
+        'MultiLine': 'ST_MultiLineString',
     }
 
     def visit_Str(self, s):
