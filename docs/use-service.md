@@ -37,13 +37,13 @@ Tiling is the process of cutting raw map data from latitude and longitude geogra
 ### Tile coordinate components
 
 - `{z}` **zoom** ranges from 0 to 20 (but no new information is added after zoom 15)
-- `{x}` **horizontal position**, counting from the "left", ranges from 0 to variable depending on the zoom.
-- `{y}` **vertical position**, counting from the "top", ranges from 0 to variable depending on the zoom.
+- `{x}` **horizontal position**, counting from the "left", ranges from 0 to variable depending on the zoom
+- `{y}` **vertical position**, counting from the "top", ranges from 0 to variable depending on the zoom
 
 ### Tile coordinate resources
 
-- MapTiler.org's [Tiles à la Google Maps: Coordinates, Tile Bounds and Projection](http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/) has a great visualization that overlays tile coordinates on an interactive map.
-- GeoFabrik's [Tile Calculator](http://tools.geofabrik.de/calc/) charts number of tiles per zoom with a customizable bounding box.
+- MapTiler.org's [Tiles à la Google Maps: Coordinates, Tile Bounds and Projection](http://www.maptiler.org/google-maps-coordinates-tile-bounds-projection/) has a great visualization that overlays tile coordinates on an interactive map
+- GeoFabrik's [Tile Calculator](http://tools.geofabrik.de/calc/) charts number of tiles per zoom with a customizable bounding box
 
 
 ## Specify layers in the service
