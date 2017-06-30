@@ -34,7 +34,7 @@ SELECT
       'min_zoom', least(16, mz_landuse_min_zoom)::real,
       'area', way_area::bigint,
       'source', 'openstreetmap.org',
-      'mz_is_building', mz_calculate_is_building_or_part(tags->'building', tags->'building:part')
+      'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
     ) AS __properties__
 FROM
     {{ table }} t
@@ -97,7 +97,7 @@ SELECT
     'min_zoom', mz_landuse_min_zoom,
     'area', way_area::bigint,
     'source', 'openstreetmap.org',
-    'mz_is_building', mz_calculate_is_building_or_part(tags->'building', tags->'building:part')
+    'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
   ) AS __properties__
 FROM
   planet_osm_polygon t
