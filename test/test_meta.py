@@ -37,6 +37,12 @@ def find_yaml_path():
 
 
 @memoize
+def make_test_metadata():
+    from tilequeue.process import make_metadata
+    return make_metadata('test')
+
+
+@memoize
 def make_layer_data_props():
     yaml_path = find_yaml_path()
     layer_parse_result = parse_layers_props(yaml_path)
@@ -75,10 +81,11 @@ class CallFuncTest(unittest.TestCase):
         shape = shapely.geometry.Point((0, 0))
         props = {}
         fid = 42
+        meta = make_test_metadata()
 
         for layer_datum in self.layer_data:
             fn = layer_datum.fn
-            result = fn(shape, props, fid)
+            result = fn(shape, props, fid, meta)
             self.assertTrue(isinstance(result, (dict, None.__class__)))
 
 
@@ -94,7 +101,8 @@ class BuildingsTest(unittest.TestCase):
         shape = shapely.geometry.Point((0, 0))
         props = dict(building='yes')
         fid = 42
-        out_props = self.buildings.fn(shape, props, fid)
+        meta = make_test_metadata()
+        out_props = self.buildings.fn(shape, props, fid, meta)
         self.assertEquals('building', out_props.get('kind'))
         self.assertIsNone(out_props.get('kind_detail'))
 
@@ -106,7 +114,8 @@ class BuildingsTest(unittest.TestCase):
             'building:part': 'passageway',
         }
         fid = 42
-        out_props = self.buildings.fn(shape, props, fid)
+        meta = make_test_metadata()
+        out_props = self.buildings.fn(shape, props, fid, meta)
         self.assertEquals('building', out_props.get('kind'))
         self.assertEquals('beach_hut', out_props.get('kind_detail'))
         self.assertEquals('passageway', out_props.get('building_part'))
@@ -125,7 +134,8 @@ class BoundariesTest(unittest.TestCase):
             'boundary:type': 'aboriginal_lands',
             'admin_level': '2',
         }
-        out_props = self.boundaries.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.boundaries.fn(None, props, None, meta)
         self.assertEquals('aboriginal_lands', out_props.get('kind'))
         self.assertEquals('2', out_props.get('kind_detail'))
 
@@ -133,7 +143,8 @@ class BoundariesTest(unittest.TestCase):
         props = {
             'featurecla': 'Admin-1 region boundary',
         }
-        out_props = self.boundaries.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.boundaries.fn(None, props, None, meta)
         self.assertEquals('macroregion', out_props.get('kind'))
         self.assertEquals('3', out_props.get('kind_detail'))
 
@@ -149,14 +160,18 @@ class EarthTest(unittest.TestCase):
         props = {
             'natural': 'arete',
         }
-        out_props = self.earth.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.earth.fn(None, props, None, meta)
         self.assertEquals('arete', out_props.get('kind'))
 
     def test_ne(self):
         props = {
             'gid': 42,
         }
-        out_props = self.earth.fn(None, props, None)
+        # this rule depends on a particular source being set
+        from tilequeue.process import make_metadata
+        meta = make_metadata('ne')
+        out_props = self.earth.fn(None, props, None, meta)
         self.assertEquals('earth', out_props.get('kind'))
 
 
@@ -171,7 +186,8 @@ class LanduseTest(unittest.TestCase):
         props = {
             'natural': 'scree',
         }
-        out_props = self.landuse.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.landuse.fn(None, props, None, meta)
         self.assertEquals('scree', out_props.get('kind'))
 
 
@@ -187,7 +203,8 @@ class PlacesTest(unittest.TestCase):
             'name': 'foo',
             'place': 'isolated_dwelling',
         }
-        out_props = self.places.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.places.fn(None, props, None, meta)
         self.assertEquals('locality', out_props.get('kind'))
         self.assertEquals('isolated_dwelling', out_props.get('kind_detail'))
 
@@ -196,7 +213,8 @@ class PlacesTest(unittest.TestCase):
             'scalerank': 42,
             'featurecla': 'Scientific station',
         }
-        out_props = self.places.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.places.fn(None, props, None, meta)
         self.assertEquals('locality', out_props.get('kind'))
         self.assertEquals('scientific_station', out_props.get('kind_detail'))
 
@@ -210,21 +228,24 @@ class PoisTest(unittest.TestCase):
 
     def test_disused(self):
         props = dict(disused='yes')
-        out_props = self.pois.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.pois.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('kind'))
 
         props = dict(disused='no', name='foo', leisure='playground')
-        out_props = self.pois.fn(None, props, None)
+        out_props = self.pois.fn(None, props, None, meta)
         self.assertEquals('playground', out_props.get('kind'))
 
     def test_no_name_ok(self):
         props = dict(historic='landmark')
-        out_props = self.pois.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.pois.fn(None, props, None, meta)
         self.assertEquals('landmark', out_props.get('kind'))
 
     def test_no_name_none(self):
         props = dict(tourism='aquarium')
-        out_props = self.pois.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.pois.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('kind'))
 
 
@@ -240,7 +261,8 @@ class RoadsTest(unittest.TestCase):
             'name': 'foo',
             'highway': 'motorway',
         }
-        out_props = self.roads.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.roads.fn(None, props, None, meta)
         self.assertEquals('highway', out_props.get('kind'))
         self.assertEquals('motorway', out_props.get('kind_detail'))
 
@@ -250,7 +272,8 @@ class RoadsTest(unittest.TestCase):
             'type': 'Road',
             'scalerank': 42,
         }
-        out_props = self.roads.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.roads.fn(None, props, None, meta)
         self.assertEquals('major_road', out_props.get('kind'))
         self.assertEquals('secondary', out_props.get('kind_detail'))
 
@@ -266,7 +289,8 @@ class TransitTest(unittest.TestCase):
         props = {
             'route': 'subway',
         }
-        out_props = self.transit.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.transit.fn(None, props, None, meta)
         self.assertEquals('subway', out_props.get('kind'))
 
 
@@ -279,17 +303,19 @@ class WaterTest(unittest.TestCase):
 
     def test_osm(self):
         props = dict(waterway='riverbank')
-        out_props = self.water.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.water.fn(None, props, None, meta)
         self.assertEquals('riverbank', out_props.get('kind'))
 
         props = dict(waterway='riverbank', intermittent='yes')
-        out_props = self.water.fn(None, props, None)
+        out_props = self.water.fn(None, props, None, meta)
         self.assertEquals('riverbank', out_props.get('kind'))
         self.assertTrue(out_props.get('intermittent'))
 
     def test_ne(self):
         props = dict(featurecla='Lake')
-        out_props = self.water.fn(None, props, None)
+        meta = make_test_metadata()
+        out_props = self.water.fn(None, props, None, meta)
         self.assertEquals('lake', out_props.get('kind'))
 
 
@@ -306,7 +332,8 @@ class LanduseMinZoomTest(unittest.TestCase):
         props = {
             'zoo': 'enclosure',
         }
-        out_min_zoom = self.landuse.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.landuse.fn(shape, props, None, meta)
         self.assertEquals(16, out_min_zoom)
 
     def test_large_zoo(self):
@@ -316,7 +343,8 @@ class LanduseMinZoomTest(unittest.TestCase):
         props = {
             'zoo': 'enclosure',
         }
-        out_min_zoom = self.landuse.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.landuse.fn(shape, props, None, meta)
         self.assertEquals(9, out_min_zoom)
 
     def test_medium_zoo(self):
@@ -341,7 +369,8 @@ class LanduseMinZoomTest(unittest.TestCase):
         util_min_zoom = calculate_1px_zoom(shape.area)
         self.assertAlmostEqual(target_zoom, util_min_zoom)
 
-        out_min_zoom = self.landuse.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.landuse.fn(shape, props, None, meta)
         self.assertAlmostEqual(target_zoom, out_min_zoom)
 
 
@@ -359,7 +388,8 @@ class BoundariesMinZoomTest(unittest.TestCase):
             'boundary': 'administrative',
             'admin_level': '2',
         }
-        out_min_zoom = self.boundaries.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals(8, out_min_zoom)
 
 
@@ -376,7 +406,8 @@ class BuildingsMinZoomTest(unittest.TestCase):
         props = {
             'building': 'yes',
         }
-        out_min_zoom = self.buildings.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.buildings.fn(shape, props, None, meta)
         self.assertEquals(17, out_min_zoom)
 
 
@@ -394,7 +425,8 @@ class EarthMinZoomTest(unittest.TestCase):
             'place': 'island',
             'name': 'An Island',
         }
-        out_min_zoom = self.earth.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.earth.fn(shape, props, None, meta)
         self.assertEquals(15, out_min_zoom)
 
 
@@ -412,7 +444,8 @@ class PlacesMinZoomTest(unittest.TestCase):
             'place': 'country',
             'name': 'A Country',
         }
-        out_min_zoom = self.places.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.places.fn(shape, props, None, meta)
         self.assertEquals(2, out_min_zoom)
 
 
@@ -431,7 +464,8 @@ class PoisMinZoomTest(unittest.TestCase):
             'operator': 'US Forest Service',
             'name': 'A Forest',
         }
-        out_min_zoom = self.pois.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.pois.fn(shape, props, None, meta)
         self.assertEquals(14, out_min_zoom)
 
 
@@ -448,7 +482,8 @@ class RoadsMinZoomTest(unittest.TestCase):
         props = {
             'highway': 'service',
         }
-        out_min_zoom = self.roads.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.roads.fn(shape, props, None, meta)
         self.assertEquals(14, out_min_zoom)
 
 
@@ -466,7 +501,8 @@ class TransitMinZoomTest(unittest.TestCase):
             'route': 'train',
             'service': 'high_speed',
         }
-        out_min_zoom = self.transit.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.transit.fn(shape, props, None, meta)
         self.assertEquals(5, out_min_zoom)
 
 
@@ -483,7 +519,8 @@ class WaterMinZoomTest(unittest.TestCase):
         props = {
             'leisure': 'swimming_pool',
         }
-        out_min_zoom = self.water.fn(shape, props, None)
+        meta = make_test_metadata()
+        out_min_zoom = self.water.fn(shape, props, None, meta)
         self.assertEquals(16, out_min_zoom)
 
 
@@ -527,7 +564,8 @@ class RoundTripRuleTest(unittest.TestCase):
         shape = None
         props = dict(some='value')
         fid = 42
-        result = fn(shape, props, fid)
+        meta = make_test_metadata()
+        result = fn(shape, props, fid, meta)
         self.assertIsNone(result)
 
         # now, round trip it through the ast formatter
@@ -543,7 +581,7 @@ class RoundTripRuleTest(unittest.TestCase):
         exec code in scope
         fn = scope['fn_name_props']
 
-        result = fn(shape, props, fid)
+        result = fn(shape, props, fid, meta)
         self.assertIsNone(result)
 
 
