@@ -605,8 +605,8 @@ filters:
   ############################################################
   # TIER 5
   ############################################################
-  # theme_park
-  - filter: {tourism: theme_park}
+  # theme_park (NOTE: also allow and normalise 'Theme Park' to deal with vandalism)
+  - filter: {tourism: [theme_park, 'Theme Park']}
     min_zoom: *tier5_min_zoom
     output:
       - *output_properties
