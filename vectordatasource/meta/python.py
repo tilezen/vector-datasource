@@ -224,6 +224,11 @@ def ast_column(ast_state, col):
         result = ast.Name('fid', ast.Load())
     elif col == 'shape':
         result = ast.Name('shape', ast.Load())
+    elif col.startswith('meta.'):
+        meta_fields = col.split('.', 1)
+        meta_prop = meta_fields[1]
+        result = ast.Attribute(
+            ast.Name('meta', ast.Load()), meta_prop, ast.Load())
     else:
         result = ast.Call(
             ast.Attribute(
@@ -509,6 +514,7 @@ def parse_layer_from_yaml(
             ast.Name('shape', ast.Param()),
             ast.Name('props', ast.Param()),
             ast.Name('fid', ast.Param()),
+            ast.Name('meta', ast.Param()),
         ], None, None, []),
         stmts,
         [])

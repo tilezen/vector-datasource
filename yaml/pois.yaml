@@ -573,8 +573,8 @@ filters:
     output:
       - *output_properties
       - {kind: resort, tier: 5}
-  # theme_park
-  - filter: {tourism: theme_park}
+  # theme_park (NOTE: also allow and normalise 'Theme Park' to deal with vandalism)
+  - filter: {tourism: [theme_park, 'Theme Park']}
     min_zoom: { min: [ { max: [ 13, { sum: [ { col: zoom }, 6.32 ] }, *tier5_min_zoom ] }, 17 ] }
     output:
       - *output_properties

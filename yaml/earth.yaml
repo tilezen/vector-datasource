@@ -71,24 +71,9 @@ filters:
       - {kind: valley}
     table: osm
 
-  # TODO: need to sort out the source
   - filter:
-      source:
-        - naturalearthdata.com
-        - openstreetmapdata.com
+      meta.source: [ne, shp]
     min_zoom: 0
     output:
       - *output_properties
       - {kind: earth}
-  # - filter: {gid: true}
-  #   min_zoom: 0
-  #   output:
-  #     - *output_properties
-  #     - {kind: earth}
-  #   table: ne
-  # - filter: {fid: true}
-  #   min_zoom: 0
-  #   output:
-  #     - *output_properties
-  #     - {kind: earth}
-  #   table: shp

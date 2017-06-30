@@ -97,7 +97,8 @@ DECLARE
   row ALIAS FOR $1;
 BEGIN
   RETURN mz_calculate_%(calc)s_%(layer)s_(
-    row.%(fid_column)s, row.%(geom_column)s, %(tags_expr)s, %(way_area)s);
+    row.%(fid_column)s, row.%(geom_column)s, %(tags_expr)s, %(way_area)s,
+    '%(meta_source)s');
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 """
@@ -442,6 +443,8 @@ class SQLExpression(ast.NodeVisitor):
 
         if name == 'shape' and attr == 'type':
             self.buf.write("ST_GeomType(way)")
+        elif name == 'meta' and attr == 'source':
+            self.buf.write("\"meta_source\"")
         else:
             raise RuntimeError("Unknown attribute pair (%r, %r)"
                                % (name, attr))
@@ -553,7 +556,8 @@ class SQLVisitor(ast.NodeVisitor):
 
     def visit_FunctionDef(self, defn):
         self.writeln("CREATE OR REPLACE FUNCTION %s"
-                     "(fid bigint, way geometry, tags hstore, way_area real)"
+                     "(fid bigint, way geometry, tags hstore, way_area real,"
+                     " meta_source text)"
                      % defn.name)
         self.writeln("RETURNS %s AS $$" % (self.return_type,))
         self.add_indent(2)
@@ -643,6 +647,20 @@ def table_is_polygonal(name):
     return name in POLYGON_TABLES
 
 
+def calculate_meta_source_for_table(name):
+    if table_is_osm(name):
+        return 'osm'
+    elif name.startswith('ne_'):
+        return 'ne'
+    elif name.startswith('wof_'):
+        return 'wof'
+    elif name in ('buffered_land', 'land_polygons', 'water_polygons'):
+        return 'shp'
+    else:
+        raise RuntimeError('Unknown table %r, cannot calculate meta source' %
+                           (name,))
+
+
 def print_adaptor(layer, table, calc, return_type):
     var = dict(layer=layer, table=table, calc=calc,
                return_type=return_type)
@@ -661,6 +679,8 @@ def print_adaptor(layer, table, calc, return_type):
         var['fid_column'] = 'gid'
         var['geom_column'] = 'the_geom'
         var['tags_expr'] = 'hstore(row)'
+
+    var['meta_source'] = calculate_meta_source_for_table(table)
 
     print ADAPTOR_QUERY % var
 
