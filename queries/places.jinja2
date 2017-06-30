@@ -56,7 +56,7 @@ SELECT
     json_build_object(
       'kind', wof_np.placetype_string
     ) AS mz_properties,
-    to_jsonb(l10n_name) || jsonb_build_object(
+    COALESCE(to_jsonb(l10n_name), '{}'::jsonb) || jsonb_build_object(
       'name', name,
       'source', 'whosonfirst.mapzen.com',
       'mz_n_photos', n_photos,
