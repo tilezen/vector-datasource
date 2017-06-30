@@ -31,12 +31,9 @@ SELECT
     {% filter geometry %}way{% endfilter %} AS __geometry__,
     mz_calculate_json_places(planet_osm_point.*) AS mz_properties,
     to_jsonb(tags) || jsonb_build_object(
-      'name', tags->'name',
       'source', 'openstreetmap.org',
-      'admin_level', tags->'admin_level',
-      'population', tags->'population',
-      'country_capital', CASE WHEN tags->'capital' = 'yes' THEN true END,
-      'region_capital', CASE WHEN tags->'state_capital' = 'yes' THEN true END,
+      'country_capital', CASE WHEN tags->'capital' = 'yes' THEN TRUE END,
+      'region_capital', CASE WHEN tags->'state_capital' = 'yes' THEN TRUE END,
       'min_zoom', mz_places_min_zoom
     ) AS __properties__
 

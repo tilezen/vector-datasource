@@ -40,7 +40,6 @@ SELECT
     NULL AS __label__,
     mz_calculate_json_buildings(planet_osm_point.*) AS mz_properties,
     to_jsonb(tags) || jsonb_build_object(
-      'name', tags->'name',
       'source', 'openstreetmap.org',
       'min_zoom', mz_building_min_zoom,
       'label_placement', true
