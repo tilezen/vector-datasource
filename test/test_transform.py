@@ -620,6 +620,9 @@ class ShieldTextTransform(unittest.TestCase):
         # see https://github.com/tilezen/vector-datasource/issues/192
         self._assert_shield_text("something", None, None)
 
+    def test_ne(self):
+        self._assert_shield_text('NZ:SH', 'SH16', '16')
+
 
 class RankBoundsTest(unittest.TestCase):
 

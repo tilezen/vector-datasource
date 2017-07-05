@@ -139,7 +139,7 @@ global:
           - when:
               continent: 'Oceania'
               level: 'Federal'
-            then: ['road', 'NZ:SH', { call: { func: trim_nz_sh, args: [{ col: label }]}}]
+            then: ['road', 'NZ:SH', { col: label}]
           - when:
               continent: ['Europe', 'Asia']
               level: 'E'

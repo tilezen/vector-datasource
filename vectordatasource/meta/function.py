@@ -220,10 +220,3 @@ def mz_building_part_kind_detail(val):
 #     return []
 # def mz_cycling_network(props, osm_id):
 #     pass
-
-
-def trim_nz_sh(label):
-    # TODO is this what the implementation should be?
-    if label.startswith('NZ:SH'):
-        label = label[len('NZ:SH'):]
-    return label
