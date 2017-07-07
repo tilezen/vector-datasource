@@ -30,10 +30,10 @@ test.assert_has_feature(
     16, 18735, 25114, 'roads',
     { 'id': 232603515, 'kind': 'minor_road', 'bicycle_network': 'ncn', 'oneway': 'yes'})
 
-# Way: Longleaf Trace (165276857) http://www.openstreetmap.org/way/165276857
+# http://www.openstreetmap.org/way/315261543
 test.assert_has_feature(
-    16, 16505, 26756, 'roads',
-    { 'id': 165276857, 'kind': 'path', 'bicycle_network': 'ncn'})
+    16, 32209, 22024, 'roads',
+    { 'id': 315261543, 'kind': 'path', 'bicycle_network': 'ncn'})
 
 # http://www.openstreetmap.org/way/44422697
 test.assert_has_feature(
