@@ -2,7 +2,6 @@
 SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    mz_calculate_json_transit({{ table }}.*) AS mz_properties,
     to_jsonb(tags) || jsonb_build_object(
       'source', 'openstreetmap.org',
       'min_zoom', mz_transit_level

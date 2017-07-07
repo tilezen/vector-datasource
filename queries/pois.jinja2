@@ -1,7 +1,6 @@
 SELECT
     osm_id AS __id__,
     {% filter geometry %}way{% endfilter %} AS __geometry__,
-    mz_properties,
     to_jsonb(tags) || jsonb_build_object(
       'source', 'openstreetmap.org',
       'min_zoom', min_zoom,
@@ -27,7 +26,6 @@ FROM (
         THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_json_pois(planet_osm_point.*) AS mz_properties,
     tags
 
   FROM
@@ -54,7 +52,6 @@ UNION ALL
         THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_json_pois(planet_osm_polygon.*) AS mz_properties,
     tags
 
   FROM

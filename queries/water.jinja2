@@ -2,7 +2,6 @@
     gid AS __id__,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     jsonb_build_object(
       'name', {{ name }},
       'area', way_area::bigint,
@@ -51,7 +50,6 @@ SELECT
     gid AS __id__,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     NULL AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     jsonb_build_object(
       'source', 'naturalearthdata.com',
       'min_zoom', mz_water_min_zoom,
@@ -78,7 +76,6 @@ SELECT
     gid AS __id__,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     jsonb_build_object(
       'source', 'naturalearthdata.com',
       'min_zoom', mz_water_min_zoom,
@@ -121,7 +118,6 @@ SELECT
     gid AS __id__,
     {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     jsonb_build_object(
       'source', 'naturalearthdata.com',
       'min_zoom', mz_water_min_zoom,
@@ -147,7 +143,6 @@ SELECT
     gid AS __id__,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     jsonb_build_object(
       'name', '',
       'area', way_area::bigint,
@@ -165,7 +160,6 @@ SELECT
     osm_id AS __id__,
     {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     to_jsonb(tags) || jsonb_build_object(
       'area', way_area::bigint,
       'source', 'openstreetmap.org',
@@ -188,7 +182,6 @@ SELECT
     osm_id AS __id__,
     {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
-    mz_calculate_json_water(t.*) AS mz_properties,
     to_jsonb(tags) || jsonb_build_object(
       'source', 'openstreetmap.org',
       'min_zoom', mz_water_min_zoom
@@ -212,7 +205,6 @@ SELECT
   osm_id AS __id__,
   {% filter geometry %}way{% endfilter %} AS __geometry__,
   NULL AS __label__,
-  mz_calculate_json_water(t.*) AS mz_properties,
   to_jsonb(tags) || jsonb_build_object(
     'source', 'openstreetmap.org',
     'min_zoom', mz_water_min_zoom,
