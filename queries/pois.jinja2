@@ -1,26 +1,17 @@
 SELECT
-    tags->'name' AS name,
-    'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    min_zoom,
-    way_area AS area,
-    tags->'protect_class' AS protect_class,
-    tags->'operator' AS operator,
-    tags->'religion' AS religion,
-    tags->'sport' AS sport,
-    (transit_routes).score AS mz_transit_score,
-    (transit_routes).root_relation_id AS mz_transit_root_relation_id,
-    (transit_routes).train_routes AS train_routes,
-    (transit_routes).subway_routes AS subway_routes,
-    (transit_routes).light_rail_routes AS light_rail_routes,
-    (transit_routes).tram_routes AS tram_routes,
-    tags->'ref' AS ref,
-    tags->'attraction' AS attraction,
-    tags->'zoo' AS zoo,
-    tags->'exit_to' AS exit_to,
-    %#tags AS tags,
-    mz_properties
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    to_jsonb(tags) || jsonb_build_object(
+      'source', 'openstreetmap.org',
+      'min_zoom', min_zoom,
+      'area', way_area,
+      'mz_transit_score', (transit_routes).score,
+      'mz_transit_root_relation_id', (transit_routes).root_relation_id,
+      'train_routes', (transit_routes).train_routes,
+      'subway_routes', (transit_routes).subway_routes,
+      'light_rail_routes', (transit_routes).light_rail_routes,
+      'tram_routes', (transit_routes).tram_routes
+    ) AS __properties__
 
 FROM (
 
@@ -35,7 +26,6 @@ FROM (
         THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_json_pois(planet_osm_point.*) AS mz_properties,
     tags
 
   FROM
@@ -62,7 +52,6 @@ UNION ALL
         THEN mz_calculate_transit_routes_and_score(NULL, osm_id)
       ELSE NULL
     END AS transit_routes,
-    mz_calculate_json_pois(planet_osm_polygon.*) AS mz_properties,
     tags
 
   FROM

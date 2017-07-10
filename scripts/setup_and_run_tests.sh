@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 set -e
 
@@ -134,30 +134,45 @@ for tbl in `ls ${basedir}/integration-test/fixtures/`; do
 done
 shopt -u nullglob
 
+echo "=== Starting test tile server..."
 # make config for tileserver and serve
 test_server_port="${basedir}/test_server.port"
 rm -f "${test_server_port}"
 python scripts/test_server.py "${dbname}" "${USER}" "${test_server_port}" &
 server_pid=$!
 
-# wait for file to exist
-if [[ ! -f "${test_server_port}" ]]; then
+echo "=== Waiting for tile server to start..."
+# wait for file to exist, which means server has started up
+counter=0
+limit=10
+while [[ ! -f "${test_server_port}" ]]; do
     sleep 1
-fi
+    # note: don't use postfix ++ as let returns 1 when the arg evaluates to
+    # zero (as (counter=0)++ would), which makes `set -e` terminate the
+    # program.
+    let counter=counter+1
+    if [[ $counter -gt $limit ]]; then
+        echo "Test server didn't start up within ${limit}s."
+        exit 1
+    fi
+done
 
-if [[ ! -f "${test_server_port}" ]]; then
-    echo "Test server didn't start up within 1s."
-    exit 1
-fi
+# no longer an error to fail - all setup is done. if the test suite fails
+# then we only want to print out, not kill the whole process.
+set +e
 
 # run tests
 port=`cat "${test_server_port}"`
 export VECTOR_DATASOURCE_CONFIG_URL="http://localhost:${port}/%(layer)s/%(z)d/%(x)d/%(y)d.json"
-python "${basedir}/integration-test.py" || (cat test.log; exit 1)
+python "${basedir}/integration-test.py"
+success=$?
 
-echo "SUCCESS"
+if [[ $success -eq 0 ]]; then
+    echo "SUCCESS"
 
-# no longer an error to fail - all tests are done.
-set +e
+else
+    cat test.log
+fi
+
 kill -HUP "${server_pid}"
 wait

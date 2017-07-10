@@ -1,19 +1,19 @@
-{% macro ne_water_cols() %}
-    way_area::bigint AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'naturalearthdata.com' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+{% macro ne_water_cols(name) %}
     gid AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    NULL::boolean AS boundary
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'name', {{ name }},
+      'area', way_area::bigint,
+      'source', 'naturalearthdata.com',
+      'min_zoom', mz_water_min_zoom,
+      'featurecla', featurecla
+    ) AS __properties__
 {% endmacro %}
 
 {% if zoom < 9 %}
 SELECT
-    NULL AS name,
-    {{ ne_water_cols() }}
+    {{ ne_water_cols('NULL') }}
 
 {% if zoom < 2 %}
 FROM ne_110m_ocean t
@@ -30,8 +30,7 @@ WHERE
 UNION ALL
 
 SELECT
-    name,
-    {{ ne_water_cols() }}
+    {{ ne_water_cols('name') }}
 
 {% if zoom < 2 %}
 FROM ne_110m_lakes t
@@ -48,16 +47,15 @@ WHERE
 UNION ALL
 
 SELECT
-    NULL AS name,
-    NULL AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'naturalearthdata.com' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    NULL AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    true AS boundary
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+    NULL AS __label__,
+    jsonb_build_object(
+      'source', 'naturalearthdata.com',
+      'min_zoom', mz_water_min_zoom,
+      'boundary', true,
+      'featurecla', featurecla
+    ) AS __properties__
 
 FROM
 {% if zoom < 2 %}
@@ -75,16 +73,15 @@ WHERE
 UNION ALL
 
 SELECT
-    NULL AS name,
-    NULL AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'naturalearthdata.com' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    true AS boundary
+    {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'source', 'naturalearthdata.com',
+      'min_zoom', mz_water_min_zoom,
+      'boundary', true,
+      'featurecla', featurecla
+    ) AS __properties__
 
 FROM
 {% if zoom < 2 %}
@@ -103,8 +100,7 @@ WHERE
 UNION ALL
 
 SELECT
-    name,
-    {{ ne_water_cols() }}
+    {{ ne_water_cols('name') }}
 
 {% if 4 <= zoom < 5 %}
 FROM ne_50m_playas t
@@ -119,16 +115,15 @@ WHERE
 UNION ALL
 
 SELECT
-    NULL AS name,
-    NULL AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'naturalearthdata.com' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
     gid AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    true AS boundary
+    {% filter geometry %}st_boundary(the_geom){% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'source', 'naturalearthdata.com',
+      'min_zoom', mz_water_min_zoom,
+      'boundary', true,
+      'featurecla', featurecla
+    ) AS __properties__
 
 FROM
 {% if 4 <= zoom < 5 %}
@@ -145,17 +140,15 @@ WHERE
 
 {% elif 9 <= zoom %}
 SELECT
-    '' AS name,
-    way_area::bigint AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'openstreetmapdata.com' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    NULL AS tunnel,
-    NULL AS tags
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'name', '',
+      'area', way_area::bigint,
+      'source', 'openstreetmapdata.com',
+      'min_zoom', mz_water_min_zoom
+    ) AS __properties__
 
 FROM water_polygons t
 
@@ -164,17 +157,14 @@ WHERE {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 UNION ALL
 
 SELECT
-    tags->'name' AS name,
-    way_area::bigint AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'openstreetmap.org' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    tags->'tunnel' AS tunnel,
-    %#tags AS tags
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    to_jsonb(tags) || jsonb_build_object(
+      'area', way_area::bigint,
+      'source', 'openstreetmap.org',
+      'min_zoom', mz_water_min_zoom
+    ) AS __properties__
 
 FROM planet_osm_polygon t
 
@@ -189,17 +179,13 @@ WHERE
 UNION ALL
 
 SELECT
-    tags->'name' AS name,
-    NULL AS area,
-    mz_calculate_json_water(t.*) AS mz_properties,
-    'openstreetmap.org' AS source,
-    mz_water_min_zoom as min_zoom,
-    {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    tags->'tunnel' AS tunnel,
-    %#tags AS tags
+    {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    to_jsonb(tags) || jsonb_build_object(
+      'source', 'openstreetmap.org',
+      'min_zoom', mz_water_min_zoom
+    ) AS __properties__
 
 FROM planet_osm_line t
 
@@ -216,21 +202,14 @@ WHERE
 UNION ALL
 
 SELECT
-  tags->'name' AS name,
-  NULL AS area,
-  mz_calculate_json_water(t.*) AS mz_properties,
-  'openstreetmap.org' AS source,
-  mz_water_min_zoom as min_zoom,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
-  NULL AS mz_label_placement,
-  true AS label_placement,
-{% if zoom < 9 %}
-  NULL::boolean AS boundary
-{% else %}
-  NULL AS tunnel,
-  %#tags AS tags
-{% endif %}
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  NULL AS __label__,
+  to_jsonb(tags) || jsonb_build_object(
+    'source', 'openstreetmap.org',
+    'min_zoom', mz_water_min_zoom,
+    'label_placement', true
+  ) AS __properties__
 
 FROM
   planet_osm_point t

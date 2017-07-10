@@ -926,3 +926,23 @@ BEGIN
         GROUP BY osm_id;
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+-- calculates the building height given the footprint area and the tags, which
+-- provide either the height or the number of levels to approximate the height.
+CREATE OR REPLACE FUNCTION mz_calculate_building_volume(way_area REAL, tags hstore)
+RETURNS REAL AS $$
+BEGIN
+  RETURN mz_building_height(tags->'height', tags->'building:levels') * way_area;
+END
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- removes the leading 'SH' in the label text.
+-- this is used for removing that prefix from the refs of New Zealand highways
+-- (perhaps SH = State Highway?) because we put the 'SH' as part of the network
+-- and want to keep a numeric ref.
+CREATE OR REPLACE FUNCTION trim_nz_sh(label TEXT)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN trim(leading 'SH' from label);
+END
+$$ LANGUAGE plpgsql IMMUTABLE;

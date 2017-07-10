@@ -1,27 +1,19 @@
 {% macro ne_landuse_cols(kind) %}
-    NULL AS protect_class,
-    NULL AS operator,
-    way_area::bigint AS area,
-    '{"kind": "{{ kind }}"}'::json AS mz_properties,
-    'naturalearthdata.com' AS source,
+    gid AS __id__,
     {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    gid AS __id__
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'name', '',
+      'min_zoom', 4::real,
+      'area', way_area::bigint,
+      'source', 'naturalearthdata.com',
+      'kind', 'urban_area'
+    ) AS __properties__
 {% endmacro %}
 
 {% macro osm_landuse_detailed_query(table, geom_type) %}
 SELECT
-{% if table == 'planet_osm_polygon' %}
-    CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END AS name,
-{% else %}
-    tags->'name' AS name,
-{% endif %}
-    least(16, mz_landuse_min_zoom)::real AS min_zoom,
-    tags->'protect_class' AS protect_class,
-    tags->'operator' AS operator,
-    way_area::bigint AS area,
-    mz_calculate_json_landuse({{ table }}.*) AS mz_properties,
-    'openstreetmap.org' AS source,
+    osm_id AS __id__,
 {% if table == 'planet_osm_polygon' %}
     {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
 {% elif table == 'planet_osm_line' %}
@@ -29,19 +21,21 @@ SELECT
 {% else %}
     {% filter geometry %}way{% endfilter %} AS __geometry__,
 {% endif %}
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    osm_id AS __id__,
-    tags->'sport' AS sport,
-    tags->'religion' AS religion,
-    tags->'surface' AS surface,
-    tags->'natural' AS "natural",
-    tags->'attraction' AS attraction,
-    tags->'zoo' AS zoo,
-    tags->'barrier' AS barrier,
-    mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building,
-    %#tags AS tags
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    to_jsonb(tags) || jsonb_build_object(
+      'name',
+{% if table == 'planet_osm_polygon' %}
+      CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END,
+{% else %}
+      tags->'name',
+{% endif %}
+      'min_zoom', least(16, mz_landuse_min_zoom)::real,
+      'area', way_area::bigint,
+      'source', 'openstreetmap.org',
+      'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
+    ) AS __properties__
 FROM
-    {{ table }}
+    {{ table }} t
 WHERE
     {{ bounds[geom_type]|bbox_filter('way',3857) }}
     {% if zoom <= 15 %}
@@ -54,29 +48,25 @@ WHERE
 {% if 4 <= zoom < 6 %}
 
 SELECT
-    '' AS name,
-    4::real AS min_zoom,
-    {{ ne_landuse_cols('urban_area') }}
+    {{ ne_landuse_cols() }}
 FROM
-    ne_50m_urban_areas
+    ne_50m_urban_areas t
 WHERE
     {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
 SELECT
-  tags->'name' AS name,
-  mz_landuse_min_zoom AS min_zoom,
-  tags->'protect_class' AS protect_class,
-  tags->'operator' AS operator,
-  way_area::bigint AS area,
-  mz_calculate_json_landuse(planet_osm_polygon.*) AS mz_properties,
-  'openstreetmap.org' AS source,
+  osm_id AS __id__,
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
-  {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-  osm_id AS __id__
+  {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+  to_jsonb(tags) || jsonb_build_object(
+    'min_zoom', mz_landuse_min_zoom,
+    'area', way_area::bigint,
+    'source', 'openstreetmap.org'
+  ) AS __properties__
 FROM
-  planet_osm_polygon
+  planet_osm_polygon t
 WHERE
   {{ bounds['polygon']|bbox_filter('way',3857) }}
   AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
@@ -85,31 +75,28 @@ WHERE
 {% elif 6 <= zoom < 8 %}
 
 SELECT
-    '' AS name,
-    4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
-    {{ ne_landuse_cols('urban_area') }},
-    NULL AS mz_is_building
+    -- we show urban areas at 4, even if it's not from this table
+    {{ ne_landuse_cols() }}
 FROM
-    ne_10m_urban_areas
+    ne_10m_urban_areas t
 WHERE
     {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 
 UNION ALL
 
 SELECT
-  CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END AS name,
-  mz_landuse_min_zoom AS min_zoom,
-  tags->'protect_class' AS protect_class,
-  tags->'operator' AS operator,
-  way_area::bigint AS area,
-  mz_calculate_json_landuse(planet_osm_polygon.*) AS mz_properties,
-  'openstreetmap.org' AS source,
-  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
-  {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
   osm_id AS __id__,
-  mz_calculate_is_building_or_part(tags->'building', tags->'building:part') AS mz_is_building
+  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
+  {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+  to_jsonb(tags) || jsonb_build_object(
+    'name', CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END,
+    'min_zoom', mz_landuse_min_zoom,
+    'area', way_area::bigint,
+    'source', 'openstreetmap.org',
+    'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
+  ) AS __properties__
 FROM
-  planet_osm_polygon
+  planet_osm_polygon t
 WHERE
   {{ bounds['polygon']|bbox_filter('way',3857) }}
   AND (tags->'boundary' IN ('national_park', 'protected_area') OR tags->'leisure'='nature_reserve')
@@ -128,20 +115,10 @@ UNION ALL
 
 -- "cross-fade" NE urban area polygons for a couple of zooms.
 SELECT
-  '' AS name,
-  4::real AS min_zoom, -- we show urban areas at 4, even if it's not from this table
-  {{ ne_landuse_cols('urban_area') }},
-  NULL AS sport,
-  NULL AS religion,
-  NULL AS surface,
-  NULL AS "natural",
-  NULL AS attraction,
-  NULL AS zoo,
-  NULL AS barrier,
-  NULL AS mz_is_building,
-  NULL AS tags
+  -- we show urban areas at 4, even if it's not from this table
+  {{ ne_landuse_cols() }}
 FROM
-  ne_10m_urban_areas
+  ne_10m_urban_areas t
 WHERE
   {{ bounds['polygon']|bbox_filter('the_geom',3857) }}
 {% endif %}

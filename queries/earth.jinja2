@@ -1,16 +1,14 @@
 {% if zoom < 9 %}
 
 SELECT
-    NULL AS name,
-    NULL AS area,
-    mz_calculate_json_earth(t.*) AS mz_properties,
-    'naturalearthdata.com' AS source,
-    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    mz_earth_min_zoom AS min_zoom,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    NULL AS tags
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'source', 'naturalearthdata.com',
+      'min_zoom', mz_earth_min_zoom,
+      'gid', gid
+    ) AS __properties__
 FROM
 {% if zoom < 2 %}
     ne_110m_land t
@@ -27,16 +25,12 @@ WHERE
 {% else %}
 
 SELECT
-    NULL AS name,
-    NULL AS area,
-    mz_calculate_json_earth(t.*) AS mz_properties,
-    'openstreetmapdata.com' AS source,
-    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
     gid AS __id__,
-    NULL AS min_zoom,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    NULL AS tags
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'source', 'openstreetmapdata.com'
+    ) AS __properties__
 
 FROM
     land_polygons t
@@ -51,16 +45,14 @@ WHERE
 UNION ALL
 
 SELECT
-    tags->'name' AS name,
-    way_area::bigint AS area,
-    mz_calculate_json_earth(t.*) AS mz_properties,
-    'openstreetmap.org' AS source,
-    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    mz_earth_min_zoom AS min_zoom,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    %#tags AS tags
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    to_jsonb(tags) || jsonb_build_object(
+      'area', way_area::bigint,
+      'source', 'openstreetmap.org',
+      'min_zoom', mz_earth_min_zoom
+    ) AS __properties__
 
 FROM planet_osm_polygon t
 
@@ -75,16 +67,13 @@ WHERE
 UNION ALL
 
 SELECT
-    tags->'name' AS name,
-    NULL AS area,
-    mz_calculate_json_earth(t.*) AS mz_properties,
-    'openstreetmap.org' AS source,
-    {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-    mz_earth_min_zoom AS min_zoom,
-    {% filter geometry %}mz_label_placement{% endfilter %} AS mz_label_placement,
-    NULL::boolean AS label_placement,
-    %#tags AS tags
+    {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    to_jsonb(tags) || jsonb_build_object(
+      'source', 'openstreetmap.org',
+      'min_zoom', mz_earth_min_zoom
+    ) AS __properties__
 
 FROM planet_osm_line t
 
@@ -101,16 +90,14 @@ WHERE
 UNION ALL
 
 SELECT
-  tags->'name' AS name,
-  NULL AS area,
-  mz_calculate_json_earth(t.*) AS mz_properties,
-  'openstreetmap.org' AS source,
-  {% filter geometry %}way{% endfilter %} AS __geometry__,
   osm_id AS __id__,
-  mz_earth_min_zoom AS min_zoom,
-  NULL AS mz_label_placement,
-  true AS label_placement,
-  %#tags AS tags
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+  NULL AS __label__,
+  to_jsonb(tags) || jsonb_build_object(
+    'source', 'openstreetmap.org',
+    'min_zoom', mz_earth_min_zoom,
+    'label_placement', true
+  ) AS __properties__
 
 FROM
   planet_osm_point t

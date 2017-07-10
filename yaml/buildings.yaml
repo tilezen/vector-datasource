@@ -3,27 +3,42 @@
 # in multiple places, and so should be checked when updated. the actual
 # content of globals is ignored, unless included in later parts of the file.
 globals:
+  - &output_properties
+    area: {col: area}
+    label_placement: {col: label_placement}
+    min_zoom: {col: min_zoom}
+    mz_label_placement: {col: mz_label_placement}
+    name: {col: name}
+    source: {col: source}
   - &building_standard_properties
+      <<: *output_properties
       building_part: {col: "building:part"}
       building_levels: {col: "building:levels"}
       building_min_levels: {col: "building:min_levels"}
       height: {col: height}
       min_height: {col: min_height}
       layer: {col: layer}
-      location: {col: tags->location}
+      location: {col: location}
       roof_color: {col: "roof:color"}
       roof_material: {col: "roof:material"}
       roof_shape: {col: "roof:shape"}
       roof_height: {col: "roof:height"}
       roof_orientation: {col: "roof:orientation"}
+      source: {col: source}
       addr_housenumber: {col: "addr:housenumber"}
       addr_street: {col: "addr:street"}
   - &building_kind_detail
       kind_detail:
-        expr: mz_building_kind_detail(tags->'building')
+        call:
+          func: mz_building_kind_detail
+          args:
+            - { col: building }
   - &building_part_kind_detail
       kind_detail:
-        expr: mz_building_part_kind_detail(tags->'building:part')
+        call:
+          func: mz_building_part_kind_detail
+          args:
+            - { col: 'building:part' }
   - &is_building
       all:
         - building: true
@@ -122,12 +137,11 @@ filters:
   # address points
   - filter:
       "addr:housenumber": true
-      way:
-        expr: |
-          GeometryType(way) = 'POINT'
+      geom_type: point
     extra_columns: [way]
     min_zoom: 17
     output:
+      <<: *output_properties
       kind: address
       addr_housenumber: {col: 'addr:housenumber'}
       addr_street: {col: 'addr:street'}

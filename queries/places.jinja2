@@ -1,20 +1,14 @@
 SELECT
-    name,
-    mz_calculate_json_places(ne_10m_populated_places.*) AS mz_properties,
-    'naturalearthdata.com' AS source,
-    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
     gid AS __id__,
-
-    NULL AS admin_level,
-    pop_max::text AS population,
-    NULL AS country_capital,
-    NULL AS region_capital,
-    NULL::integer AS mz_n_photos,
-    NULL::bigint AS area,
-    mz_places_min_zoom AS min_zoom,
-    NULL::smallint AS max_zoom,
-    NULL::boolean AS is_landuse_aoi,
-    NULL AS tags
+    {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
+    jsonb_build_object(
+      'name', name,
+      'source', 'naturalearthdata.com',
+      'population', pop_max::text,
+      'featurecla', featurecla,
+      'scalerank', scalerank,
+      'min_zoom', mz_places_min_zoom
+    ) AS __properties__
 
 FROM ne_10m_populated_places
 
@@ -32,22 +26,14 @@ WHERE
 UNION ALL
 
 SELECT
-    tags->'name' AS name,
-    mz_calculate_json_places(planet_osm_point.*) AS mz_properties,
-    'openstreetmap.org' AS source,
-    {% filter geometry %}way{% endfilter %} AS __geometry__,
     osm_id AS __id__,
-
-    tags->'admin_level' AS admin_level,
-    tags->'population' AS population,
-    (CASE WHEN tags->'capital' = 'yes' THEN true END) AS country_capital,
-    (CASE WHEN tags->'state_capital' = 'yes' THEN true END) AS region_capital,
-    NULL::integer AS mz_n_photos,
-    NULL::bigint AS area,
-    mz_places_min_zoom AS min_zoom,
-    NULL::smallint AS max_zoom,
-    NULL::boolean AS is_landuse_aoi,
-    %#tags AS tags
+    {% filter geometry %}way{% endfilter %} AS __geometry__,
+    to_jsonb(tags) || jsonb_build_object(
+      'source', 'openstreetmap.org',
+      'country_capital', CASE WHEN tags->'capital' = 'yes' THEN TRUE END,
+      'region_capital', CASE WHEN tags->'state_capital' = 'yes' THEN TRUE END,
+      'min_zoom', mz_places_min_zoom
+    ) AS __properties__
 
 FROM planet_osm_point
 
@@ -63,22 +49,18 @@ WHERE
 UNION ALL
 
 SELECT
-    name,
-    ('{"kind": ' || to_json(wof_np.placetype_string) || '}')::json AS mz_properties,
-    'whosonfirst.mapzen.com' AS source,
-    {% filter geometry %}label_position{% endfilter %} AS __geometry__,
     wof_id AS __id__,
-
-    NULL AS admin_level,
-    NULL AS population,
-    NULL AS country_capital,
-    NULL AS region_capital,
-    n_photos AS mz_n_photos,
-    area::bigint AS area,
-    min_zoom,
-    max_zoom,
-    CASE WHEN is_landuse_aoi = true THEN true ELSE NULL END AS is_landuse_aoi,
-    %#l10n_name AS tags
+    {% filter geometry %}label_position{% endfilter %} AS __geometry__,
+    COALESCE(to_jsonb(l10n_name), '{}'::jsonb) || jsonb_build_object(
+      'name', name,
+      'source', 'whosonfirst.mapzen.com',
+      'mz_n_photos', n_photos,
+      'area', area::bigint,
+      'min_zoom', min_zoom,
+      'max_zoom', max_zoom,
+      'is_landuse_aoi', CASE WHEN is_landuse_aoi = true THEN true ELSE NULL END,
+      'kind', wof_np.placetype_string
+    ) AS __properties__
 
 FROM wof_neighbourhood wof_n
 
