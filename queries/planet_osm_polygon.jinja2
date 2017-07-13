@@ -21,7 +21,7 @@ SELECT
     -- the query bbox. this is needed because Shapely expects a
     -- correctly-oriented outer to run counter-clockwise.
     THEN {% filter geometry %}{{ bounds['line']|bbox_intersection('st_reverse(st_boundary(st_forcerhr(way)))', 3857) }}{% endfilter %}
-  END AS __boundary_geometry__,
+  END AS __boundaries_geometry__,
 
   -- only certain layers return the mz_label_placement property
   CASE WHEN mz_building_min_zoom IS NOT NULL OR
