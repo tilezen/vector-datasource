@@ -1,0 +1,30 @@
+{# NOTE: only include when zoom >= 9 #}
+
+{% macro osmdata_query(padded_geometry, min_zoom, table) %}
+
+SELECT
+    gid AS __id__,
+{% if padded_geometry %}
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+{% else %}
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+{% endif %}
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'source', 'openstreetmapdata.com',
+      'area', way_area::bigint,
+      'min_zoom', {{ min_zoom }}
+    ) AS __properties__
+
+FROM {{ table }}
+
+WHERE
+    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
+
+{% endmacro %}
+
+{{ osmdata_query(False, 'mz_earth_min_zoom', 'land_polygons') }}
+
+UNION ALL
+
+{{ osmdata_query(True, 'mz_water_min_zoom', 'water_polygons') }}
