@@ -128,31 +128,33 @@ Tilezen has 4 primary sources:
 
 ### LANGUAGES are not versioned
 
-In addition to the `common` **name** locals call a place, the following `common` languages are generally available:
+In addition to the `common` **name** locals call a place, the following `common` and `common-optional` languages are generally available:
 
 #### Common languages:
 
-1. `name:ar` Arabic
-1. `name:zh` Chinese, traditional or simplified
-1. `name:en` English
-1. `name:fr` French
-1. `name:ru` Russian
-1. `name:es` Spanish
-1. `name:bn` Bengali
-1. `name:de` German
-1. `name:gr` Greek
-1. `name:hi` Hindi
-1. `name:id` Indonesian
-1. `name:it` Italian
-1. `name:ja` Japanese
-1. `name:ko` Korean
-1. `name:pt` Portugese
-1. `name:tr` Turkish
-1. `name:vi` Vietnamese
+1. `name:ar` **العربية (Arabic)** – _common_
+1. `name:bn` **বাংলা (Bengali)** – _common-optional_
+1. `name:de` **Deutsch (German)** – _common-optional_
+1. `name:en` **English** – _common_
+1. `name:es` **español (Spanish)** – _common_
+1. `name:fr` **français (French)** – _common_
+1. `name:gr` **ελληνικά (Greek)** – _common-optional_
+1. `name:hi` **हिन्दी (Hindi)** – _common-optional_
+1. `name:id` **Bahasa Indonesia (Indonesian)** – _common-optional_
+1. `name:it` **italiano (Italian)** – _common-optional_
+1. `name:ja` **日本語 (Japanese)** – _common-optional_
+1. `name:ko` **한국어 (Korean)** – _common-optional_
+1. `name:nl` **Nederlands (Dutch)** – _common-optional_
+1. `name:pl` **Polski (Polish)** – _common-optional_
+1. `name:pt` **Português (Portuguese)** – _common-optional_
+1. `name:ru` **Русский (Russian)** – _common_
+1. `name:tr` **Türkçe (Turkish)** – _common-optional_
+1. `name:vi` **Tiếng Việt (Vietnamese)** – _common-optional_
+1. `name:zh` **中文 (Chinese)**: primarily simplified but sometimes traditional – _common_
 
-Arabic, Chinese, English, French, Russian and Spanish are used by the United Nations for meetings and official documents. The other languages listed are either proposed as official language of the United Nations (Bengali, Hindi, Portugese, and Portugese) or frequently used in OpenStreetMap and Who's On First.
+Arabic, Chinese, English, French, Russian and Spanish are used by the United Nations for meetings and official documents. The other languages listed are either proposed as official language of the United Nations (Bengali, Hindi, Portugese, and Turkish) or frequently used in OpenStreetMap, Who's On First, or Wikipedia.
 
-Additional localized names are available as `common-optional`, but their actual use is the data is not widespread.
+Additional localized names are available as `common-optional` and `optional`, but their actual use is the data is not widespread.
 
 
 ### POLITICAL GEOGRAPHY is not versioned
