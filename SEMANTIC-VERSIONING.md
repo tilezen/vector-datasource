@@ -154,7 +154,7 @@ In addition to the `common` **name** locals call a place, the following `common`
 
 Arabic, Chinese, English, French, Russian and Spanish are used by the United Nations for meetings and official documents. The other languages listed are either proposed as official language of the United Nations (Bengali, Hindi, Portugese, and Turkish) or frequently used in OpenStreetMap, Who's On First, or Wikipedia.
 
-Additional localized names are available as `common-optional`, but their actual use is the data is not widespread.
+Additional localized names are available as `common-optional` and `optional`, but their actual use is the data is not widespread.
 
 
 ### POLITICAL GEOGRAPHY is not versioned
