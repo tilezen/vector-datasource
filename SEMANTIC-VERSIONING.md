@@ -133,7 +133,7 @@ In addition to the `common` **name** locals call a place, the following `common`
 #### Common languages:
 
 1. `name:ar` **العربية** (Arabic) – _common_
-1. `name:bn` **বাংলা** (Bengali) – __common-optional_
+1. `name:bn` **বাংলা** (Bengali) – _common-optional_
 1. `name:de` **Deutsch** (German) – _common-optional_
 1. `name:en` **English** – _common_
 1. `name:es` **español** (Spanish) – _common_
