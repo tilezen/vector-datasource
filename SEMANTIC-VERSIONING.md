@@ -132,25 +132,25 @@ In addition to the `common` **name** locals call a place, the following `common`
 
 #### Common languages:
 
-1. `name:ar` **العربية** (Arabic) – _common_
-1. `name:bn` **বাংলা** (Bengali) – _common-optional_
-1. `name:de` **Deutsch** (German) – _common-optional_
+1. `name:ar` **العربية (Arabic)** – _common_
+1. `name:bn` **বাংলা (Bengali)** – _common-optional_
+1. `name:de` **Deutsch (German)** – _common-optional_
 1. `name:en` **English** – _common_
-1. `name:es` **español** (Spanish) – _common_
-1. `name:fr` **français** (French) – _common_
-1. `name:gr` **ελληνικά** (Greek)  – _common-optional_
-1. `name:hi` **हिन्दी** (Hindi) – _common-optional_
-1. `name:id` **Bahasa Indonesia** (Indonesian) – _common-optional_
+1. `name:es` **español (Spanish)** – _common_
+1. `name:fr` **français (French)** – _common_
+1. `name:gr` **ελληνικά (Greek)** – _common-optional_
+1. `name:hi` **हिन्दी (Hindi)** – _common-optional_
+1. `name:id` **Bahasa Indonesia (Indonesian)** – _common-optional_
 1. `name:it` **italiano (Italian)** – _common-optional_
 1. `name:ja` **日本語 (Japanese)** – _common-optional_
 1. `name:ko` **한국어 (Korean)** – _common-optional_
-1. `name:nl` **Nederlands** (Dutch) – _common-optional_
-1. `name:pl` **Polski** (Polish) – _common-optional_
-1. `name:pt` **Português** (Portuguese) – _common-optional_
-1. `name:ru` **Русский** (Russian) – _common_
-1. `name:tr` **Türkçe** (Turkish) – _common-optional_
-1. `name:vi` **Tiếng Việt** (Vietnamese) – _common-optional_
-1. `name:zh` **中文** (Chinese, primarily simplified but sometimes traditional) – _common_
+1. `name:nl` **Nederlands (Dutch)** – _common-optional_
+1. `name:pl` **Polski (Polish)** – _common-optional_
+1. `name:pt` **Português (Portuguese)** – _common-optional_
+1. `name:ru` **Русский (Russian)** – _common_
+1. `name:tr` **Türkçe (Turkish)** – _common-optional_
+1. `name:vi` **Tiếng Việt (Vietnamese)** – _common-optional_
+1. `name:zh` **中文 (Chinese)**: primarily simplified but sometimes traditional – _common_
 
 Arabic, Chinese, English, French, Russian and Spanish are used by the United Nations for meetings and official documents. The other languages listed are either proposed as official language of the United Nations (Bengali, Hindi, Portugese, and Turkish) or frequently used in OpenStreetMap, Who's On First, or Wikipedia.
 
