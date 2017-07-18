@@ -128,7 +128,7 @@ Tilezen has 4 primary sources:
 
 ### LANGUAGES are not versioned
 
-In addition to the `common` **name** locals call a place, the following `common` languages are generally available:
+In addition to the `common` **name** locals call a place, the following `common` and `common-optional` languages are generally available:
 
 #### Common languages:
 
@@ -138,7 +138,7 @@ In addition to the `common` **name** locals call a place, the following `common`
 1. `name:en` **English** – _common_
 1. `name:es` **español** (Spanish) – _common_
 1. `name:fr` **français** (French) – _common_
-1. `name:gr` **ελληνικά** (Greek)  – _common-_optional_
+1. `name:gr` **ελληνικά** (Greek)  – _common-optional_
 1. `name:hi` **हिन्दी** (Hindi)** – _common-optional_
 1. `name:id` **Bahasa Indonesia** (Indonesian) – _common-optional_
 1. `name:it` **italiano (Italian)** – _common-optional_
