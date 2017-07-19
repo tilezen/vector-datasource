@@ -1,3 +1,18 @@
+v1.4.0-docs1
+------
+* **Release date**: 2017-06-28. _Live on prod 2017-06-??._
+* **Requires:** [tileserver v2.1.0](https://github.com/mapzen/tileserver/releases/tag/v2.1.0) and [tilequeue v1.8.0](https://github.com/mapzen/tilequeue/releases/tag/v1.8.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+- [docs] Update link to pois.jinja2. See [#1268](https://github.com/tilezen/vector-datasource/pull/1268).
+- [docs] Update `your-mapzen-api-key` URL query strings to enable key substitution. See [#1275](https://github.com/tilezen/vector-datasource/pull/1275).
+- [docs] Spelling, grammar, writing style fixes. See [#1275](https://github.com/tilezen/vector-datasource/pull/1275).
+- [docs] Add documentation for 512 pixel tile sizes. See [#1284](https://github.com/tilezen/vector-datasource/pull/1284).
+- [docs] Add documentation to suggest max zoom (per tile size). See [#1161](https://github.com/tilezen/vector-datasource/pull/1161).
+- [docs] Add documentation for tile x, y coordinates (versus latitude and longitude). See [#1111](https://github.com/tilezen/vector-datasource/pull/1111).
+- [docs] Add documentation for HTTP status codes. See [#1266](https://github.com/tilezen/vector-datasource/pull/1266).
+- [tests] Update tests for upstream OpenStreetMap data churn. See [#1267](https://github.com/tilezen/vector-datasource/pull/1267), [#1282](https://github.com/tilezen/vector-datasource/pull/1282), and [#1286](https://github.com/tilezen/vector-datasource/pull/1286).
+- Remove duplicate symbol output. See [#1265](https://github.com/tilezen/vector-datasource/pull/1265).
+- Fixed release notes on 2017-07-19 with corrected **Requires** section.
+
 v1.4.0
 ------
 * **Release date**: 2017-05-31.
