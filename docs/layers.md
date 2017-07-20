@@ -125,7 +125,7 @@ Mapzen vector tiles include 9 layers:
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
-These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
+These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
 
 While the service can return just a single layer or combination of layers, the `all` layer is more performant.
 
@@ -1068,6 +1068,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 #### Road properties (optional):
 
 * `ascent`: ski pistes from OpenStreetMap
+* `access`: `private`, `yes`, `no`, `permissive`, `customers`, `destination`, and other values from OpenStreetMap
 * `bicycle`: `yes`, `no`, `designated`, `dismount`, and other values from OpenStreetMap
 * `colour`: ski pistes from OpenStreetMap
 * `descent`: ski pistes from OpenStreetMap
