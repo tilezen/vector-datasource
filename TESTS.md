@@ -157,7 +157,7 @@ There are two ways to add integration test data:
 1. For data which comes from OpenStreetMap, add a comment in the test file with the URL of an OpenStreetMap object.
 2. For other data, add shapefiles under the `integration-test/fixtures/` subdirectory.
 
-z/x/y coordinates [are describing location and zoom level](https://mapzen.com/documentation/vector-tiles/use-service/#specify-z-x-and-y-tile-coordinates).
+NOTE: z/x/y coordinates [are describing location and zoom level](https://mapzen.com/documentation/vector-tiles/use-service/#specify-z-x-and-y-tile-coordinates).
 
 #### Adding OpenStreetMap data
 
