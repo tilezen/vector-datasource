@@ -1,9 +1,9 @@
 # layer 5
-#https://www.openstreetmap.org/way/122189460
+#https://www.openstreetmap.org/way/48474682
 test.assert_has_feature(
-    16, 18819, 24980, "roads",
+    16, 10654, 25150, "roads",
     {"kind": "highway", "kind_detail": "motorway", "is_bridge": True,
-     "id": 122189460, "sort_rank": 447})
+     "id": 48474682, "sort_rank": 447})
 
 # layer 4
 #https://www.openstreetmap.org/way/8918870
