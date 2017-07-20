@@ -157,6 +157,8 @@ There are two ways to add integration test data:
 1. For data which comes from OpenStreetMap, add a comment in the test file with the URL of an OpenStreetMap object.
 2. For other data, add shapefiles under the `integration-test/fixtures/` subdirectory.
 
+z/x/y coordinates [are describing location and zoom level](https://mapzen.com/documentation/vector-tiles/use-service/#specify-z-x-and-y-tile-coordinates).
+
 #### Adding OpenStreetMap data
 
 When `scripts/setup_and_run_tests.sh` builds the test database, it first scans the files in `integration-tests/*.py` for comments which contain URLs to `http://www.openstreetmap.org/` which reference a page for a node, way or relation object. Then it downloads these from Overpass and uses them to build the database.
