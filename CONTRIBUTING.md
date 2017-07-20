@@ -114,7 +114,7 @@ When tileserver hears a request it asks Postgres for "the stuff" inside that til
 - **jinja** updates don't require restarting tileserver; they are re-read on request during development.
 - **Python** updates don't require restarting tileserver; they are re-read on request during development.
 
-**DATA MIGRATION:** Changes to layer **yaml** files will require at a minimum reloading the **sql** functions. This is sufficient if only the `kind` or any output properties have changed. But for `min_zoom` changes the affected features will need to be recalculated, probably via a data migration. This topic is covered in [further detail](CONTRIBUTING.md#4-edit-database-or-query-logic) below.
+**DATABASE MIGRATION:** Changes to layer **yaml** files will require at a minimum reloading the **sql** functions. This is sufficient if only the `kind` or any output properties have changed. But for `min_zoom` changes the affected features will need to be recalculated, probably via a data migration. This topic is covered in [further detail](CONTRIBUTING.md#4-edit-database-or-query-logic) below.
 
 ## Let's do this!
 
