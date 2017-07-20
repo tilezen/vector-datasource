@@ -12,6 +12,7 @@ from contextlib import contextmanager
 import shapely.geometry
 import re
 import lxml.etree as ET
+import time
 
 OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 
@@ -493,19 +494,31 @@ class OsmChange(object):
     def flush(self):
         self.fh.write("</osmChange>\n")
 
-    def add_query(self, query):
-        r = requests.get("http://%s/api/interpreter" % OVERPASS_SERVER,
+    def query_result(self, query):
+        retry_count = 4
+        wait_time_in_s = 100
+        r = None
+        for _ in range(retry_count):
+            r = requests.get("http://%s/api/interpreter" % OVERPASS_SERVER,
                          params=dict(data=query))
+            if r.status_code == 200:
+                break
+            if r.status_code != 429:
+                break
+            print "429 code returned instead of overpass response - request will be repeated after %d seconds" % wait_time_in_s
+            time.sleep(wait_time_in_s)
 
         if r.status_code != 200:
             raise RuntimeError("Unable to fetch data from Overpass: %r"
                                % r.status_code)
-
         if r.headers['content-type'] != 'application/osm3s+xml':
             raise RuntimeError("Expected XML, but got %r"
                                % r.headers['content-type'])
+        return r.content
 
-        root = ET.fromstring(r.content)
+    def add_query(self, query):
+        data = self.query_result(query)
+        root = ET.fromstring(data)
         root.tag = 'modify'
         del root.attrib['version']
         del root.attrib['generator']
