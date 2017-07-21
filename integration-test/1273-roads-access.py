@@ -3,7 +3,7 @@
 # restricted access road in military base, Kraków, Poland
 # https://www.openstreetmap.org/way/43322699
 test.assert_has_feature(
-    18, 145574, 88813, 'roads',
+    16, 36393, 22203, 'roads',
     { 'id': 43322699, 'kind': 'minor_road', 'kind_detail': 'service', 'access': 'private'})
 
 test.assert_has_feature(
@@ -20,5 +20,5 @@ test.assert_has_feature(
 # cycleway in Gdańsk, Poland
 # http://www.openstreetmap.org/way/151351130#map=19/54.32715/18.61035
 test.assert_has_feature(
-    19, 289247, 167525, 'roads',
+    16, 36155, 20940, 'roads',
     { 'id': 151351130, 'kind': 'path', 'access': 'yes'})
