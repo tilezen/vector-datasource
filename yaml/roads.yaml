@@ -25,6 +25,7 @@ global:
       roundtrip: {col: tags->roundtrip}
       route_name: {col: tags->route_name}
       motor_vehicle: {col: tags->motor_vehicle}
+      access: {col: access}
       bicycle: {col: bicycle}
       service: {col: service}
       sport: {col: sport}
