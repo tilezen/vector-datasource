@@ -502,6 +502,13 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
+      end_zoom: 7
+      properties:
+        - surface
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
       end_zoom: 11
       properties:
         - bicycle
@@ -514,7 +521,6 @@ post_process:
         - route_name     # NVK (2017425): this is a suspicious tag
         - sac_scale
         - state
-        - surface
         - symbol
         - tracktype
         - type           # NVK (2017425): this is a suspicious tag
@@ -554,7 +560,6 @@ post_process:
         - sidewalk_left
         - sidewalk_right
         - sport
-        - surface
         - trail_visibility
   # drop name and other properties on early paths to
   # allow more line merging (use walking network for labeling)
