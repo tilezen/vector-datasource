@@ -502,13 +502,6 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 7
-      properties:
-        - surface
-  - fn: vectordatasource.transform.drop_properties
-    params:
-      source_layer: roads
-      start_zoom: 0
       end_zoom: 11
       properties:
         - bicycle
