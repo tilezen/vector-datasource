@@ -29,24 +29,24 @@ test.assert_no_matching_feature(
 
 test.assert_has_feature(
     15, 17456, 10780, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete:lanes'})
+    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
     13, 4364, 2695, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete:lanes'})
+    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
     11, 1091, 673, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete:lanes'})
+    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
     10, 545, 336, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete:lanes'})
+    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
     9, 272, 168, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete:lanes'})
+    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
     9, 136, 84, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete:lanes'})
+    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
