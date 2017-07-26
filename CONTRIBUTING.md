@@ -339,7 +339,7 @@ Once you make your edits to the YAML file you need to update the database. To re
 
 
 ```bash
-cd data/migrations && python create-sql-functions.py | psql osm
+python vectordatasource/meta/sql.py | psql osm
 ```
 
 Because some properties (like `min_zoom`) in the database are pre-computed, we need to update records to recalculate that using the updated functions. We call this "data migration", see some examples below.
