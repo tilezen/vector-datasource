@@ -29,7 +29,11 @@ global:
       bicycle: {col: bicycle}
       service: {col: service}
       sport: {col: sport}
-      surface: {col: tags->surface}
+      surface:
+        case:
+          - { when: { surface: 'concrete:plates' }, then: 'concrete_plates' }
+          - { when: { surface: 'concrete:lanes' }, then: 'concrete_lanes' }
+          - else: { col: 'tags->surface' }
       # NOTE: moved directly to sql
       # bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
       bicycle_network: {col: mz_cycling_network}
