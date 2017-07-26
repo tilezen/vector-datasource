@@ -48,5 +48,5 @@ test.assert_has_feature(
     { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
-    9, 136, 84, 'roads',
+    8, 136, 84, 'roads',
     { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
