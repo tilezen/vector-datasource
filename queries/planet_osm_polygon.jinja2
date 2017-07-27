@@ -11,7 +11,7 @@ SELECT
                  mz_water_min_zoom IS NULL AND
                  mz_earth_min_zoom IS NULL AND
                  mz_building_min_zoom IS NULL) THEN
-    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %}
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('way') }}{% endfilter %}
   END AS __geometry__,
 
   -- geometry for boundaries
