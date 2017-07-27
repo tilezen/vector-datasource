@@ -176,3 +176,5 @@ fi
 
 kill -HUP "${server_pid}"
 wait
+
+exit $success
