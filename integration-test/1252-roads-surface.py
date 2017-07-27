@@ -26,6 +26,10 @@ test.assert_no_matching_feature(
 
 # track with cycling route in Schartau, Germany
 # http://www.openstreetmap.org/way/58691615
+#
+# the track is part of this NCN relation, which needs to be present for the
+# min zoom to be assigned correctly.
+# http://www.openstreetmap.org/relation/2599024
 
 test.assert_has_feature(
     15, 17456, 10780, 'roads',
@@ -48,5 +52,5 @@ test.assert_has_feature(
     { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
 test.assert_has_feature(
-    9, 136, 84, 'roads',
+    8, 136, 84, 'roads',
     { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
