@@ -31,26 +31,27 @@ test.assert_no_matching_feature(
 # min zoom to be assigned correctly.
 # http://www.openstreetmap.org/relation/2599024
 
+# first, test at high zoom, where we do not expect the road to be merged,
+# so should still retain its original ID.
 test.assert_has_feature(
     15, 17456, 10780, 'roads',
     { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
 
-test.assert_has_feature(
-    13, 4364, 2695, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
+# check at a bunch of lower zooms, where we're expecting the road to be
+# merged, so be stricter with the set of properties we expect to see.
+for z in (13, 11, 10, 9, 8):
+    delta_z = 15 - z
+    coord_scale = 2 ** delta_z
 
-test.assert_has_feature(
-    11, 1091, 673, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
+    props = {
+        'kind': 'path',
+        'kind_detail': 'track',
+        'is_bicycle_related': True,
+        'surface': 'concrete_lanes',
+        'bicycle_network': 'ncn',
+        'min_zoom': 8,
+        'bicycle_shield_text': 'D10',
+    }
 
-test.assert_has_feature(
-    10, 545, 336, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
-
-test.assert_has_feature(
-    9, 272, 168, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
-
-test.assert_has_feature(
-    8, 136, 84, 'roads',
-    { 'id': 58691615, 'kind_detail': 'track', 'surface': 'concrete_lanes'})
+    test.assert_has_feature(
+        z, 17456 / coord_scale, 10780 / coord_scale, 'roads', props)
