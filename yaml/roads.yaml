@@ -33,6 +33,7 @@ global:
         case:
           - { when: { surface: 'concrete:plates' }, then: 'concrete_plates' }
           - { when: { surface: 'concrete:lanes' }, then: 'concrete_lanes' }
+          - { when: { surface: 'cobblestone:flattened' }, then: 'cobblestone_flattened' }
           - else: { col: 'tags->surface' }
       # NOTE: moved directly to sql
       # bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
