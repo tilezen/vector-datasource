@@ -502,10 +502,24 @@ class OsmChange(object):
             r = requests.get("http://%s/api/interpreter" % OVERPASS_SERVER,
                          params=dict(data=query))
             if r.status_code == 200:
+                # "200 OK is sent when the query has been successfully answered.
+                # The payload of the response is the result data."
+                # quote from http://overpass-api.de/command_line.html
+                # so response is usable
                 break
-            if r.status_code != 429:
+
+            if r.status_code not in (429, 504):
+                # "429 Too Many Requests is sent if you pass multiple queries from one IP"
+                # regularly happens with multiple sequential querries
+                # "504 Gateway Timeout is sent if the server has already so much
+                # load that the request cannot be executed. In most cases,
+                # it is best to try again later"
+                # quotes from http://overpass-api.de/command_line.html
+
+                # in cases of 429 and 504 waiting and retrying is typically enough to get an expected response
                 break
-            print "429 code returned instead of overpass response - request will be repeated after %d seconds" % wait_time_in_s
+
+            print "%d code returned instead of overpass response - request will be repeated after %d seconds" % (r.status_code, wait_time_in_s)
             time.sleep(wait_time_in_s)
 
         if r.status_code != 200:
