@@ -6,9 +6,9 @@ SELECT
   -- also, some layers don't use an intersection but return back the geometry, but some do intersect
   -- because there can be overlap, it's probably best to always do intersect here
   CASE WHEN mz_water_min_zoom IS NOT NULL
-    THEN {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('the_geom') }}{% endfilter %}
-    ELSE {% filter geometry %}{{ bounds['line']|bbox_intersection('the_geom') }}{% endfilter %}
-  END AS __geometry__
+    THEN {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %}
+    ELSE {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %}
+  END AS __geometry__,
 
   -- only certain layers return back mz_label_placement
   CASE WHEN mz_earth_min_zoom IS NOT NULL OR
@@ -26,7 +26,7 @@ SELECT
     THEN jsonb_build_object(
       'min_zoom', mz_earth_min_zoom
     )
-  END AS __earth_properties__
+  END AS __earth_properties__,
 
   CASE WHEN mz_landuse_min_zoom IS NOT NULL
     THEN jsonb_build_object(
@@ -34,7 +34,7 @@ SELECT
       -- NOTE: the name logic between pois and buildings exists only for polygons
       'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
     )
-  END AS __landuse_properties__
+  END AS __landuse_properties__,
 
   CASE WHEN mz_road_level IS NOT NULL
     THEN jsonb_build_object(
@@ -53,13 +53,13 @@ SELECT
       'mz_cycling_network', mz_cycling_network(tags, osm_id),
       'mz_networks', mz_get_rel_networks(osm_id)
     )
-  END AS __roads_properties__
+  END AS __roads_properties__,
 
   CASE WHEN mz_transit_level IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_transit_level
     )
-  END AS __transit_properties__
+  END AS __transit_properties__,
 
   CASE WHEN mz_water_min_zoom IS NOT NULL
     THEN jsonb_build_object(

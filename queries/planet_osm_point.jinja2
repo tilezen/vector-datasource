@@ -83,7 +83,7 @@ FROM (
      mz_earth_min_zoom IS NOT NULL OR
      mz_places_min_zoom IS NOT NULL OR
      mz_poi_min_zoom IS NOT NULL OR
-     mz_water_min_zoom NOT NULL
+     mz_water_min_zoom IS NOT NULL
      )
 {% else %}
     (mz_building_min_zoom < {{ zoom + 1 }} OR
@@ -94,4 +94,4 @@ FROM (
      )
 {% endif %}
 
-)
+) p

@@ -21,13 +21,13 @@ SELECT
   gid AS __id__,
 
   {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
-  NULL AS __label__,
+  NULL::bytea AS __label__,
 
-  ne_common_properties(),
+  {{ ne_common_properties() }},
 
-  NULL AS __boundaries_properties__,
-  NULL AS __earth_properties__,
-  NULL AS __landuse_properties__
+  NULL::jsonb AS __boundaries_properties__,
+  NULL::jsonb AS __earth_properties__,
+  NULL::jsonb AS __landuse_properties__,
 
   jsonb_build_object(
     'name', name,
@@ -37,8 +37,8 @@ SELECT
     'min_zoom', mz_places_min_zoom
   ) AS __places_properties__,
 
-  NULL AS __roads_properties__,
-  NULL AS __water_properties__
+  NULL::jsonb AS __roads_properties__,
+  NULL::jsonb AS __water_properties__
 
 FROM ne_10m_populated_places
 
@@ -58,16 +58,13 @@ WHERE
 -- end places
 --------------------------------------------------------------------------------
 
-{# end places conditional include #}
-{% endif %}
-
 {# conditional boundaries include #}
 {% if zoom < 8 %}
 
 UNION ALL
 
 --------------------------------------------------------------------------------
-boundaries
+-- boundaries
 --------------------------------------------------------------------------------
 
 {% macro ne_boundaries_query(name, table) %}
@@ -77,9 +74,9 @@ SELECT
   gid AS __id__,
 
   {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
-  NULL AS __label__,
+  NULL::bytea AS __label__,
 
-  ne_common_properties(),
+  {{ ne_common_properties() }},
 
   jsonb_build_object(
 {% if name %}
@@ -90,32 +87,32 @@ SELECT
     'scalerank', scalerank
   ) AS __boundaries_properties__,
 
-  NULL AS __earth_properties__,
-  NULL AS __landuse_properties__
-  NULL AS __places_properties__,
-  NULL AS __roads_properties__,
-  NULL AS __water_properties__
+  NULL::jsonb AS __earth_properties__,
+  NULL::jsonb AS __landuse_properties__,
+  NULL::jsonb AS __places_properties__,
+  NULL::jsonb AS __roads_properties__,
+  NULL::jsonb AS __water_properties__
 
 FROM
   {{ table }}
 
 WHERE
-  {{ bounds['line']|bbox_filter('the_geom', 3857) }} AND
+  {{ bounds['line']|bbox_filter('the_geom', 3857) }}
 
 {% endmacro %}
 
 {% if zoom < 2 %}
-ne_boundaries_query(False, 'ne_110m_admin_0_boundary_lines_land')
+{{ ne_boundaries_query(False, 'ne_110m_admin_0_boundary_lines_land') }}
 {% elif 2 <= zoom < 5 %}
-ne_boundaries_query(False, 'ne_50m_admin_0_boundary_lines_land')
+{{ ne_boundaries_query(False, 'ne_50m_admin_0_boundary_lines_land') }}
 UNION ALL
-ne_boundaries_query(False, 'ne_50m_admin_1_states_provinces_lines')
+{{ ne_boundaries_query(False, 'ne_50m_admin_1_states_provinces_lines') }}
 {% elif 5 <= zoom < 8 %}
-ne_boundaries_query(True, 'ne_10m_admin_0_boundary_lines_land')
+{{ ne_boundaries_query(True, 'ne_10m_admin_0_boundary_lines_land') }}
 UNION ALL
-ne_boundaries_query(False, 'ne_10m_admin_0_boundary_lines_map_units')
+{{ ne_boundaries_query(False, 'ne_10m_admin_0_boundary_lines_map_units') }}
 UNION ALL
-ne_boundaries_query(True, 'ne_10m_admin_1_states_provinces_lines')
+{{ ne_boundaries_query(True, 'ne_10m_admin_1_states_provinces_lines') }}
 {% endif %}
 
 --------------------------------------------------------------------------------
@@ -123,7 +120,7 @@ ne_boundaries_query(True, 'ne_10m_admin_1_states_provinces_lines')
 --------------------------------------------------------------------------------
 
 {# end conditional boundaries include #}
-{% end %}
+{% endif %}
 
 {# conditional earth include #}
 {% if zoom < 9 %}
@@ -141,18 +138,18 @@ SELECT
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
   {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
 
-  ne_common_properties(),
+  {{ ne_common_properties() }},
 
-  NULL AS __boundaries_properties__,
+  NULL::jsonb AS __boundaries_properties__,
 
   jsonb_build_object(
-    'min_zoom', mz_earth_min_zoom,
+    'min_zoom', mz_earth_min_zoom
   ) AS __earth_properties__,
 
-  NULL AS __landuse_properties__,
-  NULL AS __places_properties__,
-  NULL AS __roads_properties__,
-  NULL AS __water_properties__
+  NULL::jsonb AS __landuse_properties__,
+  NULL::jsonb AS __places_properties__,
+  NULL::jsonb AS __roads_properties__,
+  NULL::jsonb AS __water_properties__
 
 FROM
 {% if zoom < 2 %}
@@ -166,8 +163,6 @@ FROM
 WHERE
   mz_earth_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
-
-{% endif %}
 
 --------------------------------------------------------------------------------
 -- end earth
@@ -192,12 +187,12 @@ SELECT
   gid AS __id__,
 
   {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
-  {% filter geometry %}mz_label_placement{% endfilter %} AS __label
+  {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
 
-  ne_common_properties(),
+  {{ ne_common_properties() }},
 
-  NULL AS __boundaries_properties__,
-  NULL AS __earth_properties__,
+  NULL::jsonb AS __boundaries_properties__,
+  NULL::jsonb AS __earth_properties__,
 
   jsonb_build_object(
     'min_zoom', 4,
@@ -205,9 +200,9 @@ SELECT
     'kind', 'urban_area'
   ) AS __landuse_properties__,
 
-  NULL AS __places_properties__,
-  NULL AS __roads_properties__,
-  NULL AS __water_properties__
+  NULL::jsonb AS __places_properties__,
+  NULL::jsonb AS __roads_properties__,
+  NULL::jsonb AS __water_properties__
 
 FROM {{ table }}
 
@@ -242,14 +237,14 @@ SELECT
   gid AS __id__,
 
   {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
-  NULL AS __label__,
+  NULL::bytea AS __label__,
 
-  ne_common_properties(),
+  {{ ne_common_properties() }},
 
-  NULL AS __boundaries_properties__,
-  NULL AS __earth_properties__,
-  NULL AS __landuse_properties__,
-  NULL AS __places_properties__,
+  NULL::jsonb AS __boundaries_properties__,
+  NULL::jsonb AS __earth_properties__,
+  NULL::jsonb AS __landuse_properties__,
+  NULL::jsonb AS __places_properties__,
 
   jsonb_build_object(
       'min_zoom', scalerank,
@@ -264,7 +259,7 @@ SELECT
       'name', name
   ) AS __roads_properties__,
 
-  NULL AS __water_properties__
+  NULL::jsonb AS __water_properties__
 
 FROM
 
@@ -280,10 +275,10 @@ WHERE
 --------------------------------------------------------------------------------
 
 {# end conditional roads include #}
-{% endif
+{% endif %}
 
 {# conditional water include #}
-{% zoom < 9 %}
+{% if zoom < 9 %}
 
 UNION ALL
 
@@ -291,7 +286,7 @@ UNION ALL
 -- water
 --------------------------------------------------------------------------------
 
-{% macro ne_water(boundary_geometry, name, boundary, table) %}
+{% macro ne_water(boundary_geometry, label_geometry, name, boundary, has_area, table) %}
 
 SELECT
 
@@ -302,15 +297,19 @@ SELECT
 {% else %}
   {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
 {% endif %}
-  {% filter geometry %}mz_label_placement{% endfilter %} AS __label__
+{% if label_geometry %}
+  {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+{% else %}
+  NULL::bytea AS __label__,
+{% endif %}
 
-  ne_common_properties(),
+  {{ ne_common_properties() }},
 
-  NULL AS __boundaries_properties__,
-  NULL AS __earth_properties__,
-  NULL AS __landuse_properties__,
-  NULL AS __places_properties__,
-  NULL AS __roads_properties__,
+  NULL::jsonb AS __boundaries_properties__,
+  NULL::jsonb AS __earth_properties__,
+  NULL::jsonb AS __landuse_properties__,
+  NULL::jsonb AS __places_properties__,
+  NULL::jsonb AS __roads_properties__,
 
   jsonb_build_object(
 {% if name %}
@@ -319,7 +318,9 @@ SELECT
 {% if boundary %}
     'boundary', true,
 {% endif %}
+{% if has_area %}
     'area', way_area::bigint,
+{% endif %}
     'min_zoom', mz_water_min_zoom,
     'featurecla', featurecla
   ) AS __water_properties__
@@ -332,42 +333,42 @@ WHERE
 
 {% endmacro %}
 
-{% if zoom < 9 %}
-
 {% if zoom < 2 %}
-ne_water(False, False, False, 'ne_110m_ocean')
+{{ ne_water(False, True, False, False, True, 'ne_110m_ocean') }}
 {% elif 2 <= zoom < 5 %}
-ne_water(False, False, False, 'ne_50m_ocean')
+{{ ne_water(False, True, False, False, True, 'ne_50m_ocean') }}
 {% elif 5 <= zoom < 9 %}
-ne_water(False, False, False, 'ne_10m_ocean')
+{{ ne_water(False, True, False, False, True, 'ne_10m_ocean') }}
 {% endif %}
 
 UNION ALL
 
 {% if zoom < 2 %}
-ne_water(False, True, False, 'ne_110m_lakes')
+{{ ne_water(False, True, True, False, True, 'ne_110m_lakes') }}
 {% elif 2 <= zoom < 5 %}
-ne_water(False, True, False, 'ne_50m_lakes')
+{{ ne_water(False, True, True, False, True, 'ne_50m_lakes') }}
 {% elif 5 <= zoom < 9 %}
-ne_water(False, True, False, 'ne_10m_lakes')
+{{ ne_water(False, True, True, False, True, 'ne_10m_lakes') }}
 {% endif %}
 
 UNION ALL
 
 {% if zoom < 2 %}
-ne_water(False, False, True, 'ne_110m_coastline')
+{{ ne_water(False, False, False, True, False, 'ne_110m_coastline') }}
 {% elif 2 <= zoom < 5 %}
-ne_water(False, False, True, 'ne_50m_coastline')
+{{ ne_water(False, False, False, True, False, 'ne_50m_coastline') }}
 {% elif 5 <= zoom < 9 %}
-ne_water(False, False, True, 'ne_10m_coastline')
+{{ ne_water(False, False, False, True, False, 'ne_10m_coastline') }}
 {% endif %}
 
+UNION ALL
+
 {% if zoom < 2 %}
-ne_water(True, True, True, 'ne_110m_lakes')
+{{ ne_water(True, True, True, True, True, 'ne_110m_lakes') }}
 {% elif 2 <= zoom < 5 %}
-ne_water(True, True, True, 'ne_50m_lakes')
+{{ ne_water(True, True, True, True, True, 'ne_50m_lakes') }}
 {% elif 5 <= zoom < 9 %}
-ne_water(True, True, True, 'ne_10m_lakes')
+{{ ne_water(True, True, True, True, True, 'ne_10m_lakes') }}
 {% endif %}
 
 {# playas #}
@@ -377,16 +378,18 @@ UNION ALL
 
 -- playa polygons
 {% if 4 <= zoom < 5 %}
-ne_water(False, True, False, 'ne_50m_playas')
+{{ ne_water(False, True, True, False, True, 'ne_50m_playas') }}
 {% elif 5 <= zoom < 9 %}
-ne_water(False, True, False, 'ne_10m_playas')
+{{ ne_water(False, True, True, False, True, 'ne_10m_playas') }}
 {% endif %}
+
+UNION ALL
 
 -- playa boundaries
 {% if 4 <= zoom < 5 %}
-ne_water(True, True, True, 'ne_50m_playas')
+{{ ne_water(True, True, True, True, True, 'ne_50m_playas') }}
 {% elif 5 <= zoom < 9 %}
-ne_water(True, True, True, 'ne_10m_playas')
+{{ ne_water(True, True, True, True, True, 'ne_10m_playas') }}
 {% endif %}
 
 {% endif %}

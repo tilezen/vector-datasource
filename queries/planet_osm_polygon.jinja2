@@ -2,8 +2,8 @@ SELECT
 
   osm_id AS __id__,
 
-  -- boundaries return back the geometry in a different way, which is returned back in a sidecar property __boundary_geometry__
-  -- if the feature is only a boundary, we have an optimization to not calculate the intersection because the geometry is already available in the __boundary_geometry__ property
+  -- boundaries return back the geometry in a different way, which is returned back in a sidecar property __boundaries_geometry__
+  -- if the feature is only a boundary, we have an optimization to not calculate the intersection because the geometry is already available in the __boundaries_geometry__ property
   CASE WHEN NOT (mz_boundary_min_zoom IS NOT NULL AND
                  mz_poi_min_zoom IS NULL AND
                  mz_landuse_min_zoom IS NULL AND
@@ -96,7 +96,8 @@ FROM (
   SELECT
     osm_id,
     way,
-    way_area
+    mz_label_placement,
+    way_area,
 
     -- note: the mz_calculate_transit_routes_and_score function is pretty
     -- expensive, so we only want to calculate it when we actually need the
@@ -142,4 +143,4 @@ FROM (
        mz_transit_level < {{ zoom + 1 }} OR
        mz_water_min_zoom < {{ zoom + 1 }}))
 {% endif %}
-)
+) p
