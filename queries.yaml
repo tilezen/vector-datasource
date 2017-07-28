@@ -8,6 +8,30 @@ all:
   - pois
   - boundaries
   - transit
+
+sources:
+
+  # NOTE: these are split this way to represent each query that goes to the database
+  # this may be how we store in rawr tiles, or group all osm data together
+  planet_osm_polygon:
+    template: planet_osm_polygon.jinja2
+  planet_osm_line:
+    template: planet_osm_line.jinja2
+  planet_osm_point:
+    template: planet_osm_point.jinja2
+
+  # NOTE: these could be split up even further, but having a query per table seems like more queries than what we want
+  ne:
+    template: ne.jinja2
+
+  osmdata:
+    template: osmdata.jinja2
+    start_zoom: 9
+
+  wof:
+    template: wof.jinja2
+    start_zoom: 11
+
 layers:
   water:
     template: water.jinja2
