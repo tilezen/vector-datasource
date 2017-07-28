@@ -12,8 +12,8 @@ filters:
       name: true
     min_zoom: 0
     output:
-      - *output_properties
-      - kind: continent
+      <<: *output_properties
+      kind: continent
     table: osm
   - filter:
       place: archipelago
@@ -23,57 +23,57 @@ filters:
     # but for now, it's mostly middling data
     min_zoom: 15
     output:
-      - *output_properties
-      - {kind: archipelago}
+      <<: *output_properties
+      kind: archipelago
     table: osm
   - filter:
       place: island
       name: true
     min_zoom: { clamp: { min: 7, max: 15, value: { sum: [ { col: zoom }, 5.75 ] } } }
     output:
-      - *output_properties
-      - {kind: island}
+      <<: *output_properties
+      kind: island
     table: osm
   - filter:
       place: islet
       name: true
     min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 3.5 ] } } }
     output:
-      - *output_properties
-      - {kind: islet}
+      <<: *output_properties
+      kind: islet
     table: osm
   - filter: {natural: cliff}
     min_zoom: 13
     output:
-      - *output_properties
-      - {kind: cliff}
+      <<: *output_properties
+      kind: cliff
     table: osm
   - filter: {natural: arete}
     min_zoom: 13
     output:
-      - *output_properties
-      - {kind: arete}
+      <<: *output_properties
+      kind: arete
     table: osm
   - filter:
       natural: ridge
       name: true
     min_zoom: 13
     output:
-      - *output_properties
-      - {kind: ridge}
+      <<: *output_properties
+      kind: ridge
     table: osm
   - filter:
       natural: valley
       name: true
     min_zoom: 13
     output:
-      - *output_properties
-      - {kind: valley}
+      <<: *output_properties
+      kind: valley
     table: osm
 
   - filter:
       meta.source: [ne, shp]
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: earth}
+      <<: *output_properties
+      kind: earth

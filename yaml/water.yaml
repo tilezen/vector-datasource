@@ -25,51 +25,51 @@ filters:
   - filter: {waterway: riverbank}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: riverbank
+      <<: *water_standard_properties_osm
+      kind: riverbank
     table: osm
   - filter: {waterway: dock}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: dock
+      <<: *water_standard_properties_osm
+      kind: dock
     table: osm
   - filter: {natural: water}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: water
+      <<: *water_standard_properties_osm
+      kind: water
     table: osm
   - filter: {natural: bay}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: bay
+      <<: *water_standard_properties_osm
+      kind: bay
     table: osm
   - filter: {natural: strait}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: strait
+      <<: *water_standard_properties_osm
+      kind: strait
     table: osm
   - filter: {natural: fjord}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: fjord
+      <<: *water_standard_properties_osm
+      kind: fjord
     table: osm
   - filter: {landuse: basin}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: basin
+      <<: *water_standard_properties_osm
+      kind: basin
     table: osm
   - filter: {landuse: reservoir}
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: lake
-        reservoir: true
+      <<: *water_standard_properties_osm
+      kind: lake
+      reservoir: true
     table: osm
   - filter:
       any:
@@ -77,87 +77,88 @@ filters:
         leisure: swimming_pool
     min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: swimming_pool
+      <<: *water_standard_properties_osm
+      kind: swimming_pool
     table: osm
   - filter: {waterway: canal}
     min_zoom: 9
     output:
-        <<: *water_standard_properties_osm
-        kind: canal
+      <<: *water_standard_properties_osm
+      kind: canal
     table: osm
   - filter: {waterway: river}
     min_zoom: 9
     output:
-        <<: *water_standard_properties_osm
-        kind: river
+      <<: *water_standard_properties_osm
+      kind: river
     table: osm
   - filter: {waterway: stream}
     min_zoom: 11
     output:
-        <<: *water_standard_properties_osm
-        kind: stream
+      <<: *water_standard_properties_osm
+      kind: stream
     table: osm
   - filter: {waterway: ditch}
     min_zoom: 16
     output:
-        <<: *water_standard_properties_osm
-        kind: ditch
+      <<: *water_standard_properties_osm
+      kind: ditch
     table: osm
   - filter: {waterway: drain}
     min_zoom: 16
     output:
-        <<: *water_standard_properties_osm
-        kind: drain
+      <<: *water_standard_properties_osm
+      kind: drain
     table: osm
   - filter: {featurecla: Coastline}
     min_zoom: 0
     output:
-      - *output_properties
-      - kind: ocean
+      <<: *output_properties
+      kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
     min_zoom: 0
     output:
-      - *output_properties
-      - kind: lake
-        alkaline: true
+      <<: *output_properties
+      kind: lake
+      alkaline: true
     table: ne
   - filter: {featurecla: Lake}
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: lake}
+      <<: *output_properties
+      kind: lake
     table: ne
   - filter: {featurecla: Reservoir}
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: lake, reservoir: true}
+      <<: *output_properties
+      kind: lake
+      reservoir: true
     table: ne
   - filter: {featurecla: Playa}
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: playa}
+      <<: *output_properties
+      kind: playa
     table: ne
   - filter: {featurecla: Ocean}
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: ocean}
+      <<: *output_properties
+      kind: ocean
     table: ne
   - filter: {name: true, place: ocean}
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: ocean}
+      <<: *output_properties
+      kind: ocean
     table: osm
   - filter: {name: true, place: sea}
     min_zoom: 3
     output:
-      - *output_properties
-      - {kind: sea}
+      <<: *output_properties
+      kind: sea
     table: osm
   # - filter: {gid: true}
   #   min_zoom: 0
@@ -168,6 +169,6 @@ filters:
   - filter: {meta.source: shp}
     min_zoom: 0
     output:
-      - *output_properties
-      - {kind: ocean}
+      <<: *output_properties
+      kind: ocean
     table: shp
