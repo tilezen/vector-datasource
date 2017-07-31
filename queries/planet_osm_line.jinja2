@@ -1,0 +1,89 @@
+SELECT
+
+  osm_id AS __id__,
+
+  -- NOTE: water layer uses a padded intersection ... not sure if this continues to be necesary
+  -- also, some layers don't use an intersection but return back the geometry, but some do intersect
+  -- because there can be overlap, it's probably best to always do intersect here
+  CASE WHEN mz_water_min_zoom IS NOT NULL
+    THEN {% filter geometry %}{{ bounds['line']|bbox_padded_intersection('way') }}{% endfilter %}
+    ELSE {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %}
+  END AS __geometry__,
+
+  -- only certain layers return back mz_label_placement
+  CASE WHEN mz_earth_min_zoom IS NOT NULL OR
+            mz_landuse_min_zoom IS NOT NULL OR
+            mz_water_min_zoom IS NOT NULL
+    THEN {% filter geometry %}mz_label_placement{% endfilter %}
+  END AS __label__,
+
+  -- common properties across all layers
+  to_jsonb(tags) || jsonb_build_object(
+    'source', 'openstreetmap.org'
+  ) AS __properties__,
+
+  CASE WHEN mz_earth_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_earth_min_zoom
+    )
+  END AS __earth_properties__,
+
+  CASE WHEN mz_landuse_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_landuse_min_zoom,
+      -- NOTE: the name logic between pois and buildings exists only for polygons
+      'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
+    )
+  END AS __landuse_properties__,
+
+  CASE WHEN mz_road_level IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_road_level,
+{% if zoom >= 12 %}
+      'is_bus_route',
+      -- try to only calculate whether this is a bus route when we already know
+      -- that it's a road, as joining onto the rels table can be expensive.
+      CASE WHEN tags->'highway' IN ('motorway', 'motorway_link', 'trunk', 'trunk_link',
+                            'primary', 'primary_link', 'secondary', 'secondary_link',
+                            'tertiary', 'tertiary_link',
+                            'residential', 'unclassified', 'road', 'living_street')
+        THEN mz_calculate_is_bus_route(osm_id)
+      END,
+{% endif %}
+      'mz_cycling_network', mz_cycling_network(tags, osm_id),
+      'mz_networks', mz_get_rel_networks(osm_id)
+    )
+  END AS __roads_properties__,
+
+  CASE WHEN mz_transit_level IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_transit_level
+    )
+  END AS __transit_properties__,
+
+  CASE WHEN mz_water_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_water_min_zoom
+    )
+  END AS __water_properties__
+
+FROM planet_osm_line
+
+WHERE
+  {{ bounds['line']|bbox_filter('way', 3857) }} AND
+
+{% if zoom >= 16 %}
+  (mz_earth_min_zoom IS NOT NULL OR
+   mz_landuse_min_zoom IS NOT NULL OR
+   mz_road_level IS NOT NULL OR
+   mz_transit_level IS NOT NULL OR
+   mz_water_min_zoom IS NOT NULL
+   )
+{% else %}
+  (mz_earth_min_zoom < {{ zoom + 1 }} OR
+   mz_landuse_min_zoom < {{ zoom + 1 }} OR
+   mz_road_level < {{ zoom + 1 }} OR
+   mz_transit_level < {{ zoom + 1 }} OR
+   mz_water_min_zoom < {{ zoom + 1 }}
+   )
+{% endif %}

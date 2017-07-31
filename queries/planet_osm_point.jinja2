@@ -1,0 +1,97 @@
+SELECT
+
+  osm_id AS __id__,
+  {% filter geometry %}way{% endfilter %} AS __geometry__,
+
+  -- common properties across all layers
+  to_jsonb(tags) || jsonb_build_object(
+    'source', 'openstreetmap.org',
+    'area', 0
+  ) AS __properties__,
+
+  CASE WHEN mz_building_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_building_min_zoom,
+      'label_placement', TRUE
+    )
+  END AS __buildings_properties__,
+
+  CASE WHEN mz_earth_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_earth_min_zoom,
+      'label_placement', TRUE
+    )
+  END AS __earth_properties__,
+
+  CASE WHEN mz_places_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'country_capital', CASE WHEN tags->'capital' = 'yes' THEN TRUE END,
+      'region_capital', CASE WHEN tags->'state_capital' = 'yes' THEN TRUE END,
+      'min_zoom', mz_places_min_zoom
+    )
+  END AS __places_properties__,
+
+  CASE WHEN mz_poi_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_poi_min_zoom,
+      'mz_transit_score', (transit_routes).score,
+      'mz_transit_root_relation_id', (transit_routes).root_relation_id,
+      'train_routes', (transit_routes).train_routes,
+      'subway_routes', (transit_routes).subway_routes,
+      'light_rail_routes', (transit_routes).light_rail_routes,
+      'tram_routes', (transit_routes).tram_routes
+    )
+  END AS __pois_properties__,
+
+  CASE WHEN mz_water_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_water_min_zoom,
+      'label_placement', TRUE
+    )
+  END AS __water_properties__
+
+FROM (
+
+  SELECT
+    osm_id,
+    way,
+    -- note: the mz_calculate_transit_routes_and_score function is pretty
+    -- expensive, so we only want to calculate it when we actually need the
+    -- result.
+    CASE
+      WHEN mz_poi_min_zoom IS NOT NULL AND
+           tags ? 'railway' AND tags->'railway'='station' AND osm_id > 0
+        THEN mz_calculate_transit_routes_and_score(osm_id, NULL)
+    END AS transit_routes,
+
+    mz_building_min_zoom,
+    mz_earth_min_zoom,
+    mz_places_min_zoom,
+    mz_poi_min_zoom,
+    mz_water_min_zoom,
+
+    tags
+
+  FROM planet_osm_point
+
+  WHERE
+
+    {{ bounds['point']|bbox_filter('way', 3857) }} AND
+
+{% if zoom >= 16 %}
+    (mz_building_min_zoom IS NOT NULL OR
+     mz_earth_min_zoom IS NOT NULL OR
+     mz_places_min_zoom IS NOT NULL OR
+     mz_poi_min_zoom IS NOT NULL OR
+     mz_water_min_zoom IS NOT NULL
+     )
+{% else %}
+    (mz_building_min_zoom < {{ zoom + 1 }} OR
+     mz_earth_min_zoom < {{ zoom + 1 }} OR
+     mz_places_min_zoom < {{ zoom + 1 }} OR
+     mz_poi_min_zoom < {{ zoom + 1 }} OR
+     mz_water_min_zoom < {{ zoom + 1 }}
+     )
+{% endif %}
+
+) p

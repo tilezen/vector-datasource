@@ -43,13 +43,13 @@ test.assert_has_feature(
 # http://www.openstreetmap.org/relation/1359387
 test.assert_has_feature(
     9, 150, 192, 'transit',
-    { 'min_zoom': 5, 'ref':  '54-57',
+    { 'min_zoom': 5, 'ref': '54-57',
     'source': 'openstreetmap.org',
     'name': 'Vermonter' })
 
 test.assert_has_feature(
     9, 150, 192, 'water',
-    { 'min_zoom': 0, 'id': int,
+    { 'min_zoom': 0,
     'source': 'openstreetmapdata.com',
     'kind': 'ocean',
-    'name': '' })
+    'name': type(None) })

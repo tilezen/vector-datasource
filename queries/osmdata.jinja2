@@ -1,0 +1,41 @@
+{% macro osmdata_query(padded_geometry, min_zoom, is_land) %}
+
+SELECT
+    gid AS __id__,
+{% if padded_geometry %}
+    {% filter geometry %}{{ bounds['polygon']|bbox_padded_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+{% else %}
+    {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+{% endif %}
+    {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
+    jsonb_build_object(
+      'source', 'openstreetmapdata.com',
+      'area', way_area::bigint,
+      'min_zoom', {{ min_zoom }}
+    ) AS __properties__,
+
+{% if is_land %}
+    '{}'::jsonb AS __earth_properties__,
+    NULL::jsonb AS __water_properties__
+{% else %}
+    NULL::jsonb AS __earth_properties__,
+    '{}'::jsonb AS __water_properties__
+{% endif %}
+
+FROM
+{% if is_land %}
+land_polygons
+{% else %}
+water_polygons
+{% endif %}
+
+WHERE
+    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
+
+{% endmacro %}
+
+{{ osmdata_query(False, 'mz_earth_min_zoom', True) }}
+
+UNION ALL
+
+{{ osmdata_query(True, 'mz_water_min_zoom', False) }}

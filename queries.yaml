@@ -8,10 +8,28 @@ all:
   - pois
   - boundaries
   - transit
+
+sources:
+
+  # NOTE: these are split this way to represent each query that goes to the database
+  planet_osm_polygon:
+    template: planet_osm_polygon.jinja2
+  planet_osm_line:
+    template: planet_osm_line.jinja2
+  planet_osm_point:
+    template: planet_osm_point.jinja2
+  ne:
+    template: ne.jinja2
+  osmdata:
+    template: osmdata.jinja2
+    start_zoom: 9
+  wof:
+    template: wof.jinja2
+    start_zoom: 11
+
 layers:
   water:
     template: water.jinja2
-    start_zoom: 0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
@@ -28,7 +46,6 @@ layers:
     area-inclusion-threshold: 1
   earth:
     template: earth.jinja2
-    start_zoom: 0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
@@ -44,7 +61,6 @@ layers:
     area-inclusion-threshold: 1
   places:
     template: places.jinja2
-    start_zoom: 0
     geometry_types: [Point, MultiPoint]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -60,7 +76,6 @@ layers:
     area-inclusion-threshold: 1
   landuse:
     template: landuse.jinja2
-    start_zoom: 4
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_start: 4
     transform:
@@ -77,7 +92,6 @@ layers:
     area-inclusion-threshold: 1
   roads:
     template: roads.jinja2
-    start_zoom: 5
     geometry_types: [LineString, MultiLineString]
     simplify_start: 8
     transform:
@@ -104,7 +118,6 @@ layers:
     area-inclusion-threshold: 1
   buildings:
     template: buildings.jinja2
-    start_zoom: 13
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -125,7 +138,6 @@ layers:
     area-inclusion-threshold: 1
   pois:
     template: pois.jinja2
-    start_zoom: 4
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -150,7 +162,6 @@ layers:
     area-inclusion-threshold: 1
   boundaries:
     template: boundaries.jinja2
-    start_zoom: 0
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 8
@@ -166,7 +177,6 @@ layers:
     area-inclusion-threshold: 1
   transit:
     template: transit.jinja2
-    start_zoom: 5
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
