@@ -44,7 +44,6 @@ test.assert_has_feature(
 
 # small campground in point zoom 13
 # http://www.openstreetmap.org/way/417405356
-# min zoom matches in landuse layer, but not in pois for 13
 test.assert_no_matching_feature(
     13, 1308, 3165, 'pois',
     { 'kind': 'camp_site'})
