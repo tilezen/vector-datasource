@@ -225,7 +225,7 @@ WHERE
 {% endif %}
 
 {# conditional roads include #}
-{% if zoom < 8 %}
+{% if zoom < 8 and zoom >= 5 %}
 UNION ALL
 
 --------------------------------------------------------------------------------
@@ -247,7 +247,7 @@ SELECT
   NULL::jsonb AS __places_properties__,
 
   jsonb_build_object(
-      'min_zoom', scalerank,
+      'min_zoom', GREATEST(scalerank, 5),
       'scalerank', scalerank,
       'featurecla', featurecla,
       'type', type,

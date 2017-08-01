@@ -177,7 +177,7 @@ filters:
       scalerank: true
       featurecla: Road
       expressway: 1
-    min_zoom: { col: scalerank }
+    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
     table: ne
     output:
       <<: *ne_properties
@@ -187,7 +187,7 @@ filters:
       scalerank: true
       featurecla: Road
       type: [Major Highway, Beltway, Bypass]
-    min_zoom: { col: scalerank }
+    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
     table: ne
     output:
       <<: *ne_properties
@@ -197,7 +197,7 @@ filters:
       scalerank: true
       featurecla: Road
       type: Secondary Highway
-    min_zoom: { col: scalerank }
+    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
     table: ne
     output:
       <<: *ne_properties
@@ -207,7 +207,7 @@ filters:
       scalerank: true
       featurecla: Road
       type: Road
-    min_zoom: { col: scalerank }
+    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
     table: ne
     output:
       <<: *ne_properties
@@ -217,7 +217,7 @@ filters:
       scalerank: true
       featurecla: Road
       type: [Track, Unknown]
-    min_zoom: { col: scalerank }
+    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
     table: ne
     output:
       <<: *ne_properties
