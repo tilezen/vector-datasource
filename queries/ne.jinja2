@@ -225,7 +225,7 @@ WHERE
 {% endif %}
 
 {# conditional roads include #}
-{% if zoom < 8 %}
+{% if zoom < 8 and zoom >= 5 %}
 UNION ALL
 
 --------------------------------------------------------------------------------
@@ -268,7 +268,7 @@ FROM
 WHERE
 
   {{ bounds['line']|bbox_filter('the_geom', 3857) }}
-  AND {{ zoom }} >= 5 AND scalerank <= {{ zoom }}
+  AND scalerank <= {{ zoom }}
 
 --------------------------------------------------------------------------------
 -- end roads
