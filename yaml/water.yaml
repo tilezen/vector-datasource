@@ -18,8 +18,8 @@ globals:
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
-        then: 9
-      - else: { clamp: { min: 9, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
+        then: 8
+      - else: { clamp: { min: 8, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
 
 filters:
   - filter: {waterway: riverbank}

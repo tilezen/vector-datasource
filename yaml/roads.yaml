@@ -251,7 +251,7 @@ filters:
       kind_detail: {col: highway}
   - filter:
       highway: secondary
-    min_zoom: { clamp: { min: 0, max: 10, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 10, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -260,7 +260,7 @@ filters:
       kind_detail: secondary
   - filter:
       highway: motorway_link
-    min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 11, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -269,7 +269,7 @@ filters:
       kind_detail: motorway_link
   - filter:
       highway: tertiary
-    min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 11, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -278,7 +278,7 @@ filters:
       kind_detail: tertiary
   - filter:
       highway: trunk_link
-    min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 12, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -287,7 +287,7 @@ filters:
       kind_detail: trunk_link
   - filter:
       highway: [primary_link, secondary_link]
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -296,7 +296,7 @@ filters:
       kind_detail: {col: highway}
   - filter:
       highway: tertiary_link
-    min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 14, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -313,7 +313,7 @@ filters:
   #############################################################
   - filter:
       "tags->whitewater": portage_way
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -326,7 +326,7 @@ filters:
   #############################################################
   - filter:
       highway: [residential, unclassified, road]
-    min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 12, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -335,7 +335,7 @@ filters:
       kind_detail: {col: highway}
   - filter:
       highway: living_street
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -344,7 +344,7 @@ filters:
       kind_detail: living_street
   - filter:
       highway: pedestrian
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -354,7 +354,7 @@ filters:
       kind_detail: pedestrian
   - filter:
       highway: [path, track, cycleway, bridleway]
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -371,7 +371,7 @@ filters:
         - {horse: designated}
         - {tags->snowmobile: designated}
         - {tags->ski: designated}
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -390,7 +390,7 @@ filters:
           - {horse: designated}
           - {tags->snowmobile: designated}
           - {tags->ski: designated}
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -402,7 +402,7 @@ filters:
   - filter:
       highway: footway
       tags->footway: [sidewalk, crossing]
-    min_zoom: { clamp: { min: 0, max: 15, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 15, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -413,7 +413,7 @@ filters:
       footway: {col: tags->footway}
   - filter:
       highway: [footway, steps]
-    min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 14, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -434,7 +434,7 @@ filters:
   - filter:
       highway: service
       service: alley
-    min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 13, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -445,7 +445,7 @@ filters:
   - filter:
       highway: service
       service: [driveway, parking_aisle, drive-through]
-    min_zoom: { clamp: { min: 0, max: 15, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 15, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
@@ -460,7 +460,7 @@ filters:
           - else: { col: 'service' }
   - filter:
       highway: service
-    min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
+    min_zoom: { clamp: { min: 8, max: 14, value: { call: { func: util.calculate_path_major_route, args: [ { col: fid } ] } } } }
     table: osm
     output:
       <<: *osm_highway_properties
