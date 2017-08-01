@@ -123,7 +123,7 @@ UNION ALL
 {% endif %}
 
 {# conditional earth include #}
-{% if zoom < 9 %}
+{% if zoom < 8 %}
 
 UNION ALL
 
@@ -156,7 +156,7 @@ FROM
   ne_110m_land t
 {% elif 2 <= zoom < 5 %}
   ne_50m_land t
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
   ne_10m_land t
 {% endif %}
 
@@ -278,7 +278,7 @@ WHERE
 {% endif %}
 
 {# conditional water include #}
-{% if zoom < 9 %}
+{% if zoom < 8 %}
 
 UNION ALL
 
@@ -337,7 +337,7 @@ WHERE
 {{ ne_water(False, True, False, False, True, 'ne_110m_ocean') }}
 {% elif 2 <= zoom < 5 %}
 {{ ne_water(False, True, False, False, True, 'ne_50m_ocean') }}
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
 {{ ne_water(False, True, False, False, True, 'ne_10m_ocean') }}
 {% endif %}
 
@@ -347,7 +347,7 @@ UNION ALL
 {{ ne_water(False, True, True, False, True, 'ne_110m_lakes') }}
 {% elif 2 <= zoom < 5 %}
 {{ ne_water(False, True, True, False, True, 'ne_50m_lakes') }}
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
 {{ ne_water(False, True, True, False, True, 'ne_10m_lakes') }}
 {% endif %}
 
@@ -357,7 +357,7 @@ UNION ALL
 {{ ne_water(False, False, False, True, False, 'ne_110m_coastline') }}
 {% elif 2 <= zoom < 5 %}
 {{ ne_water(False, False, False, True, False, 'ne_50m_coastline') }}
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
 {{ ne_water(False, False, False, True, False, 'ne_10m_coastline') }}
 {% endif %}
 
@@ -367,19 +367,19 @@ UNION ALL
 {{ ne_water(True, True, True, True, True, 'ne_110m_lakes') }}
 {% elif 2 <= zoom < 5 %}
 {{ ne_water(True, True, True, True, True, 'ne_50m_lakes') }}
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
 {{ ne_water(True, True, True, True, True, 'ne_10m_lakes') }}
 {% endif %}
 
 {# playas #}
-{% if 4 <= zoom < 9 %}
+{% if 4 <= zoom < 8 %}
 
 UNION ALL
 
 -- playa polygons
 {% if 4 <= zoom < 5 %}
 {{ ne_water(False, True, True, False, True, 'ne_50m_playas') }}
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
 {{ ne_water(False, True, True, False, True, 'ne_10m_playas') }}
 {% endif %}
 
@@ -388,7 +388,7 @@ UNION ALL
 -- playa boundaries
 {% if 4 <= zoom < 5 %}
 {{ ne_water(True, True, True, True, True, 'ne_50m_playas') }}
-{% elif 5 <= zoom < 9 %}
+{% elif 5 <= zoom < 8 %}
 {{ ne_water(True, True, True, True, True, 'ne_10m_playas') }}
 {% endif %}
 

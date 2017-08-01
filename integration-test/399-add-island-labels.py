@@ -10,12 +10,12 @@ test.assert_has_feature(
 
 # Natural Earth 10m
 test.assert_has_feature(
-    8, 40, 98, 'earth',
+    7, 20, 49, 'earth',
     { 'kind': 'earth', 'source': 'naturalearthdata.com' })
 
 # OSM derived data from openstreetmapdata.com
 test.assert_has_feature(
-    9, 81, 197, 'earth',
+    8, 40, 98, 'earth',
     { 'kind': 'earth', 'source': 'openstreetmapdata.com' })
 
 
