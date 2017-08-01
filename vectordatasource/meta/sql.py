@@ -170,6 +170,14 @@ KNOWN_FUNCS = {
 }
 
 
+# this is a bit of a hack to force the type of expressions with least/greatest
+# in them to be of numeric type.
+FUNC_FORCE_TYPE = {
+    'LEAST':    float,
+    'GREATEST': float,
+}
+
+
 GLOBALS = [
     'way_area',
 ]
@@ -354,7 +362,7 @@ class SQLExpression(ast.NodeVisitor):
                 raise RuntimeError("Call to name not implemented yet: %r"
                                    % (name,))
             force_type = self.force_type
-            self.force_type = None
+            self.force_type = FUNC_FORCE_TYPE.get(func)
 
             self.buf.write(func)
             self.buf.write("(")
