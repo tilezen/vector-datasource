@@ -391,7 +391,7 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 
 Polygons representing earth landmass and natural feature lines. Uses coastline-derived land polygons from [openstreetmapdata.com](http://openstreetmapdata.com). Natural lines from OpenStreetMap representing cliffs, aretes. This layer also includes earth `label_placement` lines for ridges and valleys (which should not otherwise be symbolized).
 
-_Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
+_Uses Natural Earth until zoom 7, then switches to OSM land at zoom 8+._
 
 **Earth properties:**
 
@@ -1271,7 +1271,7 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 * Layer name: `water`
 * Geometry types: `point`, `line`, and `polygon`
 
-Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) and inland water directly from OpenStreetMap at higher zoom levels 9+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-8). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
+Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 
