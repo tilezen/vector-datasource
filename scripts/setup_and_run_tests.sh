@@ -63,7 +63,7 @@ function cleanup {
       kill -HUP "${server_pid}"
    fi
    echo "=== Dropping database \"${dbname}\" and cleaning up..."
-   dropdb --if-exists $dbhostargs "${dbname}"
+   dropdb --if-exists $userargs $dbhostargs "${dbname}"
    rm -f empty.osm data.osc test_server.port
 }
 
