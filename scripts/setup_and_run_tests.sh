@@ -40,7 +40,17 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "=== Creating database \"${dbname}\"..."
-createdb -E UTF-8 -T template0 "${dbname}"
+if [ -z "$DBHOST" ]; then
+    dbhostargs=""
+else
+    dbhostargs="-h $DBHOST"
+fi
+if [ -z "$USER" ]; then
+    userargs=""
+else
+    userargs="-U $USER"
+fi
+createdb -E UTF-8 -T template0 $dbhostargs $userargs "${dbname}"
 cat >empty.osm <<EOF
 <?xml version='1.0' encoding='utf-8'?>
 <osm version="0.6">
@@ -53,7 +63,7 @@ function cleanup {
       kill -HUP "${server_pid}"
    fi
    echo "=== Dropping database \"${dbname}\" and cleaning up..."
-   dropdb --if-exists "${dbname}"
+   dropdb --if-exists $dbhostargs "${dbname}"
    rm -f empty.osm data.osc test_server.port
 }
 
@@ -65,7 +75,7 @@ fi
 
 echo "=== Enabling database extensions..."
 for ext in postgis hstore; do
-   psql -d "${dbname}" -c "CREATE EXTENSION ${ext}"
+   psql $dbhostargs $userargs -d "${dbname}" -c "CREATE EXTENSION ${ext}"
 done
 
 echo "=== Dumping test data..."
@@ -85,6 +95,9 @@ fi
 if [[ ! -z ${DBHOST+x} ]]; then
     OSM2PGSQL_ARGS+=" -H $DBHOST"
 fi
+if [[ ! -z ${USER+x} ]]; then
+    OSM2PGSQL_ARGS+=" -U $USER"
+fi
 
 osm2pgsql $OSM2PGSQL_ARGS --create empty.osm
 osm2pgsql $OSM2PGSQL_ARGS --append data.osc
@@ -95,7 +108,7 @@ echo "=== Loading shapefile schema..."
 # in test/fixtures/ to handle specific test cases.
 for sql in `ls ${basedir}/data/shapefile_schema/*.sql`; do
     echo " >> ${sql}"
-    cat ${sql} | psql -d "${dbname}"
+    cat ${sql} | psql $userargs $dbhostargs -d "${dbname}"
 done
 
 echo "=== Loading fixture data..."
@@ -108,7 +121,7 @@ for tbl in `ls ${basedir}/integration-test/fixtures/`; do
         for shp in "${basedir}/integration-test/fixtures/${tbl}"/*.shp; do
             shp2pgsql -a -D -s 3857 -g the_geom \
                       "${shp}" "${tbl}" \
-                | psql -d "${dbname}"
+                | psql $userargs $dbhostargs -d "${dbname}"
         done
     fi
 done
@@ -118,7 +131,7 @@ echo "=== Loading bundled data..."
 pushd "${basedir}/data"
 # NOTE: not loading bundled data! All data should come from fixtures.
 # Add indexes and any required database updates
-./perform-sql-updates.sh -d "${dbname}"
+./perform-sql-updates.sh $userargs $dbhostargs -d "${dbname}"
 popd
 
 # load up pgcopy fixtures into the appropriate tables - note that these
@@ -128,7 +141,7 @@ shopt -s nullglob
 for tbl in `ls ${basedir}/integration-test/fixtures/`; do
     if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
         for pgcopy in "${basedir}/integration-test/fixtures/${tbl}"/*.pgcopy; do
-            psql -c "copy ${tbl} from stdin" "${dbname}" < "${pgcopy}"
+            psql $userargs $dbhostargs -c "copy ${tbl} from stdin" "${dbname}" < "${pgcopy}"
         done
     fi
 done
