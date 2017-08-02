@@ -67,23 +67,44 @@ SELECT
     )
   END AS __water_properties__
 
-FROM planet_osm_line
+FROM (
 
-WHERE
-  {{ bounds['line']|bbox_filter('way', 3857) }} AND
+  SELECT
+    osm_id,
+    way,
+    mz_label_placement,
+
+    mz_landuse_min_zoom,
+    mz_transit_level,
+    {% if zoom < 8 %}NULL AS {% endif %}mz_earth_min_zoom,
+    {% if zoom < 8 %}NULL AS {% endif %}mz_road_level,
+    {% if zoom < 8 %}NULL AS {% endif %}mz_water_min_zoom,
+
+    tags
+
+  FROM planet_osm_line
+
+  WHERE
+    {{ bounds['line']|bbox_filter('way', 3857) }} AND
 
 {% if zoom >= 16 %}
-  (mz_earth_min_zoom IS NOT NULL OR
-   mz_landuse_min_zoom IS NOT NULL OR
-   mz_road_level IS NOT NULL OR
-   mz_transit_level IS NOT NULL OR
-   mz_water_min_zoom IS NOT NULL
-   )
+    (mz_earth_min_zoom IS NOT NULL OR
+     mz_landuse_min_zoom IS NOT NULL OR
+     mz_road_level IS NOT NULL OR
+     mz_transit_level IS NOT NULL OR
+     mz_water_min_zoom IS NOT NULL
+     )
+{% elif zoom >= 8 %}
+    (mz_earth_min_zoom < {{ zoom + 1 }} OR
+     mz_landuse_min_zoom < {{ zoom + 1 }} OR
+     mz_road_level < {{ zoom + 1 }} OR
+     mz_transit_level < {{ zoom + 1 }} OR
+     mz_water_min_zoom < {{ zoom + 1 }}
+     )
 {% else %}
-  (mz_earth_min_zoom < {{ zoom + 1 }} OR
-   mz_landuse_min_zoom < {{ zoom + 1 }} OR
-   mz_road_level < {{ zoom + 1 }} OR
-   mz_transit_level < {{ zoom + 1 }} OR
-   mz_water_min_zoom < {{ zoom + 1 }}
-   )
+    (mz_landuse_min_zoom < {{ zoom + 1 }} OR
+     mz_transit_level < {{ zoom + 1 }}
+     )
 {% endif %}
+
+) p
