@@ -14,10 +14,6 @@ while [[ $# -gt 1 ]]; do
             NUM_JOBS=$2
             shift
             ;;
-        -H|--db-host)
-            DBHOST=$2
-            shift
-            ;;
         *)
             # ignore unknown option
             ;;
@@ -40,17 +36,17 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "=== Creating database \"${dbname}\"..."
-if [ -z "$DBHOST" ]; then
+if [ -z "$PGHOST" ]; then
     dbhostargs=""
 else
-    dbhostargs="-h $DBHOST"
+    dbhostargs="-h $PGHOST"
 fi
-if [ -z "$USER" ]; then
-    userargs=""
+if [ -z "$PGUSER" ]; then
+    dbuserargs=""
 else
-    userargs="-U $USER"
+    dbuserargs="-U $PGUSER"
 fi
-createdb -E UTF-8 -T template0 $dbhostargs $userargs "${dbname}"
+createdb -E UTF-8 -T template0 $dbhostargs $dbuserargs "${dbname}"
 cat >empty.osm <<EOF
 <?xml version='1.0' encoding='utf-8'?>
 <osm version="0.6">
@@ -63,7 +59,7 @@ function cleanup {
       kill -HUP "${server_pid}"
    fi
    echo "=== Dropping database \"${dbname}\" and cleaning up..."
-   dropdb --if-exists $userargs $dbhostargs "${dbname}"
+   dropdb --if-exists $dbuserargs $dbhostargs "${dbname}"
    rm -f empty.osm data.osc test_server.port
 }
 
@@ -75,7 +71,7 @@ fi
 
 echo "=== Enabling database extensions..."
 for ext in postgis hstore; do
-   psql $dbhostargs $userargs -d "${dbname}" -c "CREATE EXTENSION ${ext}"
+   psql $dbhostargs $dbuserargs -d "${dbname}" -c "CREATE EXTENSION ${ext}"
 done
 
 echo "=== Dumping test data..."
@@ -92,11 +88,11 @@ OSM2PGSQL_ARGS+=" -d ${dbname} --hstore-all"
 if [[ ! -z ${NUM_JOBS+x} ]]; then
     OSM2PGSQL_ARGS+=" --number-processes=$NUM_JOBS"
 fi
-if [[ ! -z ${DBHOST+x} ]]; then
-    OSM2PGSQL_ARGS+=" -H $DBHOST"
+if [[ ! -z ${PGHOST+x} ]]; then
+    OSM2PGSQL_ARGS+=" -H $PGHOST"
 fi
-if [[ ! -z ${USER+x} ]]; then
-    OSM2PGSQL_ARGS+=" -U $USER"
+if [[ ! -z ${PGUSER+x} ]]; then
+    OSM2PGSQL_ARGS+=" -U $PGUSER"
 fi
 
 osm2pgsql $OSM2PGSQL_ARGS --create empty.osm
@@ -108,7 +104,7 @@ echo "=== Loading shapefile schema..."
 # in test/fixtures/ to handle specific test cases.
 for sql in `ls ${basedir}/data/shapefile_schema/*.sql`; do
     echo " >> ${sql}"
-    cat ${sql} | psql $userargs $dbhostargs -d "${dbname}"
+    cat ${sql} | psql $dbuserargs $dbhostargs -d "${dbname}"
 done
 
 echo "=== Loading fixture data..."
@@ -121,7 +117,7 @@ for tbl in `ls ${basedir}/integration-test/fixtures/`; do
         for shp in "${basedir}/integration-test/fixtures/${tbl}"/*.shp; do
             shp2pgsql -a -D -s 3857 -g the_geom \
                       "${shp}" "${tbl}" \
-                | psql $userargs $dbhostargs -d "${dbname}"
+                | psql $dbuserargs $dbhostargs -d "${dbname}"
         done
     fi
 done
@@ -131,7 +127,7 @@ echo "=== Loading bundled data..."
 pushd "${basedir}/data"
 # NOTE: not loading bundled data! All data should come from fixtures.
 # Add indexes and any required database updates
-./perform-sql-updates.sh $userargs $dbhostargs -d "${dbname}"
+./perform-sql-updates.sh $dbuserargs $dbhostargs -d "${dbname}"
 popd
 
 # load up pgcopy fixtures into the appropriate tables - note that these
@@ -141,7 +137,7 @@ shopt -s nullglob
 for tbl in `ls ${basedir}/integration-test/fixtures/`; do
     if [[ -d "${basedir}/integration-test/fixtures/${tbl}" ]]; then
         for pgcopy in "${basedir}/integration-test/fixtures/${tbl}"/*.pgcopy; do
-            psql $userargs $dbhostargs -c "copy ${tbl} from stdin" "${dbname}" < "${pgcopy}"
+            psql $dbuserargs $dbhostargs -c "copy ${tbl} from stdin" "${dbname}" < "${pgcopy}"
         done
     fi
 done
@@ -151,7 +147,7 @@ echo "=== Starting test tile server..."
 # make config for tileserver and serve
 test_server_port="${basedir}/test_server.port"
 rm -f "${test_server_port}"
-python scripts/test_server.py "${dbname}" "${USER}" "${test_server_port}" &
+python scripts/test_server.py "${dbname}" "${PGUSER}" "${test_server_port}" &
 server_pid=$!
 
 echo "=== Waiting for tile server to start..."
