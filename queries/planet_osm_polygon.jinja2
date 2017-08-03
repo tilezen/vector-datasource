@@ -113,13 +113,13 @@ FROM (
       ELSE NULL
     END AS transit_routes,
 
-    mz_boundary_min_zoom,
     mz_building_min_zoom,
-    mz_earth_min_zoom,
     mz_landuse_min_zoom,
     mz_poi_min_zoom,
     mz_transit_level,
-    mz_water_min_zoom,
+    {% if zoom < 7 %}NULL AS {% endif %}mz_earth_min_zoom,
+    {% if zoom < 8 %}NULL AS {% endif %}mz_water_min_zoom,
+    {% if zoom < 8 %}NULL AS {% endif %}mz_boundary_min_zoom,
 
     tags
 
@@ -137,7 +137,7 @@ FROM (
        mz_poi_min_zoom IS NOT NULL OR
        mz_transit_level IS NOT NULL OR
        mz_water_min_zoom IS NOT NULL))
-{% else %}
+{% elif zoom >= 8 %}
     (mz_boundary_min_zoom < {{ zoom + 1 }} AND {{ bounds['line']|bbox_overlaps('way', 3857) }}) OR
     ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
       (mz_building_min_zoom < {{ zoom + 1 }} OR
@@ -146,5 +146,18 @@ FROM (
        mz_poi_min_zoom < {{ zoom + 1 }} OR
        mz_transit_level < {{ zoom + 1 }} OR
        mz_water_min_zoom < {{ zoom + 1 }}))
+{% elif zoom >= 7 %}
+    ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
+      (mz_building_min_zoom < {{ zoom + 1 }} OR
+       mz_earth_min_zoom < {{ zoom + 1 }} OR
+       mz_landuse_min_zoom < {{ zoom + 1 }} OR
+       mz_poi_min_zoom < {{ zoom + 1 }} OR
+       mz_transit_level < {{ zoom + 1 }}))
+{% else %}
+    ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
+      (mz_building_min_zoom < {{ zoom + 1 }} OR
+       mz_landuse_min_zoom < {{ zoom + 1 }} OR
+       mz_poi_min_zoom < {{ zoom + 1 }} OR
+       mz_transit_level < {{ zoom + 1 }}))
 {% endif %}
 ) p

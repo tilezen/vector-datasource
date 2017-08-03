@@ -22,7 +22,7 @@ sources:
     template: ne.jinja2
   osmdata:
     template: osmdata.jinja2
-    start_zoom: 9
+    start_zoom: 8
   wof:
     template: wof.jinja2
     start_zoom: 11

@@ -86,6 +86,9 @@ FROM (
      mz_water_min_zoom IS NOT NULL
      )
 {% else %}
+-- NOTE: we include all layers here, even below zoom 8, because the features
+-- going into the earth and water layers are label placements and don't
+-- conflict with the Natural Earth data at zoom < 8.
     (mz_building_min_zoom < {{ zoom + 1 }} OR
      mz_earth_min_zoom < {{ zoom + 1 }} OR
      mz_places_min_zoom < {{ zoom + 1 }} OR
