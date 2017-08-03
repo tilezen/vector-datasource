@@ -20,5 +20,9 @@ osm_ne_transition(8, 75, 96, 'roads')
 # OSM 399-earth-fixture
 osm_ne_transition(8, 40, 98, 'earth')
 # NE water fixture from 1030-invalid-wkb-polygon
-# OSM 1254-osm-ne-transition
+# OSM 1354-osm-ne-transition
 osm_ne_transition(8, 136, 80, 'water')
+# NE boundaries fixture 841-normalize-boundaries
+# OSM: Swedish country boundary
+# http://www.openstreetmap.org/relation/52822
+osm_ne_transition(8, 136, 72, 'boundaries')
