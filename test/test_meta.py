@@ -273,6 +273,19 @@ class PlacesTest(unittest.TestCase):
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
 
+    def test_capital(self):
+        meta = make_test_metadata()
+
+        props = dict(capital='yes', state_capital='yes')
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertTrue(out_props.get('country_capital'))
+        self.assertTrue(out_props.get('region_capital'))
+
+        props = dict(state_capital='yes')
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertTrue(out_props.get('region_capital'))
+
+
 class PoisTest(unittest.TestCase):
 
     @classmethod

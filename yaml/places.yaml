@@ -4,8 +4,14 @@ global:
     source: {col: source}
     admin_level: {col: admin_level}
     population: {col: population}
-    country_capital: {col: country_capital}
-    region_capital: {col: region_capital}
+    country_capital:
+      call:
+        func: util.tag_yes_to_bool
+        args: [ { col: capital } ]
+    region_capital:
+      call:
+        func: util.tag_yes_to_bool
+        args: [ { col: state_capital } ]
     mz_n_photos: {col: mz_n_photos}
     area: {col: area}
     min_zoom: {col: min_zoom}
