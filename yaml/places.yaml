@@ -10,7 +10,10 @@ global:
     area: {col: area}
     min_zoom: {col: min_zoom}
     max_zoom: {col: max_zoom}
-    is_landuse_aoi: {col: is_landuse_aoi}
+    is_landuse_aoi:
+      call:
+        func: util.tag_yes_to_bool
+        args: [ { col: is_landuse_aoi } ]
 
   - &ne_places_min_zoom
     lookup:

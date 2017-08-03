@@ -12,7 +12,7 @@ SELECT
       'area', area::bigint,
       'min_zoom', min_zoom,
       'max_zoom', max_zoom,
-      'is_landuse_aoi', CASE WHEN is_landuse_aoi = TRUE THEN TRUE END,
+      'is_landuse_aoi', is_landuse_aoi,
       'kind', wof_np.placetype_string
     ) AS __places_properties__
 

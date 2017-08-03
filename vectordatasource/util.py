@@ -75,3 +75,7 @@ def calculate_path_major_route(fid):
 def cycling_network(tags, fid):
     # TODO: implement me! current implementation is a stub.
     return None
+
+
+def tag_yes_to_bool(str_or_none):
+    return True if str_or_none == 'yes' else None

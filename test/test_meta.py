@@ -218,6 +218,22 @@ class PlacesTest(unittest.TestCase):
         self.assertEquals('locality', out_props.get('kind'))
         self.assertEquals('scientific_station', out_props.get('kind_detail'))
 
+    def test_wof_is_landuse_aoi(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('wof')
+
+        props = dict(is_landuse_aoi='yes')
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertTrue(out_props.get('is_landuse_aoi'))
+
+        props = dict(is_landuse_aoi='no')
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('is_landuse_aoi'))
+
+        props = dict()
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('is_landuse_aoi'))
+
 
 class PoisTest(unittest.TestCase):
 
