@@ -90,8 +90,7 @@ SELECT
   CASE WHEN mz_landuse_min_zoom IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_landuse_min_zoom,
-      'name', CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END,
-      'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
+      'name', CASE WHEN mz_poi_min_zoom IS NULL THEN tags->'name' ELSE NULL END
     )
   END AS __landuse_properties__
 

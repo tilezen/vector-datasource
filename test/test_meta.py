@@ -190,6 +190,44 @@ class LanduseTest(unittest.TestCase):
         out_props = self.landuse.fn(None, props, None, meta)
         self.assertEquals('scree', out_props.get('kind'))
 
+    def test_mz_is_building(self):
+        meta = make_test_metadata()
+
+        props = {
+            'leisure': 'park',
+            'building': 'yes'
+        }
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertTrue(out_props.get('mz_is_building'))
+
+        props = {
+            'leisure': 'park',
+            'building:part': 'yes'
+        }
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertTrue(out_props.get('mz_is_building'))
+
+        props = {
+            'leisure': 'park',
+            'building': 'office'
+        }
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertTrue(out_props.get('mz_is_building'))
+
+        props = {
+            'leisure': 'park',
+            'building': 'no'
+        }
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('mz_is_building'))
+
+        props = {
+            'leisure': 'park',
+            'building:part': 'no'
+        }
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('mz_is_building'))
+
 
 class PlacesTest(unittest.TestCase):
 

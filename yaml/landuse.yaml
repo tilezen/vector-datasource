@@ -17,8 +17,13 @@ global:
     attraction: {col: attraction}
     zoo: {col: zoo}
     barrier: {col: barrier}
-    mz_is_building: {col: mz_is_building}
     min_zoom: {col: min_zoom}
+    mz_is_building:
+      call:
+        func: util.is_building
+        args:
+          - {col: building}
+          - {col: "building:part"}
 
   - &tier1_min_zoom
     lookup:
