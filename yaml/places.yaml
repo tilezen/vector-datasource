@@ -43,7 +43,7 @@ filters:
     min_zoom: {col: min_zoom}
     output:
       <<: *output_properties
-      kind: {col: kind}
+      kind: {col: placetype}
     table: wof
     extra_columns: [ min_zoom ]
   - filter: {name: true, place: country}

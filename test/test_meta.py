@@ -322,6 +322,14 @@ class PlacesTest(unittest.TestCase):
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('area'))
 
+    def test_wof_kind(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('wof')
+
+        props = dict(placetype='neighbourhood')
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertEquals('neighbourhood', out_props.get('kind'))
+
     def test_capital(self):
         meta = make_test_metadata()
 
