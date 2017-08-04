@@ -6,11 +6,11 @@ global:
     population: {col: population}
     country_capital:
       call:
-        func: util.tag_yes_to_bool
+        func: util.tag_str_to_bool
         args: [ { col: capital } ]
     region_capital:
       call:
-        func: util.tag_yes_to_bool
+        func: util.tag_str_to_bool
         args: [ { col: state_capital } ]
     mz_n_photos: {col: mz_n_photos}
     area: {col: area}
