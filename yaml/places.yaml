@@ -18,7 +18,7 @@ global:
     max_zoom: {col: max_zoom}
     is_landuse_aoi:
       call:
-        func: util.tag_yes_to_bool
+        func: util.true_or_none
         args: [ { col: is_landuse_aoi } ]
 
   - &ne_places_min_zoom

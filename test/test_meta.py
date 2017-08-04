@@ -260,11 +260,15 @@ class PlacesTest(unittest.TestCase):
         from tilequeue.process import make_metadata
         meta = make_metadata('wof')
 
-        props = dict(is_landuse_aoi='yes')
+        props = dict(is_landuse_aoi=True)
         out_props = self.places.fn(None, props, None, meta)
         self.assertTrue(out_props.get('is_landuse_aoi'))
 
-        props = dict(is_landuse_aoi='no')
+        props = dict(is_landuse_aoi=False)
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('is_landuse_aoi'))
+
+        props = dict(is_landuse_aoi=None)
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
