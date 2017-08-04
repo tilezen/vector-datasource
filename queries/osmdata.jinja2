@@ -10,7 +10,7 @@ SELECT
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
     jsonb_build_object(
       'source', 'openstreetmapdata.com',
-      'area', way_area::bigint,
+      'area', way_area,
       'min_zoom', {{ min_zoom }}
     ) AS __properties__,
 

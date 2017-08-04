@@ -13,7 +13,10 @@ global:
         func: util.tag_str_to_bool
         args: [ { col: state_capital } ]
     mz_n_photos: {col: mz_n_photos}
-    area: {col: area}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
     min_zoom: {col: min_zoom}
     max_zoom: {col: max_zoom}
     is_landuse_aoi:

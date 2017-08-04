@@ -93,3 +93,9 @@ def is_building(building_tag, building_part_tag):
     result = (tag_set_and_not_no(building_tag) or
               tag_set_and_not_no(building_part_tag))
     return true_or_none(result)
+
+
+def safe_int(x):
+    if x is None:
+        return None
+    return int(x)

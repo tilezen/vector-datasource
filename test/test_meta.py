@@ -120,6 +120,17 @@ class BuildingsTest(unittest.TestCase):
         self.assertEquals('beach_hut', out_props.get('kind_detail'))
         self.assertEquals('passageway', out_props.get('building_part'))
 
+    def test_area(self):
+        import shapely.geometry
+        shape = shapely.geometry.Polygon([(0, 0), (1, 1), (1, 0)])
+        props = dict(building='yes', area=3.14159)
+        meta = make_test_metadata()
+        out_props = self.buildings.fn(shape, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
+
 
 class BoundariesTest(unittest.TestCase):
 
@@ -173,6 +184,16 @@ class EarthTest(unittest.TestCase):
         meta = make_metadata('ne')
         out_props = self.earth.fn(None, props, None, meta)
         self.assertEquals('earth', out_props.get('kind'))
+
+    def test_osmdata_area(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('shp')
+        props = dict(area=3.14159)
+        out_props = self.earth.fn(None, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
 
 
 class LanduseTest(unittest.TestCase):
@@ -228,6 +249,16 @@ class LanduseTest(unittest.TestCase):
         out_props = self.landuse.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('mz_is_building'))
 
+    def test_ne_area(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('ne')
+        props = dict(area=3.14159)
+        out_props = self.landuse.fn(None, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
+
 
 class PlacesTest(unittest.TestCase):
 
@@ -276,6 +307,21 @@ class PlacesTest(unittest.TestCase):
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
+    def test_wof_area(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('wof')
+
+        props = dict(area=3.14159)
+        out_props = self.places.fn(None, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
+
+        props = dict(area=None)
+        out_props = self.places.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('area'))
+
     def test_capital(self):
         meta = make_test_metadata()
 
@@ -318,6 +364,15 @@ class PoisTest(unittest.TestCase):
         meta = make_test_metadata()
         out_props = self.pois.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('kind'))
+
+    def test_area(self):
+        props = dict(name='foo', leisure='park', area=3.14159)
+        meta = make_test_metadata()
+        out_props = self.pois.fn(None, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
 
 
 class RoadsTest(unittest.TestCase):
@@ -388,6 +443,26 @@ class WaterTest(unittest.TestCase):
         meta = make_test_metadata()
         out_props = self.water.fn(None, props, None, meta)
         self.assertEquals('lake', out_props.get('kind'))
+
+    def test_ne_area(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('ne')
+        props = dict(featurecla='Lake', area=3.14159)
+        out_props = self.water.fn(None, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
+
+    def test_osmdata_area(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('shp')
+        props = dict(area=3.14159)
+        out_props = self.water.fn(None, props, None, meta)
+        area = out_props.get('area')
+        self.assertIsNotNone(area)
+        self.assertTrue(isinstance(area, int))
+        self.assertEquals(3, area)
 
 
 class LanduseMinZoomTest(unittest.TestCase):

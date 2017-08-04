@@ -196,7 +196,7 @@ SELECT
 
   jsonb_build_object(
     'min_zoom', 4,
-    'area', way_area::bigint,
+    'area', way_area,
     'kind', 'urban_area'
   ) AS __landuse_properties__,
 
@@ -319,7 +319,7 @@ SELECT
     'boundary', true,
 {% endif %}
 {% if has_area %}
-    'area', way_area::bigint,
+    'area', way_area,
 {% endif %}
     'min_zoom', mz_water_min_zoom,
     'featurecla', featurecla

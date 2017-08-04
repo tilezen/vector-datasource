@@ -7,7 +7,10 @@ global:
     name: {col: name}
     protect_class: {col: protect_class}
     operator: {col: operator}
-    area: {col: area}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
     source: {col: source}
     mz_label_placement: {col: mz_label_placement}
     sport: {col: sport}
