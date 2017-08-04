@@ -11,21 +11,33 @@ all:
 
 sources:
 
-  # NOTE: these are split this way to represent each query that goes to the database
+  # NOTE: each source represents a query to the database
+  # within each source, a list of templates can be used
+  # the templates will be combined with a sql `union all` in between
+  # therefore, it's necessary that the query results of each template
+  # have the same types
+
   planet_osm_polygon:
-    template: planet_osm_polygon.jinja2
+    - template: planet_osm_polygon.jinja2
   planet_osm_line:
-    template: planet_osm_line.jinja2
+    - template: planet_osm_line.jinja2
   planet_osm_point:
-    template: planet_osm_point.jinja2
+    - template: planet_osm_point.jinja2
+
   ne:
-    template: ne.jinja2
+    - template: ne.jinja2
+
   osmdata:
-    template: osmdata.jinja2
-    start_zoom: 8
+
+    - template: osmdata-earth.jinja2
+      start_zoom: 9
+
+    - template: osmdata-water.jinja2
+      start_zoom: 9
+
   wof:
-    template: wof.jinja2
-    start_zoom: 11
+    - template: wof.jinja2
+      start_zoom: 11
 
 layers:
   water:
