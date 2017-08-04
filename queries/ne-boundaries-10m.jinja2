@@ -1,0 +1,8 @@
+{% extends 'ne.jinja2' %}
+{% block query %}
+{{ ne_boundaries_query(True, 'ne_10m_admin_0_boundary_lines_land') }}
+UNION ALL
+{{ ne_boundaries_query(False, 'ne_10m_admin_0_boundary_lines_map_units') }}
+UNION ALL
+{{ ne_boundaries_query(True, 'ne_10m_admin_1_states_provinces_lines') }}
+{% endblock %}
