@@ -133,9 +133,7 @@ def parse_lookup(ast_state, l):
 def parse_func(ast_state, name, m):
     assert isinstance(m, list)
 
-    args = []
-    for arg in m:
-        args.append(ast_value(ast_state, arg))
+    args = [ast_value(ast_state, x) for x in m]
 
     return ast.Call(
         ast.Name(name, ast.Load()),
