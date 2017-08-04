@@ -195,7 +195,6 @@ SELECT
   NULL::jsonb AS __earth_properties__,
 
   jsonb_build_object(
-    'min_zoom', 4,
     'area', way_area,
     'kind', 'urban_area'
   ) AS __landuse_properties__,
@@ -247,7 +246,7 @@ SELECT
   NULL::jsonb AS __places_properties__,
 
   jsonb_build_object(
-      'min_zoom', GREATEST(scalerank, 5),
+      'min_zoom', scalerank,
       'scalerank', scalerank,
       'featurecla', featurecla,
       'type', type,

@@ -20,7 +20,11 @@ global:
     attraction: {col: attraction}
     zoo: {col: zoo}
     barrier: {col: barrier}
-    min_zoom: {col: min_zoom}
+    min_zoom:
+      case:
+        - when: { meta.source: ne }
+          then: 4
+        - else: { col: min_zoom }
     mz_is_building:
       call:
         func: util.is_building

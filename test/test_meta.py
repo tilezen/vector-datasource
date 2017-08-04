@@ -259,6 +259,13 @@ class LanduseTest(unittest.TestCase):
         self.assertTrue(isinstance(area, int))
         self.assertEquals(3, area)
 
+    def test_ne_min_zoom(self):
+        from tilequeue.process import make_metadata
+        meta = make_metadata('ne')
+        props = dict(featurecla='Urban area')
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertEquals(4, out_props.get('min_zoom'))
+
 
 class PlacesTest(unittest.TestCase):
 
@@ -404,12 +411,13 @@ class RoadsTest(unittest.TestCase):
         props = {
             'featurecla': 'Road',
             'type': 'Road',
-            'scalerank': 42,
+            'scalerank': 2,
         }
         meta = make_test_metadata()
         out_props = self.roads.fn(None, props, None, meta)
         self.assertEquals('major_road', out_props.get('kind'))
         self.assertEquals('secondary', out_props.get('kind_detail'))
+        self.assertEquals(5, out_props.get('min_zoom'))
 
 
 class TransitTest(unittest.TestCase):
