@@ -148,6 +148,7 @@ In addition to the `common` **name** locals call a place, the following `common`
 1. `name:pl` **Polski (Polish)** – _common-optional_
 1. `name:pt` **Português (Portuguese)** – _common-optional_
 1. `name:ru` **Русский (Russian)** – _common_
+1. `name:sv` **Svenska (Swedish)** – _common-optional_
 1. `name:tr` **Türkçe (Turkish)** – _common-optional_
 1. `name:vi` **Tiếng Việt (Vietnamese)** – _common-optional_
 1. `name:zh` **中文 (Chinese)**: primarily simplified but sometimes traditional – _common_
