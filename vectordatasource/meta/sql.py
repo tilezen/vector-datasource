@@ -170,6 +170,7 @@ KNOWN_FUNCS = {
     'util.is_building':                   'mz_calculate_is_building_or_part',
     'util.tag_str_to_bool':               'notimplemented',
     'util.safe_int':                      'notimplemented',
+    'util.true_or_none':                  'notimplemented',
 }
 
 
