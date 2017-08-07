@@ -7,7 +7,10 @@ global:
     name: {col: name}
     protect_class: {col: protect_class}
     operator: {col: operator}
-    area: {col: area}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
     source: {col: source}
     mz_label_placement: {col: mz_label_placement}
     sport: {col: sport}
@@ -17,8 +20,17 @@ global:
     attraction: {col: attraction}
     zoo: {col: zoo}
     barrier: {col: barrier}
-    mz_is_building: {col: mz_is_building}
-    min_zoom: {col: min_zoom}
+    min_zoom:
+      case:
+        - when: { meta.source: ne }
+          then: 4
+        - else: { col: min_zoom }
+    mz_is_building:
+      call:
+        func: util.is_building
+        args:
+          - {col: building}
+          - {col: "building:part"}
 
   - &tier1_min_zoom
     lookup:

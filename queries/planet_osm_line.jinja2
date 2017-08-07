@@ -30,9 +30,8 @@ SELECT
 
   CASE WHEN mz_landuse_min_zoom IS NOT NULL
     THEN jsonb_build_object(
-      'min_zoom', mz_landuse_min_zoom,
+      'min_zoom', mz_landuse_min_zoom
       -- NOTE: the name logic between pois and buildings exists only for polygons
-      'mz_is_building', CASE WHEN mz_calculate_is_building_or_part(tags->'building', tags->'building:part') THEN TRUE END
     )
   END AS __landuse_properties__,
 

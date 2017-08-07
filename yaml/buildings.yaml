@@ -4,7 +4,10 @@
 # content of globals is ignored, unless included in later parts of the file.
 globals:
   - &output_properties
-    area: {col: area}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
     label_placement: {col: label_placement}
     min_zoom: {col: min_zoom}
     mz_label_placement: {col: mz_label_placement}

@@ -75,3 +75,27 @@ def calculate_path_major_route(fid):
 def cycling_network(tags, fid):
     # TODO: implement me! current implementation is a stub.
     return None
+
+
+def tag_str_to_bool(str_or_none):
+    return True if str_or_none in ('yes', 'true') else None
+
+
+def true_or_none(x):
+    return True if x is True else None
+
+
+def tag_set_and_not_no(x):
+    return x is not None and x != 'no'
+
+
+def is_building(building_tag, building_part_tag):
+    result = (tag_set_and_not_no(building_tag) or
+              tag_set_and_not_no(building_part_tag))
+    return true_or_none(result)
+
+
+def safe_int(x):
+    if x is None:
+        return None
+    return int(x)

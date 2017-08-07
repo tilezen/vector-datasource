@@ -167,6 +167,10 @@ KNOWN_FUNCS = {
     'mz_get_min_zoom_highway_level_gate': 'mz_get_min_zoom_highway_level_gate',
     'util.calculate_path_major_route':    'mz_calculate_path_major_route',
     'mz_calculate_ferry_level':           'mz_calculate_ferry_level',
+    'util.is_building':                   'mz_calculate_is_building_or_part',
+    'util.tag_str_to_bool':               'notimplemented',
+    'util.safe_int':                      'notimplemented',
+    'util.true_or_none':                  'notimplemented',
 }
 
 

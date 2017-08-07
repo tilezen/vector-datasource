@@ -1,7 +1,10 @@
 globals:
   - &output_properties
     name: {col: name}
-    area: {col: area}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
     source: {col: source}
     min_zoom: {col: min_zoom}
     mz_label_placement: {col: mz_label_placement}

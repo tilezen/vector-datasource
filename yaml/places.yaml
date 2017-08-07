@@ -4,13 +4,25 @@ global:
     source: {col: source}
     admin_level: {col: admin_level}
     population: {col: population}
-    country_capital: {col: country_capital}
-    region_capital: {col: region_capital}
+    country_capital:
+      call:
+        func: util.tag_str_to_bool
+        args: [ { col: capital } ]
+    region_capital:
+      call:
+        func: util.tag_str_to_bool
+        args: [ { col: state_capital } ]
     mz_n_photos: {col: mz_n_photos}
-    area: {col: area}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
     min_zoom: {col: min_zoom}
     max_zoom: {col: max_zoom}
-    is_landuse_aoi: {col: is_landuse_aoi}
+    is_landuse_aoi:
+      call:
+        func: util.true_or_none
+        args: [ { col: is_landuse_aoi } ]
 
   - &ne_places_min_zoom
     lookup:
@@ -31,7 +43,7 @@ filters:
     min_zoom: {col: min_zoom}
     output:
       <<: *output_properties
-      kind: {col: kind}
+      kind: {col: placetype}
     table: wof
     extra_columns: [ min_zoom ]
   - filter: {name: true, place: country}

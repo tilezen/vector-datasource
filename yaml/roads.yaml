@@ -120,6 +120,7 @@ global:
   - &ne_properties
       <<: *output_properties
       ref: {col: name}
+      min_zoom: { max: [ 5, { col: scalerank } ] }
       mz_networks:
         case:
           - when:
