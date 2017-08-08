@@ -34,8 +34,5 @@ WHERE
 
 {% endmacro %}
 
-{{ osmdata_query(False, 'mz_earth_min_zoom', True) }}
-
-UNION ALL
-
-{{ osmdata_query(True, 'mz_water_min_zoom', False) }}
+{% block query %}
+{% endblock %}

@@ -1,5 +1,3 @@
--- normalize layer properties throughout all
-
 {% macro ne_common_properties() %}
 
   -- common properties
@@ -8,64 +6,6 @@
   ) AS __properties__
 
 {% endmacro %}
-
-{# places query always present across all zooms, so include first #}
-{# simplifes UNION ALL combination logic #}
-
---------------------------------------------------------------------------------
--- places
---------------------------------------------------------------------------------
-
-SELECT
-
-  gid AS __id__,
-
-  {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
-  NULL::bytea AS __label__,
-
-  {{ ne_common_properties() }},
-
-  NULL::jsonb AS __boundaries_properties__,
-  NULL::jsonb AS __earth_properties__,
-  NULL::jsonb AS __landuse_properties__,
-
-  jsonb_build_object(
-    'name', name,
-    'population', pop_max::text,
-    'featurecla', featurecla,
-    'scalerank', scalerank,
-    'min_zoom', mz_places_min_zoom
-  ) AS __places_properties__,
-
-  NULL::jsonb AS __roads_properties__,
-  NULL::jsonb AS __water_properties__
-
-FROM ne_10m_populated_places
-
-WHERE
-
-  {{ bounds['point']|bbox_filter('the_geom', 3857) }} AND
-  mz_places_min_zoom < {{ zoom + 1 }}
-{% if zoom >= 8 and zoom < 10 %}
-  AND pop_max <= 50000
-{% elif zoom >= 10 and zoom < 11 %}
-  AND pop_max <= 20000
-{% elif zoom >= 11 %}
-  AND pop_max <= 5000
-{% endif %}
-
---------------------------------------------------------------------------------
--- end places
---------------------------------------------------------------------------------
-
-{# conditional boundaries include #}
-{% if zoom < 8 %}
-
-UNION ALL
-
---------------------------------------------------------------------------------
--- boundaries
---------------------------------------------------------------------------------
 
 {% macro ne_boundaries_query(name, table) %}
 
@@ -101,35 +41,7 @@ WHERE
 
 {% endmacro %}
 
-{% if zoom < 2 %}
-{{ ne_boundaries_query(False, 'ne_110m_admin_0_boundary_lines_land') }}
-{% elif 2 <= zoom < 5 %}
-{{ ne_boundaries_query(False, 'ne_50m_admin_0_boundary_lines_land') }}
-UNION ALL
-{{ ne_boundaries_query(False, 'ne_50m_admin_1_states_provinces_lines') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_boundaries_query(True, 'ne_10m_admin_0_boundary_lines_land') }}
-UNION ALL
-{{ ne_boundaries_query(False, 'ne_10m_admin_0_boundary_lines_map_units') }}
-UNION ALL
-{{ ne_boundaries_query(True, 'ne_10m_admin_1_states_provinces_lines') }}
-{% endif %}
-
---------------------------------------------------------------------------------
--- end boundaries
---------------------------------------------------------------------------------
-
-{# end conditional boundaries include #}
-{% endif %}
-
-{# conditional earth include #}
-{% if zoom < 8 %}
-
-UNION ALL
-
---------------------------------------------------------------------------------
--- earth
---------------------------------------------------------------------------------
+{% macro ne_earth_query(table) %}
 
 SELECT
 
@@ -151,36 +63,15 @@ SELECT
   NULL::jsonb AS __roads_properties__,
   NULL::jsonb AS __water_properties__
 
-FROM
-{% if zoom < 2 %}
-  ne_110m_land t
-{% elif 2 <= zoom < 5 %}
-  ne_50m_land t
-{% elif 5 <= zoom < 8 %}
-  ne_10m_land t
-{% endif %}
+FROM {{ table }}
 
 WHERE
   mz_earth_min_zoom < {{ zoom + 1 }} AND
   {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
 
---------------------------------------------------------------------------------
--- end earth
---------------------------------------------------------------------------------
+{% endmacro %}
 
-{# end conditional earth include #}
-{% endif %}
-
-{# conditional landuse include #}
-{% if zoom < 10 %}
-
-UNION ALL
-
---------------------------------------------------------------------------------
--- landuse
---------------------------------------------------------------------------------
-
-{% macro ne_landuse(table) %}
+{% macro ne_landuse_query(table) %}
 
 SELECT
 
@@ -210,82 +101,7 @@ WHERE
 
 {% endmacro %}
 
-{% if 4 <= zoom < 6 %}
-{{ ne_landuse('ne_50m_urban_areas') }}
-{% elif zoom < 10 %}
-{{ ne_landuse('ne_10m_urban_areas') }}
-{% endif %}
-
---------------------------------------------------------------------------------
--- end landuse
---------------------------------------------------------------------------------
-
-{# end conditional landuse include #}
-{% endif %}
-
-{# conditional roads include #}
-{% if zoom < 8 and zoom >= 5 %}
-UNION ALL
-
---------------------------------------------------------------------------------
--- roads
---------------------------------------------------------------------------------
-
-SELECT
-
-  gid AS __id__,
-
-  {% filter geometry %}the_geom{% endfilter %} AS __geometry__,
-  NULL::bytea AS __label__,
-
-  {{ ne_common_properties() }},
-
-  NULL::jsonb AS __boundaries_properties__,
-  NULL::jsonb AS __earth_properties__,
-  NULL::jsonb AS __landuse_properties__,
-  NULL::jsonb AS __places_properties__,
-
-  jsonb_build_object(
-      'min_zoom', scalerank,
-      'scalerank', scalerank,
-      'featurecla', featurecla,
-      'type', type,
-      'expressway', expressway,
-      'sov_a3', sov_a3,
-      'level', level,
-      'continent', continent,
-      'label', label,
-      'name', name
-  ) AS __roads_properties__,
-
-  NULL::jsonb AS __water_properties__
-
-FROM
-
-  ne_10m_roads
-
-WHERE
-
-  {{ bounds['line']|bbox_filter('the_geom', 3857) }}
-  AND scalerank <= {{ zoom }}
-
---------------------------------------------------------------------------------
--- end roads
---------------------------------------------------------------------------------
-
-{# end conditional roads include #}
-{% endif %}
-
-{# conditional water include #}
-{% if zoom < 8 %}
-
-UNION ALL
-
---------------------------------------------------------------------------------
--- water
---------------------------------------------------------------------------------
-
-{% macro ne_water(boundary_geometry, label_geometry, name, boundary, has_area, table) %}
+{% macro ne_water_query(boundary_geometry, label_geometry, name, boundary, has_area, table) %}
 
 SELECT
 
@@ -332,70 +148,5 @@ WHERE
 
 {% endmacro %}
 
-{% if zoom < 2 %}
-{{ ne_water(False, True, False, False, True, 'ne_110m_ocean') }}
-{% elif 2 <= zoom < 5 %}
-{{ ne_water(False, True, False, False, True, 'ne_50m_ocean') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_water(False, True, False, False, True, 'ne_10m_ocean') }}
-{% endif %}
-
-UNION ALL
-
-{% if zoom < 2 %}
-{{ ne_water(False, True, True, False, True, 'ne_110m_lakes') }}
-{% elif 2 <= zoom < 5 %}
-{{ ne_water(False, True, True, False, True, 'ne_50m_lakes') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_water(False, True, True, False, True, 'ne_10m_lakes') }}
-{% endif %}
-
-UNION ALL
-
-{% if zoom < 2 %}
-{{ ne_water(False, False, False, True, False, 'ne_110m_coastline') }}
-{% elif 2 <= zoom < 5 %}
-{{ ne_water(False, False, False, True, False, 'ne_50m_coastline') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_water(False, False, False, True, False, 'ne_10m_coastline') }}
-{% endif %}
-
-UNION ALL
-
-{% if zoom < 2 %}
-{{ ne_water(True, True, True, True, True, 'ne_110m_lakes') }}
-{% elif 2 <= zoom < 5 %}
-{{ ne_water(True, True, True, True, True, 'ne_50m_lakes') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_water(True, True, True, True, True, 'ne_10m_lakes') }}
-{% endif %}
-
-{# playas #}
-{% if 4 <= zoom < 8 %}
-
-UNION ALL
-
--- playa polygons
-{% if 4 <= zoom < 5 %}
-{{ ne_water(False, True, True, False, True, 'ne_50m_playas') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_water(False, True, True, False, True, 'ne_10m_playas') }}
-{% endif %}
-
-UNION ALL
-
--- playa boundaries
-{% if 4 <= zoom < 5 %}
-{{ ne_water(True, True, True, True, True, 'ne_50m_playas') }}
-{% elif 5 <= zoom < 8 %}
-{{ ne_water(True, True, True, True, True, 'ne_10m_playas') }}
-{% endif %}
-
-{% endif %}
-
---------------------------------------------------------------------------------
--- end water
---------------------------------------------------------------------------------
-
-{# end conditional water #}
-{% endif %}
+{% block query %}
+{% endblock %}

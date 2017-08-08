@@ -1,0 +1,4 @@
+{% extends 'osmdata.jinja2' %}
+{% block query %}
+{{ osmdata_query(False, 'mz_earth_min_zoom', True) }}
+{% endblock %}
