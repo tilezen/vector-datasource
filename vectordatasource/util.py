@@ -7,8 +7,11 @@ def to_float(x):
 
     if x is None:
         return None
-    # normalize punctuation
-    x = x.replace(';', '.').replace(',', '.')
+
+    if isinstance(x, (str, unicode)):
+        # normalize punctuation
+        x = x.replace(';', '.').replace(',', '.')
+
     try:
         return float(x)
     except ValueError:
