@@ -64,7 +64,7 @@ sources:
     # ne_10m_land
     - template: ne-earth-10m.jinja2
       zoom_start: 5
-      zoom_stop: 9
+      zoom_stop: 8
 
     ## landuse
 
@@ -108,7 +108,7 @@ sources:
     # ne_10m_lakes
     - template: ne-water-10m.jinja2
       zoom_start: 5
-      zoom_stop: 9
+      zoom_stop: 8
 
     # ne_50m_playas
     - template: ne-water-playas-50m.jinja2
@@ -118,15 +118,15 @@ sources:
     # ne_10m_playas
     - template: ne-water-playas-10m.jinja2
       zoom_start: 5
-      zoom_stop: 9
+      zoom_stop: 8
 
   osmdata:
 
     - template: osmdata-earth.jinja2
-      zoom_start: 9
+      zoom_start: 8
 
     - template: osmdata-water.jinja2
-      zoom_start: 9
+      zoom_start: 8
 
   wof:
     - template: wof.jinja2
