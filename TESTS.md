@@ -33,13 +33,13 @@ If the tests failed, with the message `FAILED n TESTS` for some value of `n`, th
 The `vector-datasource` repository comes bundled with a set of fixture data in `integration-tests/geojson-fixtures/` for each test. Unless you are adding new tests, or want to test against a running tile server, then you generally will not need to alter any of these files. To run the tests:
 
 ```
-python integration-tests.py
+python integration-test.py
 ```
 
 Or individual tests may be run by listing them on the command line:
 
 ```
-python integration-tests.py integration-tests/160-motorway-junctions.py
+python integration-test.py integration-test/160-motorway-junctions.py
 ```
 
 ### Running against an existing tile server
