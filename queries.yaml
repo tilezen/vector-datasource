@@ -448,7 +448,7 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 0
-      end_zoom: 6
+      end_zoom: 7
       properties: [name]
 
   - fn: vectordatasource.transform.handle_label_placement
@@ -479,7 +479,7 @@ post_process:
     params:
       source_layer: landuse
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties: [mz_label_placement]
       geom_types: [Polygon, MultiPolygon]
 
@@ -499,14 +499,14 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
       properties: [mz_label_placement]
       geom_types: [Polygon, MultiPolygon]
 
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: landuse
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -516,7 +516,7 @@ post_process:
     params:
       source_layer: landuse
       start_zoom: 4
-      end_zoom: 12
+      end_zoom: 13
       properties: [name, sport, religion, surface]
       where: >-
         pixel_area > area
@@ -551,14 +551,14 @@ post_process:
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: buildings
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: pois
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -572,7 +572,7 @@ post_process:
   - fn: vectordatasource.transform.merge_duplicate_stations
     params:
       source_layer: pois
-      end_zoom: 15
+      end_zoom: 16
   - fn: vectordatasource.transform.normalize_station_properties
     params:
       source_layer: pois
@@ -599,7 +599,7 @@ post_process:
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name]
       geometry_types: [Point]
       min_distance: 64.0
@@ -607,7 +607,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties: [is_bridge, is_tunnel]
       where: >-
         (kind == 'path' and zoom < 15) or
@@ -617,7 +617,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - bicycle
         - colour
@@ -637,7 +637,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 13
+      end_zoom: 14
       properties:
         - all_bicycle_networks
         - all_bicycle_shield_texts
@@ -650,7 +650,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties:
         - ascent
         - crossing
@@ -675,7 +675,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - name
         - ref
@@ -685,7 +685,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties:
         - name
         - ref
@@ -705,7 +705,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 10
+      end_zoom: 11
       properties:
         - name
         - all_networks
@@ -718,7 +718,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 10
+      end_zoom: 11
       properties: [name]
       where: >-
         kind == 'highway'
@@ -728,7 +728,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 6
+      end_zoom: 7
       properties:
         - name
         - ref
@@ -745,7 +745,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 10
+      end_zoom: 11
       properties:
         - all_bicycle_networks
         - all_bicycle_shield_texts
@@ -764,7 +764,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 8
+      end_zoom: 9
       properties:
         - walking_network
         - walking_shield_text
@@ -784,27 +784,27 @@ post_process:
     params:
       source_layer: transit
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
   # only keep all stations below z12, then cut it down to the top few.
   - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: transit
       start_zoom: 9
-      end_zoom: 11
+      end_zoom: 12
       items_matching: { kind: station }
       max_items: 20
   - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: transit
       start_zoom: 12
-      end_zoom: 13
+      end_zoom: 14
       items_matching: { kind: station }
       max_items: 30
   - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: pois
       start_zoom: 9
-      end_zoom: 15
+      end_zoom: 16
       items_matching: { kind: [peak, volcano] }
       max_items: 5
   - fn: vectordatasource.transform.drop_properties_with_prefix
@@ -814,7 +814,7 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 14
+      end_zoom: 15
       quantize:
         13: vectordatasource.transform.quantize_height_round_nearest_10_meters
         14: vectordatasource.transform.quantize_height_round_nearest_5_meters
@@ -826,7 +826,7 @@ post_process:
 
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 13
+      end_zoom: 14
       source_layers: [landuse, water]
       pixel_area: 0.1
 
@@ -845,19 +845,19 @@ post_process:
     params:
       source_layer: landuse
       start_zoom: 4
-      end_zoom: 12
+      end_zoom: 13
 
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 16
 
   - fn: vectordatasource.transform.simplify_layer
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 16
       tolerance: 1.0
 
   - fn: vectordatasource.transform.buildings_unify
