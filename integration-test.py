@@ -208,51 +208,6 @@ def fetch_tile_http_mvt(z, x, y, layer):
     return r
 
 
-@contextmanager
-def features_in_tile_layer(z, x, y, layer):
-    r = fetch_tile_http_json(z, x, y, layer)
-    data = json.loads(r.text)
-
-    if config_all_layers:
-        layer_data = data.get(layer, None)
-        if layer_data is not None:
-            features = layer_data['features']
-        else:
-            features = []
-    else:
-        features = data['features']
-
-    try:
-        yield features
-
-    except Exception as e:
-        raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
-
-
-@contextmanager
-def layers_in_tile(z, x, y):
-    r = fetch_tile_http_json(z, x, y, 'all')
-    data = json.loads(r.text)
-    layers = data.keys()
-    yield layers
-
-
-@contextmanager
-def features_in_mvt_layer(z, x, y, layer):
-    r = fetch_tile_http_mvt(z, x, y, layer)
-
-    from mapbox_vector_tile import decode as mvt_decode
-    msg = mvt_decode(r.content)
-
-    try:
-        data = msg[layer]
-        features = data['features']
-        yield features
-
-    except Exception as e:
-        raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
-
-
 def count_matching(features, properties):
     """
     Returns a tuple containing the total number of features in the argument
@@ -289,82 +244,134 @@ def closest_matching(features, properties):
     return (min_feature, min_misses)
 
 
-def assert_has_feature(z, x, y, layer, properties):
-    with features_in_tile_layer(z, x, y, layer) as features:
-        num_features, num_matching = count_matching(
-            features, properties)
+class HttpFeatureFetcher(object):
 
-        if num_features == 0:
-            raise Exception, "Did not find feature including properties " \
-                "%r (because layer %r was empty)" % (properties, layer)
+    @contextmanager
+    def features_in_tile_layer(self, z, x, y, layer):
+        r = fetch_tile_http_json(z, x, y, layer)
+        data = json.loads(r.text)
 
-        if num_matching == 0:
-            closest, misses = closest_matching(features, properties)
-            raise Exception, "Did not find feature including properties " \
-                "%r. The closest match was %r: missed %r." \
-                % (properties, closest['properties'], misses)
-
-
-def assert_at_least_n_features(z, x, y, layer, properties, n):
-    """
-    Downloads a tile and checks that it contains at least `n` features which
-    match the given `properties`.
-    """
-    with features_in_tile_layer(z, x, y, layer) as features:
-        num_features, num_matching = count_matching(
-            features, properties)
-
-        if num_features < n:
-            raise Exception, "Found fewer than %d features including " \
-                "properties %r (because layer %r had %d features)" % \
-                (n, properties, layer, num_features)
-
-        if num_matching < n:
-            raise Exception, "Did not find %d features including properties " \
-                "%r, found only %d" % (n, properties, num_matching)
-
-
-def assert_less_than_n_features(z, x, y, layer, properties, n):
-    """
-    Downloads a tile and checks that it contains less than `n` features which
-    match the given `properties`.
-    """
-    with features_in_tile_layer(z, x, y, layer) as features:
-        num_features, num_matching = count_matching(
-            features, properties)
-
-        if num_matching >= n:
-            raise Exception, "Did not find %d features including properties " \
-                "%r, found only %d" % (n, properties, num_matching)
-
-
-def assert_no_matching_feature(z, x, y, layer, properties):
-    with features_in_tile_layer(z, x, y, layer) as features:
-        num_features, num_matching = count_matching(
-            features, properties)
-
-        if num_matching > 0:
-            feature = None
-            for f in features:
-                if match_properties(f['properties'], properties):
-                    feature = f
-                    break
-
-            raise Exception, "Found feature matching properties %r in " \
-                "layer %r, but was supposed to find none. For example: " \
-                "%r" % (properties, layer, feature['properties'])
-
-
-def assert_feature_geom_type(z, x, y, layer, feature_id, exp_geom_type):
-    with features_in_tile_layer(z, x, y, layer) as features:
-        for feature in features:
-            if feature['properties']['id'] == feature_id:
-                shape = shapely.geometry.shape(feature['geometry'])
-                assert shape.type == exp_geom_type, \
-                    'Unexpected geometry type: %s' % shape.type
-                break
+        if config_all_layers:
+            layer_data = data.get(layer, None)
+            if layer_data is not None:
+                features = layer_data['features']
+            else:
+                features = []
         else:
-            assert 0, 'No feature with id: %d found' % feature_id
+            features = data['features']
+
+        try:
+            yield features
+
+        except Exception as e:
+            raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
+
+
+    @contextmanager
+    def layers_in_tile(self, z, x, y):
+        r = fetch_tile_http_json(z, x, y, 'all')
+        data = json.loads(r.text)
+        layers = data.keys()
+        yield layers
+
+
+    @contextmanager
+    def features_in_mvt_layer(self, z, x, y, layer):
+        r = fetch_tile_http_mvt(z, x, y, layer)
+
+        from mapbox_vector_tile import decode as mvt_decode
+        msg = mvt_decode(r.content)
+
+        try:
+            data = msg[layer]
+            features = data['features']
+            yield features
+
+        except Exception as e:
+            raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
+
+
+class Assertions(object):
+
+    def __init__(self, feature_fetcher):
+        self.ff = feature_fetcher
+
+    def assert_has_feature(self, z, x, y, layer, properties):
+        with self.ff.features_in_tile_layer(z, x, y, layer) as features:
+            num_features, num_matching = count_matching(
+                features, properties)
+
+            if num_features == 0:
+                raise Exception, "Did not find feature including properties " \
+                    "%r (because layer %r was empty)" % (properties, layer)
+
+            if num_matching == 0:
+                closest, misses = closest_matching(features, properties)
+                raise Exception, "Did not find feature including properties " \
+                    "%r. The closest match was %r: missed %r." \
+                    % (properties, closest['properties'], misses)
+
+
+    def assert_at_least_n_features(self, z, x, y, layer, properties, n):
+        """
+        Downloads a tile and checks that it contains at least `n` features which
+        match the given `properties`.
+        """
+        with self.ff.features_in_tile_layer(z, x, y, layer) as features:
+            num_features, num_matching = count_matching(
+                features, properties)
+
+            if num_features < n:
+                raise Exception, "Found fewer than %d features including " \
+                    "properties %r (because layer %r had %d features)" % \
+                    (n, properties, layer, num_features)
+
+            if num_matching < n:
+                raise Exception, "Did not find %d features including properties " \
+                    "%r, found only %d" % (n, properties, num_matching)
+
+
+    def assert_less_than_n_features(self, z, x, y, layer, properties, n):
+        """
+        Downloads a tile and checks that it contains less than `n` features which
+        match the given `properties`.
+        """
+        with self.ff.features_in_tile_layer(z, x, y, layer) as features:
+            num_features, num_matching = count_matching(
+                features, properties)
+
+            if num_matching >= n:
+                raise Exception, "Did not find %d features including properties " \
+                    "%r, found only %d" % (n, properties, num_matching)
+
+
+    def assert_no_matching_feature(self, z, x, y, layer, properties):
+        with self.ff.features_in_tile_layer(z, x, y, layer) as features:
+            num_features, num_matching = count_matching(
+                features, properties)
+
+            if num_matching > 0:
+                feature = None
+                for f in features:
+                    if match_properties(f['properties'], properties):
+                        feature = f
+                        break
+
+                raise Exception, "Found feature matching properties %r in " \
+                    "layer %r, but was supposed to find none. For example: " \
+                    "%r" % (properties, layer, feature['properties'])
+
+
+    def assert_feature_geom_type(self, z, x, y, layer, feature_id, exp_geom_type):
+        with self.ff.features_in_tile_layer(z, x, y, layer) as features:
+            for feature in features:
+                if feature['properties']['id'] == feature_id:
+                    shape = shapely.geometry.shape(feature['geometry'])
+                    assert shape.type == exp_geom_type, \
+                        'Unexpected geometry type: %s' % shape.type
+                    break
+            else:
+                assert 0, 'No feature with id: %d found' % feature_id
 
 
 def print_coord(z, x, y, *ignored):
@@ -426,15 +433,17 @@ class TestRunner(object):
 
         else:
             assert mode == 'test'
+            self.feature_fetcher = HttpFeatureFetcher()
+            self.assertions = Assertions(self.feature_fetcher)
             function_table = {
-                'assert_has_feature': assert_has_feature,
-                'assert_no_matching_feature': assert_no_matching_feature,
-                'assert_at_least_n_features': assert_at_least_n_features,
-                'assert_less_than_n_features': assert_less_than_n_features,
-                'features_in_tile_layer': features_in_tile_layer,
-                'assert_feature_geom_type': assert_feature_geom_type,
-                'layers_in_tile': layers_in_tile,
-                'features_in_mvt_layer': features_in_mvt_layer,
+                'assert_has_feature': self.assertions.assert_has_feature,
+                'assert_no_matching_feature': self.assertions.assert_no_matching_feature,
+                'assert_at_least_n_features': self.assertions.assert_at_least_n_features,
+                'assert_less_than_n_features': self.assertions.assert_less_than_n_features,
+                'features_in_tile_layer': self.feature_fetcher.features_in_tile_layer,
+                'assert_feature_geom_type': self.assertions.assert_feature_geom_type,
+                'layers_in_tile': self.feature_fetcher.layers_in_tile,
+                'features_in_mvt_layer': self.feature_fetcher.features_in_mvt_layer,
                 'fail': fail,
                 'assertTrue': assertTrue,
             }
