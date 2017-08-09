@@ -1,0 +1,3 @@
+# RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=motorway];>;
+# RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=primary];>;
+# RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=trunk];>;

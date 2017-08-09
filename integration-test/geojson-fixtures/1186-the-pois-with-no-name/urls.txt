@@ -1,0 +1,20 @@
+#https://www.openstreetmap.org/node/1589837084
+#https://www.openstreetmap.org/node/1460537343
+#https://www.openstreetmap.org/node/3879177193
+#https://www.openstreetmap.org/node/2420432693
+#https://www.openstreetmap.org/node/2911709060
+#https://www.openstreetmap.org/node/3509468126
+#https://www.openstreetmap.org/relation/6328943
+#https://www.openstreetmap.org/node/3643451363
+# http://www.openstreetmap.org/way/79457493
+# http://www.openstreetmap.org/way/64296322
+# http://www.openstreetmap.org/node/2148541212
+# http://www.openstreetmap.org/node/4206408136
+# http://www.openstreetmap.org/node/4076680383
+# http://www.openstreetmap.org/way/86285084
+# http://www.openstreetmap.org/node/582131344
+# http://www.openstreetmap.org/way/28694608
+# http://www.openstreetmap.org/node/3367407023
+# http://www.openstreetmap.org/way/207859675
+# http://www.openstreetmap.org/way/372445925
+# http://www.openstreetmap.org/way/164878781
