@@ -17,7 +17,7 @@ sources:
   # therefore, it's necessary that the query results of each template
   # have the same types
 
-  # NOTE: zoom_stop is exclusive
+  # NOTE: end_zoom is exclusive
 
   planet_osm_polygon:
     - template: planet_osm_polygon.jinja2
@@ -35,55 +35,55 @@ sources:
 
     # ne_110m_admin_0_boundary_lines_land
     - template: ne-boundaries-110m.jinja2
-      zoom_stop: 2
+      end_zoom: 2
 
     # ne_50m_admin_0_boundary_lines_land
     # ne_50m_admin_1_states_provinces_lines
     - template: ne-boundaries-50m.jinja2
-      zoom_start: 2
-      zoom_stop: 5
+      start_zoom: 2
+      end_zoom: 5
 
     # ne_10m_admin_0_boundary_lines_land
     # ne_10m_admin_0_boundary_lines_map_units
     # ne_10m_admin_1_states_provinces_lines
     - template: ne-boundaries-10m.jinja2
-      zoom_start: 5
-      zoom_stop: 8
+      start_zoom: 5
+      end_zoom: 8
 
     ## earth
 
     # ne_110m_land
     - template: ne-earth-110m.jinja2
-      zoom_stop: 2
+      end_zoom: 2
 
     # ne_50m_land
     - template: ne-earth-50m.jinja2
-      zoom_start: 2
-      zoom_stop: 5
+      start_zoom: 2
+      end_zoom: 5
 
     # ne_10m_land
     - template: ne-earth-10m.jinja2
-      zoom_start: 5
-      zoom_stop: 8
+      start_zoom: 5
+      end_zoom: 8
 
     ## landuse
 
     # ne_50m_urban_areas
     - template: ne-landuse-50m.jinja2
-      zoom_start: 4
-      zoom_stop: 6
+      start_zoom: 4
+      end_zoom: 6
 
     # ne_10m_urban_areas
     - template: ne-landuse-10m.jinja2
-      zoom_start: 6
-      zoom_stop: 10
+      start_zoom: 6
+      end_zoom: 10
 
     ## roads
 
     # ne_10m_roads
     - template: ne-roads.jinja2
-      zoom_start: 5
-      zoom_stop: 8
+      start_zoom: 5
+      end_zoom: 8
 
     ## water
 
@@ -92,45 +92,45 @@ sources:
     # ne_110m_coastline
     # ne_110m_lakes
     - template: ne-water-110m.jinja2
-      zoom_stop: 2
+      end_zoom: 2
 
     # ne_50m_ocean
     # ne_50m_lakes
     # ne_50m_coastline
     # ne_50m_lakes
     - template: ne-water-50m.jinja2
-      zoom_start: 2
-      zoom_stop: 5
+      start_zoom: 2
+      end_zoom: 5
 
     # ne_10m_ocean
     # ne_10m_lakes
     # ne_10m_coastline
     # ne_10m_lakes
     - template: ne-water-10m.jinja2
-      zoom_start: 5
-      zoom_stop: 8
+      start_zoom: 5
+      end_zoom: 8
 
     # ne_50m_playas
     - template: ne-water-playas-50m.jinja2
-      zoom_start: 4
-      zoom_stop: 5
+      start_zoom: 4
+      end_zoom: 5
 
     # ne_10m_playas
     - template: ne-water-playas-10m.jinja2
-      zoom_start: 5
-      zoom_stop: 8
+      start_zoom: 5
+      end_zoom: 8
 
   osmdata:
 
     - template: osmdata-earth.jinja2
-      zoom_start: 8
+      start_zoom: 8
 
     - template: osmdata-water.jinja2
-      zoom_start: 8
+      start_zoom: 8
 
   wof:
     - template: wof.jinja2
-      zoom_start: 11
+      start_zoom: 11
 
 layers:
   water:
