@@ -5,14 +5,36 @@ import traceback
 from os import walk, environ
 from os.path import join as path_join
 from os.path import exists as path_exists
+from os.path import dirname
+from os.path import abspath
+from os.path import split as path_split
+from os.path import splitext as path_splitext
 import sys
 from yaml import load as load_yaml
 from appdirs import AppDirs
 from contextlib import contextmanager
-import shapely.geometry
 import re
 import lxml.etree as ET
 import time
+from tilequeue.command import parse_layer_data
+from vectordatasource.meta import find_yaml_path
+from vectordatasource.meta.python import parse_layers
+from vectordatasource.meta.python import output_kind
+from vectordatasource.meta.python import make_function_name_props
+from vectordatasource.meta.python import output_min_zoom
+from vectordatasource.meta.python import make_function_name_min_zoom
+from tilequeue.query import make_fixture_data_fetcher
+from tilequeue.query.fixture import LayerInfo
+import glob
+from ModestMaps.Core import Coordinate
+from tilequeue.tile import coord_to_mercator_bounds
+from tilequeue.process import convert_source_data_to_feature_layers
+from tilequeue.process import process_coord_no_format
+from tilequeue.tile import reproject_lnglat_to_mercator
+from shapely.geometry import shape as make_shape
+import shapely.ops
+from shapely.geometry import mapping
+
 
 OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 
@@ -266,14 +288,12 @@ class HttpFeatureFetcher(object):
         except Exception as e:
             raise Exception, "Tile %r: %s" % (r.url, e.message), sys.exc_info()[2]
 
-
     @contextmanager
     def layers_in_tile(self, z, x, y):
         r = fetch_tile_http_json(z, x, y, 'all')
         data = json.loads(r.text)
         layers = data.keys()
         yield layers
-
 
     @contextmanager
     def features_in_mvt_layer(self, z, x, y, layer):
@@ -366,7 +386,7 @@ class Assertions(object):
         with self.ff.features_in_tile_layer(z, x, y, layer) as features:
             for feature in features:
                 if feature['properties']['id'] == feature_id:
-                    shape = shapely.geometry.shape(feature['geometry'])
+                    shape = make_shape(feature['geometry'])
                     assert shape.type == exp_geom_type, \
                         'Unexpected geometry type: %s' % shape.type
                     break
@@ -403,6 +423,22 @@ def print_coord_with_context(z, x, y, *ignored):
     yield []
 
 
+def make_function_table(feature_fetcher, assertions):
+    function_table = {
+        'assert_has_feature': assertions.assert_has_feature,
+        'assert_no_matching_feature': assertions.assert_no_matching_feature,
+        'assert_at_least_n_features': assertions.assert_at_least_n_features,
+        'assert_less_than_n_features': assertions.assert_less_than_n_features,
+        'features_in_tile_layer': feature_fetcher.features_in_tile_layer,
+        'assert_feature_geom_type': assertions.assert_feature_geom_type,
+        'layers_in_tile': feature_fetcher.layers_in_tile,
+        'features_in_mvt_layer': feature_fetcher.features_in_mvt_layer,
+        'fail': fail,
+        'assertTrue': assertTrue,
+    }
+    return function_table
+
+
 class TestAPI(object):
 
     def __init__(self, function_table):
@@ -435,18 +471,8 @@ class TestRunner(object):
             assert mode == 'test'
             self.feature_fetcher = HttpFeatureFetcher()
             self.assertions = Assertions(self.feature_fetcher)
-            function_table = {
-                'assert_has_feature': self.assertions.assert_has_feature,
-                'assert_no_matching_feature': self.assertions.assert_no_matching_feature,
-                'assert_at_least_n_features': self.assertions.assert_at_least_n_features,
-                'assert_less_than_n_features': self.assertions.assert_less_than_n_features,
-                'features_in_tile_layer': self.feature_fetcher.features_in_tile_layer,
-                'assert_feature_geom_type': self.assertions.assert_feature_geom_type,
-                'layers_in_tile': self.feature_fetcher.layers_in_tile,
-                'features_in_mvt_layer': self.feature_fetcher.features_in_mvt_layer,
-                'fail': fail,
-                'assertTrue': assertTrue,
-            }
+            function_table = make_function_table(
+                self.feature_fetcher, self.assertions)
         self.test_api = TestAPI(function_table)
         self.mode = mode
 
@@ -624,6 +650,170 @@ class DataDumper(object):
         return dump_data
 
 
+def parse_layer_dict(yaml_path, output_fn, fn_name_fn):
+    layer_parse_result = parse_layers(yaml_path, output_fn, fn_name_fn)
+
+    layers = {}
+    for l in layer_parse_result.layer_data:
+        layers[l.layer] = l.fn
+
+    return layers
+
+
+class FixtureEnvironment(object):
+
+    def __init__(self):
+        src_directory = dirname(abspath(__file__))
+        config_file = path_join(src_directory, 'queries.yaml')
+        buffer_cfg = {}
+
+        assert path_exists(config_file), \
+            'Invalid query config path'
+        with open(config_file) as query_cfg_fp:
+            query_cfg = load_yaml(query_cfg_fp)
+        all_layer_data, layer_data, post_process_data = parse_layer_data(
+                query_cfg, buffer_cfg, dirname(config_file))
+
+        yaml_path = find_yaml_path()
+        layer_props = parse_layer_dict(yaml_path, output_kind, make_function_name_props)
+        layer_min_zoom = parse_layer_dict(yaml_path, output_min_zoom, make_function_name_min_zoom)
+
+        assert set(layer_props.keys()) == set(layer_min_zoom.keys())
+
+        layers = {}
+        for layer_name in layer_props.keys():
+            min_zoom_fn = layer_min_zoom[layer_name]
+            props_fn = layer_props[layer_name]
+            layers[layer_name] = LayerInfo(min_zoom_fn, props_fn)
+
+        self.layer_data = layer_data
+        self.post_process_data = post_process_data
+        self.layer_functions = layers
+
+    def output_calc_spec(self):
+        output_calc_spec = {}
+        for name, info in self.layer_functions.items():
+            output_calc_spec[name] = info.props_fn
+        return output_calc_spec
+
+
+def _load_fixtures(test_dir, test_name):
+    geojson_path = path_join(
+        test_dir, 'geojson-fixtures', test_name, '*.geojson')
+    geojson_files = glob.glob(geojson_path)
+
+    rows = []
+    for f in geojson_files:
+        with open(f, 'rb') as fh:
+            rows.extend(_load_fixture(fh))
+    return rows
+
+
+def _load_fixture(fh):
+    js = json.load(fh)
+    rows = []
+    for feature in js['features']:
+        fid = feature['id']
+        props = feature['properties']
+        # hack!
+        props['source'] = 'openstreetmap.org'
+        geom_lnglat = make_shape(feature['geometry'])
+        geom_mercator = shapely.ops.transform(
+            reproject_lnglat_to_mercator, geom_lnglat)
+
+        rows.append((fid, geom_mercator, props))
+    return rows
+
+
+class FixtureFeatureFetcher(object):
+
+    def __init__(self, f, fixture_env):
+        self.test_dir, basename = path_split(f)
+        self.test_name, ext = path_splitext(basename)
+        assert ext == '.py'
+
+        rows = _load_fixtures(self.test_dir, self.test_name)
+        self.fetcher = make_fixture_data_fetcher(
+            fixture_env.layer_functions, rows)
+        self.fixture_env = fixture_env
+
+    def _generate_tile(self, z, x, y):
+        coord = Coordinate(zoom=z, column=x, row=y)
+
+        nominal_zoom = coord.zoom
+        unpadded_bounds = coord_to_mercator_bounds(coord)
+
+        import pdb; pdb.set_trace()
+        source_rows = self.fetcher(nominal_zoom, unpadded_bounds)
+        feature_layers = convert_source_data_to_feature_layers(
+            source_rows, self.fixture_env.layer_data, unpadded_bounds,
+            nominal_zoom)
+        processed_feature_layers, extra_data = process_coord_no_format(
+            feature_layers, nominal_zoom, unpadded_bounds,
+            self.fixture_env.post_process_data,
+            self.fixture_env.output_calc_spec())
+
+        tile = {}
+        for pfl in processed_feature_layers:
+            features = []
+            for shape, props, fid in pfl['features']:
+                feature = dict(
+                    geometry=mapping(shape),
+                    properties=props,
+                    id=fid,
+                )
+                features.append(feature)
+            tile[pfl['name']] = features
+        return tile
+
+    def features_in_tile_layer(self, z, x, y, layer):
+        @contextmanager
+        def inner(z, x, y, layer):
+            tile_layers = self._generate_tile(z, x, y)
+            yield tile_layers.get(layer, [])
+        return inner(z, x, y, layer)
+
+    @contextmanager
+    def layers_in_tile(self, z, x, y):
+        @contextmanager
+        def inner(z, x, y):
+            tile_layers = self._generate_tile(z, x, y)
+            yield tile_layers.keys()
+        return inner(z, x, y)
+
+    @contextmanager
+    def features_in_mvt_layer(self, z, x, y, layer):
+        import pdb; pdb.set_trace()
+        raise Exception("unimplemented")
+
+
+# Runs tests against local fixtures rather than going to the network.
+class FixtureRunner(object):
+
+    def __init__(self):
+        self.env = FixtureEnvironment()
+
+    def __call__(self, f, log, idx, num_tests):
+        fails = 0
+
+        try:
+            feature_fetcher = FixtureFeatureFetcher(f, self.env)
+            assertions = Assertions(feature_fetcher)
+            function_table = make_function_table(feature_fetcher, assertions)
+            test_api = TestAPI(function_table)
+            runpy.run_path(f, init_globals=dict(test=test_api))
+            print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
+
+        except:
+            fails = 1
+            print "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
+            print>>log, "[%4d/%d] FAIL: %r" % (idx, num_tests, f)
+            print>>log, traceback.format_exc()
+            print>>log, ""
+
+        return fails
+
+
 data_dumper = None
 
 if len(sys.argv) > 1 and sys.argv[1] == '-printcoords':
@@ -635,13 +825,20 @@ elif len(sys.argv) > 1 and sys.argv[1] == '-dumpdata':
     mode = 'dump'
     data_dumper = DataDumper()
     runner = data_dumper.test_function()
-else:
+elif len(sys.argv) > 1 and sys.argv[1] == '-server':
+    # delete the -server argument so that the get_config method sees the
+    # arguments that it expects
+    del sys.argv[1]
     config_url, config_all_layers = get_config()
     assert config_url, "Tile URL not configured, but is necessary for " \
         "running the tests. Please check your configuration file."
     tests = sys.argv[2:]
     mode = 'test'
     runner = make_runner(mode)
+else:
+    tests = sys.argv[1:]
+    mode = 'test'
+    runner = FixtureRunner()
 
 fail_count = 0
 with open('test.log', 'w') as log:
