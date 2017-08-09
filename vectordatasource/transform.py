@@ -2072,7 +2072,7 @@ def _project_properties(ctx, action):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2258,7 +2258,7 @@ def remove_duplicate_features(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     # allow either a single or multiple layers to be used.
@@ -2353,7 +2353,7 @@ def merge_duplicate_stations(ctx):
     # we probably don't want to do this at higher zooms (e.g: 17 &
     # 18), even if there are a bunch of stations very close
     # together.
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2454,7 +2454,7 @@ def normalize_station_properties(ctx):
     # we probably don't want to do this at higher zooms (e.g: 17 &
     # 18), even if there are a bunch of stations very close
     # together.
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2551,7 +2551,7 @@ def keep_n_features(ctx):
     # 18), even if there are a bunch of features in the tile, as
     # we use the high-zoom tiles for overzooming to 20+, and we'd
     # eventually expect to see _everything_.
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2966,7 +2966,7 @@ def merge_building_features(ctx):
 
     if zoom < start_zoom:
         return None
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     quantize_height_fn = None
@@ -3034,7 +3034,7 @@ def merge_polygon_features(ctx):
 
     if zoom < start_zoom:
         return None
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     def _props_pre((shape, props, fid)):
@@ -3071,7 +3071,7 @@ def merge_line_features(ctx):
 
     if zoom < start_zoom:
         return None
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer['features'] = _merge_features_by_property(
@@ -3454,7 +3454,7 @@ def csv_match_properties(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -3498,7 +3498,7 @@ def update_parenthetical_properties(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -3690,7 +3690,7 @@ def drop_small_inners(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom and zoom > end_zoom:
+    if end_zoom and zoom >= end_zoom:
         return None
 
     meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
@@ -3741,7 +3741,7 @@ def simplify_layer(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
