@@ -743,7 +743,6 @@ class FixtureFeatureFetcher(object):
         nominal_zoom = coord.zoom
         unpadded_bounds = coord_to_mercator_bounds(coord)
 
-        import pdb; pdb.set_trace()
         source_rows = self.fetcher(nominal_zoom, unpadded_bounds)
         feature_layers = convert_source_data_to_feature_layers(
             source_rows, self.fixture_env.layer_data, unpadded_bounds,
@@ -783,7 +782,6 @@ class FixtureFeatureFetcher(object):
 
     @contextmanager
     def features_in_mvt_layer(self, z, x, y, layer):
-        import pdb; pdb.set_trace()
         raise Exception("unimplemented")
 
 
