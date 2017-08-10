@@ -115,7 +115,7 @@ FROM (
       'type',       'Feature',
       'id',         osm_id,
       'geometry',   ST_AsGeoJSON(ST_Transform(way, 4326))::json,
-      'properties', hstore_to_json_loose(tags)
+      'properties', hstore_to_json(tags)
     ) AS feature
   FROM planet_osm_${tbl}
 ) features;
