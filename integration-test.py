@@ -686,9 +686,14 @@ class FixtureEnvironment(object):
             props_fn = layer_props[layer_name]
             layers[layer_name] = LayerInfo(min_zoom_fn, props_fn)
 
+        # TODO: move this to queries.yaml?
+        label_placement_layers = set([
+            'buildings', 'earth', 'landuse', 'water'])
+
         self.layer_data = layer_data
         self.post_process_data = post_process_data
         self.layer_functions = layers
+        self.label_placement_layers = label_placement_layers
 
     def output_calc_spec(self):
         output_calc_spec = {}
@@ -734,7 +739,8 @@ class FixtureFeatureFetcher(object):
 
         rows = _load_fixtures(self.test_dir, self.test_name)
         self.fetcher = make_fixture_data_fetcher(
-            fixture_env.layer_functions, rows)
+            fixture_env.layer_functions, rows,
+            fixture_env.label_placement_layers)
         self.fixture_env = fixture_env
 
     def _generate_tile(self, z, x, y):
