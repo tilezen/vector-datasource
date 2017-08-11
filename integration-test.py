@@ -2,7 +2,7 @@ import runpy
 import requests
 import json
 import traceback
-from os import walk, environ
+from os import walk, environ, makedirs
 from os.path import join as path_join
 from os.path import exists as path_exists
 from os.path import dirname
@@ -34,9 +34,20 @@ from tilequeue.tile import reproject_lnglat_to_mercator
 from shapely.geometry import shape as make_shape
 import shapely.ops
 from shapely.geometry import mapping
+import hashlib
+import urlparse
+from collections import namedtuple
 
 
+# the Overpass server is used to download data about OSM elements. the
+# environment allows us to override the default public Overpass server to take
+# the load off it.
 OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
+
+# the fixture cache stores generated GeoJSON fixtures. these can be somewhat
+# expensive to generate (running `osm2pgsql` and so forth), so it seems worth
+# caching them for everyone to reuse.
+FIXTURE_CACHE = environ.get('FIXTURE_CACHE', 'http://localhost:8000')
 
 ##
 # App configuration:
@@ -450,6 +461,19 @@ class TestAPI(object):
         return function_table[name]
 
 
+class NoLoader(object):
+    """
+    Shim class to make remote tests pass. Since these are against a remote
+    server, there is nothing to load, and the API gets passed back as-is.
+    """
+
+    def __init__(self, api):
+        self.api = api
+
+    def load(self, urls):
+        return self.api
+
+
 class TestRunner(object):
 
     def __init__(self, mode):
@@ -480,7 +504,8 @@ class TestRunner(object):
         fails = 0
 
         try:
-            runpy.run_path(f, init_globals=dict(test=self.test_api))
+            fixtures = NoLoader(self.test_api)
+            runpy.run_path(f, init_globals=dict(fixtures=fixtures))
             if self.mode == 'test':
                 print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
         except GatewayTimeout, e:
@@ -660,12 +685,71 @@ def parse_layer_dict(yaml_path, output_fn, fn_name_fn):
     return layers
 
 
+class OSMDataObject(namedtuple("OSMDataObject", "typ fid")):
+
+    def canonical_url(self):
+        return "http://www.openstreetmap.org/%s/%d" % (self.typ, self.fid)
+
+
+class OSMDataSource(object):
+
+    def __init__(self):
+        self.hosts = ('osm.org', 'openstreetmap.org')
+
+    def parse(self, path):
+        parts = path.split("/")
+        if len(parts) != 3:
+            raise Exception("OSM URLs should look like "
+                            "\"http://openstreetmap.org/node/1234\", "
+                            "not %r." % (url,))
+        typ = parts[1]
+        fid = int(parts[2])
+        if typ not in ('node', 'way', 'relation'):
+            raise Exception("OSM URLs should be for a node, way or "
+                            "relation. I didn't understand %r"
+                            % (typ,))
+
+        return OSMDataObject(typ, fid)
+
+
+class FixtureDataSources(object):
+
+    def __init__(self):
+        self.sources = [
+            OSMDataSource(),
+        ]
+
+    def parse(self, url):
+        p = urlparse.urlsplit(url)
+        host = p.netloc.lower()
+        if host.startswith('www.'):
+            host = host[len('www.'):]
+
+        for source in self.sources:
+            if host in source.hosts:
+                return source.parse(p.path)
+
+        raise Exception("Unable to load fixtures for host %r, used "
+                        "in request for %r." % (host, url))
+
+
 class FixtureEnvironment(object):
 
     def __init__(self):
         src_directory = dirname(abspath(__file__))
         config_file = path_join(src_directory, 'queries.yaml')
         buffer_cfg = {}
+
+        # TODO: surely there's a Python module for handling this already? i
+        # didn't find one on a quick search of pypi, but "cache" is such a
+        # common term that it's easy to miss a relevant package amongst all
+        # the irrelevant ones.
+        cache_dir = environ.get('CACHE_DIR')
+        if not cache_dir:
+            cache_dir = path_join(environ['HOME'], '.cache',
+                                  'vector-datasource')
+        if not path_exists(cache_dir):
+            makedirs(cache_dir)
 
         assert path_exists(config_file), \
             'Invalid query config path'
@@ -694,6 +778,8 @@ class FixtureEnvironment(object):
         self.post_process_data = post_process_data
         self.layer_functions = layers
         self.label_placement_layers = label_placement_layers
+        self.cache_dir = cache_dir
+        self.data_sources = FixtureDataSources()
 
     def output_calc_spec(self):
         output_calc_spec = {}
@@ -701,15 +787,38 @@ class FixtureEnvironment(object):
             output_calc_spec[name] = info.props_fn
         return output_calc_spec
 
+    def ensure_fixture_file(self, urls):
+        canonical_urls = sorted(self._canonicalise(url) for url in urls)
+        test_uuid = _hash(canonical_urls)
+        geojson_file = path_join(self.cache_dir, test_uuid + '.geojson')
 
-def _load_fixtures(test_dir, test_name):
-    geojson_path = path_join(
-        test_dir, 'geojson-fixtures', test_name, '*.geojson')
-    geojson_files = glob.glob(geojson_path)
+        # first try - download it from the global fixture cache
+        if not path_exists(geojson_file):
+            try:
+                r = requests.get("%s/%s.geojson" % (FIXTURE_CACHE, test_uuid))
 
+                if r.status_code == 200:
+                    with open(geojson_file, 'wb') as fh:
+                        fh.write(r.text)
+
+            except StandardError:
+                pass
+
+        # second try - generate it from the URLs
+        if not path_exists(geojson_file):
+            self.sources.download(urls, geojson_file)
+
+        return geojson_file
+
+    def _canonicalise(self, url):
+        data_source = self.data_sources.parse(url)
+        return data_source.canonical_url()
+
+
+def _load_fixtures(geojson_files):
     rows = []
-    for f in geojson_files:
-        with open(f, 'rb') as fh:
+    for geojson_file in geojson_files:
+        with open(geojson_file, 'rb') as fh:
             rows.extend(_load_fixture(fh))
     return rows
 
@@ -720,8 +829,6 @@ def _load_fixture(fh):
     for feature in js['features']:
         fid = feature['id']
         props = feature['properties']
-        # hack!
-        props['source'] = 'openstreetmap.org'
         geom_lnglat = make_shape(feature['geometry'])
         geom_mercator = shapely.ops.transform(
             reproject_lnglat_to_mercator, geom_lnglat)
@@ -732,12 +839,8 @@ def _load_fixture(fh):
 
 class FixtureFeatureFetcher(object):
 
-    def __init__(self, f, fixture_env):
-        self.test_dir, basename = path_split(f)
-        self.test_name, ext = path_splitext(basename)
-        assert ext == '.py'
-
-        rows = _load_fixtures(self.test_dir, self.test_name)
+    def __init__(self, geojson_files, fixture_env):
+        rows = _load_fixtures(geojson_files)
         self.fetcher = make_fixture_data_fetcher(
             fixture_env.layer_functions, rows,
             fixture_env.label_placement_layers)
@@ -791,21 +894,39 @@ class FixtureFeatureFetcher(object):
         raise Exception("unimplemented")
 
 
+def _hash(urls):
+    m = hashlib.sha256()
+    for url in urls:
+        m.update(url)
+    return m.hexdigest()
+
+
+class FixtureAPI(object):
+
+    def __init__(self, env):
+        self.env = env
+
+    def load(self, urls):
+        geojson_file = self.env.ensure_fixture_file(urls)
+        feature_fetcher = FixtureFeatureFetcher([geojson_file], self.env)
+        assertions = Assertions(feature_fetcher)
+        function_table = make_function_table(feature_fetcher, assertions)
+        test_api = TestAPI(function_table)
+        return test_api
+
+
 # Runs tests against local fixtures rather than going to the network.
 class FixtureRunner(object):
 
     def __init__(self):
         self.env = FixtureEnvironment()
+        self.fixture_api = FixtureAPI(self.env)
 
     def __call__(self, f, log, idx, num_tests):
         fails = 0
 
         try:
-            feature_fetcher = FixtureFeatureFetcher(f, self.env)
-            assertions = Assertions(feature_fetcher)
-            function_table = make_function_table(feature_fetcher, assertions)
-            test_api = TestAPI(function_table)
-            runpy.run_path(f, init_globals=dict(test=test_api))
+            runpy.run_path(f, init_globals=dict(fixtures=self.fixture_api))
             print "[%4d/%d] PASS: %r" % (idx, num_tests, f)
 
         except:
@@ -836,7 +957,7 @@ elif len(sys.argv) > 1 and sys.argv[1] == '-server':
     config_url, config_all_layers = get_config()
     assert config_url, "Tile URL not configured, but is necessary for " \
         "running the tests. Please check your configuration file."
-    tests = sys.argv[2:]
+    tests = sys.argv[1:]
     mode = 'test'
     runner = make_runner(mode)
 else:

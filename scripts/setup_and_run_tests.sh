@@ -173,7 +173,8 @@ set +e
 # run tests
 port=`cat "${test_server_port}"`
 export VECTOR_DATASOURCE_CONFIG_URL="http://localhost:${port}/%(layer)s/%(z)d/%(x)d/%(y)d.json"
-python "${basedir}/integration-test.py"
+# run remote tests
+python "${basedir}/integration-test.py" -remote
 success=$?
 
 if [[ $success -eq 0 ]]; then

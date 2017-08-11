@@ -1,4 +1,7 @@
-# http://www.openstreetmap.org/node/733619113
+test = fixtures.load([
+    'http://www.openstreetmap.org/node/733619113',
+    ])
+
 test.assert_has_feature(
     16, 10483, 25332, 'pois',
     { 'kind': 'motorway_junction' })
