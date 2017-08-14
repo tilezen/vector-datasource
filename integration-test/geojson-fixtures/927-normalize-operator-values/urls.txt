@@ -1,6 +1,0 @@
-# http://www.openstreetmap.org/node/4285104560
-# http://www.openstreetmap.org/way/368766687
-# http://www.openstreetmap.org/node/796692690
-# http://www.openstreetmap.org/way/432302983
-# http://www.openstreetmap.org/node/2514034066
-# http://www.openstreetmap.org/way/429280600

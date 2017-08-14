@@ -1,7 +1,0 @@
-#https://www.openstreetmap.org/way/56149856
-#https://www.openstreetmap.org/way/152722810
-#https://www.openstreetmap.org/way/219072560
-#https://www.openstreetmap.org/way/344057345
-#https://www.openstreetmap.org/way/259001359
-#https://www.openstreetmap.org/way/194906343
-#https://www.openstreetmap.org/relation/3585039

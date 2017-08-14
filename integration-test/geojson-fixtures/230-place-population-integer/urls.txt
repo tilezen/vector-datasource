@@ -1,7 +1,0 @@
-# http://www.openstreetmap.org/relation/2835016
-# http://www.openstreetmap.org/relation/2835017
-# http://www.openstreetmap.org/node/150967056
-# http://www.openstreetmap.org/node/150975918
-# http://www.openstreetmap.org/node/150946345
-# http://www.openstreetmap.org/node/150981209
-# http://www.openstreetmap.org/node/150959789

@@ -1,7 +1,0 @@
-#https://www.openstreetmap.org/relation/148838
-#https://www.openstreetmap.org/relation/165473
-#https://www.openstreetmap.org/relation/165475
-#https://www.openstreetmap.org/relation/396458
-#https://www.openstreetmap.org/relation/396489
-#https://www.openstreetmap.org/relation/111968
-#https://www.openstreetmap.org/relation/112271
