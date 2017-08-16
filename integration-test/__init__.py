@@ -38,6 +38,7 @@ import lxml.etree as ET
 import time
 from collections import defaultdict
 import subprocess
+import urllib
 
 
 # the Overpass server is used to download data about OSM elements. the
@@ -243,6 +244,16 @@ class OSMDataObject(namedtuple("OSMDataObject", "typ fid")):
         return "http://www.openstreetmap.org/%s/%d" % (self.typ, self.fid)
 
 
+class OverpassObject(namedtuple("OverpassObject", "raw_query")):
+
+    def canonical_url(self):
+        query = urllib.urlencode(dict(data=self.raw_query))
+        url = urlparse.urlunparse((
+            'http', 'overpass-api.de', '/api/interpreter',
+            None, query, None))
+        return url
+
+
 class withlog(object):
 
     def __init__(self, log):
@@ -345,18 +356,56 @@ def dump_geojson(dbname, target_file, log, clip):
         json.dump(geojson, fh)
 
 
+def _download_from_overpass(objs, target_file, clip, base_dir):
+    with tempdir() as tmp:
+        osc_file = path_join(tmp, 'data.osc')
+        log_file = path_join(tmp, 'log.txt')
+
+        with open(log_file, 'w') as log:
+            with open(osc_file, 'w') as fh:
+                dumper = DataDumper()
+                dumper.dump_data(objs, log)
+                dumper.download_to(fh)
+
+            with tempdb(log) as dbname:
+                shell = withlog(log)
+                load_data_into_database(
+                    osc_file, base_dir, dbname, shell)
+                dump_geojson(dbname, target_file, log, clip)
+
+        # TODO: on error, print the log file?
+
+
+class OverpassDataSource(object):
+
+    def __init__(self, base_dir):
+        self.base_dir = base_dir
+        self.hosts = ('overpass-api.de')
+
+    def parse(self, url):
+        assert url.path == '/api/interpreter', \
+            "Overpass URL paths should be /api/interpreter, not %r" \
+            % (url.path,)
+        url_query = urlparse.parse_qs(url.query)
+        raw_query = "".join(url_query['data'])
+        return OverpassObject(raw_query)
+
+    def download(self, objs, target_file, clip):
+        _download_from_overpass(objs, target_file, clip, self.base_dir)
+
+
 class OSMDataSource(object):
 
     def __init__(self, base_dir):
         self.base_dir = base_dir
         self.hosts = ('osm.org', 'openstreetmap.org')
 
-    def parse(self, path):
-        parts = path.split("/")
+    def parse(self, url):
+        parts = url.path.split("/")
         if len(parts) != 3:
             raise Exception("OSM URLs should look like "
                             "\"http://openstreetmap.org/node/1234\", "
-                            "not %r." % (path,))
+                            "not %r." % (url.path,))
         typ = parts[1]
         fid = int(parts[2])
         if typ not in ('node', 'way', 'relation'):
@@ -367,23 +416,7 @@ class OSMDataSource(object):
         return OSMDataObject(typ, fid)
 
     def download(self, objs, target_file, clip):
-        with tempdir() as tmp:
-            osc_file = path_join(tmp, 'data.osc')
-            log_file = path_join(tmp, 'log.txt')
-
-            with open(log_file, 'w') as log:
-                with open(osc_file, 'w') as fh:
-                    dumper = DataDumper()
-                    dumper.dump_data(objs, log)
-                    dumper.download_to(fh)
-
-                with tempdb(log) as dbname:
-                    shell = withlog(log)
-                    load_data_into_database(
-                        osc_file, self.base_dir, dbname, shell)
-                    dump_geojson(dbname, target_file, log, clip)
-
-            # TODO: on error, print the log file?
+        _download_from_overpass(objs, target_file, clip, self.base_dir)
 
 
 class tempdb(object):
@@ -436,6 +469,7 @@ class FixtureDataSources(object):
     def __init__(self, base_dir):
         self.sources = [
             OSMDataSource(base_dir),
+            OverpassDataSource(base_dir),
         ]
 
     def _source_for(self, p):
@@ -453,7 +487,7 @@ class FixtureDataSources(object):
         p = urlparse.urlsplit(url)
         source = self._source_for(p)
         if source:
-            return source.parse(p.path)
+            return source.parse(p)
 
         raise Exception("Unable to load fixtures for host %r, used "
                         "in request for %r." % (p.netloc, url))
@@ -466,7 +500,7 @@ class FixtureDataSources(object):
             source = self._source_for(p)
             if not source:
                 raise Exception("Unknown source for url %r", (url,))
-            groups[source].append(source.parse(p.path))
+            groups[source].append(source.parse(p))
 
         with tempdir() as tmp:
             geojson_files = []
@@ -933,8 +967,12 @@ class DataDumper(object):
     def dump_data(self, objs, log):
         for obj in objs:
             try:
-                self.add_object(obj.typ, obj.fid)
-                # TODO: handle "raw" queries.
+                if isinstance(obj, OSMDataObject):
+                    self.add_object(obj.typ, obj.fid)
+                elif isinstance(obj, OverpassObject):
+                    self.add_query(obj.raw_query)
+                else:
+                    raise Exception("Unknown data object type: %r" % (obj,))
 
             except:
                 print>>log, "FAIL: fetching OSM data for %r" % (obj,)
