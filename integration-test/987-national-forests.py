@@ -80,10 +80,10 @@ test.assert_has_feature(
 # Municipal Water District and protect_class=4. It should just be
 # kind:nature_reserve.
 #
-# https://www.openstreetmap.org/way/297463477
+# https://www.openstreetmap.org/relation/7473345
 test.assert_has_feature(
     13, 1305, 3161, 'landuse',
-    { 'kind': 'nature_reserve', 'id': 297463477 })
+    { 'kind': 'nature_reserve', 'id': -7473345 })
 
 # leisure=common in Blithedale Summit Open Space Preserve with
 # boundary=national_park and boundary:type=protected_area and protect_class=5
