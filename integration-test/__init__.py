@@ -36,7 +36,6 @@ from contextlib import contextmanager
 import re
 import lxml.etree as ET
 import time
-from itertools import groupby
 from collections import defaultdict
 import subprocess
 
@@ -438,7 +437,7 @@ class FixtureDataSources(object):
             return source.parse(p.path)
 
         raise Exception("Unable to load fixtures for host %r, used "
-                        "in request for %r." % (host, url))
+                        "in request for %r." % (p.netloc, url))
 
     def download(self, urls, output_file, clip):
         groups = defaultdict(list)
