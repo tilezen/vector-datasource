@@ -795,6 +795,9 @@ class OsmFixtureTest(unittest.TestCase):
     def assert_no_matching_feature(self, z, x, y, layer, props):
         self.assertions.assert_no_matching_feature(z, x, y, layer, props)
 
+    def features_in_tile_layer(self, z, x, y, layer):
+        return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
+
     def tile_bbox(self, z, x, y, padding=0.0):
         coord = Coordinate(zoom=z, column=x, row=y)
         bounds = coord_to_bounds(coord)
