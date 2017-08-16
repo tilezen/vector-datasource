@@ -80,7 +80,13 @@ test.assert_has_feature(
 # Municipal Water District and protect_class=4. It should just be
 # kind:nature_reserve.
 #
+# https://www.openstreetmap.org/relation/7473345
 # https://www.openstreetmap.org/way/297463477
+# https://www.openstreetmap.org/way/514928209
+# http://www.openstreetmap.org/way/515885035
+# http://www.openstreetmap.org/way/12178416
+# http://www.openstreetmap.org/way/12178430
+# http://www.openstreetmap.org/way/515796172
 test.assert_has_feature(
     13, 1305, 3161, 'landuse',
     { 'kind': 'nature_reserve', 'id': 297463477 })
