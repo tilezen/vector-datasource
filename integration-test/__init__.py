@@ -290,6 +290,8 @@ def dump_geojson(dbname, target_file, log, clip):
 
     for typ in ('point', 'line', 'polygon'):
         cur = conn.cursor()
+        rel = conn.cursor()
+
         cur.execute("""
         SELECT
           osm_id,
@@ -310,6 +312,21 @@ def dump_geojson(dbname, target_file, log, clip):
 
                 geom = mapping(shape)
 
+            if typ == 'point':
+                parts_slice = '1:way_off'
+            elif osm_id >= 0:
+                parts_slice = 'way_off+1:rel_off'
+            else:
+                parts_slice = 'rel_off+1:array_upper(parts,1)'
+
+            rel.execute("""
+              SELECT json_agg(row_to_json(r.*))
+              FROM planet_osm_rels r
+              WHERE parts && ARRAY[%(osm_id)d::bigint]
+                AND parts[%(slice)s] && ARRAY[%(osm_id)d::bigint]
+            """ % dict(osm_id=osm_id, slice=parts_slice))
+            rels = (rel.fetchone() or ([]))[0]
+
             # HACK!
             tags['source'] = 'openstreetmap.org'
 
@@ -319,6 +336,8 @@ def dump_geojson(dbname, target_file, log, clip):
                 geometry=geom,
                 properties=tags,
             )
+            if rels:
+                feature['relations'] = rels
             features.append(feature)
 
     geojson = dict(type='FeatureCollection', features=features)
@@ -565,6 +584,9 @@ def _load_fixture(fh):
     for feature in js['features']:
         fid = feature['id']
         props = feature['properties']
+        rels = feature.get('relations')
+        if rels:
+            props['__relations__'] = rels
         geom_lnglat = make_shape(feature['geometry'])
         geom_mercator = shapely.ops.transform(
             reproject_lnglat_to_mercator, geom_lnglat)
