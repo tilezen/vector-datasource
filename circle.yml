@@ -16,15 +16,16 @@ dependencies:
     - pip install -Ur requirements.txt
   override:
     - python setup.py develop
+    - python integration-test/__init__.py --download-only
+  cache_directories:
+    - "~/.cache/vector-datasource"
 
 test:
   override:
     - pip install -U flake8
     - find . -not -path '*/.eggs/*' -not -path '*/integration-test*' -not -path '*/data/*' -name '*.py' | xargs flake8
     - python setup.py test
-# temporarily disable this, since we know they won't run while being
-# refactored. REMEMBER! update this once they're all working again!
-#    - ./scripts/setup_and_run_tests.sh -j 4
+    - python integration-test/__init__.py
 
 deployment:
   prerelease:
