@@ -38,8 +38,8 @@ def find_yaml_path():
 
 @memoize
 def make_test_metadata():
-    from tilequeue.process import make_metadata
-    return make_metadata('test')
+    from tilequeue.query.fixture import Metadata
+    return Metadata('test', [], [])
 
 
 @memoize

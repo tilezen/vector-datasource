@@ -246,16 +246,6 @@ PATH_MAJOR_ROUTE = {
 }
 
 
-def min_not_none(*args):
-    "Return the smallest argument which is not None, or None if they all are."
-
-    m = None
-    for a in args:
-        if m is None or (a is not None and a < m):
-            m = a
-    return m
-
-
 def deassoc(x):
     """
     Turns an array consisting of alternating key-value pairs into a
@@ -281,14 +271,19 @@ def deassoc(x):
 # note that relations is a synthetic parameter, added in the Python
 # implementation of the min zoom calculation.
 def mz_calculate_path_major_route(way_id, relations):
-    min_zoom = None
+    # would prefer to use None here, and work around so that `min` treats
+    # None as bigger than any integer. however, Python treats None the other
+    # way, which is a problem if we return None from this function.
+    # therefore, this function returns an arbitrarily large zoom, which we
+    # should expect we'll never use.
+    min_zoom = 999
 
     for rel in relations:
         rel_tags = deassoc(rel['tags'])
         if mz_is_path_major_route_relation(rel_tags):
             network = rel_tags.get('network')
             zoom = PATH_MAJOR_ROUTE.get(network)
-            min_zoom = min_not_none(min_zoom, zoom)
+            min_zoom = min(min_zoom, zoom)
 
     return min_zoom
 
