@@ -195,7 +195,7 @@ def closest_matching(features, properties):
     return (min_feature, min_misses)
 
 
-def load_tests(loader, standard_tests, pattern=None):
+def load_tests(loader, standard_tests, pattern=None, download_only=False):
     test_dir = dirname(__file__)
     if pattern is None:
         pattern = '*.py'
@@ -227,8 +227,23 @@ def load_tests(loader, standard_tests, pattern=None):
                 f.close()
 
         mod = import_module(test_dir + '.' + path.rsplit('.', 1)[0])
-        tests = loader.loadTestsFromModule(mod)
-        standard_tests.addTests(tests)
+
+        # pass a parameter to OsmFixtureTest telling it whether or not to
+        # actually run the tests. setting download_only=True means it only
+        # downloads the fixtures and stubs out all the test methods to pass.
+        #
+        # this is useful when forcing the tests to pre-download, as we need
+        # to do with CircleCI, as the cache is only saved after the
+        # dependencies step, not after the test step itself.
+        for name in dir(mod):
+            klass = getattr(mod, name)
+            if isinstance(klass, type) and \
+               issubclass(klass, unittest.TestCase):
+                names = loader.getTestCaseNames(klass)
+                for name in names:
+                    # TODO: when not instanceof OsmFixtureTest, don't add the
+                    # download_only parameter.
+                    standard_tests.addTest(klass(name, download_only))
 
     return standard_tests
 
@@ -818,7 +833,20 @@ def expand_bbox(bounds, padding):
     return (minx, miny, maxx, maxy)
 
 
+class EmptyContext(object):
+
+    def __enter__(self):
+        return []
+
+    def __exit__(self, type, value, traceback):
+        pass
+
+
 class OsmFixtureTest(unittest.TestCase):
+
+    def __init__(self, methodName='runTest', download_only=False):
+        super(OsmFixtureTest, self).__init__(methodName)
+        self.download_only = download_only
 
     def setUp(self):
         self.env = make_fixture_environment()
@@ -838,13 +866,26 @@ class OsmFixtureTest(unittest.TestCase):
         self.assertions = Assertions(feature_fetcher)
 
     def assert_has_feature(self, z, x, y, layer, props):
-        self.assertions.assert_has_feature(z, x, y, layer, props)
+        if not self.download_only:
+            self.assertions.assert_has_feature(z, x, y, layer, props)
 
     def assert_no_matching_feature(self, z, x, y, layer, props):
-        self.assertions.assert_no_matching_feature(z, x, y, layer, props)
+        if not self.download_only:
+            self.assertions.assert_no_matching_feature(z, x, y, layer, props)
 
     def features_in_tile_layer(self, z, x, y, layer):
-        return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
+        if not self.download_only:
+            return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
+        else:
+            return EmptyContext()
+
+    def assertTrue(self, *args, **kwargs):
+        if not self.download_only:
+            super(OsmFixtureTest, self).assertTrue(*args, **kwargs)
+
+    def assertFalse(self, *args, **kwargs):
+        if not self.download_only:
+            super(OsmFixtureTest, self).assertFalse(*args, **kwargs)
 
     def tile_bbox(self, z, x, y, padding=0.0):
         coord = Coordinate(zoom=z, column=x, row=y)
@@ -1008,16 +1049,27 @@ def flatten_tests(suite):
 if __name__ == '__main__':
     from unittest.util import strclass
     import sys
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        'filter', nargs='*', help='Only run tests which match at least one '
+        'of these filters. Without any filters, all tests are run.')
+    parser.add_argument(
+        '--download-only', dest='download_only', action='store_const',
+        const=True, default=False, help='Only download the fixtures, do not '
+        'actually run the tests.')
+    args = parser.parse_args()
 
     loader = unittest.TestLoader()
-    suite = load_tests(loader, unittest.TestSuite())
+    suite = load_tests(loader, unittest.TestSuite(),
+                       download_only=args.download_only)
 
     tests = []
-    filters = sys.argv[1:]
-    if filters:
+    if args.filter:
         for t in flatten_tests(suite):
             test_name = strclass(t.__class__) + "." + t._testMethodName
-            for prefix in filters:
+            for prefix in args.filter:
                 if test_name.startswith(prefix):
                     tests.append(t)
                     break
