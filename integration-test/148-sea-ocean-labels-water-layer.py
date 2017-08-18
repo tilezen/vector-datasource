@@ -1,4 +1,3 @@
-import unittest
 from . import OsmFixtureTest
 
 
@@ -7,7 +6,7 @@ from . import OsmFixtureTest
 class SeaOceanLabelsWaterLayer(OsmFixtureTest):
 
     def test_gulf_of_california(self):
-        ## Gulf of California: http://www.openstreetmap.org/node/305639734
+        # Gulf of California: http://www.openstreetmap.org/node/305639734
         self.load_fixtures([
             'http://www.openstreetmap.org/node/305639734',
         ])
@@ -20,7 +19,7 @@ class SeaOceanLabelsWaterLayer(OsmFixtureTest):
             {'kind': 'sea', 'name': 'Gulf of California'})
 
     def test_greenland_sea(self):
-        ## Greenland Sea: http://www.openstreetmap.org/node/305639396
+        # Greenland Sea: http://www.openstreetmap.org/node/305639396
         self.load_fixtures([
             'http://www.openstreetmap.org/node/305639396',
         ])
@@ -32,4 +31,4 @@ class SeaOceanLabelsWaterLayer(OsmFixtureTest):
             9, 241, 90, 'places',
             {'kind': 'sea', 'name': 'Greenland Sea'})
 
-## NOTE: No ocean points in the North America extract :-(
+# NOTE: No ocean points in the North America extract :-(

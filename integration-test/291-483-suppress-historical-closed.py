@@ -1,11 +1,10 @@
-import unittest
 from . import OsmFixtureTest
 
 
 class SuppressHistoricalClosed(OsmFixtureTest):
 
     def test_cartoon_museum(self):
-        ## Cartoon Art Museum (closed)
+        # Cartoon Art Museum (closed)
         self.load_fixtures([
             'https://www.openstreetmap.org/node/368173967',
         ])

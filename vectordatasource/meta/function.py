@@ -230,8 +230,8 @@ def mz_is_path_major_route_relation(tags):
 
     return (tags.get('type') == 'route' and
             tags.get('route') in ('hiking', 'foot', 'bicycle') and
-            tags.get('network') in ('iwn','nwn','rwn','lwn','icn','ncn',
-                                    'rcn','lcn'))
+            tags.get('network') in ('iwn', 'nwn', 'rwn', 'lwn', 'icn', 'ncn',
+                                    'rcn', 'lcn'))
 
 
 PATH_MAJOR_ROUTE = {

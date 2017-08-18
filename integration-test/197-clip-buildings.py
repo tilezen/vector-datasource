@@ -1,4 +1,3 @@
-import unittest
 from . import OsmFixtureTest
 
 
@@ -17,7 +16,7 @@ class ClipBuildings(OsmFixtureTest):
             'http://www.openstreetmap.org/relation/7141751',
         ])
         with self.features_in_tile_layer(16, 19295, 24631, 'buildings') \
-             as buildings:
+                as buildings:
             # max width and height in degress as 3x the size of the above tile
             max_w = 0.0164794921875
             max_h = 0.012484410579673977
@@ -33,10 +32,12 @@ class ClipBuildings(OsmFixtureTest):
             if building['properties']['id'] == -7141751:
                 saw_the_high_line = True
 
-            if w > max_w or h > max_h:
-                test.fail('feature %r is %rx%r, larger than the allowed ' \
-                          '%rx%r.' % (building['properties']['id'], w, h,
-                                      max_w, max_h))
+            self.assertFalse(
+                w > max_w or h > max_h,
+                'feature %r is %rx%r, larger than the allowed '
+                '%rx%r.' % (building['properties']['id'], w, h,
+                            max_w, max_h))
 
-        if not saw_the_high_line:
-            test.fail("Expected to see the High Line in this tile, but didn't.")
+        self.assertTrue(
+            saw_the_high_line,
+            "Expected to see the High Line in this tile, but didn't.")

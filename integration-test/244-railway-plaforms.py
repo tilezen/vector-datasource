@@ -1,4 +1,3 @@
-import unittest
 from . import OsmFixtureTest
 
 
@@ -11,4 +10,4 @@ class RailwayPlatforms(OsmFixtureTest):
         ])
         self.assert_has_feature(
             16, 19306, 24633, 'transit',
-            { 'kind': 'platform' })
+            {'kind': 'platform'})
