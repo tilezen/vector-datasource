@@ -297,6 +297,11 @@ def load_data_into_database(osc_file, base_dir, dbname, shell):
     osm2pgsql_args = '-E 3857 -s -C 1024'.split(' ')
     osm2pgsql_args.extend(['-S', style_file])
     osm2pgsql_args.extend(['-d', dbname, '--hstore-all'])
+    # default installs of PostgreSQL limit the number of connections to a
+    # low enough value that it causes problems for osm2pgsql. this shouldn't
+    # be too much of a problem, since individual fixtures _should_ be quite
+    # small.
+    osm2pgsql_args.append('--number-processes=1')
 
     dbhost = environ.get('PGHOST')
     if dbhost:
