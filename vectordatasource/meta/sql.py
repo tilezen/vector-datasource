@@ -165,7 +165,7 @@ KNOWN_FUNCS = {
     'max':                                'GREATEST',
     'mz_to_float_meters':                 'mz_to_float_meters',
     'mz_get_min_zoom_highway_level_gate': 'mz_get_min_zoom_highway_level_gate',
-    'util.calculate_path_major_route':    'mz_calculate_path_major_route',
+    'mz_calculate_path_major_route':      'mz_calculate_path_major_route',
     'mz_calculate_ferry_level':           'mz_calculate_ferry_level',
     'util.is_building':                   'mz_calculate_is_building_or_part',
     'util.tag_str_to_bool':               'notimplemented',
@@ -457,6 +457,11 @@ class SQLExpression(ast.NodeVisitor):
             self.buf.write("ST_GeomType(way)")
         elif name == 'meta' and attr == 'source':
             self.buf.write("\"meta_source\"")
+        elif name == 'meta' and attr in ('ways', 'relations'):
+            # we have no need to pass in ways or relations, as we can just
+            # query the data from the planet_osm_ways/rels table. so this is
+            # only needed to make the arguments list the right "shape".
+            self.buf.write("NULL")
         else:
             raise RuntimeError("Unknown attribute pair (%r, %r)"
                                % (name, attr))

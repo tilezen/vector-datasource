@@ -1019,7 +1019,7 @@ filters:
       <<: *output_properties
       kind: toilets
   - filter: {barrier: gate}
-    min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid } ] } }
+    min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
       <<: *output_properties
       kind: gate

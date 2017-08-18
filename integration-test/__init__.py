@@ -2,6 +2,7 @@ import unittest
 from os.path import dirname
 from os import listdir
 from os.path import join as path_join
+from os.path import getsize as path_getsize
 import fnmatch
 from importlib import import_module
 from collections import namedtuple
@@ -213,9 +214,13 @@ def load_tests(loader, standard_tests, pattern=None):
             f = open(pathname, 'U')
 
             # TODO: take this out after all the tests have been converted!
-            line = f.readline()
-            f.seek(0)
-            if line != 'import unittest\n':
+            new_test = False
+            while True:
+                line = f.readline()
+                if not line.startswith('#'):
+                    new_test = (line == 'from . import OsmFixtureTest\n')
+                    break
+            if not new_test:
                 continue
         finally:
             if f:
@@ -820,6 +825,15 @@ class OsmFixtureTest(unittest.TestCase):
 
     def load_fixtures(self, urls, clip=None):
         geojson_file = self.env.ensure_fixture_file(urls, clip)
+
+        if environ.get('VERBOSE'):
+            geojson_size = path_getsize(geojson_file)
+            if geojson_size > (100 * 1024):
+                import sys
+                print>>sys.stderr, "WARNING: %s: GeoJSON fixture is " \
+                    "very large, %d bytes." \
+                    % (self.id(), geojson_size)
+
         feature_fetcher = FixtureFeatureFetcher([geojson_file], self.env)
         self.assertions = Assertions(feature_fetcher)
 
@@ -999,10 +1013,11 @@ if __name__ == '__main__':
     suite = load_tests(loader, unittest.TestSuite())
 
     tests = []
-    if sys.argv:
+    filters = sys.argv[1:]
+    if filters:
         for t in flatten_tests(suite):
             test_name = strclass(t.__class__) + "." + t._testMethodName
-            for prefix in sys.argv:
+            for prefix in filters:
                 if test_name.startswith(prefix):
                     tests.append(t)
                     break

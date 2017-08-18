@@ -1,3 +1,6 @@
+from itertools import izip
+
+
 def mz_building_kind_detail(val):
     # TODO should this be in yaml instead?
     if val in (
@@ -220,3 +223,105 @@ def mz_building_part_kind_detail(val):
 #     return []
 # def mz_cycling_network(props, osm_id):
 #     pass
+
+
+def mz_is_path_major_route_relation(tags):
+    "Return True if the relation tags represent a major route relation."
+
+    return (tags.get('type') == 'route' and
+            tags.get('route') in ('hiking', 'foot', 'bicycle') and
+            tags.get('network') in ('iwn','nwn','rwn','lwn','icn','ncn',
+                                    'rcn','lcn'))
+
+
+PATH_MAJOR_ROUTE = {
+    'icn': 8,
+    'ncn': 8,
+    'iwn': 9,
+    'nwn': 9,
+    'rcn': 10,
+    'rwn': 11,
+    'lcn': 11,
+    'lwn': 12,
+}
+
+
+def min_not_none(*args):
+    "Return the smallest argument which is not None, or None if they all are."
+
+    m = None
+    for a in args:
+        if m is None or (a is not None and a < m):
+            m = a
+    return m
+
+
+def deassoc(x):
+    """
+    Turns an array consisting of alternating key-value pairs into a
+    dictionary.
+
+    Osm2pgsql stores the tags for ways and relations in the planet_osm_ways and
+    planet_osm_rels tables in this format. Hstore would make more sense now,
+    but this encoding pre-dates the common availability of hstore.
+
+    Example:
+    >>> from raw_tiles.index.util import deassoc
+    >>> deassoc(['a', 1, 'b', 'B', 'c', 3.14])
+    {'a': 1, 'c': 3.14, 'b': 'B'}
+    """
+
+    pairs = [iter(x)] * 2
+    return dict(izip(*pairs))
+
+
+# returns the min_zoom for the most important walking or cycling network
+# that the road with the given way is part of.
+#
+# note that relations is a synthetic parameter, added in the Python
+# implementation of the min zoom calculation.
+def mz_calculate_path_major_route(way_id, relations):
+    min_zoom = None
+
+    for rel in relations:
+        rel_tags = deassoc(rel['tags'])
+        if mz_is_path_major_route_relation(rel_tags):
+            network = rel_tags.get('network')
+            zoom = PATH_MAJOR_ROUTE.get(network)
+            min_zoom = min_not_none(min_zoom, zoom)
+
+    return min_zoom
+
+
+# calculates the "most important" cycle network for a road with the given tags
+# and the feature, or None if the road isn't part of a cycle network.
+#
+# note that this is a bit of a hack - the SQL implemetnation uses the feature
+# ID to look up relations, but for the Python implementation we pass the full
+# feature object, which has the relations embedded in it.
+#
+# cycle networks are considered in the following order of importance: icn,
+# ncn, rcn, lcn.
+def mz_cycling_network(tags):
+    # TODO: implement me! current implementation is a stub.
+    return None
+
+
+def mz_get_min_zoom_highway_level_gate(fid, ways):
+    # TODO: implement me!
+    return 18
+
+
+def mz_calculate_ferry_level(shape):
+    way_length = shape.length
+    if way_length > 1223:
+        return 8
+    elif way_length > 611:
+        return 9
+    elif way_length > 306:
+        return 10
+    elif way_length > 153:
+        return 11
+    elif way_length > 76:
+        return 12
+    return 13
