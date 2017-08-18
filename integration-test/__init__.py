@@ -381,19 +381,26 @@ def _download_from_overpass(objs, target_file, clip, base_dir):
         osc_file = path_join(tmp, 'data.osc')
         log_file = path_join(tmp, 'log.txt')
 
-        with open(log_file, 'w') as log:
-            with open(osc_file, 'w') as fh:
-                dumper = DataDumper()
-                dumper.dump_data(objs, log)
-                dumper.download_to(fh)
+        try:
+            with open(log_file, 'w') as log:
+                with open(osc_file, 'w') as fh:
+                    dumper = DataDumper()
+                    dumper.dump_data(objs, log)
+                    dumper.download_to(fh)
 
-            with tempdb(log) as dbname:
-                shell = withlog(log)
-                load_data_into_database(
-                    osc_file, base_dir, dbname, shell)
-                dump_geojson(dbname, target_file, log, clip)
+                with tempdb(log) as dbname:
+                    shell = withlog(log)
+                    load_data_into_database(
+                        osc_file, base_dir, dbname, shell)
+                    dump_geojson(dbname, target_file, log, clip)
 
-        # TODO: on error, print the log file?
+        except:
+            # TODO: is there some way of attaching this to the stack frame
+            # for easier reading?
+            import sys
+            with open(log_file, 'r') as log:
+                sys.stderr.write(log.read())
+            raise
 
 
 class OverpassDataSource(object):
