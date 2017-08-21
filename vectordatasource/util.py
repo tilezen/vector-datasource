@@ -101,4 +101,8 @@ def is_building(building_tag, building_part_tag):
 def safe_int(x):
     if x is None:
         return None
-    return int(x)
+    try:
+        return int(x)
+    except ValueError:
+        pass
+    return None

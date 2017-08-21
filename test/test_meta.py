@@ -266,6 +266,12 @@ class LanduseTest(unittest.TestCase):
         out_props = self.landuse.fn(None, props, None, meta)
         self.assertEquals(4, out_props.get('min_zoom'))
 
+    def test_area_tag(self):
+        props = dict(barrier='fence', area='no')
+        meta = make_test_metadata()
+        out_props = self.landuse.fn(None, props, None, meta)
+        self.assertIsNone(out_props.get('area'))
+
 
 class PlacesTest(unittest.TestCase):
 
