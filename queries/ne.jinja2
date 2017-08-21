@@ -37,7 +37,8 @@ FROM
   {{ table }}
 
 WHERE
-  {{ bounds['line']|bbox_filter('the_geom', 3857) }}
+  {{ bounds['line']|bbox_filter('the_geom', 3857) }} AND
+  mz_boundary_min_zoom < {{ zoom + 1 }}
 
 {% endmacro %}
 
