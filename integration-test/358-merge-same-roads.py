@@ -1,13 +1,5 @@
-# count the unique parameters - there should only be one, indicating that the
-# roads have been merged.
-#
-# beware: overpass wants (south,west,north,east) coords for bbox, in defiance
-# of x, y coordinate ordering.
-#
-# RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=motorway];>;
-# RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=primary];>;
-# RAW QUERY: way(36.563,-122.377,37.732,-120.844)[highway=trunk];>;
-#
+from . import OsmFixtureTest
+
 
 def _freeze(thing):
     if isinstance(thing, dict):
@@ -18,12 +10,31 @@ def _freeze(thing):
 
     return thing
 
-with test.features_in_tile_layer(8, 41, 99, 'roads') as roads:
-    features = set()
 
-    for road in roads:
-        props = frozenset(_freeze(road['properties']))
-        if props in features:
-            test.fail('Duplicate properties %r in roads layer, but properties '
-                 'should be unique.' % road['properties'])
-        features.add(props)
+def _query_highway(highway):
+    # beware: overpass wants (south,west,north,east) coords for bbox,
+    # in defiance of conventional x, y coordinate ordering.
+    bbox = "36.563,-122.377,37.732,-120.844"
+    overpass = "http://overpass-api.de/api/interpreter?data="
+    return overpass + 'way(' + bbox + ')[highway=' + highway + '];>;'
+
+
+class MergeSameRoads(OsmFixtureTest):
+
+    def test_roads_merged(self):
+        # count the unique parameters - there should only be one, indicating
+        # that the roads have been merged.
+        self.load_fixtures(
+            [_query_highway(t) for t in ('motorway', 'primary', 'trunk')],
+            clip=self.tile_bbox(8, 41, 99))
+
+        with self.features_in_tile_layer(8, 41, 99, 'roads') as roads:
+            features = set()
+
+            for road in roads:
+                props = frozenset(_freeze(road['properties']))
+                if props in features:
+                    test.fail('Duplicate properties %r in roads layer, but '
+                              'properties should be unique.'
+                              % road['properties'])
+                features.add(props)
