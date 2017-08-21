@@ -1,4 +1,5 @@
 from itertools import izip
+import re
 
 
 def mz_building_kind_detail(val):
@@ -320,3 +321,45 @@ def mz_calculate_ferry_level(shape):
     elif way_length > 76:
         return 12
     return 13
+
+
+DECIMAL_UNIT_PATTERN = re.compile('([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)$')
+IMPERIAL_PATTERN = re.compile('([0-9]+(\.[0-9]*)?)\' *(([0-9]+)")?')
+NUMERIC_PATTERN = re.compile('^([0-9]+(\.[0-9]*)?)$')
+
+
+UNIT_CONVERSION_FACTORS = {
+    'mi': 1609.3440,
+    'km': 1000.0000,
+    'm': 1.0,
+    'nmi': 1852.0000,
+    'ft': 0.3048,
+}
+
+
+def mz_to_float_meters(length):
+    # the tag passed through might not exist, in which case this function will
+    # receive None. the re.match() functions would raise an error if they were
+    # passed None, so instead we return early.
+    if length is None:
+        return None
+
+    m = DECIMAL_UNIT_PATTERN.search(length)
+    if m:
+        value = float(m.group(1))
+        unit = m.group(3)
+        factor = UNIT_CONVERSION_FACTORS[unit]
+        return factor * value
+
+    m = IMPERIAL_PATTERN.search(length)
+    if m:
+        inches = int(m.group(4) or '0')
+        feet = float(m.group(1))
+        return (feet * 12 + inches) * 0.0254
+
+    # if it's only a number, with no other additional text
+    m = NUMERIC_PATTERN.match(length)
+    if m:
+        return float(m.groups()[0])
+
+    return None

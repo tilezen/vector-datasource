@@ -729,8 +729,9 @@ def _hash(urls, clip):
 
 class Assertions(object):
 
-    def __init__(self, feature_fetcher):
+    def __init__(self, feature_fetcher, test):
         self.ff = feature_fetcher
+        self.test = test
 
     def assert_has_feature(self, z, x, y, layer, properties):
         with self.ff.features_in_tile_layer(z, x, y, layer) as features:
@@ -738,13 +739,13 @@ class Assertions(object):
                 features, properties)
 
             if num_features == 0:
-                raise Exception(
+                self.test.fail(
                     "Did not find feature including properties %r (because "
                     "layer %r was empty)" % (properties, layer))
 
             if num_matching == 0:
                 closest, misses = closest_matching(features, properties)
-                raise Exception(
+                self.test.fail(
                     "Did not find feature including properties %r. The "
                     "closest match was %r: missed %r." %
                     (properties, closest['properties'], misses))
@@ -759,13 +760,13 @@ class Assertions(object):
                 features, properties)
 
             if num_features < n:
-                raise Exception(
+                self.test.fail(
                     "Found fewer than %d features including properties %r "
                     "(because layer %r had %d features)" %
                     (n, properties, layer, num_features))
 
             if num_matching < n:
-                raise Exception(
+                self.test.fail(
                     "Did not find %d features including properties "
                     "%r, found only %d" % (n, properties, num_matching))
 
@@ -779,7 +780,7 @@ class Assertions(object):
                 features, properties)
 
             if num_matching >= n:
-                raise Exception(
+                self.test.fail(
                     "Did not find %d features including properties "
                     "%r, found only %d" % (n, properties, num_matching))
 
@@ -795,7 +796,7 @@ class Assertions(object):
                         feature = f
                         break
 
-                raise Exception(
+                self.test.fail(
                     "Found feature matching properties %r in "
                     "layer %r, but was supposed to find none. For example: "
                     "%r" % (properties, layer, feature['properties']))
@@ -875,7 +876,7 @@ class OsmFixtureTest(unittest.TestCase):
                     % (self.id(), geojson_size)
 
         feature_fetcher = FixtureFeatureFetcher([geojson_file], self.env)
-        self.assertions = Assertions(feature_fetcher)
+        self.assertions = Assertions(feature_fetcher, self)
 
     def assert_has_feature(self, z, x, y, layer, props):
         if not self.download_only:
@@ -1077,11 +1078,23 @@ if __name__ == '__main__':
     suite = load_tests(loader, unittest.TestSuite(),
                        download_only=args.download_only)
 
+    # convert filenames such as 'integration-test/1234-my-test.py' to the
+    # equivalent module name. this can be helpful on the command line, when
+    # using auto-complete to name the modules. to filter classes and
+    # individual tests within the file, it's still necessary to use the
+    # dotted module notation.
+    filters = []
+    for f in args.filter:
+        if f.endswith('.py'):
+            f = f[:-3]
+        f = f.replace('/', '.')
+        filters.append(f)
+
     tests = []
-    if args.filter:
+    if filters:
         for t in flatten_tests(suite):
             test_name = strclass(t.__class__) + "." + t._testMethodName
-            for prefix in args.filter:
+            for prefix in filters:
                 if test_name.startswith(prefix):
                     tests.append(t)
                     break
