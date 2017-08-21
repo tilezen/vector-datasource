@@ -6,7 +6,9 @@ class FixNullNetwork(OsmFixtureTest):
         # ref="N 4", route=road, but no network=*
         # so we should get something that has no network, but a shield text of
         # '4'
-        self.load_fixtures(['http://www.openstreetmap.org/relation/2307408'])
+        self.load_fixtures(
+            ['http://www.openstreetmap.org/relation/2307408'],
+            clip=self.tile_bbox(11, 1038, 705))
 
         self.assert_has_feature(
             11, 1038, 705, 'roads',
