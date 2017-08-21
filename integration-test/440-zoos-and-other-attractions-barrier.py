@@ -1,5 +1,11 @@
-# barrier=fence around enclosures
-# https://www.openstreetmap.org/way/316623706
-test.assert_has_feature(
-    16, 11458, 21855, 'landuse',
-    { 'kind': 'fence' })
+from . import OsmFixtureTest
+
+
+class ZoosAndOtherAttractionsBarrier(OsmFixtureTest):
+    def test_fences_around_enclosures(self):
+        # barrier=fence around enclosures
+        self.load_fixtures(['https://www.openstreetmap.org/way/316623706'])
+
+        self.assert_has_feature(
+            16, 11458, 21855, 'landuse',
+            {'kind': 'fence'})
