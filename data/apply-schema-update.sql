@@ -71,6 +71,9 @@ ALTER TABLE ne_10m_admin_1_states_provinces_lines ADD COLUMN mz_boundary_min_zoo
 ALTER TABLE planet_osm_point ADD COLUMN mz_building_min_zoom REAL;
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_building_min_zoom REAL;
 
+ALTER TABLE ne_50m_urban_areas ADD COLUMN mz_landuse_min_zoom REAL;
+ALTER TABLE ne_10m_urban_areas ADD COLUMN mz_landuse_min_zoom REAL;
+
 ALTER TABLE planet_osm_polygon ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 ALTER TABLE planet_osm_line ADD COLUMN mz_label_placement geometry(Geometry, 3857);
 
