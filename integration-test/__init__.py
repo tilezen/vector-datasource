@@ -318,70 +318,123 @@ def load_data_into_database(osc_file, base_dir, dbname, shell):
     # indexes, and nothing really touches `tags`, right?
 
 
-def dump_geojson(dbname, target_file, log, clip):
+def dump_table(conn, typ, clip, simplify):
+    features = []
+    all_relation_ids = set()
+    cur = conn.cursor()
+    rel = conn.cursor()
+
+    # allow the way to be simplified for large geometries where we don't need
+    # positional accuracy (e.g: when testing tag transforms).
+    geom = "way"
+    if simplify:
+        geom = "ST_Simplify(%s, %f)" % (geom, simplify)
+
+    query = """
+    SELECT
+    osm_id,
+      ST_AsGeoJSON(ST_Transform(%(geom)s, 4326)) AS geom,
+      to_json(tags) AS tags
+    FROM planet_osm_%(typ)s
+    """ % dict(typ=typ, geom=geom)
+
+    # since we will clip objects to the intersection anyway, we don't need to
+    # query anything outside of the clipping shape.
+    if clip:
+        query += " WHERE way && ST_Transform(ST_GeomFromText('%s', " \
+                 "4326), 3857)" % (clip.wkt,)
+
+    cur.execute(query)
+    for osm_id, geom, tags in cur:
+        # this is usually because something (e.g: ST_Simplify) has turned the
+        # geometry column to NULL.
+        if not isinstance(geom, (str, buffer)):
+            continue
+
+        geom = json.loads(geom)
+        if clip:
+            shape = make_shape(geom)
+            shape = shape.intersection(clip)
+
+            # skip if the intersection removed all parts of the geometry
+            if shape.is_empty:
+                continue
+
+            geom = mapping(shape)
+
+        if typ == 'point':
+            parts_slice = '1:way_off'
+        elif osm_id >= 0:
+            parts_slice = 'way_off+1:rel_off'
+        else:
+            parts_slice = 'rel_off+1:array_upper(parts,1)'
+
+        rel.execute("""
+          SELECT id
+          FROM planet_osm_rels r
+          WHERE parts && ARRAY[%(osm_id)d::bigint]
+          AND parts[%(slice)s] && ARRAY[%(osm_id)d::bigint]
+          ORDER BY id ASC
+        """ % dict(osm_id=osm_id, slice=parts_slice))
+        rels = [int(r[0]) for r in rel]
+
+        # keep track of all relation IDs so that we can build a list of them
+        # all at the top level object.
+        all_relation_ids |= set(rels)
+
+        # HACK!
+        tags['source'] = 'openstreetmap.org'
+
+        feature = dict(
+            type='Feature',
+            id=osm_id,
+            geometry=geom,
+            properties=tags,
+        )
+        if rels:
+            feature['relation_ids'] = rels
+        features.append(feature)
+
+    return features, all_relation_ids
+
+
+def dump_geojson(dbname, target_file, log, clip, simplify):
     import psycopg2
 
     conn = psycopg2.connect("dbname=%s" % dbname)
     features = []
+    relations = []
 
-    for typ in ('point', 'line', 'polygon'):
-        cur = conn.cursor()
-        rel = conn.cursor()
+    try:
+        relation_ids = set()
 
-        cur.execute("""
-        SELECT
-          osm_id,
-          ST_AsGeoJSON(ST_Transform(way, 4326)) AS geom,
-          to_json(tags) AS tags
-        FROM planet_osm_%(typ)s
-        """ % dict(typ=typ))
+        for typ in ('point', 'line', 'polygon'):
+            new_features, new_relation_ids = dump_table(
+                conn, typ, clip, simplify)
 
-        for osm_id, geom, tags in cur:
-            geom = json.loads(geom)
-            if clip:
-                shape = make_shape(geom)
-                shape = shape.intersection(clip)
+            features.extend(new_features)
+            relation_ids |= new_relation_ids
 
-                # skip if the intersection removed all parts of the geometry
-                if shape.is_empty:
-                    continue
+        if relation_ids:
+            with conn.cursor() as cur:
+                cur.execute("""
+                  SELECT json_agg(row_to_json(r.*))
+                  FROM planet_osm_rels r
+                  WHERE id IN %s
+                """, (tuple(relation_ids),))
 
-                geom = mapping(shape)
+                relations = cur.fetchone()[0]
 
-            if typ == 'point':
-                parts_slice = '1:way_off'
-            elif osm_id >= 0:
-                parts_slice = 'way_off+1:rel_off'
-            else:
-                parts_slice = 'rel_off+1:array_upper(parts,1)'
+    finally:
+        conn.close()
 
-            rel.execute("""
-              SELECT json_agg(row_to_json(r.*))
-              FROM planet_osm_rels r
-              WHERE parts && ARRAY[%(osm_id)d::bigint]
-                AND parts[%(slice)s] && ARRAY[%(osm_id)d::bigint]
-            """ % dict(osm_id=osm_id, slice=parts_slice))
-            rels = (rel.fetchone() or ([]))[0]
-
-            # HACK!
-            tags['source'] = 'openstreetmap.org'
-
-            feature = dict(
-                type='Feature',
-                id=osm_id,
-                geometry=geom,
-                properties=tags,
-            )
-            if rels:
-                feature['relations'] = rels
-            features.append(feature)
-
-    geojson = dict(type='FeatureCollection', features=features)
+    geojson = dict(type='FeatureCollection', features=features,
+                   relations=relations)
     with open(target_file, 'w') as fh:
         json.dump(geojson, fh)
 
 
-def _download_from_overpass(objs, target_file, clip, base_dir):
+def _download_from_overpass(objs, target_file, clip, simplify, base_dir):
     with tempdir() as tmp:
         osc_file = path_join(tmp, 'data.osc')
         log_file = path_join(tmp, 'log.txt')
@@ -397,7 +450,7 @@ def _download_from_overpass(objs, target_file, clip, base_dir):
                     shell = withlog(log)
                     load_data_into_database(
                         osc_file, base_dir, dbname, shell)
-                    dump_geojson(dbname, target_file, log, clip)
+                    dump_geojson(dbname, target_file, log, clip, simplify)
 
         except:
             # TODO: is there some way of attaching this to the stack frame
@@ -422,8 +475,9 @@ class OverpassDataSource(object):
         raw_query = "".join(url_query['data'])
         return OverpassObject(raw_query)
 
-    def download(self, objs, target_file, clip):
-        _download_from_overpass(objs, target_file, clip, self.base_dir)
+    def download(self, objs, target_file, clip, simplify):
+        _download_from_overpass(objs, target_file, clip, simplify,
+                                self.base_dir)
 
 
 class OSMDataSource(object):
@@ -447,8 +501,9 @@ class OSMDataSource(object):
 
         return OSMDataObject(typ, fid)
 
-    def download(self, objs, target_file, clip):
-        _download_from_overpass(objs, target_file, clip, self.base_dir)
+    def download(self, objs, target_file, clip, simplify):
+        _download_from_overpass(objs, target_file, clip, simplify,
+                                self.base_dir)
 
 
 class tempdb(object):
@@ -483,6 +538,7 @@ class tempdir(object):
 
 def combine_geojson_files(inputs, output):
     features = []
+    relations = []
     for input_file in inputs:
         with open(input_file) as fh:
             geojson = json.load(fh)
@@ -490,8 +546,10 @@ def combine_geojson_files(inputs, output):
                 "combine_geojson_files can only handle FeatureCollections, " \
                 "sorry."
             features.extend(geojson['features'])
+            relations.extend(geojson['relations'])
 
-    geojson = dict(type='FeatureCollection', features=features)
+    geojson = dict(type='FeatureCollection', features=features,
+                   relations=relations)
     with open(output, 'w') as fh:
         json.dump(geojson, fh)
 
@@ -524,7 +582,7 @@ class FixtureDataSources(object):
         raise Exception("Unable to load fixtures for host %r, used "
                         "in request for %r." % (p.netloc, url))
 
-    def download(self, urls, output_file, clip):
+    def download(self, urls, output_file, clip, simplify):
         groups = defaultdict(list)
 
         for url in urls:
@@ -539,7 +597,7 @@ class FixtureDataSources(object):
             for source, group in groups.iteritems():
                 source_name = source.__class__.__name__
                 target_file = path_join(tmp, '%s.geojson' % (source_name,))
-                source.download(group, target_file, clip)
+                source.download(group, target_file, clip, simplify)
                 assert path_exists(target_file), \
                     "Failed to download target %r" % (target_file,)
                 geojson_files.append(target_file)
@@ -606,9 +664,9 @@ class FixtureEnvironment(object):
             output_calc_spec[name] = info.props_fn
         return output_calc_spec
 
-    def ensure_fixture_file(self, urls, clip):
+    def ensure_fixture_file(self, urls, clip, simplify):
         canonical_urls = sorted(self._canonicalise(url) for url in urls)
-        test_uuid = _hash(canonical_urls, clip)
+        test_uuid = _hash(canonical_urls, clip, simplify)
         geojson_file = path_join(self.cache_dir, test_uuid + '.geojson')
 
         # first try - download it from the global fixture cache
@@ -625,7 +683,7 @@ class FixtureEnvironment(object):
 
         # second try - generate it from the URLs
         if not path_exists(geojson_file):
-            self.data_sources.download(urls, geojson_file, clip)
+            self.data_sources.download(urls, geojson_file, clip, simplify)
             assert path_exists(geojson_file), \
                 "Ooops, something went wrong downloading %r" % (geojson_file,)
 
@@ -646,13 +704,16 @@ def _load_fixtures(geojson_files):
 
 def _load_fixture(fh):
     js = json.load(fh)
+    relations = js['relations']
     rows = []
     for feature in js['features']:
         fid = feature['id']
         props = feature['properties']
-        rels = feature.get('relations')
-        if rels:
-            props['__relations__'] = rels
+        rel_ids = set(feature.get('relation_ids') or [])
+        if rel_ids:
+            rels = filter(lambda r: r['id'] in rel_ids, relations)
+            if rels:
+                props['__relations__'] = rels
         geom_lnglat = make_shape(feature['geometry'])
         geom_mercator = shapely.ops.transform(
             reproject_lnglat_to_mercator, geom_lnglat)
@@ -718,12 +779,14 @@ class FixtureFeatureFetcher(object):
         raise Exception("unimplemented")
 
 
-def _hash(urls, clip):
+def _hash(urls, clip, simplify):
     m = hashlib.sha256()
     for url in urls:
         m.update(url)
     if clip:
         m.update(clip.wkt)
+    if simplify:
+        m.update("simplify=%f" % (simplify,))
     return m.hexdigest()
 
 
@@ -864,8 +927,8 @@ class OsmFixtureTest(unittest.TestCase):
     def setUp(self):
         self.env = make_fixture_environment()
 
-    def load_fixtures(self, urls, clip=None):
-        geojson_file = self.env.ensure_fixture_file(urls, clip)
+    def load_fixtures(self, urls, clip=None, simplify=None):
+        geojson_file = self.env.ensure_fixture_file(urls, clip, simplify)
 
         if environ.get('VERBOSE'):
             geojson_size = path_getsize(geojson_file)

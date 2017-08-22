@@ -8,7 +8,7 @@ class MissingLocalizedNames(OsmFixtureTest):
         self.load_fixtures([
             'http://www.openstreetmap.org/relation/224951',
             'http://www.openstreetmap.org/relation/61320',
-        ])
+        ], clip=self.tile_bbox(15, 9643, 12327))
 
         self.assert_has_feature(
             15, 9643, 12327, "boundaries",
