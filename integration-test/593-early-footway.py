@@ -29,12 +29,6 @@ class EarlyFootway(OsmFixtureTest):
             'https://www.openstreetmap.org/way/161702316',
         ], 13, 1308, 3166)
 
-    #def test_path_with_designation(self):
-    #    # highway=path, with designation (Ocean Beach south, SF)
-    #    self._run_test([
-    #        'https://www.openstreetmap.org/way/28691787',
-    #    ], 13, 1308, 3166, 'path')
-
     def test_footway_with_name(self):
         # highway=footway, with name (Coastal Trail, Marin)
         self._run_test([
