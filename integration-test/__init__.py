@@ -648,8 +648,10 @@ class FixtureEnvironment(object):
             layers[layer_name] = LayerInfo(min_zoom_fn, props_fn)
 
         # TODO: move this to queries.yaml?
-        label_placement_layers = set([
-            'buildings', 'earth', 'landuse', 'water'])
+        label_placement_layers = {
+            'polygon': set(['buildings', 'earth', 'landuse', 'water']),
+            'linestring': set(['earth', 'landuse', 'water']),
+        }
 
         self.layer_data = layer_data
         self.post_process_data = post_process_data
