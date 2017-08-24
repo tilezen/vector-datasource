@@ -1,41 +1,53 @@
-# http://www.openstreetmap.org/way/264768910
-# Way: One Madison
-test.assert_has_feature(
-    16, 19298, 24633, 'buildings',
-    { 'id': 264768910, 'kind': 'building', 'root_id': type(None) })
-
-# http://www.openstreetmap.org/way/160967738
-test.assert_has_feature(
-    16, 19298, 24633, 'buildings',
-    { 'id': 160967738, 'kind': 'building_part', 'root_id': 264768910 })
-
-#http://www.openstreetmap.org/way/160967739
-test.assert_has_feature(
-    16, 19298, 24633, 'buildings',
-    { 'id': 160967739, 'kind': 'building_part', 'root_id': 264768910 })
+from . import OsmFixtureTest
 
 
-# http://www.openstreetmap.org/relation/6062613
-# Relation: Ferry Building
-test.assert_has_feature(
-    16, 10486, 25326, 'buildings',
-    { 'id': 24460886, 'kind': 'building', 'root_id': type(None) })
+class UnifyBuildingPart(OsmFixtureTest):
+    def test_one_madison(self):
+        # Way: One Madison
+        self.load_fixtures([
+            'http://www.openstreetmap.org/way/264768910', # the building
+            'http://www.openstreetmap.org/way/160967738', # a part
+            'http://www.openstreetmap.org/way/160967739', # a part
+        ])
 
-# http://www.openstreetmap.org/way/404449724
-test.assert_has_feature(
-    16, 10486, 25326, 'buildings',
-    { 'id': 404449724, 'kind': 'building_part', 'root_id': 24460886 })
+        self.assert_has_feature(
+            16, 19298, 24633, 'buildings',
+            {'id': 264768910, 'kind': 'building', 'root_id': type(None)})
 
+        self.assert_has_feature(
+            16, 19298, 24633, 'buildings',
+            {'id': 160967738, 'kind': 'building_part', 'root_id': 264768910})
 
-# http://www.openstreetmap.org/relation/1242762
-# Relation: Waterloo (tube and rail)
-# http://www.openstreetmap.org/relation/238793
-# Relation: Waterloo (tube station)
-# http://www.openstreetmap.org/relation/238792
-# Relation: London Waterloo
-test.assert_has_feature(
-    16, 32747, 21793, 'pois',
-    { 'id': 3638795617, 'root_id': 1242762, 'root_relation_id': type(None) })
-test.assert_has_feature(
-    16, 32747, 21793, 'pois',
-    { 'id': 3638795618, 'root_id': 1242762, 'root_relation_id': type(None) })
+        self.assert_has_feature(
+            16, 19298, 24633, 'buildings',
+            {'id': 160967739, 'kind': 'building_part', 'root_id': 264768910})
+
+    def test_ferry_building(self):
+        # Relation: Ferry Building
+        # note: the relation includes the ways with the IDs tested below.
+        self.load_fixtures(['http://www.openstreetmap.org/relation/6062613'])
+
+        self.assert_has_feature(
+            16, 10486, 25326, 'buildings',
+            {'id': 24460886, 'kind': 'building', 'root_id': type(None)})
+
+        self.assert_has_feature(
+            16, 10486, 25326, 'buildings',
+            {'id': 404449724, 'kind': 'building_part', 'root_id': 24460886})
+
+    # TODO: reinstate this test after the station relations spidering
+    # functions have been ported to python.
+    #def test_waterloo_station(self):
+    #    self.load_fixtures([
+    #        'http://www.openstreetmap.org/relation/1242762', # tube and rail
+    #        'http://www.openstreetmap.org/relation/238793', # tube station
+    #        'http://www.openstreetmap.org/relation/238792', # building
+    #    ])
+
+    #    self.assert_has_feature(
+    #        16, 32747, 21793, 'pois',
+    #        {'id': 3638795617, 'root_id': 1242762, 'root_relation_id': type(None)})
+
+    #    self.assert_has_feature(
+    #        16, 32747, 21793, 'pois',
+    #        {'id': 3638795618, 'root_id': 1242762, 'root_relation_id': type(None)})
