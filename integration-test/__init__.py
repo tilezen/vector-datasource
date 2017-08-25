@@ -641,11 +641,25 @@ class FixtureEnvironment(object):
 
         assert set(layer_props.keys()) == set(layer_min_zoom.keys())
 
+        # TODO: move this to queries.yaml?
+        allowed_shapes = {
+            'boundaries': set(['linestring', 'polygon']),
+            'buildings': set(['point', 'polygon']),
+            'earth': set(['point', 'linestring', 'polygon']),
+            'landuse': set(['linestring', 'polygon']),
+            'places': set(['point']),
+            'pois': set(['point', 'polygon']),
+            'roads': set(['linestring']),
+            'transit': set(['linestring', 'polygon']),
+            'water': set(['point', 'linestring', 'polygon']),
+        }
+
         layers = {}
         for layer_name in layer_props.keys():
             min_zoom_fn = layer_min_zoom[layer_name]
             props_fn = layer_props[layer_name]
-            layers[layer_name] = LayerInfo(min_zoom_fn, props_fn)
+            allowed = allowed_shapes.get(layer_name)
+            layers[layer_name] = LayerInfo(min_zoom_fn, props_fn, allowed)
 
         # TODO: move this to queries.yaml?
         label_placement_layers = {
