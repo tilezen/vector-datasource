@@ -147,8 +147,7 @@ FROM (
        mz_water_min_zoom < {{ zoom + 1 }}))
 {% elif zoom >= 7 %}
     ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
-      (mz_building_min_zoom < {{ zoom + 1 }} OR
-       mz_earth_min_zoom < {{ zoom + 1 }} OR
+      (mz_earth_min_zoom < {{ zoom + 1 }} OR
        mz_landuse_min_zoom < {{ zoom + 1 }} OR
        mz_poi_min_zoom < {{ zoom + 1 }} OR
        mz_transit_level < {{ zoom + 1 }}))
