@@ -886,11 +886,12 @@ class Assertions(object):
             for feature in features:
                 if feature['properties']['id'] == feature_id:
                     shape = make_shape(feature['geometry'])
-                    assert shape.type == exp_geom_type, \
-                        'Unexpected geometry type: %s' % shape.type
+                    if shape.type != exp_geom_type:
+                        self.test.fail('Unexpected geometry type: %s'
+                                       % shape.type)
                     break
             else:
-                assert 0, 'No feature with id: %d found' % feature_id
+                self.test.fail('No feature with id: %d found' % feature_id)
 
 
 def memoize(f):
@@ -964,6 +965,12 @@ class OsmFixtureTest(unittest.TestCase):
     def assert_no_matching_feature(self, z, x, y, layer, props):
         if not self.download_only:
             self.assertions.assert_no_matching_feature(z, x, y, layer, props)
+
+    def assert_feature_geom_type(self, z, x, y, layer, feature_id,
+                                 exp_geom_type):
+        if not self.download_only:
+            self.assertions.assert_feature_geom_type(
+                z, x, y, layer, feature_id, exp_geom_type)
 
     def features_in_tile_layer(self, z, x, y, layer):
         if not self.download_only:
