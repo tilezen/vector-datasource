@@ -329,7 +329,7 @@ def dump_table(conn, typ, clip, simplify):
     # positional accuracy (e.g: when testing tag transforms).
     geom = "way"
     if simplify:
-        geom = "ST_Simplify(%s, %f)" % (geom, simplify)
+        geom = "ST_SimplifyPreserveTopology(%s, %f)" % (geom, simplify)
 
     query = """
     SELECT
@@ -337,12 +337,13 @@ def dump_table(conn, typ, clip, simplify):
       ST_AsGeoJSON(ST_Transform(%(geom)s, 4326)) AS geom,
       to_json(tags) AS tags
     FROM planet_osm_%(typ)s
+    WHERE akeys(tags - ARRAY['created_by', 'source']) <> ARRAY[]::text[]
     """ % dict(typ=typ, geom=geom)
 
     # since we will clip objects to the intersection anyway, we don't need to
     # query anything outside of the clipping shape.
     if clip:
-        query += " WHERE way && ST_Transform(ST_GeomFromText('%s', " \
+        query += " AND way && ST_Transform(ST_GeomFromText('%s', " \
                  "4326), 3857)" % (clip.wkt,)
 
     cur.execute(query)
