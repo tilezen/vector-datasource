@@ -304,8 +304,22 @@ def mz_cycling_network(tags):
 
 
 def mz_get_min_zoom_highway_level_gate(fid, ways):
-    # TODO: implement me!
-    return 18
+    min_zoom = 17
+    for fid, shape, props in ways:
+        highway = props.get('highway')
+        if highway in ('motorway', 'trunk', 'primary', 'motorway_link',
+                       'trunk_link', 'primary_link'):
+            min_zoom = min(min_zoom, 14)
+
+        elif highway in ('secondary', 'tertiary', 'secondary_link',
+                         'tertiary_link'):
+            min_zoom = min(min_zoom, 15)
+
+        elif highway in ('residential', 'service', 'path', 'track', 'footway',
+                         'unclassified'):
+            min_zoom = min(min_zoom, 16)
+
+    return min_zoom
 
 
 def mz_calculate_ferry_level(shape):

@@ -323,6 +323,7 @@ def dump_table(conn, typ, clip, simplify):
     all_relation_ids = set()
     cur = conn.cursor()
     rel = conn.cursor()
+    way = conn.cursor()
 
     # allow the way to be simplified for large geometries where we don't need
     # positional accuracy (e.g: when testing tag transforms).
@@ -391,8 +392,19 @@ def dump_table(conn, typ, clip, simplify):
             geometry=geom,
             properties=tags,
         )
+
         if rels:
             feature['relation_ids'] = rels
+
+        if typ == 'point':
+            way.execute("""
+              SELECT id
+              FROM planet_osm_ways w
+              WHERE nodes && ARRAY[%s::bigint]
+            """, (osm_id,))
+            ways = [int(w[0]) for w in way]
+            feature['used_in_ways'] = ways
+
         features.append(feature)
 
     return features, all_relation_ids
@@ -718,14 +730,19 @@ def _load_fixtures(geojson_files):
     return rows
 
 
+WAY_TYPES = ('LineString', 'MultiLineString', 'Polygon', 'MultiPolygon')
+
+
 def _load_fixture(fh):
     js = json.load(fh)
     relations = js['relations']
     rows = []
+    ways = {}
+    nodes_to_update = []
     for feature in js['features']:
         fid = feature['id']
         props = feature['properties']
-        rel_ids = set(feature.get('relation_ids') or [])
+        rel_ids = set(feature.get('relation_ids', []))
         if rel_ids:
             rels = filter(lambda r: r['id'] in rel_ids, relations)
             if rels:
@@ -734,7 +751,30 @@ def _load_fixture(fh):
         geom_mercator = shapely.ops.transform(
             reproject_lnglat_to_mercator, geom_lnglat)
 
-        rows.append((fid, geom_mercator, props))
+        # save ways that this node is used in to make the connection in a
+        # second pass. this connection allows us to do things such as look up
+        # what kind of highway a gate node is part of.
+        way_ids = feature.get('used_in_ways', [])
+        if way_ids:
+            nodes_to_update.append((props, way_ids))
+
+        row = (fid, geom_mercator, props)
+        if geom_mercator.geom_type in WAY_TYPES and fid >= 0:
+            ways[fid] = row
+
+        rows.append(row)
+
+    # go back over the saved nodes to update and ways, making the links back
+    # to the way features.
+    for node_props, way_ids in nodes_to_update:
+        node_ways = []
+        for way_id in way_ids:
+            way = ways.get(way_id)
+            if way:
+                node_ways.append(way)
+        if node_ways:
+            node_props['__ways__'] = node_ways
+
     return rows
 
 
