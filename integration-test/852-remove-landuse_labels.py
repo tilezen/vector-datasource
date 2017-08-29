@@ -1,2 +1,12 @@
-with test.layers_in_tile(16, 10486, 25325) as layers:
-    test.assertTrue('landuse_labels' not in layers)
+from . import OsmFixtureTest
+
+
+class RemoveLanduseLabels(OsmFixtureTest):
+
+    def test_landuse_labels_layer_no_longer_exists(self):
+        # Label placement Cemetery in landuse - note that we test the
+        # label exists in the landuse layer in test 742.
+        self.load_fixtures(['http://www.openstreetmap.org/way/44580948'])
+
+        with self.layers_in_tile(15, 5471, 12981) as layers:
+            self.assertTrue('landuse_labels' not in layers)

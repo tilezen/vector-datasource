@@ -822,7 +822,6 @@ class FixtureFeatureFetcher(object):
             yield tile_layers.get(layer, [])
         return inner(z, x, y, layer)
 
-    @contextmanager
     def layers_in_tile(self, z, x, y):
         @contextmanager
         def inner(z, x, y):
@@ -1015,6 +1014,12 @@ class OsmFixtureTest(unittest.TestCase):
     def features_in_tile_layer(self, z, x, y, layer):
         if not self.download_only:
             return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
+        else:
+            return EmptyContext()
+
+    def layers_in_tile(self, z, x, y):
+        if not self.download_only:
+            return self.assertions.ff.layers_in_tile(z, x, y)
         else:
             return EmptyContext()
 
