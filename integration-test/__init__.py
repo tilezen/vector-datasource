@@ -42,6 +42,8 @@ from collections import defaultdict
 import subprocess
 import urllib
 import shapefile
+from tilequeue import wof
+from itertools import izip_longest
 
 
 # the Overpass server is used to download data about OSM elements. the
@@ -210,6 +212,10 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
         if path == '__init__.py':
             continue
 
+        # don't load hidden files
+        if path.startswith('.'):
+            continue
+
         pathname = path_join(test_dir, path)
 
         try:
@@ -284,6 +290,27 @@ class FixtureShapeDataObject(
         url = urlparse.urlunparse((
             'file', 'integration-tests', path, None, None, None))
         return url
+
+
+class WOFDataObject(namedtuple("WOFDataObject", "wof_id")):
+
+    def canonical_url(self):
+        slashed = ""
+        # get digits in groups of 3
+        for digits in izip_longest(*([iter(str(self.wof_id))]*3)):
+            if slashed:
+                slashed += "/"
+            for d in digits:
+                if d is not None:
+                    slashed += d
+        url = "https://whosonfirst.mapzen.com/data/%s/%d.geojson" \
+              % (slashed, self.wof_id)
+        return url
+
+
+# minimal implementation of the WOF metadata class to be passed into
+# the WOF data fetcher.
+WOFMeta = namedtuple("WOFMeta", "wof_id hash")
 
 
 class withlog(object):
@@ -612,6 +639,69 @@ class FixtureShapeSource(object):
             combine_geojson_files(jsonfiles, target_file)
 
 
+class WOFSource(object):
+
+    def __init__(self):
+        self.hosts = ('whosonfirst.mapzen.com',)
+
+    def parse(self, url):
+        parts = url.path.split("/")
+        if len(parts) != 6:
+            raise Exception(
+                "Fixture shape URLs should look like: "
+                "https://whosonfirst.mapzen.com/data/858/260/37/"
+                "85826037.geojson, not %r" %
+                (url,))
+        if parts[0] != "" or parts[1] != "data":
+            raise Exception("Malformed fixture shapefile URL")
+        id_str = "".join(parts[2:5])
+        name = id_str + ".geojson"
+        if name != parts[5]:
+            raise Exception("Expected URL to be redundant, but %r doesn't "
+                            "look like %r" % (parts[2:5], parts[5]))
+
+        return WOFDataObject(int(id_str))
+
+    def download(self, objs, target_file, clip, simplify):
+        with tempdir() as tmp:
+            jsonfiles = []
+            for obj in objs:
+                meta = WOFMeta(obj.wof_id, None) # fake the hash; sadness
+                url = obj.canonical_url()
+
+                n = wof.fetch_url_raw_neighbourhood(url, meta, 1)
+                if isinstance(n, wof.NeighbourhoodFailure):
+                    raise Exception("Failed to get WOF data: %s"
+                                    % n.reason)
+
+                geometry = shapely.ops.transform(
+                    reproject_mercator_to_lnglat, n.label_position)
+
+                properties = {
+                    'source': 'whosonfirst.mapzen.com',
+                    'name': n.name,
+                    'min_zoom': n.min_zoom,
+                    'max_zoom': n.max_zoom,
+                    'placetype': n.placetype,
+                }
+                properties.update(n.l10n_names)
+
+                features = [dict(
+                    id=obj.wof_id,
+                    type='Feature',
+                    geometry=mapping(geometry),
+                    properties=properties
+                )]
+                geojson = dict(type='FeatureCollection', features=features)
+
+                jsonfile = path_join(tmp, "%d.geojson" % (obj.wof_id))
+                with open(jsonfile, 'w') as fh:
+                    json.dump(geojson, fh)
+                jsonfiles.append(jsonfile)
+
+            combine_geojson_files(jsonfiles, target_file)
+
+
 class tempdb(object):
 
     def __init__(self, log):
@@ -667,6 +757,7 @@ class FixtureDataSources(object):
             OSMDataSource(base_dir),
             OverpassDataSource(base_dir),
             FixtureShapeSource(base_dir),
+            WOFSource(),
         ]
 
     def _source_for(self, p):
@@ -770,6 +861,7 @@ class FixtureEnvironment(object):
 
         # TODO: move this to queries.yaml?
         label_placement_layers = {
+            'point': set(['earth', 'water']),
             'polygon': set(['buildings', 'earth', 'landuse', 'water']),
             'linestring': set(['earth', 'landuse', 'water']),
         }
