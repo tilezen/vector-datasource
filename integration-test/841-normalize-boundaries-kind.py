@@ -84,91 +84,83 @@ class NormalizeBoundariesKind(OsmFixtureTest):
             16, 10487, 25355, 'boundaries',
             {'id': -2834528, 'kind': 'locality', 'kind_detail': '8'})
 
-    # def test_0008(self):
-    #     # ne data
-    #     # Admin-1 boundary
-    #     self.load_fixtures([])
 
-    #     self.assert_has_feature(
-    #         7, 75, 70, 'boundaries',
-    #         {'id': int, 'kind': 'region', 'kind_detail': '4'})
+class NormalizeBoundariesKindNaturalEarth(OsmFixtureTest):
 
-    # def test_0009(self):
-    #     # Admin-1 statistical boundary
-    #     self.load_fixtures([])
+    def setUp(self):
+        super(NormalizeBoundariesKindNaturalEarth, self).setUp()
+        self.load_fixtures([
+            'file://integration-test/fixtures/'
+            'ne_10m_admin_0_boundary_lines_land/'
+            '841-normalize-boundaries-kind-admin0.shp',
+            'file://integration-test/fixtures/'
+            'ne_10m_admin_1_states_provinces_lines/'
+            '841-normalize-boundaries-kind-admin1.shp',
+        ])
 
-    #     self.assert_has_feature(
-    #         7, 101, 56, 'boundaries',
-    #         {'id': int, 'kind': 'region', 'kind_detail': '4'})
+    def test_admin1(self):
+        # ne data
+        # Admin-1 boundary
+        self.assert_has_feature(
+            7, 75, 70, 'boundaries',
+            {'id': int, 'kind': 'region', 'kind_detail': '4'})
 
-    # def test_0010(self):
-    #     # Admin-1 statistical meta bounds
-    #     self.load_fixtures([])
+    def test_admin1_statistical(self):
+        # Admin-1 statistical boundary
+        self.assert_has_feature(
+            7, 101, 56, 'boundaries',
+            {'id': int, 'kind': 'region', 'kind_detail': '4'})
 
-    #     self.assert_has_feature(
-    #         7, 26, 52, 'boundaries',
-    #         {'id': int, 'kind': 'region', 'kind_detail': '4'})
+    def test_admin1_statistical_meta(self):
+        # Admin-1 statistical meta bounds
+        self.assert_has_feature(
+            7, 26, 52, 'boundaries',
+            {'id': int, 'kind': 'region', 'kind_detail': '4'})
 
-    # def test_0011(self):
-    #     # Admin-1 region boundary
-    #     self.load_fixtures([])
+    def test_admin1_region(self):
+        # Admin-1 region boundary
+        self.assert_has_feature(
+            7, 99, 57, 'boundaries',
+            {'id': int, 'kind': 'macroregion', 'kind_detail': '3'})
 
-    #     self.assert_has_feature(
-    #         7, 99, 57, 'boundaries',
-    #         {'id': int, 'kind': 'macroregion', 'kind_detail': '3'})
+    def test_disputed(self):
+        # Disputed (please verify)
+        self.assert_has_feature(
+            7, 39, 71, 'boundaries',
+            {'id': int, 'kind': 'disputed', 'kind_detail': '2'})
 
-    # def test_0012(self):
-    #     # Disputed (please verify)
-    #     self.load_fixtures([])
+    def test_indefinite(self):
+        # Indefinite (please verify)
+        self.assert_has_feature(
+            7, 20, 44, 'boundaries',
+            {'id': int, 'kind': 'indefinite', 'kind_detail': '2'})
 
-    #     self.assert_has_feature(
-    #         7, 39, 71, 'boundaries',
-    #         {'id': int, 'kind': 'disputed', 'kind_detail': '2'})
+    def test_indeterminant(self):
+        # Indeterminant frontier
+        self.assert_has_feature(
+            7, 91, 50, 'boundaries',
+            {'id': int, 'kind': 'indeterminate', 'kind_detail': '2'})
 
-    # def test_0013(self):
-    #     # Indefinite (please verify)
-    #     self.load_fixtures([])
+    def test_international(self):
+        # International boundary (verify)
+        self.assert_has_feature(
+            7, 67, 37, 'boundaries',
+            {'id': int, 'kind': 'country', 'kind_detail': '2'})
 
-    #     self.assert_has_feature(
-    #         7, 20, 44, 'boundaries',
-    #         {'id': int, 'kind': 'indefinite', 'kind_detail': '2'})
+    def test_lease_limit(self):
+        # Lease limit
+        self.assert_has_feature(
+            7, 86, 45, 'boundaries',
+            {'id': int, 'kind': 'lease_limit', 'kind_detail': '2'})
 
-    # def test_0014(self):
-    #     # Indeterminant frontier
-    #     self.load_fixtures([])
+    def test_line_of_control(self):
+        # Line of control (please verify)
+        self.assert_has_feature(
+            7, 90, 50, 'boundaries',
+            {'id': int, 'kind': 'line_of_control', 'kind_detail': '2'})
 
-    #     self.assert_has_feature(
-    #         7, 91, 50, 'boundaries',
-    #         {'id': int, 'kind': 'indeterminate', 'kind_detail': '2'})
-
-    # def test_0015(self):
-    #     # International boundary (verify)
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 67, 37, 'boundaries',
-    #         {'id': int, 'kind': 'country', 'kind_detail': '2'})
-
-    # def test_0016(self):
-    #     # Lease limit
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 86, 45, 'boundaries',
-    #         {'id': int, 'kind': 'lease_limit', 'kind_detail': '2'})
-
-    # def test_0017(self):
-    #     # Line of control (please verify)
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 90, 50, 'boundaries',
-    #         {'id': int, 'kind': 'line_of_control', 'kind_detail': '2'})
-
-    # def test_0018(self):
-    #     # Overlay limit
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 109, 49, 'boundaries',
-    #         {'id': int, 'kind': 'overlay_limit', 'kind_detail': '2'})
+    def test_overlay(self):
+        # Overlay limit
+        self.assert_has_feature(
+            7, 109, 49, 'boundaries',
+            {'id': int, 'kind': 'overlay_limit', 'kind_detail': '2'})

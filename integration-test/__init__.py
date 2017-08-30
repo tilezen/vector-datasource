@@ -557,7 +557,7 @@ class OverpassDataSource(object):
 
     def __init__(self, base_dir):
         self.base_dir = base_dir
-        self.hosts = ('overpass-api.de')
+        self.hosts = ('overpass-api.de',)
 
     def parse(self, url):
         assert url.path == '/api/interpreter', \

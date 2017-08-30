@@ -75,72 +75,63 @@ class NormalizePlaceKind(OsmFixtureTest):
             16, 10539, 25446, 'places',
             {'id': 3219761323, 'kind': 'locality', 'kind_detail': 'farm'})
 
-    # TODO: add this back when NE fixtures implemented
-    # def test_0010(self):
-    #     # ne historic place
-    #     self.load_fixtures([])
 
-    #     self.assert_has_feature(
-    #         16, 38247, 21826, 'places',
-    #         {'id': int, 'name': 'Chernobyl',
-    #          'kind': 'locality', 'kind_detail': 'hamlet'})
+class NormalizePlaceKindNaturalEarth(OsmFixtureTest):
 
-    # def test_0011(self):
-    #     # ne scientific station
-    #     self.load_fixtures([])
+    def setUp(self):
+        super(NormalizePlaceKindNaturalEarth, self).setUp()
+        self.load_fixtures([
+            'file://integration-test/fixtures/'
+            'ne_10m_populated_places/840-normalize-place-kind.shp',
+        ])
 
-    #     self.assert_has_feature(
-    #         16, 22209, 47255, 'places',
-    #         {'id': int, 'name': 'Elephant Island',
-    #          'kind': 'locality', 'kind_detail': 'scientific_station'})
+    def test_historic_place(self):
+        # ne historic place
+        self.assert_has_feature(
+            16, 38247, 21826, 'places',
+            {'id': int, 'name': 'Chernobyl',
+             'kind': 'locality', 'kind_detail': 'hamlet'})
 
-    # def test_0012(self):
-    #     # ne capitals
-    #     self.load_fixtures([])
+    def test_scientific_station(self):
+        # ne scientific station
+        self.assert_has_feature(
+            16, 22209, 47255, 'places',
+            {'id': int, 'name': 'Elephant Island',
+             'kind': 'locality', 'kind_detail': 'scientific_station'})
 
-    #     self.assert_has_feature(
-    #         7, 109, 49, 'places',
-    #         {'id': int, 'name': 'Seoul',
-    #          'kind': 'locality', 'country_capital': True})
+    def test_country_capital(self):
+        # ne capitals
+        self.assert_has_feature(
+            7, 109, 49, 'places',
+            {'id': int, 'name': 'Seoul',
+             'kind': 'locality', 'country_capital': True})
 
-    # def test_0013(self):
-    #     self.load_fixtures([])
+        self.assert_has_feature(
+            7, 112, 50, 'places',
+            {'id': int, 'name': 'Kyoto',
+             'kind': 'locality', 'country_capital': True})
 
-    #     self.assert_has_feature(
-    #         7, 112, 50, 'places',
-    #         {'id': int, 'name': 'Kyoto',
-    #          'kind': 'locality', 'country_capital': True})
+        self.assert_has_feature(
+            7, 104, 55, 'places',
+            {'id': int, 'name': 'Hong Kong',
+             'kind': 'locality', 'country_capital': True})
 
-    # def test_0014(self):
-    #     self.load_fixtures([])
+    def test_region_capital(self):
+        # ne state_capitals
+        self.assert_has_feature(
+            7, 117, 76, 'places',
+            {'id': int, 'name': 'Sydney',
+             'kind': 'locality', 'region_capital': True})
 
-    #     self.assert_has_feature(
-    #         7, 104, 55, 'places',
-    #         {'id': int, 'name': 'Hong Kong',
-    #          'kind': 'locality', 'country_capital': True})
+        self.assert_has_feature(
+            7, 112, 50, 'places',
+            {'id': int, 'name': 'Osaka',
+             'kind': 'locality', 'region_capital': True})
 
-    # def test_0015(self):
-    #     # ne state_capitals
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 117, 76, 'places',
-    #         {'id': int, 'name': 'Sydney',
-    #          'kind': 'locality', 'region_capital': True})
-
-    # def test_0016(self):
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 112, 50, 'places',
-    #         {'id': int, 'name': 'Osaka',
-    #          'kind': 'locality', 'region_capital': True})
-
-    # def test_0017(self):
-    #     # ne populated place
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 20, 49, 'places',
-    #         {'id': int, 'name': 'San Francisco',
-    #          'kind': 'locality', 'region_capital': type(None), 'country_capital': type(None)})
+    def test_populated_place_not_capital(self):
+        # ne populated place
+        self.assert_has_feature(
+            7, 20, 49, 'places',
+            {'id': int, 'name': 'San Francisco',
+             'kind': 'locality', 'region_capital': type(None),
+             'country_capital': type(None)})
