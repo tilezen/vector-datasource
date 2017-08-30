@@ -19,6 +19,7 @@ from tilequeue.tile import coord_to_bounds
 from tilequeue.process import convert_source_data_to_feature_layers
 from tilequeue.process import process_coord_no_format
 from tilequeue.tile import reproject_lnglat_to_mercator
+from tilequeue.tile import reproject_mercator_to_lnglat
 from shapely.geometry import shape as make_shape
 import shapely.ops
 from shapely.geometry import mapping
@@ -40,6 +41,7 @@ import time
 from collections import defaultdict
 import subprocess
 import urllib
+import shapefile
 
 
 # the Overpass server is used to download data about OSM elements. the
@@ -274,6 +276,16 @@ class OverpassObject(namedtuple("OverpassObject", "raw_query")):
         return url
 
 
+class FixtureShapeDataObject(
+        namedtuple("FixtureShapeDataObject", "table name")):
+
+    def canonical_url(self):
+        path = "/".join(["", "fixtures", self.table, self.name])
+        url = urlparse.urlunparse((
+            'file', 'integration-tests', path, None, None, None))
+        return url
+
+
 class withlog(object):
 
     def __init__(self, log):
@@ -474,6 +486,46 @@ def _download_from_overpass(objs, target_file, clip, simplify, base_dir):
             raise
 
 
+def _convert_shape_to_geojson(shpfile, jsonfile, source, clip, simplify):
+    dbffile = shpfile.replace(".shp", ".dbf")
+    features = []
+
+    with open(shpfile, "rb") as shp:
+        with open(dbffile, "rb") as dbf:
+            sf = shapefile.Reader(shp=shp, dbf=dbf)
+            field_names = [f[0].lower() for f in sf.fields[1:]]
+            gid = 0
+
+            for row in sf.iterShapeRecords():
+                geom_mercator = make_shape(row.shape.__geo_interface__)
+                geom_lnglat = shapely.ops.transform(
+                    reproject_mercator_to_lnglat, geom_mercator)
+                props = dict(zip(field_names, row.record))
+                props['source'] = source
+                gid += 1
+
+                if clip:
+                    geom_lnglat = geom_lnglat.intersection(clip)
+
+                if simplify:
+                    geom_lnglat = geom_lnglat.simplify(simplify)
+
+                if geom_lnglat.is_empty:
+                    continue
+
+                feature = dict(
+                    type='Feature',
+                    id=gid,
+                    geometry=mapping(geom_lnglat),
+                    properties=props
+                )
+                features.append(feature)
+
+    geojson = dict(type='FeatureCollection', features=features)
+    with open(jsonfile, 'w') as fh:
+        json.dump(geojson, fh)
+
+
 class OverpassDataSource(object):
 
     def __init__(self, base_dir):
@@ -519,6 +571,47 @@ class OSMDataSource(object):
                                 self.base_dir)
 
 
+class FixtureShapeSource(object):
+
+    def __init__(self, base_dir):
+        self.base_dir = base_dir
+        self.hosts = ('integration-test',)
+
+    def parse(self, url):
+        parts = url.path.split("/")
+        if len(parts) != 4:
+            raise Exception(
+                "Fixture shape URLs should look like: "
+                "file://integration-test/fixtures/ne_10m_ocean/"
+                "1030-invalid-wkb-polygon.shp, not %r" %
+                (url,))
+        if parts[0] != "" or parts[1] != "fixtures":
+            raise Exception("Malformed fixture shapefile URL")
+        table = parts[2]
+        name = parts[3]
+
+        return FixtureShapeDataObject(table, name)
+
+    def download(self, objs, target_file, clip, simplify):
+        with tempdir() as tmp:
+            jsonfiles = []
+            for obj in objs:
+                jsonfile = path_join(
+                    tmp, "%s_%s.geojson" % (obj.table, obj.name))
+                shpfile = path_join(
+                    self.base_dir, "integration-test", "fixtures",
+                    obj.table, obj.name)
+                if obj.table.startswith("ne_"):
+                    source = "naturalearthdata.com"
+                else:
+                    source = "openstreetmapdata.com"
+                _convert_shape_to_geojson(
+                    shpfile, jsonfile, source, clip, simplify)
+                jsonfiles.append(jsonfile)
+
+            combine_geojson_files(jsonfiles, target_file)
+
+
 class tempdb(object):
 
     def __init__(self, log):
@@ -559,7 +652,7 @@ def combine_geojson_files(inputs, output):
                 "combine_geojson_files can only handle FeatureCollections, " \
                 "sorry."
             features.extend(geojson['features'])
-            relations.extend(geojson['relations'])
+            relations.extend(geojson.get('relations', []))
 
     geojson = dict(type='FeatureCollection', features=features,
                    relations=relations)
@@ -573,6 +666,7 @@ class FixtureDataSources(object):
         self.sources = [
             OSMDataSource(base_dir),
             OverpassDataSource(base_dir),
+            FixtureShapeSource(base_dir),
         ]
 
     def _source_for(self, p):
@@ -788,7 +882,7 @@ class FixtureFeatureFetcher(object):
             fixture_env.label_placement_layers)
         self.fixture_env = fixture_env
 
-    def _generate_tile(self, z, x, y):
+    def _generate_feature_layers(self, z, x, y):
         coord = Coordinate(zoom=z, column=x, row=y)
 
         nominal_zoom = coord.zoom
@@ -798,11 +892,14 @@ class FixtureFeatureFetcher(object):
         feature_layers = convert_source_data_to_feature_layers(
             source_rows, self.fixture_env.layer_data, unpadded_bounds,
             nominal_zoom)
-        processed_feature_layers, extra_data = process_coord_no_format(
+        return process_coord_no_format(
             feature_layers, nominal_zoom, unpadded_bounds,
             self.fixture_env.post_process_data,
             self.fixture_env.output_calc_spec())
 
+    def _generate_tile(self, z, x, y):
+        processed_feature_layers, extra_data = self._generate_feature_layers(
+            z, x, y)
         tile = {}
         for pfl in processed_feature_layers:
             features = []
@@ -830,9 +927,29 @@ class FixtureFeatureFetcher(object):
             yield tile_layers.keys()
         return inner(z, x, y)
 
-    @contextmanager
     def features_in_mvt_layer(self, z, x, y, layer):
-        raise Exception("unimplemented")
+        @contextmanager
+        def inner(z, x, y, layer):
+            pfl, extra = self._generate_feature_layers(z, x, y)
+
+            coord = Coordinate(zoom=z, column=x, row=y)
+            bounds_merc = coord_to_mercator_bounds(coord)
+            bounds_lnglat = coord_to_bounds(coord)
+
+            from cStringIO import StringIO
+            io = StringIO()
+
+            from tilequeue.format import format_mvt
+            format_mvt(io, pfl, z, bounds_merc, bounds_lnglat)
+
+            from mapbox_vector_tile import decode as mvt_decode
+            msg = mvt_decode(io.getvalue())
+
+            data = msg[layer]
+            features = data['features']
+            yield features
+
+        return inner(z, x, y, layer)
 
 
 def _hash(urls, clip, simplify):
@@ -1012,6 +1129,11 @@ class OsmFixtureTest(unittest.TestCase):
             self.assertions.assert_feature_geom_type(
                 z, x, y, layer, feature_id, exp_geom_type)
 
+    def assert_less_than_n_features(self, z, x, y, layer, properties, n):
+        if not self.download_only:
+            self.assertions.assert_less_than_n_features(
+                z, x, y, layer, properties, n)
+
     def features_in_tile_layer(self, z, x, y, layer):
         if not self.download_only:
             return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
@@ -1021,6 +1143,12 @@ class OsmFixtureTest(unittest.TestCase):
     def layers_in_tile(self, z, x, y):
         if not self.download_only:
             return self.assertions.ff.layers_in_tile(z, x, y)
+        else:
+            return EmptyContext()
+
+    def features_in_mvt_layer(self, z, x, y, layer):
+        if not self.download_only:
+            return self.assertions.ff.features_in_mvt_layer(z, x, y, layer)
         else:
             return EmptyContext()
 
