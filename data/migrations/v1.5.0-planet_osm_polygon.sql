@@ -1,6 +1,6 @@
 -- polygon low zoom
 CREATE INDEX IF NOT EXISTS
-  planet_osm_polygon_landuse_poi_transit_geom_7_index
+  planet_osm_polygon_geom_min_zoom_7_index
   ON planet_osm_polygon USING gist(way)
   WHERE
     mz_landuse_min_zoom < 7 OR
@@ -9,7 +9,7 @@ CREATE INDEX IF NOT EXISTS
 
 -- polygon zoom 7 specific query
 CREATE INDEX IF NOT EXISTS
-  planet_osm_polygon_earth_landuse_poi_transit_geom_8_index
+  planet_osm_polygon_geom_min_zoom_8_index
   ON planet_osm_polygon USING gist(way)
   WHERE
     mz_earth_min_zoom < 8 OR
@@ -19,7 +19,7 @@ CREATE INDEX IF NOT EXISTS
 
 -- ladder the rest of the polygon queries
 CREATE INDEX IF NOT EXISTS
-  planet_osm_polygon_building_earth_landuse_poi_transit_water_geom_9_index
+  planet_osm_polygon_geom_min_zoom_9_index
   ON planet_osm_polygon USING gist(way)
   WHERE
     mz_building_min_zoom < 9 OR
@@ -30,7 +30,7 @@ CREATE INDEX IF NOT EXISTS
     mz_water_min_zoom < 9;
 
 CREATE INDEX IF NOT EXISTS
-  planet_osm_polygon_building_earth_landuse_poi_transit_water_geom_12_index
+  planet_osm_polygon_geom_min_zoom_12_index
   ON planet_osm_polygon USING gist(way)
   WHERE
     mz_building_min_zoom < 12 OR
@@ -41,7 +41,7 @@ CREATE INDEX IF NOT EXISTS
     mz_water_min_zoom < 12;
 
 CREATE INDEX IF NOT EXISTS
-  planet_osm_polygon_building_earth_landuse_poi_transit_water_geom_15_index
+  planet_osm_polygon_geom_min_zoom_15_index
   ON planet_osm_polygon USING gist(way)
   WHERE
     mz_building_min_zoom < 15 OR
@@ -52,7 +52,7 @@ CREATE INDEX IF NOT EXISTS
     mz_water_min_zoom < 15;
 
 CREATE INDEX IF NOT EXISTS
-  planet_osm_polygon_building_earth_landuse_poi_transit_water_geom_index
+  planet_osm_polygon_geom_min_zoom_index
   ON planet_osm_polygon USING gist(way)
   WHERE
     mz_building_min_zoom IS NOT NULL OR

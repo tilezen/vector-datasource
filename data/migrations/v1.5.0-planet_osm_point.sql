@@ -1,5 +1,6 @@
 -- ladder the point indexes
-CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geom_6_index
+CREATE INDEX IF NOT EXISTS
+  planet_osm_point_geom_min_zoom_6_index
   ON planet_osm_point USING gist(way)
   WHERE
     mz_building_min_zoom < 6 OR
@@ -8,7 +9,8 @@ CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geo
     mz_poi_min_zoom < 6 OR
     mz_water_min_zoom < 6;
 
-CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geom_9_index
+CREATE INDEX IF NOT EXISTS
+  planet_osm_point_geom_min_zoom_9_index
   ON planet_osm_point USING gist(way)
   WHERE
     mz_building_min_zoom < 9 OR
@@ -17,7 +19,8 @@ CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geo
     mz_poi_min_zoom < 9 OR
     mz_water_min_zoom < 9;
 
-CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geom_12_index
+CREATE INDEX IF NOT EXISTS
+  planet_osm_point_geom_min_zoom_12_index
   ON planet_osm_point USING gist(way)
   WHERE
     mz_building_min_zoom < 12 OR
@@ -26,7 +29,8 @@ CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geo
     mz_poi_min_zoom < 12 OR
     mz_water_min_zoom < 12;
 
-CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geom_15_index
+CREATE INDEX IF NOT EXISTS
+  planet_osm_point_geom_min_zoom_15_index
   ON planet_osm_point USING gist(way)
   WHERE
     mz_building_min_zoom < 15 OR
@@ -35,7 +39,8 @@ CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geo
     mz_poi_min_zoom < 15 OR
     mz_water_min_zoom < 15;
 
-CREATE INDEX IF NOT EXISTS planet_osm_point_building_earth_places_pois_water_geom_index
+CREATE INDEX IF NOT EXISTS
+  planet_osm_point_geom_min_zoom_index
   ON planet_osm_point USING gist(way)
   WHERE
     mz_building_min_zoom IS NOT NULL OR

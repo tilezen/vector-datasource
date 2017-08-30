@@ -1,6 +1,6 @@
 -- only these 2 columns are relevant in lower zoom queries
-CREATE
-  INDEX planet_osm_line_landuse_transit_geom_8_index
+CREATE INDEX
+  planet_osm_line_geom_min_zoom_8_index
   ON planet_osm_line USING gist(way)
   WHERE
     mz_landuse_min_zoom < 8 OR
@@ -8,7 +8,7 @@ CREATE
 
 -- ladder the higher zoom level indexes
 CREATE INDEX IF NOT EXISTS
-  planet_osm_line_earth_landuse_road_transit_water_geom_9_index
+  planet_osm_line_geom_min_zoom_9_index
   ON planet_osm_line USING gist(way)
   WHERE
     mz_earth_min_zoom < 9 OR
@@ -18,7 +18,7 @@ CREATE INDEX IF NOT EXISTS
     mz_water_min_zoom < 9;
 
 CREATE INDEX IF NOT EXISTS
-  planet_osm_line_earth_landuse_road_transit_water_geom_12_index
+  planet_osm_line_geom_min_zoom_12_index
   ON planet_osm_line USING gist(way)
   WHERE
     mz_earth_min_zoom < 12 OR
@@ -28,7 +28,7 @@ CREATE INDEX IF NOT EXISTS
     mz_water_min_zoom < 12;
 
 CREATE INDEX IF NOT EXISTS
-  planet_osm_line_earth_landuse_road_transit_water_geom_15_index
+  planet_osm_line_geom_min_zoom_15_index
   ON planet_osm_line USING gist(way)
   WHERE
     mz_earth_min_zoom < 15 OR
@@ -38,7 +38,7 @@ CREATE INDEX IF NOT EXISTS
     mz_water_min_zoom < 15;
 
 CREATE INDEX IF NOT EXISTS
-  planet_osm_line_earth_landuse_road_transit_water_geom_index
+  planet_osm_line_geom_min_zoom_index
   ON planet_osm_line USING gist(way)
   WHERE
     mz_earth_min_zoom IS NOT NULL OR
