@@ -68,6 +68,7 @@ CREATE INDEX
   planet_osm_polygon_geom_min_zoom_9_index
   ON planet_osm_polygon USING gist(way)
   WHERE
+    mz_boundary_min_zoom < 9 OR
     mz_building_min_zoom < 9 OR
     mz_earth_min_zoom < 9 OR
     mz_landuse_min_zoom < 9 OR
@@ -79,6 +80,7 @@ CREATE INDEX
   planet_osm_polygon_geom_min_zoom_12_index
   ON planet_osm_polygon USING gist(way)
   WHERE
+    mz_boundary_min_zoom < 12 OR
     mz_building_min_zoom < 12 OR
     mz_earth_min_zoom < 12 OR
     mz_landuse_min_zoom < 12 OR
@@ -90,6 +92,7 @@ CREATE INDEX
   planet_osm_polygon_geom_min_zoom_15_index
   ON planet_osm_polygon USING gist(way)
   WHERE
+    mz_boundary_min_zoom < 15 OR
     mz_building_min_zoom < 15 OR
     mz_earth_min_zoom < 15 OR
     mz_landuse_min_zoom < 15 OR
@@ -101,6 +104,7 @@ CREATE INDEX
   planet_osm_polygon_geom_min_zoom_index
   ON planet_osm_polygon USING gist(way)
   WHERE
+    mz_boundary_min_zoom IS NOT NULL OR
     mz_building_min_zoom IS NOT NULL OR
     mz_earth_min_zoom IS NOT NULL OR
     mz_landuse_min_zoom IS NOT NULL OR
