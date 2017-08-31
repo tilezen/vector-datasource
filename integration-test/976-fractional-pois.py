@@ -10,35 +10,6 @@ class FractionalPois(OsmFixtureTest):
             15, 5242, 12663, 'pois',
             {'id': 332223480, 'min_zoom': 15.31})
 
-    # def test_0002(self):
-    #     # Test that source and min_zoom are set properly for boundaries, roads,
-    #     # transit, and water
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         5, 9, 12, 'boundaries',
-    #         {'min_zoom': 2, 'id': int,
-    #          'source': 'naturalearthdata.com',
-    #          'kind': 'region'})
-
-    # def test_0003(self):
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 37, 48, 'roads',
-    #         {'min_zoom': 5, 'id': int, 'shield_text': '95',
-    #          'source': 'naturalearthdata.com'})
-
-    # def test_0004(self):
-    #     # There is no transit data from Natural Earth
-    #     self.load_fixtures([])
-
-    #     self.assert_has_feature(
-    #         7, 36, 50, 'water',
-    #         {'min_zoom': 0, 'id': int,
-    #          'source': 'naturalearthdata.com',
-    #          'name': 'John H. Kerr Reservoir'})
-
     def test_state_boundary(self):
         self.load_fixtures([
             'https://www.openstreetmap.org/relation/224951',
@@ -74,12 +45,50 @@ class FractionalPois(OsmFixtureTest):
              'source': 'openstreetmap.org',
              'name': 'Vermonter'})
 
-    # def test_0008(self):
-    #     self.load_fixtures([])
 
-    #     self.assert_has_feature(
-    #         9, 150, 192, 'water',
-    #         {'min_zoom': 0,
-    #          'source': 'openstreetmapdata.com',
-    #          'kind': 'ocean',
-    #          'name': type(None)})
+class FractionalPoisNe(OsmFixtureTest):
+
+    def setUp(self):
+        super(FractionalPoisNe, self).setUp()
+
+        fixtures = []
+        for table in ('ne_10m_admin_1_states_provinces_lines',
+                      'ne_10m_lakes',
+                      'ne_10m_roads',
+                      'water_polygons'):
+            fixtures.append(
+                'file://integration-test/fixtures/' +
+                table +
+                '/976-fractional-pois.shp')
+
+        self.load_fixtures(fixtures)
+
+    def test_boundaries(self):
+        # Test that source and min_zoom are set properly for boundaries, roads,
+        # transit, and water
+        self.assert_has_feature(
+            5, 9, 12, 'boundaries',
+            {'min_zoom': 2, 'id': int,
+             'source': 'naturalearthdata.com',
+             'kind': 'region'})
+
+    def test_roads(self):
+        self.assert_has_feature(
+            7, 37, 48, 'roads',
+            {'min_zoom': 5, 'id': int, 'shield_text': '95',
+             'source': 'naturalearthdata.com'})
+
+    def test_water(self):
+        # There is no transit data from Natural Earth
+        self.assert_has_feature(
+            7, 36, 50, 'water',
+            {'min_zoom': 0, 'id': int,
+             'source': 'naturalearthdata.com',
+             'name': 'John H. Kerr Reservoir'})
+
+        self.assert_has_feature(
+            9, 150, 192, 'water',
+            {'min_zoom': 0,
+             'source': 'openstreetmapdata.com',
+             'kind': 'ocean',
+             'name': type(None)})
