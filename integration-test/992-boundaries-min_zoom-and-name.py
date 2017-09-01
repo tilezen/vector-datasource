@@ -42,7 +42,8 @@ class BoundariesMinZoomAndNameNe(OsmFixtureTest):
         self.load_fixtures([
             'file://integration-test/fixtures/'
             'ne_10m_admin_1_states_provinces_lines/'
-            '992-ne_10m_admin_1_states_provinces_lines-nv-ca-europe-mexico.shp',
+            '992-ne_10m_admin_1_states_provinces_lines-nv-ca-'
+            'europe-mexico.shp',
         ])
 
         self.assert_has_feature(
@@ -58,7 +59,8 @@ class BoundariesMinZoomAndNameNe(OsmFixtureTest):
         self.load_fixtures([
             'file://integration-test/fixtures/'
             'ne_10m_admin_1_states_provinces_lines/'
-            '992-ne_10m_admin_1_states_provinces_lines-nv-ca-europe-mexico.shp',
+            '992-ne_10m_admin_1_states_provinces_lines-nv-ca'
+            '-europe-mexico.shp',
         ])
 
         # Germany region (scalerank=3, 1:10m NE only)

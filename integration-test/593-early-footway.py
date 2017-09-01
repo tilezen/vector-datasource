@@ -17,7 +17,8 @@ class EarlyFootway(OsmFixtureTest):
         ], 11, 345, 790)
 
     def test_footway_unnamed_regional(self):
-        # highway=footway, with name, and route regional (Rodeo Valley Trail, Marin)
+        # highway=footway, with name, and route regional (Rodeo Valley
+        # Trail, Marin)
         self._run_test([
             'https://www.openstreetmap.org/way/239141479',
             'https://www.openstreetmap.org/relation/2684235',

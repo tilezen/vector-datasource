@@ -666,7 +666,8 @@ class WOFSource(object):
         with tempdir() as tmp:
             jsonfiles = []
             for obj in objs:
-                meta = WOFMeta(obj.wof_id, None) # fake the hash; sadness
+                # fake the hash; sadness
+                meta = WOFMeta(obj.wof_id, None)
                 url = obj.canonical_url()
 
                 n = wof.fetch_url_raw_neighbourhood(url, meta, 1)

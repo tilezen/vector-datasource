@@ -23,7 +23,7 @@ dependencies:
 test:
   override:
     - pip install -U flake8
-    - find . -not -path '*/.eggs/*' -not -path '*/integration-test*' -not -path '*/data/*' -name '*.py' | xargs flake8
+    - find . -not -path '*/.eggs/*' -not -path '*/data/*' -name '*.py' | xargs flake8
     - python setup.py test
     - python integration-test/__init__.py
 

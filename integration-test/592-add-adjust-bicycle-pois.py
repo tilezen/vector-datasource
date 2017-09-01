@@ -120,7 +120,8 @@ class AddAdjustBicyclePois(OsmFixtureTest):
         self.assert_has_feature(
             16, 10413, 22135, 'pois',
             {'kind': 'bicycle_parking',
-             'capacity': 100, 'covered': True, 'fee': False, 'access': 'customers',
+             'capacity': 100, 'covered': True, 'fee': False,
+             'access': 'customers',
              'operator': 'Pemberton Gateway Village Suites'})
 
         # bicycle parking with capacity, covered, fee, maxstay, operator
@@ -129,8 +130,8 @@ class AddAdjustBicyclePois(OsmFixtureTest):
         self.assert_has_feature(
             16, 31627, 21244, 'pois',
             {'kind': 'bicycle_parking',
-             'capacity': 200, 'covered': True, 'fee': False, 'maxstay': '2 days',
-             'operator': 'Dublin City Council'})
+             'capacity': 200, 'covered': True, 'fee': False,
+             'maxstay': '2 days', 'operator': 'Dublin City Council'})
 
         # bicycle parking with capacity and cyclestreets ID.
         self.load_fixtures(['http://www.openstreetmap.org/node/1116224894'])

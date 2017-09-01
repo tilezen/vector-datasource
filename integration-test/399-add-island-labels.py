@@ -189,7 +189,8 @@ class AddIslandLabels(OsmFixtureTest):
 
         self.assert_has_feature(
             12, 654, 1581, 'earth',
-            {'kind': 'island', 'label_placement': True, 'name': 'Angel Island'})
+            {'kind': 'island', 'label_placement': True,
+             'name': 'Angel Island'})
 
     def test_small_island_label_polygon_great_gull(self):
         # SMALL island labels (from place polygons)
@@ -208,7 +209,8 @@ class AddIslandLabels(OsmFixtureTest):
 
         self.assert_has_feature(
             16, 19659, 24507, 'earth',
-            {'kind': 'island', 'label_placement': True, 'name': 'Goose Island'})
+            {'kind': 'island', 'label_placement': True,
+             'name': 'Goose Island'})
 
     def test_small_island_label_polygon_rincon(self):
         # SMALL island labels (from place polygons)

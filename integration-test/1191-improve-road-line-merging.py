@@ -44,7 +44,6 @@ class ImproveRoadLineMerging(OsmFixtureTest):
             'Expected at most %d coordinates, found %d in total' %
             (max_coords, total_coords))
 
-
     def test_pitkin_ave_nyc(self):
         # Pitkin Ave, NYC
         #
@@ -126,9 +125,10 @@ class ImproveRoadLineMerging(OsmFixtureTest):
         # at zoom < 13, so a z13 tile should still have it.
         self.load_fixtures([
             'http://www.openstreetmap.org/way/421314247',
-            'http://www.openstreetmap.org/way/421314246', # bridge
+            'http://www.openstreetmap.org/way/421314246',  # bridge
             'http://www.openstreetmap.org/way/9678799',
-            'http://www.openstreetmap.org/relation/1109565', # relation for ND 200
+            # relation for ND 200
+            'http://www.openstreetmap.org/relation/1109565',
         ], clip=self.tile_bbox(13, 1865, 2866))
 
         with self.features_in_tile_layer(13, 1865, 2866, 'roads') as features:
@@ -146,7 +146,7 @@ class ImproveRoadLineMerging(OsmFixtureTest):
                         count_nd_200 += len(feature['geometry']['coordinates'])
                     else:
                         count_nd_200 += 1
-                    if props.get('is_bridge') == True:
+                    if props.get('is_bridge') is True:
                         count_bridge += 1
 
             self.assertTrue(

@@ -15,7 +15,8 @@ class BasicOutdoorPois(OsmFixtureTest):
 
         self.assert_has_feature(
             16, 10481, 25335, 'pois',
-            {'id': 3443701422, 'kind': 'bicycle_repair_station', 'min_zoom': 18})
+            {'id': 3443701422, 'kind': 'bicycle_repair_station',
+             'min_zoom': 18})
 
     def test_dive_centre(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/2910259124'])

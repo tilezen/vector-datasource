@@ -7,7 +7,7 @@ class DuplicatePoints(OsmFixtureTest):
         last_coord = coords[0]
         for i in range(1, len(coords)):
             coord = coords[i]
-            assertFalse(
+            self.assertFalse(
                 coord == last_coord,
                 'Coordinate %r (at %d) == %r (at %d), but coordinates should '
                 'not be repeated.' % (coord, i, last_coord, i - 1))
@@ -28,6 +28,7 @@ class DuplicatePoints(OsmFixtureTest):
 
         self.load_fixtures([overpass + query])
 
+        num_tested = 0
         with self.features_in_tile_layer(z, x, y, 'roads') as features:
             for feature in features:
                 gtype = feature['geometry']['type']
@@ -35,7 +36,12 @@ class DuplicatePoints(OsmFixtureTest):
                 if gtype == 'LineString':
                     self._assert_no_repeated_points(
                         feature['geometry']['coordinates'])
+                    num_tested += 1
 
                 elif gtype == 'MultiLineString':
                     for linestring in feature['geometry']['coordinates']:
                         self._assert_no_repeated_points(linestring)
+                    num_tested += 1
+
+        self.assertTrue(num_tested != 0,
+                        "Expected at least one testable feature.")

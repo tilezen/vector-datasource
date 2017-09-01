@@ -24,7 +24,8 @@ class RoadSortKeysBridges(OsmFixtureTest):
         self.assert_has_feature(
             16, 11265, 26221, "roads",
             {"kind": "major_road", "kind_detail": "primary", "id": 399640204,
-             "name": "North Los Coyotes Diagonal", "is_bridge": True, "sort_rank": 430})
+             "name": "North Los Coyotes Diagonal", "is_bridge": True,
+             "sort_rank": 430})
 
     def test_secondary_bridge(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/27613581'])
@@ -47,8 +48,8 @@ class RoadSortKeysBridges(OsmFixtureTest):
 
         self.assert_has_feature(
             16, 10738, 24989, "roads",
-            {"kind": "minor_road", "kind_detail": "residential", "id": 162038104,
-             "name": "Woodwardia Pl.", "sort_rank": 410})
+            {"kind": "minor_road", "kind_detail": "residential",
+             "id": 162038104, "name": "Woodwardia Pl.", "sort_rank": 410})
 
     def test_service_bridge(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/232303398'])

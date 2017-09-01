@@ -43,7 +43,7 @@ class WaterBoundariesSlow(OsmFixtureTest):
                     if geom_type in ['Polygon', 'MultiPolygon']:
                         num_polygons += 1
 
-                    elif boundary == True:
+                    elif boundary is True:
                         num_boundaries += 1
 
                 self.assertFalse(

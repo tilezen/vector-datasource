@@ -3,7 +3,7 @@ from . import OsmFixtureTest
 
 class CliffAreteRidgeValley(OsmFixtureTest):
     def test_cliff(self):
-        #cliff in Yosemite
+        # cliff in Yosemite
         self.load_fixtures(['https://www.openstreetmap.org/way/291684864'])
 
         self.assert_has_feature(
@@ -12,7 +12,7 @@ class CliffAreteRidgeValley(OsmFixtureTest):
              "sort_rank": 227})
 
     def test_arete(self):
-        #arete in Yosemite
+        # arete in Yosemite
         self.load_fixtures(['https://www.openstreetmap.org/way/375271242'])
 
         self.assert_has_feature(

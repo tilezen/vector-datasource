@@ -29,8 +29,8 @@ class InclusivePois(OsmFixtureTest):
 
     def test_social_facilities(self):
         # amenity=social_facility + social_facility=*
-        # also with social_facility:for -> for and turned into a list to make it
-        # easier to consume.
+        # also with social_facility:for -> for and turned into a list to make
+        # it easier to consume.
         self._run_test(
             'https://www.openstreetmap.org/node/1126947892',
             '16/10480/25332', {'kind': 'social_facility', 'for': ['aids']})

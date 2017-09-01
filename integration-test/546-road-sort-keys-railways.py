@@ -48,24 +48,24 @@ class RoadSortKeysRailways(OsmFixtureTest):
 
         self.assert_has_feature(
             16, 13353, 25941, "roads",
-            {"kind": "rail", "kind_detail": "rail", "service": "spur", "id": 135403703,
-             "sort_rank": 361})
+            {"kind": "rail", "kind_detail": "rail", "service": "spur",
+             "id": 135403703, "sort_rank": 361})
 
     def test_siding(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/148018328'])
 
         self.assert_has_feature(
             16, 10485, 25331, "roads",
-            {"kind": "rail", "kind_detail": "rail", "service": "siding", "id": 148018328,
-             "sort_rank": 361})
+            {"kind": "rail", "kind_detail": "rail", "service": "siding",
+             "id": 148018328, "sort_rank": 361})
 
     def test_yard(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/119709585'])
 
         self.assert_has_feature(
             16, 10485, 25331, "roads",
-            {"kind": "rail", "kind_detail": "rail", "service": "yard", "id": 119709585,
-             "sort_rank": 359})
+            {"kind": "rail", "kind_detail": "rail", "service": "yard",
+             "id": 119709585, "sort_rank": 359})
 
     def test_crossover(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/119695339'])

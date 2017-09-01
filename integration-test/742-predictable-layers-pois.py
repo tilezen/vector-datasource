@@ -191,7 +191,8 @@ class PredictableLayersPois(OsmFixtureTest):
         # Label placement nature_reserve in landuse
         self.assert_no_matching_feature(
             15, 5766, 13111, 'landuse',
-            {'id': 40260866, 'kind': 'nature_reserve', 'label_placement': True})
+            {'id': 40260866, 'kind': 'nature_reserve',
+             'label_placement': True})
 
     def test_nature_reserve_node(self):
         # Node:1262562806 nature_reserve in POIS
@@ -262,7 +263,8 @@ class PredictableLayersPois(OsmFixtureTest):
         # Label placement protected_area in landuse
         self.assert_no_matching_feature(
             15, 5249, 12701, 'landuse',
-            {'id': 296573403, 'kind': 'protected_area', 'label_placement': True})
+            {'id': 296573403, 'kind': 'protected_area',
+             'label_placement': True})
 
     def test_protected_area_node(self):
         # boundary = protected_area in POIS
@@ -336,7 +338,8 @@ class PredictableLayersPois(OsmFixtureTest):
         # Label placement village_green in landuse
         self.assert_has_feature(
             16, 24002, 36987, 'landuse',
-            {'id': 128479579, 'kind': 'village_green', 'label_placement': True})
+            {'id': 128479579, 'kind': 'village_green',
+             'label_placement': True})
 
     def test_village_green_node(self):
         # Node:3199567035 village_green in POIS
@@ -357,7 +360,8 @@ class PredictableLayersPois(OsmFixtureTest):
         # Label placement wastewater_plant in landuse
         self.assert_no_matching_feature(
             15, 5243, 12669, 'landuse',
-            {'id': 239634932, 'kind': 'wastewater_plant', 'label_placement': True})
+            {'id': 239634932, 'kind': 'wastewater_plant',
+             'label_placement': True})
 
     def test_wastewater_plant_node(self):
         # Node:2838226695 wastewater_plant in POIS
@@ -399,7 +403,8 @@ class PredictableLayersPois(OsmFixtureTest):
         # Label placement winter_sports in landuse
         self.assert_no_matching_feature(
             15, 5470, 12530, 'landuse',
-            {'id': 317721523, 'kind': 'winter_sports', 'label_placement': True})
+            {'id': 317721523, 'kind': 'winter_sports',
+             'label_placement': True})
 
     def test_winter_sports_node(self):
         # Node:4042754024 winter_sports in POIS

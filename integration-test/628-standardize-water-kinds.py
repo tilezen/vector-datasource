@@ -3,15 +3,15 @@ from . import OsmFixtureTest
 
 class StandardizeWaterKinds(OsmFixtureTest):
     def test_great_salt_lake_ne(self):
-       # ne_10m_lakes gid 1298: Great Salt Lake, UT
-       self.load_fixtures([
-           'file://integration-test/fixtures/'
-           'ne_10m_lakes/628-standardize-water-kinds.shp',
-       ])
+        # ne_10m_lakes gid 1298: Great Salt Lake, UT
+        self.load_fixtures([
+            'file://integration-test/fixtures/'
+            'ne_10m_lakes/628-standardize-water-kinds.shp',
+        ])
 
-       self.assert_has_feature(
-           7, 23, 47, 'water',
-           {'kind': 'lake', 'alkaline': True})
+        self.assert_has_feature(
+            7, 23, 47, 'water',
+            {'kind': 'lake', 'alkaline': True})
 
     def test_reservoir(self):
         # Francisco Reservoir, SF

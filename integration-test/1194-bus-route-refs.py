@@ -39,11 +39,13 @@ class BusRouteRefs(OsmFixtureTest):
              'all_bus_shield_texts': ['3', '3']})
 
     def test_full_lists_disappear_by_zoom_12(self):
-        # make sure the all_* lists are gone by zoom 12 on major roads, but the "most
-        # important", singular network & shield text remain at earlier zooms
+        # make sure the all_* lists are gone by zoom 12 on major roads, but
+        # the "most important", singular network & shield text remain at
+        # earlier zooms
         #
-        # note that it doesn't matter what the bus shield is - that's data-dependent.
-        # for the purposes of the test, we only care that there _is_ one.
+        # note that it doesn't matter what the bus shield is - that's
+        # data-dependent. for the purposes of the test, we only care that
+        # there _is_ one.
         self.load_fixtures(['http://www.openstreetmap.org/way/225516711',
                             'http://www.openstreetmap.org/relation/2980505',
                             'http://www.openstreetmap.org/relation/2980504'])

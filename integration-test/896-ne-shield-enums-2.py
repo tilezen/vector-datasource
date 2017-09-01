@@ -50,4 +50,4 @@ class NeShieldEnums2(OsmFixtureTest):
             # but not name, ref or all_*
             for prop in ['name', 'ref', 'all_networks', 'all_shield_texts']:
                 self.assert_no_matching_feature(
-                    z, x, y, 'roads', { prop: None })
+                    z, x, y, 'roads', {prop: None})

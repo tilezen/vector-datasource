@@ -63,7 +63,6 @@ class PeakKindTileRank(OsmFixtureTest):
             'http://www.openstreetmap.org/node/358914751',
         ])
 
-
         with self.features_in_tile_layer(11, 420, 779, 'pois') as features:
             def assert_peak(rank, elevation, name):
                 properties = {'kind': 'peak', 'elevation': elevation,
@@ -97,8 +96,9 @@ class PeakKindTileRank(OsmFixtureTest):
             'https://www.openstreetmap.org/node/774446224',
         ])
 
-        with self.features_in_tile_layer(16, 12372, 26269, 'pois') \
-             as features:
+        with self.features_in_tile_layer(
+                16, 12372, 26269, 'pois') as features:
+
             num = count_matching(features, {'kind': 'peak'})
             self.assertFalse(
                 num != 7,
@@ -112,8 +112,8 @@ class PeakKindTileRank(OsmFixtureTest):
             'https://www.openstreetmap.org/node/348179123',
         ])
 
-        with self.features_in_tile_layer(12, 662, 1443, 'pois') \
-             as features:
+        with self.features_in_tile_layer(
+                12, 662, 1443, 'pois') as features:
             def assert_peak(rank_spec, elevation, kind, name):
                 if isinstance(rank_spec, int):
                     possible_ranks = [rank_spec]

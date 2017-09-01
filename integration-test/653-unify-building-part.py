@@ -5,9 +5,9 @@ class UnifyBuildingPart(OsmFixtureTest):
     def test_one_madison(self):
         # Way: One Madison
         self.load_fixtures([
-            'http://www.openstreetmap.org/way/264768910', # the building
-            'http://www.openstreetmap.org/way/160967738', # a part
-            'http://www.openstreetmap.org/way/160967739', # a part
+            'http://www.openstreetmap.org/way/264768910',  # the building
+            'http://www.openstreetmap.org/way/160967738',  # a part
+            'http://www.openstreetmap.org/way/160967739',  # a part
         ])
 
         self.assert_has_feature(
@@ -35,19 +35,19 @@ class UnifyBuildingPart(OsmFixtureTest):
             16, 10486, 25326, 'buildings',
             {'id': 404449724, 'kind': 'building_part', 'root_id': 24460886})
 
-    # TODO: reinstate this test after the station relations spidering
-    # functions have been ported to python.
-    #def test_waterloo_station(self):
-    #    self.load_fixtures([
-    #        'http://www.openstreetmap.org/relation/1242762', # tube and rail
-    #        'http://www.openstreetmap.org/relation/238793', # tube station
-    #        'http://www.openstreetmap.org/relation/238792', # building
-    #    ])
+    def test_waterloo_station(self):
+        self.load_fixtures([
+            'http://www.openstreetmap.org/relation/1242762',  # tube and rail
+            'http://www.openstreetmap.org/relation/238793',   # tube station
+            'http://www.openstreetmap.org/relation/238792',   # building
+        ])
 
-    #    self.assert_has_feature(
-    #        16, 32747, 21793, 'pois',
-    #        {'id': 3638795617, 'root_id': 1242762, 'root_relation_id': type(None)})
+        self.assert_has_feature(
+            16, 32747, 21793, 'pois',
+            {'id': 3638795617, 'root_id': 1242762,
+             'root_relation_id': type(None)})
 
-    #    self.assert_has_feature(
-    #        16, 32747, 21793, 'pois',
-    #        {'id': 3638795618, 'root_id': 1242762, 'root_relation_id': type(None)})
+        self.assert_has_feature(
+            16, 32747, 21793, 'pois',
+            {'id': 3638795618, 'root_id': 1242762,
+             'root_relation_id': type(None)})

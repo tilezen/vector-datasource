@@ -33,8 +33,9 @@ class MergeSameRoads(OsmFixtureTest):
 
             for road in roads:
                 props = frozenset(_freeze(road['properties']))
-                if props in features:
-                    test.fail('Duplicate properties %r in roads layer, but '
-                              'properties should be unique.'
-                              % road['properties'])
+                self.assertFalse(
+                    props in features,
+                    'Duplicate properties %r in roads layer, but '
+                    'properties should be unique.'
+                    % road['properties'])
                 features.add(props)

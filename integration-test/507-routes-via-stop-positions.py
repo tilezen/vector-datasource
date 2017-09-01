@@ -77,7 +77,6 @@ class RoutesViaStopPositions(OsmFixtureTest):
                 '54-57',  # Vermonter
             ])
 
-
     def test_camden_station(self):
         self._load(
             13, 2352, 3122,
@@ -116,7 +115,8 @@ class RoutesViaStopPositions(OsmFixtureTest):
                 '79-80',  # Carolinian
                 '19-20',  # Crescent
                 '600-674',  # Keystone Service
-                '82-198',  # Northeast Regional (Boston/Springfield & Lynchburg)
+                # Northeast Regional (Boston/Springfield & Lynchburg)
+                '82-198',
                 '89-90',  # Palmetto
                 'Chestnut Hill West Line',  # SEPTA - Chestnut Hill West Line
                 'Cynwyd Line',  # SEPTA - Cynwyd Line

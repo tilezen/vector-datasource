@@ -24,7 +24,8 @@ class RoadSortKeysTunnel(OsmFixtureTest):
         self.assert_has_feature(
             16, 17563, 25792, "roads",
             {"kind": "major_road", "kind_detail": "trunk", "id": 277441866,
-             "name": "Gatlinburg Spur Road (north)", "is_tunnel": True, "sort_rank": 331})
+             "name": "Gatlinburg Spur Road (north)", "is_tunnel": True,
+             "sort_rank": 331})
 
     def test_primary_level_0(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/117837633'])
@@ -55,8 +56,9 @@ class RoadSortKeysTunnel(OsmFixtureTest):
 
         self.assert_has_feature(
             16, 16808, 24362, "roads",
-            {"kind": "minor_road", "kind_detail": "residential", "id": 56393654,
-             "name": "S Paulina St.", "is_tunnel": True, "sort_rank": 310})
+            {"kind": "minor_road", "kind_detail": "residential",
+             "id": 56393654, "name": "S Paulina St.", "is_tunnel": True,
+             "sort_rank": 310})
 
     def test_service_level_0(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/190835369'])

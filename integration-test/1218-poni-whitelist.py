@@ -34,9 +34,9 @@ class PoniWhitelist(OsmFixtureTest):
         # min_zoom: 18
         self.load_fixtures(['https://www.openstreetmap.org/node/3951215438'])
 
-        #self.assert_no_matching_feature(
-        #    15, 5239, 12672, 'pois',
-        #    {'id': 3951215438})
+        # self.assert_no_matching_feature(
+        #     15, 5239, 12672, 'pois',
+        #     {'id': 3951215438})
 
         self.assert_has_feature(
             16, 10479, 25345, 'pois',
