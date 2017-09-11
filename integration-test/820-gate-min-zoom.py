@@ -7,13 +7,13 @@ class GateMinZoom(OsmFixtureTest):
     def test_gate_on_secondary(self):
         # Gate on secondary road
         self.load_fixtures([
-            'http://www.openstreetmap.org/node/3608363612',
-            'http://www.openstreetmap.org/way/83473200',
+            'https://www.openstreetmap.org/node/5074813186',
+            'https://www.openstreetmap.org/way/520725578',
         ])
 
         self.assert_has_feature(
             15, 5528, 12649, 'pois',
-            {'id': 3608363612, 'kind': 'gate', 'min_zoom': 15})
+            {'id': 5074813186, 'kind': 'gate', 'min_zoom': 15})
 
     def test_gate_on_minor_road(self):
         # Gate on minor road
