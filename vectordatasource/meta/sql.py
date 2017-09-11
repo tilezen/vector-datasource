@@ -32,6 +32,8 @@ LAYER_TABLES = {
     'landuse': [
         'planet_osm_line',
         'planet_osm_polygon',
+        'ne_50m_urban_areas',
+        'ne_10m_urban_areas',
     ],
     'places': [
         'ne_10m_populated_places',

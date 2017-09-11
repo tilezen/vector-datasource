@@ -118,6 +118,14 @@ UPDATE ne_10m_populated_places
   SET mz_places_min_zoom = mz_calculate_min_zoom_places(ne_10m_populated_places.*)
   WHERE mz_calculate_min_zoom_places(ne_10m_populated_places.*) IS NOT NULL;
 
+UPDATE ne_50m_urban_areas
+  SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(ne_50m_urban_areas.*)
+  WHERE mz_calculate_min_zoom_landuse(ne_50m_urban_areas.*) IS NOT NULL;
+
+UPDATE ne_10m_urban_areas
+  SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(ne_10m_urban_areas.*)
+  WHERE mz_calculate_min_zoom_landuse(ne_10m_urban_areas.*) IS NOT NULL;
+
 UPDATE water_polygons SET mz_label_placement = ST_PointOnSurface(the_geom);
 UPDATE land_polygons SET mz_label_placement = ST_PointOnSurface(the_geom);
 UPDATE ne_110m_ocean SET mz_label_placement = ST_PointOnSurface(the_geom);
