@@ -216,24 +216,6 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
         if path.startswith('.'):
             continue
 
-        pathname = path_join(test_dir, path)
-
-        try:
-            f = open(pathname, 'U')
-
-            # TODO: take this out after all the tests have been converted!
-            new_test = False
-            while True:
-                line = f.readline()
-                if not line.startswith('#'):
-                    new_test = (line == 'from . import FixtureTest\n')
-                    break
-            if not new_test:
-                continue
-        finally:
-            if f:
-                f.close()
-
         mod = import_module(test_dir + '.' + path.rsplit('.', 1)[0])
 
         # pass a parameter to FixtureTest telling it whether or not to
