@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WinterSportsResorts(OsmFixtureTest):
+class WinterSportsResorts(FixtureTest):
     def test_heavenly_mountain_resort(self):
         # Heavenly Mountain Resort NV/CA
         self.load_fixtures(['https://www.openstreetmap.org/way/317721523'])

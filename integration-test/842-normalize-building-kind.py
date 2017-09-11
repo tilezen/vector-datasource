@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizeBuildingKind(OsmFixtureTest):
+class NormalizeBuildingKind(FixtureTest):
     def test_office(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/431358377'])
 

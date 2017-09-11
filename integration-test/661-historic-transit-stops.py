@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class HistoricTransitStops(OsmFixtureTest):
+class HistoricTransitStops(FixtureTest):
     def test_historic_railway_stop(self):
         # Check if historic stops are shown in pois and in transit layers.
         # Historic railway stop

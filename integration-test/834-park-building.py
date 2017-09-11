@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ParkBuilding(OsmFixtureTest):
+class ParkBuilding(FixtureTest):
     def test_park_with_building_tags_should_appear_in_landuse(self):
         # This test make sure park polygons with addresses still end up in
         # the landuse layer

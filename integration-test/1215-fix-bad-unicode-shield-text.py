@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class FixBadUnicodeShieldText(OsmFixtureTest):
+class FixBadUnicodeShieldText(FixtureTest):
 
     def test_cyrillic(self):
         # route relation with a cyrillic capital letter Ka at the end.

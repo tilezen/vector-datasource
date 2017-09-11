@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MissingBuildingPart(OsmFixtureTest):
+class MissingBuildingPart(FixtureTest):
     def test_building_part_exists(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/287494678'])
 

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class LanduseLine(OsmFixtureTest):
+class LanduseLine(FixtureTest):
     def test_tree_row(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/207142223'])
 

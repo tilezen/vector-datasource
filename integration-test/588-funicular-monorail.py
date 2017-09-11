@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class FunicularMonorail(OsmFixtureTest):
+class FunicularMonorail(FixtureTest):
     def test_monorail(self):
         self.load_fixtures(['https://www.openstreetmap.org/relation/6043603'])
 

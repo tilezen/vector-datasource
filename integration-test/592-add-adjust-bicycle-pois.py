@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddAdjustBicyclePois(OsmFixtureTest):
+class AddAdjustBicyclePois(FixtureTest):
     def test_bicycle_shop(self):
         # Valencia Cyclery in SF
         self.load_fixtures(['http://www.openstreetmap.org/node/414269441'])

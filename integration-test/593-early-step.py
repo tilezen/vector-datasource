@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlyStep(OsmFixtureTest):
+class EarlyStep(FixtureTest):
     def test_steps_with_regional_route(self):
         self.load_fixtures([
             'https://www.openstreetmap.org/way/24655593',

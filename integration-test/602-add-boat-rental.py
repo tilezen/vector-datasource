@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddBoatRental(OsmFixtureTest):
+class AddBoatRental(FixtureTest):
     def test_shop_boat_rental(self):
         # shop=boat_rental
         self.load_fixtures(['https://www.openstreetmap.org/node/1306277961'])

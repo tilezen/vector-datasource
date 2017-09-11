@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WineAndAlcoholShops(OsmFixtureTest):
+class WineAndAlcoholShops(FixtureTest):
 
     def test_shop_wine(self):
         # Wine, New York, NY (shop=wine)

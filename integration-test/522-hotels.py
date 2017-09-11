@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Hotels(OsmFixtureTest):
+class Hotels(FixtureTest):
     def test_ritz_carlton(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/32947245'])
 

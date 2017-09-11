@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class TransitFeatures(OsmFixtureTest):
+class TransitFeatures(FixtureTest):
     def test_bus_stop_way(self):
         # way 91806504
         self.load_fixtures(['https://www.openstreetmap.org/way/91806504'])

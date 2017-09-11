@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MzColours(OsmFixtureTest):
+class MzColours(FixtureTest):
     def test_colour_property(self):
         self.load_fixtures(['http://www.openstreetmap.org/relation/366773'])
 

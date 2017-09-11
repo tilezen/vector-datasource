@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class PlacePopulationInteger(OsmFixtureTest):
+class PlacePopulationInteger(FixtureTest):
 
     def test_south_bay(self):
         # all these places are in the south bay, near SF, CA.

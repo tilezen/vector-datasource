@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class InclusivePois(OsmFixtureTest):
+class InclusivePois(FixtureTest):
 
     def test_healthcare_midwife(self):
         self._run_test(

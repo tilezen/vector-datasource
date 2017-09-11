@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddKindDetailForPois(OsmFixtureTest):
+class AddKindDetailForPois(FixtureTest):
     def test_seafood_restaurant(self):
         self.load_fixtures(['https://www.openstreetmap.org/node/1426311638'])
 

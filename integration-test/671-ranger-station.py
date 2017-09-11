@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RangerStation(OsmFixtureTest):
+class RangerStation(FixtureTest):
     def test_ranger_station_supersedes_tourism(self):
         # Big Basin Redwoods State Park Headquarters
         # Node with amenity=ranger_station, but also has tourism=information

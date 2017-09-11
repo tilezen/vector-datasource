@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NeMinZoomRoads(OsmFixtureTest):
+class NeMinZoomRoads(FixtureTest):
     def setUp(self):
         super(NeMinZoomRoads, self).setUp()
 

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlyFootway(OsmFixtureTest):
+class EarlyFootway(FixtureTest):
 
     def test_footway_unnamed_national(self):
         # highway=footway, no name, route national (Pacific Crest Trail)

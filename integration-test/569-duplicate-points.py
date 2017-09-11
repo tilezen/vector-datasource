@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class DuplicatePoints(OsmFixtureTest):
+class DuplicatePoints(FixtureTest):
 
     def _assert_no_repeated_points(self, coords):
         last_coord = coords[0]

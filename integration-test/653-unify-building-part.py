@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class UnifyBuildingPart(OsmFixtureTest):
+class UnifyBuildingPart(FixtureTest):
     def test_one_madison(self):
         # Way: One Madison
         self.load_fixtures([

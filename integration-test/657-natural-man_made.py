@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NaturalManMade(OsmFixtureTest):
+class NaturalManMade(FixtureTest):
     def test_mineshaft(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/4305375025'])
 

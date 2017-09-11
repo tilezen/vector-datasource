@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RouteName(OsmFixtureTest):
+class RouteName(FixtureTest):
     def test_route_name(self):
         # Relation: M-Ocean View: Inbound to Downtown (91022)
         self.load_fixtures([

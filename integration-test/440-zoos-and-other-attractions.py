@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ZoosAndOtherAttractions(OsmFixtureTest):
+class ZoosAndOtherAttractions(FixtureTest):
 
     # So the question here is if kind should be set to attraction or enclosure.
     # There are other attraction areas (like rides at amusement parks), so I

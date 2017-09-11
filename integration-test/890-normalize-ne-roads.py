@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizeNeRoads(OsmFixtureTest):
+class NormalizeNeRoads(FixtureTest):
 
     def setUp(self):
         super(NormalizeNeRoads, self).setUp()

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class PedestrianPathsBicycle(OsmFixtureTest):
+class PedestrianPathsBicycle(FixtureTest):
     def test_path(self):
         # Add footway properties to pedestrian paths and piers
         # Pedestrian path

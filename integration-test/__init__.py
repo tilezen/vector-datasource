@@ -226,7 +226,7 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
             while True:
                 line = f.readline()
                 if not line.startswith('#'):
-                    new_test = (line == 'from . import OsmFixtureTest\n')
+                    new_test = (line == 'from . import FixtureTest\n')
                     break
             if not new_test:
                 continue
@@ -236,7 +236,7 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
 
         mod = import_module(test_dir + '.' + path.rsplit('.', 1)[0])
 
-        # pass a parameter to OsmFixtureTest telling it whether or not to
+        # pass a parameter to FixtureTest telling it whether or not to
         # actually run the tests. setting download_only=True means it only
         # downloads the fixtures and stubs out all the test methods to pass.
         #
@@ -249,7 +249,7 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
                issubclass(klass, unittest.TestCase):
                 names = loader.getTestCaseNames(klass)
                 for name in names:
-                    # TODO: when not instanceof OsmFixtureTest, don't add the
+                    # TODO: when not instanceof FixtureTest, don't add the
                     # download_only parameter.
                     standard_tests.addTest(klass(name, download_only))
 
@@ -1185,10 +1185,10 @@ class EmptyContext(object):
         pass
 
 
-class OsmFixtureTest(unittest.TestCase):
+class FixtureTest(unittest.TestCase):
 
     def __init__(self, methodName='runTest', download_only=False):
-        super(OsmFixtureTest, self).__init__(methodName)
+        super(FixtureTest, self).__init__(methodName)
         self.download_only = download_only
 
     def setUp(self):
@@ -1247,11 +1247,11 @@ class OsmFixtureTest(unittest.TestCase):
 
     def assertTrue(self, *args, **kwargs):
         if not self.download_only:
-            super(OsmFixtureTest, self).assertTrue(*args, **kwargs)
+            super(FixtureTest, self).assertTrue(*args, **kwargs)
 
     def assertFalse(self, *args, **kwargs):
         if not self.download_only:
-            super(OsmFixtureTest, self).assertFalse(*args, **kwargs)
+            super(FixtureTest, self).assertFalse(*args, **kwargs)
 
     def tile_bbox(self, z, x, y, padding=0.0):
         coord = Coordinate(zoom=z, column=x, row=y)

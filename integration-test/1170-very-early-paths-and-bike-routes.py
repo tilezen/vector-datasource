@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class VeryEarlyPathsAndBikeRoutes(OsmFixtureTest):
+class VeryEarlyPathsAndBikeRoutes(FixtureTest):
 
     def test_path_with_international_route(self):
         # highway=path, with route inter-national

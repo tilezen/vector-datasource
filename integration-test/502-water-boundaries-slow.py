@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WaterBoundariesSlow(OsmFixtureTest):
+class WaterBoundariesSlow(FixtureTest):
 
     def test_boundaries(self):
         from shapely.ops import unary_union

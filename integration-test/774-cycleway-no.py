@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CyclewayEqualsNo(OsmFixtureTest):
+class CyclewayEqualsNo(FixtureTest):
     def test_centre(self):
         # Way: Grant Avenue (184956229)
         self.load_fixtures(['http://www.openstreetmap.org/way/184956229'])

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class GardenPois(OsmFixtureTest):
+class GardenPois(FixtureTest):
     def test_garden_with_area(self):
         # update gardens in pois
         # garden with area in pois

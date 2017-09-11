@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BusRoutesZ12(OsmFixtureTest):
+class BusRoutesZ12(FixtureTest):
     def test_bus_routes_exist_at_z12(self):
         z, x, y = (16, 10484, 25329)
 

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WinterSportsPois(OsmFixtureTest):
+class WinterSportsPois(FixtureTest):
 
     def test_ski_shop(self):
         # ski shop in Big Bear Lake, CA

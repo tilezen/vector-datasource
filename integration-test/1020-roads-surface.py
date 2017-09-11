@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadsSurface(OsmFixtureTest):
+class RoadsSurface(FixtureTest):
 
     def test_road_surface(self):
         # Add surface properties to roads layer (at max zooms)

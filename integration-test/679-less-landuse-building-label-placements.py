@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class LessLanduseBuildingLabelPlacements(OsmFixtureTest):
+class LessLanduseBuildingLabelPlacements(FixtureTest):
     def test_pier(self):
         # The landuse for a pier
         self.load_fixtures(['http://www.openstreetmap.org/way/82206919'])

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ManMadeOutdoorLandmarks(OsmFixtureTest):
+class ManMadeOutdoorLandmarks(FixtureTest):
     def test_communications_tower(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/1230069003'])
 

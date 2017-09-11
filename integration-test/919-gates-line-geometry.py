@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class GatesLineGeometry(OsmFixtureTest):
+class GatesLineGeometry(FixtureTest):
     def test_linear_gate(self):
         # Add barrier:gates with line geometries in landuse
         # Line barrier:ghate feature

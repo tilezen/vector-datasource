@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadSortKeysLayers(OsmFixtureTest):
+class RoadSortKeysLayers(FixtureTest):
     def test_layer_5(self):
         # layer 5
         self.load_fixtures(['https://www.openstreetmap.org/way/48474682'])

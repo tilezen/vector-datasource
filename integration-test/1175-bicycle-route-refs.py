@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BicycleRouteRefs(OsmFixtureTest):
+class BicycleRouteRefs(FixtureTest):
 
     def test_lcn45(self):
         # https://www.openstreetmap.org/way/417389551

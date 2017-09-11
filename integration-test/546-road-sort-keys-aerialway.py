@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadSortKeysAerialway(OsmFixtureTest):
+class RoadSortKeysAerialway(FixtureTest):
     def test_gondola(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/32051122'])
 

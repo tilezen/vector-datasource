@@ -1,8 +1,8 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # update landuse to include barriers features and delete from boundaries
-class MoveBarriersToLanduse(OsmFixtureTest):
+class MoveBarriersToLanduse(FixtureTest):
 
     def test_city_wall(self):
         # city_wall in landuse

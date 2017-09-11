@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Funicular(OsmFixtureTest):
+class Funicular(FixtureTest):
     def test_funicular(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/393550019'])
 

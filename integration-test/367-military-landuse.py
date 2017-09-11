@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MilitaryLanduse(OsmFixtureTest):
+class MilitaryLanduse(FixtureTest):
     def test_naval_station(self):
         # Naval Weapons Station Concord, CA
         self.load_fixtures(['https://www.openstreetmap.org/way/154836419'])

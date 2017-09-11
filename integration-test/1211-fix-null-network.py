@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class FixNullNetwork(OsmFixtureTest):
+class FixNullNetwork(FixtureTest):
     def test_routes_with_no_network(self):
         # ref="N 4", route=road, but no network=*
         # so we should get something that has no network, but a shield text of

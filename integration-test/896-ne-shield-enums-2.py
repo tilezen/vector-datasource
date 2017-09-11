@@ -1,4 +1,4 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # I think we should remove for v1 (and never should be been included at zoom
@@ -8,7 +8,7 @@ from . import OsmFixtureTest
 #  * level
 #  * namealt
 #  * namealtt
-class NeShieldEnums2(OsmFixtureTest):
+class NeShieldEnums2(FixtureTest):
 
     def setUp(self):
         super(NeShieldEnums2, self).setUp()

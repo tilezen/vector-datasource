@@ -1,9 +1,9 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # this is a collection of features which have no name and therefore should be
 # excluded from being POIs.
-class ThePoisWithNoName(OsmFixtureTest):
+class ThePoisWithNoName(FixtureTest):
 
     def test_trail_riding_station(self):
         # originally from 440-zoos-and-other-attractions-tourism.py

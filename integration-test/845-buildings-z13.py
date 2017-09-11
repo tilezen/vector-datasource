@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BuildingsZ13(OsmFixtureTest):
+class BuildingsZ13(FixtureTest):
     def test_buildings_exist_at_zoom_13(self):
         # Earlier work in 845 dropped buildings from zoom 13
         self.load_fixtures(['http://www.openstreetmap.org/way/23654700',

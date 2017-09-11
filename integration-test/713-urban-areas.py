@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class UrbanAreas(OsmFixtureTest):
+class UrbanAreas(FixtureTest):
     def test_urban_area_zooms(self):
         # update kind to read urban_areas instead of urban areas.
         # This is not an OSM feature it comes from Natural Earth

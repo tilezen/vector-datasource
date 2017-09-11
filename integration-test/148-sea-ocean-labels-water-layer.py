@@ -1,9 +1,9 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # ocean and sea labels should be in the water layer rather than the places
 # layer.
-class SeaOceanLabelsWaterLayer(OsmFixtureTest):
+class SeaOceanLabelsWaterLayer(FixtureTest):
 
     def test_gulf_of_california(self):
         # Gulf of California: http://www.openstreetmap.org/node/305639734

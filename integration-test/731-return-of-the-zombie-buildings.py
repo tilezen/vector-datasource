@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ReturnOfTheZombieBuildings(OsmFixtureTest):
+class ReturnOfTheZombieBuildings(FixtureTest):
 
     def _load_query(self, z, x, y, tag):
         from ModestMaps.Core import Coordinate

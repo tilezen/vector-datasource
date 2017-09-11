@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NeShieldEnums(OsmFixtureTest):
+class NeShieldEnums(FixtureTest):
 
     def setUp(self):
         super(NeShieldEnums, self).setUp()

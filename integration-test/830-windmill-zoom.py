@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WindmillZoom(OsmFixtureTest):
+class WindmillZoom(FixtureTest):
     def test_windmill_with_attraction(self):
         # update windmill zoom to 15 and if attraction zoom to 14
         # windmill with tourism = attraction

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Trailhead(OsmFixtureTest):
+class Trailhead(FixtureTest):
     def test_trailhead(self):
         self.load_fixtures(['https://www.openstreetmap.org/node/3447700493'])
 

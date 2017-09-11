@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MissingBuildings(OsmFixtureTest):
+class MissingBuildings(FixtureTest):
     def test_best_tile(self):
         # Best Tile
         self.load_fixtures(['https://www.openstreetmap.org/way/103383621'])

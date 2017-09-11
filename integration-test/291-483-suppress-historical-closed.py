@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class SuppressHistoricalClosed(OsmFixtureTest):
+class SuppressHistoricalClosed(FixtureTest):
 
     def test_cartoon_museum(self):
         # Cartoon Art Museum (closed)

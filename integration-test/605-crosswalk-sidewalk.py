@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CrosswalkSidewalk(OsmFixtureTest):
+class CrosswalkSidewalk(FixtureTest):
     def test_crossing_traffic_signals(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/444491374'])
 

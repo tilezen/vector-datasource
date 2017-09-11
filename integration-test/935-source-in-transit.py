@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class SourceInTransit(OsmFixtureTest):
+class SourceInTransit(FixtureTest):
     def test_source_in_transit(self):
         # Add source info in transit
         # Way: 189011731

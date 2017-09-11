@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ShieldTextRef(OsmFixtureTest):
+class ShieldTextRef(FixtureTest):
 
     def test_james_lick_freeway(self):
         # US 101, "James Lick Freeway"

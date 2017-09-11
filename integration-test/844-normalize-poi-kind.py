@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizePoiKind(OsmFixtureTest):
+class NormalizePoiKind(FixtureTest):
     def test_aeroway_gate(self):
         # Node: Gate G102 (1096088604)
         self.load_fixtures(['http://www.openstreetmap.org/node/1096088604'])

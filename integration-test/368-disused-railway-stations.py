@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class DisusedRailwayStations(OsmFixtureTest):
+class DisusedRailwayStations(FixtureTest):
 
     def test_old_south_ferry(self):
         # Old South Ferry (1) (disused=yes)

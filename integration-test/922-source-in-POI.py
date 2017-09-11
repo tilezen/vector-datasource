@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class SourceInPoi(OsmFixtureTest):
+class SourceInPoi(FixtureTest):
     def test_poi_has_source(self):
         # Add source info in POIs
         self.load_fixtures(['https://www.openstreetmap.org/way/423023928'])

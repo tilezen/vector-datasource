@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BicycleYesDesignatedRoads(OsmFixtureTest):
+class BicycleYesDesignatedRoads(FixtureTest):
 
     def test_bicycle_yes(self):
         # Add bicycle properties to roads

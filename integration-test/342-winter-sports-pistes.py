@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WinterSportsPistes(OsmFixtureTest):
+class WinterSportsPistes(FixtureTest):
     def test_piste_easy(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/313466665'])
 

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlyTrack(OsmFixtureTest):
+class EarlyTrack(FixtureTest):
     def test_track(self):
         # track example in Marin Headlands, a member of Bay Area Ridge Trail,
         # a regional network

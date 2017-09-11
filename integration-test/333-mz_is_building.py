@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MzIsBuilding(OsmFixtureTest):
+class MzIsBuilding(FixtureTest):
 
     def test_buildings_around_san_francisco_state_university(self):
         # Buildings around San Francisco State University

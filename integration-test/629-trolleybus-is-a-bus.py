@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class TrolleybusIsABus(OsmFixtureTest):
+class TrolleybusIsABus(FixtureTest):
     def test_industrial_street(self):
         self.load_fixtures([
             'http://www.openstreetmap.org/way/397268717',

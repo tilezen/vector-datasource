@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class IceCreamShops(OsmFixtureTest):
+class IceCreamShops(FixtureTest):
     def test_amenity_ice_cream(self):
         # New York, NY (amenity=ice_cream)
         self.load_fixtures(['https://www.openstreetmap.org/node/2782000317'])

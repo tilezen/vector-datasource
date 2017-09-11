@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddElevationToPeaks(OsmFixtureTest):
+class AddElevationToPeaks(FixtureTest):
     def test_mt_elbert(self):
         ##
         # A selection of very tall peaks which should be visible at zoom 9.

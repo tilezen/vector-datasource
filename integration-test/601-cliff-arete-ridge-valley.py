@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CliffAreteRidgeValley(OsmFixtureTest):
+class CliffAreteRidgeValley(FixtureTest):
     def test_cliff(self):
         # cliff in Yosemite
         self.load_fixtures(['https://www.openstreetmap.org/way/291684864'])

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ExtractAirportLinesMinorRoad(OsmFixtureTest):
+class ExtractAirportLinesMinorRoad(FixtureTest):
     def test_runway(self):
         # Way: 10L/28R (22567191)
         self.load_fixtures(['http://www.openstreetmap.org/way/22567191'])

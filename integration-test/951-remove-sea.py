@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RemoveSea(OsmFixtureTest):
+class RemoveSea(FixtureTest):
     def test_drop_sea_polygon_but_keep_label(self):
         # Drop sea polygon but keep the label
         self.load_fixtures([

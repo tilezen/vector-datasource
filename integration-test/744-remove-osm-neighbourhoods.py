@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RemoveOsmNeighbourhoods(OsmFixtureTest):
+class RemoveOsmNeighbourhoods(FixtureTest):
     def test_no_borough(self):
         # Node: Mount Pocono (158473043)
         self.load_fixtures(['http://www.openstreetmap.org/node/158473043'])

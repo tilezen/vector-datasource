@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlyCycleway(OsmFixtureTest):
+class EarlyCycleway(FixtureTest):
     def test_cycleway(self):
         z, x, y = 12, 655, 1586
         self.load_fixtures(

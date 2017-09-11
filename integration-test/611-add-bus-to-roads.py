@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddBusToRoads(OsmFixtureTest):
+class AddBusToRoads(FixtureTest):
     def test_is_bus_route(self):
         # block between mission & 6th and howard & 5th in SF.
         # appears to have lots of buses.

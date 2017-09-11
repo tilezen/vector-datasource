@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoutesViaStopPositions(OsmFixtureTest):
+class RoutesViaStopPositions(FixtureTest):
 
     def _load(self, z, x, y, nodes=[], ways=[], relations=[]):
         fixtures = []

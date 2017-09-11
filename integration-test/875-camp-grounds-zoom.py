@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CampGroundsZoom(OsmFixtureTest):
+class CampGroundsZoom(FixtureTest):
     def test_large(self):
         # update landuse to include campground features and fix label zoom
         # large campground in landuse zoom 16

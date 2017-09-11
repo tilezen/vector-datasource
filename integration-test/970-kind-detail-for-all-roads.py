@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class KindDetailForAllRoads(OsmFixtureTest):
+class KindDetailForAllRoads(FixtureTest):
     def test_ferry(self):
         # Alameda <-> SF Ferry bldg
         self.load_fixtures(['http://www.openstreetmap.org/way/98752535'])

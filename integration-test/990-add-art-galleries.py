@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddArtGalleries(OsmFixtureTest):
+class AddArtGalleries(FixtureTest):
     def test_node(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/2026996113'])
 

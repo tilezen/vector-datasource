@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlierBikeProperties(OsmFixtureTest):
+class EarlierBikeProperties(FixtureTest):
     def test_bobcat_trail(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/12188550'])
 

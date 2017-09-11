@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadsSurfaceCobblestoneValueTransformed(OsmFixtureTest):
+class RoadsSurfaceCobblestoneValueTransformed(FixtureTest):
     def test_transform(self):
         # transform cobblestone:flattened to cobblestone_flattened
         # Illicha Avenue in Donetsk, Ukraine

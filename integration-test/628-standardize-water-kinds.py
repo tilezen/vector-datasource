@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class StandardizeWaterKinds(OsmFixtureTest):
+class StandardizeWaterKinds(FixtureTest):
     def test_great_salt_lake_ne(self):
         # ne_10m_lakes gid 1298: Great Salt Lake, UT
         self.load_fixtures([

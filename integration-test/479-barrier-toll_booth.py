@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BarrierTollBooth(OsmFixtureTest):
+class BarrierTollBooth(FixtureTest):
     def test_01(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/52529616'])
 

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ZoosAndOtherAttractionsAttraction(OsmFixtureTest):
+class ZoosAndOtherAttractionsAttraction(FixtureTest):
     def test_attractions(self):
         # Sable Island Horse
         self._run_test(16, 21228, 23551, 342984911, 'animal')
