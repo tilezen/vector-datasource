@@ -332,6 +332,8 @@ class NotRule(object):
 
 def map_geom_type(geom_type):
     titled = geom_type.title()
+    if titled == 'Line':
+        titled = 'LineString'
     result = (titled, 'Multi' + titled)
     return result
 

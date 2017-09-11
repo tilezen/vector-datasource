@@ -1,13 +1,7 @@
-# Features referenced from this test:
-#https://www.openstreetmap.org/way/177402901
-#https://www.openstreetmap.org/way/228716140
-#https://www.openstreetmap.org/way/177402901
-#https://www.openstreetmap.org/way/228716140
-#https://www.openstreetmap.org/way/129691054
-#https://www.openstreetmap.org/way/107280556
+from . import OsmFixtureTest
 
-# expect these features in _both_ the landuse and POIs layers.
-for layer in ['pois', 'landuse']:
+
+class ZoosAndOtherAttractions(OsmFixtureTest):
 
     # So the question here is if kind should be set to attraction or enclosure.
     # There are other attraction areas (like rides at amusement parks), so I
@@ -26,43 +20,50 @@ for layer in ['pois', 'landuse']:
     #       'natural': 'sand',
     #       'tourism': 'attraction' })
 
-    # In the case of this Hong Kong amusement park ride, a more specific key set
-    # beyond tourism: attraction hasn't been set, so I'd expect kind:
-    # attraction.
-    # NOTE: updated to a feature in North America: MarineLand, Niagara Falls,
-    # ON.
-    test.assert_has_feature(
-        16, 18373, 24066, layer,
-        { 'id': 177402901,
-          'kind': 'attraction' })
+    def test_nonspecific_attraction(self):
+        # In the case of this Hong Kong amusement park ride, a more specific
+        # key set beyond tourism: attraction hasn't been set, so I'd expect
+        # kind: attraction.
+        # NOTE: updated to a feature in North America: MarineLand, Niagara
+        # Falls, ON.
+        self.load_fixtures(['https://www.openstreetmap.org/way/177402901'])
 
-    # pipe through religion on resorts
-    # La Foret Conference & Retreat Center (way 228716140)
-    test.assert_has_feature(
-        15, 6852, 12522, layer,
-        { 'kind': 'resort',
-          'religion': 'christian' })
+        for layer in ('pois', 'landuse'):
+            self.assert_has_feature(
+                16, 18373, 24066, layer,
+                {'id': 177402901, 'kind': 'attraction'})
 
-# NOTE: because these are also buildings, they don't appear in the
-# landuse layer.
-# See https://github.com/mapzen/vector-datasource/issues/201
+    def test_export_religion_tag_on_resorts(self):
+        # pipe through religion on resorts
+        # La Foret Conference & Retreat Center (way 228716140)
+        self.load_fixtures(['https://www.openstreetmap.org/way/228716140'])
 
-# But in the case of this Disneyland ride, there's been an attraction:
-# carousel set in addition to tourism: attraction so I expect the kind:
-# carousel to be set.
-#
-# TAGS: attraction=carousel, building=yes, name=King Arthur Carrousel,
-# tourism=attraction
-test.assert_has_feature(
-    16, 11301, 26220, 'pois',
-    { 'id': 129691054,
-      'kind': 'carousel' })
+        for layer in ('pois', 'landuse'):
+            self.assert_has_feature(
+                15, 6852, 12522, layer,
+                {'kind': 'resort', 'religion': 'christian'})
 
-# Same for this kind: roller_coaster.
-# TAGS: attraction=roller_coaster, building=yes, name=Matterhorn Bobsleds,
-# tourism=attraction
-## way 107280556 http://c.tile.openstreetmap.org/17/22603/52441.png
-test.assert_has_feature(
-    16, 11301, 26220, 'pois',
-    { 'id': 107280556,
-      'kind': 'roller_coaster' })
+    def test_carousel_more_specific(self):
+        # But in the case of this Disneyland ride, there's been an attraction:
+        # carousel set in addition to tourism: attraction so I expect the kind:
+        # carousel to be set.
+        #
+        # TAGS: attraction=carousel, building=yes, name=King Arthur Carrousel,
+        # tourism=attraction
+        self.load_fixtures(['https://www.openstreetmap.org/way/129691054'])
+
+        self.assert_has_feature(
+            16, 11301, 26220, 'pois',
+            {'id': 129691054, 'kind': 'carousel'})
+
+    def test_roller_coaster_more_specific(self):
+        # Same for this kind: roller_coaster.
+        # TAGS: attraction=roller_coaster, building=yes, name=Matterhorn
+        # Bobsleds, tourism=attraction
+        # way 107280556 http://c.tile.openstreetmap.org/17/22603/52441.png
+        self.load_fixtures(
+            ['https://www.openstreetmap.org/way/107280556'])
+
+        self.assert_has_feature(
+            16, 11301, 26220, 'pois',
+            {'id': 107280556, 'kind': 'roller_coaster'})

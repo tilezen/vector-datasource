@@ -1,13 +1,19 @@
-# San Francisco International
-# https://www.openstreetmap.org/way/23718192
-test.assert_has_feature(
-    13, 1311, 3170, 'pois',
-    { 'kind': 'aerodrome',
-      'iata': 'SFO' })
+from . import OsmFixtureTest
 
-# Oakland airport
-# https://www.openstreetmap.org/way/54363486
-test.assert_has_feature(
-    13, 1314, 3167, 'pois',
-    { 'kind': 'aerodrome',
-      'iata': 'OAK' })
+
+class AirportIataCodes(OsmFixtureTest):
+    def test_sfo(self):
+        # San Francisco International
+        self.load_fixtures(['https://www.openstreetmap.org/way/23718192'])
+
+        self.assert_has_feature(
+            13, 1311, 3170, 'pois',
+            {'kind': 'aerodrome', 'iata': 'SFO'})
+
+    def test_oak(self):
+        # Oakland airport
+        self.load_fixtures(['https://www.openstreetmap.org/way/54363486'])
+
+        self.assert_has_feature(
+            13, 1314, 3167, 'pois',
+            {'kind': 'aerodrome', 'iata': 'OAK'})

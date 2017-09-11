@@ -12,128 +12,39 @@ From within the `vector-datasource` directory.
 
 ## Data / Integration Tests
 
-There is also suite of integration tests which can be run in one of two ways:
+The integration tests use the `unittest` framework, and should end with either a message saying `OK` or one saying `FAILED (failures=N)` with `N` being how many tests failed. For each failed test, there should be a stack trace indicating which assertion failed and the test file and function that it was called from.
 
-* Against an existing tile server, which can be local or remote. This is useful for testing against a version of `tileserver` or `tilequeue` which has been locally modified, or against a freshly-deployed server to check its correct operation.
-* Against a "testing" server which contains the minimum amount of data to run the tests. This is useful in a continuous integration environment, or for running local checks while developing `vector-datasource`.
+### Running with local fixture data
 
-The tests run against data from all over the world, which can be an onerous amount of data to load on a local machine, and is probably too much for a laptop. For these situations, it can be much easier to use the "testing server" method to download only the data which is necessary.
+The `vector-datasource` project maintains a set of fixture data which will be downloaded as part of the test and cached locally in your `~/.cache/vector-datasource` directory. If you need to clear the cache for any reason, it's safe to completely delete that directory.
 
-### Running against a testing server
-
-This is the recommended method for running local tests on a laptop or desktop machine. It parses annotations in the tests to find the elements required for the test to complete, and downloads these from an [Overpass API](http://wiki.openstreetmap.org/wiki/Overpass_API) server. For data which does not come from OpenStreetMap, there are a set of "fixture" shapefiles under the `integration-tests/fixtures/` subdirectory. Please see the section on writing tests for more information.
-
-Before running the tests, make sure that you have installed `tileserver` and `tilequeue` either from git or by running `pip install -r requirements.txt`, and that you have the programs `osm2pgsql` and `shp2pgsql` installed. You will need a recent version of `osm2pgsql`, for example 0.91.0, which may not be available from your operating systems default packages, especially on Debian or Ubuntu systems. In the case that you can't get a recent version from default packages, you may need to install [from source](https://github.com/openstreetmap/osm2pgsql) or [other package sources](https://launchpad.net/~ubuntugis/+archive/ubuntu/ppa).
-
-Note that the tests require a _lot_ of data, and can result in errors like these from public Overpass instances:
+Run the integration test suite with:
 
 ```
-RuntimeError: Unable to fetch data from Overpass: 429
+python integration-test/__init__.py
 ```
 
-This error code means that the Overpass server has rejected a request because too much has been downloaded. If you get these errors, then you may want to run your own Overpass instance to avoid stressing the public instances.
-
-To run the tests, from within `vector-datasource/`:
+Or individual tests may be run by listing them on the command line:
 
 ```
-./scripts/setup_and_run_tests.sh
+python integration-test/__init__.py integration-test/160-motorway-junctions.py
 ```
 
-This will create a new database, download data and fill the database, run the tests against it and finally destroy the database. Downloading the data and setting up the database can take some time, so if you don't want the database to be destroyed, set the `$NOCLEANUP` environment variable, for example:
+Individual test functions can be run by specifying the function or module on the command line. Note that this is not a path, so the module separator '.' is used rather than the path separator '/'!
 
 ```
-NOCLEANUP=1 ./scripts/setup_and_run_tests.sh
+python integration-test/__init__.py integration-test.160-motorway-junctions.MotorwayJunctions.test_motorway_junctions
 ```
 
-If you want to use a specific Overpass server rather than the default public instance, set the environment variable `$OVERPASS_SERVER` to its hostname. For example:
-
-```
-OVERPASS_SERVER=localhost ./scripts/setup_and_run_tests.sh
-```
-
-The output of the tests can be confusing, as it is interleaved with the output of the test tile server. An indicator of a successful run is the `PASSED ALL TESTS` message, which may be several lines before the end of the output, for example:
-
-```
-127.0.0.1 - - [07/Jul/2016 14:52:44] "GET /buildings/16/10493/22885.json HTTP/1.1" 200 -
-127.0.0.1 - - [07/Jul/2016 14:52:45] "GET /landuse/16/10493/22885.json HTTP/1.1" 200 -
-[ 104/104] PASS: 'integration-test/834-park-building.py'
-PASSED ALL TESTS.
-SUCCESS
-scripts/setup_and_run_tests.sh: line 144:  9436 Hangup                  python scripts/test_server.py "${dbname}" "${USER}" "${test_server_port}"
-=== Killing test server ===
-scripts/setup_and_run_tests.sh: line 29: kill: (9436) - No such process
-=== Dropping database "vector_datasource_8765" and cleaning up...
-```
-
-If the tests failed, with the message `FAILED n TESTS` for some value of `n`, then there will be a file `test.log` left in the `vector-datasource` directory containing more information on the failed tests.
-
-### Re-running against a testing server
-
-If you originally ran with `$NOCLEANUP` then you can re-run the tests against that database as long as you know the database name which was created. This should be available in the logs, or can be found by listing the databases in postgresql - it will have a name like `vector_datasource_XXXX`.
-
-In one window, or a background `screen`, run the tests server:
-
-```
-python scripts/test_server.py vector_datasource_15651 `whoami` test_server.port
-```
-
-Replacing `vector_datasource_15651` with the name of your local database. In another window, run:
-
-```
-VECTOR_DATASOURCE_CONFIG_URL="http://localhost:`cat test_server.port`/%(layer)s/%(z)d/%(x)d/%(y)d.json" python integration-test.py
-```
-
-This will re-run the tests, but without any data updates. If you changed the tests and need to download new data then you may need to re-run the whole download process.
+This can be extremely useful when debugging a unit test with `pdb`, as running a single unit test function can help you pinpoint the failure without having to step through a lot of irrelevant preamble.
 
 ### Running against an existing tile server
 
-The rest of this guide assumes that you have already set up `vector-datasource`, `tileserver` and `tilequeue` according to the [installation guide](https://github.com/tilezen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), including steps to download and install all the necessary data.
-
-You will need to install the [AppDirs](https://pypi.python.org/pypi/appdirs) Python package. First, set up a configuration file telling the test suite which server URL to use. The location of the configuration file will vary depending on your platform. To find out, either run the test suite and read the error message, or read the docs for [AppDirs](https://pypi.python.org/pypi/appdirs). This file should be a YAML dictionary of name to URL pattern pairs. An example config file is included as `test_config.example.yaml`. For example:
-
-```yaml
----
-local:
-  url: http://localhost:8080/%(layer)s/%(z)d/%(x)d/%(y)d.json
-  use_all_layers: false
-```
-
-Each top-level key, in this example `local` requires a `url` sub-key which gives a pattern for creating valid tile URLs. There are four variables available, `layer`, `z`, `x` and `y`, which indicate the layer within the tile, zoom level and x, y coordinate respectively. The result should be a valid GeoJSON file without layers. If the data source is not able to filter layers, for example if you're reading the layered-GeoJSON directly from storage (i.e: S3), and do not use the `layer` parameter then you should set the optional `use_all_layers` parameter to `true`. By default, if left unspecified, it's false.
-
-For example, to read against a local server [proxying](https://github.com/mapzen/tile-hash-proxy) from storage such as S3, you might need a config something like this:
-
-```yaml
----
-proxy:
-  url: http://localhost:8081/all/%(z)d/%(x)d/%(y)d.json
-  use_all_layers: true
-```
-
-This defines a server called `local` which should be running on port 8080 of your local machine. This is suitable for testing against a locally-running instance of [tileserver](https://github.com/mapzen/tileserver). It also defines a server called `proxy` which should be running on port 8081 and proxies from raw, layered GeoJSON.
-
-You can now run the tests, either against your local server:
-
-```
-python integration-test.py local
-```
-
-Or against the proxy:
-
-```
-python integration-test.py proxy
-```
-
-Note that you can configure as many servers as you like. Remember to include any necessary API keys as part of the URL. You can run subsets of the tests, or single tests, by listing them after the server name like this:
-
-```
-python test.py local test/160-motorway-junctions.py
-```
-
-Verbose test output is placed in a file called `test.log` in the current directory.
+TODO! This hasn't been (re-)implemented yet for the new tests!
 
 ## Writing tests
 
-Tests should either be unit tests or integration tests. The difference between the two is whether any data is required for them to work. The unit tests do not load any data and do not access the database. The integration tests load up a set of "fixture" data and require a database and a running tile server.
+Tests should either be unit tests or integration tests. The difference between the two is whether any data is required for them to work. The unit tests do not load any data and do not access the database. The integration tests load up a set of "fixture" data which they use to mock the database.
 
 ### Unit tests
 
@@ -141,9 +52,9 @@ Unit tests go in the `tests/` subdirectory. Each should be a Python file, and us
 
 ### Integration tests
 
-Integration tests go in the `integration-tests/` subdirectory. Each should be a Python file, but uses a custom test harness which can be found in the `integration-test.py` file in the root directory of the project. Tests are generally named starting with the issue number of any issue which led to the test being written and a short description of the issue. It can he helpful if the description is the same as the git branch on which the issue is being addressed.
+Integration tests go in the `integration-tests/` subdirectory. Each should be a Python file, but uses a custom test harness which can be found in the `integration-test/__init__.py` file. Tests are generally named starting with the issue number of any issue which led to the test being written and a short description of the issue. It can he helpful if the description is the same as the git branch on which the issue is being addressed.
 
-The integration test harness has functions such as:
+The integration test defines a `unittest` compatible class called `OsmFixtureTest` which provides useful tile-related test functions such as:
 
 * `assert_has_feature(z, x, y, layer, properties)` fails the test if the tile with coordinate `z/x/y` doesn't contain a feature matching `properties` in layer `layer`.
 * `assert_at_least_n_features(z, x, y, layer, properties, n)` fails the test if the tile layer doesn't contain at least `n` matching features.
@@ -152,21 +63,16 @@ The integration test harness has functions such as:
 * `features_in_tile_layer(z, x, y, layer)` is a context manager, to be used in a `with` statement. This will iterate over all the features in the given `layer` in the tile `z/x/y`. This can be useful for writing more general tests than the assertions above allow.
 * `layers_in_tile(z, x, y)` is a context manager, to be used in a `with` statement. This will iterate over all the layers in the tile `z/x/y`. This can be used to write very general tests about the existence or absence of features in certain layers.
 
-There are two ways to add integration test data:
+Fixture data should be loaded in each test that needs it; either once for the class in the `setUp()` method (but remember to call `super.setUp()` too!) or for each test individually. The function to call is `load_fixtures([urls])`, where each URL defines an element to load. Several schemes are supported at the moment:
 
-1. For data which comes from OpenStreetMap, add a comment in the test file with the URL of an OpenStreetMap object.
-2. For other data, add shapefiles under the `integration-test/fixtures/` subdirectory.
+1. `https://www.openstreetmap.org/...` to load OSM nodes, ways and relations.
+2. `http://overpass-api.de/api/interpreter?data=...` to make a query against Overpass API.
+3. `https://whosonfirst.mapzen.com/data/...` to load data from WhosOnFirst.
+4. `file://integration-test/fixtures/...` to load data from a bundled shapefile. This is useful to handle fixtures from Natural Earth data, or pre-packaged shapefiles from OpenStreetMapData.
+
+Additionally, optional arguments can be provided to `load_fixtures`:
+
+* `clip=...` applies a clipping mask to the fixture data, keeping only the data which is within the Shapely shape passed as the argument. There is a utility function `tile_bbox(z, x, y)` so that it's easy to clip to a tile bounding box. Clipping can be very useful when working with relations, as they can be very large and this makes the fixtures large and processing slower. If it is possible to make the test pass with a clipped relation fixture, then please use the clip option.
+* `simplify=...` generalises the geometry to the tolerance given as the argument. This is also useful for reducing the size of fixtures and the complexity of the processing when the test does not need the geometry to be accurate.
 
 NOTE: z/x/y coordinates [are describing location and zoom level](https://mapzen.com/documentation/vector-tiles/use-service/#specify-z-x-and-y-tile-coordinates).
-
-#### Adding OpenStreetMap data
-
-When `scripts/setup_and_run_tests.sh` builds the test database, it first scans the files in `integration-tests/*.py` for comments which contain URLs to `http://www.openstreetmap.org/` which reference a page for a node, way or relation object. Then it downloads these from Overpass and uses them to build the database.
-
-It is also possible to put whole Overpass queries into the test by prefixing them with `RAW QUERY:`. For example, see `integration-test/333-mz_is_building.py`.
-
-#### Adding shapefile fixture data
-
-Any shapefiles under `integration-test/fixtures/` are loaded into the database by interpreting the subdirectory as the table name to load into. For example, `integration-test/fixtures/water_polygons/502-water-boundaries.shp` will be loaded into the `water_polygons` table.
-
-Note that these are loaded in without any projection transform. The shapefiles should already be in EPSG:3857. Also, the shapefiles are loaded as-is, so it's important to make sure that the columns of the shapefile match the columns of the table they're loaded into - except for any `mz_*` columns which are added later.

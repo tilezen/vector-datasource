@@ -1,3 +1,7 @@
+from itertools import izip
+import re
+
+
 def mz_building_kind_detail(val):
     # TODO should this be in yaml instead?
     if val in (
@@ -220,3 +224,156 @@ def mz_building_part_kind_detail(val):
 #     return []
 # def mz_cycling_network(props, osm_id):
 #     pass
+
+
+def mz_is_path_major_route_relation(tags):
+    "Return True if the relation tags represent a major route relation."
+
+    return (tags.get('type') == 'route' and
+            tags.get('route') in ('hiking', 'foot', 'bicycle') and
+            tags.get('network') in ('iwn', 'nwn', 'rwn', 'lwn', 'icn', 'ncn',
+                                    'rcn', 'lcn'))
+
+
+PATH_MAJOR_ROUTE = {
+    'icn': 8,
+    'ncn': 8,
+    'iwn': 9,
+    'nwn': 9,
+    'rcn': 10,
+    'rwn': 11,
+    'lcn': 11,
+    'lwn': 12,
+}
+
+
+def deassoc(x):
+    """
+    Turns an array consisting of alternating key-value pairs into a
+    dictionary.
+
+    Osm2pgsql stores the tags for ways and relations in the planet_osm_ways and
+    planet_osm_rels tables in this format. Hstore would make more sense now,
+    but this encoding pre-dates the common availability of hstore.
+
+    Example:
+    >>> from raw_tiles.index.util import deassoc
+    >>> deassoc(['a', 1, 'b', 'B', 'c', 3.14])
+    {'a': 1, 'c': 3.14, 'b': 'B'}
+    """
+
+    pairs = [iter(x)] * 2
+    return dict(izip(*pairs))
+
+
+# returns the min_zoom for the most important walking or cycling network
+# that the road with the given way is part of.
+#
+# note that relations is a synthetic parameter, added in the Python
+# implementation of the min zoom calculation.
+def mz_calculate_path_major_route(way_id, relations):
+    # would prefer to use None here, and work around so that `min` treats
+    # None as bigger than any integer. however, Python treats None the other
+    # way, which is a problem if we return None from this function.
+    # therefore, this function returns an arbitrarily large zoom, which we
+    # should expect we'll never use.
+    min_zoom = 999
+
+    for rel in relations:
+        rel_tags = deassoc(rel['tags'])
+        if mz_is_path_major_route_relation(rel_tags):
+            network = rel_tags.get('network')
+            zoom = PATH_MAJOR_ROUTE.get(network)
+            min_zoom = min(min_zoom, zoom)
+
+    return min_zoom
+
+
+# calculates the "most important" cycle network for a road with the given tags
+# and the feature, or None if the road isn't part of a cycle network.
+#
+# note that this is a bit of a hack - the SQL implemetnation uses the feature
+# ID to look up relations, but for the Python implementation we pass the full
+# feature object, which has the relations embedded in it.
+#
+# cycle networks are considered in the following order of importance: icn,
+# ncn, rcn, lcn.
+def mz_cycling_network(tags):
+    # TODO: implement me! current implementation is a stub.
+    return None
+
+
+def mz_get_min_zoom_highway_level_gate(fid, ways):
+    min_zoom = 17
+    for fid, shape, props in ways:
+        highway = props.get('highway')
+        if highway in ('motorway', 'trunk', 'primary', 'motorway_link',
+                       'trunk_link', 'primary_link'):
+            min_zoom = min(min_zoom, 14)
+
+        elif highway in ('secondary', 'tertiary', 'secondary_link',
+                         'tertiary_link'):
+            min_zoom = min(min_zoom, 15)
+
+        elif highway in ('residential', 'service', 'path', 'track', 'footway',
+                         'unclassified'):
+            min_zoom = min(min_zoom, 16)
+
+    return min_zoom
+
+
+def mz_calculate_ferry_level(shape):
+    way_length = shape.length
+    if way_length > 1223:
+        return 8
+    elif way_length > 611:
+        return 9
+    elif way_length > 306:
+        return 10
+    elif way_length > 153:
+        return 11
+    elif way_length > 76:
+        return 12
+    return 13
+
+
+DECIMAL_UNIT_PATTERN = re.compile('([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)$')
+IMPERIAL_PATTERN = re.compile('([0-9]+(\.[0-9]*)?)\' *(([0-9]+)")?')
+NUMERIC_PATTERN = re.compile('^([0-9]+(\.[0-9]*)?)$')
+
+
+UNIT_CONVERSION_FACTORS = {
+    'mi': 1609.3440,
+    'km': 1000.0000,
+    'm': 1.0,
+    'nmi': 1852.0000,
+    'ft': 0.3048,
+}
+
+
+def mz_to_float_meters(length):
+    # the tag passed through might not exist, in which case this function will
+    # receive None. the re.match() functions would raise an error if they were
+    # passed None, so instead we return early.
+    if length is None:
+        return None
+
+    m = DECIMAL_UNIT_PATTERN.search(length)
+    if m:
+        value = float(m.group(1))
+        unit = m.group(3)
+        factor = UNIT_CONVERSION_FACTORS[unit]
+        return factor * value
+
+    m = IMPERIAL_PATTERN.search(length)
+    if m:
+        inches = int(m.group(4) or '0')
+        feet = float(m.group(1))
+        return (feet * 12 + inches) * 0.0254
+
+    # if it's only a number, with no other additional text
+    m = NUMERIC_PATTERN.match(length)
+    if m:
+        return float(m.groups()[0])
+
+    return None

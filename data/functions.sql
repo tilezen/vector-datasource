@@ -632,7 +632,11 @@ $$ LANGUAGE plpgsql STABLE;
 -- or NULL otherwise.
 -- This function is meant to be called for something that we already know is a path.
 -- Please ensure input is already a path, or output will be undefined.
-CREATE OR REPLACE FUNCTION mz_calculate_path_major_route(osm_id BIGINT)
+--
+-- Note that the dummy argument is just there to make the "shape" of the
+-- arguments the same as with Python, where we need to pass in the relation
+-- information rather than query it from `planet_osm_rels`.
+CREATE OR REPLACE FUNCTION mz_calculate_path_major_route(osm_id BIGINT, dummy INTEGER)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN (
@@ -903,7 +907,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --- Identifies and returns the min_zoom for gates
 --- given the highway level of gate location
-CREATE OR REPLACE FUNCTION mz_get_min_zoom_highway_level_gate(val_osm_id BIGINT)
+-- NOTE: the dummy integer is just to make the "shape" of the arguments the same
+-- between SQL and Python, since the latter needs to be passed ways which
+-- SQL just looks up in the `planet_osm_ways` table.
+CREATE OR REPLACE FUNCTION mz_get_min_zoom_highway_level_gate(val_osm_id BIGINT, dummy INTEGER)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN MAX(CASE
