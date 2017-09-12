@@ -35,7 +35,7 @@ deployment:
       - alert-circle mapzen documentation master $CIRCLE_TOKEN
       - ./scripts/update-integration-test-coordinates.sh
       - pip install awscli
-      - aws s3 sync ~/.cache/vector-datasource/*.geojson s3://mapzen-tiles-assets/integration-test-fixtures/ --size-only
+      - aws s3 sync ~/.cache/vector-datasource/ s3://mapzen-tiles-assets/integration-test-fixtures/ --size-only --exclude="*" --include="*.geojson"
   release:
     tag: /.+/
     commands:
