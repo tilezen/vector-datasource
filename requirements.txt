@@ -22,5 +22,5 @@ wsgiref==0.1.2
 git+https://github.com/ixc/python-edtf@aad32b8d5cd8848c50fbef92c73697a93cf182ba#edtf
 git+https://github.com/tilezen/mapbox-vector-tile@master#egg=mapbox-vector-tile
 # TODO! move this back to master when the branch of tilequeue is merged!
-git+https://github.com/tilezen/tilequeue@zerebubuth/local-fixtures#egg=tilequeue
+git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
