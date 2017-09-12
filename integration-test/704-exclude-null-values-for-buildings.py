@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ExcludeNullValuesForBuildings(OsmFixtureTest):
+class ExcludeNullValuesForBuildings(FixtureTest):
 
     def test_alcatraz(self):
         # way 128245373 - alcatraz prison main building

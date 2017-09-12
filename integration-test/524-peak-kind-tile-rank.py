@@ -1,4 +1,4 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 def count_matching(features, props):
@@ -19,7 +19,7 @@ def count_matching(features, props):
     return num_matches
 
 
-class PeakKindTileRank(OsmFixtureTest):
+class PeakKindTileRank(FixtureTest):
 
     def test_01(self):
         # the tile 11/420/779 contains all the peaks below. so many, it

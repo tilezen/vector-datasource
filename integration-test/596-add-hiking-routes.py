@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddHikingRoutes(OsmFixtureTest):
+class AddHikingRoutes(FixtureTest):
     def test_track(self):
         self.load_fixtures([
             'https://www.openstreetmap.org/way/12188550',

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RemoveLanduseLabels(OsmFixtureTest):
+class RemoveLanduseLabels(FixtureTest):
 
     def test_landuse_labels_layer_no_longer_exists(self):
         # Label placement Cemetery in landuse - note that we test the

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RemoveUnstyledLocalities(OsmFixtureTest):
+class RemoveUnstyledLocalities(FixtureTest):
     def test_zoom_8(self):
         # zoom 8:
         # include only those localities with name and population and

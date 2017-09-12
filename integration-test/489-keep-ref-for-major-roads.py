@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class KeepRefForMajorRoads(OsmFixtureTest):
+class KeepRefForMajorRoads(FixtureTest):
     def test_I495(self):
         # just checks that there is at least one major_road with a ref set.
         self.load_fixtures(['https://www.openstreetmap.org/relation/1876662'])

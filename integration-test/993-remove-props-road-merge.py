@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RemovePropsRoadMerge(OsmFixtureTest):
+class RemovePropsRoadMerge(FixtureTest):
     # NOTE: fixtures load up a single element, so this doesn't actually test
     # merging itself, only that we drop the properties (which can lead to
     # more merges).

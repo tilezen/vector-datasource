@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddBridleway(OsmFixtureTest):
+class AddBridleway(FixtureTest):
     def test_bridleway(self):
         # Add bridleway from osm
         self.load_fixtures(['http://www.openstreetmap.org/way/387216146'])

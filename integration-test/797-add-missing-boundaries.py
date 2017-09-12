@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddMissingBoundaries(OsmFixtureTest):
+class AddMissingBoundaries(FixtureTest):
     def test_statistical(self):
         # NE data - no OSM elements
         # boundary between NV and CA is _also_ a "statistical" boundary

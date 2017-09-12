@@ -187,14 +187,14 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 
 #### Example test
 
-The unit tests are written using the `unittest` framework, which has been subclassed in `OsmFixtureTest` to provide some useful methods. This means that each test starts with the import of `OsmFixtureTest`, and defines a test class. These make it slightly harder to see what's going on, but are necessary to fit into the way `unittest` structures tests.
+The unit tests are written using the `unittest` framework, which has been subclassed in `FixtureTest` to provide some useful methods. This means that each test starts with the import of `OsmFixtureTest`, and defines a test class. These make it slightly harder to see what's going on, but are necessary to fit into the way `unittest` structures tests.
 
 
 ```python
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CampGroundZoom(OsmFixtureTest):
+class CampGroundZoom(FixtureTest):
 
     def test_camp_ground_in_landuse_layer(self):
         self.load_fixtures([
@@ -288,7 +288,7 @@ But the tests require this to be formatted like:
 
 #### Common test types
 
-The `OsmFixtureTest` class provides several useful tests (called using `self.`):
+The `FixtureTest` class provides several useful tests (called using `self.`):
 
 - `assert_has_feature`
 - `assert_no_matching_feature`

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MissingNameShort(OsmFixtureTest):
+class MissingNameShort(FixtureTest):
     def test_missouri(self):
         self.load_fixtures([
             'http://www.openstreetmap.org/node/473849775',

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NoNaturalPois(OsmFixtureTest):
+class NoNaturalPois(FixtureTest):
 
     def test_unnamed_natural_wood_hyde_park_london(self):
         # example from ticket: an unnamed natural=wood in Hyde Park, London

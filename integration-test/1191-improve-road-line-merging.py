@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ImproveRoadLineMerging(OsmFixtureTest):
+class ImproveRoadLineMerging(FixtureTest):
 
     def _assert_is_linestring(self, z, x, y, layer, name,
                               max_coords, max_count):

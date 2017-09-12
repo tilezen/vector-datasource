@@ -1,10 +1,10 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # we used to duplicate footway features between the roads and landuse layers.
 # this test exists to make sure we don't backslide.
 # see https://github.com/tilezen/vector-datasource/issues/776 for more info.
-class DuplicateFootway(OsmFixtureTest):
+class DuplicateFootway(FixtureTest):
 
     def test_pedestrian(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/128534087'])

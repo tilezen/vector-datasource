@@ -1,4 +1,4 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 def _freeze(thing):
@@ -11,7 +11,7 @@ def _freeze(thing):
     return thing
 
 
-class MergeLanduse(OsmFixtureTest):
+class MergeLanduse(FixtureTest):
 
     def test_merge_landuse(self):
         self.load_fixtures([

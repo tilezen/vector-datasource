@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Waterfall(OsmFixtureTest):
+class Waterfall(FixtureTest):
     def test_more_than_300m(self):
         # Upper Yosemite Falls, because it's so tall at 550 meters, more than
         # 300 meters

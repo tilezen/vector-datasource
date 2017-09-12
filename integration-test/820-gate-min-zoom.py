@@ -1,8 +1,8 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # Set gate min zoom based on highway type
-class GateMinZoom(OsmFixtureTest):
+class GateMinZoom(FixtureTest):
 
     def test_gate_on_secondary(self):
         # Gate on secondary road

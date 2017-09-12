@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class PierLines(OsmFixtureTest):
+class PierLines(FixtureTest):
     def test_pier_in_roads_layer(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/23783924'])
 

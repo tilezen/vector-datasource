@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RemoveUnstyledNePlaces(OsmFixtureTest):
+class RemoveUnstyledNePlaces(FixtureTest):
 
     def setUp(self):
         super(RemoveUnstyledNePlaces, self).setUp()

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class KindCsv(OsmFixtureTest):
+class KindCsv(FixtureTest):
     def test_post_office(self):
         self.load_fixtures(['https://www.openstreetmap.org/node/1223019595'])
 

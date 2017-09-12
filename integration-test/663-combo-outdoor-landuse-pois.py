@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ComboOutdoorLandusePois(OsmFixtureTest):
+class ComboOutdoorLandusePois(FixtureTest):
     def test_water_park_way(self):
         # Waterworld in Concord
         self.load_fixtures(['http://www.openstreetmap.org/way/31198945'])

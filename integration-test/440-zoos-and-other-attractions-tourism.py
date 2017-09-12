@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ZoosAndOtherAttractionsTourism(OsmFixtureTest):
+class ZoosAndOtherAttractionsTourism(FixtureTest):
     def test_tourism(self):
         # City Sculpture, Detroit
         self._run_test(16, 17645, 24242, 358445798, 'artwork')

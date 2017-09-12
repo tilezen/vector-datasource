@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MergeOceanEarth(OsmFixtureTest):
+class MergeOceanEarth(FixtureTest):
     def test_ne_water(self):
         # There should be a single, merged feature in each of these tiles
         # Natural Earth

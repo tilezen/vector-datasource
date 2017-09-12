@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class FractionalPois(OsmFixtureTest):
+class FractionalPois(FixtureTest):
     def test_apple_store(self):
         # Apple Store, SF
         self.load_fixtures(['https://www.openstreetmap.org/way/332223480'])
@@ -46,7 +46,7 @@ class FractionalPois(OsmFixtureTest):
              'name': 'Vermonter'})
 
 
-class FractionalPoisNe(OsmFixtureTest):
+class FractionalPoisNe(FixtureTest):
 
     def setUp(self):
         super(FractionalPoisNe, self).setUp()

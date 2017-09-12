@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ClipBuildings(OsmFixtureTest):
+class ClipBuildings(FixtureTest):
 
     def test_high_line(self):
         from shapely.geometry import shape

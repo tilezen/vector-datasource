@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class DefaultBrunnelSortKeys(OsmFixtureTest):
+class DefaultBrunnelSortKeys(FixtureTest):
     def test_footway(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/70656344'])
 

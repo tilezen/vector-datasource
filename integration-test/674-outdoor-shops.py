@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class OutdoorShops(OsmFixtureTest):
+class OutdoorShops(FixtureTest):
     def test_fishing(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/3056897308'])
 

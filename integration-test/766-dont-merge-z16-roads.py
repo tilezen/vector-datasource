@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class DontMergeZ16Roads(OsmFixtureTest):
+class DontMergeZ16Roads(FixtureTest):
     def test_roads_not_merged(self):
         # if we're merging, then only one of these will be in tiles. if
         # both exist then it's more likely that no merging is happening.

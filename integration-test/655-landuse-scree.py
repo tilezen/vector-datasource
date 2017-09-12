@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class LanduseScree(OsmFixtureTest):
+class LanduseScree(FixtureTest):
     def test_scree(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/59621863'])
 

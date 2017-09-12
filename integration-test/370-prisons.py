@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Prisons(OsmFixtureTest):
+class Prisons(FixtureTest):
     def test_rikers_island(self):
         self.load_fixtures(['https://www.openstreetmap.org/relation/3955540'])
 

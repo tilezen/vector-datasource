@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class PoniWhitelist(OsmFixtureTest):
+class PoniWhitelist(FixtureTest):
 
     def test_aeroway_helipad(self):
         # aeroway=helipad

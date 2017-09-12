@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class FixCityNames(OsmFixtureTest):
+class FixCityNames(FixtureTest):
 
     def setUp(self):
         # need to call this to make sure the environment exists.

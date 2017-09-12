@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizeBoundariesKind(OsmFixtureTest):
+class NormalizeBoundariesKind(FixtureTest):
     def test_aboriginal_lands_protected_area(self):
         # Relation: Hoopa Valley Tribe
         #
@@ -85,7 +85,7 @@ class NormalizeBoundariesKind(OsmFixtureTest):
             {'id': -2834528, 'kind': 'locality', 'kind_detail': '8'})
 
 
-class NormalizeBoundariesKindNaturalEarth(OsmFixtureTest):
+class NormalizeBoundariesKindNaturalEarth(FixtureTest):
 
     def setUp(self):
         super(NormalizeBoundariesKindNaturalEarth, self).setUp()

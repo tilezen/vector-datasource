@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ToysNotFound(OsmFixtureTest):
+class ToysNotFound(FixtureTest):
 
     def test_01(self):
         self._run_test(16, 10473, 25339,

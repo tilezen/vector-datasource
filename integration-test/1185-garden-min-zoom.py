@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class GardenMinZoom(OsmFixtureTest):
+class GardenMinZoom(FixtureTest):
     def test_very_small_garden(self):
         # this garden previously had a min_zoom of 12, but based on its size
         # should be z16 instead.

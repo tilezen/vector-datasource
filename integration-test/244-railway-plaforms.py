@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RailwayPlatforms(OsmFixtureTest):
+class RailwayPlatforms(FixtureTest):
 
     def test_hunterspoint_avenue_lirr(self):
         # Hunterspoint Avenue LIRR

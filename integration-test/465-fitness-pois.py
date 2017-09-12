@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class FitnessPois(OsmFixtureTest):
+class FitnessPois(FixtureTest):
     def test_leisure_fitness_centre(self):
         # Fitness SF SOMA, leisure=fitness_centre
         self._run_test(16, 10484, 25332, 'way/25371830')

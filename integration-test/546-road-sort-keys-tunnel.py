@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadSortKeysTunnel(OsmFixtureTest):
+class RoadSortKeysTunnel(FixtureTest):
     def test_motorway_level_0(self):
         # tunnels at level = 0
         self.load_fixtures(['https://www.openstreetmap.org/way/167952621'])

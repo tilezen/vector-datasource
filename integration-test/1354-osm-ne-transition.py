@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class OsmNeTransition(OsmFixtureTest):
+class OsmNeTransition(FixtureTest):
 
     def _assert_osm_ne_transition(self, z, x, y, layer):
         # checks that the OSM->NE transition happens for the given layer

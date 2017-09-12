@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadsAccess(OsmFixtureTest):
+class RoadsAccess(FixtureTest):
 
     def test_restricted_access(self):
         # Add surface properties to roads layer (at max zooms)

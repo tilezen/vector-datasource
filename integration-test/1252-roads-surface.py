@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadsSurface(OsmFixtureTest):
+class RoadsSurface(FixtureTest):
     def test_cobblestones(self):
         # Add surface properties to roads layer (at max zooms)
         # Prince St with cobblestones in Alexandria, VA

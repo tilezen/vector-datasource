@@ -199,8 +199,12 @@ def closest_matching(features, properties):
     return (min_feature, min_misses)
 
 
-def load_tests(loader, standard_tests, pattern=None, download_only=False):
+def load_tests(loader, standard_tests, test_instance, pattern=None):
     test_dir = dirname(__file__)
+
+    # can't load modules if there's a ".." in the path to them
+    assert ".." not in test_dir
+
     if pattern is None:
         pattern = '*.py'
 
@@ -216,27 +220,9 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
         if path.startswith('.'):
             continue
 
-        pathname = path_join(test_dir, path)
-
-        try:
-            f = open(pathname, 'U')
-
-            # TODO: take this out after all the tests have been converted!
-            new_test = False
-            while True:
-                line = f.readline()
-                if not line.startswith('#'):
-                    new_test = (line == 'from . import OsmFixtureTest\n')
-                    break
-            if not new_test:
-                continue
-        finally:
-            if f:
-                f.close()
-
         mod = import_module(test_dir + '.' + path.rsplit('.', 1)[0])
 
-        # pass a parameter to OsmFixtureTest telling it whether or not to
+        # pass a parameter to FixtureTest telling it whether or not to
         # actually run the tests. setting download_only=True means it only
         # downloads the fixtures and stubs out all the test methods to pass.
         #
@@ -244,14 +230,18 @@ def load_tests(loader, standard_tests, pattern=None, download_only=False):
         # to do with CircleCI, as the cache is only saved after the
         # dependencies step, not after the test step itself.
         for name in dir(mod):
+            # skip any "special" names, as these won't contain any tests.
+            if name.startswith('__'):
+                continue
+
             klass = getattr(mod, name)
             if isinstance(klass, type) and \
                issubclass(klass, unittest.TestCase):
                 names = loader.getTestCaseNames(klass)
                 for name in names:
-                    # TODO: when not instanceof OsmFixtureTest, don't add the
+                    # TODO: when not instanceof FixtureTest, don't add the
                     # download_only parameter.
-                    standard_tests.addTest(klass(name, download_only))
+                    standard_tests.addTest(klass(name, test_instance))
 
     return standard_tests
 
@@ -1185,16 +1175,13 @@ class EmptyContext(object):
         pass
 
 
-class OsmFixtureTest(unittest.TestCase):
+class RunTestInstance(object):
 
-    def __init__(self, methodName='runTest', download_only=False):
-        super(OsmFixtureTest, self).__init__(methodName)
-        self.download_only = download_only
-
-    def setUp(self):
+    def setUp(self, test):
         self.env = make_fixture_environment()
+        self.test = test
 
-    def load_fixtures(self, urls, clip=None, simplify=None):
+    def load_fixtures(self, urls, clip, simplify):
         geojson_file = self.env.ensure_fixture_file(urls, clip, simplify)
 
         if environ.get('VERBOSE'):
@@ -1206,52 +1193,165 @@ class OsmFixtureTest(unittest.TestCase):
                     % (self.id(), geojson_size)
 
         feature_fetcher = FixtureFeatureFetcher([geojson_file], self.env)
-        self.assertions = Assertions(feature_fetcher, self)
+        self.assertions = Assertions(feature_fetcher, self.test)
 
     def assert_has_feature(self, z, x, y, layer, props):
-        if not self.download_only:
-            self.assertions.assert_has_feature(z, x, y, layer, props)
+        self.assertions.assert_has_feature(z, x, y, layer, props)
 
     def assert_no_matching_feature(self, z, x, y, layer, props):
-        if not self.download_only:
-            self.assertions.assert_no_matching_feature(z, x, y, layer, props)
+        self.assertions.assert_no_matching_feature(z, x, y, layer, props)
 
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
                                  exp_geom_type):
-        if not self.download_only:
-            self.assertions.assert_feature_geom_type(
-                z, x, y, layer, feature_id, exp_geom_type)
+        self.assertions.assert_feature_geom_type(
+            z, x, y, layer, feature_id, exp_geom_type)
 
     def assert_less_than_n_features(self, z, x, y, layer, properties, n):
-        if not self.download_only:
-            self.assertions.assert_less_than_n_features(
-                z, x, y, layer, properties, n)
+        self.assertions.assert_less_than_n_features(
+            z, x, y, layer, properties, n)
 
     def features_in_tile_layer(self, z, x, y, layer):
-        if not self.download_only:
-            return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
-        else:
-            return EmptyContext()
+        return self.assertions.ff.features_in_tile_layer(z, x, y, layer)
 
     def layers_in_tile(self, z, x, y):
-        if not self.download_only:
-            return self.assertions.ff.layers_in_tile(z, x, y)
-        else:
-            return EmptyContext()
+        return self.assertions.ff.layers_in_tile(z, x, y)
 
     def features_in_mvt_layer(self, z, x, y, layer):
-        if not self.download_only:
-            return self.assertions.ff.features_in_mvt_layer(z, x, y, layer)
-        else:
-            return EmptyContext()
+        return self.assertions.ff.features_in_mvt_layer(z, x, y, layer)
 
     def assertTrue(self, *args, **kwargs):
-        if not self.download_only:
-            super(OsmFixtureTest, self).assertTrue(*args, **kwargs)
+        self.test.assertTrue(*args, **kwargs)
 
     def assertFalse(self, *args, **kwargs):
-        if not self.download_only:
-            super(OsmFixtureTest, self).assertFalse(*args, **kwargs)
+        self.test.assertFalse(*args, **kwargs)
+
+
+class DownloadOnlyInstance(object):
+
+    def setUp(self, test):
+        self.env = make_fixture_environment()
+        self.test = test
+
+    def load_fixtures(self, urls, clip, simplify):
+        self.env.ensure_fixture_file(urls, clip, simplify)
+
+    def assert_has_feature(self, z, x, y, layer, props):
+        pass
+
+    def assert_no_matching_feature(self, z, x, y, layer, props):
+        pass
+
+    def assert_feature_geom_type(self, z, x, y, layer, feature_id,
+                                 exp_geom_type):
+        pass
+
+    def assert_less_than_n_features(self, z, x, y, layer, properties, n):
+        pass
+
+    def features_in_tile_layer(self, z, x, y, layer):
+        return EmptyContext()
+
+    def layers_in_tile(self, z, x, y):
+        return EmptyContext()
+
+    def features_in_mvt_layer(self, z, x, y, layer):
+        return EmptyContext()
+
+    def assertTrue(self, *args, **kwargs):
+        pass
+
+    def assertFalse(self, *args, **kwargs):
+        pass
+
+
+class CollectTilesInstance(object):
+
+    def __init__(self):
+        self.tiles = set()
+
+    def _add_tile(self, z, x, y):
+        self.tiles.add((z, x, y))
+
+    def setUp(self, test):
+        self.test = test
+
+    def load_fixtures(self, urls, clip, simplify):
+        pass
+
+    def assert_has_feature(self, z, x, y, layer, props):
+        self._add_tile(z, x, y)
+
+    def assert_no_matching_feature(self, z, x, y, layer, props):
+        self._add_tile(z, x, y)
+
+    def assert_feature_geom_type(self, z, x, y, layer, feature_id,
+                                 exp_geom_type):
+        self._add_tile(z, x, y)
+
+    def assert_less_than_n_features(self, z, x, y, layer, properties, n):
+        self._add_tile(z, x, y)
+
+    def features_in_tile_layer(self, z, x, y, layer):
+        self._add_tile(z, x, y)
+        return EmptyContext()
+
+    def layers_in_tile(self, z, x, y):
+        self._add_tile(z, x, y)
+        return EmptyContext()
+
+    def features_in_mvt_layer(self, z, x, y, layer):
+        self._add_tile(z, x, y)
+        return EmptyContext()
+
+    def assertTrue(self, *args, **kwargs):
+        pass
+
+    def assertFalse(self, *args, **kwargs):
+        pass
+
+
+class FixtureTest(unittest.TestCase):
+
+    def __init__(self, methodName='runTest', test_instance=None):
+        super(FixtureTest, self).__init__(methodName)
+        self.test_instance = test_instance
+
+    def setUp(self):
+        test = super(FixtureTest, self)
+        self.test_instance.setUp(test)
+
+    def load_fixtures(self, urls, clip=None, simplify=None):
+        self.test_instance.load_fixtures(urls, clip, simplify)
+
+    def assert_has_feature(self, z, x, y, layer, props):
+        self.test_instance.assert_has_feature(z, x, y, layer, props)
+
+    def assert_no_matching_feature(self, z, x, y, layer, props):
+        self.test_instance.assert_no_matching_feature(z, x, y, layer, props)
+
+    def assert_feature_geom_type(self, z, x, y, layer, feature_id,
+                                 exp_geom_type):
+        self.test_instance.assert_feature_geom_type(
+            z, x, y, layer, feature_id, exp_geom_type)
+
+    def assert_less_than_n_features(self, z, x, y, layer, properties, n):
+        self.test_instance.assert_less_than_n_features(
+            z, x, y, layer, properties, n)
+
+    def features_in_tile_layer(self, z, x, y, layer):
+        return self.test_instance.features_in_tile_layer(z, x, y, layer)
+
+    def layers_in_tile(self, z, x, y):
+        return self.test_instance.layers_in_tile(z, x, y)
+
+    def features_in_mvt_layer(self, z, x, y, layer):
+        return self.test_instance.features_in_mvt_layer(z, x, y, layer)
+
+    def assertTrue(self, *args, **kwargs):
+        self.test_instance.assertTrue(*args, **kwargs)
+
+    def assertFalse(self, *args, **kwargs):
+        self.test_instance.assertFalse(*args, **kwargs)
 
     def tile_bbox(self, z, x, y, padding=0.0):
         coord = Coordinate(zoom=z, column=x, row=y)
@@ -1416,6 +1516,7 @@ if __name__ == '__main__':
     from unittest.util import strclass
     import sys
     import argparse
+    import os
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -1425,11 +1526,24 @@ if __name__ == '__main__':
         '--download-only', dest='download_only', action='store_const',
         const=True, default=False, help='Only download the fixtures, do not '
         'actually run the tests.')
+    parser.add_argument(
+        '--print-coords', dest='print_coords', action='store_const',
+        const=True, default=False, help='Print out the coordinates used by '
+        'the tests.')
     args = parser.parse_args()
+
+    test_stdout = sys.stderr
+    if args.download_only:
+        test_instance = DownloadOnlyInstance()
+    elif args.print_coords:
+        test_instance = CollectTilesInstance()
+        test_stdout = open(os.devnull, 'w')
+    else:
+        test_instance = RunTestInstance()
 
     loader = unittest.TestLoader()
     suite = load_tests(loader, unittest.TestSuite(),
-                       download_only=args.download_only)
+                       test_instance=test_instance)
 
     # convert filenames such as 'integration-test/1234-my-test.py' to the
     # equivalent module name. this can be helpful on the command line, when
@@ -1457,8 +1571,12 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     suite.addTests(tests)
 
-    runner = unittest.TextTestRunner()
+    runner = unittest.TextTestRunner(stream=test_stdout)
     result = runner.run(suite)
 
     if not result.wasSuccessful():
         sys.exit(1)
+
+    if isinstance(test_instance, CollectTilesInstance):
+        for z, x, y in test_instance.tiles:
+            print "%d/%d/%d" % (z, x, y)

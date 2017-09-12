@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NationalForests(OsmFixtureTest):
+class NationalForests(FixtureTest):
     def test_boundary_national_park(self):
         # Example Stanislaus National Forest in California near Yosemite
         # should be kind:forest.

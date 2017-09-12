@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MultilineEncoded(OsmFixtureTest):
+class MultilineEncoded(FixtureTest):
     def test_multiline_encoded(self):
         # Way: Big Bear Boulevard (325846175)
         self.load_fixtures(['http://www.openstreetmap.org/way/325846175'])

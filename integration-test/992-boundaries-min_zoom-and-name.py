@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BoundariesMinZoomAndNameNe(OsmFixtureTest):
+class BoundariesMinZoomAndNameNe(FixtureTest):
     # global:
     #   # NOTE: Natural Earth 1:50 million used zooms 0,1,2,3,4
     #   #       and only has USA, Canada, Brazil, and Australia
@@ -124,7 +124,7 @@ class BoundariesMinZoomAndNameNe(OsmFixtureTest):
             {'kind': 'region', 'min_zoom': 7})
 
 
-class BoundariesMinZoomAndNameOsm(OsmFixtureTest):
+class BoundariesMinZoomAndNameOsm(FixtureTest):
     def test_region_boundary_zug_luzern(self):
         # Switzerland region HAS name, OpenStreetMap
         self.load_fixtures([

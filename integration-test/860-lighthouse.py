@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Lighthouse(OsmFixtureTest):
+class Lighthouse(FixtureTest):
     def test_with_attraction(self):
         # update lighthouse zoom to 15 and if attraction zoom to 14
         # lighthouse with tourism = attraction

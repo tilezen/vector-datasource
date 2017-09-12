@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlyPath(OsmFixtureTest):
+class EarlyPath(FixtureTest):
     def test_pacific_crest_trail(self):
         # highway=path, with route national (Pacific Crest Trail)
         self.load_fixtures(

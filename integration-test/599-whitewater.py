@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class Whitewater(OsmFixtureTest):
+class Whitewater(FixtureTest):
     def test_put_in_egress(self):
         self.load_fixtures(['https://www.openstreetmap.org/node/3134398100'])
 

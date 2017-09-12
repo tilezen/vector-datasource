@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class SwimmingPools(OsmFixtureTest):
+class SwimmingPools(FixtureTest):
 
     def test_amenity_swimming_pool(self):
         # Bayonne Municipal Pool, amenity=swimming_pool

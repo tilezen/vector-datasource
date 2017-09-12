@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class IntermittentWater(OsmFixtureTest):
+class IntermittentWater(FixtureTest):
     def test_river(self):
         # Arizona Canal Diversion Channel (ACDC)
         self.load_fixtures(['http://www.openstreetmap.org/way/107817218'])

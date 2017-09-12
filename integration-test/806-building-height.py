@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BuildingHeight(OsmFixtureTest):
+class BuildingHeight(FixtureTest):
     def test_from_building_levels(self):
         # check that we synthesize a height value from building:levels
         # Way: R5 Tower A (431358377)

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class LocalityChangesPlacesNe(OsmFixtureTest):
+class LocalityChangesPlacesNe(FixtureTest):
 
     def setUp(self):
         super(LocalityChangesPlacesNe, self).setUp()
@@ -48,7 +48,7 @@ class LocalityChangesPlacesNe(OsmFixtureTest):
              'kind_detail': 'scientific_station'})
 
 
-class LocalityChangesPlacesOsm(OsmFixtureTest):
+class LocalityChangesPlacesOsm(FixtureTest):
     def test_no_region_capital_false(self):
         # Washington (158368533)
         # no region_capital false

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WofL10nName(OsmFixtureTest):
+class WofL10nName(FixtureTest):
     def test_hollywood(self):
         # Hollywood (wof neighbourhood)
         self.load_fixtures([

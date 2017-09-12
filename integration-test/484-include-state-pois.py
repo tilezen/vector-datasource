@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class IncludeStatePois(OsmFixtureTest):
+class IncludeStatePois(FixtureTest):
     def test_proposed_stations(self):
         # Antioch Station
         self.load_fixtures(['https://www.openstreetmap.org/node/3353451464'])

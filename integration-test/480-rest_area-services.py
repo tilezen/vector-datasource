@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RestAreaServices(OsmFixtureTest):
+class RestAreaServices(FixtureTest):
     def test_rest_area_node(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/159773030'])
 

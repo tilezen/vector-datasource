@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BusRouteRefs(OsmFixtureTest):
+class BusRouteRefs(FixtureTest):
     def test_one_bus_route(self):
         # Sloat Blvd, part of:
         #   type=route, route=bus, network="", ref=23

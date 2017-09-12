@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WalkingRouteRefs(OsmFixtureTest):
+class WalkingRouteRefs(FixtureTest):
     def test_single_route(self):
         # walking route constituent ways should have the walking route
         # properties projected onto them.

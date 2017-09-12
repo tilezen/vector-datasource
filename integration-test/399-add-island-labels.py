@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AddIslandLabels(OsmFixtureTest):
+class AddIslandLabels(FixtureTest):
     def test_ne_land_110m(self):
         # Natural Earth 110m
         self.load_fixtures([

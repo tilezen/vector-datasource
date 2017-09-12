@@ -1,4 +1,4 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 from mapbox_vector_tile.decoder import POLYGON
 
 
@@ -25,7 +25,7 @@ def area_of(polygons):
     return area
 
 
-class InvalidWkbPolygons(OsmFixtureTest):
+class InvalidWkbPolygons(FixtureTest):
 
     def test_caspian_sea_exists(self):
         # Caspian Sea

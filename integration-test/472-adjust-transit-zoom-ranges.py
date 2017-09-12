@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AdjustTransitZoomRanges(OsmFixtureTest):
+class AdjustTransitZoomRanges(FixtureTest):
     def test_bart(self):
         # SFO-Pittsburg/Bay Point BART
         self.load_fixtures(['https://www.openstreetmap.org/relation/2827684'])

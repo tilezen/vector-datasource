@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BayWater(OsmFixtureTest):
+class BayWater(FixtureTest):
     def test_san_pablo_bay(self):
         # San Pablo Bay
         self.load_fixtures(['https://www.openstreetmap.org/way/43950409'])

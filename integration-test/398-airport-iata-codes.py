@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class AirportIataCodes(OsmFixtureTest):
+class AirportIataCodes(FixtureTest):
     def test_sfo(self):
         # San Francisco International
         self.load_fixtures(['https://www.openstreetmap.org/way/23718192'])

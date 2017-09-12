@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class DropPhysicalRailwaysFromTransit(OsmFixtureTest):
+class DropPhysicalRailwaysFromTransit(FixtureTest):
 
     def test_drop_physical_railways(self):
         import urllib

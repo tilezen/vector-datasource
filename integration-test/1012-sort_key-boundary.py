@@ -1,8 +1,8 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 # Adds tests for OSM features (but not NE features)
-class SortKeyBoundary(OsmFixtureTest):
+class SortKeyBoundary(FixtureTest):
 
     def test_usa_country_boundary(self):
         # country boundary of USA

@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CategorizeTrains(OsmFixtureTest):
+class CategorizeTrains(FixtureTest):
     def test_long_distance(self):
         self.load_fixtures(
             ['https://www.openstreetmap.org/relation/2812900'],

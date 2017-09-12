@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MotorwayLinkZ11(OsmFixtureTest):
+class MotorwayLinkZ11(FixtureTest):
     def test_motorway_link_until_zoom_11(self):
         z, x, y = 11, 327, 791
 

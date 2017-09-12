@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class PredictableLayersPois(OsmFixtureTest):
+class PredictableLayersPois(FixtureTest):
     def test_grave_yard_node(self):
         # Node:358830410 Grave_yard in POIs
         self.load_fixtures(['http://www.openstreetmap.org/node/358830410'])

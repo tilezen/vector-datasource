@@ -1,4 +1,4 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 def _url_for(osm_id):
@@ -6,7 +6,7 @@ def _url_for(osm_id):
     return 'https://www.openstreetmap.org/%s/%d' % (typ, abs(osm_id))
 
 
-class BigBoxStores(OsmFixtureTest):
+class BigBoxStores(FixtureTest):
 
     def test_big_box_stores(self):
         tests = [

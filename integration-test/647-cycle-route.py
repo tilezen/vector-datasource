@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class CycleRoute(OsmFixtureTest):
+class CycleRoute(FixtureTest):
     def test_embarcadero(self):
         #  Way: The Embarcadero (24335490)
         self.load_fixtures([

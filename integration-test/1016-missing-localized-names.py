@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MissingLocalizedNames(OsmFixtureTest):
+class MissingLocalizedNames(FixtureTest):
     def test_nj_ny_state_boundary(self):
         # New Jersey - New York state boundary
         self.load_fixtures([

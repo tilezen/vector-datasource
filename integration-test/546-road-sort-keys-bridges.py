@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class RoadSortKeysBridges(OsmFixtureTest):
+class RoadSortKeysBridges(FixtureTest):
     def test_motorway_bridge(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/28412298'])
 

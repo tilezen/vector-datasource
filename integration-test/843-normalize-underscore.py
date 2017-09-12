@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizeUnderscore(OsmFixtureTest):
+class NormalizeUnderscore(FixtureTest):
     def test_drive_through(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/219071307'])
 

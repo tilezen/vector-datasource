@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NoCountryLabelLowZoom(OsmFixtureTest):
+class NoCountryLabelLowZoom(FixtureTest):
     def test_no_country_label_at_low_zoom(self):
         # United States
         self.load_fixtures(['http://www.openstreetmap.org/node/424317935'])

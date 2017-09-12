@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MissingRoad(OsmFixtureTest):
+class MissingRoad(FixtureTest):
     def test_route_611(self):
         # Relation: route 611 (975266)
         self.load_fixtures(

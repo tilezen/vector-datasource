@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizePlaceKind(OsmFixtureTest):
+class NormalizePlaceKind(FixtureTest):
     def test_state(self):
         # Node: California (671022)
         self.load_fixtures(['http://www.openstreetmap.org/node/671022'])
@@ -76,7 +76,7 @@ class NormalizePlaceKind(OsmFixtureTest):
             {'id': 3219761323, 'kind': 'locality', 'kind_detail': 'farm'})
 
 
-class NormalizePlaceKindNaturalEarth(OsmFixtureTest):
+class NormalizePlaceKindNaturalEarth(FixtureTest):
 
     def setUp(self):
         super(NormalizePlaceKindNaturalEarth, self).setUp()

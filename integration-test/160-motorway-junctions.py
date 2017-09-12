@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class MotorwayJunctions(OsmFixtureTest):
+class MotorwayJunctions(FixtureTest):
 
     def test_motorway_junctions(self):
         self.load_fixtures([

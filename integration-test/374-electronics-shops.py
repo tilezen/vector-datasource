@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ElectronicsShops(OsmFixtureTest):
+class ElectronicsShops(FixtureTest):
 
     def test_best_buy(self):
         self._run_test(

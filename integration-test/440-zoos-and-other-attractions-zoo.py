@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class ZoosAndOtherAttractionsZoo(OsmFixtureTest):
+class ZoosAndOtherAttractionsZoo(FixtureTest):
     def test_zoos(self):
         # Bear Enclosure (presumably + woods=yes?)
         self._run_test(16, 11458, 21855, 316623706, 'enclosure')

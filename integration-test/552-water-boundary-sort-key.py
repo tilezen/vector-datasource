@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class WaterBoundarySortKey(OsmFixtureTest):
+class WaterBoundarySortKey(FixtureTest):
     def test_water_boundary_sort_key(self):
         # from https://github.com/mapzen/vector-datasource/issues/552
         self.load_fixtures([

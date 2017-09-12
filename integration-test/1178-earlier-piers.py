@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class EarlierPiers(OsmFixtureTest):
+class EarlierPiers(FixtureTest):
 
     def test_very_large_pier(self):
         # a very, very large pier which alters the coastline visually, so

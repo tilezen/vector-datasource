@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class LanduseTier(OsmFixtureTest):
+class LanduseTier(FixtureTest):
     def test_large_national_park(self):
         # area 1.75564e+10
         self.load_fixtures(['http://www.openstreetmap.org/relation/1453306'])

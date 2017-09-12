@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class BicycleRamps(OsmFixtureTest):
+class BicycleRamps(FixtureTest):
 
     def test_ramp_properties_on_path(self):
         # Add ramp properties to paths in roads layer

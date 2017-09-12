@@ -1,7 +1,7 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
-class NormalizeOperatorValues(OsmFixtureTest):
+class NormalizeOperatorValues(FixtureTest):
     def test_us_national_park_service(self):
         # Standardize operator values
         # US National Park Service in POIS

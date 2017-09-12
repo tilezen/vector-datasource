@@ -1,4 +1,4 @@
-from . import OsmFixtureTest
+from . import FixtureTest
 
 
 def _freeze(thing):
@@ -19,7 +19,7 @@ def _query_highway(highway):
     return overpass + 'way(' + bbox + ')[highway=' + highway + '];>;'
 
 
-class MergeSameRoads(OsmFixtureTest):
+class MergeSameRoads(FixtureTest):
 
     def test_roads_merged(self):
         # count the unique parameters - there should only be one, indicating
