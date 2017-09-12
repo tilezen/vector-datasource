@@ -34,6 +34,7 @@ deployment:
       - pip install 'Circle-Beacon == 2.0.0'
       - alert-circle mapzen documentation master $CIRCLE_TOKEN
       - ./scripts/update-integration-test-coordinates.sh
+      - pip install s3cmd
       - s3cmd --continue-put put ~/.cache/vector-datasource/*.geojson s3://mapzen-tiles-assets/integration-test-fixtures/
   release:
     tag: /.+/
