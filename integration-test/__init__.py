@@ -801,7 +801,8 @@ class FixtureDataSources(object):
 
 class FixtureEnvironment(object):
 
-    def __init__(self):
+    def __init__(self, regenerate):
+        self.regenerate = regenerate
         src_directory = abspath(path_join(dirname(__file__), '..'))
         config_file = path_join(src_directory, 'queries.yaml')
         buffer_cfg = {}
@@ -877,23 +878,29 @@ class FixtureEnvironment(object):
         test_uuid = _hash(canonical_urls, clip, simplify)
         geojson_file = path_join(self.cache_dir, test_uuid + '.geojson')
 
-        # first try - download it from the global fixture cache
-        if not path_exists(geojson_file):
+        # if we want to regenerate from scratch, skip all the cache checking
+        # steps.
+        if not self.regenerate:
+            # if the file exists, use it
+            if path_exists(geojson_file):
+                return geojson_file
+
+            # first try - download it from the global fixture cache
             try:
                 r = requests.get("%s/%s.geojson" % (FIXTURE_CACHE, test_uuid))
 
                 if r.status_code == 200:
                     with open(geojson_file, 'wb') as fh:
                         fh.write(r.text)
+                    return geojson_file
 
             except StandardError:
                 pass
 
         # second try - generate it from the URLs
-        if not path_exists(geojson_file):
-            self.data_sources.download(urls, geojson_file, clip, simplify)
-            assert path_exists(geojson_file), \
-                "Ooops, something went wrong downloading %r" % (geojson_file,)
+        self.data_sources.download(urls, geojson_file, clip, simplify)
+        assert path_exists(geojson_file), \
+            "Ooops, something went wrong downloading %r" % (geojson_file,)
 
         return geojson_file
 
@@ -1149,8 +1156,8 @@ def memoize(f):
 
 
 @memoize
-def make_fixture_environment():
-    return FixtureEnvironment()
+def make_fixture_environment(regenerate):
+    return FixtureEnvironment(regenerate)
 
 
 def expand_bbox(bounds, padding):
@@ -1179,8 +1186,11 @@ class EmptyContext(object):
 
 class RunTestInstance(object):
 
+    def __init__(self, regenerate=False):
+        self.regenerate = regenerate
+
     def setUp(self, test):
-        self.env = make_fixture_environment()
+        self.env = make_fixture_environment(self.regenerate)
         self.test = test
 
     def load_fixtures(self, urls, clip, simplify):
@@ -1230,8 +1240,11 @@ class RunTestInstance(object):
 
 class DownloadOnlyInstance(object):
 
+    def __init__(self, regenerate=False):
+        self.regenerate = regenerate
+
     def setUp(self, test):
-        self.env = make_fixture_environment()
+        self.env = make_fixture_environment(self.regenerate)
         self.test = test
 
     def load_fixtures(self, urls, clip, simplify):
@@ -1532,16 +1545,19 @@ if __name__ == '__main__':
         '--print-coords', dest='print_coords', action='store_const',
         const=True, default=False, help='Print out the coordinates used by '
         'the tests.')
+    parser.add_argument(
+        '--regenerate', action='store_const', const=True, default=False,
+        help='Always regenerate the fixture, even if it exists in the cache.')
     args = parser.parse_args()
 
     test_stdout = sys.stderr
     if args.download_only:
-        test_instance = DownloadOnlyInstance()
+        test_instance = DownloadOnlyInstance(regenerate=args.regenerate)
     elif args.print_coords:
         test_instance = CollectTilesInstance()
         test_stdout = open(os.devnull, 'w')
     else:
-        test_instance = RunTestInstance()
+        test_instance = RunTestInstance(regenerate=args.regenerate)
 
     loader = unittest.TestLoader()
     suite = load_tests(loader, unittest.TestSuite(),
