@@ -461,10 +461,33 @@ def dump_geojson(dbname, target_file, log, clip, simplify):
 
         if relation_ids:
             with conn.cursor() as cur:
+                # this complex query grabs all the relations using any feature
+                # that the query has seen so far, and the relations using
+                # those, and so on recursively. this data is used to discover
+                # the root relation ID for railway stations.
                 cur.execute("""
-                  SELECT json_agg(row_to_json(r.*))
-                  FROM planet_osm_rels r
-                  WHERE id IN %s
+WITH RECURSIVE upward_search(level,path,id,parts,rel_off,cycle) AS (
+    SELECT 0,ARRAY[id],id,parts,rel_off,false
+    FROM planet_osm_rels WHERE id IN %s
+  UNION
+    SELECT
+      level + 1,
+      path || r.id,
+      r.id,
+      r.parts,
+      r.rel_off,
+      r.id = ANY(path)
+    FROM
+      planet_osm_rels r JOIN upward_search s
+    ON
+      ARRAY[s.id] && r.parts
+    WHERE
+      ARRAY[s.id] && r.parts[r.rel_off+1:array_upper(r.parts,1)] AND
+      NOT cycle
+  )
+  SELECT json_agg(row_to_json(r.*))
+  FROM planet_osm_rels r
+  WHERE r.id IN (SELECT DISTINCT id FROM upward_search)
                 """, (tuple(relation_ids),))
 
                 relations = cur.fetchone()[0]
@@ -911,10 +934,13 @@ class FixtureEnvironment(object):
 
 def _load_fixtures(geojson_files):
     rows = []
+    rels = []
     for geojson_file in geojson_files:
         with open(geojson_file, 'rb') as fh:
-            rows.extend(_load_fixture(fh))
-    return rows
+            new_rows, new_rels = _load_fixture(fh)
+            rows.extend(new_rows)
+            rels.extend(new_rels)
+    return rows, rels
 
 
 WAY_TYPES = ('LineString', 'MultiLineString', 'Polygon', 'MultiPolygon')
@@ -962,16 +988,17 @@ def _load_fixture(fh):
         if node_ways:
             node_props['__ways__'] = node_ways
 
-    return rows
+    return rows, relations
 
 
 class FixtureFeatureFetcher(object):
 
     def __init__(self, geojson_files, fixture_env):
-        rows = _load_fixtures(geojson_files)
+        rows, rels = _load_fixtures(geojson_files)
         self.fetcher = make_fixture_data_fetcher(
             fixture_env.layer_functions, rows,
-            fixture_env.label_placement_layers)
+            fixture_env.label_placement_layers,
+            relations=rels)
         self.fixture_env = fixture_env
 
     def _generate_feature_layers(self, z, x, y):
