@@ -993,8 +993,7 @@ def _load_fixture(fh):
 
 class FixtureFeatureFetcher(object):
 
-    def __init__(self, geojson_files, fixture_env):
-        rows, rels = _load_fixtures(geojson_files)
+    def __init__(self, rows, rels, fixture_env):
         self.fetcher = make_fixture_data_fetcher(
             fixture_env.layer_functions, rows,
             fixture_env.label_placement_layers,
@@ -1231,7 +1230,19 @@ class RunTestInstance(object):
                     "very large, %d bytes." \
                     % (self.id(), geojson_size)
 
-        feature_fetcher = FixtureFeatureFetcher([geojson_file], self.env)
+        rows, rels = _load_fixtures([geojson_file])
+        feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
+        self.assertions = Assertions(feature_fetcher, self.test)
+
+    def generate_fixtures(self, objs):
+        # features in rows will be dsl.Feature objects (which are namedtuples)
+        # or tuples of (fid, shape, properties). the rels should be dicts with
+        # keys for id, tags, way and rel offsets and "parts" array of IDs, as
+        # if they had come from osm2pgsql's planet_osm_rels table.
+        rows = filter(lambda o: isinstance(o, tuple), objs)
+        rels = filter(lambda o: isinstance(o, dict), objs)
+
+        feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
         self.assertions = Assertions(feature_fetcher, self.test)
 
     def assert_has_feature(self, z, x, y, layer, props):
@@ -1277,6 +1288,10 @@ class DownloadOnlyInstance(object):
     def load_fixtures(self, urls, clip, simplify):
         self.env.ensure_fixture_file(urls, clip, simplify)
 
+    def generate_fixtures(self, objs):
+        # there is nothing to download for a generated fixture.
+        pass
+
     def assert_has_feature(self, z, x, y, layer, props):
         pass
 
@@ -1318,6 +1333,9 @@ class CollectTilesInstance(object):
         self.test = test
 
     def load_fixtures(self, urls, clip, simplify):
+        pass
+
+    def generate_fixtures(self, objs):
         pass
 
     def assert_has_feature(self, z, x, y, layer, props):
@@ -1364,6 +1382,9 @@ class FixtureTest(unittest.TestCase):
 
     def load_fixtures(self, urls, clip=None, simplify=None):
         self.test_instance.load_fixtures(urls, clip, simplify)
+
+    def generate_fixtures(self, *objs):
+        self.test_instance.generate_fixtures(objs)
 
     def assert_has_feature(self, z, x, y, layer, props):
         self.test_instance.assert_has_feature(z, x, y, layer, props)
