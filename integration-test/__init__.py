@@ -957,7 +957,10 @@ def _load_fixture(fh):
         props = feature['properties']
         rel_ids = set(feature.get('relation_ids', []))
         if rel_ids:
-            rels = filter(lambda r: r['id'] in rel_ids, relations)
+            rels = []
+            for r in relations:
+                if r['id'] in rel_ids:
+                    rels.append(r)
             if rels:
                 props['__relations__'] = rels
         geom_lnglat = make_shape(feature['geometry'])
@@ -1239,8 +1242,13 @@ class RunTestInstance(object):
         # or tuples of (fid, shape, properties). the rels should be dicts with
         # keys for id, tags, way and rel offsets and "parts" array of IDs, as
         # if they had come from osm2pgsql's planet_osm_rels table.
-        rows = filter(lambda o: isinstance(o, tuple), objs)
-        rels = filter(lambda o: isinstance(o, dict), objs)
+        rows = []
+        rels = []
+        for o in objs:
+            if isinstance(o, tuple):
+                rows.append(o)
+            elif isinstance(o, dict):
+                rels.append(o)
 
         feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
         self.assertions = Assertions(feature_fetcher, self.test)
