@@ -461,10 +461,33 @@ def dump_geojson(dbname, target_file, log, clip, simplify):
 
         if relation_ids:
             with conn.cursor() as cur:
+                # this complex query grabs all the relations using any feature
+                # that the query has seen so far, and the relations using
+                # those, and so on recursively. this data is used to discover
+                # the root relation ID for railway stations.
                 cur.execute("""
-                  SELECT json_agg(row_to_json(r.*))
-                  FROM planet_osm_rels r
-                  WHERE id IN %s
+WITH RECURSIVE upward_search(level,path,id,parts,rel_off,cycle) AS (
+    SELECT 0,ARRAY[id],id,parts,rel_off,false
+    FROM planet_osm_rels WHERE id IN %s
+  UNION
+    SELECT
+      level + 1,
+      path || r.id,
+      r.id,
+      r.parts,
+      r.rel_off,
+      r.id = ANY(path)
+    FROM
+      planet_osm_rels r JOIN upward_search s
+    ON
+      ARRAY[s.id] && r.parts
+    WHERE
+      ARRAY[s.id] && r.parts[r.rel_off+1:array_upper(r.parts,1)] AND
+      NOT cycle
+  )
+  SELECT json_agg(row_to_json(r.*))
+  FROM planet_osm_rels r
+  WHERE r.id IN (SELECT DISTINCT id FROM upward_search)
                 """, (tuple(relation_ids),))
 
                 relations = cur.fetchone()[0]
@@ -801,7 +824,8 @@ class FixtureDataSources(object):
 
 class FixtureEnvironment(object):
 
-    def __init__(self):
+    def __init__(self, regenerate):
+        self.regenerate = regenerate
         src_directory = abspath(path_join(dirname(__file__), '..'))
         config_file = path_join(src_directory, 'queries.yaml')
         buffer_cfg = {}
@@ -877,23 +901,29 @@ class FixtureEnvironment(object):
         test_uuid = _hash(canonical_urls, clip, simplify)
         geojson_file = path_join(self.cache_dir, test_uuid + '.geojson')
 
-        # first try - download it from the global fixture cache
-        if not path_exists(geojson_file):
+        # if we want to regenerate from scratch, skip all the cache checking
+        # steps.
+        if not self.regenerate:
+            # if the file exists, use it
+            if path_exists(geojson_file):
+                return geojson_file
+
+            # first try - download it from the global fixture cache
             try:
                 r = requests.get("%s/%s.geojson" % (FIXTURE_CACHE, test_uuid))
 
                 if r.status_code == 200:
                     with open(geojson_file, 'wb') as fh:
                         fh.write(r.text)
+                    return geojson_file
 
             except StandardError:
                 pass
 
         # second try - generate it from the URLs
-        if not path_exists(geojson_file):
-            self.data_sources.download(urls, geojson_file, clip, simplify)
-            assert path_exists(geojson_file), \
-                "Ooops, something went wrong downloading %r" % (geojson_file,)
+        self.data_sources.download(urls, geojson_file, clip, simplify)
+        assert path_exists(geojson_file), \
+            "Ooops, something went wrong downloading %r" % (geojson_file,)
 
         return geojson_file
 
@@ -904,10 +934,13 @@ class FixtureEnvironment(object):
 
 def _load_fixtures(geojson_files):
     rows = []
+    rels = []
     for geojson_file in geojson_files:
         with open(geojson_file, 'rb') as fh:
-            rows.extend(_load_fixture(fh))
-    return rows
+            new_rows, new_rels = _load_fixture(fh)
+            rows.extend(new_rows)
+            rels.extend(new_rels)
+    return rows, rels
 
 
 WAY_TYPES = ('LineString', 'MultiLineString', 'Polygon', 'MultiPolygon')
@@ -924,7 +957,10 @@ def _load_fixture(fh):
         props = feature['properties']
         rel_ids = set(feature.get('relation_ids', []))
         if rel_ids:
-            rels = filter(lambda r: r['id'] in rel_ids, relations)
+            rels = []
+            for r in relations:
+                if r['id'] in rel_ids:
+                    rels.append(r)
             if rels:
                 props['__relations__'] = rels
         geom_lnglat = make_shape(feature['geometry'])
@@ -955,16 +991,16 @@ def _load_fixture(fh):
         if node_ways:
             node_props['__ways__'] = node_ways
 
-    return rows
+    return rows, relations
 
 
 class FixtureFeatureFetcher(object):
 
-    def __init__(self, geojson_files, fixture_env):
-        rows = _load_fixtures(geojson_files)
+    def __init__(self, rows, rels, fixture_env):
         self.fetcher = make_fixture_data_fetcher(
             fixture_env.layer_functions, rows,
-            fixture_env.label_placement_layers)
+            fixture_env.label_placement_layers,
+            relations=rels)
         self.fixture_env = fixture_env
 
     def _generate_feature_layers(self, z, x, y):
@@ -1149,8 +1185,8 @@ def memoize(f):
 
 
 @memoize
-def make_fixture_environment():
-    return FixtureEnvironment()
+def make_fixture_environment(regenerate):
+    return FixtureEnvironment(regenerate)
 
 
 def expand_bbox(bounds, padding):
@@ -1179,8 +1215,11 @@ class EmptyContext(object):
 
 class RunTestInstance(object):
 
+    def __init__(self, regenerate=False):
+        self.regenerate = regenerate
+
     def setUp(self, test):
-        self.env = make_fixture_environment()
+        self.env = make_fixture_environment(self.regenerate)
         self.test = test
 
     def load_fixtures(self, urls, clip, simplify):
@@ -1194,7 +1233,24 @@ class RunTestInstance(object):
                     "very large, %d bytes." \
                     % (self.id(), geojson_size)
 
-        feature_fetcher = FixtureFeatureFetcher([geojson_file], self.env)
+        rows, rels = _load_fixtures([geojson_file])
+        feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
+        self.assertions = Assertions(feature_fetcher, self.test)
+
+    def generate_fixtures(self, objs):
+        # features in rows will be dsl.Feature objects (which are namedtuples)
+        # or tuples of (fid, shape, properties). the rels should be dicts with
+        # keys for id, tags, way and rel offsets and "parts" array of IDs, as
+        # if they had come from osm2pgsql's planet_osm_rels table.
+        rows = []
+        rels = []
+        for o in objs:
+            if isinstance(o, tuple):
+                rows.append(o)
+            elif isinstance(o, dict):
+                rels.append(o)
+
+        feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
         self.assertions = Assertions(feature_fetcher, self.test)
 
     def assert_has_feature(self, z, x, y, layer, props):
@@ -1230,12 +1286,19 @@ class RunTestInstance(object):
 
 class DownloadOnlyInstance(object):
 
+    def __init__(self, regenerate=False):
+        self.regenerate = regenerate
+
     def setUp(self, test):
-        self.env = make_fixture_environment()
+        self.env = make_fixture_environment(self.regenerate)
         self.test = test
 
     def load_fixtures(self, urls, clip, simplify):
         self.env.ensure_fixture_file(urls, clip, simplify)
+
+    def generate_fixtures(self, objs):
+        # there is nothing to download for a generated fixture.
+        pass
 
     def assert_has_feature(self, z, x, y, layer, props):
         pass
@@ -1278,6 +1341,9 @@ class CollectTilesInstance(object):
         self.test = test
 
     def load_fixtures(self, urls, clip, simplify):
+        pass
+
+    def generate_fixtures(self, objs):
         pass
 
     def assert_has_feature(self, z, x, y, layer, props):
@@ -1324,6 +1390,9 @@ class FixtureTest(unittest.TestCase):
 
     def load_fixtures(self, urls, clip=None, simplify=None):
         self.test_instance.load_fixtures(urls, clip, simplify)
+
+    def generate_fixtures(self, *objs):
+        self.test_instance.generate_fixtures(objs)
 
     def assert_has_feature(self, z, x, y, layer, props):
         self.test_instance.assert_has_feature(z, x, y, layer, props)
@@ -1532,16 +1601,19 @@ if __name__ == '__main__':
         '--print-coords', dest='print_coords', action='store_const',
         const=True, default=False, help='Print out the coordinates used by '
         'the tests.')
+    parser.add_argument(
+        '--regenerate', action='store_const', const=True, default=False,
+        help='Always regenerate the fixture, even if it exists in the cache.')
     args = parser.parse_args()
 
     test_stdout = sys.stderr
     if args.download_only:
-        test_instance = DownloadOnlyInstance()
+        test_instance = DownloadOnlyInstance(regenerate=args.regenerate)
     elif args.print_coords:
         test_instance = CollectTilesInstance()
         test_stdout = open(os.devnull, 'w')
     else:
-        test_instance = RunTestInstance()
+        test_instance = RunTestInstance(regenerate=args.regenerate)
 
     loader = unittest.TestLoader()
     suite = load_tests(loader, unittest.TestSuite(),
