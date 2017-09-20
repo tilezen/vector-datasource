@@ -141,7 +141,7 @@ https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_k
 
 The suggested max `{z}` value for 512 pixel tiles is zoom **15**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 15 tile.
 
-In practice, requesting `512` tiles at max zoom **16** can improve Tangram performance. Specifying [tile_size](https://mapzen.com/documentation/tangram/sources/#tile_size) of 512 in the Tangram source is strongly suggested or content will stretch and appear less detailed than intended.
+In practice, requesting `512` tiles at max zoom **16** can improve Tangram performance. Specifying [tile_size](https://mapzen.com/documentation/tangram/sources/#tile_size) of `512` in the Tangram source block is strongly suggested otherwise content will stretch and appear less detailed than intended.
 
 **512 in path:**
 
