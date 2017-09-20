@@ -164,7 +164,7 @@ sources:
 
 ## TileJSON
 
-[TileJSON](https://github.com/mapbox/tilejson-spec) is an open standard for representing map metadata. It describes a vector tile service's layers and common properties. It also specifies how to request request vector tiles (in `mvt` format and `256` px tile size), and is helpful to get started in applications like [Maputnik](https://github.com/maputnik/editor) and [Mapbox Studio Classic](https://www.mapbox.com/help/define-mapbox-studio-classic/). You can retrieve Mapzen's TileJSON file at:
+[TileJSON](https://github.com/mapbox/tilejson-spec) is an open standard for representing map metadata. It describes a vector tile service's layers and common properties. It also specifies how to request vector tiles (in `mvt` format and `256` px tile size), and is helpful to get started in applications like [Maputnik](https://github.com/maputnik/editor) and [Mapbox Studio Classic](https://www.mapbox.com/help/define-mapbox-studio-classic/). You can retrieve Mapzen's TileJSON file at:
 
 ```
 http://tile.mapzen.com/mapzen/vector/v1/tilejson/mapbox.json?api_key=your-mapzen-api-key
