@@ -108,11 +108,12 @@ https://tile.mapzen.com/mapzen/vector/v1/{tilesize}/{layers}/{z}/{x}/{y}.{format
 
 ### 256 tile size (default)
 
-The suggested max `{z}` value for 256 pixel tiles is zoom **16**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 16 tile.
+The suggested max `{z}` value for `256` pixel tiles is zoom **16**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 16 tile.
 
 **Default:**
 
-Including tile size in the path is not required. When not specified the default size of 256 is returned.
+Including tile size in the path is not required. When not specified the default size of `256` is returned, and Tangram's default `tile_size` of 256 is used.
+.
 
 ```
 https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key
@@ -140,6 +141,8 @@ https://tile.mapzen.com/mapzen/vector/v1/256/{layers}/{z}/{x}/{y}.{format}?api_k
 
 The suggested max `{z}` value for 512 pixel tiles is zoom **15**. Requesting `{z}` coordinates up to 20 will return a smaller geographic area, but the tile will not include any additional data over the zoom 15 tile.
 
+In practice, requesting `512` tiles at max zoom **16** can improve Tangram performance. Specifying [tile_size](https://mapzen.com/documentation/tangram/sources/#tile_size) of 512 in the Tangram source is strongly suggested or content will stretch and appear less detailed than intended.
+
 **512 in path:**
 
 ```
@@ -155,12 +158,13 @@ sources:
         url:  https://tile.mapzen.com/mapzen/vector/v1/512/all/{z}/{x}/{y}.mvt
         url_params:
             api_key: your-mapzen-api-key
+        tile_size: 512
         max_zoom: 15
 ```
 
 ## TileJSON
 
-[TileJSON](https://github.com/mapbox/tilejson-spec) is an open standard for representing map metadata. It describes a vector tile service's layers and common properties. It also specifies how to request request vector tiles (in `mvt` format), and is helpful to get started in applications like [Maputnik](https://github.com/maputnik/editor) and [Mapbox Studio Classic](https://www.mapbox.com/help/define-mapbox-studio-classic/). You can retrieve Mapzen's TileJSON file at:
+[TileJSON](https://github.com/mapbox/tilejson-spec) is an open standard for representing map metadata. It describes a vector tile service's layers and common properties. It also specifies how to request request vector tiles (in `mvt` format and `256` px tile size), and is helpful to get started in applications like [Maputnik](https://github.com/maputnik/editor) and [Mapbox Studio Classic](https://www.mapbox.com/help/define-mapbox-studio-classic/). You can retrieve Mapzen's TileJSON file at:
 
 ```
 http://tile.mapzen.com/mapzen/vector/v1/tilejson/mapbox.json?api_key=your-mapzen-api-key
