@@ -24,3 +24,4 @@ git+https://github.com/tilezen/mapbox-vector-tile@master#egg=mapbox-vector-tile
 # TODO! move this back to master when the branch of tilequeue is merged!
 git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
+git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles
