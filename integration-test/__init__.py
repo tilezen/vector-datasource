@@ -12,7 +12,7 @@ from vectordatasource.meta.python import make_function_name_props
 from vectordatasource.meta.python import output_min_zoom
 from vectordatasource.meta.python import make_function_name_min_zoom
 from tilequeue.query import make_fixture_data_fetcher
-from tilequeue.query.fixture import LayerInfo
+from tilequeue.query.common import LayerInfo
 from ModestMaps.Core import Coordinate
 from tilequeue.tile import coord_to_mercator_bounds
 from tilequeue.tile import coord_to_bounds
