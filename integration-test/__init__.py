@@ -519,7 +519,7 @@ def _download_from_overpass(objs, target_file, clip, simplify, base_dir):
                         osc_file, base_dir, dbname, shell)
                     dump_geojson(dbname, target_file, log, clip, simplify)
 
-        except:
+        except Exception:
             # TODO: is there some way of attaching this to the stack frame
             # for easier reading?
             import sys
@@ -1566,7 +1566,7 @@ class DataDumper(object):
                 else:
                     raise Exception("Unknown data object type: %r" % (obj,))
 
-            except:
+            except Exception:
                 print>>log, "FAIL: fetching OSM data for %r" % (obj,)
                 raise
 
