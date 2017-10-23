@@ -1,3 +1,10 @@
+v1.4.1
+------
+* **Release date:** 2017-10-23.
+* **Requires:** [tileserver v2.1.1](https://github.com/mapzen/tileserver/releases/tag/v2.1.1) and [tilequeue v1.8.1](https://github.com/mapzen/tilequeue/releases/tag/v1.8.1) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+* Backport fix for including VERSION file in package. See [#265](https://github.com/tilezen/vector-datasource/pull/1411).
+* Point tilequeue/tileserver to specific versions in requirements.
+
 v1.4.0-docs1
 ------
 * **Release date**: 2017-06-28. _Live on prod 2017-06-??._
