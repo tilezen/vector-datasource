@@ -935,16 +935,16 @@ filters:
       kind: water_park
   - filter:
       waterway: dam
-    min_zoom:
-      case:
-        - when: { geom_type: line }
-          then: 12
-        - when: { geom_type: polygon }
-          then:
-            clamp:
-              min: 9
-              max: 16
-              value: { col: zoom }
+      geom_type: line
+    min_zoom: 12
+    output:
+      <<: *output_properties
+      kind: dam
+    extra_columns: [way]
+  - filter:
+      waterway: dam
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: dam
