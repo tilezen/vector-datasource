@@ -39,7 +39,8 @@ def find_yaml_path():
 @memoize
 def make_test_metadata():
     from tilequeue.query.fixture import Metadata
-    return Metadata('test', [], [])
+    from tilequeue.process import Source
+    return Metadata(Source('test', 'test'), [], [])
 
 
 @memoize
@@ -60,6 +61,18 @@ def make_layer_data_min_zoom():
     for layer_datum in layer_parse_result.layer_data:
         by_name[layer_datum.layer] = layer_datum
     return layer_parse_result.layer_data, by_name
+
+
+def _make_metadata(name):
+    from tilequeue.process import make_metadata
+    from tilequeue.process import Source
+    sources = {
+        'osm': Source('osm', 'openstreetmap.org'),
+        'ne': Source('ne', 'naturalearthdata.com'),
+        'wof': Source('wof', 'whosonfirst.mapzen.com'),
+        'shp': Source('shp', 'openstreetmapdata.com'),
+    }
+    return make_metadata(sources[name])
 
 
 class CallFuncTest(unittest.TestCase):
@@ -180,14 +193,12 @@ class EarthTest(unittest.TestCase):
             'gid': 42,
         }
         # this rule depends on a particular source being set
-        from tilequeue.process import make_metadata
-        meta = make_metadata('ne')
+        meta = _make_metadata('ne')
         out_props = self.earth.fn(None, props, None, meta)
         self.assertEquals('earth', out_props.get('kind'))
 
     def test_osmdata_area(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('shp')
+        meta = _make_metadata('shp')
         props = dict(area=3.14159)
         out_props = self.earth.fn(None, props, None, meta)
         area = out_props.get('area')
@@ -250,8 +261,7 @@ class LanduseTest(unittest.TestCase):
         self.assertIsNone(out_props.get('mz_is_building'))
 
     def test_ne_area(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('ne')
+        meta = _make_metadata('ne')
         props = dict(area=3.14159)
         out_props = self.landuse.fn(None, props, None, meta)
         area = out_props.get('area')
@@ -260,8 +270,7 @@ class LanduseTest(unittest.TestCase):
         self.assertEquals(3, area)
 
     def test_ne_min_zoom(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('ne')
+        meta = _make_metadata('ne')
         props = dict(featurecla='Urban area')
         out_props = self.landuse.fn(None, props, None, meta)
         self.assertEquals(4, out_props.get('min_zoom'))
@@ -301,8 +310,7 @@ class PlacesTest(unittest.TestCase):
         self.assertEquals('scientific_station', out_props.get('kind_detail'))
 
     def test_wof_is_landuse_aoi(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('wof')
+        meta = _make_metadata('wof')
 
         props = dict(is_landuse_aoi=True)
         out_props = self.places.fn(None, props, None, meta)
@@ -321,8 +329,7 @@ class PlacesTest(unittest.TestCase):
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
     def test_wof_area(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('wof')
+        meta = _make_metadata('wof')
 
         props = dict(area=3.14159)
         out_props = self.places.fn(None, props, None, meta)
@@ -336,8 +343,7 @@ class PlacesTest(unittest.TestCase):
         self.assertIsNone(out_props.get('area'))
 
     def test_wof_kind(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('wof')
+        meta = _make_metadata('wof')
 
         props = dict(placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
@@ -467,8 +473,7 @@ class WaterTest(unittest.TestCase):
         self.assertEquals('lake', out_props.get('kind'))
 
     def test_ne_area(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('ne')
+        meta = _make_metadata('ne')
         props = dict(featurecla='Lake', area=3.14159)
         out_props = self.water.fn(None, props, None, meta)
         area = out_props.get('area')
@@ -477,8 +482,7 @@ class WaterTest(unittest.TestCase):
         self.assertEquals(3, area)
 
     def test_osmdata_area(self):
-        from tilequeue.process import make_metadata
-        meta = make_metadata('shp')
+        meta = _make_metadata('shp')
         props = dict(area=3.14159)
         out_props = self.water.fn(None, props, None, meta)
         area = out_props.get('area')
