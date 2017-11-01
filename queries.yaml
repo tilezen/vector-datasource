@@ -139,7 +139,6 @@ sources:
 
 layers:
   water:
-    template: water.jinja2
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
@@ -155,7 +154,6 @@ layers:
     sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
-    template: earth.jinja2
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
@@ -170,7 +168,6 @@ layers:
     sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
-    template: places.jinja2
     geometry_types: [Point, MultiPoint]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -185,7 +182,6 @@ layers:
     sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
-    template: landuse.jinja2
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_start: 4
     transform:
@@ -201,7 +197,6 @@ layers:
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
-    template: roads.jinja2
     geometry_types: [LineString, MultiLineString]
     simplify_start: 8
     transform:
@@ -227,7 +222,6 @@ layers:
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
-    template: buildings.jinja2
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -247,7 +241,6 @@ layers:
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
-    template: pois.jinja2
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -271,7 +264,6 @@ layers:
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
-    template: boundaries.jinja2
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 8
@@ -286,7 +278,6 @@ layers:
       - vectordatasource.transform.truncate_min_zoom_to_2dp
     area-inclusion-threshold: 1
   transit:
-    template: transit.jinja2
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
