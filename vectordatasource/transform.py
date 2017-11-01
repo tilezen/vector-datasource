@@ -2757,7 +2757,11 @@ def make_representative_point(shape, properties, fid, zoom):
     polygons.
     """
 
-    shape = shape.representative_point()
+    label_placement_wkb = properties.get('mz_label_placement', None)
+    if label_placement_wkb:
+        shape = shapely.wkb.loads(label_placement_wkb)
+    else:
+        shape = shape.representative_point()
 
     return shape, properties, fid
 
