@@ -10,17 +10,17 @@ psql -h "${POSTGRES_HOST:-postgres}" \
      -d "${POSTGRES_DB:-osm}" \
      -c "create extension if not exists postgis; create extension if not exists hstore;"
 
-/usr/bin/wget https://s3.amazonaws.com/metro-extracts.mapzen.com/la-habana_cuba.osm.pbf
+/usr/bin/wget https://s3.amazonaws.com/metro-extracts.mapzen.com/new-york_new-york.osm.pbf
 osm2pgsql --slim \
           --cache 1024 \
           --style osm2pgsql.style \
           --hstore-all \
-          la-habana_cuba.osm.pbf \
+          new-york_new-york.osm.pbf \
           -H "${POSTGRES_HOST:-postgres}" \
           -P "${POSTGRES_PORT:-5432}" \
           -U "${POSTGRES_USER:-osm}" \
           -d "${POSTGRES_DB:-osm}"
-rm la-habana_cuba.osm.pbf
+rm new-york_new-york.osm.pbf
 
 cd data
 /usr/bin/python2.7 bootstrap.py
