@@ -343,12 +343,12 @@ tag_name_alternates = (
 )
 
 
-def _iso639_1_code_of(lang):
+def _alpha_2_code_of(lang):
     try:
-        iso639_1_code = lang.iso639_1_code.encode('utf-8')
+        alpha_2_code = lang.alpha_2.encode('utf-8')
     except AttributeError:
         return None
-    return iso639_1_code
+    return alpha_2_code
 
 
 # a structure to return language code lookup results preserving the priority
@@ -362,42 +362,42 @@ def _convert_wof_l10n_name(x):
     if len(lang_str_iso_639_3) != 3:
         return None
     try:
-        lang = pycountry.languages.get(iso639_3_code=lang_str_iso_639_3)
+        lang = pycountry.languages.get(alpha_3=lang_str_iso_639_3)
     except KeyError:
         return None
-    return LangResult(code=_iso639_1_code_of(lang), priority=0)
+    return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
 def _normalize_osm_lang_code(x):
-    # first try a 639-1 code
+    # first try an alpha-2 code
     try:
-        lang = pycountry.languages.get(iso639_1_code=x)
+        lang = pycountry.languages.get(alpha_2=x)
     except KeyError:
-        # next, try a 639-2 code
+        # next, try an alpha-3 code
         try:
-            lang = pycountry.languages.get(iso639_2T_code=x)
+            lang = pycountry.languages.get(alpha_3=x)
         except KeyError:
-            # finally, try a 639-3 code
+            # finally, try a "bibliographic" code
             try:
-                lang = pycountry.languages.get(iso639_3_code=x)
+                lang = pycountry.languages.get(bibliographic=x)
             except KeyError:
                 return None
-    return _iso639_1_code_of(lang)
+    return _alpha_2_code_of(lang)
 
 
 def _normalize_country_code(x):
     x = x.upper()
     try:
-        c = pycountry.countries.get(alpha2=x)
+        c = pycountry.countries.get(alpha_2=x)
     except KeyError:
         try:
-            c = pycountry.countries.get(alpha3=x)
+            c = pycountry.countries.get(alpha_3=x)
         except KeyError:
             try:
-                c = pycountry.countries.get(numeric_code=x)
+                c = pycountry.countries.get(numeric=x)
             except KeyError:
                 return None
-    alpha2_code = c.alpha2
+    alpha2_code = c.alpha_2
     return alpha2_code
 
 
