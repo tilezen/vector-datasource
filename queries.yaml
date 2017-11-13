@@ -8,10 +8,137 @@ all:
   - pois
   - boundaries
   - transit
+
+sources:
+
+  # NOTE: each source represents a query to the database
+  # within each source, a list of templates can be used
+  # the templates will be combined with a sql `union all` in between
+  # therefore, it's necessary that the query results of each template
+  # have the same types
+
+  # NOTE: end_zoom is exclusive
+
+  planet_osm_polygon:
+    - template: planet_osm_polygon.jinja2
+      # landuse and pois start at 4
+      start_zoom: 4
+  planet_osm_line:
+    - template: planet_osm_line.jinja2
+      # transit starts at 5
+      start_zoom: 5
+  planet_osm_point:
+    # earth and places start at zoom 0
+    - template: planet_osm_point.jinja2
+
+  ne:
+    ## places
+    # ne_10m_populated_places
+    - template: ne-places.jinja2
+
+    ## boundaries
+
+    # ne_110m_admin_0_boundary_lines_land
+    - template: ne-boundaries-110m.jinja2
+      end_zoom: 2
+
+    # ne_50m_admin_0_boundary_lines_land
+    # ne_50m_admin_1_states_provinces_lines
+    - template: ne-boundaries-50m.jinja2
+      start_zoom: 2
+      end_zoom: 5
+
+    # ne_10m_admin_0_boundary_lines_land
+    # ne_10m_admin_0_boundary_lines_map_units
+    # ne_10m_admin_1_states_provinces_lines
+    - template: ne-boundaries-10m.jinja2
+      start_zoom: 5
+      end_zoom: 8
+
+    ## earth
+
+    # ne_110m_land
+    - template: ne-earth-110m.jinja2
+      end_zoom: 2
+
+    # ne_50m_land
+    - template: ne-earth-50m.jinja2
+      start_zoom: 2
+      end_zoom: 5
+
+    # ne_10m_land
+    - template: ne-earth-10m.jinja2
+      start_zoom: 5
+      end_zoom: 8
+
+    ## landuse
+
+    # ne_50m_urban_areas
+    - template: ne-landuse-50m.jinja2
+      start_zoom: 4
+      end_zoom: 6
+
+    # ne_10m_urban_areas
+    - template: ne-landuse-10m.jinja2
+      start_zoom: 6
+      end_zoom: 10
+
+    ## roads
+
+    # ne_10m_roads
+    - template: ne-roads.jinja2
+      start_zoom: 5
+      end_zoom: 8
+
+    ## water
+
+    # ne_110m_ocean
+    # ne_110m_lakes
+    # ne_110m_coastline
+    # ne_110m_lakes
+    - template: ne-water-110m.jinja2
+      end_zoom: 2
+
+    # ne_50m_ocean
+    # ne_50m_lakes
+    # ne_50m_coastline
+    # ne_50m_lakes
+    - template: ne-water-50m.jinja2
+      start_zoom: 2
+      end_zoom: 5
+
+    # ne_10m_ocean
+    # ne_10m_lakes
+    # ne_10m_coastline
+    # ne_10m_lakes
+    - template: ne-water-10m.jinja2
+      start_zoom: 5
+      end_zoom: 8
+
+    # ne_50m_playas
+    - template: ne-water-playas-50m.jinja2
+      start_zoom: 4
+      end_zoom: 5
+
+    # ne_10m_playas
+    - template: ne-water-playas-10m.jinja2
+      start_zoom: 5
+      end_zoom: 8
+
+  osmdata:
+
+    - template: osmdata-earth.jinja2
+      start_zoom: 8
+
+    - template: osmdata-water.jinja2
+      start_zoom: 8
+
+  wof:
+    - template: wof.jinja2
+      start_zoom: 11
+
 layers:
   water:
-    template: water.jinja2
-    start_zoom: 0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
@@ -27,8 +154,6 @@ layers:
     sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
-    template: earth.jinja2
-    start_zoom: 0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 9
@@ -43,8 +168,6 @@ layers:
     sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
-    template: places.jinja2
-    start_zoom: 0
     geometry_types: [Point, MultiPoint]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -59,8 +182,6 @@ layers:
     sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
-    template: landuse.jinja2
-    start_zoom: 4
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_start: 4
     transform:
@@ -76,8 +197,6 @@ layers:
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
-    template: roads.jinja2
-    start_zoom: 5
     geometry_types: [LineString, MultiLineString]
     simplify_start: 8
     transform:
@@ -103,8 +222,6 @@ layers:
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
-    template: buildings.jinja2
-    start_zoom: 13
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -124,8 +241,6 @@ layers:
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
-    template: pois.jinja2
-    start_zoom: 4
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -149,8 +264,6 @@ layers:
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
-    template: boundaries.jinja2
-    start_zoom: 0
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 8
@@ -165,8 +278,6 @@ layers:
       - vectordatasource.transform.truncate_min_zoom_to_2dp
     area-inclusion-threshold: 1
   transit:
-    template: transit.jinja2
-    start_zoom: 5
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -333,7 +444,7 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 0
-      end_zoom: 6
+      end_zoom: 7
       properties: [name]
 
   - fn: vectordatasource.transform.handle_label_placement
@@ -364,7 +475,7 @@ post_process:
     params:
       source_layer: landuse
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties: [mz_label_placement]
       geom_types: [Polygon, MultiPolygon]
 
@@ -384,14 +495,14 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
       properties: [mz_label_placement]
       geom_types: [Polygon, MultiPolygon]
 
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: landuse
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -401,7 +512,7 @@ post_process:
     params:
       source_layer: landuse
       start_zoom: 4
-      end_zoom: 12
+      end_zoom: 13
       properties: [name, sport, religion, surface]
       where: >-
         pixel_area > area
@@ -436,14 +547,14 @@ post_process:
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: buildings
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layer: pois
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name, kind]
       geometry_types: [Point]
       min_distance: 256.0
@@ -457,7 +568,7 @@ post_process:
   - fn: vectordatasource.transform.merge_duplicate_stations
     params:
       source_layer: pois
-      end_zoom: 15
+      end_zoom: 16
   - fn: vectordatasource.transform.normalize_station_properties
     params:
       source_layer: pois
@@ -484,7 +595,7 @@ post_process:
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
-      end_zoom: 15
+      end_zoom: 16
       property_keys: [name]
       geometry_types: [Point]
       min_distance: 64.0
@@ -492,7 +603,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties: [is_bridge, is_tunnel]
       where: >-
         (kind == 'path' and zoom < 15) or
@@ -502,7 +613,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - bicycle
         - colour
@@ -514,7 +625,6 @@ post_process:
         - route_name     # NVK (2017425): this is a suspicious tag
         - sac_scale
         - state
-        - surface
         - symbol
         - tracktype
         - type           # NVK (2017425): this is a suspicious tag
@@ -523,7 +633,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 13
+      end_zoom: 14
       properties:
         - all_bicycle_networks
         - all_bicycle_shield_texts
@@ -536,7 +646,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties:
         - ascent
         - crossing
@@ -554,7 +664,6 @@ post_process:
         - sidewalk_left
         - sidewalk_right
         - sport
-        - surface
         - trail_visibility
   # drop name and other properties on early paths to
   # allow more line merging (use walking network for labeling)
@@ -562,7 +671,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - name
         - ref
@@ -572,7 +681,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties:
         - name
         - ref
@@ -592,7 +701,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 10
+      end_zoom: 11
       properties:
         - name
         - all_networks
@@ -605,7 +714,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 10
+      end_zoom: 11
       properties: [name]
       where: >-
         kind == 'highway'
@@ -615,7 +724,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 6
+      end_zoom: 7
       properties:
         - name
         - ref
@@ -632,7 +741,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 10
+      end_zoom: 11
       properties:
         - all_bicycle_networks
         - all_bicycle_shield_texts
@@ -651,7 +760,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 8
+      end_zoom: 9
       properties:
         - walking_network
         - walking_shield_text
@@ -671,27 +780,27 @@ post_process:
     params:
       source_layer: transit
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
   # only keep all stations below z12, then cut it down to the top few.
   - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: transit
       start_zoom: 9
-      end_zoom: 11
+      end_zoom: 12
       items_matching: { kind: station }
       max_items: 20
   - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: transit
       start_zoom: 12
-      end_zoom: 13
+      end_zoom: 14
       items_matching: { kind: station }
       max_items: 30
   - fn: vectordatasource.transform.keep_n_features
     params:
       source_layer: pois
       start_zoom: 9
-      end_zoom: 15
+      end_zoom: 16
       items_matching: { kind: [peak, volcano] }
       max_items: 5
   - fn: vectordatasource.transform.drop_properties_with_prefix
@@ -701,7 +810,7 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 14
+      end_zoom: 15
       quantize:
         13: vectordatasource.transform.quantize_height_round_nearest_10_meters
         14: vectordatasource.transform.quantize_height_round_nearest_5_meters
@@ -713,7 +822,7 @@ post_process:
 
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 13
+      end_zoom: 14
       source_layers: [landuse, water]
       pixel_area: 0.1
 
@@ -732,19 +841,19 @@ post_process:
     params:
       source_layer: landuse
       start_zoom: 4
-      end_zoom: 12
+      end_zoom: 13
 
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 16
 
   - fn: vectordatasource.transform.simplify_layer
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 16
       tolerance: 1.0
 
   - fn: vectordatasource.transform.buildings_unify

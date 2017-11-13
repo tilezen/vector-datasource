@@ -1,17 +1,20 @@
-## Best buy (closed)
-# https://www.openstreetmap.org/way/241643507
+from . import FixtureTest
 
-# building should be present at z15
-test.assert_has_feature(
-    15, 5232, 12654, 'buildings',
-    {'id': 241643507, 'kind': 'building', 'kind_detail': 'retail'})
 
-# but POI shouldn't
-test.assert_no_matching_feature(
-    15, 5232, 12654, 'pois',
-    {'id': 241643507})
+class SuppressHistoricalClosed(FixtureTest):
 
-# but POI should be present at z17 and marked as closed
-test.assert_has_feature(
-    16, 10465, 25308, 'pois',
-    {'id': 241643507, 'kind': 'closed', 'min_zoom': 17})
+    def test_cartoon_museum(self):
+        # Cartoon Art Museum (closed)
+        self.load_fixtures([
+            'https://www.openstreetmap.org/node/368173967',
+        ])
+
+        # POI shouldn't be visible early
+        self.assert_no_matching_feature(
+            15, 5242, 12664, 'pois',
+            {'id': 368173967})
+
+        # but POI should be present at z17 and marked as closed
+        self.assert_has_feature(
+            16, 10485, 25328, 'pois',
+            {'id': 368173967, 'kind': 'closed', 'min_zoom': 17})

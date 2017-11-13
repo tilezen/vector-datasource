@@ -1,40 +1,38 @@
-# Ways used in this test.
-#https://www.openstreetmap.org/way/342984911
-#https://www.openstreetmap.org/way/243814268
-#https://www.openstreetmap.org/way/235398095
-#https://www.openstreetmap.org/way/235037260
-#https://www.openstreetmap.org/way/235398104
-#https://www.openstreetmap.org/way/374883740
-#https://www.openstreetmap.org/way/342984911
-#https://www.openstreetmap.org/way/243814268
-#https://www.openstreetmap.org/way/235398095
-#https://www.openstreetmap.org/way/235037260
-#https://www.openstreetmap.org/way/235398104
-#https://www.openstreetmap.org/way/374883740
-#https://www.openstreetmap.org/way/325824281
+from . import FixtureTest
 
-# expect these features in _both_ the landuse and POIs layers.
-for layer in ['pois', 'landuse']:
 
-    # whitelist attraction values
-    attraction_values = [
-        (16, 21228, 23551, 342984911, 'animal'), # Sable Island Horse
-        (16, 15113, 22273, 243814268, 'water_slide'), # Fun Mountain Water Park
-        (16, 18670, 25316, 235398095, 'roller_coaster'), # Intimidator 305
-        (16, 18669, 25316, 235037260, 'carousel'), # Carousel
-        (16, 18668, 25316, 235398104, 'amusement_ride'), # White Water Canyon
-        (16, 18681, 24907, 374883740, 'maze') # Lawyers Farm Corn Maze
-    ]
+class ZoosAndOtherAttractionsAttraction(FixtureTest):
+    def test_attractions(self):
+        # Sable Island Horse
+        self._run_test(16, 21228, 23551, 342984911, 'animal')
+        # Fun Mountain Water Park
+        self._run_test(16, 15113, 22273, 243814268, 'water_slide')
+        # Intimidator 305
+        self._run_test(16, 18670, 25316, 235398095, 'roller_coaster')
+        # Carousel
+        self._run_test(16, 18669, 25316, 235037260, 'carousel')
+        # White Water Canyon
+        self._run_test(16, 18668, 25316, 235398104, 'amusement_ride')
+        # Lawyers Farm Corn Maze
+        self._run_test(16, 18681, 24907, 374883740, 'maze')
 
-    for z, x, y, osm_id, attraction in attraction_values:
-        test.assert_has_feature(
-            z, x, y, layer,
-            { 'id': osm_id,
-              'kind': attraction })
+    def test_carousel_also_building(self):
+        # This is a carousel, but also a building, which keeps it out of the
+        # landuse layer. See
+        # https://github.com/mapzen/vector-datasource/issues/201
+        self.load_fixtures(
+            ['https://www.openstreetmap.org/way/325824281'])
 
-# This is a carousel, but also a building, which keeps it out of the landuse
-# layer. See https://github.com/mapzen/vector-datasource/issues/201
-test.assert_has_feature(
-    16, 17383, 25023, 'pois',
-    { 'id': 325824281,
-      'kind': 'carousel' })
+        self.assert_has_feature(
+            16, 17383, 25023, 'pois',
+            {'id': 325824281,
+             'kind': 'carousel'})
+
+    def _run_test(self, z, x, y, osm_id, attraction):
+        # expect these features in _both_ the landuse and POIs layers.
+        self.load_fixtures(
+            ['https://www.openstreetmap.org/way/%d' % osm_id])
+
+        for layer in ('pois', 'landuse'):
+            self.assert_has_feature(
+                z, x, y, layer, {'id': osm_id, 'kind': attraction})

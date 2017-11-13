@@ -6,13 +6,13 @@ The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provi
 
 Data is organized into several thematic layers, each of which is named, for example; `buildings`, `pois`, and `water`. A selection of these layers are typically used for base map rendering, and are provided under the short-hand name `all`. Each layer includes a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
-Need help displaying vector tiles in a map? We have several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
+Need help displaying vector tiles in a map? Here are several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
 
 ### Overview
 
 #### Data sources and attribution
 
-Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](attribution.md) in your project.
+Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) in your project.
 
 #### Feature names
 
@@ -20,7 +20,7 @@ Most Mapzen vector tile features include a basic name property (`common`):
 
 * `name` - Generally the name the locals call the feature, in the local script.
 
-We support several additional name related properties (`optional`):
+It supports several additional name related properties (`optional`):
 
 * `alt_name`
 * `int_name`
@@ -36,13 +36,13 @@ We support several additional name related properties (`optional`):
 
 #### Name localization
 
-We include all language variants of the `name:*` values to enable full internationalization (when different than `name`).
+Mapzen includes all language variants of the `name:*` values to enable full internationalization (when different from `name`).
 
 Language variants are identified by an ISO 639-1 two-letter language code and optional country code, for example `en` for English and less commonly `en_GB` for British English. Mapzen [house styles](https://mapzen.com/products/maps/) designed in Tangram support displaying all language scripts.
 
 We additionally localize `alt_name:*` and `old_name:*` properties for features across all layers.
 
-For features in the `boundaries` layer, we support two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently). _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
+For features in the `boundaries` layer, there are two additional variants `name:left` and `name:right` to support oriented labeling on the appropriate side of the boundary line (so the labeled polygon's text can appear inside that polygon consistently). _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 
 **Localized name properties** (`common-optional`)**:**
 
@@ -56,7 +56,7 @@ For features in the `boundaries` layer, we support two additional variants `name
 
 Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
-A tile geometry can be one of 3 types:
+A tile geometry can be one of three types:
 
 * Point, MultiPoint
 * LineString, MultiLineString
@@ -94,15 +94,15 @@ Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and 
 
 The current version of Mapzen vector tile "Tilezen" data model is **v1.2.0**.
 
-Our tiles are still in active development, but we promise to minimize backwards incompatable breaking changes. We list data model promises in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
+Tiles are still in active development, but Mapzen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
-If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. We're also interested in your feedback at hello@mapzen.com!
+If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. You can also send your feedback at hello@mapzen.com!
 
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.0.0/CHANGELOG.md).
 
 #### Feature ordering
 
-Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, we export a `sort_rank` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_rank` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
+Ordering of features - which ones draw "on top of" other features - can be an important feature of display maps. To help out with this, there is a `sort_rank` property on some features which suggests in what order the features should appear. Lower numbers mean that features should appear "towards the back" and higher numbers mean "towards the front". These numbers are consistent across layers. The layers which include `sort_rank` on their features are: `boundaries`, `buildings`, `earth`, `landuse`, `roads`, `transit` and `water`.
 
 To facilitate **data visualization** overlays and underlays, the following client-side `order` ranges are suggested:
 
@@ -125,7 +125,7 @@ Mapzen vector tiles include 9 layers:
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
-These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
+These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
 
 While the service can return just a single layer or combination of layers, the `all` layer is more performant.
 
@@ -391,7 +391,7 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 
 Polygons representing earth landmass and natural feature lines. Uses coastline-derived land polygons from [openstreetmapdata.com](http://openstreetmapdata.com). Natural lines from OpenStreetMap representing cliffs, aretes. This layer also includes earth `label_placement` lines for ridges and valleys (which should not otherwise be symbolized).
 
-_Uses Natural Earth until zoom 8, then switches to OSM land at zoom 9+._
+_Uses Natural Earth until zoom 7, then switches to OSM land at zoom 8+._
 
 **Earth properties:**
 
@@ -1016,7 +1016,7 @@ Road names are **abbreviated** so directionals like `North` is replaced with `N`
 
 Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
-To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, `oneway`, `ref`, and `surface`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
+To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, `oneway`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
 #### Road properties (common):
 
@@ -1063,11 +1063,12 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_bus_networks` and `all_bus_shield_texts`: All of the bus and trolley-bus routes of which this road is a part, and each corresponding shield text. See `bus_network` and `bus_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bus_network`: Note that this is often not present for bus routes / networks. This may be replaced with `operator` in the future, see [issue 1194](https://github.com/tilezen/vector-datasource/issues/1194).
 * `bus_shield_text`: Contains text intended to be displayed on a shield related to the bus or trolley-bus network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
-* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`.
+* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`. `cobblestone:flattened`, `concrete:plates` and `concrete:lanes` values are transformed to `cobblestone_flattened`, `concrete_plates` and `concrete_lanes` respectively.
 
 #### Road properties (optional):
 
 * `ascent`: ski pistes from OpenStreetMap
+* `access`: `private`, `yes`, `no`, `permissive`, `customers`, `destination`, and other values from OpenStreetMap
 * `bicycle`: `yes`, `no`, `designated`, `dismount`, and other values from OpenStreetMap
 * `colour`: ski pistes from OpenStreetMap
 * `descent`: ski pistes from OpenStreetMap
@@ -1270,7 +1271,7 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 * Layer name: `water`
 * Geometry types: `point`, `line`, and `polygon`
 
-Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) and inland water directly from OpenStreetMap at higher zoom levels 9+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-8). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
+Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 

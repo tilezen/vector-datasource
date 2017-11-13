@@ -632,7 +632,11 @@ $$ LANGUAGE plpgsql STABLE;
 -- or NULL otherwise.
 -- This function is meant to be called for something that we already know is a path.
 -- Please ensure input is already a path, or output will be undefined.
-CREATE OR REPLACE FUNCTION mz_calculate_path_major_route(osm_id BIGINT)
+--
+-- Note that the dummy argument is just there to make the "shape" of the
+-- arguments the same as with Python, where we need to pass in the relation
+-- information rather than query it from `planet_osm_rels`.
+CREATE OR REPLACE FUNCTION mz_calculate_path_major_route(osm_id BIGINT, dummy INTEGER)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN (
@@ -903,7 +907,10 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --- Identifies and returns the min_zoom for gates
 --- given the highway level of gate location
-CREATE OR REPLACE FUNCTION mz_get_min_zoom_highway_level_gate(val_osm_id BIGINT)
+-- NOTE: the dummy integer is just to make the "shape" of the arguments the same
+-- between SQL and Python, since the latter needs to be passed ways which
+-- SQL just looks up in the `planet_osm_ways` table.
+CREATE OR REPLACE FUNCTION mz_get_min_zoom_highway_level_gate(val_osm_id BIGINT, dummy INTEGER)
 RETURNS SMALLINT AS $$
 BEGIN
   RETURN MAX(CASE
@@ -926,3 +933,23 @@ BEGIN
         GROUP BY osm_id;
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+-- calculates the building height given the footprint area and the tags, which
+-- provide either the height or the number of levels to approximate the height.
+CREATE OR REPLACE FUNCTION mz_calculate_building_volume(way_area REAL, tags hstore)
+RETURNS REAL AS $$
+BEGIN
+  RETURN mz_building_height(tags->'height', tags->'building:levels') * way_area;
+END
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+-- removes the leading 'SH' in the label text.
+-- this is used for removing that prefix from the refs of New Zealand highways
+-- (perhaps SH = State Highway?) because we put the 'SH' as part of the network
+-- and want to keep a numeric ref.
+CREATE OR REPLACE FUNCTION trim_nz_sh(label TEXT)
+RETURNS TEXT AS $$
+BEGIN
+  RETURN trim(leading 'SH' from label);
+END
+$$ LANGUAGE plpgsql IMMUTABLE;

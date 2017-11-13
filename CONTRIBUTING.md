@@ -93,7 +93,7 @@ The **yaml** configuration files establish which features are included per layer
 To recap, with examples:
 
 - **yaml** files are located in the `yaml/` directory. Example: [pois.yaml](yaml/pois.yaml)
-- **jinja** files are located in the `queries/` directory. Example: [pois.jinja](queries/pois.jinja).
+- **jinja** files are located in the `queries/` directory. Example: [pois.jinja2](queries/pois.jinja2).
 - **Python** files are located in the `vectordatasource/` directory. Example: [transform.py](vectordatasource/transform.py).
 - **layers** are specified in [queries.yaml](queries.yaml).
 
@@ -114,7 +114,7 @@ When tileserver hears a request it asks Postgres for "the stuff" inside that til
 - **jinja** updates don't require restarting tileserver; they are re-read on request during development.
 - **Python** updates don't require restarting tileserver; they are re-read on request during development.
 
-**DATA MIGRATION:** Changes to layer **yaml** files will require at a minimum reloading the **sql** functions. This is sufficient if only the `kind` or any output properties have changed. But for `min_zoom` changes the affected features will need to be recalculated, probably via a data migration. This topic is covered in [further detail](CONTRIBUTING.md#4-edit-database-or-query-logic) below.
+**DATABASE MIGRATION:** Changes to layer **yaml** files will require at a minimum reloading the **sql** functions. This is sufficient if only the `kind` or any output properties have changed. But for `min_zoom` changes the affected features will need to be recalculated, probably via a data migration. This topic is covered in [further detail](CONTRIBUTING.md#4-edit-database-or-query-logic) below.
 
 ## Let's do this!
 
@@ -180,66 +180,41 @@ Create a new test for the issue in `integration-test` dir. Sometimes it's helpfu
 - Create new test file
 - You'll need a specific OpenStreetMap feature ID to test against
 - You'll need the coordinates (z/x/y) of a map tile containing that feature
-- Ensure that test data is loaded into your local database
-- Ensure tileserver is running!
 - Run the test
 
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>Remember</b> to note the openstreetmap.org URL for your test feature. You'll store that in your test file as a comment for other humans to read later when the test might fail, and for the continuous integration computer to download that feature and verify your work.</div>
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>Remember</b> to note the openstreetmap.org URL for your test feature. You'll store that in your test file so that the test knows where to find the example, and for the continuous integration computer to download that feature and verify your work.</div>
 
 
 #### Example test
 
+The unit tests are written using the `unittest` framework, which has been subclassed in `FixtureTest` to provide some useful methods. This means that each test starts with the import of `OsmFixtureTest`, and defines a test class. These make it slightly harder to see what's going on, but are necessary to fit into the way `unittest` structures tests.
+
 
 ```python
-# http://www.openstreetmap.org/way/431725967
-assert_has_feature(
-   16, 10959, 25337, 'landuse',
-   { 'kind': 'camp_site'})
-```
-
-#### Missing a database feature?
-
-Sometimes you'll find a feature in OverPass that is more recent than your local database, or is in a region outside your loaded Metro Extract.
-
-To load that feature, specify the URL and the database to import into:
+from . import FixtureTest
 
 
-```bash
-./test-data-update-osm.sh http://www.openstreetmap.org/way/431725967 osm
-```
+class CampGroundZoom(FixtureTest):
 
-**Ensure tileserver is running locally:**
-
-Launch tileserver from within the tileserver directory in a new terminal window. As tileserver is usually installed alongside vector-datasource `cd ../tileserver` will usually get you there.
-
-
-```bash
-python tileserver/__init__.py config.yaml
+    def test_camp_ground_in_landuse_layer(self):
+        self.load_fixtures([
+            'http://www.openstreetmap.org/way/431725967',
+        ])
+        self.assert_has_feature(
+           16, 10959, 25337, 'landuse',
+           {'kind': 'camp_site'})
 ```
 
 **Example test run:**
 
-The first time you run tests, you need to set up a test config based on the `test_config.example.yaml` in the repo:
+In the `vector-datasource` directory in your first terminal window, run your new test to make sure it **fails** using the existing config:
 
 
 ```bash
-mkdir -p ~/.config/vector-datasource
-cp test_config.example.yaml ~/.config/vector-datasource/config.yaml
-# If you are running the tileserver somewhere other than localhost,
-# you'll need to modify config.yaml's local section to point to
-# the correct URL.
-```
-
-Back in the `vector-datasource` directory in your first terminal window, run your new test to make sure it **fails** using the existing config:
-
-
-```bash
-python integration-test.py local integration-test/875-camp-grounds-zoom.py
+python integration-test/__init__.py integration-test/875-camp-grounds-zoom.py
 ```
 
 Once it fails, we'll update our logic in step 4 below so it passes.
-
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>So what's happening here?</b> The <code>integration-test.py</code> script is asking tileserver for that specific tile to test with on your `local` machine. But before that runs, we're setting up a temporary database to load the specified OpenStreetMap feature into. Once the tile is received, we run the python based test, in this example that's <code>160-motorway-junctions.py</code> in the <code>integration-test</code> directory.</div>
 
 Now the gory details...
 
@@ -313,7 +288,7 @@ But the tests require this to be formatted like:
 
 #### Common test types
 
-The python file `integration-test.py` contains several useful tests:
+The `FixtureTest` class provides several useful tests (called using `self.`):
 
 - `assert_has_feature`
 - `assert_no_matching_feature`
@@ -333,103 +308,49 @@ Edit the YAML file corresponding to the layer. In this case we're modifying the 
   output: {kind: camp_site}
 ```
 
-#### Update the database properties
-
-Once you make your edits to the YAML file you need to update the database. To recreate SQL functions in Postgres run:
-
-
-```bash
-cd data/migrations && python create-sql-functions.py | psql osm
-```
-
-Because some properties (like `min_zoom`) in the database are pre-computed, we need to update records to recalculate that using the updated functions. We call this "data migration", see some examples below.
-
-1. Prototype migration in PGAdmin (this step)
-2. Update data migration SQL files for the release (see step 7 below)
-
-<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>Advanced topic:</b> If you modify any other raw functions in the data directory, you'll also need to run <code>psql -f data/functions.sql osm</code>.</div>
-
-#### Update the query configuration
-
-Continuing our `camp_site` example from the previous section in Postgres run:
-
-```sql
-SET
-  mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*),
-  mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_polygon.*)
-WHERE
-  tourism = 'camp_site';
-```
-
-##### Debugging filters
-
-Sometimes you need to debug why a feature appears one of multiple possible representations:
-
-```sql
-SELECT
-  osm_id, name, mz_landuse_min_zoom, mz_pois_min_zoom
-FROM planet_osm_polygon
-WHERE
-  osm_id IN (237314510, 417405356)
-```
-
-If you have a continent or planet sized database sometimes it's helpful to preview the changes in a smaller area of interest. For example: roads using a smaller viewport in latitude & longitude coordinates to Web Mercator meters:
-
-```sql
-UPDATE planet_osm_line
-  SET mz_road_level = mz_calculate_road_level(highway, railway, aeroway, route, service, aerialway, leisure, sport, man_made, way, name, bicycle, foot, horse, tags->'snowmobile', tags->'ski', osm_id)
-  WHERE
-    highway IN ('pedestrian', 'living_street', 'track', 'path', 'cycleway', 'footway', 'steps') AND
-    way && ST_Transform(ST_SetSrid(ST_MakeBox2D(ST_MakePoint(-124.03564453125, 36.59788913307022), ST_MakePoint(-117.333984375, 39.06184913429154)), 4326), 3857);
-```
-
 ### 5. Verify the new logic by running the test
 
 Run the test, hopefully it passes now! You'll need to run the test from the project's root directory, you may need to `cd ../../` to get back there after step 4 above.
 
 ```bash
-python integration-test.py local integration-test/875-camp-grounds-zoom.py
+python integration-test/__init__.py integration-test/875-camp-grounds-zoom.py
 ```
 
 **Example output:**
 
 ```python
-python integration-test.py local integration-test/875-camp-grounds-zoom.py
-config_url=None
-[   1/1] PASS: 'integration-test/875-camp-grounds-zoom.py'
-PASSED ALL TESTS.
+python integration-test/__init__.py integration-test/875-camp-grounds-zoom.py
+..
+----------------------------------------------------------------------
+Ran 2 tests in 2.236s
+
+OK
 ```
 
 If the test failed like so:
 
 ```python
-python integration-test.py local integration-test/875-camp-grounds-zoom.py
-config_url=None
-[   1/1] FAIL: 'integration-test/875-camp-grounds-zoom.py'
-FAILED 1 TESTS. For more information, see 'test.log'
-```
+python integration-test/__init__.py integration-test/875-camp-grounds-zoom.py
+.F
+======================================================================
+FAIL: test_small (integration-test.875-camp-grounds-zoom.CampGroundsZoom)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/matt/Programming/Mapzen/vector-datasource/integration-test/875-camp-grounds-zoom.py", line 34, in test_small
+    {'kind': 'camp_site', 'sort_rank': 92, 'foo': 'bar'})
+  File "/home/matt/Programming/Mapzen/vector-datasource/integration-test/__init__.py", line 1212, in assert_has_feature
+    self.assertions.assert_has_feature(z, x, y, layer, props)
+  File "/home/matt/Programming/Mapzen/vector-datasource/integration-test/__init__.py", line 1079, in assert_has_feature
+    (properties, closest['properties'], misses))
+AssertionError: Did not find feature including properties {'sort_rank': 92, 'kind': 'camp_site', 'foo': 'bar'}. The closest match was {'kind': 'camp_site', 'area': 29753, 'sort_rank': 92, 'source': 'openstreetmap.org', 'min_zoom': 13.0, 'id': 417405356}: missed {'foo': "None != 'bar'"}.
 
-You can investigate why the test failed by printing out the full debug:
+----------------------------------------------------------------------
+Ran 2 tests in 2.214s
 
-```bash
-cat test.log
+FAILED (failures=1)
 ```
 
 <div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> It's best practice to run your own test AND to also confirm that all other tests are still passing before submitting a pull request. It's possible that you might need to run an overall database migration to achieve this locally, or you can rely on CircleCI to run all the tests for you in your branch by pushing it to the server.</div>
-
-#### Some tests require tileserver restart
-
-A minority of issues will require updating the `queries.yaml` file. In those cases you'll also need to restart tileserver to reload this file.
-
-First, switch to the Terminal session where tileserver is running and kill it with a `contrl-c` keyboard press.
-
-Then relaunch tileserver from within the tileserver directory:
-
-```bash
-python tileserver/__init__.py config.yaml
-```
-
-Then run your test starting at the top of step 5 above.
 
 ### 6. Perform any modifications, as necessary
 

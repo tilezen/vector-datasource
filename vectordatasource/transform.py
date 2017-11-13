@@ -343,12 +343,12 @@ tag_name_alternates = (
 )
 
 
-def _iso639_1_code_of(lang):
+def _alpha_2_code_of(lang):
     try:
-        iso639_1_code = lang.iso639_1_code.encode('utf-8')
+        alpha_2_code = lang.alpha_2.encode('utf-8')
     except AttributeError:
         return None
-    return iso639_1_code
+    return alpha_2_code
 
 
 # a structure to return language code lookup results preserving the priority
@@ -362,42 +362,42 @@ def _convert_wof_l10n_name(x):
     if len(lang_str_iso_639_3) != 3:
         return None
     try:
-        lang = pycountry.languages.get(iso639_3_code=lang_str_iso_639_3)
+        lang = pycountry.languages.get(alpha_3=lang_str_iso_639_3)
     except KeyError:
         return None
-    return LangResult(code=_iso639_1_code_of(lang), priority=0)
+    return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
 def _normalize_osm_lang_code(x):
-    # first try a 639-1 code
+    # first try an alpha-2 code
     try:
-        lang = pycountry.languages.get(iso639_1_code=x)
+        lang = pycountry.languages.get(alpha_2=x)
     except KeyError:
-        # next, try a 639-2 code
+        # next, try an alpha-3 code
         try:
-            lang = pycountry.languages.get(iso639_2T_code=x)
+            lang = pycountry.languages.get(alpha_3=x)
         except KeyError:
-            # finally, try a 639-3 code
+            # finally, try a "bibliographic" code
             try:
-                lang = pycountry.languages.get(iso639_3_code=x)
+                lang = pycountry.languages.get(bibliographic=x)
             except KeyError:
                 return None
-    return _iso639_1_code_of(lang)
+    return _alpha_2_code_of(lang)
 
 
 def _normalize_country_code(x):
     x = x.upper()
     try:
-        c = pycountry.countries.get(alpha2=x)
+        c = pycountry.countries.get(alpha_2=x)
     except KeyError:
         try:
-            c = pycountry.countries.get(alpha3=x)
+            c = pycountry.countries.get(alpha_3=x)
         except KeyError:
             try:
-                c = pycountry.countries.get(numeric_code=x)
+                c = pycountry.countries.get(numeric=x)
             except KeyError:
                 return None
-    alpha2_code = c.alpha2
+    alpha2_code = c.alpha_2
     return alpha2_code
 
 
@@ -2072,7 +2072,7 @@ def _project_properties(ctx, action):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2258,7 +2258,7 @@ def remove_duplicate_features(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     # allow either a single or multiple layers to be used.
@@ -2353,7 +2353,7 @@ def merge_duplicate_stations(ctx):
     # we probably don't want to do this at higher zooms (e.g: 17 &
     # 18), even if there are a bunch of stations very close
     # together.
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2454,7 +2454,7 @@ def normalize_station_properties(ctx):
     # we probably don't want to do this at higher zooms (e.g: 17 &
     # 18), even if there are a bunch of stations very close
     # together.
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2551,7 +2551,7 @@ def keep_n_features(ctx):
     # 18), even if there are a bunch of features in the tile, as
     # we use the high-zoom tiles for overzooming to 20+, and we'd
     # eventually expect to see _everything_.
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2757,7 +2757,11 @@ def make_representative_point(shape, properties, fid, zoom):
     polygons.
     """
 
-    shape = shape.representative_point()
+    label_placement_wkb = properties.get('mz_label_placement', None)
+    if label_placement_wkb:
+        shape = shapely.wkb.loads(label_placement_wkb)
+    else:
+        shape = shape.representative_point()
 
     return shape, properties, fid
 
@@ -2966,7 +2970,7 @@ def merge_building_features(ctx):
 
     if zoom < start_zoom:
         return None
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     quantize_height_fn = None
@@ -3034,7 +3038,7 @@ def merge_polygon_features(ctx):
 
     if zoom < start_zoom:
         return None
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     def _props_pre((shape, props, fid)):
@@ -3071,7 +3075,7 @@ def merge_line_features(ctx):
 
     if zoom < start_zoom:
         return None
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer['features'] = _merge_features_by_property(
@@ -3454,7 +3458,7 @@ def csv_match_properties(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -3498,7 +3502,7 @@ def update_parenthetical_properties(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -3690,7 +3694,7 @@ def drop_small_inners(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom and zoom > end_zoom:
+    if end_zoom and zoom >= end_zoom:
         return None
 
     meters_per_pixel_area = calc_meters_per_pixel_area(zoom)
@@ -3741,7 +3745,7 @@ def simplify_layer(ctx):
     if zoom < start_zoom:
         return None
 
-    if end_zoom is not None and zoom > end_zoom:
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)

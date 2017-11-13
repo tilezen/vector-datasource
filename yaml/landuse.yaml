@@ -3,73 +3,120 @@
 # update here, please remember to also change it there.
 #
 global:
-  - &tier1_min_zoom |
-      CASE WHEN way_area >= 300000000 THEN  3
-           WHEN way_area >= 300000000 THEN  4
-           WHEN way_area >= 150000000 THEN  5
-           WHEN way_area >= 150000000 THEN  6
-           WHEN way_area >= 100000000 THEN  7
-           WHEN way_area >=  10000000 THEN  8
-           WHEN way_area >=   5000000 THEN  9
-           WHEN way_area >=   1000000 THEN 10
-           WHEN way_area >=    500000 THEN 11
-           WHEN way_area >=    500000 THEN 12
-           WHEN way_area >=    100000 THEN 13
-           WHEN way_area >=     50000 THEN 14
-           WHEN way_area >=      2000 THEN 15
-           ELSE                            16
-      END
-  - &tier2_min_zoom |
-      CASE WHEN way_area >= 1000000000 THEN  4
-           WHEN way_area >= 1000000000 THEN  5
-           WHEN way_area >=  150000000 THEN  6
-           WHEN way_area >=  100000000 THEN  7
-           WHEN way_area >=   10000000 THEN  8
-           WHEN way_area >=    5000000 THEN  9
-           WHEN way_area >=    1000000 THEN 10
-           WHEN way_area >=     500000 THEN 11
-           WHEN way_area >=     250000 THEN 12
-           WHEN way_area >=     100000 THEN 13
-           WHEN way_area >=      50000 THEN 14
-           WHEN way_area >=       2000 THEN 15
-           ELSE                             16
-      END
-  - &tier3_min_zoom |
-      CASE WHEN way_area >= 10000000 THEN  8
-           WHEN way_area >=  5000000 THEN  9
-           WHEN way_area >=  1000000 THEN 10
-           WHEN way_area >=   500000 THEN 11
-           WHEN way_area >=   500000 THEN 12
-           WHEN way_area >=   100000 THEN 13
-           WHEN way_area >=    50000 THEN 14
-           WHEN way_area >=     2000 THEN 15
-           ELSE                           16
-      END
-  - &tier4_min_zoom |
-      CASE WHEN way_area >= 1000000 THEN 10
-           WHEN way_area >=  500000 THEN 11
-           WHEN way_area >=  500000 THEN 12
-           WHEN way_area >=  100000 THEN 13
-           WHEN way_area >=   50000 THEN 14
-           WHEN way_area >=    2000 THEN 15
-           ELSE                          16
-      END
-  - &tier5_min_zoom |
-      CASE WHEN way_area >= 1000000 THEN 10
-           WHEN way_area >=  400000 THEN 11
-           WHEN way_area >=  200000 THEN 12
-           WHEN way_area >=   50000 THEN 13
-           WHEN way_area >=   20000 THEN 14
-           WHEN way_area >=    2000 THEN 15
-           ELSE                          16
-      END
-  - &tier6_min_zoom |
-      CASE WHEN way_area >= 500000 THEN 12
-           WHEN way_area >= 100000 THEN 13
-           WHEN way_area >=  50000 THEN 14
-           WHEN way_area >=   5000 THEN 15
-           ELSE                         16
-      END
+  - &output_properties
+    name: {col: name}
+    protect_class: {col: protect_class}
+    operator: {col: operator}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
+    source: {col: source}
+    mz_label_placement: {col: mz_label_placement}
+    sport: {col: sport}
+    religion: {col: religion}
+    surface: {col: surface}
+    natural: {col: natural}
+    attraction: {col: attraction}
+    zoo: {col: zoo}
+    barrier: {col: barrier}
+    min_zoom:
+      case:
+        - when: { meta.source: ne }
+          then: 4
+        - else: { col: min_zoom }
+    mz_is_building:
+      call:
+        func: util.is_building
+        args:
+          - {col: building}
+          - {col: "building:part"}
+
+  - &tier1_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 3, 300000000 ]
+        - [ 4, 300000000 ]
+        - [ 5, 150000000 ]
+        - [ 6, 150000000 ]
+        - [ 7, 100000000 ]
+        - [ 8,  10000000 ]
+        - [ 9,   5000000 ]
+        - [ 10,  1000000 ]
+        - [ 11,   500000 ]
+        - [ 12,   500000 ]
+        - [ 13,   100000 ]
+        - [ 14,    50000 ]
+        - [ 15,    10000 ]
+      default: 16
+  - &tier2_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 4, 1000000000 ]
+        - [ 5, 1000000000 ]
+        - [ 6,  150000000 ]
+        - [ 7,  100000000 ]
+        - [ 8,   10000000 ]
+        - [ 9,    5000000 ]
+        - [ 10,   1000000 ]
+        - [ 11,    500000 ]
+        - [ 12,    250000 ]
+        - [ 13,    100000 ]
+        - [ 14,     50000 ]
+        - [ 15,      2000 ]
+      default: 16
+  - &tier3_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 8, 10000000 ]
+        - [ 9,  5000000 ]
+        - [ 10, 1000000 ]
+        - [ 11,  500000 ]
+        - [ 12,  500000 ]
+        - [ 13,  100000 ]
+        - [ 14,   50000 ]
+        - [ 15,    2000 ]
+      default: 16
+  - &tier4_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 10, 1000000 ]
+        - [ 11,  500000 ]
+        - [ 12,  500000 ]
+        - [ 13,  100000 ]
+        - [ 14,   50000 ]
+        - [ 15,    2000 ]
+      default: 16
+  - &tier5_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 10, 1000000 ]
+        - [ 11,  400000 ]
+        - [ 12,  200000 ]
+        - [ 13,   50000 ]
+        - [ 14,   20000 ]
+        - [ 15,    2000 ]
+      default: 16
+  - &tier6_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 12, 500000 ]
+        - [ 13, 100000 ]
+        - [ 14,  50000 ]
+        - [ 15,   5000 ]
+      default: 16
   - &us_forest_service
         - United States Forest Service
         - US Forest Service
@@ -86,6 +133,11 @@ global:
         - U.S. National Park Service
         - US National Park service
 filters:
+  - filter: {meta.source: ne}
+    min_zoom: 4
+    output:
+      <<: *output_properties
+      kind: urban_area
   ############################################################
   # NOT IN ANY TIER
   #
@@ -94,35 +146,55 @@ filters:
   # aren't in any tier.
   ############################################################
   - filter: {tags->zoo: enclosure}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: enclosure}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: enclosure
   - filter: {tags->zoo: petting_zoo}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: petting_zoo}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: petting_zoo
   - filter: {tags->zoo: aviary}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: aviary}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: aviary
   - filter: {tags->attraction: animal}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: animal}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: animal
   - filter: {tags->attraction: water_slide}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: water_slide}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: water_slide
   - filter: {tags->attraction: roller_coaster}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: roller_coaster}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: roller_coaster
   - filter: {tags->attraction: summer_toboggan}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: summer_toboggan}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: summer_toboggan
   - filter: {tags->attraction: carousel}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: carousel}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: carousel
   - filter: {tags->attraction: amusement_ride}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: amusement_ride}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: amusement_ride
   - filter: {historic: fort}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: fort}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: fort
 
   ############################################################
   # TIER 2 OVERRIDES
@@ -135,6 +207,7 @@ filters:
       operator: *us_forest_service
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: forest
       tier: 2
   - filter:
@@ -144,6 +217,7 @@ filters:
       park:type: state_recreational_area
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: park
       tier: 2
   - filter:
@@ -152,6 +226,7 @@ filters:
       protection_title: National Forest
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: forest
       tier: 2
   - filter:
@@ -160,6 +235,7 @@ filters:
       protection_title: National Forest
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: forest
       tier: 2
   - filter:
@@ -169,6 +245,7 @@ filters:
         - designation: area_of_outstanding_natural_beauty
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: park
       tier: 2
   - filter:
@@ -182,7 +259,10 @@ filters:
           - operator: *us_forest_service
           - operator: *us_parks_service
     min_zoom: *tier2_min_zoom
-    output: {kind: nature_reserve, tier: 2}
+    output:
+      <<: *output_properties
+      kind: nature_reserve
+      tier: 2
 
   ############################################################
   # TIER 6 OVERRIDES
@@ -200,7 +280,10 @@ filters:
           - operator: *us_forest_service
           - operator: *us_parks_service
     min_zoom: *tier6_min_zoom
-    output: {kind: common, tier: 6}
+    output:
+      <<: *output_properties
+      kind: common
+      tier: 6
 
   ############################################################
   # TIER 1
@@ -209,6 +292,7 @@ filters:
       historic: battlefield
     min_zoom: *tier1_min_zoom
     output:
+      <<: *output_properties
       kind: battlefield
       tier: 1
   - filter:
@@ -223,6 +307,7 @@ filters:
         protection_title: National Park
     min_zoom: *tier1_min_zoom
     output:
+      <<: *output_properties
       kind: national_park
       tier: 1
 
@@ -235,6 +320,7 @@ filters:
       protect_class: ['2', '3', '5']
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: national_park
       tier: 2
   - filter:
@@ -244,80 +330,141 @@ filters:
         boundary: national_park
     min_zoom: *tier2_min_zoom
     output:
+      <<: *output_properties
       kind: park
       tier: 2
 
   - filter: { landuse: forest, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
-    output: { kind: forest, tier: 2 }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: forest
+      tier: 2
   - filter: { landuse: forest }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
-    output: { kind: forest, tier: 2 }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: forest
+      tier: 2
 
   - filter: {leisure: nature_reserve}
     min_zoom: *tier2_min_zoom
-    output: {kind: nature_reserve, tier: 2}
+    output:
+      <<: *output_properties
+      kind: nature_reserve
+      tier: 2
   - filter: {boundary: protected_area}
     min_zoom: *tier2_min_zoom
-    output: {kind: protected_area, tier: 2}
+    output:
+      <<: *output_properties
+      kind: protected_area
+      tier: 2
 
   - filter: { landuse: wood, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
-    output: { kind: wood, tier: 2 }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: wood
+      tier: 2
   - filter: { landuse: wood }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
-    output: { kind: wood, tier: 2 }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: wood
+      tier: 2
 
   - filter: { natural: forest, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
-    output: { kind: natural_forest, tier: 2 }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: natural_forest
+      tier: 2
   - filter: { natural: forest }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
-    output: { kind: natural_forest, tier: 2 }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: natural_forest
+      tier: 2
 
   - filter: { natural: wood, operator: *us_forest_service }
-    min_zoom: { max: [ 6, { lit: *tier2_min_zoom } ] }
-    output: { kind: natural_wood, tier: 2 }
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: natural_wood
+      tier: 2
   - filter: { natural: wood }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
-    output: { kind: natural_wood, tier: 2 }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: natural_wood
+      tier: 2
 
   - filter: {landuse: urban}
     min_zoom: *tier2_min_zoom
-    output: {kind: urban, tier: 2}
+    output:
+      <<: *output_properties
+      kind: urban
+      tier: 2
   - filter: {landuse: rural}
     min_zoom: *tier2_min_zoom
-    output: {kind: rural, tier: 2}
+    output:
+      <<: *output_properties
+      kind: rural
+      tier: 2
   - filter: {landuse: residential}
     min_zoom: *tier2_min_zoom
-    output: {kind: residential, tier: 2}
+    output:
+      <<: *output_properties
+      kind: residential
+      tier: 2
 
   - filter: { landuse: farm }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
-    output: { kind: farm, tier: 2 }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: farm
+      tier: 2
   - filter: { landuse: farmland }
-    min_zoom: { max: [ 10, { lit: *tier2_min_zoom } ] }
-    output: { kind: farmland, tier: 2 }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: farmland
+      tier: 2
 
   ############################################################
   # TIER 3
   ############################################################
   - filter: {aeroway: aerodrome}
     min_zoom: *tier3_min_zoom
-    output: {kind: aerodrome, tier: 3}
+    output:
+      <<: *output_properties
+      kind: aerodrome
+      tier: 3
   - filter: {landuse: military}
     min_zoom: *tier3_min_zoom
-    output: {kind: military, tier: 3}
+    output:
+      <<: *output_properties
+      kind: military
+      tier: 3
   - filter: {amenity: university}
     min_zoom: *tier3_min_zoom
-    output: {kind: university, tier: 3}
+    output:
+      <<: *output_properties
+      kind: university
+      tier: 3
   - filter: {amenity: college}
     min_zoom: *tier3_min_zoom
-    output: {kind: college, tier: 3}
+    output:
+      <<: *output_properties
+      kind: college
+      tier: 3
   # glacier
   - filter: {natural: glacier}
     min_zoom: *tier3_min_zoom
-    output: {kind: glacier, tier: 3}
+    output:
+      <<: *output_properties
+      kind: glacier
+      tier: 3
 
   ############################################################
   # TIER 4
@@ -325,145 +472,240 @@ filters:
   # cemetery
   - filter: {landuse: cemetery}
     min_zoom: *tier4_min_zoom
-    output: {kind: cemetery, tier: 4}
+    output:
+      <<: *output_properties
+      kind: cemetery
+      tier: 4
   # commercial
   - filter: {landuse: commercial}
     min_zoom: *tier4_min_zoom
-    output: {kind: commercial, tier: 4}
+    output:
+      <<: *output_properties
+      kind: commercial
+      tier: 4
   # golf_course
   - filter: {leisure: golf_course}
     min_zoom: *tier4_min_zoom
-    output: {kind: golf_course, tier: 4}
+    output:
+      <<: *output_properties
+      kind: golf_course
+      tier: 4
   # hospital
   - filter: {amenity: hospital}
     min_zoom: *tier4_min_zoom
-    output: {kind: hospital, tier: 4}
+    output:
+      <<: *output_properties
+      kind: hospital
+      tier: 4
   # industrial
   - filter: {landuse: industrial}
     min_zoom: *tier4_min_zoom
-    output: {kind: industrial, tier: 4}
+    output:
+      <<: *output_properties
+      kind: industrial
+      tier: 4
   # plant
   - filter: {power: plant}
     min_zoom: *tier4_min_zoom
-    output: {kind: plant, tier: 4}
+    output:
+      <<: *output_properties
+      kind: plant
+      tier: 4
   # generator
   - filter: {power: generator}
     min_zoom: *tier4_min_zoom
-    output: {kind: generator, tier: 4}
+    output:
+      <<: *output_properties
+      kind: generator
+      tier: 4
   # substation
   - filter: { power: [substation, station, sub_station] }
     min_zoom: *tier4_min_zoom
-    output: {kind: substation, tier: 4}
+    output:
+      <<: *output_properties
+      kind: substation
+      tier: 4
   # railway
   - filter: {landuse: railway}
     min_zoom: *tier4_min_zoom
-    output: {kind: railway, tier: 4}
+    output:
+      <<: *output_properties
+      kind: railway
+      tier: 4
   # sports_centre
   - filter: {leisure: sports_centre}
     min_zoom: *tier4_min_zoom
-    output: {kind: sports_centre, tier: 4}
+    output:
+      <<: *output_properties
+      kind: sports_centre
+      tier: 4
   # recreation_ground
   - filter: {landuse: recreation_ground}
     min_zoom: *tier4_min_zoom
-    output: {kind: recreation_ground, tier: 4}
+    output:
+      <<: *output_properties
+      kind: recreation_ground
+      tier: 4
   # retail
   - filter: {landuse: retail}
     min_zoom: *tier4_min_zoom
-    output: {kind: retail, tier: 4}
+    output:
+      <<: *output_properties
+      kind: retail
+      tier: 4
   # stadium
   - filter: {leisure: stadium}
     min_zoom: *tier4_min_zoom
-    output: {kind: stadium, tier: 4}
+    output:
+      <<: *output_properties
+      kind: stadium
+      tier: 4
   # zoo
   - filter: {tourism: zoo}
     min_zoom: *tier4_min_zoom
-    output: {kind: zoo, tier: 4}
+    output:
+      <<: *output_properties
+      kind: zoo
+      tier: 4
   # wildlife_park
   - filter: {zoo: wildlife_park}
     min_zoom: *tier4_min_zoom
-    output: {kind: wildlife_park, tier: 4}
+    output:
+      <<: *output_properties
+      kind: wildlife_park
+      tier: 4
   # winter_sports
   - filter: {landuse: winter_sports}
     min_zoom: *tier4_min_zoom
-    output: {kind: winter_sports, tier: 4}
+    output:
+      <<: *output_properties
+      kind: winter_sports
+      tier: 4
   # pier
   - filter:
       man_made: pier
-      way_area: {expr: "way_area > 0"}
-    min_zoom: GREATEST(LEAST(zoom + 1.81, 16), 11)
-    output: {kind: pier}
+      geom_type: polygon
+    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
+    output:
+      <<: *output_properties
+      kind: pier
   # wastewater_plant
   - filter: {man_made: wastewater_plant}
     min_zoom: *tier4_min_zoom
-    output: {kind: wastewater_plant, tier: 4}
+    output:
+      <<: *output_properties
+      kind: wastewater_plant
+      tier: 4
   # works
   - filter: {man_made: works}
     min_zoom: *tier4_min_zoom
-    output: {kind: works, tier: 4}
+    output:
+      <<: *output_properties
+      kind: works
+      tier: 4
   # bridge
   - filter: {man_made: bridge}
     min_zoom: *tier4_min_zoom
-    output: {kind: bridge, tier: 4}
+    output:
+      <<: *output_properties
+      kind: bridge
+      tier: 4
   # tower
   - filter: {man_made: tower}
     min_zoom: *tier4_min_zoom
-    output: {kind: tower, tier: 4}
+    output:
+      <<: *output_properties
+      kind: tower
+      tier: 4
   # breakwater
   - filter:
       man_made: breakwater
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
-    output: {kind: breakwater, tier: 4}
+    output:
+      <<: *output_properties
+      kind: breakwater
+      tier: 4
   # water_works
   - filter: {man_made: water_works}
     min_zoom: *tier4_min_zoom
-    output: {kind: water_works, tier: 4}
+    output:
+      <<: *output_properties
+      kind: water_works
+      tier: 4
   # groyne
   - filter:
       man_made: groyne
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
-    output: {kind: groyne, tier: 4}
+    output:
+      <<: *output_properties
+      kind: groyne
+      tier: 4
   # dike
   - filter:
       man_made: dike
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
-    output: {kind: dike, tier: 4}
+    output:
+      <<: *output_properties
+      kind: dike
+      tier: 4
   # cutline
   - filter:
       man_made: cutline
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier4_min_zoom
-    output: {kind: cutline, tier: 4}
+    output:
+      <<: *output_properties
+      kind: cutline
+      tier: 4
 
   ############################################################
   # TIER 5
   ############################################################
-  # theme_park
-  - filter: {tourism: theme_park}
+  # theme_park (NOTE: also allow and normalise 'Theme Park' to deal with vandalism)
+  - filter: {tourism: [theme_park, 'Theme Park']}
     min_zoom: *tier5_min_zoom
-    output: {kind: theme_park, tier: 5}
+    output:
+      <<: *output_properties
+      kind: theme_park
+      tier: 5
   # resort
   - filter: {tourism: resort}
     min_zoom: *tier5_min_zoom
-    output: {kind: resort, tier: 5}
+    output:
+      <<: *output_properties
+      kind: resort
+      tier: 5
   # aquarium
   - filter: {tourism: aquarium}
     min_zoom: *tier5_min_zoom
-    output: {kind: aquarium, tier: 5}
+    output:
+      <<: *output_properties
+      kind: aquarium
+      tier: 5
   # winery
   - filter: {tourism: winery}
     min_zoom: *tier5_min_zoom
-    output: {kind: winery, tier: 5}
+    output:
+      <<: *output_properties
+      kind: winery
+      tier: 5
   # maze
   - filter: {attraction: maze}
     min_zoom: *tier5_min_zoom
-    output: {kind: maze, tier: 5}
+    output:
+      <<: *output_properties
+      kind: maze
+      tier: 5
   # beach
   - filter: {natural: beach}
     min_zoom: *tier5_min_zoom
-    output: {kind: beach, tier: 5}
+    output:
+      <<: *output_properties
+      kind: beach
+      tier: 5
 
   ############################################################
   # TIER 6
@@ -471,64 +713,106 @@ filters:
   # garden
   - filter: {leisure: garden}
     min_zoom: *tier6_min_zoom
-    output: {kind: garden, tier: 6}
+    output:
+      <<: *output_properties
+      kind: garden
+      tier: 6
   # allotments
   - filter: {landuse: allotments}
     min_zoom: *tier6_min_zoom
-    output: {kind: allotments, tier: 6}
+    output:
+      <<: *output_properties
+      kind: allotments
+      tier: 6
   # pedestrian
   - filter:
       highway: pedestrian
-      way_area: {expr: "way_area > 0"}
+      geom_type: polygon
     min_zoom: *tier6_min_zoom
-    output: {kind: pedestrian, tier: 6}
+    output:
+      <<: *output_properties
+      kind: pedestrian
+      tier: 6
   # common
   - filter: {leisure: common}
     min_zoom: *tier6_min_zoom
-    output: {kind: common, tier: 6}
+    output:
+      <<: *output_properties
+      kind: common
+      tier: 6
   # pitch
   - filter: {leisure: pitch}
     min_zoom: *tier6_min_zoom
-    output: {kind: pitch, tier: 6}
+    output:
+      <<: *output_properties
+      kind: pitch
+      tier: 6
   # place_of_worship
   - filter: {amenity: place_of_worship}
     min_zoom: *tier6_min_zoom
-    output: {kind: place_of_worship, tier: 6}
+    output:
+      <<: *output_properties
+      kind: place_of_worship
+      tier: 6
   # playground
   - filter: {leisure: playground}
     min_zoom: *tier6_min_zoom
-    output: {kind: playground, tier: 6}
+    output:
+      <<: *output_properties
+      kind: playground
+      tier: 6
   # school
   - filter: {amenity: school}
     min_zoom: *tier6_min_zoom
-    output: {kind: school, tier: 6}
+    output:
+      <<: *output_properties
+      kind: school
+      tier: 6
   # attraction
   - filter: {tourism: attraction}
     min_zoom: *tier6_min_zoom
-    output: {kind: attraction, tier: 6}
+    output:
+      <<: *output_properties
+      kind: attraction
+      tier: 6
   # artwork
   - filter: {tourism: artwork}
     min_zoom: *tier6_min_zoom
-    output: {kind: artwork, tier: 6}
+    output:
+      <<: *output_properties
+      kind: artwork
+      tier: 6
   # wilderness_hut
   - filter: {tourism: wilderness_hut}
     min_zoom: *tier6_min_zoom
-    output: {kind: wilderness_hut, tier: 6}
+    output:
+      <<: *output_properties
+      kind: wilderness_hut
+      tier: 6
   # hanami
   - filter: {tourism: hanami}
     min_zoom: *tier6_min_zoom
-    output: {kind: hanami, tier: 6}
+    output:
+      <<: *output_properties
+      kind: hanami
+      tier: 6
 
   ############################################################
   # TIER 6 EXTRA - PARKING
   ############################################################
   - filter: {amenity: parking}
-    min_zoom: |
-      CASE WHEN way_area >= 50000 THEN 14
-           WHEN way_area >=  5000 THEN 15
-           ELSE                        16
-      END
-    output: {kind: parking, tier: 6}
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 14, 50000 ]
+          - [ 15,  5000 ]
+        default: 16
+    output:
+      <<: *output_properties
+      kind: parking
+      tier: 6
 
 
   ############################################################
@@ -539,136 +823,217 @@ filters:
       any:
         leisure: [park, national_park]
         landuse: [park, national_park]
-    min_zoom: GREATEST( LEAST(zoom + 2, 14), 9)
-    output: { kind: park }
+    min_zoom: { clamp: { min: 9, max: 14, value: { sum: [ { col: zoom }, 2 ] } } }
+    output:
+      <<: *output_properties
+      kind: park
   - filter: {landuse: grass}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: grass}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: grass
   - filter: {landuse: meadow}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: meadow}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: meadow
   - filter: {landuse: village_green}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: village_green}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: village_green
   - filter: {landuse: quarry}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: quarry}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: quarry
   - filter: {natural: land}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: land}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: land
   - filter: {natural: scrub}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: scrub}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: scrub
   - filter: {natural: wetland}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: wetland}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: wetland
   - filter: {natural: park}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: natural_park}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: natural_park
   - filter:
       highway: footway
-      way_area: {expr: "way_area > 0"}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: footway}
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: footway
   - filter: {amenity: library}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: library}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: library
   - filter: {amenity: fuel}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: fuel}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: fuel
   - filter: {amenity: cinema}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: cinema}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: cinema
   - filter: {amenity: theatre}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: theatre}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: theatre
   - filter: {amenity: prison}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: prison}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: prison
   - filter:
       aeroway: runway
-      way_area: {expr: "way_area > 0"}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: runway}
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: runway
   - filter:
       aeroway: taxiway
-      way_area: {expr: "way_area > 0"}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: taxiway}
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: taxiway
   - filter: {aeroway: apron}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: apron}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: apron
   - filter: {tourism: trail_riding_station}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: trail_riding_station}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: trail_riding_station
   - filter: {natural: scree}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: scree}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: scree
   - filter: {leisure: water_park}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: water_park}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: water_park
   - filter:
       waterway: dam
-    min_zoom: |
-      CASE
-        WHEN GeometryType(way) IN ('LINESTRING', 'MULTILINESTRING') THEN 12
-        WHEN GeometryType(way) IN ('POLYGON', 'MULTIPOLYGON') THEN GREATEST(LEAST(zoom, 16), 9) END
-    output: {kind: dam}
+      geom_type: line
+    min_zoom: 12
+    output:
+      <<: *output_properties
+      kind: dam
+    extra_columns: [way]
+  - filter:
+      waterway: dam
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: dam
     extra_columns: [way]
   - filter: {leisure: dog_park}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: dog_park}
-  - filter: {leisure: track}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: recreation_track}
-  - filter: {natural: stone}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: stone}
-  - filter: {natural: rock}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: rock}
-  - filter: {tourism: caravan_site}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: caravan_site}
-  - filter: {tourism: picnic_site}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: picnic_site}
-  - filter: {natural: tree_row}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: tree_row}
-  - filter: {barrier: hedge}
-    min_zoom: GREATEST(LEAST(zoom, 16), 9)
-    output: {kind: hedge}
-  - filter: {highway: services}
-    min_zoom: GREATEST(LEAST(zoom, 16), 11)
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
+      <<: *output_properties
+      kind: dog_park
+  - filter: {leisure: track}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: recreation_track
+  - filter: {natural: stone}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: stone
+  - filter: {natural: rock}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: rock
+  - filter: {tourism: caravan_site}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: caravan_site
+  - filter: {tourism: picnic_site}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: picnic_site
+  - filter: {natural: tree_row}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: tree_row
+  - filter: {barrier: hedge}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: hedge
+  - filter: {highway: services}
+    min_zoom: { clamp: { min: 11, max: 16, value: { col: zoom } } }
+    output:
+      <<: *output_properties
       kind: service_area
   - filter: {highway: rest_area}
-    min_zoom: GREATEST(LEAST(zoom, 16), 11)
+    min_zoom: { clamp: { min: 11, max: 16, value: { col: zoom } } }
     output:
+      <<: *output_properties
       kind: rest_area
   - filter:
       any:
         barrier: city_wall
         historic: citywalls
     min_zoom: 12
-    output: {kind: city_wall}
+    output:
+      <<: *output_properties
+      kind: city_wall
   - filter: {man_made: snow_fence}
     min_zoom: 15
-    output: {kind: snow_fence}
+    output:
+      <<: *output_properties
+      kind: snow_fence
   - filter: {barrier: retaining_wall}
     min_zoom: 15
-    output: {kind: retaining_wall}
+    output:
+      <<: *output_properties
+      kind: retaining_wall
   - filter: {barrier: fence}
     min_zoom: 16
-    output: {kind: fence}
+    output:
+      <<: *output_properties
+      kind: fence
   - filter: {tourism: camp_site}
-    min_zoom: GREATEST(LEAST(zoom, 16), 13)
-    output: {kind: camp_site}
+    min_zoom: { clamp: { min: 13, max: 16, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: camp_site
   - filter: {barrier: gate}
     min_zoom: 16
-    output: {kind: gate}
-  - filter: {amenity: grave_yard}
-    min_zoom: GREATEST( LEAST(zoom + 3, 17), 13)
     output:
+      <<: *output_properties
+      kind: gate
+  - filter: {amenity: grave_yard}
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
+    output:
+      <<: *output_properties
       kind: grave_yard

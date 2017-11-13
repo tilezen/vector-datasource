@@ -1,6 +1,36 @@
+v1.4.1
+------
+* **Release date:** 2017-10-23.
+* **Requires:** [tileserver v2.1.1](https://github.com/mapzen/tileserver/releases/tag/v2.1.1) and [tilequeue v1.8.1](https://github.com/mapzen/tilequeue/releases/tag/v1.8.1) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+* Backport fix for including VERSION file in package. See [#265](https://github.com/tilezen/vector-datasource/pull/1411).
+* Point tilequeue/tileserver to specific versions in requirements.
+
+v1.4.0-docs1
+------
+* **Release date**: 2017-06-28. _Live on prod 2017-06-??._
+* **Requires:** [tileserver v2.1.0](https://github.com/mapzen/tileserver/releases/tag/v2.1.0) and [tilequeue v1.8.0](https://github.com/mapzen/tilequeue/releases/tag/v1.8.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+- [docs] Update link to pois.jinja2. See [#1268](https://github.com/tilezen/vector-datasource/pull/1268).
+- [docs] Update `your-mapzen-api-key` URL query strings to enable key substitution. See [#1275](https://github.com/tilezen/vector-datasource/pull/1275).
+- [docs] Spelling, grammar, writing style fixes. See [#1275](https://github.com/tilezen/vector-datasource/pull/1275).
+- [docs] Add documentation for 512 pixel tile sizes. See [#1284](https://github.com/tilezen/vector-datasource/pull/1284).
+- [docs] Add documentation to suggest max zoom (per tile size). See [#1161](https://github.com/tilezen/vector-datasource/pull/1161).
+- [docs] Add documentation for tile x, y coordinates (versus latitude and longitude). See [#1111](https://github.com/tilezen/vector-datasource/pull/1111).
+- [docs] Add documentation for HTTP status codes. See [#1266](https://github.com/tilezen/vector-datasource/pull/1266).
+- [tests] Update tests for upstream OpenStreetMap data churn. See [#1267](https://github.com/tilezen/vector-datasource/pull/1267), [#1282](https://github.com/tilezen/vector-datasource/pull/1282), and [#1286](https://github.com/tilezen/vector-datasource/pull/1286).
+- Remove duplicate symbol output. See [#1265](https://github.com/tilezen/vector-datasource/pull/1265).
+- Fixed release notes on 2017-07-19 with corrected **Requires** section.
+
+v1.4.0
+------
+* **Release date**: 2017-05-31.
+* **Requires:** [tileserver v2.1.0](https://github.com/mapzen/tileserver/releases/tag/v2.1.0) and [tilequeue v1.8.0](https://github.com/mapzen/tilequeue/releases/tag/v1.8.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
+- [tests] Add support to capture all test coordinates with `-printcoords`. This also namespaces all the test assertion functions using `test`. See [#1245](https://github.com/tilezen/vector-datasource/issues/1245).
+- [tests] Publish all test coordinates for master CircleCI builds. See [#1246](https://github.com/tilezen/vector-datasource/pull/1246).
+- [docs] Remove rate limiting note (for Mapzen hosted service).
+
 v1.3.0-docs1
 ------
-* **Release date**: 2017-05-05. _Live on prod 2017-05-??._
+* **Release date**: 2017-05-05.
 * **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/v1.2.0).
 - [docs] Delete api-keys-and-rate-limits.md page
 - [docs] Update attribution.md page with less Mapzen
@@ -10,7 +40,7 @@ v1.3.0-docs1
 
 v1.3.0
 ------
-* **Release date**: 2017-05-04. _Live on prod 2017-05-??._
+* **Release date**: 2017-05-04. _Live on prod 2017-05-08._
 * **Requires:** [tileserver v2.0.0](https://github.com/mapzen/tileserver/releases/tag/v2.0.0) and [tilequeue v1.7.0](https://github.com/mapzen/tilequeue/releases/tag/v1.7.0) and [mapbox-vector-tile v1.2.0](https://pypi.python.org/pypi/mapbox-vector-tile/1.2.0).
 
   #### ENHANCEMENTS
@@ -33,6 +63,9 @@ v1.3.0
   * Some **pois** layer features were missing their `tier` property. See [#1208](https://github.com/tilezen/vector-datasource/issues/1208).
   * Remove `natural_forest`, `natural_wood`, and `village_green` from **pois** layer, a documented breaking bug fix associated with the v1.0 release. Their label points are now found in the **landuse** layer. See [#1103](https://github.com/tilezen/vector-datasource/issues/1103).
   * Fix test failures based on upstream OpenStreetMap data changes.
+  * _NOTE: while the v1.3.0 release was tagged correctly the VERSION file was stuck at v1.2.0 leading to the incorrectly report in Python installs as v1.2.0._
+
+  
 
 v1.2.0
 ------

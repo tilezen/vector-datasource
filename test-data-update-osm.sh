@@ -59,7 +59,7 @@ fi
 
 curl -o update.osm $api_url
 xsltproc test-data-osm-template.xsl update.osm > update.osc
-osm2pgsql -s -C 1024 -S osm2pgsql.style --hstore-all -d $db -a -H localhost update.osc
+osm2pgsql -s -C 1024 -S osm2pgsql.style --hstore-all -d $db -a update.osc
 rm -f update.osc update.osm
 
 echo "Done!"

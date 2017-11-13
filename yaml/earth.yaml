@@ -1,9 +1,21 @@
+globals:
+  - &output_properties
+    name: {col: name}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    mz_label_placement: {col: mz_label_placement}
+    label_placement: {col: label_placement}
 filters:
   - filter:
       place: continent
       name: true
     min_zoom: 0
     output:
+      <<: *output_properties
       kind: continent
     table: osm
   - filter:
@@ -14,35 +26,43 @@ filters:
     # but for now, it's mostly middling data
     min_zoom: 15
     output:
+      <<: *output_properties
       kind: archipelago
     table: osm
   - filter:
       place: island
       name: true
-    min_zoom: GREATEST(7, LEAST((zoom+5.75)::smallint, 15))
+    min_zoom: { clamp: { min: 7, max: 15, value: { sum: [ { col: zoom }, 5.75 ] } } }
     output:
+      <<: *output_properties
       kind: island
     table: osm
   - filter:
       place: islet
       name: true
-    min_zoom: GREATEST(15, LEAST((zoom+3.5)::smallint, 17))
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 3.5 ] } } }
     output:
+      <<: *output_properties
       kind: islet
     table: osm
   - filter: {natural: cliff}
     min_zoom: 13
-    output: {kind: cliff}
+    output:
+      <<: *output_properties
+      kind: cliff
     table: osm
   - filter: {natural: arete}
     min_zoom: 13
-    output: {kind: arete}
+    output:
+      <<: *output_properties
+      kind: arete
     table: osm
   - filter:
       natural: ridge
       name: true
     min_zoom: 13
     output:
+      <<: *output_properties
       kind: ridge
     table: osm
   - filter:
@@ -50,13 +70,13 @@ filters:
       name: true
     min_zoom: 13
     output:
+      <<: *output_properties
       kind: valley
     table: osm
-  - filter: {gid: true}
+
+  - filter:
+      meta.source: [ne, shp]
     min_zoom: 0
-    output: {kind: earth}
-    table: ne
-  - filter: {fid: true}
-    min_zoom: 0
-    output: {kind: earth}
-    table: shp
+    output:
+      <<: *output_properties
+      kind: earth

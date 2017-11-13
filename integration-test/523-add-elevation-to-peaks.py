@@ -1,47 +1,44 @@
-##
-## A selection of very tall peaks which should be visible at zoom 9.
-##
+from . import FixtureTest
 
-#http://www.openstreetmap.org/node/358915477
-# Mount Elbert, CO
-test.assert_has_feature(
-    9, 104, 195, 'pois',
-    { 'kind': 'peak', 'id': 358915477, 'elevation': 4397 })
 
-# http://www.openstreetmap.org/node/1744903493
-# Mount Rainier, WA (volcano)
-test.assert_has_feature(
-    9, 82, 180, 'pois',
-    { 'kind': 'volcano', 'id': 1744903493, 'elevation': 4392 })
+class AddElevationToPeaks(FixtureTest):
+    def test_mt_elbert(self):
+        ##
+        # A selection of very tall peaks which should be visible at zoom 9.
+        ##
+        # Mount Elbert, CO
+        self.load_fixtures(['http://www.openstreetmap.org/node/358915477'])
 
-##
-## Some smaller ones which should be visible at a range of zooms
-##
+        self.assert_has_feature(
+            9, 104, 195, 'pois',
+            {'kind': 'peak', 'id': 358915477, 'elevation': 4397})
 
-def assert_feature_min_zoom(z, x, y, layer, props):
-    test.assert_has_feature(z, x, y, layer, props)
-    test.assert_no_matching_feature(z-1, x/2, y/2, layer, props)
+    def test_mt_rainier(self):
+        # Mount Rainier, WA (volcano)
+        self.load_fixtures(['http://www.openstreetmap.org/node/1744903493'])
 
-# http://www.openstreetmap.org/node/358792071
-# San Gorgonio Mountain
-assert_feature_min_zoom(
-    10, 179, 408, 'pois',
-    { 'kind': 'peak', 'id': 358792071, 'elevation': 3502 })
+        self.assert_has_feature(
+            9, 82, 180, 'pois',
+            {'kind': 'volcano', 'id': 1744903493, 'elevation': 4392})
 
-#https://www.openstreetmap.org/node/358793535
-# Toro Peak
-assert_feature_min_zoom(
-    11, 361, 821, 'pois',
-    { 'kind': 'peak', 'id': 358793535, 'elevation': 2650 })
+    def _assert_min_zoom(self, z, x, y, node_id, elevation):
+        self.load_fixtures(
+            ['https://www.openstreetmap.org/node/%d' % node_id])
+        self.assert_has_feature(
+            z, x, y, 'pois',
+            {'kind': 'peak', 'id': node_id, 'elevation': elevation})
+        self.assert_no_matching_feature(
+            z-1, x//2, y//2, 'pois',
+            {'kind': 'peak', 'id': node_id})
 
-#https://www.openstreetmap.org/node/549642731
-# Ventana Double Cone
-assert_feature_min_zoom(
-    12, 663, 1604, 'pois',
-    { 'kind': 'peak', 'id': 549642731, 'elevation': 1477 })
+    def test_san_gorgonio(self):
+        self._assert_min_zoom(10, 179, 408, 358792071, 3502)
 
-#https://www.openstreetmap.org/node/358796064
-# Chamisal Mountain
-assert_feature_min_zoom(
-    13, 1274, 3100, 'pois',
-    { 'kind': 'peak', 'id': 358796064, 'elevation': 785 })
+    def test_toro_peak(self):
+        self._assert_min_zoom(11, 361, 821, 358793535, 2650)
+
+    def test_ventana_double_cone(self):
+        self._assert_min_zoom(12, 663, 1604, 549642731, 1477)
+
+    def test_chamisal_mountain(self):
+        self._assert_min_zoom(13, 1274, 3100, 358796064, 785)

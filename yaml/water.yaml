@@ -1,140 +1,177 @@
 globals:
+  - &output_properties
+    name: {col: name}
+    area:
+      call:
+        func: util.safe_int
+        args: [ { col: area } ]
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    mz_label_placement: {col: mz_label_placement}
+    label_placement: {col: label_placement}
+    boundary: {col: boundary}
+    tunnel: {col: tunnel}
   - &water_standard_properties_osm
-      intermittent: {expr: "tags ? 'intermittent' and tags->'intermittent'='yes'"}
+      <<: *output_properties
+      intermittent:
+        case:
+          - when:
+              intermittent: 'yes'
+            then: true
+  - &water_standard_min_zoom
+    case:
+      - when: { way_area: { min: 102400 } }
+        then: { min: [ 9, { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } } ] }
+      - else: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
+
 filters:
   - filter: {waterway: riverbank}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: riverbank
+      <<: *water_standard_properties_osm
+      kind: riverbank
     table: osm
   - filter: {waterway: dock}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: dock
+      <<: *water_standard_properties_osm
+      kind: dock
     table: osm
   - filter: {natural: water}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: water
+      <<: *water_standard_properties_osm
+      kind: water
     table: osm
   - filter: {natural: bay}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: bay
+      <<: *water_standard_properties_osm
+      kind: bay
     table: osm
   - filter: {natural: strait}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: strait
+      <<: *water_standard_properties_osm
+      kind: strait
     table: osm
   - filter: {natural: fjord}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: fjord
+      <<: *water_standard_properties_osm
+      kind: fjord
     table: osm
   - filter: {landuse: basin}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: basin
+      <<: *water_standard_properties_osm
+      kind: basin
     table: osm
   - filter: {landuse: reservoir}
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: lake
-        reservoir: true
+      <<: *water_standard_properties_osm
+      kind: lake
+      reservoir: true
     table: osm
   - filter:
       any:
         amenity: swimming_pool
         leisure: swimming_pool
-    min_zoom: CASE WHEN way_area > 102400 THEN 9 ELSE GREATEST(LEAST((zoom+1.066)::smallint,
-      16), 9) END
+    min_zoom: *water_standard_min_zoom
     output:
-        <<: *water_standard_properties_osm
-        kind: swimming_pool
+      <<: *water_standard_properties_osm
+      kind: swimming_pool
     table: osm
   - filter: {waterway: canal}
     min_zoom: 9
     output:
-        <<: *water_standard_properties_osm
-        kind: canal
+      <<: *water_standard_properties_osm
+      kind: canal
     table: osm
   - filter: {waterway: river}
     min_zoom: 9
     output:
-        <<: *water_standard_properties_osm
-        kind: river
+      <<: *water_standard_properties_osm
+      kind: river
     table: osm
   - filter: {waterway: stream}
     min_zoom: 11
     output:
-        <<: *water_standard_properties_osm
-        kind: stream
+      <<: *water_standard_properties_osm
+      kind: stream
     table: osm
   - filter: {waterway: ditch}
     min_zoom: 16
     output:
-        <<: *water_standard_properties_osm
-        kind: ditch
+      <<: *water_standard_properties_osm
+      kind: ditch
     table: osm
   - filter: {waterway: drain}
     min_zoom: 16
     output:
-        <<: *water_standard_properties_osm
-        kind: drain
+      <<: *water_standard_properties_osm
+      kind: drain
     table: osm
   - filter: {featurecla: Coastline}
     min_zoom: 0
     output:
-        kind: ocean
+      <<: *output_properties
+      kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
     min_zoom: 0
     output:
-        kind: lake
-        alkaline: true
+      <<: *output_properties
+      kind: lake
+      alkaline: true
     table: ne
   - filter: {featurecla: Lake}
     min_zoom: 0
-    output: {kind: lake}
+    output:
+      <<: *output_properties
+      kind: lake
     table: ne
   - filter: {featurecla: Reservoir}
     min_zoom: 0
-    output: {kind: lake, reservoir: true}
+    output:
+      <<: *output_properties
+      kind: lake
+      reservoir: true
     table: ne
   - filter: {featurecla: Playa}
     min_zoom: 0
-    output: {kind: playa}
+    output:
+      <<: *output_properties
+      kind: playa
     table: ne
   - filter: {featurecla: Ocean}
     min_zoom: 0
-    output: {kind: ocean}
+    output:
+      <<: *output_properties
+      kind: ocean
     table: ne
   - filter: {name: true, place: ocean}
     min_zoom: 0
-    output: {kind: ocean}
+    output:
+      <<: *output_properties
+      kind: ocean
     table: osm
   - filter: {name: true, place: sea}
     min_zoom: 3
-    output: {kind: sea}
+    output:
+      <<: *output_properties
+      kind: sea
     table: osm
-  - filter: {gid: true}
+  # - filter: {gid: true}
+  #   min_zoom: 0
+  #   output:
+  #     - *output_properties
+  #     - {kind: ocean}
+  #   table: shp
+  - filter: {meta.source: shp}
     min_zoom: 0
-    output: {kind: ocean}
+    output:
+      <<: *output_properties
+      kind: ocean
     table: shp

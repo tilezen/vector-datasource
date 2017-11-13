@@ -22,3 +22,11 @@ vector_datasource.egg-info/
 data/Makefile-import-data
 data/Makefile-prepare-data
 data/import-shapefiles.sh
+
+# files generated during testing
+empty.osm
+data.osc
+test_server.port
+
+# files generated during installation of software necessary for testing
+.eggs/*

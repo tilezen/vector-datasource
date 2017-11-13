@@ -1,0 +1,4 @@
+{% extends 'osmdata.jinja2' %}
+{% block query %}
+{{ osmdata_query(True, 'mz_water_min_zoom', False) }}
+{% endblock %}

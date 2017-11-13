@@ -1,14 +1,5 @@
+from . import FixtureTest
 from mapbox_vector_tile.decoder import POLYGON
-
-# Caspian Sea
-test.assert_has_feature(
-    5, 20, 12, 'water',
-    { 'kind': 'ocean' })
-
-# Baltic Sea - JSON format
-test.assert_has_feature(
-    5, 17, 9, 'water',
-    { 'kind': 'ocean' })
 
 
 def area_of_ring(ring):
@@ -34,24 +25,61 @@ def area_of(polygons):
     return area
 
 
-# Check MVT format
-with test.features_in_mvt_layer(5, 17, 9, 'water') as features:
-    ocean_area = 0
+class InvalidWkbPolygons(FixtureTest):
 
-    for feature in features:
-        if feature['type'] != POLYGON:
-            continue
+    def test_caspian_sea_exists(self):
+        # Caspian Sea
+        self.load_fixtures([
+            'file://integration-test/fixtures/ne_10m_ocean/'
+            '1030-invalid-wkb-polygon.shp',
+        ], clip=self.tile_bbox(5, 20, 12))
 
-        props = feature['properties']
-        if props.get('kind') == 'ocean':
-            geom = feature['geometry']
-            geom_type = geom['type']
-            test.assertTrue('Polygon' in geom_type)
-            ocean_area += area_of(geom['coordinates'])
+        self.assert_has_feature(
+            5, 20, 12, 'water',
+            {'kind': 'ocean'})
 
-    ocean_area = abs(ocean_area)
-    expected = 7326600
-    if ocean_area < expected:
-        test.fail('Ocean area %f, expected at least %f.' % (ocean_area, expected))
-    if ocean_area > 1.5 * expected:
-        test.fail('Ocean area %f > 1.5 * expected %f' % (ocean_area, expected))
+    def test_baltic_sea_exists(self):
+        # Baltic Sea - JSON format
+        self.load_fixtures([
+            'file://integration-test/fixtures/ne_10m_ocean/'
+            '1030-invalid-wkb-polygon.shp',
+        ], clip=self.tile_bbox(5, 17, 9))
+
+        self.assert_has_feature(
+            5, 17, 9, 'water',
+            {'kind': 'ocean'})
+
+    def test_mvt_feature_validity(self):
+        # Check MVT format
+        # NOTE: this is _not_ clipped or simplified, as the full area of the
+        # ocean is necessary to check that the simplification later on in the
+        # stack when encoding the MVT hasn't broken the polygon.
+        self.load_fixtures([
+            'file://integration-test/fixtures/ne_10m_ocean/'
+            '1030-invalid-wkb-polygon.shp',
+        ])
+
+        with self.features_in_mvt_layer(5, 17, 9, 'water') as features:
+            ocean_area = 0
+
+            for feature in features:
+                if feature['type'] != POLYGON:
+                    continue
+
+                props = feature['properties']
+                if props.get('kind') == 'ocean':
+                    geom = feature['geometry']
+                    geom_type = geom['type']
+                    self.assertTrue('Polygon' in geom_type)
+                    ocean_area += area_of(geom['coordinates'])
+
+            ocean_area = abs(ocean_area)
+            expected = 7326600
+            self.assertFalse(
+                ocean_area < expected,
+                'Ocean area %f, expected at least %f.' %
+                (ocean_area, expected))
+            self.assertFalse(
+                ocean_area > 1.5 * expected,
+                'Ocean area %f > 1.5 * expected %f' %
+                (ocean_area, expected))

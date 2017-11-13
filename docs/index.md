@@ -14,26 +14,25 @@ With vector tiles you have the power to customize the content and visual appeara
 
 To start integrating vector tiles to your app, you need a [developer API key](https://mapzen.com/documentation/overview/).
 
-* [API keys and rate limits](api-keys-and-rate-limits.md) - Don't abuse the shared service!
-* [Attribution requirements](attribution.md) - Terms of service for OpenStreetMap and other projects require attribution.
+* [Attribution requirements](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) - Terms of service for OpenStreetMap and other projects that require attribution.
 
 #### Requesting tiles
 
 The URL pattern to request tiles is:
 
-`https://tile.mapzen.com/mapzen/vector/v1/{layers}/{z}/{x}/{y}.{format}`
+`https://tile.mapzen.com/mapzen/vector/v1/{tilesize}/{layers}/{z}/{x}/{y}.{format}?api_key=your-mapzen-api-key`
 
 Here’s a sample tile in TopoJSON:
 
-`https://tile.mapzen.com/mapzen/vector/v1/all/16/19293/24641.topojson`
+`https://tile.mapzen.com/mapzen/vector/v1/512/all/16/19293/24641.topojson?api_key=your-mapzen-api-key`
 
-More information is available about how to [use the vector tile service](use-service.md) and specify custom layers in the service (though we recommend the default `all` layer).
+More information is available about how to [use the vector tile service](use-service.md) and specify `512` or `256` pixel tile sizes and custom layers in the service (though we recommend the default `all` layer).
 
 ##### Formats
 
 The Mapzen vector tile service provides [tiles in a variety of formats](use-service.md#formats), including [GeoJSON](http://geojson.org), [TopoJSON](https://github.com/mbostock/topojson/wiki), and the binary, protobuf-based [Mapbox Vector Tile (MVT) format](https://www.mapbox.com/vector-tiles/specification/).
 
-**We recommend** `TopoJSON` format for desktop web development, and `MVT` format for native mobile development. The Mapzen server gzips tiles automatically, so the TopoJSON file format is comparable in file size to MVT over the wire, and it's much friendlier to debug.
+**Mapzen recommends** `TopoJSON` format for desktop web development, and `MVT` format for native mobile development. The Mapzen server gzips tiles automatically, so the TopoJSON file format is comparable in file size to MVT over the wire, and it's much friendlier to debug.
 
 ##### Drawing a map
 

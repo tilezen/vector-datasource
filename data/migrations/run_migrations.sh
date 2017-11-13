@@ -22,7 +22,7 @@ done
 # are required by later steps.
 psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../functions.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new functions failed.">&2; exit 1; fi
-python ${migration_dir}/create-sql-functions.py | psql --set ON_ERROR_STOP=1 $*
+python ${migration_dir}/../../vectordatasource/meta/sql.py | psql --set ON_ERROR_STOP=1 $*
 if [ $? -ne 0 ]; then echo "Installing generated functions failed.">&2; exit 1; fi
 psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../triggers.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new triggers failed.">&2; exit 1; fi
@@ -58,7 +58,7 @@ done
 
 # re-generate the functions to avoid issues when a migration updates
 # the schema
-python ${migration_dir}/create-sql-functions.py | psql --set ON_ERROR_STOP=1 $*
+python ${migration_dir}/../../vectordatasource/meta/sql.py | psql --set ON_ERROR_STOP=1 $*
 if [ $? -ne 0 ]; then echo "Installing generated functions second time failed.">&2; exit 1; fi
 
 # analyze tables in case index updates influenced query plans
@@ -73,8 +73,6 @@ for python in ${migration_dir}/*.py; do
     # called literally '*.py'.
     [ -f $python ] || break
 
-    if [ $python != "${migration_dir}/create-sql-functions.py" ]; then
-        echo "executing python: $python"
-        python $python
-    fi
+    echo "executing python: $python"
+    python $python
 done
