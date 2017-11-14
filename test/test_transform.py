@@ -664,3 +664,44 @@ class RankBoundsTest(unittest.TestCase):
         bounds = (0, 0, 2, 2)
         rank = self._call_fut(shape, bounds)
         self.assertIsNone(rank)
+
+
+class SimplifyAndClipTest(unittest.TestCase):
+
+    def test_simplify_and_clip(self):
+        from vectordatasource.transform import simplify_and_clip
+        from tilequeue.process import Context
+        from shapely.geometry.linestring import LineString
+
+        shape = LineString([[0, 0], [0.5, 2], [1, 1]])
+        props = {}
+        fid = None
+
+        bounds = (0, 0, 1, 1)
+
+        feature_layers = [dict(
+            layer_datum=dict(
+                is_clipped=True,
+                area_threshold=0,
+                simplify_before_intersect=True,
+                simplify_start=0,
+            ),
+            padded_bounds={'line': bounds},
+            features=[(shape, props, fid)],
+        )]
+        nominal_zoom = 0
+        unpadded_bounds = bounds
+        params = dict(
+            simplify_before=16,
+        )
+        resources = None
+
+        ctx = Context(feature_layers, nominal_zoom, unpadded_bounds, params,
+                      resources)
+        simplify_and_clip(ctx)
+
+        self.assertEquals(1, len(ctx.feature_layers))
+        feature_layer = ctx.feature_layers[0]
+        self.assertEquals(1, len(feature_layer['features']))
+        out_shape, out_props, out_fid = feature_layer['features'][0]
+        self.assertEquals('LineString', out_shape.type)
