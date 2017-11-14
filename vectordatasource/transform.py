@@ -3801,6 +3801,7 @@ def simplify_and_clip(ctx):
         for shape, props, feature_id in feature_layer['features']:
 
             geom_type = normalize_geometry_type(shape.type)
+            original_geom_dim = _geom_dimensions(shape)
             padded_bounds_by_type = padded_bounds[geom_type]
             layer_padded_bounds = calculate_padded_bounds(
                 clip_factor, padded_bounds_by_type)
@@ -3840,6 +3841,17 @@ def simplify_and_clip(ctx):
             # None.
             if shape is None or shape.is_empty:
                 continue
+
+            # if clipping and simplifying caused this to become a geometry
+            # collection of different geometry types (e.g: by just touching
+            # the clipping box), then trim it back to the original geometry
+            # type.
+            if shape.type == 'GeometryCollection':
+                shape = _filter_geom_types(shape, original_geom_dim)
+                # if that removed all the geometry, then don't keep the
+                # feature.
+                if shape is None or shape.is_empty:
+                    continue
 
             simplified_feature = shape, props, feature_id
             simplified_features.append(simplified_feature)
