@@ -1,1 +1,13 @@
 .git/
+
+data/Makefile-import-data
+data/Makefile-prepare-data
+data/import-shapefiles.sh
+data/*.shp
+data/*.cpg
+data/*.dbf
+data/*.prj
+data/*.shx
+*.pyc
+.eggs/*
+vector_datasource.egg-info/
