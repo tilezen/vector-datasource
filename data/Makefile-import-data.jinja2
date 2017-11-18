@@ -25,7 +25,7 @@ shapefiles.tar.gz:
 
 {% for shapefile in shapefiles %}
 {{ shapefile['tgt_shp'] }}: {{ shapefile['tgt_zip'] }}
-	unzip -o {{ shapefile['tgt_zip'] }}
+	unzip -qq -o {{ shapefile['tgt_zip'] }}
 	test -e {{ shapefile['tgt_shp'] }}
 	touch {{ shapefile['tgt_shp'] }}
 {% endfor %}
