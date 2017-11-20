@@ -2,7 +2,7 @@
 
 set -e
 
-PSQLOPTS="--set ON_ERROR_STOP=on"
+PSQLOPTS="--set ON_ERROR_STOP=on -X -q"
 
 # apply schema updates first, some functions now depend on it.
 echo "Creating custom schema..."
