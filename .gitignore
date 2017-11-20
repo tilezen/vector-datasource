@@ -8,7 +8,11 @@ test.log
 # editor temporaries
 *~
 
-# downloaded shapefiles
+# downloaded files
+data/*.zip
+data/*.tar.gz
+data/land-polygons-split-3857/
+data/water-polygons-split-3857/
 data/*.shp
 data/*.cpg
 data/*.dbf
