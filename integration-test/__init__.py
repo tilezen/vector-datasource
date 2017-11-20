@@ -1061,7 +1061,8 @@ class FixtureFeatureFetcher(object):
             io = StringIO()
 
             from tilequeue.format import format_mvt
-            format_mvt(io, pfl, z, bounds_merc, bounds_lnglat)
+            extent = 4096
+            format_mvt(io, pfl, z, bounds_merc, bounds_lnglat, extent)
 
             from mapbox_vector_tile import decode as mvt_decode
             msg = mvt_decode(io.getvalue())
