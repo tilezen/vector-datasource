@@ -1,3 +1,8 @@
+# This is a minimal configuration to get vector-datasource running in
+# development. Documentation about the tileserver configuration syntax
+# can be found in it's repository.
+# In production the debug, reloading, and caching settings will probably
+# need to be changed, at a minimum.
 postgresql:
   dbnames: [osm]
 queries:
