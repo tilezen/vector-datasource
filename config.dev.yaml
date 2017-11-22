@@ -1,0 +1,57 @@
+# This is a minimal configuration to get vector-datasource running in
+# development. Documentation about the tileserver configuration syntax
+# can be found in it's repository.
+# In production the debug, reloading, and caching settings will probably
+# need to be changed, at a minimum.
+postgresql:
+  dbnames: [osm]
+queries:
+  config: queries.yaml
+  template-path: queries
+  reload-templates: true
+
+formats: [json, topojson, mvt]
+buffer: {}
+
+server:
+  host: localhost
+  port: 8080
+  debug: true
+  reload: true
+  threaded: false
+
+http:
+  # whether to include cors headers on responses
+  cors: true
+  # client cache time in seconds ("Cache-Control: max-age" header)
+  max-age: 300
+
+health:
+  url: /_health
+
+path_tile_size:
+  # NOTE: the keys should be strings
+  "256": 1
+  "512": 2
+
+# requests for zoom levels higher than this will 404
+max_interesting_zoom: 20
+
+# control how python code from yaml is used
+yaml:
+  # dotted name or runtime
+  type: parse
+  parse:
+    # this will parse the yaml files and compile them on startup
+    # useful when iterating on updating the yaml files themselves
+    path: yaml
+  callable:
+    # this will call a function that should return a mapping from
+    # layer name to function that generates the output properties
+    # mapping returned should look like:
+    # layer-name -> function(shape, properties, feature_id)
+    # useful when the output functions have already been generated
+    # and it's simply a matter of pointing to them
+    dotted-name: path.to.function.returning.mapping
+    args:
+      - 'any-args-to-pass'
