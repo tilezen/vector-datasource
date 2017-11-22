@@ -390,6 +390,11 @@ UPDATE
 
 <div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> Occasionally two PRs will land at the same time and you'll need to clean up the SQL to address a merge conflict. To prevent this, use more new lines in your SQL.</div>
 
+<div class='alert-message' style="color: #8a6d3b; background-color: #fcf8e3; padding: 15px; margin-bottom: 20px; border: 1px solid #faebcc; border-radius: 4px;">:warning: <b>NOTE:</b> You will need to run the database migrations after updating the SQL files. You can do this with the `data/migrations/run_migrations.sh -d osm` command. Replace `-d osm` with your database name and whatever other `psql` arguments are necessary to connect to your local database.</div>
+
+Running the migration script will have the effect of building and re-installing the SQL functions which are responsible for calculating the min zoom columns used to determine if a feature is visible at all. If you find that your tests are passing, but your live database doesn't show a feature in tiles (or shows it at the wrong zoom), then you may need to run a migration again.
+
+Migrations should be idempotent: Running them multiple times should result in the same changes. This is important, as the migrations may be run several times on the development database and many, many times against a local database. This can lead to some [complex code](https://github.com/tilezen/vector-datasource/blob/97ecbe96d14186468f1d5f48017f09a8f33d2cf4/data/migrations/v1.5.0-prefunction-schema.sql) to ensure that actions aren't performed twice. Some actions, such as `UPDATE`s, may be safe to perform multiple times. Even in those cases, it's best to add a restrictive `WHERE` clause to avoid making unnecessary writes, as these can hugely slow down the migration process.
 
 #### Migration details
 
