@@ -1,3 +1,12 @@
+-- Add zoom for POIs without a name
+UPDATE planet_osm_point
+  SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point)
+  WHERE
+    shop IS NOT NULL
+    AND name IS NULL
+    AND mz_poi_min_zoom IS DISTINCT FROM mz_calculate_min_zoom_pois(planet_osm_point);
+
+-- Index work should be done after UPDATEs
 -- ladder the point indexes
 CREATE INDEX IF NOT EXISTS
   planet_osm_point_geom_min_zoom_6_index
