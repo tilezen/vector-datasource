@@ -2,6 +2,7 @@
 
 migration_dir=${0%/*}
 
+PSQLOPTS="-Xq"
 # first, run any "pre-function" migrations. these might be necessary if the
 # migration alters tables to add columns referenced in the functions, in
 # which case the function creation would fail.
@@ -12,7 +13,7 @@ for sql in ${migration_dir}/*.sql; do
     [ -f $sql ] || break
 
     if [[ $sql = *prefunction*.sql ]]; then
-        psql -f "$sql" $*
+        psql $PSQLOPTS -f "$sql" $*
     else
         echo "SKIPPING $sql - this will be run after the functions."
     fi
@@ -20,16 +21,16 @@ done
 
 # next run functions and triggers, bailing if either of these fail, as they
 # are required by later steps.
-psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../functions.sql" $*
+psql $PSQLOPTS --set ON_ERROR_STOP=1 -f "${migration_dir}/../functions.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new functions failed.">&2; exit 1; fi
-python ${migration_dir}/../../vectordatasource/meta/sql.py | psql --set ON_ERROR_STOP=1 $*
+python ${migration_dir}/../../vectordatasource/meta/sql.py | psql $PSQLOPTS --set ON_ERROR_STOP=1 $*
 if [ $? -ne 0 ]; then echo "Installing generated functions failed.">&2; exit 1; fi
-psql --set ON_ERROR_STOP=1 -f "${migration_dir}/../triggers.sql" $*
+psql $PSQLOPTS --set ON_ERROR_STOP=1 -f "${migration_dir}/../triggers.sql" $*
 if [ $? -ne 0 ]; then echo "Installing new triggers failed.">&2; exit 1; fi
 
 # then disable triggers
 for table in planet_osm_point planet_osm_line planet_osm_polygon planet_osm_rels; do
-    psql -c "ALTER TABLE ${table} DISABLE TRIGGER USER" $*
+    psql $PSQLOPTS -c "ALTER TABLE ${table} DISABLE TRIGGER USER" $*
 done
 
 # run updates in parallel. note that we don't bail here, as we want to
@@ -45,7 +46,7 @@ for sql in ${migration_dir}/*.sql; do
     elif [[ $sql = *prefunction*.sql ]]; then
         echo "SKIPPING $sql - this was already run before the functions."
     else
-        psql -f "$sql" $* &
+        psql $PSQLOPTS -f "$sql" $* &
     fi
 done
 
@@ -53,17 +54,17 @@ wait
 
 # re-enable triggers
 for table in planet_osm_point planet_osm_line planet_osm_polygon planet_osm_rels; do
-    psql -c "ALTER TABLE ${table} ENABLE TRIGGER USER" $*
+    psql $PSQLOPTS -c "ALTER TABLE ${table} ENABLE TRIGGER USER" $*
 done
 
 # re-generate the functions to avoid issues when a migration updates
 # the schema
-python ${migration_dir}/../../vectordatasource/meta/sql.py | psql --set ON_ERROR_STOP=1 $*
+python ${migration_dir}/../../vectordatasource/meta/sql.py | psql $PSQLOPTS --set ON_ERROR_STOP=1 $*
 if [ $? -ne 0 ]; then echo "Installing generated functions second time failed.">&2; exit 1; fi
 
 # analyze tables in case index updates influenced query plans
 for table in planet_osm_point planet_osm_line planet_osm_polygon; do
-    psql -c "ANALYZE ${table}" $* &
+    psql $PSQLOPTS -c "ANALYZE ${table}" $* &
 done
 wait
 

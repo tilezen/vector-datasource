@@ -1,4 +1,5 @@
 -- only these 2 columns are relevant in lower zoom queries
+SET client_min_messages TO WARNING;
 CREATE INDEX
   planet_osm_line_geom_min_zoom_8_index
   ON planet_osm_line USING gist(way)
@@ -70,3 +71,4 @@ DROP INDEX IF EXISTS planet_osm_line_boundary_geom_index;
 DROP INDEX IF EXISTS planet_osm_line_boundary_geom_9_index;
 DROP INDEX IF EXISTS planet_osm_line_boundary_geom_12_index;
 DROP INDEX IF EXISTS planet_osm_line_boundary_geom_15_index;
+RESET client_min_messages;
