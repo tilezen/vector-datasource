@@ -1,6 +1,6 @@
 -- only these 2 columns are relevant in lower zoom queries
 SET client_min_messages TO WARNING;
-CREATE INDEX
+CREATE INDEX IF NOT EXISTS
   planet_osm_line_geom_min_zoom_8_index
   ON planet_osm_line USING gist(way)
   WHERE
