@@ -1,4 +1,5 @@
 -- polygon low zoom
+SET client_min_messages TO WARNING;
 CREATE INDEX IF NOT EXISTS
   planet_osm_polygon_geom_min_zoom_7_index
   ON planet_osm_polygon USING gist(way)
@@ -97,3 +98,4 @@ DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_6_index;
 DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_9_index;
 DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_12_index;
 DROP INDEX IF EXISTS planet_osm_polygon_pois_geom_15_index;
+RESET client_min_messages;

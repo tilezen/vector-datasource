@@ -1,4 +1,5 @@
 -- ladder the point indexes
+SET client_min_messages TO WARNING;
 CREATE INDEX IF NOT EXISTS
   planet_osm_point_geom_min_zoom_6_index
   ON planet_osm_point USING gist(way)
@@ -68,3 +69,4 @@ DROP INDEX IF EXISTS planet_osm_point_min_zoom_places_index;
 DROP INDEX IF EXISTS planet_osm_point_min_zoom_places_9_index;
 DROP INDEX IF EXISTS planet_osm_point_min_zoom_places_12_index;
 DROP INDEX IF EXISTS planet_osm_point_min_zoom_places_15_index;
+RESET client_min_messages;
