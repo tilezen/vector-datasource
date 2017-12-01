@@ -74,9 +74,16 @@ filters:
       kind: valley
     table: osm
 
+  # There are different kinds of NE "earth" now so add property filters...
   - filter:
       meta.source: [ne, shp]
     min_zoom: 0
     output:
       <<: *output_properties
       kind: earth
+
+  # ne_10m_geographic_lines
+  # ne_10m_geography_regions_polys (as points)
+  # ne_10m_minor_islands
+  # ne_10m_geography_regions_elevation_points
+  # ne_10m_geography_regions_points

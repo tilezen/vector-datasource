@@ -1037,3 +1037,8 @@ filters:
     output:
       <<: *output_properties
       kind: grave_yard
+
+  # ne_10m_antarctic_ice_shelves_lines
+  # ne_10m_antarctic_ice_shelves_polys
+  # ne_10m_glaciated_areas
+  # ne_10m_reefs

@@ -167,3 +167,6 @@ filters:
       kind: region
       kind_detail: '4'
     table: ne
+
+  # ne_10m_admin_0_boundary_lines_disputed_areas
+  # ne_10m_admin_0_boundary_lines_maritime_indicator

@@ -175,3 +175,13 @@ filters:
       <<: *output_properties
       kind: ocean
     table: shp
+
+  # ne_10m_geography_marine_polys
+  # ne_10m_lakes_europe
+  # ne_10m_lakes_historic
+  # ne_10m_lakes_north_america
+  # ne_10m_minor_islands_coastline
+  # ne_10m_rivers_europe
+  # ne_10m_rivers_lake_centerlines
+  # ne_10m_rivers_lake_centerlines_scale_rank
+  # ne_10m_rivers_north_america

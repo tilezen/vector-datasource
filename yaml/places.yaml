@@ -166,3 +166,8 @@ filters:
       kind: locality
       kind_detail: scientific_station
     table: ne
+
+  # ne_10m_admin_0_countries
+  # ne_10m_admin_0_map_subunits
+  # ne_10m_admin_0_map_subunits
+  # ne_10m_admin_0_disputed_areas
