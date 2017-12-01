@@ -9,6 +9,8 @@ shapefiles:
   #   - prj: source projection (defaults to 4326)
   #   - tile: whether to tile the data source before importing
 
+  # water and land layer sources from timestamped openstreetmapdata.com source
+
   - name: water_polygons
     url: http://data.openstreetmapdata.com/water-polygons-split-3857.zip
     prj: 3857
@@ -21,11 +23,16 @@ shapefiles:
     directory: land-polygons-split-3857
     shapefile-name: land-polygons-split-3857/land_polygons.shp
 
+  # used to intercut line features in boundaries layer with ocean marine areas
+  # hand curated by Mapzen for the Tilezen project
+
   - name: buffered_land
     url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land_10272016.zip
     prj: 3857
     shapefile-name: buffered_land_10272016.shp
     tile: true
+
+  # Natural Earth
 
   - name: ne_110m_lakes
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
