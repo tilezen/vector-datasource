@@ -166,10 +166,17 @@ shapefiles:
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_disputed_areas.zip
     prj: 4326
 
+  # for place labels and for boundaries polygons
   - name: ne_50m_admin_0_breakaway_disputed_areas
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_breakaway_disputed_areas.zip
     prj: 4326
 
+  # for place labels
+  - name: ne_10m_admin_0_disputed_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_disputed_areas.zip
+    prj: 4326
+
+  # for boundaries polygons
   - name: ne_10m_admin_0_disputed_areas_scale_rank_minor_islands
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_disputed_areas_scale_rank_minor_islands.zip
     prj: 4326
