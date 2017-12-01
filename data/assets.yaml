@@ -126,8 +126,8 @@ shapefiles:
 
   - name: ne_50m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_coastline.zip
-    prj: 43267
+    prj: 4326
 
   - name: ne_10m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
-    prj: 43267
+    prj: 4326
