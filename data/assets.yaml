@@ -33,6 +33,7 @@ shapefiles:
     tile: true
 
   # Natural Earth
+  # organized by theme, then scale set
 
   - name: ne_110m_lakes
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
@@ -46,6 +47,18 @@ shapefiles:
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes.zip
     prj: 4326
 
+  - name: ne_10m_lakes_europe
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes_europe.zip
+    prj: 4326
+
+  - name: ne_10m_lakes_north_america
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes_north_america.zip
+    prj: 4326
+
+  - name: ne_10m_lakes_historic
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes_historic.zip
+    prj: 4326
+
   - name: ne_110m_ocean
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_ocean.zip
     prj: 4326
@@ -54,10 +67,12 @@ shapefiles:
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_ocean.zip
     prj: 4326
 
+  # this should be scale_rank instead (instead of ne_10m_ocean)
   - name: ne_10m_ocean
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_ocean.zip
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_ocean_scale_rank.zip
     prj: 4326
 
+  # this should probably be dropped? or keep in but the SQL always results in selection of 0?
   - name: ne_50m_playas
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_playas.zip
     prj: 4326
@@ -82,13 +97,45 @@ shapefiles:
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_land.zip
     prj: 4326
 
+  # this should be scale_rank instead (instead of ne_10m_land, fix other mentions)
   - name: ne_10m_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_land.zip
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_land_scale_rank.zip
     prj: 4326
     tile: true
 
+  # populated places is special
+  # normally we'd use what's in the scale set, but for some reason we always select out of the 10m table instead?
+
+  #- name: ne_110m_populated_places
+  #  url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_populated_places.zip
+  #  prj: 4326
+
+  #- name: ne_50m_populated_places
+  #  url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_populated_places.zip
+  #  prj: 4326
+
   - name: ne_10m_populated_places
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places.zip
+    prj: 4326
+
+  - name: ne_50m_admin_0_countries
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_countries.zip
+    prj: 4326
+
+  - name: ne_110m_admin_0_countries
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_countries.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_countries
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
+    prj: 4326
+
+  - name: ne_50m_admin_0_map_subunits
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_map_subunits.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_map_subunits
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_map_subunits.zip
     prj: 4326
 
   - name: ne_110m_admin_0_boundary_lines_land
@@ -103,14 +150,49 @@ shapefiles:
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
     prj: 4326
 
+  - name: ne_50m_admin_0_boundary_map_units
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_map_units.zip
+    prj: 4326
+
   - name: ne_10m_admin_0_boundary_lines_map_units
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip
+    prj: 4326
+
+  - name: ne_50m_admin_0_boundary_lines_disputed_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_disputed_areas.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_boundary_lines_disputed_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_disputed_areas.zip
+    prj: 4326
+
+  - name: ne_50m_admin_0_breakaway_disputed_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_breakaway_disputed_areas.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_disputed_areas_scale_rank_minor_islands
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_disputed_areas_scale_rank_minor_islands.zip
+    prj: 4326
+
+  - name: ne_50m_admin_0_boundary_lines_maritime_indicator
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_maritime_indicator.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_boundary_lines_maritime_indicator
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_maritime_indicator.zip
+    prj: 4326
+
+  - name: ne_50m_admin_1_states_provinces_lakes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lakes.zip
+    prj: 4326
+
+  - name: ne_110m_admin_1_states_provinces_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_1_states_provinces_lines.zip
     prj: 4326
 
   - name: ne_50m_admin_1_states_provinces_lines
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
     prj: 4326
-    shapefile-name: ne_50m_admin_1_states_provinces_lines_shp.shp
 
   - name: ne_10m_admin_1_states_provinces_lines
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
@@ -130,4 +212,116 @@ shapefiles:
 
   - name: ne_10m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
+    prj: 4326
+
+  - name: ne_10m_minor_islands
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_minor_islands.zip
+    prj: 4326
+
+  - name: ne_10m_minor_islands_coastline
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_minor_islands_coastline.zip
+    prj: 4326
+
+  - name: ne_50m_antarctic_ice_shelves_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_antarctic_ice_shelves_polys.zip
+    prj: 4326
+
+  - name: ne_10m_antarctic_ice_shelves_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_antarctic_ice_shelves_polys.zip
+    prj: 4326
+
+  - name: ne_50m_antarctic_ice_shelves_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_antarctic_ice_shelves_lines.zip
+    prj: 4326
+
+  - name: ne_10m_antarctic_ice_shelves_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_antarctic_ice_shelves_lines.zip
+    prj: 4326
+
+  - name: ne_50m_geographic_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_geographic_lines.zip
+    prj: 4326
+
+  - name: ne_10m_geographic_lines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geographic_lines.zip
+    prj: 4326
+
+  - name: ne_110m_geography_marine_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_geography_marine_polys.zip
+    prj: 4326
+
+  - name: ne_50m_geography_marine_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_geography_marine_polys.zip
+    prj: 4326
+
+  - name: ne_10m_geography_marine_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_marine_polys.zip
+    prj: 4326
+
+  - name: ne_110m_geography_regions_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_geography_regions_polys.zip
+    prj: 4326
+
+  - name: ne_50m_geography_regions_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_geography_regions_polys.zip
+    prj: 4326
+
+  - name: ne_10m_geography_regions_polys
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_regions_polys.zip
+    prj: 4326
+
+  - name: ne_10m_geography_regions_points
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_regions_points.zip
+    prj: 4326
+
+  - name: ne_50m_geography_regions_elevation_points
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_geography_regions_elevation_points.zip
+    prj: 4326
+
+  - name: ne_10m_geography_regions_elevation_points
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_geography_regions_elevation_points.zip
+    prj: 4326
+
+  - name: ne_110m_glaciated_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_glaciated_areas.zip
+    prj: 4326
+
+  - name: ne_50m_glaciated_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_glaciated_areas.zip
+    prj: 4326
+
+  - name: ne_10m_glaciated_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_glaciated_areas.zip
+    prj: 4326
+
+  - name: ne_10m_reefs
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_reefs.zip
+    prj: 4326
+
+  - name: ne_110m_rivers_lake_centerlines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_rivers_lake_centerlines.zip
+    prj: 4326
+
+  - name: ne_50m_rivers_lake_centerlines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_rivers_lake_centerlines.zip
+    prj: 4326
+
+  - name: ne_10m_rivers_lake_centerlines
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_rivers_lake_centerlines.zip
+    prj: 4326
+
+  - name: ne_50m_rivers_lake_centerlines_scale_rank
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_rivers_lake_centerlines_scale_rank.zip
+    prj: 4326
+
+  - name: ne_10m_rivers_lake_centerlines_scale_rank
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_rivers_lake_centerlines_scale_rank.zip
+    prj: 4326
+
+  - name: ne_10m_rivers_north_america
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_rivers_north_america.zip
+    prj: 4326
+
+  - name: ne_10m_rivers_europe
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_rivers_europe.zip
     prj: 4326
