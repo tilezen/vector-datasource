@@ -1,11 +1,39 @@
 {% extends 'ne.jinja2' %}
 {% block query %}
-{{ ne_water_query(False, True, False, False, True, 'ne_10m_ocean') }}
+{{ ne_water_query(False, True, False, False, True, 'ne_10m_ocean_scale_rank') }}
 UNION ALL
 {{ ne_water_query(False, True, True, False, True, 'ne_10m_lakes') }}
 UNION ALL
+{{ ne_water_query(False, True, True, False, True, 'ne_10m_lakes_europe') }}
+UNION ALL
+{{ ne_water_query(False, True, True, False, True, 'ne_10m_lakes_north_america') }}
+UNION ALL
 {{ ne_water_query(False, False, False, True, False, 'ne_10m_coastline') }}
+UNION ALL
+{{ ne_water_query(False, False, False, True, False, 'ne_10m_minor_islands_coastline') }}
+UNION ALL
+-- points, really this can be for 10m, 50m, 110m (like populated places)?
+{{ ne_water_query(False, False, False, True, False, 'ne_10m_geography_marine_polys') }}
 UNION ALL
 -- boundaries
 {{ ne_water_query(True, True, True, True, True, 'ne_10m_lakes') }}
+UNION ALL
+-- boundaries
+{{ ne_water_query(True, True, True, True, True, 'ne_10m_lakes_europe') }}
+UNION ALL
+-- boundaries
+{{ ne_water_query(True, True, True, True, True, 'ne_10m_lakes_north_america') }}
+UNION ALL
+-- boundaries (only)
+{{ ne_water_query(True, True, True, True, True, 'ne_10m_lakes_historic') }}
+UNION ALL
+-- label lines
+{{ ne_water_query(False, False, False, True, False, 'ne_10m_rivers_lake_centerlines') }}
+UNION ALL
+-- draw lines
+{{ ne_water_query(False, False, False, True, False, 'ne_10m_rivers_lake_centerlines_scale_rank') }}
+UNION ALL
+{{ ne_water_query(False, False, False, True, False, 'ne_10m_rivers_north_america') }}
+UNION ALL
+{{ ne_water_query(False, False, False, True, False, 'ne_10m_rivers_europe') }}
 {% endblock %}

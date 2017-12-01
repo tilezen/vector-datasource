@@ -1,4 +1,9 @@
 {% extends 'ne.jinja2' %}
 {% block query %}
 {{ ne_earth_query('ne_50m_land') }}
+UNION ALL
+{{ ne_earth_query('ne_50m_geographic_lines') }}
+UNION ALL
+-- points, really this can be for 10m, 50m, 110m (like populated places)?
+{{ ne_earth_query('ne_50m_geography_regions_polys') }}
 {% endblock %}

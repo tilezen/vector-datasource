@@ -2,7 +2,8 @@
 
   -- common properties
   jsonb_build_object(
-    'source', 'naturalearthdata.com'
+    'source', 'naturalearthdata.com',
+    'min_zoom', mz_boundary_min_zoom,
   ) AS __properties__
 
 {% endmacro %}
@@ -22,7 +23,7 @@ SELECT
 {% if name %}
     'name', name,
 {% endif %}
-    'min_zoom', mz_boundary_min_zoom,
+    -- 'min_zoom', mz_boundary_min_zoom,
     'featurecla', featurecla,
     'scalerank', scalerank
   ) AS __boundaries_properties__,
@@ -55,6 +56,7 @@ SELECT
 
   NULL::jsonb AS __boundaries_properties__,
 
+  -- if min_zoom is in ne_common_properties, how do I omit it here?
   jsonb_build_object(
     'min_zoom', mz_earth_min_zoom
   ) AS __earth_properties__,
@@ -86,6 +88,7 @@ SELECT
   NULL::jsonb AS __boundaries_properties__,
   NULL::jsonb AS __earth_properties__,
 
+  -- kind here should be from featurecla?
   jsonb_build_object(
     'area', way_area,
     'kind', 'urban_area'
@@ -138,7 +141,7 @@ SELECT
 {% if has_area %}
     'area', way_area,
 {% endif %}
-    'min_zoom', mz_water_min_zoom,
+    -- 'min_zoom', mz_water_min_zoom,
     'featurecla', featurecla
   ) AS __water_properties__
 

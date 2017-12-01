@@ -4,5 +4,13 @@
 UNION ALL
 {{ ne_boundaries_query(False, 'ne_10m_admin_0_boundary_lines_map_units') }}
 UNION ALL
+-- lines
+{{ ne_boundaries_query(True, 'ne_10m_admin_0_boundary_lines_disputed_areas') }}
+UNION ALL
+-- polygons
+{{ ne_boundaries_query(False, 'ne_10m_admin_0_disputed_areas_scale_rank_minor_islands') }}
+UNION ALL
+{{ ne_boundaries_query(True, 'ne_10m_admin_0_boundary_lines_maritime_indicator') }}
+UNION ALL
 {{ ne_boundaries_query(True, 'ne_10m_admin_1_states_provinces_lines') }}
 {% endblock %}

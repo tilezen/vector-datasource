@@ -1,4 +1,13 @@
 {% extends 'ne.jinja2' %}
 {% block query %}
-{{ ne_earth_query('ne_10m_land') }}
+{{ ne_earth_query('ne_10m_land_scale_rank') }}
+UNION ALL
+{{ ne_earth_query('ne_10m_geographic_lines') }}
+UNION ALL
+-- points, really this can be for 10m, 50m, 110m (like populated places)?
+{{ ne_earth_query('ne_10m_geography_regions_polys') }}
+UNION ALL
+{{ ne_earth_query('ne_10m_minor_islands') }}
+UNION ALL
+{{ ne_earth_query('ne_10m_geography_regions_points') }}
 {% endblock %}

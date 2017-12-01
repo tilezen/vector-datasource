@@ -13,8 +13,18 @@ SELECT
   NULL::jsonb AS __earth_properties__,
   NULL::jsonb AS __landuse_properties__,
 
+  -- the new name:*, wikidataid, and wof_id only exist on populated places table
   jsonb_build_object(
     'name', name,
+    'name:en', name_en,
+    'name:de', name_de,
+    'name:es', name_es,
+    'name:fr', name_fr,
+    'name:pt', name_pt,
+    'name:ru', name_ru,
+    'name:zh', name_zh,
+    'wikidata_id', wikidataid,
+    'wof_id', wof_id,
     'population', pop_max,
     'featurecla', featurecla,
     'scalerank', scalerank,
@@ -38,4 +48,21 @@ WHERE
   AND pop_max <= 5000
 {% endif %}
 
+-- uhhh, where do all these belong? they need label points (and OSM points removed?)
+UNION ALL
+{{ ne_places_query('ne_10m_admin_0_countries') }}
+UNION ALL
+{{ ne_places_query('ne_10m_admin_0_map_subunits') }}
+UNION ALL
+{{ ne_places_query('ne_10m_admin_1') }}
+UNION ALL
+{{ ne_places_query('ne_110m_admin_0_countries') }}
+UNION ALL
+{{ ne_places_query('ne_50m_admin_0_countries') }}
+UNION ALL
+{{ ne_places_query('ne_50m_admin_0_map_subunits') }}
+UNION ALL
+{{ ne_places_query('ne_50m_admin_0_breakaway_disputed_areas') }}
+UNION ALL
+{{ ne_places_query('ne_50m_admin_1_states_provinces_lakes') }}
 {% endblock %}

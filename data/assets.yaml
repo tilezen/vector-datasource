@@ -68,7 +68,7 @@ shapefiles:
     prj: 4326
 
   # this should be scale_rank instead (instead of ne_10m_ocean)
-  - name: ne_10m_ocean
+  - name: ne_10m_ocean_scale_rank
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_ocean_scale_rank.zip
     prj: 4326
 
@@ -98,7 +98,7 @@ shapefiles:
     prj: 4326
 
   # this should be scale_rank instead (instead of ne_10m_land, fix other mentions)
-  - name: ne_10m_land
+  - name: ne_10m_land_scale_rank
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_land_scale_rank.zip
     prj: 4326
     tile: true

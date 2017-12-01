@@ -1,4 +1,15 @@
 {% extends 'ne.jinja2' %}
 {% block query %}
 {{ ne_landuse_query('ne_10m_urban_areas') }}
+UNION ALL
+-- lines
+{{ ne_landuse_query('ne_10m_antarctic_ice_shelves_lines') }}
+UNION ALL
+-- polygons
+{{ ne_landuse_query('ne_10m_antarctic_ice_shelves_polys') }}
+UNION ALL
+{{ ne_landuse_query('ne_10m_glaciated_areas') }}
+UNION ALL
+-- lines
+{{ ne_landuse_query('ne_10m_reefs') }}
 {% endblock %}
