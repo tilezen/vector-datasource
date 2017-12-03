@@ -691,6 +691,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
+* `art`
 * `accountant`
 * `adit`
 * `administrative`
@@ -720,6 +721,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `beach_resort`
 * `beach`
 * `beacon`
+* `beauty`
 * `bed_and_breakfast`
 * `bench`
 * `bicycle_parking`
@@ -757,6 +759,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `clothes`
 * `club`
+* `coffee`
 * `college`
 * `communications_tower`
 * `community_centre`
@@ -771,6 +774,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `dairy_kitchen`
 * `dam`
 * `day_care`
+* `deli`
 * `dentist`
 * `department_store`
 * `dive_centre`
@@ -790,9 +794,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `employment_agency`
 * `enclosure` - at a zoo
 * `estate_agent`
+* `farm`
 * `fashion`
 * `fast_food`
-* `farm`
 * `ferry_terminal`
 * `financial`
 * `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
@@ -808,6 +812,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
+* `furniture`
 * `gallery` - An art gallery.
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
@@ -829,6 +834,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hazard`
 * `healthcare`
 * `helipad`
+* `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `hospital`
 * `hostel`
@@ -871,6 +877,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `music`
 * `national_park`
 * `nature_reserve`
+* `newsagent`
 * `newspaper`
 * `ngo`
 * `notary`
@@ -884,6 +891,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
 * `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
+* `perfumery`
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
@@ -935,6 +943,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `service_area`
 * `shelter`
 * `shoemaker`
+* `shoes`
 * `shower`
 * `sinkhole`
 * `ski_rental`
@@ -949,6 +958,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `spring`
 * `stadium`
 * `station` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+* `stationery`
 * `stone`
 * `stonemason`
 * `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
@@ -965,6 +975,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `theatre`
 * `theme_park`
 * `therapist`
+* `tobacco`
 * `toilets`
 * `toll_booth`
 * `townhall`
@@ -974,9 +985,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `trail_riding_station`
 * `trailhead`
 * `tram_stop`
+* `travel_agency`
 * `travel_agent`
 * `tree`
 * `university`
+* `variety_store`
 * `veterinary`
 * `viewpoint`
 * `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.

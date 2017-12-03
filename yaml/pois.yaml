@@ -1360,8 +1360,11 @@ filters:
       <<: *output_properties
       kind: cycle_barrier
   - filter:
-      shop: [bakery, books, butcher, car, car_repair, clothes, computer, convenience,
-        fashion, florist, gift, greengrocer, hairdresser, jewelry, mobile_phone, optician, pet]
+      shop: [art, bakery, beauty, books, butcher, car, car_repair, clothes,
+        coffee, computer, convenience, deli, fashion, florist, furniture,
+        gift, greengrocer, hairdresser, hifi, jewelry, mobile_phone,
+        newsagent, optician, perfumery, pet, shoes, stationery, tobacco,
+        travel_agency, variety_store]
     min_zoom: 17
     output:
       <<: *output_properties
