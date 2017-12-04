@@ -1,5 +1,5 @@
 bucket: mapzen-tiles-assets
-datestamp: 20161110
+datestamp: 20171201
 
 shapefiles:
 
@@ -22,9 +22,9 @@ shapefiles:
     shapefile-name: land-polygons-split-3857/land_polygons.shp
 
   - name: buffered_land
-    url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land_10272016.zip
+    url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land_05232017.zip
     prj: 3857
-    shapefile-name: buffered_land_10272016.shp
+    shapefile-name: buffered_land_05232017.shp
     tile: true
 
   - name: ne_110m_lakes
@@ -103,7 +103,7 @@ shapefiles:
   - name: ne_50m_admin_1_states_provinces_lines
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
     prj: 4326
-    shapefile-name: ne_50m_admin_1_states_provinces_lines_shp.shp
+    shapefile-name: ne_50m_admin_1_states_provinces_lines.shp
 
   - name: ne_10m_admin_1_states_provinces_lines
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
