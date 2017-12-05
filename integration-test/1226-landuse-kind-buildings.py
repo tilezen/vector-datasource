@@ -67,7 +67,6 @@ class LanduseKindBuildings(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'buildings',
             {'id': 2, 'kind': 'building', 'landuse_kind': 'park'})
-        import pdb; pdb.set_trace()
         self.assert_has_feature(
             z, x, y, 'buildings',
             {'id': 3, 'kind': 'building_part', 'landuse_kind': 'park'})
