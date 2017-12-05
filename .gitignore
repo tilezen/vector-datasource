@@ -18,7 +18,10 @@ data/*.cpg
 data/*.dbf
 data/*.prj
 data/*.shx
+data/*.qpj
 data/wof_neighbourhoods.pgdump
+data/*.README.html
+data/*.VERSION.txt
 
 # python compiled bytecode and development files
 *.pyc
