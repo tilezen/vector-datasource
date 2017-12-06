@@ -3932,6 +3932,7 @@ def _guess_type_from_network(network):
         # given, so this should default to roads.
         return 'road'
 
+
 # a mapping of operator tag values to the networks that they are (probably)
 # part of. this would be better specified directly on the data, but sometimes
 # it's just not available.
