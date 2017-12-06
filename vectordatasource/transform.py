@@ -3996,8 +3996,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     mz_networks = props.get('mz_networks', [])
 
     # if there's no network, but the operator indicates a network, then we can
-    # back-fill an approximate network tag from the operator. this can mean that
-    # extra refs are available for road networks.
+    # back-fill an approximate network tag from the operator. this can mean
+    # that extra refs are available for road networks.
     if network is None:
         operator = props.get('operator')
         backfill_network = _NETWORK_OPERATORS.get(operator)
