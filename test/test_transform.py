@@ -560,14 +560,15 @@ class ShieldTextTransform(unittest.TestCase):
         self.assertEquals([expected_shield_text],
                           properties['all_shield_texts'])
 
+    def test_just_a_number(self):
+        self._assert_shield_text("whatever", "101", "101")
+
     def test_a_road(self):
         # based on http://www.openstreetmap.org/relation/2592
-        # simple pattern, should be just the number.
-        self._assert_shield_text("BAB", "A 66", "66")
+        self._assert_shield_text("BAB", "A 66", "A66")
 
         # based on http://www.openstreetmap.org/relation/446270
-        # simple pattern, should be just the number
-        self._assert_shield_text("FR:A-road", "A 66", "66")
+        self._assert_shield_text("FR:A-road", "A 66", "A66")
 
     def test_sr70var1(self):
         # based on http://www.openstreetmap.org/relation/449595

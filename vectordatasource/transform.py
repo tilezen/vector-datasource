@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 # transformation functions to apply to features
 
 from collections import defaultdict, namedtuple
@@ -3932,6 +3933,58 @@ def _guess_type_from_network(network):
         return 'road'
 
 
+# a mapping of operator tag values to the networks that they are (probably)
+# part of. this would be better specified directly on the data, but sometimes
+# it's just not available.
+#
+# this is a list of the operators with >=100 uses on ways tagged as motorways,
+# which should hopefully allow us to catch most of the important ones. they're
+# mapped to the country they're in, which should be enough in most cases to
+# render the appropriate shield.
+_NETWORK_OPERATORS = {
+    'Highways England': 'GB',
+    'ASF': 'FR',
+    'Autopista Litoral Sul': 'BR',
+    'DNIT': 'BR',
+    'Εγνατία Οδός': 'GR',
+    'Αυτοκινητόδρομος Αιγαίου': 'GR',
+    'Transport Scotland': 'GB',
+    'The Danish Road Directorate': 'DK',
+    "Autostrade per l' Italia S.P.A.": 'IT',
+    'Νέα Οδός': 'GR',
+    'Autostrada dei Fiori S.P.A.': 'IT',
+    'S.A.L.T.': 'IT',
+    'Welsh Government': 'GB',
+    'Euroscut': 'PT',
+    'DIRIF': 'FR',
+    'Administración central': 'ES',
+    'Αττική Οδός': 'GR',
+    'Autocamionale della Cisa S.P.A.': 'IT',
+    'Κεντρική Οδός': 'GR',
+    'Bundesrepublik Deutschland': 'DE',
+    'Ecovias': 'BR',
+    '東日本高速道路': 'JP',
+    'NovaDutra': 'BR',
+    'APRR': 'FR',
+    'Via Solutions Südwest': 'DE',
+    'Autoroutes du Sud de la France': 'FR',
+    'Transport for Scotland': 'GB',
+    'Departamento de Infraestructuras Viarias y Movilidad': 'ES',
+    'ViaRondon': 'BR',
+    'DIRNO': 'FR',
+    'SATAP': 'IT',
+    'Ολυμπία Οδός': 'GR',
+    'Midland Expressway Ltd': 'GB',
+    'autobahnplus A8 GmbH': 'DE',
+    'Cart': 'BR',
+    'Μορέας': 'GR',
+    'Hyderabad Metropolitan Development Authority': 'PK',
+    'Viapar': 'BR',
+    'Autostrade Centropadane': 'IT',
+    'Triângulo do Sol': 'BR',
+}
+
+
 def merge_networks_from_tags(shape, props, fid, zoom):
     """
     Take the network and ref tags from the feature and, if they both exist, add
@@ -3943,13 +3996,27 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     ref = props.get('ref')
     mz_networks = props.get('mz_networks', [])
 
+    # if there's no network, but the operator indicates a network, then we can
+    # back-fill an approximate network tag from the operator. this can mean
+    # that extra refs are available for road networks.
+    if network is None:
+        operator = props.get('operator')
+        backfill_network = _NETWORK_OPERATORS.get(operator)
+        if backfill_network:
+            network = backfill_network
+
     if network and ref:
-        props.pop('network')
+        props.pop('network', None)
         props.pop('ref')
         mz_networks.extend([_guess_type_from_network(network), network, ref])
         props['mz_networks'] = mz_networks
 
     return (shape, props, fid)
+
+
+# a pattern to find any number in a string, as a fallback for looking up road
+# reference numbers.
+_ANY_NUMBER = re.compile('[^0-9]*([0-9]+)')
 
 
 def _road_network_importance(network, ref):
@@ -3981,9 +4048,22 @@ def _road_network_importance(network, ref):
         network_code = len(network.split(':')) + 3
 
     try:
-        ref = max(int(ref or 0), 0)
+        # first, see if the reference is a number, or easily convertible
+        # into one.
+        ref = int(ref or 0)
     except ValueError:
-        ref = 0
+        # if not, we can try to extract anything that looks like a sequence
+        # of digits from the ref.
+        m = _ANY_NUMBER.match(ref)
+        if m:
+            ref = int(m.group(1))
+        else:
+            # failing that, we assume that a completely non-numeric ref is
+            # a name, which would make it quite important.
+            ref = 0
+
+    # make sure no ref is negative
+    ref = abs(ref)
 
     return network_code * 10000 + min(ref, 9999)
 
@@ -4033,6 +4113,7 @@ def _bus_network_importance(network, ref):
 
 
 _NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
+_SINGLE_LETTER_AT_FRONT = re.compile('^([^\W\d]) *(\d+)', re.UNICODE)
 _LETTER_THEN_NUMBERS = re.compile('^[^\d\s_]+[ -]?([^\s]+)',
                                   re.UNICODE | re.IGNORECASE)
 _UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
@@ -4083,6 +4164,12 @@ def _road_shield_text(network, ref):
     m = _NUMBER_AT_FRONT.match(ref)
     if m:
         return m.group(1)
+
+    # If there's a letter at the front, optionally space, and then a number,
+    # the ref is the concatenation (without space) of the letter and number.
+    m = _SINGLE_LETTER_AT_FRONT.match(ref)
+    if m:
+        return m.group(1) + m.group(2)
 
     # Otherwise, try to match a bunch of letters followed by a number.
     m = _LETTER_THEN_NUMBERS.match(ref)
