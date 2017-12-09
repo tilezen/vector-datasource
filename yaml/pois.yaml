@@ -756,6 +756,12 @@ filters:
       kind: {col: amenity}
       kind_detail: {col: cuisine}
   - filter:
+      shop: [coffee, deli]
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: shop}
+  - filter:
       amenity: [pharmacy, veterinary]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
@@ -769,6 +775,12 @@ filters:
     output:
       <<: *output_properties
       kind: {col: craft}
+  - filter:
+      shop: [variety_store, furniture, shoes, pet]
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: shop}
   - filter: {amenity: nursing_home}
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.25 ] } } }
     output:
@@ -1361,10 +1373,9 @@ filters:
       kind: cycle_barrier
   - filter:
       shop: [art, bakery, beauty, books, butcher, car, car_repair, clothes,
-        coffee, computer, convenience, deli, fashion, florist, furniture,
-        gift, greengrocer, hairdresser, hifi, jewelry, mobile_phone,
-        newsagent, optician, perfumery, pet, shoes, stationery, tobacco,
-        travel_agency, variety_store]
+        computer, convenience, fashion, florist, gift, greengrocer,
+        hairdresser, hifi, jewelry, mobile_phone, newsagent, optician,
+        perfumery, stationery, tobacco, travel_agency]
     min_zoom: 17
     output:
       <<: *output_properties
