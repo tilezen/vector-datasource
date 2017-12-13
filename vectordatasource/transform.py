@@ -4482,6 +4482,8 @@ def backfill_from_other_layer(ctx):
     # build an index of feature ID to property value in the other layer
     other_values = {}
     for (shape, props, fid) in other_layer['features']:
+        # prefer to use the `id` property rather than the fid.
+        fid = props.get('id', fid)
         kind = props.get(other_key)
         # make sure fid is truthy, as it can be set to None on features
         # created by merging.
@@ -4491,6 +4493,7 @@ def backfill_from_other_layer(ctx):
     # apply those to features which don't already have a value
     for (shape, props, fid) in layer['features']:
         if layer_key not in props:
+            fid = props.get('id', fid)
             value = other_values.get(fid)
             if value:
                 props[layer_key] = value
