@@ -356,6 +356,8 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 * `wayside_shrine`
 * `works`
 
+Additional `kind_detail` values are provided from POI `kind`s where one is not available from the building feature. This means that you could see any POI `kind` value as a building `kind_detail` value.
+
 #### Building part `kind_detail` values:
 
 * `arch`
