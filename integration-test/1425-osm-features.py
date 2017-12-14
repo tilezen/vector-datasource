@@ -57,6 +57,20 @@ class FeatureTests(FixtureTest):
             '16/19318/24656', 'landuse',
             {'kind': 'wetland', 'kind_detail': 'tidalflat'})
 
+    def test_grave_yards(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/225156545',
+            '16/34128/21564', 'landuse', {'kind': 'grave_yard', 'kind_detail': 'christian'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/41654988',
+            '16/19264/24488', 'landuse', {'kind': 'grave_yard', 'kind_detail': 'jewish'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/225156549',
+            '16/34128/21564', 'landuse', {'kind': 'grave_yard', 'kind_detail': 'muslim'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/36882463',
+            '16/19297/24637', 'landuse', {'kind': 'grave_yard'})
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])
