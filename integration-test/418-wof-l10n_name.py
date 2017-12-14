@@ -26,7 +26,7 @@ class WofL10nName(FixtureTest):
             {'id': 85882641, 'kind': 'neighbourhood',
              'source': "whosonfirst.mapzen.com",
              'name': 'San Francisco',
-             'name:es': type(None)})
+             'name:es': 'San Francisco'})
 
     def test_san_francisco_osm(self):
         # San Francisco (osm city)

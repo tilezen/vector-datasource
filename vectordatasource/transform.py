@@ -469,8 +469,6 @@ def tags_name_i18n(shape, properties, fid, zoom):
 
     langs = {}
     for k, v in tags.items():
-        if v == name:
-            continue
         for candidate in alt_name_prefix_candidates:
 
             if k.startswith(candidate):
