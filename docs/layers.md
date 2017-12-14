@@ -194,6 +194,8 @@ Label position points may also have `closed` or `historical` kind_detail values 
 
 Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for building footprints and from `building:part` tag for building parts.
 
+Note that building geometries, like most geometries in Tilezen tiles, are clipped to the bounds of the tile, even if the building extends beyond the tile. This means that it might be necessary to assemble geometry from several neighbouring tiles to recreate the full building. Some buildings are exceptionally large and span many tiles, so this can be tricky.
+
 #### Building properties (common):
 
 * `name`

@@ -13,6 +13,13 @@ def point(id, position, tags):
     return Feature(id, Point(x, y), tags)
 
 
+# utility wrapper to generate a Feature from a lat/lon shape.
+def way(id, shape, tags):
+    from shapely.ops import transform
+    merc_shape = transform(reproject_lnglat_to_mercator, shape)
+    return Feature(id, merc_shape, tags)
+
+
 # the fixture code expects "raw" relations as if they come straight from
 # osm2pgsql. the structure is a little cumbersome, so this utility function
 # constructs it from a more readable function call.
