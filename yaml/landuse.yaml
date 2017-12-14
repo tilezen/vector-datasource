@@ -1039,3 +1039,4 @@ filters:
       <<: *output_properties
       kind: grave_yard
       kind_detail: { col: religion }
+      denomination: { col: denomination }

@@ -70,6 +70,10 @@ class FeatureTests(FixtureTest):
         self._run_test(
             'http://www.openstreetmap.org/way/36882463',
             '16/19297/24637', 'landuse', {'kind': 'grave_yard'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/448226994',
+            '16/19216/24692', 'landuse', {'kind': 'grave_yard', 'religion': 'christian', 'denomination': 'reformed'})
+
 
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
