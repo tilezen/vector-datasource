@@ -572,6 +572,10 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 The value of the OpenStreetMap `wetland` tag. Common values are `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
 
+#### Grave yard `kind_detail` values:
+
+The value of the OpenStreetMap `religion` tag. A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag.
+
 ## Places
 
 ![image](images/mapzen-vector-tile-docs-places.png)
