@@ -66,7 +66,7 @@ class FeatureTests(FixtureTest):
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4882913388',
             '16/33896/23686',
-            {'kind': 'charging_station', 'truck': True, 'car': None})
+            {'kind': 'charging_station', 'truck': True})
 
         self._run_poi_test(
             'http://www.openstreetmap.org/node/2463484707',
@@ -75,6 +75,20 @@ class FeatureTests(FixtureTest):
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4042835711',
             '16/19298/24638', {'kind': 'marketplace'})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/841558023',
+            '16/19295/24639', {'kind': 'motorcycle_parking'})
+        # motorcycle_parking with capacity and access
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3517269144',
+            '16/33688/21642',
+            {'kind': 'motorcycle_parking', 'capacity': 15, 'access': 'private', 'fee': False})
+        # motorcycle_parking with covered=no and access
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/5198844293',
+            '16/33565/21643',
+            {'kind': 'motorcycle_parking', 'covered': False, 'access': 'customers', 'fee': False})
 
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))

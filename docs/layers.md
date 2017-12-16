@@ -678,13 +678,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
 * `ref`: The reference of this rental station, if one is available.
 
-#### POI properties (only on `kind:bicycle_parking`):
+#### POI properties (only on `kind:bicycle_parking` and `kind:motorcycle_parking`):
 
-* `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
+* `access`: Whether the parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
 * `capacity`: Approximate number of total bicycle parking spots.
 * `covered`: Is the parking area covered.
-* `fee`: If present, indicates whether a fee must be paid to use the bicycle parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
-* `operator`: Who runs the bike parking lot.
+* `fee`: If present, indicates whether a fee must be paid to use the parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
+* `operator`: Who runs the parking lot.
 * `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
 * `surveillance`: If present, then indicates whether there is surveillance. A value of `true` means the parking is covered by surveillance, a value of `false` means it is not. If the property is not present, then it is unknown whether surveillance is in place or not.
 
@@ -884,6 +884,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `monument`
 * `motel`
 * `motorcycle`
+* `motorcycle_parking`
 * `motorway_junction`
 * `museum`
 * `music`

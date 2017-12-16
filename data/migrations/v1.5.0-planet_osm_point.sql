@@ -5,7 +5,7 @@ UPDATE planet_osm_point
     AND (shop IN ('art', 'beauty', 'coffee', 'deli', 'furniture', 'hifi',
     'newsagent', 'perfumery', 'shoes', 'stationery', 'tobacco', 'travel_agency',
     'variety_store')
-      OR amenity IN ('car_wash', 'charging_station', 'hunting_stand', 'marketplace'));
+      OR amenity IN ('car_wash', 'charging_station', 'hunting_stand', 'marketplace', 'motorcycle_parking'));
 
 -- ladder the point indexes
 SET client_min_messages TO WARNING;
