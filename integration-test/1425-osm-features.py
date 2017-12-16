@@ -44,6 +44,34 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2299770718',
             '16/19297/24633', {'kind': 'variety_store'})
 
+    def test_amenities(self):
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3573482149',
+            '16/19297/24627', {'kind': 'car_wash'})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/5209295977',
+            '16/19309/24654',
+            {'kind': 'car_wash', 'name': 'Tropical Breeze Car Wash'})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/5209295977',
+            '16/19309/24654', {'kind': 'car_wash'})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3656027075',
+            '16/19337/24632', {'kind': 'charging_station'})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3220603991',
+            '16/33575/21727',
+            {'kind': 'charging_station', 'scooter': True, 'car': False})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/4882913388',
+            '16/33896/23686',
+            {'kind': 'charging_station', 'truck': True, 'car': None})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/2463484707',
+            '16/19179/24481', {'kind': 'hunting_stand'})
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])

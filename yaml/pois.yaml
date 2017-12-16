@@ -131,7 +131,7 @@ global:
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
         - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, car_sharing, fuel,
+            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, fuel, hunting_stand,
             life_ring, parking, picnic_table, post_box, ranger_station, recycling,
             shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
@@ -1366,6 +1366,44 @@ filters:
               not:
                 surveillance: ['no', 'none']
             then: true
+  - filter:
+      amenity: [charging_station]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
+      bicycle:
+        case:
+          - when:
+              bicycle: 'yes'
+            then: true
+          - when:
+              bicycle: 'no'
+            then: false
+      car:
+        case:
+          - when:
+              car: 'yes'
+            then: true
+          - when:
+              car: 'no'
+            then: false
+      truck:
+        case:
+          - when:
+              truck: 'yes'
+            then: true
+          - when:
+              truck: 'no'
+            then: false
+      scooter:
+        case:
+          - when:
+              scooter: 'yes'
+            then: true
+          - when:
+              scooter: 'no'
+            then: false
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output:
@@ -1380,6 +1418,12 @@ filters:
     output:
       <<: *output_properties
       kind: {col: shop}
+  - filter: # These are lower priority than the shops above
+      amenity: [car_wash, hunting_stand]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
   - filter:
       tourism: [bed_and_breakfast, chalet, guest_house, hostel]
     min_zoom: 17

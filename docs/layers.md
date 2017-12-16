@@ -693,6 +693,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
 
+#### POI properties (only on `charging_station`):
+
+* `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
+
 #### POI `kind` values:
 
 * `art`
@@ -746,9 +750,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `butcher`
 * `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `camp_site`
+* `car`
 * `car_repair`
 * `car_sharing`
-* `car`
+* `car_wash`
 * `caravan_site`
 * `care_home`
 * `carousel`
@@ -756,6 +761,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `cave_entrance`
 * `cemetery`
 * `chalet`
+* `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
 * `childcare`
 * `childrens_centre`
 * `cinema`
@@ -845,6 +851,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hot_spring`
 * `hotel`
 * `hunting`
+* `hunting_stand`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `information`
