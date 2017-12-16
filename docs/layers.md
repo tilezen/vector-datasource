@@ -893,6 +893,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `newsagent`
 * `newspaper`
 * `ngo`
+* `nightclub`
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `observatory`

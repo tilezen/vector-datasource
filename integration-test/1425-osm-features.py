@@ -92,6 +92,10 @@ class FeatureTests(FixtureTest):
             {'kind': 'motorcycle_parking', 'covered': False, 'access':
              'customers', 'fee': False})
 
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/2716231111',
+            '16/19298/24629', {'kind': 'nightclub'})
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])

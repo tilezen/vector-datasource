@@ -749,7 +749,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      amenity: [biergarten, pub, bar, restaurant, fast_food, cafe]
+      amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       <<: *output_properties
