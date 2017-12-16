@@ -5,7 +5,7 @@ UPDATE planet_osm_polygon
     AND (shop IN ('art', 'beauty', 'coffee', 'deli', 'furniture', 'hifi',
     'newsagent', 'perfumery', 'shoes', 'stationery', 'tobacco', 'travel_agency',
     'variety_store')
-      OR amenity IN ('car_wash', 'charging_station', 'hunting_stand'));
+      OR amenity IN ('car_wash', 'charging_station', 'hunting_stand', 'marketplace'));
 
 -- polygon low zoom
 SET client_min_messages TO WARNING;

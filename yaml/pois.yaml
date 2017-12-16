@@ -888,6 +888,12 @@ filters:
     output:
       <<: *output_properties
       kind: {col: shop}
+  - filter:
+      amenity: [marketplace]
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
 
   - filter:
       any:

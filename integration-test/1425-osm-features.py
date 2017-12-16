@@ -72,6 +72,10 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2463484707',
             '16/19179/24481', {'kind': 'hunting_stand'})
 
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/4042835711',
+            '16/19298/24638', {'kind': 'marketplace'})
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])

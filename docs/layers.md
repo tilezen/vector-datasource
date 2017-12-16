@@ -874,6 +874,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mast`
 * `maze`
 * `memorial`
+* `marketplace`
 * `metal_construction`
 * `midwife`
 * `military`
