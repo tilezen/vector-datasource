@@ -507,8 +507,6 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `military`
 * `national_park`
 * `nature_reserve`
-* `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
-* `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `park`
 * `parking`

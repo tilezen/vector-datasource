@@ -35,19 +35,3 @@ class NoNaturalPois(FixtureTest):
         self.assert_no_matching_feature(
             15, 9327, 12418, 'pois',
             {'id': -6366946, 'kind': 'natural_wood'})
-
-    def test_named_forest(self):
-        # same, but for a forest
-        # Liebesinsel, nr. Berlin, Germany
-        self.load_fixtures([
-            'http://www.openstreetmap.org/way/316516905',
-        ])
-
-        self.assert_has_feature(
-            16, 35199, 21454, 'landuse',
-            {'id': 316516905, 'kind': 'natural_forest',
-             'label_placement': True})
-
-        self.assert_no_matching_feature(
-            16, 35199, 21454, 'pois',
-            {'id': 316516905, 'kind': 'natural_forest'})

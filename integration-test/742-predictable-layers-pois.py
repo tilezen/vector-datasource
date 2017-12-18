@@ -91,32 +91,6 @@ class PredictableLayersPois(FixtureTest):
             8, 72, 94, 'pois',
             {'id': 432810821, 'kind': 'forest', 'protect_class': '6'})
 
-    def test_natural_forest_way(self):
-        # Way: natural: Forest in POIS
-        # note: since #1103, there should be no POIs for natural_forest,
-        # only label placements in the landuse layer.
-        self.load_fixtures(['http://www.openstreetmap.org/way/202680509'])
-
-        self.assert_no_matching_feature(
-            14, 4877, 6109, 'pois',
-            {'id': 202680509, 'kind': 'natural_forest'})
-
-        # Label placement forest in landuse
-        self.assert_has_feature(
-            15, 9755, 12218, 'landuse',
-            {'id': 202680509, 'kind': 'natural_forest',
-             'label_placement': True})
-
-    def test_natural_forest_node(self):
-        # natural: Forest in POIS
-        # note: since #1103, there should be no POIs for natural_forest,
-        # only label placements in the landuse layer.
-        self.load_fixtures(['http://www.openstreetmap.org/node/4633280957'])
-
-        self.assert_no_matching_feature(
-            14, 11852, 7770, 'pois',
-            {'id': 4633280957, 'kind': 'natural_forest', 'min_zoom': 14})
-
     def test_golf_course_way(self):
         # Way:30903221 Golf_course in POIS
         self.load_fixtures(['http://www.openstreetmap.org/way/30903221'])

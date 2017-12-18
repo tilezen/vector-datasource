@@ -29,19 +29,6 @@ class NormalizePoiKind(FixtureTest):
             16, 13462, 24933, 'pois',
             {'id': 2122898936, 'kind': 'ski_rental'})
 
-    def test_wood(self):
-        self.load_fixtures(['http://www.openstreetmap.org/way/52497271'])
-
-        self.assert_has_feature(
-            16, 10566, 25429, 'landuse',
-            {'id': 52497271, 'kind': 'wood'})
-
-        self.load_fixtures(['http://www.openstreetmap.org/way/207859675'])
-
-        self.assert_has_feature(
-            16, 11306, 26199, 'landuse',
-            {'id': 207859675, 'kind': 'wood'})
-
     def test_natural_wood(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/417405367'])
 
@@ -56,13 +43,6 @@ class NormalizePoiKind(FixtureTest):
             16, 10476, 25324, 'landuse',
             {'id': 422270533, 'kind': 'forest'})
 
-    def test_natural_forest(self):
-        self.load_fixtures(['http://www.openstreetmap.org/way/95360670'])
-
-        self.assert_has_feature(
-            16, 17780, 27428, 'landuse',
-            {'id': 95360670, 'kind': 'natural_forest'})
-
     def test_park(self):
         # Way: Stables & Equestrian Area (393312618)
         self.load_fixtures(['http://www.openstreetmap.org/way/393312618'])
@@ -70,10 +50,3 @@ class NormalizePoiKind(FixtureTest):
         self.assert_has_feature(
             16, 10294, 25113, 'landuse',
             {'id': 393312618, 'kind': 'park'})
-
-    def test_natural_park(self):
-        self.load_fixtures(['http://www.openstreetmap.org/way/469494860'])
-
-        self.assert_has_feature(
-            16, 17612, 24209, 'landuse',
-            {'id': 469494860, 'kind': 'natural_park'})

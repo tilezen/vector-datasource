@@ -62,14 +62,6 @@ class ThePoisWithNoName(FixtureTest):
             10, 163, 392, 'pois',
             {'id': 64296322})
 
-    def test_natural_forest(self):
-        # Node:2148541212 natural: Forest in POIS
-        self.load_fixtures(['http://www.openstreetmap.org/node/2148541212'])
-
-        self.assert_no_matching_feature(
-            14, 3942, 5901, 'pois',
-            {'id': 2148541212})
-
     def test_park(self):
         # Node:4206408136 park in POIS
         self.load_fixtures(['http://www.openstreetmap.org/node/4206408136'])

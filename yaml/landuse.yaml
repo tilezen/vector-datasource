@@ -360,32 +360,6 @@ filters:
       kind: protected_area
       tier: 2
 
-  - filter: { landuse: wood, operator: *us_forest_service }
-    min_zoom: { max: [ 6, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: wood
-      tier: 2
-  - filter: { landuse: wood }
-    min_zoom: { max: [ 10, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: wood
-      tier: 2
-
-  - filter: { natural: forest, operator: *us_forest_service }
-    min_zoom: { max: [ 6, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: natural_forest
-      tier: 2
-  - filter: { natural: forest }
-    min_zoom: { max: [ 10, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: natural_forest
-      tier: 2
-
   - filter: { natural: wood, operator: *us_forest_service }
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
@@ -862,11 +836,6 @@ filters:
     output:
       <<: *output_properties
       kind: wetland
-  - filter: {natural: park}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
-    output:
-      <<: *output_properties
-      kind: natural_park
   - filter:
       highway: footway
       geom_type: polygon

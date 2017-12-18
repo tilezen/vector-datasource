@@ -215,17 +215,8 @@ Below is a summary of the major, breaking changes listed for the vector tiles 1.
 * **place** and **boundaries** layers: `region`
     * `kind: [state]` > `kind: [region]`
 
-* **landuse** layer: `forest`
-    * some values are now `natural_forest`
-    * but many values are still forest
-
-* **landuse** layer: `park`
-    * some values are now `natural_park`
-    * but many values are still park
-
 * **landuse** layer: `wood`
-    * some values are now `natural_wood`
-    * but many values are still wood
+    * values are now `natural_wood`
 
 * **earth** layer: `continent` labels
     * If you have not updated for several releases, continent labels moved to the earth layer (from places layer)
