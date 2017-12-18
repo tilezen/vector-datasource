@@ -568,6 +568,9 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `works`
 * `zoo`
 
+##### Wetland `kind_detail` values:
+
+The value of the OpenStreetMap `wetland` tag.
 
 ## Places
 

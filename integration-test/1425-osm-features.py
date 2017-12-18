@@ -44,6 +44,19 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2299770718',
             '16/19297/24633', {'kind': 'variety_store'})
 
+    def test_wetland(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/412807883',
+            '16/19327/24638', 'landuse', {'kind': 'wetland'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/396249564',
+            '16/19310/24621', 'landuse',
+            {'kind': 'wetland', 'kind_detail': 'saltmarsh'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/257640900',
+            '16/19318/24656', 'landuse',
+            {'kind': 'wetland', 'kind_detail': 'tidalflat'})
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])
