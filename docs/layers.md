@@ -212,6 +212,7 @@ Note that building geometries, like most geometries in Tilezen tiles, are clippe
 * `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
 * `addr_street`: value from OpenStreetMap's `addr:street` tag
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only. _See planned bug fix in [#1095](https://github.com/tilezen/vector-datasource/issues/1095)._
+* `building_material`: A description of the material covering the outside of the building or building part, if the information is available. Common values are: `brick`, `cement_block`, `clay`, `concrete`, `glass`, `masonry`, `metal`, `mud`, `other`, `permanent`, `plaster`, `sandstone`, `semi-permanent`, `steel`, `stone`, `timber-framing`, `tin`, `traditional` and `wood`, and there are many other less common values.
 * `height`: in meters, where available
 * `layer`
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
