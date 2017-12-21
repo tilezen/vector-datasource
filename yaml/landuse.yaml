@@ -1017,11 +1017,11 @@ filters:
     output:
       <<: *output_properties
       kind: retaining_wall
-  - filter: {barrier: fence}
+  - filter: {barrier: [fence, wall]}
     min_zoom: 16
     output:
       <<: *output_properties
-      kind: fence
+      kind: {col: barrier}
   - filter: {tourism: camp_site}
     min_zoom: { clamp: { min: 13, max: 16, value: { col: zoom } } }
     output:
