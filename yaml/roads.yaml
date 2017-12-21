@@ -354,11 +354,11 @@ filters:
       kind: path
       kind_detail: pedestrian
   - filter:
-      highway: [track]
+      highway: track
       any:
         - {surface: [paved, asphalt, concrete]}
         - all:
-          - {tracktype: grade1}
+          - tracktype: grade1
           - not: {access: private}
     min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
@@ -367,14 +367,14 @@ filters:
       <<: *osm_network
       <<: *osm_footway_properties
       kind: path
-      kind_detail: {col: highway}
+      kind_detail: track
   - filter:
-      highway: [track]
+      highway: track
       any:
         - all:
-          - {surface: [gravel]}
+          - surface: [gravel]
           - not: {tracktype: [grade3, grade4, grade5]}
-        - {tracktype: [grade1,grade2]}
+        - tracktype: [grade1,grade2]
     min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -382,7 +382,7 @@ filters:
       <<: *osm_network
       <<: *osm_footway_properties
       kind: path
-      kind_detail: {col: highway}
+      kind_detail: track
   - filter:
       highway: [path, track, cycleway, bridleway]
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
