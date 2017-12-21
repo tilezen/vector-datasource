@@ -83,6 +83,33 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
+-- mz_modify_network returns an hstore of {route, network, ref}
+-- where the network has been modified according to the
+-- modifier tag, if there is any.
+CREATE OR REPLACE FUNCTION mz_modify_network(
+  tags hstore)
+RETURNS hstore AS $$
+DECLARE
+  network text := tags->'network';
+  modifier text := tags->'modifier';
+BEGIN
+  RETURN
+    tags ||
+    hstore('network',
+      CASE WHEN
+        network LIKE 'US:%' AND
+        modifier IN ('Business', 'Spur', 'Truck', 'Alternate', 'Bypass',
+                     'Connector', 'Historic', 'Toll', 'Scenic') AND
+        POSITION(modifier IN network) = 0
+      THEN
+        network || ':' || modifier
+      ELSE
+        network
+      END
+    );
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
 -- mz_get_rel_networks returns a list of triples of route type,
 -- network and ref tags, or NULL, for a given way ID.
 --
@@ -100,7 +127,7 @@ FROM (
     unnest(tags) AS unnested
   FROM (
     SELECT
-      hstore(tags)->ARRAY['route','network','ref'] AS tags
+      mz_modify_network(hstore(tags))->ARRAY['route','network','ref'] AS tags
     FROM
       planet_osm_rels
     WHERE

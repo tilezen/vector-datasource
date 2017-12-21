@@ -469,8 +469,6 @@ def tags_name_i18n(shape, properties, fid, zoom):
 
     langs = {}
     for k, v in tags.items():
-        if v == name:
-            continue
         for candidate in alt_name_prefix_candidates:
 
             if k.startswith(candidate):
@@ -4444,5 +4442,58 @@ def palettize_colours(ctx):
             rgb = parse_colour(colour)
             if rgb:
                 props[attr_name] = palette(rgb)
+
+    return layer
+
+
+def backfill_from_other_layer(ctx):
+    """
+    Matches features from one layer with the other on the basis of the feature
+    ID and, if the configured layer property doesn't exist on the feature, but
+    the other layer property does exist on the matched feature, then copy it
+    across.
+
+    The initial use for this is to backfill POI kinds into building kind_detail
+    when the building doesn't already have a different kind_detail supplied.
+    """
+
+    layer_name = ctx.params.get('layer')
+    assert layer_name, \
+        'Parameter layer was missing from ' \
+        'backfill_from_other_layer config'
+    other_layer_name = ctx.params.get('other_layer')
+    assert other_layer_name, \
+        'Parameter other_layer_name was missing from ' \
+        'backfill_from_other_layer config'
+    layer_key = ctx.params.get('layer_key')
+    assert layer_key, \
+        'Parameter layer_key was missing from ' \
+        'backfill_from_other_layer config'
+    other_key = ctx.params.get('other_key')
+    assert other_key, \
+        'Parameter other_key was missing from ' \
+        'backfill_from_other_layer config'
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    other_layer = _find_layer(ctx.feature_layers, other_layer_name)
+
+    # build an index of feature ID to property value in the other layer
+    other_values = {}
+    for (shape, props, fid) in other_layer['features']:
+        # prefer to use the `id` property rather than the fid.
+        fid = props.get('id', fid)
+        kind = props.get(other_key)
+        # make sure fid is truthy, as it can be set to None on features
+        # created by merging.
+        if kind and fid:
+            other_values[fid] = kind
+
+    # apply those to features which don't already have a value
+    for (shape, props, fid) in layer['features']:
+        if layer_key not in props:
+            fid = props.get('id', fid)
+            value = other_values.get(fid)
+            if value:
+                props[layer_key] = value
 
     return layer

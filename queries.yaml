@@ -856,6 +856,15 @@ post_process:
       end_zoom: 16
       tolerance: 1.0
 
+  # NOTE: want to do this _before_ buildings_unify, as after that we might not
+  # have a feature ID to match buildings on!
+  - fn: vectordatasource.transform.backfill_from_other_layer
+    params:
+      layer: buildings
+      layer_key: kind_detail
+      other_layer: pois
+      other_key: kind
+
   - fn: vectordatasource.transform.buildings_unify
     params:
       source_layer: buildings

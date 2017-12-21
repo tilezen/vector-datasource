@@ -194,6 +194,8 @@ Label position points may also have `closed` or `historical` kind_detail values 
 
 Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for building footprints and from `building:part` tag for building parts.
 
+Note that building geometries, like most geometries in Tilezen tiles, are clipped to the bounds of the tile, even if the building extends beyond the tile. This means that it might be necessary to assemble geometry from several neighbouring tiles to recreate the full building. Some buildings are exceptionally large and span many tiles, so this can be tricky.
+
 #### Building properties (common):
 
 * `name`
@@ -210,6 +212,7 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 * `addr_housenumber`: value from OpenStreetMap's `addr:housenumber` tag
 * `addr_street`: value from OpenStreetMap's `addr:street` tag
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only. _See planned bug fix in [#1095](https://github.com/tilezen/vector-datasource/issues/1095)._
+* `building_material`: A description of the material covering the outside of the building or building part, if the information is available. Common values are: `brick`, `cement_block`, `clay`, `concrete`, `glass`, `masonry`, `metal`, `mud`, `other`, `permanent`, `plaster`, `sandstone`, `semi-permanent`, `steel`, `stone`, `timber-framing`, `tin`, `traditional` and `wood`, and there are many other less common values.
 * `height`: in meters, where available
 * `layer`
 * `location`: from OpenStreetMap to indicate if building is underground, similar to `layer`.
@@ -355,6 +358,8 @@ Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for bu
 * `warehouse`
 * `wayside_shrine`
 * `works`
+
+Additional `kind_detail` values are provided from POI `kind`s where one is not available from the building feature. This means that you could see any POI `kind` value as a building `kind_detail` value.
 
 #### Building part `kind_detail` values:
 
@@ -691,6 +696,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
+* `art`
 * `accountant`
 * `adit`
 * `administrative`
@@ -720,6 +726,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `beach_resort`
 * `beach`
 * `beacon`
+* `beauty`
 * `bed_and_breakfast`
 * `bench`
 * `bicycle_parking`
@@ -757,6 +764,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `clothes`
 * `club`
+* `coffee`
 * `college`
 * `communications_tower`
 * `community_centre`
@@ -771,6 +779,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `dairy_kitchen`
 * `dam`
 * `day_care`
+* `deli`
 * `dentist`
 * `department_store`
 * `dive_centre`
@@ -790,9 +799,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `employment_agency`
 * `enclosure` - at a zoo
 * `estate_agent`
+* `farm`
 * `fashion`
 * `fast_food`
-* `farm`
 * `ferry_terminal`
 * `financial`
 * `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
@@ -808,6 +817,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
+* `furniture`
 * `gallery` - An art gallery.
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
@@ -829,6 +839,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hazard`
 * `healthcare`
 * `helipad`
+* `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `hospital`
 * `hostel`
@@ -871,6 +882,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `music`
 * `national_park`
 * `nature_reserve`
+* `newsagent`
 * `newspaper`
 * `ngo`
 * `notary`
@@ -884,6 +896,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
 * `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
+* `perfumery`
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
@@ -935,6 +948,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `service_area`
 * `shelter`
 * `shoemaker`
+* `shoes`
 * `shower`
 * `sinkhole`
 * `ski_rental`
@@ -949,6 +963,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `spring`
 * `stadium`
 * `station` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+* `stationery`
 * `stone`
 * `stonemason`
 * `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
@@ -965,6 +980,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `theatre`
 * `theme_park`
 * `therapist`
+* `tobacco`
 * `toilets`
 * `toll_booth`
 * `townhall`
@@ -974,9 +990,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `trail_riding_station`
 * `trailhead`
 * `tram_stop`
+* `travel_agency`
 * `travel_agent`
 * `tree`
 * `university`
+* `variety_store`
 * `veterinary`
 * `viewpoint`
 * `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
@@ -1030,7 +1048,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
 * `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see `network` and `shield_text`. Related, see `symbol` for pistes.
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
-* `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively.
+* `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively. Note that networks may include "modifier" information, for example `US:I:Business` for a business route or `US:I:Truck` for a truck route. The whitelist of "modifier" values is; `Alternate`, `Business`, `Bypass`, `Connector`, `Historic`, `Scenic`, `Spur`, `Toll` and `Truck`.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`.
 
 #### Road properties (common optional):
