@@ -395,7 +395,7 @@ filters:
   ############################################################
   # aerodrome
   - filter:
-      aeroway: [aerodrome, airport]
+      aeroway: [aerodrome, airport, heliport]
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 4.12 ] }, *tier3_min_zoom ] }, 13 ] }
     output:
       <<: *output_properties
@@ -407,6 +407,20 @@ filters:
     output:
       <<: *output_properties
       kind: military
+      tier: 3
+  # airfield, naval_base
+  - filter: {military: [airfield, range, naval_base]]}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: {col: military}
+      tier: 3
+  # danger_area
+  - filter: {military: danger_area}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 15 ] }
+    output:
+      <<: *output_properties
+      kind: danger_area
       tier: 3
   # university
   - filter: {amenity: university}
@@ -499,11 +513,11 @@ filters:
           - else: { col: 'sport' }
       tier: 4
   # stadium
-  - filter: {leisure: stadium}
+  - filter: {leisure: [horse_riding, stadium]}
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.3 ] }, *tier4_min_zoom ] }, 15 ] }
     output:
       <<: *output_properties
-      kind: stadium
+      kind: {col: leisure}
       tier: 4
   # casino
   - filter: {amenity: casino}
@@ -562,6 +576,26 @@ filters:
     output:
       <<: *output_properties
       kind: zoo
+      tier: 4
+  # other random landuse
+  - filter: {landuse: [container_terminal, port_terminal, quay, shipyard, wharf]}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+      tier: 4
+  # seems odd quay is both landuse and man_made...
+  - filter: {man_made: quay}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    output:
+      <<: *output_properties
+      kind: quay
+      tier: 4
+  - filter: {waterway: boatyard}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    output:
+      <<: *output_properties
+      kind: {col: waterway}
       tier: 4
 
   ############################################################
@@ -688,7 +722,11 @@ filters:
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: parking
+      kind:
+          - when:
+              parking: ['multi-storey', underground, rooftop]
+            then: 'parking_garage'
+          - else: 'parking'
       tier: 6
 
   ############################################################
@@ -752,6 +790,14 @@ filters:
     output:
       <<: *output_properties
       kind: {col: amenity}
+  - filter:
+    any:
+      - waterway: fuel
+      - tags->'seamark:small_craft_facility:category': 'fuel_station'
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: waterway_fuel
   - filter:
       amenity: [biergarten, pub, bar, restaurant, fast_food, cafe]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
@@ -837,11 +883,11 @@ filters:
     output:
       <<: *output_properties
       kind: scuba_diving
-  - filter: {shop: motorcycle}
+  - filter: {shop: [atv, boat, motorcycle, snowmobile]}
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: motorcycle
+      kind: {col: shop}
   - filter: {shop: mall}
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
     output:
@@ -883,7 +929,10 @@ filters:
     output:
       <<: *output_properties
       kind: ice_cream
-  - filter: {amenity: ferry_terminal}
+  - filter:
+      any:
+        amenity: ferry_terminal
+        landuse: ferry_terminal
     min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
     output:
       <<: *output_properties
@@ -937,7 +986,7 @@ filters:
     output:
       <<: *output_properties
       kind: fitness_station
-  - filter: {leisure: [beach_resort,adult_gaming_centre]}
+  - filter: {leisure: [beach_resort, adult_gaming_centre]}
     min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 0.5 ] } } }
     output:
       <<: *output_properties
@@ -1034,7 +1083,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
       <<: *health_facility_type_kind_detail
-  - filter: {tags->healthcare: [midwife,physiotherapist, psychotherapist, rehabilitation, podiatrist, optometrist, blood_donation, speech_therapist, occupational_therapist, chiropractor, hospice, physiotherapy, paediatrics]}
+  - filter: {tags->healthcare: [midwife, physiotherapist, psychotherapist, rehabilitation, podiatrist, optometrist, blood_bank, blood_donation, speech_therapist, occupational_therapist, chiropractor, hospice, physiotherapy, paediatrics]}
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1075,8 +1124,13 @@ filters:
     output:
       <<: *output_properties
       kind: boat_rental
+  - filter: {amenity: harbourmaster}
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: harbourmaster
 
-  - filter: {emergency: [fire_hydrant, phone]}
+  - filter: {emergency: [defibrillator, fire_hydrant, phone]}
     min_zoom: 18
     output:
       <<: *output_properties
@@ -1098,6 +1152,12 @@ filters:
     output:
       <<: *output_properties
       kind: funeral_directors
+  - filter:
+      amenity: customs
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: customs
   - filter:
       barrier: border_control
     min_zoom: 14
@@ -1129,7 +1189,7 @@ filters:
     output:
       <<: *output_properties
       kind: cave_entrance
-  - filter: {waterway: lock}
+  - filter: {waterway: [boat_lift, lock]}
     min_zoom: 15
     output:
       <<: *output_properties
@@ -1346,7 +1406,7 @@ filters:
       kind: information
   - filter:
       amenity: [atm, bureau_de_change, bus_stop, drinking_water, emergency_phone,
-        gambling, money_transfer, post_box, telephone]
+        gambling, karaoke, karaoke_box, money_transfer, post_box, telephone]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1448,9 +1508,9 @@ filters:
       kind: cycle_barrier
   - filter:
       shop: [art, bakery, beauty, bookmaker, books, butcher, car, car_parts, car_repair,
-        clothes, computer, convenience, fashion, florist, gift, greengrocer,
-        hairdresser, hifi, jewelry, lottery, mobile_phone, newsagent, optician,
-        perfumery, stationery, tobacco, travel_agency]
+        clothes, computer, convenience, fashion, florist, garden_centre, gift, greengrocer,
+        grocery, golf, hairdresser, hifi, jewelry, lottery, mobile_phone, newsagent, optician,
+        perfumery, ship_chandler, stationery, tobacco, travel_agency]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1596,6 +1656,11 @@ filters:
     output:
       <<: *output_properties
       kind: picnic_table
+  - filter: {amenity: love_hotel}
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: love_hotel
   - filter: {amenity: [shower,taxi]}
     min_zoom: 18
     output:
@@ -1711,6 +1776,11 @@ filters:
     output:
       <<: *output_properties
       kind: quarry
+  - filter: {industrial: slaughterhouse}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: slaughterhouse
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION
@@ -1741,3 +1811,10 @@ filters:
     output:
       <<: *output_properties
       kind: craft
+  # if a more specific industrial isn't found, then default to generic industrial kind
+  - filter:
+      industrial: true
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: industrial
