@@ -723,6 +723,7 @@ filters:
     output:
       <<: *output_properties
       kind:
+        case:
           - when:
               parking: ['multi-storey', underground, rooftop]
             then: 'parking_garage'
