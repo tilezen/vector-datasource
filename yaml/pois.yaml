@@ -27,7 +27,7 @@ global:
     zoo: {col: zoo}
     exit_to: {col: exit_to}
   - &health_facility_type_kind_detail
-    kind_detail: {col: tags->'health_facility:type'}
+    kind_detail: {col: 'health_facility:type'}
 
   - &tier1_min_zoom
     lookup:
@@ -409,7 +409,7 @@ filters:
       kind: military
       tier: 3
   # airfield, naval_base
-  - filter: {military: [airfield, range, naval_base]]}
+  - filter: {military: [airfield, range, naval_base]}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
     output:
       <<: *output_properties
@@ -458,7 +458,7 @@ filters:
     output:
       <<: *output_properties
       kind: generator
-      kind_detail: {col: tags->'generator:method'}
+      kind_detail: {col: 'generator:method'}
       tier: 4
   # golf_course
   - filter: {leisure: golf_course}
@@ -792,9 +792,9 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-    any:
-      - waterway: fuel
-      - tags->'seamark:small_craft_facility:category': 'fuel_station'
+      any:
+        - waterway: fuel
+        - tags->'seamark:small_craft_facility:category': 'fuel_station'
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       <<: *output_properties
@@ -1052,19 +1052,19 @@ filters:
     output:
       <<: *output_properties
       kind: gallery
-  - filter: { tags->health_facility:type: health_centre }
+  - filter: { 'health_facility:type': health_centre }
     min_zoom: 15
     output:
       <<: *output_properties
       kind: health_centre
       <<: *health_facility_type_kind_detail
-  - filter: { tags->health_facility:type: field_hospital }
+  - filter: { 'health_facility:type': field_hospital }
     min_zoom: 15
     output:
       <<: *output_properties
       kind: field_hospital
       <<: *health_facility_type_kind_detail
-  - filter: { tags->health_facility:type: dispensary }
+  - filter: { 'health_facility:type': dispensary }
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1141,7 +1141,7 @@ filters:
     output:
       <<: *output_properties
       kind: toilets
-      kind_detail: {col: tags->'toilets:disposal'}
+      kind_detail: {col: 'toilets:disposal'}
   - filter: {barrier: gate}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
