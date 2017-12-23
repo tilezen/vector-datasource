@@ -568,6 +568,9 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `works`
 * `zoo`
 
+##### Wetland `kind_detail` values:
+
+The value of the OpenStreetMap `wetland` tag. Common values are `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
 
 ## Places
 

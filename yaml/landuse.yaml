@@ -862,6 +862,7 @@ filters:
     output:
       <<: *output_properties
       kind: wetland
+      kind_detail: {col: wetland}
   - filter: {natural: park}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
