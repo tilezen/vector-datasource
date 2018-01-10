@@ -29,6 +29,7 @@ from zope.dottedname.resolve import resolve
 import csv
 import pycountry
 import re
+import shapely.errors
 import shapely.wkb
 import shapely.ops
 import kdtree
