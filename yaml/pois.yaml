@@ -131,8 +131,8 @@ global:
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
         - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, car_sharing, fuel,
-            life_ring, parking, picnic_table, post_box, ranger_station, recycling,
+            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, fuel, hunting_stand,
+            life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
             shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
         - barrier: [ cycle_barrier, gate, toll_booth ]
@@ -440,6 +440,8 @@ filters:
       <<: *output_properties
       kind: cemetery
       tier: 4
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   # commercial - no POI
   # cutline - no POI
   # dike - no POI
@@ -749,7 +751,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      amenity: [biergarten, pub, bar, restaurant, fast_food, cafe]
+      amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       <<: *output_properties
@@ -888,6 +890,12 @@ filters:
     output:
       <<: *output_properties
       kind: {col: shop}
+  - filter:
+      amenity: [marketplace]
+    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
 
   - filter:
       any:
@@ -1335,11 +1343,11 @@ filters:
       operator: {col: operator}
       capacity: {col: tags->capacity}
       ref: {col: ref}
-  - filter: {amenity: bicycle_parking}
+  - filter: {amenity: [bicycle_parking, motorcycle_parking] }
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: bicycle_parking
+      kind: {col: amenity}
       access: {col: access}
       operator: {col: operator}
       capacity: {col: tags->capacity}
@@ -1348,6 +1356,9 @@ filters:
           - when:
               covered: 'yes'
             then: true
+          - when:
+              covered: 'no'
+            then: false
       fee:
         case:
           - when:
@@ -1366,6 +1377,44 @@ filters:
               not:
                 surveillance: ['no', 'none']
             then: true
+  - filter:
+      amenity: [charging_station]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
+      bicycle:
+        case:
+          - when:
+              bicycle: 'yes'
+            then: true
+          - when:
+              bicycle: 'no'
+            then: false
+      car:
+        case:
+          - when:
+              car: 'yes'
+            then: true
+          - when:
+              car: 'no'
+            then: false
+      truck:
+        case:
+          - when:
+              truck: 'yes'
+            then: true
+          - when:
+              truck: 'no'
+            then: false
+      scooter:
+        case:
+          - when:
+              scooter: 'yes'
+            then: true
+          - when:
+              scooter: 'no'
+            then: false
   - filter: {barrier: cycle_barrier}
     min_zoom: 18
     output:
@@ -1380,6 +1429,12 @@ filters:
     output:
       <<: *output_properties
       kind: {col: shop}
+  - filter: # These are lower priority than the shops above
+      amenity: [car_wash, hunting_stand]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
   - filter:
       tourism: [bed_and_breakfast, chalet, guest_house, hostel]
     min_zoom: 17
@@ -1592,6 +1647,8 @@ filters:
     output:
       <<: *output_properties
       kind: grave_yard
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   - filter: {landuse: quarry}
     min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 3 ] } } }
     output:

@@ -1,3 +1,16 @@
+v1.4.3
+------
+* Clip buildings to tile boundaries. See #1142.
+* Allow some kinds of non-numeric `shield_text`. See #1452.
+* Add shops from osm.org and iD. See #1447.
+* Clip buildings to tiles. See #1446.
+* Include all name variants. See #1454.
+* Add building material tag to output. See #1455.
+* Add route modifier information to network. See #1460.
+* Add wetland detail to kind_detail. See #1461.
+* Remove unused wooded area tags + natural=park and add leaf_type to wooded areas. See #1459.
+* Guard against TopologicalError. See #1471.
+
 v1.4.1
 ------
 * **Release date:** 2017-10-23.
