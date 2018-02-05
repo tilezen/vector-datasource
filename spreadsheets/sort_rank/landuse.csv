@@ -1,4 +1,5 @@
 kind,geometrytype,sort_rank
+crane,*,272
 fence,*,269
 snow_fence,*,268
 retaining_wall,*,267
