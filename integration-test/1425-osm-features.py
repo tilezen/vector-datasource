@@ -96,6 +96,45 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2716231111',
             '16/19298/24629', {'kind': 'nightclub'})
 
+    def test_wetland(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/412807883',
+            '16/19327/24638', 'landuse', {'kind': 'wetland'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/396249564',
+            '16/19310/24621', 'landuse',
+            {'kind': 'wetland', 'kind_detail': 'saltmarsh'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/257640900',
+            '16/19318/24656', 'landuse',
+            {'kind': 'wetland', 'kind_detail': 'tidalflat'})
+
+    def test_wood_leaf_type(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/19174535',
+            '16/19310/24600', 'landuse', {'kind': 'natural_wood'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/429020668',
+            '16/19308/24610', 'landuse',
+            {'kind': 'natural_wood', 'kind_detail': 'broadleaved'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/456466352',
+            '16/19372/24598', 'landuse',
+            {'kind': 'natural_wood', 'kind_detail': 'mixed'})
+
+    def test_forest_leaf_type(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/27106290',
+            '16/19289/24630', 'landuse', {'kind': 'forest'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/337809950',
+            '16/19530/24590', 'landuse',
+            {'kind': 'forest', 'kind_detail': 'broadleaved'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/443206773',
+            '16/19461/24578', 'landuse',
+            {'kind': 'forest', 'kind_detail': 'mixed'})
+        
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])

@@ -132,6 +132,8 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  - &leaftype_kind_detail
+    kind_detail: { col: leaf_type }
 filters:
   - filter: {meta.source: ne}
     min_zoom: 4
@@ -339,12 +341,14 @@ filters:
     output:
       <<: *output_properties
       kind: forest
+      <<: *leaftype_kind_detail
       tier: 2
   - filter: { landuse: forest }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
+      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: {leisure: nature_reserve}
@@ -365,12 +369,14 @@ filters:
     output:
       <<: *output_properties
       kind: wood
+      <<: *leaftype_kind_detail
       tier: 2
   - filter: { landuse: wood }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: wood
+      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: { natural: forest, operator: *us_forest_service }
@@ -378,12 +384,14 @@ filters:
     output:
       <<: *output_properties
       kind: natural_forest
+      <<: *leaftype_kind_detail
       tier: 2
   - filter: { natural: forest }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: natural_forest
+      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: { natural: wood, operator: *us_forest_service }
@@ -391,12 +399,14 @@ filters:
     output:
       <<: *output_properties
       kind: natural_wood
+      <<: *leaftype_kind_detail
       tier: 2
   - filter: { natural: wood }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: natural_wood
+      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: {landuse: urban}
@@ -862,6 +872,7 @@ filters:
     output:
       <<: *output_properties
       kind: wetland
+      kind_detail: {col: wetland}
   - filter: {natural: park}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:

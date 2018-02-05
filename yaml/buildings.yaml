@@ -18,6 +18,7 @@ globals:
       building_part: {col: "building:part"}
       building_levels: {col: "building:levels"}
       building_min_levels: {col: "building:min_levels"}
+      building_material: {col: "building:material"}
       height: {col: height}
       min_height: {col: min_height}
       layer: {col: layer}
