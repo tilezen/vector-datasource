@@ -134,7 +134,7 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/way/443206773',
             '16/19461/24578', 'landuse',
             {'kind': 'forest', 'kind_detail': 'mixed'})
-        
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])
