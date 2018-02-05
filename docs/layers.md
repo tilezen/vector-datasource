@@ -685,13 +685,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
 * `ref`: The reference of this rental station, if one is available.
 
-#### POI properties (only on `kind:bicycle_parking`):
+#### POI properties (only on `kind:bicycle_parking` and `kind:motorcycle_parking`):
 
-* `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
+* `access`: Whether the parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
 * `capacity`: Approximate number of total bicycle parking spots.
 * `covered`: Is the parking area covered.
-* `fee`: If present, indicates whether a fee must be paid to use the bicycle parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
-* `operator`: Who runs the bike parking lot.
+* `fee`: If present, indicates whether a fee must be paid to use the parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
+* `operator`: Who runs the parking lot.
 * `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
 * `surveillance`: If present, then indicates whether there is surveillance. A value of `true` means the parking is covered by surveillance, a value of `false` means it is not. If the property is not present, then it is unknown whether surveillance is in place or not.
 
@@ -699,6 +699,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
+
+#### POI properties (only on `charging_station`):
+
+* `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
 
 #### POI `kind` values:
 
@@ -753,9 +757,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `butcher`
 * `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `camp_site`
+* `car`
 * `car_repair`
 * `car_sharing`
-* `car`
+* `car_wash`
 * `caravan_site`
 * `care_home`
 * `carousel`
@@ -763,6 +768,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `cave_entrance`
 * `cemetery`
 * `chalet`
+* `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
 * `childcare`
 * `childrens_centre`
 * `cinema`
@@ -852,6 +858,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hot_spring`
 * `hotel`
 * `hunting`
+* `hunting_stand`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `information`
@@ -874,6 +881,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mast`
 * `maze`
 * `memorial`
+* `marketplace`
 * `metal_construction`
 * `midwife`
 * `military`
@@ -883,6 +891,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `monument`
 * `motel`
 * `motorcycle`
+* `motorcycle_parking`
 * `motorway_junction`
 * `museum`
 * `music`
@@ -891,6 +900,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `newsagent`
 * `newspaper`
 * `ngo`
+* `nightclub`
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `observatory`

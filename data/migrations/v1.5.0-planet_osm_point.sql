@@ -1,10 +1,11 @@
 -- Add new shop types
 UPDATE planet_osm_point
   SET mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_point.*)
-  WHERE mz_poi_min_zoom <> mz_calculate_min_zoom_pois(planet_osm_polygon.*)
-    AND shop in ('art', 'beauty', 'coffee', 'deli', 'furniture', 'hifi',
+  WHERE mz_poi_min_zoom <> mz_calculate_min_zoom_pois(planet_osm_point.*)
+    AND (shop IN ('art', 'beauty', 'coffee', 'deli', 'furniture', 'hifi',
     'newsagent', 'perfumery', 'shoes', 'stationery', 'tobacco', 'travel_agency',
-    'variety_store');
+    'variety_store')
+      OR amenity IN ('bar', 'car_wash', 'charging_station', 'hunting_stand', 'marketplace', 'motorcycle_parking', 'nightclub'));
 
 -- ladder the point indexes
 SET client_min_messages TO WARNING;
