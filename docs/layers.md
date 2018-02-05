@@ -576,6 +576,10 @@ The value of the OpenStreetMap `wetland` tag. Common values are `bog`, `fen`, `m
 
 The value of the OpenStreetMap `religion` tag. A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag.
 
+#### Wood and forest `kind_detail` values
+
+* The value of the OpenStreetMap `leaf_type` tag. [Common values](https://taginfo.openstreetmap.org/keys/leaf_type#values) are `broadleaved`, `needleleaved`, or `mixed`.
+
 ## Places
 
 ![image](images/mapzen-vector-tile-docs-places.png)
