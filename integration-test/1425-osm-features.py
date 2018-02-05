@@ -44,6 +44,97 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2299770718',
             '16/19297/24633', {'kind': 'variety_store'})
 
+    def test_amenities(self):
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3573482149',
+            '16/19297/24627', {'kind': 'car_wash'})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/5209295977',
+            '16/19309/24654',
+            {'kind': 'car_wash', 'name': 'Tropical Breeze Car Wash'})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/5209295977',
+            '16/19309/24654', {'kind': 'car_wash'})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3656027075',
+            '16/19337/24632', {'kind': 'charging_station'})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3220603991',
+            '16/33575/21727',
+            {'kind': 'charging_station', 'scooter': True, 'car': False})
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/4882913388',
+            '16/33896/23686',
+            {'kind': 'charging_station', 'truck': True})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/2463484707',
+            '16/19179/24481', {'kind': 'hunting_stand'})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/4042835711',
+            '16/19298/24638', {'kind': 'marketplace'})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/841558023',
+            '16/19295/24639', {'kind': 'motorcycle_parking'})
+        # motorcycle_parking with capacity and access
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/3517269144',
+            '16/33688/21642',
+            {'kind': 'motorcycle_parking', 'capacity': 15, 'access': 'private',
+             'fee': False})
+        # motorcycle_parking with covered=no and access
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/5198844293',
+            '16/33565/21643',
+            {'kind': 'motorcycle_parking', 'covered': False, 'access':
+             'customers', 'fee': False})
+
+        self._run_poi_test(
+            'http://www.openstreetmap.org/node/2716231111',
+            '16/19298/24629', {'kind': 'nightclub'})
+
+    def test_wetland(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/412807883',
+            '16/19327/24638', 'landuse', {'kind': 'wetland'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/396249564',
+            '16/19310/24621', 'landuse',
+            {'kind': 'wetland', 'kind_detail': 'saltmarsh'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/257640900',
+            '16/19318/24656', 'landuse',
+            {'kind': 'wetland', 'kind_detail': 'tidalflat'})
+
+    def test_wood_leaf_type(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/19174535',
+            '16/19310/24600', 'landuse', {'kind': 'natural_wood'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/429020668',
+            '16/19308/24610', 'landuse',
+            {'kind': 'natural_wood', 'kind_detail': 'broadleaved'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/456466352',
+            '16/19372/24598', 'landuse',
+            {'kind': 'natural_wood', 'kind_detail': 'mixed'})
+
+    def test_forest_leaf_type(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/27106290',
+            '16/19289/24630', 'landuse', {'kind': 'forest'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/337809950',
+            '16/19530/24590', 'landuse',
+            {'kind': 'forest', 'kind_detail': 'broadleaved'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/443206773',
+            '16/19461/24578', 'landuse',
+            {'kind': 'forest', 'kind_detail': 'mixed'})
+
     def _run_test(self, url, zxy, layer, props):
         z, x, y = map(int, zxy.split('/'))
         self.load_fixtures([url])
