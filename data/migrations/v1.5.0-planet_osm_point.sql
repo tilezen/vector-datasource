@@ -4,7 +4,8 @@ UPDATE planet_osm_point
   WHERE mz_poi_min_zoom <> mz_calculate_min_zoom_pois(planet_osm_polygon.*)
     AND shop in ('art', 'beauty', 'coffee', 'deli', 'furniture', 'hifi',
     'newsagent', 'perfumery', 'shoes', 'stationery', 'tobacco', 'travel_agency',
-    'variety_store');
+    'variety_store') OR
+    tourism in ('alpine_hut');
 
 -- ladder the point indexes
 SET client_min_messages TO WARNING;
