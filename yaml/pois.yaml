@@ -440,6 +440,8 @@ filters:
       <<: *output_properties
       kind: cemetery
       tier: 4
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   # commercial - no POI
   # cutline - no POI
   # dike - no POI
@@ -1645,6 +1647,8 @@ filters:
     output:
       <<: *output_properties
       kind: grave_yard
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   - filter: {landuse: quarry}
     min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 3 ] } } }
     output:

@@ -486,6 +486,8 @@ filters:
       <<: *output_properties
       kind: cemetery
       tier: 4
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   # commercial
   - filter: {landuse: commercial}
     min_zoom: *tier4_min_zoom
@@ -1048,3 +1050,5 @@ filters:
     output:
       <<: *output_properties
       kind: grave_yard
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
