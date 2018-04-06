@@ -34,7 +34,8 @@ filters:
 
   # kind pre-generated for buffered_land
   - filter:
-      kind: true
+      kind: maritime
+      source: tilezen.org
     min_zoom: 8
     output:
       <<: *output_properties
