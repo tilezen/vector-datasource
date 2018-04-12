@@ -22,7 +22,7 @@ shapefiles:
     shapefile-name: land-polygons-split-3857/land_polygons.shp
 
   - name: buffered_land
-    url: http://s3.amazonaws.com/tilzen-assets/curated/buffered_land_05232017.zip
+    url: http://s3.amazonaws.com/tilezen-assets/curated/buffered_land_05232017.zip
     prj: 3857
     shapefile-name: buffered_land_05232017.shp
     tile: true
