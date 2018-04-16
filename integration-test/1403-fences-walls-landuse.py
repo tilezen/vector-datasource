@@ -15,11 +15,13 @@ class FencesWalls(FixtureTest):
 
         self.assert_has_feature(
             16, 10576, 25471, 'landuse',
-            {'id': 526327448, 'kind': 'wall', 'kind_detail': 'dry_stone', 'min_zoom': 16})
+            {'id': 526327448, 'kind': 'wall', 'kind_detail': 'dry_stone',
+             'min_zoom': 16})
 
     def test_fence_kind_detail_from_fence_type_col(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/231049157'])
 
         self.assert_has_feature(
             16, 10556, 25335, 'landuse',
-            {'id': 231049157, 'kind': 'fence', 'kind_detail': 'barbed_wire', 'min_zoom': 16})
+            {'id': 231049157, 'kind': 'fence', 'kind_detail': 'barbed_wire',
+             'min_zoom': 16})
