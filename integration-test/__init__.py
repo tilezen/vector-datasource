@@ -295,7 +295,7 @@ class WOFDataObject(namedtuple("WOFDataObject", "wof_id")):
             for d in digits:
                 if d is not None:
                     slashed += d
-        url = "https://whosonfirst.mapzen.com/data/%s/%d.geojson" \
+        url = "https://data.whosonfirst.org/%s/%d.geojson" \
               % (slashed, self.wof_id)
         return url
 
@@ -665,14 +665,14 @@ class FixtureShapeSource(object):
 class WOFSource(object):
 
     def __init__(self):
-        self.hosts = ('whosonfirst.mapzen.com',)
+        self.hosts = ('whosonfirst.org',)
 
     def parse(self, url):
         parts = url.path.split("/")
         if len(parts) != 6:
             raise Exception(
                 "Fixture shape URLs should look like: "
-                "https://whosonfirst.mapzen.com/data/858/260/37/"
+                "https://whosonfirst.org/858/260/37/"
                 "85826037.geojson, not %r" %
                 (url,))
         if parts[0] != "" or parts[1] != "data":
@@ -702,7 +702,7 @@ class WOFSource(object):
                     reproject_mercator_to_lnglat, n.label_position)
 
                 properties = {
-                    'source': 'whosonfirst.mapzen.com',
+                    'source': 'whosonfirst.org',
                     'name': n.name,
                     'min_zoom': n.min_zoom,
                     'max_zoom': n.max_zoom,
