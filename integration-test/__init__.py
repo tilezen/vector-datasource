@@ -1613,6 +1613,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--regenerate', action='store_const', const=True, default=False,
         help='Always regenerate the fixture, even if it exists in the cache.')
+    parser.add_argument(
+        '--fail-fast', action='store_const', const=True, default=False,
+        help='Stop the test run on the first error or failure.')
     args = parser.parse_args()
 
     test_stdout = sys.stderr
@@ -1654,7 +1657,7 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     suite.addTests(tests)
 
-    runner = unittest.TextTestRunner(stream=test_stdout)
+    runner = unittest.TextTestRunner(stream=test_stdout, failfast=args.fail_fast)
     result = runner.run(suite)
 
     if not result.wasSuccessful():
