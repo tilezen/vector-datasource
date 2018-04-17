@@ -668,20 +668,20 @@ class WOFSource(object):
         self.hosts = ('data.whosonfirst.org',)
 
     def parse(self, url):
-        parts = url.path.split("/")
-        if len(parts) != 6:
+        parts = url.path.rsplit("/", 1)
+        if len(parts) != 2:
             raise Exception(
-                "Fixture shape URLs should look like: "
+                "WOF fixture URLs should look like: "
                 "https://data.whosonfirst.org/858/260/37/"
                 "85826037.geojson, not %r" %
                 (url,))
-        if parts[0] != "" or parts[1] != "data":
-            raise Exception("Malformed fixture shapefile URL")
-        id_str = "".join(parts[2:5])
-        name = id_str + ".geojson"
-        if name != parts[5]:
+        prefix, filename = parts
+        if not prefix.startswith('/') or not filename.endswith('.geojson'):
+            raise Exception("Malformed fixture geojson URL")
+        id_str = prefix.replace('/', '')
+        if filename != (id_str + ".geojson"):
             raise Exception("Expected URL to be redundant, but %r doesn't "
-                            "look like %r" % (parts[2:5], parts[5]))
+                            "look like %r" % (prefix, filename))
 
         return WOFDataObject(int(id_str))
 
