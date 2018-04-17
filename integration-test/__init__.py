@@ -1657,7 +1657,8 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     suite.addTests(tests)
 
-    runner = unittest.TextTestRunner(stream=test_stdout, failfast=args.fail_fast)
+    runner = unittest.TextTestRunner(
+        stream=test_stdout, failfast=args.fail_fast)
     result = runner.run(suite)
 
     if not result.wasSuccessful():
