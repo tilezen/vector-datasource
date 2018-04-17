@@ -5,6 +5,7 @@ UPDATE planet_osm_point
     AND (shop IN ('art', 'beauty', 'coffee', 'deli', 'furniture', 'hifi',
     'newsagent', 'perfumery', 'shoes', 'stationery', 'tobacco', 'travel_agency',
     'variety_store')
+      OR tourism in ('alpine_hut')
       OR amenity IN ('bar', 'car_wash', 'charging_station', 'hunting_stand', 'marketplace', 'motorcycle_parking', 'nightclub'));
 
 -- ladder the point indexes
