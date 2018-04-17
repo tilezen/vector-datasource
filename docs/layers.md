@@ -593,7 +593,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
-**Neighbourhoods:** [Who's On First](http://whosonfirst.mapzen.com) `neighbourhood` and `macrohood` features are added starting at zoom 12. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
+**Neighbourhoods:** [Who's On First](http://www.whosonfirst.org/) `neighbourhood` and `macrohood` features are added starting at zoom 12. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
 
 
 #### Place properties (common):
@@ -602,7 +602,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
-* `source`: `openstreetmap`, `naturalearthdata.com`, or  `whosonfirst.mapzen.com`
+* `source`: `openstreetmap`, `naturalearthdata.com`, or `whosonfirst.org`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
 #### Place properties (common optional):
