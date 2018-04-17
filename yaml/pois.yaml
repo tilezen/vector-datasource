@@ -1130,7 +1130,7 @@ filters:
       <<: *output_properties
       kind: stop_area
   - filter: {tourism: alpine_hut}
-    min_zoom: 15
+    min_zoom: 13
     output:
       <<: *output_properties
       kind: alpine_hut

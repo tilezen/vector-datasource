@@ -1,9 +1,11 @@
 kind,geometrytype,sort_rank
-crane,*,272
-fence,*,269
-snow_fence,*,268
-retaining_wall,*,267
-city_wall,*,266
+power_line,*,272
+power_minor_line,*,271
+city_wall,*,270
+wall,*,269
+fence,*,268
+snow_fence,*,267
+retaining_wall,*,266
 dam,LineString;MultiLineString,265
 tree_row,*,264
 hedge,*,263
@@ -15,6 +17,7 @@ groyne,*,225
 breakwater,*,224
 dam,*,223
 land,*,222
+crane,*,113
 footway,*,112
 tower,*,111
 wilderness_hut,*,110

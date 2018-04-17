@@ -1030,11 +1030,28 @@ filters:
     output:
       <<: *output_properties
       kind: retaining_wall
+  - filter: {barrier: wall}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: wall
+      kind_detail: { col: wall }
   - filter: {barrier: fence}
     min_zoom: 16
     output:
       <<: *output_properties
       kind: fence
+      kind_detail: { col: fence_type }
+  - filter: {power: line}
+    min_zoom: 14
+    output:
+      <<: *output_properties
+      kind: power_line
+  - filter: {power: minor_line}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: power_minor_line
   - filter: {tourism: camp_site}
     min_zoom: { clamp: { min: 13, max: 16, value: { col: zoom } } }
     output:

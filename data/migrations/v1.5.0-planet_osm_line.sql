@@ -2,9 +2,9 @@
 UPDATE planet_osm_line
   SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_line.*)
   WHERE mz_landuse_min_zoom <> mz_calculate_min_zoom_landuse(planet_osm_line.*)
-    AND (man_made IN ('crane'));
-
--- only these 2 columns are relevant in lower zoom queries
+    AND (man_made IN ('crane')
+         OR barrier IN ('wall')
+         OR power IN ('line','minor_line'));
 SET client_min_messages TO WARNING;
 CREATE INDEX IF NOT EXISTS
   planet_osm_line_geom_min_zoom_8_index
