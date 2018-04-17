@@ -665,14 +665,14 @@ class FixtureShapeSource(object):
 class WOFSource(object):
 
     def __init__(self):
-        self.hosts = ('whosonfirst.org',)
+        self.hosts = ('data.whosonfirst.org',)
 
     def parse(self, url):
         parts = url.path.split("/")
         if len(parts) != 6:
             raise Exception(
                 "Fixture shape URLs should look like: "
-                "https://whosonfirst.org/858/260/37/"
+                "https://data.whosonfirst.org/858/260/37/"
                 "85826037.geojson, not %r" %
                 (url,))
         if parts[0] != "" or parts[1] != "data":
