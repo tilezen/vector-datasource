@@ -1030,11 +1030,18 @@ filters:
     output:
       <<: *output_properties
       kind: retaining_wall
+  - filter: {barrier: wall}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: wall
+      kind_detail: { col: wall }
   - filter: {barrier: fence}
     min_zoom: 16
     output:
       <<: *output_properties
       kind: fence
+      kind_detail: { col: fence_type }
   - filter: {power: line}
     min_zoom: 14
     output:
