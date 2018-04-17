@@ -451,7 +451,7 @@ def tags_name_i18n(shape, properties, fid, zoom):
         return shape, properties, fid
 
     source = properties.get('source')
-    is_wof = source == 'whosonfirst.mapzen.com'
+    is_wof = source == 'whosonfirst.org'
     is_osm = source == 'openstreetmap.org'
 
     if is_osm:

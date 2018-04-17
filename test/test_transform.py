@@ -128,7 +128,7 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals('foo', props['name:en'])
 
     def test_wof_source(self):
-        shape, props, fid = self._call_fut('whosonfirst.mapzen.com',
+        shape, props, fid = self._call_fut('whosonfirst.org',
                                            'eng_x', 'foo')
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
@@ -163,7 +163,7 @@ class TagsPriorityI18nTest(unittest.TestCase):
     def test_wof_no_two_letter_code(self):
         # given variants which have no 2-letter code (arq), then we should
         # just be left with the ones which do (ara).
-        shape, props, fid = self._call_fut('whosonfirst.mapzen.com',
+        shape, props, fid = self._call_fut('whosonfirst.org',
                                            {'ara': 'foo', 'arq': 'bar'})
         self.assertTrue('name:ar' in props)
         self.assertFalse('name:ara' in props)
