@@ -1,6 +1,7 @@
 kind,geometrytype,sort_rank
-power_line,*,272
-power_minor_line,*,271
+power_line,*,273
+power_minor_line,*,272
+crane,*,271
 city_wall,*,270
 wall,*,269
 fence,*,268
@@ -17,7 +18,6 @@ groyne,*,225
 breakwater,*,224
 dam,*,223
 land,*,222
-crane,*,113
 footway,*,112
 tower,*,111
 wilderness_hut,*,110
