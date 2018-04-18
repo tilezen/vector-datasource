@@ -16,4 +16,4 @@ class TestCranes(FixtureTest):
 
         self.assert_has_feature(
             16, 32891, 21813, 'pois',
-            {'id': 1842715060, 'kind': 'crane', 'min_zoom': 16})
+            {'id': 1842715058, 'kind': 'crane', 'min_zoom': 16})
