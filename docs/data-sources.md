@@ -45,4 +45,4 @@ More details can be found at: http://www.naturalearthdata.com/about/terms-of-use
 
 `source:whosonfirst`
 
-[Who's On First](http://www.whosonfirst.org/) is an open place gazetteer created by Mapzen and is used to source neighbourhood labels.
+[Who's On First](http://www.whosonfirst.org/) is an open place gazetteer initiated by Mapzen and is used to source neighbourhood labels.
