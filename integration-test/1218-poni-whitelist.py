@@ -392,7 +392,7 @@ class PoniWhitelist(FixtureTest):
         self.load_fixtures(['https://www.openstreetmap.org/node/1076123765'])
 
         self.assert_has_feature(
-            15, 5433, 12607, 'pois',
+            13, 1358, 3151, 'pois',
             {'id': 1076123765})
 
     def test_tourism_viewpoint(self):

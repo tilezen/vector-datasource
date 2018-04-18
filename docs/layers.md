@@ -442,7 +442,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `name`
 * `id`: From OpenStreetMap or Natural Earth. Dropped at low- and mid-zooms when features are merged. _See planned bug fix [#1033](https://github.com/tilezen/vector-datasource/issues/1033)._
-* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), `fence` (zoom 16+ only) and `gate` (zoom 16+ only).
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `power_line` (zoom 14+), `retaining_wall`, `snow_fence` (zoom 15+), `fence`, `gate`, `wall` (zoom 16+ only), and `power_minor_line` (zoom 17+).
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
@@ -521,6 +521,8 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `place_of_worship`
 * `plant`
 * `playground`
+* `power_line`
+* `power_minor_line`
 * `prison`
 * `protected_area`
 * `quarry`
@@ -555,6 +557,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `urban_area`
 * `urban`
 * `village_green`
+* `wall`
 * `wastewater_plant`
 * `water_park`
 * `water_slide`
@@ -568,6 +571,27 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `works`
 * `zoo`
 
+#### Cemetery and grave_yard `kind_detail` values:
+
+The value of the OpenStreetMap `religion` tag is used for `kind_detail` on `cemetery` and `grave_yard` features. Common values include `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+
+NOTE: A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag. Common values include `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
+
+#### Fence `kind_detail` values:
+
+The value of the OpenStreetMap `fence_type` tag. Common values include `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `electric`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `split_rail`, `stone`, `wall`, `wire`, and `wood`.
+
+#### Wall `kind_detail` values:
+
+The value of the OpenStreetMap `wall` tag. Common values include `brick`, `castle_wall`, `concrete`, `dry_stone`, `drystone`, `flood_wall`, `gabion`, `jersey_barrier`, `noise_barrier`, `pise`, `retaining_wall`, `seawall`, `stone`, and `stone_bank`.
+
+##### Wetland `kind_detail` values:
+
+The value of the OpenStreetMap `wetland` tag. Common values include `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
+
+#### Wood and forest `kind_detail` values
+
+* The value of the OpenStreetMap `leaf_type` tag. [Common values](https://taginfo.openstreetmap.org/keys/leaf_type#values) include `broadleaved`, `needleleaved`, or `mixed`.
 
 ## Places
 
@@ -679,13 +703,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `operator`: Who actually runs the bike share station, eg: "NYC Bike Share".
 * `ref`: The reference of this rental station, if one is available.
 
-#### POI properties (only on `kind:bicycle_parking`):
+#### POI properties (only on `kind:bicycle_parking` and `kind:motorcycle_parking`):
 
-* `access`: Whether the bicyle parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
+* `access`: Whether the parking is for general public use (`yes`, `permissive`, `public`) or for customers only (`customers`) or private use only (`private`, `no`).
 * `capacity`: Approximate number of total bicycle parking spots.
 * `covered`: Is the parking area covered.
-* `fee`: If present, indicates whether a fee must be paid to use the bicycle parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
-* `operator`: Who runs the bike parking lot.
+* `fee`: If present, indicates whether a fee must be paid to use the parking. A value of `true` means a fee must be paid, a value of `false` means no fee is required. If the property is not present, then it is unknown whether a fee is required or not.
+* `operator`: Who runs the parking lot.
 * `maxstay`: A duration indicating the maximum time a bike is allowed to be parked.
 * `surveillance`: If present, then indicates whether there is surveillance. A value of `true` means the parking is covered by surveillance, a value of `false` means it is not. If the property is not present, then it is unknown whether surveillance is in place or not.
 
@@ -693,6 +717,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
+
+#### POI properties (only on `charging_station`):
+
+* `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
 
 #### POI `kind` values:
 
@@ -747,9 +775,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `butcher`
 * `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `camp_site`
+* `car`
 * `car_repair`
 * `car_sharing`
-* `car`
+* `car_wash`
 * `caravan_site`
 * `care_home`
 * `carousel`
@@ -757,6 +786,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `cave_entrance`
 * `cemetery`
 * `chalet`
+* `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
 * `childcare`
 * `childrens_centre`
 * `cinema`
@@ -846,6 +876,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hot_spring`
 * `hotel`
 * `hunting`
+* `hunting_stand`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `information`
@@ -868,6 +899,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mast`
 * `maze`
 * `memorial`
+* `marketplace`
 * `metal_construction`
 * `midwife`
 * `military`
@@ -877,6 +909,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `monument`
 * `motel`
 * `motorcycle`
+* `motorcycle_parking`
 * `motorway_junction`
 * `museum`
 * `music`
@@ -885,6 +918,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `newsagent`
 * `newspaper`
 * `ngo`
+* `nightclub`
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `observatory`

@@ -706,3 +706,62 @@ class SimplifyAndClipTest(unittest.TestCase):
         self.assertEquals(1, len(feature_layer['features']))
         out_shape, out_props, out_fid = feature_layer['features'][0]
         self.assertEquals('LineString', out_shape.type)
+
+
+class AdminBoundaryTest(unittest.TestCase):
+
+    def test_boundary_difference_exception(self):
+        from vectordatasource.transform import admin_boundaries
+        from tilequeue.process import Context
+        from shapely.geometry.linestring import LineString
+        from shapely.geometry import box
+        from collections import namedtuple
+
+        shape = LineString([[0, 0], [1, 1]])
+        props1 = {'id': 1, 'kind': 'foo', 'maritime_boundary': False}
+        props2 = {'id': 2, 'kind': 'foo', 'maritime_boundary': False}
+        fid = None
+
+        bounds = (0, 0, 1, 1)
+
+        # it turns out to be difficult to make a simple, canned example of
+        # geometries which will cause a TopologicalError. instead, this fake
+        # geometry class will cause Shapely to throw AttributeError whenever
+        # it's used in a geometric operation, as it doesn't have the _geom
+        # attribute used to store a pointer to GEOS' native object.
+        class FakeGeom(namedtuple("FakeGeom", "geom_type envelope")):
+            def difference(self, other_shape):
+                from shapely.geometry import GeometryCollection
+                return GeometryCollection([])
+
+        fake_geom = FakeGeom("LineString", box(*bounds))
+
+        feature_layers = [dict(
+            layer_datum=dict(
+                is_clipped=True,
+                area_threshold=0,
+                simplify_before_intersect=True,
+                simplify_start=0,
+                name='foo',
+            ),
+            padded_bounds={'line': bounds},
+            features=[
+                (shape, props1, fid),
+                # the fake geometry here causes an exception to be thrown, as
+                # if the operation failed.
+                (fake_geom, props2, fid),
+            ],
+        )]
+        nominal_zoom = 0
+        unpadded_bounds = bounds
+        params = dict(
+            simplify_before=16,
+            base_layer='foo',
+        )
+        resources = None
+
+        ctx = Context(feature_layers, nominal_zoom, unpadded_bounds, params,
+                      resources)
+
+        # the test is simply that an exception isn't thrown.
+        admin_boundaries(ctx)

@@ -33,9 +33,10 @@ deployment:
     commands:
       - pip install 'Circle-Beacon == 2.0.0'
       - alert-circle mapzen documentation master $CIRCLE_TOKEN
-      - ./scripts/update-integration-test-coordinates.sh
-      - pip install awscli
-      - aws s3 sync ~/.cache/vector-datasource/ s3://mapzen-tiles-assets/integration-test-fixtures/ --size-only --exclude="*" --include="*.geojson"
+      # TODO: either set up new buckets, or deprecate these things.
+      #- ./scripts/update-integration-test-coordinates.sh
+      #- pip install awscli
+      #- aws s3 sync ~/.cache/vector-datasource/ s3://mapzen-tiles-assets/integration-test-fixtures/ --size-only --exclude="*" --include="*.geojson"
   release:
     tag: /.+/
     commands:
