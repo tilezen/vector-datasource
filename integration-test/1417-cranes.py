@@ -8,7 +8,8 @@ class TestCranes(FixtureTest):
 
         self.assert_has_feature(
             14, 2621, 6338, 'landuse',
-            {'id': 173458931, 'kind': 'crane', 'min_zoom': 16, 'sort_rank': 272})
+            {'id': 173458931, 'kind': 'crane', 'min_zoom': 16,
+             'sort_rank': 272})
 
     def test_crane_pois(self):
         self.load_fixtures(['http://www.openstreetmap.org/node/1842715058'])
