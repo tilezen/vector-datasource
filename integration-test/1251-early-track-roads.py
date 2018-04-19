@@ -23,14 +23,14 @@ class EarlyUnclassifiedRoads(FixtureTest):
         ])
 
         self.assert_no_matching_feature(
-          11, 330, 781, 'roads',
-          { 'kind': 'path',
-            'kind_detail': 'track'})
-  
+            11, 330, 781, 'roads',
+            {'kind': 'path',
+              'kind_detail': 'track'})
+
         self.assert_has_feature(
-        12, 661, 1562, 'roads',
-        {'kind': 'path',
-         'kind_detail': 'track'})
+            12, 661, 1562, 'roads',
+            {'kind': 'path',
+             'kind_detail': 'track'})
 
     def test_early_track_road_z12_grade1_dirt(self):
 
@@ -40,10 +40,10 @@ class EarlyUnclassifiedRoads(FixtureTest):
         ])
 
         self.assert_no_matching_feature(
-          11, 399, 782, 'roads',
-          { 'kind': 'path',
-            'kind_detail': 'track'})
-  
+            11, 399, 782, 'roads',
+            {'kind': 'path',
+              'kind_detail': 'track'})
+
         self.assert_has_feature(
             12, 799, 1565, 'roads',
             {'kind': 'path',
