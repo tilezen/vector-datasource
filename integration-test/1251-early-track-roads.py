@@ -15,6 +15,18 @@ class EarlyUnclassifiedRoads(FixtureTest):
             {'kind': 'path',
              'kind_detail': 'track'})
 
+    def test_early_track_road_z11_grade1_dirt(self):
+
+        # dirt, grade1, track (since dirt demoted from zoom 11)
+        self.load_fixtures([
+            'https://www.openstreetmap.org/way/286309045',
+        ])
+
+        self.assert_has_feature(
+            11, 399, 782, 'roads',
+            {'kind': 'path',
+             'kind_detail': 'track'})
+
     def test_early_track_road_z12_grade1_private(self):
 
         # private, grade1, track (since private demoted from zoom 11)
@@ -29,23 +41,6 @@ class EarlyUnclassifiedRoads(FixtureTest):
 
         self.assert_has_feature(
             12, 661, 1562, 'roads',
-            {'kind': 'path',
-             'kind_detail': 'track'})
-
-    def test_early_track_road_z12_grade1_dirt(self):
-
-        # dirt, grade1, track (since dirt demoted from zoom 11)
-        self.load_fixtures([
-            'https://www.openstreetmap.org/way/286309045',
-        ])
-
-        self.assert_no_matching_feature(
-            11, 399, 782, 'roads',
-            {'kind': 'path',
-              'kind_detail': 'track'})
-
-        self.assert_has_feature(
-            12, 799, 1565, 'roads',
             {'kind': 'path',
              'kind_detail': 'track'})
 
