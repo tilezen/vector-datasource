@@ -143,7 +143,7 @@ global:
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
         - lock: yes
-        - man_made: [ adit, communications_tower, mast, mineshaft, observatory,
+        - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, windmill ]
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
@@ -1577,6 +1577,12 @@ filters:
     output:
       <<: *output_properties
       kind: petroleum_well
+  - filter: {man_made: crane}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: crane
+      kind_detail: {col: "crane:type"}
   - filter: {leisure: water_park}
     min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.34 ] } } }
     output:
