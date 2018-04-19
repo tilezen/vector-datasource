@@ -22,7 +22,12 @@ class EarlyUnclassifiedRoads(FixtureTest):
             'https://www.openstreetmap.org/way/10611894',
         ])
 
-        self.assert_has_feature(
+        self.assert_no_matching_feature(
+          11, 330, 781, 'roads',
+          { 'kind': 'path',
+            'kind_detail': 'track'})
+  
+          self.assert_has_feature(
             12, 661, 1562, 'roads',
             {'kind': 'path',
              'kind_detail': 'track'})
@@ -34,6 +39,11 @@ class EarlyUnclassifiedRoads(FixtureTest):
             'https://www.openstreetmap.org/way/286309045',
         ])
 
+        self.assert_no_matching_feature(
+          11, 399, 782, 'roads',
+          { 'kind': 'path',
+            'kind_detail': 'track'})
+  
         self.assert_has_feature(
             12, 799, 1565, 'roads',
             {'kind': 'path',

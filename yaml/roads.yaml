@@ -356,7 +356,7 @@ filters:
   - filter:
       highway: track
       any:
-        - {surface: [paved, asphalt, concrete]}
+        - surface: [paved, asphalt, concrete]
         - all:
           - tracktype: grade1
           - not: {access: private}
@@ -372,7 +372,7 @@ filters:
       highway: track
       any:
         - all:
-          - surface: [gravel]
+          - surface: gravel
           - not: {tracktype: [grade3, grade4, grade5]}
         - tracktype: [grade1,grade2]
     min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
