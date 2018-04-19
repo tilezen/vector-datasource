@@ -326,7 +326,16 @@ filters:
   #
   #############################################################
   - filter:
-      highway: [residential, unclassified, road]
+      highway: [unclassified]
+    min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      kind: minor_road
+      kind_detail: {col: highway}
+  - filter:
+      highway: [residential, road]
     min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
