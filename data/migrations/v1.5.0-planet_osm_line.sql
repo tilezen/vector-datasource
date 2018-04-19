@@ -1,4 +1,3 @@
--- Add new barrier types
 UPDATE planet_osm_line
   SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_line.*)
   WHERE mz_landuse_min_zoom <> mz_calculate_min_zoom_landuse(planet_osm_line.*)
@@ -8,7 +7,7 @@ UPDATE planet_osm_line
 
 UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*)
-  WHERE (tags -> 'highway' IN ( 'unclassified') )
+  WHERE (tags -> 'highway' IN ( 'track', 'unclassified') )
       AND mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL
       AND mz_road_level IS NOT NULL
       AND mz_road_level <> mz_calculate_min_zoom_roads(planet_osm_line.*);
@@ -20,6 +19,8 @@ CREATE INDEX IF NOT EXISTS
   WHERE
     mz_landuse_min_zoom < 8 OR
     mz_transit_level < 8;
+
+
 
 -- ladder the higher zoom level indexes
 CREATE INDEX IF NOT EXISTS
