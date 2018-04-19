@@ -1069,3 +1069,11 @@ filters:
       kind: grave_yard
       kind_detail: { col: religion }
       denomination: { col: denomination }
+  - filter:
+      man_made: crane
+      geom_type: line
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: crane
+      kind_detail: {col: "crane:type"}
