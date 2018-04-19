@@ -37,7 +37,7 @@ class EarlyUnclassifiedRoads(FixtureTest):
         self.assert_no_matching_feature(
             11, 330, 781, 'roads',
             {'kind': 'path',
-              'kind_detail': 'track'})
+             'kind_detail': 'track'})
 
         self.assert_has_feature(
             12, 661, 1562, 'roads',
