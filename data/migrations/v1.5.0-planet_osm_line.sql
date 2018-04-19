@@ -1,11 +1,16 @@
 UPDATE planet_osm_line
+  SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_line.*)
+  WHERE mz_landuse_min_zoom <> mz_calculate_min_zoom_landuse(planet_osm_line.*)
+    AND (barrier IN ('wall')
+         OR power IN ('line','minor_line'));
+
+UPDATE planet_osm_line
   SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*)
   WHERE (tags -> 'highway' IN ( 'track') )
       AND mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL
       AND mz_road_level IS NOT NULL
       AND mz_road_level <> mz_calculate_min_zoom_roads(planet_osm_line.*);
 
--- only these 2 columns are relevant in lower zoom queries
 SET client_min_messages TO WARNING;
 CREATE INDEX IF NOT EXISTS
   planet_osm_line_geom_min_zoom_8_index

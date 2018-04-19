@@ -1,4 +1,4 @@
-# Mapzen Vector Tile Tests
+# Tilezen Vector Tile Tests
 
 ## Code / Unit Tests
 

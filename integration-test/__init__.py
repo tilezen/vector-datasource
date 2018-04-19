@@ -528,7 +528,8 @@ def _download_from_overpass(objs, target_file, clip, simplify, base_dir):
             raise
 
 
-def _convert_shape_to_geojson(shpfile, jsonfile, source, clip, simplify):
+def _convert_shape_to_geojson(shpfile, jsonfile, override_properties, clip,
+                              simplify):
     dbffile = shpfile.replace(".shp", ".dbf")
     features = []
 
@@ -543,7 +544,7 @@ def _convert_shape_to_geojson(shpfile, jsonfile, source, clip, simplify):
                 geom_lnglat = shapely.ops.transform(
                     reproject_mercator_to_lnglat, geom_mercator)
                 props = dict(zip(field_names, row.record))
-                props['source'] = source
+                props.update(override_properties)
                 gid += 1
 
                 if clip:
@@ -644,11 +645,18 @@ class FixtureShapeSource(object):
                     self.base_dir, "integration-test", "fixtures",
                     obj.table, obj.name)
                 if obj.table.startswith("ne_"):
-                    source = "naturalearthdata.com"
+                    override_properties = dict(source="naturalearthdata.com")
+                elif obj.table in ("buffered_land"):
+                    # have to add the maritime_boundary setting here, as the
+                    # name is too long to be a field in the shapefile!
+                    override_properties = dict(
+                        source="tilezen.org",
+                        maritime_boundary=True,
+                    )
                 else:
-                    source = "openstreetmapdata.com"
+                    override_properties = dict(source="openstreetmapdata.com")
                 _convert_shape_to_geojson(
-                    shpfile, jsonfile, source, clip, simplify)
+                    shpfile, jsonfile, override_properties, clip, simplify)
                 jsonfiles.append(jsonfile)
 
             combine_geojson_files(jsonfiles, target_file)
@@ -1232,7 +1240,7 @@ class RunTestInstance(object):
                 import sys
                 print>>sys.stderr, "WARNING: %s: GeoJSON fixture is " \
                     "very large, %d bytes." \
-                    % (self.id(), geojson_size)
+                    % (geojson_file, geojson_size)
 
         rows, rels = _load_fixtures([geojson_file])
         feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)

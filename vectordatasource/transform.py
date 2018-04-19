@@ -29,6 +29,7 @@ from zope.dottedname.resolve import resolve
 import csv
 import pycountry
 import re
+import shapely.errors
 import shapely.wkb
 import shapely.ops
 import kdtree
@@ -1795,7 +1796,14 @@ def admin_boundaries(ctx):
                     continue
                 cut_envelope = envelopes[j]
                 if envelope.intersects(cut_envelope):
-                    boundary = boundary.difference(cut_shape)
+                    try:
+                        boundary = boundary.difference(cut_shape)
+                    except shapely.errors.TopologicalError:
+                        # NOTE: we have gotten errors Topological errors here
+                        # that look like:
+                        # TopologicalError: This operation could not be
+                        # performed. Reason: unknown"
+                        pass
 
                 if boundary.is_empty:
                     break
@@ -1811,7 +1819,16 @@ def admin_boundaries(ctx):
                 cut_envelope = envelopes[j]
 
                 if envelope.intersects(cut_envelope):
-                    inside, boundary = _intersect_cut(boundary, cut_shape)
+                    try:
+                        inside, boundary = _intersect_cut(boundary, cut_shape)
+                    except (StandardError, shapely.errors.ShapelyError):
+                        # if the inside and remaining boundary can't be
+                        # calculated, then we can't continue to intersect
+                        # anything else with this shape. this means we might
+                        # end up with erroneous one-sided boundaries.
+
+                        # TODO: log warning!
+                        break
 
                     inside = _linemerge(inside)
                     if not inside.is_empty:
