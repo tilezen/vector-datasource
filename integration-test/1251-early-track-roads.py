@@ -27,10 +27,10 @@ class EarlyUnclassifiedRoads(FixtureTest):
           { 'kind': 'path',
             'kind_detail': 'track'})
   
-          self.assert_has_feature(
-            12, 661, 1562, 'roads',
-            {'kind': 'path',
-             'kind_detail': 'track'})
+        self.assert_has_feature(
+        12, 661, 1562, 'roads',
+        {'kind': 'path',
+         'kind_detail': 'track'})
 
     def test_early_track_road_z12_grade1_dirt(self):
 
