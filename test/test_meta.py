@@ -69,7 +69,7 @@ def _make_metadata(name):
     sources = {
         'osm': Source('osm', 'openstreetmap.org'),
         'ne': Source('ne', 'naturalearthdata.com'),
-        'wof': Source('wof', 'whosonfirst.mapzen.com'),
+        'wof': Source('wof', 'whosonfirst.org'),
         'shp': Source('shp', 'openstreetmapdata.com'),
     }
     return make_metadata(sources[name])

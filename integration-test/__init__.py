@@ -295,7 +295,7 @@ class WOFDataObject(namedtuple("WOFDataObject", "wof_id")):
             for d in digits:
                 if d is not None:
                     slashed += d
-        url = "https://whosonfirst.mapzen.com/data/%s/%d.geojson" \
+        url = "https://data.whosonfirst.org/%s/%d.geojson" \
               % (slashed, self.wof_id)
         return url
 
@@ -665,23 +665,23 @@ class FixtureShapeSource(object):
 class WOFSource(object):
 
     def __init__(self):
-        self.hosts = ('whosonfirst.mapzen.com',)
+        self.hosts = ('data.whosonfirst.org',)
 
     def parse(self, url):
-        parts = url.path.split("/")
-        if len(parts) != 6:
+        parts = url.path.rsplit("/", 1)
+        if len(parts) != 2:
             raise Exception(
-                "Fixture shape URLs should look like: "
-                "https://whosonfirst.mapzen.com/data/858/260/37/"
+                "WOF fixture URLs should look like: "
+                "https://data.whosonfirst.org/858/260/37/"
                 "85826037.geojson, not %r" %
                 (url,))
-        if parts[0] != "" or parts[1] != "data":
-            raise Exception("Malformed fixture shapefile URL")
-        id_str = "".join(parts[2:5])
-        name = id_str + ".geojson"
-        if name != parts[5]:
+        prefix, filename = parts
+        if not prefix.startswith('/') or not filename.endswith('.geojson'):
+            raise Exception("Malformed fixture geojson URL")
+        id_str = prefix.replace('/', '')
+        if filename != (id_str + ".geojson"):
             raise Exception("Expected URL to be redundant, but %r doesn't "
-                            "look like %r" % (parts[2:5], parts[5]))
+                            "look like %r" % (prefix, filename))
 
         return WOFDataObject(int(id_str))
 
@@ -702,7 +702,7 @@ class WOFSource(object):
                     reproject_mercator_to_lnglat, n.label_position)
 
                 properties = {
-                    'source': 'whosonfirst.mapzen.com',
+                    'source': 'whosonfirst.org',
                     'name': n.name,
                     'min_zoom': n.min_zoom,
                     'max_zoom': n.max_zoom,
@@ -1613,6 +1613,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--regenerate', action='store_const', const=True, default=False,
         help='Always regenerate the fixture, even if it exists in the cache.')
+    parser.add_argument(
+        '--fail-fast', action='store_const', const=True, default=False,
+        help='Stop the test run on the first error or failure.')
     args = parser.parse_args()
 
     test_stdout = sys.stderr
@@ -1654,7 +1657,8 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     suite.addTests(tests)
 
-    runner = unittest.TextTestRunner(stream=test_stdout)
+    runner = unittest.TextTestRunner(
+        stream=test_stdout, failfast=args.fail_fast)
     result = runner.run(suite)
 
     if not result.wasSuccessful():

@@ -5,26 +5,26 @@ class WofL10nName(FixtureTest):
     def test_hollywood(self):
         # Hollywood (wof neighbourhood)
         self.load_fixtures([
-            'https://whosonfirst.mapzen.com/data/858/260/37/85826037.geojson'
+            'https://data.whosonfirst.org/858/260/37/85826037.geojson'
         ])
 
         self.assert_has_feature(
             16, 11227, 26157, 'places',
             {'id': 85826037, 'kind': 'neighbourhood',
-             'source': "whosonfirst.mapzen.com",
+             'source': "whosonfirst.org",
              'name': 'Hollywood',
              'name:ko': '\xed\x97\x90\xeb\xa6\xac\xec\x9a\xb0\xeb\x93\x9c'})
 
     def test_san_francisco_wof(self):
         # San Francisco (wof neighbourhood)
         self.load_fixtures([
-            'https://whosonfirst.mapzen.com/data/858/826/41/85882641.geojson'
+            'https://data.whosonfirst.org/858/826/41/85882641.geojson'
         ])
 
         self.assert_has_feature(
             16, 14893, 29234, 'places',
             {'id': 85882641, 'kind': 'neighbourhood',
-             'source': "whosonfirst.mapzen.com",
+             'source': "whosonfirst.org",
              'name': 'San Francisco',
              'name:es': 'San Francisco'})
 
