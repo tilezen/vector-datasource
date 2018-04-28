@@ -4059,6 +4059,8 @@ def _road_network_importance(network, ref):
         network_code = 1
     elif network == 'US:US' or ':regional' in network:
         network_code = 2
+    elif network == 'e-road' in network:
+        network_code = 9000
     else:
         network_code = len(network.split(':')) + 3
 
