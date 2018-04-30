@@ -48,7 +48,7 @@ See the examples in the [d3-vector-tiles](https://github.com/mapzen/d3-vector-ti
 
 ## MapboxGL
 
-* **MapboxGL demo:** [preview](https://mapzen.github.io/mapboxgl-vector-tiles) | [source code](https://github.com/mapzen/mapboxgl-vector-tiles)
+* **MapboxGL demo:** [preview](https://apollomapping.github.io/ap-tilezen-mapbox-styles/demo/demo.html) | [source code](https://github.com/apollomapping/ap-tilezen-mapbox-styles)
 
 [MapboxGL](https://www.mapbox.com/mapbox-gl/) is a JavaScript library used to render the Mapbox Vector Tiles protocol buffer format through OpenGL on both web and native platforms.
 
@@ -61,7 +61,7 @@ To specify Mapzen vector tile server as the source, use the following URL string
       "tiles": ["https://tile.mapzen.com/mapzen/vector/v1/{layers}/{zoom}/{x}/{y}.mvt"]
 ```
 
-See https://github.com/mapzen/mapboxgl-vector-tiles for a sample map of Mapzen vector tiles displayed in MapboxGL.
+See https://github.com/apollomapping/ap-tilezen-mapbox-styles for a sample map of Mapzen vector tiles displayed in MapboxGL.
 
 ## OpenLayers
 
