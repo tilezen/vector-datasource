@@ -4176,6 +4176,15 @@ def _road_shield_text(network, ref):
     if network and (network.startswith('GR:') or network.startswith('gr:')):
         return ref
 
+    # Argentinian national routes start with "RN" (ruta nacional), which
+    # should be stripped, but other letters shouldn't be!
+    if network == 'AR:national' and ref.startswith('RN'):
+        return ref[2:]
+
+    # Argentinian provinicial routes start with "RP" (ruta provincial)
+    if network == 'AR:provincial' and ref.startswith('RP'):
+        return ref[2:]
+
     # If there's a number at the front (optionally with letters following),
     # then that's the ref.
     m = _NUMBER_AT_FRONT.match(ref)
