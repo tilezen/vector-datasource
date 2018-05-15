@@ -4592,18 +4592,14 @@ def drop_layer(ctx):
     """
 
     layer_to_delete = ctx.params.get('layer')
-    found_idx = None
 
     for idx, feature_layer in enumerate(ctx.feature_layers):
         layer_datum = feature_layer['layer_datum']
         layer_name = layer_datum['name']
 
         if layer_name == layer_to_delete:
-            found_idx = idx
+            del ctx.feature_layers[idx]
             break
-
-    if found_idx is not None:
-        del ctx.feature_layers[found_idx]
 
     return None
 
