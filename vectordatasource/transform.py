@@ -904,6 +904,25 @@ def _intersect_overlap(min_fraction):
     return _f
 
 
+# intersect by looking at the overlap length. if more than a minimum fraction
+# of the shape's length is within the cutting area, then we will consider it
+# totally "cut".
+def _intersect_linear_overlap(min_fraction):
+    # the inner function is what will actually get
+    # called, but closing over min_fraction means it
+    # will have access to that.
+    def _f(shape, cutting_shape):
+        overlap = shape.intersection(cutting_shape).length
+        total = shape.length
+        empty = type(shape)()
+
+        if ((total > 0) and (overlap / total) >= min_fraction):
+            return shape, empty
+        else:
+            return empty, shape
+    return _f
+
+
 # find a layer by iterating through all the layers. this
 # would be easier if they layers were in a dict(), but
 # that's a pretty invasive change.
@@ -1072,8 +1091,18 @@ def overlap(ctx):
     keep_geom_type = ctx.params.get('keep_geom_type', True)
     min_fraction = ctx.params.get('min_fraction', 0.8)
 
+    # use a different function for linear overlaps (i.e: roads with polygons)
+    # than area overlaps. keeping this explicit (rather than relying on the
+    # geometry type) means we don't end up with unexpected lines in a polygonal
+    # layer.
+    linear = ctx.params.get('linear', False)
+    if linear:
+        overlap_fn = _intersect_linear_overlap(min_fraction)
+    else:
+        overlap_fn = _intersect_overlap(min_fraction)
+
     return _intercut_impl(
-        _intersect_overlap(min_fraction), feature_layers, base_layer,
+        overlap_fn, feature_layers, base_layer,
         cutting_layer, attribute, target_attribute, cutting_attrs,
         keep_geom_type)
 
@@ -4000,6 +4029,28 @@ _NETWORK_OPERATORS = {
 }
 
 
+def _guess_network_from(country_code, ref):
+    """
+    Try to guess the network value from the country code and ref.
+    """
+
+    if country_code == 'GB':
+        letter = ref[0]
+        if letter in ('M', 'A', 'B'):
+            return 'GB:%s-road' % (letter,)
+
+    elif country_code == 'AR':
+        if ref.startswith('RN'):
+            return 'AR:national'
+        elif ref.startswith('RP'):
+            return 'AR:provincial'
+
+    # in the absence of any other more specific information, might as well
+    # just use the country code as the network (similar to what we do above
+    # when back-filling from the operator).
+    return country_code
+
+
 def merge_networks_from_tags(shape, props, fid, zoom):
     """
     Take the network and ref tags from the feature and, if they both exist, add
@@ -4010,6 +4061,14 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     network = props.get('network')
     ref = props.get('ref')
     mz_networks = props.get('mz_networks', [])
+    country_code = props.get('country_code')
+
+    # for road networks, if there's no explicit network, but the country code
+    # and ref are both available, then try to use them to back-fill the
+    # network.
+    if props.get('kind') in ('highway', 'major_road') and \
+       network is None and country_code and ref:
+        network = _guess_network_from(country_code, ref)
 
     # if there's no network, but the operator indicates a network, then we can
     # back-fill an approximate network tag from the operator. this can mean
@@ -4181,7 +4240,7 @@ def _road_shield_text(network, ref):
     if network == 'AR:national' and ref.startswith('RN'):
         return ref[2:]
 
-    # Argentinian provinicial routes start with "RP" (ruta provincial)
+    # Argentinian provincial routes start with "RP" (ruta provincial)
     if network == 'AR:provincial' and ref.startswith('RP'):
         return ref[2:]
 
@@ -4525,3 +4584,54 @@ def backfill_from_other_layer(ctx):
                 props[layer_key] = value
 
     return layer
+
+
+def drop_layer(ctx):
+    """
+    Drops the named layer from the list of layers.
+    """
+
+    layer_to_delete = ctx.params.get('layer')
+    found_idx = None
+
+    for idx, feature_layer in enumerate(ctx.feature_layers):
+        layer_datum = feature_layer['layer_datum']
+        layer_name = layer_datum['name']
+
+        if layer_name == layer_to_delete:
+            found_idx = idx
+            break
+
+    if found_idx is not None:
+        del ctx.feature_layers[found_idx]
+
+    return None
+
+
+def backfill_road_networks(ctx):
+    """
+    """
+
+    layer_name = ctx.params.get('layer')
+    assert layer_name, \
+        'Parameter layer was missing from ' \
+        'backfill_road_networks config'
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    zoom = ctx.nominal_zoom
+
+    funcs = [
+        merge_networks_from_tags,
+        extract_network_information,
+        choose_most_important_network,
+    ]
+
+    new_features = []
+    for (shape, props, fid) in layer['features']:
+        for fn in funcs:
+            shape, props, fid = fn(shape, props, fid, zoom)
+
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return None

@@ -1,5 +1,5 @@
 bucket: tilezen-assets
-datestamp: 20180313
+datestamp: 20180514
 
 shapefiles:
 
@@ -26,6 +26,11 @@ shapefiles:
     prj: 3857
     shapefile-name: buffered_land_05232017.shp
     tile: true
+
+  - name: admin_areas
+    url: http://s3.amazonaws.com/tilezen-assets/curated/admin_areas_20180409.zip
+    prj: 4326
+    shapefile-name: admin_areas_20180409.shp
 
   - name: ne_110m_lakes
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip

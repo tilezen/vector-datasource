@@ -68,6 +68,9 @@ LAYER_TABLES = {
         'planet_osm_polygon',
         'water_polygons',
     ],
+    'admin_areas': [
+        'admin_areas',
+    ],
 }
 
 
@@ -89,6 +92,7 @@ POLYGON_TABLES = [
     'ne_50m_playas',
     'ne_50m_urban_areas',
     'water_polygons',
+    'admin_areas',
 ]
 
 

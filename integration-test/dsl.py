@@ -54,3 +54,16 @@ def tile_diagonal(z, x, y):
     ])
 
     return shape
+
+
+def tile_box(z, x, y):
+    """
+    Returns a Shapely Polygon which covers the tile.
+    """
+
+    from tilequeue.tile import coord_to_bounds
+    from shapely.geometry import box
+    from ModestMaps.Core import Coordinate
+
+    bounds = coord_to_bounds(Coordinate(zoom=z, column=x, row=y))
+    return box(*bounds)

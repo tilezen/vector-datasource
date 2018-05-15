@@ -8,6 +8,7 @@ all:
   - pois
   - boundaries
   - transit
+  - admin_areas
 
 sources:
 
@@ -137,6 +138,11 @@ sources:
     - template: wof.jinja2
       start_zoom: 11
 
+  admin_areas:
+    - template: admin_areas.jinja2
+      # starts at the min zoom where we have OSM roads
+      start_zoom: 5
+
 layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
@@ -212,9 +218,6 @@ layers:
       - vectordatasource.transform.normalize_aerialways
       - vectordatasource.transform.normalize_cycleway
       - vectordatasource.transform.add_is_bicycle_related
-      - vectordatasource.transform.merge_networks_from_tags
-      - vectordatasource.transform.extract_network_information
-      - vectordatasource.transform.choose_most_important_network
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
@@ -291,6 +294,15 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.transit
+    area-inclusion-threshold: 1
+  admin_areas:
+    geometry_types: [Polygon, MultiPolygon]
+    simplify_before_intersect: false
+    simplify_start: 9
+    transform:
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
 post_process:
   - fn: vectordatasource.transform.numeric_min_filter
@@ -427,6 +439,21 @@ post_process:
     params:
       source_layer: roads
       properties: [layer]
+
+  # cut with admin_areas to put country_code attributes on roads
+  # which are mostly within a particular country.
+  - fn: vectordatasource.transform.overlap
+    params:
+      base_layer: roads
+      cutting_layer: admin_areas
+      attribute: iso_code
+      target_attribute: country_code
+      linear: true
+
+  - fn: vectordatasource.transform.backfill_road_networks
+    params:
+      layer: roads
+
   - fn: vectordatasource.transform.overlap
     params:
       base_layer: buildings
@@ -924,3 +951,8 @@ post_process:
         white: [255, 255, 255]
         yellow: [255, 255, 0]
         yellowgreen: [154, 205, 50]
+
+  - fn: vectordatasource.transform.drop_layer
+    params:
+      layer: admin_areas
+      start_zoom: 15

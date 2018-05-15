@@ -653,6 +653,13 @@ class FixtureShapeSource(object):
                         source="tilezen.org",
                         maritime_boundary=True,
                     )
+                elif obj.table in ("admin_areas"):
+                    # fix up column names here too!
+                    override_properties = dict(
+                        source='openstreetmap.org',
+                        kind='admin_area',
+                        admin_level=2,
+                    )
                 else:
                     override_properties = dict(source="openstreetmapdata.com")
                 _convert_shape_to_geojson(
