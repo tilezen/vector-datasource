@@ -532,7 +532,7 @@ LayerParseResult = namedtuple(
 def parse_layers(yaml_path, output_fn, fn_name_fn):
     layer_data = []
     layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
-              'buildings', 'roads', 'earth')
+              'buildings', 'roads', 'earth', 'admin_areas')
 
     scope = {}
     import_asts = []

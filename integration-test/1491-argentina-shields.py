@@ -70,3 +70,31 @@ class ArgentinaShieldTest(FixtureTest):
             z, x, y, 'roads',
             {'id': 1, 'kind': 'major_road', 'network': 'AR:provincial',
              'ref': 'RP21', 'shield_text': '21'})
+
+    # same as the test above, but using the country backfill rather than
+    # the relation.
+    def test_ruta_provincial_backfill(self):
+        import dsl
+
+        z, x, y = 16, 22114, 39520
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'highway': 'primary',
+                'ref': 'RP21',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                'kind': 'admin_area',
+                'iso_code': 'AR',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        # note that the logic for backfilling currently pops the 'ref' off,
+        # so that's slightly different from when it's present on both the
+        # road _and_ the relation.
+        self.assert_has_feature(
+            z, x, y, 'roads',
+            {'id': 1, 'kind': 'major_road', 'network': 'AR:provincial',
+             'shield_text': '21'})

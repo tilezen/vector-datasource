@@ -1,0 +1,16 @@
+SELECT
+  gid AS __id__,
+  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('the_geom') }}{% endfilter %} AS __geometry__,
+  jsonb_build_object(
+    'source', 'openstreetmap.org',
+    'kind', 'admin_area',
+    'admin_level', 2,
+    'iso_code', iso_code
+  ) AS __properties__,
+  '{}'::jsonb AS __admin_areas_properties__
+
+FROM
+  admin_areas
+
+WHERE
+    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
