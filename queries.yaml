@@ -140,7 +140,7 @@ sources:
 
   admin_areas:
     - template: admin_areas.jinja2
-      # starts at the min zoom where we have OSM roads
+      # starts at the min zoom where we have road layer data
       start_zoom: 5
 
 layers:
