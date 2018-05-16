@@ -1070,7 +1070,7 @@ Road names are **abbreviated** so directionals like `North` is replaced with `N`
 
 Tilezen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
-Tilezen also calculates an ISO 3166-1 alpha2 `country_code` value by working out which country a road feature is in, using [Valhalla's](https://github.com/valhalla/valhalla/) [administrative areas](https://github.com/valhalla/valhalla/blob/master/docs/mjolnir/admins.md). If we can't tell that a road segment is unambiguously in a country, then the `country_code` parameter is omitted.
+Tilezen also calculates an ISO 3166-1 alpha2 `country_code` value by working out which country a `roads` layer feature is in, using [Valhalla's](https://github.com/valhalla/valhalla/) [administrative areas](https://github.com/valhalla/valhalla/blob/master/docs/mjolnir/admins.md). If we can't tell that a road segment is unambiguously in a country, then the `country_code` parameter is omitted.
 
 To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, `oneway`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
