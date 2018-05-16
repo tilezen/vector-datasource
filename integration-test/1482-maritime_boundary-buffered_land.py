@@ -51,3 +51,51 @@ class MaritimeBoundary(FixtureTest):
         self.assert_no_matching_feature(
             8, 44, 88, "boundaries",
             {"kind": "region", "maritime_boundary": 1})
+
+    # this test is to state the properties explicitly, so that we can make sure
+    # they don't get changed unintentionally.
+    def test_generative_non_maritime(self):
+        import dsl
+
+        z, x, y = (8, 44, 88)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                'source': 'tilezen.org',
+                'maritime_boundary': True,
+                'min_zoom': 0,
+                'kind': 'maritime',
+            }),
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'source': 'openstreetmap.org',
+                'boundary': 'administrative',
+                'admin_level': '2',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 2,
+                'kind': 'country',
+                'maritime_boundary': type(None),
+            })
+
+    def test_generative_maritime(self):
+        import dsl
+
+        z, x, y = (8, 44, 88)
+
+        self.generate_fixtures(
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'source': 'openstreetmap.org',
+                'boundary': 'administrative',
+                'admin_level': '2',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 2,
+                'kind': 'country',
+                'maritime_boundary': True,
+            })

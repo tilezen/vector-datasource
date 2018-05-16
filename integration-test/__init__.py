@@ -1408,6 +1408,12 @@ class FixtureTest(unittest.TestCase):
         self.test_instance.load_fixtures(urls, clip, simplify)
 
     def generate_fixtures(self, *objs):
+        # check for common programming mistake, given that this takes variadic
+        # args, but could easily take a list.
+        if objs:
+            self.assertFalse(
+                isinstance(objs[0], list),
+                msg='generate_fixtures is variadic, do not pass it a list')
         self.test_instance.generate_fixtures(objs)
 
     def assert_has_feature(self, z, x, y, layer, props):
