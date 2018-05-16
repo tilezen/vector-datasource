@@ -954,4 +954,4 @@ post_process:
   - fn: vectordatasource.transform.drop_layer
     params:
       layer: admin_areas
-      start_zoom: 15
+      start_zoom: 0
