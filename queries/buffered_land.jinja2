@@ -16,7 +16,7 @@ FROM (
     -- extract only polygons. we might get linestring and point fragments when
     -- the box and geometry touch but don't overlap. we don't want these, so
     -- want to throw them away.
-    fiahdlfauisdhluhST_CollectionExtract({% filter geometry %}the_geom{% endfilter %}, 3) AS geom
+    ST_CollectionExtract({% filter geometry %}the_geom{% endfilter %}, 3) AS geom
 
   FROM buffered_land
 
