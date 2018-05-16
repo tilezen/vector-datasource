@@ -298,7 +298,6 @@ layers:
   admin_areas:
     geometry_types: [Polygon, MultiPolygon]
     simplify_before_intersect: false
-    simplify_start: 9
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.add_id_to_properties
