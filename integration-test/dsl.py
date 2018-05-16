@@ -67,3 +67,16 @@ def tile_box(z, x, y):
 
     bounds = coord_to_bounds(Coordinate(zoom=z, column=x, row=y))
     return box(*bounds)
+
+
+def tile_centre(z, x, y):
+    """
+    Returns the (lon, lat) tuple of the centre of the tile. Note that the
+    centre is calculated in mercator projection, so might not be the centre of
+    the tile in lat/lon projection.
+    """
+
+    from tilequeue.tile import num2deg
+
+    lat, lon = num2deg(x + 0.5, y + 0.5, z)
+    return (lon, lat)
