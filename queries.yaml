@@ -140,7 +140,7 @@ sources:
 
   admin_areas:
     - template: admin_areas.jinja2
-      # starts at the min zoom where we have OSM roads
+      # starts at the min zoom where we have road layer data
       start_zoom: 5
 
   # note: this goes into the _boundaries_ layer.
@@ -302,8 +302,11 @@ layers:
     area-inclusion-threshold: 1
   admin_areas:
     geometry_types: [Polygon, MultiPolygon]
+    # note: simplify_* settings shouldn't affect this layer, as it should be
+    # dropped before we get to that stage. but worth "documenting" that it
+    # shouldn't be simplified here to make it more explicit.
     simplify_before_intersect: false
-    simplify_start: 9
+    simplify_start: 999
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.add_id_to_properties
@@ -858,6 +861,13 @@ post_process:
       source_layers: [landuse, water]
       pixel_area: 0.1
 
+  # drop this layer before simplify_and_clip - we don't want it in the output,
+  # so don't waste time simplifying and clipping it to the tile.
+  - fn: vectordatasource.transform.drop_layer
+    params:
+      layer: admin_areas
+      start_zoom: 0
+
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
 
@@ -956,8 +966,3 @@ post_process:
         white: [255, 255, 255]
         yellow: [255, 255, 0]
         yellowgreen: [154, 205, 50]
-
-  - fn: vectordatasource.transform.drop_layer
-    params:
-      layer: admin_areas
-      start_zoom: 15
