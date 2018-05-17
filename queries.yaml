@@ -463,31 +463,47 @@ post_process:
       where: kind == 'mini_roundabout'
       # see https://en.wikipedia.org/wiki/List_of_countries_with_left-hand_traffic
       logic_table:
+        AG: true
+        AI: true
         AU: true
+        BB: true
         BD: true
+        BM: true
         BN: true
+        BS: true
         BT: true
         BW: true
         CC: true
         CK: true
         CX: true
         CY: true
+        DM: true
         FJ: true
+        FK: true
         GB: true
+        GD: true
         GG: true
+        GS: true
+        GY: true
         HK: true
         ID: true
         IE: true
         IM: true
         IN: true
         JE: true
+        JM: true
         JP: true
         KE: true
         KI: true
+        KN: true
+        KY: true
+        LC: true
         LK: true
         LS: true
         MO: true
+        MS: true
         MT: true
+        MU: true
         MV: true
         MW: true
         MY: true
@@ -502,15 +518,23 @@ post_process:
         PK: true
         PN: true
         SB: true
+        SC: true
         SG: true
+        SH: true
+        SR: true
         SZ: true
+        TC: true
         TH: true
         TK: true
         TL: true
         TO: true
+        TT: true
         TV: true
         TZ: true
         UG: true
+        VC: true
+        VG: true
+        VI: true
         WS: true
         ZA: true
         ZM: true
