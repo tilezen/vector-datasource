@@ -4631,3 +4631,102 @@ def backfill_road_networks(ctx):
 
     layer['features'] = new_features
     return None
+
+
+# helper class to wrap logic around extracting required and optional parameters
+# from the context object passed to post-processors, making its use more
+# concise and readable in the post-processor method itself.
+#
+class _Params(object):
+    def __init__(self, ctx, post_processor_name):
+        self.ctx = ctx
+        self.post_processor_name = post_processor_name
+
+    def required(self, name, typ=str, default=None):
+        """
+        Returns a named parameter of the given type and default from the
+        context, raising an assertion failed exception if the parameter wasn't
+        present, or wasn't an instance of the type.
+        """
+
+        value = self.optional(name, typ=typ, default=default)
+        assert value is not None, \
+            'Required parameter %r was missing from %r config' \
+            % (name, self.post_processor_name)
+        return value
+
+    def optional(self, name, typ=str, default=None):
+        """
+        Returns a named parameter of the given type, or the default if that
+        parameter wasn't given in the context. Raises an exception if the
+        value was present and is not of the expected type.
+        """
+
+        value = self.ctx.params.get(name, default)
+        if value is not None:
+            assert isinstance(value, typ), \
+                'Expected parameter %r to be of type %s, but value %r is of ' \
+                'type %r in %r config' \
+                % (name, typ.__name__, value, type(value).__name__,
+                   self.post_processor_name)
+        return value
+
+
+def point_in_country_logic(ctx):
+    """
+    Intersect points from source layer with target layer, then look up which
+    country they're in and assign property based on a look-up table.
+    """
+
+    params = _Params(ctx, 'point_in_country_logic')
+    layer_name = params.required('layer')
+    country_layer_name = params.required('country_layer')
+    country_code_attr = params.required('country_code_attr')
+    output_attr = params.required('output_attr')
+    logic_table = params.required('logic_table', typ=dict)
+    where = params.optional('where')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    country_layer = _find_layer(ctx.feature_layers, country_layer_name)
+
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    # this is a wrapper around a geometry, so that we can store extra
+    # information in the STRTree.
+    class country_with_value(object):
+        def __init__(self, geom, value):
+            self.geom = geom
+            self.value = value
+            self._geom = geom._geom
+            self.is_empty = geom.is_empty
+
+    # construct an STRtree index of the country->value mapping. in many cases,
+    # the country will cover the whole tile, but in some other cases it will
+    # not, and it's worth having the speedup of indexing for those.
+    countries = []
+    for (shape, props, fid) in country_layer['features']:
+        country_code = props.get(country_code_attr)
+        value = logic_table.get(country_code)
+        if value is not None:
+            countries.append(country_with_value(shape, value))
+
+    countries_index = STRtree(countries)
+
+    for (shape, props, fid) in layer['features']:
+        # skip features where the 'where' clause doesn't match
+        if where:
+            local = props.copy()
+            if not eval(where, {}, local):
+                continue
+
+        candidates = countries_index.query(shape)
+        for candidate in candidates:
+            # given that the shape is (expected to be) a point, all
+            # intersections are the same (there's no measure of the "amount of
+            # overlap"), so we might as well just stop on the first one.
+            if shape.intersects(candidate.geom):
+                props[output_attr] = candidate.value
+                break
+
+    return None
