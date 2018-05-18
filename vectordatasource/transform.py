@@ -4054,16 +4054,28 @@ def _ref_importance(ref):
 def _guess_network_gb(ref):
     letter = ref[0]
     if letter in ('M', 'A', 'B'):
-        return 'GB:%s-road' % (letter,)
+        return [('GB:%s-road' % (letter,), ref)]
     return None
 
 
 def _guess_network_ar(ref):
     if ref.startswith('RN'):
-        return 'AR:national'
+        return [('AR:national', ref)]
     elif ref.startswith('RP'):
-        return 'AR:provincial'
+        return [('AR:provincial', ref)]
     return None
+
+
+def _guess_network_au(ref):
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network = _AU_NETWORK_EXPANSION.get(part[0])
+        if network:
+            part = part[1:]
+        networks.append((network, part))
+    return networks
 
 
 def _do_not_backfill(ref):
@@ -4085,6 +4097,73 @@ def _sort_network_us(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
+_AU_NETWORK_IMPORTANCE = {
+    'N-highway': 0,
+    'A-road': 1,
+    'M-road': 2,
+    'B-road': 3,
+    'C-road': 4,
+    'N-route': 5,
+    'S-route': 6,
+    'Metro-road': 7,
+    'T-drive': 8,
+}
+
+
+def _sort_network_au(network, ref):
+    if network is None or \
+       not network.startswith('AU:'):
+        network_code = 9999
+    else:
+        network_code = _AU_NETWORK_IMPORTANCE.get(network[3:], 9999)
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+_AU_NETWORK_EXPANSION = {
+    'A': 'AU:A-road',
+    'M': 'AU:M-road',
+    'B': 'AU:B-road',
+    'C': 'AU:C-road',
+    'N': 'AU:N-route',
+    'S': 'AU:S-route',
+    'T': 'AU:T-drive',
+}
+
+
+def _fix_network_au(mz_networks):
+    if mz_networks is None:
+        return None
+
+    new_networks = []
+
+    # mz_networks is a list of repeated [type, network, ref, ...], it isn't
+    # nested!
+    itr = iter(mz_networks)
+    for (type, network, ref) in zip(itr, itr, itr):
+        if type == 'road':
+            if network in _AU_NETWORK_EXPANSION:
+                network = _AU_NETWORK_EXPANSION[network]
+
+            else:
+                # backfill network from ref, if possible. (note that ref must
+                # be non-None, since mz_networks entries have either network or
+                # ref, or both).
+                if ref[0].isalpha():
+                    network = 'AU:%s-road' % (ref[0],)
+
+            # if ref exists and starts with a letter, drop it (should be part
+            # of the network).
+            if ref and ref[0].isalpha():
+                ref = ref[1:]
+
+        new_networks.extend([type, network, ref])
+
+    return new_networks
+
+
 # CountryNetworkLogic centralises the logic around country-specific road
 # network processing. this allows us to do different things, such as
 # back-filling missing network tag values or sorting networks differently
@@ -4095,11 +4174,12 @@ def _sort_network_us(network, ref):
 # the different logic sections are:
 #
 # * backfill: this is called as fn(ref) when the `network` value is missing in
-#             the original object and may return a network value to use
-#             instead.
+#             the original object and may return a list of (network, ref)
+#             tuples to use instead.
 #
-# * fix: this is called as fn(shape, props, fid, zoom) and should fix whatever
-#        problems it can with `mz_networks` and return (shape, props, fid).
+# * fix: this is called as fn(mz_networks) and should fix whatever problems it
+#        can and return the replacement `mz_networks`. remember! mz_networks
+#        can have network or ref None!
 #
 # * sort: this is called as fn(network, ref) and should return a numeric value
 #         where lower numeric values mean _more_ important networks.
@@ -4112,6 +4192,11 @@ CountryNetworkLogic.__new__.__defaults__ = (None,) * len(
 _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'AR': CountryNetworkLogic(
         backfill=_guess_network_ar,
+    ),
+    'AU': CountryNetworkLogic(
+        backfill=_guess_network_au,
+        fix=_fix_network_au,
+        sort=_sort_network_au,
     ),
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
@@ -4144,7 +4229,9 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         # structure we know about how refs work in the country.
         logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
         if logic and logic.backfill:
-            network = logic.backfill(ref)
+            networks_and_refs = logic.backfill(ref) or []
+            for net, r in networks_and_refs:
+                mz_networks.extend(['road', net, r])
         else:
             # last ditch backfill, if we know nothing else about this element,
             # at least we know what country it is in.
@@ -4163,6 +4250,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         props.pop('network', None)
         props.pop('ref')
         mz_networks.extend([_guess_type_from_network(network), network, ref])
+
+    if mz_networks:
         props['mz_networks'] = mz_networks
 
     return (shape, props, fid)
@@ -4426,6 +4515,25 @@ def _choose_most_important_network(properties, prefix, importance_fn):
 
         tuples = sorted(set(zip(networks, shield_texts)), key=network_key)
 
+        # i think most route designers would try pretty hard to make sure that
+        # a segment of road isn't on two routes of different networks but with
+        # the same shield text. most likely when this happens it's because we
+        # have duplicate information in the element and relations it's a part
+        # of. so get rid of anything with network=None where there's an entry
+        # with the same ref (and network != none).
+        seen_ref = set()
+        new_tuples = []
+        for network, ref in tuples:
+            if network:
+                if ref:
+                    seen_ref.add(ref)
+                new_tuples.append((network, ref))
+
+            elif ref not in seen_ref:
+                new_tuples.append((network, ref))
+
+        tuples = new_tuples
+
         # expose first network as network/shield_text
         network, ref = tuples[0]
         properties[prefix + 'network'] = network
@@ -4682,6 +4790,23 @@ def drop_layer(ctx):
     return None
 
 
+def _fixup_country_specific_networks(shape, props, fid, zoom):
+    """
+    Apply country-specific fixup functions to mz_networks.
+    """
+
+    mz_networks = props.get('mz_networks')
+
+    country_code = props.get('country_code')
+    logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
+    if logic and logic.fix:
+        mz_networks = logic.fix(mz_networks)
+        if mz_networks is not None:
+            props['mz_networks'] = mz_networks
+
+    return (shape, props, fid)
+
+
 def road_networks(ctx):
     """
     Fix up road networks. This means looking at the networks from the
@@ -4698,6 +4823,7 @@ def road_networks(ctx):
 
     funcs = [
         merge_networks_from_tags,
+        _fixup_country_specific_networks,
         extract_network_information,
         choose_most_important_network,
     ]
