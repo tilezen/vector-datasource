@@ -4424,7 +4424,7 @@ def _choose_most_important_network(properties, prefix, importance_fn):
         def network_key(t):
             return importance_fn(*t)
 
-        tuples = sorted(zip(networks, shield_texts), key=network_key)
+        tuples = sorted(set(zip(networks, shield_texts)), key=network_key)
 
         # expose first network as network/shield_text
         network, ref = tuples[0]
