@@ -4073,7 +4073,7 @@ def _guess_network_au(ref):
             continue
         network = _AU_NETWORK_EXPANSION.get(part[0])
         if network:
-            part = part[1:]
+            part = part[1:].strip()
         networks.append((network, part))
     return networks
 
@@ -4107,6 +4107,7 @@ _AU_NETWORK_IMPORTANCE = {
     'S-route': 6,
     'Metro-road': 7,
     'T-drive': 8,
+    'R-route': 9,
 }
 
 
@@ -4128,9 +4129,61 @@ _AU_NETWORK_EXPANSION = {
     'B': 'AU:B-road',
     'C': 'AU:C-road',
     'N': 'AU:N-route',
+    'R': 'AU:R-route',
     'S': 'AU:S-route',
     'T': 'AU:T-drive',
+    'MR': 'AU:Metro-road',
 }
+
+
+def _splitref(ref):
+    """
+    Split ref into a leading alphabetic part and a trailing (possibly numeric)
+    part.
+    """
+
+    # empty strings don't have a prefix
+    if not ref:
+        return None, ref
+
+    for i in xrange(0, len(ref)):
+        if not ref[i].isalpha():
+            return ref[0:i], ref[i:]
+
+    # got to the end, must be all "prefix", which probably indicates it's not
+    # a ref of the expected prefix-suffix form, and we should just return the
+    # ref without a prefix.
+    return None, ref
+
+
+def _normalize_au_netref(network, ref):
+    """
+    Take the network and ref of an Australian road and normalise them so that
+    the network is in the form 'AU:road-type' and the ref is numeric. This is
+    based on a bunch of logic about what kinds of Australian roads exist.
+
+    Returns new (network, ref) values.
+    """
+
+    # grab the prefix, if any, from the ref. we can use this to "back-fill" the
+    # network.
+    prefix, ref = _splitref(ref)
+
+    if network and network.startswith('AU:') and \
+       network[3:] in _AU_NETWORK_IMPORTANCE:
+        # network is already in the form we want!
+        pass
+
+    elif network in _AU_NETWORK_EXPANSION:
+        network = _AU_NETWORK_EXPANSION[network]
+
+    elif prefix in _AU_NETWORK_EXPANSION:
+        # backfill network from ref, if possible. (note that ref must
+        # be non-None, since mz_networks entries have either network or
+        # ref, or both).
+        network = _AU_NETWORK_EXPANSION[prefix]
+
+    return network, ref
 
 
 def _fix_network_au(mz_networks):
@@ -4144,20 +4197,7 @@ def _fix_network_au(mz_networks):
     itr = iter(mz_networks)
     for (type, network, ref) in zip(itr, itr, itr):
         if type == 'road':
-            if network in _AU_NETWORK_EXPANSION:
-                network = _AU_NETWORK_EXPANSION[network]
-
-            else:
-                # backfill network from ref, if possible. (note that ref must
-                # be non-None, since mz_networks entries have either network or
-                # ref, or both).
-                if ref[0].isalpha():
-                    network = 'AU:%s-road' % (ref[0],)
-
-            # if ref exists and starts with a letter, drop it (should be part
-            # of the network).
-            if ref and ref[0].isalpha():
-                ref = ref[1:]
+            network, ref = _normalize_au_netref(network, ref)
 
         new_networks.extend([type, network, ref])
 
