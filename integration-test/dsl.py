@@ -80,3 +80,17 @@ def tile_centre(z, x, y):
 
     lat, lon = num2deg(x + 0.5, y + 0.5, z)
     return (lon, lat)
+
+
+def is_in(iso_code, z, x, y, way_id=-1):
+    """
+    This pattern gets used a lot in road shield tests to set up a country
+    polygon which is joined to the roads to apply country-specific processing
+    logic. It's a little verbose, so this utility function can shorten it and
+    make it a little more readable.
+    """
+
+    return way(way_id, tile_box(z, x, y), {
+        'kind': 'admin_area', 'iso_code': iso_code,
+        'source': 'openstreetmap.org',
+    })

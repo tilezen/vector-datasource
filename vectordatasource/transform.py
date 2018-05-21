@@ -4051,14 +4051,16 @@ def _ref_importance(ref):
     return ref
 
 
-def _guess_network_gb(ref):
+def _guess_network_gb(tags):
+    ref = tags.get('ref')
     letter = ref[0]
     if letter in ('M', 'A', 'B'):
         return [('GB:%s-road' % (letter,), ref)]
     return None
 
 
-def _guess_network_ar(ref):
+def _guess_network_ar(tags):
+    ref = tags.get('ref')
     if ref.startswith('RN'):
         return [('AR:national', ref)]
     elif ref.startswith('RP'):
@@ -4066,7 +4068,8 @@ def _guess_network_ar(ref):
     return None
 
 
-def _guess_network_au(ref):
+def _guess_network_au(tags):
+    ref = tags.get('ref')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4076,7 +4079,17 @@ def _guess_network_au(ref):
     return networks
 
 
-def _do_not_backfill(ref):
+def _guess_network_ca(tags):
+    nat_name = tags.get('nat_name:en') or tags.get('nat_name')
+    if nat_name and nat_name.lower() == 'trans-canada highway':
+        # note: no ref for TCH. some states appear to add route numbers from
+        # the state highway to the TCH shields, e.g:
+        # https://commons.wikimedia.org/wiki/File:TCH-16_(BC).svg
+        return [('CA:transcanada', None)]
+    return []
+
+
+def _do_not_backfill(tags):
     return None
 
 
@@ -4115,6 +4128,21 @@ def _sort_network_au(network, ref):
         network_code = 9999
     else:
         network_code = _AU_NETWORK_IMPORTANCE.get(network[3:], 9999)
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ca(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CA:transcanada':
+        network_code = 0
+    elif network == 'CA:yellowhead':
+        network_code = 1
+    else:
+        network_code = len(network.split(':')) + 2
 
     ref = _ref_importance(ref)
 
@@ -4184,6 +4212,18 @@ def _normalize_au_netref(network, ref):
     return network, ref
 
 
+def _normalize_ca_netref(network, ref):
+    if isinstance(network, (str, unicode)) and \
+       network.startswith('CA:NB') and \
+       ref.isdigit():
+        refnum = int(ref)
+        if refnum >= 200:
+            network = 'CA:NB3'
+        elif refnum >= 100:
+            network = 'CA:NB2'
+    return network, ref
+
+
 # CountryNetworkLogic centralises the logic around country-specific road
 # network processing. this allows us to do different things, such as
 # back-filling missing network tag values or sorting networks differently
@@ -4193,9 +4233,10 @@ def _normalize_au_netref(network, ref):
 #
 # the different logic sections are:
 #
-# * backfill: this is called as fn(ref) to unpack the ref tag into a list of
-#             (network, ref) tuples to use instead. For example, it's common
-#             to give ref=A1;B2;C3 to indicate multiple networks & shields.
+# * backfill: this is called as fn(tags) to unpack the ref tag (and any other
+#             meaningful tags) into a list of (network, ref) tuples to use
+#             instead. For example, it's common to give ref=A1;B2;C3 to
+#             indicate multiple networks & shields.
 #
 # * fix: this is called as fn(network, ref) and should fix whatever problems it
 #        can and return the replacement (network, ref). remember! either
@@ -4217,6 +4258,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_au,
         fix=_normalize_au_netref,
         sort=_sort_network_au,
+    ),
+    'CA': CountryNetworkLogic(
+        backfill=_guess_network_ca,
+        fix=_normalize_ca_netref,
+        sort=_sort_network_ca,
     ),
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
@@ -4249,7 +4295,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         # structure we know about how refs work in the country.
         logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
         if logic and logic.backfill:
-            networks_and_refs = logic.backfill(ref) or []
+            networks_and_refs = logic.backfill(props) or []
 
             # if we found a ref, but the network was not provided, then "use
             # up" the network tag by assigning it to the first network. this
