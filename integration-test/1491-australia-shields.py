@@ -126,6 +126,32 @@ class AustraliaShieldTest(FixtureTest):
                 'all_shield_texts': ['9', '31'],
             })
 
+    def test_s_road_in_zero_relations(self):
+        import dsl
+
+        z, x, y = (16, 60644, 38056)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                'kind': 'admin_area', 'iso_code': 'AU',
+                'source': 'openstreetmap.org'
+            }),
+            # https://www.openstreetmap.org/way/240922938
+            dsl.way(240922938, dsl.tile_diagonal(z, x, y), {
+                'source:name': 'survey', 'maxspeed': '60', 'lanes': '2',
+                'name': 'Beaudesert Beenleigh Road',
+                'source': 'openstreetmap.org', 'source:ref': 'survey',
+                'ref': '92;T8', 'highway': 'primary', 'network': 'S',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 240922938, 'shield_text': '92', 'network': 'AU:S-route',
+                'all_networks': ['AU:S-route', 'AU:T-drive'],
+                'all_shield_texts': ['92', '8'],
+            })
+
     # test not just a B-road, but one where the text ref has spaces between
     # the additional T-drive refs (i.e: "T 28" rather than "T28").
     def test_b_road_with_spaces(self):

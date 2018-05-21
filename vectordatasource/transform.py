@@ -4071,9 +4071,7 @@ def _guess_network_au(ref):
     for part in ref.split(';'):
         if not part:
             continue
-        network = _AU_NETWORK_EXPANSION.get(part[0])
-        if network:
-            part = part[1:].strip()
+        network, ref = _normalize_au_netref(None, part)
         networks.append((network, part))
     return networks
 
@@ -4148,7 +4146,7 @@ def _splitref(ref):
 
     for i in xrange(0, len(ref)):
         if not ref[i].isalpha():
-            return ref[0:i], ref[i:]
+            return ref[0:i], ref[i:].strip()
 
     # got to the end, must be all "prefix", which probably indicates it's not
     # a ref of the expected prefix-suffix form, and we should just return the
@@ -4246,15 +4244,27 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     # and ref are both available, then try to use them to back-fill the
     # network.
     if props.get('kind') in ('highway', 'major_road') and \
-       network is None and country_code and ref:
+       country_code and ref:
         # apply country-specific logic to try and backfill the network from
         # structure we know about how refs work in the country.
         logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
         if logic and logic.backfill:
             networks_and_refs = logic.backfill(ref) or []
+
+            # if we found a ref, but the network was not provided, then "use
+            # up" the network tag by assigning it to the first network. this
+            # deals with cases where people write network="X", ref="1;Y2" to
+            # mean "X1" and "Y2".
+            if networks_and_refs:
+                net, r = networks_and_refs[0]
+                if net is None and network is not None:
+                    networks_and_refs[0] = (network, r)
+                    network = None
+
             for net, r in networks_and_refs:
                 mz_networks.extend(['road', net, r])
-        else:
+
+        elif network is None:
             # last ditch backfill, if we know nothing else about this element,
             # at least we know what country it is in.
             network = country_code
@@ -4262,7 +4272,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     # if there's no network, but the operator indicates a network, then we can
     # back-fill an approximate network tag from the operator. this can mean
     # that extra refs are available for road networks.
-    if network is None:
+    elif network is None:
         operator = props.get('operator')
         backfill_network = _NETWORK_OPERATORS.get(operator)
         if backfill_network:
