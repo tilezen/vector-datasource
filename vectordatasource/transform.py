@@ -4193,9 +4193,9 @@ def _normalize_au_netref(network, ref):
 #
 # the different logic sections are:
 #
-# * backfill: this is called as fn(ref) when the `network` value is missing in
-#             the original object and may return a list of (network, ref)
-#             tuples to use instead.
+# * backfill: this is called as fn(ref) to unpack the ref tag into a list of
+#             (network, ref) tuples to use instead. For example, it's common
+#             to give ref=A1;B2;C3 to indicate multiple networks & shields.
 #
 # * fix: this is called as fn(network, ref) and should fix whatever problems it
 #        can and return the replacement (network, ref). remember! either
