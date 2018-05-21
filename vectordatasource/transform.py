@@ -4186,24 +4186,6 @@ def _normalize_au_netref(network, ref):
     return network, ref
 
 
-def _fix_network_au(mz_networks):
-    if mz_networks is None:
-        return None
-
-    new_networks = []
-
-    # mz_networks is a list of repeated [type, network, ref, ...], it isn't
-    # nested!
-    itr = iter(mz_networks)
-    for (type, network, ref) in zip(itr, itr, itr):
-        if type == 'road':
-            network, ref = _normalize_au_netref(network, ref)
-
-        new_networks.extend([type, network, ref])
-
-    return new_networks
-
-
 # CountryNetworkLogic centralises the logic around country-specific road
 # network processing. this allows us to do different things, such as
 # back-filling missing network tag values or sorting networks differently
@@ -4217,9 +4199,9 @@ def _fix_network_au(mz_networks):
 #             the original object and may return a list of (network, ref)
 #             tuples to use instead.
 #
-# * fix: this is called as fn(mz_networks) and should fix whatever problems it
-#        can and return the replacement `mz_networks`. remember! mz_networks
-#        can have network or ref None!
+# * fix: this is called as fn(network, ref) and should fix whatever problems it
+#        can and return the replacement (network, ref). remember! either
+#        network or ref can be None!
 #
 # * sort: this is called as fn(network, ref) and should return a numeric value
 #         where lower numeric values mean _more_ important networks.
@@ -4235,7 +4217,7 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     ),
     'AU': CountryNetworkLogic(
         backfill=_guess_network_au,
-        fix=_fix_network_au,
+        fix=_normalize_au_netref,
         sort=_sort_network_au,
     ),
     'GB': CountryNetworkLogic(
@@ -4839,10 +4821,18 @@ def _fixup_country_specific_networks(shape, props, fid, zoom):
 
     country_code = props.get('country_code')
     logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
-    if logic and logic.fix:
-        mz_networks = logic.fix(mz_networks)
-        if mz_networks is not None:
-            props['mz_networks'] = mz_networks
+    if logic and logic.fix and mz_networks:
+        new_networks = []
+
+        # mz_networks is a list of repeated [type, network, ref, ...], it isn't
+        # nested!
+        itr = iter(mz_networks)
+        for (type, network, ref) in zip(itr, itr, itr):
+            if type == 'road':
+                network, ref = logic.fix(network, ref)
+            new_networks.extend([type, network, ref])
+
+        props['mz_networks'] = new_networks
 
     return (shape, props, fid)
 
