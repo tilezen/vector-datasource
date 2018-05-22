@@ -4079,6 +4079,85 @@ def _guess_network_au(tags):
     return networks
 
 
+# list of all the state codes in Brazil, see
+# https://en.wikipedia.org/wiki/ISO_3166-2:BR
+_BR_STATES = set([
+    'DF',  # Distrito Federal (federal district, not really a state)
+    'AC',  # Acre
+    'AL',  # Alagoas
+    'AP',  # Amapá
+    'AM',  # Amazonas
+    'BA',  # Bahia
+    'CE',  # Ceará
+    'ES',  # Espírito Santo
+    'GO',  # Goiás
+    'MA',  # Maranhão
+    'MT',  # Mato Grosso
+    'MS',  # Mato Grosso do Sul
+    'MG',  # Minas Gerais
+    'PA',  # Pará
+    'PB',  # Paraíba
+    'PR',  # Paraná
+    'PE',  # Pernambuco
+    'PI',  # Piauí
+    'RJ',  # Rio de Janeiro
+    'RN',  # Rio Grande do Norte
+    'RS',  # Rio Grande do Sul
+    'RO',  # Rondônia
+    'RR',  # Roraima
+    'SC',  # Santa Catarina
+    'SP',  # São Paulo
+    'SE',  # Sergipe
+    'TO',  # Tocantins
+])
+
+
+# additional road types
+_BR_NETWORK_EXPANSION = {
+    # Minas Gerais state roads
+    'AMG': 'BR:MG:access',
+    'LMG': 'BR:MG:local',
+    'MGC': 'BR:MG:connecting',
+    # CMG seems to be coupled with BR- roads of the same number
+    'CMG': 'BR:MG',
+
+    # Rio Grande do Sul state roads
+    'ERS': 'BR:RS:state',
+    'VRS': 'BR:RS:secondary',
+    'RSC': 'BR:RS:connecting',
+
+    # access roads in São Paulo?
+    'SPA': 'BR:SP:access',
+
+    # connecting roads in Paraná?
+    'PRC': 'BR:PR:connecting',
+
+    # municipal roads in Paulínia
+    'PLN': 'BR:SP:paulinia',
+}
+
+
+def _guess_network_br(tags):
+    ref = tags.get('ref')
+    networks = []
+    for prefix, num in re.findall('([A-Za-z]+)[- ]?([0-9]+)', ref):
+        if prefix == 'BR':
+            network = prefix
+
+        elif prefix in _BR_STATES:
+            network = 'BR:' + prefix
+
+        elif prefix in _BR_NETWORK_EXPANSION:
+            network = _BR_NETWORK_EXPANSION[prefix]
+
+        else:
+            continue
+
+        networks.append((network, '%s-%s' % (prefix, num)))
+
+    return networks
+
+
 def _guess_network_ca(tags):
     nat_name = tags.get('nat_name:en') or tags.get('nat_name')
     if nat_name and nat_name.lower() == 'trans-canada highway':
@@ -4128,6 +4207,19 @@ def _sort_network_au(network, ref):
         network_code = 9999
     else:
         network_code = _AU_NETWORK_IMPORTANCE.get(network[3:], 9999)
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_br(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'BR:Trans-Amazonian':
+        network_code = 0
+    else:
+        network_code = len(network.split(':')) + 1
 
     ref = _ref_importance(ref)
 
@@ -4212,6 +4304,32 @@ def _normalize_au_netref(network, ref):
     return network, ref
 
 
+def _normalize_br_netref(network, ref):
+    # try to add detail to the network by looking at the ref value,
+    # which often has additional information.
+    for guess_net, guess_ref in _guess_network_br(dict(ref=ref)):
+        if guess_ref == ref and guess_net.startswith(network):
+            network = guess_net
+            break
+
+    if network == 'BR':
+        if ref == 'BR-230':
+            return 'BR:Trans-Amazonian', ref
+        else:
+            return network, ref
+
+    elif network.startswith('BR:'):
+        # probably already good?
+        return network, ref
+
+    elif network in _BR_STATES:
+        # just missing the 'BR:' at the start?
+        return 'BR:' + network, ref
+
+    else:
+        return None, ref
+
+
 def _normalize_ca_netref(network, ref):
     if isinstance(network, (str, unicode)) and \
        network.startswith('CA:NB') and \
@@ -4259,6 +4377,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         fix=_normalize_au_netref,
         sort=_sort_network_au,
     ),
+    'BR': CountryNetworkLogic(
+        backfill=_guess_network_br,
+        fix=_normalize_br_netref,
+        sort=_sort_network_br,
+    ),
     'CA': CountryNetworkLogic(
         backfill=_guess_network_ca,
         fix=_normalize_ca_netref,
@@ -4305,7 +4428,10 @@ def merge_networks_from_tags(shape, props, fid, zoom):
                 net, r = networks_and_refs[0]
                 if net is None and network is not None:
                     networks_and_refs[0] = (network, r)
-                    network = None
+                # if we extracted information from the network and ref, then
+                # we don't want to process it again.
+                network = None
+                ref = None
 
             for net, r in networks_and_refs:
                 mz_networks.extend(['road', net, r])
