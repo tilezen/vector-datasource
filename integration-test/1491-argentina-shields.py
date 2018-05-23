@@ -16,6 +16,7 @@ class ArgentinaShieldTest(FixtureTest):
         z, x, y = 16, 22114, 39520
 
         self.generate_fixtures(
+            dsl.is_in('AR', z, x, y),
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'highway': 'motorway',
                 'ref': 'RNA002',
@@ -50,6 +51,7 @@ class ArgentinaShieldTest(FixtureTest):
         z, x, y = 16, 22114, 39520
 
         self.generate_fixtures(
+            dsl.is_in('AR', z, x, y),
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'highway': 'primary',
                 'ref': 'RP21',
@@ -79,14 +81,10 @@ class ArgentinaShieldTest(FixtureTest):
         z, x, y = 16, 22114, 39520
 
         self.generate_fixtures(
+            dsl.is_in('AR', z, x, y),
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'highway': 'primary',
                 'ref': 'RP21',
-                'source': 'openstreetmap.org',
-            }),
-            dsl.way(1, dsl.tile_box(z, x, y), {
-                'kind': 'admin_area',
-                'iso_code': 'AR',
                 'source': 'openstreetmap.org',
             }),
         )

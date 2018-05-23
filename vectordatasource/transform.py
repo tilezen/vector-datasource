@@ -4276,6 +4276,19 @@ def _normalize_cn_netref(network, ref):
     return network, ref
 
 
+def _shield_text_ar(network, ref):
+    # Argentinian national routes start with "RN" (ruta nacional), which
+    # should be stripped, but other letters shouldn't be!
+    if network == 'AR:national' and ref.startswith('RN'):
+        return ref[2:]
+
+    # Argentinian provincial routes start with "RP" (ruta provincial)
+    if network == 'AR:provincial' and ref.startswith('RP'):
+        return ref[2:]
+
+    return ref
+
+
 # do not strip anything from the ref apart from whitespace.
 def _use_ref_as_is(network, ref):
     return ref.strip()
@@ -4314,6 +4327,7 @@ CountryNetworkLogic.__new__.__defaults__ = (None,) * len(
 _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'AR': CountryNetworkLogic(
         backfill=_guess_network_ar,
+        shield_text=_shield_text_ar,
     ),
     'AU': CountryNetworkLogic(
         backfill=_guess_network_au,
@@ -4494,24 +4508,24 @@ _UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
                                 re.UNICODE | re.IGNORECASE)
 
 
+def _make_unicode_or_none(ref):
+    if isinstance(ref, unicode):
+        # no need to do anything, it's already okay
+        return ref
+
+    elif isinstance(ref, str):
+        # it's UTF-8 encoded bytes, so make it a unicode
+        return unicode(ref, 'utf-8')
+
+    # dunno what this is?!!
+    return None
+
+
 def _road_shield_text(network, ref):
     """
     Try to extract the string that should be displayed within the road shield,
     based on the raw ref and the network value.
     """
-
-    if ref is None:
-        return None
-
-    if isinstance(ref, unicode):
-        # no need to do anything, it's already okay
-        pass
-    elif isinstance(ref, str):
-        # it's UTF-8 encoded bytes, so make it a unicode
-        ref = unicode(ref, 'utf-8')
-    else:
-        # dunno what this is?!!
-        return None
 
     # FI-PI-LI is just a special case?
     if ref == 'FI-PI-LI':
@@ -4532,15 +4546,6 @@ def _road_shield_text(network, ref):
     # unlike for other roads.
     if network and (network.startswith('GR:') or network.startswith('gr:')):
         return ref
-
-    # Argentinian national routes start with "RN" (ruta nacional), which
-    # should be stripped, but other letters shouldn't be!
-    if network == 'AR:national' and ref.startswith('RN'):
-        return ref[2:]
-
-    # Argentinian provincial routes start with "RP" (ruta provincial)
-    if network == 'AR:provincial' and ref.startswith('RP'):
-        return ref[2:]
 
     # If there's a number at the front (optionally with letters following),
     # then that's the ref.
@@ -4641,7 +4646,12 @@ def extract_network_information(shape, properties, fid, zoom):
             network_names = list()
             for network_name, ref in vals:
                 network_names.append(network_name)
-                shield_texts.append(shield_text_fn(network_name, ref))
+
+                ref = _make_unicode_or_none(ref)
+                if ref is not None:
+                    ref = shield_text_fn(network_name, ref)
+
+                shield_texts.append(ref)
 
             properties[all_networks] = network_names
             properties[all_shield_texts] = shield_texts
