@@ -4196,6 +4196,17 @@ def _guess_network_cn(tags):
     return networks
 
 
+def _guess_network_fr(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_cn_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4282,6 +4293,27 @@ def _sort_network_cn(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_fr(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'FR:A-road':
+        network_code = 0
+    elif network == 'FR:N-road':
+        network_code = 1
+    elif network == 'FR:D-road':
+        network_code = 2
+    elif network == 'FR':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 4
+    else:
+        network_code = 5 + len(network.split(':'))
 
     ref = _ref_importance(ref)
 
@@ -4411,6 +4443,42 @@ def _normalize_cn_netref(network, ref):
     return network, ref
 
 
+_FR_DEPARTMENTAL_D_ROAD = re.compile(
+    '^FR:[0-9]+:([A-Z]+)-road$', re.UNICODE | re.IGNORECASE)
+
+
+def _normalize_fr_netref(network, ref):
+    prefix, ref = _splitref(ref)
+    if prefix:
+        # routes nationales (RN) are actually signed just "N"? also, RNIL
+        # are routes delegated to local departments, but still signed as
+        # routes nationales.
+        if prefix in ('RN', 'RNIL'):
+            prefix = 'N'
+
+        # strip spaces and leading zeros
+        ref = prefix + ref.strip().lstrip('0')
+
+        # backfill network from refs if network wasn't provided from another
+        # source.
+        if network is None:
+            network = 'FR:%s-road' % (prefix,)
+
+    # networks are broken down by department, e.g: FR:01:D-road, but we
+    # only want to match on the D-road part, so throw away the department
+    # number.
+    if isinstance(network, (str, unicode)):
+        m = _FR_DEPARTMENTAL_D_ROAD.match(network)
+        if m:
+            # see comment above. TODO: figure out how to not say this twice.
+            prefix = m.group(1).upper()
+            if prefix in ('RN', 'RNIL'):
+                prefix = 'N'
+            network = 'FR:%s-road' % (prefix,)
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -4483,6 +4551,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_cn,
         fix=_normalize_cn_netref,
         sort=_sort_network_cn,
+        shield_text=_use_ref_as_is,
+    ),
+    'FR': CountryNetworkLogic(
+        backfill=_guess_network_fr,
+        fix=_normalize_fr_netref,
+        sort=_sort_network_fr,
         shield_text=_use_ref_as_is,
     ),
     'GB': CountryNetworkLogic(
