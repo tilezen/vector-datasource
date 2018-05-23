@@ -4089,6 +4089,17 @@ def _guess_network_ca(tags):
     return []
 
 
+def _guess_network_cn(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_cn_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4143,6 +4154,25 @@ def _sort_network_ca(network, ref):
         network_code = 1
     else:
         network_code = len(network.split(':')) + 2
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_cn(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CN:expressways':
+        network_code = 0
+    elif network == 'CN:expressways:regional':
+        network_code = 1
+    elif network == 'CN:jx-roads':
+        network_code = 2
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
 
     ref = _ref_importance(ref)
 
@@ -4224,6 +4254,33 @@ def _normalize_ca_netref(network, ref):
     return network, ref
 
 
+def _normalize_cn_netref(network, ref):
+    if ref.startswith('S'):
+        network = 'CN:expressways:regional'
+
+    elif ref.startswith('G'):
+        network = 'CN:expressways'
+
+    elif ref.startswith('X'):
+        network = 'CN:jx-roads'
+
+    elif network == 'CN-expressways':
+        network = 'CN:expressways'
+
+    elif network == 'CN-expressways-regional':
+        network = 'CN:expressways:regional'
+
+    elif network == 'JX-roads':
+        network = 'CN:jx-roads'
+
+    return network, ref
+
+
+# do not strip anything from the ref apart from whitespace.
+def _use_ref_as_is(network, ref):
+    return ref.strip()
+
+
 # CountryNetworkLogic centralises the logic around country-specific road
 # network processing. this allows us to do different things, such as
 # back-filling missing network tag values or sorting networks differently
@@ -4245,8 +4302,12 @@ def _normalize_ca_netref(network, ref):
 # * sort: this is called as fn(network, ref) and should return a numeric value
 #         where lower numeric values mean _more_ important networks.
 #
+# * shield_text: this is called as fn(network, ref) and should return the
+#                shield text to output. this might mean stripping leading alpha
+#                numeric characters - or not, depending on the country.
+#
 CountryNetworkLogic = namedtuple(
-    'CountryNetworkLogic', 'backfill fix sort')
+    'CountryNetworkLogic', 'backfill fix sort shield_text')
 CountryNetworkLogic.__new__.__defaults__ = (None,) * len(
     CountryNetworkLogic._fields)
 
@@ -4263,6 +4324,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_ca,
         fix=_normalize_ca_netref,
         sort=_sort_network_ca,
+    ),
+    'CN': CountryNetworkLogic(
+        backfill=_guess_network_cn,
+        fix=_normalize_cn_netref,
+        sort=_sort_network_cn,
+        shield_text=_use_ref_as_is,
     ),
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
@@ -4548,6 +4615,8 @@ def extract_network_information(shape, properties, fid, zoom):
     """
 
     mz_networks = properties.pop('mz_networks', None)
+    country_code = properties.get('country_code')
+    country_logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
 
     if mz_networks is not None:
         # take the list and make triples out of it
@@ -4563,11 +4632,16 @@ def extract_network_information(shape, properties, fid, zoom):
             all_networks = 'all_' + network.prefix + 'networks'
             all_shield_texts = 'all_' + network.prefix + 'shield_texts'
 
+            shield_text_fn = network.shield_text_fn
+            if network is _ROAD_NETWORK and country_logic and \
+               country_logic.shield_text:
+                shield_text_fn = country_logic.shield_text
+
             shield_texts = list()
             network_names = list()
             for network_name, ref in vals:
                 network_names.append(network_name)
-                shield_texts.append(network.shield_text_fn(network_name, ref))
+                shield_texts.append(shield_text_fn(network_name, ref))
 
             properties[all_networks] = network_names
             properties[all_shield_texts] = shield_texts
