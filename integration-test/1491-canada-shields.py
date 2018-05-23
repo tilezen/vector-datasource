@@ -28,8 +28,8 @@ class CanadaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 348819775,
-                'shield_text': type(None), 'network': 'CA:transcanada',
-                'all_shield_texts': [None, '69'],
+                'shield_text': '69', 'network': 'CA:transcanada',
+                'all_shield_texts': ['69', '69'],
                 'all_networks': ['CA:transcanada', 'CA:ON:primary'],
             })
 
@@ -67,10 +67,10 @@ class CanadaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 51442002,
-                'shield_text': type(None), 'network': 'CA:transcanada',
+                'shield_text': '16', 'network': 'CA:transcanada',
                 'all_networks': ['CA:transcanada', 'CA:yellowhead',
                                  'CA:BC:something'],
-                'all_shield_texts': [None, '16', '0'],
+                'all_shield_texts': ['16', '16', '0'],
             })
 
     def test_nb2(self):

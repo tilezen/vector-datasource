@@ -4085,7 +4085,7 @@ def _guess_network_ca(tags):
         # note: no ref for TCH. some states appear to add route numbers from
         # the state highway to the TCH shields, e.g:
         # https://commons.wikimedia.org/wiki/File:TCH-16_(BC).svg
-        return [('CA:transcanada', None)]
+        return [('CA:transcanada', tags.get('ref'))]
     return []
 
 
