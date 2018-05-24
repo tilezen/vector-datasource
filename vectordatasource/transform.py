@@ -4446,13 +4446,20 @@ def _normalize_cn_netref(network, ref):
 def _normalize_de_netref(network, ref):
     prefix, ref = _splitref(ref)
     if prefix:
-        ref = prefix + ref
+        if prefix == 'Ring':
+            ref = 'Ring ' + ref
+        else:
+            ref = prefix + ref
+
         if not network:
             network = {
                 'A': 'DE:BAB',
                 'B': 'DE:BS',
                 'L': 'DE:LS',
                 'K': 'DE:KS',
+                'St': 'DE:StS',
+                'S': 'DE:StS',
+                'Ring': 'DE:Hamburg:Ring',
             }.get(prefix)
 
     if network == 'Landesstra\xc3\x9fen NRW':

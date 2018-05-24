@@ -284,3 +284,180 @@ class GermanShieldTest(FixtureTest):
                 'all_shield_texts': ['K40'],
                 'all_networks': ['DE:KS'],
             })
+
+    # https://de.wikipedia.org/wiki/Liste_der_Staatsstra%C3%9Fen_in_Bayern
+    def test_de_staatstrasse_bayern(self):
+        import dsl
+
+        z, x, y = (16, 34765, 22335)
+
+        self.generate_fixtures(
+            dsl.is_in('DE', z, x, y),
+            # https://www.openstreetmap.org/way/3925136
+            dsl.way(3925136, dsl.tile_diagonal(z, x, y), {
+                'maxspeed': '70', 'lanes': '4', 'source:maxspeed': 'sign',
+                'surface': 'asphalt', 'source': 'openstreetmap.org',
+                'embankment': 'yes', 'sidewalk': 'separate', 'ref': 'St 2240',
+                'highway': 'secondary',
+            }),
+            dsl.relation(1, {
+                'description': u'Staatsstra\xdfe St 2240: ...',
+                'type': 'route', 'route': 'road',
+                'source': 'openstreetmap.org', 'operator': 'Freistaat Bayern',
+                'ref': 'St 2240',
+            }, ways=[3925136]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 3925136,
+                'shield_text': 'St2240', 'network': 'DE:StS',
+            })
+
+    # https://de.wikipedia.org/wiki/Liste_der_Staatsstra%C3%9Fen_in_Sachsen_bis_zur_S_199
+    def test_de_staatstrasse_sachsen(self):
+        import dsl
+
+        z, x, y = (16, 35269, 21920)
+
+        self.generate_fixtures(
+            dsl.is_in('DE', z, x, y),
+            # https://www.openstreetmap.org/way/3358875
+            dsl.way(3358875, dsl.tile_diagonal(z, x, y), {
+                'maxspeed': '50', 'lanes': '2', 'surface': 'asphalt',
+                'name': u'Gro\xdfenhainer Stra\xdfe', 'lit': 'yes',
+                'source': 'openstreetmap.org', 'oneway': 'yes', 'foot': 'no',
+                'bicycle': 'use_sidepath', 'sidewalk': 'separate',
+                'ref': 'S 179', 'highway': 'secondary',
+                'turn:lanes': 'through|through',
+            }),
+            dsl.relation(1, {
+                'ref': 'S 179', 'route': 'road',
+                'source': 'openstreetmap.org', 'type': 'route',
+            }, ways=[3358875]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 3358875,
+                'shield_text': 'S179', 'network': 'DE:StS',
+            })
+
+    def test_de_bs_double(self):
+        import dsl
+
+        z, x, y = (16, 35115, 21991)
+
+        self.generate_fixtures(
+            dsl.is_in('DE', z, x, y),
+            # https://www.openstreetmap.org/way/3237220
+            dsl.way(3237220, dsl.tile_diagonal(z, x, y), {
+                'maxspeed': '50', 'lanes': '2', 'name': u'Neefestra\xdfe',
+                'turn:lanes': 'through|through;right', 'surface': 'asphalt',
+                'source': 'openstreetmap.org', 'hazmat': 'designated',
+                'oneway': 'yes', 'bicycle': 'no', 'ref': 'B 173;B 169',
+                'highway': 'primary',
+            }),
+            dsl.relation(1, {
+                'checked': '2014/01/06 Streckenkundler', 'name':
+                'B 169 (Sachsen)', 'type': 'route', 'route': 'road',
+                'source': 'openstreetmap.org',
+                'operator': 'Bundesrepublik Deutschland', 'ref': 'B 169',
+            }, ways=[3237220]),
+            dsl.relation(2, {
+                'name': 'B 173', 'ref': 'B 173', 'route': 'road',
+                'wikipedia': u'de:Bundesstra\xdfe 173',
+                'source': 'openstreetmap.org', 'wikidata': 'Q52784',
+                'operator': 'Bundesrepublik Deutschland', 'type': 'route',
+            }, ways=[3237220]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 3237220,
+                'shield_text': 'B169', 'network': 'DE:BS',
+                'all_networks': ['DE:BS', 'DE:BS'],
+                'all_shield_texts': ['B169', 'B173'],
+            })
+
+    def test_de_bs_a(self):
+        import dsl
+
+        z, x, y = (16, 34437, 22569)
+
+        self.generate_fixtures(
+            dsl.is_in('DE', z, x, y),
+            # https://www.openstreetmap.org/way/13235013
+            dsl.way(13235013, dsl.tile_diagonal(z, x, y), {
+                'maxspeed': '50', 'placement': 'right_of:2',
+                'name': u'Roteb\xfchlstra\xdfe', 'surface': 'asphalt',
+                'source': 'openstreetmap.org', 'oneway': 'yes', 'lanes': '4',
+                'sidewalk': 'none', 'ref': 'B 27a', 'highway': 'primary',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 13235013,
+                'shield_text': 'B27a', 'network': 'DE:BS',
+            })
+
+    def test_de_ring(self):
+        import dsl
+
+        z, x, y = (16, 34578, 21177)
+
+        self.generate_fixtures(
+            dsl.is_in('DE', z, x, y),
+            # https://www.openstreetmap.org/way/4644427
+            dsl.way(4644427, dsl.tile_diagonal(z, x, y), {
+                'maxspeed': '50', 'lanes': '2', 'name': 'Holstenplatz',
+                'source': 'openstreetmap.org', 'maxheight': 'none',
+                'cycleway:right': 'track', 'surface': 'asphalt',
+                'oneway': 'yes', 'sidewalk': 'right', 'ref': 'Ring 2',
+                'highway': 'secondary',
+            }),
+            dsl.relation(1, {
+                'name': 'Ring 2', 'ref': 'Ring 2', 'route': 'road',
+                'wikipedia': 'de:Ring 2 (Hamburg)',
+                'source': 'openstreetmap.org', 'wikidata': 'Q20731702',
+                'type': 'route',
+            }, ways=[4644427]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 4644427,
+                'shield_text': 'Ring 2', 'network': 'DE:Hamburg:Ring'})
+
+    def test_de_bs_ring_order(self):
+        import dsl
+
+        z, x, y = (16, 34583, 21151)
+
+        self.generate_fixtures(
+            dsl.is_in('DE', z, x, y),
+            # https://www.openstreetmap.org/way/4329503
+            dsl.way(4329503, dsl.tile_diagonal(z, x, y), {
+                'toll:N3': 'yes', 'maxspeed': '60', 'lanes': '2',
+                'name': 'Krohnstieg', 'surface': 'asphalt', 'lit': 'yes',
+                'source': 'openstreetmap.org', 'oneway': 'yes', 'foot': 'no',
+                'bicycle': 'no', 'ref': 'Ring 3;B 433', 'highway': 'trunk',
+            }),
+            dsl.relation(1, {
+                'source': 'openstreetmap.org', 'route': 'road',
+                'type': 'route', 'name': 'Ring 3',
+            }, ways=[4329503]),
+            dsl.relation(3, {
+                'name': 'B433', 'type': 'route', 'route': 'road',
+                'source': 'openstreetmap.org', 'ref': 'B 433',
+            }, ways=[4329503]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 4329503,
+                'shield_text': 'B433', 'network': 'DE:BS',
+                'all_shield_texts': ['B433', 'Ring 3'],
+                'all_networks': ['DE:BS', 'DE:Hamburg:Ring'],
+            })
