@@ -4196,6 +4196,33 @@ def _guess_network_cn(tags):
     return networks
 
 
+def _guess_network_jp(tags):
+    ref = tags.get('ref')
+
+    name = tags.get('name:ja') or tags.get('name')
+    network_from_name = None
+    if name:
+        if isinstance(name, str):
+            name = unicode(name, 'utf-8')
+        if name.startswith(u'\u56fd\u9053') and \
+           name.endswith(u'\u53f7'):
+            network_from_name = 'JP:national'
+
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_jp_netref(None, part)
+
+        if network is None and network_from_name is not None:
+            network = network_from_name
+
+        if network and part:
+            networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4411,6 +4438,18 @@ def _normalize_cn_netref(network, ref):
     return network, ref
 
 
+def _normalize_jp_netref(network, ref):
+    if network and network.startswith('jp:'):
+        network = 'JP:' + network[3:]
+
+    elif network is None:
+        prefix, _ = _splitref(ref)
+        if prefix in ('C', 'E'):
+            network = 'JP:expressways'
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -4488,6 +4527,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
     ),
+    'JP': CountryNetworkLogic(
+        backfill=_guess_network_jp,
+        fix=_normalize_jp_netref,
+        shield_text=_use_ref_as_is,
+    ),
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
         sort=_sort_network_us,
@@ -4515,6 +4559,20 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         # apply country-specific logic to try and backfill the network from
         # structure we know about how refs work in the country.
         logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
+
+        # if the road is a member of exactly one road relation, which provides
+        # a network and no ref, and the element itself provides no network,
+        # then use the network from the relation instead.
+        if network is None:
+            solo_networks_from_relations = []
+            for i in xrange(0, len(mz_networks), 3):
+                t, n, r = mz_networks[i:i+3]
+                if t == 'road' and n and r is None:
+                    solo_networks_from_relations.append((n, i))
+            if len(solo_networks_from_relations) == 1:
+                network, i = solo_networks_from_relations[0]
+                del mz_networks[i:i+3]
+
         if logic and logic.backfill:
             networks_and_refs = logic.backfill(props) or []
 
