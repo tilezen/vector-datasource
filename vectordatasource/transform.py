@@ -4196,6 +4196,17 @@ def _guess_network_cn(tags):
     return networks
 
 
+def _guess_network_mx(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_mx_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4282,6 +4293,19 @@ def _sort_network_cn(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_mx(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'MX:MEX':
+        network_code = 0
+    else:
+        network_code = len(network.split(':')) + 1
 
     ref = _ref_importance(ref)
 
@@ -4411,6 +4435,71 @@ def _normalize_cn_netref(network, ref):
     return network, ref
 
 
+# mapping of mexican road prefixes into their network values.
+_MX_ROAD_NETWORK_PREFIXES = {
+    'AGS':    'MX:AGU',  # Aguascalientes
+    'BC':     'MX:BCN',  # Baja California
+    'BCS':    'MX:BCS',  # Baja California Sur
+    'CAM':    'MX:CAM',  # Campeche
+    'CHIS':   'MX:CHP',  # Chiapas
+    'CHIH':   'MX:CHH',  # Chihuahua
+    'COAH':   'MX:COA',  # Coahuila
+    'COL':    'MX:COL',  # Colima
+    'DGO':    'MX:DUR',  # Durango
+    'GTO':    'MX:GUA',  # Guanajuato
+    'GRO':    'MX:GRO',  # Guerrero
+    'HGO':    'MX:HID',  # Hidalgo
+    'JAL':    'MX:JAL',  # Jalisco
+    # NOTE: couldn't find an example for Edomex.
+    'MICH':   'MX:MIC',  # Michoacán
+    'MOR':    'MX:MOR',  # Morelos
+    'NAY':    'MX:NAY',  # Nayarit
+    'NL':     'MX:NLE',  # Nuevo León
+    'OAX':    'MX:OAX',  # Oaxaca
+    'PUE':    'MX:PUE',  # Puebla
+    'QRO':    'MX:QUE',  # Querétaro
+    'ROO':    'MX:ROO',  # Quintana Roo
+    'SIN':    'MX:SIN',  # Sinaloa
+    'SLP':    'MX:SLP',  # San Luis Potosí
+    'SON':    'MX:SON',  # Sonora
+    'TAB':    'MX:TAB',  # Tabasco
+    'TAM':    'MX:TAM',  # Tamaulipas
+    # NOTE: couldn't find an example for Tlaxcala.
+    'VER':    'MX:VER',  # Veracruz
+    'YUC':    'MX:YUC',  # Yucatán
+    'ZAC':    'MX:ZAC',  # Zacatecas
+
+    # National roads
+    'MEX':    'MX:MEX',
+}
+
+
+def _normalize_mx_netref(network, ref):
+    # interior ring road in Mexico City
+    if ref == 'INT':
+        network = 'MX:CMX:INT'
+        ref = None
+
+    elif ref == 'EXT':
+        network = 'MX:CMX:EXT'
+        ref = None
+
+    prefix, part = _splitref(ref)
+    if prefix:
+        net = _MX_ROAD_NETWORK_PREFIXES.get(prefix.upper())
+        if net:
+            network = net
+            ref = part
+
+    # sometimes Quintana Roo is also written as "Q. Roo", which trips up
+    # the _splitref() function, so this just adjusts for that.
+    if ref and ref.upper().startswith('Q. ROO'):
+        network = 'MX:ROO'
+        ref = ref[len('Q. ROO'):].strip()
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -4487,6 +4576,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     ),
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
+    ),
+    'MX': CountryNetworkLogic(
+        backfill=_guess_network_mx,
+        fix=_normalize_mx_netref,
+        sort=_sort_network_mx,
     ),
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
