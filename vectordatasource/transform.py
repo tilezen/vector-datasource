@@ -4569,6 +4569,11 @@ def merge_networks_from_tags(shape, props, fid, zoom):
                 t, n, r = mz_networks[i:i+3]
                 if t == 'road' and n and r is None:
                     solo_networks_from_relations.append((n, i))
+
+            # if we found one _and only one_ road network, then we use the
+            # network value and delete the [type, network, ref] 3-tuple from
+            # mz_networks (which is a flattened list of them). because there's
+            # only one, we can delete it by using its index.
             if len(solo_networks_from_relations) == 1:
                 network, i = solo_networks_from_relations[0]
                 del mz_networks[i:i+3]
