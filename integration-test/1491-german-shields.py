@@ -311,7 +311,7 @@ class GermanShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 3925136,
-                'shield_text': 'St2240', 'network': 'DE:StS',
+                'shield_text': 'St2240', 'network': 'DE:STS',
             })
 
     # https://de.wikipedia.org/wiki/Liste_der_Staatsstra%C3%9Fen_in_Sachsen_bis_zur_S_199
@@ -340,7 +340,7 @@ class GermanShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 3358875,
-                'shield_text': 'S179', 'network': 'DE:StS',
+                'shield_text': 'S179', 'network': 'DE:STS',
             })
 
     def test_de_bs_double(self):

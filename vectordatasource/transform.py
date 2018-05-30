@@ -4348,10 +4348,14 @@ def _sort_network_de(network, ref):
         network_code = 2
     elif network == 'DE:KS':
         network_code = 3
+    elif network == 'DE:STS':
+        network_code = 4
+    elif network == 'DE:Hamburg:Ring':
+        network_code = 5
     elif network == 'e-road':
         network_code = 99
     else:
-        network_code = len(network.split(':')) + 4
+        network_code = len(network.split(':')) + 6
 
     ref = _ref_importance(ref)
 
@@ -4508,8 +4512,8 @@ def _normalize_de_netref(network, ref):
                 'B': 'DE:BS',
                 'L': 'DE:LS',
                 'K': 'DE:KS',
-                'St': 'DE:StS',
-                'S': 'DE:StS',
+                'St': 'DE:STS',
+                'S': 'DE:STS',
                 'Ring': 'DE:Hamburg:Ring',
             }.get(prefix)
 
