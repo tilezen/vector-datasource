@@ -269,3 +269,111 @@ class SouthKoreanShields(FixtureTest):
                 'shield_text': '451',
                 'network': 'KR:expressway',
             })
+
+    def test_kr_jungbunaeryukgosokdoro(self):
+        import dsl
+
+        z, x, y = (16, 56156, 25839)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/562319872
+            dsl.way(562319872, dsl.tile_diagonal(z, x, y), {
+                'name:en': 'Jungbunaeryuk Expressway', 'lanes': '2',
+                'name': u'\uc911\ubd80\ub0b4\ub959\uace0\uc18d\ub3c4\ub85c',
+                'name:ko': u'\uc911\ubd80\ub0b4\ub959\uace0\uc18d\ub3c4\ub85c',
+                'review': 'no', 'name:ko_rm': 'Jungbunaeryukgosokdoro',
+                'source': 'openstreetmap.org',
+                'ncat': u'\uace0\uc18d\ub3c4\ub85c', 'oneway': 'yes',
+                'ref': '45', 'toll': 'yes', 'highway': 'motorway',
+            }),
+            dsl.relation(1, {
+                'name:en': 'Jungbunaeryuk Expressway',
+                'name': u'\uc911\ubd80\ub0b4\ub959\uace0\uc18d\ub3c4\ub85c',
+                'name:ko': u'\uc911\ubd80\ub0b4\ub959\uace0\uc18d\ub3c4\ub85c',
+                'ref': '45', 'route': 'road', 'source': 'openstreetmap.org',
+                'type': 'route',
+            }, ways=[562319872]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 562319872,
+                'shield_text': '45',
+                'network': 'KR:expressway',
+            })
+
+    def test_kr_upo_2_ro(self):
+        import dsl
+
+        z, x, y = (16, 56158, 25837)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/179815107
+            dsl.way(179815107, dsl.tile_diagonal(z, x, y), {
+                'name:en': 'Upo 2-ro', 'name': u'\uc6b0\ud3ec2\ub85c',
+                'name:ko': u'\uc6b0\ud3ec2\ub85c', 'review': 'no',
+                'source': 'openstreetmap.org', 'highway': 'secondary',
+                'ref': '1080', 'ncat': u'\uc9c0\ubc29\ub3c4',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 179815107,
+                'shield_text': '1080',
+                'network': 'KR:local',
+            })
+
+    def test_kr_special_city(self):
+        import dsl
+
+        z, x, y = (16, 55879, 25372)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/37395768
+            dsl.way(37395768, dsl.tile_diagonal(z, x, y), {
+                'bridge': 'viaduct', 'layer': '2',
+                'name:en': 'Naebusunhwan-ro', 'bicycle': 'no',
+                'name': u'\ub0b4\ubd80\uc21c\ud658\ub85c',
+                'name:ko': u'\ub0b4\ubd80\uc21c\ud658\ub85c', 'review': 'no',
+                'source': 'openstreetmap.org',
+                'ncat': u'\ud2b9\ubcc4\uc2dc\ub3c4', 'oneway': 'yes',
+                'ref': '30', 'highway': 'trunk',
+                'name:ja': u'\u5185\u90e8\u5faa\u74b0\u8def',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 37395768,
+                'shield_text': '30',
+                'network': 'KR:metropolitan',
+            })
+
+    def test_kr_metropolitan(self):
+        import dsl
+
+        z, x, y = (16, 56178, 25761)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/577716125
+            dsl.way(577716125, dsl.tile_diagonal(z, x, y), {
+                'name:en': 'Jungang-daero',
+                'name': u'\uc911\uc559\ub300\ub85c',
+                'name:ko': u'\uc911\uc559\ub300\ub85c', 'review': 'no',
+                'name:ko_rm': 'Jungangdaero', 'source': 'openstreetmap.org',
+                'highway': 'primary', 'ref': '61',
+                'ncat': u'\uad11\uc5ed\uc2dc\ub3c4\ub85c',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 577716125,
+                'shield_text': '61',
+                'network': 'KR:metropolitan',
+            })

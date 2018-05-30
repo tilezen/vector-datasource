@@ -257,6 +257,10 @@ def add_road_network_from_ncat(shape, properties, fid, zoom):
             # metropolitan city roads - gwangyeoksido
             properties['network'] = 'KR:metropolitan'
 
+        elif ncat == u'\ud2b9\ubcc4\uc2dc\ub3c4':
+            # special city (Seoul) roads - teukbyeolsido
+            properties['network'] = 'KR:metropolitan'
+
         elif ncat == u'\uace0\uc18d\ub3c4\ub85c':
             # expressways - gosokdoro
             properties['network'] = 'KR:expressway'
@@ -4303,6 +4307,10 @@ def _guess_network_kr(tags):
 
         elif name_ko.endswith(u'\uad11\uc5ed\uc2dc\ub3c4\ub85c'):
             # metropolitan city roads - gwangyeoksido
+            network_from_tags = 'KR:metropolitan'
+
+        elif name_ko.endswith(u'\ud2b9\ubcc4\uc2dc\ub3c4'):
+            # special city (Seoul) roads - teukbyeolsido
             network_from_tags = 'KR:metropolitan'
 
         elif (name_ko.endswith(u'\uace0\uc18d\ub3c4\ub85c') or
