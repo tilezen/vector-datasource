@@ -4349,7 +4349,7 @@ def _sort_network_fr(network, ref):
     elif network == 'FR':
         network_code = 3
     elif network == 'e-road':
-        network_code = 4
+        network_code = 99
     else:
         network_code = 5 + len(network.split(':'))
 
