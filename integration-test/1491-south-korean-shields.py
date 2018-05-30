@@ -162,3 +162,110 @@ class SouthKoreanShields(FixtureTest):
                 'shield_text': '92',
                 'network': 'KR:national',
             })
+
+    def test_kr_national_no_rel(self):
+        import dsl
+
+        z, x, y = (16, 56158, 25837)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/542451694
+            dsl.way(542451694, dsl.tile_diagonal(z, x, y), {
+                'name:en': 'Upo 1-daero', 'name': u'\uc6b0\ud3ec1\ub300\ub85c',
+                'name:ko': u'\uc6b0\ud3ec1\ub300\ub85c', 'review': 'no',
+                'source': 'openstreetmap.org', 'highway': 'primary',
+                'ref': '20;24', 'ncat': u'\uad6d\ub3c4',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 542451694,
+                'shield_text': '20', 'network': 'KR:national',
+                'all_shield_texts': ['20', '24'],
+                'all_networks': ['KR:national', 'KR:national'],
+            })
+
+    def test_kr_expressway_no_rel(self):
+        import dsl
+
+        z, x, y = (16, 55923, 25876)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/574671133
+            dsl.way(574671133, dsl.tile_diagonal(z, x, y), {
+                'name:en': 'Gwangjudaegu Expressway',
+                'name': u'\uad11\uc8fc\ub300\uad6c\uace0\uc18d\ub3c4\ub85c',
+                'name:ko': u'\uad11\uc8fc\ub300\uad6c\uace0\uc18d\ub3c4\ub85c',
+                'review': 'no', 'name:ko_rm': 'Gwangjudaegugosokdoro',
+                'source': 'openstreetmap.org', 'maxspeed': '80',
+                'ncat': u'\uace0\uc18d\ub3c4\ub85c', 'oneway': 'yes',
+                'ref': '12', 'highway': 'motorway',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 574671133,
+                'shield_text': '12',
+                'network': 'KR:expressway',
+            })
+
+    def test_kr_expressway_no_name_en(self):
+        import dsl
+
+        z, x, y = (16, 56165, 25760)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/43543281
+            dsl.way(43543281, dsl.tile_diagonal(z, x, y), {
+                'lanes': '2', 'name': u'\uc911\ubd80\ub0b4\ub959\uace0'
+                u'\uc18d\ub3c4\ub85c\uc9c0\uc120', 'review': 'no',
+                'source': 'openstreetmap.org', 'highway': 'motorway',
+                'oneway': 'yes', 'ref': '451',
+                'ncat': u'\uace0\uc18d\ub3c4\ub85c',
+            }),
+            dsl.relation(1, {
+                'type': 'route', 'route': 'road', 'ref': '451',
+                'source': 'openstreetmap.org',
+            }, ways=[43543281]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 43543281,
+                'shield_text': '451',
+                'network': 'KR:expressway',
+            })
+
+    def test_kr_expressway_no_name_en_no_ncat(self):
+        # same as the test above, but without the "ncat" to test that it
+        # backfills from the name.
+        import dsl
+
+        z, x, y = (16, 56165, 25760)
+
+        self.generate_fixtures(
+            dsl.is_in('KR', z, x, y),
+            # https://www.openstreetmap.org/way/43543281
+            dsl.way(43543281, dsl.tile_diagonal(z, x, y), {
+                'lanes': '2', 'name': u'\uc911\ubd80\ub0b4\ub959\uace0'
+                u'\uc18d\ub3c4\ub85c\uc9c0\uc120', 'review': 'no',
+                'source': 'openstreetmap.org', 'highway': 'motorway',
+                'oneway': 'yes', 'ref': '451',
+            }),
+            dsl.relation(1, {
+                'type': 'route', 'route': 'road', 'ref': '451',
+                'source': 'openstreetmap.org',
+            }, ways=[43543281]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 43543281,
+                'shield_text': '451',
+                'network': 'KR:expressway',
+            })

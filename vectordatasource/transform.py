@@ -235,6 +235,39 @@ def road_classifier(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def add_road_network_from_ncat(shape, properties, fid, zoom):
+    """
+    Many South Korean roads appear to have an "ncat" tag, which seems to
+    correspond to the type of road network (perhaps "ncat" = "national
+    category"?)
+
+    This filter carries that through into "network", unless it is already
+    populated.
+    """
+
+    if properties.get('network') is None:
+        tags = properties.get('tags', {})
+        ncat = _make_unicode_or_none(tags.get('ncat'))
+
+        if ncat == u'\uad6d\ub3c4':
+            # national roads - gukdo
+            properties['network'] = 'KR:national'
+
+        elif ncat == u'\uad11\uc5ed\uc2dc\ub3c4\ub85c':
+            # metropolitan city roads - gwangyeoksido
+            properties['network'] = 'KR:metropolitan'
+
+        elif ncat == u'\uace0\uc18d\ub3c4\ub85c':
+            # expressways - gosokdoro
+            properties['network'] = 'KR:expressway'
+
+        elif ncat == u'\uc9c0\ubc29\ub3c4':
+            # local highways - jibangdo
+            properties['network'] = 'KR:local'
+
+    return shape, properties, fid
+
+
 def road_trim_properties(shape, properties, fid, zoom):
     properties = _remove_properties(properties, 'bridge', 'tunnel')
     return shape, properties, fid
@@ -4258,15 +4291,28 @@ def _guess_network_jp(tags):
 
 def _guess_network_kr(tags):
     ref = tags.get('ref')
+    network_from_tags = tags.get('network')
 
-    # seems really weird to be doing this based on the English name, but
-    # the Korean name ending with gosokdoro didn't seem to be limited to
-    # expressways alone?
-    name_en = tags.get('name:en')
-    network_from_name = None
-    if name_en:
-        if name_en.endswith(' Expressway'):
-            network_from_name = 'KR:expressway'
+    # the name often ends with a word which appears to mean expressway or
+    # national road.
+    name_ko = _make_unicode_or_none(tags.get('name:ko') or tags.get('name'))
+    if name_ko and network_from_tags is None:
+        if name_ko.endswith(u'\uad6d\ub3c4'):
+            # national roads - gukdo
+            network_from_tags = 'KR:national'
+
+        elif name_ko.endswith(u'\uad11\uc5ed\uc2dc\ub3c4\ub85c'):
+            # metropolitan city roads - gwangyeoksido
+            network_from_tags = 'KR:metropolitan'
+
+        elif (name_ko.endswith(u'\uace0\uc18d\ub3c4\ub85c') or
+              name_ko.endswith(u'\uace0\uc18d\ub3c4\ub85c\uc9c0\uc120')):
+            # expressways - gosokdoro (and expressway branches)
+            network_from_tags = 'KR:expressway'
+
+        elif name_ko.endswith(u'\uc9c0\ubc29\ub3c4'):
+            # local highways - jibangdo
+            network_from_tags = 'KR:local'
 
     networks = []
     for part in ref.split(';'):
@@ -4274,8 +4320,8 @@ def _guess_network_kr(tags):
             continue
         network, ref = _normalize_kr_netref(None, part)
 
-        if network is None and network_from_name is not None:
-            network = network_from_name
+        if network is None and network_from_tags is not None:
+            network = network_from_tags
 
         if network and part:
             networks.append((network, part))
