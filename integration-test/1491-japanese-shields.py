@@ -56,7 +56,7 @@ class JapaneseShieldTest(FixtureTest):
                 'shield_text': '305', 'network': 'JP:prefectural',
             })
 
-    def test_jp_e_expressways(self):
+    def test_jp_e_expressway(self):
         import dsl
 
         z, x, y = (16, 57350, 26039)
@@ -98,9 +98,9 @@ class JapaneseShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 18576866,
-                'shield_text': 'E28', 'network': 'JP:expressways'})
+                'shield_text': 'E28', 'network': 'JP:expressway'})
 
-    def test_jp_ea_expressways(self):
+    def test_jp_ea_expressway(self):
         import dsl
 
         z, x, y = (16, 58512, 24062)
@@ -136,10 +136,10 @@ class JapaneseShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 24268939,
-                'shield_text': 'E5A', 'network': 'JP:expressways',
+                'shield_text': 'E5A', 'network': 'JP:expressway',
             })
 
-    def test_jp_c_expressways(self):
+    def test_jp_c_expressway(self):
         import dsl
 
         z, x, y = (16, 58181, 25788)
@@ -175,7 +175,7 @@ class JapaneseShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 297142400,
-                'shield_text': 'C3', 'network': 'JP:expressways',
+                'shield_text': 'C3', 'network': 'JP:expressway',
             })
 
     def test_not_national_route(self):

@@ -4299,9 +4299,9 @@ def _sort_network_ca(network, ref):
 def _sort_network_cn(network, ref):
     if network is None:
         network_code = 9999
-    elif network == 'CN:expressways':
+    elif network == 'CN:expressway':
         network_code = 0
-    elif network == 'CN:expressways:regional':
+    elif network == 'CN:expressway:regional':
         network_code = 1
     elif network == 'CN:JX':
         network_code = 2
@@ -4418,19 +4418,19 @@ def _normalize_ca_netref(network, ref):
 
 def _normalize_cn_netref(network, ref):
     if ref.startswith('S'):
-        network = 'CN:expressways:regional'
+        network = 'CN:expressway:regional'
 
     elif ref.startswith('G'):
-        network = 'CN:expressways'
+        network = 'CN:expressway'
 
     elif ref.startswith('X'):
         network = 'CN:JX'
 
     elif network == 'CN-expressways':
-        network = 'CN:expressways'
+        network = 'CN:expressway'
 
     elif network == 'CN-expressways-regional':
-        network = 'CN:expressways:regional'
+        network = 'CN:expressway:regional'
 
     elif network == 'JX-roads':
         network = 'CN:JX'
@@ -4445,7 +4445,7 @@ def _normalize_jp_netref(network, ref):
     elif network is None:
         prefix, _ = _splitref(ref)
         if prefix in ('C', 'E'):
-            network = 'JP:expressways'
+            network = 'JP:expressway'
 
     return network, ref
 
