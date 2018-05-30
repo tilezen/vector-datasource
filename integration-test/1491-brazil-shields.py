@@ -93,8 +93,11 @@ class BrazilShieldTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'roads',
-            {'id': 31532787, 'network': 'BR:AL'})
+            z, x, y, 'roads', {
+                'id': 31532787,
+                'shield_text': '105',
+                'network': 'BR:AL',
+            })
 
     def test_ap(self):
         import dsl
@@ -112,8 +115,11 @@ class BrazilShieldTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'roads',
-            {'id': 29111026, 'network': 'BR:AP'})
+            z, x, y, 'roads', {
+                'id': 29111026,
+                'shield_text': '010',
+                'network': 'BR:AP',
+            })
 
     def test_am(self):
         import dsl
@@ -130,8 +136,11 @@ class BrazilShieldTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'roads',
-            {'id': 28958366, 'network': 'BR:AM'})
+             z, x, y, 'roads', {
+                 'id': 28958366,
+                 'shield_text': '010',
+                 'network': 'BR:AM',
+             })
 
     def test_ba(self):
         import dsl
@@ -150,7 +159,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 8099519, 'network': 'BR:BA'})
+            {'id': 8099519, 'shield_text': '263', 'network': 'BR:BA'})
 
     def test_ce(self):
         import dsl
@@ -168,7 +177,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 23328809, 'network': 'BR:CE'})
+            {'id': 23328809, 'shield_text': '060', 'network': 'BR:CE'})
 
     def test_es(self):
         import dsl
@@ -193,7 +202,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 24602299, 'network': 'BR:ES'})
+            {'id': 24602299, 'shield_text': '480', 'network': 'BR:ES'})
 
     def test_go(self):
         import dsl
@@ -211,7 +220,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 24012217, 'network': 'BR:GO'})
+            {'id': 24012217, 'shield_text': '536', 'network': 'BR:GO'})
 
     def test_ma(self):
         import dsl
@@ -229,7 +238,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 29137050, 'network': 'BR:MA'})
+            {'id': 29137050, 'shield_text': '106', 'network': 'BR:MA'})
 
     def test_mt(self):
         import dsl
@@ -247,7 +256,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 28996480, 'network': 'BR:MT'})
+            {'id': 28996480, 'shield_text': '451', 'network': 'BR:MT'})
 
     def test_ms(self):
         import dsl
@@ -265,7 +274,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 29012329, 'network': 'BR:MS'})
+            {'id': 29012329, 'shield_text': '228', 'network': 'BR:MS'})
 
     def test_mg(self):
         import dsl
@@ -288,7 +297,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 4543343, 'network': 'BR:MG'})
+            {'id': 4543343, 'shield_text': '020', 'network': 'BR:MG'})
 
     def test_pa(self):
         import dsl
@@ -419,7 +428,7 @@ class BrazilShieldTest(FixtureTest):
             }, ways=[13076835]),
         )
 
-        # note: we don't pick up the tourist route... should we?
+        # note: we don't pick up the tourist route
         self.assert_has_feature(
             z, x, y, 'roads',
             {'id': 13076835, 'shield_text': '107', 'network': 'BR:RJ'})
@@ -606,7 +615,7 @@ class BrazilShieldTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 11507107, 'shield_text': '0130', 'network': 'BR:MG:access'})
+            {'id': 11507107, 'shield_text': '0130', 'network': 'BR:MG'})
 
     def test_br_LMG(self):
         import dsl
@@ -651,7 +660,7 @@ class BrazilShieldTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 31574746,
                 'all_shield_texts': ['259', '259'],
-                'all_networks': ['BR', 'BR:MG:connecting'],
+                'all_networks': ['BR', 'BR:MG'],
             })
 
     def test_br_CMG(self):
@@ -700,8 +709,8 @@ class BrazilShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 20906150,
-                'shield_text': '602', 'network': 'BR:RS:state',
-                'all_networks': ['BR:RS:state'],
+                'shield_text': '602', 'network': 'BR:RS',
+                'all_networks': ['BR:RS'],
                 'all_shield_texts': ['602'],
             })
 
@@ -722,7 +731,7 @@ class BrazilShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 26757190, 'shield_text': '851',
-                'network': 'BR:RS:secondary',
+                'network': 'BR:RS',
             })
 
     def test_br_RSC(self):
@@ -757,7 +766,7 @@ class BrazilShieldTest(FixtureTest):
                 'id': 25979338,
                 'shield_text': '453', 'network': 'BR',
                 'all_shield_texts': ['453', '453'],
-                'all_networks': ['BR', 'BR:RS:connecting']
+                'all_networks': ['BR', 'BR:RS']
             })
 
     def test_br_SPA(self):
@@ -775,8 +784,12 @@ class BrazilShieldTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'roads',
-            {'id': 4964220, 'shield_text': '344', 'network': 'BR:SP:access'})
+            z, x, y, 'roads', {
+                'id': 4964220,
+                'shield_text': '055', 'network': 'BR:SP',
+                'all_shield_texts': ['055', '344'],
+                'all_networks': ['BR:SP', 'BR:SP'],
+            })
 
     def test_br_PRC(self):
         import dsl
@@ -802,7 +815,7 @@ class BrazilShieldTest(FixtureTest):
                 'id': 31611447,
                 'shield_text': '466', 'network': 'BR',
                 'all_shield_texts': ['466', '466'],
-                'all_networks': ['BR', 'BR:PR:connecting']
+                'all_networks': ['BR', 'BR:PR']
             })
 
     def test_br_PLN(self):
@@ -823,5 +836,31 @@ class BrazilShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 116514858,
-                'shield_text': '346', 'network': 'BR:SP:paulinia',
+                'shield_text': '346', 'network': 'BR:SP:PLN',
+            })
+
+    def test_br_SP_many(self):
+        import dsl
+
+        z, x, y = (16, 24051, 36887)
+
+        self.generate_fixtures(
+            dsl.is_in('BR', z, x, y),
+            # https://www.openstreetmap.org/way/258575188
+            dsl.way(258575188, dsl.tile_diagonal(z, x, y), {
+                'lanes': '1', 'name': 'Rodovia Municipal Domingos Innocentini',
+                'wikipedia': 'pt:Rodovia Municipal Domingos Innocentini',
+                'surface': 'asphalt', 'source': 'openstreetmap.org',
+                'oneway': 'yes', 'ref': 'SPA-149/215;SCA-040',
+                'highway': 'primary',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 258575188,
+                'shield_text': '149',
+                'network': 'BR:SP',
+                'all_networks': ['BR:SP', 'BR:SP', 'BR:SP:SCA'],
+                'all_shield_texts': ['149', '215', '040'],
             })

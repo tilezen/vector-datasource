@@ -4115,32 +4115,49 @@ _BR_STATES = set([
 # additional road types
 _BR_NETWORK_EXPANSION = {
     # Minas Gerais state roads
-    'AMG': 'BR:MG:access',
+    'AMG': 'BR:MG',
     'LMG': 'BR:MG:local',
-    'MGC': 'BR:MG:connecting',
+    'MGC': 'BR:MG',
     # CMG seems to be coupled with BR- roads of the same number
     'CMG': 'BR:MG',
 
     # Rio Grande do Sul state roads
-    'ERS': 'BR:RS:state',
-    'VRS': 'BR:RS:secondary',
-    'RSC': 'BR:RS:connecting',
+    'ERS': 'BR:RS',
+    'VRS': 'BR:RS',
+    'RSC': 'BR:RS',
 
     # access roads in São Paulo?
-    'SPA': 'BR:SP:access',
+    'SPA': 'BR:SP',
 
     # connecting roads in Paraná?
-    'PRC': 'BR:PR:connecting',
+    'PRC': 'BR:PR',
 
     # municipal roads in Paulínia
-    'PLN': 'BR:SP:paulinia',
+    'PLN': 'BR:SP:PLN',
+
+    # municipal roads in São Carlos
+    # https://pt.wikipedia.org/wiki/Estradas_do_munic%C3%ADpio_de_S%C3%A3o_Carlos#Identifica%C3%A7%C3%A3o
+    'SCA': 'BR:SP:SCA',
 }
 
 
 def _guess_network_br(tags):
     ref = tags.get('ref')
     networks = []
-    for prefix, num in re.findall('([A-Za-z]+)[- ]?([0-9]+)', ref):
+
+    # track last prefix, so that we can handle cases where the ref is written
+    # as "BR-XXX/YYY" to mean "BR-XXX; BR-YYY".
+    last_prefix = None
+
+    for prefix, num in re.findall('([A-Za-z]+)?[- ]?([0-9]+)', ref):
+        # if there's a prefix, save it for potential later use. if there isn't
+        # then use the previous one - if any.
+        if prefix:
+            last_prefix = prefix
+        else:
+            prefix = last_prefix
+
+        # make sure the prefix is from a network that we know about.
         if prefix == 'BR':
             network = prefix
 
