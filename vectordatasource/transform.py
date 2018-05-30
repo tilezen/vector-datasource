@@ -4167,7 +4167,7 @@ def _sort_network_cn(network, ref):
         network_code = 0
     elif network == 'CN:expressways:regional':
         network_code = 1
-    elif network == 'CN:jx-roads':
+    elif network == 'CN:JX':
         network_code = 2
     elif network == 'AsianHighway':
         network_code = 99
@@ -4262,7 +4262,7 @@ def _normalize_cn_netref(network, ref):
         network = 'CN:expressways'
 
     elif ref.startswith('X'):
-        network = 'CN:jx-roads'
+        network = 'CN:JX'
 
     elif network == 'CN-expressways':
         network = 'CN:expressways'
@@ -4271,7 +4271,7 @@ def _normalize_cn_netref(network, ref):
         network = 'CN:expressways:regional'
 
     elif network == 'JX-roads':
-        network = 'CN:jx-roads'
+        network = 'CN:JX'
 
     return network, ref
 

@@ -142,7 +142,8 @@ class ChinaShieldTest(FixtureTest):
     # China appears to have a fairly common 3rd type of road, signified with an
     # X000 number. based on the positions of X & S in the ref, it seems like a
     # less important route type. the network is occasionally given as
-    # "JX-roads"
+    # "JX-roads", which appears to mean Jianxi province. therefore we designate
+    # as "CN:JX"
     def test_cn_x102(self):
         import dsl
 
@@ -172,7 +173,7 @@ class ChinaShieldTest(FixtureTest):
                 'all_shield_texts': ['S214', 'X102'],
                 'all_networks': [
                     'CN:expressways:regional',
-                    'CN:jx-roads',
+                    'CN:JX',
                 ],
             })
 
@@ -194,7 +195,7 @@ class ChinaShieldTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 137979647,
                 'shield_text': 'X032',
-                'network': 'CN:jx-roads',
+                'network': 'CN:JX',
                 'all_shield_texts': ['X032', 'X059'],
             })
 
