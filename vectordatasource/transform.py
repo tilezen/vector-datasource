@@ -4256,6 +4256,33 @@ def _guess_network_jp(tags):
     return networks
 
 
+def _guess_network_kr(tags):
+    ref = tags.get('ref')
+
+    # seems really weird to be doing this based on the English name, but
+    # the Korean name ending with gosokdoro didn't seem to be limited to
+    # expressways alone?
+    name_en = tags.get('name:en')
+    network_from_name = None
+    if name_en:
+        if name_en.endswith(' Expressway'):
+            network_from_name = 'KR:expressway'
+
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_kr_netref(None, part)
+
+        if network is None and network_from_name is not None:
+            network = network_from_name
+
+        if network and part:
+            networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4674,6 +4701,18 @@ def _normalize_jp_netref(network, ref):
     return network, ref
 
 
+def _normalize_kr_netref(network, ref):
+    net, part = _splitref(ref)
+    if net == 'AH':
+        network = 'AsianHighway'
+        ref = part
+
+    elif network == 'AH':
+        network = 'AsianHighway'
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -4767,6 +4806,10 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_jp,
         fix=_normalize_jp_netref,
         shield_text=_use_ref_as_is,
+    ),
+    'KR': CountryNetworkLogic(
+        backfill=_guess_network_kr,
+        fix=_normalize_kr_netref,
     ),
     'MX': CountryNetworkLogic(
         backfill=_guess_network_mx,
