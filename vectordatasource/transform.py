@@ -4052,11 +4052,45 @@ def _ref_importance(ref):
 
 
 def _guess_network_gb(tags):
+    # for roads we put the original OSM highway tag value in kind_detail, so we
+    # can recover it here.
+    highway = tags.get('kind_detail')
+
     ref = tags.get('ref')
-    letter = ref[0]
-    if letter in ('M', 'A', 'B'):
-        return [('GB:%s-road' % (letter,), ref)]
-    return None
+    networks = []
+    # although roads are part of only one network in the UK, some roads are
+    # tagged incorrectly as being part of two, so we have to handle this case.
+    for part in ref.split(';'):
+        if not part:
+            continue
+
+        # letter at the start of the ref indicates the road class. generally
+        # one of 'M', 'A', or 'B' - although other letters exist, they are
+        # rarely used.
+        letter, number = _splitref(part)
+
+        # UK is tagged a bit weirdly, using the highway tag value in addition
+        # to the ref to figure out which road class should be applied. the
+        # following is not applied strictly, but is a "best guess" at the
+        # appropriate signage colour.
+        #
+        # https://wiki.openstreetmap.org/wiki/United_Kingdom_Tagging_Guidelines
+        if letter == 'M' and highway == 'motorway':
+            networks.append(('GB:M-road', 'M' + number))
+
+        elif ref.endswith('(M)') and highway == 'motorway':
+            networks.append(('GB:M-road', 'A' + number))
+
+        elif letter == 'A' and highway == 'trunk':
+            networks.append(('GB:A-road-green', 'A' + number))
+
+        elif letter == 'A' and highway == 'primary':
+            networks.append(('GB:A-road-white', 'A' + number))
+
+        elif letter == 'B' and highway == 'secondary':
+            networks.append(('GB:B-road', 'B' + number))
+
+    return networks
 
 
 def _guess_network_ar(tags):
@@ -4407,6 +4441,27 @@ def _sort_network_mx(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
+def _sort_network_gb(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'GB:M-road':
+        network_code = 0
+    elif network == 'GB:A-road-green':
+        network_code = 1
+    elif network == 'GB:A-road-white':
+        network_code = 2
+    elif network == 'GB:B-road':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
 _AU_NETWORK_EXPANSION = {
     'A': 'AU:A-road',
     'M': 'AU:M-road',
@@ -4687,6 +4742,12 @@ def _shield_text_ar(network, ref):
     return ref
 
 
+def _shield_text_gb(network, ref):
+    # just remove any space between the letter and number(s)
+    prefix, number = _splitref(ref)
+    return prefix + number
+
+
 # do not strip anything from the ref apart from whitespace.
 def _use_ref_as_is(network, ref):
     return ref.strip()
@@ -4762,6 +4823,8 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     ),
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
+        sort=_sort_network_gb,
+        shield_text=_shield_text_gb,
     ),
     'JP': CountryNetworkLogic(
         backfill=_guess_network_jp,
