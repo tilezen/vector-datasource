@@ -4207,6 +4207,33 @@ def _guess_network_mx(tags):
     return networks
 
 
+def _guess_network_jp(tags):
+    ref = tags.get('ref')
+
+    name = tags.get('name:ja') or tags.get('name')
+    network_from_name = None
+    if name:
+        if isinstance(name, str):
+            name = unicode(name, 'utf-8')
+        if name.startswith(u'\u56fd\u9053') and \
+           name.endswith(u'\u53f7'):
+            network_from_name = 'JP:national'
+
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_jp_netref(None, part)
+
+        if network is None and network_from_name is not None:
+            network = network_from_name
+
+        if network and part:
+            networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4283,9 +4310,9 @@ def _sort_network_ca(network, ref):
 def _sort_network_cn(network, ref):
     if network is None:
         network_code = 9999
-    elif network == 'CN:expressways':
+    elif network == 'CN:expressway':
         network_code = 0
-    elif network == 'CN:expressways:regional':
+    elif network == 'CN:expressway:regional':
         network_code = 1
     elif network == 'CN:JX':
         network_code = 2
@@ -4415,19 +4442,19 @@ def _normalize_ca_netref(network, ref):
 
 def _normalize_cn_netref(network, ref):
     if ref.startswith('S'):
-        network = 'CN:expressways:regional'
+        network = 'CN:expressway:regional'
 
     elif ref.startswith('G'):
-        network = 'CN:expressways'
+        network = 'CN:expressway'
 
     elif ref.startswith('X'):
         network = 'CN:JX'
 
     elif network == 'CN-expressways':
-        network = 'CN:expressways'
+        network = 'CN:expressway'
 
     elif network == 'CN-expressways-regional':
-        network = 'CN:expressways:regional'
+        network = 'CN:expressway:regional'
 
     elif network == 'JX-roads':
         network = 'CN:JX'
@@ -4496,6 +4523,18 @@ def _normalize_mx_netref(network, ref):
     if ref and ref.upper().startswith('Q. ROO'):
         network = 'MX:ROO'
         ref = ref[len('Q. ROO'):].strip()
+
+    return network, ref
+
+
+def _normalize_jp_netref(network, ref):
+    if network and network.startswith('jp:'):
+        network = 'JP:' + network[3:]
+
+    elif network is None:
+        prefix, _ = _splitref(ref)
+        if prefix in ('C', 'E'):
+            network = 'JP:expressway'
 
     return network, ref
 
@@ -4577,6 +4616,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
     ),
+    'JP': CountryNetworkLogic(
+        backfill=_guess_network_jp,
+        fix=_normalize_jp_netref,
+        shield_text=_use_ref_as_is,
+    ),
     'MX': CountryNetworkLogic(
         backfill=_guess_network_mx,
         fix=_normalize_mx_netref,
@@ -4609,6 +4653,25 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         # apply country-specific logic to try and backfill the network from
         # structure we know about how refs work in the country.
         logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
+
+        # if the road is a member of exactly one road relation, which provides
+        # a network and no ref, and the element itself provides no network,
+        # then use the network from the relation instead.
+        if network is None:
+            solo_networks_from_relations = []
+            for i in xrange(0, len(mz_networks), 3):
+                t, n, r = mz_networks[i:i+3]
+                if t == 'road' and n and r is None:
+                    solo_networks_from_relations.append((n, i))
+
+            # if we found one _and only one_ road network, then we use the
+            # network value and delete the [type, network, ref] 3-tuple from
+            # mz_networks (which is a flattened list of them). because there's
+            # only one, we can delete it by using its index.
+            if len(solo_networks_from_relations) == 1:
+                network, i = solo_networks_from_relations[0]
+                del mz_networks[i:i+3]
+
         if logic and logic.backfill:
             networks_and_refs = logic.backfill(props) or []
 

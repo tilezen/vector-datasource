@@ -2,7 +2,7 @@ from . import FixtureTest
 
 
 class ChinaShieldTest(FixtureTest):
-    def test_cn_expressways(self):
+    def test_cn_expressway(self):
         import dsl
 
         z, x, y = (16, 54413, 26599)
@@ -36,12 +36,12 @@ class ChinaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 127553001,
-                'shield_text': 'G42', 'network': 'CN:expressways',
+                'shield_text': 'G42', 'network': 'CN:expressway',
                 'all_shield_texts': ['G42', 'AH5'],
-                'all_networks': ['CN:expressways', 'AsianHighway'],
+                'all_networks': ['CN:expressway', 'AsianHighway'],
             })
 
-    def test_cn_expressways_regional(self):
+    def test_cn_expressway_regional(self):
         import dsl
 
         z, x, y = (16, 54858, 26781)
@@ -67,11 +67,11 @@ class ChinaShieldTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 168706293,
                 'shield_text': 'S20',
-                'network': 'CN:expressways:regional',
+                'network': 'CN:expressway:regional',
             })
 
     # test for road with multiple CN-expressway shields on it
-    def test_cn_multiple_expressways(self):
+    def test_cn_multiple_expressway(self):
         import dsl
 
         z, x, y = (16, 54161, 26636)
@@ -126,12 +126,12 @@ class ChinaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 65176048,
-                'shield_text': 'G3', 'network': 'CN:expressways',
+                'shield_text': 'G3', 'network': 'CN:expressway',
                 'all_networks': [
-                    'CN:expressways',
-                    'CN:expressways',
-                    'CN:expressways',
-                    'CN:expressways',
+                    'CN:expressway',
+                    'CN:expressway',
+                    'CN:expressway',
+                    'CN:expressway',
                     'AsianHighway',
                 ],
                 'all_shield_texts': [
@@ -169,10 +169,10 @@ class ChinaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 50677938,
-                'shield_text': 'S214', 'network': 'CN:expressways:regional',
+                'shield_text': 'S214', 'network': 'CN:expressway:regional',
                 'all_shield_texts': ['S214', 'X102'],
                 'all_networks': [
-                    'CN:expressways:regional',
+                    'CN:expressway:regional',
                     'CN:JX',
                 ],
             })
@@ -204,7 +204,7 @@ class ChinaShieldTest(FixtureTest):
     # "^[GSX][0-9]+$" pattern.
     #
     # note that the G107 relation also has "network=CN-roads", which we should
-    # correct to "CN:expressways".
+    # correct to "CN:expressway".
     #
     def test_cn_g4w2(self):
         import dsl
@@ -239,7 +239,7 @@ class ChinaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 49242320,
-                'shield_text': 'G4W2', 'network': 'CN:expressways',
+                'shield_text': 'G4W2', 'network': 'CN:expressway',
                 'all_shield_texts': ['G4W2', 'G107'],
-                'all_networks': ['CN:expressways', 'CN:expressways'],
+                'all_networks': ['CN:expressway', 'CN:expressway'],
             })
