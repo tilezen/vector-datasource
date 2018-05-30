@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from . import FixtureTest
 
 
@@ -12,7 +13,7 @@ class FrenchShieldTest(FixtureTest):
             # https://www.openstreetmap.org/way/16108247
             dsl.way(16108247, dsl.tile_diagonal(z, x, y), {
                 'horse': 'no', 'hazmat': 'no', 'bicycle': 'no',
-                'name': u'Boulevard P\xe9riph\xe9rique Int\xe9rieur',
+                'name': u'Boulevard Périphérique Intérieur',
                 'toll': 'no', 'surface': 'asphalt', 'lit': 'yes',
                 'source': 'openstreetmap.org', 'maxspeed': '70',
                 'int_ref': 'E 05', 'oneway': 'yes', 'foot': 'no', 'lanes': '3',
@@ -21,12 +22,12 @@ class FrenchShieldTest(FixtureTest):
             }),
             dsl.relation(1, {
                 'type': 'route', 'route': 'road', 'bicycle': 'no',
-                'name': u'Boulevard P\xe9riph\xe9rique de Paris',
+                'name': u'Boulevard Périphérique de Paris',
                 'source': 'openstreetmap.org',
             }, ways=[16108247]),
             dsl.relation(2, {
                 'network': 'e-road', 'ref': 'E 05', 'route': 'road',
-                'wikipedia': u'fr:Route europ\xe9enne 5',
+                'wikipedia': u'fr:Route européenne 5',
                 'source': 'openstreetmap.org', 'wikidata': 'Q693493',
                 'type': 'route', 'section': 'France (north-south)',
             }, ways=[16108247]),
@@ -101,16 +102,16 @@ class FrenchShieldTest(FixtureTest):
             dsl.relation(1, {
                 'name': 'E 401 Saint-Brieuc - Caen', 'type': 'route',
                 'route': 'road', 'source': 'openstreetmap.org',
-                'name:fr': u'Route europ\xe9enne E 401',
+                'name:fr': u'Route européenne E 401',
                 'wikidata': 'Q1922885', 'ref': 'E 401',
                 'description:fr': 'E 401 Saint-Brieuc - Caen',
                 'network': 'e-road',
             }, ways=[147156883]),
             dsl.relation(2, {
                 'name:en': 'E 03 Cherbourg - La Rochelle',
-                'name': u'Route europ\xe9enne E 03', 'type': 'route',
-                'route': 'road', 'name:cs': u'Evropsk\xe1 silnice E03',
-                'name:fr': u'Route europ\xe9enne E 03',
+                'name': u'Route européenne E 03', 'type': 'route',
+                'route': 'road', 'name:cs': u'Evropská silnice E03',
+                'name:fr': u'Route européenne E 03',
                 'source': 'openstreetmap.org',
                 'e-road:class': 'A-intermediate',
                 'wikipedia': 'en:European route E03',
