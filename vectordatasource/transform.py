@@ -4207,6 +4207,17 @@ def _guess_network_fr(tags):
     return networks
 
 
+def _guess_network_de(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_de_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _guess_network_mx(tags):
     ref = tags.get('ref')
     networks = []
@@ -4352,6 +4363,31 @@ def _sort_network_fr(network, ref):
         network_code = 99
     else:
         network_code = 5 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_de(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'DE:BAB':
+        network_code = 0
+    elif network == 'DE:BS':
+        network_code = 1
+    elif network == 'DE:LS':
+        network_code = 2
+    elif network == 'DE:KS':
+        network_code = 3
+    elif network == 'DE:STS':
+        network_code = 4
+    elif network == 'DE:Hamburg:Ring':
+        network_code = 5
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 6
 
     ref = _ref_importance(ref)
 
@@ -4530,6 +4566,37 @@ def _normalize_fr_netref(network, ref):
     return network, ref
 
 
+def _normalize_de_netref(network, ref):
+    prefix, ref = _splitref(ref)
+    if prefix:
+        if prefix == 'Ring':
+            ref = 'Ring ' + ref
+        else:
+            ref = prefix + ref
+
+        if not network:
+            network = {
+                'A': 'DE:BAB',
+                'B': 'DE:BS',
+                'L': 'DE:LS',
+                'K': 'DE:KS',
+                'St': 'DE:STS',
+                'S': 'DE:STS',
+                'Ring': 'DE:Hamburg:Ring',
+            }.get(prefix)
+
+    if network == 'Landesstra\xc3\x9fen NRW':
+        network = 'DE:LS'
+
+    elif network == 'Kreisstra\xc3\x9fen Hildesheim':
+        network = 'DE:KS'
+
+    elif network == 'BAB':
+        network = 'DE:BAB'
+
+    return network, ref
+
+
 # mapping of mexican road prefixes into their network values.
 _MX_ROAD_NETWORK_PREFIXES = {
     'AGS':    'MX:AGU',  # Aguascalientes
@@ -4679,6 +4746,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_cn,
         fix=_normalize_cn_netref,
         sort=_sort_network_cn,
+        shield_text=_use_ref_as_is,
+    ),
+    'DE': CountryNetworkLogic(
+        backfill=_guess_network_de,
+        fix=_normalize_de_netref,
+        sort=_sort_network_de,
         shield_text=_use_ref_as_is,
     ),
     'FR': CountryNetworkLogic(
