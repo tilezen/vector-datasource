@@ -249,23 +249,23 @@ def add_road_network_from_ncat(shape, properties, fid, zoom):
         tags = properties.get('tags', {})
         ncat = _make_unicode_or_none(tags.get('ncat'))
 
-        if ncat == u'\uad6d\ub3c4':
+        if ncat == u'국도':
             # national roads - gukdo
             properties['network'] = 'KR:national'
 
-        elif ncat == u'\uad11\uc5ed\uc2dc\ub3c4\ub85c':
+        elif ncat == u'광역시도로':
             # metropolitan city roads - gwangyeoksido
             properties['network'] = 'KR:metropolitan'
 
-        elif ncat == u'\ud2b9\ubcc4\uc2dc\ub3c4':
+        elif ncat == u'특별시도':
             # special city (Seoul) roads - teukbyeolsido
             properties['network'] = 'KR:metropolitan'
 
-        elif ncat == u'\uace0\uc18d\ub3c4\ub85c':
+        elif ncat == u'고속도로':
             # expressways - gosokdoro
             properties['network'] = 'KR:expressway'
 
-        elif ncat == u'\uc9c0\ubc29\ub3c4':
+        elif ncat == u'지방도':
             # local highways - jibangdo
             properties['network'] = 'KR:local'
 
@@ -4274,8 +4274,8 @@ def _guess_network_jp(tags):
     if name:
         if isinstance(name, str):
             name = unicode(name, 'utf-8')
-        if name.startswith(u'\u56fd\u9053') and \
-           name.endswith(u'\u53f7'):
+        if name.startswith(u'国道') and \
+           name.endswith(u'号'):
             network_from_name = 'JP:national'
 
     networks = []
@@ -4301,24 +4301,24 @@ def _guess_network_kr(tags):
     # national road.
     name_ko = _make_unicode_or_none(tags.get('name:ko') or tags.get('name'))
     if name_ko and network_from_tags is None:
-        if name_ko.endswith(u'\uad6d\ub3c4'):
+        if name_ko.endswith(u'국도'):
             # national roads - gukdo
             network_from_tags = 'KR:national'
 
-        elif name_ko.endswith(u'\uad11\uc5ed\uc2dc\ub3c4\ub85c'):
+        elif name_ko.endswith(u'광역시도로'):
             # metropolitan city roads - gwangyeoksido
             network_from_tags = 'KR:metropolitan'
 
-        elif name_ko.endswith(u'\ud2b9\ubcc4\uc2dc\ub3c4'):
+        elif name_ko.endswith(u'특별시도'):
             # special city (Seoul) roads - teukbyeolsido
             network_from_tags = 'KR:metropolitan'
 
-        elif (name_ko.endswith(u'\uace0\uc18d\ub3c4\ub85c') or
-              name_ko.endswith(u'\uace0\uc18d\ub3c4\ub85c\uc9c0\uc120')):
+        elif (name_ko.endswith(u'고속도로') or
+              name_ko.endswith(u'고속도로지선')):
             # expressways - gosokdoro (and expressway branches)
             network_from_tags = 'KR:expressway'
 
-        elif name_ko.endswith(u'\uc9c0\ubc29\ub3c4'):
+        elif name_ko.endswith(u'지방도'):
             # local highways - jibangdo
             network_from_tags = 'KR:local'
 
