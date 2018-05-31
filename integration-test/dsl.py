@@ -6,18 +6,32 @@ from tilequeue.tile import reproject_lnglat_to_mercator
 Feature = namedtuple('Feature', 'fid shape properties')
 
 
+# turns a dict mapping keys to values, either of which might be unicode,
+# into a dict mapping only utf-8 encoded values (if they're strings at
+# all - it'll leave other types alone).
+def _tags_to_utf8(tags):
+    new_tags = {}
+    for k, v in tags.iteritems():
+        if isinstance(k, unicode):
+            k = k.encode('utf-8')
+        if isinstance(v, unicode):
+            v = v.encode('utf-8')
+        new_tags[k] = v
+    return new_tags
+
+
 # simple utility wrapper to generate a Feature at a point. note that the
 # position is expected to be in (lon, lat) coordinates.
 def point(id, position, tags):
     x, y = reproject_lnglat_to_mercator(*position)
-    return Feature(id, Point(x, y), tags)
+    return Feature(id, Point(x, y), _tags_to_utf8(tags))
 
 
 # utility wrapper to generate a Feature from a lat/lon shape.
 def way(id, shape, tags):
     from shapely.ops import transform
     merc_shape = transform(reproject_lnglat_to_mercator, shape)
-    return Feature(id, merc_shape, tags)
+    return Feature(id, merc_shape, _tags_to_utf8(tags))
 
 
 # the fixture code expects "raw" relations as if they come straight from
@@ -30,7 +44,7 @@ def relation(id, tags, nodes=None, ways=None, relations=None):
     way_off = len(nodes)
     rel_off = way_off + len(ways)
     tags_as_list = []
-    for k, v in tags.items():
+    for k, v in _tags_to_utf8(tags).items():
         tags_as_list.extend((k, v))
     return dict(
         id=id, tags=tags_as_list, way_off=way_off, rel_off=rel_off,
