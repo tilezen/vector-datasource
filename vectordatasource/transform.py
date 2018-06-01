@@ -4635,10 +4635,15 @@ def _normalize_gr_netref(network, ref):
     ref = _make_unicode_or_none(ref)
 
     prefix, ref = _splitref(ref)
-    if prefix in (u'ΕΟ', 'EO'):
+    # this might look bizzare, but it's because the Greek capital letters
+    # epsilon and omicron look very similar (in some fonts identical) to the
+    # Latin characters E and O. it's the same below for capital alpha and A.
+    # these are sometimes mixed up in the data, so we map them to the same
+    # networks.
+    if prefix in (u'ΕΟ', u'EO'):
         network = 'GR:national'
 
-    elif prefix in (u'Α', 'A'):
+    elif prefix in (u'Α', u'A'):
         network = 'GR:motorway'
         # keep A prefix for shield text
         ref = u'Α' + ref
