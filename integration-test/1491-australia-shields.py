@@ -122,7 +122,7 @@ class AustraliaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 16477624, 'shield_text': '9', 'network': 'AU:T-drive',
-                'all_networks': ['AU:T-drive', None],
+                'all_networks': ['AU:T-drive', type(None)],
                 'all_shield_texts': ['9', '31'],
             })
 
