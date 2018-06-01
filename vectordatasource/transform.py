@@ -4388,6 +4388,19 @@ def _guess_network_kr(tags):
     return networks
 
 
+def _guess_network_pl(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_pl_netref(None, part)
+        networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4543,6 +4556,19 @@ def _sort_network_gr(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
+def _sort_network_ir(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = 5 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
 def _sort_network_mx(network, ref):
     if network is None:
         network_code = 9999
@@ -4571,6 +4597,25 @@ def _sort_network_gb(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 4
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_pl(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'PL:motorway':
+        network_code = 0
+    elif network == 'PL:expressway':
+        network_code = 1
+    elif network == 'PL:national':
+        network_code = 2
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
 
     ref = _ref_importance(ref)
 
@@ -4675,6 +4720,13 @@ def _normalize_ca_netref(network, ref):
             network = 'CA:NB3'
         elif refnum >= 100:
             network = 'CA:NB2'
+    return network, ref
+
+
+def _normalize_cd_netref(network, ref):
+    if network == 'CD:rrig':
+        network = 'CD:RRIG'
+
     return network, ref
 
 
@@ -4790,6 +4842,15 @@ def _normalize_gr_netref(network, ref):
     return network, ref
 
 
+def _normalize_ir_netref(network, ref):
+    if network == 'AH':
+        network = 'AsianHighway'
+    elif network == 'IR:freeways':
+        network = 'IR:freeway'
+
+    return network, ref
+
+
 # mapping of mexican road prefixes into their network values.
 _MX_ROAD_NETWORK_PREFIXES = {
     'AGS':    'MX:AGU',  # Aguascalientes
@@ -4879,6 +4940,27 @@ def _normalize_kr_netref(network, ref):
     return network, ref
 
 
+def _normalize_ph_netref(network, ref):
+    if network == 'PH:nhn':
+        network = 'PH:NHN'
+
+    return network, ref
+
+
+def _normalize_pl_netref(network, ref):
+    if network == 'PL:motorways':
+        network = 'PL:motorway'
+    elif network == 'PL:expressways':
+        network = 'PL:expressway'
+
+    if ref.startswith('A'):
+        network = 'PL:motorway'
+    elif ref.startswith('S'):
+        network = 'PL:expressway'
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -4953,6 +5035,9 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         fix=_normalize_ca_netref,
         sort=_sort_network_ca,
     ),
+    'CD': CountryNetworkLogic(
+        fix=_normalize_cd_netref,
+    ),
     'CN': CountryNetworkLogic(
         backfill=_guess_network_cn,
         fix=_normalize_cn_netref,
@@ -4981,6 +5066,10 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         fix=_normalize_gr_netref,
         sort=_sort_network_gr,
     ),
+    'IR': CountryNetworkLogic(
+        fix=_normalize_ir_netref,
+        sort=_sort_network_ir,
+    ),
     'JP': CountryNetworkLogic(
         backfill=_guess_network_jp,
         fix=_normalize_jp_netref,
@@ -4995,11 +5084,35 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         fix=_normalize_mx_netref,
         sort=_sort_network_mx,
     ),
+    'PH': CountryNetworkLogic(
+        fix=_normalize_ph_netref,
+    ),
+    'PL': CountryNetworkLogic(
+        backfill=_guess_network_pl,
+        fix=_normalize_pl_netref,
+        sort=_sort_network_pl,
+    ),
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
         sort=_sort_network_us,
     ),
 }
+
+
+# regular expression to look for a country code at the beginning of the network
+# tag.
+_COUNTRY_CODE = re.compile('^([a-z][a-z]):(.*)', re.UNICODE | re.IGNORECASE)
+
+
+def _fixup_network_country_code(network):
+    if network is None:
+        return None
+
+    m = _COUNTRY_CODE.match(network)
+    if m:
+        network = m.group(1).upper() + ':' + m.group(2)
+
+    return network
 
 
 def merge_networks_from_tags(shape, props, fid, zoom):
@@ -5013,6 +5126,14 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     ref = props.get('ref')
     mz_networks = props.get('mz_networks', [])
     country_code = props.get('country_code')
+
+    # apply some generic fixes to networks:
+    #  * if they begin with two letters and a colon, then make sure the two
+    #    letters are upper case, as they're probably a country code.
+    for i in xrange(0, len(mz_networks), 3):
+        t, n = mz_networks[i:i+2]
+        if t == 'road' and n is not None:
+            mz_networks[i+1] = _fixup_network_country_code(n)
 
     # for road networks, if there's no explicit network, but the country code
     # and ref are both available, then try to use them to back-fill the
@@ -5062,8 +5183,16 @@ def merge_networks_from_tags(shape, props, fid, zoom):
 
         elif network is None:
             # last ditch backfill, if we know nothing else about this element,
-            # at least we know what country it is in.
-            network = country_code
+            # at least we know what country it is in. but don't add if there's
+            # an entry in mz_networks with the same ref!
+            if ref:
+                found = False
+                for i in xrange(0, len(mz_networks), 3):
+                    t, _, r = mz_networks[i:i+3]
+                    if t == 'road' and r == ref:
+                        found = True
+                if not found:
+                    network = country_code
 
     # if there's no network, but the operator indicates a network, then we can
     # back-fill an approximate network tag from the operator. this can mean
