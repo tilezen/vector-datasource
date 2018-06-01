@@ -4218,6 +4218,17 @@ def _guess_network_de(tags):
     return networks
 
 
+def _guess_network_gr(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_gr_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _guess_network_mx(tags):
     ref = tags.get('ref')
     networks = []
@@ -4388,6 +4399,23 @@ def _sort_network_de(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 6
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_gr(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'GR:motorway':
+        network_code = 0
+    elif network == 'GR:national':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
 
     ref = _ref_importance(ref)
 
@@ -4597,6 +4625,24 @@ def _normalize_de_netref(network, ref):
     return network, ref
 
 
+def _normalize_gr_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    prefix, ref = _splitref(ref)
+    if prefix == u'ΕΟ':
+        network = 'GR:national'
+
+    elif prefix == u'Α':
+        network = 'GR:motorway'
+        # keep A prefix for shield text
+        ref = prefix + ref
+
+    elif network == 'e-road':
+        ref = 'E' + ref
+
+    return network, ref
+
+
 # mapping of mexican road prefixes into their network values.
 _MX_ROAD_NETWORK_PREFIXES = {
     'AGS':    'MX:AGU',  # Aguascalientes
@@ -4762,6 +4808,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     ),
     'GB': CountryNetworkLogic(
         backfill=_guess_network_gb,
+    ),
+    'GR': CountryNetworkLogic(
+        backfill=_guess_network_gr,
+        fix=_normalize_gr_netref,
+        sort=_sort_network_gr,
     ),
     'JP': CountryNetworkLogic(
         backfill=_guess_network_jp,
@@ -5097,6 +5148,12 @@ def extract_network_information(shape, properties, fid, zoom):
                 ref = _make_unicode_or_none(ref)
                 if ref is not None:
                     ref = shield_text_fn(network_name, ref)
+
+                # we try to keep properties as utf-8 encoded str, but the
+                # shield text function may have turned them into unicode.
+                # this is a catch-all just to make absolutely sure.
+                if isinstance(ref, unicode):
+                    ref = ref.encode('utf-8')
 
                 shield_texts.append(ref)
 
