@@ -4224,6 +4224,12 @@ def _guess_network_gr(tags):
     for part in ref.split(';'):
         if not part:
             continue
+
+        # ignore provincial refs, they should be on reg_ref. see:
+        # https://wiki.openstreetmap.org/wiki/WikiProject_Greece/Provincial_Road_Network
+        if part.startswith(u'ΕΠ'.encode('utf-8')):
+            continue
+
         network, ref = _normalize_gr_netref(None, part)
         networks.append((network, part))
     return networks
@@ -4629,13 +4635,13 @@ def _normalize_gr_netref(network, ref):
     ref = _make_unicode_or_none(ref)
 
     prefix, ref = _splitref(ref)
-    if prefix == u'ΕΟ':
+    if prefix in (u'ΕΟ', 'EO'):
         network = 'GR:national'
 
-    elif prefix == u'Α':
+    elif prefix in (u'Α', 'A'):
         network = 'GR:motorway'
         # keep A prefix for shield text
-        ref = prefix + ref
+        ref = u'Α' + ref
 
     elif network == 'e-road':
         ref = 'E' + ref
