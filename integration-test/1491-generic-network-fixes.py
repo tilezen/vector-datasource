@@ -130,7 +130,6 @@ class GenericNetworkTest(FixtureTest):
             }),
             dsl.relation(1, {
                 'network': u'bg:municipal',
-                'note': u'See: http://wiki.openstreetmap.org/wiki/WikiProject_Bulgaria/Road_network',
                 'ref': u'GAB1005',
                 'route': u'road',
                 'source': u'openstreetmap.org',
@@ -163,10 +162,8 @@ class GenericNetworkTest(FixtureTest):
                 'surface': u'asphalt',
             }),
             dsl.relation(1, {
-                'description': u'О.п. Видин — Иново — Брегово — граница Югославия',
                 'name': u'Второкласен път 12',
                 'network': u'bg:national',
-                'note': u'see: http://wiki.openstreetmap.org/wiki/WikiProject_Bulgaria/Road_network',
                 'ref': u'12',
                 'route': u'road',
                 'source': u'openstreetmap.org',
@@ -298,12 +295,7 @@ class GenericNetworkTest(FixtureTest):
             }),
             dsl.relation(1, {
                 'distance': u'611 km',
-                'int_name': u'Brest (Kazlovičy) — Minsk — miaža Rasijskaj Federacyi (Redźki)',
                 'loc_name': u'Олимпийка',
-                'name': u'Брест (Козловичи) — Минск — граница Российской Федерации (Редьки)',
-                'name:be': u'Брэст (Казловічы) — Мінск — мяжа Расійскай Федэрацыі (Рэдзькі)',
-                'name:lt': u'Brestas — Minskas — Rusijos Federacijos siena',
-                'name:pl': u'Brześć (Kozłowicze) — Mińsk — granica Federacji Rosyjskiej',
                 'network': u'by:national',
                 'ref': u'М1',
                 'route': u'road',
@@ -1182,7 +1174,6 @@ class GenericNetworkTest(FixtureTest):
                 'section': u'Iran',
                 'source': u'openstreetmap.org',
                 'type': u'route',
-                'url': u'http://wiki.openstreetmap.org/wiki/Asia/Asian_Highway_Network',
                 'wikidata': u'Q494205',
                 'wikipedia': u'en:AH1',
             }, ways=[35693445]),
@@ -1338,7 +1329,6 @@ class GenericNetworkTest(FixtureTest):
                 'source': u'openstreetmap.org',
             }),
             dsl.relation(1, {
-                'description': u'Chelyabinsk - Kostanay - Zapadnoe (Toksan bi) - Buzuluk - Derzhavinsk - Arkalyk - Zhezkazgan - Kyzylorda - Shymkent - Tashkent - Aini - Dushanbe - Nizhny Pyanj',
                 'description:fr': u'E 123 Tcheliabinsk - Nizhny Panj',
                 'name': u'E 123 Chelyabinsk - Panji Poyon',
                 'name:de': u'Europastraße 123',
@@ -1347,7 +1337,6 @@ class GenericNetworkTest(FixtureTest):
                 'name:pl': u'Trasa europejska E 123',
                 'name:ru': u'Европейский маршрут E 123',
                 'network': u'e-road',
-                'note': u'This route cannot be continuous due to missing road "Toskan-bi (Zapadnoe)-Buzuluk that never were built, and partially unpaved (dirt) roads Dzerzhinsk-Arkalyk-Zhezkazgan',
                 'ref': u'E 123',
                 'route': u'road',
                 'source': u'openstreetmap.org',
@@ -1365,7 +1354,6 @@ class GenericNetworkTest(FixtureTest):
                 'type': u'route',
             }, ways=[261067663]),
             dsl.relation(3, {
-                'description': u'Kashi – Turugart – Torougart – Naryn – Bishkek – Georgievka – Kordai – Merke – Shymkent – Kyzylorda – Aralsk – Karabutak – Aktyubinsk – Ural’sk – Kamenka – Ozinki – Saratov – Borysoglebsk – Voronezh – Kursk – Krupets – Border of Ukraine',
                 'int_ref': u'AH61',
                 'name': u'Asian Highway AH61',
                 'name:en': u'Asian Highway AH61',
@@ -1378,7 +1366,6 @@ class GenericNetworkTest(FixtureTest):
             }, ways=[261067663]),
             dsl.relation(4, {
                 'distance': u'2083.1 km',
-                'name': u'Граница РФ (на Самару) — Шымкент, через Уральск, Актобе, Кызылорду',
                 'nat_ref': u'M-32',
                 'network': u'kz:national',
                 'ref': u'M-32',
@@ -1388,7 +1375,6 @@ class GenericNetworkTest(FixtureTest):
             }, ways=[261067663]),
             dsl.relation(5, {
                 'addr:country': u'KZ',
-                'description': u'Glukhov - Kursk - Voronezh - Saratov - Uralsk - Aktobe - Karabutak - Aralsk - Novokazalinsk - Kzylorda - Shymkent',
                 'description:fr': u'E 38 Glukhov - Chimkent',
                 'name': u'Европейский маршрут E 38',
                 'name:de': u'Europastraße 38',
@@ -1397,7 +1383,6 @@ class GenericNetworkTest(FixtureTest):
                 'name:pl': u'Trasa europejska E 38',
                 'name:ru': u'Европейский маршрут E 38',
                 'network': u'e-road',
-                'note': u'WARNING: DO NOT DO AUTOMATIC SORTING IN RELATION EDITOR',
                 'ref': u'E 38',
                 'route': u'road',
                 'source': u'openstreetmap.org',
@@ -1530,10 +1515,7 @@ class GenericNetworkTest(FixtureTest):
             }),
             dsl.relation(1, {
                 'distance': u'307.0 km',
-                'name': u'Rīga — Daugavpils — Krāslava — Baltkrievijas robeža (Pāternieki)',
                 'name:lt': u'Ryga — Daugpilis — Kraslava — Baltarusijos siena',
-                'name:lv': u'Rīga — Daugavpils — Krāslava — Baltkrievijas robeža (Pāternieki)',
-                'name:ru': u'Рига — Даугавпилс — Краслава — белорусская граница (Патерниеки)',
                 'network': u'lv:national',
                 'ref': u'A6',
                 'route': u'road',
@@ -1634,7 +1616,6 @@ class GenericNetworkTest(FixtureTest):
                 'surface': u'asphalt',
             }),
             dsl.relation(1, {
-                'description': u'National Road A1: border with SRB (Tabanovce) - Kumanovo - Miladinovce - Veles -Gevgelija -border with Greece (Bogorodica)',
                 'from': u'Kumanovo',
                 'name': u'A1',
                 'network': u'mk:national',
@@ -1765,7 +1746,7 @@ class GenericNetworkTest(FixtureTest):
                 'network': u'NO:Riksvei',
             })
 
-    def test_noriksvei(self):
+    def test_noriksvei_capital(self):
         import dsl
 
         z, x, y = (16, 34089, 18878)
@@ -1835,7 +1816,6 @@ class GenericNetworkTest(FixtureTest):
                 'route': u'road',
                 'source': u'openstreetmap.org',
                 'type': u'route',
-                'url': u'http://wiki.openstreetmap.org/wiki/Asia/Asian_Highway_Network',
                 'wikidata': u'Q727638',
                 'wikipedia': u'en:AH2',
             }, ways=[27030698]),
@@ -2078,7 +2058,6 @@ class GenericNetworkTest(FixtureTest):
                 'oneway': u'yes',
                 'ref': u'S7',
                 'source': u'openstreetmap.org',
-                'source:maxaxleload': u'Dz.U. 2011 nr 222 poz. 1321 Art. 2 pkt. 11',
                 'source:maxspeed': u'PL:trunk',
                 'surface': u'asphalt',
             }),
@@ -2182,7 +2161,6 @@ class GenericNetworkTest(FixtureTest):
                 'oneway': u'yes',
                 'ref': u'A18',
                 'source': u'openstreetmap.org',
-                'source:maxaxleload': u'Dz.U. 2011 nr 222 poz. 1321 Art. 2 pkt. 11',
                 'source:maxspeed': u'sign',
                 'surface': u'concrete',
                 'turn:lanes': u'none|none|right',
@@ -2283,7 +2261,6 @@ class GenericNetworkTest(FixtureTest):
                 'lanes': u'1',
                 'maxspeed': u'90',
                 'maxspeed:bus': u'70',
-                'maxspeed:hgv:conditional': u'90 @ (weight<=3.5);70 @ (weight>3.5)',
                 'maxspeed:trailer': u'70',
                 'ref': u'901',
                 'source': u'openstreetmap.org',
@@ -2548,7 +2525,6 @@ class GenericNetworkTest(FixtureTest):
             dsl.relation(1, {
                 'name': u'Можайское шоссе (город Одинцово)',
                 'network': u'ru:municipal',
-                'note': u'Данный участок не входит в состав дорог регионального или межмуниципального значения, относится к городу Одинцово (дорога местного значения).',
                 'route': u'road',
                 'source': u'openstreetmap.org',
                 'type': u'route',
@@ -2578,7 +2554,6 @@ class GenericNetworkTest(FixtureTest):
                 'surface': u'asphalt',
             }),
             dsl.relation(1, {
-                'description': u'Москва — Тула — Орёл — Курск — Белгород — граница с Украиной',
                 'distance': u'720',
                 'name': u'«Крым»',
                 'network': u'ru:national',
@@ -2722,7 +2697,6 @@ class GenericNetworkTest(FixtureTest):
                 'source:maxspeed': u'SK:rural',
             }),
             dsl.relation(1, {
-                'description': u'Partizánske — Veľké Uherce — Skýcov — Zlaté Moravce — Tesárske Mlyňany — Vráble — Dvory nad Žitavou — Bajč',
                 'distance': u'88.837 km',
                 'network': u'sk:regional',
                 'ref': u'511',
@@ -2909,7 +2883,6 @@ class GenericNetworkTest(FixtureTest):
                 'source': u'openstreetmap.org',
             }),
             dsl.relation(1, {
-                'description': u'Вінниця - Турбів - Гайсин - Балта - Велика Михайлівка - /М-16/',
                 'distance': u'366.3',
                 'name': u'Автошлях Р-33',
                 'network': u'ua:regional',
@@ -2923,7 +2896,6 @@ class GenericNetworkTest(FixtureTest):
                 'wikipedia': u'uk:Автошлях Р 33',
             }, ways=[162675995]),
             dsl.relation(2, {
-                'description': u'Біла Церква - Тетіїв - Липовець - Гуменне - до автомобільної дороги М-12',
                 'distance': u'157.2',
                 'name': u'Автошлях Р-17',
                 'network': u'ua:regional',
@@ -3170,7 +3142,6 @@ class GenericNetworkTest(FixtureTest):
                 'source': u'openstreetmap.org',
             }),
             dsl.relation(1, {
-                'description': u'Оржиця (Т-17-13) — Мусіївка — Хорол (М03, Т-17-16)',
                 'distance': u'51.5',
                 'loc_ref': u'Т-17-09',
                 'name': u'Автошлях Т-17-09',

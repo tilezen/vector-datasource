@@ -4317,6 +4317,17 @@ def _guess_network_mx(tags):
     return networks
 
 
+def _guess_network_no(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_no_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _guess_network_jp(tags):
     ref = tags.get('ref')
 
@@ -4576,6 +4587,25 @@ def _sort_network_mx(network, ref):
         network_code = 0
     else:
         network_code = len(network.split(':')) + 1
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_no(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'NO:oslo:ring':
+        network_code = 0
+    elif network == 'e-road':
+        network_code = 1
+    elif network == 'NO:Riksvei':
+        network_code = 2
+    elif network == 'NO:Fylkesvei':
+        network_code = 3
+    else:
+        network_code = len(network.split(':')) + 4
 
     ref = _ref_importance(ref)
 
@@ -4940,6 +4970,37 @@ def _normalize_kr_netref(network, ref):
     return network, ref
 
 
+def _normalize_no_netref(network, ref):
+    prefix, number = _splitref(ref)
+
+    if prefix == 'Rv':
+        network = 'NO:Riksvei'
+        ref = number
+
+    elif prefix == 'Fv':
+        network = 'NO:Fylkesvei'
+        ref = number
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = 'E ' + number.lstrip('0')
+
+    elif prefix == 'Ring':
+        network = 'NO:oslo:ring'
+        ref = 'Ring ' + number
+
+    elif network and network.lower().startswith('no:riksvei'):
+        network = 'NO:Riksvei'
+
+    elif network and network.lower().startswith('no:fylkesvei'):
+        network = 'NO:Fylkesvei'
+
+    else:
+        network = None
+
+    return network, ref
+
+
 def _normalize_ph_netref(network, ref):
     if network == 'PH:nhn':
         network = 'PH:NHN'
@@ -5083,6 +5144,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_mx,
         fix=_normalize_mx_netref,
         sort=_sort_network_mx,
+    ),
+    'NO': CountryNetworkLogic(
+        backfill=_guess_network_no,
+        fix=_normalize_no_netref,
+        sort=_sort_network_no,
+        shield_text=_use_ref_as_is,
     ),
     'PH': CountryNetworkLogic(
         fix=_normalize_ph_netref,
