@@ -3842,46 +3842,6 @@ class GenericNetworkTest(FixtureTest):
                 'network': u'GA:national',
             })
 
-    def test_inroads(self):
-        import dsl
-
-        z, x, y = (16, 46765, 26893)
-
-        self.generate_fixtures(
-            dsl.is_in('IN', z, x, y),
-            # https://www.openstreetmap.org/way/169248989
-            dsl.way(169248989, dsl.tile_diagonal(z, x, y), {
-                'highway': u'secondary',
-                'lanes': u'2',
-                'maxspeed': u'50',
-                'name': u'Panchkula - Nahan Road',
-                'ref': u'MDR118',
-                'source': u'openstreetmap.org',
-            }),
-            dsl.relation(1, {
-                'name': u'Haryana Major District Road 118',
-                'network': u'IN:SH:HR',
-                'ref': u'MDR118',
-                'route': u'road',
-                'source': u'openstreetmap.org',
-                'type': u'route',
-            }, ways=[169248989]),
-            dsl.relation(2, {
-                'name': u'Panchkula - Nahan Road',
-                'name:en': u'Panchkula - Nahan Road',
-                'network': u'IN-roads',
-                'route': u'road',
-                'source': u'openstreetmap.org',
-                'type': u'route',
-            }, ways=[169248989]),
-        )
-
-        self.assert_has_feature(
-            z, x, y, 'roads', {
-                'id': 169248989,
-                'network': u'IN:road',
-            })
-
     def test_iqroads(self):
         import dsl
 

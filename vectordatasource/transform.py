@@ -4326,6 +4326,17 @@ def _guess_network_gr(tags):
     return networks
 
 
+def _guess_network_in(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_in_netref(None, part)
+        networks.append((network, ref))
+    return networks
+
+
 def _guess_network_mx(tags):
     ref = tags.get('ref')
     networks = []
@@ -4657,6 +4668,23 @@ def _sort_network_gr(network, ref):
         network_code = 1
     elif network == 'e-road':
         network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_in(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'IN:NH':
+        network_code = 0
+    elif network == 'IN:SH':
+        network_code = 1
+    elif network == 'IN:MDR':
+        network_code = 2
     else:
         network_code = len(network.split(':')) + 3
 
@@ -5134,6 +5162,40 @@ def _normalize_gr_netref(network, ref):
 
     elif network and network.startswith('GR:provincial:'):
         network = 'GR:provincial'
+
+    return network, ref
+
+
+def _normalize_in_netref(network, ref):
+    prefix, ref = _splitref(ref)
+
+    if prefix == 'NH':
+        network = 'IN:NH'
+
+    elif prefix == 'SH':
+        network = 'IN:SH'
+
+    elif prefix == 'MDR':
+        network = 'IN:MDR'
+
+    elif network and network.startswith('IN:NH'):
+        network = 'IN:NH'
+
+    elif network and network.startswith('IN:SH'):
+        network = 'IN:SH'
+
+    elif network and network.startswith('IN:MDR'):
+        network = 'IN:MDR'
+
+    elif ref == 'MDR':
+        network = 'IN:MDR'
+        ref = None
+
+    elif ref == 'ORR':
+        network = 'IN:NH'
+
+    else:
+        network = None
 
     return network, ref
 
@@ -5632,6 +5694,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_gr,
         fix=_normalize_gr_netref,
         sort=_sort_network_gr,
+    ),
+    'IN': CountryNetworkLogic(
+        backfill=_guess_network_in,
+        fix=_normalize_in_netref,
+        sort=_sort_network_in,
+        shield_text=_use_ref_as_is,
     ),
     'IR': CountryNetworkLogic(
         fix=_normalize_ir_netref,
