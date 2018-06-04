@@ -76,4 +76,4 @@ class ShieldTextRef(FixtureTest):
             16, 14852, 26071, 'roads',
             {'kind': 'highway', 'id': 290908536,
              'all_networks': ['US:I', 'US:OK:Turnpike'],
-             'all_shield_texts': ['44', None]})
+             'all_shield_texts': ['44', type(None)]})

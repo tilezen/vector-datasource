@@ -35,7 +35,7 @@ class BusRouteRefs(FixtureTest):
             {'id': 225516711,
              'bus_network': type(None),
              'bus_shield_text': '3',
-             'all_bus_networks': [None],
+             'all_bus_networks': [type(None)],
              'all_bus_shield_texts': ['3']})
 
     def test_full_lists_disappear_by_zoom_12(self):

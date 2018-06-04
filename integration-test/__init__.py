@@ -85,41 +85,61 @@ def make_acceptable_module_name(path):
 #                       falsey, the match fails.
 #   {'key': obj}      - The key must exist and its value must be equal to the
 #                       given object.
+#   {'key': list(..)} - The key must exist, and its value must be a list of the
+#                       same length. These rules are applied recursively to
+#                       the corresponding items in both lists.
 #
 # This allows us to write some reasonably flexible rules.
 #
 def match_properties(actual, expected):
     for exp_k, exp_v in expected.iteritems():
         v = actual.get(exp_k, None)
-        # normalise unicode values
-        if isinstance(v, unicode):
-            v = v.encode('utf-8')
 
-        if exp_v is not None:
-            if isinstance(exp_v, set):
-                if v not in exp_v:
-                    return False
-
-            elif isinstance(exp_v, type):
-                if not isinstance(v, exp_v):
-                    return False
-
-            elif callable(exp_v):
-                if not exp_v(v):
-                    return False
-
-            elif isinstance(exp_v, unicode):
-                if v != exp_v.encode('utf-8'):
-                    return False
-
-            elif v != exp_v:
-                return False
-
-        else:
-            if v is None:
-                return False
+        if not _match_item(v, exp_v):
+            return False
 
     return True
+
+
+# Recursive single item match.
+#
+# Applies the rules described in the comment for match_properties() to a single
+# element, recursing into lists to apply the same logic.
+def _match_item(v, exp_v):
+    # normalise unicode values
+    if isinstance(v, unicode):
+        v = v.encode('utf-8')
+
+    if exp_v is None:
+        # confusingly, a missing or None value (v) does _not_ match an expected
+        # value of None! expecting None is interpreted as expecting _any_
+        # value.
+        return v is not None
+
+    elif isinstance(exp_v, set):
+        return v in exp_v
+
+    elif isinstance(exp_v, type):
+        return isinstance(v, exp_v)
+
+    elif callable(exp_v):
+        return exp_v(v)
+
+    elif isinstance(exp_v, unicode):
+        return v == exp_v.encode('utf-8')
+
+    elif isinstance(v, list) and isinstance(exp_v, list):
+        if len(v) != len(exp_v):
+            return False
+
+        for v2, exp_v2 in zip(v, exp_v):
+            if not _match_item(v2, exp_v2):
+                return False
+
+        return True
+
+    # final catch-all
+    return v == exp_v
 
 
 # quantify how different a feature is from the expected feature properties.
