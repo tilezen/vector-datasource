@@ -5350,6 +5350,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
                     t, _, r = mz_networks[i:i+3]
                     if t == 'road' and r == ref:
                         found = True
+                        break
                 if not found:
                     network = country_code
 
