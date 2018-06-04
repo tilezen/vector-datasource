@@ -1873,70 +1873,6 @@ class GenericNetworkTest(FixtureTest):
                 'network': u'NP:regional',
             })
 
-    def test_pemunicipal(self):
-        import dsl
-
-        z, x, y = (16, 18516, 33900)
-
-        self.generate_fixtures(
-            dsl.is_in('PE', z, x, y),
-            # https://www.openstreetmap.org/way/262205335
-            dsl.way(262205335, dsl.tile_diagonal(z, x, y), {
-                'highway': u'primary',
-                'ref': u'AM-103',
-                'source': u'openstreetmap.org',
-            }),
-            dsl.relation(1, {
-                'name': u'Ruta nacional AM-103',
-                'network': u'pe:municipal',
-                'route': u'road',
-                'source': u'openstreetmap.org',
-                'type': u'route',
-            }, ways=[262205335]),
-        )
-
-        self.assert_has_feature(
-            z, x, y, 'roads', {
-                'id': 262205335,
-                'network': u'PE:municipal',
-            })
-
-    def test_penational(self):
-        import dsl
-
-        z, x, y = (16, 18872, 34030)
-
-        self.generate_fixtures(
-            dsl.is_in('PE', z, x, y),
-            # https://www.openstreetmap.org/way/372608804
-            dsl.way(372608804, dsl.tile_diagonal(z, x, y), {
-                'highway': u'trunk',
-                'int_ref': u'PE-5N',
-                'name': u'Carretera Fernando Belaunde Terry',
-                'oneway': u'yes',
-                'ref': u'PE-5N',
-                'source': u'openstreetmap.org',
-                'surface': u'paved',
-            }),
-            dsl.relation(1, {
-                'int_ref': u'PE-5',
-                'name': u'Longitudinal de la Selva Norte',
-                'network': u'pe:national',
-                'ref': u'PE-5N',
-                'route': u'road',
-                'source': u'openstreetmap.org',
-                'type': u'route',
-                'wikidata': u'Q627318',
-                'wikipedia': u'es:Ruta nacional PE-5N',
-            }, ways=[372608804]),
-        )
-
-        self.assert_has_feature(
-            z, x, y, 'roads', {
-                'id': 372608804,
-                'network': u'PE:national',
-            })
-
     def test_phnational(self):
         import dsl
 
@@ -3469,4 +3405,827 @@ class GenericNetworkTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 26395642,
                 'network': u'KZ:regional',
+            })
+
+    def test_biroads(self):
+        import dsl
+
+        z, x, y = (16, 38215, 33392)
+
+        self.generate_fixtures(
+            dsl.is_in('BI', z, x, y),
+            # https://www.openstreetmap.org/way/208822117
+            dsl.way(208822117, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'lanes': u'2',
+                'name': u'RN2',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+                'survey': u'GPS',
+            }),
+            dsl.relation(1, {
+                'name': u'RN2',
+                'network': u'BI-roads',
+                'ref': u'RN2',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[208822117]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 208822117,
+                'network': u'BI:road',
+            })
+
+    def test_boroads(self):
+        import dsl
+
+        z, x, y = (16, 20552, 36089)
+
+        self.generate_fixtures(
+            dsl.is_in('BO', z, x, y),
+            # https://www.openstreetmap.org/way/96056846
+            dsl.way(96056846, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'lanes': u'2',
+                'name': u'Avenida Circunvalación',
+                'oneway': u'yes',
+                'ref': u'F1',
+                'ref_1': u'F12',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+            }),
+            dsl.relation(1, {
+                'from': u'Desaguadero',
+                'name': u'Ruta Nacional 1',
+                'network': u'BO-roads',
+                'operator': u'ABC',
+                'ref': u'F1',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'to': u'Bermejo',
+                'type': u'route',
+                'wikidata': u'Q1133917',
+                'wikipedia': u'es:Ruta 1 (Bolivia)',
+            }, ways=[96056846]),
+            dsl.relation(2, {
+                'from': u'Caihuasi (Cruce RN4)',
+                'name': u'Ruta Nacional 12',
+                'network': u'bo-roads',
+                'operator': u'ABC',
+                'ref': u'F12',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'to': u'Pisiga (Front Chile)',
+                'type': u'route',
+            }, ways=[96056846]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 96056846,
+                'network': u'BO:road',
+            })
+
+    def test_boroads2(self):
+        import dsl
+
+        z, x, y = (16, 20742, 34783)
+
+        self.generate_fixtures(
+            dsl.is_in('BO', z, x, y),
+            # https://www.openstreetmap.org/way/187629235
+            dsl.way(187629235, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'junction': u'roundabout',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'from': u'Cruce F3 (Yucumo)',
+                'name': u'Ruta Nacional 8',
+                'network': u'BO-roads',
+                'ref': u'F8',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'to': u'Guayanamerín',
+                'type': u'route',
+                'wikipedia': u'es:Ruta 8 (Bolivia)',
+            }, ways=[187629235]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 187629235,
+                'network': u'BO:road',
+            })
+
+    def test_boroads3(self):
+        import dsl
+
+        z, x, y = (16, 20418, 36170)
+
+        self.generate_fixtures(
+            dsl.is_in('BO', z, x, y),
+            # https://www.openstreetmap.org/way/142334277
+            dsl.way(142334277, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'lanes': u'2',
+                'maxspeed': u'80',
+                'name': u'RN27: Ancaravi-Turco',
+                'oneway': u'no',
+                'ref': u'F27',
+                'source': u'openstreetmap.org',
+                'surface': u'paved',
+            }),
+            dsl.relation(1, {
+                'from': u'Ancaravi',
+                'is_in': u'Bolivia',
+                'name': u'Ruta Nacional 27',
+                'network': u'BO-Roads',
+                'operator': u'ABC',
+                'ref': u'F27',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'to': u'Juchus Huaylla (Cruce RN4)',
+                'type': u'route',
+            }, ways=[142334277]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 142334277,
+                'network': u'BO:road',
+            })
+
+    def test_brbaroads(self):
+        import dsl
+
+        z, x, y = (16, 25787, 35137)
+
+        self.generate_fixtures(
+            dsl.is_in('BR', z, x, y),
+            # https://www.openstreetmap.org/way/552869142
+            dsl.way(552869142, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'lanes': u'2',
+                'maxspeed': u'60',
+                'name': u'Avenida Santos Dumont',
+                'old_name': u'Estrada do Coco',
+                'oneway': u'yes',
+                'operator': u'CLN',
+                'ref': u'BA-099',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+            }),
+            dsl.relation(1, {
+                'network': u'BR-BA-roads',
+                'ref': u'BA-099',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[552869142]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 552869142,
+                'network': u'BR:BA',
+            })
+
+    def test_brmgroads(self):
+        import dsl
+
+        z, x, y = (16, 24235, 35954)
+
+        self.generate_fixtures(
+            dsl.is_in('BR', z, x, y),
+            # https://www.openstreetmap.org/way/355329134
+            dsl.way(355329134, dsl.tile_diagonal(z, x, y), {
+                'highway': u'residential',
+                'name': u'Travessa VIII',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'network': u'BR-MG-roads',
+                'ref': u'MG-188',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[355329134]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 355329134,
+                'network': u'BR:MG',
+            })
+
+    def test_brsp(self):
+        import dsl
+
+        z, x, y = (16, 24010, 37375)
+
+        self.generate_fixtures(
+            dsl.is_in('BR', z, x, y),
+            # https://www.openstreetmap.org/way/275485009
+            dsl.way(275485009, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'name': u'Rodovia José Edgard Carneiro dos Santos',
+                'oneway': u'no',
+                'operator': u'DER',
+                'ref': u'SP-193',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'network': u'BR-SP',
+                'operator': u'DER',
+                'ref': u'SP-193',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[275485009]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 275485009,
+                'network': u'BR:SP',
+            })
+
+    def test_brtoroads(self):
+        import dsl
+
+        z, x, y = (16, 24157, 35010)
+
+        self.generate_fixtures(
+            dsl.is_in('BR', z, x, y),
+            # https://www.openstreetmap.org/way/249260364
+            dsl.way(249260364, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary_link',
+                'lanes': u'1',
+                'oneway': u'yes',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+            }),
+            dsl.relation(1, {
+                'network': u'BR-TO-roads',
+                'ref': u'TO-050',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[249260364]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 249260364,
+                'network': u'BR:TO',
+            })
+
+    def test_cgroads(self):
+        import dsl
+
+        z, x, y = (16, 35672, 32984)
+
+        self.generate_fixtures(
+            dsl.is_in('CG', z, x, y),
+            # https://www.openstreetmap.org/way/79513695
+            dsl.way(79513695, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'ref': u'RN 2',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+            }),
+            dsl.relation(1, {
+                'network': u'CG-roads',
+                'ref': u'RN 2',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[79513695]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 79513695,
+                'network': u'CG:road',
+            })
+
+    def test_cmroads(self):
+        import dsl
+
+        z, x, y = (16, 34866, 32072)
+
+        self.generate_fixtures(
+            dsl.is_in('CM', z, x, y),
+            # https://www.openstreetmap.org/way/203757381
+            dsl.way(203757381, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'oneway': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'name': u'N2',
+                'network': u'CM-roads',
+                'ref': u'N2 (Cameroon)',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[203757381]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 203757381,
+                'network': u'CM:road',
+            })
+
+    def test_garoads(self):
+        import dsl
+
+        z, x, y = (16, 34888, 32456)
+
+        self.generate_fixtures(
+            dsl.is_in('GA', z, x, y),
+            # https://www.openstreetmap.org/way/79297648
+            dsl.way(79297648, dsl.tile_diagonal(z, x, y), {
+                'access': u'yes',
+                'highway': u'trunk',
+                'ref': u'RN2',
+                'source': u'openstreetmap.org',
+                'start_date': u'befor 1970',
+                'surface': u'unpaved',
+            }),
+            dsl.relation(1, {
+                'network': u'GA-roads',
+                'ref': u'RN2',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[79297648]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 79297648,
+                'network': u'GA:road',
+            })
+
+    def test_inroads(self):
+        import dsl
+
+        z, x, y = (16, 46765, 26893)
+
+        self.generate_fixtures(
+            dsl.is_in('IN', z, x, y),
+            # https://www.openstreetmap.org/way/169248989
+            dsl.way(169248989, dsl.tile_diagonal(z, x, y), {
+                'highway': u'secondary',
+                'lanes': u'2',
+                'maxspeed': u'50',
+                'name': u'Panchkula - Nahan Road',
+                'ref': u'MDR118',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'name': u'Haryana Major District Road 118',
+                'network': u'IN:SH:HR',
+                'ref': u'MDR118',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[169248989]),
+            dsl.relation(2, {
+                'name': u'Panchkula - Nahan Road',
+                'name:en': u'Panchkula - Nahan Road',
+                'network': u'IN-roads',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[169248989]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 169248989,
+                'network': u'IN:road',
+            })
+
+    def test_iqroads(self):
+        import dsl
+
+        z, x, y = (16, 40984, 26142)
+
+        self.generate_fixtures(
+            dsl.is_in('IQ', z, x, y),
+            # https://www.openstreetmap.org/way/386326359
+            dsl.way(386326359, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'oneway': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'name:en': u'Highway 5',
+                'network': u'IQ-roads',
+                'ref': u'5',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[386326359]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 386326359,
+                'network': u'IQ:road',
+            })
+
+    def test_lonetwork(self):
+        import dsl
+
+        z, x, y = (16, 51383, 28940)
+
+        self.generate_fixtures(
+            dsl.is_in('LO', z, x, y),
+            # https://www.openstreetmap.org/way/477601864
+            dsl.way(477601864, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'int_ref': u'AH12',
+                'ref': u'13',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'int_ref': u'AH12',
+                'name': u'Asian Highway AH12',
+                'name:de': u'Asien Fernstraße AH12',
+                'name:en': u'Asian Highway AH12',
+                'name:ru': u'Азиатский маршрут AH12',
+                'network': u'AsianHighway',
+                'ref': u'AH12',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+                'wikidata': u'Q727626',
+                'wikipedia': u'en:AH12',
+            }, ways=[477601864]),
+            dsl.relation(2, {
+                'network': u'LO-network',
+                'ref': u'13',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[477601864]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 477601864,
+                'network': u'LO:network',
+            })
+
+    def test_mzroads(self):
+        import dsl
+
+        z, x, y = (16, 38471, 36963)
+
+        self.generate_fixtures(
+            dsl.is_in('MZ', z, x, y),
+            # https://www.openstreetmap.org/way/130302571
+            dsl.way(130302571, dsl.tile_diagonal(z, x, y), {
+                'highway': u'secondary',
+                'old_ref': u'423',
+                'ref': u'N222',
+                'source': u'openstreetmap.org',
+                'surface': u'unpaved',
+            }),
+            dsl.relation(1, {
+                'network': u'MZ-roads',
+                'old_ref': u'423',
+                'ref': u'N222',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[130302571]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 130302571,
+                'network': u'MZ:road',
+            })
+
+    def test_thnetwork(self):
+        import dsl
+
+        z, x, y = (16, 51091, 30043)
+
+        self.generate_fixtures(
+            dsl.is_in('TH', z, x, y),
+            # https://www.openstreetmap.org/way/449165197
+            dsl.way(449165197, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'junction': u'roundabout',
+                'name': u'ถนนพหลโยธิน',
+                'name:en': u'Phahon Yothin Road',
+                'name:th': u'ถนนพหลโยธิน',
+                'oneway': u'yes',
+                'ref': u'1',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'name': u'ถนนพหลโยธิน',
+                'name:de': u'Phahon Yothin Straße',
+                'name:en': u'Phahon Yothin Road',
+                'name:ja': u'パホンヨーティン通り',
+                'name:nl': u'Phahonyothin',
+                'name:th': u'ถนนพหลโยธิน',
+                'name:zh': u'拍鳳裕庭路',
+                'network': u'TH-network',
+                'ref': u'1',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+                'wikidata': u'Q2063769',
+                'wikipedia': u'th:ถนนพหลโยธิน',
+            }, ways=[449165197]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 449165197,
+                'network': u'TH:network',
+            })
+
+    def test_throads(self):
+        import dsl
+
+        z, x, y = (16, 51840, 29552)
+
+        self.generate_fixtures(
+            dsl.is_in('TH', z, x, y),
+            # https://www.openstreetmap.org/way/544361823
+            dsl.way(544361823, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'oneway': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'network': u'TH-roads',
+                'ref': u'212',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[544361823]),
+            dsl.relation(2, {
+                'network': u'TH-roads',
+                'ref': u'240',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[544361823]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 544361823,
+                'network': u'TH:road',
+            })
+
+    def test_trmotorway(self):
+        import dsl
+
+        z, x, y = (16, 37688, 25164)
+
+        self.generate_fixtures(
+            dsl.is_in('TR', z, x, y),
+            # https://www.openstreetmap.org/way/184329678
+            dsl.way(184329678, dsl.tile_diagonal(z, x, y), {
+                'highway': u'motorway',
+                'int_ref': u'E 87',
+                'lanes': u'3',
+                'maxspeed': u'90',
+                'minspeed': u'40',
+                'name': u'İzmir Çevre Yolu',
+                'oneway': u'yes',
+                'ref': u'O-30',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'name:bg': u'Европейски път Е 87, Турция',
+                'name:de': u'Europastraße 87, Türkei',
+                'name:en': u'European Route 87, Turkey',
+                'network': u'e-road',
+                'ref': u'E 87',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[184329678]),
+            dsl.relation(2, {
+                'network': u'TR-motorway',
+                'ref': u'O-30',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[184329678]),
+            dsl.relation(3, {
+                'highway': u'motorway',
+                'name': u'İzmir Çevre Yolu',
+                'network': u'TR-motorway',
+                'ref': u'O-30',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[184329678]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 184329678,
+                'network': u'TR:motorway',
+            })
+
+    def test_trroad(self):
+        import dsl
+
+        z, x, y = (16, 38708, 24805)
+
+        self.generate_fixtures(
+            dsl.is_in('TR', z, x, y),
+            # https://www.openstreetmap.org/way/226373024
+            dsl.way(226373024, dsl.tile_diagonal(z, x, y), {
+                'highway': u'motorway_link',
+                'oneway': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'description': u'Ankara Çevre Otoyolu',
+                'network': u'TR-road',
+                'ref': u'O-20',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[226373024]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 226373024,
+                'network': u'TR:road',
+            })
+
+    def test_trroads(self):
+        import dsl
+
+        z, x, y = (16, 37787, 24573)
+
+        self.generate_fixtures(
+            dsl.is_in('TR', z, x, y),
+            # https://www.openstreetmap.org/way/171673241
+            dsl.way(171673241, dsl.tile_diagonal(z, x, y), {
+                'highway': u'trunk',
+                'lanes': u'2',
+                'maxspeed': u'50',
+                'oneway': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'network': u'TR-roads',
+                'ref': u'D 555',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[171673241]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 171673241,
+                'network': u'TR:road',
+            })
+
+    def test_viroads(self):
+        import dsl
+
+        z, x, y = (16, 51909, 28995)
+
+        self.generate_fixtures(
+            dsl.is_in('VI', z, x, y),
+            # https://www.openstreetmap.org/way/48844918
+            dsl.way(48844918, dsl.tile_diagonal(z, x, y), {
+                'highway': u'secondary',
+                'ref': u'217',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'network': u'VI-roads',
+                'ref': u'217',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[48844918]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 48844918,
+                'network': u'VI:road',
+            })
+
+    def test_vnroads(self):
+        import dsl
+
+        z, x, y = (16, 52648, 30239)
+
+        self.generate_fixtures(
+            dsl.is_in('VN', z, x, y),
+            # https://www.openstreetmap.org/way/140383278
+            dsl.way(140383278, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'name': u'Quốc lộ 1D',
+                'oneway': u'yes',
+                'ref': u'1D',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'name': u'Quốc lộ 1D',
+                'name:en': u'National road 1D',
+                'name:vi': u'Quốc lộ 1D',
+                'network': u'VN-roads',
+                'ref': u'1D',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[140383278]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 140383278,
+                'network': u'VN:road',
+            })
+
+    def test_vntl(self):
+        import dsl
+
+        z, x, y = (16, 52078, 29058)
+
+        self.generate_fixtures(
+            dsl.is_in('VN', z, x, y),
+            # https://www.openstreetmap.org/way/161484320
+            dsl.way(161484320, dsl.tile_diagonal(z, x, y), {
+                'alt_name': u'Đường Cà Mau',
+                'highway': u'secondary',
+                'name': u'Tỉnh lộ 481',
+                'ref': u'481',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'alt_name': u'Đường Cà Mau',
+                'highway': u'secondary',
+                'name': u'Tỉnh lộ 481',
+                'network': u'VN-TL',
+                'ref': u'481',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[161484320]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 161484320,
+                'network': u'VN:TL',
+            })
+
+    def test_zmroads(self):
+        import dsl
+
+        z, x, y = (16, 37204, 35232)
+
+        self.generate_fixtures(
+            dsl.is_in('ZM', z, x, y),
+            # https://www.openstreetmap.org/way/44146353
+            dsl.way(44146353, dsl.tile_diagonal(z, x, y), {
+                'bridge': u'yes',
+                'highway': u'primary',
+                'layer': u'1',
+                'ref': u'M8',
+                'source': u'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'eef': u'M8',
+                'name': u'M8',
+                'network': u'ZM-roads',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[44146353]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 44146353,
+                'network': u'ZM:road',
             })

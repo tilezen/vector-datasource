@@ -4328,6 +4328,17 @@ def _guess_network_no(tags):
     return networks
 
 
+def _guess_network_pe(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_pe_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _guess_network_jp(tags):
     ref = tags.get('ref')
 
@@ -4573,7 +4584,20 @@ def _sort_network_ir(network, ref):
     elif network == 'AsianHighway':
         network_code = 99
     else:
-        network_code = 5 + len(network.split(':'))
+        network_code = len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_lo(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':'))
 
     ref = _ref_importance(ref)
 
@@ -4730,7 +4754,10 @@ def _normalize_br_netref(network, ref):
             return network, ref
 
     elif network.startswith('BR:'):
-        # probably already good?
+        # turn things like "BR:BA-roads" into just "BR:BA"
+        if network.endswith('-roads'):
+            network = network[:-6]
+
         return network, ref
 
     elif network in _BR_STATES:
@@ -5001,6 +5028,55 @@ def _normalize_no_netref(network, ref):
     return network, ref
 
 
+_PE_STATES = set([
+    'AM',  # Amazonas
+    'AN',  # Ancash
+    'AP',  # Apurímac
+    'AR',  # Arequipa
+    'AY',  # Ayacucho
+    'CA',  # Cajamarca
+    'CU',  # Cusco
+    'HU',  # Huánuco
+    'HV',  # Huancavelica
+    'IC',  # Ica
+    'JU',  # Junín
+    'LA',  # Lambayeque
+    'LI',  # La Libertad
+    'LM',  # Lima (including Callao)
+    'LO',  # Loreto
+    'MD',  # Madre de Dios
+    'MO',  # Moquegua
+    'PA',  # Pasco
+    'PI',  # Piura
+    'PU',  # Puno
+    'SM',  # San Martín
+    'TA',  # Tacna
+    'TU',  # Tumbes
+    'UC',  # Ucayali
+])
+
+
+def _normalize_pe_netref(network, ref):
+    prefix, number = _splitref(ref)
+
+    # Peruvian refs seem to be usually written "XX-YY" with a dash, so we have
+    # to remove that as it's not part of the shield text.
+    number = number.lstrip('-')
+
+    if prefix == 'PE':
+        network = 'PE:PE'
+        ref = number
+
+    elif prefix in _PE_STATES:
+        network = 'PE:' + prefix
+        ref = number
+
+    else:
+        network = None
+
+    return network, ref
+
+
 def _normalize_ph_netref(network, ref):
     if network == 'PH:nhn':
         network = 'PH:NHN'
@@ -5140,6 +5216,9 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_kr,
         fix=_normalize_kr_netref,
     ),
+    'LO': CountryNetworkLogic(
+        sort=_sort_network_lo,
+    ),
     'MX': CountryNetworkLogic(
         backfill=_guess_network_mx,
         fix=_normalize_mx_netref,
@@ -5149,6 +5228,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_no,
         fix=_normalize_no_netref,
         sort=_sort_network_no,
+        shield_text=_use_ref_as_is,
+    ),
+    'PE': CountryNetworkLogic(
+        backfill=_guess_network_pe,
+        fix=_normalize_pe_netref,
         shield_text=_use_ref_as_is,
     ),
     'PH': CountryNetworkLogic(
@@ -5168,7 +5252,7 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
 
 # regular expression to look for a country code at the beginning of the network
 # tag.
-_COUNTRY_CODE = re.compile('^([a-z][a-z]):(.*)', re.UNICODE | re.IGNORECASE)
+_COUNTRY_CODE = re.compile('^([a-z][a-z])[:-](.*)', re.UNICODE | re.IGNORECASE)
 
 
 def _fixup_network_country_code(network):
@@ -5177,7 +5261,13 @@ def _fixup_network_country_code(network):
 
     m = _COUNTRY_CODE.match(network)
     if m:
-        network = m.group(1).upper() + ':' + m.group(2)
+        suffix = m.group(2)
+
+        # fix up common suffixes which are plural with ones which are singular.
+        if suffix.lower() == 'roads':
+            suffix = 'road'
+
+        network = m.group(1).upper() + ':' + suffix
 
     return network
 
@@ -5197,6 +5287,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     # apply some generic fixes to networks:
     #  * if they begin with two letters and a colon, then make sure the two
     #    letters are upper case, as they're probably a country code.
+    #  * if they begin with two letters and a dash, then make the letters upper
+    #    case and replace the dash with a colon.
     for i in xrange(0, len(mz_networks), 3):
         t, n = mz_networks[i:i+2]
         if t == 'road' and n is not None:
