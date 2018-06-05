@@ -907,7 +907,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 503900908,
-                'network': u'GR:provincial:22',
+                'network': u'GR:provincial',
             })
 
     def test_grprovincial52(self):
@@ -940,7 +940,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 25144610,
-                'network': u'GR:provincial:52',
+                'network': u'GR:provincial',
             })
 
     def test_grprovincial54(self):
@@ -970,7 +970,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 14429261,
-                'network': u'GR:provincial:54',
+                'network': u'GR:provincial',
             })
 
     def test_grprovincial55(self):
@@ -1000,7 +1000,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 332922898,
-                'network': u'GR:provincial:55',
+                'network': u'GR:provincial',
             })
 
     def test_grprovincial72(self):
@@ -1030,7 +1030,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 223510857,
-                'network': u'GR:provincial:72',
+                'network': u'GR:provincial',
             })
 
     def test_grprovincial73(self):
@@ -1061,7 +1061,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 425300873,
-                'network': u'GR:provincial:73',
+                'network': u'GR:provincial',
             })
 
     def test_irfreeways(self):

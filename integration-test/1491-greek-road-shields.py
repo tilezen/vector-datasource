@@ -208,7 +208,7 @@ class GreekShieldTest(FixtureTest):
             }),
             dsl.relation(1, {
                 'name': u'Παρανέστι - Σιδηρόνερο',
-                'network': u'GR:provincial:52',
+                'network': u'GR:provincial',
                 'ref': u'5206',
                 'route': u'road',
                 'source': u'openstreetmap.org',
@@ -219,9 +219,9 @@ class GreekShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 15463931,
-                'network': u'GR:provincial:52',
+                'network': u'GR:provincial',
                 'shield_text': u'5206',
-                'all_networks': [u'GR:provincial:52'],
+                'all_networks': [u'GR:provincial'],
                 'all_shield_texts': [u'5206'],
             })
 

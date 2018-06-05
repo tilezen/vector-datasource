@@ -4896,6 +4896,9 @@ def _normalize_gr_netref(network, ref):
     elif network == 'e-road':
         ref = 'E' + ref
 
+    elif network and network.startswith('GR:provincial:'):
+        network = 'GR:provincial'
+
     return network, ref
 
 
