@@ -4423,6 +4423,19 @@ def _guess_network_pl(tags):
     return networks
 
 
+def _guess_network_pt(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_pt_netref(None, part)
+        networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4689,6 +4702,35 @@ def _sort_network_pl(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_pt(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'PT:motorway':
+        network_code = 0
+    elif network == 'PT:primary':
+        network_code = 1
+    elif network == 'PT:secondary':
+        network_code = 2
+    elif network == 'PT:national':
+        network_code = 3
+    elif network == 'PT:rapid':
+        network_code = 4
+    elif network == 'PT:express':
+        network_code = 5
+    elif network == 'PT:regional':
+        network_code = 6
+    elif network == 'PT:municipal':
+        network_code = 7
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 8
 
     ref = _ref_importance(ref)
 
@@ -5146,6 +5188,40 @@ def _normalize_pl_netref(network, ref):
     return network, ref
 
 
+# expansion from ref prefixes to (network, shield text prefix).
+#
+# https://en.wikipedia.org/wiki/Roads_in_Portugal
+#
+# note that it seems signs generally don't have EN, ER or EM on them. instead,
+# they have N, R and, presumably, M - although i wasn't able to find one of
+# those. perhaps they're not important enough to sign with a number.
+_PT_NETWORK_EXPANSION = {
+    'A': ('PT:motorway', 'A'),
+    'IP': ('PT:primary', 'IP'),
+    'IC': ('PT:secondary', 'IC'),
+    'VR': ('PT:rapid', 'VR'),
+    'VE': ('PT:express', 'VE'),
+    'EN': ('PT:national', 'N'),
+    'ER': ('PT:regional', 'R'),
+    'EM': ('PT:municipal', 'M'),
+    'E': ('e-road', 'E'),
+}
+
+
+def _normalize_pt_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    result = _PT_NETWORK_EXPANSION.get(prefix)
+    if result:
+        network, letter = result
+        ref = letter + num.lstrip('0')
+
+    else:
+        network = None
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -5297,6 +5373,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         fix=_normalize_pl_netref,
         sort=_sort_network_pl,
     ),
+    'PT': CountryNetworkLogic(
+        backfill=_guess_network_pt,
+        fix=_normalize_pt_netref,
+        sort=_sort_network_pt,
+        shield_text=_use_ref_as_is,
+    ),
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
         sort=_sort_network_us,
@@ -5343,10 +5425,17 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     #    letters are upper case, as they're probably a country code.
     #  * if they begin with two letters and a dash, then make the letters upper
     #    case and replace the dash with a colon.
+    #  * expand ;-delimited lists in refs
     for i in xrange(0, len(mz_networks), 3):
-        t, n = mz_networks[i:i+2]
+        t, n, r = mz_networks[i:i+3]
         if t == 'road' and n is not None:
-            mz_networks[i+1] = _fixup_network_country_code(n)
+            n = _fixup_network_country_code(n)
+            mz_networks[i+1] = n
+        if r is not None and ';' in r:
+            refs = r.split(';')
+            mz_networks[i+2] = refs.pop()
+            for new_ref in refs:
+                mz_networks.extend((t, n, new_ref))
 
     # for road networks, if there's no explicit network, but the country code
     # and ref are both available, then try to use them to back-fill the
