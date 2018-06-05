@@ -2728,6 +2728,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 235109184,
+                'shield_text': u'М05',
                 'network': u'UA:international',
             })
 
@@ -2759,10 +2760,13 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 386932416,
+                'shield_text': type(None),
                 'network': u'UA:local',
             })
 
     def test_ualocalzht(self):
+        # we don't output shield text for the UA:local network, as they are
+        # minor roads which don't appear to get shields.
         import dsl
 
         z, x, y = (16, 38025, 22012)
@@ -2794,7 +2798,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 368445267,
-                'network': u'UA:local:zht',
+                'shield_text': type(None),
+                'network': type(None),
             })
 
     def test_uanational(self):
@@ -2834,6 +2839,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 131492257,
+                'shield_text': u'Н03',
                 'network': u'UA:national',
             })
 
@@ -2882,10 +2888,16 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 162675995,
+                'shield_text': u'Р17',
                 'network': u'UA:regional',
+                'all_shield_texts': [u'Р17', u'Р33'],
+                'all_networks': ['UA:regional', 'UA:regional'],
             })
 
     def test_uaterrirorialluhansk(self):
+        # note the spelling mistake: "ua:terrirorial" vs "ua:territorial".
+        # we can't normalise this (it's a data error), and the ref is a
+        # C-class, which is very minor and doesn't appear to get a shield.
         import dsl
 
         z, x, y = (16, 40024, 22539)
@@ -2914,7 +2926,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 234326072,
-                'network': u'UA:terrirorial:luhansk',
+                'shield_text': type(None),
+                'network': type(None),
             })
 
     def test_uaterritorial(self):
@@ -2949,6 +2962,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 390887321,
+                'shield_text': u'Т1009',
                 'network': u'UA:territorial',
             })
 
@@ -2985,7 +2999,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 458709032,
-                'network': u'UA:territorial:hrk',
+                'shield_text': u'Т2104',
+                'network': u'UA:territorial',
             })
 
     def test_uaterritorialhrs(self):
@@ -3023,7 +3038,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 131709575,
-                'network': u'UA:territorial:hrs',
+                'shield_text': u'Т2216',
+                'network': u'UA:territorial',
             })
 
     def test_uaterritoriallug(self):
@@ -3056,7 +3072,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 34911803,
-                'network': u'UA:territorial:lug',
+                'shield_text': u'Т1322',
+                'network': u'UA:territorial',
             })
 
     def test_uaterritorialods(self):
@@ -3091,7 +3108,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 60205997,
-                'network': u'UA:territorial:ods',
+                'shield_text': u'Т1607',
+                'network': u'UA:territorial',
             })
 
     def test_uaterritorialpol(self):
@@ -3128,7 +3146,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 345592644,
-                'network': u'UA:territorial:pol',
+                'shield_text': u'Т1709',
+                'network': u'UA:territorial',
             })
 
     def test_uaterritorialzap(self):
@@ -3169,7 +3188,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 189288216,
-                'network': u'UA:territorial:zap',
+                'shield_text': u'Т0813',
+                'network': u'UA:territorial',
             })
 
     def test_uatertiary(self):
@@ -3204,6 +3224,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 298743622,
+                'shield_text': type(None),
                 'network': u'UA:tertiary',
             })
 

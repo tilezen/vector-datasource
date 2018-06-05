@@ -4458,6 +4458,19 @@ def _guess_network_ru(tags):
     return networks
 
 
+def _guess_network_ua(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ua_netref(tags.get('network'), part)
+        networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4778,6 +4791,32 @@ def _sort_network_ru(network, ref):
     elif network == 'e-road':
         network_code = 99
     elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ua(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'UA:international':
+        network_code = 0
+    elif network == 'UA:national':
+        network_code = 1
+    elif network == 'UA:regional':
+        network_code = 2
+    elif network == 'UA:territorial':
+        network_code = 3
+    elif network == 'e-road':
         network_code = 99
     else:
         network_code = len(network.split(':')) + 4
@@ -5315,6 +5354,45 @@ def _normalize_ru_netref(network, ref):
     return network, ref
 
 
+def _normalize_ua_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+    prefix, num = _splitref(ref)
+
+    num = num.lstrip('-')
+
+    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
+        if network is None:
+            network = 'UA:international'
+        ref = u'М' + num
+
+    elif prefix in (u'Н', 'H'):
+        if network is None:
+            network = 'UA:national'
+        ref = u'Н' + num
+
+    elif prefix in (u'Р', 'P'):
+        if network is None:
+            network = 'UA:regional'
+        ref = u'Р' + num
+
+    elif prefix in (u'Т', 'T'):
+        network = 'UA:territorial'
+        ref = u'Т' + num.replace('-', '')
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = u'E' + num
+
+    else:
+        ref = None
+        network = None
+
+    if isinstance(ref, unicode):
+        ref = ref.encode('utf-8')
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -5476,6 +5554,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_ru,
         fix=_normalize_ru_netref,
         sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
+    'UA': CountryNetworkLogic(
+        backfill=_guess_network_ua,
+        fix=_normalize_ua_netref,
+        sort=_sort_network_ua,
         shield_text=_use_ref_as_is,
     ),
     'US': CountryNetworkLogic(
@@ -5905,14 +5989,15 @@ def _choose_most_important_network(properties, prefix, importance_fn):
 
         tuples = new_tuples
 
-        # expose first network as network/shield_text
-        network, ref = tuples[0]
-        properties[prefix + 'network'] = network
-        properties[prefix + 'shield_text'] = ref
+        if tuples:
+            # expose first network as network/shield_text
+            network, ref = tuples[0]
+            properties[prefix + 'network'] = network
+            properties[prefix + 'shield_text'] = ref
 
-        # replace properties with sorted versions of themselves
-        properties[all_networks] = [n[0] for n in tuples]
-        properties[all_shield_texts] = [n[1] for n in tuples]
+            # replace properties with sorted versions of themselves
+            properties[all_networks] = [n[0] for n in tuples]
+            properties[all_shield_texts] = [n[1] for n in tuples]
 
     return properties
 
