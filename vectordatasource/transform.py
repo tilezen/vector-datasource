@@ -4591,6 +4591,25 @@ def _sort_network_ir(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
+def _sort_network_kz(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'KZ:national':
+        network_code = 0
+    elif network == 'KZ:regional':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = 2 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
 def _sort_network_lo(network, ref):
     if network is None:
         network_code = 9999
@@ -5012,6 +5031,20 @@ def _normalize_kr_netref(network, ref):
     return network, ref
 
 
+def _normalize_kz_netref(network, ref):
+    net, num = _splitref(ref)
+
+    if net == 'AH' or network == 'AH':
+        network = 'AsianHighway'
+        ref = 'AH' + num
+
+    elif net == 'E' or network == 'e-road':
+        network = 'e-road'
+        ref = 'E' + num
+
+    return network, ref
+
+
 def _normalize_no_netref(network, ref):
     prefix, number = _splitref(ref)
 
@@ -5231,6 +5264,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'KR': CountryNetworkLogic(
         backfill=_guess_network_kr,
         fix=_normalize_kr_netref,
+    ),
+    'KZ': CountryNetworkLogic(
+        fix=_normalize_kz_netref,
+        sort=_sort_network_kz,
+        shield_text=_use_ref_as_is,
     ),
     'LO': CountryNetworkLogic(
         sort=_sort_network_lo,

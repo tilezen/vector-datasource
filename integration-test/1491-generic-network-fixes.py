@@ -1404,10 +1404,15 @@ class GenericNetworkTest(FixtureTest):
             }, ways=[261067663]),
         )
 
+        # TODO: sort e-road or AH first/last?
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 261067663,
-                'network': u'KZ:national',
+                'shield_text': 'M-32',
+                'network': 'KZ:national',
+                'all_shield_texts': ['M-32', 'E38', 'AH61', 'AH62', 'E123'],
+                'all_networks': ['KZ:national', 'e-road', 'AsianHighway',
+                                 'AsianHighway', 'e-road'],
             })
 
     def test_ltnational(self):
