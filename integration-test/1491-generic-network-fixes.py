@@ -2272,7 +2272,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 422696695,
-                'network': u'PT:national',
+                'shield_text': 'N230',
+                'network': 'PT:national',
             })
 
     def test_ptregionalcentre(self):
@@ -2302,6 +2303,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 182513565,
+                'shield_text': 'R230',
                 'network': u'PT:regional',
             })
 
