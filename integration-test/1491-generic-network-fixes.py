@@ -2404,10 +2404,12 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 40357283,
+                'shield_text': u'Р145',
                 'network': u'RU:federal',
             })
 
     def test_ruintermunicipal(self):
+        # don't shield these H-type / intermunicipal roads
         import dsl
 
         z, x, y = (16, 39641, 19019)
@@ -2434,6 +2436,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 165806759,
+                'shield_text': type(None),
                 'network': u'RU:intermunicipal',
             })
 
@@ -2462,6 +2465,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 272251749,
+                'shield_text': type(None),
                 'network': u'RU:local',
             })
 
@@ -2495,6 +2499,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 156094979,
+                'shield_text': type(None),
                 'network': u'RU:municipal',
             })
 
@@ -2539,7 +2544,10 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 24682239,
+                'shield_text': u'М2',
                 'network': u'RU:national',
+                'all_shield_texts': [u'М2', 'E105'],
+                'all_networks': ['RU:national', 'e-road'],
             })
 
     def test_ruregional(self):
@@ -2580,6 +2588,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 342367532,
+                'shield_text': u'Р382',
                 'network': u'RU:regional',
             })
 

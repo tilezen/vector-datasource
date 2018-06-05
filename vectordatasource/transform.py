@@ -4248,12 +4248,21 @@ def _guess_network_br(tags):
 
 def _guess_network_ca(tags):
     nat_name = tags.get('nat_name:en') or tags.get('nat_name')
+    ref = tags.get('ref')
+    network = tags.get('network')
+
+    networks = []
+
+    if network and ref:
+        networks.append((network, ref))
+
     if nat_name and nat_name.lower() == 'trans-canada highway':
         # note: no ref for TCH. some states appear to add route numbers from
         # the state highway to the TCH shields, e.g:
         # https://commons.wikimedia.org/wiki/File:TCH-16_(BC).svg
-        return [('CA:transcanada', tags.get('ref'))]
-    return []
+        networks.append(('CA:transcanada', ref))
+
+    return networks
 
 
 def _guess_network_cn(tags):
@@ -4431,6 +4440,19 @@ def _guess_network_pt(tags):
         if not part:
             continue
         network, ref = _normalize_pt_netref(None, part)
+        networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_ru(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ru_netref(tags.get('network'), part)
         networks.append((network, part))
 
     return networks
@@ -4733,6 +4755,37 @@ def _sort_network_pt(network, ref):
         network_code = len(network.split(':')) + 8
 
     ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ru(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'RU:national' and ref:
+        if ref.startswith(u'М'):
+            network_code = 0
+        elif ref.startswith(u'Р'):
+            network_code = 1
+        elif ref.startswith(u'А'):
+            network_code = 2
+        else:
+            network_code = 9999
+    elif network == 'RU:regional':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
 
     return network_code * 10000 + min(ref, 9999)
 
@@ -5151,7 +5204,8 @@ def _normalize_pe_netref(network, ref):
 
     # Peruvian refs seem to be usually written "XX-YY" with a dash, so we have
     # to remove that as it's not part of the shield text.
-    number = number.lstrip('-')
+    if number:
+        number = number.lstrip('-')
 
     if prefix == 'PE':
         network = 'PE:PE'
@@ -5218,6 +5272,45 @@ def _normalize_pt_netref(network, ref):
 
     else:
         network = None
+
+    return network, ref
+
+
+def _normalize_ru_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+    prefix, num = _splitref(ref)
+
+    # get rid of any stuff trailing the '-'. seems to be a section number or
+    # mile marker?
+    if num:
+        num = num.lstrip('-').split('-')[0]
+
+    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
+        ref = u'М' + num
+
+    elif prefix in (u'Р', 'P'):
+        if network is None:
+            network = 'RU:regional'
+        ref = u'Р' + num
+
+    elif prefix in (u'А', 'A'):
+        if network is None:
+            network = 'RU:regional'
+        ref = u'А' + num
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = u'E' + num
+
+    elif prefix == 'AH':
+        network = 'AsianHighway'
+        ref = u'AH' + num
+
+    else:
+        ref = None
+
+    if isinstance(ref, unicode):
+        ref = ref.encode('utf-8')
 
     return network, ref
 
@@ -5379,6 +5472,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         sort=_sort_network_pt,
         shield_text=_use_ref_as_is,
     ),
+    'RU': CountryNetworkLogic(
+        backfill=_guess_network_ru,
+        fix=_normalize_ru_netref,
+        sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
         sort=_sort_network_us,
@@ -5453,7 +5552,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
             solo_networks_from_relations = []
             for i in xrange(0, len(mz_networks), 3):
                 t, n, r = mz_networks[i:i+3]
-                if t == 'road' and n and r is None:
+                if t == 'road' and n and (r is None or r == ref):
                     solo_networks_from_relations.append((n, i))
 
             # if we found one _and only one_ road network, then we use the
@@ -5462,6 +5561,9 @@ def merge_networks_from_tags(shape, props, fid, zoom):
             # only one, we can delete it by using its index.
             if len(solo_networks_from_relations) == 1:
                 network, i = solo_networks_from_relations[0]
+                # add network back into properties in case we need to pass it
+                # to the backfill.
+                props['network'] = network
                 del mz_networks[i:i+3]
 
         if logic and logic.backfill:
@@ -5798,7 +5900,7 @@ def _choose_most_important_network(properties, prefix, importance_fn):
                     seen_ref.add(ref)
                 new_tuples.append((network, ref))
 
-            elif ref not in seen_ref:
+            elif ref is not None and ref not in seen_ref:
                 new_tuples.append((network, ref))
 
         tuples = new_tuples
