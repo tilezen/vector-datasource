@@ -1319,7 +1319,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 386400216,
-                'network': u'JP:prefectural:kanagawa',
+                'network': u'JP:prefectural',
             })
 
     def test_kznational(self):

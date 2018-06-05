@@ -4989,8 +4989,8 @@ def _normalize_mx_netref(network, ref):
 
 
 def _normalize_jp_netref(network, ref):
-    if network and network.startswith('jp:'):
-        network = 'JP:' + network[3:]
+    if network and network.startswith('JP:prefectural:'):
+        network = 'JP:prefectural'
 
     elif network is None:
         prefix, _ = _splitref(ref)
