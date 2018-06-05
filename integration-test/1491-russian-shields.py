@@ -181,3 +181,42 @@ class RussianShieldTest(FixtureTest):
                 'network': u'RU:national',
                 'shield_text': u'А119',
             })
+
+    def test_ru_k_road(self):
+        # the K roads (actually cyrillic capital Ka) are regional roads with
+        # some very long refs. it doesn't look like they ever get displayed
+        # as a shield, so we drop the shield text.
+        import dsl
+
+        z, x, y = (16, 47192, 21042)
+
+        self.generate_fixtures(
+            dsl.is_in('RU', z, x, y),
+            # https://www.openstreetmap.org/way/342367532
+            dsl.way(342367532, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary_link',
+                'lanes': u'2',
+                'old_ref': u'P382',
+                'oneway': u'yes',
+                'ref': u'50К-17р',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+            }),
+            dsl.relation(1, {
+                'name': u'Новосибирск — Кочки — Павлодар (в пред. РФ)',
+                'network': u'ru:regional',
+                'ref': u'50К-17р',
+                'route': u'road',
+                'source': u'openstreetmap.org',
+                'type': u'route',
+            }, ways=[342367532]),
+            # note: P382 relation should go here. this tests what happens if
+            # there's no additional relation.
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 342367532,
+                'shield_text': type(None),
+                'network': u'RU:regional',
+            })
