@@ -1583,33 +1583,36 @@ class GenericNetworkTest(FixtureTest):
                 'network': u'LV:regional',
             })
 
-    def test_mklocal(self):
+    def test_r29278_mknational(self):
         import dsl
 
-        z, x, y = (16, 36653, 24587)
+        z, x, y = (16, 36578, 24359)
 
         self.generate_fixtures(
             dsl.is_in('MK', z, x, y),
-            # https://www.openstreetmap.org/way/219834131
-            dsl.way(219834131, dsl.tile_diagonal(z, x, y), {
-                'highway': u'tertiary',
-                'name': u'Велушина - Острец',
-                'ref': u'04-01',
+            # https://www.openstreetmap.org/way/193364172
+            dsl.way(193364172, dsl.tile_diagonal(z, x, y), {
+                'highway': u'secondary',
+                'ref': u'R29278',
                 'source': u'openstreetmap.org',
             }),
             dsl.relation(1, {
-                'network': u'mk:local',
-                'ref': u'04-01',
+                'from': u'Negotino',
+                'name': u'R29278',
+                'network': u'mk:national',
+                'ref': u'R29278',
                 'route': u'road',
                 'source': u'openstreetmap.org',
+                'to': u'A2',
                 'type': u'route',
-            }, ways=[219834131]),
+            }, ways=[193364172]),
         )
 
         self.assert_has_feature(
             z, x, y, 'roads', {
-                'id': 219834131,
-                'network': u'MK:local',
+                'id': 193364172,
+                'network': u'MK:national',
+                'shield_text': u'R29278',
             })
 
     def test_mknational(self):
