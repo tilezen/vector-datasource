@@ -1065,6 +1065,12 @@ class GenericNetworkTest(FixtureTest):
             })
 
     def test_irfreeways(self):
+        # it looks like roads in Iran are signed in both Arabic and Latin
+        # scripts for the numbers, and that the Asian Highway is signed
+        # something like "A1Tr", although the "Tr" is in a little box.
+        #
+        # https://en.wikipedia.org/wiki/Freeway_2_(Iran)
+
         import dsl
 
         z, x, y = (16, 41219, 25277)
@@ -1127,6 +1133,9 @@ class GenericNetworkTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 549630346,
                 'network': u'IR:freeway',
+                'shield_text': '2',
+                'all_networks': ['IR:freeway', 'AsianHighway'],
+                'all_shield_texts': ['2', 'A1'],
             })
 
     def test_irnational(self):
@@ -1191,7 +1200,10 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 35693445,
-                'network': u'IR:national',
+                'network': 'IR:national',
+                'shield_text': '44',
+                'all_networks': ['IR:national', 'AsianHighway'],
+                'all_shield_texts': ['44', 'A1'],
             })
 
     def test_japrefectural(self):

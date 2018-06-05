@@ -4900,8 +4900,20 @@ def _normalize_gr_netref(network, ref):
 
 
 def _normalize_ir_netref(network, ref):
-    if network == 'AH':
+    net, num = _splitref(ref)
+
+    if network == 'AH' or net == 'AH':
         network = 'AsianHighway'
+
+        # in Iran, the Wikipedia page for the AsianHighway template suggests
+        # that the AH route is shown as "A1Tr" (with the "Tr" in a little box)
+        # https://en.wikipedia.org/wiki/Template:AHN-AH
+        #
+        # however, i haven't been able to find an example on a real road sign,
+        # so perhaps it's not widely shown. anyway, we probably want "A1" as
+        # the shield text.
+        ref = 'A' + num
+
     elif network == 'IR:freeways':
         network = 'IR:freeway'
 
@@ -5206,6 +5218,7 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'IR': CountryNetworkLogic(
         fix=_normalize_ir_netref,
         sort=_sort_network_ir,
+        shield_text=_use_ref_as_is,
     ),
     'JP': CountryNetworkLogic(
         backfill=_guess_network_jp,
