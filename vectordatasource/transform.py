@@ -4298,6 +4298,17 @@ def _guess_network_de(tags):
     return networks
 
 
+def _guess_network_ga(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ga_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _guess_network_gr(tags):
     ref = tags.get('ref')
     networks = []
@@ -4616,6 +4627,21 @@ def _sort_network_de(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 6
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ga(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'GA:national':
+        network_code = 0
+    elif network == 'GA:L-road':
+        network_code = 1
+    else:
+        network_code = 2 + len(network.split(':'))
 
     ref = _ref_importance(ref)
 
@@ -5064,6 +5090,24 @@ def _normalize_de_netref(network, ref):
 
     elif network == 'BAB':
         network = 'DE:BAB'
+
+    return network, ref
+
+
+def _normalize_ga_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if prefix in ('N', 'RN'):
+        network = 'GA:national'
+        ref = 'N' + num
+
+    elif prefix == 'L':
+        network = 'GA:L-road'
+        ref = 'L' + num
+
+    else:
+        network = None
+        ref = None
 
     return network, ref
 
@@ -5571,6 +5615,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_fr,
         fix=_normalize_fr_netref,
         sort=_sort_network_fr,
+        shield_text=_use_ref_as_is,
+    ),
+    'GA': CountryNetworkLogic(
+        backfill=_guess_network_ga,
+        fix=_normalize_ga_netref,
+        sort=_sort_network_ga,
         shield_text=_use_ref_as_is,
     ),
     'GB': CountryNetworkLogic(

@@ -3838,7 +3838,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 79297648,
-                'network': u'GA:road',
+                'shield_text': 'N2',
+                'network': u'GA:national',
             })
 
     def test_inroads(self):
