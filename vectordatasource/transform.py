@@ -4471,6 +4471,19 @@ def _guess_network_ua(tags):
     return networks
 
 
+def _guess_network_za(tags):
+    ref = tags.get('ref', '')
+    networks = []
+
+    for part in re.split('[;/,]', ref):
+        if not part:
+            continue
+        network, ref = _normalize_za_netref(tags.get('network'), part)
+        networks.append((network, part))
+
+    return networks
+
+
 def _do_not_backfill(tags):
     return None
 
@@ -4820,6 +4833,32 @@ def _sort_network_ua(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_za(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'ZA:national':
+        network_code = 0
+    elif network == 'ZA:provincial':
+        network_code = 1
+    elif network == 'ZA:regional':
+        network_code = 2
+    elif network == 'ZA:metropolitan':
+        network_code = 3
+    elif network == 'ZA:kruger':
+        network_code = 4
+    elif network == 'ZA:S-road':
+        network_code = 5
+    else:
+        network_code = len(network.split(':')) + 6
 
     if ref is None:
         ref = 9999
@@ -5393,6 +5432,52 @@ def _normalize_ua_netref(network, ref):
     return network, ref
 
 
+def _normalize_za_netref(network, ref):
+    prefix, num = _splitref(ref)
+    ndigits = len(num)
+
+    # N, R & M numbered routes all have special shields which have the letter
+    # above the number, which would make it part of the shield artwork rather
+    # than the shield text.
+    if prefix == 'N':
+        network = 'ZA:national'
+        ref = num
+
+    elif prefix == 'R' and ndigits == 2:
+        # 2-digit R numbers are provincial routes, 3-digit are regional routes.
+        # https://en.wikipedia.org/wiki/Numbered_routes_in_South_Africa
+        network = 'ZA:provincial'
+        ref = num
+
+    elif prefix == 'R' and ndigits == 3:
+        network == 'ZA:regional'
+        ref = num
+
+    elif prefix == 'M':
+        # there are various different metropolitan networks, but according to
+        # the Wikipedia page, they all have the same shield. so lumping them
+        # all together under "metropolitan".
+        network = 'ZA:metropolitan'
+        ref = num
+
+    elif prefix == 'H':
+        # i wasn't able to find documentation for these, but there are
+        # H-numbered roads with good signage, which appear to be only in the
+        # Kruger National Park, so i've named them that way.
+        network = 'ZA:kruger'
+
+    elif prefix == 'S':
+        # i wasn't able to find any documentation for these, but there are
+        # plain white-on-green signs for some of these visible.
+        network = 'ZA:S-road'
+
+    else:
+        ref = None
+        network = None
+
+    return network, ref
+
+
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
@@ -5565,6 +5650,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
         sort=_sort_network_us,
+    ),
+    'ZA': CountryNetworkLogic(
+        backfill=_guess_network_za,
+        fix=_normalize_za_netref,
+        sort=_sort_network_za,
+        shield_text=_use_ref_as_is,
     ),
 }
 

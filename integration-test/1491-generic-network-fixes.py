@@ -3292,10 +3292,13 @@ class GenericNetworkTest(FixtureTest):
             }, ways=[4290234]),
         )
 
+        # note: ZA M-number shields have the M as part of the shield artwork
+        # above the number, so removed it from the shield text.
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4290234,
-                'network': u'ZA:capetown',
+                'shield_text': '3',
+                'network': u'ZA:metropolitan',
             })
 
     def test_zanational(self):
@@ -3391,10 +3394,14 @@ class GenericNetworkTest(FixtureTest):
             }, ways=[481135283]),
         )
 
+        # note: the ZA shields have the R above the number (in a diamond for
+        # provincial rather than regional shields), so removed that from the
+        # shield text, as it's part of the artwork.
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 481135283,
-                'network': u'ZA:regional',
+                'shield_text': '26',
+                'network': u'ZA:provincial',
             })
 
     def test_grnational(self):
