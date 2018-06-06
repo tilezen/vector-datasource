@@ -3654,6 +3654,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 552869142,
+                'shield_text': '099',
                 'network': u'BR:BA',
             })
 
@@ -3682,6 +3683,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 355329134,
+                'shield_text': '188',
                 'network': u'BR:MG',
             })
 
@@ -3714,6 +3716,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 275485009,
+                'shield_text': '193',
                 'network': u'BR:SP',
             })
 
@@ -3744,6 +3747,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 249260364,
+                'shield_text': '050',
                 'network': u'BR:TO',
             })
 
