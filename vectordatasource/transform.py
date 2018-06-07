@@ -4493,11 +4493,14 @@ def _guess_network_ua(tags):
     return networks
 
 
+_COMMON_SEPARATORS = re.compile('[;,/,]')
+
+
 def _guess_network_za(tags):
     ref = tags.get('ref', '')
     networks = []
 
-    for part in re.split('[;/,]', ref):
+    for part in _COMMON_SEPARATORS.split(ref):
         if not part:
             continue
         network, ref = _normalize_za_netref(tags.get('network'), part)
