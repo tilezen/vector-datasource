@@ -1729,7 +1729,7 @@ class GenericNetworkTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 106337203,
                 'shield_text': '555',
-                'network': u'NO:Fylkesvei',
+                'network': u'NO:fylkesvei',
             })
 
     def test_noriksvei(self):
@@ -1765,7 +1765,7 @@ class GenericNetworkTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 521803129,
                 'shield_text': '15',
-                'network': u'NO:Riksvei',
+                'network': u'NO:riksvei',
             })
 
     def test_noriksvei_capital(self):
@@ -1806,7 +1806,7 @@ class GenericNetworkTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 298679001,
                 'shield_text': '7',
-                'network': u'NO:Riksvei',
+                'network': u'NO:riksvei',
             })
 
     def test_npnational(self):

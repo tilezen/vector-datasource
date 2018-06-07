@@ -90,9 +90,9 @@ class NorwegianShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 26119489,
-                'network': u'NO:Fylkesvei',
+                'network': u'NO:fylkesvei',
                 'shield_text': u'51',
-                'all_networks': [u'NO:Fylkesvei'],
+                'all_networks': [u'NO:fylkesvei'],
                 'all_shield_texts': [u'51'],
             })
 
@@ -128,8 +128,8 @@ class NorwegianShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 3648469,
-                'network': u'NO:Fylkesvei',
+                'network': u'NO:fylkesvei',
                 'shield_text': u'270',
-                'all_networks': [u'NO:Fylkesvei'],
+                'all_networks': [u'NO:fylkesvei'],
                 'all_shield_texts': [u'270'],
             })

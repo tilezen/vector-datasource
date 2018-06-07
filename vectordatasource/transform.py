@@ -5341,11 +5341,11 @@ def _normalize_no_netref(network, ref):
     prefix, number = _splitref(ref)
 
     if prefix == 'Rv':
-        network = 'NO:Riksvei'
+        network = 'NO:riksvei'
         ref = number
 
     elif prefix == 'Fv':
-        network = 'NO:Fylkesvei'
+        network = 'NO:fylkesvei'
         ref = number
 
     elif prefix == 'E':
@@ -5357,10 +5357,10 @@ def _normalize_no_netref(network, ref):
         ref = 'Ring ' + number
 
     elif network and network.lower().startswith('no:riksvei'):
-        network = 'NO:Riksvei'
+        network = 'NO:riksvei'
 
     elif network and network.lower().startswith('no:fylkesvei'):
-        network = 'NO:Fylkesvei'
+        network = 'NO:fylkesvei'
 
     else:
         network = None
