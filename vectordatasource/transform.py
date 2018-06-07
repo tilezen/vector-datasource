@@ -4728,13 +4728,15 @@ def _sort_network_kz(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_lo(network, ref):
+def _sort_network_la(network, ref):
     if network is None:
         network_code = 9999
+    elif network == 'LA:national':
+        network_code = 0
     elif network == 'AsianHighway':
         network_code = 99
     else:
-        network_code = len(network.split(':'))
+        network_code = 1 + len(network.split(':'))
 
     ref = _ref_importance(ref)
 
@@ -5220,6 +5222,14 @@ def _normalize_ir_netref(network, ref):
 
     elif network == 'IR:freeways':
         network = 'IR:freeway'
+
+    return network, ref
+
+
+def _normalize_la_netref(network, ref):
+    # apparently common mistake: Laos is LA, not LO
+    if network == 'LO:network':
+        network = 'LA:national'
 
     return network, ref
 
@@ -5723,8 +5733,9 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         sort=_sort_network_kz,
         shield_text=_use_ref_as_is,
     ),
-    'LO': CountryNetworkLogic(
-        sort=_sort_network_lo,
+    'LA': CountryNetworkLogic(
+        fix=_normalize_la_netref,
+        sort=_sort_network_la,
     ),
     'MX': CountryNetworkLogic(
         backfill=_guess_network_mx,

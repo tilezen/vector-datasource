@@ -3877,7 +3877,7 @@ class GenericNetworkTest(FixtureTest):
         z, x, y = (16, 51383, 28940)
 
         self.generate_fixtures(
-            dsl.is_in('LO', z, x, y),
+            dsl.is_in('LA', z, x, y),
             # https://www.openstreetmap.org/way/477601864
             dsl.way(477601864, dsl.tile_diagonal(z, x, y), {
                 'highway': u'primary',
@@ -3911,7 +3911,7 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 477601864,
-                'network': u'LO:network',
+                'network': u'LA:national',
             })
 
     def test_mzroads(self):
