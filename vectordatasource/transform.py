@@ -4348,6 +4348,17 @@ def _guess_network_mx(tags):
     return networks
 
 
+def _guess_network_my(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_my_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
 def _guess_network_no(tags):
     ref = tags.get('ref')
     networks = []
@@ -4750,6 +4761,23 @@ def _sort_network_mx(network, ref):
         network_code = 0
     else:
         network_code = len(network.split(':')) + 1
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_my(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'MY:federal':
+        network_code = 0
+    elif network == 'MY:expressway':
+        network_code = 1
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 2
 
     ref = _ref_importance(ref)
 
@@ -5299,6 +5327,62 @@ def _normalize_mx_netref(network, ref):
     return network, ref
 
 
+# roads in Malaysia can have a state prefix similar to the letters used on
+# vehicle license plates. see Wikipedia for a list:
+#
+#  https://en.wikipedia.org/wiki/Malaysian_State_Roads_system
+#
+# these are mapped to the abbreviations given in the table on:
+#
+#  https://en.wikipedia.org/wiki/States_and_federal_territories_of_Malaysia
+#
+_MY_ROAD_STATE_CODES = {
+    'A': 'PRK',  # Perak
+    'B': 'SGR',  # Selangor
+    'C': 'PHG',  # Pahang
+    'D': 'KTN',  # Kelantan
+    'J': 'JHR',  # Johor
+    'K': 'KDH',  # Kedah
+    'M': 'MLK',  # Malacca
+    'N': 'NSN',  # Negiri Sembilan
+    'P': 'PNG',  # Penang
+    'R': 'PLS',  # Perlis
+    'SA': 'SBH',  # Sabah
+    'T': 'TRG',  # Terengganu
+    'Q': 'SWK',  # Sarawak
+}
+
+
+def _normalize_my_netref(network, ref):
+    prefix, number = _splitref(ref)
+
+    if prefix == 'E':
+        network = 'MY:expressway'
+
+    elif prefix in ('FT', ''):
+        network = 'MY:federal'
+        # federal highway 1 has many parts (1-1, 1-2, etc...) but it's not
+        # clear that they're actually signed that way. so throw the part
+        # after the dash away.
+        ref = number.split('-')[0]
+
+    elif prefix == 'AH':
+        network = 'AsianHighway'
+
+    elif prefix == 'MBSA':
+        network = 'MY:SGR:municipal'
+        # shorten ref so that it is more likely to fit in a 5-char shield.
+        ref = 'BSA' + number
+
+    elif prefix in _MY_ROAD_STATE_CODES:
+        network = 'MY:' + _MY_ROAD_STATE_CODES[prefix]
+
+    else:
+        network = None
+
+    return network, ref
+
+
 def _normalize_jp_netref(network, ref):
     if network and network.startswith('JP:prefectural:'):
         network = 'JP:prefectural'
@@ -5741,6 +5825,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_mx,
         fix=_normalize_mx_netref,
         sort=_sort_network_mx,
+    ),
+    'MY': CountryNetworkLogic(
+        backfill=_guess_network_my,
+        fix=_normalize_my_netref,
+        sort=_sort_network_my,
+        shield_text=_use_ref_as_is,
     ),
     'NO': CountryNetworkLogic(
         backfill=_guess_network_no,
