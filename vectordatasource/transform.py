@@ -5371,6 +5371,8 @@ def _normalize_my_netref(network, ref):
 
     elif prefix == 'MBSA':
         network = 'MY:SGR:municipal'
+        # shorten ref so that it is more likely to fit in a 5-char shield.
+        ref = 'BSA' + number
 
     elif prefix in _MY_ROAD_STATE_CODES:
         network = 'MY:' + _MY_ROAD_STATE_CODES[prefix]

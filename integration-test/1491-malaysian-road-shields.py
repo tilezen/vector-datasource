@@ -505,5 +505,5 @@ class MalaysianShieldTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 24701880,
                 'network': u'MY:SGR:municipal',
-                'shield_text': u'MBSA 15',
+                'shield_text': u'BSA15',
             })
