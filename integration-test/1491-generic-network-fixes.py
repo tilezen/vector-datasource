@@ -464,7 +464,10 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 26686903,
-                'network': u'CH:Nationalstrasse',
+                'shield_text': '28',
+                'network': u'CH:national',
+                'all_shield_texts': ['28'],
+                'all_networks': ['CH:national'],
             })
 
     def test_chregional(self):
