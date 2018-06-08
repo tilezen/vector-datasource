@@ -4608,9 +4608,9 @@ def _sort_network_ca(network, ref):
 def _sort_network_ch(network, ref):
     if network is None:
         network_code = 9999
-    elif network == 'CA:national':
+    elif network == 'CH:national':
         network_code = 0
-    elif network == 'CA:regional':
+    elif network == 'CH:regional':
         network_code = 1
     elif network == 'e-road':
         network_code = 99
