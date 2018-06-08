@@ -113,7 +113,6 @@ class SpanishShieldTest(FixtureTest):
                 'route': u'road',
                 'source': u'openstreetmap.org',
                 'type': u'route',
-                'url': u'http://wiki.openstreetmap.org/wiki/WikiProject_Europe/E-road_network',
             }, ways=[34078314]),
         )
 
@@ -630,12 +629,10 @@ class SpanishShieldTest(FixtureTest):
                 'junction': u'roundabout',
                 'lanes': u'2',
                 'layer': u'0',
-                'name': u'Carretera de Trujillo a Portugal por Valencia de Alcántara',
                 'ref': u'CC-21',
                 'source': u'openstreetmap.org',
             }),
             dsl.relation(1, {
-                'name': u'Carretera de Trujillo a Portugal por Valencia de Alcántara',
                 'operator': u'Ministerio de Fomento',
                 'ref': u'N-521',
                 'route': u'road',
@@ -2001,7 +1998,6 @@ class SpanishShieldTest(FixtureTest):
             # https://www.openstreetmap.org/way/4853102
             dsl.way(4853102, dsl.tile_diagonal(z, x, y), {
                 'highway': u'trunk',
-                'is_in': u'Oviedo;Asturias;Principado de Asturias;España;Europe',
                 'is_in:city': u'Oviedo',
                 'is_in:continent': u'Europe',
                 'is_in:country': u'España',
