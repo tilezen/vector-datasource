@@ -4491,6 +4491,21 @@ def _guess_network_ru(tags):
     return networks
 
 
+def _guess_network_tr(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in _COMMON_SEPARATORS.split(ref):
+        part = part.strip()
+        if not part:
+            continue
+        network, ref = _normalize_tr_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+
+    return networks
+
+
 def _guess_network_ua(tags):
     ref = tags.get('ref')
     networks = []
@@ -4887,6 +4902,39 @@ def _sort_network_ru(network, ref):
         else:
             network_code = 9999
     elif network == 'RU:regional':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_tr(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'TR:motorway':
+        network_code = 0
+    elif network == 'TR:highway':
+        # some highways are "main highways", so it makes sense to show them
+        # before regular other highways.
+        # see footer of https://en.wikipedia.org/wiki/State_road_D.010_(Turkey)
+        if ref in ('D010', 'D100', 'D200', 'D300', 'D400',
+                   'D550', 'D650', 'D750', 'D850', 'D950'):
+            network_code = 1
+        else:
+            network_code = 2
+    elif network == 'TR:provincial':
         network_code = 3
     elif network == 'e-road':
         network_code = 99
@@ -5596,6 +5644,40 @@ def _normalize_ru_netref(network, ref):
     return network, ref
 
 
+_TR_PROVINCIAL = re.compile('^[0-9]{2}-[0-9]{2}$')
+
+
+def _normalize_tr_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip('-')
+
+    if prefix == 'O':
+        # see https://en.wikipedia.org/wiki/Otoyol
+        network = 'TR:motorway'
+        ref = 'O' + num.lstrip('0')
+
+    elif prefix == 'D':
+        # see https://en.wikipedia.org/wiki/Turkish_State_Highway_System
+        network = 'TR:highway'
+        # drop section suffixes
+        ref = 'D' + num.split('-')[0]
+
+    elif ref and _TR_PROVINCIAL.match(ref):
+        network = 'TR:provincial'
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = 'E' + num
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
 def _normalize_ua_netref(network, ref):
     ref = _make_unicode_or_none(ref)
     prefix, num = _splitref(ref)
@@ -5861,6 +5943,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_ru,
         fix=_normalize_ru_netref,
         sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
+    'TR': CountryNetworkLogic(
+        backfill=_guess_network_tr,
+        fix=_normalize_tr_netref,
+        sort=_sort_network_tr,
         shield_text=_use_ref_as_is,
     ),
     'UA': CountryNetworkLogic(
