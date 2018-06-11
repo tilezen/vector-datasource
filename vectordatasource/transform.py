@@ -4265,6 +4265,18 @@ def _guess_network_ca(tags):
     return networks
 
 
+def _guess_network_ch(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ch_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+    return networks
+
+
 def _guess_network_cn(tags):
     ref = tags.get('ref')
     networks = []
@@ -4627,6 +4639,23 @@ def _sort_network_ca(network, ref):
         network_code = 0
     elif network == 'CA:yellowhead':
         network_code = 1
+    else:
+        network_code = len(network.split(':')) + 2
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ch(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CH:national':
+        network_code = 0
+    elif network == 'CH:regional':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
     else:
         network_code = len(network.split(':')) + 2
 
@@ -5158,6 +5187,25 @@ def _normalize_ca_netref(network, ref):
 def _normalize_cd_netref(network, ref):
     if network == 'CD:rrig':
         network = 'CD:RRIG'
+
+    return network, ref
+
+
+def _normalize_ch_netref(network, ref):
+    prefix, ref = _splitref(ref)
+
+    if network == 'CH:Nationalstrasse':
+        # clean up the ref by removing any prefixes and extra stuff after
+        # the number.
+        ref = ref.split(' ')[0]
+        network = 'CH:national'
+
+    elif prefix == 'A':
+        network = 'CH:motorway'
+
+    elif network not in ('CH:motorway', 'CH:national', 'CH:regional'):
+        network = None
+        ref = None
 
     return network, ref
 
@@ -5946,6 +5994,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_ca,
         fix=_normalize_ca_netref,
         sort=_sort_network_ca,
+    ),
+    'CH': CountryNetworkLogic(
+        backfill=_guess_network_ch,
+        fix=_normalize_ch_netref,
+        sort=_sort_network_ch,
     ),
     'CD': CountryNetworkLogic(
         fix=_normalize_cd_netref,
