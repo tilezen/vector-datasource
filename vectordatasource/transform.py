@@ -4491,6 +4491,19 @@ def _guess_network_ru(tags):
     return networks
 
 
+def _guess_network_sg(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_sg_netref(None, part)
+        networks.append((network, ref))
+
+    return networks
+
+
 def _guess_network_ua(tags):
     ref = tags.get('ref')
     networks = []
@@ -5596,6 +5609,32 @@ def _normalize_ru_netref(network, ref):
     return network, ref
 
 
+# NOTE: there's aslo an "NSC", which is under construction
+_SG_EXPRESSWAYS = set([
+    'AYE',  # Ayer Rajah Expressway
+    'BKE',  # Bukit Timah Expressway
+    'CTE',  # Central Expressway
+    'ECP',  # East Coast Parkway
+    'KJE',  # Kranji Expressway
+    'KPE',  # Kallang-Paya Lebar Expressway
+    'MCE',  # Marina Coastal Expressway
+    'PIE',  # Pan Island Expressway
+    'SLE',  # Seletar Expressway
+    'TPE',  # Tampines Expressway
+])
+
+
+def _normalize_sg_netref(network, ref):
+    if ref in _SG_EXPRESSWAYS:
+        network = 'SG:expressway'
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
 def _normalize_ua_netref(network, ref):
     ref = _make_unicode_or_none(ref)
     prefix, num = _splitref(ref)
@@ -5861,6 +5900,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_ru,
         fix=_normalize_ru_netref,
         sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
+    'SG': CountryNetworkLogic(
+        backfill=_guess_network_sg,
+        fix=_normalize_sg_netref,
         shield_text=_use_ref_as_is,
     ),
     'UA': CountryNetworkLogic(
