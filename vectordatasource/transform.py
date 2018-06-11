@@ -4265,6 +4265,18 @@ def _guess_network_ca(tags):
     return networks
 
 
+def _guess_network_ch(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ch_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+    return networks
+
+
 def _guess_network_cn(tags):
     ref = tags.get('ref')
     networks = []
@@ -4491,6 +4503,20 @@ def _guess_network_pt(tags):
     return networks
 
 
+def _guess_network_ro(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ro_netref(None, part)
+        if network or ref:
+            networks.append((network, part))
+
+    return networks
+
+
 def _guess_network_ru(tags):
     ref = tags.get('ref')
     networks = []
@@ -4500,6 +4526,34 @@ def _guess_network_ru(tags):
             continue
         network, ref = _normalize_ru_netref(tags.get('network'), part)
         networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_sg(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_sg_netref(None, part)
+        networks.append((network, ref))
+
+    return networks
+
+
+def _guess_network_tr(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in _COMMON_SEPARATORS.split(ref):
+        part = part.strip()
+        if not part:
+            continue
+        network, ref = _normalize_tr_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
 
     return networks
 
@@ -4598,6 +4652,23 @@ def _sort_network_ca(network, ref):
         network_code = 0
     elif network == 'CA:yellowhead':
         network_code = 1
+    else:
+        network_code = len(network.split(':')) + 2
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ch(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CH:national':
+        network_code = 0
+    elif network == 'CH:regional':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
     else:
         network_code = len(network.split(':')) + 2
 
@@ -4908,6 +4979,27 @@ def _sort_network_pt(network, ref):
     return network_code * 10000 + min(ref, 9999)
 
 
+def _sort_network_ro(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'RO:motorway':
+        network_code = 0
+    elif network == 'RO:national':
+        network_code = 1
+    elif network == 'RO:county':
+        network_code = 2
+    elif network == 'RO:local':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
 def _sort_network_ru(network, ref):
     ref = _make_unicode_or_none(ref)
 
@@ -4923,6 +5015,39 @@ def _sort_network_ru(network, ref):
         else:
             network_code = 9999
     elif network == 'RU:regional':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_tr(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'TR:motorway':
+        network_code = 0
+    elif network == 'TR:highway':
+        # some highways are "main highways", so it makes sense to show them
+        # before regular other highways.
+        # see footer of https://en.wikipedia.org/wiki/State_road_D.010_(Turkey)
+        if ref in ('D010', 'D100', 'D200', 'D300', 'D400',
+                   'D550', 'D650', 'D750', 'D850', 'D950'):
+            network_code = 1
+        else:
+            network_code = 2
+    elif network == 'TR:provincial':
         network_code = 3
     elif network == 'e-road':
         network_code = 99
@@ -5098,6 +5223,25 @@ def _normalize_ca_netref(network, ref):
 def _normalize_cd_netref(network, ref):
     if network == 'CD:rrig':
         network = 'CD:RRIG'
+
+    return network, ref
+
+
+def _normalize_ch_netref(network, ref):
+    prefix, ref = _splitref(ref)
+
+    if network == 'CH:Nationalstrasse':
+        # clean up the ref by removing any prefixes and extra stuff after
+        # the number.
+        ref = ref.split(' ')[0]
+        network = 'CH:national'
+
+    elif prefix == 'A':
+        network = 'CH:motorway'
+
+    elif network not in ('CH:motorway', 'CH:national', 'CH:regional'):
+        network = None
+        ref = None
 
     return network, ref
 
@@ -5771,6 +5915,31 @@ def _normalize_pt_netref(network, ref):
     return network, ref
 
 
+# note that there's another road class, DX, which is documented, but doesn't
+# currently exist.
+# see https://en.wikipedia.org/wiki/Roads_in_Romania
+#
+_RO_NETWORK_PREFIXES = {
+    'A': 'RO:motorway',
+    'DN': 'RO:national',
+    'DJ': 'RO:county',
+    'DC': 'RO:local',
+    'E': 'e-road',
+}
+
+
+def _normalize_ro_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    network = _RO_NETWORK_PREFIXES.get(prefix)
+    if network is not None:
+        ref = prefix + num
+    else:
+        ref = None
+
+    return network, ref
+
+
 def _normalize_ru_netref(network, ref):
     ref = _make_unicode_or_none(ref)
     prefix, num = _splitref(ref)
@@ -5806,6 +5975,66 @@ def _normalize_ru_netref(network, ref):
 
     if isinstance(ref, unicode):
         ref = ref.encode('utf-8')
+
+    return network, ref
+
+
+_TR_PROVINCIAL = re.compile('^[0-9]{2}-[0-9]{2}$')
+
+
+# NOTE: there's aslo an "NSC", which is under construction
+_SG_EXPRESSWAYS = set([
+    'AYE',  # Ayer Rajah Expressway
+    'BKE',  # Bukit Timah Expressway
+    'CTE',  # Central Expressway
+    'ECP',  # East Coast Parkway
+    'KJE',  # Kranji Expressway
+    'KPE',  # Kallang-Paya Lebar Expressway
+    'MCE',  # Marina Coastal Expressway
+    'PIE',  # Pan Island Expressway
+    'SLE',  # Seletar Expressway
+    'TPE',  # Tampines Expressway
+])
+
+
+def _normalize_sg_netref(network, ref):
+    if ref in _SG_EXPRESSWAYS:
+        network = 'SG:expressway'
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
+def _normalize_tr_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip('-')
+
+    if prefix == 'O':
+        # see https://en.wikipedia.org/wiki/Otoyol
+        network = 'TR:motorway'
+        ref = 'O' + num.lstrip('0')
+
+    elif prefix == 'D':
+        # see https://en.wikipedia.org/wiki/Turkish_State_Highway_System
+        network = 'TR:highway'
+        # drop section suffixes
+        ref = 'D' + num.split('-')[0]
+
+    elif ref and _TR_PROVINCIAL.match(ref):
+        network = 'TR:provincial'
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = 'E' + num
+
+    else:
+        network = None
+        ref = None
 
     return network, ref
 
@@ -5914,6 +6143,17 @@ def _shield_text_gb(network, ref):
     return prefix + number
 
 
+def _shield_text_ro(network, ref):
+    # the DN, DJ & DC networks don't have a prefix on the displayed shields,
+    # see:
+    # https://upload.wikimedia.org/wikipedia/commons/b/b0/Autostrada_Sibiu_01.jpg
+    # https://upload.wikimedia.org/wikipedia/commons/7/7a/A1_Arad-Timisoara_-_01.JPG
+    if network in ('RO:national', 'RO:county', 'RO:local'):
+        return ref[2:]
+
+    return ref
+
+
 # do not strip anything from the ref apart from whitespace.
 def _use_ref_as_is(network, ref):
     return ref.strip()
@@ -5968,6 +6208,11 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_ca,
         fix=_normalize_ca_netref,
         sort=_sort_network_ca,
+    ),
+    'CH': CountryNetworkLogic(
+        backfill=_guess_network_ch,
+        fix=_normalize_ch_netref,
+        sort=_sort_network_ch,
     ),
     'CD': CountryNetworkLogic(
         fix=_normalize_cd_netref,
@@ -6077,10 +6322,27 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         sort=_sort_network_pt,
         shield_text=_use_ref_as_is,
     ),
+    'RO': CountryNetworkLogic(
+        backfill=_guess_network_ro,
+        fix=_normalize_ro_netref,
+        sort=_sort_network_ro,
+        shield_text=_shield_text_ro,
+    ),
     'RU': CountryNetworkLogic(
         backfill=_guess_network_ru,
         fix=_normalize_ru_netref,
         sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
+    'SG': CountryNetworkLogic(
+        backfill=_guess_network_sg,
+        fix=_normalize_sg_netref,
+        shield_text=_use_ref_as_is,
+    ),
+    'TR': CountryNetworkLogic(
+        backfill=_guess_network_tr,
+        fix=_normalize_tr_netref,
+        sort=_sort_network_tr,
         shield_text=_use_ref_as_is,
     ),
     'UA': CountryNetworkLogic(

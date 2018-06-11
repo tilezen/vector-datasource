@@ -464,7 +464,10 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 26686903,
-                'network': u'CH:Nationalstrasse',
+                'shield_text': '28',
+                'network': u'CH:national',
+                'all_shield_texts': ['28'],
+                'all_networks': ['CH:national'],
             })
 
     def test_chregional(self):
@@ -2337,7 +2340,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 432600432,
-                'network': u'RO:DC',
+                'network': 'RO:local',
+                'shield_text': '39',
             })
 
     def test_rodj(self):
@@ -2371,7 +2375,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 27861514,
-                'network': u'RO:DJ',
+                'network': 'RO:county',
+                'shield_text': '561F',
             })
 
     def test_rufederal(self):
@@ -4101,7 +4106,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 226373024,
-                'network': u'TR:road',
+                'shield_text': 'O20',
+                'network': u'TR:motorway',
             })
 
     def test_trroads(self):
@@ -4131,7 +4137,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 171673241,
-                'network': u'TR:road',
+                'shield_text': 'D555',
+                'network': 'TR:highway',
             })
 
     def test_viroads(self):
