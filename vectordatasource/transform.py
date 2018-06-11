@@ -4478,6 +4478,20 @@ def _guess_network_pt(tags):
     return networks
 
 
+def _guess_network_ro(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ro_netref(None, part)
+        if network or ref:
+            networks.append((network, part))
+
+    return networks
+
+
 def _guess_network_ru(tags):
     ref = tags.get('ref')
     networks = []
@@ -4487,6 +4501,19 @@ def _guess_network_ru(tags):
             continue
         network, ref = _normalize_ru_netref(tags.get('network'), part)
         networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_sg(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_sg_netref(None, part)
+        networks.append((network, ref))
 
     return networks
 
@@ -4881,6 +4908,27 @@ def _sort_network_pt(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 8
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ro(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'RO:motorway':
+        network_code = 0
+    elif network == 'RO:national':
+        network_code = 1
+    elif network == 'RO:county':
+        network_code = 2
+    elif network == 'RO:local':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
 
     ref = _ref_importance(ref)
 
@@ -5605,6 +5653,31 @@ def _normalize_pt_netref(network, ref):
     return network, ref
 
 
+# note that there's another road class, DX, which is documented, but doesn't
+# currently exist.
+# see https://en.wikipedia.org/wiki/Roads_in_Romania
+#
+_RO_NETWORK_PREFIXES = {
+    'A': 'RO:motorway',
+    'DN': 'RO:national',
+    'DJ': 'RO:county',
+    'DC': 'RO:local',
+    'E': 'e-road',
+}
+
+
+def _normalize_ro_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    network = _RO_NETWORK_PREFIXES.get(prefix)
+    if network is not None:
+        ref = prefix + num
+    else:
+        ref = None
+
+    return network, ref
+
+
 def _normalize_ru_netref(network, ref):
     ref = _make_unicode_or_none(ref)
     prefix, num = _splitref(ref)
@@ -5645,6 +5718,32 @@ def _normalize_ru_netref(network, ref):
 
 
 _TR_PROVINCIAL = re.compile('^[0-9]{2}-[0-9]{2}$')
+
+
+# NOTE: there's aslo an "NSC", which is under construction
+_SG_EXPRESSWAYS = set([
+    'AYE',  # Ayer Rajah Expressway
+    'BKE',  # Bukit Timah Expressway
+    'CTE',  # Central Expressway
+    'ECP',  # East Coast Parkway
+    'KJE',  # Kranji Expressway
+    'KPE',  # Kallang-Paya Lebar Expressway
+    'MCE',  # Marina Coastal Expressway
+    'PIE',  # Pan Island Expressway
+    'SLE',  # Seletar Expressway
+    'TPE',  # Tampines Expressway
+])
+
+
+def _normalize_sg_netref(network, ref):
+    if ref in _SG_EXPRESSWAYS:
+        network = 'SG:expressway'
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
 
 
 def _normalize_tr_netref(network, ref):
@@ -5780,6 +5879,17 @@ def _shield_text_gb(network, ref):
     # just remove any space between the letter and number(s)
     prefix, number = _splitref(ref)
     return prefix + number
+
+
+def _shield_text_ro(network, ref):
+    # the DN, DJ & DC networks don't have a prefix on the displayed shields,
+    # see:
+    # https://upload.wikimedia.org/wikipedia/commons/b/b0/Autostrada_Sibiu_01.jpg
+    # https://upload.wikimedia.org/wikipedia/commons/7/7a/A1_Arad-Timisoara_-_01.JPG
+    if network in ('RO:national', 'RO:county', 'RO:local'):
+        return ref[2:]
+
+    return ref
 
 
 # do not strip anything from the ref apart from whitespace.
@@ -5939,10 +6049,21 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         sort=_sort_network_pt,
         shield_text=_use_ref_as_is,
     ),
+    'RO': CountryNetworkLogic(
+        backfill=_guess_network_ro,
+        fix=_normalize_ro_netref,
+        sort=_sort_network_ro,
+        shield_text=_shield_text_ro,
+    ),
     'RU': CountryNetworkLogic(
         backfill=_guess_network_ru,
         fix=_normalize_ru_netref,
         sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
+    'SG': CountryNetworkLogic(
+        backfill=_guess_network_sg,
+        fix=_normalize_sg_netref,
         shield_text=_use_ref_as_is,
     ),
     'TR': CountryNetworkLogic(
