@@ -4103,7 +4103,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 226373024,
-                'network': u'TR:road',
+                'shield_text': 'O20',
+                'network': u'TR:motorway',
             })
 
     def test_trroads(self):
@@ -4133,7 +4134,8 @@ class GenericNetworkTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 171673241,
-                'network': u'TR:road',
+                'shield_text': 'D555',
+                'network': 'TR:highway',
             })
 
     def test_viroads(self):
