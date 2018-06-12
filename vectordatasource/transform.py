@@ -4729,11 +4729,11 @@ def _sort_network_es(network, ref):
         network_code = 0
     elif network == 'ES:N-road':
         network_code = 1
-    elif network and network.startswith('ES:autonoma:'):
+    elif network == 'ES:autonoma':
         network_code = 2
-    elif network and network.startswith('ES:province:'):
+    elif network == 'ES:province':
         network_code = 3
-    elif network and network.startswith('ES:city:'):
+    elif network == 'ES:city':
         network_code = 4
     elif network == 'e-road':
         network_code = 99
@@ -5319,175 +5319,161 @@ def _normalize_cn_netref(network, ref):
 
 
 # mapping the network prefixes onto ISO 3166-2 codes
-_ES_AUTONOMA = {
-    'ARA': 'AR',  # Aragon
-    'CA': 'CB',  # Cantabria (also Cadiz?)
-    'CL': 'CL',  # Castile & Leon
-    'CM': 'CM',  # Castilla-La Mancha
-    'C': 'CT',  # Catalonia (also Cistierna & Eivissa?)
-    'EX': 'EX',  # Extremadura
-    'AG': 'GA',  # Galicia
-    'M': 'MD',  # Madrid
-    'R': 'MD',  # Madrid
-    'Ma': 'IB',  # Mallorca
-    'Me': 'IB',  # Menorca
-    'ML': 'ML',  # Melilla
-    'RC': 'IB',  # Menorca
-    'RM': 'MC',  # Murcia
-    'V': 'VC',  # Valencia (also A Coruna?)
-    'CV': 'VC',  # Valencia
-    'Cv': 'VC',  # Valencia
-}
+_ES_AUTONOMA = set([
+    'ARA',  # Aragon
+    'A',  # Aragon & Andalusia (and also Álava, Basque Country)
+    'CA',  # Cantabria (also Cadiz?)
+    'CL',  # Castile & Leon
+    'CM',  # Castilla-La Mancha
+    'C',  # Catalonia (also Cistierna & Eivissa?)
+    'EX',  # Extremadura
+    'AG',  # Galicia
+    'M',  # Madrid
+    'R',  # Madrid
+    'Ma',  # Mallorca
+    'Me',  # Menorca
+    'ML',  # Melilla
+    'RC',  # Menorca
+    'RM',  # Murcia
+    'V',  # Valencia (also A Coruna?)
+    'CV',  # Valencia
+    'Cv',  # Valencia
+])
 
 
 # mapping the network prefixes onto ISO 3166-2 codes
-_ES_PROVINCES = {
-    'AC': 'C',  # A Coruna
-    'DP': 'C',  # A Coruna
-    'AB': 'AB',  # Albacete
-    'F': 'A',  # Alicante?
-    'AL': 'AL',  # Almeria
-    'AE': 'O',  # Asturias
-    'AS': 'O',  # Asturias
-    'AV': 'AV',  # Avila
-    'BA': 'BA',  # Badajoz
-    'B': 'B',  # Barcelona
-    'BP': 'B',  # Barcelona
-    'BV': 'B',  # Barcelona
-    'BI': 'BI',  # Bizkaia
-    'BU': 'BU',  # Burgos
-    'CC': 'CC',  # Caceres
-    'CO': 'CO',  # Cordoba
-    'CR': 'CR',  # Cuidad Real
-    'GIP': 'GI',  # Girona
-    'GIV': 'GI',  # Girona
-    'GI': 'SS',  # Gipuzkoa & Girona
-    'GR': 'GR',  # Granada
-    'GU': 'GU',  # Guadalajara
-    'HU': 'HU',  # Huesca
-    'JA': 'J',  # Jaen
-    'JV': 'J',  # Jaen
-    'LR': 'LO',  # La Rioja
-    'LE': 'LE',  # Leon
-    'L': 'L',  # Lerida
-    'LP': 'L',  # Lerida
-    'LV': 'L',  # Lerida
-    'LU': 'LU',  # Lugo
-    'MP': 'M',  # Madrid
-    'MA': 'MA',  # Malaga
-    'NA': 'NA',  # Navarre
-    'OU': 'OR',  # Orense
-    'P': 'P',  # Palencia
-    'PP': 'P',  # Palencia
-    'EP': 'PO',  # Pontevedra
-    'PO': 'PO',  # Pontevedra
-    'DSA': 'SA',  # Salamanca
-    'SA': 'SA',  # Salamanca
-    'NI': 'SG',  # Segovia
-    'SG': 'SG',  # Segovia
-    'SE': 'SE',  # Sevilla
-    'SO': 'SO',  # Soria
-    'TP': 'T',  # Tarragona
-    'TV': 'T',  # Tarragona
-    'TE': 'TE',  # Teruel
-    'TO': 'TO',  # Toledo
-    'VA': 'VA',  # Valladolid
-    'ZA': 'ZA',  # Zamora
-    'CP': 'Z',  # Zaragoza
-    'Z': 'Z',  # Zaragoza
-    'PM': 'PM',  # Baleares
-    'PMV': 'PM',  # Baleares
-}
+_ES_PROVINCES = set([
+    'AC',  # A Coruna
+    'DP',  # A Coruna
+    'AB',  # Albacete
+    'F',  # Alicante?
+    'AL',  # Almeria
+    'AE',  # Asturias
+    'AS',  # Asturias
+    'AV',  # Avila
+    'BA',  # Badajoz
+    'B',  # Barcelona
+    'BP',  # Barcelona
+    'BV',  # Barcelona
+    'BI',  # Bizkaia
+    'BU',  # Burgos
+    'CC',  # Caceres
+    'CO',  # Cordoba
+    'CR',  # Cuidad Real
+    'GIP',  # Girona
+    'GIV',  # Girona
+    'GI',  # Gipuzkoa & Girona
+    'GR',  # Granada
+    'GU',  # Guadalajara
+    'HU',  # Huesca
+    'JA',  # Jaen
+    'JV',  # Jaen
+    'LR',  # La Rioja
+    'LE',  # Leon
+    'L',  # Lerida
+    'LP',  # Lerida
+    'LV',  # Lerida
+    'LU',  # Lugo
+    'MP',  # Madrid
+    'MA',  # Malaga
+    'NA',  # Navarre
+    'OU',  # Orense
+    'P',  # Palencia
+    'PP',  # Palencia
+    'EP',  # Pontevedra
+    'PO',  # Pontevedra
+    'DSA',  # Salamanca
+    'SA',  # Salamanca
+    'NI',  # Segovia
+    'SG',  # Segovia
+    'SE',  # Sevilla
+    'SO',  # Soria
+    'TP',  # Tarragona
+    'TV',  # Tarragona
+    'TE',  # Teruel
+    'TO',  # Toledo
+    'VA',  # Valladolid
+    'ZA',  # Zamora
+    'CP',  # Zaragoza
+    'Z',  # Zaragoza
+    'PM',  # Baleares
+    'PMV',  # Baleares
+])
 
 
 # mapping city codes to the name of the city
-_ES_CITIES = {
-    'AI': 'Aviles',  # Aviles
-    'IA': 'Aviles',  # Aviles
-    'CT': 'Cartagena',  # Cartagena
-    'CS': 'Castello',  # Castello
-    'CU': 'Cudillero',  # Cudillero
-    'CHE': 'Ejea de los Caballeros',  # Ejea de los Caballeros
-    'EL': 'Elx',  # Elx/Elche
-    'FE': 'Ferrol',  # Ferrol
-    'GJ': 'Gijon',  # Gijon
-    'H': 'Huelva',  # Huelva
-    'VM': 'Huelva',  # Huelva
-    'J': 'Jaen',  # Jaen
-    'LN': 'Lena',  # Lena
-    'LL': 'Lleida',  # Lleida
-    'LO': 'Logrono',  # Logrono
-    'ME': 'Merida',  # Merida
-    'E': 'Mollerussa',  # Mollerussa? / Eivissa
-    'MU': 'Murcia',  # Murcia
-    'O': 'Oviedo',  # Oviedo
-    'PA': 'Pamplona',  # Pamplona
-    'PR': 'Parres',  # Parres
-    'PI': 'Pilona',  # Pilona
-    'CHMS': 'Ponferrada',  # Ponferrada?
-    'PT': 'Puertollano',  # Puertollano
-    'SL': 'Salas',  # Salas
-    'S': 'Santander',  # Santander
-    'SC': 'Santiago de Compostela',  # Santiago de Compostela
-    'SI': 'Siero',  # Siero
-    'VG': 'Vigo',  # Vigo
-    'EI': 'Eivissa',  # Eivissa
-}
+_ES_CITIES = set([
+    'AI',  # Aviles
+    'IA',  # Aviles
+    'CT',  # Cartagena
+    'CS',  # Castello
+    'CU',  # Cudillero
+    'CHE',  # Ejea de los Caballeros
+    'EL',  # Elx/Elche
+    'FE',  # Ferrol
+    'GJ',  # Gijon
+    'H',  # Huelva
+    'VM',  # Huelva
+    'J',  # Jaen
+    'LN',  # Lena
+    'LL',  # Lleida
+    'LO',  # Logrono
+    'ME',  # Merida
+    'E',  # Mollerussa? / Eivissa
+    'MU',  # Murcia
+    'O',  # Oviedo
+    'PA',  # Pamplona
+    'PR',  # Parres
+    'PI',  # Pilona
+    'CHMS',  # Ponferrada?
+    'PT',  # Puertollano
+    'SL',  # Salas
+    'S',  # Santander
+    'SC',  # Santiago de Compostela
+    'SI',  # Siero
+    'VG',  # Vigo
+    'EI',  # Eivissa
+])
 
 
 def _normalize_es_netref(network, ref):
-    if network and (
-            network in ('ES:A-road', 'ES:N-road') or
-            network.startswith('ES:autonoma:') or
-            network.startswith('ES:province:') or
-            network.startswith('ES:city:')):
-        return network, ref
+    prefix, num = _splitref(ref)
 
-    prefix, ref = _splitref(ref)
+    if num:
+        num = num.lstrip('-')
 
-    # a lot of Spanish refs are dash-separated, so remove that before
-    # processing.
-    ref = ref.lstrip('-')
-
-    ref_digits = 0
-    for i in xrange(0, len(ref)):
-        if ref[i].isdigit():
-            ref_digits += 1
+    # some A-roads in Spain are actually province or autonoma roads. these are
+    # distinguished from the national A-roads by whether they have 1 or 2
+    # digits (national) or 3 or more digits (autonoma / province). sadly, it
+    # doesn't seem to be possible to tell whether it's an autonoma or province
+    # without looking at the geometry, which is left as a TODO for later rainy
+    # days.
+    num_digits = 0
+    for i in xrange(0, len(num)):
+        if num[i].isdigit():
+            num_digits += 1
         else:
             break
 
-    if prefix in ('A', 'AP'):
+    if prefix in ('A', 'AP') and num_digits < 3:
         network = 'ES:A-road'
-        ref = '%s-%s' % (prefix, ref)
 
     elif prefix == 'N':
         network = 'ES:N-road'
-        ref = 'N-' + ref
 
     elif prefix == 'E':
         # e-roads seem to be signed without leading zeros.
         network = 'e-road'
-        ref = 'E-' + ref.lstrip('0')
+        ref = 'E-' + num.lstrip('0')
 
     elif prefix in _ES_AUTONOMA:
-        network = 'ES:autonoma:' + _ES_AUTONOMA[prefix]
-        # leave ref as-is, don't add a prefix for it
-
-    elif prefix == 'VP' and ref_digits == 3:
-        network = 'ES:province:Zaragoza'
-
-    elif prefix == 'VP' and ref_digits == 4:
-        network = 'ES:province:Valladolid'
+        network = 'ES:autonoma'
 
     elif prefix in _ES_PROVINCES:
-        network = 'ES:province:' + _ES_PROVINCES[prefix]
-
-    elif prefix == 'SC' and ref.startswith('B-'):
-        network = 'ES:city:Torello'
-        ref = ref[2:]
+        network = 'ES:province'
 
     elif prefix in _ES_CITIES:
-        network = 'ES:city:' + _ES_CITIES[prefix]
+        network = 'ES:city'
 
     else:
         network = None

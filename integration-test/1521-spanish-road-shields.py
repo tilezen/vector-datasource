@@ -197,8 +197,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 155558564,
-                'network': u'ES:province:AB',
-                'shield_text': u'301',
+                'network': u'ES:province',
+                'shield_text': u'AB-301',
             })
 
     def test_ac305_es(self):
@@ -222,8 +222,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 7753386,
-                'network': u'ES:province:C',
-                'shield_text': u'305',
+                'network': u'ES:province',
+                'shield_text': u'AC-305',
             })
 
     def test_ae3_es(self):
@@ -246,8 +246,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 194846533,
-                'network': u'ES:province:O',
-                'shield_text': u'3',
+                'network': u'ES:province',
+                'shield_text': u'AE-3',
             })
 
     def test_ag57n_es(self):
@@ -271,8 +271,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 9218818,
-                'network': u'ES:autonoma:GA',
-                'shield_text': u'57N',
+                'network': u'ES:autonoma',
+                'shield_text': u'AG-57N',
             })
 
     def test_ai81_es(self):
@@ -298,8 +298,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4600940,
-                'network': u'ES:city:Aviles',
-                'shield_text': u'81',
+                'network': u'ES:city',
+                'shield_text': u'AI-81',
             })
 
     def test_al14_es(self):
@@ -324,8 +324,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23290717,
-                'network': u'ES:province:AL',
-                'shield_text': u'14',
+                'network': u'ES:province',
+                'shield_text': u'AL-14',
             })
 
     def test_araa1_es(self):
@@ -350,8 +350,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 53213667,
-                'network': u'ES:autonoma:AR',
-                'shield_text': u'A1',
+                'network': u'ES:autonoma',
+                'shield_text': u'ARA-A1',
             })
 
     def test_as266_es(self):
@@ -376,8 +376,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 407780,
-                'network': u'ES:province:O',
-                'shield_text': u'266',
+                'network': u'ES:province',
+                'shield_text': u'AS-266',
             })
 
     def test_av20_es(self):
@@ -419,8 +419,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4300495,
-                'network': u'ES:province:AV',
-                'shield_text': u'20',
+                'network': u'ES:province',
+                'shield_text': u'AV-20',
             })
 
     def test_b250a_es(self):
@@ -442,8 +442,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 8376343,
-                'network': u'ES:province:B',
-                'shield_text': u'250a',
+                'network': u'ES:province',
+                'shield_text': u'B-250a',
             })
 
     def test_ba20_es(self):
@@ -466,8 +466,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23268459,
-                'network': u'ES:province:BA',
-                'shield_text': u'20',
+                'network': u'ES:province',
+                'shield_text': u'BA-20',
             })
 
     def test_bi633_es(self):
@@ -492,8 +492,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4324114,
-                'network': u'ES:province:BI',
-                'shield_text': u'633',
+                'network': u'ES:province',
+                'shield_text': u'BI-633',
             })
 
     def test_bp5002_es(self):
@@ -516,8 +516,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 21292155,
-                'network': u'ES:province:B',
-                'shield_text': u'5002',
+                'network': u'ES:province',
+                'shield_text': u'BP-5002',
             })
 
     def test_bu571_es(self):
@@ -539,8 +539,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 6279079,
-                'network': u'ES:province:BU',
-                'shield_text': u'571',
+                'network': u'ES:province',
+                'shield_text': u'BU-571',
             })
 
     def test_bv4132z_es(self):
@@ -562,8 +562,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 14488252,
-                'network': u'ES:province:B',
-                'shield_text': u'4132z',
+                'network': u'ES:province',
+                'shield_text': u'BV-4132z',
             })
 
     def test_c250_es(self):
@@ -585,8 +585,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4784144,
-                'network': u'ES:autonoma:CT',
-                'shield_text': u'250',
+                'network': u'ES:autonoma',
+                'shield_text': u'C-250',
             })
 
     def test_ca901_es(self):
@@ -611,8 +611,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4336684,
-                'network': u'ES:autonoma:CB',
-                'shield_text': u'901',
+                'network': u'ES:autonoma',
+                'shield_text': u'CA-901',
             })
 
     def test_cc21_es(self):
@@ -646,8 +646,8 @@ class SpanishShieldTest(FixtureTest):
                 'id': 22966379,
                 'network': u'ES:N-road',
                 'shield_text': u'N-521',
-                'all_networks': ['ES:N-road', 'ES:province:CC'],
-                'all_shield_texts': ['N-521', '21'],
+                'all_networks': ['ES:N-road', 'ES:province'],
+                'all_shield_texts': ['N-521', 'CC-21'],
             })
 
     def test_che1504_es(self):
@@ -668,8 +668,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 32367394,
-                'network': u'ES:city:Ejea de los Caballeros',
-                'shield_text': u'1504',
+                'network': u'ES:city',
+                'shield_text': u'CHE-1504',
             })
 
     def test_chms1_es(self):
@@ -693,8 +693,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 37524381,
-                'network': u'ES:city:Ponferrada',
-                'shield_text': u'1',
+                'network': u'ES:city',
+                'shield_text': u'CHMS-1',
             })
 
     def test_cl621_es(self):
@@ -718,8 +718,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4860096,
-                'network': u'ES:autonoma:CL',
-                'shield_text': u'621',
+                'network': u'ES:autonoma',
+                'shield_text': u'CL-621',
             })
 
     def test_cm3127_es(self):
@@ -741,8 +741,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4816816,
-                'network': u'ES:autonoma:CM',
-                'shield_text': u'3127',
+                'network': u'ES:autonoma',
+                'shield_text': u'CM-3127',
             })
 
     def test_co31_es(self):
@@ -765,8 +765,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 8392206,
-                'network': u'ES:province:CO',
-                'shield_text': u'31',
+                'network': u'ES:province',
+                'shield_text': u'CO-31',
             })
 
     def test_cp002_es(self):
@@ -788,8 +788,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23342761,
-                'network': u'ES:province:Z',
-                'shield_text': u'002',
+                'network': u'ES:province',
+                'shield_text': u'CP-002',
             })
 
     def test_cr4194_es(self):
@@ -811,8 +811,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 42251605,
-                'network': u'ES:province:CR',
-                'shield_text': u'4194',
+                'network': u'ES:province',
+                'shield_text': u'CR-4194',
             })
 
     def test_cs22_es(self):
@@ -837,8 +837,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23985225,
-                'network': u'ES:city:Castello',
-                'shield_text': u'22',
+                'network': u'ES:city',
+                'shield_text': u'CS-22',
             })
 
     def test_ct33_es(self):
@@ -862,8 +862,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 33779155,
-                'network': u'ES:city:Cartagena',
-                'shield_text': u'33',
+                'network': u'ES:city',
+                'shield_text': u'CT-33',
             })
 
     def test_cu3_es(self):
@@ -885,8 +885,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 9250047,
-                'network': u'ES:city:Cudillero',
-                'shield_text': u'3',
+                'network': u'ES:city',
+                'shield_text': u'CU-3',
             })
 
     def test_cv905_es(self):
@@ -910,8 +910,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4857393,
-                'network': u'ES:autonoma:VC',
-                'shield_text': u'905',
+                'network': u'ES:autonoma',
+                'shield_text': u'CV-905',
             })
 
     def test_cv799_es(self):
@@ -933,8 +933,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 43962964,
-                'network': u'ES:autonoma:VC',
-                'shield_text': u'799',
+                'network': u'ES:autonoma',
+                'shield_text': u'Cv-799',
             })
 
     def test_dp7206_es(self):
@@ -955,8 +955,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 7656083,
-                'network': u'ES:province:C',
-                'shield_text': u'7206',
+                'network': u'ES:province',
+                'shield_text': u'DP-7206',
             })
 
     def test_dsa600_es(self):
@@ -984,8 +984,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 22810174,
-                'network': u'ES:province:SA',
-                'shield_text': u'600',
+                'network': u'ES:province',
+                'shield_text': u'DSA-600',
             })
 
     def test_ei700_es(self):
@@ -1007,8 +1007,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 15239069,
-                'network': u'ES:city:Eivissa',
-                'shield_text': u'700',
+                'network': u'ES:city',
+                'shield_text': u'EI-700',
             })
 
     def test_el20_es(self):
@@ -1033,8 +1033,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 69146172,
-                'network': u'ES:city:Elx',
-                'shield_text': u'20',
+                'network': u'ES:city',
+                'shield_text': u'EL-20',
             })
 
     def test_ep8001_es(self):
@@ -1055,8 +1055,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 7656097,
-                'network': u'ES:province:PO',
-                'shield_text': u'8001',
+                'network': u'ES:province',
+                'shield_text': u'EP-8001',
             })
 
     def test_ex207_es(self):
@@ -1089,8 +1089,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 22926785,
-                'network': u'ES:autonoma:EX',
-                'shield_text': u'207',
+                'network': u'ES:autonoma',
+                'shield_text': u'EX-207',
             })
 
     def test_f24_es(self):
@@ -1111,8 +1111,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 107700090,
-                'network': u'ES:province:A',
-                'shield_text': u'24',
+                'network': u'ES:province',
+                'shield_text': u'F-24',
             })
 
     def test_fe15_es(self):
@@ -1148,10 +1148,10 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 10262756,
-                'network': u'ES:city:Ferrol',
-                'shield_text': u'15',
-                'all_networks': ['ES:city:Ferrol', 'e-road'],
-                'all_shield_texts': ['15', 'E-1'],
+                'network': u'ES:city',
+                'shield_text': u'FE-15',
+                'all_networks': ['ES:city', 'e-road'],
+                'all_shield_texts': ['FE-15', 'E-1'],
             })
 
     def test_gi2137_es(self):
@@ -1173,8 +1173,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4256875,
-                'network': u'ES:province:SS',
-                'shield_text': u'2137',
+                'network': u'ES:province',
+                'shield_text': u'GI-2137',
             })
 
     def test_gip4033_es(self):
@@ -1198,8 +1198,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 19850716,
-                'network': u'ES:province:GI',
-                'shield_text': u'4033',
+                'network': u'ES:province',
+                'shield_text': u'GIP-4033',
             })
 
     def test_giv5264_es(self):
@@ -1222,8 +1222,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 28242808,
-                'network': u'ES:province:GI',
-                'shield_text': u'5264',
+                'network': u'ES:province',
+                'shield_text': u'GIV-5264',
             })
 
     def test_gj10_es(self):
@@ -1251,8 +1251,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4267997,
-                'network': u'ES:city:Gijon',
-                'shield_text': u'10',
+                'network': u'ES:city',
+                'shield_text': u'GJ-10',
             })
 
     def test_gr14_es(self):
@@ -1287,8 +1287,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 25694915,
-                'network': u'ES:province:GR',
-                'shield_text': u'14',
+                'network': u'ES:province',
+                'shield_text': u'GR-14',
             })
 
     def test_gu102_es(self):
@@ -1311,8 +1311,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 32918480,
-                'network': u'ES:province:GU',
-                'shield_text': u'102',
+                'network': u'ES:province',
+                'shield_text': u'GU-102',
             })
 
     def test_h31_es(self):
@@ -1336,8 +1336,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 24849341,
-                'network': u'ES:city:Huelva',
-                'shield_text': u'31',
+                'network': u'ES:city',
+                'shield_text': u'H-31',
             })
 
     def test_huv2301_es(self):
@@ -1358,8 +1358,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 18945398,
-                'network': u'ES:province:HU',
-                'shield_text': u'V-2301',
+                'network': u'ES:province',
+                'shield_text': u'HU-V-2301',
             })
 
     def test_ia1_es(self):
@@ -1381,8 +1381,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 259323740,
-                'network': u'ES:city:Aviles',
-                'shield_text': u'1',
+                'network': u'ES:city',
+                'shield_text': u'IA-1',
             })
 
     def test_j14_es(self):
@@ -1407,8 +1407,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 28959936,
-                'network': u'ES:city:Jaen',
-                'shield_text': u'14',
+                'network': u'ES:city',
+                'shield_text': u'J-14',
             })
 
     def test_ja6104_es(self):
@@ -1434,8 +1434,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 61899450,
-                'network': u'ES:province:J',
-                'shield_text': u'6104',
+                'network': u'ES:province',
+                'shield_text': u'JA-6104',
             })
 
     def test_jv2031_es(self):
@@ -1457,8 +1457,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 243869870,
-                'network': u'ES:province:J',
-                'shield_text': u'2031',
+                'network': u'ES:province',
+                'shield_text': u'JV-2031',
             })
 
     def test_lp4033b_es(self):
@@ -1480,8 +1480,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 14604117,
-                'network': u'ES:province:L',
-                'shield_text': u'P-4033B',
+                'network': u'ES:province',
+                'shield_text': u'L-P-4033B',
             })
 
     def test_le493_es(self):
@@ -1503,8 +1503,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4869407,
-                'network': u'ES:province:LE',
-                'shield_text': u'493',
+                'network': u'ES:province',
+                'shield_text': u'LE-493',
             })
 
     def test_ll12_es(self):
@@ -1527,8 +1527,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 30136519,
-                'network': u'ES:city:Lleida',
-                'shield_text': u'12',
+                'network': u'ES:city',
+                'shield_text': u'LL-12',
             })
 
     def test_ln6_es(self):
@@ -1549,8 +1549,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 94658802,
-                'network': u'ES:city:Lena',
-                'shield_text': u'6',
+                'network': u'ES:city',
+                'shield_text': u'LN-6',
             })
 
     def test_lo20_es(self):
@@ -1586,8 +1586,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 8085360,
-                'network': u'ES:city:Logrono',
-                'shield_text': u'20',
+                'network': u'ES:city',
+                'shield_text': u'LO-20',
             })
 
     def test_lp7032_es(self):
@@ -1610,8 +1610,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 11985562,
-                'network': u'ES:province:L',
-                'shield_text': u'7032',
+                'network': u'ES:province',
+                'shield_text': u'LP-7032',
             })
 
     def test_lr134_es(self):
@@ -1634,8 +1634,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4305846,
-                'network': u'ES:province:LO',
-                'shield_text': u'134',
+                'network': u'ES:province',
+                'shield_text': u'LR-134',
             })
 
     def test_lu617_es(self):
@@ -1658,8 +1658,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23458502,
-                'network': u'ES:province:LU',
-                'shield_text': u'617',
+                'network': u'ES:province',
+                'shield_text': u'LU-617',
             })
 
     def test_lv3344_es(self):
@@ -1681,8 +1681,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 24209301,
-                'network': u'ES:province:L',
-                'shield_text': u'3344',
+                'network': u'ES:province',
+                'shield_text': u'LV-3344',
             })
 
     def test_m40_es(self):
@@ -1733,8 +1733,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 3996189,
-                'network': u'ES:autonoma:MD',
-                'shield_text': u'40',
+                'network': u'ES:autonoma',
+                'shield_text': u'M-40',
             })
 
     def test_ma5103_es(self):
@@ -1762,8 +1762,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4676310,
-                'network': u'ES:province:MA',
-                'shield_text': u'5103',
+                'network': u'ES:province',
+                'shield_text': u'MA-5103',
             })
 
     def test_me11_es(self):
@@ -1788,8 +1788,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 74489915,
-                'network': u'ES:city:Merida',
-                'shield_text': u'11',
+                'network': u'ES:city',
+                'shield_text': u'ME-11',
             })
 
     def test_ml204_es(self):
@@ -1823,8 +1823,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 38489610,
-                'network': u'ES:autonoma:ML',
-                'shield_text': u'204',
+                'network': u'ES:autonoma',
+                'shield_text': u'ML-204',
             })
 
     def test_mp203_es(self):
@@ -1849,8 +1849,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 30545206,
-                'network': u'ES:province:M',
-                'shield_text': u'203',
+                'network': u'ES:province',
+                'shield_text': u'MP-203',
             })
 
     def test_mu30_es(self):
@@ -1879,8 +1879,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 17716810,
-                'network': u'ES:city:Murcia',
-                'shield_text': u'30',
+                'network': u'ES:city',
+                'shield_text': u'MU-30',
             })
 
     def test_ma2220a_es(self):
@@ -1904,8 +1904,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4225841,
-                'network': u'ES:autonoma:IB',
-                'shield_text': u'2220a',
+                'network': u'ES:autonoma',
+                'shield_text': u'Ma-2220a',
             })
 
     def test_me1_es(self):
@@ -1927,8 +1927,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 6620546,
-                'network': u'ES:autonoma:IB',
-                'shield_text': u'1',
+                'network': u'ES:autonoma',
+                'shield_text': u'Me-1',
             })
 
     def test_na6630_es(self):
@@ -1961,8 +1961,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4300207,
-                'network': u'ES:province:NA',
-                'shield_text': u'6630',
+                'network': u'ES:province',
+                'shield_text': u'NA-6630',
             })
 
     def test_nia_es(self):
@@ -1984,8 +1984,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 45858922,
-                'network': u'ES:province:SG',
-                'shield_text': u'a',
+                'network': u'ES:province',
+                'shield_text': u'NI-a',
             })
 
     def test_o14_es(self):
@@ -2013,8 +2013,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4853102,
-                'network': u'ES:city:Oviedo',
-                'shield_text': u'14',
+                'network': u'ES:city',
+                'shield_text': u'O-14',
             })
 
     def test_ou103_es(self):
@@ -2037,8 +2037,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 25863479,
-                'network': u'ES:province:OR',
-                'shield_text': u'103',
+                'network': u'ES:province',
+                'shield_text': u'OU-103',
             })
 
     def test_p431_es(self):
@@ -2061,8 +2061,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 22970377,
-                'network': u'ES:province:P',
-                'shield_text': u'431',
+                'network': u'ES:province',
+                'shield_text': u'P-431',
             })
 
     def test_pa32_es(self):
@@ -2095,8 +2095,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4348471,
-                'network': u'ES:city:Pamplona',
-                'shield_text': u'32',
+                'network': u'ES:city',
+                'shield_text': u'PA-32',
             })
 
     def test_pi13_es(self):
@@ -2117,8 +2117,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 66336790,
-                'network': u'ES:city:Pilona',
-                'shield_text': u'13',
+                'network': u'ES:city',
+                'shield_text': u'PI-13',
             })
 
     def test_pm801_es(self):
@@ -2142,8 +2142,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 3318645,
-                'network': u'ES:province:PM',
-                'shield_text': u'801',
+                'network': u'ES:province',
+                'shield_text': u'PM-801',
             })
 
     def test_pmv8031_es(self):
@@ -2166,8 +2166,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 15239278,
-                'network': u'ES:province:PM',
-                'shield_text': u'803.1',
+                'network': u'ES:province',
+                'shield_text': u'PMV-803.1',
             })
 
     def test_po11_es(self):
@@ -2189,8 +2189,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 7654141,
-                'network': u'ES:province:PO',
-                'shield_text': u'11',
+                'network': u'ES:province',
+                'shield_text': u'PO-11',
             })
 
     def test_pp6303_es(self):
@@ -2213,8 +2213,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 25197510,
-                'network': u'ES:province:P',
-                'shield_text': u'6303',
+                'network': u'ES:province',
+                'shield_text': u'PP-6303',
             })
 
     def test_pr3_es(self):
@@ -2235,8 +2235,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 237395519,
-                'network': u'ES:city:Parres',
-                'shield_text': u'3',
+                'network': u'ES:city',
+                'shield_text': u'PR-3',
             })
 
     def test_pt10_es(self):
@@ -2258,8 +2258,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23440177,
-                'network': u'ES:city:Puertollano',
-                'shield_text': u'10',
+                'network': u'ES:city',
+                'shield_text': u'PT-10',
             })
 
     def test_r4_es(self):
@@ -2290,8 +2290,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 6276316,
-                'network': u'ES:autonoma:MD',
-                'shield_text': u'4',
+                'network': u'ES:autonoma',
+                'shield_text': u'R-4',
             })
 
     def test_rc2_es(self):
@@ -2317,8 +2317,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 25557690,
-                'network': u'ES:autonoma:IB',
-                'shield_text': u'2',
+                'network': u'ES:autonoma',
+                'shield_text': u'RC-2',
             })
 
     def test_rm19_es(self):
@@ -2341,8 +2341,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 17709127,
-                'network': u'ES:autonoma:MC',
-                'shield_text': u'19',
+                'network': u'ES:autonoma',
+                'shield_text': u'RM-19',
             })
 
     def test_s10_es(self):
@@ -2378,8 +2378,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4332313,
-                'network': u'ES:city:Santander',
-                'shield_text': u'10',
+                'network': u'ES:city',
+                'shield_text': u'S-10',
             })
 
     def test_sa200_es(self):
@@ -2402,8 +2402,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23211839,
-                'network': u'ES:province:SA',
-                'shield_text': u'200',
+                'network': u'ES:province',
+                'shield_text': u'SA-200',
             })
 
     def test_sc20_es(self):
@@ -2427,8 +2427,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 9863691,
-                'network': u'ES:city:Santiago de Compostela',
-                'shield_text': u'20',
+                'network': u'ES:city',
+                'shield_text': u'SC-20',
             })
 
     def test_se30(self):
@@ -2467,8 +2467,8 @@ class SpanishShieldTest(FixtureTest):
                 'id': 19783204,
                 'network': u'ES:A-road',
                 'shield_text': u'A-4',
-                'all_networks': ['ES:A-road', 'ES:province:SE', 'e-road'],
-                'all_shield_texts': ['A-4', '30', 'E-5'],
+                'all_networks': ['ES:A-road', 'ES:province', 'e-road'],
+                'all_shield_texts': ['A-4', 'SE-30', 'E-5'],
             })
 
     def test_si8_es(self):
@@ -2491,8 +2491,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 197726519,
-                'network': u'ES:city:Siero',
-                'shield_text': u'8',
+                'network': u'ES:city',
+                'shield_text': u'SI-8',
             })
 
     def test_sl9_es(self):
@@ -2515,8 +2515,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 459026558,
-                'network': u'ES:city:Salas',
-                'shield_text': u'9',
+                'network': u'ES:city',
+                'shield_text': u'SL-9',
             })
 
     def test_so132_es(self):
@@ -2538,8 +2538,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 19909201,
-                'network': u'ES:province:SO',
-                'shield_text': u'132',
+                'network': u'ES:province',
+                'shield_text': u'SO-132',
             })
 
     # TODO: need to tell if this is in Tarragona or Murcia province. will need
@@ -2565,8 +2565,8 @@ class SpanishShieldTest(FixtureTest):
     #     self.assert_has_feature(
     #         z, x, y, 'roads', {
     #             'id': 17945750,
-    #             'network': u'ES:province:MU',
-    #             'shield_text': u'730',
+    #             'network': u'ES:province',
+    #             'shield_text': u'T-730',
     #         })
 
     def test_tev8005_es(self):
@@ -2589,8 +2589,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23069546,
-                'network': u'ES:province:TE',
-                'shield_text': u'V-8005',
+                'network': u'ES:province',
+                'shield_text': u'TE-V-8005',
             })
 
     def test_to20_es(self):
@@ -2613,8 +2613,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23513439,
-                'network': u'ES:province:TO',
-                'shield_text': u'20',
+                'network': u'ES:province',
+                'shield_text': u'TO-20',
             })
 
     def test_tp2402_es(self):
@@ -2640,8 +2640,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 30043275,
-                'network': u'ES:province:T',
-                'shield_text': u'2402',
+                'network': u'ES:province',
+                'shield_text': u'TP-2402',
             })
 
     def test_tv3141_es(self):
@@ -2664,8 +2664,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 23266743,
-                'network': u'ES:province:T',
-                'shield_text': u'3141',
+                'network': u'ES:province',
+                'shield_text': u'TV-3141',
             })
 
     def test_v31_es(self):
@@ -2688,8 +2688,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 10689165,
-                'network': u'ES:autonoma:VC',
-                'shield_text': u'31',
+                'network': u'ES:autonoma',
+                'shield_text': u'V-31',
             })
 
     def test_va20_es(self):
@@ -2716,8 +2716,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4850505,
-                'network': u'ES:province:VA',
-                'shield_text': u'20',
+                'network': u'ES:province',
+                'shield_text': u'VA-20',
             })
 
     def test_vg20_es(self):
@@ -2742,8 +2742,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 10145722,
-                'network': u'ES:city:Vigo',
-                'shield_text': u'20',
+                'network': u'ES:city',
+                'shield_text': u'VG-20',
             })
 
     def test_vm497_es(self):
@@ -2766,8 +2766,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 26756572,
-                'network': u'ES:city:Huelva',
-                'shield_text': u'497',
+                'network': u'ES:city',
+                'shield_text': u'VM-497',
             })
 
     def test_z30_es(self):
@@ -2791,8 +2791,8 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 4766157,
-                'network': u'ES:province:Z',
-                'shield_text': u'30',
+                'network': u'ES:province',
+                'shield_text': u'Z-30',
             })
 
     def test_za20_es(self):
@@ -2819,6 +2819,89 @@ class SpanishShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 13894462,
-                'network': u'ES:province:ZA',
-                'shield_text': u'20',
+                'network': u'ES:province',
+                'shield_text': u'ZA-20',
+            })
+
+    def test_a132_alava(self):
+        # NOTE: this A-132 is in Álava, Basque Country.
+        # TODO: one rainy day, use the geometry to tell it's in Álava, rather
+        # than one of the other autonoma which _also_ use the A- prefix for
+        # roads which aren't ES:A-road.
+        import dsl
+
+        z, x, y = (16, 32302, 24125)
+
+        self.generate_fixtures(
+            dsl.is_in('ES', z, x, y),
+            # https://www.openstreetmap.org/way/503269748
+            dsl.way(503269748, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'maxspeed': u'100',
+                'name': u'Carretera Sangüesa-Vitoria',
+                'name:es': u'Carretera Sangüesa-Vitoria',
+                'name:eu': u'Zangotza-Gasteiz errepidea',
+                'ref': u'A-132',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 503269748,
+                'network': u'ES:autonoma',
+                'shield_text': u'A-132',
+            })
+
+    def test_a132_aragon(self):
+        # NOTE: this A-132 is near Huesca, Aragon
+        # TODO: one rainy day, use the geometry to tell it's in Aragon, rather
+        # than one of the other autonoma / provinces which _also_ use the A-
+        # prefix for roads which aren't ES:A-road.
+        import dsl
+
+        z, x, y = (16, 32671, 24278)
+
+        self.generate_fixtures(
+            dsl.is_in('ES', z, x, y),
+            # https://www.openstreetmap.org/way/389741906
+            dsl.way(389741906, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'name': u'Carretera de Huesca a Puente la Reina',
+                'ref': u'A-132',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 389741906,
+                'network': u'ES:autonoma',
+                'shield_text': u'A-132',
+            })
+
+    def test_a308_andalusia(self):
+        # NOTE: this A-132 is in Andalusia.
+        # TODO: one rainy day, use the geometry to tell it's in Andalusia,
+        # rather than one of the other autonoma / provinces which _also_ use
+        # the A- prefix for roads which aren't ES:A-road.
+        import dsl
+
+        z, x, y = (16, 32169, 25430)
+
+        self.generate_fixtures(
+            dsl.is_in('ES', z, x, y),
+            # https://www.openstreetmap.org/way/328246083
+            dsl.way(328246083, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'ref': u'A-308',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 328246083,
+                'network': u'ES:autonoma',
+                'shield_text': u'A-308',
             })
