@@ -1,0 +1,26 @@
+
+    def test_{{name}}(self):
+        import dsl
+
+        z, x, y = ({{z}}, {{x}}, {{y}})
+
+        self.generate_fixtures(
+        {%- if iso_code is not none %}
+            dsl.is_in('{{iso_code}}', z, x, y),
+        {%- endif %}
+            dsl.way({{ne_id}}, dsl.{{geom_func}}(z, x, y), {
+        {%- for k, v in props|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%- endfor %}
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, '{{layer_name}}', {
+                'id': {{ne_id}},
+        {%- if expect is not none %}
+        {%-   for k, v in expect|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%-   endfor %}
+        {%- endif %}
+            })

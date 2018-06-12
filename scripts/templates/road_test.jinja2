@@ -1,0 +1,34 @@
+
+    def test_{{name}}(self):
+        import dsl
+
+        z, x, y = ({{z}}, {{x}}, {{y}})
+
+        self.generate_fixtures(
+        {%- if iso_code is not none %}
+            dsl.is_in('{{iso_code}}', z, x, y),
+        {%- endif %}
+            # https://www.openstreetmap.org/way/{{way_id}}
+            dsl.way({{way_id}}, dsl.tile_diagonal(z, x, y), {
+        {%- for k, v in way_tags|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%- endfor %}
+            }),
+        {%- for rel in relations %}
+            dsl.relation({{loop.index}}, {
+        {%- for k, v in rel|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%- endfor %}
+            }, ways=[{{way_id}}]),
+        {%- endfor %}
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': {{way_id}},
+        {%- if expect is not none %}
+        {%-   for k, v in expect|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%-   endfor %}
+        {%- endif %}
+            })
