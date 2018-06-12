@@ -407,6 +407,16 @@ def _convert_wof_l10n_name(x):
     return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
+def _convert_ne_l10n_name(x):
+    if len(x) != 2:
+        return None
+    try:
+        lang = pycountry.languages.get(alpha_2=x)
+    except KeyError:
+        return None
+    return LangResult(code=_alpha_2_code_of(lang), priority=0)
+
+
 def _normalize_osm_lang_code(x):
     # first try an alpha-2 code
     try:
@@ -490,6 +500,7 @@ def tags_name_i18n(shape, properties, fid, zoom):
     source = properties.get('source')
     is_wof = source == 'whosonfirst.org'
     is_osm = source == 'openstreetmap.org'
+    is_ne = source == 'naturalearthdata.com'
 
     if is_osm:
         alt_name_prefix_candidates = [
@@ -499,10 +510,22 @@ def tags_name_i18n(shape, properties, fid, zoom):
     elif is_wof:
         alt_name_prefix_candidates = ['name:']
         convert_fn = _convert_wof_l10n_name
+
+    elif is_ne:
+        # replace name_xx with name:xx in tags
+        for k in tags.keys():
+            if k.startswith('name_'):
+                value = tags.pop(k)
+                tag_k = k.replace('_', ':')
+                tags[tag_k] = value
+
+        alt_name_prefix_candidates = ['name:']
+        convert_fn = _convert_ne_l10n_name
+
     else:
-        # conversion function only implemented for things which come from OSM
-        # or WOF - implement more cases here when more localized named sources
-        # become available.
+        # conversion function only implemented for things which come from OSM,
+        # NE or WOF - implement more cases here when more localized named
+        # sources become available.
         return shape, properties, fid
 
     langs = {}
