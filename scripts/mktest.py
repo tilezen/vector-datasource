@@ -198,7 +198,7 @@ def naturalearth_test(args):
         name = 'FIXME'
 
     if shape.geom_type in ('Point', 'Multipoint'):
-        geom_func = 'tile_centre'
+        geom_func = 'tile_centre_shape'
         lon, lat = shape.coords[0]
 
     else:
@@ -220,6 +220,7 @@ def naturalearth_test(args):
         iso_code=args.is_in,
         props=props,
         expect=expect,
+        layer_name=args.layer_name,
     )
 
     output = _render_template('naturalearth_test', args)
@@ -271,6 +272,9 @@ if __name__ == '__main__':
     ne_test_parser.add_argument(
         '--ne-id', type=int, default=1,
         help='Natural Earth ID to use.')
+    ne_test_parser.add_argument(
+        '--layer-name', default='pois',
+        help='Name of the layer in the tile to expect this feature in.')
     ne_test_parser.set_defaults(func=naturalearth_test)
 
     args = parser.parse_args()
