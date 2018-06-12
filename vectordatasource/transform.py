@@ -4574,6 +4574,32 @@ def _guess_network_ua(tags):
 _COMMON_SEPARATORS = re.compile('[;,/,]')
 
 
+def _guess_network_vn(tags):
+    ref = tags.get('ref', '')
+
+    # some bare refs can be augmented from the network tag on the way, or
+    # guessed from the name, which often starts with the type of the road.
+    network_from_tags = tags.get('network')
+    if not network_from_tags:
+        name = tags.get('name') or tags.get('name:vi')
+        if name:
+            name = unicode(name, 'utf-8')
+            if name.startswith(u'Tỉnh lộ'):
+                network_from_tags = 'VN:provincial'
+            elif name.startswith(u'Quốc lộ'):
+                network_from_tags = 'VN:national'
+
+    networks = []
+    for part in _COMMON_SEPARATORS.split(ref):
+        if not part:
+            continue
+        network, ref = _normalize_vn_netref(network_from_tags, part)
+        if network or ref:
+            networks.append((network, ref))
+
+    return networks
+
+
 def _guess_network_za(tags):
     ref = tags.get('ref', '')
     networks = []
@@ -5078,6 +5104,30 @@ def _sort_network_ua(network, ref):
     elif network == 'UA:territorial':
         network_code = 3
     elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_vn(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'VN:expressway':
+        network_code = 0
+    elif network == 'VN:national':
+        network_code = 1
+    elif network == 'VN:provincial':
+        network_code = 2
+    elif network == 'VN:road':
+        network_code = 3
+    elif network == 'AsianHighway':
         network_code = 99
     else:
         network_code = len(network.split(':')) + 4
@@ -6078,6 +6128,41 @@ def _normalize_ua_netref(network, ref):
     return network, ref
 
 
+def _normalize_vn_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip(u'.')
+
+    if prefix == u'CT' or network == 'VN:expressway':
+        network = 'VN:expressway'
+        ref = u'CT' + num
+
+    elif prefix == u'QL' or network == 'VN:national':
+        network = 'VN:national'
+        ref = u'QL' + num
+
+    elif prefix in (u'ĐT', u'DT'):
+        network = 'VN:provincial'
+        ref = u'ĐT' + num
+
+    elif prefix == u'TL' or network in ('VN:provincial', 'VN:TL'):
+        network = 'VN:provincial'
+        ref = u'TL' + num
+
+    elif ref:
+        network = 'VN:road'
+
+    else:
+        network = None
+        ref = None
+
+    if isinstance(ref, unicode):
+        ref = ref.encode('utf-8')
+    return network, ref
+
+
 def _normalize_za_netref(network, ref):
     prefix, num = _splitref(ref)
     ndigits = len(num)
@@ -6354,6 +6439,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
     'US': CountryNetworkLogic(
         backfill=_do_not_backfill,
         sort=_sort_network_us,
+    ),
+    'VN': CountryNetworkLogic(
+        backfill=_guess_network_vn,
+        fix=_normalize_vn_netref,
+        sort=_sort_network_vn,
+        shield_text=_use_ref_as_is,
     ),
     'ZA': CountryNetworkLogic(
         backfill=_guess_network_za,
