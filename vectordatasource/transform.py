@@ -4288,6 +4288,19 @@ def _guess_network_cn(tags):
     return networks
 
 
+def _guess_network_es(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        part = part.strip()
+        if not part:
+            continue
+        network, ref = _normalize_es_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+    return networks
+
+
 def _guess_network_fr(tags):
     ref = tags.get('ref')
     networks = []
@@ -4703,6 +4716,29 @@ def _sort_network_cn(network, ref):
         network_code = 99
     else:
         network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_es(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'ES:A-road':
+        network_code = 0
+    elif network == 'ES:N-road':
+        network_code = 1
+    elif network == 'ES:autonoma':
+        network_code = 2
+    elif network == 'ES:province':
+        network_code = 3
+    elif network == 'ES:city':
+        network_code = 4
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = 5 + len(network.split(':'))
 
     ref = _ref_importance(ref)
 
@@ -5278,6 +5314,170 @@ def _normalize_cn_netref(network, ref):
 
     elif network == 'JX-roads':
         network = 'CN:JX'
+
+    return network, ref
+
+
+# mapping the network prefixes onto ISO 3166-2 codes
+_ES_AUTONOMA = set([
+    'ARA',  # Aragon
+    'A',  # Aragon & Andalusia (and also Álava, Basque Country)
+    'CA',  # Cantabria (also Cadiz?)
+    'CL',  # Castile & Leon
+    'CM',  # Castilla-La Mancha
+    'C',  # Catalonia (also Cistierna & Eivissa?)
+    'EX',  # Extremadura
+    'AG',  # Galicia
+    'M',  # Madrid
+    'R',  # Madrid
+    'Ma',  # Mallorca
+    'Me',  # Menorca
+    'ML',  # Melilla
+    'RC',  # Menorca
+    'RM',  # Murcia
+    'V',  # Valencia (also A Coruna?)
+    'CV',  # Valencia
+    'Cv',  # Valencia
+])
+
+
+# mapping the network prefixes onto ISO 3166-2 codes
+_ES_PROVINCES = set([
+    'AC',  # A Coruna
+    'DP',  # A Coruna
+    'AB',  # Albacete
+    'F',  # Alicante?
+    'AL',  # Almeria
+    'AE',  # Asturias
+    'AS',  # Asturias
+    'AV',  # Avila
+    'BA',  # Badajoz
+    'B',  # Barcelona
+    'BP',  # Barcelona
+    'BV',  # Barcelona
+    'BI',  # Bizkaia
+    'BU',  # Burgos
+    'CC',  # Caceres
+    'CO',  # Cordoba
+    'CR',  # Cuidad Real
+    'GIP',  # Girona
+    'GIV',  # Girona
+    'GI',  # Gipuzkoa & Girona
+    'GR',  # Granada
+    'GU',  # Guadalajara
+    'HU',  # Huesca
+    'JA',  # Jaen
+    'JV',  # Jaen
+    'LR',  # La Rioja
+    'LE',  # Leon
+    'L',  # Lerida
+    'LP',  # Lerida
+    'LV',  # Lerida
+    'LU',  # Lugo
+    'MP',  # Madrid
+    'MA',  # Malaga
+    'NA',  # Navarre
+    'OU',  # Orense
+    'P',  # Palencia
+    'PP',  # Palencia
+    'EP',  # Pontevedra
+    'PO',  # Pontevedra
+    'DSA',  # Salamanca
+    'SA',  # Salamanca
+    'NI',  # Segovia
+    'SG',  # Segovia
+    'SE',  # Sevilla
+    'SO',  # Soria
+    'TP',  # Tarragona
+    'TV',  # Tarragona
+    'TE',  # Teruel
+    'TO',  # Toledo
+    'VA',  # Valladolid
+    'ZA',  # Zamora
+    'CP',  # Zaragoza
+    'Z',  # Zaragoza
+    'PM',  # Baleares
+    'PMV',  # Baleares
+])
+
+
+# mapping city codes to the name of the city
+_ES_CITIES = set([
+    'AI',  # Aviles
+    'IA',  # Aviles
+    'CT',  # Cartagena
+    'CS',  # Castello
+    'CU',  # Cudillero
+    'CHE',  # Ejea de los Caballeros
+    'EL',  # Elx/Elche
+    'FE',  # Ferrol
+    'GJ',  # Gijon
+    'H',  # Huelva
+    'VM',  # Huelva
+    'J',  # Jaen
+    'LN',  # Lena
+    'LL',  # Lleida
+    'LO',  # Logrono
+    'ME',  # Merida
+    'E',  # Mollerussa? / Eivissa
+    'MU',  # Murcia
+    'O',  # Oviedo
+    'PA',  # Pamplona
+    'PR',  # Parres
+    'PI',  # Pilona
+    'CHMS',  # Ponferrada?
+    'PT',  # Puertollano
+    'SL',  # Salas
+    'S',  # Santander
+    'SC',  # Santiago de Compostela
+    'SI',  # Siero
+    'VG',  # Vigo
+    'EI',  # Eivissa
+])
+
+
+def _normalize_es_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip('-')
+
+    # some A-roads in Spain are actually province or autonoma roads. these are
+    # distinguished from the national A-roads by whether they have 1 or 2
+    # digits (national) or 3 or more digits (autonoma / province). sadly, it
+    # doesn't seem to be possible to tell whether it's an autonoma or province
+    # without looking at the geometry, which is left as a TODO for later rainy
+    # days.
+    num_digits = 0
+    for i in xrange(0, len(num)):
+        if num[i].isdigit():
+            num_digits += 1
+        else:
+            break
+
+    if prefix in ('A', 'AP') and num_digits < 3:
+        network = 'ES:A-road'
+
+    elif prefix == 'N':
+        network = 'ES:N-road'
+
+    elif prefix == 'E':
+        # e-roads seem to be signed without leading zeros.
+        network = 'e-road'
+        ref = 'E-' + num.lstrip('0')
+
+    elif prefix in _ES_AUTONOMA:
+        network = 'ES:autonoma'
+
+    elif prefix in _ES_PROVINCES:
+        network = 'ES:province'
+
+    elif prefix in _ES_CITIES:
+        network = 'ES:city'
+
+    else:
+        network = None
+        ref = None
 
     return network, ref
 
@@ -6098,6 +6298,12 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_de,
         fix=_normalize_de_netref,
         sort=_sort_network_de,
+        shield_text=_use_ref_as_is,
+    ),
+    'ES': CountryNetworkLogic(
+        backfill=_guess_network_es,
+        fix=_normalize_es_netref,
+        sort=_sort_network_es,
         shield_text=_use_ref_as_is,
     ),
     'FR': CountryNetworkLogic(
