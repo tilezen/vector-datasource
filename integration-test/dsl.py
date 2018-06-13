@@ -96,6 +96,18 @@ def tile_centre(z, x, y):
     return (lon, lat)
 
 
+def tile_centre_shape(z, x, y):
+    """
+    Returns a shape consisting of a single point at the (mercator) tile
+    centre.
+    """
+
+    from shapely.geometry import Point
+
+    lon, lat = tile_centre(z, x, y)
+    return Point(lon, lat)
+
+
 def is_in(iso_code, z, x, y, way_id=-1):
     """
     This pattern gets used a lot in road shield tests to set up a country

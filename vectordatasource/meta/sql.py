@@ -671,7 +671,7 @@ def table_is_polygonal(name):
 
 
 def calculate_meta_source_for_table(name):
-    if table_is_osm(name):
+    if table_is_osm(name) or name == 'admin_areas':
         return 'osm'
     elif name.startswith('ne_'):
         return 'ne'

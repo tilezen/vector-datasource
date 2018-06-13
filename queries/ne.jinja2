@@ -1,3 +1,5 @@
+{% set ne_languages = ['ar', 'bn', 'de', 'en', 'es', 'fr', 'el', 'hi', 'hu', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'sv', 'tr', 'vi', 'zh'] %}
+
 {% macro ne_common_properties() %}
 
   -- common properties
@@ -131,6 +133,9 @@ SELECT
   jsonb_build_object(
 {% if name %}
     'name', name,
+    {%- for lang in ne_languages %}
+    'name_{{lang}}', name_{{lang}},
+    {%- endfor %}
 {% endif %}
 {% if boundary %}
     'boundary', true,
