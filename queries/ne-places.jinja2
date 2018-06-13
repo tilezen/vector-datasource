@@ -15,6 +15,9 @@ SELECT
 
   jsonb_build_object(
     'name', name,
+    {%- for lang in ne_languages %}
+    'name_{{lang}}', name_{{lang}},
+    {%- endfor %}
     'population', pop_max,
     'featurecla', featurecla,
     'scalerank', scalerank,
