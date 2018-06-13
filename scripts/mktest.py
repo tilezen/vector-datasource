@@ -273,7 +273,7 @@ if __name__ == '__main__':
         '--ne-id', type=int, default=1,
         help='Natural Earth ID to use.')
     ne_test_parser.add_argument(
-        '--layer-name', default='pois',
+        '--layer-name', default='places',
         help='Name of the layer in the tile to expect this feature in.')
     ne_test_parser.set_defaults(func=naturalearth_test)
 
