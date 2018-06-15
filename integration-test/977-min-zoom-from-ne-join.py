@@ -117,3 +117,29 @@ class MinZoomFromAdminAreaBasedDefault(FixtureTest):
                 'min_zoom': 0,
                 'max_zoom': 16,
             })
+
+    def test_wales(self):
+        # wales is a country within the UK, but mapped as place=state.
+        # should get a fallback from the states_provinces spreadsheet.
+        import dsl
+
+        z, x, y = (10, 501, 336)
+
+        self.generate_fixtures(
+            dsl.is_in('GB', z, x, y),
+            # https://www.openstreetmap.org/node/2642288017
+            dsl.point(2642288017, (-3.73893, 52.2928116), {
+                'is_in': u'United Kingdom, Europe',
+                'name': u'Wales',
+                'note': u'geographical centre of Wales',
+                'place': u'state',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 2642288017,
+                'min_zoom': 10,
+                'max_zoom': 11,
+            })
