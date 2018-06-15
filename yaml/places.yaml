@@ -54,6 +54,8 @@ filters:
     output:
       <<: *output_properties
       kind: country
+      __ne_min_zoom: {col: __ne_min_zoom}
+      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, place: state}
     # note: min_zoom needs to be smaller than any min_label in
@@ -64,6 +66,8 @@ filters:
       <<: *output_properties
       kind: region
       kind_detail: state
+      __ne_min_zoom: {col: __ne_min_zoom}
+      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, place: province}
     # note: min_zoom needs to be smaller than any min_label in
@@ -74,6 +78,8 @@ filters:
       <<: *output_properties
       kind: region
       kind_detail: province
+      __ne_min_zoom: {col: __ne_min_zoom}
+      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8

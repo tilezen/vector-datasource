@@ -700,7 +700,7 @@ DECLARE
   decimal_matches text[] :=
     regexp_matches(txt, '([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)');
   imperial_matches text[] :=
-    regexp_matches(txt, E'([0-9]+(\\.[0-9]*)?)\' *(([0-9]+)")?');
+    regexp_matches(txt, E'([0-9]+(\\.[0-9]*)?)\x27 *(([0-9]+)")?');
   numeric_matches text[] :=
     regexp_matches(txt, '([0-9]+(\.[0-9]*)?)');
 BEGIN

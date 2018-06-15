@@ -556,26 +556,6 @@ def tags_name_i18n(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
-def tags_set_min_max_zoom(shape, props, fid, zoom):
-    """
-    Set the min and max zoom from the __ne_* variants of the same tags, if they
-    exist. This is used to override the values in the YAML file with data
-    merged from Natural Earth tables.
-    """
-
-    tags = props.get('tags', {})
-
-    ne_min_zoom = tags.get('__ne_min_zoom')
-    if ne_min_zoom is not None:
-        props['min_zoom'] = ne_min_zoom
-
-    ne_max_zoom = tags.get('__ne_max_zoom')
-    if ne_max_zoom is not None:
-        props['max_zoom'] = ne_max_zoom
-
-    return shape, props, fid
-
-
 def _no_none_min(a, b):
     """
     Usually, `min(None, a)` will return None. This isn't
@@ -3561,6 +3541,15 @@ class CSVMatcher(object):
                 return (self.target_key, target_val)
 
         return None
+
+
+class YAMLToDict(dict):
+    def __init__(self, fh):
+        import yaml
+        data = yaml.load(fh)
+        assert isinstance(data, dict)
+        for k, v in data.iteritems():
+            self[k] = v
 
 
 def csv_match_properties(ctx):
@@ -7267,8 +7256,21 @@ def point_in_country_logic(ctx):
     layer_name = params.required('layer')
     country_layer_name = params.required('country_layer')
     country_code_attr = params.required('country_code_attr')
-    output_attr = params.required('output_attr')
-    logic_table = params.required('logic_table', typ=dict)
+
+    # single attribute version
+    output_attr = params.optional('output_attr')
+    # multiple attribute version
+    output_attrs = params.optional('output_attrs', typ=list)
+    # must provide one or the other
+    assert output_attr or output_attrs, 'Must provide one or other of ' \
+        'output_attr or output_attrs for point_in_country_logic'
+
+    logic_table = params.optional('logic_table', typ=dict)
+    if logic_table is None:
+        logic_table = ctx.resources.get('logic_table')
+    assert logic_table is not None, 'Must provide logic_table via a param ' \
+        'or resource for point_in_country_logic'
+
     where = params.optional('where')
 
     layer = _find_layer(ctx.feature_layers, layer_name)
@@ -7311,7 +7313,11 @@ def point_in_country_logic(ctx):
             # intersections are the same (there's no measure of the "amount of
             # overlap"), so we might as well just stop on the first one.
             if shape.intersects(candidate.geom):
-                props[output_attr] = candidate.value
+                if output_attrs:
+                    for output_attr in output_attrs:
+                        props[output_attr] = candidate.value[output_attr]
+                else:
+                    props[output_attr] = candidate.value
                 break
 
     return None
@@ -7339,5 +7345,27 @@ def max_zoom_filter(ctx):
                 new_features.append(feature)
 
         layer['features'] = new_features
+
+    return None
+
+
+def tags_set_ne_min_max_zoom(ctx):
+    """
+    Override the min zoom and max zoom properties with __ne_* variants from
+    Natural Earth, if there are any.
+    """
+
+    params = _Params(ctx, 'tags_set_ne_min_max_zoom')
+    layer_name = params.required('layer')
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    for _, props, _ in layer['features']:
+        min_zoom = props.pop('__ne_min_zoom', None)
+        if min_zoom is not None:
+            props['min_zoom'] = min_zoom
+
+        max_zoom = props.pop('__ne_max_zoom', None)
+        if max_zoom is not None:
+            props['max_zoom'] = max_zoom
 
     return None

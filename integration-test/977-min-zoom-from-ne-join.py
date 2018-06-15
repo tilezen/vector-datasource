@@ -53,3 +53,67 @@ class MinZoomFromNETest(FixtureTest):
         x, y = deg2num(self.lat, self.lon, zoom)
         self.assert_no_matching_feature(
             zoom, x, y, 'places', {'id': 838090640})
+
+
+class MinZoomFromAdminAreaBasedDefault(FixtureTest):
+
+    def test_united_kingdom(self):
+        # in the absence of data joined from NE, we should fall back to a
+        # default based on the country that the label point is in.
+        import dsl
+        from tilequeue.tile import deg2num
+
+        lon, lat = (-3.2765753, 54.7023545)
+        z = 5
+        x, y = deg2num(lat, lon, z)
+
+        self.generate_fixtures(
+            dsl.is_in('GB', z, x, y),
+            # https://www.openstreetmap.org/node/838090640
+            dsl.point(838090640, (lon, lat), {
+                'name': u'United Kingdom',
+                'place': u'country',
+                'population': u'61792000',
+                'source': u'openstreetmap.org',
+                'wikidata': u'Q145',
+                'wikipedia': u'de:United Kingdom',  # LOL, de:
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 838090640,
+                'min_zoom': 1.7,
+                'max_zoom': 6.7,
+            })
+
+    def test_ne_min_zoom_should_override_default(self):
+        import dsl
+        from tilequeue.tile import deg2num
+
+        lon, lat = (-3.2765753, 54.7023545)
+        z = 5
+        x, y = deg2num(lat, lon, z)
+
+        self.generate_fixtures(
+            dsl.is_in('GB', z, x, y),
+            # https://www.openstreetmap.org/node/838090640
+            dsl.point(838090640, (lon, lat), {
+                'name': u'United Kingdom',
+                'place': u'country',
+                'population': u'61792000',
+                'source': u'openstreetmap.org',
+                'wikidata': u'Q145',
+                'wikipedia': u'de:United Kingdom',  # LOL, de:
+                # NE joins should override defaults from location
+                '__ne_min_zoom': 0,
+                '__ne_max_zoom': 16,
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 838090640,
+                'min_zoom': 0,
+                'max_zoom': 16,
+            })
