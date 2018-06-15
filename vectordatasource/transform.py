@@ -556,6 +556,26 @@ def tags_name_i18n(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def tags_set_min_max_zoom(shape, props, fid, zoom):
+    """
+    Set the min and max zoom from the __ne_* variants of the same tags, if they
+    exist. This is used to override the values in the YAML file with data
+    merged from Natural Earth tables.
+    """
+
+    tags = props.get('tags', {})
+
+    ne_min_zoom = tags.get('__ne_min_zoom')
+    if ne_min_zoom is not None:
+        props['min_zoom'] = ne_min_zoom
+
+    ne_max_zoom = tags.get('__ne_max_zoom')
+    if ne_max_zoom is not None:
+        props['max_zoom'] = ne_max_zoom
+
+    return shape, props, fid
+
+
 def _no_none_min(a, b):
     """
     Usually, `min(None, a)` will return None. This isn't
@@ -7293,5 +7313,31 @@ def point_in_country_logic(ctx):
             if shape.intersects(candidate.geom):
                 props[output_attr] = candidate.value
                 break
+
+    return None
+
+
+def max_zoom_filter(ctx):
+    """
+    For features with a max_zoom, remove them if it's < nominal zoom.
+    """
+
+    params = _Params(ctx, 'max_zoom_filter')
+    layers = params.required('layers', typ=list)
+    nominal_zoom = ctx.nominal_zoom
+
+    for layer_name in layers:
+        layer = _find_layer(ctx.feature_layers, layer_name)
+
+        features = layer['features']
+        new_features = []
+
+        for feature in features:
+            _, props, _ = feature
+            max_zoom = props.get('max_zoom')
+            if max_zoom is None or max_zoom >= nominal_zoom:
+                new_features.append(feature)
+
+        layer['features'] = new_features
 
     return None

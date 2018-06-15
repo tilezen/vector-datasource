@@ -1,5 +1,5 @@
 bucket: tilezen-assets
-datestamp: 20180612
+datestamp: 20180614
 
 shapefiles:
 
@@ -129,3 +129,15 @@ shapefiles:
   - name: ne_10m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
     prj: 43267
+
+  - name: ne_10m_admin_0_countries
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_map_units
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_map_units.zip
+    prj: 4326
+
+  - name: ne_10m_admin_1_states_provinces
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip
+    prj: 4326

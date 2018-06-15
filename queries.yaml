@@ -183,6 +183,7 @@ layers:
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_set_min_max_zoom
       - vectordatasource.transform.tags_remove
       - vectordatasource.transform.place_population_int
       - vectordatasource.transform.calculate_default_place_min_zoom
@@ -1053,3 +1054,7 @@ post_process:
         white: [255, 255, 255]
         yellow: [255, 255, 0]
         yellowgreen: [154, 205, 50]
+
+  - fn: vectordatasource.transform.max_zoom_filter
+    params:
+      layers: [places]
