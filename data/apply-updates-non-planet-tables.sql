@@ -187,3 +187,7 @@ CREATE INDEX ne_10m_land_way_area_index ON ne_10m_land(way_area);
 UPDATE land_polygons SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
 CREATE INDEX land_polygons_wayarea_index ON land_polygons(way_area);
 
+-- we look up min_label, max_label by wikidata ID.
+CREATE INDEX ne_10m_admin_0_countries_wikidata_index ON ne_10m_admin_0_countries(wikidataid);
+CREATE INDEX ne_10m_admin_0_map_units_wikidata_index ON ne_10m_admin_0_map_units(wikidataid);
+CREATE INDEX ne_10m_admin_1_states_provinces_wikidata_index ON ne_10m_admin_1_states_provinces(wikidataid);

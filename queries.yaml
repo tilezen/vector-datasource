@@ -549,6 +549,45 @@ post_process:
         ZM: true # Zambia
         ZW: true # Zimbabwe
 
+  # cut places with admin_areas to put country_code attributes on country,
+  # state and province points. this is used to backfill information such as
+  # min and max zoom based on country defaults.
+  - fn: vectordatasource.transform.point_in_country_logic
+    resources:
+      logic_table:
+        type: file
+        init_fn: vectordatasource.transform.YAMLToDict
+        path: spreadsheets/min_zoom/country.yaml
+    params:
+      layer: places
+      country_layer: admin_areas
+      country_code_attr: iso_code
+      output_attrs:
+        - min_zoom
+        - max_zoom
+      where: kind == 'country'
+
+  - fn: vectordatasource.transform.point_in_country_logic
+    resources:
+      logic_table:
+        type: file
+        init_fn: vectordatasource.transform.YAMLToDict
+        path: spreadsheets/min_zoom/state_province.yaml
+    params:
+      layer: places
+      country_layer: admin_areas
+      country_code_attr: iso_code
+      output_attrs:
+        - min_zoom
+        - max_zoom
+      where: kind == 'region'
+
+  # IMPORTANT! do this _after_ the YAMLToDict default stuff, otherwise the
+  # default will overwrite the value fron Natural Earth.
+  - fn: vectordatasource.transform.tags_set_ne_min_max_zoom
+    params:
+      layer: places
+
   - fn: vectordatasource.transform.overlap
     params:
       base_layer: buildings
@@ -1053,3 +1092,7 @@ post_process:
         white: [255, 255, 255]
         yellow: [255, 255, 0]
         yellowgreen: [154, 205, 50]
+
+  - fn: vectordatasource.transform.max_zoom_filter
+    params:
+      layers: [places]

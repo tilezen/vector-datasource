@@ -9,5 +9,5 @@ class NoCountryLabelLowZoom(FixtureTest):
         self.assert_no_matching_feature(
             0, 0, 0, 'places', {'kind': 'country'})
 
-        self.assert_no_matching_feature(
-            1, 0, 0, 'places', {'kind': 'country'})
+        # see integration-test/977-min-zoom-from-ne-join.py -- we now get this
+        # information from joining on the Natural Earth countries table.

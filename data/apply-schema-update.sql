@@ -121,6 +121,16 @@ PERFORM add_column_if_not_exists('ne_10m_land', 'mz_label_placement', 'geometry(
 PERFORM add_column_if_not_exists('ne_50m_urban_areas', 'mz_label_placement', 'geometry(Geometry, 3857)');
 PERFORM add_column_if_not_exists('ne_10m_urban_areas', 'mz_label_placement', 'geometry(Geometry, 3857)');
 
+-- NOTE: the absence of:
+--
+--  * ne_10m_admin_0_countries
+--  * ne_10m_admin_0_map_units
+--  * ne_10m_admin_1_states_provinces
+--
+-- although we do import the _boundaries_ variants of some of these, we only use
+-- the polygon variants above to join on the wikidata ID, we don't draw or label
+-- them directly.
+
 END$$;
 
 DROP FUNCTION add_column_if_not_exists(text, text, text);

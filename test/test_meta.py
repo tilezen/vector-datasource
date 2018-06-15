@@ -619,7 +619,7 @@ class PlacesMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.places.fn(shape, props, None, meta)
-        self.assertEquals(2, out_min_zoom)
+        self.assertEquals(1, out_min_zoom)
 
 
 class PoisMinZoomTest(unittest.TestCase):

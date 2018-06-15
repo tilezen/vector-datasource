@@ -3543,6 +3543,15 @@ class CSVMatcher(object):
         return None
 
 
+class YAMLToDict(dict):
+    def __init__(self, fh):
+        import yaml
+        data = yaml.load(fh)
+        assert isinstance(data, dict)
+        for k, v in data.iteritems():
+            self[k] = v
+
+
 def csv_match_properties(ctx):
     """
     Add or update a property on all features which match properties which are
@@ -7247,8 +7256,21 @@ def point_in_country_logic(ctx):
     layer_name = params.required('layer')
     country_layer_name = params.required('country_layer')
     country_code_attr = params.required('country_code_attr')
-    output_attr = params.required('output_attr')
-    logic_table = params.required('logic_table', typ=dict)
+
+    # single attribute version
+    output_attr = params.optional('output_attr')
+    # multiple attribute version
+    output_attrs = params.optional('output_attrs', typ=list)
+    # must provide one or the other
+    assert output_attr or output_attrs, 'Must provide one or other of ' \
+        'output_attr or output_attrs for point_in_country_logic'
+
+    logic_table = params.optional('logic_table', typ=dict)
+    if logic_table is None:
+        logic_table = ctx.resources.get('logic_table')
+    assert logic_table is not None, 'Must provide logic_table via a param ' \
+        'or resource for point_in_country_logic'
+
     where = params.optional('where')
 
     layer = _find_layer(ctx.feature_layers, layer_name)
@@ -7291,7 +7313,59 @@ def point_in_country_logic(ctx):
             # intersections are the same (there's no measure of the "amount of
             # overlap"), so we might as well just stop on the first one.
             if shape.intersects(candidate.geom):
-                props[output_attr] = candidate.value
+                if output_attrs:
+                    for output_attr in output_attrs:
+                        props[output_attr] = candidate.value[output_attr]
+                else:
+                    props[output_attr] = candidate.value
                 break
+
+    return None
+
+
+def max_zoom_filter(ctx):
+    """
+    For features with a max_zoom, remove them if it's < nominal zoom.
+    """
+
+    params = _Params(ctx, 'max_zoom_filter')
+    layers = params.required('layers', typ=list)
+    nominal_zoom = ctx.nominal_zoom
+
+    for layer_name in layers:
+        layer = _find_layer(ctx.feature_layers, layer_name)
+
+        features = layer['features']
+        new_features = []
+
+        for feature in features:
+            _, props, _ = feature
+            max_zoom = props.get('max_zoom')
+            if max_zoom is None or max_zoom >= nominal_zoom:
+                new_features.append(feature)
+
+        layer['features'] = new_features
+
+    return None
+
+
+def tags_set_ne_min_max_zoom(ctx):
+    """
+    Override the min zoom and max zoom properties with __ne_* variants from
+    Natural Earth, if there are any.
+    """
+
+    params = _Params(ctx, 'tags_set_ne_min_max_zoom')
+    layer_name = params.required('layer')
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    for _, props, _ in layer['features']:
+        min_zoom = props.pop('__ne_min_zoom', None)
+        if min_zoom is not None:
+            props['min_zoom'] = min_zoom
+
+        max_zoom = props.pop('__ne_max_zoom', None)
+        if max_zoom is not None:
+            props['max_zoom'] = max_zoom
 
     return None

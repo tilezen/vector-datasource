@@ -26,7 +26,8 @@ SELECT
   CASE WHEN mz_places_min_zoom IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_places_min_zoom
-    )
+    ) ||
+      tz_get_ne_min_max_zoom(tags->'wikidata')
   END AS __places_properties__,
 
   CASE WHEN mz_poi_min_zoom IS NOT NULL

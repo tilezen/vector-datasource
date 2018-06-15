@@ -47,24 +47,39 @@ filters:
     table: wof
     extra_columns: [ min_zoom ]
   - filter: {name: true, place: country}
-    min_zoom: 2
+    # note: min_zoom needs to be smaller than any min_label in
+    # ne_10m_admin_0_countries to make sure we're not dropping any by not being
+    # included in the PostgreSQL index.
+    min_zoom: 1
     output:
       <<: *output_properties
       kind: country
+      __ne_min_zoom: {col: __ne_min_zoom}
+      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, place: state}
-    min_zoom: 4
+    # note: min_zoom needs to be smaller than any min_label in
+    # ne_10m_admin_1_states_provinces to make sure we're not dropping any by
+    # not being included in the PostgreSQL index.
+    min_zoom: 3
     output:
       <<: *output_properties
       kind: region
       kind_detail: state
+      __ne_min_zoom: {col: __ne_min_zoom}
+      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, place: province}
-    min_zoom: 4
+    # note: min_zoom needs to be smaller than any min_label in
+    # ne_10m_admin_1_states_provinces to make sure we're not dropping any by
+    # not being included in the PostgreSQL index.
+    min_zoom: 3
     output:
       <<: *output_properties
       kind: region
       kind_detail: province
+      __ne_min_zoom: {col: __ne_min_zoom}
+      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
