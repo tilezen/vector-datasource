@@ -1,0 +1,24 @@
+
+    def test_{{name}}(self):
+        import dsl
+
+        z, x, y = ({{z}}, {{x}}, {{y}})
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/{{node_id}}
+            dsl.point({{node_id}}, {{position}}, {
+        {%- for k, v in node_tags|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%- endfor %}
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, '{{layer_name}}', {
+                'id': {{node_id}},
+        {%- if expect is not none %}
+        {%-   for k, v in expect|dictsort %}
+                '{{k}}': u'{{v}}',
+        {%-   endfor %}
+        {%- endif %}
+            })

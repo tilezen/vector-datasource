@@ -7,6 +7,34 @@ import os
 from contextlib import contextmanager
 
 
+def node(node_id, zoom=16):
+    url = 'https://api.openstreetmap.org/api/0.6/node/%d' % (node_id,)
+    headers = {'user-agent': 'mktest.py/0.0.1 (https://github.com/tilezen)'}
+    r = requests.get(url, headers=headers)
+    root = ET.fromstring(r.content)
+    assert root.tag == 'osm'
+
+    tags = {}
+    pos = None
+
+    for child in root:
+        if child.tag == 'node':
+            lat = float(child.attrib['lat'])
+            lon = float(child.attrib['lon'])
+            pos = (lon, lat)
+            for nchild in child:
+                if nchild.tag == 'tag':
+                    k = nchild.attrib['k']
+                    v = nchild.attrib['v']
+                    tags[k] = v
+            break
+
+    assert pos
+    tags['source'] = 'openstreetmap.org'
+
+    return pos, tags
+
+
 def way_full(way_id, zoom=16):
     url = 'https://api.openstreetmap.org/api/0.6/way/%d/full' % (way_id,)
     headers = {'user-agent': 'mktest.py/0.0.1 (https://github.com/tilezen)'}
@@ -110,6 +138,34 @@ def road_test(args):
     )
 
     output = _render_template('road_test', args)
+    print output.encode('utf-8')
+
+
+def node_test(args):
+    import json
+
+    position, node_tags = node(args.node_id, args.zoom)
+    x, y = tile.deg2num(position[1], position[0], args.zoom)
+    coord = Coordinate(zoom=args.zoom, column=x, row=y)
+    expect = json.loads(args.expect) if args.expect else None
+
+    if expect:
+        name = '_'.join(_make_ident(v) for v in expect.values())
+    else:
+        name = 'FIXME'
+
+    args = dict(
+        name=name,
+        z=args.zoom,
+        x=coord.column,
+        y=coord.row,
+        position=position,
+        node_id=args.node_id,
+        node_tags=node_tags,
+        expect=expect,
+    )
+
+    output = _render_template('node_test', args)
     print output.encode('utf-8')
 
 
@@ -249,6 +305,24 @@ if __name__ == '__main__':
         '--zoom', type=int, default=16,
         help='Zoom to use for tile.')
     road_test_parser.set_defaults(func=road_test)
+
+    # NODE (places / pois)
+    node_test_parser = subparsers.add_parser(
+        'node', help='make a unit test for a point from an OSM node.')
+
+    node_test_parser.add_argument(
+        '--node-id', type=int, required=True,
+        help='Node ID of the OSM element used to create the test.')
+    node_test_parser.add_argument(
+        '--expect',
+        help='JSON-encoded dict of expected properties.')
+    node_test_parser.add_argument(
+        '--zoom', type=int, default=16,
+        help='Zoom to use for tile.')
+    node_test_parser.add_argument(
+        '--layer-name', default='places',
+        help='Name of the layer in the tile to expect this feature in.')
+    node_test_parser.set_defaults(func=node_test)
 
     # NATURAL EARTH
     ne_test_parser = subparsers.add_parser(
