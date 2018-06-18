@@ -283,6 +283,106 @@ def naturalearth_test(args):
     print output.encode('utf-8')
 
 
+def _overpass_fetch(element_type, bbox, query):
+    import json
+
+    overpass_api = 'https://overpass-api.de/api/interpreter'
+    data = '[out:json][timeout:5][maxsize:1048576];' \
+           '(%s[%s](%s););out 1 geom qt;' \
+           % (element_type, query, ','.join(str(f) for f in bbox))
+    r = requests.get(overpass_api, params=dict(data=data))
+
+    response = json.loads(r.text)
+    return response["elements"]
+
+
+def _overpass_find(element_type, query):
+    # note: all this arithmetic is on (lat, lon) pairs because that's the
+    # (incorrect) order that Overpass expects it to be in.
+
+    centre = (40.82580725925, -73.9098083973)
+    size = (0.17457992415, 0.1867675781)
+    factor = 1.0
+    max_factor = max(90 / size[0], 180 / size[1])
+
+    while factor < max_factor:
+        bbox = [centre[0] - factor * size[0],
+                centre[1] - factor * size[1],
+                centre[0] + factor * size[0],
+                centre[1] + factor * size[1]]
+
+        elements = _overpass_fetch(element_type, bbox, query)
+        if elements:
+            break
+
+        factor = factor * 2.0
+
+    else:
+        raise RuntimeError("Nothing matching %r found!" % (query,))
+
+    return elements[0]
+
+
+def _overpass_node(query):
+    element = _overpass_find('node', query)
+
+    position = tuple(element[p] for p in ('lat', 'lon'))
+    return 'node', element['id'], position, 'dsl.point', repr(position), \
+        element['tags']
+
+
+def _overpass_way(query):
+    element = _overpass_find('way', query)
+
+    point = element['geometry'][0]
+    position = tuple(point[p] for p in ('lat', 'lon'))
+    geom = 'dsl.tile_box(z, x, y)'
+    return 'way', element['id'], position, 'dsl.way', geom, element['tags']
+
+
+def _overpass_element(layer_name, query_fn, args):
+    import json
+
+    elt_type, elt_id, pos, geom_fn_name, geom_fn_arg, tags = query_fn(
+        args.query)
+    x, y = tile.deg2num(pos[1], pos[0], args.zoom)
+    coord = Coordinate(zoom=args.zoom, column=x, row=y)
+    expect = json.loads(args.expect) if args.expect else None
+
+    if expect:
+        name = '_'.join(_make_ident(v) for v in expect.values())
+    else:
+        name = 'FIXME'
+    name = name + '_' + elt_type
+
+    tags['source'] = 'openstreetmap.org'
+
+    params = dict(
+        name=name,
+        z=args.zoom,
+        x=coord.column,
+        y=coord.row,
+        elt_id=elt_id,
+        tags=tags,
+        expect=expect,
+        layer_name=layer_name,
+        geom_fn_name=geom_fn_name,
+        geom_fn_arg=geom_fn_arg,
+        elt_type=elt_type,
+    )
+
+    output = _render_template('overpass_test', params)
+    print output.encode('utf-8')
+
+
+def overpass_test(args):
+    if args.poi:
+        _overpass_element('pois', _overpass_node, args)
+
+    if args.landuse:
+        _overpass_element('landuse', _overpass_way, args)
+
+
 if __name__ == '__main__':
     import argparse
 
@@ -350,6 +450,27 @@ if __name__ == '__main__':
         '--layer-name', default='places',
         help='Name of the layer in the tile to expect this feature in.')
     ne_test_parser.set_defaults(func=naturalearth_test)
+
+    # FIND BY TAGS IN OVERPASS
+    overpass_parser = subparsers.add_parser(
+        'overpass', help='Use Overpass API to find examples based on tags')
+
+    overpass_parser.add_argument(
+        '--query', required=True,
+        help='Query to send to Overpass')
+    overpass_parser.add_argument(
+        '--poi', action='store_true', help='Make a test for a point in the '
+        'pois layer.')
+    overpass_parser.add_argument(
+        '--landuse', action='store_true', help='Make a test for a polygon in '
+        'the landuse layer.')
+    overpass_parser.add_argument(
+        '--expect',
+        help='JSON-encoded dict of expected properties.')
+    overpass_parser.add_argument(
+        '--zoom', type=int, default=16,
+        help='Zoom to use for tile.')
+    overpass_parser.set_defaults(func=overpass_test)
 
     args = parser.parse_args()
     args.func(args)
