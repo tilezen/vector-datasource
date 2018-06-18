@@ -463,6 +463,14 @@ post_process:
     params:
       layer: roads
 
+  # having calculated the country_code on roads, now drop it. we don't want it
+  # in the output (and it's already part of the `network`, if any got added to
+  # the feature.)
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      properties: [country_code]
+
   - fn: vectordatasource.transform.point_in_country_logic
     params:
       layer: pois

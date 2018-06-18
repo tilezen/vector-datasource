@@ -12,9 +12,7 @@ class AddCountryCodesToRoads(FixtureTest):
         # get geometry into the pipeline. in real usage, the admin_area comes
         # from a static shapefile.
         self.generate_fixtures(
-            dsl.way(1, dsl.tile_box(z, x, y),
-                    {'kind': 'admin_area', 'iso_code': 'GB',
-                     'source': 'openstreetmap.org'}),
+            dsl.is_in('GB', z, x, y),
             dsl.way(2, dsl.tile_diagonal(z, x, y),
                     {'highway': 'motorway', 'ref': 'M4',
                      'source': 'openstreetmap.org'}),
@@ -24,11 +22,12 @@ class AddCountryCodesToRoads(FixtureTest):
         with self.layers_in_tile(z, x, y) as layers:
             self.assertNotIn('admin_areas', layers)
 
-        # but should have used it to add a "country_code" parameter to the
-        # road.
+        # the country_code will have been used internally to generate a
+        # "country_code" property, but (as per #1534) it should be stripped out
+        # before the tile is output.
         self.assert_has_feature(
             z, x, y, 'roads',
-            {'id': 2, 'country_code': 'GB', 'network': 'GB:M-road'})
+            {'id': 2, 'country_code': type(None), 'network': 'GB:M-road'})
 
     # the backfill national network in the UK should still be more important
     # than the EU "e-road" desigation, as that isn't signed.
