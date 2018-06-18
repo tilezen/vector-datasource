@@ -450,6 +450,13 @@ filters:
       <<: *output_properties
       kind: aerodrome
       tier: 3
+  - filter: {military: airfield}
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
+      tier: 3
   - filter: {landuse: military}
     min_zoom: *tier3_min_zoom
     output:

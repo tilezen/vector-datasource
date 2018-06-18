@@ -406,6 +406,14 @@ filters:
       <<: *output_properties
       kind: {col: aeroway}
       tier: 3
+  # miltary airfield
+  - filter: {military: airfield}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
+      tier: 3
   # military
   - filter: {landuse: military}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
