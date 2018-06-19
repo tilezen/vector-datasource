@@ -1024,11 +1024,16 @@ filters:
     output:
       <<: *output_properties
       kind: {col: amenity}
-  - filter: {tags->healthcare: midwife}
+  - filter: {healthcare: midwife}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: midwife
+  - filter: {healthcare: [blood_donation, blood_bank]}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: blood_bank
   - filter:
       amenity: [kindergarten, childcare]
     min_zoom: 17

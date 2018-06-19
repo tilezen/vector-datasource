@@ -336,10 +336,11 @@ class _OverpassNode(object):
         return 'node'
 
     def geom_fn_name(self):
-        return 'dsl.node'
+        return 'dsl.point'
 
     def geom_fn_arg(self):
-        return repr(self.position)
+        lat, lon = self.position
+        return "(%f, %f)" % (lon, lat)
 
 
 class _OverpassWay(object):
@@ -412,6 +413,9 @@ def _overpass_element(layer_name, query_fn, args):
 def overpass_test(args):
     if args.poi:
         _overpass_element('pois', _OverpassNode, args)
+
+    if args.poi_poly:
+        _overpass_element('pois', _OverpassWayArea, args)
 
     if args.landuse:
         _overpass_element('landuse', _OverpassWayArea, args)
@@ -504,6 +508,9 @@ if __name__ == '__main__':
     overpass_parser.add_argument(
         '--landuse-line', action='store_true', help='Make a test for a line '
         'in the landuse layer.')
+    overpass_parser.add_argument(
+        '--poi-poly', action='store_true', help='Make a test for a POI point '
+        'from a polygon centroid.')
     overpass_parser.add_argument(
         '--expect',
         help='JSON-encoded dict of expected properties.')

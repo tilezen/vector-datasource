@@ -789,3 +789,83 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'fence',
                 'kind_detail': u'wood',
             })
+
+    def test_blood_bank_node(self):
+        import dsl
+
+        z, x, y = (16, 19087, 24820)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2572216768
+            dsl.point(2572216768, (-75.1506499, 39.9601062), {
+                'addr:city': u'Philadelphia',
+                'addr:housenumber': u'700',
+                'addr:postcode': u'19123',
+                'addr:street': u'Spring Garden Street',
+                'healthcare': u'blood_donation',
+                'name': u'Philadelphia Red Cross Blood Donation Center',
+                'phone': u'1-800-RED CROSS',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2572216768,
+                'kind': u'blood_bank',
+            })
+
+    def test_blood_bank_way(self):
+        import dsl
+
+        z, x, y = (16, 18892, 24049)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/567183407
+            dsl.way(567183407, dsl.tile_box(z, x, y), {
+                'addr:city': u'Liverpool',
+                'addr:housenumber': u'7359',
+                'addr:postcode': u'13090',
+                'addr:state': u'NY',
+                'addr:street': u'Oswego Road',
+                'building': u'yes',
+                'healthcare': u'blood_donation',
+                'name': u'American Red Cross Blood Donation Center',
+                'operator': u'American Red Cross',
+                'phone': u'+1-800-733-2767',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 567183407,
+                'kind': u'blood_bank',
+            })
+
+    def test_blood_bank_node_fixup(self):
+        # the more common tag is healthcare=blood_donation, but there are a few
+        # instances of healthcare=blood_bank that we can fixup.
+        import dsl
+
+        z, x, y = (16, 19302, 24629)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5345342860
+            dsl.point(5345342860, (-73.9694947, 40.7588798), {
+                'addr:city': u'New York',
+                'addr:housenumber': u'641',
+                'addr:postcode': u'10022',
+                'addr:state': u'NY',
+                'addr:street': u'Lexington Avenue',
+                'healthcare': u'blood_bank',
+                'name': u'10 Storks',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5345342860,
+                'kind': u'blood_bank',
+            })
