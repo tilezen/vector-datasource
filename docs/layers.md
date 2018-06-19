@@ -479,6 +479,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `common`
 * `crane`
 * `cutline`
+* `danger` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
 * `dike`
 * `ditch`
@@ -813,6 +814,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `cross`
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
+* `danger` - e.g: military training zones, firing ranges.
 * `dam`
 * `day_care`
 * `deli`

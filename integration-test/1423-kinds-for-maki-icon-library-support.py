@@ -869,3 +869,76 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 5345342860,
                 'kind': u'blood_bank',
             })
+
+    def test_danger_way(self):
+        import dsl
+
+        z, x, y = (16, 19197, 24804)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/28735778
+            dsl.way(28735778, dsl.tile_box(z, x, y), {
+                'military': u'danger_area',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 28735778,
+                'kind': u'danger',
+            })
+
+    def test_danger_cliff_top(self):
+        # to be honest, this looks like a tagging mistake - it's near a path
+        # called "cliff top", nowhere near any military areas that i can see
+        # and seems more likely to have been intended as a viewpoint than a
+        # danger area. still, it makes for a decent test.
+
+        import dsl
+
+        z, x, y = (16, 32354, 21550)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4809654741
+            dsl.point(4809654741, (-2.2727805, 52.3271344), {
+                'landuse': u'military',
+                'military': u'danger_area',
+                'name': u'cliff top',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4809654741,
+                'kind': u'danger',
+                'name': u'cliff top',
+            })
+
+    def test_danger_area_otmoor(self):
+        import dsl
+
+        z, x, y = (13, 4069, 2712)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/26165183
+            dsl.way(26165183, dsl.tile_box(z, x, y), {
+                'access': 'private',
+                'military': 'danger_area',
+                'name': 'Otmoor Range Danger Area',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 26165183,
+                'kind': u'danger',
+                'name': u'Otmoor Range Danger Area',
+            })
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 26165183,
+                'kind': u'danger',
+            })

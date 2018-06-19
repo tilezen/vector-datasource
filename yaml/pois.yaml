@@ -425,6 +425,13 @@ filters:
       kind: airfield
       kind_detail: military
       tier: 3
+  # military danger area
+  - filter: {military: danger_area}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: danger
+      tier: 3
   # military
   - filter: {landuse: military}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }

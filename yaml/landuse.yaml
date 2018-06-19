@@ -1049,6 +1049,14 @@ filters:
     output:
       <<: *output_properties
       kind: {col: barrier}
+  - filter:
+      military: danger_area
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: danger
+    extra_columns: [way]
 
   # whitelist fence_type if it's present, otherwise don't include it. this
   # means we don't get random values in the output that we can't document.
