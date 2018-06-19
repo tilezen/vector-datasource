@@ -481,12 +481,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `cutline`
 * `dam` - polygon, line
 * `dike`
+* `ditch`
 * `dog_park`
 * `enclosure`
 * `farm`
 * `farmland`
 * `farmyard`
-* `fence`
+* `fence` - if present, `kind_detail` one of `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
 * `footway`
 * `forest`
 * `fort`
@@ -499,9 +500,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `grass`
 * `grave_yard`
 * `groyne`
+* `guard_rail`
 * `hanami`
 * `hospital`
 * `industrial`
+* `kerb`
 * `land`
 * `library`
 * `maze`
@@ -784,6 +787,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `care_home`
 * `carousel`
 * `carpenter`
+* `cattle_grid`
 * `cave_entrance`
 * `cemetery`
 * `chalet`
@@ -854,7 +858,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
-* `gate`
+* `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
 * `generator`
 * `geyser`
 * `gift`

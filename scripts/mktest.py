@@ -306,10 +306,12 @@ def _overpass_find(element_type, query):
     max_factor = max(90 / size[0], 180 / size[1])
 
     while factor < max_factor:
-        bbox = [centre[0] - factor * size[0],
-                centre[1] - factor * size[1],
-                centre[0] + factor * size[0],
-                centre[1] + factor * size[1]]
+        # don't use the full latitude range, as we can't express that in
+        # mercator tile coordinates!
+        bbox = [max(-85, centre[0] - factor * size[0]),
+                max(-180, centre[1] - factor * size[1]),
+                min(85, centre[0] + factor * size[0]),
+                min(180, centre[1] + factor * size[1])]
 
         elements = _overpass_fetch(element_type, bbox, query)
         if elements:
@@ -323,29 +325,60 @@ def _overpass_find(element_type, query):
     return elements[0]
 
 
-def _overpass_node(query):
-    element = _overpass_find('node', query)
+class _OverpassNode(object):
+    def __init__(self, query):
+        element = _overpass_find('node', query)
+        self.position = tuple(element[p] for p in ('lat', 'lon'))
+        self.element_id = element['id']
+        self.tags = element['tags']
 
-    position = tuple(element[p] for p in ('lat', 'lon'))
-    return 'node', element['id'], position, 'dsl.point', repr(position), \
-        element['tags']
+    def element_type(self):
+        return 'node'
+
+    def geom_fn_name(self):
+        return 'dsl.node'
+
+    def geom_fn_arg(self):
+        return repr(self.position)
 
 
-def _overpass_way(query):
-    element = _overpass_find('way', query)
+class _OverpassWay(object):
+    def __init__(self, query):
+        element = _overpass_find('way', query)
+        point = element['geometry'][0]
+        self.position = tuple(point[p] for p in ('lat', 'lon'))
+        self.element_id = element['id']
+        self.tags = element['tags']
 
-    point = element['geometry'][0]
-    position = tuple(point[p] for p in ('lat', 'lon'))
-    geom = 'dsl.tile_box(z, x, y)'
-    return 'way', element['id'], position, 'dsl.way', geom, element['tags']
+    def element_type(self):
+        return 'way'
+
+    def geom_fn_name(self):
+        return 'dsl.way'
+
+
+class _OverpassWayArea(_OverpassWay):
+    def __init__(self, query):
+        super(_OverpassWayArea, self).__init__(query)
+
+    def geom_fn_arg(self):
+        return 'dsl.tile_box(z, x, y)'
+
+
+class _OverpassWayLine(_OverpassWay):
+    def __init__(self, query):
+        super(_OverpassWayLine, self).__init__(query)
+
+    def geom_fn_arg(self):
+        return 'dsl.tile_diagonal(z, x, y)'
 
 
 def _overpass_element(layer_name, query_fn, args):
     import json
 
-    elt_type, elt_id, pos, geom_fn_name, geom_fn_arg, tags = query_fn(
-        args.query)
-    x, y = tile.deg2num(pos[1], pos[0], args.zoom)
+    result = query_fn(args.query)
+    pos = result.position
+    x, y = tile.deg2num(pos[0], pos[1], args.zoom)
     coord = Coordinate(zoom=args.zoom, column=x, row=y)
     expect = json.loads(args.expect) if args.expect else None
 
@@ -353,8 +386,9 @@ def _overpass_element(layer_name, query_fn, args):
         name = '_'.join(_make_ident(v) for v in expect.values())
     else:
         name = 'FIXME'
-    name = name + '_' + elt_type
+    name = name + '_' + result.element_type()
 
+    tags = result.tags
     tags['source'] = 'openstreetmap.org'
 
     params = dict(
@@ -362,13 +396,13 @@ def _overpass_element(layer_name, query_fn, args):
         z=args.zoom,
         x=coord.column,
         y=coord.row,
-        elt_id=elt_id,
+        elt_id=result.element_id,
         tags=tags,
         expect=expect,
         layer_name=layer_name,
-        geom_fn_name=geom_fn_name,
-        geom_fn_arg=geom_fn_arg,
-        elt_type=elt_type,
+        geom_fn_name=result.geom_fn_name(),
+        geom_fn_arg=result.geom_fn_arg(),
+        elt_type=result.element_type(),
     )
 
     output = _render_template('overpass_test', params)
@@ -377,10 +411,13 @@ def _overpass_element(layer_name, query_fn, args):
 
 def overpass_test(args):
     if args.poi:
-        _overpass_element('pois', _overpass_node, args)
+        _overpass_element('pois', _OverpassNode, args)
 
     if args.landuse:
-        _overpass_element('landuse', _overpass_way, args)
+        _overpass_element('landuse', _OverpassWayArea, args)
+
+    if args.landuse_line:
+        _overpass_element('landuse', _OverpassWayLine, args)
 
 
 if __name__ == '__main__':
@@ -464,6 +501,9 @@ if __name__ == '__main__':
     overpass_parser.add_argument(
         '--landuse', action='store_true', help='Make a test for a polygon in '
         'the landuse layer.')
+    overpass_parser.add_argument(
+        '--landuse-line', action='store_true', help='Make a test for a line '
+        'in the landuse layer.')
     overpass_parser.add_argument(
         '--expect',
         help='JSON-encoded dict of expected properties.')

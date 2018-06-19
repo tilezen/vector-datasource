@@ -3213,6 +3213,35 @@ def normalize_tourism_kind(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
+# a whitelist of the most common fence types from OSM.
+# see https://taginfo.openstreetmap.org/keys/fence_type#values
+_WHITELIST_FENCE_TYPES = set([
+    'avalanche',
+    'barbed_wire',
+    'bars',
+    'brick',  # some might say a fence made of brick is called a wall...
+    'chain',
+    'chain_link',
+    'concrete',
+    'drystone_wall',
+    'electric',
+    'grate',
+    'hedge',
+    'metal',
+    'metal_bars',
+    'net',
+    'pole',
+    'railing',
+    'railings',
+    'split_rail',
+    'steel',
+    'stone',
+    'wall',
+    'wire',
+    'wood',
+])
+
+
 def build_fence(ctx):
     """
     Some landuse polygons have an extra barrier fence tag, in thouse cases we
@@ -3258,17 +3287,20 @@ def build_fence(ctx):
 
         barrier = props.pop('barrier', None)
 
-        if barrier is not None:
-            if barrier == 'fence':
-                # filter only linestring-like objects. we don't
-                # want any points which might have been created
-                # by the intersection.
-                filtered_shape = _filter_geom_types(shape, _POLYGON_DIMENSION)
+        if barrier == 'fence':
+            fence_type = props.pop('fence_type', None)
+            # filter only linestring-like objects. we don't
+            # want any points which might have been created
+            # by the intersection.
+            filtered_shape = _filter_geom_types(shape, _POLYGON_DIMENSION)
 
-                if not filtered_shape.is_empty:
-                    new_props = _make_new_properties(props, prop_transform)
-                    new_props['kind'] = 'fence'
-                    new_features.append((filtered_shape, new_props, fid))
+            if not filtered_shape.is_empty:
+                new_props = _make_new_properties(props, prop_transform)
+                new_props['kind'] = 'fence'
+                if fence_type in _WHITELIST_FENCE_TYPES:
+                    new_props['kind_detail'] = fence_type
+
+                new_features.append((filtered_shape, new_props, fid))
 
     if new_layer_name is None:
         # no new layer requested, instead add new

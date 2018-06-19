@@ -135,7 +135,18 @@ global:
             life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
             shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
-        - barrier: [ cycle_barrier, gate, toll_booth ]
+        - barrier:
+            - block
+            - bollard
+            - cattle_grid
+            - chain
+            - cycle_barrier
+            - gate
+            - kissing_gate
+            - lift_gate
+            - stile
+            - swing_gate
+            - toll_booth
         - emergency: [ lifeguard_tower, phone ]
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, traffic_signals, trailhead ]
@@ -1046,11 +1057,12 @@ filters:
     output:
       <<: *output_properties
       kind: toilets
-  - filter: {barrier: gate}
+  - filter: {barrier: [gate, lift_gate, kissing_gate, swing_gate, stile, chain]}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
       <<: *output_properties
       kind: gate
+      kind_detail: {col: barrier}
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output:
@@ -1159,7 +1171,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      barrier: [block, bollard, lift_gate]
+      barrier: [block, bollard, cattle_grid]
     min_zoom: 16
     output:
       <<: *output_properties
