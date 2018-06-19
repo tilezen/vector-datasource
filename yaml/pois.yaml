@@ -148,9 +148,6 @@ global:
             - swing_gate
             - toll_booth
         - emergency: [ lifeguard_tower, phone, defibrillator ]
-        - entrance: [ 'yes', main, staircase, service, home, unisex, garage,
-            emergency, exit, main_entrance, residence, secondary_entrance,
-            private, fire_exit]
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, traffic_signals, trailhead ]
         - historic: landmark
@@ -1700,49 +1697,6 @@ filters:
     output:
       <<: *output_properties
       kind: quarry
-
-  # map detailed kinds of entrances to kind=entrance with kind_detail
-  - filter:
-      entrance: [ main, staircase, service, home, unisex, garage,
-        residence, private ]
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: entrance
-      kind_detail: {col: entrance}
-  # clean up a couple of weird tagging choices.
-  - filter: {entrance: main_entrance}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: entrance
-      kind_detail: main
-  - filter: {entrance: secondary_entrance}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: entrance
-      kind_detail: secondary
-  # map detailed kinds of exits to kind=exit with kind_detail
-  - filter:
-      entrance: [ emergency, fire_exit ]
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: exit
-      kind_detail: {col: entrance}
-  # exits without detail
-  - filter: {entrance: exit}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: exit
-  # entrances without detail
-  - filter: {entrance: true}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: entrance
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

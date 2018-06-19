@@ -1009,7 +1009,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5560645981,
                 'kind': u'entrance',
             })
@@ -1028,7 +1028,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 3274261072,
                 'kind': u'entrance',
                 'kind_detail': u'main',
@@ -1048,7 +1048,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5104221320,
                 'kind': u'entrance',
                 'kind_detail': u'staircase',
@@ -1068,13 +1068,16 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 2494258437,
                 'kind': u'entrance',
                 'kind_detail': u'service',
             })
 
     def test_home_entrance_node(self):
+        # what to do about entrances which are also addresses? we put both as
+        # points in the buildings layer, and it sort of seems redundant to have
+        # a point for each. but should one take priority over the other?
         import dsl
 
         z, x, y = (16, 18918, 25146)
@@ -1083,7 +1086,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
             # https://www.openstreetmap.org/node/4909832627
             dsl.point(4909832627, (-76.076968, 38.571745), {
                 'addr:city': u'Cambridge',
-                'addr:housenumber': u'307',
+                # 'addr:housenumber': u'307',
                 'addr:postcode': u'21613',
                 'addr:street': u'High Street',
                 'entrance': u'home',
@@ -1092,7 +1095,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 4909832627,
                 'kind': u'entrance',
                 'kind_detail': u'home',
@@ -1113,7 +1116,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5028110333,
                 'kind': u'entrance',
                 'kind_detail': u'unisex',
@@ -1133,7 +1136,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5103334973,
                 'kind': u'entrance',
                 'kind_detail': u'garage',
@@ -1153,7 +1156,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 4211372648,
                 'kind': u'exit',
                 'kind_detail': u'emergency',
@@ -1173,7 +1176,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 3569401990,
                 'kind': u'exit',
             })
@@ -1192,7 +1195,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5083818836,
                 'kind': u'entrance',
                 'kind_detail': u'main',
@@ -1213,7 +1216,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5559913168,
                 'kind': u'entrance',
                 'kind_detail': u'residence',
@@ -1235,7 +1238,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5541446704,
                 'kind': u'entrance',
                 'kind_detail': u'secondary',
@@ -1255,7 +1258,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 4689338325,
                 'kind': u'entrance',
                 'kind_detail': u'private',
@@ -1275,7 +1278,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'pois', {
+            z, x, y, 'buildings', {
                 'id': 5016784225,
                 'kind': u'exit',
                 'kind_detail': u'fire_exit',

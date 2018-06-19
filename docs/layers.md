@@ -230,6 +230,8 @@ Note that building geometries, like most geometries in Tilezen tiles, are clippe
 * `building`
 * `building_part`
 * `address`
+* `entrance`
+* `exit`
 
 #### Building footprint and label placement `kind_detail` values:
 
@@ -386,6 +388,25 @@ Additional `kind_detail` values are provided from POI `kind`s where one is not a
 * `verticalpassage`
 * `wall`
 * `window`
+
+#### Entrance and exit `kind_detail` values
+
+Entrances can have an optional `kind_detail`. If present, it will be one of:
+
+* `main`
+* `staircase`
+* `service`
+* `home`
+* `unisex` - seems to be mostly mapped on building containing toilets.
+* `garage`
+* `residence`
+* `private`
+* `secondary`
+
+Exits can have an optional `kind_detail`. If present, it will be one of:
+
+* `emergency`
+* `fire_exit`
 
 ## Earth
 
