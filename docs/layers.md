@@ -817,6 +817,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `danger` - e.g: military training zones, firing ranges.
 * `dam`
 * `day_care`
+* `defibrillator`
 * `deli`
 * `dentist`
 * `department_store`

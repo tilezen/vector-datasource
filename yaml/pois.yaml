@@ -147,7 +147,7 @@ global:
             - stile
             - swing_gate
             - toll_booth
-        - emergency: [ lifeguard_tower, phone ]
+        - emergency: [ lifeguard_tower, phone, defibrillator ]
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, traffic_signals, trailhead ]
         - historic: landmark
@@ -1337,6 +1337,11 @@ filters:
     output:
       <<: *output_properties
       kind: mast
+  - filter: {emergency: defibrillator}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: defibrillator
   - filter:
       office: [accountant, administrative, advertising_agency, architect, association,
         company, consulting, educational_institution, employment_agency, estate_agent,

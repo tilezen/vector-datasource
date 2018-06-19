@@ -942,3 +942,54 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 26165183,
                 'kind': u'danger',
             })
+
+    def test_defibrillator_node(self):
+        import dsl
+
+        z, x, y = (16, 19266, 24671)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4407735213
+            dsl.point(4407735213, (-74.165199, 40.581625), {
+                'emergency': u'defibrillator',
+                'indoor': u'yes',
+                'level': u'2',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4407735213,
+                'kind': u'defibrillator',
+            })
+
+    def test_defibrillator_way(self):
+        import dsl
+
+        z, x, y = (16, 16935, 26003)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/117019981
+            dsl.way(117019981, dsl.tile_box(z, x, y), {
+                'addr:city': u'Athens',
+                'addr:housenumber': u'508',
+                'addr:postcode': u'35611',
+                'addr:state': u'AL',
+                'addr:street': u'Jefferson Street South',
+                'building': u'public',
+                'defibrillator:location': u'1st floor, from the front door, go forward on left before steps',
+                'emergency': u'defibrillator',
+                'name': u'Athens Utilities Customer Service',
+                'office': u'government',
+                'operator': u'City of Athens Customer Service Dept.',
+                'source': u'openstreetmap.org',
+                'website': u'http://www.athens-utilities.com/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 117019981,
+                'kind': u'defibrillator',
+            })
