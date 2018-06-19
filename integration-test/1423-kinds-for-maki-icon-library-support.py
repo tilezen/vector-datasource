@@ -978,7 +978,8 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'addr:state': u'AL',
                 'addr:street': u'Jefferson Street South',
                 'building': u'public',
-                'defibrillator:location': u'1st floor, from the front door, go forward on left before steps',
+                'defibrillator:location': u'1st floor, from the front ' \
+                u'door, go forward on left before steps',
                 'emergency': u'defibrillator',
                 'name': u'Athens Utilities Customer Service',
                 'office': u'government',
@@ -992,4 +993,290 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 117019981,
                 'kind': u'defibrillator',
+            })
+
+    def test_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19281, 24643)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5560645981
+            dsl.point(5560645981, (-74.085264, 40.700752), {
+                'entrance': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5560645981,
+                'kind': u'entrance',
+            })
+
+    def test_main_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19288, 24645)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3274261072
+            dsl.point(3274261072, (-74.045208, 40.690017), {
+                'entrance': u'main',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3274261072,
+                'kind': u'entrance',
+                'kind_detail': u'main',
+            })
+
+    def test_staircase_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19327, 24628)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5104221320
+            dsl.point(5104221320, (-73.830464, 40.762991), {
+                'entrance': u'staircase',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5104221320,
+                'kind': u'entrance',
+                'kind_detail': u'staircase',
+            })
+
+    def test_service_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19303, 24651)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2494258437
+            dsl.point(2494258437, (-73.962089, 40.667189), {
+                'entrance': u'service',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2494258437,
+                'kind': u'entrance',
+                'kind_detail': u'service',
+            })
+
+    def test_home_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 18918, 25146)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4909832627
+            dsl.point(4909832627, (-76.076968, 38.571745), {
+                'addr:city': u'Cambridge',
+                'addr:housenumber': u'307',
+                'addr:postcode': u'21613',
+                'addr:street': u'High Street',
+                'entrance': u'home',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4909832627,
+                'kind': u'entrance',
+                'kind_detail': u'home',
+            })
+
+    def test_unisex_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 32056, 24712)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5028110333
+            dsl.point(5028110333, (-3.908103, 40.411595), {
+                'access': u'private',
+                'entrance': u'unisex',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5028110333,
+                'kind': u'entrance',
+                'kind_detail': u'unisex',
+            })
+
+    def test_garage_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19295, 24632)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5103334973
+            dsl.point(5103334973, (-74.005862, 40.743563), {
+                'entrance': u'garage',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5103334973,
+                'kind': u'entrance',
+                'kind_detail': u'garage',
+            })
+
+    def test_emergency_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 32747, 21789)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4211372648
+            dsl.point(4211372648, (-0.1107958, 51.5187394), {
+                'entrance': u'emergency',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4211372648,
+                'kind': u'exit',
+                'kind_detail': u'emergency',
+            })
+
+    def test_exit_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19305, 24629)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3569401990
+            dsl.point(3569401990, (-73.954288, 40.757290), {
+                'entrance': u'exit',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3569401990,
+                'kind': u'exit',
+            })
+
+    def test_main_entrance_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19294, 24641)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5083818836
+            dsl.point(5083818836, (-74.010921, 40.708488), {
+                'entrance': u'main_entrance',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5083818836,
+                'kind': u'entrance',
+                'kind_detail': u'main',
+            })
+
+    def test_residence_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 18310, 23885)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5559913168
+            dsl.point(5559913168, (-79.414757, 43.779602), {
+                'access': u'private',
+                'entrance': u'residence',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5559913168,
+                'kind': u'entrance',
+                'kind_detail': u'residence',
+            })
+
+    def test_secondary_entrance_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19288, 24629)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5541446704
+            dsl.point(5541446704, (-74.042494, 40.756505), {
+                'access': u'private',
+                'entrance': u'secondary_entrance',
+                'source': u'openstreetmap.org',
+                'wheelchair': u'yes',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5541446704,
+                'kind': u'entrance',
+                'kind_detail': u'secondary',
+            })
+
+    def test_private_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 18626, 24060)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4689338325
+            dsl.point(4689338325, (-77.679041, 43.082803), {
+                'entrance': u'private',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4689338325,
+                'kind': u'entrance',
+                'kind_detail': u'private',
+            })
+
+    def test_fire_exit_entrance_node(self):
+        import dsl
+
+        z, x, y = (16, 19346, 24661)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5016784225
+            dsl.point(5016784225, (-73.728280, 40.625330), {
+                'entrance': u'fire_exit',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5016784225,
+                'kind': u'exit',
+                'kind_detail': u'fire_exit',
             })
