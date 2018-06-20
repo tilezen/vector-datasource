@@ -1697,6 +1697,15 @@ filters:
     output:
       <<: *output_properties
       kind: quarry
+  - filter:
+      leisure:
+        - adult_gaming_centre
+        # fairly common misspelling
+        - adult_gaming_center
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: gaming
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

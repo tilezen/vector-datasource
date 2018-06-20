@@ -1283,3 +1283,55 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'exit',
                 'kind_detail': u'fire_exit',
             })
+
+    def test_gaming_node(self):
+        import dsl
+
+        z, x, y = (16, 19077, 24822)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2100740221
+            dsl.point(2100740221, (-75.203507, 39.951631), {
+                'addr:city': u'Philadelphia',
+                'addr:housenumber': u'4006',
+                'addr:postcode': u'19104',
+                'addr:state': u'PA',
+                'addr:street': u'Spruce Street',
+                'leisure': u'adult_gaming_centre',
+                'name': u'University Family Fun Center',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2100740221,
+                'kind': u'gaming',
+            })
+
+    def test_gaming_way(self):
+        import dsl
+
+        z, x, y = (16, 17768, 25989)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/41979263
+            dsl.way(41979263, dsl.tile_box(z, x, y), {
+                'addr:city': u'Greenville',
+                'addr:housenumber': u'614',
+                'addr:postcode': u'29601',
+                'addr:street': u'North Main Street',
+                'building': u'yes',
+                'height': u'8.7',
+                'leisure': u'adult_gaming_centre',
+                'name': u'Breakout',
+                'source': u'openstreetmap.org',
+                'website': u'https://breakoutgreenville.com/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 41979263,
+                'kind': u'gaming',
+            })

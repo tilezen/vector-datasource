@@ -879,6 +879,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `furniture`
 * `gallery` - An art gallery.
+* `gaming`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
