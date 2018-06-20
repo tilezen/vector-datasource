@@ -1382,3 +1382,56 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 265733658,
                 'kind': u'garden_centre',
             })
+
+    def test_golf_node(self):
+        import dsl
+
+        z, x, y = (16, 19252, 24580)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5622433042
+            dsl.point(5622433042, (-74.244082, 40.962317), {
+                'addr:city': u'Wayne',
+                'addr:housenumber': u'1210',
+                'addr:postcode': u'07470',
+                'addr:state': u'NJ',
+                'addr:street': u'Paterson-Hamburg Turnpike',
+                'name': u'K & J Custom Fit Pro Shop',
+                'shop': u'golf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5622433042,
+                'kind': u'golf',
+            })
+
+    def test_golf_way(self):
+        import dsl
+
+        z, x, y = (16, 18826, 24953)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/398700987
+            dsl.way(398700987, dsl.tile_box(z, x, y), {
+                'addr:city': u'Loch Raven',
+                'addr:country': u'US',
+                'addr:housenumber': u'803',
+                'addr:postcode': u'21286',
+                'addr:state': u'MD',
+                'addr:street': u'Goucher Boulevard',
+                'addr:unit': u'104',
+                'building': u'retail',
+                'name': u'Golf Galaxy',
+                'shop': u'golf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 398700987,
+                'kind': u'golf',
+            })

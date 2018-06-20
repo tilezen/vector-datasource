@@ -888,6 +888,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `generator`
 * `geyser`
 * `gift`
+* `golf` - Shop selling golf equipment.
 * `golf_course`
 * `government`
 * `greengrocer`
