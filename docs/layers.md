@@ -891,7 +891,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `golf` - Shop selling golf equipment.
 * `golf_course`
 * `government`
-* `greengrocer`
+* `greengrocer` - Shop selling fruits and vegetables.
+* `grocery` - Shop selling non-perishable foods.
 * `group_home`
 * `guest_house`
 * `hairdresser`

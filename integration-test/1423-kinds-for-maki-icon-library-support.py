@@ -1435,3 +1435,60 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 398700987,
                 'kind': u'golf',
             })
+
+    def test_grocery_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24628)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2709906342
+            dsl.point(2709906342, (-73.990564, 40.761580), {
+                'addr:city': u'New York',
+                'addr:housenumber': u'681',
+                'addr:postcode': u'10036',
+                'addr:state': u'NY',
+                'addr:street': u'9th Avenue',
+                'name': u'New York Food Market',
+                'phone': u'+1 212 2456470',
+                'shop': u'grocery',
+                'source': u'openstreetmap.org',
+                'website': u'http://newyorkfoodmarket.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2709906342,
+                'kind': u'grocery',
+            })
+
+    def test_grocery_way(self):
+        import dsl
+
+        z, x, y = (16, 19285, 24634)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/409910669
+            dsl.way(409910669, dsl.tile_box(z, x, y), {
+                'addr:city': u'Jersey City',
+                'addr:housenumber': u'2975',
+                'addr:postcode': u'07306',
+                'addr:state': u'NJ',
+                'addr:street': u'John F. Kennedy Boulevard',
+                'building': u'yes',
+                'building:levels': u'1',
+                'name': u'Apna Bazar Cash & Carry',
+                'opening_hours': u'Mo-Su 09:00-21:00',
+                'phone': u'+1 201 217 9701',
+                'shop': u'grocery',
+                'source': u'openstreetmap.org',
+                'website': u'http://www.apnabazarcashandcarry.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 409910669,
+                'kind': u'grocery',
+            })

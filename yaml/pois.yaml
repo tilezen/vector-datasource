@@ -1459,7 +1459,7 @@ filters:
       kind: cycle_barrier
   - filter:
       shop: [art, bakery, beauty, books, butcher, car, car_repair, clothes,
-        computer, convenience, fashion, florist, gift, greengrocer,
+        computer, convenience, fashion, florist, gift, greengrocer, grocery,
         hairdresser, hifi, jewelry, mobile_phone, newsagent, optician,
         perfumery, stationery, tobacco, travel_agency]
     min_zoom: 17
