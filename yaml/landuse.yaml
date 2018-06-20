@@ -458,6 +458,13 @@ filters:
       kind: airfield
       kind_detail: military
       tier: 3
+  - filter: {military: naval_base}
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: naval_base
+      kind_detail: military
+      tier: 3
   - filter: {landuse: military}
     min_zoom: *tier3_min_zoom
     output:
@@ -1116,3 +1123,23 @@ filters:
       <<: *output_properties
       kind: crane
       kind_detail: {col: "crane:type"}
+  - filter:
+      any:
+        harbour: 'yes'
+        landuse: harbour
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: harbor
+  - filter:
+      landuse:
+        - port_terminal
+        - ferry_terminal
+        - container_terminal
+        - shipyard
+        - wharf
+        - quay
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: {col: landuse}

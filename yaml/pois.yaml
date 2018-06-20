@@ -131,7 +131,7 @@ global:
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
         - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, fuel, hunting_stand,
+            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, customs, fuel, hunting_stand,
             life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
             shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
@@ -172,7 +172,7 @@ global:
         - tags->rwn_ref: true
         - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
         - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
-        - waterway: [ dam, lock, waterfall ]
+        - waterway: [ dam, lock, waterfall, boatyard, boat_lift ]
 
 filters:
   # remove disused things, they're not real POIs any more
@@ -770,7 +770,7 @@ filters:
       <<: *output_properties
       kind: level_crossing
   - filter:
-      amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
+      amenity: [bank, cinema, courthouse, customs, embassy, fire_station, fuel, library, police,
         post_office, theatre]
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
@@ -1461,7 +1461,7 @@ filters:
       shop: [art, bakery, beauty, books, butcher, car, car_repair, clothes,
         computer, convenience, fashion, florist, gift, greengrocer, grocery,
         hairdresser, hifi, jewelry, mobile_phone, newsagent, optician,
-        perfumery, stationery, tobacco, travel_agency]
+        perfumery, ship_chandler, stationery, tobacco, travel_agency]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1614,6 +1614,13 @@ filters:
     output:
       <<: *output_properties
       kind: petroleum_well
+  # a boat lift is a more specific type of object than a crane, although it may
+  # or may not be an instance of a crane.
+  - filter: {waterway: boat_lift}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: boat_lift
   - filter: {man_made: crane}
     min_zoom: 16
     output:
@@ -1706,6 +1713,12 @@ filters:
     output:
       <<: *output_properties
       kind: gaming
+  - filter:
+      waterway: boatyard
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: boatyard
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION
