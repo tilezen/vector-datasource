@@ -1306,7 +1306,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 2100740221,
-                'kind': u'gaming',
+                'kind': u'adult_gaming_centre',
             })
 
     def test_gaming_way(self):
@@ -1333,7 +1333,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 41979263,
-                'kind': u'gaming',
+                'kind': u'adult_gaming_centre',
             })
 
     def test_garden_centre_node(self):
@@ -1493,7 +1493,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'grocery',
             })
 
-    def test_harbor_natural_water_way(self):
+    def test_harbour_natural_water_way(self):
         import dsl
 
         z, x, y = (16, 19002, 25265)
@@ -1507,13 +1507,14 @@ class KindsForMakiIconSupportTest(FixtureTest):
             }),
         )
 
-        self.assert_has_feature(
+        # note: the harbour=yes by itself isn't enough to make this into a
+        # landuse feature.
+        self.assert_no_matching_feature(
             z, x, y, 'landuse', {
                 'id': 310557860,
-                'kind': u'harbor',
             })
 
-    def test_harbor_pier_way(self):
+    def test_harbour_pier_way(self):
         import dsl
 
         z, x, y = (16, 25307, 36837)
@@ -1534,11 +1535,10 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 183049783,
-                # should be 'kind': u'harbor',?
                 'kind': 'pier',
             })
 
-    def test_harbor_way(self):
+    def test_harbour_way(self):
         import dsl
 
         z, x, y = (16, 38891, 25976)
@@ -1553,13 +1553,14 @@ class KindsForMakiIconSupportTest(FixtureTest):
             }),
         )
 
-        self.assert_has_feature(
+        # harbour=yes is not enough by itself to make a feature in the landuse
+        # layer.
+        self.assert_no_matching_feature(
             z, x, y, 'landuse', {
                 'id': 515527428,
-                'kind': u'harbor',
             })
 
-    def test_harbor_landuse_harbour_way(self):
+    def test_harbour_landuse_harbour_way(self):
         import dsl
 
         z, x, y = (16, 35014, 25282)
@@ -1578,10 +1579,10 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 422833298,
-                'kind': u'harbor',
+                'kind': u'harbour',
             })
 
-    def test_harbor_landuse_port_way(self):
+    def test_harbour_landuse_port_way(self):
         import dsl
 
         z, x, y = (16, 31231, 20846)
@@ -1605,7 +1606,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 143517784,
-                'kind': u'harbor',
+                'kind': u'port',
             })
 
     def test_port_terminal_way(self):
@@ -1627,8 +1628,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 256125920,
-                # TODO: should be 'kind': u'port_terminal',?
-                'kind': 'pier',
+                'kind': u'port_terminal',
             })
 
     def test_ferry_terminal_way(self):

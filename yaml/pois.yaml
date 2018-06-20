@@ -1712,7 +1712,7 @@ filters:
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: gaming
+      kind: adult_gaming_centre
   - filter:
       waterway: boatyard
     min_zoom: 16
