@@ -1335,3 +1335,50 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 41979263,
                 'kind': u'gaming',
             })
+
+    def test_garden_centre_node(self):
+        import dsl
+
+        z, x, y = (16, 19293, 24649)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1378081014
+            dsl.point(1378081014, (-74.015906, 40.675089), {
+                'name': u'Chelsea Garden Center Red Hook',
+                'shop': u'garden_centre',
+                'source': u'openstreetmap.org',
+                'website': u'http://www.chelseagardencenter.com/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1378081014,
+                'kind': u'garden_centre',
+            })
+
+    def test_garden_centre_way(self):
+        import dsl
+
+        z, x, y = (16, 19303, 24648)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/265733658
+            dsl.way(265733658, dsl.tile_box(z, x, y), {
+                'addr:housenumber': u'784',
+                'addr:postcode': u'11238',
+                'addr:street': u'Dean Street',
+                'building': u'yes',
+                'height': u'4.7',
+                'name': u'Natty Garden',
+                'nycdoitt:bin': u'3027945',
+                'shop': u'garden_centre',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 265733658,
+                'kind': u'garden_centre',
+            })

@@ -882,6 +882,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `gaming`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
+* `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
 * `generator`

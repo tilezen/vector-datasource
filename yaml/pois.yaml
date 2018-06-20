@@ -911,7 +911,7 @@ filters:
       <<: *output_properties
       kind: electronics
   - filter:
-      shop: [department_store, supermarket, doityourself, hardware, trade]
+      shop: [department_store, supermarket, doityourself, hardware, trade, garden_centre]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
     output:
       <<: *output_properties
