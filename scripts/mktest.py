@@ -283,22 +283,35 @@ def naturalearth_test(args):
     print output.encode('utf-8')
 
 
-def _overpass_fetch(element_type, bbox, query):
+def _overpass_api(query):
     import json
 
     overpass_api = 'https://overpass-api.de/api/interpreter'
     data = '[out:json][timeout:5][maxsize:1048576];' \
-           '(%s[%s](%s););out 1 geom qt;' \
-           % (element_type, query, ','.join(str(f) for f in bbox))
+           '%s;out 1 geom qt;' % (query,)
     r = requests.get(overpass_api, params=dict(data=data))
 
     response = json.loads(r.text)
     return response["elements"]
 
 
+def _overpass_fetch(element_type, bbox, query):
+    return _overpass_api(
+        '(%s[%s](%s);)' % (element_type, query, ','.join(str(f) for f in bbox))
+    )
+
+
+def _overpass_fetch_id(element_type, element_id):
+    return _overpass_api('(%s(%d);)' % (element_type, element_id))
+
+
 def _overpass_find(element_type, query):
     # note: all this arithmetic is on (lat, lon) pairs because that's the
     # (incorrect) order that Overpass expects it to be in.
+
+    if query.startswith('id:'):
+        elements = _overpass_fetch_id(element_type, int(query[3:]))
+        return elements[0]
 
     centre = (40.82580725925, -73.9098083973)
     size = (0.17457992415, 0.1867675781)
@@ -423,6 +436,9 @@ def overpass_test(args):
     if args.landuse_line:
         _overpass_element('landuse', _OverpassWayLine, args)
 
+    if args.landuse_label:
+        _overpass_element('landuse', _OverpassNode, args)
+
 
 if __name__ == '__main__':
     import argparse
@@ -511,6 +527,9 @@ if __name__ == '__main__':
     overpass_parser.add_argument(
         '--poi-poly', action='store_true', help='Make a test for a POI point '
         'from a polygon centroid.')
+    overpass_parser.add_argument(
+        '--landuse-label', action='store_true', help='Make a test for a point '
+        'in the landuse layer from a node.')
     overpass_parser.add_argument(
         '--expect',
         help='JSON-encoded dict of expected properties.')
