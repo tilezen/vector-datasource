@@ -20,6 +20,7 @@ global:
     attraction: {col: attraction}
     zoo: {col: zoo}
     barrier: {col: barrier}
+    fence_type: {col: fence_type}
     min_zoom:
       case:
         - when: { meta.source: ne }
@@ -449,6 +450,13 @@ filters:
     output:
       <<: *output_properties
       kind: aerodrome
+      tier: 3
+  - filter: {military: airfield}
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
       tier: 3
   - filter: {landuse: military}
     min_zoom: *tier3_min_zoom
@@ -1036,12 +1044,43 @@ filters:
       <<: *output_properties
       kind: wall
       kind_detail: { col: wall }
-  - filter: {barrier: fence}
+  - filter: {barrier: [kerb, guard_rail, ditch]}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: {col: barrier}
+  - filter:
+      military: danger_area
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: danger
+    extra_columns: [way]
+
+  # whitelist fence_type if it's present, otherwise don't include it. this
+  # means we don't get random values in the output that we can't document.
+  - filter:
+      barrier: fence
+      fence_type: [avalanche, barbed_wire, bars, brick, chain, chain_link, concrete, drystone_wall, electric, grate, hedge, metal, metal_bars, net, pole, railing, railings, split_rail, steel, stone, wall, wire, wood]
     min_zoom: 16
     output:
       <<: *output_properties
       kind: fence
       kind_detail: { col: fence_type }
+  - filter:
+      barrier: fence
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: fence
+
+  - filter: {barrier: wire_fence}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: fence
+      kind_detail: wire
   - filter: {power: line}
     min_zoom: 14
     output:

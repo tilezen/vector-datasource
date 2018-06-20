@@ -149,3 +149,46 @@ filters:
       kind: address
       addr_housenumber: {col: 'addr:housenumber'}
       addr_street: {col: 'addr:street'}
+
+  # map detailed kinds of entrances to kind=entrance with kind_detail
+  - filter:
+      entrance: [ main, staircase, service, home, unisex, garage,
+        residence, private ]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: entrance
+      kind_detail: {col: entrance}
+  # clean up a couple of weird tagging choices.
+  - filter: {entrance: main_entrance}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: entrance
+      kind_detail: main
+  - filter: {entrance: secondary_entrance}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: entrance
+      kind_detail: secondary
+  # map detailed kinds of exits to kind=exit with kind_detail
+  - filter:
+      entrance: [ emergency, fire_exit ]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: exit
+      kind_detail: {col: entrance}
+  # exits without detail
+  - filter: {entrance: exit}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: exit
+  # entrances without detail
+  - filter: {entrance: true}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: entrance

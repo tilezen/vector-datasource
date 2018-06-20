@@ -135,8 +135,19 @@ global:
             life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
             shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
-        - barrier: [ cycle_barrier, gate, toll_booth ]
-        - emergency: [ lifeguard_tower, phone ]
+        - barrier:
+            - block
+            - bollard
+            - cattle_grid
+            - chain
+            - cycle_barrier
+            - gate
+            - kissing_gate
+            - lift_gate
+            - stile
+            - swing_gate
+            - toll_booth
+        - emergency: [ lifeguard_tower, phone, defibrillator ]
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, traffic_signals, trailhead ]
         - historic: landmark
@@ -405,6 +416,21 @@ filters:
     output:
       <<: *output_properties
       kind: {col: aeroway}
+      tier: 3
+  # miltary airfield
+  - filter: {military: airfield}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
+      tier: 3
+  # military danger area
+  - filter: {military: danger_area}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: danger
       tier: 3
   # military
   - filter: {landuse: military}
@@ -1005,11 +1031,16 @@ filters:
     output:
       <<: *output_properties
       kind: {col: amenity}
-  - filter: {tags->healthcare: midwife}
+  - filter: {healthcare: midwife}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: midwife
+  - filter: {healthcare: [blood_donation, blood_bank]}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: blood_bank
   - filter:
       amenity: [kindergarten, childcare]
     min_zoom: 17
@@ -1038,11 +1069,12 @@ filters:
     output:
       <<: *output_properties
       kind: toilets
-  - filter: {barrier: gate}
+  - filter: {barrier: [gate, lift_gate, kissing_gate, swing_gate, stile, chain]}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
       <<: *output_properties
       kind: gate
+      kind_detail: {col: barrier}
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output:
@@ -1151,7 +1183,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      barrier: [block, bollard, lift_gate]
+      barrier: [block, bollard, cattle_grid]
     min_zoom: 16
     output:
       <<: *output_properties
@@ -1305,6 +1337,11 @@ filters:
     output:
       <<: *output_properties
       kind: mast
+  - filter: {emergency: defibrillator}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: defibrillator
   - filter:
       office: [accountant, administrative, advertising_agency, architect, association,
         company, consulting, educational_institution, employment_agency, estate_agent,

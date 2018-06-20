@@ -37,6 +37,12 @@ filters:
       <<: *water_standard_properties_osm
       kind: dock
     table: osm
+  - filter: {amenity: fountain}
+    min_zoom: *water_standard_min_zoom
+    output:
+      <<: *water_standard_properties_osm
+      kind: fountain
+    table: osm
   - filter: {natural: water}
     min_zoom: *water_standard_min_zoom
     output:

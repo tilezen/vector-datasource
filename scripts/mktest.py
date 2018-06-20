@@ -283,6 +283,147 @@ def naturalearth_test(args):
     print output.encode('utf-8')
 
 
+def _overpass_fetch(element_type, bbox, query):
+    import json
+
+    overpass_api = 'https://overpass-api.de/api/interpreter'
+    data = '[out:json][timeout:5][maxsize:1048576];' \
+           '(%s[%s](%s););out 1 geom qt;' \
+           % (element_type, query, ','.join(str(f) for f in bbox))
+    r = requests.get(overpass_api, params=dict(data=data))
+
+    response = json.loads(r.text)
+    return response["elements"]
+
+
+def _overpass_find(element_type, query):
+    # note: all this arithmetic is on (lat, lon) pairs because that's the
+    # (incorrect) order that Overpass expects it to be in.
+
+    centre = (40.82580725925, -73.9098083973)
+    size = (0.17457992415, 0.1867675781)
+    factor = 1.0
+    max_factor = max(90 / size[0], 180 / size[1])
+
+    while factor < max_factor:
+        # don't use the full latitude range, as we can't express that in
+        # mercator tile coordinates!
+        bbox = [max(-85, centre[0] - factor * size[0]),
+                max(-180, centre[1] - factor * size[1]),
+                min(85, centre[0] + factor * size[0]),
+                min(180, centre[1] + factor * size[1])]
+
+        elements = _overpass_fetch(element_type, bbox, query)
+        if elements:
+            break
+
+        factor = factor * 2.0
+
+    else:
+        raise RuntimeError("Nothing matching %r found!" % (query,))
+
+    return elements[0]
+
+
+class _OverpassNode(object):
+    def __init__(self, query):
+        element = _overpass_find('node', query)
+        self.position = tuple(element[p] for p in ('lat', 'lon'))
+        self.element_id = element['id']
+        self.tags = element['tags']
+
+    def element_type(self):
+        return 'node'
+
+    def geom_fn_name(self):
+        return 'dsl.point'
+
+    def geom_fn_arg(self):
+        lat, lon = self.position
+        return "(%f, %f)" % (lon, lat)
+
+
+class _OverpassWay(object):
+    def __init__(self, query):
+        element = _overpass_find('way', query)
+        point = element['geometry'][0]
+        self.position = tuple(point[p] for p in ('lat', 'lon'))
+        self.element_id = element['id']
+        self.tags = element['tags']
+
+    def element_type(self):
+        return 'way'
+
+    def geom_fn_name(self):
+        return 'dsl.way'
+
+
+class _OverpassWayArea(_OverpassWay):
+    def __init__(self, query):
+        super(_OverpassWayArea, self).__init__(query)
+
+    def geom_fn_arg(self):
+        return 'dsl.tile_box(z, x, y)'
+
+
+class _OverpassWayLine(_OverpassWay):
+    def __init__(self, query):
+        super(_OverpassWayLine, self).__init__(query)
+
+    def geom_fn_arg(self):
+        return 'dsl.tile_diagonal(z, x, y)'
+
+
+def _overpass_element(layer_name, query_fn, args):
+    import json
+
+    result = query_fn(args.query)
+    pos = result.position
+    x, y = tile.deg2num(pos[0], pos[1], args.zoom)
+    coord = Coordinate(zoom=args.zoom, column=x, row=y)
+    expect = json.loads(args.expect) if args.expect else None
+
+    if expect:
+        name = '_'.join(_make_ident(v) for v in expect.values())
+    else:
+        name = 'FIXME'
+    name = name + '_' + result.element_type()
+
+    tags = result.tags
+    tags['source'] = 'openstreetmap.org'
+
+    params = dict(
+        name=name,
+        z=args.zoom,
+        x=coord.column,
+        y=coord.row,
+        elt_id=result.element_id,
+        tags=tags,
+        expect=expect,
+        layer_name=layer_name,
+        geom_fn_name=result.geom_fn_name(),
+        geom_fn_arg=result.geom_fn_arg(),
+        elt_type=result.element_type(),
+    )
+
+    output = _render_template('overpass_test', params)
+    print output.encode('utf-8')
+
+
+def overpass_test(args):
+    if args.poi:
+        _overpass_element('pois', _OverpassNode, args)
+
+    if args.poi_poly:
+        _overpass_element('pois', _OverpassWayArea, args)
+
+    if args.landuse:
+        _overpass_element('landuse', _OverpassWayArea, args)
+
+    if args.landuse_line:
+        _overpass_element('landuse', _OverpassWayLine, args)
+
+
 if __name__ == '__main__':
     import argparse
 
@@ -350,6 +491,33 @@ if __name__ == '__main__':
         '--layer-name', default='places',
         help='Name of the layer in the tile to expect this feature in.')
     ne_test_parser.set_defaults(func=naturalearth_test)
+
+    # FIND BY TAGS IN OVERPASS
+    overpass_parser = subparsers.add_parser(
+        'overpass', help='Use Overpass API to find examples based on tags')
+
+    overpass_parser.add_argument(
+        '--query', required=True,
+        help='Query to send to Overpass')
+    overpass_parser.add_argument(
+        '--poi', action='store_true', help='Make a test for a point in the '
+        'pois layer.')
+    overpass_parser.add_argument(
+        '--landuse', action='store_true', help='Make a test for a polygon in '
+        'the landuse layer.')
+    overpass_parser.add_argument(
+        '--landuse-line', action='store_true', help='Make a test for a line '
+        'in the landuse layer.')
+    overpass_parser.add_argument(
+        '--poi-poly', action='store_true', help='Make a test for a POI point '
+        'from a polygon centroid.')
+    overpass_parser.add_argument(
+        '--expect',
+        help='JSON-encoded dict of expected properties.')
+    overpass_parser.add_argument(
+        '--zoom', type=int, default=16,
+        help='Zoom to use for tile.')
+    overpass_parser.set_defaults(func=overpass_test)
 
     args = parser.parse_args()
     args.func(args)
