@@ -910,6 +910,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `halt`
 * `hanami`
 * `handicraft`
+* `harbourmaster`
 * `hardware`
 * `hazard`
 * `healthcare`

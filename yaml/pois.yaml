@@ -131,7 +131,7 @@ global:
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
         - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, customs, fuel, hunting_stand,
+            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, customs, fuel, harbourmaster, hunting_stand,
             life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
             shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
@@ -148,6 +148,7 @@ global:
             - swing_gate
             - toll_booth
         - emergency: [ lifeguard_tower, phone, defibrillator ]
+        - harbour: harbour_master
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, traffic_signals, trailhead ]
         - historic: landmark
@@ -162,6 +163,7 @@ global:
         - power: [ pole, tower ]
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
+        - "seamark:building:function": harbour_master
         - tags->icn_ref: true
         - tags->iwn_ref: true
         - tags->lcn_ref: true
@@ -1719,6 +1721,15 @@ filters:
     output:
       <<: *output_properties
       kind: boatyard
+  - filter:
+      any:
+        - amenity: harbourmaster
+        - harbour: harbour_master
+        - "seamark:building:function": harbour_master
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: harbourmaster
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

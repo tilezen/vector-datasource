@@ -1929,3 +1929,135 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 206943159,
                 'kind': u'customs',
             })
+
+    def test_harbourmaster_seamark_node(self):
+        import dsl
+
+        z, x, y = (16, 17964, 29191)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/778613459
+            dsl.point(778613459, (-81.318644, 19.272868), {
+                'addr:city': u'Spotts',
+                'addr:country': u'KY',
+                'addr:street': u'Jackson Road',
+                'building': u'yes',
+                'description': u'This is where the ships anchor '\
+                u'during rough seas!',
+                'name': u'Spotts Bay Alternate Cruise Facility of ' \
+                u'Port Authority',
+                'seamark:building:function': u'harbour_master',
+                'seamark:type': u'building',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 778613459,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbourmaster_seamark_way(self):
+        import dsl
+
+        z, x, y = (16, 18409, 24075)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/84872891
+            dsl.way(84872891, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'seamark:building:function': u'harbour_master',
+                'seamark:type': u'building',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 84872891,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbour_master_node(self):
+        import dsl
+
+        z, x, y = (16, 18224, 23638)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3721714683
+            dsl.point(3721714683, (-79.887715, 44.753227), {
+                'harbour': u'harbour_master',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3721714683,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbour_master_way(self):
+        import dsl
+
+        z, x, y = (16, 32156, 22859)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/406287049
+            dsl.way(406287049, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'harbour': u'harbour_master',
+                'opening_hours': u'Mo-Sa 09:00-12:00,14:00-18:00',
+                'source': u'openstreetmap.org',
+                'wheelchair': u'yes',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 406287049,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbourmaster_amenity_node(self):
+        import dsl
+
+        z, x, y = (16, 17927, 28133)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4424415086
+            dsl.point(4424415086, (-81.518615, 24.660679), {
+                'amenity': u'harbourmaster',
+                'shop': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4424415086,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbourmaster_amenity_way(self):
+        import dsl
+
+        z, x, y = (16, 17777, 28436)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/259829016
+            dsl.way(259829016, dsl.tile_box(z, x, y), {
+                'amenity': u'harbourmaster',
+                'building': u'yes',
+                'building:levels': u'3',
+                'name': u'Empresa Prácticos de Cuba',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 259829016,
+                'kind': u'harbourmaster',
+            })
