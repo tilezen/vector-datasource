@@ -1688,6 +1688,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 398258882,
                 'kind': u'shipyard',
+                'min_zoom': 15,
             })
 
     def test_wharf_way(self):
@@ -1708,6 +1709,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 184311022,
                 'kind': u'wharf',
+                'min_zoom': 16,
             })
 
     def test_quay_way(self):
@@ -1728,6 +1730,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 45061639,
                 'kind': u'quay',
+                'min_zoom': 16,
             })
 
     def test_naval_base_way(self):

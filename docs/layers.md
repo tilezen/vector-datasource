@@ -526,7 +526,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `groyne`
 * `guard_rail`
 * `hanami`
-* `harbor` (a.k.a harbour)
+* `harbour`
 * `hospital`
 * `industrial`
 * `kerb`
@@ -762,6 +762,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `accountant`
 * `adit`
 * `administrative`
+* `adult_gaming_centre`
 * `advertising_agency`
 * `aerodrome`
 * `aeroway_gate`
@@ -890,7 +891,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
 * `furniture`
 * `gallery` - An art gallery.
-* `gaming`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
 * `garden_centre`
@@ -903,7 +903,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `golf_course`
 * `government`
 * `greengrocer` - Shop selling fruits and vegetables.
-* `grocery` - Shop selling non-perishable foods.
+* `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
 * `group_home`
 * `guest_house`
 * `hairdresser`

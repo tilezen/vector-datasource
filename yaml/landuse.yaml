@@ -610,6 +610,8 @@ filters:
   # port, ferry, container terminals
   - filter:
       landuse:
+        - harbour
+        - port
         - port_terminal
         - ferry_terminal
         - container_terminal
@@ -1134,9 +1136,13 @@ filters:
       kind_detail: {col: "crane:type"}
   - filter:
       landuse:
-        - harbour
-        - port
         - shipyard
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+  - filter:
+      landuse:
         - wharf
         - quay
     min_zoom: 16
