@@ -1283,3 +1283,649 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'exit',
                 'kind_detail': u'fire_exit',
             })
+
+    def test_gaming_node(self):
+        import dsl
+
+        z, x, y = (16, 19077, 24822)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2100740221
+            dsl.point(2100740221, (-75.203507, 39.951631), {
+                'addr:city': u'Philadelphia',
+                'addr:housenumber': u'4006',
+                'addr:postcode': u'19104',
+                'addr:state': u'PA',
+                'addr:street': u'Spruce Street',
+                'leisure': u'adult_gaming_centre',
+                'name': u'University Family Fun Center',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2100740221,
+                'kind': u'adult_gaming_centre',
+            })
+
+    def test_gaming_way(self):
+        import dsl
+
+        z, x, y = (16, 17768, 25989)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/41979263
+            dsl.way(41979263, dsl.tile_box(z, x, y), {
+                'addr:city': u'Greenville',
+                'addr:housenumber': u'614',
+                'addr:postcode': u'29601',
+                'addr:street': u'North Main Street',
+                'building': u'yes',
+                'height': u'8.7',
+                'leisure': u'adult_gaming_centre',
+                'name': u'Breakout',
+                'source': u'openstreetmap.org',
+                'website': u'https://breakoutgreenville.com/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 41979263,
+                'kind': u'adult_gaming_centre',
+            })
+
+    def test_garden_centre_node(self):
+        import dsl
+
+        z, x, y = (16, 19293, 24649)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1378081014
+            dsl.point(1378081014, (-74.015906, 40.675089), {
+                'name': u'Chelsea Garden Center Red Hook',
+                'shop': u'garden_centre',
+                'source': u'openstreetmap.org',
+                'website': u'http://www.chelseagardencenter.com/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1378081014,
+                'kind': u'garden_centre',
+            })
+
+    def test_garden_centre_way(self):
+        import dsl
+
+        z, x, y = (16, 19303, 24648)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/265733658
+            dsl.way(265733658, dsl.tile_box(z, x, y), {
+                'addr:housenumber': u'784',
+                'addr:postcode': u'11238',
+                'addr:street': u'Dean Street',
+                'building': u'yes',
+                'height': u'4.7',
+                'name': u'Natty Garden',
+                'nycdoitt:bin': u'3027945',
+                'shop': u'garden_centre',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 265733658,
+                'kind': u'garden_centre',
+            })
+
+    def test_golf_node(self):
+        import dsl
+
+        z, x, y = (16, 19252, 24580)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5622433042
+            dsl.point(5622433042, (-74.244082, 40.962317), {
+                'addr:city': u'Wayne',
+                'addr:housenumber': u'1210',
+                'addr:postcode': u'07470',
+                'addr:state': u'NJ',
+                'addr:street': u'Paterson-Hamburg Turnpike',
+                'name': u'K & J Custom Fit Pro Shop',
+                'shop': u'golf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5622433042,
+                'kind': u'golf',
+            })
+
+    def test_golf_way(self):
+        import dsl
+
+        z, x, y = (16, 18826, 24953)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/398700987
+            dsl.way(398700987, dsl.tile_box(z, x, y), {
+                'addr:city': u'Loch Raven',
+                'addr:country': u'US',
+                'addr:housenumber': u'803',
+                'addr:postcode': u'21286',
+                'addr:state': u'MD',
+                'addr:street': u'Goucher Boulevard',
+                'addr:unit': u'104',
+                'building': u'retail',
+                'name': u'Golf Galaxy',
+                'shop': u'golf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 398700987,
+                'kind': u'golf',
+            })
+
+    def test_grocery_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24628)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2709906342
+            dsl.point(2709906342, (-73.990564, 40.761580), {
+                'addr:city': u'New York',
+                'addr:housenumber': u'681',
+                'addr:postcode': u'10036',
+                'addr:state': u'NY',
+                'addr:street': u'9th Avenue',
+                'name': u'New York Food Market',
+                'phone': u'+1 212 2456470',
+                'shop': u'grocery',
+                'source': u'openstreetmap.org',
+                'website': u'http://newyorkfoodmarket.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2709906342,
+                'kind': u'grocery',
+            })
+
+    def test_grocery_way(self):
+        import dsl
+
+        z, x, y = (16, 19285, 24634)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/409910669
+            dsl.way(409910669, dsl.tile_box(z, x, y), {
+                'addr:city': u'Jersey City',
+                'addr:housenumber': u'2975',
+                'addr:postcode': u'07306',
+                'addr:state': u'NJ',
+                'addr:street': u'John F. Kennedy Boulevard',
+                'building': u'yes',
+                'building:levels': u'1',
+                'name': u'Apna Bazar Cash & Carry',
+                'opening_hours': u'Mo-Su 09:00-21:00',
+                'phone': u'+1 201 217 9701',
+                'shop': u'grocery',
+                'source': u'openstreetmap.org',
+                'website': u'http://www.apnabazarcashandcarry.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 409910669,
+                'kind': u'grocery',
+            })
+
+    def test_harbour_natural_water_way(self):
+        import dsl
+
+        z, x, y = (16, 19002, 25265)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/310557860
+            dsl.way(310557860, dsl.tile_box(z, x, y), {
+                'harbour': u'yes',
+                'natural': u'water',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # note: the harbour=yes by itself isn't enough to make this into a
+        # landuse feature.
+        self.assert_no_matching_feature(
+            z, x, y, 'landuse', {
+                'id': 310557860,
+            })
+
+    def test_harbour_pier_way(self):
+        import dsl
+
+        z, x, y = (16, 25307, 36837)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/183049783
+            dsl.way(183049783, dsl.tile_box(z, x, y), {
+                'harbour': u'yes',
+                'man_made': u'pier',
+                'name': u'Porto do Açu',
+                'operator': u'LLX',
+                'seamark:harbour:category': u'tanker;bulk',
+                'seamark:type': u'harbour',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 183049783,
+                'kind': 'pier',
+            })
+
+    def test_harbour_way(self):
+        import dsl
+
+        z, x, y = (16, 38891, 25976)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/515527428
+            dsl.way(515527428, dsl.tile_box(z, x, y), {
+                'addr:city': u'Larnaka',
+                'harbour': u'yes',
+                'name': u'Larnaka harbour',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # harbour=yes is not enough by itself to make a feature in the landuse
+        # layer.
+        self.assert_no_matching_feature(
+            z, x, y, 'landuse', {
+                'id': 515527428,
+            })
+
+    def test_harbour_landuse_harbour_way(self):
+        import dsl
+
+        z, x, y = (16, 35014, 25282)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/422833298
+            dsl.way(422833298, dsl.tile_box(z, x, y), {
+                'harbour': u'yes',
+                'landuse': u'harbour',
+                'name': u'Cala Dogana',
+                'natural': u'bay',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 422833298,
+                'kind': u'harbour',
+            })
+
+    def test_harbour_landuse_port_way(self):
+        import dsl
+
+        z, x, y = (16, 31231, 20846)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/143517784
+            dsl.way(143517784, dsl.tile_box(z, x, y), {
+                'harbour': u'yes',
+                'landuse': u'port',
+                'maxdraft': u'12',
+                'maxlength': u'300',
+                'operator': u'Port Authority of Killybegs',
+                'phone': u'00353 (0)74 9731032',
+                'seamark:type': u'harbour',
+                'source': u'openstreetmap.org',
+                'vhf_channel': u'14',
+                'website': u'http://www.killybegsharbour.ie/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 143517784,
+                'kind': u'port',
+            })
+
+    def test_port_terminal_way(self):
+        import dsl
+
+        z, x, y = (16, 22575, 37950)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/256125920
+            dsl.way(256125920, dsl.tile_box(z, x, y), {
+                'harbour': u'yes',
+                'landuse': u'port_terminal',
+                'man_made': u'pier',
+                'name': u'Nuevo puerto de Posadas',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 256125920,
+                'kind': u'port_terminal',
+            })
+
+    def test_ferry_terminal_way(self):
+        import dsl
+
+        z, x, y = (16, 31640, 21243)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/55873793
+            dsl.way(55873793, dsl.tile_box(z, x, y), {
+                'access': u'customers',
+                'landuse': u'ferry_terminal',
+                'name': u'Terminal 1',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 55873793,
+                'kind': u'ferry_terminal',
+            })
+
+    def test_container_terminal_way(self):
+        import dsl
+
+        z, x, y = (16, 18282, 31129)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/330811048
+            dsl.way(330811048, dsl.tile_box(z, x, y), {
+                'landuse': u'container_terminal',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 330811048,
+                'kind': u'container_terminal',
+            })
+
+    def test_shipyard_way(self):
+        import dsl
+
+        z, x, y = (16, 29593, 30065)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/398258882
+            dsl.way(398258882, dsl.tile_box(z, x, y), {
+                'landuse': u'shipyard',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 398258882,
+                'kind': u'shipyard',
+                'min_zoom': 15,
+            })
+
+    def test_wharf_way(self):
+        import dsl
+
+        z, x, y = (16, 21272, 23202)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/184311022
+            dsl.way(184311022, dsl.tile_box(z, x, y), {
+                'landuse': u'wharf',
+                'name': u'Covehead Wharf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 184311022,
+                'kind': u'wharf',
+                'min_zoom': 16,
+            })
+
+    def test_quay_way(self):
+        import dsl
+
+        z, x, y = (16, 29533, 27314)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/45061639
+            dsl.way(45061639, dsl.tile_box(z, x, y), {
+                'area': u'yes',
+                'landuse': u'quay',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 45061639,
+                'kind': u'quay',
+                'min_zoom': 16,
+            })
+
+    def test_naval_base_way(self):
+        import dsl
+
+        z, x, y = (16, 19134, 25058)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/28501295
+            dsl.way(28501295, dsl.tile_box(z, x, y), {
+                'landuse': u'military',
+                'military': u'naval_base',
+                'name': u'United States Coast Guard Training Center',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 28501295,
+                'kind': u'naval_base',
+            })
+
+    def test_boatyard_way(self):
+        import dsl
+
+        z, x, y = (16, 19327, 24653)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/527031661
+            dsl.way(527031661, dsl.tile_box(z, x, y), {
+                'access': u'private',
+                'name': u'Rockman\'s Park Memorial Boat Club',
+                'source': u'openstreetmap.org',
+                'waterway': u'boatyard',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 527031661,
+                'kind': u'boatyard',
+            })
+
+    def test_boatyard_node(self):
+        import dsl
+
+        z, x, y = (16, 19327, 24654)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5082841810
+            dsl.point(5082841810, (-73.830727, 40.654999), {
+                'source': u'openstreetmap.org',
+                'waterway': u'boatyard',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5082841810,
+                'kind': u'boatyard',
+            })
+
+    def test_boat_lift_node(self):
+        import dsl
+
+        z, x, y = (16, 18169, 24135)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2426819553
+            dsl.point(2426819553, (-80.193664, 42.782552), {
+                'man_made': u'crane',
+                'name': u'Travel Lift',
+                'source': u'openstreetmap.org',
+                'waterway': u'boat_lift',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2426819553,
+                'kind': u'boat_lift',
+            })
+
+    def test_boat_lift_way(self):
+        import dsl
+
+        z, x, y = (16, 18828, 24981)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/170211248
+            dsl.way(170211248, dsl.tile_box(z, x, y), {
+                'source': u'openstreetmap.org',
+                'waterway': u'boat_lift',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 170211248,
+                'kind': u'boat_lift',
+            })
+
+    def test_ship_chandler_way(self):
+        import dsl
+
+        z, x, y = (16, 33481, 21751)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/276059237
+            dsl.way(276059237, dsl.tile_box(z, x, y), {
+                'building': u'retail',
+                'name': u'T.D. Bouwman & zn. BV',
+                'ref:bag': u'1676100000449055',
+                'seamark:small_craft_facility:category': u'chandler',
+                'seamark:type': u'small_craft_facility',
+                'shop': u'ship_chandler',
+                'source': u'openstreetmap.org',
+                'source:date': u'2014-02-11',
+                'start_date': u'1800',
+                'website': u'http://www.tdbouwman.nl/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 276059237,
+                'kind': u'ship_chandler',
+            })
+
+    def test_ship_chandler_node(self):
+        import dsl
+
+        z, x, y = (16, 33480, 21752)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2806599446
+            dsl.point(2806599446, (3.914906, 51.642764), {
+                'addr:city': u'Zierikzee',
+                'addr:housenumber': u'17',
+                'addr:postcode': u'4301RC',
+                'addr:street': u'Deltastraat',
+                'name': u'Mulder Yachtservice',
+                'seamark:small_craft_facility:category': u'boatyard;chandler',
+                'seamark:type': u'small_craft_facility',
+                'shop': u'ship_chandler',
+                'source': u'openstreetmap.org',
+                'source:date': u'2014-02-11',
+                'website': u'http://www.mulderyachtservice.nl/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2806599446,
+                'kind': u'ship_chandler',
+            })
+
+    def test_customs_node(self):
+        import dsl
+
+        z, x, y = (16, 18868, 23795)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/529165668
+            dsl.point(529165668, (-76.354747, 44.136012), {
+                'amenity': u'customs',
+                'attribution': u'Natural Resources Canada',
+                'canvec:CODE': u'2010100',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 529165668,
+                'kind': u'customs',
+            })
+
+    def test_customs_way(self):
+        import dsl
+
+        z, x, y = (16, 18990, 23680)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/206943159
+            dsl.way(206943159, dsl.tile_box(z, x, y), {
+                'amenity': u'customs',
+                'building': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 206943159,
+                'kind': u'customs',
+            })

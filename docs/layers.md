@@ -498,6 +498,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `college`
 * `commercial`
 * `common`
+* `container_terminal`
 * `crane`
 * `cutline`
 * `danger` - e.g: military training zones, firing ranges.
@@ -510,6 +511,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `farmland`
 * `farmyard`
 * `fence` - if present, `kind_detail` one of `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
+* `ferry_terminal`
 * `footway`
 * `forest`
 * `fort`
@@ -524,6 +526,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `groyne`
 * `guard_rail`
 * `hanami`
+* `harbour`
 * `hospital`
 * `industrial`
 * `kerb`
@@ -537,6 +540,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
+* `naval_base`
 * `park`
 * `parking`
 * `pedestrian`
@@ -547,11 +551,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `place_of_worship`
 * `plant`
 * `playground`
+* `port_terminal`
 * `power_line`
 * `power_minor_line`
 * `prison`
 * `protected_area`
 * `quarry`
+* `quay`
 * `railway`
 * `recreation_ground`
 * `recreation_track`
@@ -568,6 +574,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `scree`
 * `scrub`
 * `service_area`
+* `shipyard`
 * `snow_fence`
 * `sports_centre`
 * `stadium`
@@ -589,6 +596,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `water_slide`
 * `water_works`
 * `wetland`
+* `wharf`
 * `wilderness_hut`
 * `wildlife_park`
 * `winery`
@@ -754,6 +762,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `accountant`
 * `adit`
 * `administrative`
+* `adult_gaming_centre`
 * `advertising_agency`
 * `aerodrome`
 * `aeroway_gate`
@@ -794,6 +803,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `boat_rental`
 * `boat_storage`
 * `bollard`
+* `boatyard`
+* `boat_lift`
 * `books`
 * `brewery`
 * `bus_station`
@@ -833,6 +844,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `courthouse`
 * `crane`
 * `cross`
+* `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
 * `danger` - e.g: military training zones, firing ranges.
@@ -881,14 +893,17 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `gallery` - An art gallery.
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
+* `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
 * `generator`
 * `geyser`
 * `gift`
+* `golf` - Shop selling golf equipment.
 * `golf_course`
 * `government`
-* `greengrocer`
+* `greengrocer` - Shop selling fruits and vegetables.
+* `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
 * `group_home`
 * `guest_house`
 * `hairdresser`
@@ -1011,6 +1026,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `scuba_diving`
 * `service_area`
 * `shelter`
+* `ship_chandler`
 * `shoemaker`
 * `shoes`
 * `shower`
