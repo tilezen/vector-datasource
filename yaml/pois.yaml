@@ -158,6 +158,7 @@ global:
         - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, windmill ]
+        - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
         - power: [ pole, tower ]
@@ -1329,6 +1330,16 @@ filters:
     output:
       <<: *output_properties
       kind: memorial
+  # slipway with mooring info
+  - filter:
+      leisure: slipway
+      mooring: ['yes', 'no']
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: slipway
+      mooring: {col: mooring}
+  # plain slipway without mooring info
   - filter: { leisure: slipway }
     min_zoom: 17
     output:
@@ -1730,6 +1741,30 @@ filters:
     output:
       <<: *output_properties
       kind: harbourmaster
+  # moorings with more detail
+  - filter:
+      mooring: [
+        commercial, cruise, customers, declaration, ferry, guest,
+        pile, private, public, waiting, yacht, yachts]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+      kind_detail: {col: mooring}
+  # moorings with access restrictions
+  - filter:
+      mooring: [ private, public ]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+      access: {col: mooring}
+  # plain moorings, without detail
+  - filter: {mooring: true}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

@@ -546,7 +546,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `pedestrian`
 * `petting_zoo`
 * `picnic_site`
-* `pier`
+* `pier` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `pitch`
 * `place_of_worship`
 * `plant`
@@ -953,6 +953,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
 * `mobile_phone`
 * `monument`
+* `mooring` - A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `motel`
 * `motorcycle`
 * `motorcycle_parking`
@@ -1248,7 +1249,8 @@ Railway `service` values are:
 
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
-**Piers** start showing up at zoom 13+ with `kind_detail` values of `pier`.
+**Piers** start showing up at zoom 13+ with `kind_detail` values of `pier`. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
 
 ## Transit
 

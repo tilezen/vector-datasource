@@ -2061,3 +2061,275 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 259829016,
                 'kind': u'harbourmaster',
             })
+
+    def test_yes_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 18842, 25052)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4341108759
+            dsl.point(4341108759, (-76.493961, 38.972904), {
+                'mooring': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # treat mooring=yes as a "yes, there's a mooring here", but we don't
+        # know any more about it.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4341108759,
+                'kind': u'mooring',
+                'kind_detail': type(None),
+            })
+
+    def test_private_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 19533, 24620)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1989045561
+            dsl.point(1989045561, (-72.699321, 40.796934), {
+                'mooring': u'private',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # TODO: should we show these at all if they're private?
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1989045561,
+                'kind': u'mooring',
+                'access': 'private',
+            })
+
+    def test_no_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 17992, 23772)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5180188472
+            dsl.point(5180188472, (-81.166304, 44.226554), {
+                'leisure': u'slipway',
+                'mooring': u'no',
+                'source': u'openstreetmap.org',
+                'vehicle': u'no',
+            }),
+        )
+
+        # in this case, the mooring=no is a description of the slipway, rather
+        # than a feature in its own right.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5180188472,
+                'kind': u'slipway',
+                'mooring': 'no',
+            })
+
+    def test_commercial_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 18223, 24746)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2015422399
+            dsl.point(2015422399, (-79.895062, 40.270013), {
+                'man_made': u'mooring',
+                'mooring': u'commercial',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # note: there's not many man_made=mooring, so we ignore that.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2015422399,
+                'kind': u'mooring',
+                'kind_detail': u'commercial',
+            })
+
+    def test_ferry_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 17344, 23374)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2320763454
+            dsl.point(2320763454, (-84.724975, 45.774231), {
+                'mooring': u'ferry',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2320763454,
+                'kind': u'mooring',
+                'kind_detail': u'ferry',
+            })
+
+    def test_guest_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 17669, 27124)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3667335766
+            dsl.point(3667335766, (-82.936394, 29.590537), {
+                'maxstay': u'minimal',  # wow, sounds super hospitable...
+                'mooring': u'guest',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3667335766,
+                'kind': u'mooring',
+                'kind_detail': u'guest',
+            })
+
+    def test_cruise_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 19903, 24337)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4148336680
+            dsl.point(4148336680, (-70.666619, 41.961962), {
+                'contact:phone': u'+1 508 7462643',
+                'contact:website': u'http://www.captjohn.com/',
+                'mooring': u'cruise',
+                'name': u'Captain John Whale Watching & Fishing Tours',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4148336680,
+                'kind': u'mooring',
+                'kind_detail': u'cruise',
+            })
+
+    def test_waiting_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 33124, 24003)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2102077401
+            dsl.point(2102077401, (1.959648, 43.312300), {
+                'mooring': u'waiting',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2102077401,
+                'kind': u'mooring',
+                'kind_detail': u'waiting',
+            })
+
+    def test_pile_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 33704, 21668)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2410435220
+            dsl.point(2410435220, (5.146992, 51.927532), {
+                'material': u'wood',
+                'mooring': u'pile',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2410435220,
+                'kind': u'mooring',
+                'kind_detail': u'pile',
+            })
+
+    def test_declaration_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 30526, 40041)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2079122376
+            dsl.point(2079122376, (-12.312872, -37.063474), {
+                'mooring': u'declaration',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2079122376,
+                'kind': u'mooring',
+                'kind_detail': u'declaration',
+            })
+
+    def test_yachts_mooring_way(self):
+        import dsl
+
+        z, x, y = (16, 15565, 26449)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/584249543
+            dsl.way(584249543, dsl.tile_box(z, x, y), {
+                'man_made': u'pier',
+                'mooring': u'yachts',
+                'source': u'openstreetmap.org',
+                'width': u'1.2',
+            }),
+        )
+
+        # this is really a description of the pier, rather than a feature in
+        # its own right, so pass it through on the pier.
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 584249543,
+                'kind': u'pier',
+                'mooring': u'yachts',
+            })
+
+    def test_customers_mooring_way(self):
+        import dsl
+
+        z, x, y = (16, 19866, 24126)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/278952041
+            dsl.way(278952041, dsl.tile_box(z, x, y), {
+                'access': u'customers',
+                'area': u'yes',
+                'floating': u'no',
+                'horse': u'no',
+                'layer': u'2',
+                'lit': u'yes',
+                'man_made': u'pier',
+                'material': u'wood',
+                'mooring': u'customers',
+                'motor_vehicle': u'no',
+                'seamark:type': u'mooring',
+                'seasonal': u'no',
+                'source': u'openstreetmap.org',
+                'surface': u'wood',
+            }),
+        )
+
+        # again, seems like a description of who's allowed to tie up on the
+        # pier, not a separate feature.
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 278952041,
+                'kind': u'pier',
+                'mooring': u'customers',
+            })
