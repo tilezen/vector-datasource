@@ -557,7 +557,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `prison`
 * `protected_area`
 * `quarry`
-* `quay`
+* `quay` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `railway`
 * `recreation_ground`
 * `recreation_track`
