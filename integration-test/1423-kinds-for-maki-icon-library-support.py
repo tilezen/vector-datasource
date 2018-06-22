@@ -2417,7 +2417,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'sanitary_dump_station',
             })
 
-    def test_sanitary_dump_station_node(self):
+    def test_waterway_sanitary_dump_station_node(self):
         import dsl
 
         z, x, y = (16, 18876, 25380)
@@ -2436,7 +2436,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'sanitary_dump_station',
             })
 
-    def test_sanitary_dump_station_way(self):
+    def test_waterway_sanitary_dump_station_way(self):
         import dsl
 
         z, x, y = (16, 11649, 25525)
