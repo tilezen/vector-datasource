@@ -165,6 +165,7 @@ global:
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
         - "seamark:building:function": harbour_master
+        - "seamark:small_craft_facility:category": fuel_station
         - tags->icn_ref: true
         - tags->iwn_ref: true
         - tags->lcn_ref: true
@@ -175,7 +176,7 @@ global:
         - tags->rwn_ref: true
         - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
         - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
-        - waterway: [ dam, lock, waterfall, boatyard, boat_lift, sanitary_dump_station ]
+        - waterway: [ dam, lock, waterfall, boatyard, boat_lift, sanitary_dump_station, fuel ]
 
 filters:
   # remove disused things, they're not real POIs any more
@@ -772,6 +773,16 @@ filters:
     output:
       <<: *output_properties
       kind: level_crossing
+  # filter the waterway / boat fuel before generic amenity=fuel, as they appear
+  # to be often tagged with both.
+  - filter:
+      any:
+        - waterway: fuel
+        - "seamark:small_craft_facility:category": fuel_station
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: waterway_fuel
   - filter:
       amenity: [bank, cinema, courthouse, customs, embassy, fire_station, fuel, library, police,
         post_office, theatre]

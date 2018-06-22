@@ -2604,3 +2604,68 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'caravan_site',
                 'sanitary_dump_station': u'yes',
             })
+
+    def test_waterway_fuel_node(self):
+        import dsl
+
+        z, x, y = (16, 19406, 24550)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5489425299
+            dsl.point(5489425299, (-73.398601, 41.085890), {
+                'source': u'openstreetmap.org',
+                'waterway': u'fuel',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5489425299,
+                'kind': u'waterway_fuel',
+            })
+
+    def test_waterway_fuel_way(self):
+        import dsl
+
+        z, x, y = (16, 32043, 22582)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/72074171
+            dsl.way(72074171, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'fuel:diesel': u'yes',
+                'seamark:information': u'diesel',
+                'seamark:small_craft_facility:category': u'fuel_station',
+                'seamark:type': u'small_craft_facility',
+                'source': u'openstreetmap.org',
+                'waterway': u'fuel',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 72074171,
+                'kind': u'waterway_fuel',
+            })
+
+    def test_waterway_amenity_fuel_node(self):
+        import dsl
+
+        z, x, y = (16, 34254, 21225)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/270602036
+            dsl.point(270602036, (8.163521, 53.405975), {
+                'amenity': u'fuel',
+                'name': u'Dieseltankstelle',
+                'seamark:small_craft_facility:category': u'fuel_station',
+                'seamark:type': u'small_craft_facility',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 270602036,
+                'kind': u'waterway_fuel',
+            })
