@@ -2333,3 +2333,48 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'kind': u'pier',
                 'mooring': u'customers',
             })
+
+    def test_quay_man_made_way_line(self):
+        import dsl
+
+        z, x, y = (16, 18958, 25284)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/109938886
+            dsl.way(109938886, dsl.tile_diagonal(z, x, y), {
+                'man_made': u'quay',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # should linear quays go into the roads layer like piers?
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 109938886,
+                'kind': u'path',
+                'kind_detail': u'quay',
+            })
+
+    def test_man_made_quay_way_area(self):
+        import dsl
+
+        z, x, y = (16, 33352, 21847)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/465148799
+            dsl.way(465148799, dsl.tile_box(z, x, y), {
+                'man_made': u'quay',
+                'name': u'Kaai 410',
+                'name:de': u'kai 410',
+                'name:fr': u'quai 410',
+                'name:it': u'banchina 410',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # polygonal quays should go into landuse?
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 465148799,
+                'kind': u'quay',
+            })

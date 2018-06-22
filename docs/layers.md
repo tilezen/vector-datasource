@@ -1249,8 +1249,7 @@ Railway `service` values are:
 
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
-**Piers** start showing up at zoom 13+ with `kind_detail` values of `pier`. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
-
+**Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
 ## Transit
 

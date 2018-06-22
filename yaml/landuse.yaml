@@ -1161,3 +1161,8 @@ filters:
     output:
       <<: *output_properties
       kind: {col: landuse}
+  - filter: {man_made: quay}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: quay
