@@ -2378,3 +2378,229 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 465148799,
                 'kind': u'quay',
             })
+
+    def test_sanitary_dump_station_node(self):
+        import dsl
+
+        z, x, y = (16, 19489, 24603)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3925485395
+            dsl.point(3925485395, (-72.938255, 40.865682), {
+                'amenity': u'sanitary_dump_station',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3925485395,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_sanitary_dump_station_way(self):
+        import dsl
+
+        z, x, y = (16, 18684, 24916)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/552257184
+            dsl.way(552257184, dsl.tile_box(z, x, y), {
+                'amenity': u'sanitary_dump_station',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 552257184,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_sanitary_dump_station_node(self):
+        import dsl
+
+        z, x, y = (16, 18876, 25380)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3472044600
+            dsl.point(3472044600, (-76.306942, 37.561204), {
+                'source': u'openstreetmap.org',
+                'waterway': u'sanitary_dump_station',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3472044600,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_sanitary_dump_station_way(self):
+        import dsl
+
+        z, x, y = (16, 11649, 25525)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/551894147
+            dsl.way(551894147, dsl.tile_box(z, x, y), {
+                'source': u'openstreetmap.org',
+                'waterway': u'sanitary_dump_station',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 551894147,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_marina_sanity_dump_station_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 18725, 23827)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3730870302
+            dsl.point(3730870302, (-77.135342, 44.010267), {
+                'leisure': u'marina',
+                'name': u'Port Picton Harbour Marina',
+                'power_supply': u'yes',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'wikidata': u'Q385085',
+                'wikipedia': u'en:Prince Edward County, Ontario',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3730870302,
+                'kind': u'marina',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_marina_sanity_dump_station_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 18844, 25055)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/39392303
+            dsl.way(39392303, dsl.tile_box(z, x, y), {
+                'leisure': u'marina',
+                'name': u'Bert Jabin\'s Yacht Yard',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 39392303,
+                'kind': u'marina',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_camp_site_sanitary_dump_station_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 10802, 24913)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1798722757
+            dsl.point(1798722757, (-120.662796, 39.566655), {
+                'capacity': u'19',
+                'drinking_water': u'yes',
+                'fee': u'yes',
+                'name': u'Loganville Campground',
+                'operator': u'USFS',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'toilets': u'yes',
+                'toilets:disposal': u'pitlatrine',
+                'tourism': u'camp_site',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1798722757,
+                'kind': u'camp_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_camp_site_sanitary_dump_station_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 18937, 24765)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/506304336
+            dsl.way(506304336, dsl.tile_box(z, x, y), {
+                'internet_access': u'wlan',
+                'internet_access:fee': u'yes',
+                'name': u'Lake-in-Wood Campground',
+                'payment:cash': u'yes',
+                'payment:mastercard': u'yes',
+                'payment:visa': u'yes',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'tourism': u'camp_site',
+                'wheelchair': u'limited',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 506304336,
+                'kind': u'camp_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_caravan_site_sanitary_dump_station_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 19122, 23577)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4345342880
+            dsl.point(4345342880, (-74.959569, 44.991434), {
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'tourism': u'caravan_site',
+                'water_point': u'yes',
+                'name': 'Fake name to pass the no_name_okay filter',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4345342880,
+                'kind': u'caravan_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_caravan_site_sanitary_dump_station_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 19212, 24226)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/416560900
+            dsl.way(416560900, dsl.tile_box(z, x, y), {
+                'name': u'Nickerson Park Campground',
+                'power_supply': u'yes',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'tents': u'yes',
+                'tourism': u'caravan_site',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 416560900,
+                'kind': u'caravan_site',
+                'sanitary_dump_station': u'yes',
+            })

@@ -752,6 +752,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
 
+#### POI properties (only on `kind:marina`, `kind:camp_site` and `kind:caravan_site`)
+
+* `sanitary_dump_station`: One of `yes`, `customers` or `public` if there are sanitary dump facilities at this location, and who is permitted to use them.
+
 #### POI properties (only on `charging_station`):
 
 * `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
@@ -1023,6 +1027,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `rock`
 * `roller_coaster`
 * `saddle`
+* `sanitary_dump_station`
 * `sawmill`
 * `school` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `scuba_diving`
