@@ -1745,7 +1745,7 @@ filters:
   - filter:
       mooring: [
         commercial, cruise, customers, declaration, ferry, guest,
-        pile, private, public, waiting, yacht, yachts]
+        pile, waiting, yacht, yachts]
     min_zoom: 17
     output:
       <<: *output_properties
