@@ -85,41 +85,61 @@ def make_acceptable_module_name(path):
 #                       falsey, the match fails.
 #   {'key': obj}      - The key must exist and its value must be equal to the
 #                       given object.
+#   {'key': list(..)} - The key must exist, and its value must be a list of the
+#                       same length. These rules are applied recursively to
+#                       the corresponding items in both lists.
 #
 # This allows us to write some reasonably flexible rules.
 #
 def match_properties(actual, expected):
     for exp_k, exp_v in expected.iteritems():
         v = actual.get(exp_k, None)
-        # normalise unicode values
-        if isinstance(v, unicode):
-            v = v.encode('utf-8')
 
-        if exp_v is not None:
-            if isinstance(exp_v, set):
-                if v not in exp_v:
-                    return False
-
-            elif isinstance(exp_v, type):
-                if not isinstance(v, exp_v):
-                    return False
-
-            elif callable(exp_v):
-                if not exp_v(v):
-                    return False
-
-            elif isinstance(exp_v, unicode):
-                if v != exp_v.encode('utf-8'):
-                    return False
-
-            elif v != exp_v:
-                return False
-
-        else:
-            if v is None:
-                return False
+        if not _match_item(v, exp_v):
+            return False
 
     return True
+
+
+# Recursive single item match.
+#
+# Applies the rules described in the comment for match_properties() to a single
+# element, recursing into lists to apply the same logic.
+def _match_item(v, exp_v):
+    # normalise unicode values
+    if isinstance(v, unicode):
+        v = v.encode('utf-8')
+
+    if exp_v is None:
+        # confusingly, a missing or None value (v) does _not_ match an expected
+        # value of None! expecting None is interpreted as expecting _any_
+        # value.
+        return v is not None
+
+    elif isinstance(exp_v, set):
+        return v in exp_v
+
+    elif isinstance(exp_v, type):
+        return isinstance(v, exp_v)
+
+    elif callable(exp_v):
+        return exp_v(v)
+
+    elif isinstance(exp_v, unicode):
+        return v == exp_v.encode('utf-8')
+
+    elif isinstance(v, list) and isinstance(exp_v, list):
+        if len(v) != len(exp_v):
+            return False
+
+        for v2, exp_v2 in zip(v, exp_v):
+            if not _match_item(v2, exp_v2):
+                return False
+
+        return True
+
+    # final catch-all
+    return v == exp_v
 
 
 # quantify how different a feature is from the expected feature properties.
@@ -295,7 +315,7 @@ class WOFDataObject(namedtuple("WOFDataObject", "wof_id")):
             for d in digits:
                 if d is not None:
                     slashed += d
-        url = "https://whosonfirst.mapzen.com/data/%s/%d.geojson" \
+        url = "https://data.whosonfirst.org/%s/%d.geojson" \
               % (slashed, self.wof_id)
         return url
 
@@ -528,7 +548,8 @@ def _download_from_overpass(objs, target_file, clip, simplify, base_dir):
             raise
 
 
-def _convert_shape_to_geojson(shpfile, jsonfile, source, clip, simplify):
+def _convert_shape_to_geojson(shpfile, jsonfile, override_properties, clip,
+                              simplify):
     dbffile = shpfile.replace(".shp", ".dbf")
     features = []
 
@@ -543,7 +564,7 @@ def _convert_shape_to_geojson(shpfile, jsonfile, source, clip, simplify):
                 geom_lnglat = shapely.ops.transform(
                     reproject_mercator_to_lnglat, geom_mercator)
                 props = dict(zip(field_names, row.record))
-                props['source'] = source
+                props.update(override_properties)
                 gid += 1
 
                 if clip:
@@ -644,11 +665,25 @@ class FixtureShapeSource(object):
                     self.base_dir, "integration-test", "fixtures",
                     obj.table, obj.name)
                 if obj.table.startswith("ne_"):
-                    source = "naturalearthdata.com"
+                    override_properties = dict(source="naturalearthdata.com")
+                elif obj.table in ("buffered_land"):
+                    # have to add the maritime_boundary setting here, as the
+                    # name is too long to be a field in the shapefile!
+                    override_properties = dict(
+                        source="tilezen.org",
+                        maritime_boundary=True,
+                    )
+                elif obj.table in ("admin_areas"):
+                    # fix up column names here too!
+                    override_properties = dict(
+                        source='openstreetmap.org',
+                        kind='admin_area',
+                        admin_level=2,
+                    )
                 else:
-                    source = "openstreetmapdata.com"
+                    override_properties = dict(source="openstreetmapdata.com")
                 _convert_shape_to_geojson(
-                    shpfile, jsonfile, source, clip, simplify)
+                    shpfile, jsonfile, override_properties, clip, simplify)
                 jsonfiles.append(jsonfile)
 
             combine_geojson_files(jsonfiles, target_file)
@@ -657,23 +692,23 @@ class FixtureShapeSource(object):
 class WOFSource(object):
 
     def __init__(self):
-        self.hosts = ('whosonfirst.mapzen.com',)
+        self.hosts = ('data.whosonfirst.org',)
 
     def parse(self, url):
-        parts = url.path.split("/")
-        if len(parts) != 6:
+        parts = url.path.rsplit("/", 1)
+        if len(parts) != 2:
             raise Exception(
-                "Fixture shape URLs should look like: "
-                "https://whosonfirst.mapzen.com/data/858/260/37/"
+                "WOF fixture URLs should look like: "
+                "https://data.whosonfirst.org/858/260/37/"
                 "85826037.geojson, not %r" %
                 (url,))
-        if parts[0] != "" or parts[1] != "data":
-            raise Exception("Malformed fixture shapefile URL")
-        id_str = "".join(parts[2:5])
-        name = id_str + ".geojson"
-        if name != parts[5]:
+        prefix, filename = parts
+        if not prefix.startswith('/') or not filename.endswith('.geojson'):
+            raise Exception("Malformed fixture geojson URL")
+        id_str = prefix.replace('/', '')
+        if filename != (id_str + ".geojson"):
             raise Exception("Expected URL to be redundant, but %r doesn't "
-                            "look like %r" % (parts[2:5], parts[5]))
+                            "look like %r" % (prefix, filename))
 
         return WOFDataObject(int(id_str))
 
@@ -694,7 +729,7 @@ class WOFSource(object):
                     reproject_mercator_to_lnglat, n.label_position)
 
                 properties = {
-                    'source': 'whosonfirst.mapzen.com',
+                    'source': 'whosonfirst.org',
                     'name': n.name,
                     'min_zoom': n.min_zoom,
                     'max_zoom': n.max_zoom,
@@ -1232,7 +1267,7 @@ class RunTestInstance(object):
                 import sys
                 print>>sys.stderr, "WARNING: %s: GeoJSON fixture is " \
                     "very large, %d bytes." \
-                    % (self.id(), geojson_size)
+                    % (geojson_file, geojson_size)
 
         rows, rels = _load_fixtures([geojson_file])
         feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
@@ -1393,6 +1428,12 @@ class FixtureTest(unittest.TestCase):
         self.test_instance.load_fixtures(urls, clip, simplify)
 
     def generate_fixtures(self, *objs):
+        # check for common programming mistake, given that this takes variadic
+        # args, but could easily take a list.
+        if objs:
+            self.assertFalse(
+                isinstance(objs[0], list),
+                msg='generate_fixtures is variadic, do not pass it a list')
         self.test_instance.generate_fixtures(objs)
 
     def assert_has_feature(self, z, x, y, layer, props):
@@ -1605,6 +1646,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--regenerate', action='store_const', const=True, default=False,
         help='Always regenerate the fixture, even if it exists in the cache.')
+    parser.add_argument(
+        '--fail-fast', action='store_const', const=True, default=False,
+        help='Stop the test run on the first error or failure.')
     args = parser.parse_args()
 
     test_stdout = sys.stderr
@@ -1646,7 +1690,8 @@ if __name__ == '__main__':
     suite = unittest.TestSuite()
     suite.addTests(tests)
 
-    runner = unittest.TextTestRunner(stream=test_stdout)
+    runner = unittest.TextTestRunner(
+        stream=test_stdout, failfast=args.fail_fast)
     result = runner.run(suite)
 
     if not result.wasSuccessful():

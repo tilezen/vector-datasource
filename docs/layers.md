@@ -230,6 +230,8 @@ Note that building geometries, like most geometries in Tilezen tiles, are clippe
 * `building`
 * `building_part`
 * `address`
+* `entrance`
+* `exit`
 
 #### Building footprint and label placement `kind_detail` values:
 
@@ -387,6 +389,25 @@ Additional `kind_detail` values are provided from POI `kind`s where one is not a
 * `wall`
 * `window`
 
+#### Entrance and exit `kind_detail` values
+
+Entrances can have an optional `kind_detail`. If present, it will be one of:
+
+* `main`
+* `staircase`
+* `service`
+* `home`
+* `unisex` - seems to be mostly mapped on building containing toilets.
+* `garage`
+* `residence`
+* `private`
+* `secondary`
+
+Exits can have an optional `kind_detail`. If present, it will be one of:
+
+* `emergency`
+* `fire_exit`
+
 ## Earth
 
 ![image](images/mapzen-vector-tile-docs-earth.png)
@@ -442,7 +463,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 * `name`
 * `id`: From OpenStreetMap or Natural Earth. Dropped at low- and mid-zooms when features are merged. _See planned bug fix [#1033](https://github.com/tilezen/vector-datasource/issues/1033)._
-* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `retaining_wall` (zoom 15+), `snow_fence` (zoom 15+), `fence` (zoom 16+ only) and `gate` (zoom 16+ only).
+* `kind`: combination of the `landuse`, `leisure`, `natural`, `highway`, `aeroway`, `amenity`, `tourism`, `zoo`, `attraction`, `man_made`, `power`, and `boundary` OSM tags, or `urban_area` for Natural Earth features. Also includes of some `barrier` and `waterway` tags: `city_wall` (zoom 12+), `dam` (zoom 12+), `power_line` (zoom 14+), `retaining_wall`, `snow_fence` (zoom 15+), `crane`, `fence`, `gate`, `wall` (zoom 16+ only), and `power_minor_line` (zoom 17+).
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
@@ -477,15 +498,20 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `college`
 * `commercial`
 * `common`
+* `container_terminal`
+* `crane`
 * `cutline`
+* `danger` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
 * `dike`
+* `ditch`
 * `dog_park`
 * `enclosure`
 * `farm`
 * `farmland`
 * `farmyard`
-* `fence`
+* `fence` - if present, `kind_detail` one of `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
+* `ferry_terminal`
 * `footway`
 * `forest`
 * `fort`
@@ -498,9 +524,12 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `grass`
 * `grave_yard`
 * `groyne`
+* `guard_rail`
 * `hanami`
+* `harbour`
 * `hospital`
 * `industrial`
+* `kerb`
 * `land`
 * `library`
 * `maze`
@@ -511,19 +540,24 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
+* `naval_base`
 * `park`
 * `parking`
 * `pedestrian`
 * `petting_zoo`
 * `picnic_site`
-* `pier`
+* `pier` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `pitch`
 * `place_of_worship`
 * `plant`
 * `playground`
+* `port_terminal`
+* `power_line`
+* `power_minor_line`
 * `prison`
 * `protected_area`
 * `quarry`
+* `quay` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `railway`
 * `recreation_ground`
 * `recreation_track`
@@ -540,6 +574,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `scree`
 * `scrub`
 * `service_area`
+* `shipyard`
 * `snow_fence`
 * `sports_centre`
 * `stadium`
@@ -555,11 +590,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `urban_area`
 * `urban`
 * `village_green`
+* `wall`
 * `wastewater_plant`
 * `water_park`
 * `water_slide`
 * `water_works`
 * `wetland`
+* `wharf`
 * `wilderness_hut`
 * `wildlife_park`
 * `winery`
@@ -568,12 +605,27 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `works`
 * `zoo`
 
+#### Cemetery and grave_yard `kind_detail` values:
+
+The value of the OpenStreetMap `religion` tag is used for `kind_detail` on `cemetery` and `grave_yard` features. Common values include `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+
+NOTE: A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag. Common values include `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
+
+#### Fence `kind_detail` values:
+
+The value of the OpenStreetMap `fence_type` tag. Common values include `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `electric`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `split_rail`, `stone`, `wall`, `wire`, and `wood`.
+
+#### Wall `kind_detail` values:
+
+The value of the OpenStreetMap `wall` tag. Common values include `brick`, `castle_wall`, `concrete`, `dry_stone`, `drystone`, `flood_wall`, `gabion`, `jersey_barrier`, `noise_barrier`, `pise`, `retaining_wall`, `seawall`, `stone`, and `stone_bank`.
+
 ##### Wetland `kind_detail` values:
 
-The value of the OpenStreetMap `wetland` tag. Common values are `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
+The value of the OpenStreetMap `wetland` tag. Common values include `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
 
 #### Wood and forest `kind_detail` values
-* The value of the OpenStreetMap `leaf_type` tag. [Common values](https://taginfo.openstreetmap.org/keys/leaf_type#values) are `broadleaved`, `needleleaved`, or `mixed`.
+
+* The value of the OpenStreetMap `leaf_type` tag. [Common values](https://taginfo.openstreetmap.org/keys/leaf_type#values) include `broadleaved`, `needleleaved`, or `mixed`.
 
 ## Places
 
@@ -588,7 +640,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 
 ![image](images/mapzen-vector-tile-docs-places-neighbourhoods.png)
 
-**Neighbourhoods:** [Who's On First](http://whosonfirst.mapzen.com) `neighbourhood` and `macrohood` features are added starting at zoom 12. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
+**Neighbourhoods:** [Who's On First](http://www.whosonfirst.org/) `neighbourhood` and `macrohood` features are added starting at zoom 12. Neighbourhoods are included one zoom earlier than their `min_zoom`, and stay included 1 zoom past their `max_zoom`.
 
 
 #### Place properties (common):
@@ -597,7 +649,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
-* `source`: `openstreetmap`, `naturalearthdata.com`, or  `whosonfirst.mapzen.com`
+* `source`: `openstreetmap`, `naturalearthdata.com`, or `whosonfirst.org`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
 #### Place properties (common optional):
@@ -700,6 +752,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
 
+#### POI properties (only on `kind:marina`, `kind:camp_site` and `kind:caravan_site`)
+
+* `sanitary_dump_station`: One of `yes`, `customers` or `public` if there are sanitary dump facilities at this location, and who is permitted to use them.
+
 #### POI properties (only on `charging_station`):
 
 * `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
@@ -710,6 +766,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `accountant`
 * `adit`
 * `administrative`
+* `adult_gaming_centre`
 * `advertising_agency`
 * `aerodrome`
 * `aeroway_gate`
@@ -750,6 +807,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `boat_rental`
 * `boat_storage`
 * `bollard`
+* `boatyard`
+* `boat_lift`
 * `books`
 * `brewery`
 * `bus_station`
@@ -765,6 +824,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `care_home`
 * `carousel`
 * `carpenter`
+* `cattle_grid`
 * `cave_entrance`
 * `cemetery`
 * `chalet`
@@ -786,11 +846,15 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `consulting`
 * `convenience`
 * `courthouse`
+* `crane`
 * `cross`
+* `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
+* `danger` - e.g: military training zones, firing ranges.
 * `dam`
 * `day_care`
+* `defibrillator`
 * `deli`
 * `dentist`
 * `department_store`
@@ -833,20 +897,24 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `gallery` - An art gallery.
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
+* `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
-* `gate`
+* `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
 * `generator`
 * `geyser`
 * `gift`
+* `golf` - Shop selling golf equipment.
 * `golf_course`
 * `government`
-* `greengrocer`
+* `greengrocer` - Shop selling fruits and vegetables.
+* `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
 * `group_home`
 * `guest_house`
 * `hairdresser`
 * `halt`
 * `hanami`
 * `handicraft`
+* `harbourmaster`
 * `hardware`
 * `hazard`
 * `healthcare`
@@ -886,9 +954,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `midwife`
 * `military`
 * `mineshaft`
-* `mini_roundabout`
+* `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
 * `mobile_phone`
 * `monument`
+* `mooring` - A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `motel`
 * `motorcycle`
 * `motorcycle_parking`
@@ -958,11 +1027,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `rock`
 * `roller_coaster`
 * `saddle`
+* `sanitary_dump_station`
 * `sawmill`
 * `school` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `scuba_diving`
 * `service_area`
 * `shelter`
+* `ship_chandler`
 * `shoemaker`
 * `shoes`
 * `shower`
@@ -1048,7 +1119,7 @@ More than just roads, this OpenStreetMap and Natural Earth based transportation 
 
 Road names are **abbreviated** so directionals like `North` is replaced with `N`, `Northeast` is replaced with `NE`, and common street suffixes like `Avenue` to `Ave.` and `Street` to `St.`. Full details in the [StreetNames](https://github.com/nvkelso/map-label-style-manual/blob/master/tools/street_names/StreetNames/__init__.py) library.
 
-Mapzen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
+Tilezen calculates the `landuse_kind` value by intercutting `roads` with the `landuse` layer to determine if a road segment is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of roads over these features. For instance, light grey minor roads look great in general, but aren't legible over most landuse colors unless they are darkened.
 
 To improve performance, some road segments are merged at low and mid-zooms. To facilitate this, certain properties are dropped at those zooms. Examples include `is_bridge` and `is_tunnel`, `name`, `network`, `oneway`, and `ref`. The exact zoom varies per feature class (major roads keep this properties over a wider range, minor roads drop them starting at zoom 14). When roads are merged, the original OSM `id` values are dropped.
 
@@ -1140,7 +1211,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary`.
 
-**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `unclassified`, and `road`. Zoom 13 adds `primary_link`, `secondary_link`, `raceway`, `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway`. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, `corridor`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`. Internationally and nationally significant paths (`path`, `footway`, `steps`) are added at zoom 9, regionally significant paths are added at zoom 11, locally significant at zoom 12, and named or designated paths at zoom 13. Internationally and nationally significant bicycle routes are added at zoom 8, regionally significant bike routes at zoom 10, and locally significant at zoom 11.
+**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary`, `unclassified`, and paved grade1 `track` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `road`, and grade1 and grade2 `track`. Zoom 13 adds `primary_link`, `secondary_link`, `raceway`, remaining `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway`. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, `corridor`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`. Internationally and nationally significant paths (`path`, `footway`, `steps`) are added at zoom 9, regionally significant paths are added at zoom 11, locally significant at zoom 12, and named or designated paths at zoom 13. Internationally and nationally significant bicycle routes are added at zoom 8, regionally significant bike routes at zoom 10, and locally significant at zoom 11.
 
 **Ferries** from both Natural Earth and OpenStreetMap are shown starting at zoom 5 with `kind` values of `ferry`.
 
@@ -1183,7 +1254,7 @@ Railway `service` values are:
 
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
-**Piers** start showing up at zoom 13+ with `kind_detail` values of `pier`.
+**Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
 ## Transit
 

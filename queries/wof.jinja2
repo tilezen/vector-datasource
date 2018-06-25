@@ -7,7 +7,7 @@ SELECT
     COALESCE(to_jsonb(l10n_name), '{}'::jsonb) ||
     jsonb_build_object(
       'name', name,
-      'source', 'whosonfirst.mapzen.com',
+      'source', 'whosonfirst.org',
       'mz_n_photos', n_photos,
       'area', area,
       'is_landuse_aoi', is_landuse_aoi,

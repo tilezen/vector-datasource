@@ -1,5 +1,5 @@
-bucket: mapzen-tiles-assets
-datestamp: 20171201
+bucket: tilezen-assets
+datestamp: 20180614
 
 shapefiles:
 
@@ -22,10 +22,15 @@ shapefiles:
     shapefile-name: land-polygons-split-3857/land_polygons.shp
 
   - name: buffered_land
-    url: http://s3.amazonaws.com/mapzen-tiles-assets/curated/buffered_land_05232017.zip
+    url: http://s3.amazonaws.com/tilezen-assets/curated/buffered_land_05232017.zip
     prj: 3857
     shapefile-name: buffered_land_05232017.shp
     tile: true
+
+  - name: admin_areas
+    url: http://s3.amazonaws.com/tilezen-assets/curated/admin_areas_20180409.zip
+    prj: 4326
+    shapefile-name: admin_areas_20180409.shp
 
   - name: ne_110m_lakes
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
@@ -124,3 +129,15 @@ shapefiles:
   - name: ne_10m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
     prj: 43267
+
+  - name: ne_10m_admin_0_countries
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
+    prj: 4326
+
+  - name: ne_10m_admin_0_map_units
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_map_units.zip
+    prj: 4326
+
+  - name: ne_10m_admin_1_states_provinces
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip
+    prj: 4326

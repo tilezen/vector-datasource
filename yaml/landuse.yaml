@@ -20,6 +20,7 @@ global:
     attraction: {col: attraction}
     zoo: {col: zoo}
     barrier: {col: barrier}
+    fence_type: {col: fence_type}
     min_zoom:
       case:
         - when: { meta.source: ne }
@@ -450,6 +451,19 @@ filters:
       <<: *output_properties
       kind: aerodrome
       tier: 3
+  - filter: {military: airfield}
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
+      tier: 3
+  - filter: {military: naval_base}
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: naval_base
+      tier: 3
   - filter: {landuse: military}
     min_zoom: *tier3_min_zoom
     output:
@@ -486,6 +500,8 @@ filters:
       <<: *output_properties
       kind: cemetery
       tier: 4
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   # commercial
   - filter: {landuse: commercial}
     min_zoom: *tier4_min_zoom
@@ -591,7 +607,31 @@ filters:
       <<: *output_properties
       kind: winter_sports
       tier: 4
-  # pier
+  # port, ferry, container terminals
+  - filter:
+      landuse:
+        - harbour
+        - port
+        - port_terminal
+        - ferry_terminal
+        - container_terminal
+    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+  # pier with mooring
+  - filter:
+      man_made: pier
+      geom_type: polygon
+      mooring: [
+        'no', 'yes', commercial, cruise, customers, declaration, ferry, guest,
+        private, public, waiting, yacht, yachts]
+    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
+    output:
+      <<: *output_properties
+      kind: pier
+      mooring: {col: mooring}
+  # pier without mooring
   - filter:
       man_made: pier
       geom_type: polygon
@@ -1028,11 +1068,59 @@ filters:
     output:
       <<: *output_properties
       kind: retaining_wall
-  - filter: {barrier: fence}
+  - filter: {barrier: wall}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: wall
+      kind_detail: { col: wall }
+  - filter: {barrier: [kerb, guard_rail, ditch]}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: {col: barrier}
+  - filter:
+      military: danger_area
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: danger
+    extra_columns: [way]
+
+  # whitelist fence_type if it's present, otherwise don't include it. this
+  # means we don't get random values in the output that we can't document.
+  - filter:
+      barrier: fence
+      fence_type: [avalanche, barbed_wire, bars, brick, chain, chain_link, concrete, drystone_wall, electric, grate, hedge, metal, metal_bars, net, pole, railing, railings, split_rail, steel, stone, wall, wire, wood]
     min_zoom: 16
     output:
       <<: *output_properties
       kind: fence
+      kind_detail: { col: fence_type }
+  - filter:
+      barrier: fence
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: fence
+
+  - filter: {barrier: wire_fence}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: fence
+      kind_detail: wire
+  - filter: {power: line}
+    min_zoom: 14
+    output:
+      <<: *output_properties
+      kind: power_line
+  - filter: {power: minor_line}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: power_minor_line
   - filter: {tourism: camp_site}
     min_zoom: { clamp: { min: 13, max: 16, value: { col: zoom } } }
     output:
@@ -1048,3 +1136,33 @@ filters:
     output:
       <<: *output_properties
       kind: grave_yard
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
+  - filter:
+      man_made: crane
+      geom_type: line
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: crane
+      kind_detail: {col: "crane:type"}
+  - filter:
+      landuse:
+        - shipyard
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+  - filter:
+      landuse:
+        - wharf
+        - quay
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+  - filter: {man_made: quay}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: quay

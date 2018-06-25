@@ -1,4 +1,4 @@
-# Mapzen Vector Tile Tests
+# Tilezen Vector Tile Tests
 
 ## Code / Unit Tests
 
@@ -67,7 +67,7 @@ Fixture data should be loaded in each test that needs it; either once for the cl
 
 1. `https://www.openstreetmap.org/...` to load OSM nodes, ways and relations.
 2. `http://overpass-api.de/api/interpreter?data=...` to make a query against Overpass API.
-3. `https://whosonfirst.mapzen.com/data/...` to load data from WhosOnFirst.
+3. `https://data.whosonfirst.org/...` to load data from Who's On First.
 4. `file://integration-test/fixtures/...` to load data from a bundled shapefile. This is useful to handle fixtures from Natural Earth data, or pre-packaged shapefiles from OpenStreetMapData.
 
 Additionally, optional arguments can be provided to `load_fixtures`:

@@ -1,4 +1,17 @@
--- only these 2 columns are relevant in lower zoom queries
+UPDATE planet_osm_line
+  SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(planet_osm_line.*)
+  WHERE mz_landuse_min_zoom <> mz_calculate_min_zoom_landuse(planet_osm_line.*)
+    AND (man_made IN ('crane')
+         OR barrier IN ('wall')
+         OR power IN ('line','minor_line'));
+
+UPDATE planet_osm_line
+  SET mz_road_level = mz_calculate_min_zoom_roads(planet_osm_line.*)
+  WHERE (tags -> 'highway' IN ( 'track', 'unclassified') )
+      AND mz_calculate_min_zoom_roads(planet_osm_line.*) IS NOT NULL
+      AND mz_road_level IS NOT NULL
+      AND mz_road_level <> mz_calculate_min_zoom_roads(planet_osm_line.*);
+
 SET client_min_messages TO WARNING;
 CREATE INDEX IF NOT EXISTS
   planet_osm_line_geom_min_zoom_8_index
@@ -6,6 +19,8 @@ CREATE INDEX IF NOT EXISTS
   WHERE
     mz_landuse_min_zoom < 8 OR
     mz_transit_level < 8;
+
+
 
 -- ladder the higher zoom level indexes
 CREATE INDEX IF NOT EXISTS

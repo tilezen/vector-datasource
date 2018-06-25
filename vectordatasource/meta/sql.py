@@ -68,6 +68,9 @@ LAYER_TABLES = {
         'planet_osm_polygon',
         'water_polygons',
     ],
+    'admin_areas': [
+        'admin_areas',
+    ],
 }
 
 
@@ -89,6 +92,7 @@ POLYGON_TABLES = [
     'ne_50m_playas',
     'ne_50m_urban_areas',
     'water_polygons',
+    'admin_areas',
 ]
 
 
@@ -667,7 +671,7 @@ def table_is_polygonal(name):
 
 
 def calculate_meta_source_for_table(name):
-    if table_is_osm(name):
+    if table_is_osm(name) or name == 'admin_areas':
         return 'osm'
     elif name.startswith('ne_'):
         return 'ne'

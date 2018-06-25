@@ -35,8 +35,8 @@ class BusRouteRefs(FixtureTest):
             {'id': 225516711,
              'bus_network': type(None),
              'bus_shield_text': '3',
-             'all_bus_networks': [None, None],
-             'all_bus_shield_texts': ['3', '3']})
+             'all_bus_networks': [type(None)],
+             'all_bus_shield_texts': ['3']})
 
     def test_full_lists_disappear_by_zoom_12(self):
         # make sure the all_* lists are gone by zoom 12 on major roads, but

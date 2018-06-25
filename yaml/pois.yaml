@@ -132,30 +132,78 @@ global:
   - &no_name_okay
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
-        - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, bureau_de_change, car_sharing, customs,
-            car_sharing, car_wash, charging_station, hunting_stand, fuel, harbourmaster, 
-            karaoke_box, life_ring, money_transfer, motorcycle_parking, parking,
-            picnic_table, post_box, ranger_station, recycling, shelter, shower, taxi,
-            telephone, toilets, waste_basket, waste_disposal, water_point,
-            watering_place ]
-        - barrier: [ border_control, cycle_barrier, gate, toll_booth ]
-        - emergency: [ fire_hydrant, lifeguard_tower, phone ]
+        - amenity:
+          - atm
+          - bbq
+          - bench
+          - bicycle_parking
+          - bicycle_rental
+          - bicycle_repair_station
+          - boat_storage
+          - bureau_de_change
+          - car_sharing
+          - car_wash
+          - charging_station
+          - customs
+          - fuel
+          - harbourmaster
+          - hunting_stand
+          - karaoke_box
+          - life_ring
+          - money_transfer
+          - motorcycle_parking
+          - parking
+          - picnic_table
+          - post_box
+          - ranger_station
+          - recycling
+          - sanitary_dump_station
+          - shelter
+          - shower
+          - taxi
+          - telephone
+          - toilets
+          - waste_basket
+          - waste_disposal
+          - water_point
+          - watering_place
+        - barrier:
+          - block
+          - bollard
+          - border_control
+          - cattle_grid
+          - chain
+          - cycle_barrier
+          - gate
+          - kissing_gate
+          - lift_gate
+          - stile
+          - swing_gate
+          - toll_booth
+        - emergency:
+          - defibrillator
+          - fire_hydrant
+          - lifeguard_tower
+          - phone
+        - harbour: harbour_master
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, street_lamp, traffic_signals, trailhead ]
         - historic: landmark
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
         - lock: yes
-        - man_made: [ adit, communications_tower, mast, mineshaft, observatory,
+        - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, watermill, windmill ]
+        - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
         - power: [ pole, tower ]
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
-        - tags->'health_facility:type': field_hospital
+        - "health_facility:type": field_hospital
+        - "seamark:building:function": harbour_master
+        - "seamark:small_craft_facility:category": fuel_station
         - tags->icn_ref: true
         - tags->iwn_ref: true
         - tags->lcn_ref: true
@@ -166,7 +214,14 @@ global:
         - tags->rwn_ref: true
         - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
         - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
-        - waterway: [ boat_lift, dam, fuel, lock, waterfall ]
+        - waterway:
+          - boat_lift
+          - boatyard
+          - dam
+          - fuel
+          - lock
+          - sanitary_dump_station
+          - waterfall
 
 filters:
   # remove disused things, they're not real POIs any more
@@ -402,6 +457,21 @@ filters:
       <<: *output_properties
       kind: {col: aeroway}
       tier: 3
+  # miltary airfield
+  - filter: {military: airfield}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
+      tier: 3
+  # military danger area
+  - filter: {military: danger_area}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: danger
+      tier: 3
   # military
   - filter: {landuse: military}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
@@ -450,6 +520,8 @@ filters:
       <<: *output_properties
       kind: cemetery
       tier: 4
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   # commercial - no POI
   # cutline - no POI
   # dike - no POI
@@ -785,8 +857,18 @@ filters:
     output:
       <<: *output_properties
       kind: level_crossing
+  # filter the waterway / boat fuel before generic amenity=fuel, as they appear
+  # to be often tagged with both.
   - filter:
-      amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
+      any:
+        - waterway: fuel
+        - "seamark:small_craft_facility:category": fuel_station
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: waterway_fuel
+  - filter:
+      amenity: [bank, cinema, courthouse, customs, embassy, fire_station, fuel, library, police,
         post_office, theatre]
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
@@ -829,7 +911,7 @@ filters:
       <<: *output_properties
       kind: {col: craft}
   - filter:
-      shop: [charity, variety_store, furniture, shoes, pet]
+      shop: [charity, furniture_golf, pet, shoes, store, variety]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
@@ -915,6 +997,10 @@ filters:
     output:
       <<: *output_properties
       kind: marina
+      sanitary_dump_station:
+        case:
+          - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
+            then: {col: sanitary_dump_station}
   - filter: {amenity: townhall}
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.85 ] } } }
     output:
@@ -945,7 +1031,7 @@ filters:
       <<: *output_properties
       kind: electronics
   - filter:
-      shop: [department_store, supermarket, doityourself, hardware, trade]
+      shop: [department_store, supermarket, doityourself, hardware, trade, garden_centre]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
     output:
       <<: *output_properties
@@ -1085,36 +1171,41 @@ filters:
       kind: ambulatory_care
       <<: *health_facility_type_kind_detail
   - filter:
-      amenity: [social_facility, clinic, doctors, dentist]
+      amenity: [clinic_dentist, doctors, facility, social]
     min_zoom: 17
     output:
       <<: *output_properties
       kind: {col: amenity}
       <<: *health_facility_type_kind_detail
-  - filter: {tags->healthcare: [midwife, physiotherapist, psychotherapist, rehabilitation, podiatrist, optometrist, blood_bank, blood_donation, speech_therapist, occupational_therapist, chiropractor, hospice, physiotherapy, paediatrics]}
+  - filter: {healthcare: [bank, blood, chiropractor, donation, hospice, midwife, midwife_occupational, optometrist_paediatrics, physiotherapist_physiotherapy, podiatrist_psychotherapist, rehabilitation, speech, therapist, therapist]}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: {col: tags->healthcare}
       <<: *health_facility_type_kind_detail
-  - filter: {tags->healthcare: alternative}
+  - filter: {healthcare: alternative}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: healthcare_alternative
       <<: *health_facility_type_kind_detail
-  - filter: {tags->healthcare: centre}
+  - filter: {healthcare: centre}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: healthcare_centre
       <<: *health_facility_type_kind_detail
-  - filter: {tags->healthcare: laboratory}
+  - filter: {healthcare: laboratory}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: healthcare_laboratory
       <<: *health_facility_type_kind_detail
+  - filter: {healthcare: [blood_donation, blood_bank]}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: blood_bank
   - filter:
       amenity: [baby_hatch, kindergarten, childcare]
     min_zoom: 17
@@ -1149,7 +1240,7 @@ filters:
       <<: *output_properties
       kind: toilets
       kind_detail: {col: 'toilets:disposal'}
-  - filter: {barrier: gate}
+  - filter: {barrier: [chain, gate_gate, gate_gate, kissing_lift, stile, swing]}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
       <<: *output_properties
@@ -1259,7 +1350,7 @@ filters:
       <<: *output_properties
       kind: stop_area
   - filter: {tourism: alpine_hut}
-    min_zoom: 15
+    min_zoom: 13
     output:
       <<: *output_properties
       kind: alpine_hut
@@ -1286,7 +1377,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      barrier: [block, bollard, lift_gate]
+      barrier: [block, bollard, cattle_grid]
     min_zoom: 16
     output:
       <<: *output_properties
@@ -1400,6 +1491,10 @@ filters:
     output:
       <<: *output_properties
       kind: camp_site
+      sanitary_dump_station:
+        case:
+          - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
+            then: {col: sanitary_dump_station}
   - filter:
       tourism: viewpoint
     min_zoom: 15
@@ -1430,6 +1525,16 @@ filters:
     output:
       <<: *output_properties
       kind: memorial
+  # slipway with mooring info
+  - filter:
+      leisure: slipway
+      mooring: ['yes', 'no']
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: slipway
+      mooring: {col: mooring}
+  # plain slipway without mooring info
   - filter: { leisure: slipway }
     min_zoom: 17
     output:
@@ -1440,6 +1545,11 @@ filters:
     output:
       <<: *output_properties
       kind: mast
+  - filter: {emergency: defibrillator}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: defibrillator
   - filter:
       office: [accountant, administrative, advertising_agency, architect, association,
         company, consulting, educational_institution, employment_agency, estate_agent,
@@ -1556,10 +1666,39 @@ filters:
       <<: *output_properties
       kind: cycle_barrier
   - filter:
-      shop: [art, bakery, beauty, bookmaker, books, butcher, car, car_parts, car_repair,
-        clothes, computer, convenience, fashion, florist, garden_centre, gift, greengrocer,
-        grocery, golf, hairdresser, hifi, jewelry, lottery, mobile_phone, newsagent, optician,
-        perfumery, ship_chandler, stationery, tobacco, travel_agency]
+      shop:
+        - art
+        - bakery
+        - beauty
+        - bookmaker
+        - books
+        - butcher
+        - car
+        - car_parts
+        - car_repair
+        - clothes
+        - computer
+        - convenience
+        - fashion
+        - florist
+        - garden_centre
+        - gift
+        - golf
+        - greengrocer
+        - grocery
+        - hairdresser
+        - hifi
+        - jewelry
+        - lottery
+        - mobile_phone
+        - newsagent
+        - optician
+        - optician,
+        - perfumery
+        - ship_chandler
+        - stationery
+        - tobacco
+        - travel_agency
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1756,6 +1895,19 @@ filters:
     output:
       <<: *output_properties
       kind: petroleum_well
+  # a boat lift is a more specific type of object than a crane, although it may
+  # or may not be an instance of a crane.
+  - filter: {waterway: boat_lift}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: boat_lift
+  - filter: {man_made: crane}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: crane
+      kind_detail: {col: "crane:type"}
   - filter: {leisure: water_park}
     min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.34 ] } } }
     output:
@@ -1806,6 +1958,10 @@ filters:
     output:
       <<: *output_properties
       kind: caravan_site
+      sanitary_dump_station:
+        case:
+          - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
+            then: {col: sanitary_dump_station}
   - filter: {tourism: picnic_site}
     min_zoom: 16
     output:
@@ -1826,6 +1982,8 @@ filters:
     output:
       <<: *output_properties
       kind: grave_yard
+      kind_detail: { col: religion }
+      denomination: { col: denomination }
   - filter: {landuse: quarry}
     min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
@@ -1836,6 +1994,63 @@ filters:
     output:
       <<: *output_properties
       kind: slaughterhouse
+  - filter:
+      leisure:
+        - adult_gaming_centre
+        # fairly common misspelling
+        - adult_gaming_center
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: adult_gaming_centre
+  - filter:
+      waterway: boatyard
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: boatyard
+  - filter:
+      any:
+        - amenity: harbourmaster
+        - harbour: harbour_master
+        - "seamark:building:function": harbour_master
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: harbourmaster
+  # moorings with more detail
+  - filter:
+      mooring: [
+        commercial, cruise, customers, declaration, ferry, guest,
+        pile, waiting, yacht, yachts]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+      kind_detail: {col: mooring}
+  # moorings with access restrictions
+  - filter:
+      mooring: [ private, public ]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+      access: {col: mooring}
+  # plain moorings, without detail
+  - filter: {mooring: true}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+
+  - filter:
+      any:
+        - amenity: sanitary_dump_station
+        - waterway: sanitary_dump_station
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: sanitary_dump_station
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

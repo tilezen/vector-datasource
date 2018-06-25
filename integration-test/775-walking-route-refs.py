@@ -41,4 +41,4 @@ class WalkingRouteRefs(FixtureTest):
              'walking_network': 'nwn', 'walking_shield_text': 'PCT',
              'all_walking_networks': ['nwn', 'nwn', 'rwn', 'rwn'],
              'all_walking_shield_texts': [
-                 'PCT', 'PCT Section H', 'JMT', None]})
+                 'PCT', 'PCT Section H', 'JMT', type(None)]})

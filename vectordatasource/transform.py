@@ -235,6 +235,43 @@ def road_classifier(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def add_road_network_from_ncat(shape, properties, fid, zoom):
+    """
+    Many South Korean roads appear to have an "ncat" tag, which seems to
+    correspond to the type of road network (perhaps "ncat" = "national
+    category"?)
+
+    This filter carries that through into "network", unless it is already
+    populated.
+    """
+
+    if properties.get('network') is None:
+        tags = properties.get('tags', {})
+        ncat = _make_unicode_or_none(tags.get('ncat'))
+
+        if ncat == u'국도':
+            # national roads - gukdo
+            properties['network'] = 'KR:national'
+
+        elif ncat == u'광역시도로':
+            # metropolitan city roads - gwangyeoksido
+            properties['network'] = 'KR:metropolitan'
+
+        elif ncat == u'특별시도':
+            # special city (Seoul) roads - teukbyeolsido
+            properties['network'] = 'KR:metropolitan'
+
+        elif ncat == u'고속도로':
+            # expressways - gosokdoro
+            properties['network'] = 'KR:expressway'
+
+        elif ncat == u'지방도':
+            # local highways - jibangdo
+            properties['network'] = 'KR:local'
+
+    return shape, properties, fid
+
+
 def road_trim_properties(shape, properties, fid, zoom):
     properties = _remove_properties(properties, 'bridge', 'tunnel')
     return shape, properties, fid
@@ -370,6 +407,16 @@ def _convert_wof_l10n_name(x):
     return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
+def _convert_ne_l10n_name(x):
+    if len(x) != 2:
+        return None
+    try:
+        lang = pycountry.languages.get(alpha_2=x)
+    except KeyError:
+        return None
+    return LangResult(code=_alpha_2_code_of(lang), priority=0)
+
+
 def _normalize_osm_lang_code(x):
     # first try an alpha-2 code
     try:
@@ -451,8 +498,9 @@ def tags_name_i18n(shape, properties, fid, zoom):
         return shape, properties, fid
 
     source = properties.get('source')
-    is_wof = source == 'whosonfirst.mapzen.com'
+    is_wof = source == 'whosonfirst.org'
     is_osm = source == 'openstreetmap.org'
+    is_ne = source == 'naturalearthdata.com'
 
     if is_osm:
         alt_name_prefix_candidates = [
@@ -462,10 +510,22 @@ def tags_name_i18n(shape, properties, fid, zoom):
     elif is_wof:
         alt_name_prefix_candidates = ['name:']
         convert_fn = _convert_wof_l10n_name
+
+    elif is_ne:
+        # replace name_xx with name:xx in tags
+        for k in tags.keys():
+            if k.startswith('name_'):
+                value = tags.pop(k)
+                tag_k = k.replace('_', ':')
+                tags[tag_k] = value
+
+        alt_name_prefix_candidates = ['name:']
+        convert_fn = _convert_ne_l10n_name
+
     else:
-        # conversion function only implemented for things which come from OSM
-        # or WOF - implement more cases here when more localized named sources
-        # become available.
+        # conversion function only implemented for things which come from OSM,
+        # NE or WOF - implement more cases here when more localized named
+        # sources become available.
         return shape, properties, fid
 
     langs = {}
@@ -904,6 +964,25 @@ def _intersect_overlap(min_fraction):
     return _f
 
 
+# intersect by looking at the overlap length. if more than a minimum fraction
+# of the shape's length is within the cutting area, then we will consider it
+# totally "cut".
+def _intersect_linear_overlap(min_fraction):
+    # the inner function is what will actually get
+    # called, but closing over min_fraction means it
+    # will have access to that.
+    def _f(shape, cutting_shape):
+        overlap = shape.intersection(cutting_shape).length
+        total = shape.length
+        empty = type(shape)()
+
+        if ((total > 0) and (overlap / total) >= min_fraction):
+            return shape, empty
+        else:
+            return empty, shape
+    return _f
+
+
 # find a layer by iterating through all the layers. this
 # would be easier if they layers were in a dict(), but
 # that's a pretty invasive change.
@@ -1072,8 +1151,18 @@ def overlap(ctx):
     keep_geom_type = ctx.params.get('keep_geom_type', True)
     min_fraction = ctx.params.get('min_fraction', 0.8)
 
+    # use a different function for linear overlaps (i.e: roads with polygons)
+    # than area overlaps. keeping this explicit (rather than relying on the
+    # geometry type) means we don't end up with unexpected lines in a polygonal
+    # layer.
+    linear = ctx.params.get('linear', False)
+    if linear:
+        overlap_fn = _intersect_linear_overlap(min_fraction)
+    else:
+        overlap_fn = _intersect_overlap(min_fraction)
+
     return _intercut_impl(
-        _intersect_overlap(min_fraction), feature_layers, base_layer,
+        overlap_fn, feature_layers, base_layer,
         cutting_layer, attribute, target_attribute, cutting_attrs,
         keep_geom_type)
 
@@ -1819,7 +1908,16 @@ def admin_boundaries(ctx):
                 cut_envelope = envelopes[j]
 
                 if envelope.intersects(cut_envelope):
-                    inside, boundary = _intersect_cut(boundary, cut_shape)
+                    try:
+                        inside, boundary = _intersect_cut(boundary, cut_shape)
+                    except (StandardError, shapely.errors.ShapelyError):
+                        # if the inside and remaining boundary can't be
+                        # calculated, then we can't continue to intersect
+                        # anything else with this shape. this means we might
+                        # end up with erroneous one-sided boundaries.
+
+                        # TODO: log warning!
+                        break
 
                     inside = _linemerge(inside)
                     if not inside.is_empty:
@@ -3115,6 +3213,35 @@ def normalize_tourism_kind(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
+# a whitelist of the most common fence types from OSM.
+# see https://taginfo.openstreetmap.org/keys/fence_type#values
+_WHITELIST_FENCE_TYPES = set([
+    'avalanche',
+    'barbed_wire',
+    'bars',
+    'brick',  # some might say a fence made of brick is called a wall...
+    'chain',
+    'chain_link',
+    'concrete',
+    'drystone_wall',
+    'electric',
+    'grate',
+    'hedge',
+    'metal',
+    'metal_bars',
+    'net',
+    'pole',
+    'railing',
+    'railings',
+    'split_rail',
+    'steel',
+    'stone',
+    'wall',
+    'wire',
+    'wood',
+])
+
+
 def build_fence(ctx):
     """
     Some landuse polygons have an extra barrier fence tag, in thouse cases we
@@ -3160,17 +3287,20 @@ def build_fence(ctx):
 
         barrier = props.pop('barrier', None)
 
-        if barrier is not None:
-            if barrier == 'fence':
-                # filter only linestring-like objects. we don't
-                # want any points which might have been created
-                # by the intersection.
-                filtered_shape = _filter_geom_types(shape, _POLYGON_DIMENSION)
+        if barrier == 'fence':
+            fence_type = props.pop('fence_type', None)
+            # filter only linestring-like objects. we don't
+            # want any points which might have been created
+            # by the intersection.
+            filtered_shape = _filter_geom_types(shape, _POLYGON_DIMENSION)
 
-                if not filtered_shape.is_empty:
-                    new_props = _make_new_properties(props, prop_transform)
-                    new_props['kind'] = 'fence'
-                    new_features.append((filtered_shape, new_props, fid))
+            if not filtered_shape.is_empty:
+                new_props = _make_new_properties(props, prop_transform)
+                new_props['kind'] = 'fence'
+                if fence_type in _WHITELIST_FENCE_TYPES:
+                    new_props['kind_detail'] = fence_type
+
+                new_features.append((filtered_shape, new_props, fid))
 
     if new_layer_name is None:
         # no new layer requested, instead add new
@@ -3443,6 +3573,15 @@ class CSVMatcher(object):
                 return (self.target_key, target_val)
 
         return None
+
+
+class YAMLToDict(dict):
+    def __init__(self, fh):
+        import yaml
+        data = yaml.load(fh)
+        assert isinstance(data, dict)
+        for k, v in data.iteritems():
+            self[k] = v
 
 
 def csv_match_properties(ctx):
@@ -3991,6 +4130,2403 @@ _NETWORK_OPERATORS = {
 }
 
 
+def _ref_importance(ref):
+    try:
+        # first, see if the reference is a number, or easily convertible
+        # into one.
+        ref = int(ref or 0)
+    except ValueError:
+        # if not, we can try to extract anything that looks like a sequence
+        # of digits from the ref.
+        m = _ANY_NUMBER.match(ref)
+        if m:
+            ref = int(m.group(1))
+        else:
+            # failing that, we assume that a completely non-numeric ref is
+            # a name, which would make it quite important.
+            ref = 0
+
+    # make sure no ref is negative
+    ref = abs(ref)
+
+    return ref
+
+
+def _guess_network_gb(tags):
+    # for roads we put the original OSM highway tag value in kind_detail, so we
+    # can recover it here.
+    highway = tags.get('kind_detail')
+
+    ref = tags.get('ref')
+    networks = []
+    # although roads are part of only one network in the UK, some roads are
+    # tagged incorrectly as being part of two, so we have to handle this case.
+    for part in ref.split(';'):
+        if not part:
+            continue
+
+        # letter at the start of the ref indicates the road class. generally
+        # one of 'M', 'A', or 'B' - although other letters exist, they are
+        # rarely used.
+        letter, number = _splitref(part)
+
+        # UK is tagged a bit weirdly, using the highway tag value in addition
+        # to the ref to figure out which road class should be applied. the
+        # following is not applied strictly, but is a "best guess" at the
+        # appropriate signage colour.
+        #
+        # https://wiki.openstreetmap.org/wiki/United_Kingdom_Tagging_Guidelines
+        if letter == 'M' and highway == 'motorway':
+            networks.append(('GB:M-road', 'M' + number))
+
+        elif ref.endswith('(M)') and highway == 'motorway':
+            networks.append(('GB:M-road', 'A' + number))
+
+        elif letter == 'A' and highway == 'trunk':
+            networks.append(('GB:A-road-green', 'A' + number))
+
+        elif letter == 'A' and highway == 'primary':
+            networks.append(('GB:A-road-white', 'A' + number))
+
+        elif letter == 'B' and highway == 'secondary':
+            networks.append(('GB:B-road', 'B' + number))
+
+    return networks
+
+
+def _guess_network_ar(tags):
+    ref = tags.get('ref')
+    if ref.startswith('RN'):
+        return [('AR:national', ref)]
+    elif ref.startswith('RP'):
+        return [('AR:provincial', ref)]
+    return None
+
+
+def _guess_network_au(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_au_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+# list of all the state codes in Brazil, see
+# https://en.wikipedia.org/wiki/ISO_3166-2:BR
+_BR_STATES = set([
+    'DF',  # Distrito Federal (federal district, not really a state)
+    'AC',  # Acre
+    'AL',  # Alagoas
+    'AP',  # Amapá
+    'AM',  # Amazonas
+    'BA',  # Bahia
+    'CE',  # Ceará
+    'ES',  # Espírito Santo
+    'GO',  # Goiás
+    'MA',  # Maranhão
+    'MT',  # Mato Grosso
+    'MS',  # Mato Grosso do Sul
+    'MG',  # Minas Gerais
+    'PA',  # Pará
+    'PB',  # Paraíba
+    'PR',  # Paraná
+    'PE',  # Pernambuco
+    'PI',  # Piauí
+    'RJ',  # Rio de Janeiro
+    'RN',  # Rio Grande do Norte
+    'RS',  # Rio Grande do Sul
+    'RO',  # Rondônia
+    'RR',  # Roraima
+    'SC',  # Santa Catarina
+    'SP',  # São Paulo
+    'SE',  # Sergipe
+    'TO',  # Tocantins
+])
+
+
+# additional road types
+_BR_NETWORK_EXPANSION = {
+    # Minas Gerais state roads
+    'AMG': 'BR:MG',
+    'LMG': 'BR:MG:local',
+    'MGC': 'BR:MG',
+    # CMG seems to be coupled with BR- roads of the same number
+    'CMG': 'BR:MG',
+
+    # Rio Grande do Sul state roads
+    'ERS': 'BR:RS',
+    'VRS': 'BR:RS',
+    'RSC': 'BR:RS',
+
+    # access roads in São Paulo?
+    'SPA': 'BR:SP',
+
+    # connecting roads in Paraná?
+    'PRC': 'BR:PR',
+
+    # municipal roads in Paulínia
+    'PLN': 'BR:SP:PLN',
+
+    # municipal roads in São Carlos
+    # https://pt.wikipedia.org/wiki/Estradas_do_munic%C3%ADpio_de_S%C3%A3o_Carlos#Identifica%C3%A7%C3%A3o
+    'SCA': 'BR:SP:SCA',
+}
+
+
+def _guess_network_br(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    # track last prefix, so that we can handle cases where the ref is written
+    # as "BR-XXX/YYY" to mean "BR-XXX; BR-YYY".
+    last_prefix = None
+
+    for prefix, num in re.findall('([A-Za-z]+)?[- ]?([0-9]+)', ref):
+        # if there's a prefix, save it for potential later use. if there isn't
+        # then use the previous one - if any.
+        if prefix:
+            last_prefix = prefix
+        else:
+            prefix = last_prefix
+
+        # make sure the prefix is from a network that we know about.
+        if prefix == 'BR':
+            network = prefix
+
+        elif prefix in _BR_STATES:
+            network = 'BR:' + prefix
+
+        elif prefix in _BR_NETWORK_EXPANSION:
+            network = _BR_NETWORK_EXPANSION[prefix]
+
+        else:
+            continue
+
+        networks.append((network, '%s-%s' % (prefix, num)))
+
+    return networks
+
+
+def _guess_network_ca(tags):
+    nat_name = tags.get('nat_name:en') or tags.get('nat_name')
+    ref = tags.get('ref')
+    network = tags.get('network')
+
+    networks = []
+
+    if network and ref:
+        networks.append((network, ref))
+
+    if nat_name and nat_name.lower() == 'trans-canada highway':
+        # note: no ref for TCH. some states appear to add route numbers from
+        # the state highway to the TCH shields, e.g:
+        # https://commons.wikimedia.org/wiki/File:TCH-16_(BC).svg
+        networks.append(('CA:transcanada', ref))
+
+    return networks
+
+
+def _guess_network_ch(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ch_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+    return networks
+
+
+def _guess_network_cn(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_cn_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_es(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        part = part.strip()
+        if not part:
+            continue
+        network, ref = _normalize_es_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+    return networks
+
+
+def _guess_network_fr(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_fr_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_de(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_de_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_ga(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ga_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_gr(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+
+        # ignore provincial refs, they should be on reg_ref. see:
+        # https://wiki.openstreetmap.org/wiki/WikiProject_Greece/Provincial_Road_Network
+        if part.startswith(u'ΕΠ'.encode('utf-8')):
+            continue
+
+        network, ref = _normalize_gr_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_in(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_in_netref(None, part)
+        networks.append((network, ref))
+    return networks
+
+
+def _guess_network_mx(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_mx_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_my(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_my_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_no(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_no_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_pe(tags):
+    ref = tags.get('ref')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_pe_netref(None, part)
+        networks.append((network, part))
+    return networks
+
+
+def _guess_network_jp(tags):
+    ref = tags.get('ref')
+
+    name = tags.get('name:ja') or tags.get('name')
+    network_from_name = None
+    if name:
+        if isinstance(name, str):
+            name = unicode(name, 'utf-8')
+        if name.startswith(u'国道') and \
+           name.endswith(u'号'):
+            network_from_name = 'JP:national'
+
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_jp_netref(None, part)
+
+        if network is None and network_from_name is not None:
+            network = network_from_name
+
+        if network and part:
+            networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_kr(tags):
+    ref = tags.get('ref')
+    network_from_tags = tags.get('network')
+
+    # the name often ends with a word which appears to mean expressway or
+    # national road.
+    name_ko = _make_unicode_or_none(tags.get('name:ko') or tags.get('name'))
+    if name_ko and network_from_tags is None:
+        if name_ko.endswith(u'국도'):
+            # national roads - gukdo
+            network_from_tags = 'KR:national'
+
+        elif name_ko.endswith(u'광역시도로'):
+            # metropolitan city roads - gwangyeoksido
+            network_from_tags = 'KR:metropolitan'
+
+        elif name_ko.endswith(u'특별시도'):
+            # special city (Seoul) roads - teukbyeolsido
+            network_from_tags = 'KR:metropolitan'
+
+        elif (name_ko.endswith(u'고속도로') or
+              name_ko.endswith(u'고속도로지선')):
+            # expressways - gosokdoro (and expressway branches)
+            network_from_tags = 'KR:expressway'
+
+        elif name_ko.endswith(u'지방도'):
+            # local highways - jibangdo
+            network_from_tags = 'KR:local'
+
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_kr_netref(None, part)
+
+        if network is None and network_from_tags is not None:
+            network = network_from_tags
+
+        if network and part:
+            networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_pl(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_pl_netref(None, part)
+        networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_pt(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_pt_netref(None, part)
+        networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_ro(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ro_netref(None, part)
+        if network or ref:
+            networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_ru(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ru_netref(tags.get('network'), part)
+        networks.append((network, part))
+
+    return networks
+
+
+def _guess_network_sg(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_sg_netref(None, part)
+        networks.append((network, ref))
+
+    return networks
+
+
+def _guess_network_tr(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in _COMMON_SEPARATORS.split(ref):
+        part = part.strip()
+        if not part:
+            continue
+        network, ref = _normalize_tr_netref(None, part)
+        if network or ref:
+            networks.append((network, ref))
+
+    return networks
+
+
+def _guess_network_ua(tags):
+    ref = tags.get('ref')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_ua_netref(tags.get('network'), part)
+        networks.append((network, part))
+
+    return networks
+
+
+_COMMON_SEPARATORS = re.compile('[;,/,]')
+
+
+def _guess_network_vn(tags):
+    ref = tags.get('ref', '')
+
+    # some bare refs can be augmented from the network tag on the way, or
+    # guessed from the name, which often starts with the type of the road.
+    network_from_tags = tags.get('network')
+    if not network_from_tags:
+        name = tags.get('name') or tags.get('name:vi')
+        if name:
+            name = unicode(name, 'utf-8')
+            if name.startswith(u'Tỉnh lộ'):
+                network_from_tags = 'VN:provincial'
+            elif name.startswith(u'Quốc lộ'):
+                network_from_tags = 'VN:national'
+
+    networks = []
+    for part in _COMMON_SEPARATORS.split(ref):
+        if not part:
+            continue
+        network, ref = _normalize_vn_netref(network_from_tags, part)
+        if network or ref:
+            networks.append((network, ref))
+
+    return networks
+
+
+def _guess_network_za(tags):
+    ref = tags.get('ref', '')
+    networks = []
+
+    for part in _COMMON_SEPARATORS.split(ref):
+        if not part:
+            continue
+        network, ref = _normalize_za_netref(tags.get('network'), part)
+        networks.append((network, part))
+
+    return networks
+
+
+def _do_not_backfill(tags):
+    return None
+
+
+def _sort_network_us(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'US:I':
+        network_code = 1
+    elif network == 'US:US':
+        network_code = 2
+    else:
+        network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+_AU_NETWORK_IMPORTANCE = {
+    'N-highway': 0,
+    'A-road': 1,
+    'M-road': 2,
+    'B-road': 3,
+    'C-road': 4,
+    'N-route': 5,
+    'S-route': 6,
+    'Metro-road': 7,
+    'T-drive': 8,
+    'R-route': 9,
+}
+
+
+def _sort_network_au(network, ref):
+    if network is None or \
+       not network.startswith('AU:'):
+        network_code = 9999
+    else:
+        network_code = _AU_NETWORK_IMPORTANCE.get(network[3:], 9999)
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_br(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'BR:Trans-Amazonian':
+        network_code = 0
+    else:
+        network_code = len(network.split(':')) + 1
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ca(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CA:transcanada':
+        network_code = 0
+    elif network == 'CA:yellowhead':
+        network_code = 1
+    else:
+        network_code = len(network.split(':')) + 2
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ch(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CH:national':
+        network_code = 0
+    elif network == 'CH:regional':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 2
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_cn(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'CN:expressway':
+        network_code = 0
+    elif network == 'CN:expressway:regional':
+        network_code = 1
+    elif network == 'CN:JX':
+        network_code = 2
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_es(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'ES:A-road':
+        network_code = 0
+    elif network == 'ES:N-road':
+        network_code = 1
+    elif network == 'ES:autonoma':
+        network_code = 2
+    elif network == 'ES:province':
+        network_code = 3
+    elif network == 'ES:city':
+        network_code = 4
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = 5 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_fr(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'FR:A-road':
+        network_code = 0
+    elif network == 'FR:N-road':
+        network_code = 1
+    elif network == 'FR:D-road':
+        network_code = 2
+    elif network == 'FR':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = 5 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_de(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'DE:BAB':
+        network_code = 0
+    elif network == 'DE:BS':
+        network_code = 1
+    elif network == 'DE:LS':
+        network_code = 2
+    elif network == 'DE:KS':
+        network_code = 3
+    elif network == 'DE:STS':
+        network_code = 4
+    elif network == 'DE:Hamburg:Ring':
+        network_code = 5
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 6
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ga(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'GA:national':
+        network_code = 0
+    elif network == 'GA:L-road':
+        network_code = 1
+    else:
+        network_code = 2 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_gr(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'GR:motorway':
+        network_code = 0
+    elif network == 'GR:national':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_in(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'IN:NH':
+        network_code = 0
+    elif network == 'IN:SH':
+        network_code = 1
+    elif network == 'IN:MDR':
+        network_code = 2
+    else:
+        network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ir(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_kz(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'KZ:national':
+        network_code = 0
+    elif network == 'KZ:regional':
+        network_code = 1
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = 2 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_la(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'LA:national':
+        network_code = 0
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = 1 + len(network.split(':'))
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_mx(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'MX:MEX':
+        network_code = 0
+    else:
+        network_code = len(network.split(':')) + 1
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_my(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'MY:federal':
+        network_code = 0
+    elif network == 'MY:expressway':
+        network_code = 1
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 2
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_no(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'NO:oslo:ring':
+        network_code = 0
+    elif network == 'e-road':
+        network_code = 1
+    elif network == 'NO:Riksvei':
+        network_code = 2
+    elif network == 'NO:Fylkesvei':
+        network_code = 3
+    else:
+        network_code = len(network.split(':')) + 4
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_gb(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'GB:M-road':
+        network_code = 0
+    elif network == 'GB:A-road-green':
+        network_code = 1
+    elif network == 'GB:A-road-white':
+        network_code = 2
+    elif network == 'GB:B-road':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_pl(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'PL:motorway':
+        network_code = 0
+    elif network == 'PL:expressway':
+        network_code = 1
+    elif network == 'PL:national':
+        network_code = 2
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 3
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_pt(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'PT:motorway':
+        network_code = 0
+    elif network == 'PT:primary':
+        network_code = 1
+    elif network == 'PT:secondary':
+        network_code = 2
+    elif network == 'PT:national':
+        network_code = 3
+    elif network == 'PT:rapid':
+        network_code = 4
+    elif network == 'PT:express':
+        network_code = 5
+    elif network == 'PT:regional':
+        network_code = 6
+    elif network == 'PT:municipal':
+        network_code = 7
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 8
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ro(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'RO:motorway':
+        network_code = 0
+    elif network == 'RO:national':
+        network_code = 1
+    elif network == 'RO:county':
+        network_code = 2
+    elif network == 'RO:local':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ru(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'RU:national' and ref:
+        if ref.startswith(u'М'):
+            network_code = 0
+        elif ref.startswith(u'Р'):
+            network_code = 1
+        elif ref.startswith(u'А'):
+            network_code = 2
+        else:
+            network_code = 9999
+    elif network == 'RU:regional':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_tr(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'TR:motorway':
+        network_code = 0
+    elif network == 'TR:highway':
+        # some highways are "main highways", so it makes sense to show them
+        # before regular other highways.
+        # see footer of https://en.wikipedia.org/wiki/State_road_D.010_(Turkey)
+        if ref in ('D010', 'D100', 'D200', 'D300', 'D400',
+                   'D550', 'D650', 'D750', 'D850', 'D950'):
+            network_code = 1
+        else:
+            network_code = 2
+    elif network == 'TR:provincial':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_ua(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    if network is None:
+        network_code = 9999
+    elif network == 'UA:international':
+        network_code = 0
+    elif network == 'UA:national':
+        network_code = 1
+    elif network == 'UA:regional':
+        network_code = 2
+    elif network == 'UA:territorial':
+        network_code = 3
+    elif network == 'e-road':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_vn(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'VN:expressway':
+        network_code = 0
+    elif network == 'VN:national':
+        network_code = 1
+    elif network == 'VN:provincial':
+        network_code = 2
+    elif network == 'VN:road':
+        network_code = 3
+    elif network == 'AsianHighway':
+        network_code = 99
+    else:
+        network_code = len(network.split(':')) + 4
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+def _sort_network_za(network, ref):
+    if network is None:
+        network_code = 9999
+    elif network == 'ZA:national':
+        network_code = 0
+    elif network == 'ZA:provincial':
+        network_code = 1
+    elif network == 'ZA:regional':
+        network_code = 2
+    elif network == 'ZA:metropolitan':
+        network_code = 3
+    elif network == 'ZA:kruger':
+        network_code = 4
+    elif network == 'ZA:S-road':
+        network_code = 5
+    else:
+        network_code = len(network.split(':')) + 6
+
+    if ref is None:
+        ref = 9999
+    else:
+        ref = _ref_importance(ref)
+
+    return network_code * 10000 + min(ref, 9999)
+
+
+_AU_NETWORK_EXPANSION = {
+    'A': 'AU:A-road',
+    'M': 'AU:M-road',
+    'B': 'AU:B-road',
+    'C': 'AU:C-road',
+    'N': 'AU:N-route',
+    'R': 'AU:R-route',
+    'S': 'AU:S-route',
+    'T': 'AU:T-drive',
+    'MR': 'AU:Metro-road',
+}
+
+
+def _splitref(ref):
+    """
+    Split ref into a leading alphabetic part and a trailing (possibly numeric)
+    part.
+    """
+
+    # empty strings don't have a prefix
+    if not ref:
+        return None, ref
+
+    for i in xrange(0, len(ref)):
+        if not ref[i].isalpha():
+            return ref[0:i], ref[i:].strip()
+
+    # got to the end, must be all "prefix", which probably indicates it's not
+    # a ref of the expected prefix-suffix form, and we should just return the
+    # ref without a prefix.
+    return None, ref
+
+
+def _normalize_au_netref(network, ref):
+    """
+    Take the network and ref of an Australian road and normalise them so that
+    the network is in the form 'AU:road-type' and the ref is numeric. This is
+    based on a bunch of logic about what kinds of Australian roads exist.
+
+    Returns new (network, ref) values.
+    """
+
+    # grab the prefix, if any, from the ref. we can use this to "back-fill" the
+    # network.
+    prefix, ref = _splitref(ref)
+
+    if network and network.startswith('AU:') and \
+       network[3:] in _AU_NETWORK_IMPORTANCE:
+        # network is already in the form we want!
+        pass
+
+    elif network in _AU_NETWORK_EXPANSION:
+        network = _AU_NETWORK_EXPANSION[network]
+
+    elif prefix in _AU_NETWORK_EXPANSION:
+        # backfill network from ref, if possible. (note that ref must
+        # be non-None, since mz_networks entries have either network or
+        # ref, or both).
+        network = _AU_NETWORK_EXPANSION[prefix]
+
+    return network, ref
+
+
+def _normalize_br_netref(network, ref):
+    # try to add detail to the network by looking at the ref value,
+    # which often has additional information.
+    for guess_net, guess_ref in _guess_network_br(dict(ref=ref)):
+        if guess_ref == ref and guess_net.startswith(network):
+            network = guess_net
+            break
+
+    if network == 'BR':
+        if ref == 'BR-230':
+            return 'BR:Trans-Amazonian', ref
+        else:
+            return network, ref
+
+    elif network.startswith('BR:'):
+        # turn things like "BR:BA-roads" into just "BR:BA"
+        if network.endswith('-roads'):
+            network = network[:-6]
+
+        return network, ref
+
+    elif network in _BR_STATES:
+        # just missing the 'BR:' at the start?
+        return 'BR:' + network, ref
+
+    else:
+        return None, ref
+
+
+def _normalize_ca_netref(network, ref):
+    if isinstance(network, (str, unicode)) and \
+       network.startswith('CA:NB') and \
+       ref.isdigit():
+        refnum = int(ref)
+        if refnum >= 200:
+            network = 'CA:NB3'
+        elif refnum >= 100:
+            network = 'CA:NB2'
+    return network, ref
+
+
+def _normalize_cd_netref(network, ref):
+    if network == 'CD:rrig':
+        network = 'CD:RRIG'
+
+    return network, ref
+
+
+def _normalize_ch_netref(network, ref):
+    prefix, ref = _splitref(ref)
+
+    if network == 'CH:Nationalstrasse':
+        # clean up the ref by removing any prefixes and extra stuff after
+        # the number.
+        ref = ref.split(' ')[0]
+        network = 'CH:national'
+
+    elif prefix == 'A':
+        network = 'CH:motorway'
+
+    elif network not in ('CH:motorway', 'CH:national', 'CH:regional'):
+        network = None
+        ref = None
+
+    return network, ref
+
+
+def _normalize_cn_netref(network, ref):
+    if ref.startswith('S'):
+        network = 'CN:expressway:regional'
+
+    elif ref.startswith('G'):
+        network = 'CN:expressway'
+
+    elif ref.startswith('X'):
+        network = 'CN:JX'
+
+    elif network == 'CN-expressways':
+        network = 'CN:expressway'
+
+    elif network == 'CN-expressways-regional':
+        network = 'CN:expressway:regional'
+
+    elif network == 'JX-roads':
+        network = 'CN:JX'
+
+    return network, ref
+
+
+# mapping the network prefixes onto ISO 3166-2 codes
+_ES_AUTONOMA = set([
+    'ARA',  # Aragon
+    'A',  # Aragon & Andalusia (and also Álava, Basque Country)
+    'CA',  # Cantabria (also Cadiz?)
+    'CL',  # Castile & Leon
+    'CM',  # Castilla-La Mancha
+    'C',  # Catalonia (also Cistierna & Eivissa?)
+    'EX',  # Extremadura
+    'AG',  # Galicia
+    'M',  # Madrid
+    'R',  # Madrid
+    'Ma',  # Mallorca
+    'Me',  # Menorca
+    'ML',  # Melilla
+    'RC',  # Menorca
+    'RM',  # Murcia
+    'V',  # Valencia (also A Coruna?)
+    'CV',  # Valencia
+    'Cv',  # Valencia
+])
+
+
+# mapping the network prefixes onto ISO 3166-2 codes
+_ES_PROVINCES = set([
+    'AC',  # A Coruna
+    'DP',  # A Coruna
+    'AB',  # Albacete
+    'F',  # Alicante?
+    'AL',  # Almeria
+    'AE',  # Asturias
+    'AS',  # Asturias
+    'AV',  # Avila
+    'BA',  # Badajoz
+    'B',  # Barcelona
+    'BP',  # Barcelona
+    'BV',  # Barcelona
+    'BI',  # Bizkaia
+    'BU',  # Burgos
+    'CC',  # Caceres
+    'CO',  # Cordoba
+    'CR',  # Cuidad Real
+    'GIP',  # Girona
+    'GIV',  # Girona
+    'GI',  # Gipuzkoa & Girona
+    'GR',  # Granada
+    'GU',  # Guadalajara
+    'HU',  # Huesca
+    'JA',  # Jaen
+    'JV',  # Jaen
+    'LR',  # La Rioja
+    'LE',  # Leon
+    'L',  # Lerida
+    'LP',  # Lerida
+    'LV',  # Lerida
+    'LU',  # Lugo
+    'MP',  # Madrid
+    'MA',  # Malaga
+    'NA',  # Navarre
+    'OU',  # Orense
+    'P',  # Palencia
+    'PP',  # Palencia
+    'EP',  # Pontevedra
+    'PO',  # Pontevedra
+    'DSA',  # Salamanca
+    'SA',  # Salamanca
+    'NI',  # Segovia
+    'SG',  # Segovia
+    'SE',  # Sevilla
+    'SO',  # Soria
+    'TP',  # Tarragona
+    'TV',  # Tarragona
+    'TE',  # Teruel
+    'TO',  # Toledo
+    'VA',  # Valladolid
+    'ZA',  # Zamora
+    'CP',  # Zaragoza
+    'Z',  # Zaragoza
+    'PM',  # Baleares
+    'PMV',  # Baleares
+])
+
+
+# mapping city codes to the name of the city
+_ES_CITIES = set([
+    'AI',  # Aviles
+    'IA',  # Aviles
+    'CT',  # Cartagena
+    'CS',  # Castello
+    'CU',  # Cudillero
+    'CHE',  # Ejea de los Caballeros
+    'EL',  # Elx/Elche
+    'FE',  # Ferrol
+    'GJ',  # Gijon
+    'H',  # Huelva
+    'VM',  # Huelva
+    'J',  # Jaen
+    'LN',  # Lena
+    'LL',  # Lleida
+    'LO',  # Logrono
+    'ME',  # Merida
+    'E',  # Mollerussa? / Eivissa
+    'MU',  # Murcia
+    'O',  # Oviedo
+    'PA',  # Pamplona
+    'PR',  # Parres
+    'PI',  # Pilona
+    'CHMS',  # Ponferrada?
+    'PT',  # Puertollano
+    'SL',  # Salas
+    'S',  # Santander
+    'SC',  # Santiago de Compostela
+    'SI',  # Siero
+    'VG',  # Vigo
+    'EI',  # Eivissa
+])
+
+
+def _normalize_es_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip('-')
+
+    # some A-roads in Spain are actually province or autonoma roads. these are
+    # distinguished from the national A-roads by whether they have 1 or 2
+    # digits (national) or 3 or more digits (autonoma / province). sadly, it
+    # doesn't seem to be possible to tell whether it's an autonoma or province
+    # without looking at the geometry, which is left as a TODO for later rainy
+    # days.
+    num_digits = 0
+    for i in xrange(0, len(num)):
+        if num[i].isdigit():
+            num_digits += 1
+        else:
+            break
+
+    if prefix in ('A', 'AP') and num_digits < 3:
+        network = 'ES:A-road'
+
+    elif prefix == 'N':
+        network = 'ES:N-road'
+
+    elif prefix == 'E':
+        # e-roads seem to be signed without leading zeros.
+        network = 'e-road'
+        ref = 'E-' + num.lstrip('0')
+
+    elif prefix in _ES_AUTONOMA:
+        network = 'ES:autonoma'
+
+    elif prefix in _ES_PROVINCES:
+        network = 'ES:province'
+
+    elif prefix in _ES_CITIES:
+        network = 'ES:city'
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
+_FR_DEPARTMENTAL_D_ROAD = re.compile(
+    '^FR:[0-9]+:([A-Z]+)-road$', re.UNICODE | re.IGNORECASE)
+
+
+def _normalize_fr_netref(network, ref):
+    prefix, ref = _splitref(ref)
+    if prefix:
+        # routes nationales (RN) are actually signed just "N"? also, RNIL
+        # are routes delegated to local departments, but still signed as
+        # routes nationales.
+        if prefix in ('RN', 'RNIL'):
+            prefix = 'N'
+
+        # strip spaces and leading zeros
+        ref = prefix + ref.strip().lstrip('0')
+
+        # backfill network from refs if network wasn't provided from another
+        # source.
+        if network is None:
+            network = 'FR:%s-road' % (prefix,)
+
+    # networks are broken down by department, e.g: FR:01:D-road, but we
+    # only want to match on the D-road part, so throw away the department
+    # number.
+    if isinstance(network, (str, unicode)):
+        m = _FR_DEPARTMENTAL_D_ROAD.match(network)
+        if m:
+            # see comment above. TODO: figure out how to not say this twice.
+            prefix = m.group(1).upper()
+            if prefix in ('RN', 'RNIL'):
+                prefix = 'N'
+            network = 'FR:%s-road' % (prefix,)
+
+    return network, ref
+
+
+def _normalize_de_netref(network, ref):
+    prefix, ref = _splitref(ref)
+    if prefix:
+        if prefix == 'Ring':
+            ref = 'Ring ' + ref
+        else:
+            ref = prefix + ref
+
+        if not network:
+            network = {
+                'A': 'DE:BAB',
+                'B': 'DE:BS',
+                'L': 'DE:LS',
+                'K': 'DE:KS',
+                'St': 'DE:STS',
+                'S': 'DE:STS',
+                'Ring': 'DE:Hamburg:Ring',
+            }.get(prefix)
+
+    if network == 'Landesstra\xc3\x9fen NRW':
+        network = 'DE:LS'
+
+    elif network == 'Kreisstra\xc3\x9fen Hildesheim':
+        network = 'DE:KS'
+
+    elif network == 'BAB':
+        network = 'DE:BAB'
+
+    return network, ref
+
+
+def _normalize_ga_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if prefix in ('N', 'RN'):
+        network = 'GA:national'
+        ref = 'N' + num
+
+    elif prefix == 'L':
+        network = 'GA:L-road'
+        ref = 'L' + num
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
+def _normalize_gr_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+
+    prefix, ref = _splitref(ref)
+    # this might look bizzare, but it's because the Greek capital letters
+    # epsilon and omicron look very similar (in some fonts identical) to the
+    # Latin characters E and O. it's the same below for capital alpha and A.
+    # these are sometimes mixed up in the data, so we map them to the same
+    # networks.
+    if prefix in (u'ΕΟ', u'EO'):
+        network = 'GR:national'
+
+    elif prefix in (u'Α', u'A'):
+        network = 'GR:motorway'
+        # keep A prefix for shield text
+        ref = u'Α' + ref
+
+    elif network == 'e-road':
+        ref = 'E' + ref
+
+    elif network and network.startswith('GR:provincial:'):
+        network = 'GR:provincial'
+
+    return network, ref
+
+
+def _normalize_in_netref(network, ref):
+    prefix, ref = _splitref(ref)
+
+    if prefix == 'NH':
+        network = 'IN:NH'
+
+    elif prefix == 'SH':
+        network = 'IN:SH'
+
+    elif prefix == 'MDR':
+        network = 'IN:MDR'
+
+    elif network and network.startswith('IN:NH'):
+        network = 'IN:NH'
+
+    elif network and network.startswith('IN:SH'):
+        network = 'IN:SH'
+
+    elif network and network.startswith('IN:MDR'):
+        network = 'IN:MDR'
+
+    elif ref == 'MDR':
+        network = 'IN:MDR'
+        ref = None
+
+    elif ref == 'ORR':
+        network = 'IN:NH'
+
+    else:
+        network = None
+
+    return network, ref
+
+
+def _normalize_ir_netref(network, ref):
+    net, num = _splitref(ref)
+
+    if network == 'AH' or net == 'AH':
+        network = 'AsianHighway'
+
+        # in Iran, the Wikipedia page for the AsianHighway template suggests
+        # that the AH route is shown as "A1Tr" (with the "Tr" in a little box)
+        # https://en.wikipedia.org/wiki/Template:AHN-AH
+        #
+        # however, i haven't been able to find an example on a real road sign,
+        # so perhaps it's not widely shown. anyway, we probably want "A1" as
+        # the shield text.
+        ref = 'A' + num
+
+    elif network == 'IR:freeways':
+        network = 'IR:freeway'
+
+    return network, ref
+
+
+def _normalize_la_netref(network, ref):
+    # apparently common mistake: Laos is LA, not LO
+    if network == 'LO:network':
+        network = 'LA:national'
+
+    return network, ref
+
+
+# mapping of mexican road prefixes into their network values.
+_MX_ROAD_NETWORK_PREFIXES = {
+    'AGS':    'MX:AGU',  # Aguascalientes
+    'BC':     'MX:BCN',  # Baja California
+    'BCS':    'MX:BCS',  # Baja California Sur
+    'CAM':    'MX:CAM',  # Campeche
+    'CHIS':   'MX:CHP',  # Chiapas
+    'CHIH':   'MX:CHH',  # Chihuahua
+    'COAH':   'MX:COA',  # Coahuila
+    'COL':    'MX:COL',  # Colima
+    'DGO':    'MX:DUR',  # Durango
+    'GTO':    'MX:GUA',  # Guanajuato
+    'GRO':    'MX:GRO',  # Guerrero
+    'HGO':    'MX:HID',  # Hidalgo
+    'JAL':    'MX:JAL',  # Jalisco
+    # NOTE: couldn't find an example for Edomex.
+    'MICH':   'MX:MIC',  # Michoacán
+    'MOR':    'MX:MOR',  # Morelos
+    'NAY':    'MX:NAY',  # Nayarit
+    'NL':     'MX:NLE',  # Nuevo León
+    'OAX':    'MX:OAX',  # Oaxaca
+    'PUE':    'MX:PUE',  # Puebla
+    'QRO':    'MX:QUE',  # Querétaro
+    'ROO':    'MX:ROO',  # Quintana Roo
+    'SIN':    'MX:SIN',  # Sinaloa
+    'SLP':    'MX:SLP',  # San Luis Potosí
+    'SON':    'MX:SON',  # Sonora
+    'TAB':    'MX:TAB',  # Tabasco
+    'TAM':    'MX:TAM',  # Tamaulipas
+    # NOTE: couldn't find an example for Tlaxcala.
+    'VER':    'MX:VER',  # Veracruz
+    'YUC':    'MX:YUC',  # Yucatán
+    'ZAC':    'MX:ZAC',  # Zacatecas
+
+    # National roads
+    'MEX':    'MX:MEX',
+}
+
+
+def _normalize_mx_netref(network, ref):
+    # interior ring road in Mexico City
+    if ref == 'INT':
+        network = 'MX:CMX:INT'
+        ref = None
+
+    elif ref == 'EXT':
+        network = 'MX:CMX:EXT'
+        ref = None
+
+    prefix, part = _splitref(ref)
+    if prefix:
+        net = _MX_ROAD_NETWORK_PREFIXES.get(prefix.upper())
+        if net:
+            network = net
+            ref = part
+
+    # sometimes Quintana Roo is also written as "Q. Roo", which trips up
+    # the _splitref() function, so this just adjusts for that.
+    if ref and ref.upper().startswith('Q. ROO'):
+        network = 'MX:ROO'
+        ref = ref[len('Q. ROO'):].strip()
+
+    return network, ref
+
+
+# roads in Malaysia can have a state prefix similar to the letters used on
+# vehicle license plates. see Wikipedia for a list:
+#
+#  https://en.wikipedia.org/wiki/Malaysian_State_Roads_system
+#
+# these are mapped to the abbreviations given in the table on:
+#
+#  https://en.wikipedia.org/wiki/States_and_federal_territories_of_Malaysia
+#
+_MY_ROAD_STATE_CODES = {
+    'A': 'PRK',  # Perak
+    'B': 'SGR',  # Selangor
+    'C': 'PHG',  # Pahang
+    'D': 'KTN',  # Kelantan
+    'J': 'JHR',  # Johor
+    'K': 'KDH',  # Kedah
+    'M': 'MLK',  # Malacca
+    'N': 'NSN',  # Negiri Sembilan
+    'P': 'PNG',  # Penang
+    'R': 'PLS',  # Perlis
+    'SA': 'SBH',  # Sabah
+    'T': 'TRG',  # Terengganu
+    'Q': 'SWK',  # Sarawak
+}
+
+
+def _normalize_my_netref(network, ref):
+    prefix, number = _splitref(ref)
+
+    if prefix == 'E':
+        network = 'MY:expressway'
+
+    elif prefix in ('FT', ''):
+        network = 'MY:federal'
+        # federal highway 1 has many parts (1-1, 1-2, etc...) but it's not
+        # clear that they're actually signed that way. so throw the part
+        # after the dash away.
+        ref = number.split('-')[0]
+
+    elif prefix == 'AH':
+        network = 'AsianHighway'
+
+    elif prefix == 'MBSA':
+        network = 'MY:SGR:municipal'
+        # shorten ref so that it is more likely to fit in a 5-char shield.
+        ref = 'BSA' + number
+
+    elif prefix in _MY_ROAD_STATE_CODES:
+        network = 'MY:' + _MY_ROAD_STATE_CODES[prefix]
+
+    else:
+        network = None
+
+    return network, ref
+
+
+def _normalize_jp_netref(network, ref):
+    if network and network.startswith('JP:prefectural:'):
+        network = 'JP:prefectural'
+
+    elif network is None:
+        prefix, _ = _splitref(ref)
+        if prefix in ('C', 'E'):
+            network = 'JP:expressway'
+
+    return network, ref
+
+
+def _normalize_kr_netref(network, ref):
+    net, part = _splitref(ref)
+    if net == 'AH':
+        network = 'AsianHighway'
+        ref = part
+
+    elif network == 'AH':
+        network = 'AsianHighway'
+
+    return network, ref
+
+
+def _normalize_kz_netref(network, ref):
+    net, num = _splitref(ref)
+
+    if net == 'AH' or network == 'AH':
+        network = 'AsianHighway'
+        ref = 'AH' + num
+
+    elif net == 'E' or network == 'e-road':
+        network = 'e-road'
+        ref = 'E' + num
+
+    return network, ref
+
+
+def _normalize_no_netref(network, ref):
+    prefix, number = _splitref(ref)
+
+    if prefix == 'Rv':
+        network = 'NO:riksvei'
+        ref = number
+
+    elif prefix == 'Fv':
+        network = 'NO:fylkesvei'
+        ref = number
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = 'E ' + number.lstrip('0')
+
+    elif prefix == 'Ring':
+        network = 'NO:oslo:ring'
+        ref = 'Ring ' + number
+
+    elif network and network.lower().startswith('no:riksvei'):
+        network = 'NO:riksvei'
+
+    elif network and network.lower().startswith('no:fylkesvei'):
+        network = 'NO:fylkesvei'
+
+    else:
+        network = None
+
+    return network, ref
+
+
+_PE_STATES = set([
+    'AM',  # Amazonas
+    'AN',  # Ancash
+    'AP',  # Apurímac
+    'AR',  # Arequipa
+    'AY',  # Ayacucho
+    'CA',  # Cajamarca
+    'CU',  # Cusco
+    'HU',  # Huánuco
+    'HV',  # Huancavelica
+    'IC',  # Ica
+    'JU',  # Junín
+    'LA',  # Lambayeque
+    'LI',  # La Libertad
+    'LM',  # Lima (including Callao)
+    'LO',  # Loreto
+    'MD',  # Madre de Dios
+    'MO',  # Moquegua
+    'PA',  # Pasco
+    'PI',  # Piura
+    'PU',  # Puno
+    'SM',  # San Martín
+    'TA',  # Tacna
+    'TU',  # Tumbes
+    'UC',  # Ucayali
+])
+
+
+def _normalize_pe_netref(network, ref):
+    prefix, number = _splitref(ref)
+
+    # Peruvian refs seem to be usually written "XX-YY" with a dash, so we have
+    # to remove that as it's not part of the shield text.
+    if number:
+        number = number.lstrip('-')
+
+    if prefix == 'PE':
+        network = 'PE:PE'
+        ref = number
+
+    elif prefix in _PE_STATES:
+        network = 'PE:' + prefix
+        ref = number
+
+    else:
+        network = None
+
+    return network, ref
+
+
+def _normalize_ph_netref(network, ref):
+    if network == 'PH:nhn':
+        network = 'PH:NHN'
+
+    return network, ref
+
+
+def _normalize_pl_netref(network, ref):
+    if network == 'PL:motorways':
+        network = 'PL:motorway'
+    elif network == 'PL:expressways':
+        network = 'PL:expressway'
+
+    if ref.startswith('A'):
+        network = 'PL:motorway'
+    elif ref.startswith('S'):
+        network = 'PL:expressway'
+
+    return network, ref
+
+
+# expansion from ref prefixes to (network, shield text prefix).
+#
+# https://en.wikipedia.org/wiki/Roads_in_Portugal
+#
+# note that it seems signs generally don't have EN, ER or EM on them. instead,
+# they have N, R and, presumably, M - although i wasn't able to find one of
+# those. perhaps they're not important enough to sign with a number.
+_PT_NETWORK_EXPANSION = {
+    'A': ('PT:motorway', 'A'),
+    'IP': ('PT:primary', 'IP'),
+    'IC': ('PT:secondary', 'IC'),
+    'VR': ('PT:rapid', 'VR'),
+    'VE': ('PT:express', 'VE'),
+    'EN': ('PT:national', 'N'),
+    'ER': ('PT:regional', 'R'),
+    'EM': ('PT:municipal', 'M'),
+    'E': ('e-road', 'E'),
+}
+
+
+def _normalize_pt_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    result = _PT_NETWORK_EXPANSION.get(prefix)
+    if result:
+        network, letter = result
+        ref = letter + num.lstrip('0')
+
+    else:
+        network = None
+
+    return network, ref
+
+
+# note that there's another road class, DX, which is documented, but doesn't
+# currently exist.
+# see https://en.wikipedia.org/wiki/Roads_in_Romania
+#
+_RO_NETWORK_PREFIXES = {
+    'A': 'RO:motorway',
+    'DN': 'RO:national',
+    'DJ': 'RO:county',
+    'DC': 'RO:local',
+    'E': 'e-road',
+}
+
+
+def _normalize_ro_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    network = _RO_NETWORK_PREFIXES.get(prefix)
+    if network is not None:
+        ref = prefix + num
+    else:
+        ref = None
+
+    return network, ref
+
+
+def _normalize_ru_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+    prefix, num = _splitref(ref)
+
+    # get rid of any stuff trailing the '-'. seems to be a section number or
+    # mile marker?
+    if num:
+        num = num.lstrip('-').split('-')[0]
+
+    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
+        ref = u'М' + num
+
+    elif prefix in (u'Р', 'P'):
+        if network is None:
+            network = 'RU:regional'
+        ref = u'Р' + num
+
+    elif prefix in (u'А', 'A'):
+        if network is None:
+            network = 'RU:regional'
+        ref = u'А' + num
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = u'E' + num
+
+    elif prefix == 'AH':
+        network = 'AsianHighway'
+        ref = u'AH' + num
+
+    else:
+        ref = None
+
+    if isinstance(ref, unicode):
+        ref = ref.encode('utf-8')
+
+    return network, ref
+
+
+_TR_PROVINCIAL = re.compile('^[0-9]{2}-[0-9]{2}$')
+
+
+# NOTE: there's aslo an "NSC", which is under construction
+_SG_EXPRESSWAYS = set([
+    'AYE',  # Ayer Rajah Expressway
+    'BKE',  # Bukit Timah Expressway
+    'CTE',  # Central Expressway
+    'ECP',  # East Coast Parkway
+    'KJE',  # Kranji Expressway
+    'KPE',  # Kallang-Paya Lebar Expressway
+    'MCE',  # Marina Coastal Expressway
+    'PIE',  # Pan Island Expressway
+    'SLE',  # Seletar Expressway
+    'TPE',  # Tampines Expressway
+])
+
+
+def _normalize_sg_netref(network, ref):
+    if ref in _SG_EXPRESSWAYS:
+        network = 'SG:expressway'
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
+def _normalize_tr_netref(network, ref):
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip('-')
+
+    if prefix == 'O':
+        # see https://en.wikipedia.org/wiki/Otoyol
+        network = 'TR:motorway'
+        ref = 'O' + num.lstrip('0')
+
+    elif prefix == 'D':
+        # see https://en.wikipedia.org/wiki/Turkish_State_Highway_System
+        network = 'TR:highway'
+        # drop section suffixes
+        ref = 'D' + num.split('-')[0]
+
+    elif ref and _TR_PROVINCIAL.match(ref):
+        network = 'TR:provincial'
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = 'E' + num
+
+    else:
+        network = None
+        ref = None
+
+    return network, ref
+
+
+def _normalize_ua_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+    prefix, num = _splitref(ref)
+
+    num = num.lstrip('-')
+
+    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
+        if network is None:
+            network = 'UA:international'
+        ref = u'М' + num
+
+    elif prefix in (u'Н', 'H'):
+        if network is None:
+            network = 'UA:national'
+        ref = u'Н' + num
+
+    elif prefix in (u'Р', 'P'):
+        if network is None:
+            network = 'UA:regional'
+        ref = u'Р' + num
+
+    elif prefix in (u'Т', 'T'):
+        network = 'UA:territorial'
+        ref = u'Т' + num.replace('-', '')
+
+    elif prefix == 'E':
+        network = 'e-road'
+        ref = u'E' + num
+
+    else:
+        ref = None
+        network = None
+
+    if isinstance(ref, unicode):
+        ref = ref.encode('utf-8')
+
+    return network, ref
+
+
+def _normalize_vn_netref(network, ref):
+    ref = _make_unicode_or_none(ref)
+    prefix, num = _splitref(ref)
+
+    if num:
+        num = num.lstrip(u'.')
+
+    if prefix == u'CT' or network == 'VN:expressway':
+        network = 'VN:expressway'
+        ref = u'CT' + num
+
+    elif prefix == u'QL' or network == 'VN:national':
+        network = 'VN:national'
+        ref = u'QL' + num
+
+    elif prefix in (u'ĐT', u'DT'):
+        network = 'VN:provincial'
+        ref = u'ĐT' + num
+
+    elif prefix == u'TL' or network in ('VN:provincial', 'VN:TL'):
+        network = 'VN:provincial'
+        ref = u'TL' + num
+
+    elif ref:
+        network = 'VN:road'
+
+    else:
+        network = None
+        ref = None
+
+    if isinstance(ref, unicode):
+        ref = ref.encode('utf-8')
+    return network, ref
+
+
+def _normalize_za_netref(network, ref):
+    prefix, num = _splitref(ref)
+    ndigits = len(num)
+
+    # N, R & M numbered routes all have special shields which have the letter
+    # above the number, which would make it part of the shield artwork rather
+    # than the shield text.
+    if prefix == 'N':
+        network = 'ZA:national'
+        ref = num
+
+    elif prefix == 'R' and ndigits == 2:
+        # 2-digit R numbers are provincial routes, 3-digit are regional routes.
+        # https://en.wikipedia.org/wiki/Numbered_routes_in_South_Africa
+        network = 'ZA:provincial'
+        ref = num
+
+    elif prefix == 'R' and ndigits == 3:
+        network == 'ZA:regional'
+        ref = num
+
+    elif prefix == 'M':
+        # there are various different metropolitan networks, but according to
+        # the Wikipedia page, they all have the same shield. so lumping them
+        # all together under "metropolitan".
+        network = 'ZA:metropolitan'
+        ref = num
+
+    elif prefix == 'H':
+        # i wasn't able to find documentation for these, but there are
+        # H-numbered roads with good signage, which appear to be only in the
+        # Kruger National Park, so i've named them that way.
+        network = 'ZA:kruger'
+
+    elif prefix == 'S':
+        # i wasn't able to find any documentation for these, but there are
+        # plain white-on-green signs for some of these visible.
+        network = 'ZA:S-road'
+
+    else:
+        ref = None
+        network = None
+
+    return network, ref
+
+
+def _shield_text_ar(network, ref):
+    # Argentinian national routes start with "RN" (ruta nacional), which
+    # should be stripped, but other letters shouldn't be!
+    if network == 'AR:national' and ref.startswith('RN'):
+        return ref[2:]
+
+    # Argentinian provincial routes start with "RP" (ruta provincial)
+    if network == 'AR:provincial' and ref.startswith('RP'):
+        return ref[2:]
+
+    return ref
+
+
+def _shield_text_gb(network, ref):
+    # just remove any space between the letter and number(s)
+    prefix, number = _splitref(ref)
+    return prefix + number
+
+
+def _shield_text_ro(network, ref):
+    # the DN, DJ & DC networks don't have a prefix on the displayed shields,
+    # see:
+    # https://upload.wikimedia.org/wikipedia/commons/b/b0/Autostrada_Sibiu_01.jpg
+    # https://upload.wikimedia.org/wikipedia/commons/7/7a/A1_Arad-Timisoara_-_01.JPG
+    if network in ('RO:national', 'RO:county', 'RO:local'):
+        return ref[2:]
+
+    return ref
+
+
+# do not strip anything from the ref apart from whitespace.
+def _use_ref_as_is(network, ref):
+    return ref.strip()
+
+
+# CountryNetworkLogic centralises the logic around country-specific road
+# network processing. this allows us to do different things, such as
+# back-filling missing network tag values or sorting networks differently
+# based on which country they are in. (e.g: in the UK, an "M" road is more
+# important than an "A" road, even though they'd sort the other way
+# alphabetically).
+#
+# the different logic sections are:
+#
+# * backfill: this is called as fn(tags) to unpack the ref tag (and any other
+#             meaningful tags) into a list of (network, ref) tuples to use
+#             instead. For example, it's common to give ref=A1;B2;C3 to
+#             indicate multiple networks & shields.
+#
+# * fix: this is called as fn(network, ref) and should fix whatever problems it
+#        can and return the replacement (network, ref). remember! either
+#        network or ref can be None!
+#
+# * sort: this is called as fn(network, ref) and should return a numeric value
+#         where lower numeric values mean _more_ important networks.
+#
+# * shield_text: this is called as fn(network, ref) and should return the
+#                shield text to output. this might mean stripping leading alpha
+#                numeric characters - or not, depending on the country.
+#
+CountryNetworkLogic = namedtuple(
+    'CountryNetworkLogic', 'backfill fix sort shield_text')
+CountryNetworkLogic.__new__.__defaults__ = (None,) * len(
+    CountryNetworkLogic._fields)
+
+_COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
+    'AR': CountryNetworkLogic(
+        backfill=_guess_network_ar,
+        shield_text=_shield_text_ar,
+    ),
+    'AU': CountryNetworkLogic(
+        backfill=_guess_network_au,
+        fix=_normalize_au_netref,
+        sort=_sort_network_au,
+    ),
+    'BR': CountryNetworkLogic(
+        backfill=_guess_network_br,
+        fix=_normalize_br_netref,
+        sort=_sort_network_br,
+    ),
+    'CA': CountryNetworkLogic(
+        backfill=_guess_network_ca,
+        fix=_normalize_ca_netref,
+        sort=_sort_network_ca,
+    ),
+    'CH': CountryNetworkLogic(
+        backfill=_guess_network_ch,
+        fix=_normalize_ch_netref,
+        sort=_sort_network_ch,
+    ),
+    'CD': CountryNetworkLogic(
+        fix=_normalize_cd_netref,
+    ),
+    'CN': CountryNetworkLogic(
+        backfill=_guess_network_cn,
+        fix=_normalize_cn_netref,
+        sort=_sort_network_cn,
+        shield_text=_use_ref_as_is,
+    ),
+    'DE': CountryNetworkLogic(
+        backfill=_guess_network_de,
+        fix=_normalize_de_netref,
+        sort=_sort_network_de,
+        shield_text=_use_ref_as_is,
+    ),
+    'ES': CountryNetworkLogic(
+        backfill=_guess_network_es,
+        fix=_normalize_es_netref,
+        sort=_sort_network_es,
+        shield_text=_use_ref_as_is,
+    ),
+    'FR': CountryNetworkLogic(
+        backfill=_guess_network_fr,
+        fix=_normalize_fr_netref,
+        sort=_sort_network_fr,
+        shield_text=_use_ref_as_is,
+    ),
+    'GA': CountryNetworkLogic(
+        backfill=_guess_network_ga,
+        fix=_normalize_ga_netref,
+        sort=_sort_network_ga,
+        shield_text=_use_ref_as_is,
+    ),
+    'GB': CountryNetworkLogic(
+        backfill=_guess_network_gb,
+        sort=_sort_network_gb,
+        shield_text=_shield_text_gb,
+    ),
+    'GR': CountryNetworkLogic(
+        backfill=_guess_network_gr,
+        fix=_normalize_gr_netref,
+        sort=_sort_network_gr,
+    ),
+    'IN': CountryNetworkLogic(
+        backfill=_guess_network_in,
+        fix=_normalize_in_netref,
+        sort=_sort_network_in,
+        shield_text=_use_ref_as_is,
+    ),
+    'IR': CountryNetworkLogic(
+        fix=_normalize_ir_netref,
+        sort=_sort_network_ir,
+        shield_text=_use_ref_as_is,
+    ),
+    'JP': CountryNetworkLogic(
+        backfill=_guess_network_jp,
+        fix=_normalize_jp_netref,
+        shield_text=_use_ref_as_is,
+    ),
+    'KR': CountryNetworkLogic(
+        backfill=_guess_network_kr,
+        fix=_normalize_kr_netref,
+    ),
+    'KZ': CountryNetworkLogic(
+        fix=_normalize_kz_netref,
+        sort=_sort_network_kz,
+        shield_text=_use_ref_as_is,
+    ),
+    'LA': CountryNetworkLogic(
+        fix=_normalize_la_netref,
+        sort=_sort_network_la,
+    ),
+    'MX': CountryNetworkLogic(
+        backfill=_guess_network_mx,
+        fix=_normalize_mx_netref,
+        sort=_sort_network_mx,
+    ),
+    'MY': CountryNetworkLogic(
+        backfill=_guess_network_my,
+        fix=_normalize_my_netref,
+        sort=_sort_network_my,
+        shield_text=_use_ref_as_is,
+    ),
+    'NO': CountryNetworkLogic(
+        backfill=_guess_network_no,
+        fix=_normalize_no_netref,
+        sort=_sort_network_no,
+        shield_text=_use_ref_as_is,
+    ),
+    'PE': CountryNetworkLogic(
+        backfill=_guess_network_pe,
+        fix=_normalize_pe_netref,
+        shield_text=_use_ref_as_is,
+    ),
+    'PH': CountryNetworkLogic(
+        fix=_normalize_ph_netref,
+    ),
+    'PL': CountryNetworkLogic(
+        backfill=_guess_network_pl,
+        fix=_normalize_pl_netref,
+        sort=_sort_network_pl,
+    ),
+    'PT': CountryNetworkLogic(
+        backfill=_guess_network_pt,
+        fix=_normalize_pt_netref,
+        sort=_sort_network_pt,
+        shield_text=_use_ref_as_is,
+    ),
+    'RO': CountryNetworkLogic(
+        backfill=_guess_network_ro,
+        fix=_normalize_ro_netref,
+        sort=_sort_network_ro,
+        shield_text=_shield_text_ro,
+    ),
+    'RU': CountryNetworkLogic(
+        backfill=_guess_network_ru,
+        fix=_normalize_ru_netref,
+        sort=_sort_network_ru,
+        shield_text=_use_ref_as_is,
+    ),
+    'SG': CountryNetworkLogic(
+        backfill=_guess_network_sg,
+        fix=_normalize_sg_netref,
+        shield_text=_use_ref_as_is,
+    ),
+    'TR': CountryNetworkLogic(
+        backfill=_guess_network_tr,
+        fix=_normalize_tr_netref,
+        sort=_sort_network_tr,
+        shield_text=_use_ref_as_is,
+    ),
+    'UA': CountryNetworkLogic(
+        backfill=_guess_network_ua,
+        fix=_normalize_ua_netref,
+        sort=_sort_network_ua,
+        shield_text=_use_ref_as_is,
+    ),
+    'US': CountryNetworkLogic(
+        backfill=_do_not_backfill,
+        sort=_sort_network_us,
+    ),
+    'VN': CountryNetworkLogic(
+        backfill=_guess_network_vn,
+        fix=_normalize_vn_netref,
+        sort=_sort_network_vn,
+        shield_text=_use_ref_as_is,
+    ),
+    'ZA': CountryNetworkLogic(
+        backfill=_guess_network_za,
+        fix=_normalize_za_netref,
+        sort=_sort_network_za,
+        shield_text=_use_ref_as_is,
+    ),
+}
+
+
+# regular expression to look for a country code at the beginning of the network
+# tag.
+_COUNTRY_CODE = re.compile('^([a-z][a-z])[:-](.*)', re.UNICODE | re.IGNORECASE)
+
+
+def _fixup_network_country_code(network):
+    if network is None:
+        return None
+
+    m = _COUNTRY_CODE.match(network)
+    if m:
+        suffix = m.group(2)
+
+        # fix up common suffixes which are plural with ones which are singular.
+        if suffix.lower() == 'roads':
+            suffix = 'road'
+
+        network = m.group(1).upper() + ':' + suffix
+
+    return network
+
+
 def merge_networks_from_tags(shape, props, fid, zoom):
     """
     Take the network and ref tags from the feature and, if they both exist, add
@@ -4001,11 +6537,92 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     network = props.get('network')
     ref = props.get('ref')
     mz_networks = props.get('mz_networks', [])
+    country_code = props.get('country_code')
+
+    # apply some generic fixes to networks:
+    #  * if they begin with two letters and a colon, then make sure the two
+    #    letters are upper case, as they're probably a country code.
+    #  * if they begin with two letters and a dash, then make the letters upper
+    #    case and replace the dash with a colon.
+    #  * expand ;-delimited lists in refs
+    for i in xrange(0, len(mz_networks), 3):
+        t, n, r = mz_networks[i:i+3]
+        if t == 'road' and n is not None:
+            n = _fixup_network_country_code(n)
+            mz_networks[i+1] = n
+        if r is not None and ';' in r:
+            refs = r.split(';')
+            mz_networks[i+2] = refs.pop()
+            for new_ref in refs:
+                mz_networks.extend((t, n, new_ref))
+
+    # for road networks, if there's no explicit network, but the country code
+    # and ref are both available, then try to use them to back-fill the
+    # network.
+    if props.get('kind') in ('highway', 'major_road') and \
+       country_code and ref:
+        # apply country-specific logic to try and backfill the network from
+        # structure we know about how refs work in the country.
+        logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
+
+        # if the road is a member of exactly one road relation, which provides
+        # a network and no ref, and the element itself provides no network,
+        # then use the network from the relation instead.
+        if network is None:
+            solo_networks_from_relations = []
+            for i in xrange(0, len(mz_networks), 3):
+                t, n, r = mz_networks[i:i+3]
+                if t == 'road' and n and (r is None or r == ref):
+                    solo_networks_from_relations.append((n, i))
+
+            # if we found one _and only one_ road network, then we use the
+            # network value and delete the [type, network, ref] 3-tuple from
+            # mz_networks (which is a flattened list of them). because there's
+            # only one, we can delete it by using its index.
+            if len(solo_networks_from_relations) == 1:
+                network, i = solo_networks_from_relations[0]
+                # add network back into properties in case we need to pass it
+                # to the backfill.
+                props['network'] = network
+                del mz_networks[i:i+3]
+
+        if logic and logic.backfill:
+            networks_and_refs = logic.backfill(props) or []
+
+            # if we found a ref, but the network was not provided, then "use
+            # up" the network tag by assigning it to the first network. this
+            # deals with cases where people write network="X", ref="1;Y2" to
+            # mean "X1" and "Y2".
+            if networks_and_refs:
+                net, r = networks_and_refs[0]
+                if net is None and network is not None:
+                    networks_and_refs[0] = (network, r)
+                # if we extracted information from the network and ref, then
+                # we don't want to process it again.
+                network = None
+                ref = None
+
+            for net, r in networks_and_refs:
+                mz_networks.extend(['road', net, r])
+
+        elif network is None:
+            # last ditch backfill, if we know nothing else about this element,
+            # at least we know what country it is in. but don't add if there's
+            # an entry in mz_networks with the same ref!
+            if ref:
+                found = False
+                for i in xrange(0, len(mz_networks), 3):
+                    t, _, r = mz_networks[i:i+3]
+                    if t == 'road' and r == ref:
+                        found = True
+                        break
+                if not found:
+                    network = country_code
 
     # if there's no network, but the operator indicates a network, then we can
     # back-fill an approximate network tag from the operator. this can mean
     # that extra refs are available for road networks.
-    if network is None:
+    elif network is None:
         operator = props.get('operator')
         backfill_network = _NETWORK_OPERATORS.get(operator)
         if backfill_network:
@@ -4015,6 +6632,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         props.pop('network', None)
         props.pop('ref')
         mz_networks.extend([_guess_type_from_network(network), network, ref])
+
+    if mz_networks:
         props['mz_networks'] = mz_networks
 
     return (shape, props, fid)
@@ -4025,7 +6644,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
 _ANY_NUMBER = re.compile('[^0-9]*([0-9]+)')
 
 
-def _road_network_importance(network, ref):
+def _default_sort_network(network, ref):
     """
     Returns an integer representing the numeric importance of the network,
     where lower numbers are more important.
@@ -4046,30 +6665,16 @@ def _road_network_importance(network, ref):
 
     if network is None:
         network_code = 9999
-    elif network == 'US:I' or ':national' in network:
+    elif ':national' in network:
         network_code = 1
-    elif network == 'US:US' or ':regional' in network:
+    elif ':regional' in network:
         network_code = 2
+    elif network == 'e-road' in network:
+        network_code = 9000
     else:
         network_code = len(network.split(':')) + 3
 
-    try:
-        # first, see if the reference is a number, or easily convertible
-        # into one.
-        ref = int(ref or 0)
-    except ValueError:
-        # if not, we can try to extract anything that looks like a sequence
-        # of digits from the ref.
-        m = _ANY_NUMBER.match(ref)
-        if m:
-            ref = int(m.group(1))
-        else:
-            # failing that, we assume that a completely non-numeric ref is
-            # a name, which would make it quite important.
-            ref = 0
-
-    # make sure no ref is negative
-    ref = abs(ref)
+    ref = _ref_importance(ref)
 
     return network_code * 10000 + min(ref, 9999)
 
@@ -4126,24 +6731,24 @@ _UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
                                 re.UNICODE | re.IGNORECASE)
 
 
+def _make_unicode_or_none(ref):
+    if isinstance(ref, unicode):
+        # no need to do anything, it's already okay
+        return ref
+
+    elif isinstance(ref, str):
+        # it's UTF-8 encoded bytes, so make it a unicode
+        return unicode(ref, 'utf-8')
+
+    # dunno what this is?!!
+    return None
+
+
 def _road_shield_text(network, ref):
     """
     Try to extract the string that should be displayed within the road shield,
     based on the raw ref and the network value.
     """
-
-    if ref is None:
-        return None
-
-    if isinstance(ref, unicode):
-        # no need to do anything, it's already okay
-        pass
-    elif isinstance(ref, str):
-        # it's UTF-8 encoded bytes, so make it a unicode
-        ref = unicode(ref, 'utf-8')
-    else:
-        # dunno what this is?!!
-        return None
 
     # FI-PI-LI is just a special case?
     if ref == 'FI-PI-LI':
@@ -4207,7 +6812,7 @@ _Network = namedtuple(
 _ROAD_NETWORK = _Network(
     '',
     _road_shield_text,
-    _road_network_importance)
+    None)
 _FOOT_NETWORK = _Network(
     'walking_',
     _default_shield_text,
@@ -4238,6 +6843,8 @@ def extract_network_information(shape, properties, fid, zoom):
     """
 
     mz_networks = properties.pop('mz_networks', None)
+    country_code = properties.get('country_code')
+    country_logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
 
     if mz_networks is not None:
         # take the list and make triples out of it
@@ -4253,11 +6860,27 @@ def extract_network_information(shape, properties, fid, zoom):
             all_networks = 'all_' + network.prefix + 'networks'
             all_shield_texts = 'all_' + network.prefix + 'shield_texts'
 
+            shield_text_fn = network.shield_text_fn
+            if network is _ROAD_NETWORK and country_logic and \
+               country_logic.shield_text:
+                shield_text_fn = country_logic.shield_text
+
             shield_texts = list()
             network_names = list()
             for network_name, ref in vals:
                 network_names.append(network_name)
-                shield_texts.append(network.shield_text_fn(network_name, ref))
+
+                ref = _make_unicode_or_none(ref)
+                if ref is not None:
+                    ref = shield_text_fn(network_name, ref)
+
+                # we try to keep properties as utf-8 encoded str, but the
+                # shield text function may have turned them into unicode.
+                # this is a catch-all just to make absolutely sure.
+                if isinstance(ref, unicode):
+                    ref = ref.encode('utf-8')
+
+                shield_texts.append(ref)
 
             properties[all_networks] = network_names
             properties[all_shield_texts] = shield_texts
@@ -4265,13 +6888,12 @@ def extract_network_information(shape, properties, fid, zoom):
     return (shape, properties, fid)
 
 
-def _choose_most_important_network(properties, network):
+def _choose_most_important_network(properties, prefix, importance_fn):
     """
     Use the `_network_importance` function to select any road networks from
     `all_networks` and `all_shield_texts`, taking the most important one.
     """
 
-    prefix = network.prefix
     all_networks = 'all_' + prefix + 'networks'
     all_shield_texts = 'all_' + prefix + 'shield_texts'
 
@@ -4280,18 +6902,38 @@ def _choose_most_important_network(properties, network):
 
     if networks and shield_texts:
         def network_key(t):
-            return network.network_importance_fn(*t)
+            return importance_fn(*t)
 
-        tuples = sorted(zip(networks, shield_texts), key=network_key)
+        tuples = sorted(set(zip(networks, shield_texts)), key=network_key)
 
-        # expose first network as network/shield_text
-        network, ref = tuples[0]
-        properties[prefix + 'network'] = network
-        properties[prefix + 'shield_text'] = ref
+        # i think most route designers would try pretty hard to make sure that
+        # a segment of road isn't on two routes of different networks but with
+        # the same shield text. most likely when this happens it's because we
+        # have duplicate information in the element and relations it's a part
+        # of. so get rid of anything with network=None where there's an entry
+        # with the same ref (and network != none).
+        seen_ref = set()
+        new_tuples = []
+        for network, ref in tuples:
+            if network:
+                if ref:
+                    seen_ref.add(ref)
+                new_tuples.append((network, ref))
 
-        # replace properties with sorted versions of themselves
-        properties[all_networks] = [n[0] for n in tuples]
-        properties[all_shield_texts] = [n[1] for n in tuples]
+            elif ref is not None and ref not in seen_ref:
+                new_tuples.append((network, ref))
+
+        tuples = new_tuples
+
+        if tuples:
+            # expose first network as network/shield_text
+            network, ref = tuples[0]
+            properties[prefix + 'network'] = network
+            properties[prefix + 'shield_text'] = ref
+
+            # replace properties with sorted versions of themselves
+            properties[all_networks] = [n[0] for n in tuples]
+            properties[all_shield_texts] = [n[1] for n in tuples]
 
     return properties
 
@@ -4299,7 +6941,22 @@ def _choose_most_important_network(properties, network):
 def choose_most_important_network(shape, properties, fid, zoom):
 
     for net in _NETWORKS.values():
-        properties = _choose_most_important_network(properties, net)
+        prefix = net.prefix
+        if net is _ROAD_NETWORK:
+            country_code = properties.get('country_code')
+            logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
+
+            importance_fn = None
+            if logic:
+                importance_fn = logic.sort
+            if not importance_fn:
+                importance_fn = _default_sort_network
+
+        else:
+            importance_fn = net.network_importance_fn
+
+        properties = _choose_most_important_network(
+            properties, prefix, importance_fn)
 
     return (shape, properties, fid)
 
@@ -4505,3 +7162,242 @@ def backfill_from_other_layer(ctx):
                 props[layer_key] = value
 
     return layer
+
+
+def drop_layer(ctx):
+    """
+    Drops the named layer from the list of layers.
+    """
+
+    layer_to_delete = ctx.params.get('layer')
+
+    for idx, feature_layer in enumerate(ctx.feature_layers):
+        layer_datum = feature_layer['layer_datum']
+        layer_name = layer_datum['name']
+
+        if layer_name == layer_to_delete:
+            del ctx.feature_layers[idx]
+            break
+
+    return None
+
+
+def _fixup_country_specific_networks(shape, props, fid, zoom):
+    """
+    Apply country-specific fixup functions to mz_networks.
+    """
+
+    mz_networks = props.get('mz_networks')
+
+    country_code = props.get('country_code')
+    logic = _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC.get(country_code)
+    if logic and logic.fix and mz_networks:
+        new_networks = []
+
+        # mz_networks is a list of repeated [type, network, ref, ...], it isn't
+        # nested!
+        itr = iter(mz_networks)
+        for (type, network, ref) in zip(itr, itr, itr):
+            if type == 'road':
+                network, ref = logic.fix(network, ref)
+            new_networks.extend([type, network, ref])
+
+        props['mz_networks'] = new_networks
+
+    return (shape, props, fid)
+
+
+def road_networks(ctx):
+    """
+    Fix up road networks. This means looking at the networks from the
+    relation(s), if any, merging that with information from the tags on the
+    original object and any structure we expect from looking at the country
+    code.
+    """
+
+    params = _Params(ctx, 'road_networks')
+    layer_name = params.required('layer')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    zoom = ctx.nominal_zoom
+
+    funcs = [
+        merge_networks_from_tags,
+        _fixup_country_specific_networks,
+        extract_network_information,
+        choose_most_important_network,
+    ]
+
+    new_features = []
+    for (shape, props, fid) in layer['features']:
+        for fn in funcs:
+            shape, props, fid = fn(shape, props, fid, zoom)
+
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return None
+
+
+# helper class to wrap logic around extracting required and optional parameters
+# from the context object passed to post-processors, making its use more
+# concise and readable in the post-processor method itself.
+#
+class _Params(object):
+    def __init__(self, ctx, post_processor_name):
+        self.ctx = ctx
+        self.post_processor_name = post_processor_name
+
+    def required(self, name, typ=str, default=None):
+        """
+        Returns a named parameter of the given type and default from the
+        context, raising an assertion failed exception if the parameter wasn't
+        present, or wasn't an instance of the type.
+        """
+
+        value = self.optional(name, typ=typ, default=default)
+        assert value is not None, \
+            'Required parameter %r was missing from %r config' \
+            % (name, self.post_processor_name)
+        return value
+
+    def optional(self, name, typ=str, default=None):
+        """
+        Returns a named parameter of the given type, or the default if that
+        parameter wasn't given in the context. Raises an exception if the
+        value was present and is not of the expected type.
+        """
+
+        value = self.ctx.params.get(name, default)
+        if value is not None:
+            assert isinstance(value, typ), \
+                'Expected parameter %r to be of type %s, but value %r is of ' \
+                'type %r in %r config' \
+                % (name, typ.__name__, value, type(value).__name__,
+                   self.post_processor_name)
+        return value
+
+
+def point_in_country_logic(ctx):
+    """
+    Intersect points from source layer with target layer, then look up which
+    country they're in and assign property based on a look-up table.
+    """
+
+    params = _Params(ctx, 'point_in_country_logic')
+    layer_name = params.required('layer')
+    country_layer_name = params.required('country_layer')
+    country_code_attr = params.required('country_code_attr')
+
+    # single attribute version
+    output_attr = params.optional('output_attr')
+    # multiple attribute version
+    output_attrs = params.optional('output_attrs', typ=list)
+    # must provide one or the other
+    assert output_attr or output_attrs, 'Must provide one or other of ' \
+        'output_attr or output_attrs for point_in_country_logic'
+
+    logic_table = params.optional('logic_table', typ=dict)
+    if logic_table is None:
+        logic_table = ctx.resources.get('logic_table')
+    assert logic_table is not None, 'Must provide logic_table via a param ' \
+        'or resource for point_in_country_logic'
+
+    where = params.optional('where')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    country_layer = _find_layer(ctx.feature_layers, country_layer_name)
+
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    # this is a wrapper around a geometry, so that we can store extra
+    # information in the STRTree.
+    class country_with_value(object):
+        def __init__(self, geom, value):
+            self.geom = geom
+            self.value = value
+            self._geom = geom._geom
+            self.is_empty = geom.is_empty
+
+    # construct an STRtree index of the country->value mapping. in many cases,
+    # the country will cover the whole tile, but in some other cases it will
+    # not, and it's worth having the speedup of indexing for those.
+    countries = []
+    for (shape, props, fid) in country_layer['features']:
+        country_code = props.get(country_code_attr)
+        value = logic_table.get(country_code)
+        if value is not None:
+            countries.append(country_with_value(shape, value))
+
+    countries_index = STRtree(countries)
+
+    for (shape, props, fid) in layer['features']:
+        # skip features where the 'where' clause doesn't match
+        if where:
+            local = props.copy()
+            if not eval(where, {}, local):
+                continue
+
+        candidates = countries_index.query(shape)
+        for candidate in candidates:
+            # given that the shape is (expected to be) a point, all
+            # intersections are the same (there's no measure of the "amount of
+            # overlap"), so we might as well just stop on the first one.
+            if shape.intersects(candidate.geom):
+                if output_attrs:
+                    for output_attr in output_attrs:
+                        props[output_attr] = candidate.value[output_attr]
+                else:
+                    props[output_attr] = candidate.value
+                break
+
+    return None
+
+
+def max_zoom_filter(ctx):
+    """
+    For features with a max_zoom, remove them if it's < nominal zoom.
+    """
+
+    params = _Params(ctx, 'max_zoom_filter')
+    layers = params.required('layers', typ=list)
+    nominal_zoom = ctx.nominal_zoom
+
+    for layer_name in layers:
+        layer = _find_layer(ctx.feature_layers, layer_name)
+
+        features = layer['features']
+        new_features = []
+
+        for feature in features:
+            _, props, _ = feature
+            max_zoom = props.get('max_zoom')
+            if max_zoom is None or max_zoom >= nominal_zoom:
+                new_features.append(feature)
+
+        layer['features'] = new_features
+
+    return None
+
+
+def tags_set_ne_min_max_zoom(ctx):
+    """
+    Override the min zoom and max zoom properties with __ne_* variants from
+    Natural Earth, if there are any.
+    """
+
+    params = _Params(ctx, 'tags_set_ne_min_max_zoom')
+    layer_name = params.required('layer')
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    for _, props, _ in layer['features']:
+        min_zoom = props.pop('__ne_min_zoom', None)
+        if min_zoom is not None:
+            props['min_zoom'] = min_zoom
+
+        max_zoom = props.pop('__ne_max_zoom', None)
+        if max_zoom is not None:
+            props['max_zoom'] = max_zoom
+
+    return None

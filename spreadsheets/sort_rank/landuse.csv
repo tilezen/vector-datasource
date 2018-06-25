@@ -1,8 +1,12 @@
 kind,geometrytype,sort_rank
-fence,*,269
-snow_fence,*,268
-retaining_wall,*,267
-city_wall,*,266
+power_line,*,273
+power_minor_line,*,272
+crane,*,271
+city_wall,*,270
+wall,*,269
+fence,*,268
+snow_fence,*,267
+retaining_wall,*,266
 dam,LineString;MultiLineString,265
 tree_row,*,264
 hedge,*,263

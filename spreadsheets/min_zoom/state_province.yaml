@@ -1,0 +1,949 @@
+---
+# Andorra
+AD:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# United Arab Emirates
+AE:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Afghanistan
+AF:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Antigua and Barb
+AG:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Anguilla
+AI:
+  min_zoom: 11.5
+  max_zoom: 11.5
+# Albania
+AL:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Armenia
+AM:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Angola
+AO:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Antarctica
+AQ:
+  min_zoom: 14.5
+  max_zoom: 14.5
+# Argentina
+AR:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# American Samoa
+AS:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Austria
+AT:
+  min_zoom:  7.8
+  max_zoom: 11.0
+# Australia
+AU:
+  min_zoom:  4.6
+  max_zoom:  8.1
+# Aruba
+AW:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Åland
+AX:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Azerbaijan
+AZ:
+  min_zoom:  9.2
+  max_zoom: 11.0
+# Bosnia and Herz
+BA:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Barbados
+BB:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Bangladesh
+BD:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Belgium
+BE:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Burkina Faso
+BF:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Bulgaria
+BG:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Bahrain
+BH:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Burundi
+BI:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Benin
+BJ:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# St-Barthélemy
+BL:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Bermuda
+BM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Brunei
+BN:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Bolivia
+BO:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Brazil
+BR:
+  min_zoom:  3.7
+  max_zoom:  8.5
+# Bahamas
+BS:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Bhutan
+BT:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Botswana
+BW:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# Belarus
+BY:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Belize
+BZ:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Canada
+CA:
+  min_zoom:  3.5
+  max_zoom:  7.5
+# Dem. Rep. Congo
+CD:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# Central African Rep
+CF:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Congo
+CG:
+  min_zoom:  7.6
+  max_zoom: 11.0
+# Switzerland
+CH:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Côte d'Ivoire
+CI:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Cook Is
+CK:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Chile
+CL:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# Cameroon
+CM:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# China
+CN:
+  min_zoom:  5.0
+  max_zoom: 10.3
+# Colombia
+CO:
+  min_zoom:  7.0
+  max_zoom: 11.2
+# Costa Rica
+CR:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Cuba
+CU:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Cabo Verde
+CV:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Curaçao
+CW:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Cyprus
+CY:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Czechia
+CZ:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Germany
+DE:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Djibouti
+DJ:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Denmark
+DK:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Dominica
+DM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Dominican Rep
+DO:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Algeria
+DZ:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Ecuador
+EC:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Estonia
+EE:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Egypt
+EG:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# W. Sahara
+EH:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Eritrea
+ER:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Spain
+ES:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Ethiopia
+ET:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Finland
+FI:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Fiji
+FJ:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Falkland Is
+FK:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Micronesia
+FM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Faeroe Is
+FO:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Gabon
+GA:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# United Kingdom
+GB:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Grenada
+GD:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Georgia
+GE:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Guernsey
+GG:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Ghana
+GH:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Gibraltar
+GI:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Greenland
+GL:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Gambia
+GM:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Guinea
+GN:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Eq. Guinea
+GQ:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Greece
+GR:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# S. Geo. and the Is
+GS:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Guatemala
+GT:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Guam
+GU:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Guinea-Bissau
+GW:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Guyana
+GY:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Hong Kong
+HK:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Heard I. and McDonald Is
+HM:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Honduras
+HN:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Croatia
+HR:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Haiti
+HT:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Hungary
+HU:
+  min_zoom:  8.5
+  max_zoom: 11.0
+# Indonesia
+ID:
+  min_zoom:  5.0
+  max_zoom: 10.1
+# Ireland
+IE:
+  min_zoom:  8.2
+  max_zoom: 11.0
+# Israel
+IL:
+  min_zoom:  8.4
+  max_zoom: 11.0
+# Isle of Man
+IM:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# India
+IN:
+  min_zoom:  4.6
+  max_zoom: 10.1
+# Br. Indian Ocean Ter
+IO:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Iraq
+IQ:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Iran
+IR:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Iceland
+IS:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# Italy
+IT:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Jersey
+JE:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Jamaica
+JM:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Jordan
+JO:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Japan
+JP:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Kenya
+KE:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Kyrgyzstan
+KG:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Cambodia
+KH:
+  min_zoom:  8.1
+  max_zoom: 11.0
+# Kiribati
+KI:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Comoros
+KM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# St. Kitts and Nevis
+KN:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# North Korea
+KP:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# South Korea
+KR:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Kuwait
+KW:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Cayman Is
+KY:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Kazakhstan
+KZ:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# Laos
+LA:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Lebanon
+LB:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Saint Lucia
+LC:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Liechtenstein
+LI:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Sri Lanka
+LK:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Liberia
+LR:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Lesotho
+LS:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Lithuania
+LT:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Luxembourg
+LU:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Latvia
+LV:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Libya
+LY:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Morocco
+MA:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Monaco
+MC:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Moldova
+MD:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Montenegro
+ME:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# St-Martin
+MF:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Madagascar
+MG:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Marshall Is
+MH:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Macedonia
+MK:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Mali
+ML:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Myanmar
+MM:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Mongolia
+MN:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# Macao
+MO:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# N. Mariana Is
+MP:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Mauritania
+MR:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Montserrat
+MS:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Malta
+MT:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Mauritius
+MU:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Maldives
+MV:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Malawi
+MW:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Mexico
+MX:
+  min_zoom:  6.9
+  max_zoom: 11.2
+# Malaysia
+MY:
+  min_zoom:  7.2
+  max_zoom: 11.0
+# Mozambique
+MZ:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Namibia
+NA:
+  min_zoom:  6.0
+  max_zoom: 11.0
+# New Caledonia
+NC:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Niger
+NE:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Norfolk Island
+NF:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Nigeria
+NG:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Nicaragua
+NI:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Netherlands
+NL:
+  min_zoom:  8.6
+  max_zoom: 11.0
+# Nepal
+NP:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Nauru
+NR:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Niue
+NU:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# New Zealand
+NZ:
+  min_zoom:  8.5
+  max_zoom: 11.3
+# Oman
+OM:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Panama
+PA:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Peru
+PE:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Fr. Polynesia
+PF:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Papua New Guinea
+PG:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Philippines
+PH:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Pakistan
+PK:
+  min_zoom:  5.0
+  max_zoom: 10.5
+# Poland
+PL:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# St. Pierre and Miquelon
+PM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Pitcairn Is
+PN:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Puerto Rico
+PR:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Palestine
+PS:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Portugal
+PT:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Palau
+PW:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Paraguay
+PY:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Qatar
+QA:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Romania
+RO:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Serbia
+RS:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Russia
+RU:
+  min_zoom:  5.0
+  max_zoom: 10.2
+# Rwanda
+RW:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Saudi Arabia
+SA:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Solomon Is
+SB:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Seychelles
+SC:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Sudan
+SD:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Sweden
+SE:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Singapore
+SG:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Saint Helena
+SH:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Slovenia
+SI:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Slovakia
+SK:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Sierra Leone
+SL:
+  min_zoom:  7.8
+  max_zoom: 11.0
+# San Marino
+SM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Senegal
+SN:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Somalia
+SO:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Suriname
+SR:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# S. Sudan
+SS:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# São Tomé and Principe
+ST:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# El Salvador
+SV:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Sint Maarten
+SX:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Syria
+SY:
+  min_zoom:  7.7
+  max_zoom: 11.5
+# eSwatini
+SZ:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Turks and Caicos Is
+TC:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Chad
+TD:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Fr. S. Antarctic Lands
+TF:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Togo
+TG:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Thailand
+TH:
+  min_zoom:  8.2
+  max_zoom: 11.0
+# Tajikistan
+TJ:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Timor-Leste
+TL:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Turkmenistan
+TM:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Tunisia
+TN:
+  min_zoom:  7.7
+  max_zoom: 11.0
+# Tonga
+TO:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Turkey
+TR:
+  min_zoom:  7.0
+  max_zoom: 11.0
+# Trinidad and Tobago
+TT:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Tuvalu
+TV:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# Taiwan
+TW:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# Tanzania
+TZ:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Ukraine
+UA:
+  min_zoom:  6.7
+  max_zoom: 11.0
+# Uganda
+UG:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# U.S. Minor Outlying Is
+UM:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# United States of America
+US:
+  min_zoom:  3.5
+  max_zoom:  7.5
+# Uruguay
+UY:
+  min_zoom:  8.0
+  max_zoom: 11.0
+# Uzbekistan
+UZ:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Vatican
+VA:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# St. Vin. and Gren
+VC:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Venezuela
+VE:
+  min_zoom:  7.1
+  max_zoom: 11.3
+# British Virgin Is
+VG:
+  min_zoom: 18.0
+  max_zoom: 18.0
+# U.S. Virgin Is
+VI:
+  min_zoom: 11.0
+  max_zoom: 11.0
+# Vietnam
+VN:
+  min_zoom:  8.3
+  max_zoom: 11.0
+# Vanuatu
+VU:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Wallis and Futuna Is
+WF:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Samoa
+WS:
+  min_zoom:  9.0
+  max_zoom: 11.0
+# Kosovo
+XK:
+  min_zoom: 10.0
+  max_zoom: 11.0
+# Yemen
+YE:
+  min_zoom:  8.7
+  max_zoom: 11.0
+# South Africa
+ZA:
+  min_zoom:  4.6
+  max_zoom: 10.1
+# Zambia
+ZM:
+  min_zoom:  6.6
+  max_zoom: 11.0
+# Zimbabwe
+ZW:
+  min_zoom:  6.7
+  max_zoom: 11.0

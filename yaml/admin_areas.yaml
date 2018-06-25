@@ -1,0 +1,9 @@
+filters:
+  - filter:
+      kind: admin_area
+      iso_code: true
+    min_zoom: 5
+    output:
+      kind: admin_area
+      iso_code: {col: iso_code}
+      min_zoom: 5

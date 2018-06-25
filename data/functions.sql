@@ -700,7 +700,7 @@ DECLARE
   decimal_matches text[] :=
     regexp_matches(txt, '([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)');
   imperial_matches text[] :=
-    regexp_matches(txt, E'([0-9]+(\\.[0-9]*)?)\' *(([0-9]+)")?');
+    regexp_matches(txt, E'([0-9]+(\\.[0-9]*)?)\x27 *(([0-9]+)")?');
   numeric_matches text[] :=
     regexp_matches(txt, '([0-9]+(\.[0-9]*)?)');
 BEGIN
@@ -980,3 +980,52 @@ BEGIN
   RETURN trim(leading 'SH' from label);
 END
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- returns a JSONB object containing __ne_min_zoom and __ne_max_zoom set to the
+-- label min and max zoom of any matching row from the Natural Earth countries,
+-- map units and states/provinces themes.
+CREATE OR REPLACE FUNCTION tz_get_ne_min_max_zoom(wikidata_id TEXT)
+RETURNS JSONB AS $$
+DECLARE
+  min_zoom REAL;
+  max_zoom REAL;
+BEGIN
+  IF wikidata_id IS NULL THEN
+    RETURN '{}'::jsonb;
+  END IF;
+
+  -- first, try the countries table
+  SELECT
+    min_label, max_label INTO min_zoom, max_zoom
+    FROM ne_10m_admin_0_countries c
+    WHERE c.wikidataid = wikidata_id;
+
+  -- if that fails, try map_units (which contains some sub-country but super-
+  -- state level stuff such as England, Scotland and Wales).
+  IF NOT FOUND THEN
+    SELECT
+      min_label, max_label INTO min_zoom, max_zoom
+      FROM ne_10m_admin_0_map_units mu
+      WHERE mu.wikidataid = wikidata_id;
+  END IF;
+
+  -- finally, try states and provinces
+  IF NOT FOUND THEN
+    SELECT
+      min_label, max_label INTO min_zoom, max_zoom
+      FROM ne_10m_admin_1_states_provinces sp
+      WHERE sp.wikidataid = wikidata_id;
+  END IF;
+
+  -- return an empty JSONB rather than null, so that it can be safely
+  -- concatenated with whatever other JSONB rather than needing a check for
+  -- null.
+  IF NOT FOUND THEN
+    RETURN '{}'::jsonb;
+  END IF;
+  RETURN jsonb_build_object(
+    '__ne_min_zoom', min_zoom,
+    '__ne_max_zoom', max_zoom
+  );
+END
+$$ LANGUAGE plpgsql STABLE;

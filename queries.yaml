@@ -8,6 +8,7 @@ all:
   - pois
   - boundaries
   - transit
+  - admin_areas
 
 sources:
 
@@ -137,6 +138,16 @@ sources:
     - template: wof.jinja2
       start_zoom: 11
 
+  admin_areas:
+    - template: admin_areas.jinja2
+      # starts at the min zoom where we have road layer data
+      start_zoom: 5
+
+  # note: this goes into the _boundaries_ layer.
+  buffered_land:
+    - template: buffered_land.jinja2
+      start_zoom: 0
+
 layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
@@ -212,9 +223,7 @@ layers:
       - vectordatasource.transform.normalize_aerialways
       - vectordatasource.transform.normalize_cycleway
       - vectordatasource.transform.add_is_bicycle_related
-      - vectordatasource.transform.merge_networks_from_tags
-      - vectordatasource.transform.extract_network_information
-      - vectordatasource.transform.choose_most_important_network
+      - vectordatasource.transform.add_road_network_from_ncat
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
@@ -291,6 +300,18 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.transit
+    area-inclusion-threshold: 1
+  admin_areas:
+    geometry_types: [Polygon, MultiPolygon]
+    # note: simplify_* settings shouldn't affect this layer, as it should be
+    # dropped before we get to that stage. but worth "documenting" that it
+    # shouldn't be simplified here to make it more explicit.
+    simplify_before_intersect: false
+    simplify_start: 999
+    transform:
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.add_id_to_properties
+      - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
 post_process:
   - fn: vectordatasource.transform.numeric_min_filter
@@ -427,6 +448,154 @@ post_process:
     params:
       source_layer: roads
       properties: [layer]
+
+  # cut with admin_areas to put country_code attributes on roads
+  # which are mostly within a particular country.
+  - fn: vectordatasource.transform.overlap
+    params:
+      base_layer: roads
+      cutting_layer: admin_areas
+      attribute: iso_code
+      target_attribute: country_code
+      linear: true
+
+  - fn: vectordatasource.transform.road_networks
+    params:
+      layer: roads
+
+  # having calculated the country_code on roads, now drop it. we don't want it
+  # in the output (and it's already part of the `network`, if any got added to
+  # the feature.)
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      properties: [country_code]
+
+  - fn: vectordatasource.transform.point_in_country_logic
+    params:
+      layer: pois
+      country_layer: admin_areas
+      country_code_attr: iso_code
+      output_attr: drives_on_left
+      where: kind == 'mini_roundabout'
+      # see https://en.wikipedia.org/wiki/List_of_countries_with_left-hand_traffic
+      logic_table:
+        AG: true # Antigua and Barbuda
+        AI: true # Anguilla
+        AU: true # Australia
+        BB: true # Barbados
+        BD: true # Bangladesh
+        BM: true # Bermuda
+        BN: true # Brunei
+        BS: true # Bahamas
+        BT: true # Bhutan
+        BW: true # Botswana
+        CC: true # Cocos (Keeling) Islands
+        CK: true # Cook Islands
+        CX: true # Christmas Island
+        CY: true # Cyprus (note, also fake ISO code for Northern Cyprus)
+        DM: true # Dominica
+        FJ: true # Fiji
+        FK: true # Falkland Islands
+        GB: true # United Kingdom
+        GD: true # Grenada
+        GG: true # Guernsey
+        GS: true # South Georgia and the South Sandwich Islands
+        GY: true # Guyana
+        HK: true # Hong Kong
+        ID: true # Indonesia
+        IE: true # Ireland
+        IM: true # Isle of Man
+        IN: true # India
+        JE: true # Jersey
+        JM: true # Jamaica
+        JP: true # Japan
+        KE: true # Kenya
+        KI: true # Kiribati
+        KN: true # Saint Kitts and Nevis
+        KY: true # Cayman Islands
+        LC: true # Saint Lucia
+        LK: true # Sri Lanka
+        LS: true # Lesotho
+        MO: true # Macau (fake ISO code)
+        MS: true # Montserrat
+        MT: true # Malta
+        MU: true # Mauritius
+        MV: true # Maldives
+        MW: true # Malawi
+        MY: true # Malaysia
+        MZ: true # Mozambique
+        NA: true # Namibia
+        NF: true # Norfolk Island
+        NP: true # Nepal
+        NR: true # Nauru
+        NU: true # Niue
+        NZ: true # New Zealand
+        PG: true # Papua New Guinea
+        PK: true # Pakistan
+        PN: true # Pitcairn Islands
+        SB: true # Solomon Islands
+        SC: true # Seychelles
+        SG: true # Singapore
+        SH: true # Saint Helena, Ascension and Tristan da Cunha
+        SR: true # Suriname
+        SZ: true # Swaziland
+        TC: true # Turks and Caicos Islands
+        TH: true # Thailand
+        TK: true # Tokelau
+        TL: true # East Timor
+        TO: true # Tonga
+        TT: true # Trinidad and Tobago
+        TV: true # Tuvalu
+        TZ: true # Tanzania
+        UG: true # Uganda
+        VC: true # Saint Vincent and the Grenadines
+        VG: true # British Virgin Islands
+        VI: true # U.S. Virgin Islands
+        WS: true # Samoa
+        ZA: true # South Africa
+        ZM: true # Zambia
+        ZW: true # Zimbabwe
+
+  # cut places with admin_areas to put country_code attributes on country,
+  # state and province points. this is used to backfill information such as
+  # min and max zoom based on country defaults.
+  - fn: vectordatasource.transform.point_in_country_logic
+    resources:
+      logic_table:
+        type: file
+        init_fn: vectordatasource.transform.YAMLToDict
+        path: spreadsheets/min_zoom/country.yaml
+    params:
+      layer: places
+      country_layer: admin_areas
+      country_code_attr: iso_code
+      output_attrs:
+        - min_zoom
+        - max_zoom
+      where: kind == 'country'
+
+  - fn: vectordatasource.transform.point_in_country_logic
+    resources:
+      logic_table:
+        type: file
+        init_fn: vectordatasource.transform.YAMLToDict
+        path: spreadsheets/min_zoom/state_province.yaml
+    params:
+      layer: places
+      country_layer: admin_areas
+      country_code_attr: iso_code
+      output_attrs:
+        - min_zoom
+        - max_zoom
+      where: kind == 'region'
+
+  # IMPORTANT! do this _after_ the YAMLToDict default stuff, otherwise the
+  # default will overwrite the value fron Natural Earth.
+  - fn: vectordatasource.transform.tags_set_ne_min_max_zoom
+    params:
+      layer: places
+
   - fn: vectordatasource.transform.overlap
     params:
       base_layer: buildings
@@ -826,6 +995,13 @@ post_process:
       source_layers: [landuse, water]
       pixel_area: 0.1
 
+  # drop this layer before simplify_and_clip - we don't want it in the output,
+  # so don't waste time simplifying and clipping it to the tile.
+  - fn: vectordatasource.transform.drop_layer
+    params:
+      layer: admin_areas
+      start_zoom: 0
+
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
 
@@ -924,3 +1100,7 @@ post_process:
         white: [255, 255, 255]
         yellow: [255, 255, 0]
         yellowgreen: [154, 205, 50]
+
+  - fn: vectordatasource.transform.max_zoom_filter
+    params:
+      layers: [places]

@@ -109,6 +109,29 @@ class FeatureTests(FixtureTest):
             '16/19318/24656', 'landuse',
             {'kind': 'wetland', 'kind_detail': 'tidalflat'})
 
+    def test_grave_yards(self):
+        self._run_test(
+            'http://www.openstreetmap.org/way/225156545',
+            '16/34128/21564', 'landuse',
+            {'kind': 'grave_yard', 'kind_detail': 'christian'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/41654988',
+            '16/19264/24488', 'landuse',
+            {'kind': 'grave_yard', 'kind_detail': 'jewish'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/225156549',
+            '16/34128/21564', 'landuse',
+            {'kind': 'grave_yard', 'kind_detail': 'muslim'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/36882463',
+            '16/19297/24637', 'landuse',
+            {'kind': 'grave_yard'})
+        self._run_test(
+            'http://www.openstreetmap.org/way/448226994',
+            '16/19216/24692', 'landuse',
+            {'kind': 'grave_yard', 'religion': 'christian',
+             'denomination': 'reformed'})
+
     def test_wood_leaf_type(self):
         self._run_test(
             'http://www.openstreetmap.org/way/19174535',
