@@ -36,7 +36,6 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 368396366,
                 'kind': u'airfield',
-                'kind_detail': 'military',
             })
 
     def test_airfield_way(self):
@@ -886,7 +885,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 28735778,
-                'kind': u'danger',
+                'kind': u'danger_area',
             })
 
     def test_danger_cliff_top(self):
@@ -912,7 +911,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 4809654741,
-                'kind': u'danger',
+                'kind': u'danger_area',
                 'name': u'cliff top',
             })
 
@@ -934,13 +933,13 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 26165183,
-                'kind': u'danger',
+                'kind': u'danger_area',
                 'name': u'Otmoor Range Danger Area',
             })
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 26165183,
-                'kind': u'danger',
+                'kind': u'danger_area',
             })
 
     def test_defibrillator_node(self):

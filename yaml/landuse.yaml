@@ -1085,7 +1085,7 @@ filters:
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
-      kind: danger
+      kind: danger_area
     extra_columns: [way]
 
   # whitelist fence_type if it's present, otherwise don't include it. this

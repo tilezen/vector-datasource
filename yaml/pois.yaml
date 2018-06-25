@@ -16,16 +16,17 @@ global:
     operator: {col: operator}
     religion: {col: religion}
     sport: {col: sport}
+    ref: {col: ref}
+    attraction: {col: attraction}
+    zoo: {col: zoo}
+    exit_to: {col: exit_to}
+  - &transit_properties
     mz_transit_score: {col: mz_transit_score}
     mz_transit_root_relation_id: {col: mz_transit_root_relation_id}
     train_routes: {col: train_routes}
     subway_routes: {col: subway_routes}
     light_rail_routes: {col: light_rail_routes}
     tram_routes: {col: tram_routes}
-    ref: {col: ref}
-    attraction: {col: attraction}
-    zoo: {col: zoo}
-    exit_to: {col: exit_to}
   - &health_facility_type_kind_detail
     kind_detail: {col: 'health_facility:type'}
 
@@ -457,28 +458,6 @@ filters:
       <<: *output_properties
       kind: {col: aeroway}
       tier: 3
-  # miltary airfield
-  - filter: {military: airfield}
-    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
-    output:
-      <<: *output_properties
-      kind: airfield
-      kind_detail: military
-      tier: 3
-  # military danger area
-  - filter: {military: danger_area}
-    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
-    output:
-      <<: *output_properties
-      kind: danger
-      tier: 3
-  # military
-  - filter: {landuse: military}
-    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
-    output:
-      <<: *output_properties
-      kind: military
-      tier: 3
   # airfield, naval_base
   - filter: {military: [airfield, range, naval_base]}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
@@ -492,6 +471,13 @@ filters:
     output:
       <<: *output_properties
       kind: danger_area
+      tier: 3
+  # military
+  - filter: {landuse: military}
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: military
       tier: 3
   # university
   - filter: {amenity: university}
@@ -845,6 +831,7 @@ filters:
     min_zoom: 10
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: station
       state: {col: tags->state}
   - filter: {natural: spring}
@@ -911,7 +898,7 @@ filters:
       <<: *output_properties
       kind: {col: craft}
   - filter:
-      shop: [charity, furniture_golf, pet, shoes, store, variety]
+      shop: [charity, furniture, golf, pet, shoes, variety_store]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
@@ -967,7 +954,7 @@ filters:
     output:
       <<: *output_properties
       kind: scuba_diving
-  - filter: {shop: [atv, boat, motorcycle, snowmobile]}
+  - filter: {shop: [atv, motorcycle, snowmobile]}
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1171,7 +1158,7 @@ filters:
       kind: ambulatory_care
       <<: *health_facility_type_kind_detail
   - filter:
-      amenity: [clinic_dentist, doctors, facility, social]
+      amenity: [clinic, dentist, doctors, social_facility]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1217,8 +1204,8 @@ filters:
       any:
         amenity: boat_rental
         shop: boat_rental
-        tags->rental: boat
-        all: {shop: boat, tags->rental: 'yes'}
+        rental: boat
+        all: {shop: boat, rental: 'yes'}
     min_zoom: 16
     output:
       <<: *output_properties
@@ -1240,11 +1227,12 @@ filters:
       <<: *output_properties
       kind: toilets
       kind_detail: {col: 'toilets:disposal'}
-  - filter: {barrier: [chain, gate_gate, gate_gate, kissing_lift, stile, swing]}
+  - filter: {barrier: [chain, gate, kissing_gate, lift_gate, stile, swing_gate]}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
       <<: *output_properties
       kind: gate
+      kind_detail: {col: barrier}
   - filter:
       shop: funeral_directors
     min_zoom: 14
@@ -1288,7 +1276,7 @@ filters:
     output:
       <<: *output_properties
       kind: cave_entrance
-  - filter: {waterway: [boat_lift, lock]}
+  - filter: {waterway: lock}
     min_zoom: 15
     output:
       <<: *output_properties
@@ -1297,6 +1285,7 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: station
       state: {col: tags->state}
   - filter:
@@ -1308,46 +1297,55 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: {col: railway}
   - filter: {railway: platform}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {highway: platform}
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: bus_stop
   - filter: {public_transport: platform, tags->rail: 'yes'}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {public_transport: platform, tags->light_rail: 'yes'}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {public_transport: platform, tags->bus: 'yes'}
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: bus_stop
   - filter: {public_transport: platform}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {public_transport: stop_area}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: stop_area
   - filter: {tags->site: stop_area}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: stop_area
   - filter: {tourism: alpine_hut}
     min_zoom: 13
@@ -1693,7 +1691,6 @@ filters:
         - mobile_phone
         - newsagent
         - optician
-        - optician,
         - perfumery
         - ship_chandler
         - stationery
@@ -1719,6 +1716,7 @@ filters:
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: subway_entrance
   - filter:
       amenity: [bench, waste_basket]
