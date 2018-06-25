@@ -619,7 +619,19 @@ filters:
     output:
       <<: *output_properties
       kind: {col: landuse}
-  # pier
+  # pier with mooring
+  - filter:
+      man_made: pier
+      geom_type: polygon
+      mooring: [
+        'no', 'yes', commercial, cruise, customers, declaration, ferry, guest,
+        private, public, waiting, yacht, yachts]
+    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
+    output:
+      <<: *output_properties
+      kind: pier
+      mooring: {col: mooring}
+  # pier without mooring
   - filter:
       man_made: pier
       geom_type: polygon
@@ -1149,3 +1161,8 @@ filters:
     output:
       <<: *output_properties
       kind: {col: landuse}
+  - filter: {man_made: quay}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: quay

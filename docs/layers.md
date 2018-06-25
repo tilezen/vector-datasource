@@ -546,7 +546,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `pedestrian`
 * `petting_zoo`
 * `picnic_site`
-* `pier`
+* `pier` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `pitch`
 * `place_of_worship`
 * `plant`
@@ -557,7 +557,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `prison`
 * `protected_area`
 * `quarry`
-* `quay`
+* `quay` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `railway`
 * `recreation_ground`
 * `recreation_track`
@@ -752,6 +752,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `elevation`: Elevation of the peak or volcano in meters, where available.
 * `kind_tile_rank`: A rank of each peak or volcano, with 1 being the most important. Both peaks and volcanos are scored in the same scale. When the zoom is less than 16, only five of these features are included in each tile. At zoom 16, all the features are - although it's rare to have more than 5 peaks in a zoom 16 tile.
 
+#### POI properties (only on `kind:marina`, `kind:camp_site` and `kind:caravan_site`)
+
+* `sanitary_dump_station`: One of `yes`, `customers` or `public` if there are sanitary dump facilities at this location, and who is permitted to use them.
+
 #### POI properties (only on `charging_station`):
 
 * `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
@@ -910,6 +914,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `halt`
 * `hanami`
 * `handicraft`
+* `harbourmaster`
 * `hardware`
 * `hazard`
 * `healthcare`
@@ -952,6 +957,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
 * `mobile_phone`
 * `monument`
+* `mooring` - A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `motel`
 * `motorcycle`
 * `motorcycle_parking`
@@ -1021,6 +1027,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `rock`
 * `roller_coaster`
 * `saddle`
+* `sanitary_dump_station`
 * `sawmill`
 * `school` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `scuba_diving`
@@ -1247,7 +1254,7 @@ Railway `service` values are:
 
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
-**Piers** start showing up at zoom 13+ with `kind_detail` values of `pier`.
+**Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
 ## Transit
 

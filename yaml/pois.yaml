@@ -131,9 +131,9 @@ global:
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
         - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, customs, fuel, hunting_stand,
+            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, customs, fuel, harbourmaster, hunting_stand,
             life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
-            shelter, shower, telephone, toilets, waste_basket, waste_disposal,
+            sanitary_dump_station, shelter, shower, telephone, toilets, waste_basket, waste_disposal,
             water_point, watering_place ]
         - barrier:
             - block
@@ -148,6 +148,7 @@ global:
             - swing_gate
             - toll_booth
         - emergency: [ lifeguard_tower, phone, defibrillator ]
+        - harbour: harbour_master
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
             rest_area, traffic_signals, trailhead ]
         - historic: landmark
@@ -157,11 +158,14 @@ global:
         - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, windmill ]
+        - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
         - power: [ pole, tower ]
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
+        - "seamark:building:function": harbour_master
+        - "seamark:small_craft_facility:category": fuel_station
         - tags->icn_ref: true
         - tags->iwn_ref: true
         - tags->lcn_ref: true
@@ -172,7 +176,7 @@ global:
         - tags->rwn_ref: true
         - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
         - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
-        - waterway: [ dam, lock, waterfall, boatyard, boat_lift ]
+        - waterway: [ dam, lock, waterfall, boatyard, boat_lift, sanitary_dump_station, fuel ]
 
 filters:
   # remove disused things, they're not real POIs any more
@@ -769,6 +773,16 @@ filters:
     output:
       <<: *output_properties
       kind: level_crossing
+  # filter the waterway / boat fuel before generic amenity=fuel, as they appear
+  # to be often tagged with both.
+  - filter:
+      any:
+        - waterway: fuel
+        - "seamark:small_craft_facility:category": fuel_station
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: waterway_fuel
   - filter:
       amenity: [bank, cinema, courthouse, customs, embassy, fire_station, fuel, library, police,
         post_office, theatre]
@@ -884,6 +898,10 @@ filters:
     output:
       <<: *output_properties
       kind: marina
+      sanitary_dump_station:
+        case:
+          - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
+            then: {col: sanitary_dump_station}
   - filter: {amenity: townhall}
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.85 ] } } }
     output:
@@ -1297,6 +1315,10 @@ filters:
     output:
       <<: *output_properties
       kind: camp_site
+      sanitary_dump_station:
+        case:
+          - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
+            then: {col: sanitary_dump_station}
   - filter:
       tourism: viewpoint
     min_zoom: 15
@@ -1327,6 +1349,16 @@ filters:
     output:
       <<: *output_properties
       kind: memorial
+  # slipway with mooring info
+  - filter:
+      leisure: slipway
+      mooring: ['yes', 'no']
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: slipway
+      mooring: {col: mooring}
+  # plain slipway without mooring info
   - filter: { leisure: slipway }
     min_zoom: 17
     output:
@@ -1677,6 +1709,10 @@ filters:
     output:
       <<: *output_properties
       kind: caravan_site
+      sanitary_dump_station:
+        case:
+          - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
+            then: {col: sanitary_dump_station}
   - filter: {tourism: picnic_site}
     min_zoom: 16
     output:
@@ -1719,6 +1755,48 @@ filters:
     output:
       <<: *output_properties
       kind: boatyard
+  - filter:
+      any:
+        - amenity: harbourmaster
+        - harbour: harbour_master
+        - "seamark:building:function": harbour_master
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: harbourmaster
+  # moorings with more detail
+  - filter:
+      mooring: [
+        commercial, cruise, customers, declaration, ferry, guest,
+        pile, waiting, yacht, yachts]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+      kind_detail: {col: mooring}
+  # moorings with access restrictions
+  - filter:
+      mooring: [ private, public ]
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+      access: {col: mooring}
+  # plain moorings, without detail
+  - filter: {mooring: true}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: mooring
+
+  - filter:
+      any:
+        - amenity: sanitary_dump_station
+        - waterway: sanitary_dump_station
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: sanitary_dump_station
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

@@ -718,8 +718,13 @@ filters:
   # OSM man_made
   #
   #############################################################
+  # pier/quay with mooring
   - filter:
-      man_made: pier
+      geom_type: line
+      man_made: [pier, quay]
+      mooring: [
+        'no', 'yes', commercial, cruise, customers, declaration, ferry, guest,
+        private, public, waiting, yacht, yachts]
     min_zoom: 13
     table: osm
     output:
@@ -727,7 +732,20 @@ filters:
       <<: *osm_network
       <<: *osm_footway_properties
       kind: path
-      kind_detail: pier
+      kind_detail: {col: man_made}
+      mooring: {col: mooring}
+  # pier/quay without mooring
+  - filter:
+      geom_type: line
+      man_made: [pier, quay]
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      <<: *osm_footway_properties
+      kind: path
+      kind_detail: {col: man_made}
   #############################################################
   #
   # OSM piste

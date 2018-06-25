@@ -1929,3 +1929,743 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'id': 206943159,
                 'kind': u'customs',
             })
+
+    def test_harbourmaster_seamark_node(self):
+        import dsl
+
+        z, x, y = (16, 17964, 29191)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/778613459
+            dsl.point(778613459, (-81.318644, 19.272868), {
+                'addr:city': u'Spotts',
+                'addr:country': u'KY',
+                'addr:street': u'Jackson Road',
+                'building': u'yes',
+                'description': u'This is where the ships anchor '\
+                u'during rough seas!',
+                'name': u'Spotts Bay Alternate Cruise Facility of ' \
+                u'Port Authority',
+                'seamark:building:function': u'harbour_master',
+                'seamark:type': u'building',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 778613459,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbourmaster_seamark_way(self):
+        import dsl
+
+        z, x, y = (16, 18409, 24075)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/84872891
+            dsl.way(84872891, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'seamark:building:function': u'harbour_master',
+                'seamark:type': u'building',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 84872891,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbour_master_node(self):
+        import dsl
+
+        z, x, y = (16, 18224, 23638)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3721714683
+            dsl.point(3721714683, (-79.887715, 44.753227), {
+                'harbour': u'harbour_master',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3721714683,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbour_master_way(self):
+        import dsl
+
+        z, x, y = (16, 32156, 22859)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/406287049
+            dsl.way(406287049, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'harbour': u'harbour_master',
+                'opening_hours': u'Mo-Sa 09:00-12:00,14:00-18:00',
+                'source': u'openstreetmap.org',
+                'wheelchair': u'yes',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 406287049,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbourmaster_amenity_node(self):
+        import dsl
+
+        z, x, y = (16, 17927, 28133)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4424415086
+            dsl.point(4424415086, (-81.518615, 24.660679), {
+                'amenity': u'harbourmaster',
+                'shop': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4424415086,
+                'kind': u'harbourmaster',
+            })
+
+    def test_harbourmaster_amenity_way(self):
+        import dsl
+
+        z, x, y = (16, 17777, 28436)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/259829016
+            dsl.way(259829016, dsl.tile_box(z, x, y), {
+                'amenity': u'harbourmaster',
+                'building': u'yes',
+                'building:levels': u'3',
+                'name': u'Empresa Prácticos de Cuba',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 259829016,
+                'kind': u'harbourmaster',
+            })
+
+    def test_yes_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 18842, 25052)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4341108759
+            dsl.point(4341108759, (-76.493961, 38.972904), {
+                'mooring': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # treat mooring=yes as a "yes, there's a mooring here", but we don't
+        # know any more about it.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4341108759,
+                'kind': u'mooring',
+                'kind_detail': type(None),
+            })
+
+    def test_private_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 19533, 24620)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1989045561
+            dsl.point(1989045561, (-72.699321, 40.796934), {
+                'mooring': u'private',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # TODO: should we show these at all if they're private?
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1989045561,
+                'kind': u'mooring',
+                'access': 'private',
+            })
+
+    def test_no_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 17992, 23772)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5180188472
+            dsl.point(5180188472, (-81.166304, 44.226554), {
+                'leisure': u'slipway',
+                'mooring': u'no',
+                'source': u'openstreetmap.org',
+                'vehicle': u'no',
+            }),
+        )
+
+        # in this case, the mooring=no is a description of the slipway, rather
+        # than a feature in its own right.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5180188472,
+                'kind': u'slipway',
+                'mooring': 'no',
+            })
+
+    def test_commercial_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 18223, 24746)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2015422399
+            dsl.point(2015422399, (-79.895062, 40.270013), {
+                'man_made': u'mooring',
+                'mooring': u'commercial',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # note: there's not many man_made=mooring, so we ignore that.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2015422399,
+                'kind': u'mooring',
+                'kind_detail': u'commercial',
+            })
+
+    def test_ferry_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 17344, 23374)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2320763454
+            dsl.point(2320763454, (-84.724975, 45.774231), {
+                'mooring': u'ferry',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2320763454,
+                'kind': u'mooring',
+                'kind_detail': u'ferry',
+            })
+
+    def test_guest_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 17669, 27124)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3667335766
+            dsl.point(3667335766, (-82.936394, 29.590537), {
+                'maxstay': u'minimal',  # wow, sounds super hospitable...
+                'mooring': u'guest',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3667335766,
+                'kind': u'mooring',
+                'kind_detail': u'guest',
+            })
+
+    def test_cruise_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 19903, 24337)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4148336680
+            dsl.point(4148336680, (-70.666619, 41.961962), {
+                'contact:phone': u'+1 508 7462643',
+                'contact:website': u'http://www.captjohn.com/',
+                'mooring': u'cruise',
+                'name': u'Captain John Whale Watching & Fishing Tours',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4148336680,
+                'kind': u'mooring',
+                'kind_detail': u'cruise',
+            })
+
+    def test_waiting_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 33124, 24003)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2102077401
+            dsl.point(2102077401, (1.959648, 43.312300), {
+                'mooring': u'waiting',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2102077401,
+                'kind': u'mooring',
+                'kind_detail': u'waiting',
+            })
+
+    def test_pile_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 33704, 21668)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2410435220
+            dsl.point(2410435220, (5.146992, 51.927532), {
+                'material': u'wood',
+                'mooring': u'pile',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2410435220,
+                'kind': u'mooring',
+                'kind_detail': u'pile',
+            })
+
+    def test_declaration_mooring_node(self):
+        import dsl
+
+        z, x, y = (16, 30526, 40041)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2079122376
+            dsl.point(2079122376, (-12.312872, -37.063474), {
+                'mooring': u'declaration',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2079122376,
+                'kind': u'mooring',
+                'kind_detail': u'declaration',
+            })
+
+    def test_yachts_mooring_way(self):
+        import dsl
+
+        z, x, y = (16, 15565, 26449)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/584249543
+            dsl.way(584249543, dsl.tile_box(z, x, y), {
+                'man_made': u'pier',
+                'mooring': u'yachts',
+                'source': u'openstreetmap.org',
+                'width': u'1.2',
+            }),
+        )
+
+        # this is really a description of the pier, rather than a feature in
+        # its own right, so pass it through on the pier.
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 584249543,
+                'kind': u'pier',
+                'mooring': u'yachts',
+            })
+
+    def test_customers_mooring_way(self):
+        import dsl
+
+        z, x, y = (16, 19866, 24126)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/278952041
+            dsl.way(278952041, dsl.tile_box(z, x, y), {
+                'access': u'customers',
+                'area': u'yes',
+                'floating': u'no',
+                'horse': u'no',
+                'layer': u'2',
+                'lit': u'yes',
+                'man_made': u'pier',
+                'material': u'wood',
+                'mooring': u'customers',
+                'motor_vehicle': u'no',
+                'seamark:type': u'mooring',
+                'seasonal': u'no',
+                'source': u'openstreetmap.org',
+                'surface': u'wood',
+            }),
+        )
+
+        # again, seems like a description of who's allowed to tie up on the
+        # pier, not a separate feature.
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 278952041,
+                'kind': u'pier',
+                'mooring': u'customers',
+            })
+
+    def test_quay_man_made_way_line(self):
+        import dsl
+
+        z, x, y = (16, 18958, 25284)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/109938886
+            dsl.way(109938886, dsl.tile_diagonal(z, x, y), {
+                'man_made': u'quay',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # should linear quays go into the roads layer like piers?
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 109938886,
+                'kind': u'path',
+                'kind_detail': u'quay',
+            })
+
+    def test_man_made_quay_way_area(self):
+        import dsl
+
+        z, x, y = (16, 33352, 21847)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/465148799
+            dsl.way(465148799, dsl.tile_box(z, x, y), {
+                'man_made': u'quay',
+                'name': u'Kaai 410',
+                'name:de': u'kai 410',
+                'name:fr': u'quai 410',
+                'name:it': u'banchina 410',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # polygonal quays should go into landuse?
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 465148799,
+                'kind': u'quay',
+            })
+
+    def test_sanitary_dump_station_node(self):
+        import dsl
+
+        z, x, y = (16, 19489, 24603)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3925485395
+            dsl.point(3925485395, (-72.938255, 40.865682), {
+                'amenity': u'sanitary_dump_station',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3925485395,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_sanitary_dump_station_way(self):
+        import dsl
+
+        z, x, y = (16, 18684, 24916)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/552257184
+            dsl.way(552257184, dsl.tile_box(z, x, y), {
+                'amenity': u'sanitary_dump_station',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 552257184,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_waterway_sanitary_dump_station_node(self):
+        import dsl
+
+        z, x, y = (16, 18876, 25380)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3472044600
+            dsl.point(3472044600, (-76.306942, 37.561204), {
+                'source': u'openstreetmap.org',
+                'waterway': u'sanitary_dump_station',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3472044600,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_waterway_sanitary_dump_station_way(self):
+        import dsl
+
+        z, x, y = (16, 11649, 25525)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/551894147
+            dsl.way(551894147, dsl.tile_box(z, x, y), {
+                'source': u'openstreetmap.org',
+                'waterway': u'sanitary_dump_station',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 551894147,
+                'kind': u'sanitary_dump_station',
+            })
+
+    def test_marina_sanity_dump_station_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 18725, 23827)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3730870302
+            dsl.point(3730870302, (-77.135342, 44.010267), {
+                'leisure': u'marina',
+                'name': u'Port Picton Harbour Marina',
+                'power_supply': u'yes',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'wikidata': u'Q385085',
+                'wikipedia': u'en:Prince Edward County, Ontario',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3730870302,
+                'kind': u'marina',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_marina_sanity_dump_station_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 18844, 25055)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/39392303
+            dsl.way(39392303, dsl.tile_box(z, x, y), {
+                'leisure': u'marina',
+                'name': u'Bert Jabin\'s Yacht Yard',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 39392303,
+                'kind': u'marina',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_camp_site_sanitary_dump_station_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 10802, 24913)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1798722757
+            dsl.point(1798722757, (-120.662796, 39.566655), {
+                'capacity': u'19',
+                'drinking_water': u'yes',
+                'fee': u'yes',
+                'name': u'Loganville Campground',
+                'operator': u'USFS',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'toilets': u'yes',
+                'toilets:disposal': u'pitlatrine',
+                'tourism': u'camp_site',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1798722757,
+                'kind': u'camp_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_camp_site_sanitary_dump_station_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 18937, 24765)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/506304336
+            dsl.way(506304336, dsl.tile_box(z, x, y), {
+                'internet_access': u'wlan',
+                'internet_access:fee': u'yes',
+                'name': u'Lake-in-Wood Campground',
+                'payment:cash': u'yes',
+                'payment:mastercard': u'yes',
+                'payment:visa': u'yes',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'tourism': u'camp_site',
+                'wheelchair': u'limited',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 506304336,
+                'kind': u'camp_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_caravan_site_sanitary_dump_station_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 19122, 23577)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4345342880
+            dsl.point(4345342880, (-74.959569, 44.991434), {
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'tourism': u'caravan_site',
+                'water_point': u'yes',
+                'name': 'Fake name to pass the no_name_okay filter',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4345342880,
+                'kind': u'caravan_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_caravan_site_sanitary_dump_station_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 19212, 24226)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/416560900
+            dsl.way(416560900, dsl.tile_box(z, x, y), {
+                'name': u'Nickerson Park Campground',
+                'power_supply': u'yes',
+                'sanitary_dump_station': u'yes',
+                'source': u'openstreetmap.org',
+                'tents': u'yes',
+                'tourism': u'caravan_site',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 416560900,
+                'kind': u'caravan_site',
+                'sanitary_dump_station': u'yes',
+            })
+
+    def test_waterway_fuel_node(self):
+        import dsl
+
+        z, x, y = (16, 19406, 24550)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5489425299
+            dsl.point(5489425299, (-73.398601, 41.085890), {
+                'source': u'openstreetmap.org',
+                'waterway': u'fuel',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5489425299,
+                'kind': u'waterway_fuel',
+            })
+
+    def test_waterway_fuel_way(self):
+        import dsl
+
+        z, x, y = (16, 32043, 22582)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/72074171
+            dsl.way(72074171, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'fuel:diesel': u'yes',
+                'seamark:information': u'diesel',
+                'seamark:small_craft_facility:category': u'fuel_station',
+                'seamark:type': u'small_craft_facility',
+                'source': u'openstreetmap.org',
+                'waterway': u'fuel',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 72074171,
+                'kind': u'waterway_fuel',
+            })
+
+    def test_waterway_amenity_fuel_node(self):
+        import dsl
+
+        z, x, y = (16, 34254, 21225)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/270602036
+            dsl.point(270602036, (8.163521, 53.405975), {
+                'amenity': u'fuel',
+                'name': u'Dieseltankstelle',
+                'seamark:small_craft_facility:category': u'fuel_station',
+                'seamark:type': u'small_craft_facility',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 270602036,
+                'kind': u'waterway_fuel',
+            })
