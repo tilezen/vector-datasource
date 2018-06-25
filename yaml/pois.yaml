@@ -527,6 +527,13 @@ filters:
       kind: golf_course
       tier: 4
   # groyne - no POI
+  # field_hospital - seems more specific than hospital, so match it first.
+  - filter: { 'health_facility:type': field_hospital }
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: field_hospital
+      <<: *health_facility_type_kind_detail
   # hospital
   - filter: {amenity: hospital}
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.32 ] }, *tier4_min_zoom ] }, 14 ] }
@@ -855,7 +862,7 @@ filters:
       <<: *output_properties
       kind: waterway_fuel
   - filter:
-      amenity: [bank, cinema, courthouse, customs, embassy, fire_station, fuel, library, police,
+      amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
         post_office, theatre]
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
@@ -1138,12 +1145,6 @@ filters:
       <<: *output_properties
       kind: health_centre
       <<: *health_facility_type_kind_detail
-  - filter: { 'health_facility:type': field_hospital }
-    min_zoom: 15
-    output:
-      <<: *output_properties
-      kind: field_hospital
-      <<: *health_facility_type_kind_detail
   - filter: { 'health_facility:type': dispensary }
     min_zoom: 17
     output:
@@ -1239,18 +1240,20 @@ filters:
     output:
       <<: *output_properties
       kind: funeral_directors
-  - filter:
-      amenity: customs
-    min_zoom: 15
-    output:
-      <<: *output_properties
-      kind: customs
+  # put border_control ahead of customs. many customs checks will be border controls,
+  # but the reverse isn't necessarily true.
   - filter:
       barrier: border_control
-    min_zoom: 14
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       <<: *output_properties
       kind: border_control
+  - filter:
+      amenity: customs
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: customs
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output:
@@ -1558,11 +1561,6 @@ filters:
     output:
       <<: *output_properties
       kind: {col: office}
-  - filter: {office: 'yes'}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: office
   - filter: {shop: bicycle}
     min_zoom: 15
     output:
@@ -2079,6 +2077,13 @@ filters:
     output:
       <<: *output_properties
       kind: craft
+  # if a more specific off isn't found, then default to a generic office.
+  - filter:
+      office: true
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: office
   # if a more specific industrial isn't found, then default to generic industrial kind
   - filter:
       industrial: true
