@@ -142,6 +142,7 @@ global:
           - bicycle_repair_station
           - boat_storage
           - bureau_de_change
+          - car_rental
           - car_sharing
           - car_wash
           - charging_station
@@ -199,10 +200,10 @@ global:
         - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
-        - power: [ pole, tower ]
+        - power: [ pole, tower, generator ]
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
-        - "health_facility:type": field_hospital
+        - "health_facility:type": [field_hospital, health_centre]
         - "seamark:building:function": harbour_master
         - "seamark:small_craft_facility:category": fuel_station
         - tags->icn_ref: true
@@ -243,6 +244,16 @@ filters:
     output:
       kind: null
 
+  # remove abandoned or disused watermills
+  - filter:
+      any:
+        - "abandoned:man_made": watermill
+        - all:
+          - "watermill:disused": true
+          - not: {"watermill:disused": "no"}
+    min_zoom: null
+    output: {kind: null}
+
   ############################################################
   # NOT IN ANY TIER
   #
@@ -250,6 +261,20 @@ filters:
   # otherwise that rule will trigger first. So these have been moved
   # up here.
   ############################################################
+  # if it's a ruin, then the ruin would be the attraction?
+  - filter:
+      ruins: 'yes'
+      man_made: [lighthouse, watermill, windmill]
+    min_zoom:
+      case:
+        - when: { tourism: attraction }
+          then: 14
+        - else: 17
+    output:
+      <<: *output_properties
+      kind: ruins
+      kind_detail: {col: man_made}
+  # attractions which aren't ruined
   - filter: {man_made: [lighthouse, watermill, windmill]}
     min_zoom:
       case:
@@ -517,7 +542,31 @@ filters:
     output:
       <<: *output_properties
       kind: generator
-      kind_detail: {col: 'generator:method'}
+      kind_detail:
+        case:
+          # whitelist common values
+          - when:
+              'generator:method':
+                - anaerobic_digestion
+                - barrage
+                - combustion
+                - fission
+                - gasification
+                - photovoltaic
+                - run-of-the-river
+                - stream
+                - thermal
+                - water-pumped-storage
+                - water-storage
+                - wind_turbine
+            then: {col: 'generator:method'}
+          # fix up some common misspellings and alternative tag uses.
+          - when: {'generator:method': dam}
+            then: water-storage
+          - when: {'generator:method': [solar, solar_photovoltaic_panel, photovoltaik, solar_panel]}
+            then: photovoltaic
+          - when: {'generator:method': wind}
+            then: wind_turbine
       tier: 4
   # golf_course
   - filter: {leisure: golf_course}
@@ -1227,7 +1276,13 @@ filters:
     output:
       <<: *output_properties
       kind: toilets
-      kind_detail: {col: 'toilets:disposal'}
+      kind_detail:
+        # normalize disposal and whitelist
+        case:
+          - when: {'toilets:disposal': [pit_latrine, flush, chemical, pour_flush, bucket]}
+            then: {col: 'toilets:disposal'}
+          - when: {'toilets:disposal': pitlatrine}
+            then: pit_latrine
   - filter: {barrier: [chain, gate, kissing_gate, lift_gate, stile, swing_gate]}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
@@ -1510,7 +1565,7 @@ filters:
       kind: information
   - filter:
       amenity: [atm, bureau_de_change, bus_stop, drinking_water, emergency_phone,
-        gambling, karaoke, karaoke_box, money_transfer, post_box, telephone]
+        karaoke, karaoke_box, money_transfer, post_box, telephone]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1741,36 +1796,14 @@ filters:
       kind: water_well
       kind_detail:
         case:
-          - when:
-              drinking_water: 'yes'
-            then:
-                case:
-                  - when:
-                      pump: 'no'
-                    then: 'drinking_water_no_pump'
-                  - when:
-                      pump: 'powered'
-                    # OSM tags use powered, but HOT icon set calls this "auto"
-                    then: 'drinking_water_pump_powered'
-                  - when:
-                      pump: 'manual'
-                    then: 'drinking_water_pump_manual'
-                  - else: 'drinking_water'
-          - when:
-              drinking_water: 'no'
-            then:
-                case:
-                  - when:
-                      pump: 'no'
-                    then: 'no_pump'
-                  - when:
-                      pump: 'powered'
-                    # OSM tags use powered, but HOT icon set calls this "auto"
-                    then: 'pump_powered'
-                  - when:
-                      pump: 'manual'
-                    then: 'pump_manual'
-                  -  else: null
+          - when: {drinking_water: 'yes'}
+            then: drinking_water
+          - else: not_drinking_water
+      # this is just to whitelist the powered, manual, 'no' values.
+      pump:
+        case:
+          - when: {pump: [powered, manual, 'no']}
+            then: {col: pump}
   - filter: {natural: saddle}
     min_zoom: 14
     output:
@@ -1830,7 +1863,11 @@ filters:
     output:
       <<: *output_properties
       kind: studio
-      kind_detail: {col: studio}
+      kind_detail:
+        # whitelist common studio values as kind_detail.
+        case:
+          - when: {studio: [audio, cinema, photography, radio, television, video]}
+            then: {col: studio}
   - filter: {amenity: bicycle_repair_station}
     min_zoom: 18
     output:
@@ -1999,6 +2036,13 @@ filters:
     output:
       <<: *output_properties
       kind: adult_gaming_centre
+  # this is often used on shop=bookmaker, shop=lottery or
+  # leisure=adult_gaming_centre, but seems more generic than any of those.
+  - filter: {amenity: gambling}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
   - filter:
       waterway: boatyard
     min_zoom: 16
