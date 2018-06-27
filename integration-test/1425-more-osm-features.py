@@ -884,3 +884,24 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 442214478,
                 'kind': u'plant_nursery',
             })
+
+    def test_plaque_node(self):
+        import dsl
+
+        z, x, y = (16, 19299, 24630)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1289222425
+            dsl.point(1289222425, (-73.982936, 40.752781), {
+                'historic': u'memorial',
+                'memorial': u'plaque',
+                'name': u'Wendell L. Willkie',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1289222425,
+                'kind': u'plaque',
+            })

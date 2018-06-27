@@ -1018,6 +1018,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `pitch`
 * `place_of_worship` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `plaque` - A memorial plaque.
 * `playground` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plumber`
 * `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
