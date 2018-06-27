@@ -976,7 +976,10 @@ filters:
     output:
       <<: *output_properties
       kind: wetland
-      kind_detail: {col: wetland}
+      kind_detail:
+        case:
+          - when: { wetland: [bog, fen, mangrove, marsh, mud, reedbed, saltern, saltmarsh, string_bog, swamp, tidalflat, wet_meadow] }
+            then: {col: wetland}
   - filter: {natural: park}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:

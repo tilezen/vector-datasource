@@ -627,7 +627,7 @@ The value of the OpenStreetMap `wall` tag. Common values include `brick`, `castl
 
 ##### Wetland `kind_detail` values:
 
-The value of the OpenStreetMap `wetland` tag. Common values include `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
+The value of the OpenStreetMap `wetland` tag. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
 
 #### Wood and forest `kind_detail` values
 
