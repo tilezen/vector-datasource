@@ -502,6 +502,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `container_terminal`
 * `crane`
 * `cutline`
+* `cutting` - A lowered area of land, usually to carry a road or railway.
 * `danger` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
 * `dike`

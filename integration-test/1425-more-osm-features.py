@@ -1298,3 +1298,22 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 481307273,
                 'kind': u'obelisk',
             })
+
+    def test_cutting_way(self):
+        import dsl
+
+        z, x, y = (16, 17064, 30550)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/283464048
+            dsl.way(283464048, dsl.tile_diagonal(z, x, y), {
+                'man_made': u'cutting',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 283464048,
+                'kind': u'cutting',
+            })

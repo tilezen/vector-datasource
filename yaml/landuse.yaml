@@ -1151,11 +1151,11 @@ filters:
     output:
       <<: *output_properties
       kind: {col: barrier}
-  - filter: {man_made: embankment}
+  - filter: {man_made: [embankment, cutting]}
     min_zoom: 16
     output:
       <<: *output_properties
-      kind: embankment
+      kind: { col: man_made }
   - filter:
       military: danger_area
       geom_type: polygon
