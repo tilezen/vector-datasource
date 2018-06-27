@@ -507,6 +507,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `dike`
 * `ditch`
 * `dog_park`
+* `embankment` - A raised area of land, usually to carry a road or railway.
 * `enclosure`
 * `farm`
 * `farmland`

@@ -210,3 +210,22 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 3017396520,
                 'kind': u'elevator',
             })
+
+    def test_embankment_way(self):
+        import dsl
+
+        z, x, y = (16, 19317, 24645)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/374783696
+            dsl.way(374783696, dsl.tile_diagonal(z, x, y), {
+                'man_made': u'embankment',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 374783696,
+                'kind': u'embankment',
+            })
