@@ -188,7 +188,7 @@ global:
           - lifeguard_tower
           - phone
         - harbour: harbour_master
-        - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
+        - highway: [ bus_stop, elevator, ford, mini_roundabout, motorway_junction, platform,
             rest_area, street_lamp, traffic_signals, trailhead ]
         - historic: landmark
         - landuse: quarry
@@ -2105,6 +2105,12 @@ filters:
     output:
       <<: *output_properties
       kind: sanitary_dump_station
+
+  - filter: {highway: elevator}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: elevator
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

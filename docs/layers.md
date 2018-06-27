@@ -880,6 +880,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `egress`
 * `electrician`
 * `electronics`
+* `elevator` - An enclosure for vertical travel.
 * `embassy`
 * `emergency_phone`
 * `employment_agency`

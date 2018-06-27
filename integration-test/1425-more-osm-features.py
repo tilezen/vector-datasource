@@ -171,3 +171,42 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 663098951,
                 'kind': u'chemist',
             })
+
+    def test_elevator_way(self):
+        import dsl
+
+        z, x, y = (16, 19300, 24647)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/510502210
+            dsl.way(510502210, dsl.tile_box(z, x, y), {
+                'highway': u'elevator',
+                'level': u'(-1,-2)',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 510502210,
+                'kind': u'elevator',
+            })
+
+    def test_elevator_node(self):
+        import dsl
+
+        z, x, y = (16, 19312, 24643)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3017396520
+            dsl.point(3017396520, (-73.911936, 40.699476), {
+                'highway': u'elevator',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3017396520,
+                'kind': u'elevator',
+            })
