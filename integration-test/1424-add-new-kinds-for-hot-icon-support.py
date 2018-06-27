@@ -264,8 +264,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4831455841,
                 'kind': u'water_well',
-                'kind_detail': u'drinking_water',
-                'pump': u'powered',
+                'kind_detail': u'drinkable_powered',
             })
 
     def test_drinking_water_water_well_manual_node(self):
@@ -291,8 +290,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4151615348,
                 'kind': u'water_well',
-                'kind_detail': u'drinking_water',
-                'pump': u'manual',
+                'kind_detail': u'drinkable_manual',
             })
 
     def test_drinking_water_water_well_no_node(self):
@@ -318,8 +316,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 2316015603,
                 'kind': u'water_well',
-                'kind_detail': u'drinking_water',
-                'pump': u'no',
+                'kind_detail': u'drinkable_no_pump',
             })
 
     def test_not_drinking_water_water_well_powered_node(self):
@@ -344,8 +341,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 2321995834,
                 'kind': u'water_well',
-                'kind_detail': u'not_drinking_water',
-                'pump': u'powered',
+                'kind_detail': u'not_drinkable_powered',
             })
 
     def test_not_drinking_water_water_well_manual_node(self):
@@ -368,8 +364,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4859738847,
                 'kind': u'water_well',
-                'kind_detail': u'not_drinking_water',
-                'pump': u'manual',
+                'kind_detail': u'not_drinkable_manual',
             })
 
     def test_not_drinking_water_water_well_no_node(self):
@@ -391,8 +386,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4297637981,
                 'kind': u'water_well',
-                'kind_detail': u'not_drinking_water',
-                'pump': u'no',
+                'kind_detail': u'not_drinkable_no_pump',
             })
 
     def test_funeral_directors_node(self):
@@ -1545,4 +1539,327 @@ class KindsForHotIconSupportTest(FixtureTest):
         self.assert_no_matching_feature(
             z, x, y, 'pois', {
                 'id': 292797056,
+            })
+
+    def test_well_drinkable_pump_unknown(self):
+        import dsl
+
+        z, x, y = (16, 18406, 23509)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2944866554
+            dsl.point(2944866554, (-78.892701, 45.252528), {
+                'drinking_water': u'yes',
+                'man_made': u'water_well',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2944866554,
+                'kind': u'water_well',
+                'kind_detail': u'drinkable',
+            })
+
+    def test_well_not_drinkable_pump_unknown(self):
+        import dsl
+
+        z, x, y = (16, 19787, 24199)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3149670266
+            dsl.point(3149670266, (-71.304862, 42.523910), {
+                'drinking_water': u'no',
+                'man_made': u'water_well',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3149670266,
+                'kind': u'water_well',
+                'kind_detail': u'not_drinkable',
+            })
+
+    def test_shop_fallback_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24631)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/663098951
+            dsl.point(663098951, (-73.988039, 40.749678), {
+                'name': u'Lush',
+                'shop': u'chemist',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # currently we don't break out shop=chemist as a separate kind (many of
+        # them are also amentity=pharmacy), so this triggers the fallback to
+        # the generic shop kind.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 663098951,
+                'kind': u'shop',
+            })
+
+    def test_shop_fallback_way(self):
+        import dsl
+
+        z, x, y = (16, 19209, 24618)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/586396929
+            dsl.way(586396929, dsl.tile_box(z, x, y), {
+                'addr:city': u'Morristown',
+                'addr:housenumber': u'117',
+                'addr:street': u'Speedwell Avenue',
+                'building': u'yes',
+                'name': u'CVS',
+                'roof:shape': u'flat',
+                'shop': u'chemist',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # currently we don't break out shop=chemist as a separate kind (many of
+        # them are also amentity=pharmacy), so this triggers the fallback to
+        # the generic shop kind.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 586396929,
+                'kind': u'shop',
+            })
+
+    def test_shop_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24646)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3781172742
+            dsl.point(3781172742, (-73.991079, 40.686835), {
+                'addr:city': u'Brooklyn',
+                'addr:housenumber': u'64',
+                'addr:postcode': u'11201',
+                'addr:state': u'NY',
+                'addr:street': u'Bergen Street',
+                'name': u'Homage Skate Shop',
+                'shop': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # when we have the shop=yes tag, we fall back to the generic shop kind.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3781172742,
+                'kind': u'shop',
+            })
+
+    def test_shop_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 19288, 24645)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/515962755
+            dsl.way(515962755, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'name': u'Audio Tour Pavilion',
+                'shop': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # when we have the shop=yes tag, we fall back to the generic shop kind.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 515962755,
+                'kind': u'shop',
+            })
+
+    def test_office_fallback_node(self):
+        import dsl
+
+        z, x, y = (16, 19312, 24637)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5344121866
+            dsl.point(5344121866, (-73.912454, 40.725519), {
+                'addr:housenumber': u'55-60',
+                'addr:street': u'58th Street',
+                'name': u'Petro Home Services',
+                'office': u'energy_supplier',
+                'phone': u'+1-718-354-3804',
+                'source': u'openstreetmap.org',
+                'website': u'www.petro.com',
+            }),
+        )
+
+        # we don't currently break out office=energy_supplier separately, so it
+        # gets the generic fallback.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5344121866,
+                'kind': u'office',
+            })
+
+    def test_office_fallback_way(self):
+        import dsl
+
+        z, x, y = (16, 18572, 24941)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/239373623
+            dsl.way(239373623, dsl.tile_box(z, x, y), {
+                'addr:city': u'Martinsburg',
+                'addr:housenumber': u'901',
+                'addr:postcode': u'25401',
+                'addr:state': u'WV',
+                'addr:street': u'Wilson Street',
+                'building': u'yes',
+                'name': u'FIRSTENERGY',
+                'office': u'energy_supplier',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # we don't currently break out office=energy_supplier separately, so it
+        # gets the generic fallback.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 239373623,
+                'kind': u'office',
+            })
+
+    def test_office_yes_node(self):
+        import dsl
+
+        z, x, y = (16, 19300, 24649)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5633395353
+            dsl.point(5633395353, (-73.980805, 40.675520), {
+                'name': u'Fil Doux Textiles',
+                'office': u'yes',
+                'phone': u'+1 212 202 1459',
+                'source': u'openstreetmap.org',
+                'website': u'https://fildoux.com',
+            }),
+        )
+
+        # generic office=yes => generic kind:office
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5633395353,
+                'kind': u'office',
+            })
+
+    def test_office_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 19299, 24645)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/250369751
+            dsl.way(250369751, dsl.tile_box(z, x, y), {
+                'addr:city': u'Brooklyn',
+                'addr:housenumber': u'2',
+                'addr:postcode': u'11201',
+                'addr:state': u'NY',
+                'addr:street': u'MetroTech',
+                'alt_name': u'2 MetroTech Center',
+                'building': u'school',
+                'height': u'57.5',
+                'layer': u'1',
+                'name': u'2 MetroTech Center',
+                'nycdoitt:bin': u'3255603',
+                'office': u'yes',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # generic office=yes => generic kind:office
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 250369751,
+                'kind': u'office',
+            })
+
+    def test_industrial_factory_node(self):
+        import dsl
+
+        z, x, y = (16, 18807, 24829)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2632929388
+            dsl.point(2632929388, (-76.685326, 39.921063), {
+                'addr:city': u'York',
+                'addr:housenumber': u'2315',
+                'addr:postcode': u'17402',
+                'addr:state': u'PA',
+                'addr:street': u'South Queen Street',
+                'building': u'factory',
+                'description': u'Custom Electronic Assembly',
+                'industrial': u'factory',
+                'name': u'Keystone Electronics Inc.',
+                'phone': u'+1-717-747-5900',
+                'source': u'openstreetmap.org',
+                'website': u'http://keyelectron.com/',
+            }),
+        )
+
+        # we don't currently break out a separate kind for industrial=factory,
+        # so it gets the generic fallback.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2632929388,
+                'kind': u'industrial',
+            })
+
+    def test_industrial_factory_way(self):
+        import dsl
+
+        z, x, y = (16, 19286, 24611)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/475766379
+            dsl.way(475766379, dsl.tile_box(z, x, y), {
+                'building': u'industrial',
+                'industrial': u'factory',
+                'name': u'Coca-Cola Bottling Co',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # we don't currently break out a separate kind for industrial=factory,
+        # so it gets the generic fallback.
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 475766379,
+                'kind': u'industrial',
+            })
+
+    def test_industrial_yes_way(self):
+        # couldn't find an industrial=yes, so this is a wholly synthetic test.
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                'industrial': u'yes',
+                'name': u'Something industrial',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1,
+                'kind': u'industrial',
             })

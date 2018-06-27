@@ -1291,7 +1291,7 @@ filters:
       kind_detail: {col: barrier}
   - filter:
       shop: funeral_directors
-    min_zoom: 14
+    min_zoom: 16
     output:
       <<: *output_properties
       kind: funeral_directors
@@ -1796,14 +1796,22 @@ filters:
       kind: water_well
       kind_detail:
         case:
+          - when: {drinking_water: 'yes', pump: 'powered'}
+            then: drinkable_powered
+          - when: {drinking_water: 'yes', pump: 'manual'}
+            then: drinkable_manual
+          - when: {drinking_water: 'yes', pump: 'no'}
+            then: drinkable_no_pump
           - when: {drinking_water: 'yes'}
-            then: drinking_water
-          - else: not_drinking_water
-      # this is just to whitelist the powered, manual, 'no' values.
-      pump:
-        case:
-          - when: {pump: [powered, manual, 'no']}
-            then: {col: pump}
+            then: drinkable
+          - when: {drinking_water: 'no', pump: 'powered'}
+            then: not_drinkable_powered
+          - when: {drinking_water: 'no', pump: 'manual'}
+            then: not_drinkable_manual
+          - when: {drinking_water: 'no', pump: 'no'}
+            then: not_drinkable_no_pump
+          - when: {drinking_water: 'no'}
+            then: not_drinkable
   - filter: {natural: saddle}
     min_zoom: 14
     output:

@@ -940,6 +940,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hunting_stand`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+* `industrial` - An industrial POI which didn't match a more specific kind.
 * `information`
 * `insurance`
 * `it`
@@ -986,6 +987,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `observatory`
+* `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
 * `outdoor`
@@ -1050,6 +1052,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ship_chandler`
 * `shoemaker`
 * `shoes`
+* `shop` - A shop or store which didn't match a more specific kind.
 * `shower`
 * `sinkhole`
 * `ski_rental`
@@ -1109,7 +1112,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `water_point`
 * `water_slide`
 * `water_tower`
-* `water_well` - A location where water can be extracted from the ground. If known, `kind_detail` will be given as `drinking_water` or `not_drinking_water`. If information about pumping is known, the `pump` property will be one of `powered`, `manual` or `no`.
+* `water_well` - A location where water can be extracted from the ground. If known, `kind_detail` will give information about water potability and pump type, with values: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`. The prefix `drinkable` indicates drinking water, `not_drinkable` indicates not drinkable water. The suffix `powered` indicates a powered or automatic pump, `manual` indicates a manual pump, and `no_pump` indicates that the water must be raised without a pump (e.g: a bucket and line). If information about the pump is not available, the `kind_detail` will be either `drinkable` or `not_drinkable`.
 * `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
 * `watering_place`
