@@ -926,3 +926,54 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind': u'reef',
                 'kind_detail': 'coral',
             })
+
+    def test_cosmetics_node(self):
+        import dsl
+
+        z, x, y = (16, 19299, 24646)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5343308393
+            dsl.point(5343308393, (-73.986721, 40.687488), {
+                'name': u'Anwaar Co.',
+                'phone': u'+1 718 875 3791',
+                'shop': u'cosmetics',
+                'source': u'openstreetmap.org',
+                'website': u'http://anwaarco.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5343308393,
+                'kind': u'cosmetics',
+            })
+
+    def test_cosmetics_way(self):
+        import dsl
+
+        z, x, y = (16, 19305, 24637)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/280081650
+            dsl.way(280081650, dsl.tile_box(z, x, y), {
+                'addr:city': u'Brooklyn',
+                'addr:housenumber': u'95',
+                'addr:postcode': u'11222',
+                'addr:state': u'NY',
+                'addr:street': u'Nassau Avenue',
+                'building': u'yes',
+                'height': u'15.1',
+                'name': u'Ziolko Cosmetics & Herbal',
+                'nycdoitt:bin': u'3322680',
+                'phone': u'718 609 9279',
+                'shop': u'cosmetics',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 280081650,
+                'kind': u'cosmetics',
+            })

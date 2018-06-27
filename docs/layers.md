@@ -859,6 +859,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `consulting`
 * `convenience`
 * `copyshop` - A shop offering photocopying and printing services.
+* `cosmetics` - A shop selling cosmetics.
 * `courthouse`
 * `craft` - A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
 * `crane`
