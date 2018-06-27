@@ -1216,3 +1216,22 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind': u'bunker',
                 'kind_detail': u'missile_silo',
             })
+
+    def test_wayside_cross_node(self):
+        import dsl
+
+        z, x, y = (16, 19309, 24677)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4987290359
+            dsl.point(4987290359, (-73.927802, 40.559544), {
+                'historic': u'wayside_cross',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4987290359,
+                'kind': u'wayside_cross',
+            })

@@ -1129,6 +1129,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `waterfall`
 * `watering_place`
 * `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`.
+* `wayside_cross`
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`

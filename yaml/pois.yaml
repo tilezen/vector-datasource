@@ -190,7 +190,7 @@ global:
         - harbour: harbour_master
         - highway: [ bus_stop, elevator, ford, mini_roundabout, motorway_junction, platform,
             rest_area, street_lamp, traffic_signals, trailhead ]
-        - historic: landmark
+        - historic: [landmark, wayside_cross]
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
         - lock: yes
@@ -2134,6 +2134,12 @@ filters:
     output:
       <<: *output_properties
       kind: elevator
+
+  - filter: { historic: wayside_cross }
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: wayside_cross
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION
