@@ -78,6 +78,14 @@ global:
       sidewalk: {col: sidewalk}
       sidewalk_left: {col: 'sidewalk:left'}
       sidewalk_right: {col: 'sidewalk:right'}
+      cutting:
+        case:
+          - when: {cutting: ['yes', 'right', 'left', 'both']}
+            then: true
+      embankment:
+        case:
+          - when: {embankment: ['yes', 'right', 'left', 'two_sided', 'both']}
+            then: true
   - &osm_network
       mz_networks: {col: mz_networks}
       network: {col: network}

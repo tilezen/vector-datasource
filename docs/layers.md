@@ -1210,10 +1210,12 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ascent`: ski pistes from OpenStreetMap
 * `access`: `private`, `yes`, `no`, `permissive`, `customers`, `destination`, and other values from OpenStreetMap
 * `bicycle`: `yes`, `no`, `designated`, `dismount`, and other values from OpenStreetMap
+* `cutting`: True if the road or railway is in a cutting.
 * `colour`: ski pistes from OpenStreetMap
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
+* `embankment`: True if the road or railway is on an embankment.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap

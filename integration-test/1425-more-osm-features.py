@@ -1317,3 +1317,61 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 283464048,
                 'kind': u'cutting',
             })
+
+    def test_railway_cutting_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 19279, 24646)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/95467617
+            dsl.way(95467617, dsl.tile_diagonal(z, x, y), {
+                'cutting': u'yes',
+                'electrified': u'no',
+                'gauge': u'1435',
+                'maxspeed': u'15 mph',
+                'name': u'Bayonne Connection',
+                'railway': u'rail',
+                'railway:traffic_mode': u'freight',
+                'source': u'openstreetmap.org',
+                'source:maxspeed': u'Conrail ETT 2013-10-17',
+                'usage': u'industrial',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 95467617,
+                'kind': u'rail',
+                'cutting': True,
+            })
+
+    def test_railway_embankment_yes_way(self):
+        import dsl
+
+        z, x, y = (16, 19278, 24646)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/95467611
+            dsl.way(95467611, dsl.tile_diagonal(z, x, y), {
+                'electrified': u'no',
+                'embankment': u'yes',
+                'gauge': u'1435',
+                'maxspeed': u'25 mph',
+                'name': u'National Docks Branch',
+                'old_railway_operator': u'LV',
+                'operator': u'Conrail',
+                'railway': u'rail',
+                'railway:traffic_mode': u'freight',
+                'source': u'openstreetmap.org',
+                'source:maxspeed': u'Conrail ETT 2013-10-17',
+                'usage': u'branch',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 95467611,
+                'kind': u'rail',
+                'embankment': True,
+            })
