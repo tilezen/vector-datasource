@@ -486,7 +486,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `attraction`
 * `aviary`
 * `battlefield`
-* `beach`
+* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
 * `breakwater`
 * `bridge`
 * `camp_site`
@@ -792,7 +792,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `battlefield`
 * `bbq`
 * `beach_resort`
-* `beach`
+* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
 * `beacon`
 * `beauty`
 * `bed_and_breakfast`

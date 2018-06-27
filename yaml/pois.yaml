@@ -730,6 +730,12 @@ filters:
       <<: *output_properties
       kind: beach
       tier: 5
+      # whitelist most common surface values for beaches. i'm not quite sure i'd
+      # call surface=grass a beach, but it's in the data..?
+      kind_detail:
+        case:
+          - when: {surface: [grass, gravel, pebbles, pebblestone, rocky, sand]}
+            then: {col: surface}
   # glacier - no POI
   # maze
   - filter:
