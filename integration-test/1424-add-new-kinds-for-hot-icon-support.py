@@ -1586,51 +1586,53 @@ class KindsForHotIconSupportTest(FixtureTest):
     def test_shop_fallback_node(self):
         import dsl
 
-        z, x, y = (16, 19298, 24631)
+        z, x, y = (16, 19297, 24646)
 
         self.generate_fixtures(
-            # https://www.openstreetmap.org/node/663098951
-            dsl.point(663098951, (-73.988039, 40.749678), {
-                'name': u'Lush',
-                'shop': u'chemist',
+            # https://www.openstreetmap.org/node/2549967219
+            dsl.point(2549967219, (-73.994662, 40.685270), {
+                'addr:housenumber': u'254',
+                'addr:postcode': u'11231',
+                'addr:street': u'Court Street',
+                'name': u'American Beer Distributing Co.',
+                'shop': u'beverages',
                 'source': u'openstreetmap.org',
             }),
         )
 
-        # currently we don't break out shop=chemist as a separate kind (many of
-        # them are also amentity=pharmacy), so this triggers the fallback to
-        # the generic shop kind.
+        # currently we don't break out shop=beverages as a separate kind, so
+        # this triggers the fallback to the generic shop kind.
         self.assert_has_feature(
             z, x, y, 'pois', {
-                'id': 663098951,
+                'id': 2549967219,
                 'kind': u'shop',
             })
 
     def test_shop_fallback_way(self):
         import dsl
 
-        z, x, y = (16, 19209, 24618)
+        z, x, y = (16, 19303, 24648)
 
         self.generate_fixtures(
-            # https://www.openstreetmap.org/way/586396929
-            dsl.way(586396929, dsl.tile_box(z, x, y), {
-                'addr:city': u'Morristown',
-                'addr:housenumber': u'117',
-                'addr:street': u'Speedwell Avenue',
+            # https://www.openstreetmap.org/way/265733688
+            dsl.way(265733688, dsl.tile_box(z, x, y), {
+                'addr:housenumber': u'648',
+                'addr:postcode': u'11238',
+                'addr:street': u'Washington Avenue',
                 'building': u'yes',
-                'name': u'CVS',
-                'roof:shape': u'flat',
-                'shop': u'chemist',
+                'height': u'11.5',
+                'name': u'Prospect Heights Beer Works',
+                'nycdoitt:bin': u'3027946',
+                'shop': u'beverages',
                 'source': u'openstreetmap.org',
             }),
         )
 
-        # currently we don't break out shop=chemist as a separate kind (many of
-        # them are also amentity=pharmacy), so this triggers the fallback to
-        # the generic shop kind.
+        # currently we don't break out shop=beverages as a separate kind, so
+        # this triggers the fallback to the generic shop kind.
         self.assert_has_feature(
             z, x, y, 'pois', {
-                'id': 586396929,
+                'id': 265733688,
                 'kind': u'shop',
             })
 

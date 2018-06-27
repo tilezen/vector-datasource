@@ -151,3 +151,23 @@ class MoreOSMFeaturesTest(FixtureTest):
                     'kind': u'beach',
                     'kind_detail': u'rocky',
                 })
+
+    def test_chemist_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24631)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/663098951
+            dsl.point(663098951, (-73.988039, 40.749678), {
+                'name': u'Lush',
+                'shop': u'chemist',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 663098951,
+                'kind': u'chemist',
+            })

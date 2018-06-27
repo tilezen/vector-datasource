@@ -493,6 +493,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `caravan_site`
 * `carousel`
 * `cemetery`
+* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `cinema`
 * `city_wall`
 * `college`
