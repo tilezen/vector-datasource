@@ -960,7 +960,7 @@ filters:
       <<: *output_properties
       kind: {col: craft}
   - filter:
-      shop: [charity, chemist, cosmetics, furniture, golf, pet, shoes, variety_store]
+      shop: [charity, chemist, cosmetics, fishmonger, furniture, golf, pet, shoes, variety_store]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties

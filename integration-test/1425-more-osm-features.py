@@ -977,3 +977,52 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 280081650,
                 'kind': u'cosmetics',
             })
+
+    def test_fishmonger_node(self):
+        import dsl
+
+        z, x, y = (16, 19327, 24641)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2274506529
+            dsl.point(2274506529, (-73.830344, 40.709093), {
+                'addr:housenumber': u'81-18',
+                'addr:street': u'Lefferts Boulevard',
+                'name': u'Kew Gardens Fish Market',
+                'shop': u'fishmonger',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2274506529,
+                'kind': u'fishmonger',
+            })
+
+    def test_fishmonger_way(self):
+        import dsl
+
+        z, x, y = (16, 19331, 24643)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/283172152
+            dsl.way(283172152, dsl.tile_box(z, x, y), {
+                'addr:city': u'Jamaica',
+                'addr:housenumber': u'91-02',
+                'addr:postcode': u'11435',
+                'addr:street': u'Sutphin Boulevard',
+                'building': u'yes',
+                'height': u'10.0',
+                'name': u'Corner Fish Market',
+                'nycdoitt:bin': u'4213900',
+                'shop': u'fishmonger',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 283172152,
+                'kind': u'fishmonger',
+            })

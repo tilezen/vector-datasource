@@ -901,6 +901,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `firepit`
 * `fishing`
 * `fishing_area`
+* `fishmonger` - A shop selling fish and seafood.
 * `fitness_station`
 * `fitness`
 * `florist`
