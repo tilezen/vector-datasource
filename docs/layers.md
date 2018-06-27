@@ -627,7 +627,7 @@ The value of the OpenStreetMap `wetland` tag. Common values include `bog`, `fen`
 
 #### Wood and forest `kind_detail` values
 
-* The value of the OpenStreetMap `leaf_type` tag. [Common values](https://taginfo.openstreetmap.org/keys/leaf_type#values) include `broadleaved`, `needleleaved`, or `mixed`.
+* The value of the OpenStreetMap `leaf_type` tag, whitelisted to `broadleaved`, `needleleaved`, `mixed` or `leafless`.
 
 ## Places
 

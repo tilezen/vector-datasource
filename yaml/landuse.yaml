@@ -133,8 +133,12 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  # whitelist for leaf_type
   - &leaftype_kind_detail
-    kind_detail: { col: leaf_type }
+    kind_detail:
+      case:
+        - when: {leaf_type: [broadleaved, leafless, mixed, needleleaved]}
+          then: {col: leaf_type}
 filters:
   - filter: {meta.source: ne}
     min_zoom: 4
