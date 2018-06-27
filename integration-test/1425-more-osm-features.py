@@ -1026,3 +1026,193 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 283172152,
                 'kind': u'fishmonger',
             })
+
+    def test_pillbox_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24706)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2576451001
+            dsl.point(2576451001, (-73.991799, 40.438530), {
+                'bunker_type': u'pillbox',
+                'military': u'bunker',
+                'name': u'Battery Kingman',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2576451001,
+                'kind': u'bunker',
+                'kind_detail': u'pillbox',
+            })
+
+    def test_munitions_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 13379, 25960)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3911068941
+            dsl.point(3911068941, (-106.505514, 34.991425), {
+                'access': u'no',
+                'bunker_type': u'munitions',
+                'location': u'underground',
+                'military': u'bunker',
+                'name': u'Point 105',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3911068941,
+                'kind': u'bunker',
+                'kind_detail': u'munitions',
+            })
+
+    def test_gun_emplacement_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 19470, 30932)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3516716377
+            dsl.point(3516716377, (-73.045059, 10.029707), {
+                'building': u'bunker',
+                'bunker_type': u'gun_emplacement',
+                'FIXME': u'name',
+                'landuse': u'military',
+                'military': u'bunker',
+                'name': u'Batallón de Alta Montaña',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3516716377,
+                'kind': u'bunker',
+                'kind_detail': u'gun_emplacement',
+            })
+
+    def test_hardened_aircraft_shelter_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 18873, 28902)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/462127948
+            dsl.point(462127948, (-76.326978, 20.766293), {
+                'building': u'bunker',
+                'bunker_type': u'hardened_aircraft_shelter',
+                'military': u'bunker',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 462127948,
+                'kind': u'bunker',
+                'kind_detail': u'hardened_aircraft_shelter',
+            })
+
+    def test_blockhouse_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 34926, 24316)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4687134694
+            dsl.point(4687134694, (11.854714, 42.045672), {
+                'building': u'bunker',
+                'bunker_type': u'blockhouse',
+                'landuse': u'military',
+                'military': u'bunker',
+                'name': u'Tobruk',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4687134694,
+                'kind': u'bunker',
+                'kind_detail': u'blockhouse',
+            })
+
+    def test_technical_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 31253, 23940)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4955741213
+            dsl.point(4955741213, (-8.318059, 43.563983), {
+                'abandoned': u'yes',
+                'bunker_type': u'technical',
+                'description': u'Antigua batería militar',
+                'historic': u'yes',
+                'military': u'bunker',
+                'name': u'Proyectores B6',
+                'official_name': u'Batería Militar 6',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4955741213,
+                'kind': u'bunker',
+                'kind_detail': u'technical',
+            })
+
+    def test_mg_nest_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 32669, 24924)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4949636318
+            dsl.point(4949636318, (-0.541801, 39.518136), {
+                'bunker_type': u'mg_nest',
+                'historic': u'yes',
+                'military': u'bunker',
+                'ruins': u'no',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4949636318,
+                'kind': u'bunker',
+                'kind_detail': u'mg_nest',
+            })
+
+    def test_missile_silo_bunker_node(self):
+        import dsl
+
+        z, x, y = (16, 10814, 26017)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5434097308
+            dsl.point(5434097308, (-120.596493, 34.734051), {
+                'building': u'bunker',
+                'bunker_type': u'missile_silo',
+                'landuse': u'military',
+                'military': u'bunker',
+                'name': u'Titan--',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5434097308,
+                'kind': u'bunker',
+                'kind_detail': u'missile_silo',
+            })

@@ -197,6 +197,7 @@ global:
         - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, watermill, windmill ]
+        - military: bunker
         - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
@@ -497,6 +498,16 @@ filters:
       <<: *output_properties
       kind: danger_area
       tier: 3
+  # bunker
+  - filter: {military: bunker}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: bunker
+      kind_detail:
+        case:
+          - when: { bunker_type: [pillbox, munitions, gun_emplacement, hardened_aircraft_shelter, blockhouse, technical, mg_nest, missile_silo] }
+            then: { col: bunker_type }
   # military
   - filter: {landuse: military}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }

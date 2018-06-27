@@ -819,6 +819,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bookmaker`
 * `books`
 * `brewery`
+* `bunker` - A reinforced military building. Where known, the `kind_detail` will be one of: `blockhouse`, `gun_emplacement`, `hardened_aircraft_shelter`, `mg_nest`, `missile_silo`, `munitions`, `pillbox`, `technical`.
 * `bus_station`
 * `bus_stop`
 * `butcher`
