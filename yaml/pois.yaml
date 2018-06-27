@@ -16,16 +16,19 @@ global:
     operator: {col: operator}
     religion: {col: religion}
     sport: {col: sport}
+    ref: {col: ref}
+    attraction: {col: attraction}
+    zoo: {col: zoo}
+    exit_to: {col: exit_to}
+  - &transit_properties
     mz_transit_score: {col: mz_transit_score}
     mz_transit_root_relation_id: {col: mz_transit_root_relation_id}
     train_routes: {col: train_routes}
     subway_routes: {col: subway_routes}
     light_rail_routes: {col: light_rail_routes}
     tram_routes: {col: tram_routes}
-    ref: {col: ref}
-    attraction: {col: attraction}
-    zoo: {col: zoo}
-    exit_to: {col: exit_to}
+  - &health_facility_type_kind_detail
+    kind_detail: {col: 'health_facility:type'}
 
   - &tier1_min_zoom
     lookup:
@@ -130,40 +133,77 @@ global:
   - &no_name_okay
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
-        - amenity: [ atm, bbq, bench, bicycle_parking, bicycle_rental,
-            bicycle_repair_station, boat_storage, car_sharing, car_wash, charging_station, customs, fuel, harbourmaster, hunting_stand,
-            life_ring, motorcycle_parking, parking, picnic_table, post_box, ranger_station, recycling,
-            sanitary_dump_station, shelter, shower, telephone, toilets, waste_basket, waste_disposal,
-            water_point, watering_place ]
+        - amenity:
+          - atm
+          - bbq
+          - bench
+          - bicycle_parking
+          - bicycle_rental
+          - bicycle_repair_station
+          - boat_storage
+          - bureau_de_change
+          - car_rental
+          - car_sharing
+          - car_wash
+          - charging_station
+          - customs
+          - fuel
+          - harbourmaster
+          - hunting_stand
+          - karaoke_box
+          - life_ring
+          - money_transfer
+          - motorcycle_parking
+          - parking
+          - picnic_table
+          - post_box
+          - ranger_station
+          - recycling
+          - sanitary_dump_station
+          - shelter
+          - shower
+          - taxi
+          - telephone
+          - toilets
+          - waste_basket
+          - waste_disposal
+          - water_point
+          - watering_place
         - barrier:
-            - block
-            - bollard
-            - cattle_grid
-            - chain
-            - cycle_barrier
-            - gate
-            - kissing_gate
-            - lift_gate
-            - stile
-            - swing_gate
-            - toll_booth
-        - emergency: [ lifeguard_tower, phone, defibrillator ]
+          - block
+          - bollard
+          - border_control
+          - cattle_grid
+          - chain
+          - cycle_barrier
+          - gate
+          - kissing_gate
+          - lift_gate
+          - stile
+          - swing_gate
+          - toll_booth
+        - emergency:
+          - defibrillator
+          - fire_hydrant
+          - lifeguard_tower
+          - phone
         - harbour: harbour_master
         - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
-            rest_area, traffic_signals, trailhead ]
+            rest_area, street_lamp, traffic_signals, trailhead ]
         - historic: landmark
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
         - lock: yes
         - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
-            water_well, windmill ]
+            water_well, watermill, windmill ]
         - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
-        - power: [ pole, tower ]
+        - power: [ pole, tower, generator ]
         - public_transport: [ platform, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
+        - "health_facility:type": [field_hospital, health_centre]
         - "seamark:building:function": harbour_master
         - "seamark:small_craft_facility:category": fuel_station
         - tags->icn_ref: true
@@ -176,7 +216,14 @@ global:
         - tags->rwn_ref: true
         - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
         - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
-        - waterway: [ dam, lock, waterfall, boatyard, boat_lift, sanitary_dump_station, fuel ]
+        - waterway:
+          - boat_lift
+          - boatyard
+          - dam
+          - fuel
+          - lock
+          - sanitary_dump_station
+          - waterfall
 
 filters:
   # remove disused things, they're not real POIs any more
@@ -197,6 +244,16 @@ filters:
     output:
       kind: null
 
+  # remove abandoned or disused watermills
+  - filter:
+      any:
+        - "abandoned:man_made": watermill
+        - all:
+          - "watermill:disused": true
+          - not: {"watermill:disused": "no"}
+    min_zoom: null
+    output: {kind: null}
+
   ############################################################
   # NOT IN ANY TIER
   #
@@ -204,7 +261,21 @@ filters:
   # otherwise that rule will trigger first. So these have been moved
   # up here.
   ############################################################
-  - filter: {man_made: windmill}
+  # if it's a ruin, then the ruin would be the attraction?
+  - filter:
+      ruins: 'yes'
+      man_made: [lighthouse, watermill, windmill]
+    min_zoom:
+      case:
+        - when: { tourism: attraction }
+          then: 14
+        - else: 17
+    output:
+      <<: *output_properties
+      kind: ruins
+      kind_detail: {col: man_made}
+  # attractions which aren't ruined
+  - filter: {man_made: [lighthouse, watermill, windmill]}
     min_zoom:
       case:
         - when: { tourism: attraction }
@@ -212,16 +283,7 @@ filters:
         - else: 15
     output:
       <<: *output_properties
-      kind: windmill
-  - filter: {man_made: lighthouse}
-    min_zoom:
-      case:
-        - when: { tourism: attraction }
-          then: 14
-        - else: 15
-    output:
-      <<: *output_properties
-      kind: lighthouse
+      kind: {col: man_made}
   - filter: {man_made: observatory}
     min_zoom: 15
     output:
@@ -415,26 +477,25 @@ filters:
   ############################################################
   # aerodrome
   - filter:
-      aeroway: [aerodrome, airport]
+      aeroway: [aerodrome, airport, heliport]
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 4.12 ] }, *tier3_min_zoom ] }, 13 ] }
     output:
       <<: *output_properties
       kind: {col: aeroway}
       tier: 3
-  # miltary airfield
-  - filter: {military: airfield}
+  # airfield, naval_base
+  - filter: {military: [airfield, range, naval_base]}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
     output:
       <<: *output_properties
-      kind: airfield
-      kind_detail: military
+      kind: {col: military}
       tier: 3
-  # military danger area
+  # danger_area
   - filter: {military: danger_area}
-    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 15 ] }
     output:
       <<: *output_properties
-      kind: danger
+      kind: danger_area
       tier: 3
   # military
   - filter: {landuse: military}
@@ -481,6 +542,31 @@ filters:
     output:
       <<: *output_properties
       kind: generator
+      kind_detail:
+        case:
+          # whitelist common values
+          - when:
+              'generator:method':
+                - anaerobic_digestion
+                - barrage
+                - combustion
+                - fission
+                - gasification
+                - photovoltaic
+                - run-of-the-river
+                - stream
+                - thermal
+                - water-pumped-storage
+                - water-storage
+                - wind_turbine
+            then: {col: 'generator:method'}
+          # fix up some common misspellings and alternative tag uses.
+          - when: {'generator:method': dam}
+            then: water-storage
+          - when: {'generator:method': [solar, solar_photovoltaic_panel, photovoltaik, solar_panel]}
+            then: photovoltaic
+          - when: {'generator:method': wind}
+            then: wind_turbine
       tier: 4
   # golf_course
   - filter: {leisure: golf_course}
@@ -490,12 +576,20 @@ filters:
       kind: golf_course
       tier: 4
   # groyne - no POI
+  # field_hospital - seems more specific than hospital, so match it first.
+  - filter: { 'health_facility:type': field_hospital }
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: field_hospital
+      <<: *health_facility_type_kind_detail
   # hospital
   - filter: {amenity: hospital}
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.32 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
       <<: *output_properties
       kind: hospital
+      <<: *health_facility_type_kind_detail
       tier: 4
   # industrial - no POI
   # pier - no POI
@@ -534,11 +628,18 @@ filters:
           - else: { col: 'sport' }
       tier: 4
   # stadium
-  - filter: {leisure: stadium}
+  - filter: {leisure: [horse_riding, stadium]}
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.3 ] }, *tier4_min_zoom ] }, 15 ] }
     output:
       <<: *output_properties
-      kind: stadium
+      kind: {col: leisure}
+      tier: 4
+  # casino
+  - filter: {amenity: casino}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.3 ] }, *tier4_min_zoom ] }, 15 ] }
+    output:
+      <<: *output_properties
+      kind: casino
       tier: 4
   # substation
   - filter: {power: substation}
@@ -590,6 +691,26 @@ filters:
     output:
       <<: *output_properties
       kind: zoo
+      tier: 4
+  # other random landuse
+  - filter: {landuse: [container_terminal, port_terminal, quay, shipyard, wharf]}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+      tier: 4
+  # seems odd quay is both landuse and man_made...
+  - filter: {man_made: quay}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    output:
+      <<: *output_properties
+      kind: quay
+      tier: 4
+  - filter: {waterway: boatyard}
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    output:
+      <<: *output_properties
+      kind: {col: waterway}
       tier: 4
 
   ############################################################
@@ -716,7 +837,12 @@ filters:
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: parking
+      kind:
+        case:
+          - when:
+              parking: ['multi-storey', underground, rooftop]
+            then: 'parking_garage'
+          - else: 'parking'
       tier: 6
 
   ############################################################
@@ -761,6 +887,7 @@ filters:
     min_zoom: 10
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: station
       state: {col: tags->state}
   - filter: {natural: spring}
@@ -784,12 +911,20 @@ filters:
       <<: *output_properties
       kind: waterway_fuel
   - filter:
-      amenity: [bank, cinema, courthouse, customs, embassy, fire_station, fuel, library, police,
+      amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
         post_office, theatre]
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
+  - filter:
+      any:
+        - waterway: fuel
+        - tags->'seamark:small_craft_facility:category': 'fuel_station'
+    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: waterway_fuel
   - filter:
       amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
@@ -809,6 +944,7 @@ filters:
     output:
       <<: *output_properties
       kind: {col: amenity}
+      <<: *health_facility_type_kind_detail
   - filter:
       craft: [brewery, carpenter, confectionery, dressmaker, electrician, gardener,
         handicraft, hvac, metal_construction, painter, photographer, photographic_laboratory,
@@ -818,8 +954,13 @@ filters:
       <<: *output_properties
       kind: {col: craft}
   - filter:
-      shop: [variety_store, furniture, shoes, pet, golf]
+      shop: [charity, furniture, golf, pet, shoes, variety_store]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: shop}
+  - filter: {shop: [camera, copyshop, photo, tyres]}
+    min_zoom: 16
     output:
       <<: *output_properties
       kind: {col: shop}
@@ -828,6 +969,7 @@ filters:
     output:
       <<: *output_properties
       kind: nursing_home
+      <<: *health_facility_type_kind_detail
   - filter: {shop: music}
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output:
@@ -868,11 +1010,11 @@ filters:
     output:
       <<: *output_properties
       kind: scuba_diving
-  - filter: {shop: motorcycle}
+  - filter: {shop: [atv, motorcycle, snowmobile]}
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: motorcycle
+      kind: {col: shop}
   - filter: {shop: mall}
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
     output:
@@ -918,7 +1060,10 @@ filters:
     output:
       <<: *output_properties
       kind: ice_cream
-  - filter: {amenity: ferry_terminal}
+  - filter:
+      any:
+        amenity: ferry_terminal
+        landuse: ferry_terminal
     min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
     output:
       <<: *output_properties
@@ -978,11 +1123,11 @@ filters:
     output:
       <<: *output_properties
       kind: fitness_station
-  - filter: {leisure: beach_resort}
+  - filter: {leisure: [beach_resort, adult_gaming_centre]}
     min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 0.5 ] } } }
     output:
       <<: *output_properties
-      kind: beach_resort
+      kind: {col: leisure}
   - filter:
       tourism: [hotel, motel]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.3 ] } } }
@@ -1043,24 +1188,63 @@ filters:
     output:
       <<: *output_properties
       kind: gallery
+  - filter: { 'health_facility:type': health_centre }
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: health_centre
+      <<: *health_facility_type_kind_detail
+  - filter: { 'health_facility:type': dispensary }
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: dispensary
+      <<: *health_facility_type_kind_detail
   - filter:
-      amenity: [social_facility, clinic, doctors, dentist]
+      social_facility: ambulatory_care
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: ambulatory_care
+      <<: *health_facility_type_kind_detail
+  - filter:
+      amenity: [clinic, dentist, doctors, social_facility]
     min_zoom: 17
     output:
       <<: *output_properties
       kind: {col: amenity}
-  - filter: {healthcare: midwife}
+      <<: *health_facility_type_kind_detail
+  - filter: {healthcare: [bank, blood, chiropractor, donation, hospice, midwife, midwife_occupational, optometrist_paediatrics, physiotherapist_physiotherapy, podiatrist_psychotherapist, rehabilitation, speech, therapist, therapist]}
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: midwife
+      kind: {col: tags->healthcare}
+      <<: *health_facility_type_kind_detail
+  - filter: {healthcare: alternative}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: healthcare_alternative
+      <<: *health_facility_type_kind_detail
+  - filter: {healthcare: centre}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: healthcare_centre
+      <<: *health_facility_type_kind_detail
+  - filter: {healthcare: laboratory}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: healthcare_laboratory
+      <<: *health_facility_type_kind_detail
   - filter: {healthcare: [blood_donation, blood_bank]}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: blood_bank
   - filter:
-      amenity: [kindergarten, childcare]
+      amenity: [baby_hatch, kindergarten, childcare]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1070,29 +1254,61 @@ filters:
       any:
         amenity: boat_rental
         shop: boat_rental
-        tags->rental: boat
-        all: {shop: boat, tags->rental: 'yes'}
+        rental: boat
+        all: {shop: boat, rental: 'yes'}
     min_zoom: 16
     output:
       <<: *output_properties
       kind: boat_rental
-
-  - filter: {emergency: phone}
+  - filter: {amenity: harbourmaster}
     min_zoom: 18
     output:
       <<: *output_properties
-      kind: phone
+      kind: harbourmaster
+
+  - filter: {emergency: [defibrillator, fire_hydrant, phone]}
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: {col: emergency}
   - filter: {amenity: toilets}
     min_zoom: 18
     output:
       <<: *output_properties
       kind: toilets
-  - filter: {barrier: [gate, lift_gate, kissing_gate, swing_gate, stile, chain]}
+      kind_detail:
+        # normalize disposal and whitelist
+        case:
+          - when: {'toilets:disposal': [pit_latrine, flush, chemical, pour_flush, bucket]}
+            then: {col: 'toilets:disposal'}
+          - when: {'toilets:disposal': pitlatrine}
+            then: pit_latrine
+  - filter: {barrier: [chain, gate, kissing_gate, lift_gate, stile, swing_gate]}
     min_zoom: { call: { func: mz_get_min_zoom_highway_level_gate, args: [ { col: fid }, { col: meta.ways } ] } }
     output:
       <<: *output_properties
       kind: gate
       kind_detail: {col: barrier}
+  - filter:
+      shop: funeral_directors
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: funeral_directors
+  # put border_control ahead of customs. many customs checks will be border controls,
+  # but the reverse isn't necessarily true.
+  - filter:
+      barrier: border_control
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: border_control
+  - filter:
+      amenity: customs
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    output:
+      <<: *output_properties
+      kind: customs
   - filter: {barrier: toll_booth}
     min_zoom: 15
     output:
@@ -1127,6 +1343,7 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: station
       state: {col: tags->state}
   - filter:
@@ -1138,46 +1355,55 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: {col: railway}
   - filter: {railway: platform}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {highway: platform}
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: bus_stop
   - filter: {public_transport: platform, tags->rail: 'yes'}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {public_transport: platform, tags->light_rail: 'yes'}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {public_transport: platform, tags->bus: 'yes'}
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: bus_stop
   - filter: {public_transport: platform}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: platform
   - filter: {public_transport: stop_area}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: stop_area
   - filter: {tags->site: stop_area}
     min_zoom: 15
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: stop_area
   - filter: {tourism: alpine_hut}
     min_zoom: 13
@@ -1195,7 +1421,13 @@ filters:
       <<: *output_properties
       kind: helipad
   - filter:
-      amenity: [bus_station, car_sharing, recycling, shelter]
+      amenity: arts_centre
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
+  - filter:
+      amenity: [bus_station, car_rental, car_sharing, recycling, shelter]
     min_zoom: 16
     output:
       <<: *output_properties
@@ -1332,14 +1564,14 @@ filters:
       <<: *output_properties
       kind: information
   - filter:
-      amenity: [atm, bus_stop, drinking_water, emergency_phone,
-        post_box, telephone]
+      amenity: [atm, bureau_de_change, bus_stop, drinking_water, emergency_phone,
+        karaoke, karaoke_box, money_transfer, post_box, telephone]
     min_zoom: 17
     output:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      highway: [bus_stop, traffic_signals]
+      highway: [bus_stop, street_lamp, traffic_signals]
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1384,11 +1616,6 @@ filters:
     output:
       <<: *output_properties
       kind: {col: office}
-  - filter: {office: 'yes'}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: office
   - filter: {shop: bicycle}
     min_zoom: 15
     output:
@@ -1490,10 +1717,38 @@ filters:
       <<: *output_properties
       kind: cycle_barrier
   - filter:
-      shop: [art, bakery, beauty, books, butcher, car, car_repair, clothes,
-        computer, convenience, fashion, florist, gift, greengrocer, grocery,
-        hairdresser, hifi, jewelry, mobile_phone, newsagent, optician,
-        perfumery, ship_chandler, stationery, tobacco, travel_agency]
+      shop:
+        - art
+        - bakery
+        - beauty
+        - bookmaker
+        - books
+        - butcher
+        - car
+        - car_parts
+        - car_repair
+        - clothes
+        - computer
+        - convenience
+        - fashion
+        - florist
+        - garden_centre
+        - gift
+        - golf
+        - greengrocer
+        - grocery
+        - hairdresser
+        - hifi
+        - jewelry
+        - lottery
+        - mobile_phone
+        - newsagent
+        - optician
+        - perfumery
+        - ship_chandler
+        - stationery
+        - tobacco
+        - travel_agency
     min_zoom: 17
     output:
       <<: *output_properties
@@ -1514,6 +1769,7 @@ filters:
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *transit_properties
       kind: subway_entrance
   - filter:
       amenity: [bench, waste_basket]
@@ -1532,11 +1788,30 @@ filters:
     output:
       <<: *output_properties
       kind: adit
+
   - filter: {man_made: water_well}
     min_zoom: 17
     output:
       <<: *output_properties
       kind: water_well
+      kind_detail:
+        case:
+          - when: {drinking_water: 'yes', pump: 'powered'}
+            then: drinkable_powered
+          - when: {drinking_water: 'yes', pump: 'manual'}
+            then: drinkable_manual
+          - when: {drinking_water: 'yes', pump: 'no'}
+            then: drinkable_no_pump
+          - when: {drinking_water: 'yes'}
+            then: drinkable
+          - when: {drinking_water: 'no', pump: 'powered'}
+            then: not_drinkable_powered
+          - when: {drinking_water: 'no', pump: 'manual'}
+            then: not_drinkable_manual
+          - when: {drinking_water: 'no', pump: 'no'}
+            then: not_drinkable_no_pump
+          - when: {drinking_water: 'no'}
+            then: not_drinkable
   - filter: {natural: saddle}
     min_zoom: 14
     output:
@@ -1591,6 +1866,16 @@ filters:
     output:
       <<: *output_properties
       kind: bbq
+  - filter: {amenity: studio}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: studio
+      kind_detail:
+        # whitelist common studio values as kind_detail.
+        case:
+          - when: {studio: [audio, cinema, photography, radio, television, video]}
+            then: {col: studio}
   - filter: {amenity: bicycle_repair_station}
     min_zoom: 18
     output:
@@ -1606,11 +1891,16 @@ filters:
     output:
       <<: *output_properties
       kind: picnic_table
-  - filter: {amenity: shower}
+  - filter: {amenity: love_hotel}
     min_zoom: 18
     output:
       <<: *output_properties
-      kind: shower
+      kind: love_hotel
+  - filter: {amenity: [shower,taxi]}
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
   - filter: {amenity: waste_disposal}
     min_zoom: 18
     output:
@@ -1740,6 +2030,11 @@ filters:
     output:
       <<: *output_properties
       kind: quarry
+  - filter: {industrial: slaughterhouse}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: slaughterhouse
   - filter:
       leisure:
         - adult_gaming_centre
@@ -1749,6 +2044,13 @@ filters:
     output:
       <<: *output_properties
       kind: adult_gaming_centre
+  # this is often used on shop=bookmaker, shop=lottery or
+  # leisure=adult_gaming_centre, but seems more generic than any of those.
+  - filter: {amenity: gambling}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
   - filter:
       waterway: boatyard
     min_zoom: 16
@@ -1812,3 +2114,32 @@ filters:
       <<: *output_properties
       kind: attraction
       tier: 6
+
+  # if a more specific shop isn't found, then default to generic shop kind
+  - filter:
+      shop: true
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: shop
+  # if a more specific craft isn't found, then default to generic craft kind
+  - filter:
+      craft: true
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: craft
+  # if a more specific off isn't found, then default to a generic office.
+  - filter:
+      office: true
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: office
+  # if a more specific industrial isn't found, then default to generic industrial kind
+  - filter:
+      industrial: true
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: industrial

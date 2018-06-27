@@ -779,6 +779,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `aquarium`
 * `archaeological_site`
 * `architect`
+* `arts_centre` - A venue where arts are performed or exhibited.
 * `artwork`
 * `assisted_living`
 * `association`
@@ -806,17 +807,21 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `block`
 * `boat_rental`
 * `boat_storage`
-* `bollard`
 * `boatyard`
 * `boat_lift`
+* `bollard`
+* `bookmaker`
 * `books`
 * `brewery`
 * `bus_station`
 * `bus_stop`
 * `butcher`
 * `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `camera` - A shop selling cameras.
 * `camp_site`
 * `car`
+* `car_parts` - A shop selling car parts.
+* `car_rental` - A business which rents cars.
 * `car_repair`
 * `car_sharing`
 * `car_wash`
@@ -824,11 +829,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `care_home`
 * `carousel`
 * `carpenter`
+* `casino` - A venue for gambling.
 * `cattle_grid`
 * `cave_entrance`
 * `cemetery`
 * `chalet`
 * `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
+* `charity` - A shop selling items, often second-hand clothes, in order to raise money for charity.
 * `childcare`
 * `childrens_centre`
 * `cinema`
@@ -845,7 +852,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `confectionery`
 * `consulting`
 * `convenience`
+* `copyshop` - A shop offering photocopying and printing services.
 * `courthouse`
+* `craft` - A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
 * `crane`
 * `cross`
 * `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
@@ -893,6 +902,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fort`
 * `foundation`
 * `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
+* `funeral_directors` - A venue offering funerary services.
 * `furniture`
 * `gallery` - An art gallery.
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
@@ -900,7 +910,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
-* `generator`
+* `generator` - A building or structure which generates power. If the method is known, then the `kind_detail` will describe it as one of: `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
 * `geyser`
 * `gift`
 * `golf` - Shop selling golf equipment.
@@ -918,6 +928,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hardware`
 * `hazard`
 * `healthcare`
+* `health_centre`
 * `helipad`
 * `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
@@ -929,6 +940,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hunting_stand`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+* `industrial` - An industrial POI which didn't match a more specific kind.
 * `information`
 * `insurance`
 * `it`
@@ -944,6 +956,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `lift_gate`
 * `lighthouse`
 * `lock`
+* `lottery` - A shop selling lottery tickets.
 * `mall`
 * `marina`
 * `mast`
@@ -956,6 +969,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mineshaft`
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
 * `mobile_phone`
+* `money_transfer` - A business which specialises in transferring money between people, often internationally.
 * `monument`
 * `mooring` - A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 * `motel`
@@ -973,6 +987,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `observatory`
+* `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
 * `outdoor`
@@ -987,6 +1002,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `petting_zoo`
 * `pharmacy`
 * `phone`
+* `photo` - A shop offering photograph processing services, e.g: developing or mounting.
 * `photographer`
 * `photographic_laboratory`
 * `physician`
@@ -1036,6 +1052,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ship_chandler`
 * `shoemaker`
 * `shoes`
+* `shop` - A shop or store which didn't match a more specific kind.
 * `shower`
 * `sinkhole`
 * `ski_rental`
@@ -1053,6 +1070,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `stationery`
 * `stone`
 * `stonemason`
+* `studio` - A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
 * `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `subway_entrance`
 * `summer_camp`
@@ -1068,7 +1086,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `theme_park`
 * `therapist`
 * `tobacco`
-* `toilets`
+* `toilets`. Where available, `kind_detail` will be set to the disposal type, one of: `bucket`, `chemical`, `flush`, `pit_latrine` or `pour_flush`.
 * `toll_booth`
 * `townhall`
 * `toys`
@@ -1080,6 +1098,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `travel_agency`
 * `travel_agent`
 * `tree`
+* `tyres` - A shop selling car tyres or tires.
 * `university`
 * `variety_store`
 * `veterinary`
@@ -1093,10 +1112,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `water_point`
 * `water_slide`
 * `water_tower`
-* `water_well`
+* `water_well` - A location where water can be extracted from the ground. If known, `kind_detail` will give information about water potability and pump type, with values: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`. The prefix `drinkable` indicates drinking water, `not_drinkable` indicates not drinkable water. The suffix `powered` indicates a powered or automatic pump, `manual` indicates a manual pump, and `no_pump` indicates that the water must be raised without a pump (e.g: a bucket and line). If information about the pump is not available, the `kind_detail` will be either `drinkable` or `not_drinkable`.
 * `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
 * `watering_place`
+* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`.
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`

@@ -36,7 +36,6 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 368396366,
                 'kind': u'airfield',
-                'kind_detail': 'military',
             })
 
     def test_airfield_way(self):
@@ -886,7 +885,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 28735778,
-                'kind': u'danger',
+                'kind': u'danger_area',
             })
 
     def test_danger_cliff_top(self):
@@ -912,7 +911,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 4809654741,
-                'kind': u'danger',
+                'kind': u'danger_area',
                 'name': u'cliff top',
             })
 
@@ -934,13 +933,13 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 26165183,
-                'kind': u'danger',
+                'kind': u'danger_area',
                 'name': u'Otmoor Range Danger Area',
             })
         self.assert_has_feature(
             z, x, y, 'landuse', {
                 'id': 26165183,
-                'kind': u'danger',
+                'kind': u'danger_area',
             })
 
     def test_defibrillator_node(self):
@@ -2668,4 +2667,531 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 270602036,
                 'kind': u'waterway_fuel',
+            })
+
+    def test_bureau_de_change_node(self):
+        import dsl
+
+        z, x, y = (16, 19294, 24641)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/2034011032
+            dsl.point(2034011032, (-74.013403, 40.706036), {
+                'amenity': u'bureau_de_change',
+                'name': u'Travelex',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2034011032,
+                'kind': u'bureau_de_change',
+            })
+
+    def test_bureau_de_change_way(self):
+        import dsl
+
+        z, x, y = (16, 18993, 23478)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/292975938
+            dsl.way(292975938, dsl.tile_box(z, x, y), {
+                'addr:housenumber': u'1724',
+                'addr:street': u'Bank Street',
+                'amenity': u'bureau_de_change',
+                'building': u'commercial',
+                'name': u'Money Mart',
+                'office': u'financial',
+                'shop': u'money_lender',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 292975938,
+                'kind': u'bureau_de_change',
+            })
+
+    def test_karaoke_box_node(self):
+        import dsl
+
+        z, x, y = (16, 10592, 25438)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4360926928
+            dsl.point(4360926928, (-121.813979, 37.308435), {
+                'amenity': u'karaoke_box',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4360926928,
+                'kind': u'karaoke_box',
+            })
+
+    def test_karaoke_box_way(self):
+        import dsl
+
+        z, x, y = (16, 18478, 32805)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/427879004
+            dsl.way(427879004, dsl.tile_box(z, x, y), {
+                'addr:city': u'Quito',
+                'addr:street': u'Juan León Mera',
+                'amenity': u'karaoke_box',
+                'building': u'yes',
+                'name': u'Julios Karaoke Bar',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 427879004,
+                'kind': u'karaoke_box',
+            })
+
+    def test_money_transfer_node(self):
+        import dsl
+
+        z, x, y = (16, 19299, 24632)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3854507957
+            dsl.point(3854507957, (-73.982208, 40.743233), {
+                'amenity': u'money_transfer',
+                'shop': u'money_lender',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3854507957,
+                'kind': u'money_transfer',
+            })
+
+    def test_money_transfer_way(self):
+        import dsl
+
+        z, x, y = (16, 18993, 23478)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/366495997
+            dsl.way(366495997, dsl.tile_box(z, x, y), {
+                'addr:housenumber': u'1717',
+                'addr:street': u'Bank Street',
+                'amenity': u'money_transfer',
+                'building': u'commercial',
+                'name': u'Western Union',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 366495997,
+                'kind': u'money_transfer',
+            })
+
+    def test_taxi_node(self):
+        import dsl
+
+        z, x, y = (16, 19298, 24650)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5648649304
+            dsl.point(5648649304, (-73.988704, 40.670701), {
+                'addr:housenumber': u'440',
+                'addr:postcode': u'11215',
+                'addr:street': u'4th Avenue',
+                'amenity': u'taxi',
+                'atm': u'yes',
+                'name': u'Castle',
+                'office': u'yes',
+                'opening_hours': u'24/7',
+                'phone': u'+1 718 499 9333',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5648649304,
+                'kind': u'taxi',
+            })
+
+    def test_taxi_way(self):
+        import dsl
+
+        z, x, y = (16, 19301, 24646)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/248141957
+            dsl.way(248141957, dsl.tile_box(z, x, y), {
+                'addr:housenumber': u'269',
+                'addr:postcode': u'11205',
+                'addr:street': u'Cumberland Street',
+                'amenity': u'taxi',
+                'building': u'yes',
+                'height': u'11.2',
+                'name': u'brooklyn taxi company',
+                'nycdoitt:bin': u'3058992',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 248141957,
+                'kind': u'taxi',
+            })
+
+    def test_border_control_node(self):
+        import dsl
+
+        z, x, y = (16, 18401, 24104)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/319641176
+            dsl.point(319641176, (-78.915192, 42.907821), {
+                'barrier': u'border_control',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 319641176,
+                'kind': u'border_control',
+            })
+
+    def test_border_control_way(self):
+        import dsl
+
+        z, x, y = (16, 17643, 24261)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/165631502
+            dsl.way(165631502, dsl.tile_box(z, x, y), {
+                'amenity': u'customs',
+                'barrier': u'border_control',
+                'landuse': u'construction',
+                'name': u'Canadian Plaza - DRIC',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 165631502,
+                'kind': u'border_control',
+            })
+
+    def test_fire_hydrant_node(self):
+        import dsl
+
+        z, x, y = (16, 19288, 24645)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5525689518
+            dsl.point(5525689518, (-74.045333, 40.690406), {
+                'emergency': u'fire_hydrant',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5525689518,
+                'kind': u'fire_hydrant',
+            })
+
+    def test_fire_hydrant_way(self):
+        import dsl
+
+        z, x, y = (16, 34320, 23397)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/586085037
+            dsl.way(586085037, dsl.tile_box(z, x, y), {
+                'barrier': u'fence',
+                'emergency': u'fire_hydrant',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 586085037,
+                'kind': u'fire_hydrant',
+            })
+
+    def test_street_lamp_node(self):
+        import dsl
+
+        z, x, y = (16, 19295, 24642)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5057307983
+            dsl.point(5057307983, (-74.009300, 40.704352), {
+                'highway': u'street_lamp',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5057307983,
+                'kind': u'street_lamp',
+            })
+
+    def test_street_lamp_way(self):
+        import dsl
+
+        z, x, y = (16, 11301, 26220)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/580258855
+            dsl.way(580258855, dsl.tile_box(z, x, y), {
+                'highway': u'street_lamp',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 580258855,
+                'kind': u'street_lamp',
+            })
+
+    def test_heliport_node(self):
+        import dsl
+
+        z, x, y = (16, 15902, 25235)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3961957374
+            dsl.point(3961957374, (-92.644167, 38.190326), {
+                'addr:city': u'Lake Ozark',
+                'addr:housenumber': u'2101',
+                'addr:postcode': u'65049',
+                'addr:street': u'Bagnell Dam Boulevard',
+                'aeroway': u'heliport',
+                'faa': u'MO02',
+                'name': u'Lake Ozark Helicopters',
+                'phone': u'+1 573 302 0022',
+                'source': u'openstreetmap.org',
+                'website': u'http://lakeozarkhelicopters.com/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3961957374,
+                'kind': u'heliport',
+            })
+
+    def test_heliport_way(self):
+        import dsl
+
+        z, x, y = (16, 19294, 24642)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/160901442
+            dsl.way(160901442, dsl.tile_box(z, x, y), {
+                'addr:city': u'New York',
+                'addr:state': u'NY',
+                'aerodrome:type': u'public',
+                'aeroway': u'heliport',
+                'alt_name': u'Downtown Manhattan/Wall St. Heliport',
+                'ele': u'1',
+                'faa': u'JRB',
+                'iata': u'JRB',
+                'icao': u'KJRB',
+                'name': u'Downtown Manhattan Heliport',
+                'source': u'openstreetmap.org',
+                'website': u'http://www.downtownmanhattanheliport.com/',
+                'wikidata': u'Q1575175',
+                'wikipedia': u'en:Downtown Manhattan Heliport',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 160901442,
+                'kind': u'heliport',
+            })
+
+    def test_horse_riding_node(self):
+        import dsl
+
+        z, x, y = (16, 18969, 24101)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5363428250
+            dsl.point(5363428250, (-75.795323, 42.920041), {
+                'leisure': u'horse_riding',
+                'name': u'Whispering Hill Equestrian Center',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5363428250,
+                'kind': u'horse_riding',
+            })
+
+    def test_horse_riding_way(self):
+        import dsl
+
+        z, x, y = (16, 19322, 24641)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/415715650
+            dsl.way(415715650, dsl.tile_box(z, x, y), {
+                'leisure': u'horse_riding',
+                'name': u'Lynne\'s Riding Center',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 415715650,
+                'kind': u'horse_riding',
+            })
+
+    def test_casino_node(self):
+        import dsl
+
+        z, x, y = (16, 19049, 24663)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/677131244
+            dsl.point(677131244, (-75.357312, 40.614903), {
+                'amenity': u'casino',
+                'name': u'Sands Bethlehem',
+                'source': u'openstreetmap.org',
+                'wheelchair': u'yes',
+                'wikidata': u'Q7416891',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 677131244,
+                'kind': u'casino',
+            })
+
+    def test_casino_way(self):
+        import dsl
+
+        z, x, y = (16, 19397, 24623)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/556401354
+            dsl.way(556401354, dsl.tile_box(z, x, y), {
+                'amenity': u'casino',
+                'building': u'yes',
+                'name': u'Race Palace',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 556401354,
+                'kind': u'casino',
+            })
+
+    def test_watermill_node(self):
+        import dsl
+
+        z, x, y = (16, 19451, 24591)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/684168892
+            dsl.point(684168892, (-73.147435, 40.914999), {
+                'historic': u'yes',
+                'man_made': u'watermill',
+                'name': u'Stony Brook Grist Mill',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 684168892,
+                'kind': u'watermill',
+            })
+
+    def test_watermill_way(self):
+        import dsl
+
+        z, x, y = (16, 19074, 24788)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/420870873
+            dsl.way(420870873, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'man_made': u'watermill',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 420870873,
+                'kind': u'watermill',
+            })
+
+    def test_field_hospital_node(self):
+        import dsl
+
+        z, x, y = (16, 19656, 29116)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3306168229
+            dsl.point(3306168229, (-72.023353, 19.659932), {
+                'amenity': u'hospital',
+                'health_facility:type': u'field_hospital',
+                'name': u'Tecima',
+                'operator:type': u'public',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3306168229,
+                'kind': u'field_hospital',
+            })
+
+    def test_field_hospital_way(self):
+        import dsl
+
+        z, x, y = (16, 19408, 41285)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/551957454
+            dsl.way(551957454, dsl.tile_box(z, x, y), {
+                'building': u'hospital',
+                'health_facility:type': u'field_hospital',
+                'healthcare': u'yes',
+                'name': u'Posta de Salud Tenaún Alto',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 551957454,
+                'kind': u'field_hospital',
             })
