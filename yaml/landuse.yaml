@@ -766,6 +766,43 @@ filters:
         case:
           - when: {surface: [grass, gravel, pebbles, pebblestone, rocky, sand]}
             then: {col: surface}
+  # orchard
+  - filter: { landuse: orchard }
+    min_zoom: *tier5_min_zoom
+    output:
+      <<: *output_properties
+      kind: orchard
+      kind_detail:
+        case:
+          - when:
+              trees:
+                - agave_plants
+                - almond_trees
+                - apple_trees
+                - avocado_trees
+                - banana_plants
+                - cherry_trees
+                - coconut_palms
+                - coffea_plants
+                - date_palms
+                - hazel_plants
+                - hop_plants
+                - kiwi_plants
+                - macadamia_trees
+                - mango_trees
+                - oil_palms
+                - olive_trees
+                - orange_trees
+                - papaya_trees
+                - peach_trees
+                - persimmon_trees
+                - pineapple_plants
+                - pitaya_plants
+                - plum_trees
+                - rubber_trees
+                - tea_plants
+                - walnut_trees
+            then: { col: trees }
 
   ############################################################
   # TIER 6

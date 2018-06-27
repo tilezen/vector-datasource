@@ -544,6 +544,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `naval_base`
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. If available, `kind_detail` will provide the tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, `walnut_trees`.
 * `park`
 * `parking`
 * `pedestrian`
