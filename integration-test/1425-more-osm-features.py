@@ -905,3 +905,24 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 1289222425,
                 'kind': u'plaque',
             })
+
+    def test_reef_way(self):
+        import dsl
+
+        z, x, y = (16, 59972, 36438)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/300536075
+            dsl.way(300536075, dsl.tile_box(z, x, y), {
+                'natural': u'reef',
+                'reef': u'coral',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 300536075,
+                'kind': u'reef',
+                'kind_detail': 'coral',
+            })

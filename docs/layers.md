@@ -566,6 +566,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `railway`
 * `recreation_ground`
 * `recreation_track`
+* `reef` - A solid feature just under the surface of the ocean, usually made from rock, sand or coral. If known, the `kind_detail` will be given as one of `coral`, `rock`, `sand`.
 * `residential`
 * `resort`
 * `rest_area`

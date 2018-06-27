@@ -493,6 +493,17 @@ filters:
       <<: *output_properties
       kind: glacier
       tier: 3
+  # reef
+  - filter: {natural: reef}
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: reef
+      tier: 3
+      kind_detail:
+        case:
+          - when: { reef: [coral, rock, sand] }
+            then: { col: reef }
 
   ############################################################
   # TIER 4
