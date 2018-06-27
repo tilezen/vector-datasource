@@ -1594,7 +1594,10 @@ filters:
       <<: *output_properties
       kind: {col: highway}
   # memorial plaques more specific than plain memorials
-  - filter: {historic: memorial, memorial: plaque}
+  - filter:
+      any:
+        - {historic: memorial, memorial: plaque}
+        - historic: memorial_plaque
     min_zoom: 16
     output:
       <<: *output_properties

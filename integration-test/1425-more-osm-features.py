@@ -1235,3 +1235,28 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 4987290359,
                 'kind': u'wayside_cross',
             })
+
+    def test_memorial_plaque_node(self):
+        import dsl
+
+        z, x, y = (16, 32531, 21365)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/3577265515
+            dsl.point(3577265515, (-1.297031, 52.944488), {
+                'dedicatee': u'Oswald Short',
+                'historic': u'memorial_plaque',
+                'inscription': u'Oswald Short (1883-1969) of Short ' \
+                u'Brothers Aeronautical Engineers / Lived here ' \
+                u'1881-c.1895 / Erected by public subscription',
+                'name': u'Oswald Short (1883-1969)',
+                'plaque:colour': u'blue',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3577265515,
+                'kind': u'plaque',
+            })
