@@ -997,6 +997,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `nightclub`
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `obelisk` - A tall structure, usually a monument or memorial (so see also `monument` and `memorial`).
 * `observatory`
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`

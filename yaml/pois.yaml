@@ -194,7 +194,7 @@ global:
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
         - lock: yes
-        - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
+        - man_made: [ adit, communications_tower, crane, mast, mineshaft, obelisk, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, watermill, windmill ]
         - military: bunker
@@ -1608,6 +1608,12 @@ filters:
     output:
       <<: *output_properties
       kind: memorial
+  # obelisk - but not a monument or a memorial
+  - filter: {man_made: obelisk}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: obelisk
   # slipway with mooring info
   - filter:
       leisure: slipway

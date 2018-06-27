@@ -1260,3 +1260,41 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 3577265515,
                 'kind': u'plaque',
             })
+
+    def test_obelisk_node(self):
+        import dsl
+
+        z, x, y = (16, 18088, 25938)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5370564611
+            dsl.point(5370564611, (-80.634831, 35.088498), {
+                'man_made': u'obelisk',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5370564611,
+                'kind': u'obelisk',
+            })
+
+    def test_obelisk_way(self):
+        import dsl
+
+        z, x, y = (16, 15094, 26381)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/481307273
+            dsl.way(481307273, dsl.tile_box(z, x, y), {
+                'man_made': u'obelisk',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 481307273,
+                'kind': u'obelisk',
+            })
