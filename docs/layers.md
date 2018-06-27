@@ -554,6 +554,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `pitch`
 * `place_of_worship`
 * `plant`
+* `plant_nursery` - Land used for growing young plants.
 * `playground`
 * `port_terminal`
 * `power_line`

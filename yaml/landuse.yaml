@@ -803,6 +803,12 @@ filters:
                 - tea_plants
                 - walnut_trees
             then: { col: trees }
+  # plant nursery
+  - filter: { landuse: plant_nursery }
+    min_zoom: *tier5_min_zoom
+    output:
+      <<: *output_properties
+      kind: plant_nursery
 
   ############################################################
   # TIER 6

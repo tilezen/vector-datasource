@@ -865,3 +865,22 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind': u'orchard',
                 'kind_detail': u'oil_palms',
             })
+
+    def test_plant_nursery_way(self):
+        import dsl
+
+        z, x, y = (16, 19319, 24594)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/442214478
+            dsl.way(442214478, dsl.tile_box(z, x, y), {
+                'landuse': u'plant_nursery',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 442214478,
+                'kind': u'plant_nursery',
+            })
