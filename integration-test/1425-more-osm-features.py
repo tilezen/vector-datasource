@@ -229,3 +229,43 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 374783696,
                 'kind': u'embankment',
             })
+
+    def test_miniature_golf_node(self):
+        import dsl
+
+        z, x, y = (16, 19284, 24583)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5181018838
+            dsl.point(5181018838, (-74.068437, 40.948861), {
+                'leisure': u'miniature_golf',
+                'name': u'Monster Mini Golf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5181018838,
+                'kind': u'miniature_golf',
+            })
+
+    def test_miniature_golf_way(self):
+        import dsl
+
+        z, x, y = (16, 19293, 24645)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/510028688
+            dsl.way(510028688, dsl.tile_box(z, x, y), {
+                'leisure': u'miniature_golf',
+                'name': u'FIGMENT Mini Golf',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 510028688,
+                'kind': u'miniature_golf',
+            })

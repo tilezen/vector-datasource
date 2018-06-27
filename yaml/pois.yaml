@@ -2000,6 +2000,11 @@ filters:
     output:
       <<: *output_properties
       kind: firepit
+  - filter: {leisure: miniature_golf}
+    min_zoom: { clamp: { min: 16, max: 17, value: { sum: [ { col: zoom }, 1 ] } } }
+    output:
+      <<: *output_properties
+      kind: miniature_golf
   - filter: {tourism: caravan_site}
     min_zoom: { clamp: { min: 14, max: 15, value: { col: zoom } } }
     output:
