@@ -269,3 +269,23 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'id': 510028688,
                 'kind': u'miniature_golf',
             })
+
+    def test_mud_way(self):
+        import dsl
+
+        z, x, y = (16, 19455, 24611)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/451611986
+            dsl.way(451611986, dsl.tile_box(z, x, y), {
+                'name': u'mud',
+                'natural': u'mud',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 451611986,
+                'kind': u'mud',
+            })

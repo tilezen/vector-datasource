@@ -1030,6 +1030,11 @@ filters:
     output:
       <<: *output_properties
       kind: rock
+  - filter: {natural: mud}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: mud
   - filter: {tourism: caravan_site}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:

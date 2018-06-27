@@ -537,6 +537,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `maze`
 * `meadow`
 * `military`
+* `mud` - An area where the surface is bare mud.
 * `national_park`
 * `nature_reserve`
 * `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
