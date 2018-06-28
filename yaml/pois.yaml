@@ -188,15 +188,16 @@ global:
           - lifeguard_tower
           - phone
         - harbour: harbour_master
-        - highway: [ bus_stop, ford, mini_roundabout, motorway_junction, platform,
+        - highway: [ bus_stop, elevator, ford, mini_roundabout, motorway_junction, platform,
             rest_area, street_lamp, traffic_signals, trailhead ]
-        - historic: landmark
+        - historic: [landmark, wayside_cross]
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
         - lock: yes
-        - man_made: [ adit, communications_tower, crane, mast, mineshaft, observatory,
+        - man_made: [ adit, communications_tower, crane, mast, mineshaft, obelisk, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, watermill, windmill ]
+        - military: bunker
         - mooring: true
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
@@ -497,6 +498,16 @@ filters:
       <<: *output_properties
       kind: danger_area
       tier: 3
+  # bunker
+  - filter: {military: bunker}
+    min_zoom: {case: [{when: {name: true}, then: 16}, {else: 18}]}
+    output:
+      <<: *output_properties
+      kind: bunker
+      kind_detail:
+        case:
+          - when: { bunker_type: [pillbox, munitions, gun_emplacement, hardened_aircraft_shelter, blockhouse, technical, mg_nest, missile_silo] }
+            then: { col: bunker_type }
   # military
   - filter: {landuse: military}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
@@ -730,6 +741,12 @@ filters:
       <<: *output_properties
       kind: beach
       tier: 5
+      # whitelist most common surface values for beaches. i'm not quite sure i'd
+      # call surface=grass a beach, but it's in the data..?
+      kind_detail:
+        case:
+          - when: {surface: [grass, gravel, pebbles, pebblestone, rocky, sand]}
+            then: {col: surface}
   # glacier - no POI
   # maze
   - filter:
@@ -763,6 +780,26 @@ filters:
       <<: *output_properties
       kind: winery
       tier: 5
+
+  # obelisk - note that this takes precedence over artwork, monument and memorial!
+  - filter: {man_made: obelisk}
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 14, 20 ]  # z14 if height >= 20m
+          - [ 15, 10 ]  # z15 if height >= 10m
+        default: 16
+    output:
+      <<: *output_properties
+      kind: obelisk
+      tier: 5
+      # keep information about whether this was a monument or memorial
+      kind_detail:
+        case:
+          - when: {historic: [monument, memorial]}
+            then: {col: historic}
 
   ############################################################
   # TIER 6
@@ -954,7 +991,7 @@ filters:
       <<: *output_properties
       kind: {col: craft}
   - filter:
-      shop: [charity, furniture, golf, pet, shoes, variety_store]
+      shop: [charity, chemist, cosmetics, fishmonger, furniture, golf, pet, shoes, variety_store]
     min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
@@ -1576,6 +1613,16 @@ filters:
     output:
       <<: *output_properties
       kind: {col: highway}
+  # memorial plaques more specific than plain memorials
+  - filter:
+      any:
+        - {historic: memorial, memorial: plaque}
+        - historic: memorial_plaque
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: plaque
+  # plain memorial
   - filter: {historic: memorial}
     min_zoom: 17
     output:
@@ -1994,6 +2041,11 @@ filters:
     output:
       <<: *output_properties
       kind: firepit
+  - filter: {leisure: miniature_golf}
+    min_zoom: { clamp: { min: 16, max: 17, value: { sum: [ { col: zoom }, 1 ] } } }
+    output:
+      <<: *output_properties
+      kind: miniature_golf
   - filter: {tourism: caravan_site}
     min_zoom: { clamp: { min: 14, max: 15, value: { col: zoom } } }
     output:
@@ -2099,6 +2151,18 @@ filters:
     output:
       <<: *output_properties
       kind: sanitary_dump_station
+
+  - filter: {highway: elevator}
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: elevator
+
+  - filter: { historic: wayside_cross }
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: wayside_cross
 
   ############################################################
   # TIER 6 EXTRA - ATTRACTION

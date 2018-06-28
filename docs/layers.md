@@ -486,13 +486,14 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `attraction`
 * `aviary`
 * `battlefield`
-* `beach`
+* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
 * `breakwater`
 * `bridge`
 * `camp_site`
 * `caravan_site`
 * `carousel`
 * `cemetery`
+* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `cinema`
 * `city_wall`
 * `college`
@@ -501,11 +502,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `container_terminal`
 * `crane`
 * `cutline`
+* `cutting` - A lowered area of land, usually to carry a road or railway.
 * `danger` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
 * `dike`
 * `ditch`
 * `dog_park`
+* `embankment` - A raised area of land, usually to carry a road or railway.
 * `enclosure`
 * `farm`
 * `farmland`
@@ -535,12 +538,14 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `maze`
 * `meadow`
 * `military`
+* `mud` - An area where the surface is bare mud.
 * `national_park`
 * `nature_reserve`
 * `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `naval_base`
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. If available, `kind_detail` will provide the tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, `walnut_trees`.
 * `park`
 * `parking`
 * `pedestrian`
@@ -550,6 +555,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `pitch`
 * `place_of_worship`
 * `plant`
+* `plant_nursery` - Land used for growing young plants.
 * `playground`
 * `port_terminal`
 * `power_line`
@@ -621,11 +627,11 @@ The value of the OpenStreetMap `wall` tag. Common values include `brick`, `castl
 
 ##### Wetland `kind_detail` values:
 
-The value of the OpenStreetMap `wetland` tag. Common values include `bog`, `fen`, `mangrove`, `marsh`, `reedbed`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, and `wet_meadow`.
+The value of the OpenStreetMap `wetland` tag. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
 
 #### Wood and forest `kind_detail` values
 
-* The value of the OpenStreetMap `leaf_type` tag. [Common values](https://taginfo.openstreetmap.org/keys/leaf_type#values) include `broadleaved`, `needleleaved`, or `mixed`.
+* The value of the OpenStreetMap `leaf_type` tag, whitelisted to `broadleaved`, `needleleaved`, `mixed` or `leafless`.
 
 ## Places
 
@@ -792,7 +798,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `battlefield`
 * `bbq`
 * `beach_resort`
-* `beach`
+* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
 * `beacon`
 * `beauty`
 * `bed_and_breakfast`
@@ -813,6 +819,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bookmaker`
 * `books`
 * `brewery`
+* `bunker` - A reinforced military building. Where known, the `kind_detail` will be one of: `blockhouse`, `gun_emplacement`, `hardened_aircraft_shelter`, `mg_nest`, `missile_silo`, `munitions`, `pillbox`, `technical`.
 * `bus_station`
 * `bus_stop`
 * `butcher`
@@ -853,6 +860,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `consulting`
 * `convenience`
 * `copyshop` - A shop offering photocopying and printing services.
+* `cosmetics` - A specialty shop selling cosmetics.
 * `courthouse`
 * `craft` - A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
 * `crane`
@@ -879,6 +887,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `egress`
 * `electrician`
 * `electronics`
+* `elevator` - An enclosure for vertical travel.
 * `embassy`
 * `emergency_phone`
 * `employment_agency`
@@ -893,6 +902,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `firepit`
 * `fishing`
 * `fishing_area`
+* `fishmonger` - A shop selling fish and seafood.
 * `fitness_station`
 * `fitness`
 * `florist`
@@ -967,6 +977,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `midwife`
 * `military`
 * `mineshaft`
+* `miniature_golf` - A venue for playing miniature golf.
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
 * `mobile_phone`
 * `money_transfer` - A business which specialises in transferring money between people, often internationally.
@@ -986,6 +997,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `nightclub`
 * `notary`
 * `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
@@ -1011,6 +1023,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `pitch`
 * `place_of_worship` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `plaque` - A memorial plaque.
 * `playground` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plumber`
 * `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
@@ -1117,6 +1130,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `waterfall`
 * `watering_place`
 * `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`.
+* `wayside_cross`
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`
@@ -1195,10 +1209,12 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ascent`: ski pistes from OpenStreetMap
 * `access`: `private`, `yes`, `no`, `permissive`, `customers`, `destination`, and other values from OpenStreetMap
 * `bicycle`: `yes`, `no`, `designated`, `dismount`, and other values from OpenStreetMap
+* `cutting`: If the road or railway is in a cutting the value will be one of `yes`, `left` or `right` depending on whether the cutting is on both sides, the left side or the right side, respectively.
 * `colour`: ski pistes from OpenStreetMap
 * `descent`: ski pistes from OpenStreetMap
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
+* `embankment`: If the road or railway is on an embankment the value will be one of `yes`, `left` or `right` depending on whether the embankment is on both sides, the left side or the right side, respectively.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1429,6 +1445,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `lake` - polygon
 * `ocean` - polygon, point is intended for label placement only
 * `playa` - polygon
+* `reef` - polygon. A solid feature just under the surface of the ocean, usually made from rock, sand or coral. If known, the `kind_detail` will be given as one of `coral`, `rock`, `sand`.
 * `river` - line
 * `riverbank` - polygon
 * `sea` - point, intended for label placement only

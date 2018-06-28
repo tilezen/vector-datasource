@@ -133,8 +133,12 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  # whitelist for leaf_type
   - &leaftype_kind_detail
-    kind_detail: { col: leaf_type }
+    kind_detail:
+      case:
+        - when: {leaf_type: [broadleaved, leafless, mixed, needleleaved]}
+          then: {col: leaf_type}
 filters:
   - filter: {meta.source: ne}
     min_zoom: 4
@@ -756,6 +760,55 @@ filters:
       <<: *output_properties
       kind: beach
       tier: 5
+      # whitelist most common surface values for beaches. i'm not quite sure i'd
+      # call surface=grass a beach, but it's in the data..?
+      kind_detail:
+        case:
+          - when: {surface: [grass, gravel, pebbles, pebblestone, rocky, sand]}
+            then: {col: surface}
+  # orchard
+  - filter: { landuse: orchard }
+    min_zoom: *tier5_min_zoom
+    output:
+      <<: *output_properties
+      kind: orchard
+      kind_detail:
+        case:
+          - when:
+              trees:
+                - agave_plants
+                - almond_trees
+                - apple_trees
+                - avocado_trees
+                - banana_plants
+                - cherry_trees
+                - coconut_palms
+                - coffea_plants
+                - date_palms
+                - hazel_plants
+                - hop_plants
+                - kiwi_plants
+                - macadamia_trees
+                - mango_trees
+                - oil_palms
+                - olive_trees
+                - orange_trees
+                - papaya_trees
+                - peach_trees
+                - persimmon_trees
+                - pineapple_plants
+                - pitaya_plants
+                - plum_trees
+                - rubber_trees
+                - tea_plants
+                - walnut_trees
+            then: { col: trees }
+  # plant nursery
+  - filter: { landuse: plant_nursery }
+    min_zoom: *tier5_min_zoom
+    output:
+      <<: *output_properties
+      kind: plant_nursery
 
   ############################################################
   # TIER 6
@@ -912,7 +965,10 @@ filters:
     output:
       <<: *output_properties
       kind: wetland
-      kind_detail: {col: wetland}
+      kind_detail:
+        case:
+          - when: { wetland: [bog, fen, mangrove, marsh, mud, reedbed, saltern, saltmarsh, string_bog, swamp, tidalflat, wet_meadow] }
+            then: {col: wetland}
   - filter: {natural: park}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
@@ -1020,6 +1076,11 @@ filters:
     output:
       <<: *output_properties
       kind: rock
+  - filter: {natural: mud}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: mud
   - filter: {tourism: caravan_site}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
@@ -1079,6 +1140,11 @@ filters:
     output:
       <<: *output_properties
       kind: {col: barrier}
+  - filter: {man_made: [embankment, cutting]}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: { col: man_made }
   - filter:
       military: danger_area
       geom_type: polygon

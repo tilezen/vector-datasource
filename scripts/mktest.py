@@ -362,7 +362,7 @@ class _OverpassWay(object):
         point = element['geometry'][0]
         self.position = tuple(point[p] for p in ('lat', 'lon'))
         self.element_id = element['id']
-        self.tags = element['tags']
+        self.tags = element.get('tags', {})
 
     def element_type(self):
         return 'way'
