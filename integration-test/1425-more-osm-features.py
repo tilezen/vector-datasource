@@ -1438,3 +1438,54 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind_detail': 'primary',
                 'embankment': 'yes',
             })
+
+    def test_monument_obelisk_node(self):
+        import dsl
+
+        z, x, y = (16, 17450, 26571)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/4028552922
+            dsl.point(4028552922, (-84.140170, 32.194609), {
+                'historic': u'monument',
+                'man_made': u'obelisk',
+                'monument:type': u'obelisk',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4028552922,
+                'kind': u'obelisk',
+                'kind_detail': u'monument',
+            })
+
+    def test_monument_obelisk_way(self):
+        import dsl
+
+        z, x, y = (16, 19439, 24108)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/178594567
+            dsl.way(178594567, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'height': u'267',
+                'historic': u'monument',
+                'man_made': u'obelisk',
+                'name': u'Bennington Battle Monument',
+                'obelisk:size': u'monumental',
+                'ref:nrhp': u'71000054',
+                'source': u'openstreetmap.org',
+                'website': u'http://historicsites.vermont.gov',
+                'wikidata': u'Q4889875',
+                'wikipedia': u'en:Bennington Battle Monument',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 178594567,
+                'kind': u'obelisk',
+                'kind_detail': u'monument',
+            })
