@@ -55,7 +55,7 @@ class MoreOSMFeaturesTest(FixtureTest):
                     'kind_detail': u'pebblestone',
                 })
 
-    def test_gravel_beach_way(self):
+    def test_gravel_beach_pois_way(self):
         import dsl
 
         z, x, y = (16, 19304, 24371)
@@ -71,13 +71,33 @@ class MoreOSMFeaturesTest(FixtureTest):
             }),
         )
 
-        for layer in ('pois', 'landuse'):
-            self.assert_has_feature(
-                z, x, y, layer, {
-                    'id': 360547782,
-                    'kind': u'beach',
-                    'kind_detail': u'gravel',
-                })
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 360547782,
+                'kind': u'beach',
+                'kind_detail': u'gravel',
+            })
+
+    def test_gravel_beach_landuse_way(self):
+        import dsl
+
+        z, x, y = (16, 19304, 24371)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/360547782
+            dsl.way(360547782, dsl.tile_box(z, x, y), {
+                'natural': u'beach',
+                'source': u'openstreetmap.org',
+                'surface': u'gravel',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 360547782,
+                'kind': u'beach',
+                'kind_detail': u'gravel',
+            })
 
     def test_pebbles_beach_way(self):
         import dsl
