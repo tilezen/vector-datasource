@@ -781,6 +781,26 @@ filters:
       kind: winery
       tier: 5
 
+  # obelisk - note that this takes precedence over artwork, monument and memorial!
+  - filter: {man_made: obelisk}
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 14, 20 ]  # z14 if height >= 20m
+          - [ 15, 10 ]  # z15 if height >= 10m
+        default: 16
+    output:
+      <<: *output_properties
+      kind: obelisk
+      tier: 5
+      # keep information about whether this was a monument or memorial
+      kind_detail:
+        case:
+          - when: {historic: [monument, memorial]}
+            then: {col: historic}
+
   ############################################################
   # TIER 6
   ############################################################
@@ -1156,17 +1176,6 @@ filters:
     output:
       <<: *output_properties
       kind: motorway_junction
-  # obelisk - note that this takes precedence over monument and memorial!
-  - filter: {man_made: obelisk}
-    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 2.24 ] } } }
-    output:
-      <<: *output_properties
-      kind: obelisk
-      # keep information about whether this was a monument or memorial
-      kind_detail:
-        case:
-          - when: {historic: [monument, memorial]}
-            then: {col: historic}
   - filter: {historic: monument}
     min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 2.24 ] } } }
     output:

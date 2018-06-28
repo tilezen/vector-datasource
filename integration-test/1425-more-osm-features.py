@@ -1557,3 +1557,92 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind': u'bunker',
                 'min_zoom': 18,
             })
+
+    def test_washington_monument(self):
+        import dsl
+
+        z, x, y = (16, 18744, 25072)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/3374540
+            dsl.way(3374540, dsl.tile_box(z, x, y), {
+                "addr:city": "Washington",
+                "addr:housenumber": "1601",
+                "addr:postcode": "20560",
+                "addr:state": "DC",
+                "addr:street": "Independence Avenue",
+                "building": "obelisk",
+                "building:colour": "white",
+                "dcgis:address": "1601 Independence Ave, NW",
+                "dcgis:aid": "294406",
+                "dcgis:gis": "HSE_0015",
+                "dcgis:list_info": "Reg",
+                "dcgis:nr_eligibl": "0",
+                "dcgis:objectid": "259",
+                "dcgis:ssl": "PAR 03160011",
+                "dcgis:update_date": "Wed Feb 01 00:00:00 UTC 2006",
+                "fee": "no",
+                "height": "169.16",
+                "historic": "monument",
+                "landmark": "yes",
+                "man_made": "obelisk",
+                "memorial:type": "obelisk",
+                "name": "Washington Monument",
+                "name:da": u"Washington-monumentet",
+                "name:de": u"Washington-Denkmal",
+                "name:es": u"Monumento a Washington",
+                "name:hu": u"Washington-emlékmű",
+                "name:it": u"Monumento a Washington",
+                "obelisk:size": "monumental",
+                "roof:colour": "white",
+                "roof:height": "16.76",
+                "roof:shape": "pyramidal",
+                "start_date": "1885-02-28",
+                "tourism": "attraction",
+                "type": "multipolygon",
+                "wikidata": "Q178114",
+                "wikipedia": "en:Washington Monument",
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 3374540,
+                'kind': u'obelisk',
+                'min_zoom': 14,
+            })
+
+    def test_obelisco_macuteo(self):
+        import dsl
+
+        z, x, y = (16, 35039, 24352)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/128740184
+            dsl.way(128740184, dsl.tile_box(z, x, y), {
+                'artwork_type': u'obelisk',
+                'height': u'14.52',
+                'historic': u'monument',
+                'historic:civilization': u'ancient_egyptian',
+                'historic:era': u'dynasty_XIX',
+                'historic:period': u'new_kingdom',
+                'man_made': u'obelisk',
+                'name': u'Obelisco Macuteo',
+                'obelisk:height': u'6.34',
+                'obelisk:material': u'red_granite',
+                'obelisk:size': u'monumental',
+                'source': u'openstreetmap.org',
+                'start_date': u'C13 BC',
+                'tourism': u'artwork',
+                'wikidata': u'Q3348569',
+                'wikipedia': u'it:Obelisco del Pantheon',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 128740184,
+                'kind': u'obelisk',
+                'min_zoom': 15,
+            })
