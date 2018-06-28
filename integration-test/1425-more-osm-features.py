@@ -1343,7 +1343,7 @@ class MoreOSMFeaturesTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 95467617,
                 'kind': u'rail',
-                'cutting': True,
+                'cutting': 'yes',
             })
 
     def test_railway_embankment_yes_way(self):
@@ -1373,5 +1373,68 @@ class MoreOSMFeaturesTest(FixtureTest):
             z, x, y, 'roads', {
                 'id': 95467611,
                 'kind': u'rail',
-                'embankment': True,
+                'embankment': 'yes',
+            })
+
+    def test_embankment_left_way(self):
+        import dsl
+
+        z, x, y = (16, 19715, 24176)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/430667681
+            dsl.way(430667681, dsl.tile_diagonal(z, x, y), {
+                'attribution': u'Office of Geographic and ' \
+                u'Environmental Information (MassGIS)',
+                'condition': u'fair',
+                'embankment': u'left',
+                'highway': u'residential',
+                'lanes': u'2',
+                'massgis:way_id': u'187669',
+                'name': u'South Row Road',
+                'source': u'openstreetmap.org',
+                'width': u'9.1',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 430667681,
+                'kind': u'minor_road',
+                'kind_detail': 'residential',
+                'embankment': 'left',
+            })
+
+    def test_embankment_both_way(self):
+        import dsl
+
+        z, x, y = (16, 16196, 25177)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/540442026
+            dsl.way(540442026, dsl.tile_diagonal(z, x, y), {
+                'embankment': u'both',
+                'hgv': u'designated',
+                'hgv:national_network': u'yes',
+                'highway': u'primary',
+                'lanes': u'2',
+                'maxspeed': u'55 mph',
+                'name': u'Highway 50',
+                'NHS': u'yes',
+                'ref': u'US 50',
+                'source': u'openstreetmap.org',
+                'surface': u'asphalt',
+                'tiger:cfcc': u'A21',
+                'tiger:county': u'Franklin, MO',
+                'tiger:reviewed': u'no',
+            }),
+        )
+
+        # NOTE: embankment=both is mapped to embankment:yes.
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 540442026,
+                'kind': u'major_road',
+                'kind_detail': 'primary',
+                'embankment': 'yes',
             })
