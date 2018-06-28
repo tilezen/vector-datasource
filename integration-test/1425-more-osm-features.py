@@ -1509,3 +1509,51 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind': u'obelisk',
                 'kind_detail': u'monument',
             })
+
+    def test_bunker_name_z16_way(self):
+        import dsl
+
+        z, x, y = (16, 19286, 24667)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/35099149
+            dsl.way(35099149, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'historic': u'ruins',
+                'military': u'bunker',
+                'name': u'Battery Upton',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        # bunker _with name_ should have z16
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 35099149,
+                'kind': u'bunker',
+                'min_zoom': 16,
+            })
+
+    def test_bunker_noname_z18_way(self):
+        import dsl
+
+        z, x, y = (16, 19286, 24665)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/35136899
+            dsl.way(35136899, dsl.tile_box(z, x, y), {
+                'building': u'yes',
+                'description': u'watchtower CRF North coincident range finder',
+                'historic': u'ruins',
+                'level': u'-1',
+                'military': u'bunker',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 35136899,
+                'kind': u'bunker',
+                'min_zoom': 18,
+            })

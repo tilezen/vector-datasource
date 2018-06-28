@@ -500,7 +500,7 @@ filters:
       tier: 3
   # bunker
   - filter: {military: bunker}
-    min_zoom: 16
+    min_zoom: {case: [{when: {name: true}, then: 16}, {else: 18}]}
     output:
       <<: *output_properties
       kind: bunker
