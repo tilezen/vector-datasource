@@ -567,7 +567,6 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `railway`
 * `recreation_ground`
 * `recreation_track`
-* `reef` - A solid feature just under the surface of the ocean, usually made from rock, sand or coral. If known, the `kind_detail` will be given as one of `coral`, `rock`, `sand`.
 * `residential`
 * `resort`
 * `rest_area`
@@ -1446,6 +1445,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `lake` - polygon
 * `ocean` - polygon, point is intended for label placement only
 * `playa` - polygon
+* `reef` - polygon. A solid feature just under the surface of the ocean, usually made from rock, sand or coral. If known, the `kind_detail` will be given as one of `coral`, `rock`, `sand`.
 * `river` - line
 * `riverbank` - polygon
 * `sea` - point, intended for label placement only

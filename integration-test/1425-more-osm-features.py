@@ -941,7 +941,7 @@ class MoreOSMFeaturesTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, 'landuse', {
+            z, x, y, 'water', {
                 'id': 300536075,
                 'kind': u'reef',
                 'kind_detail': 'coral',
