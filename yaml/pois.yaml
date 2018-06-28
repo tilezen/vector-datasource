@@ -2139,7 +2139,7 @@ filters:
       kind: sanitary_dump_station
 
   - filter: {highway: elevator}
-    min_zoom: 16
+    min_zoom: 17
     output:
       <<: *output_properties
       kind: elevator
