@@ -758,5 +758,16 @@ class RoundTripRuleTest(unittest.TestCase):
         self.assertIsNone(result)
 
 
+class GenerateSQLTest(unittest.TestCase):
+
+    def test_generate_sql(self):
+        from vectordatasource.meta.sql import write_sql
+        from cStringIO import StringIO
+
+        io = StringIO()
+        # this should throw if there's an error.
+        write_sql(io)
+
+
 if __name__ == '__main__':
     unittest.main()

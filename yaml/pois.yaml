@@ -957,7 +957,7 @@ filters:
   - filter:
       any:
         - waterway: fuel
-        - tags->'seamark:small_craft_facility:category': 'fuel_station'
+        - "seamark:small_craft_facility:category": 'fuel_station'
     min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       <<: *output_properties

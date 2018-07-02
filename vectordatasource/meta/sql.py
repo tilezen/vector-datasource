@@ -359,12 +359,17 @@ class SQLExpression(ast.NodeVisitor):
         if isinstance(call.func, ast.Attribute) and \
            isinstance(call.func.value, ast.Name) and \
            call.func.value.id == 'props':
+            col_name = call.args[0].s
+            if "'" in col_name:
+                raise RuntimeError("Tag/column name cannot contain "
+                                   "single quote: %r" % (col_name,))
+
             if self.force_type == int:
-                self.buf.write("(tags->'%s')::integer" % call.args[0].s)
+                self.buf.write("(tags->'%s')::integer" % col_name)
             elif self.force_type == float:
-                self.buf.write("(tags->'%s')::real" % call.args[0].s)
+                self.buf.write("(tags->'%s')::real" % col_name)
             else:
-                self.buf.write("tags->'%s'" % call.args[0].s)
+                self.buf.write("tags->'%s'" % col_name)
         else:
             name = fn_name(call.func)
             func = KNOWN_FUNCS.get(name)
@@ -684,7 +689,7 @@ def calculate_meta_source_for_table(name):
                            (name,))
 
 
-def print_adaptor(layer, table, calc, return_type):
+def print_adaptor(io, layer, table, calc, return_type):
     var = dict(layer=layer, table=table, calc=calc,
                return_type=return_type)
 
@@ -705,13 +710,12 @@ def print_adaptor(layer, table, calc, return_type):
 
     var['meta_source'] = calculate_meta_source_for_table(table)
 
-    print ADAPTOR_QUERY % var
+    io.write(ADAPTOR_QUERY % var)
 
 
-def main(argv=None):
+def write_sql(io):
     from vectordatasource.meta import find_yaml_path
-    if argv is None:
-        argv = sys.argv
+
     yaml_path = find_yaml_path()
     for output_fn, make_fn_name, force_type, return_type in (
             (output_kind, make_function_name_props, None, 'JSON'),
@@ -722,14 +726,14 @@ def main(argv=None):
             assert isinstance(function_data, FunctionData)
             ast_fn = function_data.ast
             ast_fn = GeomTypeTransformer().visit(ast_fn)
-            visitor = SQLVisitor(sys.stdout, force_type, return_type)
+            visitor = SQLVisitor(io, force_type, return_type)
             visitor.visit(ast_fn)
 
     for layer, tables in LAYER_TABLES.items():
         for table in tables:
             for calc, return_type in [('json', 'JSON'), ('min_zoom', 'REAL')]:
-                print_adaptor(layer, table, calc, return_type)
+                print_adaptor(io, layer, table, calc, return_type)
 
 
 if __name__ == '__main__':
-    main()
+    write_sql(sys.stdout)
