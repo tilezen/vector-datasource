@@ -13,4 +13,5 @@ FROM
   admin_areas
 
 WHERE
-    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
+    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }} AND
+    admin_leve = '2'
