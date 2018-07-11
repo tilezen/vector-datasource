@@ -4,7 +4,8 @@ from . import FixtureTest
 class WaterBoundariesSlow(FixtureTest):
 
     def test_boundaries(self):
-        from shapely.ops import unary_union
+        from shapely.geometry import Polygon, MultiPolygon
+        import dsl
 
         # River Tocanis, Brasil
 
@@ -23,13 +24,65 @@ class WaterBoundariesSlow(FixtureTest):
             [16, 23775, 33616],
         ]
 
-        all_tiles = no_boundary_tiles + boundary_tiles
-        all_boxes = [self.tile_bbox(*t, padding=2) for t in all_tiles]
-
-        self.load_fixtures([
-            'https://www.openstreetmap.org/relation/275011',
-            'https://www.openstreetmap.org/relation/1363854',
-        ], clip=unary_union(all_boxes))
+        self.generate_fixtures(
+            dsl.way(-275011,
+                    MultiPolygon([
+                        Polygon([
+                            (-49.39061691153051, -4.642129842005724),
+                            (-49.3911190288361, -4.64364792245321),
+                            (-49.3873424215501, -4.64655660425706),
+                            (-49.383544921875, -4.644166012503287),
+                            (-49.383544921875, -4.656281393196448),
+                            (-49.3836036333376, -4.65640167692064),
+                            (-49.3888874340073, -4.65459808086801),
+                            (-49.3950947926206, -4.65838675537571),
+                            (-49.4110107421875, -4.656996327123991),
+                            (-49.4110107421875, -4.642129842005724),
+                            (-49.39061691153051, -4.642129842005724),
+                        ]), Polygon([
+                            (-49.4219970703125, -4.65603655397672),
+                            (-49.449462890625, -4.653637121108541),
+                            (-49.449462890625, -4.642129842005724),
+                            (-49.4219970703125, -4.642129842005724),
+                            (-49.4219970703125, -4.65603655397672),
+                        ]),
+                    ]), {
+                        "natural": "water",
+                        "name": u"Reservat\u00f3rio da Usina "
+                        u"Hidrel\u00e9trica de Tucuru\u00ed",
+                        "short_name": u"Reservat\u00f3rio UHE de Tucuru\u00ed",
+                        "way_area": "2.71214e+09",
+                        "wikipedia": u"pt:Usina Hidrel\u00e9trica de "
+                        u"Tucuru\u00ed",
+                        "name:de": u"Tucuru\u00ed-Stausee",
+                        "water": "reservoir",
+                        "source": "openstreetmap.org",
+                        "wikidata": "Q1475210",
+                    }),
+            dsl.way(-1363854,
+                    MultiPolygon([
+                        Polygon([
+                            (-49.449462890625, -4.653637121108541),
+                            (-49.4219970703125, -4.65603655397672),
+                            (-49.4219970703125, -4.669505032676526),
+                            (-49.449462890625, -4.669505032676526),
+                            (-49.449462890625, -4.653637121108541),
+                        ]), Polygon([
+                            (-49.4110107421875, -4.656996327123991),
+                            (-49.3950947926206, -4.65838675537571),
+                            (-49.38621008393813, -4.669505032676526),
+                            (-49.404887252266015, -4.669505032676526),
+                            (-49.4072058792811, -4.66783843107854),
+                            (-49.40703528549232, -4.669505032676526),
+                            (-49.4110107421875, -4.669505032676526),
+                            (-49.4110107421875, -4.656996327123991),
+                        ])
+                    ]), {
+                        "source": "openstreetmap.org",
+                        "waterway": "riverbank",
+                        "way_area": 7.12568e+08,
+                    })
+        )
 
         for z, x, y in no_boundary_tiles:
             with self.features_in_tile_layer(z, x, y, 'water') as features:

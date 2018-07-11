@@ -23,20 +23,61 @@ class WalkingRouteRefs(FixtureTest):
              'all_walking_shield_texts': ['416']})
 
     def test_multiple_routes(self):
+        import dsl
+
+        z, x, y = 16, 11044, 25309
+
         #   network=nwn, ref="PCT Section H"
         #   type=route, route=hiking, network=nwn, ref=PCT
         #   type=route, route=foot, network=rwn, ref=JMT
         #   type=route, route=foot, network=rwn, ref="", name="PCT - California
         #   Section H"
-        self.load_fixtures([
-            'https://www.openstreetmap.org/way/373532611',
-            'https://www.openstreetmap.org/relation/1225378',
-            'https://www.openstreetmap.org/relation/1244828',
-            'https://www.openstreetmap.org/relation/1244686',
-        ], clip=self.tile_bbox(16, 11044, 25309))
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/373532611
+            dsl.way(373532611, dsl.tile_diagonal(z, x, y), {
+                "horse": "yes",
+                "bicycle": "no",
+                "name": "John Muir Trail",
+                "source": "openstreetmap.org",
+                "alt_name": "Pacific Crest National Scenic Trail",
+                "network": "nwn",
+                "motorcar": "no",
+                "foot": "yes",
+                "ref": "PCT Section H",
+                "highway": "path",
+                "motorcycle": "no",
+            }),
+            # https://www.openstreetmap.org/relation/1225378
+            dsl.relation(1225378, {
+                "name": "Pacific Crest Trail",
+                "network": "nwn",
+                "ref": "PCT",
+                "route": "hiking",
+                "type": "route",
+                "wikidata": "Q2003736",
+                "wikipedia": "en:Pacific Crest Trail",
+            }, ways=[373532611]),
+            # https://www.openstreetmap.org/relation/1244828
+            dsl.relation(1244828, {
+                "name": "John Muir Trail",
+                "network": "rwn",
+                "ref": "JMT",
+                "route": "foot",
+                "type": "route",
+                "wikidata": "Q967917",
+                "wikipedia": "en:John Muir Trail",
+            }, ways=[373532611]),
+            # https://www.openstreetmap.org/relation/1244686
+            dsl.relation(1244686, {
+                "name": "PCT - California Section H",
+                "network": "rwn",
+                "route": "foot",
+                "type": "route",
+            }, ways=[373532611])
+        )
 
         self.assert_has_feature(
-            16, 11044, 25309, 'roads',
+            z, x, y, 'roads',
             {'id': 373532611,
              'walking_network': 'nwn', 'walking_shield_text': 'PCT',
              'all_walking_networks': ['nwn', 'nwn', 'rwn', 'rwn'],

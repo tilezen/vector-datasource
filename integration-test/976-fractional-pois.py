@@ -35,12 +35,35 @@ class FractionalPois(FixtureTest):
              'network': 'US:NJ:Hudson'})
 
     def test_train_route(self):
-        self.load_fixtures([
-            'http://www.openstreetmap.org/relation/1359387',
-        ], clip=self.tile_bbox(9, 150, 192))
+        import dsl
+
+        z, x, y = 9, 150, 192
+
+        self.generate_fixtures(
+            dsl.way(1359387, dsl.tile_diagonal(z, x, y), {
+                "website": "http://www.amtrak.com",
+                "passenger": "national",
+                "via": "New York Penn Station",
+                "from": "Washington, DC",
+                "name": "Vermonter",
+                "service": "long_distance",
+                "to": "Saint Albans, Vermont",
+                "route": "train",
+                "wikipedia": "en:Vermonter (train)",
+                "route_name": "Vermonter",
+                "route_pref_color": "0",
+                "public_transport:version": "1",
+                "wikidata": "Q1412872",
+                "source": "openstreetmap.org",
+                "operator": "Amtrak",
+                "ref": "54-57",
+                "colour": "#005480",
+                "network": "Amtrak"
+            }),
+        )
 
         self.assert_has_feature(
-            9, 150, 192, 'transit',
+            z, x, y, 'transit',
             {'min_zoom': 5, 'ref': '54-57',
              'source': 'openstreetmap.org',
              'name': 'Vermonter'})
