@@ -13,4 +13,7 @@ FROM
   admin_areas
 
 WHERE
-    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }}
+    {{ bounds['polygon']|bbox_filter('the_geom', 3857) }} AND
+    -- NOTE: this _is not_ a typo! this table is loaded from a shapefile, which truncates column names to
+    -- 8 characters.
+    admin_leve = '2'
