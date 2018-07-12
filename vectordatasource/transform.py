@@ -5643,7 +5643,8 @@ def _normalize_gr_netref(network, ref):
     if prefix in (u'ΕΟ', u'EO'):
         network = 'GR:national'
 
-    elif prefix in (u'Α', u'A'):
+    elif (prefix in (u'Α', u'A') and
+          (network is None or network == 'GR:motorway')):
         network = 'GR:motorway'
         # keep A prefix for shield text
         ref = u'Α' + ref
