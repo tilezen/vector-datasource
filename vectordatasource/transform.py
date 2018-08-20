@@ -5299,7 +5299,8 @@ def _normalize_br_netref(network, ref):
     # try to add detail to the network by looking at the ref value,
     # which often has additional information.
     for guess_net, guess_ref in _guess_network_br(dict(ref=ref)):
-        if guess_ref == ref and guess_net.startswith(network):
+        if guess_ref == ref and (
+                network is None or guess_net.startswith(network)):
             network = guess_net
             break
 
@@ -5527,7 +5528,7 @@ def _normalize_es_netref(network, ref):
     elif prefix == 'N':
         network = 'ES:N-road'
 
-    elif prefix == 'E':
+    elif prefix == 'E' and num:
         # e-roads seem to be signed without leading zeros.
         network = 'e-road'
         ref = 'E-' + num.lstrip('0')
@@ -5562,7 +5563,8 @@ def _normalize_fr_netref(network, ref):
             prefix = 'N'
 
         # strip spaces and leading zeros
-        ref = prefix + ref.strip().lstrip('0')
+        if ref:
+            ref = prefix + ref.strip().lstrip('0')
 
         # backfill network from refs if network wasn't provided from another
         # source.
@@ -5893,7 +5895,7 @@ def _normalize_no_netref(network, ref):
         network = 'NO:fylkesvei'
         ref = number
 
-    elif prefix == 'E':
+    elif prefix == 'E' and number:
         network = 'e-road'
         ref = 'E ' + number.lstrip('0')
 
@@ -6008,7 +6010,7 @@ def _normalize_pt_netref(network, ref):
     prefix, num = _splitref(ref)
 
     result = _PT_NETWORK_EXPANSION.get(prefix)
-    if result:
+    if result and num:
         network, letter = result
         ref = letter + num.lstrip('0')
 
@@ -6117,12 +6119,12 @@ def _normalize_tr_netref(network, ref):
     if num:
         num = num.lstrip('-')
 
-    if prefix == 'O':
+    if prefix == 'O' and num:
         # see https://en.wikipedia.org/wiki/Otoyol
         network = 'TR:motorway'
         ref = 'O' + num.lstrip('0')
 
-    elif prefix == 'D':
+    elif prefix == 'D' and num:
         # see https://en.wikipedia.org/wiki/Turkish_State_Highway_System
         network = 'TR:highway'
         # drop section suffixes
@@ -6131,7 +6133,7 @@ def _normalize_tr_netref(network, ref):
     elif ref and _TR_PROVINCIAL.match(ref):
         network = 'TR:provincial'
 
-    elif prefix == 'E':
+    elif prefix == 'E' and num:
         network = 'e-road'
         ref = 'E' + num
 
@@ -6146,9 +6148,14 @@ def _normalize_ua_netref(network, ref):
     ref = _make_unicode_or_none(ref)
     prefix, num = _splitref(ref)
 
-    num = num.lstrip('-')
+    if num:
+        num = num.lstrip('-')
 
-    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
+    if not num:
+        network = None
+        ref = None
+
+    elif prefix in (u'М', 'M'):  # cyrillic M & latin M!
         if network is None:
             network = 'UA:international'
         ref = u'М' + num
@@ -6188,7 +6195,11 @@ def _normalize_vn_netref(network, ref):
     if num:
         num = num.lstrip(u'.')
 
-    if prefix == u'CT' or network == 'VN:expressway':
+    if not num:
+        network = None
+        ref = None
+
+    elif prefix == u'CT' or network == 'VN:expressway':
         network = 'VN:expressway'
         ref = u'CT' + num
 
@@ -6218,7 +6229,7 @@ def _normalize_vn_netref(network, ref):
 
 def _normalize_za_netref(network, ref):
     prefix, num = _splitref(ref)
-    ndigits = len(num)
+    ndigits = len(num) if num else 0
 
     # N, R & M numbered routes all have special shields which have the letter
     # above the number, which would make it part of the shield artwork rather
@@ -6278,7 +6289,10 @@ def _shield_text_ar(network, ref):
 def _shield_text_gb(network, ref):
     # just remove any space between the letter and number(s)
     prefix, number = _splitref(ref)
-    return prefix + number
+    if prefix and number:
+        return prefix + number
+    else:
+        return ref
 
 
 def _shield_text_ro(network, ref):
