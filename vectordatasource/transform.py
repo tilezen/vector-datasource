@@ -4196,7 +4196,9 @@ def _guess_network_gb(tags):
 
 def _guess_network_ar(tags):
     ref = tags.get('ref')
-    if ref.startswith('RN'):
+    if ref is None:
+        return None
+    elif ref.startswith('RN'):
         return [('AR:national', ref)]
     elif ref.startswith('RP'):
         return [('AR:provincial', ref)]
@@ -5307,7 +5309,7 @@ def _normalize_br_netref(network, ref):
         else:
             return network, ref
 
-    elif network.startswith('BR:'):
+    elif network and network.startswith('BR:'):
         # turn things like "BR:BA-roads" into just "BR:BA"
         if network.endswith('-roads'):
             network = network[:-6]
@@ -5361,13 +5363,13 @@ def _normalize_ch_netref(network, ref):
 
 
 def _normalize_cn_netref(network, ref):
-    if ref.startswith('S'):
+    if ref and ref.startswith('S'):
         network = 'CN:expressway:regional'
 
-    elif ref.startswith('G'):
+    elif ref and ref.startswith('G'):
         network = 'CN:expressway'
 
-    elif ref.startswith('X'):
+    elif ref and ref.startswith('X'):
         network = 'CN:JX'
 
     elif network == 'CN-expressways':
@@ -5974,9 +5976,9 @@ def _normalize_pl_netref(network, ref):
     elif network == 'PL:expressways':
         network = 'PL:expressway'
 
-    if ref.startswith('A'):
+    if ref and ref.startswith('A'):
         network = 'PL:motorway'
-    elif ref.startswith('S'):
+    elif ref and ref.startswith('S'):
         network = 'PL:expressway'
 
     return network, ref
@@ -6263,11 +6265,11 @@ def _normalize_za_netref(network, ref):
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
-    if network == 'AR:national' and ref.startswith('RN'):
+    if network == 'AR:national' and ref and ref.startswith('RN'):
         return ref[2:]
 
     # Argentinian provincial routes start with "RP" (ruta provincial)
-    if network == 'AR:provincial' and ref.startswith('RP'):
+    if network == 'AR:provincial' and ref and ref.startswith('RP'):
         return ref[2:]
 
     return ref
