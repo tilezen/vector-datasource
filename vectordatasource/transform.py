@@ -4157,7 +4157,7 @@ def _guess_network_gb(tags):
     # can recover it here.
     highway = tags.get('kind_detail')
 
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     # although roads are part of only one network in the UK, some roads are
     # tagged incorrectly as being part of two, so we have to handle this case.
@@ -4206,7 +4206,7 @@ def _guess_network_ar(tags):
 
 
 def _guess_network_au(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4282,6 +4282,10 @@ def _guess_network_br(tags):
     ref = tags.get('ref')
     networks = []
 
+    # a missing or blank ref isn't going to give us much information
+    if not ref:
+        return networks
+
     # track last prefix, so that we can handle cases where the ref is written
     # as "BR-XXX/YYY" to mean "BR-XXX; BR-YYY".
     last_prefix = None
@@ -4332,7 +4336,7 @@ def _guess_network_ca(tags):
 
 
 def _guess_network_ch(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4344,7 +4348,7 @@ def _guess_network_ch(tags):
 
 
 def _guess_network_cn(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4355,7 +4359,7 @@ def _guess_network_cn(tags):
 
 
 def _guess_network_es(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         part = part.strip()
@@ -4368,7 +4372,7 @@ def _guess_network_es(tags):
 
 
 def _guess_network_fr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4379,7 +4383,7 @@ def _guess_network_fr(tags):
 
 
 def _guess_network_de(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4390,7 +4394,7 @@ def _guess_network_de(tags):
 
 
 def _guess_network_ga(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4401,7 +4405,7 @@ def _guess_network_ga(tags):
 
 
 def _guess_network_gr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4418,7 +4422,7 @@ def _guess_network_gr(tags):
 
 
 def _guess_network_in(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4429,7 +4433,7 @@ def _guess_network_in(tags):
 
 
 def _guess_network_mx(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4440,7 +4444,7 @@ def _guess_network_mx(tags):
 
 
 def _guess_network_my(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4451,7 +4455,7 @@ def _guess_network_my(tags):
 
 
 def _guess_network_no(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4462,7 +4466,7 @@ def _guess_network_no(tags):
 
 
 def _guess_network_pe(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4473,7 +4477,7 @@ def _guess_network_pe(tags):
 
 
 def _guess_network_jp(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
 
     name = tags.get('name:ja') or tags.get('name')
     network_from_name = None
@@ -4500,7 +4504,7 @@ def _guess_network_jp(tags):
 
 
 def _guess_network_kr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     network_from_tags = tags.get('network')
 
     # the name often ends with a word which appears to mean expressway or
@@ -4544,7 +4548,7 @@ def _guess_network_kr(tags):
 
 
 def _guess_network_pl(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in ref.split(';'):
@@ -4557,7 +4561,7 @@ def _guess_network_pl(tags):
 
 
 def _guess_network_pt(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in ref.split(';'):
@@ -4570,7 +4574,7 @@ def _guess_network_pt(tags):
 
 
 def _guess_network_ro(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in ref.split(';'):
@@ -4584,7 +4588,7 @@ def _guess_network_ro(tags):
 
 
 def _guess_network_ru(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in ref.split(';'):
@@ -4597,7 +4601,7 @@ def _guess_network_ru(tags):
 
 
 def _guess_network_sg(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in ref.split(';'):
@@ -4610,7 +4614,7 @@ def _guess_network_sg(tags):
 
 
 def _guess_network_tr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in _COMMON_SEPARATORS.split(ref):
@@ -4625,7 +4629,7 @@ def _guess_network_tr(tags):
 
 
 def _guess_network_ua(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in ref.split(';'):
