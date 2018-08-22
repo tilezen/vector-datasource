@@ -4157,7 +4157,7 @@ def _guess_network_gb(tags):
     # can recover it here.
     highway = tags.get('kind_detail')
 
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     # although roads are part of only one network in the UK, some roads are
     # tagged incorrectly as being part of two, so we have to handle this case.
@@ -4196,22 +4196,39 @@ def _guess_network_gb(tags):
 
 def _guess_network_ar(tags):
     ref = tags.get('ref')
-    if ref.startswith('RN'):
+    if ref is None:
+        return None
+    elif ref.startswith('RN'):
         return [('AR:national', ref)]
     elif ref.startswith('RP'):
         return [('AR:provincial', ref)]
     return None
 
 
-def _guess_network_au(tags):
-    ref = tags.get('ref')
+def _guess_network_with(tags, fn):
+    """
+    Common function for backfilling (network, ref) pairs by running the
+    "normalize" function on the parts of the ref. For example, if the
+    ref was 'A1;B2;C3', then the normalize function would be run on
+    fn(None, 'A1'), fn(None, 'B2'), etc...
+
+    This allows us to back-fill the network where it can be deduced from
+    the ref in a particular country (e.g: if all motorways are A[0-9]).
+    """
+
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
+        part = part.strip()
         if not part:
             continue
-        network, ref = _normalize_au_netref(None, part)
+        network, ref = fn(None, part)
         networks.append((network, part))
     return networks
+
+
+def _guess_network_au(tags):
+    return _guess_network_with(tags, _normalize_au_netref)
 
 
 # list of all the state codes in Brazil, see
@@ -4280,6 +4297,10 @@ def _guess_network_br(tags):
     ref = tags.get('ref')
     networks = []
 
+    # a missing or blank ref isn't going to give us much information
+    if not ref:
+        return networks
+
     # track last prefix, so that we can handle cases where the ref is written
     # as "BR-XXX/YYY" to mean "BR-XXX; BR-YYY".
     last_prefix = None
@@ -4330,7 +4351,7 @@ def _guess_network_ca(tags):
 
 
 def _guess_network_ch(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4342,64 +4363,27 @@ def _guess_network_ch(tags):
 
 
 def _guess_network_cn(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_cn_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_cn_netref)
 
 
 def _guess_network_es(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        part = part.strip()
-        if not part:
-            continue
-        network, ref = _normalize_es_netref(None, part)
-        if network or ref:
-            networks.append((network, ref))
-    return networks
+    return _guess_network_with(tags, _normalize_es_netref)
 
 
 def _guess_network_fr(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_fr_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_fr_netref)
 
 
 def _guess_network_de(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_de_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_de_netref)
 
 
 def _guess_network_ga(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ga_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_ga_netref)
 
 
 def _guess_network_gr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
         if not part:
@@ -4416,62 +4400,27 @@ def _guess_network_gr(tags):
 
 
 def _guess_network_in(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_in_netref(None, part)
-        networks.append((network, ref))
-    return networks
+    return _guess_network_with(tags, _normalize_in_netref)
 
 
 def _guess_network_mx(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_mx_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_mx_netref)
 
 
 def _guess_network_my(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_my_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_my_netref)
 
 
 def _guess_network_no(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_no_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_no_netref)
 
 
 def _guess_network_pe(tags):
-    ref = tags.get('ref')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_pe_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_pe_netref)
 
 
 def _guess_network_jp(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
 
     name = tags.get('name:ja') or tags.get('name')
     network_from_name = None
@@ -4498,7 +4447,7 @@ def _guess_network_jp(tags):
 
 
 def _guess_network_kr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     network_from_tags = tags.get('network')
 
     # the name often ends with a word which appears to mean expressway or
@@ -4542,73 +4491,27 @@ def _guess_network_kr(tags):
 
 
 def _guess_network_pl(tags):
-    ref = tags.get('ref')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_pl_netref(None, part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_pl_netref)
 
 
 def _guess_network_pt(tags):
-    ref = tags.get('ref')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_pt_netref(None, part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_pt_netref)
 
 
 def _guess_network_ro(tags):
-    ref = tags.get('ref')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ro_netref(None, part)
-        if network or ref:
-            networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_ro_netref)
 
 
 def _guess_network_ru(tags):
-    ref = tags.get('ref')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ru_netref(tags.get('network'), part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_ru_netref)
 
 
 def _guess_network_sg(tags):
-    ref = tags.get('ref')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_sg_netref(None, part)
-        networks.append((network, ref))
-
-    return networks
+    return _guess_network_with(tags, _normalize_sg_netref)
 
 
 def _guess_network_tr(tags):
-    ref = tags.get('ref')
+    ref = tags.get('ref', '')
     networks = []
 
     for part in _COMMON_SEPARATORS.split(ref):
@@ -4623,16 +4526,7 @@ def _guess_network_tr(tags):
 
 
 def _guess_network_ua(tags):
-    ref = tags.get('ref')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ua_netref(tags.get('network'), part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_ua_netref)
 
 
 _COMMON_SEPARATORS = re.compile('[;,/,]')
@@ -5297,7 +5191,8 @@ def _normalize_br_netref(network, ref):
     # try to add detail to the network by looking at the ref value,
     # which often has additional information.
     for guess_net, guess_ref in _guess_network_br(dict(ref=ref)):
-        if guess_ref == ref and guess_net.startswith(network):
+        if guess_ref == ref and (
+                network is None or guess_net.startswith(network)):
             network = guess_net
             break
 
@@ -5307,7 +5202,7 @@ def _normalize_br_netref(network, ref):
         else:
             return network, ref
 
-    elif network.startswith('BR:'):
+    elif network and network.startswith('BR:'):
         # turn things like "BR:BA-roads" into just "BR:BA"
         if network.endswith('-roads'):
             network = network[:-6]
@@ -5361,13 +5256,13 @@ def _normalize_ch_netref(network, ref):
 
 
 def _normalize_cn_netref(network, ref):
-    if ref.startswith('S'):
+    if ref and ref.startswith('S'):
         network = 'CN:expressway:regional'
 
-    elif ref.startswith('G'):
+    elif ref and ref.startswith('G'):
         network = 'CN:expressway'
 
-    elif ref.startswith('X'):
+    elif ref and ref.startswith('X'):
         network = 'CN:JX'
 
     elif network == 'CN-expressways':
@@ -5525,7 +5420,7 @@ def _normalize_es_netref(network, ref):
     elif prefix == 'N':
         network = 'ES:N-road'
 
-    elif prefix == 'E':
+    elif prefix == 'E' and num:
         # e-roads seem to be signed without leading zeros.
         network = 'e-road'
         ref = 'E-' + num.lstrip('0')
@@ -5560,7 +5455,8 @@ def _normalize_fr_netref(network, ref):
             prefix = 'N'
 
         # strip spaces and leading zeros
-        ref = prefix + ref.strip().lstrip('0')
+        if ref:
+            ref = prefix + ref.strip().lstrip('0')
 
         # backfill network from refs if network wasn't provided from another
         # source.
@@ -5891,7 +5787,7 @@ def _normalize_no_netref(network, ref):
         network = 'NO:fylkesvei'
         ref = number
 
-    elif prefix == 'E':
+    elif prefix == 'E' and number:
         network = 'e-road'
         ref = 'E ' + number.lstrip('0')
 
@@ -5974,9 +5870,9 @@ def _normalize_pl_netref(network, ref):
     elif network == 'PL:expressways':
         network = 'PL:expressway'
 
-    if ref.startswith('A'):
+    if ref and ref.startswith('A'):
         network = 'PL:motorway'
-    elif ref.startswith('S'):
+    elif ref and ref.startswith('S'):
         network = 'PL:expressway'
 
     return network, ref
@@ -6006,7 +5902,7 @@ def _normalize_pt_netref(network, ref):
     prefix, num = _splitref(ref)
 
     result = _PT_NETWORK_EXPANSION.get(prefix)
-    if result:
+    if result and num:
         network, letter = result
         ref = letter + num.lstrip('0')
 
@@ -6115,12 +6011,12 @@ def _normalize_tr_netref(network, ref):
     if num:
         num = num.lstrip('-')
 
-    if prefix == 'O':
+    if prefix == 'O' and num:
         # see https://en.wikipedia.org/wiki/Otoyol
         network = 'TR:motorway'
         ref = 'O' + num.lstrip('0')
 
-    elif prefix == 'D':
+    elif prefix == 'D' and num:
         # see https://en.wikipedia.org/wiki/Turkish_State_Highway_System
         network = 'TR:highway'
         # drop section suffixes
@@ -6129,7 +6025,7 @@ def _normalize_tr_netref(network, ref):
     elif ref and _TR_PROVINCIAL.match(ref):
         network = 'TR:provincial'
 
-    elif prefix == 'E':
+    elif prefix == 'E' and num:
         network = 'e-road'
         ref = 'E' + num
 
@@ -6144,9 +6040,14 @@ def _normalize_ua_netref(network, ref):
     ref = _make_unicode_or_none(ref)
     prefix, num = _splitref(ref)
 
-    num = num.lstrip('-')
+    if num:
+        num = num.lstrip('-')
 
-    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
+    if not num:
+        network = None
+        ref = None
+
+    elif prefix in (u'М', 'M'):  # cyrillic M & latin M!
         if network is None:
             network = 'UA:international'
         ref = u'М' + num
@@ -6186,7 +6087,11 @@ def _normalize_vn_netref(network, ref):
     if num:
         num = num.lstrip(u'.')
 
-    if prefix == u'CT' or network == 'VN:expressway':
+    if not num:
+        network = None
+        ref = None
+
+    elif prefix == u'CT' or network == 'VN:expressway':
         network = 'VN:expressway'
         ref = u'CT' + num
 
@@ -6216,7 +6121,7 @@ def _normalize_vn_netref(network, ref):
 
 def _normalize_za_netref(network, ref):
     prefix, num = _splitref(ref)
-    ndigits = len(num)
+    ndigits = len(num) if num else 0
 
     # N, R & M numbered routes all have special shields which have the letter
     # above the number, which would make it part of the shield artwork rather
@@ -6263,11 +6168,11 @@ def _normalize_za_netref(network, ref):
 def _shield_text_ar(network, ref):
     # Argentinian national routes start with "RN" (ruta nacional), which
     # should be stripped, but other letters shouldn't be!
-    if network == 'AR:national' and ref.startswith('RN'):
+    if network == 'AR:national' and ref and ref.startswith('RN'):
         return ref[2:]
 
     # Argentinian provincial routes start with "RP" (ruta provincial)
-    if network == 'AR:provincial' and ref.startswith('RP'):
+    if network == 'AR:provincial' and ref and ref.startswith('RP'):
         return ref[2:]
 
     return ref
@@ -6276,7 +6181,10 @@ def _shield_text_ar(network, ref):
 def _shield_text_gb(network, ref):
     # just remove any space between the letter and number(s)
     prefix, number = _splitref(ref)
-    return prefix + number
+    if prefix and number:
+        return prefix + number
+    else:
+        return ref
 
 
 def _shield_text_ro(network, ref):

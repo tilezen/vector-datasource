@@ -769,3 +769,19 @@ class AdminBoundaryTest(unittest.TestCase):
 
         # the test is simply that an exception isn't thrown.
         admin_boundaries(ctx)
+
+
+class RoadNetworkFixTest(unittest.TestCase):
+
+    def test_normalize_br_netref(self):
+        from vectordatasource.transform import _normalize_br_netref
+        net, ref = _normalize_br_netref(None, "SP-1")
+        self.assertEqual("BR:SP", net)
+        self.assertEqual("SP-1", ref)
+
+    def test_guess_network_br(self):
+        from vectordatasource.transform import _guess_network_br
+        # should be empty for a missing ref
+        self.assertEqual([], _guess_network_br({}))
+        # should be empty for a blank ref
+        self.assertEqual([], _guess_network_br(dict(ref="")))
