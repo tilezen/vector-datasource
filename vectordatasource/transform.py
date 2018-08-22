@@ -4205,15 +4205,30 @@ def _guess_network_ar(tags):
     return None
 
 
-def _guess_network_au(tags):
+def _guess_network_with(tags, fn):
+    """
+    Common function for backfilling (network, ref) pairs by running the
+    "normalize" function on the parts of the ref. For example, if the
+    ref was 'A1;B2;C3', then the normalize function would be run on
+    fn(None, 'A1'), fn(None, 'B2'), etc...
+
+    This allows us to back-fill the network where it can be deduced from
+    the ref in a particular country (e.g: if all motorways are A[0-9]).
+    """
+
     ref = tags.get('ref', '')
     networks = []
     for part in ref.split(';'):
+        part = part.strip()
         if not part:
             continue
-        network, ref = _normalize_au_netref(None, part)
+        network, ref = fn(None, part)
         networks.append((network, part))
     return networks
+
+
+def _guess_network_au(tags):
+    return _guess_network_with(tags, _normalize_au_netref)
 
 
 # list of all the state codes in Brazil, see
@@ -4348,60 +4363,23 @@ def _guess_network_ch(tags):
 
 
 def _guess_network_cn(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_cn_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_cn_netref)
 
 
 def _guess_network_es(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        part = part.strip()
-        if not part:
-            continue
-        network, ref = _normalize_es_netref(None, part)
-        if network or ref:
-            networks.append((network, ref))
-    return networks
+    return _guess_network_with(tags, _normalize_es_netref)
 
 
 def _guess_network_fr(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_fr_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_fr_netref)
 
 
 def _guess_network_de(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_de_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_de_netref)
 
 
 def _guess_network_ga(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ga_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_ga_netref)
 
 
 def _guess_network_gr(tags):
@@ -4422,58 +4400,23 @@ def _guess_network_gr(tags):
 
 
 def _guess_network_in(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_in_netref(None, part)
-        networks.append((network, ref))
-    return networks
+    return _guess_network_with(tags, _normalize_in_netref)
 
 
 def _guess_network_mx(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_mx_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_mx_netref)
 
 
 def _guess_network_my(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_my_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_my_netref)
 
 
 def _guess_network_no(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_no_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_no_netref)
 
 
 def _guess_network_pe(tags):
-    ref = tags.get('ref', '')
-    networks = []
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_pe_netref(None, part)
-        networks.append((network, part))
-    return networks
+    return _guess_network_with(tags, _normalize_pe_netref)
 
 
 def _guess_network_jp(tags):
@@ -4548,69 +4491,23 @@ def _guess_network_kr(tags):
 
 
 def _guess_network_pl(tags):
-    ref = tags.get('ref', '')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_pl_netref(None, part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_pl_netref)
 
 
 def _guess_network_pt(tags):
-    ref = tags.get('ref', '')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_pt_netref(None, part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_pt_netref)
 
 
 def _guess_network_ro(tags):
-    ref = tags.get('ref', '')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ro_netref(None, part)
-        if network or ref:
-            networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_ro_netref)
 
 
 def _guess_network_ru(tags):
-    ref = tags.get('ref', '')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ru_netref(tags.get('network'), part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_ru_netref)
 
 
 def _guess_network_sg(tags):
-    ref = tags.get('ref', '')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_sg_netref(None, part)
-        networks.append((network, ref))
-
-    return networks
+    return _guess_network_with(tags, _normalize_sg_netref)
 
 
 def _guess_network_tr(tags):
@@ -4629,16 +4526,7 @@ def _guess_network_tr(tags):
 
 
 def _guess_network_ua(tags):
-    ref = tags.get('ref', '')
-    networks = []
-
-    for part in ref.split(';'):
-        if not part:
-            continue
-        network, ref = _normalize_ua_netref(tags.get('network'), part)
-        networks.append((network, part))
-
-    return networks
+    return _guess_network_with(tags, _normalize_ua_netref)
 
 
 _COMMON_SEPARATORS = re.compile('[;,/,]')
