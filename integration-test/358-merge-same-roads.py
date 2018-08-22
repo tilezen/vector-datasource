@@ -16,7 +16,7 @@ def _query_highway(highway):
     # in defiance of conventional x, y coordinate ordering.
     bbox = "36.563,-122.377,37.732,-120.844"
     overpass = "http://overpass-api.de/api/interpreter?data="
-    return overpass + 'way(' + bbox + ')[highway=' + highway + '];>;'
+    return overpass + 'way(' + bbox + ')[highway=' + highway + ']%3B>%3B'
 
 
 class MergeSameRoads(FixtureTest):

@@ -14,7 +14,7 @@ class ReturnOfTheZombieBuildings(FixtureTest):
         # scheme that overpass expects (south,west,north,east).
         bbox = "%f,%f,%f,%f" % (bounds[1], bounds[0], bounds[3], bounds[2])
         overpass = "http://overpass-api.de/api/interpreter?data="
-        query = "way(" + bbox + ")[" + tag + "];>;"
+        query = "way(" + bbox + ")[" + tag + "]%3B>%3B"
 
         self.load_fixtures([overpass + query])
 
