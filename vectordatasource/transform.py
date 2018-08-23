@@ -4400,7 +4400,16 @@ def _guess_network_gr(tags):
 
 
 def _guess_network_in(tags):
-    return _guess_network_with(tags, _normalize_in_netref)
+    ref = tags.get('ref', '')
+    networks = []
+    for part in ref.split(';'):
+        if not part:
+            continue
+        network, ref = _normalize_in_netref(None, part)
+        # note: we return _ref_ here, as normalize_in_netref might have changed
+        # the ref part (e.g: in order to split MDR54 into (network=MDR, ref=54)
+        networks.append((network, ref))
+    return networks
 
 
 def _guess_network_mx(tags):
@@ -4503,7 +4512,19 @@ def _guess_network_ro(tags):
 
 
 def _guess_network_ru(tags):
-    return _guess_network_with(tags, _normalize_ru_netref)
+    ref = tags.get('ref', '')
+    network = tags.get('network')
+    networks = []
+
+    for part in ref.split(';'):
+        if not part:
+            continue
+        # note: we pass in the network tag, as that can be important for
+        # disambiguating Russian refs.
+        network, ref = _normalize_ru_netref(network, part)
+        networks.append((network, part))
+
+    return networks
 
 
 def _guess_network_sg(tags):
