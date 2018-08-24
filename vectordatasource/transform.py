@@ -5429,8 +5429,8 @@ def _normalize_es_netref(network, ref):
     if num:
         num = num.lstrip('-')
 
-        for i in xrange(0, len(num)):
-            if num[i].isdigit():
+        for c in num:
+            if c.isdigit():
                 num_digits += 1
             else:
                 break
