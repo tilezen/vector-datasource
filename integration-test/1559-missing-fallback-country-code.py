@@ -29,3 +29,29 @@ class MissingFallbackCountryCodeTest(FixtureTest):
                 'shield_text': '4',
                 'network': 'NO',
             })
+
+    def test_ca(self):
+        import dsl
+
+        z, x, y = (16, 13515, 21656)
+
+        self.generate_fixtures(
+            dsl.is_in('CA', z, x, y),
+            # https://www.openstreetmap.org/way/284925161
+            dsl.way(284925161, dsl.tile_diagonal(z, x, y), {
+                'highway': u'primary',
+                'lanes': u'2',
+                'maxspeed': u'100',
+                'name': u'Veterans Memorial Highway',
+                'ref': u'2',
+                'source': u'openstreetmap.org',
+                'surface': u'paved',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 284925161,
+                'shield_text': '2',
+                'network': 'CA',
+            })

@@ -4347,6 +4347,10 @@ def _guess_network_ca(tags):
         # https://commons.wikimedia.org/wiki/File:TCH-16_(BC).svg
         networks.append(('CA:transcanada', ref))
 
+    if not networks and ref:
+        # final fallback - all we know is that this is a road in Canada.
+        networks.append(('CA', ref))
+
     return networks
 
 
