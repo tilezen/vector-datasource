@@ -1,3 +1,6 @@
+# -*- encoding: utf-8 -*-
+from shapely.wkt import loads as wkt_loads
+import dsl
 from . import FixtureTest
 
 
@@ -5,7 +8,7 @@ class HistoricTransitStops(FixtureTest):
     def test_historic_railway_stop(self):
         # Check if historic stops are shown in pois and in transit layers.
         # Historic railway stop
-        self.load_fixtures(['https://www.openstreetmap.org/node/3039734894'])
+        self.generate_fixtures(dsl.way(3039734894, wkt_loads('POINT (-73.9832352026681 40.6727968999414)'), {u'name': u'Third Street', u'end_date': u'1940-05-31', u'tram': u'no', u'source': u'openstreetmap.org', u'historic': u'yes', u'train': u'no', u'light_rail': u'no', u'operator': u'Brooklyn-Manhattan Transit Company', u'railway': u'stop', u'subway': u'yes', u'public_transport': u'stop_position'}))
 
         self.assert_no_matching_feature(
             13, 2412, 3081, 'pois',
@@ -13,7 +16,7 @@ class HistoricTransitStops(FixtureTest):
 
     def test_historic_tram_stop(self):
         # Historic tram stop
-        self.load_fixtures(['http://www.openstreetmap.org/node/413573669'])
+        self.generate_fixtures(dsl.way(413573669, wkt_loads('POINT (-121.949906465259 36.97554418488439)'), {u'name': u'Capitola Village/Depot Hill', u'railway:proposed': u'tram_stop', u'note': u'Noted as a Secondary Station', u'source': u'openstreetmap.org', u'historic': u'yes', u'railway': u'tram_stop', u'ref': u'11'}))
 
         self.assert_no_matching_feature(
             13, 1320, 3189, 'pois',
@@ -21,13 +24,13 @@ class HistoricTransitStops(FixtureTest):
 
     def test_historic_railway_halt(self):
         # Historic railway halt
-        self.load_fixtures(['http://www.openstreetmap.org/node/708144563'])
+        self.generate_fixtures(dsl.way(708144563, wkt_loads('POINT (14.8139903286339 59.15514209522067)'), {u'historic:railway': u'halt', u'historic': u'yes', u'disused': u'yes', u'name': u'Kvistbro', u'source': u'openstreetmap.org'}))
 
         self.assert_no_matching_feature(
             13, 4433, 2416, 'pois',
             {'id': 708144563})
 
-        self.load_fixtures(['http://www.openstreetmap.org/node/2468597590'])
+        self.generate_fixtures(dsl.way(2468597590, wkt_loads('POINT (9.147960458165631 46.24711157299198)'), {u'source': u'openstreetmap.org', u'railway': u'halt', u'historic': u'railway_station', u'name': u'Grono'}))
 
         self.assert_no_matching_feature(
             13, 4304, 2906, 'pois',
@@ -35,7 +38,7 @@ class HistoricTransitStops(FixtureTest):
 
     def test_historic_railway_station(self):
         # Historic railway station
-        self.load_fixtures(['http://www.openstreetmap.org/node/985085275'])
+        self.generate_fixtures(dsl.way(985085275, wkt_loads('POINT (7.88296176838984 50.62061888904539)'), {u'name': u'Alter Verladebahnhof', u'note': u'disused since 2001', u'source': u'openstreetmap.org', u'historic': u'yes', u'railway': u'station', u'ruins': u'yes'}))
 
         self.assert_no_matching_feature(
             13, 4275, 2756, 'pois',
@@ -43,7 +46,7 @@ class HistoricTransitStops(FixtureTest):
 
     def test_historic_tram_stop_2(self):
         # Historic tram stop
-        self.load_fixtures(['http://www.openstreetmap.org/node/3367033945'])
+        self.generate_fixtures(dsl.way(3367033945, wkt_loads('POINT (-122.333631091518 47.78397268711019)'), {u'name': u'Lake Ballenger (Historic)', u'source': u'openstreetmap.org', u'historic': u'tram_stop', u'crossing': u'uncontrolled', u'railway': u'tram_stop', u'highway': u'crossing'}))
 
         self.assert_no_matching_feature(
             13, 1312, 2854, 'pois',
@@ -51,7 +54,7 @@ class HistoricTransitStops(FixtureTest):
 
     def test_current_railway_stop(self):
         # Current railway stop
-        self.load_fixtures(['http://www.openstreetmap.org/node/2986320002'])
+        self.generate_fixtures(dsl.way(2986320002, wkt_loads('POINT (-73.94815608065468 40.67836252093279)'), {u'name': u'Nostrand Avenue', u'source': u'openstreetmap.org', u'train': u'yes', u'public_transport': u'stop_position', u'operator': u'Long Island Rail Road', u'railway': u'stop', u'railway:position': u'1.6', u'network': u'Long Island Rail Road'}))
 
         self.assert_has_feature(
             16, 19306, 24648, 'pois',
@@ -59,7 +62,7 @@ class HistoricTransitStops(FixtureTest):
 
     def test_current_tram_stop(self):
         # Current tram stop
-        self.load_fixtures(['http://www.openstreetmap.org/node/257074010'])
+        self.generate_fixtures(dsl.way(257074010, wkt_loads('POINT (-122.413997610771 37.77939210258558)'), {u'name': u'Civic Center', u'wikipedia': u'en:Civic Center / UN Plaza Station', u'source': u'openstreetmap.org', u'operator': u'San Francisco Municipal Railway', u'railway': u'tram_stop', u'network': u'Muni'}))
 
         self.assert_has_feature(
             13, 1310, 3166, 'pois',
@@ -68,7 +71,7 @@ class HistoricTransitStops(FixtureTest):
     def test_current_railway_halt(self):
         # Current railway halt
         # http://www.openstreetmap.org/node/302735255
-        self.load_fixtures(['http://www.openstreetmap.org/node/302735255'])
+        self.generate_fixtures(dsl.way(302735255, wkt_loads('POINT (16.8020703892136 48.10800269583749)'), {u'railway:ref': u'Reg H1', u'uic_ref': u'8101787', u'name': u'Wildungsmauer', u'railway:position': u'38.0', u'uic_name': u'Wildungsmauer', u'source': u'openstreetmap.org', u'train': u'yes', u'public_transport': u'stop_position', u'operator': u'\xd6BB', u'railway:position:exact': u'37.985', u'railway': u'halt', u'ref': u'1'}))
 
         self.assert_has_feature(
             13, 4478, 2843, 'pois',
