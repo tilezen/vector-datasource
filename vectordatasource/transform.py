@@ -6199,6 +6199,24 @@ def _shield_text_ar(network, ref):
     return ref
 
 
+_AU_NETWORK_SHIELD_TEXT = {
+    'AU:M-road': 'M',
+    'AU:A-road': 'A',
+    'AU:B-road': 'B',
+    'AU:C-road': 'C',
+}
+
+
+def _shield_text_au(network, ref):
+    # shields on M, A, B & C roads should have the letter, but not other types
+    # of roads.
+    prefix = _AU_NETWORK_SHIELD_TEXT.get(network)
+    if prefix:
+        ref = prefix + ref
+
+    return ref
+
+
 def _shield_text_gb(network, ref):
     # just remove any space between the letter and number(s)
     prefix, number = _splitref(ref)
@@ -6263,6 +6281,7 @@ _COUNTRY_SPECIFIC_ROAD_NETWORK_LOGIC = {
         backfill=_guess_network_au,
         fix=_normalize_au_netref,
         sort=_sort_network_au,
+        shield_text=_shield_text_au,
     ),
     'BR': CountryNetworkLogic(
         backfill=_guess_network_br,
