@@ -5419,9 +5419,6 @@ _ES_CITIES = set([
 def _normalize_es_netref(network, ref):
     prefix, num = _splitref(ref)
 
-    if num:
-        num = num.lstrip('-')
-
     # some A-roads in Spain are actually province or autonoma roads. these are
     # distinguished from the national A-roads by whether they have 1 or 2
     # digits (national) or 3 or more digits (autonoma / province). sadly, it
@@ -5429,13 +5426,16 @@ def _normalize_es_netref(network, ref):
     # without looking at the geometry, which is left as a TODO for later rainy
     # days.
     num_digits = 0
-    for i in xrange(0, len(num)):
-        if num[i].isdigit():
-            num_digits += 1
-        else:
-            break
+    if num:
+        num = num.lstrip('-')
 
-    if prefix in ('A', 'AP') and num_digits < 3:
+        for c in num:
+            if c.isdigit():
+                num_digits += 1
+            else:
+                break
+
+    if prefix in ('A', 'AP') and num_digits > 0 and num_digits < 3:
         network = 'ES:A-road'
 
     elif prefix == 'N':

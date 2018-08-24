@@ -36,3 +36,29 @@ class RobustToNoneTest(FixtureTest):
                 'id': 367163748,
                 'network': 'PL:motorway',
             })
+
+    def test_es_ref_no_digits(self):
+        import dsl
+        z, x, y = (16, 32360, 24673)
+        self.generate_fixtures(
+            dsl.is_in('ES', z, x, y),
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'highway': 'motorway',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                # NOTE: no "ref" on the relation.
+                'network': 'ES:A-road',
+                'route': 'road',
+                'type': 'route',
+                'source': 'openstreetmap.org',
+            }, ways=[1]),
+        )
+
+        # can't figure out network or shield_text for this!
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 1,
+                'network': type(None),
+                'shield_text': type(None),
+            })
