@@ -4347,6 +4347,10 @@ def _guess_network_ca(tags):
         # https://commons.wikimedia.org/wiki/File:TCH-16_(BC).svg
         networks.append(('CA:transcanada', ref))
 
+    if not networks and ref:
+        # final fallback - all we know is that this is a road in Canada.
+        networks.append(('CA', ref))
+
     return networks
 
 
@@ -6829,6 +6833,7 @@ def _choose_most_important_network(properties, prefix, importance_fn):
 
     networks = properties.pop(all_networks, None)
     shield_texts = properties.pop(all_shield_texts, None)
+    country_code = properties.get('country_code')
 
     if networks and shield_texts:
         def network_key(t):
@@ -6851,7 +6856,8 @@ def _choose_most_important_network(properties, prefix, importance_fn):
                 new_tuples.append((network, ref))
 
             elif ref is not None and ref not in seen_ref:
-                new_tuples.append((network, ref))
+                # network is None, fall back to the country code
+                new_tuples.append((country_code, ref))
 
         tuples = new_tuples
 
