@@ -1,0 +1,69 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:2.7.15-stretch
+    steps:
+      - checkout
+      #- run:
+      #    name: Add Tilezen PPA
+      #    command: sudo add-apt-repository ppa:tilezen/ppa -y
+      - run:
+          name: Update packages
+          command: sudo apt-get update
+      - run:
+          name: Install osm2pgsql
+          command: sudo apt-get install osm2pgsql proj-data
+      - run:
+          name: Start PostgreSQL
+          command: |
+            sudo service postgresql start
+            sudo sudo -u postgres createuser -s circleci
+      - restore_cache:
+          key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - run:
+          name: Install Pip dependencies
+          command: |
+            virtualenv ~/env
+            . ~/env/bin/activate
+            pip install -Ur requirements.txt
+      - save_cache:
+          key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - "~/env"
+      - run:
+          name: Setup.py develop
+          command: |
+            . ~/env/bin/activate
+            python setup.py develop
+      - restore_cache:
+          key: fixtures-{{ .Branch }}
+      - run:
+          name: Download fixture data
+          command: |
+            . ~/env/bin/activate
+            python integration-test/__init__.py --download-only
+      - save_cache:
+          key: fixtures-{{ .Branch }}
+          paths:
+            - "~/.cache/vector-datasource"
+      - run:
+          name: Install flake8
+          command: |
+            . ~/env/bin/activate
+            pip install -U flake8
+      - run:
+          name: Check PEP8 compliance
+          command: |
+            . ~/env/bin/activate
+            find . -not -path '*/.eggs/*' -not -path '*/data/*' -name '*.py' | xargs flake8
+      - run:
+          name: Unit tests
+          command: |
+            . ~/env/bin/activate
+            python setup.py test
+      - run:
+          name: Integration tests
+          command: |
+            . ~/env/bin/activate
+            python integration-test/__init__.py
