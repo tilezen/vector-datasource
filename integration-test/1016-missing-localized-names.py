@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 from shapely.wkt import loads as wkt_loads
 import dsl
-# -*- coding: utf-8 -*-
 from . import FixtureTest
 
 
