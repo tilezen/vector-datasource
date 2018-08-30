@@ -36,17 +36,11 @@ jobs:
           command: |
             . ~/env/bin/activate
             python setup.py develop
-      - restore_cache:
-          key: fixtures-{{ .Branch }}
       - run:
           name: Download fixture data
           command: |
             . ~/env/bin/activate
             python integration-test/__init__.py --download-only
-      - save_cache:
-          key: fixtures-{{ .Branch }}
-          paths:
-            - "~/.cache/vector-datasource"
       - run:
           name: Install flake8
           command: |
