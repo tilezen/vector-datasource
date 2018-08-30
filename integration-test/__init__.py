@@ -57,7 +57,7 @@ OVERPASS_SERVER = environ.get('OVERPASS_SERVER', 'overpass-api.de')
 # caching them for everyone to reuse.
 FIXTURE_CACHE = environ.get(
     'FIXTURE_CACHE',
-    'http://s3.amazonaws.com/mapzen-tiles-assets/integration-test-fixtures')
+    'http://s3.amazonaws.com/nextzen-tile-assets/integration-test-fixtures')
 
 
 def make_acceptable_module_name(path):
