@@ -13,6 +13,12 @@ jobs:
           command: sudo apt-get install osm2pgsql proj-data
       - run:
           name: Start PostgreSQL
+          # note the double "sudo" here: once to get to root, and again to get
+          # to postgres. normally, one would just sudo directly to postgres, but
+          # that asked for the circleci user's password, which meant it failed.
+          # this could probably be fixed by whitelisting the createuser command
+          # in /etc/sudoers, but this was quicker (although more confusing,
+          # sorry).
           command: |
             sudo service postgresql start
             sudo sudo -u postgres createuser -s circleci
