@@ -111,6 +111,7 @@ v1.5.0
   * roads layer: Show track kind 1 zooms earlier by default when surface: [gravel], tracktype: not: {tracktype: [grade3, grade4, grade5]
   * roads Add roads layer quay lines
   * roads For both quay and existing pier indicate mooring of ['no', 'yes', commercial, cruise, customers, declaration, ferry, guest, private, public, waiting, yacht, yachts]
+  * roads: major changes to network and shield_text to support USA and international road shields: TODO enumerate network values..._
   * water: add fountain kind
   * water: add reef kind with optional kind_detail of [coral, rock, sand]_
 
