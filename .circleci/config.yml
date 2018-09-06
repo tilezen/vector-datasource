@@ -1,0 +1,66 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:2.7.15-stretch
+    steps:
+      - checkout
+      - run:
+          name: Update packages
+          command: sudo apt-get update
+      - run:
+          name: Install osm2pgsql
+          command: sudo apt-get install osm2pgsql proj-data
+      - run:
+          name: Start PostgreSQL
+          # note the double "sudo" here: once to get to root, and again to get
+          # to postgres. normally, one would just sudo directly to postgres, but
+          # that asked for the circleci user's password, which meant it failed.
+          # this could probably be fixed by whitelisting the createuser command
+          # in /etc/sudoers, but this was quicker (although more confusing,
+          # sorry).
+          command: |
+            sudo service postgresql start
+            sudo sudo -u postgres createuser -s circleci
+      - restore_cache:
+          key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
+      - run:
+          name: Install Pip dependencies
+          command: |
+            virtualenv ~/env
+            . ~/env/bin/activate
+            pip install -Ur requirements.txt
+      - save_cache:
+          key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          paths:
+            - "~/env"
+      - run:
+          name: Setup.py develop
+          command: |
+            . ~/env/bin/activate
+            python setup.py develop
+      - run:
+          name: Download fixture data
+          command: |
+            . ~/env/bin/activate
+            python integration-test/__init__.py --download-only
+      - run:
+          name: Install flake8
+          command: |
+            . ~/env/bin/activate
+            pip install -U flake8
+      - run:
+          name: Check PEP8 compliance
+          command: |
+            . ~/env/bin/activate
+            find . -not -path '*/.eggs/*' -not -path '*/data/*' -name '*.py' | xargs flake8
+      - run:
+          name: Unit tests
+          command: |
+            . ~/env/bin/activate
+            python setup.py test
+      - run:
+          name: Integration tests
+          command: |
+            . ~/env/bin/activate
+            python integration-test/__init__.py
