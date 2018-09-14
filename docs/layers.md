@@ -1170,7 +1170,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see `network` and `shield_text`. Related, see `symbol` for pistes.
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively. Note that networks may include "modifier" information, for example `US:I:Business` for a business route or `US:I:Truck` for a truck route. The whitelist of "modifier" values is; `Alternate`, `Business`, `Bypass`, `Connector`, `Historic`, `Scenic`, `Spur`, `Toll` and `Truck`.
-* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`.
+* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`. Whitepsace, punctuation, and prefixes are generally stripped.
 
 #### Road properties (common optional):
 
@@ -1403,6 +1403,559 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 * white
 * yellow
 * yellowgreen
+
+#### Network values
+
+Any road with `shield_text` will include a `network` property with a value like `AA:bcdef` where `AA` is a 2-character country code, followed by a `:` separator, and category value which either indicates the "region" (state or province) or "level" of the road network. There are exceptions to this for trans-national networks like `e-road`.
+
+always replace plural `??:roads` with singular `??:road`
+
+When we don't see network we backfill based on common road operators values.
+
+Some countries without network tags but with ref values with ';' and '/' and other separators: CH, GR, IN, IT, JP, RU, TR, VN, ZA
+
+Network value include:
+
+* `AR:national` ref.startswith(`RN`)
+* `AR:provincial` ref.startswith(`RP`)
+* `AsianHighway` if network == `AH` or net == `AH` or ref prefixed with `AH` 
+* `AU:A-road`
+* `AU:B-road`
+* `AU:C-road`
+* `AU:M-road`
+* `AU:Metro-road`
+* `AU:N-highway`
+* `AU:N-route`
+* `AU:R-route`
+* `AU:S-route`
+* `AU:T-drive`
+* `BR:AC`,  # Acre
+* `BR:AL`,  # Alagoas
+* `BR:AM`,  # Amazonas
+* `BR:AP`,  # Amapá
+* `BR:BA`,  # Bahia
+* `BR:BR` when `BR:roads`
+* `BR:CE`,  # Ceará
+* `BR:DF`,  # Distrito Federal (federal district, not really a state)
+* `BR:ES`,  # Espírito Santo
+* `BR:GO`,  # Goiás
+* `BR:MA`,  # Maranhão
+* `BR:MG:local` Minas Gerais local roads, ref prefix including `LMG`
+* `BR:MG`,  Minas Gerais state roads, ref prefix including `AMG`, `CMG`, `MGC`
+* `BR:MS`,  # Mato Grosso do Sul
+* `BR:MT`,  # Mato Grosso
+* `BR:PA`,  # Pará
+* `BR:PB`,  # Paraíba
+* `BR:PE`,  # Pernambuco
+* `BR:PI`,  # Piauí
+* `BR:PR` connecting roads in Paraná with ref prefix in `PRC`
+* `BR:PR`,  # Paraná
+* `BR:RJ`,  # Rio de Janeiro
+* `BR:RN`,  # Rio Grande do Norte
+* `BR:RO`,  # Rondônia
+* `BR:RR`,  # Roraima
+* `BR:RS` Rio Grande do Sul state roads with prefix in (ERS, VRS, RSC)
+* `BR:RS`,  # Rio Grande do Sul
+* `BR:SC`,  # Santa Catarina
+* `BR:SE`,  # Sergipe
+* `BR:SP:PLN` municipal roads in Paulínia, with ref prefix in `PLN`
+* `BR:SP:SCA` municipal roads in São Carlos with ref in `SCA`
+* `BR:SP` access roads in São Paulo with ref prefix of `SPA`
+* `BR:SP`,  # São Paulo
+* `BR:TO`,  # Tocantins
+* `BR:Trans-Amazonian`, when network is BR and ref == `BR-230`
+* `BR` fallback when operator in `Autopista Litoral Sul`, `Cart`, `DNIT`, `Ecovias`, `NovaDutra`, `Triângulo do Sol`, `Viapar`, `ViaRondon`
+* `CA:NB2` and network.startswith(`CA:NB`) and \ and refnum >= 100
+* `CA:NB3` and network.startswith(`CA:NB`) and \ and refnum >= 200
+* `CA:transcanada`
+* `CA:transcanada`, ref)) when nat_name and nat_name.lower() == `trans-canada highway`
+* `CA:yellowhead`
+* `CD:RRIG` if network == `CD:rrig`
+* `CH:motorway`
+* `CH:national`
+* `CH:regional`
+* `CN:expressway:regional` (when expressway starts with S; normalized from `CN-expressways-regional`)
+* `CN:expressway` (when expressway starts with G; normalized from `CN-expressways)
+* `CN:JX` (ref.startswith(`X`) or network == `JX-roads`:)
+* `DE:BAB` when network == `BAB` or when prefix `A`
+* `DE:BS`,, when prefix `B`
+* `DE:Hamburg:Ring`, , when prefix `Ring`
+* `DE:KS` when network == `Kreisstra\xc3\x9fen Hildesheim` or when prefix `K`
+* `DE:LS` when network = `Landesstra\xc3\x9fen NRW` or prefix `L`
+* `DE:STS`, when prefix `S` or `St`
+* `DE` when operator in `autobahnplus A8 GmbH`, `Bundesrepublik Deutschland`, `Via Solutions Südwest`, `The Danish Road Directorate`
+* `e-road` and prefix == `E` and num
+* `ES:A-road` when prefix in (`A`, `AP`) and num_digits > 0 and num_digits < 3
+* `ES:autonoma` when prefix in `ARA`, `A`, `CA`, `CL`, `CM`, `C`, `EX`, `AG`, `M`, `R`, `Ma`, `Me`, `ML`, `RC`, `RM`, `V`, `CV`, `Cv`
+* `ES:city` when prefix in `AI`, `IA`, `CT`, `CS`, `CU`, `CHE`, `EL`, `FE`, `GJ`, `H`,  `VM`, `J`, `LN`, `LL`, `LO`, `ME`, `E`, `MU`, `O`, `PA`, `PR`, `PI`, `CHMS`, `PT`, `SL`, `S`, `SC`, `SI`, `VG`, `EI`, 
+* `ES:N-road` when prefix == `N`
+* `ES:province`  when prefix in `AC`, `DP`, `AB`, `F`,  , `AL`, `AE`, `AS`, `AV`, `BA`, `B`,  , `BP`, `BV`, `BI`, `BU`, `CC`, `CO`, `CR`, `GIP`,, `GIV`,, `GI`, `GR`, `GU`, `HU`, `JA`, `JV`, `LR`, `LE`, `L`,  , `LP`, `LV`, `LU`,, `MP`,, `MA`,, `NA`,, `OU`,, `P`, `PP`,, `EP`,, `PO`,, `DSA`, `SA`,, `NI`,, `SG`,, `SE`,, `SO`,, `TP`,, `TV`,, `TE`,, `TO`,, `VA`,, `ZA`,, `CP`,, `Z`, `PM`,, `PMV`
+* `ES` when operator in `Administración central`, `Departamento de Infraestructuras Viarias y Movilidad`
+* `FR:A-road`
+* `FR:D-road` when ref in `^FR:[0-9]+:([A-Z]+)-road$` or N
+* `FR:N-road` when ref starts RN or RNIL
+* `FR` when operator in `APRR`, `ASF`, `Autoroutes du Sud de la France`, `DIRIF`, `DIRNO`
+* `GA:L-road` when ref starts `L`
+* `GA:national` when prefix in (`N`, `RN`)
+* `GB:A-road-green`, highway == `trunk`: ref starts with A
+* `GB:A-road-white`, highway == `primary`: ref starts with A
+* `GB:B-road`  highway == `secondary`:: ref starts with B
+* `GB:M-road`, highway == `motorway`: and ref.startswith(`(M)`) or and ref.endswith(`(M)`)
+* `GB` when operator in `Highways England`, `Midland Expressway Ltd`, `Transport for Scotland`, `Transport Scotland`, `Welsh Government`
+* `GR:motorway` when (prefix in (u`Α`, u`A`) or 
+* `GR:national` when prefix in (u`ΕΟ`, u`EO`)
+* `GR:provincial` network.startswith(`GR:provincial:`) (GR: ΕΠ provincial refs are ignored.)
+* `GR` when operator in `Αττική Οδός`, `Αυτοκινητόδρομος Αιγαίου`,`Εγνατία Οδός`, `Κεντρική Οδός`, `Μορέας`, `Νέα Οδός`, `Ολυμπία Οδός`
+* `IN:MDR` network.startswith(`IN:MDR`) or ref == `MDR`
+* `IN:NH` network.startswith(`IN:NH`) or ref prefix == `NH` or ref == `ORR`
+* `IN:SH` network.startswith(`IN:SH`) or prefix == `SH`
+* `IR:freeway` network == `IR:freeways`
+* `IT` when operator in "Autostrade per l` Italia S.P.A.", `Autocamionale della Cisa S.P.A.`, `Autostrada dei Fiori S.P.A.`, `Autostrade Centropadane`, `S.A.L.T.`, `SATAP`
+* `JP:expressway` when prefix starts with C or E
+* `JP:national` when name.startswith(u`国道`) and name.endswith(u`号`)
+* `JP:prefectural` when network.startswith(`JP:prefectural:`)
+* `JP` when operator in `東日本高速道路`
+* `KR:expressway` expressways - gosokdoro (ncat=`고속도로`)
+* `KR:local` local highways - jibangdo (ncat=`지방도`)
+* `KR:metropolitan` for metropolitan city roads - gwangyeoksido (ncat=`광역시도로`) and special city (Seoul) roads - teukbyeolsido (ncat=`특별시도`)
+* `KR:national` for national roads - gukdo (ncat=`국도`)
+* `KZ:national`
+* `KZ:regional`
+* `LA:national` if network == `LO:network`
+* `MX:AGU` for Aguascalientes when prefix starts with `AGS`
+* `MX:BCS` for Baja California Sur when prefix starts with `BC` or `BCS`
+* `MX:CAM` for Campeche when prefix starts with `CAM`
+* `MX:CHH` for Chihuahua when prefix starts with `CHIH`
+* `MX:CHP` for Chiapas when prefix starts with `CHIS`
+* `MX:CMX:EXT` road in Mexico City when prefix is `EXT`
+* `MX:CMX:INT` interior ring road in Mexico City when prefix is `INT`
+* `MX:COA` for Coahuila  when prefix starts with `COAH`
+* `MX:COL` for Colima when prefix starts with `COL`
+* `MX:DUR` for Durango when prefix starts with `DGO`
+* `MX:GRO` for Guerrero when prefix starts with `GRO`
+* `MX:GUA` for Guanajuato when prefix starts with `GTO`
+* `MX:HID` for Hidalgo when prefix starts with `HGO`
+* `MX:JAL` for Jalisco when prefix starts with `JAL`
+* `MX:MEX` for Mexican national roads when prefix starts with `MEX`
+* `MX:MIC` for Michoacán when prefix starts with `MICH`
+* `MX:MOR` for Morelos when prefix starts with `MOR`
+* `MX:NAY` for Nayarit when prefix starts with `NAY`
+* `MX:NLE` for Nuevo León when prefix starts with `NL`
+* `MX:OAX` for Oaxaca when prefix starts with `OAX`
+* `MX:PUE` for Puebla when prefix starts with `PUE`
+* `MX:QUE` for Querétaro when prefix starts with `QRO`
+* `MX:ROO` for Quintana Roo when prefix starts with `ROO`
+* `MX:ROO` for Quintana Roo when ref.upper().startswith(`Q. ROO`)
+* `MX:SIN` for Sinaloa when prefix starts with `SIN`
+* `MX:SLP` for San Luis Potosí when prefix starts with `SLP`
+* `MX:SON` for Sonora when prefix starts with `SON`
+* `MX:TAB` for Tabasco when prefix starts with `TAB`
+* `MX:TAM` for Tamaulipas when prefix starts with `TAM`
+* `MX:VER` for Veracruz when prefix starts with `VER`
+* `MX:YUC` for Yucatán when prefix starts with `YUC`
+* `MX:ZAC` for Zacatecas when prefix starts with `ZAC`
+* `MY:expressway` when prefix is E
+* `MY:federal` when prefix is FT or none
+* `MY:JHR` for Johor when prefix starts with `J`
+* `MY:KDH` for Kedah when prefix starts with `K`
+* `MY:KTN` for Kelantan when prefix starts with `D`
+* `MY:MLK` for Malacca when prefix starts with `M`
+* `MY:NSN` for Negiri Sembilan when prefix starts with `N`
+* `MY:PHG` for Pahang when prefix starts with `C`
+* `MY:PLS` for Perlis when prefix starts with `R`
+* `MY:PNG` for Penang when prefix starts with `P`
+* `MY:PRK` for Perak when prefix starts with `A`
+* `MY:SBH` for Sabah when prefix starts with `SA`
+* `MY:SGR:municipal` when prefix == `MBSA` (but strip ref prefix to BSA#)
+* `MY:SGR` for Selangor when prefix starts with `B`
+* `MY:SWK` for Sarawak when prefix starts with `Q`
+* `MY:TRG` for Terengganu when prefix starts with `T`
+* `NO:fylkesvei` when network.lower().startswith(`no:fylkesvei`) or `NO:Fylkesvei` or when prefix == `Fv`
+* `NO:oslo:ring` when prefix == `Ring`
+* `NO:riksvei` when network.lower().startswith(`no:riksvei`) or `NO:Riksvei` or prefix == `Rv`
+* `PE:AM` for Amazonas
+* `PE:AN` for Ancash
+* `PE:AP` for Apurímac
+* `PE:AR` for Arequipa
+* `PE:AY` for Ayacucho
+* `PE:CA` for Cajamarca
+* `PE:CU` for Cusco
+* `PE:HU` for Huánuco
+* `PE:HV` for Huancavelica
+* `PE:IC` for Ica
+* `PE:JU` for Junín
+* `PE:LA` for Lambayeque
+* `PE:LI` for La Libertad
+* `PE:LM` for Lima (including Callao)
+* `PE:LO` for Loreto
+* `PE:MD` for Madre de Dios
+* `PE:MO` for Moquegua
+* `PE:PA` for Pasco
+* `PE:PE` for federal routes when prefix == `PE`
+* `PE:PI` for Piura
+* `PE:PU` for Puno
+* `PE:SM` for San Martín
+* `PE:TA` for Tacna
+* `PE:TU` for Tumbes
+* `PE:UC` for Ucayali
+* `PH:NHN` when network == `PH:nhn`
+* `PK` when operator in `Hyderabad Metropolitan Development Authority`
+* `PL:expressway` when network == `PL:expressways` or when ref.startswith(`S`)
+* `PL:motorway` when network == `PL:motorways` or ref.startswith(`A`)
+* `PL:national`
+* `PT:express` when prefix starts `VE`
+* `PT:motorway` when prefix starts `A`
+* `PT:municipal` when prefix starts `EM`
+* `PT:national` when prefix starts `EN`
+* `PT:primary` when prefix starts `IP`
+* `PT:rapid` when prefix starts `VR`
+* `PT:regional` when prefix starts `ER`
+* `PT:secondary` when prefix starts `IC`
+* `PT` when operator in `Euroscut`
+* `RO:county`, when ref prefixed with `DJ`
+* `RO:local`, when ref prefixed with `DC`
+* `RO:motorway` when ref prefixed with `A`
+* `RO:national`, when ref prefixed with `DN`
+* `RU:??``   if prefix in (u`М`, `M`):  # cyrillic M & latin M!
+* `RU:national` and ref
+* `RU:regional` when ref prefixed with cyrillic `А` or latin `A`
+* `RU:regional` when ref prefixed with cyrillic `Р` or latin `P`
+* `SG:expressway` for prefixes including `AYE` (Ayer Rajah Expressway), `BKE` (Bukit Timah Expressway), `CTE` (Central Expressway), `ECP` (East Coast Parkway), `KJE` (Kranji Expressway), `KPE` (Kallang-Paya Lebar Expressway), `MCE` (Marina Coastal Expressway), `PIE` (Pan Island Expressway), `SLE` (Seletar Expressway), `TPE` (Tampines Expressway), 
+* `TR:highway` for Turkish State Highway System roads prefixed with `D`
+* `TR:motorway` for Otoyol roads prefixed with `O`
+* `TR:provincial`: when ref in (`D010`, `D100`, `D200`, `D300`, `D400`,`D550`, `D650`, `D750`, `D850`, `D950`)
+* `UA:international` when ref prefixed with cyrillic `M` or latin `M`
+* `UA:national` when ref prefixed with cyrillic `Н` or latin `H`
+* `UA:regional` when ref prefixed with cyrillic `Р` or latin `P`
+* `UA:territorial` when ref prefixed with cyrillic `Т` or latin `T`
+* `US:AK`
+* `US:AL`
+* `US:AR`
+* `US:AZ`
+* `US:BIA`
+* `US:BLM`
+* `US:CA`
+* `US:CO`
+* `US:CT`
+* `US:DC`
+* `US:DE`
+* `US:FL`
+* `US:FSH`
+* `US:FSR`
+* `US:GA`
+* `US:HI`
+* `US:I:Alternate`
+* `US:I:Business`
+* `US:I:Truck`
+* `US:I`
+* `US:IA`
+* `US:ID`
+* `US:IL`
+* `US:IN`
+* `US:KS`
+* `US:KY`
+* `US:LA`
+* `US:MA`
+* `US:MD`
+* `US:ME`
+* `US:MI`
+* `US:MN`
+* `US:MO`
+* `US:MS`
+* `US:MT`
+* `US:NC`
+* `US:ND`
+* `US:NE`
+* `US:NH`
+* `US:NJ`
+* `US:NM`
+* `US:NV`
+* `US:NY`
+* `US:OH`
+* `US:OK`
+* `US:OR`
+* `US:PA`
+* `US:RI`
+* `US:SC`
+* `US:SD`
+* `US:TN`
+* `US:TX`
+* `US:US:Alternate`
+* `US:US:Business`
+* `US:US:Truck`
+* `US:US`
+* `US:UT`
+* `US:VA`
+* `US:VT`
+* `US:WA`
+* `US:WI`
+* `US:WV`
+* `US:WY`
+* `VN:expressway` (normalized `VN:expressway`) or ref prefixed with `CT`
+* `VN:national` when name.startswith(u`Quốc lộ`) or ref prefixed with `QL`
+* `VN:provincial` when name.startswith(u`Tỉnh lộ`) or when ref prefixed with `ĐT` or `DT` or (normalized `VN:TL`) or ref prefixed with `TL`
+* `VN:road` for all other Vietnamese roads that have a ref
+* `ZA:kruger` when ref prefixed with `H`
+* `ZA:metropolitan` when ref prefixed with `M`
+* `ZA:national` when ref prefixed with `N`
+* `ZA:provincial` when ref prefixed with `R` and 2 chars
+* `ZA:regional` when ref prefixed with `R` and 3 chars
+* `ZA:S-road` when ref prefixed with `S`
+
+When a network value can't be determined from the upstream data source we calculate where the road is located and provide the relevant 2-char country code as the network value.
+
+Country | Alpha-2 code
+------- | ------------
+Afghanistan | `AF`
+Åland Islands | `AX`
+Albania | `AL`
+Algeria | `DZ`
+American Samoa | `AS`
+Andorra | `AD`
+Angola | `AO`
+Anguilla | `AI`
+Antarctica | `AQ`
+Antigua and Barbuda | `AG`
+Argentina | `AR`
+Armenia | `AM`
+Aruba | `AW`
+Australia | `AU`
+Austria | `AT`
+Azerbaijan | `AZ`
+Bahamas | `BS`
+Bahrain | `BH`
+Bangladesh | `BD`
+Barbados | `BB`
+Belarus | `BY`
+Belgium | `BE`
+Belize | `BZ`
+Benin | `BJ`
+Bermuda | `BM`
+Bhutan | `BT`
+Bolivia (Plurinational State of) | `BO`
+Bonaire, Sint Eustatius and Saba | `BQ`
+Bosnia and Herzegovina | `BA`
+Botswana | `BW`
+Bouvet Island | `BV`
+Brazil | `BR`
+British Indian Ocean Territory | `IO`
+Brunei Darussalam | `BN`
+Bulgaria | `BG`
+Burkina Faso | `BF`
+Burundi | `BI`
+Cabo Verde | `CV`
+Cambodia | `KH`
+Cameroon | `CM`
+Canada | `CA`
+Cayman Islands | `KY`
+Central African Republic | `CF`
+Chad | `TD`
+Chile | `CL`
+China | `CN`
+Christmas Island | `CX`
+Cocos (Keeling) Islands | `CC`
+Colombia | `CO`
+Comoros | `KM`
+Congo | `CG`
+Democratic Republic of the Congo | `CD`
+Cook Islands | `CK`
+Costa Rica | `CR`
+Côte d'Ivoire | `CI`
+Croatia | `HR`
+Cuba | `CU`
+Curaçao | `CW`
+Cyprus | `CY`
+Czechia | `CZ`
+Denmark | `DK`
+Djibouti | `DJ`
+Dominica | `DM`
+Dominican Republic | `DO`
+Ecuador | `EC`
+Egypt | `EG`
+El Salvador | `SV`
+Equatorial Guinea | `GQ`
+Eritrea | `ER`
+Estonia | `EE`
+Eswatini | `SZ`
+Ethiopia | `ET`
+Falkland Islands (Malvinas) | `FK`
+Faroe Islands | `FO`
+Fiji | `FJ`
+Finland | `FI`
+France | `FR`
+French Guiana | `GF`
+French Polynesia | `PF`
+French Southern Territories | `TF`
+Gabon | `GA`
+Gambia | `GM`
+Georgia | `GE`
+Germany | `DE`
+Ghana | `GH`
+Gibraltar | `GI`
+Greece | `GR`
+Greenland | `GL`
+Grenada | `GD`
+Guadeloupe | `GP`
+Guam | `GU`
+Guatemala | `GT`
+Guernsey | `GG`
+Guinea | `GN`
+Guinea-Bissau | `GW`
+Guyana | `GY`
+Haiti | `HT`
+Heard Island and McDonald Islands | `HM`
+Holy See | `VA`
+Honduras | `HN`
+Hong Kong | `HK`
+Hungary | `HU`
+Iceland | `IS`
+India | `IN`
+Indonesia | `ID`
+Iran | `IR`
+Iraq | `IQ`
+Ireland | `IE`
+Isle of Man | `IM`
+Israel | `IL`
+Italy | `IT`
+Jamaica | `JM`
+Japan | `JP`
+Jersey | `JE`
+Jordan | `JO`
+Kazakhstan | `KZ`
+Kenya | `KE`
+Kiribati | `KI`
+North Korea | `KP`
+South Korea | `KR`
+Kuwait | `KW`
+Kyrgyzstan | `KG`
+Laos | `LA`
+Latvia | `LV`
+Lebanon | `LB`
+Lesotho | `LS`
+Liberia | `LR`
+Libya | `LY`
+Liechtenstein | `LI`
+Lithuania | `LT`
+Luxembourg | `LU`
+Macao | `MO`
+Macedonia | `MK`
+Madagascar | `MG`
+Malawi | `MW`
+Malaysia | `MY`
+Maldives | `MV`
+Mali | `ML`
+Malta | `MT`
+Marshall Islands | `MH`
+Martinique | `MQ`
+Mauritania | `MR`
+Mauritius | `MU`
+Mayotte | `YT`
+Mexico | `MX`
+Micronesia | `FM`
+Moldova | `MD`
+Monaco | `MC`
+Mongolia | `MN`
+Montenegro | `ME`
+Montserrat | `MS`
+Morocco | `MA`
+Mozambique | `MZ`
+Myanmar | `MM`
+Namibia | `NA`
+Nauru | `NR`
+Nepal | `NP`
+Netherlands | `NL`
+New Caledonia | `NC`
+New Zealand | `NZ`
+Nicaragua | `NI`
+Niger | `NE`
+Nigeria | `NG`
+Niue | `NU`
+Norfolk Island | `NF`
+Northern Mariana Islands | `MP`
+Norway | `NO`
+Oman | `OM`
+Pakistan | `PK`
+Palau | `PW`
+Palestine, State of | `PS`
+Panama | `PA`
+Papua New Guinea | `PG`
+Paraguay | `PY`
+Peru | `PE`
+Philippines | `PH`
+Pitcairn | `PN`
+Poland | `PL`
+Portugal | `PT`
+Puerto Rico | `PR`
+Qatar | `QA`
+Réunion | `RE`
+Romania | `RO`
+Russian Federation | `RU`
+Rwanda | `RW`
+Saint Barthélemy | `BL`
+Saint Helena, Ascension and Tristan da Cunha | `SH`
+Saint Kitts and Nevis | `KN`
+Saint Lucia | `LC`
+Saint Martin (French part) | `MF`
+Saint Pierre and Miquelon | `PM`
+Saint Vincent and the Grenadines | `VC`
+Samoa | `WS`
+San Marino | `SM`
+Sao Tome and Principe | `ST`
+Saudi Arabia | `SA`
+Senegal | `SN`
+Serbia | `RS`
+Seychelles | `SC`
+Sierra Leone | `SL`
+Singapore | `SG`
+Sint Maarten (Dutch part) | `SX`
+Slovakia | `SK`
+Slovenia | `SI`
+Solomon Islands | `SB`
+Somalia | `SO`
+South Africa | `ZA`
+South Georgia and the South Sandwich Islands | `GS`
+South Sudan | `SS`
+Spain | `ES`
+Sri Lanka | `LK`
+Sudan | `SD`
+Suriname | `SR`
+Svalbard and Jan Mayen | `SJ`
+Sweden | `SE`
+Switzerland | `CH`
+Syrian Arab Republic | `SY`
+Taiwan, Province of China[a] | `TW`
+Tajikistan | `TJ`
+Tanzania, United Republic of | `TZ`
+Thailand | `TH`
+Timor-Leste | `TL`
+Togo | `TG`
+Tokelau | `TK`
+Tonga | `TO`
+Trinidad and Tobago | `TT`
+Tunisia | `TN`
+Turkey | `TR`
+Turkmenistan | `TM`
+Turks and Caicos Islands | `TC`
+Tuvalu | `TV`
+Uganda | `UG`
+Ukraine | `UA`
+United Arab Emirates | `AE`
+United Kingdom | `GB`
+United States of America | `US`
+U.S. Minor Outlying Islands | `UM`
+Uruguay | `UY`
+Uzbekistan | `UZ`
+Vanuatu | `VU`
+Venezuela | `VE`
+Viet Nam | `VN`
+Virgin Is. (British) | `VG`
+Virgin Is. (U.S.) | `VI`
+Wallis and Futuna | `WF`
+Western Sahara | `EH`
+Yemen | `YE`
+Zambia | `ZM`
+Zimbabwe | `ZW`
+
 
 
 ## Water
