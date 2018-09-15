@@ -10,7 +10,8 @@ v1.5.0
   * **landuse**: Add **kind_detail** for `wood` and `forest` kinds with values indicating _leaftype_: `broadleaved`, `leafless`, `mixed`, `needleleaved`.
   * **landuse**: Add **kind_detail** optional property for `beach` kind to indicate _surface_ values of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
   * **landuse**: Add **kind_detail** optional property for `wetland` when _wetland_ is `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
-  * **landuse**: Add **kind_detail** optional property to indicate the religion and denomination of `cemetery` and `grave_yard` kinds. Common values include: TODO.
+  * **landuse**: Add **kind_detail** optional property for `cemetery` and `grave_yard` kinds, with common values: `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+  * **landuse**: Add **denomination** optional property for `cemetery` and `grave_yard` kinds, with common values: `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
   * **landuse**: Add `airfield` kind for military airfields. 
   * **landuse**: Add `container_terminal` kind.
   * **landuse**: Add `crane` kind as line geometry.
@@ -69,8 +70,6 @@ v1.5.0
   * **pois**: Add `car_rental` kind.
   * **pois**: Add `car_wash` kind.
   * **pois**: Add `casino` kind.
-  * **pois**: Add `cattle_grid` kind of barrier.
-  * **pois**: Add `chain` kind of barrier.
   * **pois**: Add `charging_station` kind and indicate boolean properties for **bicycle**, **car**, **truck**, and **scooter** usage.
   * **pois**: Add `charity` kind.
   * **pois**: Add `chemist` kind for shops.
@@ -101,7 +100,6 @@ v1.5.0
   * **pois**: Add `hunting_stand` kind.
   * **pois**: Add `karaoke_box` kind.
   * **pois**: Add `karaoke` kind.
-  * **pois**: Add `kissing_gate` kind of barrier.
   * **pois**: Add `lottery` kind.
   * **pois**: Add `love_hotel` kind at zoom 18+.
   * **pois**: Add `marketplace` kind.
@@ -124,10 +122,8 @@ v1.5.0
   * **pois**: Add `slaughterhouse` kind.
   * **pois**: Add `slipway` kind with optional **mooring** property.
   * **pois**: Add `snowmobile` kind.
-  * **pois**: Add `stile` kind of barrier.
   * **pois**: Add `street_lamp` kind.
   * **pois**: Add `studio` kind, with optional **kind_detail** values `audio`, ` cinema`, ` photography`, ` radio`, ` television`, ` video`.
-  * **pois**: Add `swing_gate` kind of barrier.
   * **pois**: Add `taxi` kind for taxi stands.
   * **pois**: Add `tyres` kind.
   * **pois**: Add `waterway_fuel` kind.
@@ -138,14 +134,14 @@ v1.5.0
   * **pois**: Add catchall `industrial` kind when there isn't a more specific kind.
   * **pois**: Add catchall `office` kind when there isn't a more specific kind.
   * **pois**: Add catchall `shop` kind when there isn't a more specific kind.
-  * **pois**: Allow additional kind values to show up on the map when they lack a name: `power_generator`, `boat_lift`, `boatyard`, `waterway_fuel`, `sanitary_dump_station`, `harbour_master`, `field_hospital`, `health_centre`, `bunker`, `crane`, `obelisk`, `wayside_cross`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `customs`, `harbourmaster`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `sanitary_dump_station`, `taxi`, `block`, `bollard,border_control,cattle_grid,chain`, `kissing_gate,lift_gate,stile,swing_gate`, `defibrillator`, `fire_hydrant`, and `street_lamp.
+  * **pois**: Allow additional kind values to show up on the map when they lack a name: `power_generator`, `boat_lift`, `boatyard`, `waterway_fuel`, `sanitary_dump_station`, `harbour_master`, `field_hospital`, `health_centre`, `bunker`, `crane`, `obelisk`, `wayside_cross`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `customs`, `harbourmaster`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `sanitary_dump_station`, `taxi`, `block`, `bollard,border_control,cattle_grid,chain`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`, `defibrillator`, `fire_hydrant`, and `street_lamp.
   * **pois**: Modify **min_zoom** of `alpine_hut` kind to reveal them two zooms earlier at zoom 13.
   * **pois**: Modify **min_zoom** of `lighthouse` kind when they are ruins but also attractions.
   * **pois**: Modify **min_zoom** of `watermill` kind when they are ruins but also attractions.
   * **pois**: Remove abandoned or disused `watermill` kind features (but keep the majority of features).
   * **pois**: Stop emitting **covered** boolean property when the value was false on `bicycle_parking` and `motorcycle_parking` kind features.
-  * **roads**: Add **cutting** optional property with values [yes, right, left]
-  * **roads**: Add **embankment** optional property with values [yes, right, left]
+  * **roads**: Add **cutting** optional property with values: `yes`, `right`, and `left`.
+  * **roads**: Add **embankment** optional property with values: `yes`, `right`, and `left`.
   * **roads**: Add **mooring** optional property for new `quay` and existing `pier` kinds with values: ['no', 'yes', commercial, cruise, customers, declaration, ferry, guest, private, public, waiting, yacht, yachts]
   * **roads**: Add `quay` kind lines.
   * **roads**: Major changes to **network** and **shield_text** to support fallback international road shields. When no network is provided by a ref is, a 2-char country code will be exported as the network value based on the location of the road, like 'AM' or 'US'.

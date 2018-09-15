@@ -1,22 +1,22 @@
-# Layers in Mapzen's vector tiles
+# Layers in Tilezen's vector tiles
 
 ![image](images/mapzen-vector-tile-docs-all-layers.png)
 
-The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
+The [Tilezen vector tiles](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated intermittently as a free & shared service at [Nextzen.org](http://www.nextzen.org).
 
 Data is organized into several thematic layers, each of which is named, for example; `buildings`, `pois`, and `water`. A selection of these layers are typically used for base map rendering, and are provided under the short-hand name `all`. Each layer includes a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
-Need help displaying vector tiles in a map? Here are several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
+Need help displaying vector tiles in a map? Here are several [examples](display-tiles.md) using Tilezen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
 
 ### Overview
 
 #### Data sources and attribution
 
-Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) in your project.
+Tilezen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) in your project.
 
 #### Feature names
 
-Most Mapzen vector tile features include a basic name property (`common`):
+Most Tilezen vector tile features include a basic name property (`common`):
 
 * `name` - Generally the name the locals call the feature, in the local script.
 
@@ -36,7 +36,7 @@ It supports several additional name related properties (`optional`):
 
 #### Name localization
 
-Mapzen includes all language variants of the `name:*` values to enable full internationalization (when different from `name`).
+Tilezen includes all language variants of the `name:*` values to enable full internationalization (when different from `name`).
 
 Language variants are identified by an ISO 639-1 two-letter language code and optional country code, for example `en` for English and less commonly `en_GB` for British English. Mapzen [house styles](https://mapzen.com/products/maps/) designed in Tangram support displaying all language scripts.
 
@@ -54,7 +54,7 @@ For features in the `boundaries` layer, there are two additional variants `name:
 
 #### Geometry types
 
-Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
+Individual Tilezen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
 A tile geometry can be one of three types:
 
@@ -88,17 +88,17 @@ Mapnik supports geometry filtering via the special `mapnik::geometry_type` keywo
 
 #### Data updates
 
-Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and mid-zoom tiles are updated approximately monthly. Some source data rarely updates – Natural Earth updates approximately yearly.
+Most Tilezen vector tile content is updated minutely from OpenStreetMap. Low and mid-zoom tiles are updated approximately monthly. Some source data rarely updates – Natural Earth updates approximately yearly.
 
 #### Changelog
 
-The current version of Mapzen vector tile "Tilezen" data model is **v1.2.0**.
+The current version of Tilezen vector tile data schema is **v1.5.0**.
 
-Tiles are still in active development, but Mapzen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
+Tiles are still in active development, but Tilezen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
 If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. You can also send your feedback at hello@mapzen.com!
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.0.0/CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.5.0/CHANGELOG.md).
 
 #### Feature ordering
 
@@ -121,7 +121,7 @@ draw:
 
 ### Layer reference
 
-Mapzen vector tiles include 9 layers:
+Tilezen vector tiles include 9 layers:
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
@@ -155,7 +155,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `id:right`: For the relation on the right side of the boundary line.
 * `name:left`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `name:right`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
-* `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
+* `maritime_boundary`: a special Tilezen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
 
 #### Boundaries properties (optional):
 
@@ -188,7 +188,7 @@ Polygons from OpenStreetMap representing building footprints, building label pla
 
 Individual `building_part` geometries from OpenStreetMap following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels. Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect.
 
-Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
+Tilezen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
 Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms. _See related bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 
@@ -471,12 +471,14 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 #### Landuse properties (common optional):
 
-* `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
+* `protect_class`: Common values include: `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
 * `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
+* `mooring`: Common values include: `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
 #### Landuse `kind` values:
 
 * `aerodrome`
+* `airfield`
 * `allotments`
 * `amusement_ride`
 * `animal`
@@ -486,14 +488,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `attraction`
 * `aviary`
 * `battlefield`
-* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
+* `beach` - Where the land meets the sea gradually.
 * `breakwater`
 * `bridge`
 * `camp_site`
 * `caravan_site`
 * `carousel`
-* `cemetery`
-* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
+* `cemetery` with `kind_detail` and `denomination` properties. 
 * `cinema`
 * `city_wall`
 * `college`
@@ -503,20 +504,20 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `crane`
 * `cutline`
 * `cutting` - A lowered area of land, usually to carry a road or railway.
-* `danger` - e.g: military training zones, firing ranges.
+* `danger_area` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
 * `dike`
-* `ditch`
+* `ditch` line.
 * `dog_park`
 * `embankment` - A raised area of land, usually to carry a road or railway.
 * `enclosure`
 * `farm`
 * `farmland`
 * `farmyard`
-* `fence` - if present, `kind_detail` one of `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
+* `fence` with `kind_detail` property.
 * `ferry_terminal`
 * `footway`
-* `forest`
+* `forest` with `kind_detail` property.
 * `fort`
 * `fuel`
 * `garden`
@@ -525,14 +526,14 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `glacier`
 * `golf_course`
 * `grass`
-* `grave_yard`
+* `grave_yard` with `kind_detail` and `denomination` properties. 
 * `groyne`
-* `guard_rail`
+* `guard_rail` line.
 * `hanami`
 * `harbour`
 * `hospital`
 * `industrial`
-* `kerb`
+* `kerb` line.
 * `land`
 * `library`
 * `maze`
@@ -545,25 +546,26 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `naval_base`
-* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. If available, `kind_detail` will provide the tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, `walnut_trees`.
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. With `kind_detail` property.
 * `park`
 * `parking`
 * `pedestrian`
 * `petting_zoo`
 * `picnic_site`
-* `pier` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+* `pier` with mooring property.
 * `pitch`
 * `place_of_worship`
 * `plant`
 * `plant_nursery` - Land used for growing young plants.
 * `playground`
+* `port`
 * `port_terminal`
-* `power_line`
-* `power_minor_line`
+* `power_line` line.
+* `power_minor_line` line.
 * `prison`
 * `protected_area`
 * `quarry`
-* `quay` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+* `quay` with mooring property.
 * `railway`
 * `recreation_ground`
 * `recreation_track`
@@ -596,20 +598,24 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `urban_area`
 * `urban`
 * `village_green`
-* `wall`
+* `wall` line with `kind_detail` property.
 * `wastewater_plant`
 * `water_park`
 * `water_slide`
 * `water_works`
-* `wetland`
+* `wetland` with `kind_detail` property.
 * `wharf`
 * `wilderness_hut`
 * `wildlife_park`
 * `winery`
 * `winter_sports`
-* `wood`
+* `wood` with `kind_detail` property.
 * `works`
 * `zoo`
+
+#### Beach `kind_detail` values:
+
+If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
 
 #### Cemetery and grave_yard `kind_detail` values:
 
@@ -632,6 +638,11 @@ The value of the OpenStreetMap `wetland` tag. If available, value will be one of
 #### Wood and forest `kind_detail` values
 
 * The value of the OpenStreetMap `leaf_type` tag, whitelisted to `broadleaved`, `needleleaved`, `mixed` or `leafless`.
+
+#### Orchard `kind_detail` values
+
+The tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
+
 
 ## Places
 
@@ -719,11 +730,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 #### POI properties (common optional):
 
 * `kind_detail`: cuisine, sport
-* `attraction`:
+* `attraction`: TODO
 * `exit_to`: only for highway exits
 * `ref`: generally only for `aeroway_gate` and `station_entrance` features
-* `religion`:
-* `zoo`:
+* `religion`: TODO
+* `zoo`: TODO
 
 #### POI properties (only on `kind:station`):
 
@@ -766,6 +777,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 * `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
 
+#### POI properties (only on `quary`, `wharf`):
+
+* `mooring` with values: `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
 #### POI `kind` values:
 
 * `art`
@@ -776,6 +791,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `advertising_agency`
 * `aerodrome`
 * `aeroway_gate`
+* `airfield` for military use.
 * `airport`
 * `alcohol`
 * `alpine_hut`
@@ -791,14 +807,16 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `association`
 * `atm`
 * `attraction`
+* `atv`
 * `aviary`
+* `baby_hatch`
 * `bakery`
 * `bank`
 * `bar`
 * `battlefield`
 * `bbq`
 * `beach_resort`
-* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
+* `beach` - Where the land meets the sea gradually. With `kind_detail` property.
 * `beacon`
 * `beauty`
 * `bed_and_breakfast`
@@ -811,6 +829,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
+* `blood_bank`
 * `boat_rental`
 * `boat_storage`
 * `boatyard`
@@ -819,7 +838,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bookmaker`
 * `books`
 * `brewery`
-* `bunker` - A reinforced military building. Where known, the `kind_detail` will be one of: `blockhouse`, `gun_emplacement`, `hardened_aircraft_shelter`, `mg_nest`, `missile_silo`, `munitions`, `pillbox`, `technical`.
+* `border_control`
+* `bunker` - A reinforced military building. With `kind_detail` property.
+* `bureau_de_change`
 * `bus_station`
 * `bus_stop`
 * `butcher`
@@ -837,16 +858,18 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `carousel`
 * `carpenter`
 * `casino` - A venue for gambling.
-* `cattle_grid`
+* `cattle_grid` barrier
 * `cave_entrance`
-* `cemetery`
+* `cemetery` with `kind_detail` and `denomination` properties.
+* `chain` barrier
 * `chalet`
 * `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
 * `charity` - A shop selling items, often second-hand clothes, in order to raise money for charity.
+* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `childcare`
 * `childrens_centre`
 * `cinema`
-* `clinic`
+* `clinic` with `kind_detail` property.
 * `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `clothes`
 * `club`
@@ -858,6 +881,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `computer`
 * `confectionery`
 * `consulting`
+* `container_terminal`
 * `convenience`
 * `copyshop` - A shop offering photocopying and printing services.
 * `cosmetics` - A specialty shop selling cosmetics.
@@ -868,15 +892,16 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
-* `danger` - e.g: military training zones, firing ranges.
+* `danger_area` - e.g: military training zones, firing ranges.
 * `dam`
 * `day_care`
 * `defibrillator`
 * `deli`
-* `dentist`
+* `dentist` with `kind_detail` property.
 * `department_store`
+* `dispensary`
 * `dive_centre`
-* `doctors`
+* `doctors` with `kind_detail` property.
 * `dog_park`
 * `doityourself`
 * `dressmaker`
@@ -898,6 +923,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fast_food`
 * `ferry_terminal`
 * `financial`
+* `field_hospital`
+* `fire_hydrant`
 * `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `firepit`
 * `fishing`
@@ -915,17 +942,19 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `funeral_directors` - A venue offering funerary services.
 * `furniture`
 * `gallery` - An art gallery.
+* `gambling`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
 * `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
-* `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
-* `generator` - A building or structure which generates power. If the method is known, then the `kind_detail` will describe it as one of: `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+* `gate` with `kind_detail` property.
+* `generator` - A building or structure which generates power. With `kind_detail` property.
 * `geyser`
 * `gift`
 * `golf` - Shop selling golf equipment.
 * `golf_course`
 * `government`
+* `grave_yard` with `kind_detail` and `denomination` properties. 
 * `greengrocer` - Shop selling fruits and vegetables.
 * `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
 * `group_home`
@@ -937,12 +966,17 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `harbourmaster`
 * `hardware`
 * `hazard`
-* `healthcare`
+* `healthcare` with `kind_detail` property.
 * `health_centre`
+* `healthcare_alternative`
+* `healthcare_centre`
+* `healthcare_laboratory`
 * `helipad`
+* `heliport`
 * `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
-* `hospital`
+* `horse_riding`
+* `hospital` with `kind_detail` property.
 * `hostel`
 * `hot_spring`
 * `hotel`
@@ -956,6 +990,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `it`
 * `jewelry`
 * `kindergarten`
+* `karaoke_box`
+* `karaoke`
 * `landmark`
 * `laundry`
 * `lawyer`
@@ -963,10 +999,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `library`
 * `life_ring`
 * `lifeguard_tower`
-* `lift_gate`
 * `lighthouse`
 * `lock`
 * `lottery` - A shop selling lottery tickets.
+* `love_hotel`
 * `mall`
 * `marina`
 * `mast`
@@ -982,7 +1018,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mobile_phone`
 * `money_transfer` - A business which specialises in transferring money between people, often internationally.
 * `monument`
-* `mooring` - A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+* `mooring` with `kind_detail` property.
 * `motel`
 * `motorcycle`
 * `motorcycle_parking`
@@ -996,23 +1032,26 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ngo`
 * `nightclub`
 * `notary`
-* `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `nursing_home` with `kind_detail` property. _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `naval_base`
 * `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. If available, `kind_detail` will provide the tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
 * `outdoor`
 * `outreach`
 * `painter`
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
 * `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `perfumery`
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
-* `pharmacy`
+* `pharmacy` with `kind_detail` property.
 * `phone`
 * `photo` - A shop offering photograph processing services, e.g: developing or mounting.
 * `photographer`
@@ -1028,6 +1067,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `plumber`
 * `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `political_party`
+* `port_terminal`
 * `post_box`
 * `post_office`
 * `pottery`
@@ -1041,6 +1081,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `put_in`
 * `pylon`
 * `quarry`
+* `quay` - if available, with `mooring` property.
+* `range` for military use.
 * `ranger_station`
 * `rapid`
 * `recreation_ground`
@@ -1062,6 +1104,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `scuba_diving`
 * `service_area`
 * `shelter`
+* `shipyard`
 * `ship_chandler`
 * `shoemaker`
 * `shoes`
@@ -1071,9 +1114,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ski_rental`
 * `ski_school`
 * `ski`
+* `slaughterhouse`
 * `slipway`
 * `snow_cannon`
-* `social_facility`
+* `snowmobile`
+* `social_facility` with `kind_detail` property.
 * `soup_kitchen`
 * `sports_centre`
 * `sports`
@@ -1083,6 +1128,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `stationery`
 * `stone`
 * `stonemason`
+* `street_lamp`
 * `studio` - A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
 * `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `subway_entrance`
@@ -1092,6 +1138,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `swimming_area`
 * `tailor`
 * `tax_advisor`
+* `taxi` for taxi stands.
 * `telecommunication`
 * `telephone`
 * `telescope`
@@ -1099,7 +1146,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `theme_park`
 * `therapist`
 * `tobacco`
-* `toilets`. Where available, `kind_detail` will be set to the disposal type, one of: `bucket`, `chemical`, `flush`, `pit_latrine` or `pour_flush`.
+* `toilets` with `kind_detail`
 * `toll_booth`
 * `townhall`
 * `toys`
@@ -1114,7 +1161,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `tyres` - A shop selling car tyres or tires.
 * `university`
 * `variety_store`
-* `veterinary`
+* `veterinary` with `kind_detail` property.
 * `viewpoint`
 * `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
@@ -1125,11 +1172,12 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `water_point`
 * `water_slide`
 * `water_tower`
-* `water_well` - A location where water can be extracted from the ground. If known, `kind_detail` will give information about water potability and pump type, with values: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`. The prefix `drinkable` indicates drinking water, `not_drinkable` indicates not drinkable water. The suffix `powered` indicates a powered or automatic pump, `manual` indicates a manual pump, and `no_pump` indicates that the water must be raised without a pump (e.g: a bucket and line). If information about the pump is not available, the `kind_detail` will be either `drinkable` or `not_drinkable`.
+* `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
 * `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
+* `waterway_fuel`
 * `watering_place`
-* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`.
+* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
 * `wayside_cross`
 * `wilderness_hut`
 * `wildlife_park`
@@ -1137,10 +1185,54 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `wine`
 * `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `winter_sports`
+* `wharf` with mooring property.
 * `wood`
 * `works`
 * `workshop`
 * `zoo`
+
+#### Beach `kind_detail` values:
+
+The value of the OpenStreetMap `surface` tag. Common values include `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, and ` sand`.
+
+#### Bunker `kind_detail` values:
+
+Where known, the `kind_detail` will be one of: `blockhouse`, `gun_emplacement`, `hardened_aircraft_shelter`, `mg_nest`, `missile_silo`, `munitions`, `pillbox`, `technical`.
+
+#### Cemetery and grave_yard `kind_detail` values:
+
+The value of the OpenStreetMap `religion` tag is used for `kind_detail` on `cemetery` and `grave_yard` features. Common values include `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+
+NOTE: A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag. Common values include `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
+
+#### Clinic, dentist, doctors, `social_facility, and healthcare `kind_detail` values:
+
+Common values include `bank`, ` blood`, ` chiropractor`, ` donation`, ` hospice`, ` midwife`, ` midwife_occupational`, ` optometrist_paediatrics`, ` physiotherapist_physiotherapy`, ` podiatrist_psychotherapist`, ` rehabilitation`, ` speech_therapist`, and `therapist`.
+
+#### Hospital, pharmacy, veterinary, and `nursing_home` `kind_detail` values:
+
+Indicate heath care facility type.
+
+#### Gate `kind_detail` values:
+
+One of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
+
+#### Generator `kind_detail` values:
+
+The value of the OpenStreetMap `method` tag. Common values include `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+
+#### Mooring `kind_detail` values:
+
+A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
+#### Toilet `kind_detail` values:
+
+Common values include `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` bucket`.
+
+#### **water_well** `kind_detail` values:
+
+Common values include `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
+
 
 ## Roads (Transportation)
 
@@ -1240,6 +1332,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `minor_road`
 * `path`
 * `piste`
+* `quay`
 * `racetrack`
 * `rail`
 
@@ -1969,7 +2062,7 @@ Water `polygons` representing oceans, riverbanks and lakes. Derived from a combi
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 
-Mapzen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=true`. Set to `true` when present on `line` geometry, or from Natural Earth line source.
+Tilezen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=true`. Set to `true` when present on `line` geometry, or from Natural Earth line source.
 
 #### Water properties (common):
 
@@ -1995,6 +2088,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `dock` - polygon
 * `drain` - line
 * `fjord` - point, intended for label placement only
+* `fountain` - polygon
 * `lake` - polygon
 * `ocean` - polygon, point is intended for label placement only
 * `playa` - polygon
