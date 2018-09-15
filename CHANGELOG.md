@@ -5,152 +5,191 @@ v1.5.0
 
   #### ENHANCEMENTS
 
-  * **places**: Lookup `min_zoom` for countries, map units, and regions from Natural Earth while continue sourcing feature labels from OpenStreetMap.
-  * **places**: Add locality name translations at low zooms from Natural Earth.
-  * **buildings**: add `entrance` and `exit` (with kind_detail set to the type of [main, staircase, service, home, unisex, garage, residence, private, secondary] or emergency, fire_exit)
-  * **landuse**: add (all line geometries): `power_line`, `power_minor_line`, `wall`, `crane`, `kerb`, `guard_rail`, `ditch`
-  * **landuse**: add `embankment` and `cutting`.
-  * **landuse**: add `fence` with optional kind_detail [avalanche, barbed_wire, bars, brick, chain, chain_link, concrete, drystone_wall, electric, grate, hedge, metal, metal_bars, net, pole, railing, railings, split_rail, steel, stone, wall, wire, wood]
-  * **landuse**: add optional kind_detail with values indicating leaftype: broadleaved, leafless, mixed, needleleaved.
-  * **landuse**: add `airfield` kind for military airfields. 
-  * **landuse**: add `naval_base` kind for military.
-  * **landuse**: add `danger_area` kind for military.
-  * **landuse**: add `shipyard` kind.
-  * **landuse**: add `wharf` kind
-  * **landuse**: add `quay` kind
-  * **landuse**: add `kind_detail` property to indicate the `religion` and `denomination` property for **cemetery**, grave_yard,  
-  * **landuse**: add `harbour`, `port`, `port_terminal`, `ferry_terminal`, `container_terminal`.
-  * **landuse**: add `pier` polygon when it's used for mooring. 
-  * **landuse**: add kind_detail for beaches to indicate surface values of: [grass, gravel, pebbles, pebblestone, rocky, sand].
-  * **landuse**: add kind_detail for wetland when wetland is [bog, fen, mangrove, marsh, mud, reedbed, saltern, saltmarsh, string_bog, swamp, tidalflat, wet_meadow].
-  * **landuse**: add kind `mud`.
-  * **landuse**: add `orchard` with optional kind_detail values of agave_plants, almond_trees, apple_trees, avocado_trees, banana_plants, cherry_trees, coconut_palms, coffea_plants, date_palms, hazel_plants, hop_plants, kiwi_plants, macadamia_trees, mango_trees, oil_palms, olive_trees, orange_trees, papaya_trees, peach_trees, persimmon_trees, pineapple_plants, pitaya_plants, plum_trees, rubber_trees, tea_plants, walnut_trees.
-  * **landuse**: add kind: `plant_nursery`. 
-  * **pois**: Adds `drives_on_left` property for mini-roundabouts.
-  * **pois**: add additional optional properties to the pois layer: `ref`, `attraction`, `zoo`, `exit_to`.
-  * **pois**: Add kind_detail for health facilities types.
-  * **pois**: Allow additional kind values to show up on the map when lacking a name: `power_generator`, `boat_lift`, `boatyard`, `waterway_fuel`, `sanitary_dump_station`, `harbour_master`, `field_hospital`, `health_centre`, `bunker`, `crane`, `obelisk`, `wayside_cross`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `customs`, `harbourmaster`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `sanitary_dump_station`, `taxi`, `block`, `bollard,border_control,cattle_grid,chain`, `kissing_gate,lift_gate,stile,swing_gate`, `defibrillator`, `fire_hydrant`, `street_lamp
-  * **pois**: adjust min_zoom of lighthouse, watermill when they are ruins but also attractions.
-  * **pois**: remove abandoned and disused watermills.
-  * **pois**: Add `heliport`
-  * **pois**: Add `airfield`, `range`, `naval_base`, `danger_area`
-  * **pois**: Add `bunker` with kind_detail optional [pillbox, munitions, gun_emplacement, hardened_aircraft_shelter, blockhouse, technical, mg_nest, missile_silo]
-  * **pois**: Add kind_detail to generator to indicate method of [anaerobic_digestion,barrage,combustion,fission,gasification,photovoltaic,run-of-the-river,stream,thermal,water-pumped-storage,water-storage,wind_turbine]
-  * **pois**: Add kind `field_hospital` with optional kind_detail to indicate heath care facility type.
-  * **pois**: Add `health_centre`
-  * **pois**: Add `dispensary`
-  * **pois**: Add `ambulatory_care`
-  * **pois**: Add `healthcare_centre`
-  * **pois**: Add `healthcare_laboratory`
-  * **pois**: Add `blood_bank`
-  * **pois**: Add `baby_hatch`
-  * **pois**: Add optional kind_detail to hospital to indicate heath care facility type.
-  * **pois**: Add optional kind_detail to pharmacy, veterinary to indicate heath care facility type.
-  * **pois**: Add optional kind_detail to nursing home to indicate heath care facility type.
-  * **pois**: Add optional kind_detail to clinic, dentist, doctors, social_facility, healthcare: [bank, blood, chiropractor, donation, hospice, midwife, midwife_occupational, optometrist_paediatrics, physiotherapist_physiotherapy, podiatrist_psychotherapist, rehabilitation, speech, therapist, therapist
-  * **pois**: Add `healthcare_alternative`
-  * **pois**: Add `horse_riding`
-  * **pois**: Add `casino`
-  * **pois**: Add `container_terminal`, `port_terminal`, `quay`, `shipyard`, `wharf`, `boatyard`
-  * **pois**: Add pois kind_detail for beaches when surface: [grass, gravel, pebbles, pebblestone, rocky, sand].
-  * **pois**: Add `obelisk` with precidence over artwork, monument and memorial. Moderate min_zoom based on height. Optional kind_detail when monument, memorial.
-  * **pois**: Split parking into `parking` and `parking_garage` when parking type is 'multi-storey', underground, rooftop'.
-  * **pois**: Add `waterway_fuel`
-  * **pois**: Add `nightclub`
-  * **pois**: Add `charity`, `chemist`, `cosmetics`, `fishmonger`, `golf`
-  * **pois**: Add `camera`, `copyshop`, `photo`, `tyres`
-  * **pois**: Add `atv`, `snowmobile`
-  * **pois**: Indicate if marina kind has `sanitary_dump_station` with new property ['yes', 'customers', 'public'] 
-  * **pois**: Indicate if camp_site kind has `sanitary_dump_station` with new property. ['yes', 'customers', 'public']
-  * **pois**: Indicate if caravan_site kind has `sanitary_dump_station` with new property. ['yes', 'customers', 'public']
-  * **pois**: Expand coverage of existing ferry_terminal kind.
-  * **pois**: Add `garden_centre` kind.
-  * **pois**: Add `marketplace` kind.
+  * **buildings**: add `entrance` points, with optional **kind_detail** property with values: `main`, `staircase`, `service`, `home`, `unisex`, `garage`, `residence`, `private`, `secondary`, `emergency`, `fire_exit`.
+  * **buildings**: add `exit` points, with optional **kind_detail** property with values: `main`, `staircase`, `service`, `home`, `unisex`, `garage`, `residence`, `private`, `secondary`, `emergency`, `fire_exit`.
+  * **landuse**: Add **kind_detail** for `wood` and `forest` kinds with values indicating _leaftype_: `broadleaved`, `leafless`, `mixed`, `needleleaved`.
+  * **landuse**: Add **kind_detail** optional property for `beach` kind to indicate _surface_ values of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
+  * **landuse**: Add **kind_detail** optional property for `wetland` when _wetland_ is `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
+  * **landuse**: Add **kind_detail** optional property to indicate the religion and denomination of `cemetery` and `grave_yard` kinds. Common values include: TODO.
+  * **landuse**: Add `airfield` kind for military airfields. 
+  * **landuse**: Add `container_terminal` kind.
+  * **landuse**: Add `crane` kind as line geometry.
+  * **landuse**: Add `cutting` kind.
+  * **landuse**: Add `danger_area` kind for military.
+  * **landuse**: Add `ditch` kind as line geometry.
+  * **landuse**: Add `embankment` kind.
+  * **landuse**: Add `fence` kind lines with optional **kind_detail** `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
+  * **landuse**: Add `ferry_terminal` kind.
+  * **landuse**: Add `guard_rail` kind as line geometry.
+  * **landuse**: Add `harbour` kind.
+  * **landuse**: Add `kerb` kind as line geometry.
+  * **landuse**: Add `mud` kind.
+  * **landuse**: Add `naval_base` kind for military.
+  * **landuse**: Add `orchard` kind with optional **kind_detail** values: `agave_plants`, ` almond_trees`, ` apple_trees`, ` avocado_trees`, ` banana_plants`, ` cherry_trees`, ` coconut_palms`, ` coffea_plants`, ` date_palms`, ` hazel_plants`, ` hop_plants`, ` kiwi_plants`, ` macadamia_trees`, ` mango_trees`, ` oil_palms`, ` olive_trees`, ` orange_trees`, ` papaya_trees`, ` peach_trees`, ` persimmon_trees`, ` pineapple_plants`, ` pitaya_plants`, ` plum_trees`, ` rubber_trees`, ` tea_plants`, ` walnut_trees`.
+  * **landuse**: Add `pier` polygon when's used for mooring. 
+  * **landuse**: Add `plant_nursery` kind.
+  * **landuse**: Add `port_terminal` kind.
+  * **landuse**: Add `port` kind.
+  * **landuse**: Add `power_line` kind as line geometry.
+  * **landuse**: Add `power_minor_line` kind as line geometry.
+  * **landuse**: Add `quay` kind
+  * **landuse**: Add `shipyard` kind.
+  * **landuse**: Add `wall` kind as line geometry.
+  * **landuse**: Add `wharf` kind
+  * **places**: Add locality name translations for ~21 languages at low zooms from Natural Earth.
+  * **places**: Lookup `min_zoom` for `country`, `map_unit`, and `region` from Natural Earth while continue sourcing feature names from OpenStreetMap.
+  * **pois**: Add **attraction** optional property for all kinds.
+  * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features.
+  * **pois**: Add **exit_to** optional property for all kinds.
+  * **pois**: Add **kind_detail** optional property for kind `beach` with surface values of: `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, ` sand`.
+  * **pois**: Add **kind_detail** optional property for kinds `cemetery` and `grave_yard` to indicate the _religion_ and/or _denomination_.
+  * **pois**: Add **kind_detail** optional property for kinds `clinic`, `dentist`, `doctors`, `social_facility`, and `healthcare` with values: `bank`, ` blood`, ` chiropractor`, ` donation`, ` hospice`, ` midwife`, ` midwife_occupational`, ` optometrist_paediatrics`, ` physiotherapist_physiotherapy`, ` podiatrist_psychotherapist`, ` rehabilitation`, ` speech`, ` therapist`, ` therapist`.
+  * **pois**: Add **kind_detail** optional property for kinds `hospital`, `pharmacy`, `veterinary`, and `nursing_home` to indicate heath care facility type.
+  * **pois**: Add **kind_detail** optional property for kind `generator` to indicate method of `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+  * **pois**: Add **kind_detail** optional property for kind `toilet` to indicate `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` bucket`.
+  * **pois**: Add **kind_detail** optional property for kind `water_well` with optional values: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
+  * **pois**: Add **ref** optional property for all kinds.
+  * **pois**: Add **sanitary_dump_station** optional property on existing `marina`, `camp_site`, and `caravan_site` kind features with values: `yes`, `customers`, or `public`.
+  * **pois**: Add **zoo** optional property for all kinds.
   * **pois**: Add `adult_gaming_centre` kind.
-  * **pois**: Add `harbourmaster`
-  * **pois**: Add `defibrillator`, `fire_hydrant`
-  * **pois**: Add kind_detail to toilet to indicate [pit_latrine, flush, chemical, pour_flush, bucket]
-  * **pois**: Add additional kinds of bariers: `chain`, `kissing_gate`, `stile`, `swing_gate`, `cattle_grid`
-  * **pois**: Add `funeral_directors`
-  * **pois**: Add `border_control`
-  * **pois**: Add `customs`
-  * **pois**: Modify existing alpine_hut kind to show up at zoom 13 (was zoom 15).
-  * **pois**: Add `arts_centre`
-  * **pois**: Add `car_rental`
-  * **pois**: Add `bureau_de_change`, `karaoke`, `karaoke_box`, `money_transfer`, `street_lamp`
-  * **pois**: Add `plaque`
-  * **pois**: Add `slipway` kind with mooring property
-  * **pois**: Add `motorcycle_parking`
-  * **pois**: Don't emit `covered` property when false on bicycle_parking, motorcycle_parking.
-  * **pois**: Add `charging_station` kind and indicate boolens for bicycle, car, truck, and scooter usage.
-  * **pois**: Add more types of shops with kinds: `bookmaker`, `car_parts`, `garden_centre`, `golf`, `grocery`, `lottery`, `ship_chandler`
-  * **pois**: Add `car_wash`, `hunting_stand` kinds
-  * **pois**: For existing water_well kind, add kind_detail to indicate [drinkable_powered, drinkable_manual, drinkable_no_pump, drinkable, not_drinkable_powered, not_drinkable_manual, not_drinkable_no_pump, not_drinkable]
-  * **pois**: Add `studio` kind with optional kind_detail values [audio, cinema, photography, radio, television, video]
-  * **pois**: Add `love_hotel` kind at zoom 18+
-  * **pois**: Add `taxi` for taxi stands.
-  * **pois**: Add `boat_lift`
-  * **pois**: Add `crane` with optional `kind_detail` to indicate the type of crane... TODO list types
-  * **pois**: Add `miniature_golf`
-  * **pois**: Add pois `kind_detail` property to indicate the `religion` and `denomination` property for **cemetery**, grave_yard,  
-  * **pois**: Add `slaughterhouse`
-  * **pois**: Add `adult_gaming_centre`
-  * **pois**: Add `gambling`
-  * **pois**: Add `boatyard`
-  * **pois**: Add `harbourmaster`
-  * **pois**: Add `mooring` with optional kind_detail _[commercial, cruise, customers, declaration, ferry, guest, pile, waiting, yacht, yachts] and optional access property [private, public]
-  * **pois**: Add `sanitary_dump_station`
-  * **pois**: Add `elevator`
-  * **pois**: Add `wayside_cross`
-  * **pois**: Add generic catchall kinds of `shop`, `craft`, `office`, and `industrial` when no more detailed type found (so generic shop, generic craft...)
-  * **roads**: layer: add property `cutting` [yes', right, left]
-  * **roads**: layer: add property `embankment` [yes', right, left]
-  * **roads**: layer: Show `unclassified` kind one zoom earlier by default.
-  * **roads**: layer: Show `track` kind two zooms earlier by default when surface: [paved, asphalt, concrete], tracktype: grade1, not: {access: private}
-  * **roads**: layer: Show `track` kind one zooms earlier by default when surface: [gravel], tracktype: not: {tracktype: [grade3, grade4, grade5]
-  * **roads**: Add `quay` kind lines
-  * **roads**: For both `quay` and existing `pier` indicate `mooring` of ['no', 'yes', commercial, cruise, customers, declaration, ferry, guest, private, public, waiting, yacht, yachts]
-  * **roads**: major changes to `network` and `shield_text` to support USA road shields: `US:AK`, `US:AL`, `US:AR`, `US:AZ`, `US:BIA`, `US:BLM`, `US:CA`, `US:CO`, `US:CT`, `US:DC`, `US:DE`, `US:FL`, `US:FSH`, `US:FSR`, `US:GA`, `US:HI`, `US:I:Alternate`, `US:I:Business`, `US:I:Truck`, `US:I`, `US:IA`, `US:ID`, `US:IL`, `US:IN`, `US:KS`, `US:KY`, `US:LA`, `US:MA`, `US:MD`, `US:ME`, `US:MI`, `US:MN`, `US:MO`, `US:MS`, `US:MT`, `US:NC`, `US:ND`, `US:NE`, `US:NH`, `US:NJ`, `US:NM`, `US:NV`, `US:NY`, `US:OH`, `US:OK`, `US:OR`, `US:PA`, `US:RI`, `US:SC`, `US:SD`, `US:TN`, `US:TX`, `US:US:Alternate`, `US:US:Business`, `US:US:Truck`, `US:US`, `US:UT`, `US:VA`, `US:VT`, `US:WA`, `US:WI`, `US:WV`, and `US:WY`.
-  * **roads**: major changes to `network` and `shield_text` to support localized road shields globally, including (but not limited to), with uppercase 2-char country code prefixes: `AM:AM`, `AR:national`, `AR:provincial`, `AT:A-road`, `AT:L`, `AT:S-road`, `AU:A-road`, `AU:B-road`, `AU:C-road`, `AU:M-road`, `AU:Metro-road`, `AU:N-highway`, `AU:N-route`, `AU:S-route`, `AU:T-drive`, `BD:NH`, `BE:A-road`, `BE:I`, `BE:N-road`, `BR:AC`, `BR:AL`, `BR:AM`, `BR:AP`, `BR:BA`, `BR:BR`, `BR:CE`, `BR:DF`, `BR:ES`, `BR:GO`, `BR:MA`, `BR:MG`, `BR:MS`, `BR:MT`, `BR:PA`, `BR:PB`, `BR:PE`, `BR:PI`, `BR:PR`, `BR:RJ`, `BR:RN`, `BR:RO`, `BR:RR`, `BR:RS`, `BR:SC`, `BR:SE`, `BR:SP`, `BR:TO`, `BR:Trans-Amazonian`, `CA:AB`, `CA:AB:primary`, `CA:AB:trunk`, `CA:BC`, `CA:BC:primary`, `CA:BC:trunk`, `CA:MB`, `CA:MB:PTH`, `CA:NB`, `CA:NB2`, `CA:NB3`, `CA:NS`, `CA:NS:R`, `CA:NS:T`, `CA:NT`, `CA:ON`, `CA:ON:primary`, `CA:PEI`, `CA:QC`, `CA:QC:A`, `CA:QC:R`, `CA:SK`, `CA:SK:primary`, `CA:transcanada`, `CA:YT`, `CH:motorway`, `CH:national`, `CL`, `CL:national`, `CL:panamerican`, `CL:regional`, `CN:expressway`, `CN:expressway:regional`, `CN:road`, `CZ:national`, `CZ:regional`, `DE:BAB`, `DE:BS`, `DE:DE`, `DE:L`, `DE:LS`, `DK:D`, `DK:national`, `e-road`, `ES:A-road`, `ES:autonoma`, `ES:IU`, `ES:N-road`, `ES:province`, `FI:FI`, `FI:FS`, `FI:LR`
-`FI:RR`, `FR:A-road`, `FR:D`, `FR:D-road`, `FR:N-road`, `GB:A-road-green`, `GB:A-road-white`, `GB:M-road`, `GR:GR`, `GR:I`, `GR:motorway`, `GR:national`, `HU:national`, `ID:ID`, `ID:motorway`, `ID:national`, `IE:M`, `IE:N`, `IE:R`, `IN:MH`, `IN:NH`, `IN:SH`, `IQ`, `IQ:IQ`, `IT:A-road`, `IT:B-road`, `IT:RA`, `IT:SP`, `IT:SR`, `IT:SS`, `JP:expressway`, `JP:prefectural`, `KR:expressway`, `KR:local`, `KR:national`, `LU:CR`, `LU:M`, `LU:RN`, `MX:AGU`, `MX:BCN`, `MX:BCS`, `MX:CAM`, `MX:CHH`, `MX:CHP`, `MX:CMX`, `MX:COA`, `MX:COL`, `MX:DUR`, `MX:GRO`, `MX:GUA`, `MX:HID`, `MX:JAL`, `MX:MEX`, `MX:MIC`, `MX:MOR`, `MX:MX`, `MX:NAY`, `MX:NLE`, `MX:OAX`, `MX:PUE`, `MX:QUE`, `MX:ROO`, `MX:SH`, `MX:SIN`, `MX:SLP`, `MX:SON`, `MX:TAB`, `MX:TAM`, `MX:TLA`, `MX:VER`, `MX:YUC`, `MX:ZAC`, `MY:expressway`, `NL:A-road`, `NL:N-road`, `NL:S-road`, `NO:fylkesvei`, `NO:riksvei`, `NO:RR`, `NZ:SH`, `NZ:SR`, `PE:AM`, `PE:AN`, `PE:AP`, `PE:AR`, `PE:AY`, `PE:CA`, `PE:CL`, `PE:CU`, `PE:HU`, `PE:HV`, `PE:IC`, `PE:JU`, `PE:LA`, `PE:LI`, `PE:LM`, `PE:LO`, `PE:MD`, `PE:MO`, `PE:PA`, `PE:PE`, `PE:PI`, `PE:PU`, `PE:SM`, `PE:TA`, `PE:TU`, `PE:UC`, `PL:expressway`, `PL:motorway`, `PL:national`, `PL:regional`, `PT:A`, `PT:IC`, `PT:motorway`, `PT:national`, `PT:primary`, `PT:regional`, `PT:secondary`, `RO:county`, `RO:local`, `RO:motorway`, `RO:national`, `RU:national`, `SA:national`, `SE:A`, `SG:E`, `SG:expressway`, `SK:LR`, `TH:motorway`, `TH:road`, `TR:highway`, `TR:motorway`, `UA:international`, `UA:national`, `UA:regional`, `UA:regional-yellow`, `UA:territorial`, `UK:G`, `VN:expressway`, `VN:national`, `VN:PR`, `VN:VN`, `ZA:metropolitan`, `ZA:national`, `ZA:provincial`, `ZA:regional`.
-  * **roads**: changes to `network` and `shield_text` to support fallback international road shields. When no network is provided by a ref is, a 2-char country code will be exported as the network value based on the location of the road.
-  * **roads**: Show important cycling and walking routes at earlier zooms by adjusting the `min_zoom` of `path`, `major_road`, and `minor_road` cycling and walking related features in the **roads** layer. This means that `min_zoom` values are now variable for features of the same kind, depending on their importance in the bicycle and walking networks; in earlier releases they all shared the same `min_zoom`. See [#1172](https://github.com/tilezen/vector-datasource/issues/1172).
-  * **water**: add `fountain` kind
-  * **water**: add `reef` **kind** with optional kind_detail of [coral, rock, sand]_
+  * **pois**: Add `airfield` kind for military features.
+  * **pois**: Add `ambulatory_care` kind.
+  * **pois**: Add `arts_centre` kind.
+  * **pois**: Add `atv` kind for shops.
+  * **pois**: Add `baby_hatch` kind.
+  * **pois**: Add `blood_bank` kind.
+  * **pois**: Add `boat_lift` kind.
+  * **pois**: Add `boatyard` kind.
+  * **pois**: Add `bookmaker` kind.
+  * **pois**: Add `border_control` kind.
+  * **pois**: Add `bunker` kind for military features, with optional **kind_detail** values: `pillbox`, `munitions`, `gun_emplacement`, `hardened_aircraft_shelter`, `blockhouse`, `technical`, `mg_nest`, `missile_silo`
+  * **pois**: Add `bureau_de_change` kind.
+  * **pois**: Add `camera` kind for shops.
+  * **pois**: Add `car_parts` kind for shops.
+  * **pois**: Add `car_rental` kind.
+  * **pois**: Add `car_wash` kind.
+  * **pois**: Add `casino` kind.
+  * **pois**: Add `cattle_grid` kind of barrier.
+  * **pois**: Add `chain` kind of barrier.
+  * **pois**: Add `charging_station` kind and indicate boolean properties for **bicycle**, **car**, **truck**, and **scooter** usage.
+  * **pois**: Add `charity` kind.
+  * **pois**: Add `chemist` kind for shops.
+  * **pois**: Add `container_terminal` kind.
+  * **pois**: Add `copyshop` kind.
+  * **pois**: Add `cosmetics` kind for shops.
+  * **pois**: Add `crane` kind with optional `kind_detail` to indicate the type of crane... TODO list types
+  * **pois**: Add `customs` kind.
+  * **pois**: Add `danger_area` kind for military features.
+  * **pois**: Add `defibrillator` kind.
+  * **pois**: Add `dispensary` kind.
+  * **pois**: Add `elevator` kind.
+  * **pois**: Add `field_hospital` kind with optional **kind_detail** to indicate heath care facility type.
+  * **pois**: Add `fire_hydrant` kind
+  * **pois**: Add `fishmonger` kind.
+  * **pois**: Add `funeral_directors` kind.
+  * **pois**: Add `gambling` kind.
+  * **pois**: Add `garden_centre` kind.
+  * **pois**: Add `golf` kind.
+  * **pois**: Add `grocery` kind.
+  * **pois**: Add `harbourmaster` kind.
+  * **pois**: Add `health_centre` kind.
+  * **pois**: Add `healthcare_alternative` kind.
+  * **pois**: Add `healthcare_centre` kind.
+  * **pois**: Add `healthcare_laboratory` kind.
+  * **pois**: Add `heliport` kind.
+  * **pois**: Add `horse_riding` kind.
+  * **pois**: Add `hunting_stand` kind.
+  * **pois**: Add `karaoke_box` kind.
+  * **pois**: Add `karaoke` kind.
+  * **pois**: Add `kissing_gate` kind of barrier.
+  * **pois**: Add `lottery` kind.
+  * **pois**: Add `love_hotel` kind at zoom 18+.
+  * **pois**: Add `marketplace` kind.
+  * **pois**: Add `miniature_golf` kind.
+  * **pois**: Add `money_transfer` kind.
+  * **pois**: Add `mooring` kind with optional **kind_detail** values of `commercial`, ` cruise`, ` customers`, ` declaration`, ` ferry`, ` guest`, ` pile`, ` waiting`, ` yacht`, ` yachts` and optional **access** property with values: `private` or `public`.
+  * **pois**: Add `motorcycle_parking` kind.
+  * **pois**: Add `naval_base` kind for military features.
+  * **pois**: Add `nightclub` kind.
+  * **pois**: Add `obelisk` kind with a variable zoom according to it's height. This kind takes precidence over `artwork`, `monument`, and `memorial`. Optional **kind_detail** indicates if feature is also a `monument` or `memorial`.
+  * **pois**: Add `parking_garage` kind by subdividing existing `parking`, when parking type is `multi-storey`, `underground`, or `rooftop`.
+  * **pois**: Add `photo` kind.
+  * **pois**: Add `plaque` kind.
+  * **pois**: Add `port_terminal` kind.
+  * **pois**: Add `quay` kind.
+  * **pois**: Add `range` kind for military features.
+  * **pois**: Add `sanitary_dump_station` kind.
+  * **pois**: Add `ship_chandler` kind.
+  * **pois**: Add `shipyard` kind.
+  * **pois**: Add `slaughterhouse` kind.
+  * **pois**: Add `slipway` kind with optional **mooring** property.
+  * **pois**: Add `snowmobile` kind.
+  * **pois**: Add `stile` kind of barrier.
+  * **pois**: Add `street_lamp` kind.
+  * **pois**: Add `studio` kind, with optional **kind_detail** values `audio`, ` cinema`, ` photography`, ` radio`, ` television`, ` video`.
+  * **pois**: Add `swing_gate` kind of barrier.
+  * **pois**: Add `taxi` kind for taxi stands.
+  * **pois**: Add `tyres` kind.
+  * **pois**: Add `waterway_fuel` kind.
+  * **pois**: Add `wayside_cross` kind.
+  * **pois**: Add `wharf` kind.
+  * **pois**: Add additional `ferry_terminal` kind features by expanding upstream filters.
+  * **pois**: Add catchall `craft` kind when there isn't a more specific kind.
+  * **pois**: Add catchall `industrial` kind when there isn't a more specific kind.
+  * **pois**: Add catchall `office` kind when there isn't a more specific kind.
+  * **pois**: Add catchall `shop` kind when there isn't a more specific kind.
+  * **pois**: Allow additional kind values to show up on the map when they lack a name: `power_generator`, `boat_lift`, `boatyard`, `waterway_fuel`, `sanitary_dump_station`, `harbour_master`, `field_hospital`, `health_centre`, `bunker`, `crane`, `obelisk`, `wayside_cross`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `customs`, `harbourmaster`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `sanitary_dump_station`, `taxi`, `block`, `bollard,border_control,cattle_grid,chain`, `kissing_gate,lift_gate,stile,swing_gate`, `defibrillator`, `fire_hydrant`, and `street_lamp.
+  * **pois**: Modify **min_zoom** of `alpine_hut` kind to reveal them two zooms earlier at zoom 13.
+  * **pois**: Modify **min_zoom** of `lighthouse` kind when they are ruins but also attractions.
+  * **pois**: Modify **min_zoom** of `watermill` kind when they are ruins but also attractions.
+  * **pois**: Remove abandoned or disused `watermill` kind features (but keep the majority of features).
+  * **pois**: Stop emitting **covered** boolean property when the value was false on `bicycle_parking` and `motorcycle_parking` kind features.
+  * **roads**: Add **cutting** optional property with values [yes, right, left]
+  * **roads**: Add **embankment** optional property with values [yes, right, left]
+  * **roads**: Add **mooring** optional property for new `quay` and existing `pier` kinds with values: ['no', 'yes', commercial, cruise, customers, declaration, ferry, guest, private, public, waiting, yacht, yachts]
+  * **roads**: Add `quay` kind lines.
+  * **roads**: Major changes to **network** and **shield_text** to support fallback international road shields. When no network is provided by a ref is, a 2-char country code will be exported as the network value based on the location of the road, like 'AM' or 'US'.
+  * **roads**: Major changes to **network** and **shield_text** to support localized road shields globally, including (but not limited to), with uppercase 2-char country code prefixes: `AM:AM`, `AR:national`, `AR:provincial`, `AT:A-road`, `AT:L`, `AT:S-road`, `AU:A-road`, `AU:B-road`, `AU:C-road`, `AU:M-road`, `AU:Metro-road`, `AU:N-highway`, `AU:N-route`, `AU:S-route`, `AU:T-drive`, `BD:NH`, `BE:A-road`, `BE:I`, `BE:N-road`, `BR:AC`, `BR:AL`, `BR:AM`, `BR:AP`, `BR:BA`, `BR:BR`, `BR:CE`, `BR:DF`, `BR:ES`, `BR:GO`, `BR:MA`, `BR:MG`, `BR:MS`, `BR:MT`, `BR:PA`, `BR:PB`, `BR:PE`, `BR:PI`, `BR:PR`, `BR:RJ`, `BR:RN`, `BR:RO`, `BR:RR`, `BR:RS`, `BR:SC`, `BR:SE`, `BR:SP`, `BR:TO`, `BR:Trans-Amazonian`, `CA:AB`, `CA:AB:primary`, `CA:AB:trunk`, `CA:BC`, `CA:BC:primary`, `CA:BC:trunk`, `CA:MB`, `CA:MB:PTH`, `CA:NB`, `CA:NB2`, `CA:NB3`, `CA:NS`, `CA:NS:R`, `CA:NS:T`, `CA:NT`, `CA:ON`, `CA:ON:primary`, `CA:PEI`, `CA:QC`, `CA:QC:A`, `CA:QC:R`, `CA:SK`, `CA:SK:primary`, `CA:transcanada`, `CA:YT`, `CH:motorway`, `CH:national`, `CL`, `CL:national`, `CL:panamerican`, `CL:regional`, `CN:expressway`, `CN:expressway:regional`, `CN:road`, `CZ:national`, `CZ:regional`, `DE:BAB`, `DE:BS`, `DE:DE`, `DE:L`, `DE:LS`, `DK:D`, `DK:national`, `e-road`, `ES:A-road`, `ES:autonoma`, `ES:IU`, `ES:N-road`, `ES:province`, `FI:FI`, `FI:FS`, `FI:LR`, `FI:RR`, `FR:A-road`, `FR:D`, `FR:D-road`, `FR:N-road`, `GB:A-road-green`, `GB:A-road-white`, `GB:M-road`, `GR:GR`, `GR:I`, `GR:motorway`, `GR:national`, `HU:national`, `ID:ID`, `ID:motorway`, `ID:national`, `IE:M`, `IE:N`, `IE:R`, `IN:MH`, `IN:NH`, `IN:SH`, `IQ`, `IQ:IQ`, `IT:A-road`, `IT:B-road`, `IT:RA`, `IT:SP`, `IT:SR`, `IT:SS`, `JP:expressway`, `JP:prefectural`, `KR:expressway`, `KR:local`, `KR:national`, `LU:CR`, `LU:M`, `LU:RN`, `MX:AGU`, `MX:BCN`, `MX:BCS`, `MX:CAM`, `MX:CHH`, `MX:CHP`, `MX:CMX`, `MX:COA`, `MX:COL`, `MX:DUR`, `MX:GRO`, `MX:GUA`, `MX:HID`, `MX:JAL`, `MX:MEX`, `MX:MIC`, `MX:MOR`, `MX:MX`, `MX:NAY`, `MX:NLE`, `MX:OAX`, `MX:PUE`, `MX:QUE`, `MX:ROO`, `MX:SH`, `MX:SIN`, `MX:SLP`, `MX:SON`, `MX:TAB`, `MX:TAM`, `MX:TLA`, `MX:VER`, `MX:YUC`, `MX:ZAC`, `MY:expressway`, `NL:A-road`, `NL:N-road`, `NL:S-road`, `NO:fylkesvei`, `NO:riksvei`, `NO:RR`, `NZ:SH`, `NZ:SR`, `PE:AM`, `PE:AN`, `PE:AP`, `PE:AR`, `PE:AY`, `PE:CA`, `PE:CL`, `PE:CU`, `PE:HU`, `PE:HV`, `PE:IC`, `PE:JU`, `PE:LA`, `PE:LI`, `PE:LM`, `PE:LO`, `PE:MD`, `PE:MO`, `PE:PA`, `PE:PE`, `PE:PI`, `PE:PU`, `PE:SM`, `PE:TA`, `PE:TU`, `PE:UC`, `PL:expressway`, `PL:motorway`, `PL:national`, `PL:regional`, `PT:A`, `PT:IC`, `PT:motorway`, `PT:national`, `PT:primary`, `PT:regional`, `PT:secondary`, `RO:county`, `RO:local`, `RO:motorway`, `RO:national`, `RU:national`, `SA:national`, `SE:A`, `SG:E`, `SG:expressway`, `SK:LR`, `TH:motorway`, `TH:road`, `TR:highway`, `TR:motorway`, `UA:international`, `UA:national`, `UA:regional`, `UA:regional-yellow`, `UA:territorial`, `UK:G`, `VN:expressway`, `VN:national`, `VN:PR`, `VN:VN`, `ZA:metropolitan`, `ZA:national`, `ZA:provincial`, `ZA:regional`.
+  * **roads**: Major changes to **network** and **shield_text** to support USA road shields: `US:AK`, `US:AL`, `US:AR`, `US:AZ`, `US:BIA`, `US:BLM`, `US:CA`, `US:CO`, `US:CT`, `US:DC`, `US:DE`, `US:FL`, `US:FSH`, `US:FSR`, `US:GA`, `US:HI`, `US:I:Alternate`, `US:I:Business`, `US:I:Truck`, `US:I`, `US:IA`, `US:ID`, `US:IL`, `US:IN`, `US:KS`, `US:KY`, `US:LA`, `US:MA`, `US:MD`, `US:ME`, `US:MI`, `US:MN`, `US:MO`, `US:MS`, `US:MT`, `US:NC`, `US:ND`, `US:NE`, `US:NH`, `US:NJ`, `US:NM`, `US:NV`, `US:NY`, `US:OH`, `US:OK`, `US:OR`, `US:PA`, `US:RI`, `US:SC`, `US:SD`, `US:TN`, `US:TX`, `US:US:Alternate`, `US:US:Business`, `US:US:Truck`, `US:US`, `US:UT`, `US:VA`, `US:VT`, `US:WA`, `US:WI`, `US:WV`, and `US:WY`.
+  * **roads**: Modify **min_zoom** of `track` kind to show 1 zooms earlier by default when **surface** is `gravel` or **tracktype** is not `grade3`, `grade4`, or `grade5`
+  * **roads**: Modify **min_zoom** of `track` kind to show 2 zooms earlier by default when **surface** is `paved`, `asphalt`, `concrete` or **tracktype** is `grade1` (but not for **access** `private`}
+  * **roads**: Modify **min_zoom** of `unclassified` kind to show 1 zoom earlier by default.
+  * **roads**: Show important cycling and walking routes at earlier zooms by adjusting the `min_zoom` of `path`, `major_road`, and `minor_road` kinds. This means that `min_zoom` values are now variable for features of the same kind, depending on their importance in the bicycle and walking networks; in earlier releases they all shared the same `min_zoom`. See [#1172](https://github.com/tilezen/vector-datasource/issues/1172).
+  * **water**: Add `fountain` kind.
+  * **water**: Add `reef` kind, with optional **kind_detail** values of `coral`, `rock`, and `sand`.
 
   #### BUG FIXES
 
-  * Fix spelling of ~60 locality (city) names at low-zooms in **places** layer. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
-  * Fix water topology by making Natural Earth ne_10m_ocean features OGC valid.
+  * **places**: Fix spelling of ~60 **locality** (city) names at low-zooms in **places** layer by taking Natural Earth update. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
+  * **water**: Fix missing ocean water by making Natural Earth `ne_10m_ocean` features OGC valid in PostGIS.
 
   #### DOCUMENTATION CHANGES
 
-  * Correct the Greek language 2-char code from `gr` to `el` in the Semantic Versioning statement.
-  * Change references to Mapzen (RIP) to Tilezen
-  * Update MapboxGL demo thanks to Apollo Mapping
+  * Correct the **Greek** language 2-char code from `gr` to `el` in the Semantic Versioning statement.
+  * Change references to **Mapzen** (RIP) to **Tilezen**.
+  * **Update MapboxGL demo**, thanks to Apollo Mapping
   * Use service wording changes (Less > Fewer)
-  * TODO: update tilejson/tilejson.json.erb
+  * Updated Layers documentation for v1.5 schema changes.
+  * TODO: Updated tilejson/tilejson.json.erb for v1.5 schema changes.
   
 
   #### INTERNAL CHANGES
 
-  * Refactors to support RAWR tile builds in queries/jinja and elsewhere.
-  * Support easier creation of generative tests for points, lines, and polygons.
-  * Change references to Who's On First gazetteer to whosonfirst.org from Mapzen.
-  * Upgrade to CircleCI 2.0
+  * Change references to **Who's On First** gazetteer source to `whosonfirst.org` from `whosonfirst.mapzen.com`.
+  * Refactors to support **RAWR tile** builds in queries/jinja and elsewhere.
+  * Add support for multiple **localized names** from Natural Earth 4.x by adding new transform `convert_ne_l10n_name` for 2-char language codes.
+  * Use a Tilezen curated **country admin polygon** layer to determine country codes PIP for intermediate processing (this layer is not exported in final tiles).
+  * Add new function to **calculate linear overlap with polygons**, useful for road in country calculation.
+  * Add new function to **calculate point in polygon (PIP)**, useful in POI in country calculation.
+  * Updates to Tilezen curated **buffered_land** layer for marine boundary lines.
   * Be more robust to only add database columns when they don't already exist.
-  * Use a Tilezen curated country admin polygon layer to determine country codes PIP, but this layer is not exported in final tile.
-  * Updates to Tilezen curated buffered_land layer for marine boundary lines.
-  * This will be the last set of database migrations provided. All future builds assume "global" RAWR tile build.
-  * Continue migration to generative tests instead of live-data OSM Overpass tests.
-  * Add new transform convert_ne_l10n_name for 2-char language codes to support multiple localized names from Natural Earth.
-  * Refactor all network and ref > shield_text logic to support international road shields based on fuzzy data and missing country code data, including specific functions per country._
-  * Add new function to calculate linear overlap with polygons, useful for road in country calculation.
-  * Add new function point in country, useful in POI country calculation.
-  * Add max_zoom_filter to remove features with a max_zoom if it's < nominal zoom.
-  * Add whitelist for fence types.
-  
-
+  * Support easier creation of **generative tests** for points, lines, and polygons.
+  * Continued migration to generative tests instead of live-data OpenStreetMap tests via Overpass.
+  * Upgrade to **CircleCI 2.0** for continuous integration.
+  * Refactor all OpenStreetMap to Tilezen ETL logic for `network` and `ref` > `shield_text` to support international road shields based on fuzzy data and missing country code data, including specific functions per country.
+  * Add `max_zoom_filter` to remove features with a `max_zoom` if it's < `nominal` zoom.
+  * Add whitelist for **fence** `kind_detail` values.
+  * This will be the last set of **database migrations** provided. All future releases will assume "global" RAWR tile builds.
 
 v1.4.3
 ------
