@@ -1510,8 +1510,8 @@ Some countries without network tags but with ref values with ';' and '/' and oth
 Network value include:
 
 * `AM:AM` - Armenia
-* `AR:national` - Argentina ref.startswith(`RN`)
-* `AR:provincial` - Argentina ref.startswith(`RP`)
+* `AR:national` - Argentina ref starts with `RN`
+* `AR:provincial` - Argentina ref starts with `RP`
 * `AsianHighway` - if network == `AH` or net == `AH` or ref prefixed with `AH` 
 * `AT:A-road` - Austria
 * `AT:L` TODO: ???
@@ -1530,66 +1530,66 @@ Network value include:
 * `BE:A-road` - Belgium  2x TODO: ??? - 
 * `BE:I` - Belgium  2x TODO: ??? - 
 * `BE:N-road` - Belgium  2x TODO: ??? - 
-* `BR:AC` - Acre region in Brazil
-* `BR:AL` - Alagoas region in Brazil
-* `BR:AM` - Amazonas region in Brazil
-* `BR:AP` - Amapá region in Brazil
-* `BR:BA` - Bahia region in Brazil
+* `BR:AC` - **Acre** region in Brazil
+* `BR:AL` - **Alagoas** region in Brazil
+* `BR:AM` - **Amazonas** region in Brazil
+* `BR:AP` - **Amapá** region in Brazil
+* `BR:BA` - **Bahia** region in Brazil
 * `BR:BR` - Federal routes in Brazil and when network = `BR:roads`
-* `BR:CE` - Ceará region in Brazil
-* `BR:DF` - Distrito Federal region in Brazil
-* `BR:ES` - Espírito Santo region in Brazil
-* `BR:GO` - Goiás region in Brazil
-* `BR:MA` - Maranhão region in Brazil
-* `BR:MG:local` - Minas Gerais region in Brazil local roads, ref prefix including `LMG`
-* `BR:MG` - Minas Gerais region in Brazil state roads, ref prefix including `AMG`, `CMG`, `MGC`
-* `BR:MS` - Mato Grosso do Sul region in Brazil
-* `BR:MT` - Mato Grosso region in Brazil
-* `BR:PA` - Pará region in Brazil
-* `BR:PB` - Paraíba region in Brazil
-* `BR:PE` - Pernambuco region in Brazil
-* `BR:PI` - Piauí region in Brazil
-* `BR:PR` - connecting roads in Paraná region in Brazil with ref prefix in `PRC`
-* `BR:PR` - Paraná region in Brazil
-* `BR:RJ` - Rio de Janeiro region in Brazil
-* `BR:RN` - Rio Grande do Norte region in Brazil
-* `BR:RO` - Rondônia region in Brazil
-* `BR:RR` - Roraima region in Brazil
-* `BR:RS` - Rio Grande do Sul region in Brazil state roads with prefix in (ERS, VRS, RSC)
-* `BR:SC` - Santa Catarina region in Brazil
-* `BR:SE` - Sergipe region in Brazil
-* `BR:SP:PLN` - municipal roads in Paulínia region in Brazil, with ref prefix in `PLN`
-* `BR:SP:SCA` - municipal roads in São Carlos region in Brazil with ref in `SCA`
-* `BR:SP` - São Paulo region in Brazil and access roads ref prefix of `SPA`
-* `BR:TO` - Tocantins region in Brazil
-* `BR:Trans-Amazonian` - Brazil when network is BR and ref == `BR-230`
-* `BR` fallback when operator in `Autopista Litoral Sul`, `Cart`, `DNIT`, `Ecovias`, `NovaDutra`, `Triângulo do Sol`, `Viapar`, `ViaRondon`
-* `CA:AB:primary` - Alberta region in Canada
-* `CA:AB:trunk` - Alberta region in Canada
-* `CA:AB` - Alberta region in Canada
-* `CA:BC:primary` - British Columbia region in Canada
-* `CA:BC:trunk` - British Columbia region in Canada
-* `CA:BC` - British Columbia region in CanadaTODO: ???
-* `CA:MB:PTH` - Manitoba region in Canada
-* `CA:MB` - Manitoba region in Canada
-* `CA:NB` - New Brunswich region in Canada
-* `CA:NB2` - New Brunswich region in Canada network.startswith(`CA:NB`) and \ and refnum >= 100
-* `CA:NB3` - New Brunswich region in Canada network.startswith(`CA:NB`) and \ and refnum >= 200
-* `CA:NS:R` - Nova Scotia region in Canada 2x TODO: ???
-* `CA:NS:T` - Nova Scotia region in Canada 2x TODO: ???
-* `CA:NS` - Nova Scotia region in Canada 2x TODO: ???
-* `CA:NT` - Northwest Territories region in Canada
-* `CA:ON:primary` - Ontario region in Canada
-* `CA:ON` - Ontario region in Canada TODO: ???
-* `CA:PEI` - Prince Edward Island region in Canada
-* `CA:QC:A` - Quebec region in Canada
-* `CA:QC:R` - Quebec region in Canada
-* `CA:QC` - Quebec region in Canada TODO: ???
-* `CA:SK:primary` - Sashsqatuan region in Canada TODO: ???
-* `CA:SK` - Sashsqatuan region in Canada TODO: ???
-* `CA:transcanada` - Canada and when ref)) when nat_name and nat_name.lower() == `trans-canada highway`
-* `CA:yellowhead` - Canada Transcanda variant
-* `CA:YT` - Yukon Territory region in Canada
+* `BR:CE` - **Ceará** region in Brazil
+* `BR:DF` - **Distrito Federal** region in Brazil
+* `BR:ES` - **Espírito Santo** region in Brazil
+* `BR:GO` - **Goiás** region in Brazil
+* `BR:MA` - **Maranhão** region in Brazil
+* `BR:MG:local` - **Minas Gerais** region in Brazil local roads, ref prefix including `LMG`
+* `BR:MG` - **Minas Gerais** region in Brazil state roads, ref prefix including `AMG`, `CMG`, `MGC`
+* `BR:MS` - **Mato Grosso do Sul** region in Brazil
+* `BR:MT` - **Mato Grosso** region in Brazil
+* `BR:PA` - **Pará** region in Brazil
+* `BR:PB` - **Paraíba** region in Brazil
+* `BR:PE` - **Pernambuco** region in Brazil
+* `BR:PI` - **Piauí** region in Brazil
+* `BR:PR` - **connecting roads in Paraná** region in Brazil with ref prefix in `PRC`
+* `BR:PR` - **Paraná** region in Brazil
+* `BR:RJ` - **Rio de Janeiro** region in Brazil
+* `BR:RN` - **Rio Grande do Norte** region in Brazil
+* `BR:RO` - **Rondônia** region in Brazil
+* `BR:RR` - **Roraima** region in Brazil
+* `BR:RS` - **Rio Grande do Sul** region in Brazil state roads with prefix in (ERS, VRS, RSC)
+* `BR:SC` - **Santa Catarina** region in Brazil
+* `BR:SE` - **Sergipe** region in Brazil
+* `BR:SP:PLN` - **municipal roads in Paulínia** region in Brazil, with ref prefix in `PLN`
+* `BR:SP:SCA` - **municipal roads in São Carlos** region in Brazil with ref in `SCA`
+* `BR:SP` - **São Paulo** region in Brazil and access roads ref prefix of `SPA`
+* `BR:TO` - **Tocantins** region in Brazil
+* `BR:Trans-Amazonian` - **Trans-Amazonian** route in Brazil when network is BR and ref == `BR-230`
+* `BR` - Brazil fallback when operator in `Autopista Litoral Sul`, `Cart`, `DNIT`, `Ecovias`, `NovaDutra`, `Triângulo do Sol`, `Viapar`, `ViaRondon`
+* `CA:AB:primary` - **Alberta** region in Canada
+* `CA:AB:trunk` - **Alberta** region in Canada
+* `CA:AB` - **Alberta** region in Canada
+* `CA:BC:primary` - **British Columbia** region in Canada
+* `CA:BC:trunk` - **British Columbia** region in Canada
+* `CA:BC` - **British Columbia** region in CanadaTODO: ???
+* `CA:MB:PTH` - **Manitoba** region in Canada
+* `CA:MB` - **Manitoba** region in Canada
+* `CA:NB` - **New Brunswich** region in Canada
+* `CA:NB2` - **New Brunswich** region in Canada network.startswith(`CA:NB`) and \ and refnum >= 100
+* `CA:NB3` - **New Brunswich** region in Canada network.startswith(`CA:NB`) and \ and refnum >= 200
+* `CA:NS:R` - **Nova Scotia** region in Canada 2x TODO: ???
+* `CA:NS:T` - **Nova Scotia** region in Canada 2x TODO: ???
+* `CA:NS` - **Nova Scotia** region in Canada 2x TODO: ???
+* `CA:NT` - **Northwest Territories** region in Canada
+* `CA:ON:primary` - **Ontario** region in Canada
+* `CA:ON` - **Ontario** region in Canada TODO: ???
+* `CA:PEI` - **Prince Edward Island** region in Canada
+* `CA:QC:A` - **Quebec** region in Canada
+* `CA:QC:R` - **Quebec** region in Canada
+* `CA:QC` - **Quebec** region in Canada TODO: ???
+* `CA:SK:primary` - **Sashsqatuan** region in Canada TODO: ???
+* `CA:SK` - **Sashsqatuan** region in Canada TODO: ???
+* `CA:transcanada` - **Canada Transcanada** highway and when ref)) when nat_name and nat_name.lower() == `trans-canada highway`
+* `CA:yellowhead` - **Canada Transcanda variant**
+* `CA:YT` - **Yukon Territory** region in Canada
 * `CD:RRIG` - Democratic Republic of the Congo if network == `CD:rrig`
 * `CH:motorway` - Switzerland
 * `CH:national` - Switzerland
@@ -1599,7 +1599,7 @@ Network value include:
 * `CL:regional` - Chile
 * `CN:expressway:regional` - China (when expressway starts with S; normalized from `CN-expressways-regional`)
 * `CN:expressway` - China (when expressway starts with G; normalized from `CN-expressways)
-* `CN:JX` - Jinxia region in China (ref.startswith(`X`) or network == `JX-roads`:)
+* `CN:JX` - Jinxia region in China, when ref starts with `X` or network == `JX-roads`:)
 * `CN:road` - China 
 * `CZ:national` - Czechia 
 * `CZ:regional` - Czechia
@@ -1631,84 +1631,84 @@ Network value include:
 * `FR` - France when operator in `APRR`, `ASF`, `Autoroutes du Sud de la France`, `DIRIF`, `DIRNO`
 * `GA:L-road` - Gabon when ref starts `L`
 * `GA:national` - Gabon when prefix in (`N`, `RN`)
-* `GB:A-road-green` - United Kingdom highway == `trunk`: ref starts with A
-* `GB:A-road-white` - United Kingdom highway == `primary`: ref starts with A
-* `GB:B-road` - United Kingdom highway == `secondary`:: ref starts with B
-* `GB:M-road` - United Kingdom highway == `motorway`: and ref.startswith(`(M)`) or and ref.endswith(`(M)`)
+* `GB:A-road-green` - United Kingdom highway == `trunk` and ref starts with `A`
+* `GB:A-road-white` - United Kingdom highway == `primary` and ref starts with `A`
+* `GB:B-road` - United Kingdom highway == `secondary` and ref starts with `B`
+* `GB:M-road` - United Kingdom highway == `motorway`: and ref starts or ends with `M`
 * `GB` - United Kingdom when operator in `Highways England`, `Midland Expressway Ltd`, `Transport for Scotland`, `Transport Scotland`, `Welsh Government`
-* `GR:motorway` - Greece when (prefix in (u`Α`, u`A`) or 
-* `GR:national` - Greece when prefix in (u`ΕΟ`, u`EO`)
-* `GR:provincial` - Greece network.startswith(`GR:provincial:`) (GR: ΕΠ provincial refs are ignored.)
+* `GR:motorway` - Greece when ref starts with Greek `Α` or Latin `A`
+* `GR:national` - Greece when ref starts with Greek `ΕΟ` or Latin `EO`
+* `GR:provincial` - Greece generically for any provincial network when the network starts with `GR:provincial:`. Note that `ΕΠ` provincial refs are ignored.
 * `GR` - Greece when operator in `Αττική Οδός`, `Αυτοκινητόδρομος Αιγαίου`,`Εγνατία Οδός`, `Κεντρική Οδός`, `Μορέας`, `Νέα Οδός`, `Ολυμπία Οδός`
-* `HU:national` - Hungary
+* `HU:national` - Hungary national routes
 * `ID:ID` - Indonesia 2x TODO: ???
 * `ID:motorway` - Indonesia 2x TODO: ???
 * `ID:national` - Indonesia 2x TODO: ???
-* `IE:M` - Ireland 2x TODO: ???
-* `IE:N` - Ireland 2x TODO: ???
-* `IE:R` - Ireland 2x TODO: ???
+* `IE:M` - Ireland motorways 2x TODO: ???
+* `IE:N` - Ireland N-roads 2x TODO: ???
+* `IE:R` - Ireland R-roads 2x TODO: ???
 * `IN:MDR` - India network.startswith(`IN:MDR`) or ref == `MDR`
 * `IN:MH` - India 2x TODO: ???
-* `IN:NH` - India national highway network.startswith(`IN:NH`) or ref prefix == `NH` or ref == `ORR`
-* `IN:SH` - India state highway network.startswith(`IN:SH`) or prefix == `SH`
+* `IN:NH` - India national highway, when network starts with `IN:NH`  or ref starts with `NH` or `ORR`.
+* `IN:SH` - India state highway, when network starts with `IN:SH` or ref starts with `SH`.
 * `IQ:IQ` - Iraq 2x TODO: ???
-* `IR:freeway` - Iran network == `IR:freeways` TODO: ???
-* `IT:A-road` - Italy
-* `IT:B-road` - Italy
+* `IR:freeway` - Iran freeway network (upstream `IR:freeways` values are normalized)
+* `IT:A-road` - Italy A-roads
+* `IT:B-road` - Italy B-roads
 * `IT:RA` - Italy
 * `IT:SP` - Italy
 * `IT:SR` - Italy
 * `IT:SS` - Italy
 * `IT` - Italy when operator in "Autostrade per l` Italia S.P.A.", `Autocamionale della Cisa S.P.A.`, `Autostrada dei Fiori S.P.A.`, `Autostrade Centropadane`, `S.A.L.T.`, `SATAP`
-* `JP:expressway` - Japan when prefix starts with C or E
-* `JP:national` - Japan when name.startswith(u`国道`) and name.endswith(u`号`)
-* `JP:prefectural` - Japan when network.startswith(`JP:prefectural:`)
+* `JP:expressway` - Japan expressways when ref starts with `C` or `E`.
+* `JP:national` - Japan national routes when name starts with `国道` ends with `号`.
+* `JP:prefectural` - Japan regional routes when network starts with `JP:prefectural:`
 * `JP` - Japan when operator in `東日本高速道路`
 * `KR:expressway` - South Korea expressways - gosokdoro (ncat=`고속도로`)
 * `KR:local` - South Korea local highways - jibangdo (ncat=`지방도`)
 * `KR:metropolitan` - South Korea for metropolitan city roads - gwangyeoksido (ncat=`광역시도로`) and special city (Seoul) roads - teukbyeolsido (ncat=`특별시도`)
 * `KR:national` - South Korea for national roads - gukdo (ncat=`국도`)
-* `KZ:national` - Kazakhstan
-* `KZ:regional` - Kazakhstan
-* `LA:national` - Laos if network == `LO:network` to correct bad country code
+* `KZ:national` - Kazakhstan national routes
+* `KZ:regional` - Kazakhstan regional routes
+* `LA:national` - Laos national routes when network == `LO:network` to correct for bad country code
 * `LU:CR` - Luxembourg 2x TODO: ???
 * `LU:M` - Luxembourg 2x TODO: ???
 * `LU:RN` - Luxembourg 2x TODO: ???
-* `MX:AGU` - Aguascalientes region in Mexico when prefix starts with `AGS`
-* `MX:BCN` - Baja California Norte region in Mexico
-* `MX:BCS` - Baja California Sur region in Mexico when prefix starts with `BC` or `BCS`
-* `MX:CAM` - Campeche region in Mexico when prefix starts with `CAM`
-* `MX:CHH` - Chihuahua region in Mexico when prefix starts with `CHIH`
-* `MX:CHP` - Chiapas region in Mexico when prefix starts with `CHIS`
-* `MX:CMX:EXT` - road in Mexico City when prefix is `EXT`
-* `MX:CMX:INT` - interior ring road in Mexico City when prefix is `INT`
+* `MX:AGU` - **Aguascalientes** region in Mexico when prefix starts with `AGS`
+* `MX:BCN` - **Baja California Norte** region in Mexico
+* `MX:BCS` - **Baja California Sur** region in Mexico when prefix starts with `BC` or `BCS`
+* `MX:CAM` - **Campeche** region in Mexico when prefix starts with `CAM`
+* `MX:CHH` - **Chihuahua** region in Mexico when prefix starts with `CHIH`
+* `MX:CHP` - **Chiapas** region in Mexico when prefix starts with `CHIS`
+* `MX:CMX:EXT` - road in **Mexico City** when prefix is `EXT`
+* `MX:CMX:INT` - interior ring road in **Mexico City** when prefix is `INT`
 * `MX:CMX` 2x TODO: ???
-* `MX:COA` - Coahuila region in Mexico when prefix starts with `COAH`
-* `MX:COL` - Colima region in Mexico when prefix starts with `COL`
-* `MX:DUR` - Durango region in Mexico when prefix starts with `DGO`
-* `MX:GRO` - Guerrero region in Mexico when prefix starts with `GRO`
-* `MX:GUA` - Guanajuato region in Mexico when prefix starts with `GTO`
-* `MX:HID` - Hidalgo region in Mexico when prefix starts with `HGO`
-* `MX:JAL` - Jalisco region in Mexico when prefix starts with `JAL`
-* `MX:MEX` - Mexican region in Mexico national roads when prefix starts with `MEX`
-* `MX:MIC` - Michoacán region in Mexico when prefix starts with `MICH`
-* `MX:MOR` - Morelos region in Mexico when prefix starts with `MOR`
+* `MX:COA` - **Coahuila** region in Mexico when prefix starts with `COAH`
+* `MX:COL` - **Colima** region in Mexico when prefix starts with `COL`
+* `MX:DUR` - **Durango** region in Mexico when prefix starts with `DGO`
+* `MX:GRO` - **Guerrero** region in Mexico when prefix starts with `GRO`
+* `MX:GUA` - **Guanajuato** region in Mexico when prefix starts with `GTO`
+* `MX:HID` - **Hidalgo** region in Mexico when prefix starts with `HGO`
+* `MX:JAL` - **Jalisco** region in Mexico when prefix starts with `JAL`
+* `MX:MEX` - **Mexican** region in Mexico national roads when prefix starts with `MEX`
+* `MX:MIC` - **Michoacán** region in Mexico when prefix starts with `MICH`
+* `MX:MOR` - **Morelos** region in Mexico when prefix starts with `MOR`
 * `MX:MX` 2x TODO: ???
-* `MX:NAY` - Nayarit region in Mexico when prefix starts with `NAY`
-* `MX:NLE` - Nuevo León region in Mexico when prefix starts with `NL`
-* `MX:OAX` - Oaxaca region in Mexico when prefix starts with `OAX`
-* `MX:PUE` - Puebla region in Mexico when prefix starts with `PUE`
-* `MX:QUE` - Querétaro region in Mexico when prefix starts with `QRO`
-* `MX:ROO` - Quintana Roo region in Mexico when prefix starts with `ROO` or ref.upper().startswith(`Q. ROO`)
-* `MX:SIN` - Sinaloa region in Mexico when prefix starts with `SIN`
-* `MX:SLP` - San Luis Potosí region in Mexico when prefix starts with `SLP`
-* `MX:SON` - Sonora region in Mexico when prefix starts with `SON`
-* `MX:TAB` - Tabasco region in Mexico when prefix starts with `TAB`
-* `MX:TAM` - Tamaulipas region in Mexico when prefix starts with `TAM`
+* `MX:NAY` - **Nayarit** region in Mexico when prefix starts with `NAY`
+* `MX:NLE` - **Nuevo León** region in Mexico when prefix starts with `NL`
+* `MX:OAX` - **Oaxaca** region in Mexico when prefix starts with `OAX`
+* `MX:PUE` - **Puebla** region in Mexico when prefix starts with `PUE`
+* `MX:QUE` - **Querétaro** region in Mexico when prefix starts with `QRO`
+* `MX:ROO` - **Quintana Roo** region in Mexico when prefix starts with `ROO` or ref.upper().startswith(`Q. ROO`)
+* `MX:SIN` - **Sinaloa** region in Mexico when prefix starts with `SIN`
+* `MX:SLP` - **San Luis Potosí** region in Mexico when prefix starts with `SLP`
+* `MX:SON` - **Sonora** region in Mexico when prefix starts with `SON`
+* `MX:TAB` - **Tabasco** region in Mexico when prefix starts with `TAB`
+* `MX:TAM` - **Tamaulipas** region in Mexico when prefix starts with `TAM`
 * `MX:TLA` 2x TODO: ???
-* `MX:VER` - Veracruz region in Mexico when prefix starts with `VER`
-* `MX:YUC` - Yucatán region in Mexico when prefix starts with `YUC`
-* `MX:ZAC` - Zacatecas region in Mexico when prefix starts with `ZAC`
+* `MX:VER` - **Veracruz** region in Mexico when prefix starts with `VER`
+* `MX:YUC` - **Yucatán** region in Mexico when prefix starts with `YUC`
+* `MX:ZAC` - **Zacatecas** region in Mexico when prefix starts with `ZAC`
 * `MY:expressway` - Malaysia when prefix is E
 * `MY:federal` - Malaysia when prefix is FT or none
 * `MY:JHR` - Johor, Malaysia when prefix starts with `J` TODO: ???
@@ -1734,35 +1734,35 @@ Network value include:
 * `NO:RR` - Norway 2x TODO: ???
 * `NZ:SH` - New Zealand state highway 2x TODO: ???
 * `NZ:SR` - New Zealand state route or road 2x TODO: ???
-* `PE:AM` - Amazonas region in Peru
-* `PE:AN` - Ancash region in Peru
-* `PE:AP` - Apurímac region in Peru
-* `PE:AR` - Arequipa region in Peru
-* `PE:AY` - Ayacucho region in Peru
-* `PE:CA` - Cajamarca region in Peru
-* `PE:CU` - Cusco region in Peru
-* `PE:HU` - Huánuco region in Peru
-* `PE:HV` - Huancavelica region in Peru
-* `PE:IC` - Ica region in Peru
-* `PE:JU` - Junín region in Peru
-* `PE:LA` - Lambayeque region in Peru
-* `PE:LI` - La Libertad region in Peru
-* `PE:LM` - Lima (including Callao) region in Peru
-* `PE:LO` - Loreto region in Peru
-* `PE:MD` - Madre de Dios region in Peru
-* `PE:MO` - Moquegua region in Peru
-* `PE:PA` - Pasco region in Peru
-* `PE:PE` - Peru federal routes when prefix == `PE`
-* `PE:PI` - Piura region in Peru
-* `PE:PU` - Puno region in Peru
-* `PE:SM` - San Martín region in Peru
-* `PE:TA` - Tacna region in Peru
-* `PE:TU` - Tumbes region in Peru
-* `PE:UC` - Ucayali region in Peru
-* `PH:NHN` - Philippines when network == `PH:nhn`
-* `PK` - Pakistan when operator in `Hyderabad Metropolitan Development Authority`
-* `PL:expressway` - Poland when network == `PL:expressways` or when ref.startswith(`S`)
-* `PL:motorway` - Poland when network == `PL:motorways` or ref.startswith(`A`)
+* `PE:AM` - **Amazonas** region in Peru
+* `PE:AN` - **Ancash** region in Peru
+* `PE:AP` - **Apurímac** region in Peru
+* `PE:AR` - **Arequipa** region in Peru
+* `PE:AY` - **Ayacucho** region in Peru
+* `PE:CA` - **Cajamarca** region in Peru
+* `PE:CU` - **Cusco** region in Peru
+* `PE:HU` - **Huánuco** region in Peru
+* `PE:HV` - **Huancavelica** region in Peru
+* `PE:IC` - **Ica** region in Peru
+* `PE:JU` - **Junín** region in Peru
+* `PE:LA` - **Lambayeque** region in Peru
+* `PE:LI` - **La Libertad** region in Peru
+* `PE:LM` - **Lima (including Callao)** region in Peru
+* `PE:LO` - **Loreto** region in Peru
+* `PE:MD` - **Madre de Dios** region in Peru
+* `PE:MO` - **Moquegua** region in Peru
+* `PE:PA` - **Pasco** region in Peru
+* `PE:PE` - **Peru federal routes** when prefix == `PE`
+* `PE:PI` - **Piura** region in Peru
+* `PE:PU` - **Puno** region in Peru
+* `PE:SM` - **San Martín** region in Peru
+* `PE:TA` - **Tacna** region in Peru
+* `PE:TU` - **Tumbes** region in Peru
+* `PE:UC` - **Ucayali** region in Peru
+* `PH:NHN` - Philippines national highway network (normalized from `PH:nhn`)
+* `PK` - Pakistan when operator is `Hyderabad Metropolitan Development Authority`
+* `PL:expressway` - Poland when network == `PL:expressways` or when ref starts with `S`
+* `PL:motorway` - Poland when network == `PL:motorways` or ref starts with `A`
 * `PL:national` - Poland
 * `PL:regional` - Poland
 * `PT:A` - Portugal 2x TODO: ???
@@ -1800,69 +1800,69 @@ Network value include:
 * `UA:regional-yellow` - Ukraine 2x TODO: ???
 * `UA:regional` - Ukraine when ref prefixed with cyrillic `Р` or latin `P`
 * `UA:territorial` - Ukraine when ref prefixed with cyrillic `Т` or latin `T`
-* `US:AK` - Alaska region in United States
-* `US:AL` - Alabama region in United States
-* `US:AR` - Arkansas region in United States
-* `US:AZ` - Arizona region in United States
-* `US:BIA` - Burough of Indian Affairs routes in United States TODO: ???
-* `US:BLM` - Burough of Land Management routes in United States TODO: ???
-* `US:CA` - California region in United States
-* `US:CO` - Colorado region in United States
-* `US:CT` - Connecticut region in United States
-* `US:DC` - District of Columbia region in United States
-* `US:DE` - Deleware region in United States
-* `US:FL` - Florida region in United States
-* `US:FSH` - U.S. Forest Service Highway in United States
-* `US:FSR` - U.S. Forest Service Road in United States
-* `US:GA` - Georgia region in United States
-* `US:HI` - Hawaii region in United States
-* `US:I:Alternate` - Interstate route alternate in United States
-* `US:I:Business` - Interstate business alternate in United States
-* `US:I:Truck` - Interstate truck alternate in United States
-* `US:I` - Interstate route in United States
-* `US:IA` - Iowa region in United States
-* `US:ID` - Idaho region in United States
-* `US:IL` - Illinois region in United States
-* `US:IN` - Indiana region in United States
-* `US:KS` - Kansas region in United States
-* `US:KY` - Kentucky region in United States
-* `US:LA` - Louisiana region in United States
-* `US:MA` - Massachuesets region in United States
-* `US:MD` - Maryland region in United States
-* `US:ME` - Maine region in United States
-* `US:MI` - Michigan region in United States
-* `US:MN` - Minnesotta region in United States
-* `US:MO` - Missouri region in United States
-* `US:MS` - Mississippi region in United States
-* `US:MT` - Montana region in United States
-* `US:NC` - North Carolina region in United States
-* `US:ND` - North Dakota region in United States
-* `US:NE` - Nebraska region in United States
-* `US:NH` - New Hampshire region in United States
-* `US:NJ` - New Jersey region in United States
-* `US:NM` - New Mexico region in United States
-* `US:NV` - Nevada region in United States
-* `US:NY` - New York region in United States
-* `US:OH` - Ohio region in United States
-* `US:OK` - Oklahoma region in United States
-* `US:OR` - Oregon region in United States
-* `US:PA` - Pennsylvania region in United States
-* `US:RI` - Rhode Island region in United States
-* `US:SC` - South Carolina region in United States
-* `US:SD` - South Dakota region in United States
-* `US:TN` - Tennessee region in United States
-* `US:TX` - Texas region in United States
-* `US:US:Alternate` - U.S. Federal route alternate in United States
-* `US:US:Business` - U.S. Federal business alternate in United States
-* `US:US:Truck` - U.S. Federal truck alternate in United States
-* `US:US` - U.S. Federal route in United States
-* `US:UT` - Utah region in United States
-* `US:VA` - Virginia region in United States
-* `US:VT` - Vermont region in United States
-* `US:WA` - Washington region in United States
-* `US:WI` - Wisconsin region in United States
-* `US:WV` - West Virginia region in United States
-* `US:WY` - Wyoming region in United States
+* `US:AK` - **Alaska** region in United States
+* `US:AL` - **Alabama** region in United States
+* `US:AR` - **Arkansas** region in United States
+* `US:AZ` - **Arizona** region in United States
+* `US:BIA` - **Burough of Indian Affairs** routes in United States TODO: ???
+* `US:BLM` - **Burough of Land Management** routes in United States TODO: ???
+* `US:CA` - **California** region in United States
+* `US:CO` - **Colorado** region in United States
+* `US:CT` - **Connecticut** region in United States
+* `US:DC` - **District of Columbia** region in United States
+* `US:DE` - **Deleware** region in United States
+* `US:FL` - **Florida** region in United States
+* `US:FSH` - **U.S. Forest Service Highway** in United States
+* `US:FSR` - **U.S. Forest Service Road** in United States
+* `US:GA` - **Georgia** region in United States
+* `US:HI` - **Hawaii** region in United States
+* `US:I:Alternate` - **Interstate alternate** route in United States
+* `US:I:Business` - **Interstate business** alternate in United States
+* `US:I:Truck` - **Interstate truck** alternate in United States
+* `US:I` - **Interstate** route in United States
+* `US:IA` - **Iowa** region in United States
+* `US:ID` - **Idaho** region in United States
+* `US:IL` - **Illinois** region in United States
+* `US:IN` - **Indiana** region in United States
+* `US:KS` - **Kansas** region in United States
+* `US:KY` - **Kentucky** region in United States
+* `US:LA` - **Louisiana** region in United States
+* `US:MA` - **Massachuesets** region in United States
+* `US:MD` - **Maryland** region in United States
+* `US:ME` - **Maine** region in United States
+* `US:MI` - **Michigan** region in United States
+* `US:MN` - **Minnesotta** region in United States
+* `US:MO` - **Missouri** region in United States
+* `US:MS` - **Mississippi** region in United States
+* `US:MT` - **Montana** region in United States
+* `US:NC` - **North Carolina** region in United States
+* `US:ND` - **North Dakota** region in United States
+* `US:NE` - **Nebraska** region in United States
+* `US:NH` - **New Hampshire** region in United States
+* `US:NJ` - **New Jersey** region in United States
+* `US:NM` - **New Mexico** region in United States
+* `US:NV` - **Nevada** region in United States
+* `US:NY` - **New York** region in United States
+* `US:OH` - **Ohio** region in United States
+* `US:OK` - **Oklahoma** region in United States
+* `US:OR` - **Oregon** region in United States
+* `US:PA` - **Pennsylvania** region in United States
+* `US:RI` - **Rhode Island** region in United States
+* `US:SC` - **South Carolina** region in United States
+* `US:SD` - **South Dakota** region in United States
+* `US:TN` - **Tennessee** region in United States
+* `US:TX` - **Texas** region in United States
+* `US:US:Alternate` - **U.S. Federal alternate** route in United States
+* `US:US:Business` - **U.S. Federal business** alternate in United States
+* `US:US:Truck` - **U.S. Federal truck** alternate in United States
+* `US:US` - **U.S. Federal** route in United States
+* `US:UT` - **Utah** region in United States
+* `US:VA` - **Virginia** region in United States
+* `US:VT` - **Vermont** region in United States
+* `US:WA` - **Washington** region in United States
+* `US:WI` - **Wisconsin** region in United States
+* `US:WV` - **West Virginia** region in United States
+* `US:WY` - **Wyoming** region in United States
 * `VN:expressway` - Vietnam (normalized `VN:expressway`) or ref prefixed with `CT`
 * `VN:national` - Vietnam when name.startswith(u`Quốc lộ`) or ref prefixed with `QL`
 * `VN:provincial` - Vietnam when name.startswith(u`Tỉnh lộ`) or when ref prefixed with `ĐT` or `DT` or (normalized `VN:TL`) or ref prefixed with `TL`
@@ -1876,257 +1876,257 @@ Network value include:
 
 When a network value can't be determined from the upstream data source we calculate where the road is located and provide the relevant 2-char country code as the network value.
 
-Country | Alpha-2 code
-------- | ------------
-Afghanistan | `AF`
-Åland Islands | `AX`
-Albania | `AL`
-Algeria | `DZ`
-American Samoa | `AS`
-Andorra | `AD`
-Angola | `AO`
-Anguilla | `AI`
-Antarctica | `AQ`
-Antigua and Barbuda | `AG`
-Argentina | `AR`
-Armenia | `AM`
-Aruba | `AW`
-Australia | `AU`
-Austria | `AT`
-Azerbaijan | `AZ`
-Bahamas | `BS`
-Bahrain | `BH`
-Bangladesh | `BD`
-Barbados | `BB`
-Belarus | `BY`
-Belgium | `BE`
-Belize | `BZ`
-Benin | `BJ`
-Bermuda | `BM`
-Bhutan | `BT`
-Bolivia (Plurinational State of) | `BO`
-Bonaire, Sint Eustatius and Saba | `BQ`
-Bosnia and Herzegovina | `BA`
-Botswana | `BW`
-Bouvet Island | `BV`
-Brazil | `BR`
-British Indian Ocean Territory | `IO`
-Brunei Darussalam | `BN`
-Bulgaria | `BG`
-Burkina Faso | `BF`
-Burundi | `BI`
-Cabo Verde | `CV`
-Cambodia | `KH`
-Cameroon | `CM`
-Canada | `CA`
-Cayman Islands | `KY`
-Central African Republic | `CF`
-Chad | `TD`
-Chile | `CL`
-China | `CN`
-Christmas Island | `CX`
-Cocos (Keeling) Islands | `CC`
-Colombia | `CO`
-Comoros | `KM`
-Congo | `CG`
-Democratic Republic of the Congo | `CD`
-Cook Islands | `CK`
-Costa Rica | `CR`
-Côte d'Ivoire | `CI`
-Croatia | `HR`
-Cuba | `CU`
-Curaçao | `CW`
-Cyprus | `CY`
-Czechia | `CZ`
-Denmark | `DK`
-Djibouti | `DJ`
-Dominica | `DM`
-Dominican Republic | `DO`
-Ecuador | `EC`
-Egypt | `EG`
-El Salvador | `SV`
-Equatorial Guinea | `GQ`
-Eritrea | `ER`
-Estonia | `EE`
-Eswatini | `SZ`
-Ethiopia | `ET`
-Falkland Islands (Malvinas) | `FK`
-Faroe Islands | `FO`
-Fiji | `FJ`
-Finland | `FI`
-France | `FR`
-French Guiana | `GF`
-French Polynesia | `PF`
-French Southern Territories | `TF`
-Gabon | `GA`
-Gambia | `GM`
-Georgia | `GE`
-Germany | `DE`
-Ghana | `GH`
-Gibraltar | `GI`
-Greece | `GR`
-Greenland | `GL`
-Grenada | `GD`
-Guadeloupe | `GP`
-Guam | `GU`
-Guatemala | `GT`
-Guernsey | `GG`
-Guinea | `GN`
-Guinea-Bissau | `GW`
-Guyana | `GY`
-Haiti | `HT`
-Heard Island and McDonald Islands | `HM`
-Holy See | `VA`
-Honduras | `HN`
-Hong Kong | `HK`
-Hungary | `HU`
-Iceland | `IS`
-India | `IN`
-Indonesia | `ID`
-Iran | `IR`
-Iraq | `IQ`
-Ireland | `IE`
-Isle of Man | `IM`
-Israel | `IL`
-Italy | `IT`
-Jamaica | `JM`
-Japan | `JP`
-Jersey | `JE`
-Jordan | `JO`
-Kazakhstan | `KZ`
-Kenya | `KE`
-Kiribati | `KI`
-North Korea | `KP`
-South Korea | `KR`
-Kuwait | `KW`
-Kyrgyzstan | `KG`
-Laos | `LA`
-Latvia | `LV`
-Lebanon | `LB`
-Lesotho | `LS`
-Liberia | `LR`
-Libya | `LY`
-Liechtenstein | `LI`
-Lithuania | `LT`
-Luxembourg | `LU`
-Macao | `MO`
-Macedonia | `MK`
-Madagascar | `MG`
-Malawi | `MW`
-Malaysia | `MY`
-Maldives | `MV`
-Mali | `ML`
-Malta | `MT`
-Marshall Islands | `MH`
-Martinique | `MQ`
-Mauritania | `MR`
-Mauritius | `MU`
-Mayotte | `YT`
-Mexico | `MX`
-Micronesia | `FM`
-Moldova | `MD`
-Monaco | `MC`
-Mongolia | `MN`
-Montenegro | `ME`
-Montserrat | `MS`
-Morocco | `MA`
-Mozambique | `MZ`
-Myanmar | `MM`
-Namibia | `NA`
-Nauru | `NR`
-Nepal | `NP`
-Netherlands | `NL`
-New Caledonia | `NC`
-New Zealand | `NZ`
-Nicaragua | `NI`
-Niger | `NE`
-Nigeria | `NG`
-Niue | `NU`
-Norfolk Island | `NF`
-Northern Mariana Islands | `MP`
-Norway | `NO`
-Oman | `OM`
-Pakistan | `PK`
-Palau | `PW`
-Palestine, State of | `PS`
-Panama | `PA`
-Papua New Guinea | `PG`
-Paraguay | `PY`
-Peru | `PE`
-Philippines | `PH`
-Pitcairn | `PN`
-Poland | `PL`
-Portugal | `PT`
-Puerto Rico | `PR`
-Qatar | `QA`
-Réunion | `RE`
-Romania | `RO`
-Russian Federation | `RU`
-Rwanda | `RW`
-Saint Barthélemy | `BL`
-Saint Helena, Ascension and Tristan da Cunha | `SH`
-Saint Kitts and Nevis | `KN`
-Saint Lucia | `LC`
-Saint Martin (French part) | `MF`
-Saint Pierre and Miquelon | `PM`
-Saint Vincent and the Grenadines | `VC`
-Samoa | `WS`
-San Marino | `SM`
-Sao Tome and Principe | `ST`
-Saudi Arabia | `SA`
-Senegal | `SN`
-Serbia | `RS`
-Seychelles | `SC`
-Sierra Leone | `SL`
-Singapore | `SG`
-Sint Maarten (Dutch part) | `SX`
-Slovakia | `SK`
-Slovenia | `SI`
-Solomon Islands | `SB`
-Somalia | `SO`
-South Africa | `ZA`
-South Georgia and the South Sandwich Islands | `GS`
-South Sudan | `SS`
-Spain | `ES`
-Sri Lanka | `LK`
-Sudan | `SD`
-Suriname | `SR`
-Svalbard and Jan Mayen | `SJ`
-Sweden | `SE`
-Switzerland | `CH`
-Syrian Arab Republic | `SY`
-Taiwan, Province of China[a] | `TW`
-Tajikistan | `TJ`
-Tanzania, United Republic of | `TZ`
-Thailand | `TH`
-Timor-Leste | `TL`
-Togo | `TG`
-Tokelau | `TK`
-Tonga | `TO`
-Trinidad and Tobago | `TT`
-Tunisia | `TN`
-Turkey | `TR`
-Turkmenistan | `TM`
-Turks and Caicos Islands | `TC`
-Tuvalu | `TV`
-Uganda | `UG`
-Ukraine | `UA`
-United Arab Emirates | `AE`
-United Kingdom | `GB`
-United States of America | `US`
-U.S. Minor Outlying Islands | `UM`
-Uruguay | `UY`
-Uzbekistan | `UZ`
-Vanuatu | `VU`
-Venezuela | `VE`
-Viet Nam | `VN`
-Virgin Is. (British) | `VG`
-Virgin Is. (U.S.) | `VI`
-Wallis and Futuna | `WF`
-Western Sahara | `EH`
-Yemen | `YE`
-Zambia | `ZM`
-Zimbabwe | `ZW`
+Alpha-2 code | Country
+------------ | -------
+`AF` | Afghanistan
+`AX` | Åland Islands
+`AL` | Albania
+`DZ` | Algeria
+`AS` | American Samoa
+`AD` | Andorra
+`AO` | Angola
+`AI` | Anguilla
+`AQ` | Antarctica
+`AG` | Antigua and Barbuda
+`AR` | Argentina
+`AM` | Armenia
+`AW` | Aruba
+`AU` | Australia
+`AT` | Austria
+`AZ` | Azerbaijan
+`BS` | Bahamas
+`BH` | Bahrain
+`BD` | Bangladesh
+`BB` | Barbados
+`BY` | Belarus
+`BE` | Belgium
+`BZ` | Belize
+`BJ` | Benin
+`BM` | Bermuda
+`BT` | Bhutan
+`BO` | Bolivia
+`BQ` | Bonaire, Sint Eustatius and Saba
+`BA` | Bosnia and Herzegovina
+`BW` | Botswana
+`BV` | Bouvet Island
+`BR` | Brazil
+`IO` | British Indian Ocean Territory
+`BN` | Brunei Darussalam
+`BG` | Bulgaria
+`BF` | Burkina Faso
+`BI` | Burundi
+`CV` | Cabo Verde
+`KH` | Cambodia
+`CM` | Cameroon
+`CA` | Canada
+`KY` | Cayman Islands
+`CF` | Central African Republic
+`TD` | Chad
+`CL` | Chile
+`CN` | China
+`CX` | Christmas Island
+`CC` | Cocos (Keeling) Islands
+`CO` | Colombia
+`KM` | Comoros
+`CG` | Congo
+`CD` | Democratic Republic of the Congo
+`CK` | Cook Islands
+`CR` | Costa Rica
+`CI` | Côte d'Ivoire
+`HR` | Croatia
+`CU` | Cuba
+`CW` | Curaçao
+`CY` | Cyprus
+`CZ` | Czechia
+`DK` | Denmark
+`DJ` | Djibouti
+`DM` | Dominica
+`DO` | Dominican Republic
+`EC` | Ecuador
+`EG` | Egypt
+`SV` | El Salvador
+`GQ` | Equatorial Guinea
+`ER` | Eritrea
+`EE` | Estonia
+`SZ` | Eswatini
+`ET` | Ethiopia
+`FK` | Falkland Islands (Malvinas)
+`FO` | Faroe Islands
+`FJ` | Fiji
+`FI` | Finland
+`FR` | France
+`GF` | French Guiana
+`PF` | French Polynesia
+`TF` | French Southern Territories
+`GA` | Gabon
+`GM` | Gambia
+`GE` | Georgia
+`DE` | Germany
+`GH` | Ghana
+`GI` | Gibraltar
+`GR` | Greece
+`GL` | Greenland
+`GD` | Grenada
+`GP` | Guadeloupe
+`GU` | Guam
+`GT` | Guatemala
+`GG` | Guernsey
+`GN` | Guinea
+`GW` | Guinea-Bissau
+`GY` | Guyana
+`HT` | Haiti
+`HM` | Heard Island and McDonald Islands
+`VA` | Holy See
+`HN` | Honduras
+`HK` | Hong Kong
+`HU` | Hungary
+`IS` | Iceland
+`IN` | India
+`ID` | Indonesia
+`IR` | Iran
+`IQ` | Iraq
+`IE` | Ireland
+`IM` | Isle of Man
+`IL` | Israel
+`IT` | Italy
+`JM` | Jamaica
+`JP` | Japan
+`JE` | Jersey
+`JO` | Jordan
+`KZ` | Kazakhstan
+`KE` | Kenya
+`KI` | Kiribati
+`KP` | North Korea
+`KR` | South Korea
+`KW` | Kuwait
+`KG` | Kyrgyzstan
+`LA` | Laos
+`LV` | Latvia
+`LB` | Lebanon
+`LS` | Lesotho
+`LR` | Liberia
+`LY` | Libya
+`LI` | Liechtenstein
+`LT` | Lithuania
+`LU` | Luxembourg
+`MO` | Macao
+`MK` | Macedonia
+`MG` | Madagascar
+`MW` | Malawi
+`MY` | Malaysia
+`MV` | Maldives
+`ML` | Mali
+`MT` | Malta
+`MH` | Marshall Islands
+`MQ` | Martinique
+`MR` | Mauritania
+`MU` | Mauritius
+`YT` | Mayotte
+`MX` | Mexico
+`FM` | Micronesia
+`MD` | Moldova
+`MC` | Monaco
+`MN` | Mongolia
+`ME` | Montenegro
+`MS` | Montserrat
+`MA` | Morocco
+`MZ` | Mozambique
+`MM` | Myanmar
+`NA` | Namibia
+`NR` | Nauru
+`NP` | Nepal
+`NL` | Netherlands
+`NC` | New Caledonia
+`NZ` | New Zealand
+`NI` | Nicaragua
+`NE` | Niger
+`NG` | Nigeria
+`NU` | Niue
+`NF` | Norfolk Island
+`MP` | Northern Mariana Islands
+`NO` | Norway
+`OM` | Oman
+`PK` | Pakistan
+`PW` | Palau
+`PS` | Palestine
+`PA` | Panama
+`PG` | Papua New Guinea
+`PY` | Paraguay
+`PE` | Peru
+`PH` | Philippines
+`PN` | Pitcairn
+`PL` | Poland
+`PT` | Portugal
+`PR` | Puerto Rico
+`QA` | Qatar
+`RE` | Réunion
+`RO` | Romania
+`RU` | Russian Federation
+`RW` | Rwanda
+`BL` | Saint Barthélemy
+`SH` | Saint Helena, Ascension and Tristan da Cunha
+`KN` | Saint Kitts and Nevis
+`LC` | Saint Lucia
+`MF` | Saint Martin (French part)
+`PM` | Saint Pierre and Miquelon
+`VC` | Saint Vincent and the Grenadines
+`WS` | Samoa
+`SM` | San Marino
+`ST` | Sao Tome and Principe
+`SA` | Saudi Arabia
+`SN` | Senegal
+`RS` | Serbia
+`SC` | Seychelles
+`SL` | Sierra Leone
+`SG` | Singapore
+`SX` | Sint Maarten (Dutch part)
+`SK` | Slovakia
+`SI` | Slovenia
+`SB` | Solomon Islands
+`SO` | Somalia
+`ZA` | South Africa
+`GS` | South Georgia and the South Sandwich Islands
+`SS` | South Sudan
+`ES` | Spain
+`LK` | Sri Lanka
+`SD` | Sudan
+`SR` | Suriname
+`SJ` | Svalbard and Jan Mayen
+`SE` | Sweden
+`CH` | Switzerland
+`SY` | Syria
+`TW` | Taiwan
+`TJ` | Tajikistan
+`TZ` | Tanzania, United Republic of
+`TH` | Thailand
+`TL` | Timor-Leste
+`TG` | Togo
+`TK` | Tokelau
+`TO` | Tonga
+`TT` | Trinidad and Tobago
+`TN` | Tunisia
+`TR` | Turkey
+`TM` | Turkmenistan
+`TC` | Turks and Caicos Islands
+`TV` | Tuvalu
+`UG` | Uganda
+`UA` | Ukraine
+`AE` | United Arab Emirates
+`GB` | United Kingdom
+`US` | United States of America
+`UM` | U.S. Minor Outlying Islands
+`UY` | Uruguay
+`UZ` | Uzbekistan
+`VU` | Vanuatu
+`VE` | Venezuela
+`VN` | Vietnam
+`VG` | Virgin Is. (British)
+`VI` | Virgin Is. (U.S.)
+`WF` | Wallis and Futuna
+`EH` | Western Sahara
+`YE` | Yemen
+`ZM` | Zambia
+`ZW` | Zimbabwe
 
 
 
