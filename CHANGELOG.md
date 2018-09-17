@@ -134,7 +134,7 @@ v1.5.0
   * **pois**: Add catchall `industrial` kind when there isn't a more specific kind.
   * **pois**: Add catchall `office` kind when there isn't a more specific kind.
   * **pois**: Add catchall `shop` kind when there isn't a more specific kind.
-  * **pois**: Allow additional kind values to show up on the map when they lack a name: `power_generator`, `boat_lift`, `boatyard`, `waterway_fuel`, `sanitary_dump_station`, `harbour_master`, `field_hospital`, `health_centre`, `bunker`, `crane`, `obelisk`, `wayside_cross`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `customs`, `harbourmaster`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `sanitary_dump_station`, `taxi`, `block`, `bollard,border_control,cattle_grid,chain`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`, `defibrillator`, `fire_hydrant`, and `street_lamp.
+  * **pois**: Allow additional kind values to show up on the map when they lack a name: `boat_lift`, `boatyard`, `border_control`, `bunker`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `crane`, `customs`, `defibrillator`, `field_hospital`, `fire_hydrant`, `harbour_master`, `harbourmaster`, `health_centre`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `obelisk`, `power_generator`, `sanitary_dump_station`, `street_lamp`, `taxi`, `waterway_fuel`, and `wayside_cross`.
   * **pois**: Modify **min_zoom** of `alpine_hut` kind to reveal them two zooms earlier at zoom 13.
   * **pois**: Modify **min_zoom** of `lighthouse` kind when they are ruins but also attractions.
   * **pois**: Modify **min_zoom** of `watermill` kind when they are ruins but also attractions.
