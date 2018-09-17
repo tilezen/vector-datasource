@@ -7,6 +7,8 @@ v1.5.0
 
   * **buildings**: add `entrance` points, with optional **kind_detail** property with values: `main`, `staircase`, `service`, `home`, `unisex`, `garage`, `residence`, `private`, or `secondary`.
   * **buildings**: add `exit` points, with optional **kind_detail** property with values: `emergency` or `fire_exit`.
+  * **buildings**: all building polygons are now clipped to tile boundaries, which fixes missing **landuse_kind** values. [Issue #1226](https://github.com/tilezen/vector-datasource/issues/1226) and [#1142](https://github.com/tilezen/vector-datasource/issues/1142) and [#487](https://github.com/tilezen/vector-datasource/issues/487).
+  * **buildings**: Add **building_material** optional property to describe the material covering the outside of the building or building part. Common values are: `brick`, `cement_block`, `clay`, `concrete`, `glass`, `masonry`, `metal`, `mud`, `other`, `permanent`, `plaster`, `sandstone`, `semi-permanent`, `steel`, `stone`, `timber-framing`, `tin`, `traditional` and `wood`. [Issue #1408](https://github.com/tilezen/vector-datasource/issues/1408).
   * **landuse**: Add **kind_detail** for `wood` and `forest` kinds with values indicating _leaftype_: `broadleaved`, `leafless`, `mixed`, `needleleaved`.
   * **landuse**: Add **kind_detail** optional property for `beach` kind to indicate _surface_ values of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
   * **landuse**: Add **kind_detail** optional property for `wetland` when _wetland_ is `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
@@ -14,7 +16,7 @@ v1.5.0
   * **landuse**: Add **denomination** optional property for `cemetery` and `grave_yard` kinds, with common values: `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
   * **landuse**: Add `airfield` kind for military airfields. 
   * **landuse**: Add `container_terminal` kind.
-  * **landuse**: Add `crane` kind as line geometry.
+  * **landuse**: Add `crane` kind as line geometry. [Issue #1417](https://github.com/tilezen/vector-datasource/issues/1417).
   * **landuse**: Add `cutting` kind.
   * **landuse**: Add `danger_area` kind for military.
   * **landuse**: Add `ditch` kind as line geometry.
@@ -31,16 +33,17 @@ v1.5.0
   * **landuse**: Add `plant_nursery` kind.
   * **landuse**: Add `port_terminal` kind.
   * **landuse**: Add `port` kind.
-  * **landuse**: Add `power_line` kind as line geometry.
-  * **landuse**: Add `power_minor_line` kind as line geometry.
+  * **landuse**: Add `power_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232.)
+  * **landuse**: Add `power_minor_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232.)
   * **landuse**: Add `quay` kind
   * **landuse**: Add `shipyard` kind.
-  * **landuse**: Add `wall` kind as line geometry.
+  * **landuse**: Add `wall` kind as line geometry. [Issue #1403](https://github.com/tilezen/vector-datasource/issues/1403).
   * **landuse**: Add `wharf` kind
-  * **places**: Add locality **name** translations for ~21 languages at low zooms from Natural Earth.
+  * **places**: Add locality **name** translations for ~21 languages at low zooms from Natural Earth. [Issue #977](https://github.com/tilezen/vector-datasource/issues/977).
   * **places**: Lookup **min_zoom** for `country`, `map_unit`, and `region` from Natural Earth while continue sourcing feature names from OpenStreetMap.
+  * **pois**: Add over hundred new kind values (listed below) to support full compatibility with OSM.org and iD [#1425](https://github.com/tilezen/vector-datasource/issues/1425), Maki [#1423](https://github.com/tilezen/vector-datasource/issues/1423), and Humanitarian OpenStreetMap (HOT) [#1424](https://github.com/tilezen/vector-datasource/issues/1424) icon libraries.
   * **pois**: Add **attraction** optional property for all kinds.
-  * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features.
+  * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features. [Issue #1498](https://github.com/tilezen/vector-datasource/issues/1498).
   * **pois**: Add **exit_to** optional property for all kinds.
   * **pois**: Add **kind_detail** optional property for kind `beach` with surface values of: `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, ` sand`.
   * **pois**: Add **kind_detail** optional property for kinds `cemetery` and `grave_yard` to indicate the _religion_. See landuse description above for values.
@@ -76,7 +79,7 @@ v1.5.0
   * **pois**: Add `container_terminal` kind.
   * **pois**: Add `copyshop` kind.
   * **pois**: Add `cosmetics` kind for shops.
-  * **pois**: Add `crane` kind with optional **kind_detail** to indicate the type of crane, including: `container_crane`, `floor_mounted_crane`, `gantry_crane`, `portal_crane`, `travellift`.
+  * **pois**: Add `crane` kind with optional **kind_detail** to indicate the type of crane, including: `container_crane`, `floor_mounted_crane`, `gantry_crane`, `portal_crane`, `travellift`.  [Issue #1417](https://github.com/tilezen/vector-datasource/issues/1417).
   * **pois**: Add `customs` kind.
   * **pois**: Add `danger_area` kind for military features.
   * **pois**: Add `defibrillator` kind.
@@ -135,28 +138,33 @@ v1.5.0
   * **pois**: Add catchall `office` kind when there isn't a more specific kind.
   * **pois**: Add catchall `shop` kind when there isn't a more specific kind.
   * **pois**: Allow additional kind values to show up on the map when they lack a name: `boat_lift`, `boatyard`, `border_control`, `bunker`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `crane`, `customs`, `defibrillator`, `field_hospital`, `fire_hydrant`, `harbour_master`, `harbourmaster`, `health_centre`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `obelisk`, `power_generator`, `sanitary_dump_station`, `street_lamp`, `taxi`, `waterway_fuel`, and `wayside_cross`.
-  * **pois**: Modify **min_zoom** of `alpine_hut` kind to reveal them two zooms earlier at zoom 13.
+  * **pois**: Modify **min_zoom** of `alpine_hut` kind to reveal them two zooms earlier at zoom 13. [Issue #1407](https://github.com/tilezen/vector-datasource/issues/1407).
   * **pois**: Modify **min_zoom** of `lighthouse` kind when they are ruins but also attractions.
   * **pois**: Modify **min_zoom** of `watermill` kind when they are ruins but also attractions.
   * **pois**: Remove abandoned or disused `watermill` kind features (but keep the majority of features).
   * **pois**: Stop emitting **covered** boolean property when the value was false on `bicycle_parking` and `motorcycle_parking` kind features.
+  * **roads**: Add **access** optional property with common values: `private`, `yes`, `no`, `permissive`, `customers`, `destination`. [Issue #1273](https://github.com/tilezen/vector-datasource/issues/1273).
   * **roads**: Add **cutting** optional property with values: `yes`, `right`, and `left`.
   * **roads**: Add **embankment** optional property with values: `yes`, `right`, and `left`.
   * **roads**: Add **mooring** optional property for new `quay` and existing `pier` kinds with values: ['no', 'yes', commercial, cruise, customers, declaration, ferry, guest, private, public, waiting, yacht, yachts]
   * **roads**: Add `quay` kind lines.
   * **roads**: Major changes to **network** and **shield_text** to support localized road shields globally, including (but not limited to), with uppercase 2-char country code prefixes: `AM:AM`, `AR:national`, `AR:provincial`, `AT:A-road`, `AT:L`, `AT:S-road`, `AU:A-road`, `AU:B-road`, `AU:C-road`, `AU:M-road`, `AU:Metro-road`, `AU:N-highway`, `AU:N-route`, `AU:S-route`, `AU:T-drive`, `BD:NH`, `BE:A-road`, `BE:I`, `BE:N-road`, `BR:AC`, `BR:AL`, `BR:AM`, `BR:AP`, `BR:BA`, `BR:BR`, `BR:CE`, `BR:DF`, `BR:ES`, `BR:GO`, `BR:MA`, `BR:MG`, `BR:MS`, `BR:MT`, `BR:PA`, `BR:PB`, `BR:PE`, `BR:PI`, `BR:PR`, `BR:RJ`, `BR:RN`, `BR:RO`, `BR:RR`, `BR:RS`, `BR:SC`, `BR:SE`, `BR:SP`, `BR:TO`, `BR:Trans-Amazonian`, `CA:AB`, `CA:AB:primary`, `CA:AB:trunk`, `CA:BC`, `CA:BC:primary`, `CA:BC:trunk`, `CA:MB`, `CA:MB:PTH`, `CA:NB`, `CA:NB2`, `CA:NB3`, `CA:NS`, `CA:NS:R`, `CA:NS:T`, `CA:NT`, `CA:ON`, `CA:ON:primary`, `CA:PEI`, `CA:QC`, `CA:QC:A`, `CA:QC:R`, `CA:SK`, `CA:SK:primary`, `CA:transcanada`, `CA:YT`, `CH:motorway`, `CH:national`, `CL`, `CL:national`, `CL:panamerican`, `CL:regional`, `CN:expressway`, `CN:expressway:regional`, `CN:road`, `CZ:national`, `CZ:regional`, `DE:BAB`, `DE:BS`, `DE:DE`, `DE:L`, `DE:LS`, `DK:D`, `DK:national`, `e-road`, `ES:A-road`, `ES:autonoma`, `ES:IU`, `ES:N-road`, `ES:province`, `FI:FI`, `FI:FS`, `FI:LR`, `FI:RR`, `FR:A-road`, `FR:D`, `FR:D-road`, `FR:N-road`, `GB:A-road-green`, `GB:A-road-white`, `GB:M-road`, `GR:GR`, `GR:I`, `GR:motorway`, `GR:national`, `HU:national`, `ID:ID`, `ID:motorway`, `ID:national`, `IE:M`, `IE:N`, `IE:R`, `IN:MH`, `IN:NH`, `IN:SH`, `IQ`, `IQ:IQ`, `IT:A-road`, `IT:B-road`, `IT:RA`, `IT:SP`, `IT:SR`, `IT:SS`, `JP:expressway`, `JP:prefectural`, `KR:expressway`, `KR:local`, `KR:national`, `LU:CR`, `LU:M`, `LU:RN`, `MX:AGU`, `MX:BCN`, `MX:BCS`, `MX:CAM`, `MX:CHH`, `MX:CHP`, `MX:CMX`, `MX:COA`, `MX:COL`, `MX:DUR`, `MX:GRO`, `MX:GUA`, `MX:HID`, `MX:JAL`, `MX:MEX`, `MX:MIC`, `MX:MOR`, `MX:MX`, `MX:NAY`, `MX:NLE`, `MX:OAX`, `MX:PUE`, `MX:QUE`, `MX:ROO`, `MX:SH`, `MX:SIN`, `MX:SLP`, `MX:SON`, `MX:TAB`, `MX:TAM`, `MX:TLA`, `MX:VER`, `MX:YUC`, `MX:ZAC`, `MY:expressway`, `NL:A-road`, `NL:N-road`, `NL:S-road`, `NO:fylkesvei`, `NO:riksvei`, `NO:RR`, `NZ:SH`, `NZ:SR`, `PE:AM`, `PE:AN`, `PE:AP`, `PE:AR`, `PE:AY`, `PE:CA`, `PE:CL`, `PE:CU`, `PE:HU`, `PE:HV`, `PE:IC`, `PE:JU`, `PE:LA`, `PE:LI`, `PE:LM`, `PE:LO`, `PE:MD`, `PE:MO`, `PE:PA`, `PE:PE`, `PE:PI`, `PE:PU`, `PE:SM`, `PE:TA`, `PE:TU`, `PE:UC`, `PL:expressway`, `PL:motorway`, `PL:national`, `PL:regional`, `PT:A`, `PT:IC`, `PT:motorway`, `PT:national`, `PT:primary`, `PT:regional`, `PT:secondary`, `RO:county`, `RO:local`, `RO:motorway`, `RO:national`, `RU:national`, `SA:national`, `SE:A`, `SG:E`, `SG:expressway`, `SK:LR`, `TH:motorway`, `TH:road`, `TR:highway`, `TR:motorway`, `UA:international`, `UA:national`, `UA:regional`, `UA:regional-yellow`, `UA:territorial`, `UK:G`, `VN:expressway`, `VN:national`, `VN:PR`, `VN:VN`, `ZA:metropolitan`, `ZA:national`, `ZA:provincial`, `ZA:regional`.
-  * **roads**: Major changes to **network** and **shield_text** to support fallback international road shields. When no network is provided by a ref is, a 2-char country code will be exported as the network value based on the location of the road, like 'AM' or 'US'.
-  * **roads**: Minor changes to **network** and **shield_text** to support USA road shields: `US:AK`, `US:AL`, `US:AR`, `US:AZ`, `US:BIA`, `US:BLM`, `US:CA`, `US:CO`, `US:CT`, `US:DC`, `US:DE`, `US:FL`, `US:FSH`, `US:FSR`, `US:GA`, `US:HI`, `US:I:Alternate`, `US:I:Business`, `US:I:Truck`, `US:I`, `US:IA`, `US:ID`, `US:IL`, `US:IN`, `US:KS`, `US:KY`, `US:LA`, `US:MA`, `US:MD`, `US:ME`, `US:MI`, `US:MN`, `US:MO`, `US:MS`, `US:MT`, `US:NC`, `US:ND`, `US:NE`, `US:NH`, `US:NJ`, `US:NM`, `US:NV`, `US:NY`, `US:OH`, `US:OK`, `US:OR`, `US:PA`, `US:RI`, `US:SC`, `US:SD`, `US:TN`, `US:TX`, `US:US:Alternate`, `US:US:Business`, `US:US:Truck`, `US:US`, `US:UT`, `US:VA`, `US:VT`, `US:WA`, `US:WI`, `US:WV`, and `US:WY`.
-  * **roads**: Modify **min_zoom** of `track` kind to show 1 zooms earlier by default when **surface** is `gravel` or **tracktype** is not `grade3`, `grade4`, or `grade5`
-  * **roads**: Modify **min_zoom** of `track` kind to show 2 zooms earlier by default when **surface** is `paved`, `asphalt`, `concrete` or **tracktype** is `grade1` (but not for **access** `private`}
-  * **roads**: Modify **min_zoom** of `unclassified` kind to show 1 zoom earlier by default.
+  * **roads**: Major changes to **network** and **shield_text** to support fallback international road shields. When no network is provided by a ref is, a 2-char country code will be exported as the network value based on the location of the road, like 'AM' or 'US'. [Issue #135](https://github.com/tilezen/vector-datasource/issues/135).
+  * **roads**: Minor changes to **network** and **shield_text** to support USA road shields, including _modifier_ postfix: `US:AK`, `US:AL`, `US:AR`, `US:AZ`, `US:BIA`, `US:BLM`, `US:CA`, `US:CO`, `US:CT`, `US:DC`, `US:DE`, `US:FL`, `US:FSH`, `US:FSR`, `US:GA`, `US:HI`, `US:I:Alternate`, `US:I:Business`, `US:I:Truck`, `US:I`, `US:IA`, `US:ID`, `US:IL`, `US:IN`, `US:KS`, `US:KY`, `US:LA`, `US:MA`, `US:MD`, `US:ME`, `US:MI`, `US:MN`, `US:MO`, `US:MS`, `US:MT`, `US:NC`, `US:ND`, `US:NE`, `US:NH`, `US:NJ`, `US:NM`, `US:NV`, `US:NY`, `US:OH`, `US:OK`, `US:OR`, `US:PA`, `US:RI`, `US:SC`, `US:SD`, `US:TN`, `US:TX`, `US:US:Alternate`, `US:US:Business`, `US:US:Truck`, `US:US`, `US:UT`, `US:VA`, `US:VT`, `US:WA`, `US:WI`, `US:WV`, and `US:WY`. [Issue #1387](https://github.com/tilezen/vector-datasource/issues/1387).
+  * **roads**: Modify **min_zoom** of `track` kind to show 1 zooms earlier by default when **surface** is `gravel` or **tracktype** is not `grade3`, `grade4`, or `grade5`. [Issue #1251](https://github.com/tilezen/vector-datasource/issues/1251).
+  * **roads**: Modify **min_zoom** of `track` kind to show 2 zooms earlier by default when **surface** is `paved`, `asphalt`, `concrete` or **tracktype** is `grade1` (but not for **access** `private`). [Issue #1251](https://github.com/tilezen/vector-datasource/issues/1251).
+  * **roads**: Modify **min_zoom** of `unclassified` kind to show 1 zoom earlier by default. [Issue #1250](https://github.com/tilezen/vector-datasource/issues/1250).
   * **roads**: Show important cycling and walking routes at earlier zooms by adjusting the `min_zoom` of `path`, `major_road`, and `minor_road` kinds. This means that `min_zoom` values are now variable for features of the same kind, depending on their importance in the bicycle and walking networks; in earlier releases they all shared the same `min_zoom`. See [#1172](https://github.com/tilezen/vector-datasource/issues/1172).
   * **water**: Add `fountain` kind.
   * **water**: Add `reef` kind, with optional **kind_detail** values of `coral`, `rock`, and `sand`.
 
   #### BUG FIXES
 
+  * **boundaries**: Restore full border to Gaza Strip. [Issue #1257](https://github.com/tilezen/vector-datasource/issues/1257).
+  * **landuse**: MVT format now includes many more polygons that were dropped in earlier versions that used different format driver.
   * **places**: Fix spelling of ~60 **locality** (city) names at low-zooms in **places** layer by taking Natural Earth update. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
+  * **roads**: European primary network calculation now prefers local networks instead of e-road. [Issue #1483](https://github.com/tilezen/vector-datasource/issues/1483).
+  * **roads**: Add surface property at more zooms. [Issue #1252](https://github.com/tilezen/vector-datasource/issues/1252).
   * **water**: Fix missing ocean water by making Natural Earth `ne_10m_ocean` features OGC valid in PostGIS.
 
   #### DOCUMENTATION CHANGES
@@ -181,6 +189,8 @@ v1.5.0
   * Be more robust to only add database columns when they don't already exist.
   * Support easier creation of **generative tests** for points, lines, and polygons.
   * Continued migration to generative tests instead of live-data OpenStreetMap tests via Overpass.
+  * Switch to generating MVT format with **Coanacatl**, which wraps Wagyu and VTZero.
+  * Requires Postgresql 9.5. [Issue #1319](https://github.com/tilezen/vector-datasource/issues/1319).
   * Upgrade to **CircleCI 2.0** for continuous integration.
   * Refactor all OpenStreetMap to Tilezen ETL logic for `network` and `ref` > `shield_text` to support international road shields based on fuzzy data and missing country code data, including specific functions per country.
   * Add `max_zoom_filter` to remove features with a `max_zoom` if it's < `nominal` zoom.
