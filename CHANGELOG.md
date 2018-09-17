@@ -43,7 +43,8 @@ v1.5.0
   * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features.
   * **pois**: Add **exit_to** optional property for all kinds.
   * **pois**: Add **kind_detail** optional property for kind `beach` with surface values of: `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, ` sand`.
-  * **pois**: Add **kind_detail** optional property for kinds `cemetery` and `grave_yard` to indicate the _religion_ and/or _denomination_.
+  * **pois**: Add **kind_detail** optional property for kinds `cemetery` and `grave_yard` to indicate the _religion_. See landuse description above for values.
+  * **pois**: Add **denomination** optional property for kinds `cemetery` and `grave_yard` to indicate the _denomination_. See landuse description above for values.
   * **pois**: Add **kind_detail** optional property for kinds `clinic`, `dentist`, `doctors`, `social_facility`, and `healthcare` with values: `bank`, ` blood`, ` chiropractor`, ` donation`, ` hospice`, ` midwife`, ` midwife_occupational`, ` optometrist_paediatrics`, ` physiotherapist_physiotherapy`, ` podiatrist_psychotherapist`, ` rehabilitation`, ` speech`, ` therapist`, ` therapist`.
   * **pois**: Add **kind_detail** optional property for kinds `hospital`, `pharmacy`, `veterinary`, and `nursing_home` to indicate heath care facility type.
   * **pois**: Add **kind_detail** optional property for kind `generator` to indicate method of `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
