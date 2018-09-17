@@ -165,7 +165,7 @@ v1.5.0
   * **landuse**: MVT format now includes many more polygons that were dropped in earlier versions that used different format driver.
   * **places**: Fix spelling of ~60 **locality** (city) names at low-zooms in **places** layer by taking Natural Earth update. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
   * **roads**: European primary network calculation now prefers local networks instead of e-road. [Issue #1483](https://github.com/tilezen/vector-datasource/issues/1483).
-  * **roads**: Add surface property at more zooms. [Issue #1252](https://github.com/tilezen/vector-datasource/issues/1252).
+  * **roads**: Add **surface** property at more zooms. [Issue #1252](https://github.com/tilezen/vector-datasource/issues/1252).
   * **water**: Fix missing ocean water by making Natural Earth `ne_10m_ocean` features OGC valid in PostGIS.
 
   #### DOCUMENTATION CHANGES
