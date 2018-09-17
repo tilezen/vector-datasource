@@ -5,8 +5,8 @@ v1.5.0
 
   #### ENHANCEMENTS
 
-  * **buildings**: add `entrance` points, with optional **kind_detail** property with values: `main`, `staircase`, `service`, `home`, `unisex`, `garage`, `residence`, `private`, `secondary`, `emergency`, `fire_exit`.
-  * **buildings**: add `exit` points, with optional **kind_detail** property with values: `main`, `staircase`, `service`, `home`, `unisex`, `garage`, `residence`, `private`, `secondary`, `emergency`, `fire_exit`.
+  * **buildings**: add `entrance` points, with optional **kind_detail** property with values: `main`, `staircase`, `service`, `home`, `unisex`, `garage`, `residence`, `private`, or `secondary`.
+  * **buildings**: add `exit` points, with optional **kind_detail** property with values: `emergency` or `fire_exit`.
   * **landuse**: Add **kind_detail** for `wood` and `forest` kinds with values indicating _leaftype_: `broadleaved`, `leafless`, `mixed`, `needleleaved`.
   * **landuse**: Add **kind_detail** optional property for `beach` kind to indicate _surface_ values of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
   * **landuse**: Add **kind_detail** optional property for `wetland` when _wetland_ is `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
