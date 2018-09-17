@@ -37,8 +37,8 @@ v1.5.0
   * **landuse**: Add `shipyard` kind.
   * **landuse**: Add `wall` kind as line geometry.
   * **landuse**: Add `wharf` kind
-  * **places**: Add locality name translations for ~21 languages at low zooms from Natural Earth.
-  * **places**: Lookup `min_zoom` for `country`, `map_unit`, and `region` from Natural Earth while continue sourcing feature names from OpenStreetMap.
+  * **places**: Add locality **name** translations for ~21 languages at low zooms from Natural Earth.
+  * **places**: Lookup **min_zoom** for `country`, `map_unit`, and `region` from Natural Earth while continue sourcing feature names from OpenStreetMap.
   * **pois**: Add **attraction** optional property for all kinds.
   * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features.
   * **pois**: Add **exit_to** optional property for all kinds.
