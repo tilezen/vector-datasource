@@ -76,7 +76,7 @@ v1.5.0
   * **pois**: Add `container_terminal` kind.
   * **pois**: Add `copyshop` kind.
   * **pois**: Add `cosmetics` kind for shops.
-  * **pois**: Add `crane` kind with optional `kind_detail` to indicate the type of crane... TODO list types
+  * **pois**: Add `crane` kind with optional **kind_detail** to indicate the type of crane, including: `container_crane`, `floor_mounted_crane`, `gantry_crane`, `portal_crane`, `travellift`.
   * **pois**: Add `customs` kind.
   * **pois**: Add `danger_area` kind for military features.
   * **pois**: Add `defibrillator` kind.
