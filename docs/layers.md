@@ -1503,7 +1503,7 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 
 #### Network values
 
-Any road with `shield_text` will include a `network` property with a value like `AA:bcdef` where `AA` is a 2-character country code, followed by a `:` separator, and `bcdef` category value which either indicates the "region" (state or province) or "level" of the road network. There are exceptions to this for trans-national networks like `e-road`.
+Any road with `shield_text` will include a `network` property with a value like `AA:bcdef` where `AA` is a 2-character country code, followed by a `:` separator, and `bcdef` category value which either indicates the "region" (state or province) or "level" of the road network. There are exceptions to this for trans-national networks like `e-road`. In some cases, like the United States and Canada an additional _modifier_ to appended to indicate `Truck` and other alternate routes, or further network disambiguation.
 
 Some countries without network tags but with ref values with `;` and `/` and other separators, including: Switzerland, Greece, India, Italy, Japan, Russia, Turkey, Vietnam, and South Africa.
 
