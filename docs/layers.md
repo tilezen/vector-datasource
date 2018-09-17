@@ -1573,7 +1573,7 @@ Network value include:
 * `CA:AB` - **Alberta** region in Canada
 * `CA:BC:primary` - **British Columbia** region in Canada
 * `CA:BC:trunk` - **British Columbia** region in Canada
-* `CA:BC` - **British Columbia** region in CanadaTODO: ???
+* `CA:BC` - **British Columbia** region in Canada TODO: ???
 * `CA:MB:PTH` - **Manitoba** region in Canada
 * `CA:MB` - **Manitoba** region in Canada
 * `CA:NB` - **New Brunswich** region in Canada
