@@ -1205,13 +1205,9 @@ The value of the OpenStreetMap `religion` tag is used for `kind_detail` on `ceme
 
 NOTE: A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag. Common values include `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
 
-#### Clinic, dentist, doctors, `social_facility, and healthcare `kind_detail` values:
+#### Clinic, dentist, doctors, healthcare, hospital, `nursing_home`, pharmacy, `social_facility`, and veterinary `kind_detail` values:
 
-Common values include `bank`, ` blood`, ` chiropractor`, ` donation`, ` hospice`, ` midwife`, ` midwife_occupational`, ` optometrist_paediatrics`, ` physiotherapist_physiotherapy`, ` podiatrist_psychotherapist`, ` rehabilitation`, ` speech_therapist`, and `therapist`.
-
-#### Hospital, pharmacy, veterinary, and `nursing_home` `kind_detail` values:
-
-Indicate heath care facility type.
+Indicate heath care facility type, common values include: `office`, `dispensary`, `clinic`, `laboratory`, `health_centre`, `hospital`, `health_center`, `CSCom`, `first_aid`, `pharmacy`, `chemist_dispensing`, `counselling_centre`, `medical_clinic`.
 
 #### Gate `kind_detail` values:
 
