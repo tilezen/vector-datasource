@@ -713,7 +713,7 @@ Over 400 points of interest (POI) kinds are supported. POIs are included startin
 
 NOTE: The `pois` layer includes point "labels" for most polygon features otherwise found in the `landuse` layer (eg: `national_park` and `park`); these points are suitable for drawing as icon-and-text labels. The remaining `label_position` points in the `landuse` layer and `buildings` layer are suitable for text-only labels.
 
-Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Carto stylesheet](https://github.com/gravitystorm/openstreetmap-carto).
+Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [openstreetmap.org carto stylesheet](https://github.com/gravitystorm/openstreetmap-carto).
 
 The range of kinds has expanded to cover nearly all of the basic OpenStreetMap.org cartography, iD editor preset icons, Maki icons, Humanitarian OpenStreetMap Team's map style, and more. Icons are provided in the related Mapzen icon library project.
 
