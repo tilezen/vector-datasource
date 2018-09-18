@@ -1041,7 +1041,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
-* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. If available, `kind_detail` will provide the tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
 * `outdoor`
 * `outreach`
 * `painter`
@@ -1148,7 +1148,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `theme_park`
 * `therapist`
 * `tobacco`
-* `toilets` with `kind_detail`
+* `toilets` with `kind_detail` property.
 * `toll_booth`
 * `townhall`
 * `toys`
@@ -1229,13 +1229,17 @@ The value of the OpenStreetMap `method` tag. Common values include `anaerobic_di
 
 A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
+#### Orchard `kind_detail` values:
+
+Common values include: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
+
 #### Toilet `kind_detail` values:
 
 Common values include `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` bucket`.
 
 #### **water_well** `kind_detail` values:
 
-Common values include `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
+Common values include: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
 
 
 ## Roads (Transportation)
