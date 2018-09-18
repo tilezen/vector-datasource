@@ -209,7 +209,7 @@ v1.4.3
 * Include all name variants. See #1454.
 * Add building material tag to output. See #1455.
 * Add route modifier information to network. See #1460.
-* Add wetland detail to `kind_detail. See #1461.
+* Add wetland detail to `kind_detail`. See #1461.
 * Remove unused wooded area tags + natural=park and add _leaf_type_ **kind_detail** to wooded areas. See #1459.
 * Guard against TopologicalError. See #1471.
 
