@@ -1606,7 +1606,7 @@ Network value include:
 * `CL:panamerican` - Chile
 * `CL:regional` - Chile
 * `CN:expressway:regional` - China (when expressway starts with S; normalized from `CN-expressways-regional`)
-* `CN:expressway` - China (when expressway starts with G; normalized from `CN-expressways)
+* `CN:expressway` - China (when expressway starts with G; normalized from `CN-expressways`)
 * `CN:JX` - Jinxia region in China, when ref starts with `X` or network == `JX-roads`:)
 * `CN:road` - China 
 * `CZ:national` - Czechia 
