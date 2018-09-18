@@ -393,15 +393,15 @@ Additional `kind_detail` values are provided from POI `kind`s where one is not a
 
 Entrances can have an optional `kind_detail`. If present, it will be one of:
 
-* `main`
-* `staircase`
-* `service`
-* `home`
-* `unisex` - seems to be mostly mapped on building containing toilets.
 * `garage`
-* `residence`
+* `home`
+* `main`
 * `private`
+* `residence`
 * `secondary`
+* `service`
+* `staircase`
+* `unisex` - seems to be mostly mapped on building containing toilets.
 
 Exits can have an optional `kind_detail`. If present, it will be one of:
 
