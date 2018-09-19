@@ -96,7 +96,7 @@ The current version of Tilezen vector tile data schema is **v1.5.0**.
 
 Tiles are still in active development, but Tilezen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
-You can send your feedback at hello@nextzen.com or via our [Gitter chat](https://gitter.im/tilezen/tilezen-chat) room.
+You can send your feedback at hello@nextzen.org or via our [Gitter chat](https://gitter.im/tilezen/tilezen-chat) room.
 
 Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.5.0/CHANGELOG.md).
 
