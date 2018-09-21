@@ -42,7 +42,7 @@ v1.5.0
   * **landuse**: Add `wharf` kind
   * **places**: Add locality **name** translations for ~21 languages at low zooms from Natural Earth. [Issue #977](https://github.com/tilezen/vector-datasource/issues/977).
   * **places**: Lookup **min_zoom** for `country`, `map_unit`, and `region` from Natural Earth while continue sourcing feature names from OpenStreetMap.
-  * **pois**: Add over hundred new kind values (listed below) to support full compatibility with OSM.org and iD [#1425](https://github.com/tilezen/vector-datasource/issues/1425), Maki [#1423](https://github.com/tilezen/vector-datasource/issues/1423), and Humanitarian OpenStreetMap (HOT) [#1424](https://github.com/tilezen/vector-datasource/issues/1424) icon libraries.
+  * **pois**: Add over hundred new kind values (listed below) to support full compatibility with OSM.org and iD [#1425](https://github.com/tilezen/vector-datasource/issues/1425), Maki [#1423](https://github.com/tilezen/vector-datasource/issues/1423), and Humanitarian OpenStreetMap (HOT) [#1424](https://github.com/tilezen/vector-datasource/issues/1424) icon libraries. A continuation of work started in v1.4.3.
   * **pois**: Add **attraction** optional property for all kinds.
   * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features. [Issue #1498](https://github.com/tilezen/vector-datasource/issues/1498).
   * **pois**: Add **exit_to** optional property for all kinds.
