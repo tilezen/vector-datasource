@@ -34,8 +34,8 @@ v1.5.0
   * **landuse**: Add `plant_nursery` kind.
   * **landuse**: Add `port_terminal` kind.
   * **landuse**: Add `port` kind.
-  * **landuse**: Add `power_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232.)
-  * **landuse**: Add `power_minor_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232.)
+  * **landuse**: Add `power_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232)
+  * **landuse**: Add `power_minor_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232)
   * **landuse**: Add `quay` kind
   * **landuse**: Add `shipyard` kind.
   * **landuse**: Add `wall` kind as line geometry. [Issue #1403](https://github.com/tilezen/vector-datasource/issues/1403).
