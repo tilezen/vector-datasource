@@ -1520,13 +1520,11 @@ Network value include:
 * `AR:provincial`
 * `AsianHighway`
 * `AT:A-road`
-* `AT:S-road`
 * `AU:A-road`
 * `AU:B-road`
 * `AU:C-road`
 * `AU:M-road`
 * `AU:Metro-road`
-* `AU:N-highway`
 * `AU:N-route`
 * `AU:R-route`
 * `AU:S-route`
@@ -1599,7 +1597,6 @@ Network value include:
 * `CH:national`
 * `CH:regional`
 * `CL:national`
-* `CL:panamerican`
 * `CL:regional`
 * `CN:expressway:regional`
 * `CN:expressway`
@@ -1642,13 +1639,10 @@ Network value include:
 * `IN:MDR`
 * `IN:NH`
 * `IN:SH`
+* `IR:national`
 * `IR:freeway`
 * `IT:A-road`
 * `IT:B-road`
-* `IT:RA`
-* `IT:SP`
-* `IT:SR`
-* `IT:SS`
 * `IT`
 * `JP:expressway`
 * `JP:national`
@@ -1763,8 +1757,6 @@ Network value include:
 * `RU:national`
 * `RU:regional`
 * `SG:expressway`
-* `TH:motorway`
-* `TH:road`
 * `TR:highway`
 * `TR:motorway`
 * `TR:provincial`
