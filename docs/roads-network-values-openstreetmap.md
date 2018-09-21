@@ -122,7 +122,7 @@ _If not specified the network is from the raw OpenStreetMap network value._
 * `FR:A-road` - **France**
 * `FR:D-road` - **France** when ref starts with `^FR:[0-9]+:([A-Z]+)-road$` to strip department numbers or `N`
 * `FR:N-road` - **France** when ref starts with `RN` or `RNIL`
-* `FR` - **France** when operator in `APRR`, `ASF`, `Autoroutes du Sud de la **France**`, `DIRIF`, `DIRNO`
+* `FR` - **France** when operator in `APRR`, `ASF`, `Autoroutes du Sud de la France`, `DIRIF`, `DIRNO`
 * `GA:L-road` - **Gabon** when ref starts `L`
 * `GA:national` - **Gabon** when ref starts with `N` or `RN`
 * `GB:A-road-green` - **United Kingdom** when highway is `trunk` and ref starts with `A`
