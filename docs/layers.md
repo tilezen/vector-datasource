@@ -1399,7 +1399,7 @@ Any road with `shield_text` will include a `network` property with a value like 
 
 When a network value can't be determined from the upstream data source we calculate where the road is located and provide the relevant 2-char country code as the network value. See table below for mapping of country codes to country names.
 
-Tilezen normalizes upstream data sources to well known values. While it's common for OpenStreetMap to include road network relations in the United States and Canada, most other countries lack this information and we synthesize [OSM > Tilzeen network values](roads-network-values-openstreetmap.md) from a combination of network, ref, and country spatial joins.
+Tilezen normalizes upstream data sources to well known values. While it's common for OpenStreetMap to include road network relations in the United States and Canada, most other countries lack this information and we [synthesize Tilzeen network values from OpenStreetMap](roads-network-values-openstreetmap.md) from a combination of network, ref, and country spatial joins.
 
 Network value include:
 
