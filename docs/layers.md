@@ -1393,118 +1393,6 @@ Railway `service` values are:
 
 **Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
-## Transit
-
-![image](images/mapzen-vector-tile-docs-transit.png)
-
-* Layer name: `transit`
-* Geometry types: `line`, `polygon`
-
-Transit line features from OpenStreetMap start appearing at zoom 5+ for national trains, with regional trains addded at zoom 6+. Then `subway`,`light_rail`, and `tram` are added at zoom 10+. `funicular` and `monorail` features are added at zoom 12+. Platform polygons are added zoom 14+.
-
-_TIP: If you're looking for transit `station` and `station_entrance` features, look in the `pois` layer instead._
-
-#### Transit properties (common):
-
-* `name`: including localized name variants
-* `id`: OpenStreetMap feature `osm_id`
-* `kind`: detailed below, per geometry type
-* `source`: `openstreetmap.org`
-* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
-* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
-
-#### Transit properties (common optional):
-
-Depending on upstream OpenStreetMap tagging, the following properties may be present:
-
-* `ref`
-* `network`
-* `operator`
-* `railway`
-* `route`
-
-A smaller set is also available for non-`platform` features:
-
-* `colour`: either a `#rrggbb` hex value, or a CSS colour name (like `red`)
-* `colour_name`: A colour name from a fixed palette, see description below.
-* `layer`
-* `state`
-* `symbol`
-* `type`
-
-#### Transit properties (optional):
-
-Depending on OpenStreetMap tagging, the following properties may be present for non-`platform` features.
-
-* `ascent`
-* `descent`
-* `description`
-* `distance`
-* `roundtrip`
-
-#### Transit `kind` values (line, polygon):
-
-* `light_rail`
-* `platform`
-* `railway`
-* `subway`
-* `train`
-* `tram`
-
-#### Transit `colour_name` values:
-
-Transit lines may have their colours mapped onto one of these CSS colours. The intention is that designers can take this limited palette set and remap them onto a set which is more appropriate and in keeping with the other colours in the design. Inspired by [py-cooperhewitt-swatchbook](https://github.com/cooperhewitt/py-cooperhewitt-swatchbook).
-
-* `aqua`
-* `aquamarine`
-* `black`
-* `blue`
-* `brown`
-* `crimson`
-* `darkgrey`
-* `darkorchid`
-* `darkred`
-* `darkseagreen`
-* `dodgerblue`
-* `fuchsia`
-* `gainsboro`
-* `gold`
-* `goldenrod`
-* `green`
-* `grey`
-* `hotpink`
-* `indigo`
-* `khaki`
-* `lightblue`
-* `lightcoral`
-* `lightgreen`
-* `lightteal`
-* `lime`
-* `limegreen`
-* `mediumpurple`
-* `mediumseagreen`
-* `mediumturquoise`
-* `navy`
-* `olivedrab`
-* `orange`
-* `orangered`
-* `peru`
-* `pink`
-* `plum`
-* `purple`
-* `red`
-* `royalblue`
-* `sandybrown`
-* `silver`
-* `steelblue`
-* `tan`
-* `teal`
-* `tomato`
-* `violet`
-* `white`
-* `yellow`
-* `yellowgreen`
-
 #### Network values
 
 Any road with `shield_text` will include a `network` property with a value like `AA:bcdef` where `AA` is a 2-character country code, followed by a `:` separator, and `bcdef` category value which either indicates the "region" (state or province) or "level" of the road network. There are exceptions to this for trans-national networks like `e-road`. In some cases, like the United States and Canada an additional _modifier_ to appended to indicate `Truck` and other alternate routes, or further network disambiguation.
@@ -2106,6 +1994,117 @@ Alpha-2 code | Country
 `ZW` | Zimbabwe
 
 
+## Transit
+
+![image](images/mapzen-vector-tile-docs-transit.png)
+
+* Layer name: `transit`
+* Geometry types: `line`, `polygon`
+
+Transit line features from OpenStreetMap start appearing at zoom 5+ for national trains, with regional trains addded at zoom 6+. Then `subway`,`light_rail`, and `tram` are added at zoom 10+. `funicular` and `monorail` features are added at zoom 12+. Platform polygons are added zoom 14+.
+
+_TIP: If you're looking for transit `station` and `station_entrance` features, look in the `pois` layer instead._
+
+#### Transit properties (common):
+
+* `name`: including localized name variants
+* `id`: OpenStreetMap feature `osm_id`
+* `kind`: detailed below, per geometry type
+* `source`: `openstreetmap.org`
+* `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
+* `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
+
+#### Transit properties (common optional):
+
+Depending on upstream OpenStreetMap tagging, the following properties may be present:
+
+* `ref`
+* `network`
+* `operator`
+* `railway`
+* `route`
+
+A smaller set is also available for non-`platform` features:
+
+* `colour`: either a `#rrggbb` hex value, or a CSS colour name (like `red`)
+* `colour_name`: A colour name from a fixed palette, see description below.
+* `layer`
+* `state`
+* `symbol`
+* `type`
+
+#### Transit properties (optional):
+
+Depending on OpenStreetMap tagging, the following properties may be present for non-`platform` features.
+
+* `ascent`
+* `descent`
+* `description`
+* `distance`
+* `roundtrip`
+
+#### Transit `kind` values (line, polygon):
+
+* `light_rail`
+* `platform`
+* `railway`
+* `subway`
+* `train`
+* `tram`
+
+#### Transit `colour_name` values:
+
+Transit lines may have their colours mapped onto one of these CSS colours. The intention is that designers can take this limited palette set and remap them onto a set which is more appropriate and in keeping with the other colours in the design. Inspired by [py-cooperhewitt-swatchbook](https://github.com/cooperhewitt/py-cooperhewitt-swatchbook).
+
+* `aqua`
+* `aquamarine`
+* `black`
+* `blue`
+* `brown`
+* `crimson`
+* `darkgrey`
+* `darkorchid`
+* `darkred`
+* `darkseagreen`
+* `dodgerblue`
+* `fuchsia`
+* `gainsboro`
+* `gold`
+* `goldenrod`
+* `green`
+* `grey`
+* `hotpink`
+* `indigo`
+* `khaki`
+* `lightblue`
+* `lightcoral`
+* `lightgreen`
+* `lightteal`
+* `lime`
+* `limegreen`
+* `mediumpurple`
+* `mediumseagreen`
+* `mediumturquoise`
+* `navy`
+* `olivedrab`
+* `orange`
+* `orangered`
+* `peru`
+* `pink`
+* `plum`
+* `purple`
+* `red`
+* `royalblue`
+* `sandybrown`
+* `silver`
+* `steelblue`
+* `tan`
+* `teal`
+* `tomato`
+* `violet`
+* `white`
+* `yellow`
+* `yellowgreen`
 
 ## Water
 
