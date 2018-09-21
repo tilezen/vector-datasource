@@ -1,22 +1,22 @@
-# Layers in Mapzen's vector tiles
+# Layers in Tilezen's vector tiles
 
 ![image](images/mapzen-vector-tile-docs-all-layers.png)
 
-The [Mapzen vector tile service](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated daily as a free & shared service.
+The [Tilezen vector tiles](https://mapzen.com/projects/vector-tiles) provides worldwide basemap coverage sourced from [OpenStreetMap](www.openstreetmap.org) and other open data projects, updated intermittently as a free & shared service at [Nextzen.org](http://www.nextzen.org).
 
 Data is organized into several thematic layers, each of which is named, for example; `buildings`, `pois`, and `water`. A selection of these layers are typically used for base map rendering, and are provided under the short-hand name `all`. Each layer includes a simplified view of OpenStreetMap data for easier consumption, with common tags often condensed into a single `kind` field as noted below.
 
-Need help displaying vector tiles in a map? Here are several [examples](display-tiles.md) using Mapzen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
+Need help displaying vector tiles in a map? Here are several [examples](display-tiles.md) using Tilezen vector tiles to style in your favorite graphics library including Tangram, Mapbox GL, D3, and OpenLayers.
 
 ### Overview
 
 #### Data sources and attribution
 
-Mapzen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) in your project.
+Tilezen primarily sources from OpenStreetMap, but includes a variety of other open data. For a full listing, view the [data sources](data-sources.md). Each source may require [attribution](https://github.com/tilezen/vector-datasource/blob/master/docs/attribution.md) in your project.
 
 #### Feature names
 
-Most Mapzen vector tile features include a basic name property (`common`):
+Most Tilezen vector tile features include a basic name property (`common`):
 
 * `name` - Generally the name the locals call the feature, in the local script.
 
@@ -36,7 +36,7 @@ It supports several additional name related properties (`optional`):
 
 #### Name localization
 
-Mapzen includes all language variants of the `name:*` values to enable full internationalization (when different from `name`).
+Tilezen includes all language variants of the `name:*` values to enable full internationalization (when different from `name`).
 
 Language variants are identified by an ISO 639-1 two-letter language code and optional country code, for example `en` for English and less commonly `en_GB` for British English. Mapzen [house styles](https://mapzen.com/products/maps/) designed in Tangram support displaying all language scripts.
 
@@ -54,7 +54,7 @@ For features in the `boundaries` layer, there are two additional variants `name:
 
 #### Geometry types
 
-Individual Mapzen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
+Individual Tilezen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
 
 A tile geometry can be one of three types:
 
@@ -88,17 +88,17 @@ Mapnik supports geometry filtering via the special `mapnik::geometry_type` keywo
 
 #### Data updates
 
-Most Mapzen vector tile content is updated minutely from OpenStreetMap. Low and mid-zoom tiles are updated approximately monthly. Some source data rarely updates – Natural Earth updates approximately yearly.
+Most Tilezen vector tile content is updated minutely from OpenStreetMap. Low and mid-zoom tiles are updated approximately monthly. Some source data rarely updates – Natural Earth updates approximately yearly.
 
 #### Changelog
 
-The current version of Mapzen vector tile "Tilezen" data model is **v1.2.0**.
+The current version of Tilezen vector tile data schema is **v1.5.0**.
 
-Tiles are still in active development, but Mapzen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
+Tiles are still in active development, but Tilezen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
-If you're signed up for a [Mapzen API key](https://mapzen.com/developers) you should receive an email notifying you of upcoming changes before they are rolled out to production. You can also send your feedback at hello@mapzen.com!
+You can send your feedback at hello@nextzen.org or via our [Gitter chat](https://gitter.im/tilezen/tilezen-chat) room.
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.0.0/CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.5.0/CHANGELOG.md).
 
 #### Feature ordering
 
@@ -121,7 +121,7 @@ draw:
 
 ### Layer reference
 
-Mapzen vector tiles include 9 layers:
+Tilezen vector tiles include 9 layers:
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
@@ -155,7 +155,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `id:right`: For the relation on the right side of the boundary line.
 * `name:left`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `name:right`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
-* `maritime_boundary`: a special Mapzen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
+* `maritime_boundary`: a special Tilezen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
 
 #### Boundaries properties (optional):
 
@@ -184,11 +184,11 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * Layer name: `buildings`
 * Geometry types: `point` and `polygon`
 
-Polygons from OpenStreetMap representing building footprints, building label placement points, building_part features, and address points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
+Polygons from OpenStreetMap representing building footprints, building label placement points, `building_part` features, address points, and entrance and exit points. Starts at zoom 13 by including huge buildings, progressively adding all buildings at zoom 16+. Address points are available at zoom 16+, but marked with `min_zoom: 17` to suggest that they are suitable for display at zoom level 17 and higher.
 
 Individual `building_part` geometries from OpenStreetMap following the [Simple 3D Buildings](http://wiki.openstreetmap.org/wiki/Simple_3D_Buildings) tags at higher zoom levels. Building parts may receive a `root_id` corresponding to the building feature, if any, with which they intersect.
 
-Mapzen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
+Tilezen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
 Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms. _See related bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 
@@ -393,15 +393,15 @@ Additional `kind_detail` values are provided from POI `kind`s where one is not a
 
 Entrances can have an optional `kind_detail`. If present, it will be one of:
 
-* `main`
-* `staircase`
-* `service`
-* `home`
-* `unisex` - seems to be mostly mapped on building containing toilets.
 * `garage`
-* `residence`
+* `home`
+* `main`
 * `private`
+* `residence`
 * `secondary`
+* `service`
+* `staircase`
+* `unisex` - seems to be mostly mapped on building containing toilets.
 
 Exits can have an optional `kind_detail`. If present, it will be one of:
 
@@ -471,12 +471,14 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 #### Landuse properties (common optional):
 
-* `protect_class`: Common values include `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
+* `protect_class`: Common values include: `1`, `2`, `3`, `4`, `5`, `6`. See [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dprotected_area#Protect_classes_for_various_countries) for more information.
 * `operator`: e.g. `United States National Park Service`, `United States Forest Service`, `National Parks & Wildlife Service NSW`.
+* `mooring`: Common values include: `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
 #### Landuse `kind` values:
 
 * `aerodrome`
+* `airfield`
 * `allotments`
 * `amusement_ride`
 * `animal`
@@ -486,14 +488,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `attraction`
 * `aviary`
 * `battlefield`
-* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
+* `beach` - Where the land meets the sea gradually.
 * `breakwater`
 * `bridge`
 * `camp_site`
 * `caravan_site`
 * `carousel`
-* `cemetery`
-* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
+* `cemetery` with `kind_detail` and `denomination` properties. 
 * `cinema`
 * `city_wall`
 * `college`
@@ -503,20 +504,20 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `crane`
 * `cutline`
 * `cutting` - A lowered area of land, usually to carry a road or railway.
-* `danger` - e.g: military training zones, firing ranges.
+* `danger_area` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
 * `dike`
-* `ditch`
+* `ditch` line.
 * `dog_park`
 * `embankment` - A raised area of land, usually to carry a road or railway.
 * `enclosure`
 * `farm`
 * `farmland`
 * `farmyard`
-* `fence` - if present, `kind_detail` one of `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
+* `fence` with `kind_detail` property.
 * `ferry_terminal`
 * `footway`
-* `forest`
+* `forest` with `kind_detail` property.
 * `fort`
 * `fuel`
 * `garden`
@@ -525,14 +526,14 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `glacier`
 * `golf_course`
 * `grass`
-* `grave_yard`
+* `grave_yard` with `kind_detail` and `denomination` properties. 
 * `groyne`
-* `guard_rail`
+* `guard_rail` line.
 * `hanami`
 * `harbour`
 * `hospital`
 * `industrial`
-* `kerb`
+* `kerb` line.
 * `land`
 * `library`
 * `maze`
@@ -545,25 +546,26 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `naval_base`
-* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. If available, `kind_detail` will provide the tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, `walnut_trees`.
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. With `kind_detail` property.
 * `park`
 * `parking`
 * `pedestrian`
 * `petting_zoo`
 * `picnic_site`
-* `pier` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+* `pier` with mooring property.
 * `pitch`
 * `place_of_worship`
 * `plant`
 * `plant_nursery` - Land used for growing young plants.
 * `playground`
+* `port`
 * `port_terminal`
-* `power_line`
-* `power_minor_line`
+* `power_line` line.
+* `power_minor_line` line.
 * `prison`
 * `protected_area`
 * `quarry`
-* `quay` - if available, with `mooring` one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+* `quay` with mooring property.
 * `railway`
 * `recreation_ground`
 * `recreation_track`
@@ -596,20 +598,24 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `urban_area`
 * `urban`
 * `village_green`
-* `wall`
+* `wall` line with `kind_detail` property.
 * `wastewater_plant`
 * `water_park`
 * `water_slide`
 * `water_works`
-* `wetland`
+* `wetland` with `kind_detail` property.
 * `wharf`
 * `wilderness_hut`
 * `wildlife_park`
 * `winery`
 * `winter_sports`
-* `wood`
+* `wood` with `kind_detail` property.
 * `works`
 * `zoo`
+
+#### Beach `kind_detail` values:
+
+If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
 
 #### Cemetery and grave_yard `kind_detail` values:
 
@@ -632,6 +638,11 @@ The value of the OpenStreetMap `wetland` tag. If available, value will be one of
 #### Wood and forest `kind_detail` values
 
 * The value of the OpenStreetMap `leaf_type` tag, whitelisted to `broadleaved`, `needleleaved`, `mixed` or `leafless`.
+
+#### Orchard `kind_detail` values
+
+The tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
+
 
 ## Places
 
@@ -698,11 +709,13 @@ Primarily these are available for features of kind `locality` or `region`.
 * Layer name: `pois`
 * Geometry types: `point`
 
-Over 200 points of interest (POI) kinds are supported. POIs are included starting at zoom 4 for `national_park`, zoom 9 for `park`, and zoom 12 for other major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Progressively more features are added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features are included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 16 all local features are added, like `amusement_ride`, `atm`, and `bus_stop`, but may be marked with a `min_zoom` property to suggest at which zoom levels they are suitable for display. For example, `bench` and `waste_basket` features may be marked `min_zoom: 18` to suggest that they are displayed at zoom 18 and higher.  Note that `min_zoom` is not an integer, and may contain a fractional component.
+Over 400 points of interest (POI) kinds are supported. POIs are included starting at zoom 4 for `national_park`, zoom 9 for `park`, and zoom 12 for other major features like `airport`, `hospital`, `zoo`, and `motorway_junction`. Progressively more features are added at each additional zoom based on a combination of feature area (if available) and `kind` value. For instance, by zoom 15 most `police`, `library`, `university`, and `beach` features are included, and by zoom 16 things like `car_sharing`, `picnic_site`, and `tree` are added. By zoom 16 all local features are added, like `amusement_ride`, `atm`, and `bus_stop`, but may be marked with a `min_zoom` property to suggest at which zoom levels they are suitable for display. For example, `bench` and `waste_basket` features may be marked `min_zoom: 18` to suggest that they are displayed at zoom 18 and higher.  Note that `min_zoom` is not an integer, and may contain a fractional component.
 
 NOTE: The `pois` layer includes point "labels" for most polygon features otherwise found in the `landuse` layer (eg: `national_park` and `park`); these points are suitable for drawing as icon-and-text labels. The remaining `label_position` points in the `landuse` layer and `buildings` layer are suitable for text-only labels.
 
-Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [OSM.org Mapnik stylesheet](https://trac.openstreetmap.org/browser/subversion/applications/rendering/mapnik).
+Points of interest from OpenStreetMap, with per-zoom selections similar to the primary [openstreetmap.org carto stylesheet](https://github.com/gravitystorm/openstreetmap-carto).
+
+The range of kinds has expanded to cover nearly all of the basic OpenStreetMap.org cartography, iD editor preset icons, Maki icons, Humanitarian OpenStreetMap Team's map style, and more. Icons are provided in the related Mapzen icon library project.
 
 Features from OpenStreetMap which are tagged `disused=*` for any other value than `disused=no` are not included in the data. Features which have certain parenthetical comments after their name are suppressed until zoom 17 and have their `kind` property set to that comment. Currently anything with a name ending in '(closed)' or '(historical)' will be suppressed in this manner. Railway stops, halts, stations and tram stops from OpenStreetMap tagged with a `historic` tag are also not included in the data.
 
@@ -719,11 +732,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 #### POI properties (common optional):
 
 * `kind_detail`: cuisine, sport
-* `attraction`:
+* `attraction`: TODO
 * `exit_to`: only for highway exits
 * `ref`: generally only for `aeroway_gate` and `station_entrance` features
-* `religion`:
-* `zoo`:
+* `religion`: TODO
+* `zoo`: TODO
 
 #### POI properties (only on `kind:station`):
 
@@ -766,6 +779,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 * `bicycle`, `scooter`, `car`, `truck`: True, false, or omitted based on if that type of vehicle can be charged, or if the information is not present
 
+#### POI properties (only on `quary`, `wharf`):
+
+* `mooring` with values: `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
 #### POI `kind` values:
 
 * `art`
@@ -776,6 +793,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `advertising_agency`
 * `aerodrome`
 * `aeroway_gate`
+* `airfield` for military use.
 * `airport`
 * `alcohol`
 * `alpine_hut`
@@ -791,14 +809,16 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `association`
 * `atm`
 * `attraction`
+* `atv`
 * `aviary`
+* `baby_hatch`
 * `bakery`
 * `bank`
 * `bar`
 * `battlefield`
 * `bbq`
 * `beach_resort`
-* `beach` - Where the land meets the sea gradually. If known, `kind_detail` gives the surface type, one of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
+* `beach` - Where the land meets the sea gradually. With `kind_detail` property.
 * `beacon`
 * `beauty`
 * `bed_and_breakfast`
@@ -811,6 +831,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
+* `blood_bank`
 * `boat_rental`
 * `boat_storage`
 * `boatyard`
@@ -819,7 +840,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bookmaker`
 * `books`
 * `brewery`
-* `bunker` - A reinforced military building. Where known, the `kind_detail` will be one of: `blockhouse`, `gun_emplacement`, `hardened_aircraft_shelter`, `mg_nest`, `missile_silo`, `munitions`, `pillbox`, `technical`.
+* `border_control`
+* `bunker` - A reinforced military building. With `kind_detail` property.
+* `bureau_de_change`
 * `bus_station`
 * `bus_stop`
 * `butcher`
@@ -837,16 +860,18 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `carousel`
 * `carpenter`
 * `casino` - A venue for gambling.
-* `cattle_grid`
+* `cattle_grid` barrier
 * `cave_entrance`
-* `cemetery`
+* `cemetery` with `kind_detail` and `denomination` properties.
+* `chain` barrier
 * `chalet`
 * `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
 * `charity` - A shop selling items, often second-hand clothes, in order to raise money for charity.
+* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `childcare`
 * `childrens_centre`
 * `cinema`
-* `clinic`
+* `clinic` with `kind_detail` property.
 * `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `clothes`
 * `club`
@@ -858,25 +883,27 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `computer`
 * `confectionery`
 * `consulting`
+* `container_terminal`
 * `convenience`
 * `copyshop` - A shop offering photocopying and printing services.
 * `cosmetics` - A specialty shop selling cosmetics.
 * `courthouse`
 * `craft` - A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
-* `crane`
+* `crane` with `kind_detail` property.
 * `cross`
 * `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
-* `danger` - e.g: military training zones, firing ranges.
+* `danger_area` - e.g: military training zones, firing ranges.
 * `dam`
 * `day_care`
 * `defibrillator`
 * `deli`
-* `dentist`
+* `dentist` with `kind_detail` property.
 * `department_store`
+* `dispensary`
 * `dive_centre`
-* `doctors`
+* `doctors` with `kind_detail` property.
 * `dog_park`
 * `doityourself`
 * `dressmaker`
@@ -898,6 +925,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fast_food`
 * `ferry_terminal`
 * `financial`
+* `field_hospital` with `kind_detail` property.
+* `fire_hydrant`
 * `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `firepit`
 * `fishing`
@@ -915,17 +944,19 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `funeral_directors` - A venue offering funerary services.
 * `furniture`
 * `gallery` - An art gallery.
+* `gambling`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
 * `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
-* `gate` - with `kind_detail` one of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
-* `generator` - A building or structure which generates power. If the method is known, then the `kind_detail` will describe it as one of: `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+* `gate` with `kind_detail` property.
+* `generator` - A building or structure which generates power. With `kind_detail` property.
 * `geyser`
 * `gift`
 * `golf` - Shop selling golf equipment.
 * `golf_course`
 * `government`
+* `grave_yard` with `kind_detail` and `denomination` properties. 
 * `greengrocer` - Shop selling fruits and vegetables.
 * `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
 * `group_home`
@@ -937,12 +968,17 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `harbourmaster`
 * `hardware`
 * `hazard`
-* `healthcare`
+* `healthcare` with `kind_detail` property.
 * `health_centre`
+* `healthcare_alternative`
+* `healthcare_centre`
+* `healthcare_laboratory`
 * `helipad`
+* `heliport`
 * `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
-* `hospital`
+* `horse_riding`
+* `hospital` with `kind_detail` property.
 * `hostel`
 * `hot_spring`
 * `hotel`
@@ -956,6 +992,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `it`
 * `jewelry`
 * `kindergarten`
+* `karaoke_box`
+* `karaoke`
 * `landmark`
 * `laundry`
 * `lawyer`
@@ -963,10 +1001,10 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `library`
 * `life_ring`
 * `lifeguard_tower`
-* `lift_gate`
 * `lighthouse`
 * `lock`
 * `lottery` - A shop selling lottery tickets.
+* `love_hotel`
 * `mall`
 * `marina`
 * `mast`
@@ -982,7 +1020,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `mobile_phone`
 * `money_transfer` - A business which specialises in transferring money between people, often internationally.
 * `monument`
-* `mooring` - A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+* `mooring` with `kind_detail` property.
 * `motel`
 * `motorcycle`
 * `motorcycle_parking`
@@ -996,23 +1034,26 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ngo`
 * `nightclub`
 * `notary`
-* `nursing_home` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `nursing_home` with `kind_detail` property. _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `naval_base`
 * `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
+* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
 * `outdoor`
 * `outreach`
 * `painter`
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
 * `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `perfumery`
 * `pet`
 * `petroleum_well`
 * `petting_zoo`
-* `pharmacy`
+* `pharmacy` with `kind_detail` property.
 * `phone`
 * `photo` - A shop offering photograph processing services, e.g: developing or mounting.
 * `photographer`
@@ -1028,6 +1069,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `plumber`
 * `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `political_party`
+* `port_terminal`
 * `post_box`
 * `post_office`
 * `pottery`
@@ -1041,6 +1083,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `put_in`
 * `pylon`
 * `quarry`
+* `quay` - if available, with `mooring` property.
+* `range` for military use.
 * `ranger_station`
 * `rapid`
 * `recreation_ground`
@@ -1062,6 +1106,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `scuba_diving`
 * `service_area`
 * `shelter`
+* `shipyard`
 * `ship_chandler`
 * `shoemaker`
 * `shoes`
@@ -1071,9 +1116,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ski_rental`
 * `ski_school`
 * `ski`
+* `slaughterhouse`
 * `slipway`
 * `snow_cannon`
-* `social_facility`
+* `snowmobile`
+* `social_facility` with `kind_detail` property.
 * `soup_kitchen`
 * `sports_centre`
 * `sports`
@@ -1083,6 +1130,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `stationery`
 * `stone`
 * `stonemason`
+* `street_lamp`
 * `studio` - A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
 * `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `subway_entrance`
@@ -1092,6 +1140,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `swimming_area`
 * `tailor`
 * `tax_advisor`
+* `taxi` for taxi stands.
 * `telecommunication`
 * `telephone`
 * `telescope`
@@ -1099,7 +1148,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `theme_park`
 * `therapist`
 * `tobacco`
-* `toilets`. Where available, `kind_detail` will be set to the disposal type, one of: `bucket`, `chemical`, `flush`, `pit_latrine` or `pour_flush`.
+* `toilets` with `kind_detail` property.
 * `toll_booth`
 * `townhall`
 * `toys`
@@ -1114,7 +1163,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `tyres` - A shop selling car tyres or tires.
 * `university`
 * `variety_store`
-* `veterinary`
+* `veterinary` with `kind_detail` property.
 * `viewpoint`
 * `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
@@ -1125,11 +1174,12 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `water_point`
 * `water_slide`
 * `water_tower`
-* `water_well` - A location where water can be extracted from the ground. If known, `kind_detail` will give information about water potability and pump type, with values: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`. The prefix `drinkable` indicates drinking water, `not_drinkable` indicates not drinkable water. The suffix `powered` indicates a powered or automatic pump, `manual` indicates a manual pump, and `no_pump` indicates that the water must be raised without a pump (e.g: a bucket and line). If information about the pump is not available, the `kind_detail` will be either `drinkable` or `not_drinkable`.
+* `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
 * `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
+* `waterway_fuel`
 * `watering_place`
-* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`.
+* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
 * `wayside_cross`
 * `wilderness_hut`
 * `wildlife_park`
@@ -1137,10 +1187,60 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `wine`
 * `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `winter_sports`
+* `wharf` with mooring property.
 * `wood`
 * `works`
 * `workshop`
 * `zoo`
+
+#### Beach `kind_detail` values:
+
+The value of the OpenStreetMap `surface` tag. Common values include `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, and ` sand`.
+
+#### Bunker `kind_detail` values:
+
+Where known, the `kind_detail` will be one of: `blockhouse`, `gun_emplacement`, `hardened_aircraft_shelter`, `mg_nest`, `missile_silo`, `munitions`, `pillbox`, `technical`.
+
+#### Cemetery and grave_yard `kind_detail` values:
+
+The value of the OpenStreetMap `religion` tag is used for `kind_detail` on `cemetery` and `grave_yard` features. Common values include `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+
+NOTE: A `denomination` attribute is also available with the value of the OpenStreetMap denomination tag. Common values include `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
+
+### Crane `kind_detail` values:
+
+Common values include: `container_crane`, `floor_mounted_crane`, `gantry_crane`, `portal_crane`, `travellift`.
+
+_See planned fix in https://github.com/tilezen/vector-datasource/issues/1597._
+
+#### Clinic, dentist, doctors, field_hospital, healthcare, hospital, `nursing_home`, pharmacy, `social_facility`, and veterinary `kind_detail` values:
+
+Indicate heath care facility type, common values include: `office`, `dispensary`, `clinic`, `laboratory`, `health_centre`, `hospital`, `health_center`, `CSCom`, `first_aid`, `pharmacy`, `chemist_dispensing`, `counselling_centre`, `medical_clinic`.
+
+#### Gate `kind_detail` values:
+
+One of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
+
+#### Generator `kind_detail` values:
+
+The value of the OpenStreetMap `method` tag. Common values include `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+
+#### Mooring `kind_detail` values:
+
+A place to tie up a boat. If available, with `kind_detail` one of `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `pile`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
+#### Orchard `kind_detail` values:
+
+Common values include: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
+
+#### Toilet `kind_detail` values:
+
+Common values include `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` bucket`.
+
+#### **water_well** `kind_detail` values:
+
+Common values include: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
+
 
 ## Roads (Transportation)
 
@@ -1170,7 +1270,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `ref`: Commonly-used reference for roads, for example "I 90" for Interstate 90. To use with shields, see `network` and `shield_text`. Related, see `symbol` for pistes.
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively. Note that networks may include "modifier" information, for example `US:I:Business` for a business route or `US:I:Truck` for a truck route. The whitelist of "modifier" values is; `Alternate`, `Business`, `Bypass`, `Connector`, `Historic`, `Scenic`, `Spur`, `Toll` and `Truck`.
-* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`.
+* `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`. Whitepsace, punctuation, and prefixes are generally stripped.
 
 #### Road properties (common optional):
 
@@ -1240,6 +1340,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `minor_road`
 * `path`
 * `piste`
+* `quay`
 * `racetrack`
 * `rail`
 
@@ -1291,6 +1392,607 @@ Railway `service` values are:
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
 **Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
+#### Roads layer network values
+
+Any road with `shield_text` will include a `network` property with a value like `AA:bcdef` where `AA` is a 2-character country code, followed by a `:` separator, and `bcdef` category value which either indicates the "region" (state or province) or "level" of the road network. There are exceptions to this for trans-national networks like `e-road`. In some cases, like the United States and Canada an additional _modifier_ to appended to indicate `Truck` and other alternate routes, or further network disambiguation.
+
+When a network value can't be determined from the upstream data source we calculate where the road is located and provide the relevant 2-char country code as the network value. See table below for mapping of country codes to country names.
+
+Tilezen normalizes upstream data sources to well known values. While it's common for OpenStreetMap to include road network relations in the United States and Canada, most other countries lack this information and we [synthesize Tilezen network values from OpenStreetMap](roads-network-values-openstreetmap.md) from a combination of network, ref, and country spatial joins.
+
+Network value include:
+
+* `AM:AM`
+* `AR:national`
+* `AR:provincial`
+* `AsianHighway`
+* `AT:A-road`
+* `AU:A-road`
+* `AU:B-road`
+* `AU:C-road`
+* `AU:M-road`
+* `AU:Metro-road`
+* `AU:N-route`
+* `AU:R-route`
+* `AU:S-route`
+* `AU:T-drive`
+* `BE:A-road`
+* `BE:N-road`
+* `BE:R-road`
+* `BR:AC`
+* `BR:AL`
+* `BR:AM`
+* `BR:AP`
+* `BR:BA`
+* `BR:BR`
+* `BR:CE`
+* `BR:DF`
+* `BR:ES`
+* `BR:GO`
+* `BR:MA`
+* `BR:MG:local`
+* `BR:MG`
+* `BR:MS`
+* `BR:MT`
+* `BR:PA`
+* `BR:PB`
+* `BR:PE`
+* `BR:PI`
+* `BR:PR`
+* `BR:PR`
+* `BR:RJ`
+* `BR:RN`
+* `BR:RO`
+* `BR:RR`
+* `BR:RS`
+* `BR:SC`
+* `BR:SE`
+* `BR:SP:PLN`
+* `BR:SP:SCA`
+* `BR:SP`
+* `BR:TO`
+* `BR:Trans-Amazonian`
+* `BR`
+* `CA:AB:primary`
+* `CA:AB:trunk`
+* `CA:AB`
+* `CA:BC:primary`
+* `CA:BC:trunk`
+* `CA:BC`
+* `CA:MB:PTH`
+* `CA:MB`
+* `CA:NB`
+* `CA:NB2`
+* `CA:NB3`
+* `CA:NS:R`
+* `CA:NS:T`
+* `CA:NS:T`
+* `CA:NT`
+* `CA:ON:primary`
+* `CA:ON:secondary`
+* `CA:PEI`
+* `CA:QC:A`
+* `CA:QC:R`
+* `CA:SK:primary`
+* `CA:SK:secondary`
+* `CA:SK:tertiary`
+* `CA:transcanada`
+* `CA:yellowhead`
+* `CA:YT`
+* `CD:RRIG`
+* `CH:motorway`
+* `CH:national`
+* `CH:regional`
+* `CL:national`
+* `CL:regional`
+* `CN:expressway:regional`
+* `CN:expressway`
+* `CN:JX`
+* `CN:road`
+* `CZ:national`
+* `CZ:regional`
+* `DE:BAB`
+* `DE:BS`
+* `DE:Hamburg:Ring`
+* `DE:KS`
+* `DE:LS`
+* `DE:STS`
+* `DE`
+* `DK:national`
+* `e-road`
+* `ES:A-road`
+* `ES:autonoma`
+* `ES:city`
+* `ES:N-road`
+* `ES:province`
+* `ES`
+* `FR:A-road`
+* `FR:D-road`
+* `FR:N-road`
+* `FR`
+* `GA:L-road`
+* `GA:national`
+* `GB:A-road-green`
+* `GB:A-road-white`
+* `GB:B-road`
+* `GB:M-road`
+* `GB`
+* `GR:motorway`
+* `GR:national`
+* `GR:provincial`
+* `GR`
+* `HU:national`
+* `ID:national`
+* `IN:MDR`
+* `IN:NH`
+* `IN:SH`
+* `IR:national`
+* `IR:freeway`
+* `IT:A-road`
+* `IT:B-road`
+* `IT`
+* `JP:expressway`
+* `JP:national`
+* `JP:prefectural`
+* `JP`
+* `KR:expressway`
+* `KR:local`
+* `KR:metropolitan`
+* `KR:national`
+* `KZ:national`
+* `KZ:regional`
+* `LA:national`
+* `MX:AGU`
+* `MX:BCN`
+* `MX:BCS`
+* `MX:CAM`
+* `MX:CHH`
+* `MX:CHP`
+* `MX:CMX:EXT`
+* `MX:CMX:INT`
+* `MX:COA`
+* `MX:COL`
+* `MX:DUR`
+* `MX:GRO`
+* `MX:GUA`
+* `MX:HID`
+* `MX:JAL`
+* `MX:MEX`
+* `MX:MIC`
+* `MX:MOR`
+* `MX:NAY`
+* `MX:NLE`
+* `MX:OAX`
+* `MX:PUE`
+* `MX:QUE`
+* `MX:ROO`
+* `MX:SIN`
+* `MX:SLP`
+* `MX:SON`
+* `MX:TAB`
+* `MX:TAM`
+* `MX:VER`
+* `MX:YUC`
+* `MX:ZAC`
+* `MY:expressway`
+* `MY:federal`
+* `MY:JHR`
+* `MY:KDH`
+* `MY:KTN`
+* `MY:MLK`
+* `MY:NSN`
+* `MY:PHG`
+* `MY:PLS`
+* `MY:PNG`
+* `MY:PRK`
+* `MY:SBH`
+* `MY:SGR:municipal`
+* `MY:SGR`
+* `MY:SWK`
+* `MY:TRG`
+* `NL:A-road`
+* `NL:N-road`
+* `NO:fylkesvei`
+* `NO:oslo:ring`
+* `NO:riksvei`
+* `NZ:SH`
+* `NZ:SR`
+* `PE:AM`
+* `PE:AN`
+* `PE:AP`
+* `PE:AR`
+* `PE:AY`
+* `PE:CA`
+* `PE:CU`
+* `PE:HU`
+* `PE:HV`
+* `PE:IC`
+* `PE:JU`
+* `PE:LA`
+* `PE:LI`
+* `PE:LM`
+* `PE:LO`
+* `PE:MD`
+* `PE:MO`
+* `PE:PA`
+* `PE:PE`
+* `PE:PI`
+* `PE:PU`
+* `PE:SM`
+* `PE:TA`
+* `PE:TU`
+* `PE:UC`
+* `PH:NHN`
+* `PK`
+* `PL:expressway`
+* `PL:motorway`
+* `PL:national`
+* `PL:regional`
+* `PT:express`
+* `PT:motorway`
+* `PT:municipal`
+* `PT:national`
+* `PT:primary`
+* `PT:rapid`
+* `PT:regional`
+* `PT:secondary`
+* `PT`
+* `RO:county`
+* `RO:local`
+* `RO:motorway`
+* `RO:national`
+* `RU:national`
+* `RU:regional`
+* `SG:expressway`
+* `TR:highway`
+* `TR:motorway`
+* `TR:provincial`
+* `UA:international`
+* `UA:national`
+* `UA:regional`
+* `UA:territorial`
+* `US:AK`
+* `US:AL`
+* `US:AR`
+* `US:AZ`
+* `US:BIA`
+* `US:BLM`
+* `US:CA`
+* `US:CO`
+* `US:CT`
+* `US:DC`
+* `US:DE`
+* `US:FL`
+* `US:FSH`
+* `US:FSR`
+* `US:GA`
+* `US:HI`
+* `US:I:Alternate`
+* `US:I:Business`
+* `US:I:Bypass`
+* `US:I:Connector`
+* `US:I:Historic`
+* `US:I:Scenic`
+* `US:I:Spur`
+* `US:I:Toll`
+* `US:I:Truck`
+* `US:I`
+* `US:IA`
+* `US:ID`
+* `US:IL`
+* `US:IN`
+* `US:KS`
+* `US:KY`
+* `US:LA`
+* `US:MA`
+* `US:MD`
+* `US:ME`
+* `US:MI`
+* `US:MN`
+* `US:MO`
+* `US:MS`
+* `US:MT`
+* `US:NC`
+* `US:ND`
+* `US:NE`
+* `US:NH`
+* `US:NJ`
+* `US:NM`
+* `US:NV`
+* `US:NY`
+* `US:OH`
+* `US:OK`
+* `US:OR`
+* `US:PA`
+* `US:RI`
+* `US:SC`
+* `US:SD`
+* `US:TN`
+* `US:TX`
+* `US:US:Alternate`
+* `US:US:Business`
+* `US:US:Bypass`
+* `US:US:Connector`
+* `US:US:Historic`
+* `US:US:Scenic`
+* `US:US:Spur`
+* `US:US:Toll`
+* `US:US:Truck`
+* `US:US`
+* `US:UT`
+* `US:VA`
+* `US:VT`
+* `US:WA`
+* `US:WI`
+* `US:WV`
+* `US:WY`
+* `VN:expressway`
+* `VN:national`
+* `VN:provincial`
+* `VN:road`
+* `ZA:kruger`
+* `ZA:metropolitan`
+* `ZA:national`
+* `ZA:provincial`
+* `ZA:regional`
+* `ZA:S-road`
+
+
+Country lookup table:
+
+Alpha-2 code | Country
+------------ | -------
+`AF` | Afghanistan
+`AX` | Åland Islands
+`AL` | Albania
+`DZ` | Algeria
+`AS` | American Samoa
+`AD` | Andorra
+`AO` | Angola
+`AI` | Anguilla
+`AQ` | Antarctica
+`AG` | Antigua and Barbuda
+`AR` | Argentina
+`AM` | Armenia
+`AW` | Aruba
+`AU` | Australia
+`AT` | Austria
+`AZ` | Azerbaijan
+`BS` | Bahamas
+`BH` | Bahrain
+`BD` | Bangladesh
+`BB` | Barbados
+`BY` | Belarus
+`BE` | Belgium
+`BZ` | Belize
+`BJ` | Benin
+`BM` | Bermuda
+`BT` | Bhutan
+`BO` | Bolivia
+`BQ` | Bonaire, Sint Eustatius and Saba
+`BA` | Bosnia and Herzegovina
+`BW` | Botswana
+`BV` | Bouvet Island
+`BR` | Brazil
+`IO` | British Indian Ocean Territory
+`BN` | Brunei Darussalam
+`BG` | Bulgaria
+`BF` | Burkina Faso
+`BI` | Burundi
+`CV` | Cabo Verde
+`KH` | Cambodia
+`CM` | Cameroon
+`CA` | Canada
+`KY` | Cayman Islands
+`CF` | Central African Republic
+`TD` | Chad
+`CL` | Chile
+`CN` | China
+`CX` | Christmas Island
+`CC` | Cocos (Keeling) Islands
+`CO` | Colombia
+`KM` | Comoros
+`CG` | Congo
+`CD` | Democratic Republic of the Congo
+`CK` | Cook Islands
+`CR` | Costa Rica
+`CI` | Côte d'Ivoire
+`HR` | Croatia
+`CU` | Cuba
+`CW` | Curaçao
+`CY` | Cyprus
+`CZ` | Czechia
+`DK` | Denmark
+`DJ` | Djibouti
+`DM` | Dominica
+`DO` | Dominican Republic
+`EC` | Ecuador
+`EG` | Egypt
+`SV` | El Salvador
+`GQ` | Equatorial Guinea
+`ER` | Eritrea
+`EE` | Estonia
+`SZ` | Eswatini
+`ET` | Ethiopia
+`FK` | Falkland Islands (Malvinas)
+`FO` | Faroe Islands
+`FJ` | Fiji
+`FI` | Finland
+`FR` | France
+`GF` | French Guiana
+`PF` | French Polynesia
+`TF` | French Southern Territories
+`GA` | Gabon
+`GM` | Gambia
+`GE` | Georgia
+`DE` | Germany
+`GH` | Ghana
+`GI` | Gibraltar
+`GR` | Greece
+`GL` | Greenland
+`GD` | Grenada
+`GP` | Guadeloupe
+`GU` | Guam
+`GT` | Guatemala
+`GG` | Guernsey
+`GN` | Guinea
+`GW` | Guinea-Bissau
+`GY` | Guyana
+`HT` | Haiti
+`HM` | Heard Island and McDonald Islands
+`VA` | Holy See
+`HN` | Honduras
+`HK` | Hong Kong
+`HU` | Hungary
+`IS` | Iceland
+`IN` | India
+`ID` | Indonesia
+`IR` | Iran
+`IQ` | Iraq
+`IE` | Ireland
+`IM` | Isle of Man
+`IL` | Israel
+`IT` | Italy
+`JM` | Jamaica
+`JP` | Japan
+`JE` | Jersey
+`JO` | Jordan
+`KZ` | Kazakhstan
+`KE` | Kenya
+`KI` | Kiribati
+`KP` | North Korea
+`KR` | South Korea
+`KW` | Kuwait
+`KG` | Kyrgyzstan
+`LA` | Laos
+`LV` | Latvia
+`LB` | Lebanon
+`LS` | Lesotho
+`LR` | Liberia
+`LY` | Libya
+`LI` | Liechtenstein
+`LT` | Lithuania
+`LU` | Luxembourg
+`MO` | Macao
+`MK` | Macedonia
+`MG` | Madagascar
+`MW` | Malawi
+`MY` | Malaysia
+`MV` | Maldives
+`ML` | Mali
+`MT` | Malta
+`MH` | Marshall Islands
+`MQ` | Martinique
+`MR` | Mauritania
+`MU` | Mauritius
+`YT` | Mayotte
+`MX` | Mexico
+`FM` | Micronesia
+`MD` | Moldova
+`MC` | Monaco
+`MN` | Mongolia
+`ME` | Montenegro
+`MS` | Montserrat
+`MA` | Morocco
+`MZ` | Mozambique
+`MM` | Myanmar
+`NA` | Namibia
+`NR` | Nauru
+`NP` | Nepal
+`NL` | Netherlands
+`NC` | New Caledonia
+`NZ` | New Zealand
+`NI` | Nicaragua
+`NE` | Niger
+`NG` | Nigeria
+`NU` | Niue
+`NF` | Norfolk Island
+`MP` | Northern Mariana Islands
+`NO` | Norway
+`OM` | Oman
+`PK` | Pakistan
+`PW` | Palau
+`PS` | Palestine
+`PA` | Panama
+`PG` | Papua New Guinea
+`PY` | Paraguay
+`PE` | Peru
+`PH` | Philippines
+`PN` | Pitcairn
+`PL` | Poland
+`PT` | Portugal
+`PR` | Puerto Rico
+`QA` | Qatar
+`RE` | Réunion
+`RO` | Romania
+`RU` | Russian Federation
+`RW` | Rwanda
+`BL` | Saint Barthélemy
+`SH` | Saint Helena, Ascension and Tristan da Cunha
+`KN` | Saint Kitts and Nevis
+`LC` | Saint Lucia
+`MF` | Saint Martin (French part)
+`PM` | Saint Pierre and Miquelon
+`VC` | Saint Vincent and the Grenadines
+`WS` | Samoa
+`SM` | San Marino
+`ST` | Sao Tome and Principe
+`SA` | Saudi Arabia
+`SN` | Senegal
+`RS` | Serbia
+`SC` | Seychelles
+`SL` | Sierra Leone
+`SG` | Singapore
+`SX` | Sint Maarten (Dutch part)
+`SK` | Slovakia
+`SI` | Slovenia
+`SB` | Solomon Islands
+`SO` | Somalia
+`ZA` | South Africa
+`GS` | South Georgia and the South Sandwich Islands
+`SS` | South Sudan
+`ES` | Spain
+`LK` | Sri Lanka
+`SD` | Sudan
+`SR` | Suriname
+`SJ` | Svalbard and Jan Mayen
+`SE` | Sweden
+`CH` | Switzerland
+`SY` | Syria
+`TW` | Taiwan
+`TJ` | Tajikistan
+`TZ` | Tanzania, United Republic of
+`TH` | Thailand
+`TL` | Timor-Leste
+`TG` | Togo
+`TK` | Tokelau
+`TO` | Tonga
+`TT` | Trinidad and Tobago
+`TN` | Tunisia
+`TR` | Turkey
+`TM` | Turkmenistan
+`TC` | Turks and Caicos Islands
+`TV` | Tuvalu
+`UG` | Uganda
+`UA` | Ukraine
+`AE` | United Arab Emirates
+`GB` | United Kingdom
+`US` | United States of America
+`UM` | U.S. Minor Outlying Islands
+`UY` | Uruguay
+`UZ` | Uzbekistan
+`VU` | Vanuatu
+`VE` | Venezuela
+`VN` | Vietnam
+`VG` | Virgin Is. (British)
+`VI` | Virgin Is. (U.S.)
+`WF` | Wallis and Futuna
+`EH` | Western Sahara
+`YE` | Yemen
+`ZM` | Zambia
+`ZW` | Zimbabwe
+
 
 ## Transit
 
@@ -1354,56 +2056,55 @@ Depending on OpenStreetMap tagging, the following properties may be present for 
 
 Transit lines may have their colours mapped onto one of these CSS colours. The intention is that designers can take this limited palette set and remap them onto a set which is more appropriate and in keeping with the other colours in the design. Inspired by [py-cooperhewitt-swatchbook](https://github.com/cooperhewitt/py-cooperhewitt-swatchbook).
 
-* aqua
-* aquamarine
-* black
-* blue
-* brown
-* crimson
-* darkgrey
-* darkorchid
-* darkred
-* darkseagreen
-* dodgerblue
-* fuchsia
-* gainsboro
-* gold
-* goldenrod
-* green
-* grey
-* hotpink
-* indigo
-* khaki
-* lightblue
-* lightcoral
-* lightgreen
-* lightteal
-* lime
-* limegreen
-* mediumpurple
-* mediumseagreen
-* mediumturquoise
-* navy
-* olivedrab
-* orange
-* orangered
-* peru
-* pink
-* plum
-* purple
-* red
-* royalblue
-* sandybrown
-* silver
-* steelblue
-* tan
-* teal
-* tomato
-* violet
-* white
-* yellow
-* yellowgreen
-
+* `aqua`
+* `aquamarine`
+* `black`
+* `blue`
+* `brown`
+* `crimson`
+* `darkgrey`
+* `darkorchid`
+* `darkred`
+* `darkseagreen`
+* `dodgerblue`
+* `fuchsia`
+* `gainsboro`
+* `gold`
+* `goldenrod`
+* `green`
+* `grey`
+* `hotpink`
+* `indigo`
+* `khaki`
+* `lightblue`
+* `lightcoral`
+* `lightgreen`
+* `lightteal`
+* `lime`
+* `limegreen`
+* `mediumpurple`
+* `mediumseagreen`
+* `mediumturquoise`
+* `navy`
+* `olivedrab`
+* `orange`
+* `orangered`
+* `peru`
+* `pink`
+* `plum`
+* `purple`
+* `red`
+* `royalblue`
+* `sandybrown`
+* `silver`
+* `steelblue`
+* `tan`
+* `teal`
+* `tomato`
+* `violet`
+* `white`
+* `yellow`
+* `yellowgreen`
 
 ## Water
 
@@ -1416,7 +2117,7 @@ Water `polygons` representing oceans, riverbanks and lakes. Derived from a combi
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 
-Mapzen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=true`. Set to `true` when present on `line` geometry, or from Natural Earth line source.
+Tilezen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=true`. Set to `true` when present on `line` geometry, or from Natural Earth line source.
 
 #### Water properties (common):
 
@@ -1442,6 +2143,7 @@ Mapzen calculates the composite exterior edge for overlapping water polygons and
 * `dock` - polygon
 * `drain` - line
 * `fjord` - point, intended for label placement only
+* `fountain` - polygon
 * `lake` - polygon
 * `ocean` - polygon, point is intended for label placement only
 * `playa` - polygon

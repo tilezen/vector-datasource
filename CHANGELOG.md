@@ -1,5 +1,207 @@
+v1.5.0
+------
+* **Release date:** 2018-09-21.
+* **Requires:** [tileserver v2.2.1](https://github.com/tilezen/tileserver/releases/tag/v2.1.1) and [tilequeue v2.1.0](https://github.com/tilezen/tilequeue/releases/tag/v2.1.0)  and [rawr_tiles v1.0.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.0.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
+
+  #### ENHANCEMENTS
+
+  * **buildings**: add `entrance` points, with optional **kind_detail** property with values: `garage`, `home`, `main`, `private`, `residence`, `secondary`, `service`, `staircase`, or `unisex`.
+  * **buildings**: add `exit` points, with optional **kind_detail** property with values: `emergency` or `fire_exit`.
+  * **buildings**: all building polygons are now clipped to tile boundaries, which fixes missing **landuse_kind** values. [Issue #1226](https://github.com/tilezen/vector-datasource/issues/1226) and [#1142](https://github.com/tilezen/vector-datasource/issues/1142) and [#487](https://github.com/tilezen/vector-datasource/issues/487).
+  * **buildings**: Add **building_material** optional property to describe the material covering the outside of the building or building part. Common values are: `brick`, `cement_block`, `clay`, `concrete`, `glass`, `masonry`, `metal`, `mud`, `other`, `permanent`, `plaster`, `sandstone`, `semi-permanent`, `steel`, `stone`, `timber-framing`, `tin`, `traditional` and `wood`. [Issue #1408](https://github.com/tilezen/vector-datasource/issues/1408).
+  * **landuse**: Add new kind values (listed below) to support full compatibility with OSM.org [#1425](https://github.com/tilezen/vector-datasource/issues/1425) map style.
+  * **landuse**: Add **kind_detail** for `wood` and `forest` kinds with values indicating _leaftype_: `broadleaved`, `leafless`, `mixed`, `needleleaved`.
+  * **landuse**: Add **kind_detail** optional property for `beach` kind to indicate _surface_ values of: `grass`, `gravel`, `pebbles`, `pebblestone`, `rocky`, `sand`.
+  * **landuse**: Add **kind_detail** optional property for `wetland` when _wetland_ is `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
+  * **landuse**: Add **kind_detail** optional property for `cemetery` and `grave_yard` kinds, with common values: `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+  * **landuse**: Add **denomination** optional property for `cemetery` and `grave_yard` kinds, with common values: `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
+  * **landuse**: Add `airfield` kind for military airfields. 
+  * **landuse**: Add `container_terminal` kind.
+  * **landuse**: Add `crane` kind as line geometry. [Issue #1417](https://github.com/tilezen/vector-datasource/issues/1417).
+  * **landuse**: Add `cutting` kind.
+  * **landuse**: Add `danger_area` kind for military.
+  * **landuse**: Add `ditch` kind as line geometry.
+  * **landuse**: Add `embankment` kind.
+  * **landuse**: Add `fence` kind lines with optional **kind_detail** `avalanche`, `barbed_wire`, `bars`, `brick`, `chain`, `chain_link`, `concrete`, `drystone_wall`, `electric`, `grate`, `hedge`, `metal`, `metal_bars`, `net`, `pole`, `railing`, `railings`, `split_rail`, `steel`, `stone`, `wall`, `wire`, `wood`.
+  * **landuse**: Add `ferry_terminal` kind.
+  * **landuse**: Add `guard_rail` kind as line geometry.
+  * **landuse**: Add `harbour` kind.
+  * **landuse**: Add `kerb` kind as line geometry.
+  * **landuse**: Add `mud` kind.
+  * **landuse**: Add `naval_base` kind for military.
+  * **landuse**: Add `orchard` kind with optional **kind_detail** values: `agave_plants`, ` almond_trees`, ` apple_trees`, ` avocado_trees`, ` banana_plants`, ` cherry_trees`, ` coconut_palms`, ` coffea_plants`, ` date_palms`, ` hazel_plants`, ` hop_plants`, ` kiwi_plants`, ` macadamia_trees`, ` mango_trees`, ` oil_palms`, ` olive_trees`, ` orange_trees`, ` papaya_trees`, ` peach_trees`, ` persimmon_trees`, ` pineapple_plants`, ` pitaya_plants`, ` plum_trees`, ` rubber_trees`, ` tea_plants`, ` walnut_trees`.
+  * **landuse**: Add `pier` polygon when's used for mooring. 
+  * **landuse**: Add `plant_nursery` kind.
+  * **landuse**: Add `port_terminal` kind.
+  * **landuse**: Add `port` kind.
+  * **landuse**: Add `power_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232)
+  * **landuse**: Add `power_minor_line` kind as line geometry. [Issue #232](https://github.com/tilezen/vector-datasource/issues/232)
+  * **landuse**: Add `quay` kind
+  * **landuse**: Add `shipyard` kind.
+  * **landuse**: Add `wall` kind as line geometry. [Issue #1403](https://github.com/tilezen/vector-datasource/issues/1403).
+  * **landuse**: Add `wharf` kind
+  * **places**: Add locality **name** translations for ~21 languages at low zooms from Natural Earth. [Issue #977](https://github.com/tilezen/vector-datasource/issues/977).
+  * **places**: Lookup **min_zoom** for `country`, `map_unit`, and `region` from Natural Earth while continue sourcing feature names from OpenStreetMap.
+  * **pois**: Add over hundred new kind values (listed below) to support full compatibility with OSM.org and iD [#1425](https://github.com/tilezen/vector-datasource/issues/1425), Maki [#1423](https://github.com/tilezen/vector-datasource/issues/1423), and Humanitarian OpenStreetMap (HOT) [#1424](https://github.com/tilezen/vector-datasource/issues/1424) icon libraries. A continuation of work started in v1.4.3.
+  * **pois**: Add **attraction** optional property for all kinds.
+  * **pois**: Add **drives_on_left** optional boolean property for `mini_roundabout` kind features. [Issue #1498](https://github.com/tilezen/vector-datasource/issues/1498).
+  * **pois**: Add **exit_to** optional property for all kinds.
+  * **pois**: Add **kind_detail** optional property for kind `beach` with surface values of: `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, ` sand`.
+  * **pois**: Add **kind_detail** optional property for kinds `cemetery` and `grave_yard` to indicate the _religion_. See landuse description above for values.
+  * **pois**: Add **denomination** optional property for kinds `cemetery` and `grave_yard` to indicate the _denomination_. See landuse description above for values.
+  * **pois**: Add **kind_detail** optional property for kinds `clinic`, `dentist`, `doctors`, `healthcare`, `hospital`, `nursing_home`, `pharmacy`, `social_facility`, and `veterinary` with values: `office`, `dispensary`, `clinic`, `laboratory`, `health_centre`, `hospital`, `health_center`, `CSCom`, `first_aid`, `pharmacy`, `chemist_dispensing`, `counselling_centre`, `medical_clinic`.
+  * **pois**: Add **kind_detail** optional property for kind `generator` to indicate method of `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+  * **pois**: Add **kind_detail** optional property for kind `toilet` to indicate `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` bucket`.
+  * **pois**: Add **kind_detail** optional property for kind `water_well` with optional values: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
+  * **pois**: Add **ref** optional property for all kinds.
+  * **pois**: Add **sanitary_dump_station** optional property on existing `marina`, `camp_site`, and `caravan_site` kind features with values: `yes`, `customers`, or `public`.
+  * **pois**: Add **zoo** optional property for all kinds.
+  * **pois**: Add `adult_gaming_centre` kind.
+  * **pois**: Add `airfield` kind for military features.
+  * **pois**: Add `ambulatory_care` kind.
+  * **pois**: Add `arts_centre` kind.
+  * **pois**: Add `atv` kind for shops.
+  * **pois**: Add `baby_hatch` kind.
+  * **pois**: Add `blood_bank` kind.
+  * **pois**: Add `boat_lift` kind.
+  * **pois**: Add `boatyard` kind.
+  * **pois**: Add `bookmaker` kind.
+  * **pois**: Add `border_control` kind.
+  * **pois**: Add `bunker` kind for military features, with optional **kind_detail** values: `pillbox`, `munitions`, `gun_emplacement`, `hardened_aircraft_shelter`, `blockhouse`, `technical`, `mg_nest`, `missile_silo`
+  * **pois**: Add `bureau_de_change` kind.
+  * **pois**: Add `camera` kind for shops.
+  * **pois**: Add `car_parts` kind for shops.
+  * **pois**: Add `car_rental` kind.
+  * **pois**: Add `car_wash` kind.
+  * **pois**: Add `casino` kind.
+  * **pois**: Add `charging_station` kind and indicate boolean properties for **bicycle**, **car**, **truck**, and **scooter** usage.
+  * **pois**: Add `charity` kind.
+  * **pois**: Add `chemist` kind for shops.
+  * **pois**: Add `container_terminal` kind.
+  * **pois**: Add `copyshop` kind.
+  * **pois**: Add `cosmetics` kind for shops.
+  * **pois**: Add `crane` kind with optional **kind_detail** to indicate the type of crane, including: `container_crane`, `floor_mounted_crane`, `gantry_crane`, `portal_crane`, `travellift`.  [Issue #1417](https://github.com/tilezen/vector-datasource/issues/1417).
+  * **pois**: Add `customs` kind.
+  * **pois**: Add `danger_area` kind for military features.
+  * **pois**: Add `defibrillator` kind.
+  * **pois**: Add `dispensary` kind.
+  * **pois**: Add `elevator` kind.
+  * **pois**: Add `field_hospital` kind with optional **kind_detail** to indicate heath care facility type.
+  * **pois**: Add `fire_hydrant` kind
+  * **pois**: Add `fishmonger` kind.
+  * **pois**: Add `funeral_directors` kind.
+  * **pois**: Add `gambling` kind.
+  * **pois**: Add `garden_centre` kind.
+  * **pois**: Add `golf` kind.
+  * **pois**: Add `grocery` kind.
+  * **pois**: Add `harbourmaster` kind.
+  * **pois**: Add `health_centre` kind.
+  * **pois**: Add `healthcare_alternative` kind.
+  * **pois**: Add `healthcare_centre` kind.
+  * **pois**: Add `healthcare_laboratory` kind.
+  * **pois**: Add `heliport` kind.
+  * **pois**: Add `horse_riding` kind.
+  * **pois**: Add `hunting_stand` kind.
+  * **pois**: Add `karaoke_box` kind.
+  * **pois**: Add `karaoke` kind.
+  * **pois**: Add `lottery` kind.
+  * **pois**: Add `love_hotel` kind at zoom 18+.
+  * **pois**: Add `marketplace` kind.
+  * **pois**: Add `miniature_golf` kind.
+  * **pois**: Add `money_transfer` kind.
+  * **pois**: Add `mooring` kind with optional **kind_detail** values of `commercial`, ` cruise`, ` customers`, ` declaration`, ` ferry`, ` guest`, ` pile`, ` waiting`, ` yacht`, ` yachts` and optional **access** property with values: `private` or `public`.
+  * **pois**: Add `motorcycle_parking` kind.
+  * **pois**: Add `naval_base` kind for military features.
+  * **pois**: Add `nightclub` kind.
+  * **pois**: Add `obelisk` kind with a variable zoom according to it's height. This kind takes precidence over `artwork`, `monument`, and `memorial`. Optional **kind_detail** indicates if feature is also a `monument` or `memorial`.
+  * **pois**: Add `parking_garage` kind by subdividing existing `parking`, when parking type is `multi-storey`, `underground`, or `rooftop`.
+  * **pois**: Add `photo` kind.
+  * **pois**: Add `plaque` kind.
+  * **pois**: Add `port_terminal` kind.
+  * **pois**: Add `quay` kind.
+  * **pois**: Add `range` kind for military features.
+  * **pois**: Add `sanitary_dump_station` kind.
+  * **pois**: Add `ship_chandler` kind.
+  * **pois**: Add `shipyard` kind.
+  * **pois**: Add `slaughterhouse` kind.
+  * **pois**: Add `slipway` kind with optional **mooring** property.
+  * **pois**: Add `snowmobile` kind.
+  * **pois**: Add `street_lamp` kind.
+  * **pois**: Add `studio` kind, with optional **kind_detail** values `audio`, ` cinema`, ` photography`, ` radio`, ` television`, ` video`.
+  * **pois**: Add `taxi` kind for taxi stands.
+  * **pois**: Add `tyres` kind.
+  * **pois**: Add `waterway_fuel` kind.
+  * **pois**: Add `wayside_cross` kind.
+  * **pois**: Add `wharf` kind.
+  * **pois**: Add additional `ferry_terminal` kind features by expanding upstream filters.
+  * **pois**: Add catchall `craft` kind when there isn't a more specific kind.
+  * **pois**: Add catchall `industrial` kind when there isn't a more specific kind.
+  * **pois**: Add catchall `office` kind when there isn't a more specific kind.
+  * **pois**: Add catchall `shop` kind when there isn't a more specific kind.
+  * **pois**: Allow additional kind values to show up on the map when they lack a name: `boat_lift`, `boatyard`, `border_control`, `bunker`, `bureau_de_change`, `car_rental`, `car_wash`, `charging_station`, `crane`, `customs`, `defibrillator`, `field_hospital`, `fire_hydrant`, `harbour_master`, `harbourmaster`, `health_centre`, `hunting_stand`, `karaoke_box`, `money_transfer`, `motorcycle_parking`, `obelisk`, `power_generator`, `sanitary_dump_station`, `street_lamp`, `taxi`, `waterway_fuel`, and `wayside_cross`.
+  * **pois**: Modify **min_zoom** of `alpine_hut` kind to reveal them two zooms earlier at zoom 13. [Issue #1407](https://github.com/tilezen/vector-datasource/issues/1407).
+  * **pois**: Modify **min_zoom** of `lighthouse` kind when they are ruins but also attractions.
+  * **pois**: Modify **min_zoom** of `watermill` kind when they are ruins but also attractions.
+  * **pois**: Remove abandoned or disused `watermill` kind features (but keep the majority of features).
+  * **pois**: Stop emitting **covered** boolean property when the value was false on `bicycle_parking` and `motorcycle_parking` kind features.
+  * **roads**: Add **access** optional property with common values: `private`, `yes`, `no`, `permissive`, `customers`, `destination`. [Issue #1273](https://github.com/tilezen/vector-datasource/issues/1273).
+  * **roads**: Add **cutting** optional property with values: `yes`, `right`, and `left`.
+  * **roads**: Add **embankment** optional property with values: `yes`, `right`, and `left`.
+  * **roads**: Add **mooring** optional property for new `quay` and existing `pier` kinds with values: ['no', 'yes', commercial, cruise, customers, declaration, ferry, guest, private, public, waiting, yacht, yachts]
+  * **roads**: Add `quay` kind lines.
+  * **roads**: Major changes to **network** and **shield_text** to support localized road shields globally, including (but not limited to), with uppercase 2-char country code prefixes: `AM:AM`, `AR:national`, `AR:provincial`, `AsianHighway`, `AT:A-road`, `AU:A-road`, `AU:B-road`, `AU:C-road`, `AU:M-road`, `AU:Metro-road`, `AU:N-route`, `AU:R-route`, `AU:S-route`, `AU:T-drive`, `BE:A-road`, `BE:N-road`, `BE:R-road`, `BR:AC`, `BR:AL`, `BR:AM`, `BR:AP`, `BR:BA`, `BR:BR`, `BR:CE`, `BR:DF`, `BR:ES`, `BR:GO`, `BR:MA`, `BR:MG:local`, `BR:MG`, `BR:MS`, `BR:MT`, `BR:PA`, `BR:PB`, `BR:PE`, `BR:PI`, `BR:PR`, `BR:RJ`, `BR:RN`, `BR:RO`, `BR:RR`, `BR:RS`, `BR:SC`, `BR:SE`, `BR:SP:PLN`, `BR:SP:SCA`, `BR:SP`, `BR:TO`, `BR:Trans-Amazonian`, `BR`, `CA:AB:primary`, `CA:AB:trunk`, `CA:AB`, `CA:BC:primary`, `CA:BC:trunk`, `CA:BC`, `CA:MB:PTH`, `CA:MB`, `CA:NB2`, `CA:NB3`, `CA:NB`, `CA:NS:R`, `CA:NS:T`, `CA:NT`, `CA:ON:primary`, `CA:ON:secondary`, `CA:PEI`, `CA:QC:A`, `CA:QC:R`, `CA:SK:primary`, `CA:SK:secondary`, `CA:SK:tertiary`, `CA:transcanada`, `CA:yellowhead`, `CA:YT`, `CD:RRIG`, `CH:motorway`, `CH:national`, `CH:regional`, `CL:national`, `CL:regional`, `CN:expressway:regional`, `CN:expressway`, `CN:JX`, `CN:road`, `CZ:national`, `CZ:regional`, `DE:BAB`, `DE:BS`, `DE:Hamburg:Ring`, `DE:KS`, `DE:LS`, `DE:STS`, `DE`, `DK:national`, `e-road`, `ES:A-road`, `ES:autonoma`, `ES:city`, `ES:N-road`, `ES:province`, `ES`, `FR:A-road`, `FR:D-road`, `FR:N-road`, `FR`, `GA:L-road`, `GA:national`, `GB:A-road-green`, `GB:A-road-white`, `GB:B-road`, `GB:M-road`, `GB`, `GR:motorway`, `GR:national`, `GR:provincial`, `GR`, `HU:national`, `ID:national`, `IN:MDR`, `IN:NH`, `IN:SH`, `IR:freeway`, `IR:national`, `IT:A-road`, `IT:B-road`, `IT`, `JP:expressway`, `JP:national`, `JP:prefectural`, `JP`, `KR:expressway`, `KR:local`, `KR:metropolitan`, `KR:national`, `KZ:national`, `KZ:regional`, `LA:national`, `MX:AGU`, `MX:BCN`, `MX:BCS`, `MX:CAM`, `MX:CHH`, `MX:CHP`, `MX:CMX:EXT`, `MX:CMX:INT`, `MX:COA`, `MX:COL`, `MX:DUR`, `MX:GRO`, `MX:GUA`, `MX:HID`, `MX:JAL`, `MX:MEX`, `MX:MIC`, `MX:MOR`, `MX:NAY`, `MX:NLE`, `MX:OAX`, `MX:PUE`, `MX:QUE`, `MX:ROO`, `MX:SIN`, `MX:SLP`, `MX:SON`, `MX:TAB`, `MX:TAM`, `MX:VER`, `MX:YUC`, `MX:ZAC`, `MY:expressway`, `MY:federal`, `MY:JHR`, `MY:KDH`, `MY:KTN`, `MY:MLK`, `MY:NSN`, `MY:PHG`, `MY:PLS`, `MY:PNG`, `MY:PRK`, `MY:SBH`, `MY:SGR:municipal`, `MY:SGR`, `MY:SWK`, `MY:TRG`, `NL:A-road`, `NL:N-road`, `NO:fylkesvei`, `NO:oslo:ring`, `NO:riksvei`, `NZ:SH`, `NZ:SR`, `PE:AM`, `PE:AN`, `PE:AP`, `PE:AR`, `PE:AY`, `PE:CA`, `PE:CU`, `PE:HU`, `PE:HV`, `PE:IC`, `PE:JU`, `PE:LA`, `PE:LI`, `PE:LM`, `PE:LO`, `PE:MD`, `PE:MO`, `PE:PA`, `PE:PE`, `PE:PI`, `PE:PU`, `PE:SM`, `PE:TA`, `PE:TU`, `PE:UC`, `PH:NHN`, `PK`, `PL:expressway`, `PL:motorway`, `PL:national`, `PL:regional`, `PT:express`, `PT:motorway`, `PT:municipal`, `PT:national`, `PT:primary`, `PT:rapid`, `PT:regional`, `PT:secondary`, `PT`, `RO:county`, `RO:local`, `RO:motorway`, `RO:national`, `RU:national`, `RU:regional`, `SG:expressway`, `TR:highway`, `TR:motorway`, `TR:provincial`, `UA:international`, `UA:national`, `UA:regional`, `UA:territorial`, `VN:expressway`, `VN:national`, `VN:provincial`, `VN:road`, `ZA:kruger`, `ZA:metropolitan`, `ZA:national`, `ZA:provincial`, `ZA:regional`, and `ZA:S-road`.
+  * **roads**: Major changes to **network** and **shield_text** to support fallback international road shields. When no network is provided by a ref is, a 2-char country code will be exported as the network value based on the location of the road, like `AM` or `US`. [Issue #135](https://github.com/tilezen/vector-datasource/issues/135).
+  * **roads**: Minor changes to **network** and **shield_text** to support USA road shields, including _modifier_ postfix: `US:AK`, `US:AL`, `US:AR`, `US:AZ`, `US:BIA`, `US:BLM`, `US:CA`, `US:CO`, `US:CT`, `US:DC`, `US:DE`, `US:FL`, `US:FSH`, `US:FSR`, `US:GA`, `US:HI`, `US:I:Alternate`, `US:I:Business`, `US:I:Bypass`, `US:I:Connector`, `US:I:Historic`, `US:I:Scenic`, `US:I:Spur`, `US:I:Toll`, `US:I:Truck`, `US:I`, `US:IA`, `US:ID`, `US:IL`, `US:IN`, `US:KS`, `US:KY`, `US:LA`, `US:MA`, `US:MD`, `US:ME`, `US:MI`, `US:MN`, `US:MO`, `US:MS`, `US:MT`, `US:NC`, `US:ND`, `US:NE`, `US:NH`, `US:NJ`, `US:NM`, `US:NV`, `US:NY`, `US:OH`, `US:OK`, `US:OR`, `US:PA`, `US:RI`, `US:SC`, `US:SD`, `US:TN`, `US:TX`, `US:US:Alternate`, `US:US:Business`, `US:US:Bypass`, `US:US:Connector`, `US:US:Historic`, `US:US:Scenic`, `US:US:Spur`, `US:US:Toll`, `US:US:Truck`, `US:US`, `US:UT`, `US:VA`, `US:VT`, `US:WA`, `US:WI`, `US:WV`, and `US:WY`. [Issue #1387](https://github.com/tilezen/vector-datasource/issues/1387).
+  * **roads**: Modify **min_zoom** of `track` kind to show 1 zooms earlier by default when **surface** is `gravel` or **tracktype** is not `grade3`, `grade4`, or `grade5`. [Issue #1251](https://github.com/tilezen/vector-datasource/issues/1251).
+  * **roads**: Modify **min_zoom** of `track` kind to show 2 zooms earlier by default when **surface** is `paved`, `asphalt`, `concrete` or **tracktype** is `grade1` (but not for **access** `private`). [Issue #1251](https://github.com/tilezen/vector-datasource/issues/1251).
+  * **roads**: Modify **min_zoom** of `unclassified` kind to show 1 zoom earlier by default. [Issue #1250](https://github.com/tilezen/vector-datasource/issues/1250).
+  * **roads**: Show important cycling and walking routes at earlier zooms by adjusting the `min_zoom` of `path`, `major_road`, and `minor_road` kinds. This means that `min_zoom` values are now variable for features of the same kind, depending on their importance in the bicycle and walking networks; in earlier releases they all shared the same `min_zoom`. See [#1172](https://github.com/tilezen/vector-datasource/issues/1172).
+  * **water**: Add `fountain` kind.
+  * **water**: Add `reef` kind, with optional **kind_detail** values of `coral`, `rock`, and `sand`.
+
+  #### BUG FIXES
+
+  * **boundaries**: Restore full border to Gaza Strip. [Issue #1257](https://github.com/tilezen/vector-datasource/issues/1257).
+  * **landuse**: MVT format now includes many more polygons that were dropped in earlier versions that used different format driver.
+  * **places**: Fix spelling of ~60 **locality** (city) names at low-zooms in **places** layer by taking Natural Earth update. [#1140](https://github.com/tilezen/vector-datasource/issues/1140).
+  * **roads**: European primary network calculation now prefers local networks instead of e-road. [Issue #1483](https://github.com/tilezen/vector-datasource/issues/1483).
+  * **roads**: Add **surface** property at more zooms. [Issue #1252](https://github.com/tilezen/vector-datasource/issues/1252).
+  * **water**: Fix missing ocean water by making Natural Earth `ne_10m_ocean` features OGC valid in PostGIS.
+
+  #### DOCUMENTATION CHANGES
+
+  * Correct the **Greek** language 2-char code from `gr` to `el` in the Semantic Versioning statement.
+  * Change references to **Mapzen** (RIP) to **Tilezen**.
+  * **Update MapboxGL demo**, thanks to Apollo Mapping
+  * Use service wording changes (Less > Fewer)
+  * Updated Layers documentation for v1.5 schema changes.
+  * TODO: Updated tilejson/tilejson.json.erb for v1.5 schema changes.
+  
+
+  #### INTERNAL CHANGES
+
+  * Change references to **Who's On First** gazetteer source to `whosonfirst.org` from `whosonfirst.mapzen.com`.
+  * Refactors to support **RAWR tile** builds in queries/jinja and elsewhere.
+  * Add support for multiple **localized names** from Natural Earth 4.x by adding new transform `convert_ne_l10n_name` for 2-char language codes.
+  * Use a Tilezen curated **country admin polygon** layer to determine country codes PIP for intermediate processing (this layer is not exported in final tiles).
+  * Add new function to **calculate linear overlap with polygons**, useful for road in country calculation.
+  * Add new function to **calculate point in polygon (PIP)**, useful in POI in country calculation.
+  * Updates to Tilezen curated **buffered_land** layer for marine boundary lines.
+  * Be more robust to only add database columns when they don't already exist.
+  * Support easier creation of **generative tests** for points, lines, and polygons.
+  * Continued migration to generative tests instead of live-data OpenStreetMap tests via Overpass.
+  * Switch to generating MVT format with **Coanacatl**, which wraps Wagyu and VTZero.
+  * Requires Postgresql 9.5. [Issue #1319](https://github.com/tilezen/vector-datasource/issues/1319).
+  * Upgrade to **CircleCI 2.0** for continuous integration.
+  * Refactor all OpenStreetMap to Tilezen ETL logic for `network` and `ref` > `shield_text` to support international road shields based on fuzzy data and missing country code data, including specific functions per country.
+  * Add `max_zoom_filter` to remove features with a `max_zoom` if it's < `nominal` zoom.
+  * Add whitelist for **fence** `kind_detail` values.
+  * This will be the last set of **database migrations** provided. All future releases will assume "global" RAWR tile builds.
+
 v1.4.3
 ------
+* **Release date:** 2018-01-08.
+* RAWR internal pre-release round 2.
 * Clip buildings to tile boundaries. See #1142.
 * Allow some kinds of non-numeric `shield_text`. See #1452.
 * Add shops from osm.org and iD. See #1447.
@@ -7,9 +209,14 @@ v1.4.3
 * Include all name variants. See #1454.
 * Add building material tag to output. See #1455.
 * Add route modifier information to network. See #1460.
-* Add wetland detail to kind_detail. See #1461.
-* Remove unused wooded area tags + natural=park and add leaf_type to wooded areas. See #1459.
+* Add wetland detail to `kind_detail`. See #1461.
+* Remove unused wooded area tags + natural=park and add _leaf_type_ **kind_detail** to wooded areas. See #1459.
 * Guard against TopologicalError. See #1471.
+
+v1.4.2
+------
+* **Release date:** 2017-12-04.
+* RAWR internal pre-release.
 
 v1.4.1
 ------
