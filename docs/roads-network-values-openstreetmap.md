@@ -117,7 +117,7 @@ _If not specified the network is from the raw OpenStreetMap network value._
 * `ES:autonoma` - **Spain** when ref starts with `ARA`, `A`, `CA`, `CL`, `CM`, `C`, `EX`, `AG`, `M`, `R`, `Ma`, `Me`, `ML`, `RC`, `RM`, `V`, `CV`, `Cv`
 * `ES:city` - **Spain** when ref starts with `AI`, `IA`, `CT`, `CS`, `CU`, `CHE`, `EL`, `FE`, `GJ`, `H`,  `VM`, `J`, `LN`, `LL`, `LO`, `ME`, `E`, `MU`, `O`, `PA`, `PR`, `PI`, `CHMS`, `PT`, `SL`, `S`, `SC`, `SI`, `VG`, `EI`, 
 * `ES:N-road` - **Spain** when ref starts with `N`
-* `ES:province` - **Spain** when ref starts with `AC`, `DP`, `AB`, `F`,  , `AL`, `AE`, `AS`, `AV`, `BA`, `B`,  , `BP`, `BV`, `BI`, `BU`, `CC`, `CO`, `CR`, `GIP`,, `GIV`,, `GI`, `GR`, `GU`, `HU`, `JA`, `JV`, `LR`, `LE`, `L`,  , `LP`, `LV`, `LU`,, `MP`,, `MA`,, `NA`,, `OU`,, `P`, `PP`,, `EP`,, `PO`,, `DSA`, `SA`,, `NI`,, `SG`,, `SE`,, `SO`,, `TP`,, `TV`,, `TE`,, `TO`,, `VA`,, `ZA`,, `CP`,, `Z`, `PM`,, `PMV`
+* `ES:province` - **Spain** when ref starts with `AC`, `DP`, `AB`, `F`, `AL`, `AE`, `AS`, `AV`, `BA`, `B`,  , `BP`, `BV`, `BI`, `BU`, `CC`, `CO`, `CR`, `GIP`, `GIV`, `GI`, `GR`, `GU`, `HU`, `JA`, `JV`, `LR`, `LE`, `L`,  , `LP`, `LV`, `LU`, `MP`, `MA`, `NA`, `OU`, `P`, `PP`, `EP`, `PO`, `DSA`, `SA`, `NI`, `SG`, `SE`, `SO`, `TP`, `TV`, `TE`, `TO`, `VA`, `ZA`, `CP`, `Z`, `PM`, `PMV`
 * `ES` - **Spain** when operator in `Administración central`, `Departamento de Infraestructuras Viarias y Movilidad`
 * `FR:A-road` - **France**
 * `FR:D-road` - **France** when ref starts with `^FR:[0-9]+:([A-Z]+)-road$` to strip department numbers or `N`
