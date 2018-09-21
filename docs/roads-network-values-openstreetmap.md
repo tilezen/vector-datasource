@@ -263,12 +263,12 @@ _If not specified the network is from the raw OpenStreetMap network value._
 * `UA:international` - **Ukraine** when ref starts with cyrillic `M` or latin `M`
 * `UA:national` - **Ukraine** when ref starts with cyrillic `Н` or latin `H`
 * `UA:regional` - **Ukraine** when ref starts with cyrillic `Р` or latin `P`, see also `UA:regional-yellow`
-* `UA:territorial` - ****Ukraine**** when ref starts with cyrillic `Т` or latin `T`
+* `UA:territorial` - **Ukraine** when ref starts with cyrillic `Т` or latin `T`
 * `US:AK` - **Alaska** region in United States
 * `US:AL` - **Alabama** region in United States
 * `US:AR` - **Arkansas** region in United States
 * `US:AZ` - **Arizona** region in United States
-* `US:BIA` - **Bureau of **India**n Affairs** routes in United States, not widely populated OSM value
+* `US:BIA` - **Bureau of Indian Affairs** routes in United States, not widely populated OSM value
 * `US:BLM` - **Bureau of Land Management** routes in United States, not widely populated OSM value
 * `US:CA` - **California** region in United States
 * `US:CO` - **Colorado** region in United States
@@ -293,7 +293,7 @@ _If not specified the network is from the raw OpenStreetMap network value._
 * `US:IA` - **Iowa** region in United States
 * `US:ID` - **Idaho** region in United States
 * `US:IL` - **Illinois** region in United States
-* `US:IN` - ****India**na** region in United States
+* `US:IN` - **Indiana** region in United States
 * `US:KS` - **Kansas** region in United States
 * `US:KY` - **Kentucky** region in United States
 * `US:LA` - **Louisiana** region in United States
