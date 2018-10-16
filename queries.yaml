@@ -231,6 +231,9 @@ layers:
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
+    simplify_before_intersect: yes
+    area_threshold: 0.0
+    tolerance: 0.0
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -314,15 +317,6 @@ layers:
       - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
 post_process:
-  - fn: vectordatasource.transform.numeric_min_filter
-    params:
-      source_layer: buildings
-      mode: any
-      filters:
-        13: { area: 1600, volume: 300000 }
-        14: { area:  100, volume: 200000 }
-        15: { area:  100, volume: 100000 }
-
   - fn: vectordatasource.transform.build_fence
     params:
       base_layer: landuse
@@ -981,19 +975,50 @@ post_process:
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
 
+  # drop small inners in buildings before we do the merge.
+  - fn: vectordatasource.transform.drop_small_inners
+    params:
+      end_zoom: 15
+      source_layers: [buildings]
+      pixel_area: 0.25
+
   - fn: vectordatasource.transform.merge_building_features
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 15
+      end_zoom: 16
       quantize:
-        13: vectordatasource.transform.quantize_height_round_nearest_10_meters
-        14: vectordatasource.transform.quantize_height_round_nearest_5_meters
+        13: vectordatasource.transform.quantize_height_round_nearest_20_meters
+        14: vectordatasource.transform.quantize_height_round_nearest_10_meters
+        15: vectordatasource.transform.quantize_height_round_nearest_10_meters
+      # todo: keep instead of drop?
       drop:
         - name
+        - short_name
         - addr_housenumber
         - addr_street
-      max_merged_features: 1000
+        - osm_relation
+      # NOTE: max_merged_features is set to keep the time taken for geometry
+      # merging down, as it seems to go up with the square of the number of
+      # features.
+      max_merged_features: 2000
+
+  # drop small inners in buildings after we do the merge, too! because the merge
+  # process may also have created small inners.
+  - fn: vectordatasource.transform.drop_small_inners
+    params:
+      end_zoom: 15
+      source_layers: [buildings]
+      pixel_area: 0.25
+
+  - fn: vectordatasource.transform.numeric_min_filter
+    params:
+      source_layer: buildings
+      mode: any
+      filters:
+        13: { area: 1600, volume: 300000 }
+        14: { area:  100, volume: 200000 }
+        15: { area:  100, volume: 100000 }
 
   - fn: vectordatasource.transform.drop_small_inners
     params:
