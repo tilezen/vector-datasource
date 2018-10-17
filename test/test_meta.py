@@ -581,11 +581,7 @@ class BuildingsMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.buildings.fn(shape, props, None, meta)
-        # NOTE: we include a lot of buildings at 15 & 16 that we later drop if
-        # they can't be merged, so this is no guarantee that the building will
-        # be present in the tile - or if it is, it might be merged with
-        # something else!
-        self.assertEquals(15, out_min_zoom)
+        self.assertEquals(17, out_min_zoom)
 
 
 class EarthMinZoomTest(unittest.TestCase):
