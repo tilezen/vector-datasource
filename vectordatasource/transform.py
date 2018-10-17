@@ -2131,10 +2131,13 @@ def drop_features_where(ctx):
     source_layer = ctx.params.get('source_layer')
     assert source_layer, 'drop_features_where: missing source layer'
     start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
     where = ctx.params.get('where')
     assert where, 'drop_features_where: missing where'
 
     if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom >= end_zoom:
         return None
 
     layer = _find_layer(feature_layers, source_layer)
@@ -2990,11 +2993,11 @@ def _merge_lines(linestring_shapes):
     # an empty GeometryCollection, which causes problems further down the line,
     # usually while formatting the tile.
     if not list_of_linestrings:
-        return None
+        return []
 
     multi = MultiLineString(list_of_linestrings)
     result = _linemerge(multi)
-    return result
+    return [result]
 
 
 def _drop_small_inners_multi(shape, area_tolerance):
@@ -3053,8 +3056,8 @@ def _drop_small_outers_multi(shape, area_tolerance):
 
 def _merge_polygons(polygon_shapes):
     """
-    Merge a list of polygons together into a single shape. Returns a merged
-    shape or None.
+    Merge a list of polygons together into a single shape. Returns list of
+    shapes, which might be empty.
     """
 
     list_of_polys = []
@@ -3065,11 +3068,11 @@ def _merge_polygons(polygon_shapes):
     # empty GeometryCollection, which causes problems further down the line,
     # usually while formatting the tile.
     if not list_of_polys:
-        return None
+        return []
 
     result = shapely.ops.unary_union(list_of_polys)
 
-    return result
+    return [result]
 
 
 def _merge_buildings(polygon_shapes, tolerance):
@@ -3092,13 +3095,22 @@ def _merge_buildings(polygon_shapes, tolerance):
     area_tolerance = tolerance * tolerance
 
     result = _merge_polygons(polygon_shapes)
+    if not result:
+        return result
+
+    assert len(result) == 1
+    result = result[0]
+
     result = result.buffer(tolerance)
     result = result.simplify(tolerance)
     result = _drop_small_inners_multi(result, area_tolerance)
     result = result.buffer(-tolerance)
     result = _drop_small_outers_multi(result, area_tolerance)
 
-    return result
+    if result.is_empty:
+        return []
+
+    return [result]
 
 
 def _union_bounds(a, b):
@@ -3118,26 +3130,69 @@ def _union_bounds(a, b):
                 max(amaxx, bmaxx), max(amaxy, bmaxy))
 
 
-def _group_shapes_for_merge(shapes, shapes_per_merge, depth=0, bounds=None):
+# RecursiveMerger is a set of functions to merge geometry recursively in a
+# quad tree.
+#
+# It consists of three functions, any of which can be `id` for a no-op, and
+# all of which take a single argument which will be a list of shapes, and
+# should return a list of shapes as output.
+#
+#   * leaf: called at the leaves of the quad tree with original geometry.
+#   * node: called at internal nodes of the quad tree with the results of
+#           either calls to leaf() or node().
+#   * root: called once at the root with the results of the top node (or leaf
+#           if it's a degenerate single-level tree).
+#
+# These allow us to merge transformed versions of geometry, where leaf()
+# transforms the geometry to some other form (e.g: buffered for buildings),
+# node merges those recursively, and then root reverses the buffering.
+#
+RecursiveMerger = namedtuple('RecursiveMerger', 'leaf node root')
+
+
+# A bucket used to sort shapes into the next level of the quad tree.
+Bucket = namedtuple("Bucket", "bounds box shapes")
+
+
+def _mkbucket(*bounds):
     """
-    Group the shapes geographically, returning a list of lists of shapes where
-    each individual list should have no more than shapes_per_merge items.
+    Convenience method to make a bucket from a tuple of bounds (minx, miny,
+    maxx, maxy) and also make the Shapely shape for that.
+    """
+
+    from shapely.geometry import box
+
+    return Bucket(bounds, box(*bounds), [])
+
+
+def _merge_shapes_recursively(shapes, shapes_per_merge, merger, depth=0,
+                              bounds=None):
+    """
+    Group the shapes geographically, returning a list of shapes. The merger,
+    which must be a RecursiveMerger, controls how the shapes are merged.
 
     This is to help merging/unioning, where it's better to try and merge shapes
     which are adjacent or near each other, rather than just taking a slice of
     a list of shapes which might be in any order.
 
+    The shapes_per_merge controls at what depth the tree starts merging.
+    Smaller values mean a deeper tree, which might increase performance if
+    merging large numbers of items at once is slow.
+
     This method is recursive, and will bottom out after 5 levels deep, which
-    might mean that sometimes more than shapes_per_merge items are in a list.
+    might mean that sometimes more than shapes_per_merge items are merged at
+    once.
     """
 
-    from shapely.geometry import box
+    assert isinstance(merger, RecursiveMerger)
 
     # don't keep recursing. if we haven't been able to get to a smaller number
     # of shaped by 5 levels down, then perhaps there are particularly large
     # shapes which are preventing things getting split up correctly.
-    if len(shapes) <= shapes_per_merge or depth >= 5:
-        return [shapes]
+    if len(shapes) <= shapes_per_merge and depth == 0:
+        return merger.root(merger.leaf(shapes))
+    elif depth >= 5:
+        return merger.leaf(shapes)
 
     # on the first call, figure out what the bounds of the shapes are. when
     # recursing, use the bounds passed in from the parent.
@@ -3149,18 +3204,13 @@ def _group_shapes_for_merge(shapes, shapes_per_merge, depth=0, bounds=None):
     midx = 0.5 * (minx + maxx)
     midy = 0.5 * (miny + maxy)
 
-    Bucket = namedtuple("Bucket", "bounds box shapes")
-
-    def mkbucket(*bounds):
-        return Bucket(bounds, box(*bounds), [])
-
     # find the 4 quadrants of the bounding box and use those to bucket the
     # shapes so that neighbouring shapes are more likely to stay together.
     buckets = [
-        mkbucket(minx, miny, midx, midy),
-        mkbucket(minx, midy, midx, maxy),
-        mkbucket(midx, miny, maxx, midy),
-        mkbucket(midx, midy, maxx, maxy),
+        _mkbucket(minx, miny, midx, midy),
+        _mkbucket(minx, midy, midx, maxy),
+        _mkbucket(midx, miny, maxx, midy),
+        _mkbucket(midx, midy, maxx, maxy),
     ]
 
     for shape in shapes:
@@ -3178,16 +3228,21 @@ def _group_shapes_for_merge(shapes, shapes_per_merge, depth=0, bounds=None):
     grouped_shapes = []
     for bucket in buckets:
         if len(bucket.shapes) > shapes_per_merge:
-            recursed = _group_shapes_for_merge(
-                bucket.shapes, shapes_per_merge,
+            recursed = _merge_shapes_recursively(
+                bucket.shapes, shapes_per_merge, merger,
                 depth=depth+1, bounds=bucket.bounds)
             grouped_shapes.extend(recursed)
 
         # don't add empty lists!
         elif bucket.shapes:
-            grouped_shapes.append(bucket.shapes)
+            grouped_shapes.extend(merger.leaf(bucket.shapes))
 
-    return grouped_shapes
+    fn = merger.root if depth == 0 else merger.node
+    return fn(grouped_shapes)
+
+
+def _noop(x):
+    return x
 
 
 def _merge_features_by_property(
@@ -3247,9 +3302,10 @@ def _merge_features_by_property(
             # them all to have duplicate IDs.
             fid = None
 
-        for shapes_slice in _group_shapes_for_merge(shapes, shapes_per_merge):
-            merged_shape = _merge_shape_fn(shapes_slice)
+        merger = RecursiveMerger(root=_noop, node=_noop, leaf=_merge_shape_fn)
 
+        for merged_shape in _merge_shapes_recursively(
+                shapes, shapes_per_merge, merger):
             # don't keep any features which have become degenerate or empty
             # after having been merged.
             if merged_shape is None or merged_shape.is_empty:
@@ -3285,6 +3341,11 @@ def merge_building_features(ctx):
         return None
     if end_zoom is not None and zoom >= end_zoom:
         return None
+
+    # this formula seems to give a good balance between larger values, which
+    # merge more but can merge everything into a blob if too large, and small
+    # values which retain detail.
+    tolerance = min(5, 0.4 * tolerance_for_zoom(zoom))
 
     quantize_height_fn = None
     quantize_cfg = ctx.params.get('quantize')
@@ -3325,7 +3386,7 @@ def merge_building_features(ctx):
         return props
 
     def _merge_polygons(shapes):
-        return _merge_buildings(shapes, zoom)
+        return _merge_buildings(shapes, tolerance)
 
     layer['features'] = _merge_features_by_property(
         layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,

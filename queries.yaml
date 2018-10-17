@@ -412,17 +412,6 @@ post_process:
       source_layer: water
       target_value_type: int
 
-  # assign `scale_rank`
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scale_rank/buildings.csv
-    params:
-      source_layer: buildings
-      target_value_type: int
-
   # drop all polygonal features that don't meet the minimum area
   # threshold. this depends on the mz_min_pixels property to be set on
   # features first
@@ -1011,14 +1000,42 @@ post_process:
       source_layers: [buildings]
       pixel_area: 0.25
 
+  # assign `scale_rank` - AFTER merging, as this changes the area and volume
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/scale_rank/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+
   - fn: vectordatasource.transform.numeric_min_filter
     params:
       source_layer: buildings
       mode: any
       filters:
-        13: { area: 1600, volume: 300000 }
-        14: { area:  100, volume: 200000 }
-        15: { area:  100, volume: 100000 }
+        13: { area: 5000, height: 150, volume: 150000 }
+        14: { area: 3000, height: 100, volume: 100000 }
+        15: { area:  500, height: 100, volume: 100000 }
+        16: { area:  100,              volume:  50000 }
+
+  # drop features not matching scale rank requirements (is is a max, so couldn't
+  # be merged with the preceding numeric min).
+  - fn: vectordatasource.transform.drop_features_where
+    params:
+      source_layer: buildings
+      start_zoom: 13
+      end_zoom: 14
+      where: scale_rank > 2
+
+  - fn: vectordatasource.transform.drop_features_where
+    params:
+      source_layer: buildings
+      start_zoom: 14
+      end_zoom: 15
+      where: scale_rank > 3
 
   - fn: vectordatasource.transform.drop_small_inners
     params:
