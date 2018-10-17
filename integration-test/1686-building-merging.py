@@ -489,4 +489,7 @@ class BuildingMergingTest(FixtureTest):
             )
 
         with self.features_in_tile_layer(z, x, y, 'buildings') as features:
-            self.assertEquals(len(features), 1)
+            # have to use assertTrue here rather than the more natural
+            # assertEqual so that when this is run as --download-only the test
+            # case class can skip this test.
+            self.assertTrue(len(features) == 1)
