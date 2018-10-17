@@ -12,4 +12,4 @@ class MissingBuildingPart(FixtureTest):
             16, 19298, 24632, 'buildings',
             {'kind': 'building_part',
              'id': 287494678,
-             'min_zoom': 16})
+             'min_zoom': 15})

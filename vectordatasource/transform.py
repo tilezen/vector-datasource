@@ -3092,6 +3092,8 @@ def _merge_buildings(polygon_shapes, tolerance):
     buildings together into blocks.
     """
 
+    from shapely.geometry import JOIN_STYLE
+
     area_tolerance = tolerance * tolerance
 
     result = _merge_polygons(polygon_shapes)
@@ -3101,10 +3103,15 @@ def _merge_buildings(polygon_shapes, tolerance):
     assert len(result) == 1
     result = result[0]
 
-    result = result.buffer(tolerance)
+    # buffer with a mitre join, as this keeps the corners sharp and (mostly)
+    # keeps angles the same. to avoid spikes, we limit the mitre to a little
+    # under 90 degrees.
+    result = result.buffer(
+        tolerance, join_style=JOIN_STYLE.mitre, mitre_limit=1.5)
     result = result.simplify(tolerance)
     result = _drop_small_inners_multi(result, area_tolerance)
-    result = result.buffer(-tolerance)
+    result = result.buffer(
+        -tolerance, join_style=JOIN_STYLE.mitre, mitre_limit=1.5)
     result = _drop_small_outers_multi(result, area_tolerance)
 
     if result.is_empty:
