@@ -337,9 +337,9 @@ def mz_calculate_ferry_level(shape):
     return 13
 
 
-DECIMAL_UNIT_PATTERN = re.compile('([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)$')
-IMPERIAL_PATTERN = re.compile('([0-9]+(\.[0-9]*)?)\' *(([0-9]+)")?')
-NUMERIC_PATTERN = re.compile('^([0-9]+(\.[0-9]*)?)$')
+DECIMAL_UNIT_PATTERN = re.compile(r'([0-9]+(\.[0-9]*)?) *(mi|km|m|nmi|ft)$')
+IMPERIAL_PATTERN = re.compile(r'([0-9]+(\.[0-9]*)?)\' *(([0-9]+)")?')
+NUMERIC_PATTERN = re.compile(r'^([0-9]+(\.[0-9]*)?)$')
 
 
 UNIT_CONVERSION_FACTORS = {

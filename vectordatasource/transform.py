@@ -57,7 +57,7 @@ digits_pattern = re.compile('^[0-9-]+$')
 
 # used to detect station names which are followed by a
 # parenthetical list of line names.
-station_pattern = re.compile('([^(]*)\(([^)]*)\).*')
+station_pattern = re.compile(r'([^(]*)\(([^)]*)\).*')
 
 # used to detect if an airport's IATA code is the "short"
 # 3-character type. there are also longer codes, and ones
@@ -6676,11 +6676,11 @@ def _bus_network_importance(network, ref):
     return _generic_network_importance(network, ref, {})
 
 
-_NUMBER_AT_FRONT = re.compile('^(\d+\w*)', re.UNICODE)
-_SINGLE_LETTER_AT_FRONT = re.compile('^([^\W\d]) *(\d+)', re.UNICODE)
-_LETTER_THEN_NUMBERS = re.compile('^[^\d\s_]+[ -]?([^\s]+)',
+_NUMBER_AT_FRONT = re.compile(r'^(\d+\w*)', re.UNICODE)
+_SINGLE_LETTER_AT_FRONT = re.compile(r'^([^\W\d]) *(\d+)', re.UNICODE)
+_LETTER_THEN_NUMBERS = re.compile(r'^[^\d\s_]+[ -]?([^\s]+)',
                                   re.UNICODE | re.IGNORECASE)
-_UA_TERRITORIAL_RE = re.compile('^(\w)-(\d+)-(\d+)$',
+_UA_TERRITORIAL_RE = re.compile(r'^(\w)-(\d+)-(\d+)$',
                                 re.UNICODE | re.IGNORECASE)
 
 
