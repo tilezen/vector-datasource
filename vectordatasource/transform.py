@@ -7336,6 +7336,32 @@ def max_zoom_filter(ctx):
     return None
 
 
+def min_zoom_filter(ctx):
+    """
+    For features with a min_zoom, remove them if it's > nominal zoom + 1.
+    """
+
+    params = _Params(ctx, 'min_zoom_filter')
+    layers = params.required('layers', typ=list)
+    nominal_zoom = ctx.nominal_zoom
+
+    for layer_name in layers:
+        layer = _find_layer(ctx.feature_layers, layer_name)
+
+        features = layer['features']
+        new_features = []
+
+        for feature in features:
+            _, props, _ = feature
+            min_zoom = props.get('min_zoom')
+            if min_zoom is not None and min_zoom <= nominal_zoom + 1:
+                new_features.append(feature)
+
+        layer['features'] = new_features
+
+    return None
+
+
 def tags_set_ne_min_max_zoom(ctx):
     """
     Override the min zoom and max zoom properties with __ne_* variants from
