@@ -188,7 +188,7 @@ global:
           - lifeguard_tower
           - phone
         - harbour: harbour_master
-        - highway: [ bus_stop, elevator, ford, mini_roundabout, motorway_junction, platform,
+        - highway: [ bus_stop, elevator, ford, turning_circle, turning_loop, mini_roundabout, motorway_junction, platform,
             rest_area, street_lamp, traffic_signals, trailhead ]
         - historic: [landmark, wayside_cross]
         - landuse: quarry
@@ -1351,6 +1351,11 @@ filters:
     output:
       <<: *output_properties
       kind: toll_booth
+  - filter: {highway: [turning_circle, turning_loop]}
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: { col: highway }
   - filter: {highway: mini_roundabout}
     min_zoom: 15
     output:
