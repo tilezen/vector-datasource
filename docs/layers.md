@@ -1160,6 +1160,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `travel_agency`
 * `travel_agent`
 * `tree`
+* `turning_circle`
+* `turning_loop`
 * `tyres` - A shop selling car tyres or tires.
 * `university`
 * `variety_store`
