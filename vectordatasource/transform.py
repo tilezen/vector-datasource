@@ -3194,7 +3194,7 @@ def _merge_shapes_recursively(shapes, shapes_per_merge, merger, depth=0,
     assert isinstance(merger, RecursiveMerger)
 
     # don't keep recursing. if we haven't been able to get to a smaller number
-    # of shaped by 5 levels down, then perhaps there are particularly large
+    # of shapes by 5 levels down, then perhaps there are particularly large
     # shapes which are preventing things getting split up correctly.
     if len(shapes) <= shapes_per_merge and depth == 0:
         return merger.root(merger.leaf(shapes))
