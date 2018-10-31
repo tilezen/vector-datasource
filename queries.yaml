@@ -146,7 +146,7 @@ sources:
   # note: this goes into the _boundaries_ layer.
   buffered_land:
     - template: buffered_land.jinja2
-      start_zoom: 0
+      start_zoom: 8
 
 layers:
   water:
