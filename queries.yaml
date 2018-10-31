@@ -911,6 +911,41 @@ post_process:
         - all_bus_shield_texts
       where: >-
         kind == 'highway'
+  # get rid of all_* properties on highways when zoom < 10.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 10
+      properties:
+        - all_networks
+        - all_shield_texts
+      where: >-
+        kind == 'highway'
+  # want to further drop all_* stuff on major roads at zoom < 12.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 12
+      properties:
+        - all_networks
+        - all_shield_texts
+      where: >-
+        kind == 'major_road'
+  # drop all_networks & all_shield_texts properties on road things where
+  # zoom < 14 and kind isn't highway or major_road, which we've already done
+  # above.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties:
+        - all_networks
+        - all_shield_texts
+      where: >-
+        kind not in ('highway', 'major_road')
   # drop walking network related properties on all roads early
   # as paths are only brought in at zoom 9 and these properties
   # on other kinds would prevent merging at zoom 8 and earlier
