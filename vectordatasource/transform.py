@@ -1959,6 +1959,93 @@ def admin_boundaries(ctx):
     return layer
 
 
+def _unicode_len(s):
+    if isinstance(s, str):
+        return len(s.decode('utf-8'))
+    elif isinstance(s, unicode):
+        return len(s)
+    return None
+
+
+def _delete_labels_longer_than(max_label, props):
+    """
+    Delete entries in the props dict where the key starts with 'name' and the
+    unicode length of the value is greater than max_length.
+
+    If one half of a left/right pair is too long, then the opposite in the pair
+    is also deleted.
+    """
+
+    to_delete = set()
+
+    for k, v in props.iteritems():
+        if not k.startswith('name'):
+            continue
+
+        length = _unicode_len(v)
+        if length is None:
+            # huh? name isn't a string?
+            continue
+
+        if length <= max_label:
+            continue
+
+        to_delete.add(k)
+        if k.startswith('name:left:'):
+            opposite_k = k.replace(':left:', ':right:')
+            to_delete.add(opposite_k)
+        elif k.startswith('name:right:'):
+            opposite_k = k.replace(':right:', ':left:')
+            to_delete.add(opposite_k)
+
+    for k in to_delete:
+        if k in props:
+            del props[k]
+
+
+def drop_names_on_short_boundaries(ctx):
+    """
+    Drop all names on a boundaries which are too small to render the shortest
+    name.
+    """
+
+    params = _Params(ctx, 'drop_names_on_short_boundaries')
+    layer_name = params.required('source_layer')
+    start_zoom = params.optional('start_zoom', typ=int, default=0)
+    end_zoom = params.optional('end_zoom', typ=int)
+    factor = params.optional('factor', typ=(int, float), default=10.0)
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    zoom = ctx.nominal_zoom
+
+    if zoom < start_zoom or \
+       (end_zoom is not None and zoom >= end_zoom):
+        return None
+
+    tolerance = factor * tolerance_for_zoom(zoom)
+
+    for shape, props, fid in layer['features']:
+        geom_type = shape.geom_type
+
+        if geom_type in ('LineString', 'MultiLineString'):
+            label_shape = shape.simplify(tolerance)
+            if geom_type == 'LineString':
+                shape_length = label_shape.length
+            else:
+                # get the longest section to see if that's labellable - if
+                # not, then none of the sections could have a label and we
+                # can drop the names.
+                shape_length = max(part.length for part in label_shape)
+
+            # maximum number of characters we'll be able to print at this
+            # zoom.
+            max_label = int(shape_length / tolerance)
+
+            _delete_labels_longer_than(max_label, props)
+
+    return None
+
+
 def handle_label_placement(ctx):
     """
     Converts a geometry label column into a separate feature.

@@ -592,10 +592,28 @@ post_process:
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_rank', reverse: True }
+
+
+  # turn admin polygons (countries, regions, etc...) into oriented boundaries with left/right names.
   - fn: vectordatasource.transform.admin_boundaries
     params:
       base_layer: boundaries
       start_zoom: 8
+
+  # try to merge boundaries into as long segments as possible.
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: boundaries
+      start_zoom: 8
+      end_zoom: 15
+
+  # drop labels on boundaries which are too short to render.
+  - fn: vectordatasource.transform.drop_names_on_short_boundaries
+    params:
+      source_layer: boundaries
+      start_zoom: 8
+      end_zoom: 11
+      factor: 11
 
   # drop names on boundary lines (country, region, macroregion) except zoom 7 from Natural Earth
   - fn: vectordatasource.transform.drop_properties
