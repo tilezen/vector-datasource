@@ -16,9 +16,10 @@ class FractionalPois(FixtureTest):
             'https://www.openstreetmap.org/relation/61320',
         ], clip=self.tile_bbox(9, 150, 192, padding=2))
 
+        # NOTE: might not have an ID if it has been merged
         self.assert_has_feature(
             9, 150, 192, 'boundaries',
-            {'min_zoom': 8, 'id': -224951,
+            {'min_zoom': 8,
              'source': 'openstreetmap.org',
              'name': 'New Jersey - New York'})
 

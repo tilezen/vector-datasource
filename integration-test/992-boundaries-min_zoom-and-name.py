@@ -125,15 +125,31 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
 
 
 class BoundariesMinZoomAndNameOsm(FixtureTest):
-    def test_region_boundary_zug_luzern(self):
-        # Switzerland region HAS name, OpenStreetMap
+    def test_region_boundary_zug_luzern_z8(self):
+        # Switzerland region HAS NO name, OpenStreetMap
         self.load_fixtures([
             'http://www.openstreetmap.org/relation/1686447',
             'http://www.openstreetmap.org/relation/1685677',
         ], clip=self.tile_bbox(8, 133, 89))
 
+        # test that the regional boundary is present at zoom 8, although it
+        # should have had its name stripped off, since it's very short.
         self.assert_has_feature(
             8, 133, 89, 'boundaries',
+            {'kind': 'region', 'name': type(None)})
+
+    def test_region_boundary_zug_luzern_z12(self):
+        # Switzerland region HAS name, OpenStreetMap
+        # do this at z12, as the boundary between Zug and Luzern is quite
+        # short, and we want enough space to label.
+        self.load_fixtures([
+            'http://www.openstreetmap.org/relation/1686447',
+            'http://www.openstreetmap.org/relation/1685677',
+        ], clip=self.tile_bbox(12, 2144, 1438))
+
+        # name should be present at zoom 12
+        self.assert_has_feature(
+            12, 2144, 1438, 'boundaries',
             {'kind': 'region', 'name': 'Zug - Luzern'})
 
     def test_region_boundary_salzburg_tirol(self):
