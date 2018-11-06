@@ -613,7 +613,10 @@ post_process:
       source_layer: boundaries
       start_zoom: 8
       end_zoom: 11
-      factor: 11
+      # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
+      # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
+      # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
+      pixels_per_letter: 11
 
   # drop names on boundary lines (country, region, macroregion) except zoom 7 from Natural Earth
   - fn: vectordatasource.transform.drop_properties
