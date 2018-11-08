@@ -3243,7 +3243,7 @@ def _intersects_bounds(a, b):
     if aminx > bmaxx or amaxx < bminx:
         return False
 
-    elif aminy < bmaxy or amaxy < bminy:
+    elif aminy > bmaxy or amaxy < bminy:
         return False
 
     return True
@@ -3613,8 +3613,6 @@ def _junction_merge_candidates(ids, geoms, pt, angle_tolerance):
                 min_angle = (delta_angle, j)
 
         if min_angle[0] >= angle_tolerance or min_angle is None:
-            if min_angle[0] >= angle_tolerance and len(candidates) == 0 and len(angles) >= 4:
-                print("Missed opportunity: %d-way, min %f >= %f" % (len(angles), min_angle[0], angle_tolerance))
             break
 
         candidates.append((angles[j][1], angles[j-1][1]))
@@ -3723,6 +3721,7 @@ def _linestring_nonoverlapping_partition(mls):
     class _Bucket(object):
         def __init__(self, first_shape):
             self.shapes = [first_shape]
+            self.bounds = first_shape.bounds
 
         def add(self, shape):
             """
@@ -3732,11 +3731,14 @@ def _linestring_nonoverlapping_partition(mls):
 
             assert shape.geom_type == 'LineString'
 
-            for s in self.shapes:
-                if s.intersects(shape):
-                    return False
+            bounds = shape.bounds
+            if _intersects_bounds(self.bounds, bounds):
+                for s in self.shapes:
+                    if s.intersects(shape):
+                        return False
 
             self.shapes.append(shape)
+            self.bounds = _union_bounds(self.bounds, bounds)
             return True
 
         def as_shape(self):
@@ -3766,7 +3768,7 @@ def _linestring_nonoverlapping_partition(mls):
     # together to only use 2 buckets. however, making this optimal seems
     # like it might be a Hard problem.
     buckets = []
-    for shape in mls.geoms:
+    for shape in sorted(mls.geoms, key=lambda l: l.bounds[0]):
         for bucket in buckets:
             if bucket.add(shape):
                 break

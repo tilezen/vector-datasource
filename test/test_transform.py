@@ -908,3 +908,38 @@ class MergeJunctionTest(unittest.TestCase):
             MultiLineString([ls1, ls3]),
             MultiLineString([ls2, ls4]),
         ])
+
+
+class TestBoundingBoxIntersection(unittest.TestCase):
+
+    def _intersects(self, a, b):
+        from vectordatasource.transform import _intersects_bounds
+        self.assertTrue(_intersects_bounds(a, b))
+
+    def _disjoint(self, a, b):
+        from vectordatasource.transform import _intersects_bounds
+        self.assertFalse(_intersects_bounds(a, b))
+
+    def test_left(self):
+        self._disjoint((0, 0, 1, 1), (2, 0, 3, 1))
+
+    def test_right(self):
+        self._disjoint((2, 0, 3, 1), (0, 0, 1, 1))
+
+    def test_top(self):
+        self._disjoint((0, 0, 1, 1), (0, 2, 1, 3))
+
+    def test_bottom(self):
+        self._disjoint((0, 2, 1, 3), (0, 0, 1, 1))
+
+    def test_contains(self):
+        self._intersects((0, 0, 5, 5), (1, 1, 4, 4))
+
+    def tests_contained(self):
+        self._intersects((1, 1, 4, 4), (0, 0, 5, 5))
+
+    def test_half_left(self):
+        self._intersects((0, 0, 5, 2), (1, 1, 4, 3))
+
+    def test_half_top(self):
+        self._intersects((0, 0, 2, 5), (1, 1, 3, 4))
