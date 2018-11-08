@@ -3232,6 +3232,23 @@ def _union_bounds(a, b):
                 max(amaxx, bmaxx), max(amaxy, bmaxy))
 
 
+def _intersects_bounds(a, b):
+    """
+    Return true if two bounding boxes intersect.
+    """
+
+    aminx, aminy, amaxx, amaxy = a
+    bminx, bminy, bmaxx, bmaxy = b
+
+    if aminx > bmaxx or amaxx < bminx:
+        return False
+
+    elif aminy < bmaxy or amaxy < bminy:
+        return False
+
+    return True
+
+
 # RecursiveMerger is a set of functions to merge geometry recursively in a
 # quad tree.
 #
@@ -3536,16 +3553,279 @@ def merge_polygon_features(ctx):
     return layer
 
 
+def _angle_at(linestring, pt):
+    import math
+
+    if pt == linestring.coords[0]:
+        nx = linestring.coords[1]
+    elif pt == linestring.coords[-1]:
+        nx = pt
+        pt = linestring.coords[-2]
+    else:
+        assert False, "Expected point to be first or last"
+
+    if nx == pt:
+        return None
+
+    dx = nx[0] - pt[0]
+    dy = nx[1] - pt[1]
+    if dy < 0.0:
+        dx = -dx
+        dy = -dy
+
+    a = math.atan2(dy, dx) / math.pi * 180.0
+    assert 0 <= a < 180
+    return a
+
+
+def _junction_merge_candidates(ids, geoms, pt, angle_tolerance):
+    # find the angles at which the lines join the point
+    angles = []
+    for i in ids:
+        a = _angle_at(geoms[i], pt)
+        if a is not None:
+            angles.append((a, i))
+
+    # turn that into an angle->index associative list, so
+    # that we can tell which are the closest pair of angles.
+    angles.sort()
+
+    # list of pairs of ids, candidates to be merged.
+    candidates = []
+
+    # loop over the list, removing the closest pair, as long
+    # as they're within the tolerance angle of eachother.
+    while len(angles) > 1:
+        min_angle = None
+        for j in xrange(0, len(angles)):
+            angle1, idx1 = angles[j]
+            angle0, idx0 = angles[j-1]
+
+            # usually > 0 since angles are sorted, but might be negative
+            # on the first index (angles[-1]). note that, since we're
+            # taking the non-directional angle, the result should be
+            # between 0 and 180.
+            delta_angle = angle1 - angle0
+            if delta_angle < 0:
+                delta_angle += 180
+
+            if min_angle is None or delta_angle < min_angle[0]:
+                min_angle = (delta_angle, j)
+
+        if min_angle[0] >= angle_tolerance or min_angle is None:
+            if min_angle[0] >= angle_tolerance and len(candidates) == 0 and len(angles) >= 4:
+                print("Missed opportunity: %d-way, min %f >= %f" % (len(angles), min_angle[0], angle_tolerance))
+            break
+
+        candidates.append((angles[j][1], angles[j-1][1]))
+        del angles[j]
+        del angles[j-1]
+
+    return candidates
+
+
+def _merge_junctions_in_multilinestring(mls, angle_tolerance):
+    """
+    Merge LineStrings within a MultiLineString across junctions where more
+    than two lines meet and the lines appear to continue across the junction
+    at the same angle.
+
+    The angle_tolerance (in degrees) is used to judge whether two lines
+    look like they continue across a junction.
+
+    Returns a new shape.
+    """
+
+    endpoints = defaultdict(list)
+    for i, ls in enumerate(mls.geoms):
+        endpoints[ls.coords[0]].append(i)
+        endpoints[ls.coords[-1]].append(i)
+
+    seen = set()
+    merged_geoms = []
+    for pt, ids in endpoints.iteritems():
+        # we can't merge unless we've got at least 2 lines!
+        if len(ids) < 2:
+            continue
+
+        candidates = _junction_merge_candidates(
+            ids, mls.geoms, pt, angle_tolerance)
+        for a, b in candidates:
+            if a not in seen and b not in seen and a != b:
+                merged = linemerge(MultiLineString(
+                    [mls.geoms[a], mls.geoms[b]]))
+                if merged.geom_type == 'LineString':
+                    merged_geoms.append(merged)
+                    seen.add(a)
+                    seen.add(b)
+                elif (merged.geom_type == 'MultiLineString' and
+                      len(merged.geoms) == 1):
+                    merged_geoms.append(merged.geoms[0])
+                    seen.add(a)
+                    seen.add(b)
+
+    # add back any left over linestrings which didn't get merged.
+    for i, ls in enumerate(mls.geoms):
+        if i not in seen:
+            merged_geoms.append(ls)
+
+    if len(merged_geoms) == 1:
+        return merged_geoms[0]
+    else:
+        return MultiLineString(merged_geoms)
+
+
+def _merge_junctions(features, angle_tolerance):
+    """
+    Merge LineStrings within MultiLineStrings within features across junction
+    boundaries where the lines appear to continue at the same angle.
+
+    Returns a new list of features.
+    """
+
+    new_features = []
+    for shape, props, fid in features:
+        if shape.geom_type == 'MultiLineString':
+            shape = _merge_junctions_in_multilinestring(
+                shape, angle_tolerance)
+            if shape.geom_type == 'MultiLineString':
+                disjoint_shapes = _linestring_nonoverlapping_partition(shape)
+                for disjoint_shape in disjoint_shapes:
+                    new_features.append((disjoint_shape, props, None))
+                continue
+        new_features.append((shape, props, fid))
+    return new_features
+
+
+def _linestring_nonoverlapping_partition(mls):
+    """
+    Given a MultiLineString input, returns a list of MultiLineStrings
+    which are individually simple, but cover all the points in the
+    input MultiLineString.
+
+    The OGC definition of a MultiLineString says it's _simple_ if it
+    consists of simple LineStrings and the LineStrings only meet each
+    other at their endpoints. This means that anything which makes
+    MultiLineStrings simple is going to insert intersections between
+    crossing lines, and decompose them into separate LineStrings.
+
+    In general we _do not want_ this behaviour, as it prevents
+    simplification and results in more points in the geometry. However,
+    there are many operations which will result in simple outputs, such
+    as intersections and unions. Therefore, we would prefer to take the
+    hit of having multiple features, if the features can be decomposed
+    in such a way that they are individually simple.
+    """
+
+    # only interested in MultiLineStrings for this method!
+    assert mls.geom_type == 'MultiLineString'
+
+    class _Bucket(object):
+        def __init__(self, first_shape):
+            self.shapes = [first_shape]
+
+        def add(self, shape):
+            """
+            If the shape doesn't intersect any other shape in the bucket,
+            then add it and return True. Otherwise return False.
+            """
+
+            assert shape.geom_type == 'LineString'
+
+            for s in self.shapes:
+                if s.intersects(shape):
+                    return False
+
+            self.shapes.append(shape)
+            return True
+
+        def as_shape(self):
+            if len(self.shapes) == 1:
+                return self.shapes[0]
+            else:
+                return MultiLineString(self.shapes)
+
+    # simple (and sub-optimal) greedy algorithm for making sure that
+    # linestrings don't intersect: put each into the first bucket which
+    # doesn't already contain a linestring which intersects it.
+    #
+    # this will be suboptimal. for example:
+    #
+    #      2 4
+    #      | |
+    # 3 ---+-+---
+    #      | |
+    # 1 -----+---
+    #        |
+    #
+    # (lines 1 & 2 do _not_ intersect).
+    #
+    # the greedy algorithm will use 3 buckets, as it'll put lines 1 & 2 in
+    # the same bucket, forcing 3 & 4 into individual buckets for a total
+    # of 3 buckets. optimally, we can bucket 1 & 3 together and 2 & 4
+    # together to only use 2 buckets. however, making this optimal seems
+    # like it might be a Hard problem.
+    buckets = []
+    for shape in mls.geoms:
+        for bucket in buckets:
+            if bucket.add(shape):
+                break
+        else:
+            # if it didn't fit in any existing bucket, then make a new
+            # bucket for it.
+            buckets.append(_Bucket(shape))
+
+    results = []
+    for bucket in buckets:
+        results.append(bucket.as_shape())
+    return results
+
+
+def _drop_short_segments_from_multi(tolerance, mls):
+    return MultiLineString(
+        [g for g in mls.geoms if g.length >= tolerance])
+
+
+def _drop_short_segments(tolerance, features):
+    new_features = []
+
+    for shape, props, fid in features:
+        if shape.geom_type == 'MultiLineString':
+            shape = _drop_short_segments_from_multi(tolerance, shape)
+
+        elif shape.geom_type == 'LineString':
+            if shape.length < tolerance:
+                shape = None
+
+        if shape and not shape.is_empty:
+            new_features.append((shape, props, fid))
+
+    return new_features
+
+
 def merge_line_features(ctx):
     """
     Merge linestrings having the same properties, in the source_layer
     between start_zoom and end_zoom inclusive.
+
+    By default, will not merge features across points where more than
+    two lines meet. If you set merge_junctions, then it will try to
+    merge where the line looks contiguous.
     """
 
+    params = _Params(ctx, 'merge_line_features')
     zoom = ctx.nominal_zoom
-    source_layer = ctx.params.get('source_layer')
-    start_zoom = ctx.params.get('start_zoom', 0)
-    end_zoom = ctx.params.get('end_zoom')
+    source_layer = params.required('source_layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    merge_junctions = params.optional(
+        'merge_junctions', default=False, typ=bool)
+    junction_angle_tolerance = params.optional(
+        'merge_junction_angle', default=15.0, typ=float)
+    drop_short_segments = params.optional(
+        'drop_short_segments', default=False, typ=bool)
+    short_segment_factor = params.optional(
+        'drop_length_pixels', default=0.1, typ=float)
 
     assert source_layer, 'merge_line_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -3559,6 +3839,16 @@ def merge_line_features(ctx):
 
     layer['features'] = _merge_features_by_property(
         layer['features'], _LINE_DIMENSION)
+
+    if drop_short_segments:
+        tolerance = short_segment_factor * tolerance_for_zoom(zoom)
+        layer['features'] = _drop_short_segments(
+            tolerance, layer['features'])
+
+    if merge_junctions:
+        layer['features'] = _merge_junctions(
+            layer['features'], junction_angle_tolerance)
+
     return layer
 
 
