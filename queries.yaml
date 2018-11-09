@@ -719,6 +719,13 @@ post_process:
     params:
       source_layer: water
 
+  # merge line water polygons
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: water
+      start_zoom: 8
+      end_zoom: 15
+
   - fn: vectordatasource.transform.generate_address_points
     params:
       source_layer: buildings

@@ -1194,6 +1194,18 @@ class Assertions(object):
                     "layer %r, but was supposed to find none. For example: "
                     "%r" % (properties, layer, feature['properties']))
 
+    def assert_n_matching_features(self, z, x, y, layer, properties, n):
+        with self.ff.features_in_tile_layer(z, x, y, layer) as features:
+            num_features, num_matching = count_matching(
+                features, properties)
+
+            if num_matching != n:
+                self.test.fail(
+                    "Found %d features matching properties %r in "
+                    "layer %r, but was supposed to find %d. "
+                    "Found %d total features." %
+                    (num_matching, properties, layer, n, num_features))
+
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
                                  exp_geom_type):
         with self.ff.features_in_tile_layer(z, x, y, layer) as features:
@@ -1295,6 +1307,9 @@ class RunTestInstance(object):
     def assert_no_matching_feature(self, z, x, y, layer, props):
         self.assertions.assert_no_matching_feature(z, x, y, layer, props)
 
+    def assert_n_matching_features(self, z, x, y, layer, props, n):
+        self.assertions.assert_n_matching_features(z, x, y, layer, props, n)
+
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
                                  exp_geom_type):
         self.assertions.assert_feature_geom_type(
@@ -1342,6 +1357,9 @@ class DownloadOnlyInstance(object):
     def assert_no_matching_feature(self, z, x, y, layer, props):
         pass
 
+    def assert_n_matching_features(self, z, x, y, layer, props, n):
+        pass
+
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
                                  exp_geom_type):
         pass
@@ -1386,6 +1404,9 @@ class CollectTilesInstance(object):
         self._add_tile(z, x, y)
 
     def assert_no_matching_feature(self, z, x, y, layer, props):
+        self._add_tile(z, x, y)
+
+    def assert_n_matching_features(self, z, x, y, layer, props, n):
         self._add_tile(z, x, y)
 
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
@@ -1441,6 +1462,9 @@ class FixtureTest(unittest.TestCase):
 
     def assert_no_matching_feature(self, z, x, y, layer, props):
         self.test_instance.assert_no_matching_feature(z, x, y, layer, props)
+
+    def assert_n_matching_features(self, z, x, y, layer, props, n):
+        self.test_instance.assert_n_matching_features(z, x, y, layer, props, n)
 
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
                                  exp_geom_type):
