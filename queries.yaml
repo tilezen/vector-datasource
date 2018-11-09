@@ -1132,10 +1132,6 @@ post_process:
       # roads at that point is less than 5 degrees.
       merge_junctions: true
       merge_junction_angle: 5.0
-      # setting the following will cause lines, or parts of multi-lines,
-      # shorter than 0.1px at nominal zoom to be dropped.
-      drop_short_segments: true
-      drop_length_pixels: 0.1
 
   - fn: vectordatasource.transform.simplify_layer
     params:
@@ -1143,6 +1139,16 @@ post_process:
       start_zoom: 8
       end_zoom: 16
       tolerance: 1.0
+
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 16
+      # setting the following will cause lines, or parts of multi-lines,
+      # shorter than 0.1px at nominal zoom to be dropped.
+      drop_short_segments: true
+      drop_length_pixels: 0.1
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!

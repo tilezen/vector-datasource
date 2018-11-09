@@ -22,6 +22,9 @@ def _query_highway(highway):
 class MergeSameRoads(FixtureTest):
 
     def test_roads_merged(self):
+        from collections import defaultdict
+        from shapely.geometry import asShape
+
         # count the unique parameters - there should only be one, indicating
         # that the roads have been merged.
         self.load_fixtures(
@@ -29,13 +32,20 @@ class MergeSameRoads(FixtureTest):
             clip=self.tile_bbox(8, 41, 99))
 
         with self.features_in_tile_layer(8, 41, 99, 'roads') as roads:
-            features = set()
+            features = defaultdict(list)
 
             for road in roads:
                 props = frozenset(_freeze(road['properties']))
-                self.assertFalse(
-                    props in features,
-                    'Duplicate properties %r in roads layer, but '
-                    'properties should be unique.'
-                    % road['properties'])
-                features.add(props)
+                geom = asShape(road['geometry'])
+
+                for f in features[props]:
+                    if f.disjoint(geom):
+                        self.assertTrue(
+                            False,
+                            'Duplicate properties %r in roads layer for '
+                            'disjoint geometries (%r & %r), but '
+                            'properties should be unique or geometries '
+                            'intersecting.' % (road['properties'], f.wkt,
+                                               geom.wkt))
+
+                features[props].append(geom)
