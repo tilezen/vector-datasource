@@ -43,9 +43,14 @@ class MergeJunctionTest(FixtureTest):
             # should have merged into a single _feature_
             self.assertTrue(len(features) == 1)
 
-            # the shape should be a multilinestring
-            shape = asShape(features[0]['geometry'])
-            self.assertTrue(shape.geom_type == 'MultiLineString')
+            # when the test suite runs in "download only mode", an empty
+            # set of features is passed into this block. the assertion
+            # is shorted out, so we need this additional check which is
+            # trivially satisfied in the case we're doing real testing.
+            if len(features) == 1:
+                # the shape should be a multilinestring
+                shape = asShape(features[0]['geometry'])
+                self.assertTrue(shape.geom_type == 'MultiLineString')
 
-            # with two internal linestrings
-            self.assertTrue(len(shape.geoms) == 2)
+                # with two internal linestrings
+                self.assertTrue(len(shape.geoms) == 2)
