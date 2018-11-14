@@ -785,3 +785,161 @@ class RoadNetworkFixTest(unittest.TestCase):
         self.assertEqual([], _guess_network_br({}))
         # should be empty for a blank ref
         self.assertEqual([], _guess_network_br(dict(ref="")))
+
+
+# utility method to sort linestrings canonically, so that they can
+# be compared equal in a list. this allows us to use assertEqual on
+# multilinestrings where we don't care about the order of the lines
+# in the multi.
+def _sort_linestrings(lines):
+    return list(sorted(lines, key=lambda l: l.wkt))
+
+
+class MergeJunctionTest(unittest.TestCase):
+
+    def test_simple_merge(self):
+        from shapely.geometry import LineString, MultiLineString
+        from vectordatasource.transform import \
+            _merge_junctions_in_multilinestring
+
+        angle_tolerance = 15.0
+        mls = MultiLineString([
+            LineString([[0, 0], [1, 0]]),
+            LineString([[-1, 0], [0, 0]]),
+        ])
+
+        shape = _merge_junctions_in_multilinestring(mls, angle_tolerance)
+
+        expected = LineString([[-1, 0], [0, 0], [1, 0]])
+        self.assertEquals(shape, expected)
+
+    def test_four_way_merge(self):
+        from shapely.geometry import LineString, MultiLineString
+        from vectordatasource.transform import \
+            _merge_junctions_in_multilinestring
+
+        angle_tolerance = 15.0
+        mls = MultiLineString([
+            LineString([[0, 0], [1, 0]]),
+            LineString([[-1, 0], [0, 0]]),
+            LineString([[0, 0], [0, 1]]),
+            LineString([[0, 0], [0, -1]]),
+        ])
+
+        shape = _merge_junctions_in_multilinestring(mls, angle_tolerance)
+
+        expected = MultiLineString([
+            LineString([[-1, 0], [0, 0], [1, 0]]),
+            LineString([[0, -1], [0, 0], [0, 1]]),
+        ])
+
+        self.assertEquals(shape.geom_type, expected.geom_type)
+        self.assertEquals(_sort_linestrings(shape.geoms),
+                          _sort_linestrings(expected.geoms))
+
+    def test_merge_tolerance(self):
+        from shapely.geometry import LineString, MultiLineString
+        from vectordatasource.transform import \
+            _merge_junctions_in_multilinestring
+
+        angle_tolerance = 0.0
+        # these have been adjusted so that none of them meet at
+        # exact angles, so no merge should take place.
+        mls = MultiLineString([
+            LineString([[0, 0], [1, 0.1]]),
+            LineString([[-1, 0], [0, 0]]),
+            LineString([[0, 0], [0.1, 1]]),
+            LineString([[0, 0], [0, -1]]),
+        ])
+
+        shape = _merge_junctions_in_multilinestring(mls, angle_tolerance)
+
+        expected = mls
+        self.assertEquals(shape.geom_type, expected.geom_type)
+        self.assertEquals(_sort_linestrings(shape.geoms),
+                          _sort_linestrings(expected.geoms))
+
+    def test_partition_mls_nonoverlapping(self):
+        from shapely.geometry import LineString, MultiLineString
+        from vectordatasource.transform import \
+            _linestring_nonoverlapping_partition
+
+        # these are already non-overlapping, so should not be split
+        mls = MultiLineString([
+            LineString([[0, 0], [1, 0]]),
+            LineString([[0, 1], [1, 1]]),
+        ])
+
+        shapes = _linestring_nonoverlapping_partition(mls)
+
+        self.assertEquals(shapes, [mls])
+
+    def test_partition_mls_simple_overlapping(self):
+        from shapely.geometry import LineString, MultiLineString
+        from vectordatasource.transform import \
+            _linestring_nonoverlapping_partition
+
+        ls1 = LineString([[-1, 0], [1, 0]])
+        ls2 = LineString([[0, -1], [0, 1]])
+
+        # these are overlapping, so should be split
+        mls = MultiLineString([ls1, ls2])
+
+        shapes = _linestring_nonoverlapping_partition(mls)
+
+        self.assertEquals(shapes, [ls1, ls2])
+
+    def test_partition_mls_overlapping(self):
+        from shapely.geometry import LineString, MultiLineString
+        from vectordatasource.transform import \
+            _linestring_nonoverlapping_partition
+
+        ls1 = LineString([[-3, 0], [3, 0]])
+        ls2 = LineString([[0, -3], [0, 3]])
+        ls3 = LineString([[-3, 1], [3, 1]])
+        ls4 = LineString([[1, -3], [1, 3]])
+
+        # these are overlapping, so should be split
+        mls = MultiLineString([ls1, ls2, ls3, ls4])
+
+        shapes = _linestring_nonoverlapping_partition(mls)
+
+        self.assertEquals(shapes, [
+            MultiLineString([ls1, ls3]),
+            MultiLineString([ls2, ls4]),
+        ])
+
+
+class TestBoundingBoxIntersection(unittest.TestCase):
+
+    def _intersects(self, a, b):
+        from vectordatasource.transform import _intersects_bounds
+        self.assertTrue(_intersects_bounds(a, b))
+
+    def _disjoint(self, a, b):
+        from vectordatasource.transform import _intersects_bounds
+        self.assertFalse(_intersects_bounds(a, b))
+
+    def test_left(self):
+        self._disjoint((0, 0, 1, 1), (2, 0, 3, 1))
+
+    def test_right(self):
+        self._disjoint((2, 0, 3, 1), (0, 0, 1, 1))
+
+    def test_top(self):
+        self._disjoint((0, 0, 1, 1), (0, 2, 1, 3))
+
+    def test_bottom(self):
+        self._disjoint((0, 2, 1, 3), (0, 0, 1, 1))
+
+    def test_contains(self):
+        self._intersects((0, 0, 5, 5), (1, 1, 4, 4))
+
+    def tests_contained(self):
+        self._intersects((1, 1, 4, 4), (0, 0, 5, 5))
+
+    def test_half_left(self):
+        self._intersects((0, 0, 5, 2), (1, 1, 4, 3))
+
+    def test_half_top(self):
+        self._intersects((0, 0, 2, 5), (1, 1, 3, 4))

@@ -1129,18 +1129,46 @@ post_process:
       start_zoom: 4
       end_zoom: 13
 
+  # first, merge linestrings together where the properties are the same, and
+  # make sure we merge across junctions. this will create a set of non-simple
+  # multilinestrings which do not have nodes at junctions.
+  #
+  # note that the linestrings are already simplified by preceding simplify
+  # and clip stage.
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
       start_zoom: 8
       end_zoom: 16
+      # setting the following will try to merge linestrings across junctions
+      # (i.e: more than 2 roads meeting at a point) where the angle between
+      # roads at that point is less than 5 degrees.
+      merge_junctions: true
+      merge_junction_angle: 5.0
 
+  # simplify roads again, to take advantage of any opportunities opened up
+  # by merging roads with the same properties in the previous step.
   - fn: vectordatasource.transform.simplify_layer
     params:
       source_layer: roads
       start_zoom: 8
       end_zoom: 16
       tolerance: 1.0
+
+  # merge _again_, this time to merge any features which no longer intersect
+  # because of the simplification step and can be packed into the same
+  # MultiLineString. also, drop short segments within the MultiLineString
+  # which didn't get merged into something larger - at 0.1 pixels, these
+  # probably aren't visible anyway.
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 16
+      # setting the following will cause lines, or parts of multi-lines,
+      # shorter than 0.1px at nominal zoom to be dropped.
+      drop_short_segments: true
+      drop_length_pixels: 0.1
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!
