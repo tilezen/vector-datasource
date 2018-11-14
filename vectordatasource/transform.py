@@ -3190,6 +3190,11 @@ def _merge_buildings(polygon_shapes, tolerance):
     from shapely.geometry import JOIN_STYLE
 
     area_tolerance = tolerance * tolerance
+    # small factor, relative to tolerance. this is used so that we don't buffer
+    # polygons out by exactly the same amount as we buffer them inwards. using
+    # the exact same value ends up causing topology problems when two points on
+    # opposing sides of the polygon meet eachother exactly.
+    epsilon = tolerance * 1.0e-6
 
     result = _merge_polygons(polygon_shapes)
     if not result:
@@ -3202,14 +3207,15 @@ def _merge_buildings(polygon_shapes, tolerance):
     # keeps angles the same. to avoid spikes, we limit the mitre to a little
     # under 90 degrees.
     result = result.buffer(
-        tolerance, join_style=JOIN_STYLE.mitre, mitre_limit=1.5)
+        tolerance - epsilon, join_style=JOIN_STYLE.mitre, mitre_limit=1.5)
     result = result.simplify(tolerance)
     result = _drop_small_inners_multi(result, area_tolerance)
     result = result.buffer(
         -tolerance, join_style=JOIN_STYLE.mitre, mitre_limit=1.5)
     result = _drop_small_outers_multi(result, area_tolerance)
 
-    if result.is_empty:
+    # don't return invalid results!
+    if result.is_empty or not result.is_valid:
         return []
 
     return [result]
