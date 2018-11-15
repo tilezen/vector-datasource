@@ -943,3 +943,25 @@ class TestBoundingBoxIntersection(unittest.TestCase):
 
     def test_half_top(self):
         self._intersects((0, 0, 2, 5), (1, 1, 3, 4))
+
+
+class MergeBuildingTest(unittest.TestCase):
+
+    def test_merge_buildings(self):
+        from shapely.wkb import loads
+        from vectordatasource.transform import _merge_buildings
+
+        mp = loads(
+            '01060000000200000001030000000100000005000000295C8FC2F57A9040'
+            'E17A140E126B59410000000000A3904085EB51D8126B594148E17A14AEB9'
+            '9040C3F5285C0E6B5941666666666692904085EB51A80D6B5941295C8FC2'
+            'F57A9040E17A140E126B5941010300000001000000050000005C8FC2F528'
+            '439040713D0A070C6B5941666666666692904085EB51A80D6B5941333333'
+            '3333B99040EC51B84E066B594100000000006A9040B81E85AB046B59415C'
+            '8FC2F528439040713D0A070C6B5941'.decode('hex')
+        )
+        tolerance = 1.9109257071294063
+        result = _merge_buildings(mp, tolerance)
+
+        self.assertEquals(len(result), 1)
+        self.assertTrue(result[0].is_valid)
