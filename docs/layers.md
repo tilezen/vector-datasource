@@ -2108,6 +2108,80 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 * `yellow`
 * `yellowgreen`
 
+## Traffic Flow Layer
+This **optional** layer is meant to be updated every few minutes, due to the highly dynamic nature of the data. Consideration should be given to rendering the features from this layer linked to the **roads** layer when linear referencing is available, or as an overlay
+
+* Layer name: `traffic_flow`
+* Geometry types: `line`
+
+#### `common` properties:
+* `id`: Unique traffic event ID. Can be referenced when checking for updated traffic information for specified event
+* `kind`: the **severity** of the flow information as seen by traffic provider to indicate the traffic "color"
+* `kind_detail`: the **congestion** level of traffic flow, with 0.0 representing completely free flowing traffic to 1.0 completely congested traffic
+* `min_zoom`: this value is derived from combination of `road_kind`, `kind`, and `kind_detail` values. A suggestion for which zoom to draw a feature. The value is a float
+
+#### Possible `kind` values for traffic flow:
+* `unknown`: traffic status unknown
+* `free`: Free flowing, not disturbed, traffic
+* `minor`: Minor traffic
+* `slow`: Slowly moving traffic
+* `queuing`: The traffic is in queues but still moves slowly
+* `stationary`: Stationary traffic, congestion
+* `none`: No traffic flow due to blockage or closure
+
+#### `common-optional` properties:
+* `source`: provider of traffic information
+* `speed`: speed in km/h
+* `drives_on_left`: set to `true` when the country drives on the left, e.g. In the U.K
+
+#### `optional` properties:
+The following properties should only be included when **roads** layer features doesn't include `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md). In that case the traffic data should be delivered without geometry and run-time linked with the **roads** layer. But baring that, the following `optional` properties enable sizing and layering of the traffic overlay with respect to the roads network:
+
+* `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md), or..
+* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `is_bridge`: set to `true` when the linear is a bridge
+* `is_tunnel`: set to `true` when the linear is a tunnel
+* `ramp` or `is_link`: set to `true` when the linear is a slip-road
+
+## Traffic Incident Layer
+This **optional** layer is meant to be updated every few minutes, due to the highly dynamic nature of the information contained within this layer. Consideration should be given to rendering the features from this layer either linked to the **roads** layer for linear geometries or as an overlay, and always as an overlay for point geometries
+
+* Layer name: `traffic_incidents`
+* Geometry types: `line`, `point`
+
+#### `common` properties:
+* `id`: Unique traffic event ID. Can be referenced when checking for updated traffic information for specified event
+* `kind`: type of the incident
+* `min_zoom`: this value is derived from the internal `warning_level` used for the severity of the incidents which corresponds to a list of values: low (3), minor (2), major (1), critical (0). A suggestion for which zoom to draw a feature. The value is a float
+
+#### Possible values for the incident `kind` are:
+* `accident`: there has been a collision
+* `congestion`: there has been a build up of vehicles
+* `construction`: building or roadworks are taking place
+* `disabled_vehicle`: a vehicle is unable to move and is obstructing the road
+* `mass_transit`: a large amount of people are migrating from one location to another
+* `planned_event`: an organised event is taking place causing disruption
+* `road_hazard`: there are dangerous objects on the surface of the road
+* `weather`: weather conditions are causing disruptions
+* `other`: an incident not explainable with the labels above has occurred
+
+#### `common-optional` properties:
+* `source`: provider of traffic information
+* `start_time`: the time the incident begins/begun as [unix time](https://en.wikipedia.org/wiki/Unix_time). At least one of the `start_time` or `stop_time` must be set
+* `stop_time`: the time the incident ends/ended as [unix time](https://en.wikipedia.org/wiki/Unix_time). At least one of the `start_time` or `stop_time` must be set
+* `title`: a short description of the incident, localized, such as `title:en` for English and `title:de` for German. Could be used for a title of a pop-up shown in the screen
+* `description`: potentially long description and comment on the incident. Localized, like `title` mentioned above
+
+#### `optional` properties:
+The following properties should only be included when **roads** layer features doesn't include `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md). In that case the traffic data should be delivered without geometry and run-time linked with the **roads** layer. But baring that, the following `optional` properties enable sizing and layering of the traffic overlay with respect to the roads network:
+
+* `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md), or..
+* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `is_bridge`: set to `true` when the linear is a bridge
+* `is_tunnel`: set to `true` when the linear is a tunnel
+* `ramp` or `is_link`: set to `true` when the linear is a slip-road
+* `drives_on_left`: set to `true` when the country drives on the left, e.g. In the U.K
+
 ## Water
 
 ![image](images/mapzen-vector-tile-docs-water.png)
