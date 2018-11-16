@@ -2110,6 +2110,8 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 
 ## Traffic Flow
 
+![image](images/mapzen-vector-tile-docs-traffic-flow.png)
+
 This **optional** layer is meant to be updated every few minutes, due to the highly dynamic nature of the data. Consideration should be given to rendering the features from this layer linked to the **roads** layer when linear referencing is available, or as an overlay
 
 * Layer name: `traffic_flow`
@@ -2153,6 +2155,8 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * `is_link`: set to true when the linear is a slip-road
 
 ## Traffic Incidents
+
+![image](images/mapzen-vector-tile-docs-traffic-incidents.png)
 
 This **optional** layer is meant to be updated every few minutes, due to the highly dynamic nature of the information contained within this layer. Consideration should be given to rendering the features from this layer either linked to the **roads** layer for linear geometries or as an overlay, and always as an overlay for point geometries
 
