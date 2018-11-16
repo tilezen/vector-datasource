@@ -3580,6 +3580,12 @@ def _angle_at(linestring, pt):
         dy = -dy
 
     a = math.atan2(dy, dx) / math.pi * 180.0
+
+    # wrap around at exactly 180, because we don't care about the direction of
+    # the road, only what angle the line is at, and 180 is horizontal same as 0.
+    if a == 180.0:
+        a = 0.0
+
     assert 0 <= a < 180
     return a
 
