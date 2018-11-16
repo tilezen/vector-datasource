@@ -2137,14 +2137,15 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 * `congestion`: the level of traffic flow, with 0.0 representing completely free flowing traffic to 1.0 completely congested traffic
 * `speed`: speed in km/h
 * `drives_on_left`: set to `true` when the country drives on the left, e.g. In the U.K
+* `sort_rank`: a suggestion for which order to draw flow features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers
 
 #### `optional` properties:
 
-If the roads layer features include linear_ref_id, then traffic flow layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
+If the roads layer features include `linear_ref_id`, then traffic flow layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
 
 * `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md).
 
-However, if the roads layer does not include linear_ref_id, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
+However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
 * `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
@@ -2186,9 +2187,12 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 
 #### `optional` properties:
 
-The following properties should only be included when **roads** layer features doesn't include `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md). In that case the traffic data should be delivered without geometry and run-time linked with the **roads** layer. But baring that, the following `optional` properties enable sizing and layering of the traffic overlay with respect to the roads network:
+If the roads layer features include `linear_ref_id`, then traffic incidents layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
 
-* `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md), or..
+* `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md).
+
+However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
+
 * `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
