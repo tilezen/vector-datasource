@@ -2294,9 +2294,12 @@ def _project_properties(ctx, action):
             new_features.append((shape, props, fid))
             continue
 
-        # copy params to add a 'zoom' one. would prefer '$zoom', but apparently
-        # that's not allowed in python syntax.
-        local = props.copy()
+        # we're going to use a defaultdict for this, so that references to
+        # properties which don't exist just end up as None without causing an
+        # exception. we also add a 'zoom' one. would prefer '$zoom', but
+        # apparently that's not allowed in python syntax.
+        local = defaultdict(lambda: None)
+        local.update(props)
         local['zoom'] = zoom
 
         # allow decisions based on meters per pixel zoom too.

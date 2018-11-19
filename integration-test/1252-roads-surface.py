@@ -60,10 +60,14 @@ class RoadsSurface(FixtureTest):
                 'kind_detail': 'track',
                 'is_bicycle_related': True,
                 'surface': 'concrete_lanes',
-                'bicycle_network': 'ncn',
                 'min_zoom': 8,
-                'bicycle_shield_text': 'D10',
             }
+
+            if z >= 13:
+                props.update({
+                    'bicycle_network': 'ncn',
+                    'bicycle_shield_text': 'D10',
+                })
 
             self.assert_has_feature(
                 z, 17456 / coord_scale, 10780 / coord_scale, 'roads', props)

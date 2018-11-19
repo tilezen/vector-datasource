@@ -985,6 +985,42 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
+  # drop RCN network & shield text below zoom 13.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 13
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'rcn'
+  # drop LCN network & shield text below zoom 16. this is earlier than a
+  # previous drop of the all_*, so make sure we clear those out too.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
+      where: >-
+        bicycle_network == 'lcn'
+  # drop any bicycle network & shield text on tracks below zoom 13.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 13
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+      where: >-
+        kind == 'path' and kind_detail == 'track'
   - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: pois
