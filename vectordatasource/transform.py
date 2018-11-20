@@ -3688,7 +3688,19 @@ def _merge_junctions_in_multilinestring(mls, angle_tolerance):
 
 def _loop_merge_junctions(geom, angle_tolerance):
     """
-    Loop while some merges are still happening.
+    Keep applying junction merging to the MultiLineString until there are no
+    merge opportunities left.
+
+    A single merge step will only carry out one merge per LineString, which
+    means that the other endpoint might miss out on a possible merge. So we
+    loop over the merge until all opportunities are exhausted: either we end
+    up with a single LineString or we run a step and it fails to merge any
+    candidates.
+
+    For a total number of possible merges, N, we could potentially be left
+    with two thirds of these left over, depending on the order of the
+    candidates. This means we should need only O(log N) steps to merge them
+    all.
     """
 
     if geom.geom_type != 'MultiLineString':
@@ -3745,8 +3757,12 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
     Merge LineStrings within MultiLineStrings within features across junction
     boundaries where the lines appear to continue at the same angle.
 
-    Where junctions were merged, apply a simplification step to remove colinear
-    junction points.
+    If simplify_tolerance is provided, apply a simplification step. This can
+    help to remove colinear junction points left over from any merging.
+
+    Finally, group the lines into non-overlapping sets, each of which generates
+    a separate MultiLineString feature to ensure they're already simple and
+    further geometric operations won't re-introduce intersection points.
 
     Returns a new list of features.
     """
