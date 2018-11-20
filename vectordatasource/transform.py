@@ -3686,10 +3686,67 @@ def _merge_junctions_in_multilinestring(mls, angle_tolerance):
         return MultiLineString(merged_geoms)
 
 
-def _merge_junctions(features, angle_tolerance):
+def _loop_merge_junctions(geom, angle_tolerance):
+    """
+    Loop while some merges are still happening.
+    """
+
+    if geom.geom_type != 'MultiLineString':
+        return geom
+
+    # keep track of the number of linestrings in the multilinestring. we'll
+    # use that to figure out if we've merged as much as we possibly can.
+    mls_size = len(geom.geoms)
+
+    while True:
+        geom = _merge_junctions_in_multilinestring(geom, angle_tolerance)
+
+        # merged everything down to a single linestring
+        if geom.geom_type == 'LineString':
+            break
+
+        # made no progress
+        elif len(geom.geoms) == mls_size:
+            break
+
+        assert len(geom.geoms) < mls_size, \
+            "Number of geometries should stay the same or reduce after merge."
+
+        # otherwise, keep looping
+        mls_size = len(geom.geoms)
+
+    return geom
+
+
+def _simplify_line_collection(shape, tolerance):
+    """
+    Calling simplify on a MultiLineString doesn't always simplify if it would
+    make the MultiLineString non-simple.
+
+    However, we're trying to sort linestrings into nonoverlapping sets, and we
+    don't care whether they overlap at this point. However, we do want to make
+    sure that any colinear points in the individual LineStrings are removed.
+    """
+
+    if shape.geom_type == 'LineString':
+        return shape.simplify(tolerance)
+
+    elif shape.geom_type == 'MultiLineString':
+        new_geoms = []
+        for geom in shape.geoms:
+            new_geoms.append(geom.simplify(tolerance))
+        return MultiLineString(new_geoms)
+
+    return shape
+
+
+def _merge_junctions(features, angle_tolerance, simplify_tolerance):
     """
     Merge LineStrings within MultiLineStrings within features across junction
     boundaries where the lines appear to continue at the same angle.
+
+    Where junctions were merged, apply a simplification step to remove colinear
+    junction points.
 
     Returns a new list of features.
     """
@@ -3697,8 +3754,11 @@ def _merge_junctions(features, angle_tolerance):
     new_features = []
     for shape, props, fid in features:
         if shape.geom_type == 'MultiLineString':
-            shape = _merge_junctions_in_multilinestring(
-                shape, angle_tolerance)
+            shape = _loop_merge_junctions(shape, angle_tolerance)
+
+            if simplify_tolerance > 0.0:
+                shape = _simplify_line_collection(shape, simplify_tolerance)
+
             if shape.geom_type == 'MultiLineString':
                 disjoint_shapes = _linestring_nonoverlapping_partition(shape)
                 for disjoint_shape in disjoint_shapes:
@@ -3841,6 +3901,8 @@ def merge_line_features(ctx):
         'drop_short_segments', default=False, typ=bool)
     short_segment_factor = params.optional(
         'drop_length_pixels', default=0.1, typ=float)
+    simplify_tolerance = params.optional(
+        'simplify_tolerance', default=0.0, typ=float)
 
     assert source_layer, 'merge_line_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -3862,7 +3924,7 @@ def merge_line_features(ctx):
 
     if merge_junctions:
         layer['features'] = _merge_junctions(
-            layer['features'], junction_angle_tolerance)
+            layer['features'], junction_angle_tolerance, simplify_tolerance)
 
     return layer
 
