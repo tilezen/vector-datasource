@@ -3729,13 +3729,13 @@ def _simplify_line_collection(shape, tolerance):
     """
 
     if shape.geom_type == 'LineString':
-        return shape.simplify(tolerance)
+        shape = shape.simplify(tolerance)
 
     elif shape.geom_type == 'MultiLineString':
         new_geoms = []
         for geom in shape.geoms:
             new_geoms.append(geom.simplify(tolerance))
-        return MultiLineString(new_geoms)
+        shape = MultiLineString(new_geoms)
 
     return shape
 
@@ -3756,15 +3756,17 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
         if shape.geom_type == 'MultiLineString':
             shape = _loop_merge_junctions(shape, angle_tolerance)
 
-            if simplify_tolerance > 0.0:
-                shape = _simplify_line_collection(shape, simplify_tolerance)
+        if simplify_tolerance > 0.0:
+            shape = _simplify_line_collection(shape, simplify_tolerance)
 
-            if shape.geom_type == 'MultiLineString':
-                disjoint_shapes = _linestring_nonoverlapping_partition(shape)
-                for disjoint_shape in disjoint_shapes:
-                    new_features.append((disjoint_shape, props, None))
-                continue
-        new_features.append((shape, props, fid))
+        if shape.geom_type == 'MultiLineString':
+            disjoint_shapes = _linestring_nonoverlapping_partition(shape)
+            for disjoint_shape in disjoint_shapes:
+                new_features.append((disjoint_shape, props, None))
+
+        else:
+            new_features.append((shape, props, fid))
+
     return new_features
 
 
