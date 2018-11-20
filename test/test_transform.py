@@ -965,3 +965,29 @@ class MergeBuildingTest(unittest.TestCase):
 
         self.assertEquals(len(result), 1)
         self.assertTrue(result[0].is_valid)
+
+
+class AngleAtTest(unittest.TestCase):
+
+    def _check(self, coords, angle):
+        from shapely.geometry import LineString
+        from vectordatasource.transform import _angle_at
+
+        ls = LineString(coords)
+        self.assertEqual(_angle_at(ls, ls.coords[0]), angle)
+        self.assertEqual(_angle_at(ls, ls.coords[-1]), angle)
+
+    def test_angle_at_zero(self):
+        self._check([[0, 0], [1, 0]], 0)
+
+    def test_angle_at_180(self):
+        self._check([[1, 0], [0, 0]], 0)
+
+    def test_angle_at_90(self):
+        self._check([[0, 0], [0, 1]], 90)
+
+    def test_angle_at_270(self):
+        self._check([[0, 1], [0, 0]], 90)
+
+    def test_angle_at_degenerate(self):
+        self._check([[0, 0], [0, 0]], None)
