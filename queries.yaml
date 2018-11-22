@@ -894,9 +894,18 @@ post_process:
         - route
         - route_name
         - state
-        - surface
         - symbol
         - type
+      where: >-
+        kind == 'minor_road'
+  # keep "surface" until zoom 15.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - surface
       where: >-
         kind == 'minor_road'
   # drop to get better merging at mid zooms.
