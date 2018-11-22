@@ -8145,3 +8145,46 @@ def tags_set_ne_min_max_zoom(ctx):
             props['max_zoom'] = max_zoom
 
     return None
+
+
+def whitelist(ctx):
+    """
+    Applies a whitelist to a particular property on all features in the layer,
+    optionally also remapping some values.
+    """
+
+    params = _Params(ctx, 'whitelist')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    property_name = params.required('property')
+    whitelist = params.required('whitelist', typ=list)
+    remap = params.optional('remap', default={}, typ=dict)
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+        value = props.get(property_name)
+        if value is not None:
+            if value in whitelist:
+                # leave value as-is
+                continue
+
+            elif value in remap:
+                # replace with replacement value
+                props[property_name] = remap[value]
+
+            else:
+                # drop the property
+                props.pop(property_name)
+
+    return None
