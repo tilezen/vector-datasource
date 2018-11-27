@@ -15,7 +15,7 @@ class DropRoadPropertiesTest(FixtureTest):
         # zoom <= 12.
         import dsl
 
-        z, x, y = (13, 4096, 4096)
+        z, x, y = (12, 2048, 2048)
 
         self.generate_fixtures(
             # note: use a major road type, so that the road still exists at
@@ -33,22 +33,29 @@ class DropRoadPropertiesTest(FixtureTest):
             }, ways=[1]),
         )
 
-        # should exist with all properties at zoom 13
+        # should exist with all properties at zoom 12
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 1,
+                'kind': 'major_road',
                 'bicycle_network': u'rcn',
                 'bicycle_shield_text': u'X',
             })
 
-        # should drop properties by zoom 12
-        self.assert_no_matching_feature(
+        # should drop shield text property at zoom 11
+        self.assert_has_feature(
             z-1, x//2, y//2, 'roads', {
-                'bicycle_network': None,
+                'kind': 'major_road',
+                'bicycle_network': u'rcn',
+                'bicycle_shield_text': type(None),
             })
-        self.assert_no_matching_feature(
-            z-1, x//2, y//2, 'roads', {
-                'bicycle_shield_text': None,
+
+        # and drop everything by zoom 10
+        self.assert_has_feature(
+            z-2, x//4, y//4, 'roads', {
+                'kind': 'major_road',
+                'bicycle_network': type(None),
+                'bicycle_shield_text': type(None),
             })
 
     def test_track(self):
@@ -105,10 +112,10 @@ class DropRoadPropertiesTest(FixtureTest):
         #             visible: false
         #
         # roughly translates to: don't draw shields on LCN networks when
-        # zoom <= 15.
+        # zoom < 15.
         import dsl
 
-        z, x, y = (16, 0, 0)
+        z, x, y = (15, 0, 0)
 
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
@@ -124,20 +131,27 @@ class DropRoadPropertiesTest(FixtureTest):
             }, ways=[1]),
         )
 
-        # should exist with all properties at zoom 16 (as should everything).
+        # should exist with all properties at zoom 15.
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 1,
+                'kind': 'minor_road',
                 'bicycle_network': u'lcn',
                 'bicycle_shield_text': u'X',
             })
 
-        # should drop properties by zoom 15
-        self.assert_no_matching_feature(
+        # should drop shield text by zoom 14
+        self.assert_has_feature(
             z-1, x//2, y//2, 'roads', {
-                'bicycle_network': None,
+                'kind': 'minor_road',
+                'bicycle_network': u'lcn',
+                'bicycle_shield_text': type(None),
             })
-        self.assert_no_matching_feature(
-            z-1, x//2, y//2, 'roads', {
-                'bicycle_shield_text': None,
+
+        # should drop everything by <= 13
+        self.assert_has_feature(
+            z-2, x//4, y//4, 'roads', {
+                'kind': 'minor_road',
+                'bicycle_network': type(None),
+                'bicycle_shield_text': type(None),
             })
