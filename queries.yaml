@@ -991,30 +991,52 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
-  # drop RCN network & shield text below zoom 13.
+  # drop RCN network & shield text below zoom 11, and shield text at one more
+  # zoom.
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522771
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 13
+      end_zoom: 11
       properties:
         - bicycle_network
         - bicycle_shield_text
       where: >-
         bicycle_network == 'rcn'
-  # drop LCN network & shield text below zoom 16. this is earlier than a
-  # previous drop of the all_*, so make sure we clear those out too.
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 16
+      end_zoom: 12
+      properties:
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'rcn'
+  # drop LCN network & shield text below zoom 14 and shield text only at
+  # one more zoom level. (should be present at zoom 15).
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236523895
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
       properties:
         - bicycle_network
         - bicycle_shield_text
       where: >-
         bicycle_network == 'lcn'
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'lcn'
   # drop any bicycle network & shield text on tracks below zoom 13.
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236524127
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
