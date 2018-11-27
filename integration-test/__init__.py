@@ -915,7 +915,7 @@ class FixtureEnvironment(object):
         label_placement_layers = {
             'point': set(['earth', 'water']),
             'polygon': set(['buildings', 'earth', 'landuse', 'water']),
-            'linestring': set(['earth', 'landuse', 'water']),
+            'linestring': set(['earth', 'landuse']),
         }
 
         self.layer_data = layer_data
