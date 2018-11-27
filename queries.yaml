@@ -821,12 +821,20 @@ post_process:
       start_zoom: 0
       end_zoom: 14
       properties:
-        - all_bicycle_networks
-        - all_bicycle_shield_texts
         - all_walking_networks
         - all_walking_shield_texts
         - all_bus_networks
         - all_bus_shield_texts
+  # drop all_bicycle_* until the max zoom:
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522176
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
   # drop certain road properties at lower zooms
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -929,8 +937,6 @@ post_process:
       start_zoom: 0
       end_zoom: 11
       properties:
-        - all_bicycle_networks
-        - all_bicycle_shield_texts
         - all_walking_networks
         - all_walking_shield_texts
         - bus_network
@@ -1006,8 +1012,6 @@ post_process:
       properties:
         - bicycle_network
         - bicycle_shield_text
-        - all_bicycle_networks
-        - all_bicycle_shield_texts
       where: >-
         bicycle_network == 'lcn'
   # drop any bicycle network & shield text on tracks below zoom 13.
