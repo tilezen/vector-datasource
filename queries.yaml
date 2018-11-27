@@ -897,7 +897,6 @@ post_process:
       end_zoom: 16
       properties:
         - colour
-        - motor_vehicle
         - operator
         - route
         - route_name
@@ -925,8 +924,6 @@ post_process:
       properties:
         - cutting
         - embankment
-      where: >-
-        kind == 'minor_road'
 
   # whitelist certain values for access on roads at mid and low zooms. the
   # distinction between different values is too much detail at these zooms and
@@ -955,6 +952,18 @@ post_process:
         military: official
         restricted: official
         forestry: official
+  # keep motor_vehicle = no, private, but drop other values. motor_vehicle seems
+  # to have a range of values similarly to access. perhaps they should be
+  # merged?
+  - fn: vectordatasource.transform.whitelist
+    params:
+      layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      property: motor_vehicle
+      whitelist:
+        - "no"
+        - private
 
   # this is a patch because we still want to drop name, network from major_road
   # features between zoom 7 and 10
