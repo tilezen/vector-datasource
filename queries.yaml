@@ -152,7 +152,7 @@ layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 9
+    simplify_start: 8
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -167,7 +167,7 @@ layers:
   earth:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 9
+    simplify_start: 8
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
