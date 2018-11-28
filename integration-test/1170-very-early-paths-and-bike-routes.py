@@ -130,12 +130,19 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
         self.load_fixtures([
             'http://www.openstreetmap.org/way/44422697',
             'http://www.openstreetmap.org/relation/325779',
-        ], clip=self.tile_bbox(10, 164, 396))
+        ], clip=self.tile_bbox(13, 1313, 3172))
 
+        # keeps bicycle_network at zoom 13
+        self.assert_has_feature(
+            13, 1313, 3172, 'roads',
+            {'kind': 'path', 'is_bicycle_related': True,
+             'bicycle_network': 'rcn'})
+
+        # keeps is_bicycle_related at zoom 10
         self.assert_has_feature(
             10, 164, 396, 'roads',
             {'kind': 'path', 'is_bicycle_related': True,
-             'bicycle_network': 'rcn'})
+             'bicycle_network': type(None)})
 
     def test_residential_with_regional_route(self):
         # Hyltebjerg Allé residential road with rcn in Copenhagen
@@ -144,32 +151,38 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             'https://www.openstreetmap.org/relation/2087590',
         ], clip=self.tile_bbox(10, 547, 320))
 
+        # keep bicycle_network until 13
         self.assert_has_feature(
-            10, 547, 320, 'roads',
+            13, 4379, 2563, 'roads',
             {'kind': 'minor_road', 'is_bicycle_related': True,
              'bicycle_network': 'rcn'})
 
+        # keep the is_bicycle_related at lower zooms
+        self.assert_has_feature(
+            10, 547, 320, 'roads',
+            {'kind': 'minor_road', 'is_bicycle_related': True,
+             'bicycle_network': type(None)})
+
     def test_living_street_with_local_route(self):
-        # lcn in Seattle (living street that would only be visible at zoom 13
-        # otherwise) at zoom 11
+        # lcn in Seattle - LCN only visible at zoom 16
         self.load_fixtures([
             'https://www.openstreetmap.org/way/6477775',
             'https://www.openstreetmap.org/relation/3541926',
-        ], clip=self.tile_bbox(11, 327, 715))
+        ], clip=self.tile_bbox(16, 10492, 22900))
 
         self.assert_has_feature(
-            11, 327, 715, 'roads',
+            16, 10492, 22900, 'roads',
             {'kind': 'minor_road', 'bicycle_network': 'lcn'})
 
     def test_kirkham_street_lcn(self):
-        # Kirkham Street lcn in San Francisco at zoom 11
+        # Kirkham Street lcn in San Francisco at zoom 16
         self.load_fixtures([
             'https://www.openstreetmap.org/way/89802424',
             'https://www.openstreetmap.org/relation/32313',
-        ], clip=self.tile_bbox(11, 327, 791))
+        ], clip=self.tile_bbox(16, 10471, 25334))
 
         self.assert_has_feature(
-            11, 327, 791, 'roads',
+            16, 10471, 25334, 'roads',
             {'kind': 'minor_road', 'bicycle_network': 'lcn'})
 
     def test_asiatisk_plads_service_road_lcn(self):
@@ -177,8 +190,8 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
         self.load_fixtures([
             'https://www.openstreetmap.org/way/164049387',
             'https://www.openstreetmap.org/relation/6199242',
-        ], clip=self.tile_bbox(11, 1095, 641))
+        ], clip=self.tile_bbox(16, 35059, 20513))
 
         self.assert_has_feature(
-            11, 1095, 641, 'roads',
+            16, 35059, 20513, 'roads',
             {'kind': 'minor_road', 'bicycle_network': 'lcn'})

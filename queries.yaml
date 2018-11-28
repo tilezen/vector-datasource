@@ -821,12 +821,20 @@ post_process:
       start_zoom: 0
       end_zoom: 14
       properties:
-        - all_bicycle_networks
-        - all_bicycle_shield_texts
         - all_walking_networks
         - all_walking_shield_texts
         - all_bus_networks
         - all_bus_shield_texts
+  # drop all_bicycle_* until the max zoom:
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522176
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - all_bicycle_networks
+        - all_bicycle_shield_texts
   # drop certain road properties at lower zooms
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -881,6 +889,82 @@ post_process:
         (kind == 'rail' and zoom < 15) or
         (kind == 'minor_road' and zoom < 14) or
         (kind == 'major_road' and zoom <  7)
+  # drop these "detail" tags to get better merging at zoom < 16
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - colour
+        - operator
+        - route
+        - route_name
+        - state
+        - symbol
+        - type
+      where: >-
+        kind == 'minor_road'
+  # keep "surface" until zoom 15.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - surface
+      where: >-
+        kind == 'minor_road'
+  # drop to get better merging at mid zooms.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties:
+        - cutting
+        - embankment
+
+  # whitelist certain values for access on roads at mid and low zooms. the
+  # distinction between different values is too much detail at these zooms and
+  # we'd be better served by more merging.
+  - fn: vectordatasource.transform.whitelist
+    params:
+      layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      property: access
+      # this whitelists the most important values, which are most meaningful in
+      # terms of interpreting the map at z<14 (private is the most common access
+      # value, accounting for 70% of uses on 2018-11-20).
+      whitelist:
+        - "no"
+        - private
+        - official
+      # some values are less important, but belong to a category that might
+      # still be important. for example, access=military at mid or low zooms
+      # might effectively be described as "there's a road here, but you probably
+      # don't want to go there", while still not being quite the same thing as
+      # access=private or access=no, which are both "you definitely don't want
+      # to go there".
+      remap:
+        emergency: official
+        military: official
+        restricted: official
+        forestry: official
+  # keep motor_vehicle = no, private, but drop other values. motor_vehicle seems
+  # to have a range of values similarly to access. perhaps they should be
+  # merged?
+  - fn: vectordatasource.transform.whitelist
+    params:
+      layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      property: motor_vehicle
+      whitelist:
+        - "no"
+        - private
+
   # this is a patch because we still want to drop name, network from major_road
   # features between zoom 7 and 10
   - fn: vectordatasource.transform.drop_properties
@@ -929,8 +1013,6 @@ post_process:
       start_zoom: 0
       end_zoom: 11
       properties:
-        - all_bicycle_networks
-        - all_bicycle_shield_texts
         - all_walking_networks
         - all_walking_shield_texts
         - bus_network
@@ -985,6 +1067,62 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
+  # drop RCN network & shield text below zoom 11, and shield text at one more
+  # zoom.
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522771
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 11
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'rcn'
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 12
+      properties:
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'rcn'
+  # drop LCN network & shield text below zoom 14 and shield text only at
+  # one more zoom level. (should be present at zoom 15).
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236523895
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'lcn'
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - bicycle_shield_text
+      where: >-
+        bicycle_network == 'lcn'
+  # drop any bicycle network & shield text on tracks below zoom 13.
+  # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236524127
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 13
+      properties:
+        - bicycle_network
+        - bicycle_shield_text
+      where: >-
+        kind == 'path' and kind_detail == 'track'
   - fn: vectordatasource.transform.update_parenthetical_properties
     params:
       source_layer: pois
@@ -1122,6 +1260,20 @@ post_process:
       attribute: kind
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_rank', reverse: True }
+
+  # drop landuse_kind=residential or industrial at mid-low zooms, because they
+  # interfere a lot with merging, and tend to be not strongly styled unlike
+  # military, hospital or park/forest land uses.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 14
+      properties:
+        - landuse_kind
+      where: >-
+        landuse_kind in ('residential', 'industrial')
+
   # merge any remaining polygons by their properties.
   - fn: vectordatasource.transform.merge_polygon_features
     params:

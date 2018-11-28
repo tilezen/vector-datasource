@@ -12,10 +12,10 @@ class RoadsSurface(FixtureTest):
             15, 9371, 12546, 'roads',
             {'id': 190536019, 'kind': 'minor_road', 'surface': 'cobblestone'})
 
-        # and that surface property stays at earlier zooms
+        # and that surface property is dropped at earlier zooms
         self.assert_has_feature(
             13, 2342, 3136, 'roads',
-            {'id': 190536019, 'kind': 'minor_road', 'surface': 'cobblestone'})
+            {'id': 190536019, 'kind': 'minor_road', 'surface': type(None)})
 
     def test_asphalt(self):
         # motorway in Kraków, Poland
@@ -51,6 +51,7 @@ class RoadsSurface(FixtureTest):
 
         # check at a bunch of lower zooms, where we're expecting the road to be
         # merged, so be stricter with the set of properties we expect to see.
+        # we'd expect the surface tag to have been stripped off by now.
         for z in (13, 11, 10, 9, 8):
             delta_z = 15 - z
             coord_scale = 2 ** delta_z
@@ -60,10 +61,14 @@ class RoadsSurface(FixtureTest):
                 'kind_detail': 'track',
                 'is_bicycle_related': True,
                 'surface': 'concrete_lanes',
-                'bicycle_network': 'ncn',
                 'min_zoom': 8,
-                'bicycle_shield_text': 'D10',
             }
+
+            if z >= 13:
+                props.update({
+                    'bicycle_network': 'ncn',
+                    'bicycle_shield_text': 'D10',
+                })
 
             self.assert_has_feature(
                 z, 17456 / coord_scale, 10780 / coord_scale, 'roads', props)
