@@ -7754,6 +7754,18 @@ def truncate_min_zoom_to_2dp(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def truncate_min_zoom_to_1dp(shape, properties, fid, zoom):
+    """
+    Truncate the "min_zoom" property to one decimal place.
+    """
+
+    min_zoom = properties.get('min_zoom')
+    if min_zoom:
+        properties['min_zoom'] = round(min_zoom, 1)
+
+    return shape, properties, fid
+
+
 class Palette(object):
     """
     A collection of named colours which allows relatively fast lookup of the
