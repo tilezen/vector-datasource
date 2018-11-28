@@ -626,6 +626,20 @@ post_process:
       end_zoom: 7
       properties: [name]
 
+  # before extracting the label placement points, remove small water areas which
+  # are probably too small to label.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 16
+      properties: [name]
+      geom_types: [Polygon, MultiPolygon]
+      # NOTE: the 270 factor comes from curve fitting the area table from the
+      # walkabout style, with 270 being the min, ranging up to 1070.
+      where: >-
+        area < 270.0 * pixel_area
+
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:

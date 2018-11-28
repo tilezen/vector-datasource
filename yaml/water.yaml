@@ -18,6 +18,27 @@ globals:
           - when:
               intermittent: 'yes'
             then: true
+  - &water_polygon_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        # limit show smaller landuse areas to higher zooms
+        - [ 0, 40000000000 ]
+        - [ 2, 20000000000 ]
+        # some weird natural earth scale set transition
+        - [ 3, 80000000000 ]
+        - [ 4,  5000000000 ]
+        - [ 5,   700000000 ]
+        - [ 6,   500000000 ]
+        - [ 7,   160000000 ]
+        - [ 8,    20000000 ]
+        - [ 9,     5000000 ]
+        - [ 10,    1000000 ]
+        - [ 11,     200000 ]
+        - [ 12,      50000 ]
+        - [ 13,      20000 ]
+      default: 14
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
@@ -26,7 +47,7 @@ globals:
 
 filters:
   - filter: {waterway: riverbank}
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: riverbank
@@ -44,7 +65,7 @@ filters:
       kind: fountain
     table: osm
   - filter: {natural: water}
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: water
@@ -74,7 +95,7 @@ filters:
       kind: basin
     table: osm
   - filter: {landuse: reservoir}
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: lake
@@ -84,7 +105,7 @@ filters:
       any:
         amenity: swimming_pool
         leisure: swimming_pool
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: swimming_pool
@@ -139,39 +160,39 @@ filters:
       kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
-    min_zoom: 0
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *output_properties
       kind: lake
       alkaline: true
     table: ne
   - filter: {featurecla: Lake}
-    min_zoom: 0
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *output_properties
       kind: lake
     table: ne
   - filter: {featurecla: Reservoir}
-    min_zoom: 0
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *output_properties
       kind: lake
       reservoir: true
     table: ne
   - filter: {featurecla: Playa}
-    min_zoom: 0
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *output_properties
       kind: playa
     table: ne
   - filter: {featurecla: Ocean}
-    min_zoom: 0
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *output_properties
       kind: ocean
     table: ne
   - filter: {name: true, place: ocean}
-    min_zoom: 0
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *output_properties
       kind: ocean

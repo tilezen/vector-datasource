@@ -106,7 +106,7 @@ class FractionalPoisNe(FixtureTest):
         # There is no transit data from Natural Earth
         self.assert_has_feature(
             7, 36, 50, 'water',
-            {'min_zoom': 0, 'id': int,
+            {'min_zoom': 7, 'id': int,
              'source': 'naturalearthdata.com',
              'name': 'John H. Kerr Reservoir'})
 
