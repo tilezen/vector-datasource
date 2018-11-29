@@ -11,7 +11,7 @@ class WaterLayerTooBigTest(FixtureTest):
         import math
         import dsl
 
-        for zoom in range(5, 16):
+        for zoom in range(8, 16):
             area = 270.0 * calc_meters_per_pixel_area(zoom)
             radius = math.sqrt(area / math.pi)
 
