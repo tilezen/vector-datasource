@@ -694,7 +694,7 @@ class WaterMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.water.fn(shape, props, None, meta)
-        self.assertEquals(16, out_min_zoom)
+        self.assertEquals(17, out_min_zoom)
 
 
 class RoundTripRuleTest(unittest.TestCase):

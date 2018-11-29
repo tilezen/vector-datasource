@@ -102,17 +102,38 @@ class FractionalPoisNe(FixtureTest):
             {'min_zoom': 5, 'id': int, 'shield_text': '95',
              'source': 'naturalearthdata.com'})
 
-    def test_water(self):
-        # There is no transit data from Natural Earth
-        self.assert_has_feature(
-            7, 36, 50, 'water',
-            {'min_zoom': 0, 'id': int,
-             'source': 'naturalearthdata.com',
-             'name': 'John H. Kerr Reservoir'})
-
+    def test_water_osm(self):
         self.assert_has_feature(
             9, 150, 192, 'water',
             {'min_zoom': 0,
              'source': 'openstreetmapdata.com',
              'kind': 'ocean',
              'name': type(None)})
+
+
+# move stuff into this class when it gets ported from fixture-based tests
+# above to generative tests. eventually the class above should be empty.
+class FractionalPoisNeGenerative(FixtureTest):
+
+    def test_water_ne(self):
+        import dsl
+
+        z, x, y = (7, 36, 50)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                u'scalerank': 7,
+                u'source': u'naturalearthdata.com',
+                u'year': 1953,
+                u'featurecla': u'Reservoir',
+                u'name_abb': u'John H. Kerr Res.',
+                u'name': u'John H. Kerr Reservoir',
+                u'min_zoom': 7,
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'water',
+            {'min_zoom': 7, 'id': int,
+             'source': 'naturalearthdata.com',
+             'name': 'John H. Kerr Reservoir'})

@@ -152,7 +152,7 @@ layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 9
+    simplify_start: 8
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -161,13 +161,13 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 9
+    simplify_start: 8
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -175,7 +175,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
@@ -625,6 +625,20 @@ post_process:
       start_zoom: 0
       end_zoom: 7
       properties: [name]
+
+  # before extracting the label placement points, remove small water areas which
+  # are probably too small to label.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 16
+      properties: [name]
+      geom_types: [Polygon, MultiPolygon]
+      # NOTE: the 270 factor comes from curve fitting the area table from the
+      # walkabout style, with 270 being the min, ranging up to 1070.
+      where: >-
+        area < 270.0 * pixel_area
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
