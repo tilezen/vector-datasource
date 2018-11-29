@@ -32,7 +32,10 @@ globals:
         - [ 11,     200000 ]
         - [ 12,      50000 ]
         - [ 13,      20000 ]
-      default: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
+        - [ 14,       2000 ]
+        - [ 15,       1000 ]
+        - [ 16,        400 ]
+      default: 17
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
