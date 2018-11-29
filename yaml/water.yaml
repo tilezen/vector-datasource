@@ -23,14 +23,8 @@ globals:
       key: { col: way_area }
       op: '>='
       table:
-        # limit show smaller landuse areas to higher zooms
-        - [ 0, 40000000000 ]
-        - [ 2, 20000000000 ]
-        # some weird natural earth scale set transition
-        - [ 3, 80000000000 ]
-        - [ 4,  5000000000 ]
-        - [ 5,   700000000 ]
-        - [ 6,   500000000 ]
+        # OSM data starts at z8, but we should include some stuff at z7 so that
+        # the transition doesn't have a gap in it.
         - [ 7,   160000000 ]
         - [ 8,    20000000 ]
         - [ 9,     5000000 ]
@@ -153,6 +147,10 @@ filters:
           - when: { reef: [coral, rock, sand] }
             then: { col: reef }
     table: osm
+
+  #
+  # NE features
+  #
   - filter: {featurecla: Coastline}
     min_zoom: 0
     output:
@@ -160,37 +158,41 @@ filters:
       kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
-    min_zoom: *water_polygon_min_zoom
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: lake
       alkaline: true
     table: ne
   - filter: {featurecla: Lake}
-    min_zoom: *water_polygon_min_zoom
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: lake
     table: ne
   - filter: {featurecla: Reservoir}
-    min_zoom: *water_polygon_min_zoom
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: lake
       reservoir: true
     table: ne
   - filter: {featurecla: Playa}
-    min_zoom: *water_polygon_min_zoom
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: playa
     table: ne
   - filter: {featurecla: Ocean}
-    min_zoom: *water_polygon_min_zoom
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: ocean
     table: ne
+
+  #
+  # OSM water place points (ocean, sea labels)
+  #
   - filter: {name: true, place: ocean}
     min_zoom: *water_polygon_min_zoom
     output:
