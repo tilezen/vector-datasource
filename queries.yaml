@@ -210,6 +210,7 @@ layers:
   roads:
     geometry_types: [LineString, MultiLineString]
     simplify_start: 8
+    tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -279,6 +280,7 @@ layers:
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 8
+    tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
