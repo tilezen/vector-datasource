@@ -21,12 +21,14 @@ class RestAreaServices(FixtureTest):
             {'kind': 'rest_area', 'id': 97057565, 'sort_rank': 41})
 
     def test_service_area_node(self):
+        # NOTE: this has been remapped as an area now. the test data here
+        # is superseded by the 1698-too-many-service-areas test.
         # node: Tiffin River
         self.generate_fixtures(dsl.way(200412620, wkt_loads('POINT (-84.41292493378698 41.6045519557572)'), {u'source': u'openstreetmap.org', u'name': u'Tiffin River', u'highway': u'services'}))  # noqa
 
         self.assert_has_feature(
             16, 17401, 24424, 'pois',
-            {'kind': 'service_area', 'id': 200412620, 'min_zoom': 11})
+            {'kind': 'service_area', 'id': 200412620, 'min_zoom': 17})
 
     def test_service_area_way(self):
         # Way: Nicole Driveway (274732386)

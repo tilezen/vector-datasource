@@ -100,6 +100,8 @@ def routes_using(way_id):
 def _make_ident(s):
     if isinstance(s, unicode):
         s = s.encode('ascii', 'replace')
+    elif isinstance(s, (int, long, bool, float)):
+        s = repr(s)
     return s.lower().translate(None, ':-')
 
 

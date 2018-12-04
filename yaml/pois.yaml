@@ -2065,8 +2065,38 @@ filters:
     output:
       <<: *output_properties
       kind: picnic_site
-  - filter: {highway: services}
-    min_zoom: 11
+
+  # service area points are hard to tell from mistagged points, but we can do
+  # an approximation by looking to see if the name matches one of several
+  # common suffixes and using that to lift the min zoom.
+  - filter:
+      all:
+        - { highway: services }
+        - { geom_type: point }
+    min_zoom: { call: { func: tz_looks_like_service_area, args: [ { col: name } ] } }
+    output:
+      <<: *output_properties
+      kind: service_area
+
+  # for service area polygons, we can look at the area, which we'd expect to
+  # be large.
+  - filter: { highway: services }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          # really big service area polygons tend to cover the parking lots and
+          # all the buildings (i.e: they're landuse areas).
+          - [ 11, 50000 ]
+          - [ 12, 10000 ]
+          # however, there are many smaller ones which appear to just cover a
+          # single building. ideally, these would be re-drawn to cover the whole
+          # area, but most seem to be >3000 square "meters".
+          - [ 13,  3000 ]
+          - [ 14,  1500 ]
+          - [ 15,  1000 ]
+        default: 17
     output:
       <<: *output_properties
       kind: service_area
