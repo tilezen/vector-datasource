@@ -1308,6 +1308,76 @@ filters:
     output:
       <<: *output_properties
       kind: {col: emergency}
+
+  # NOTE: services and rest areas often have toilets, and often they're
+  # co-tagged on the same object. therefore, we have to try and match the
+  # service / rest area first, otherwise it'll get assigned as a toilet.
+  #
+  # service area points are hard to tell from mistagged points, but we can do
+  # an approximation by looking to see if the name matches one of several
+  # common suffixes and using that to lift the min zoom.
+  - filter:
+      all:
+        - { highway: services }
+        - { geom_type: point }
+    min_zoom: { call: { func: tz_looks_like_service_area, args: [ { col: name } ] } }
+    output:
+      <<: *output_properties
+      kind: service_area
+
+  # for service area polygons, we can look at the area, which we'd expect to
+  # be large.
+  - filter: { highway: services }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          # really big service area polygons tend to cover the parking lots and
+          # all the buildings (i.e: they're landuse areas).
+          - [ 11, 50000 ]
+          - [ 12, 10000 ]
+          # however, there are many smaller ones which appear to just cover a
+          # single building. ideally, these would be re-drawn to cover the whole
+          # area, but most seem to be >3000 square "meters".
+          - [ 13,  3000 ]
+          - [ 14,  1500 ]
+          - [ 15,  1000 ]
+        default: 17
+    output:
+      <<: *output_properties
+      kind: service_area
+  # identify rest area points from their names.
+  - filter:
+      all:
+        - { highway: rest_area }
+        - { geom_type: point }
+    min_zoom: { call: { func: tz_looks_like_rest_area, args: [ { col: name } ] } }
+    output:
+      <<: *output_properties
+      kind: rest_area
+  # and rest area polygons from their size
+  - filter: { highway: rest_area }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          # really big rest area polygons tend to cover the parking lots and
+          # all the buildings (i.e: they're landuse areas).
+          - [ 11, 50000 ]
+          - [ 12, 25000 ]
+          # however, there are many smaller ones which appear to just cover a
+          # single building. ideally, these would be re-drawn to cover the whole
+          # area, but most seem to be >20,000 square "meters".
+          - [ 13, 10000 ]
+          - [ 14,  5000 ]
+          - [ 15,  1000 ]
+        default: 17
+    output:
+      <<: *output_properties
+      kind: rest_area
+
   - filter: {amenity: toilets}
     min_zoom: 18
     output:
@@ -2066,45 +2136,6 @@ filters:
       <<: *output_properties
       kind: picnic_site
 
-  # service area points are hard to tell from mistagged points, but we can do
-  # an approximation by looking to see if the name matches one of several
-  # common suffixes and using that to lift the min zoom.
-  - filter:
-      all:
-        - { highway: services }
-        - { geom_type: point }
-    min_zoom: { call: { func: tz_looks_like_service_area, args: [ { col: name } ] } }
-    output:
-      <<: *output_properties
-      kind: service_area
-
-  # for service area polygons, we can look at the area, which we'd expect to
-  # be large.
-  - filter: { highway: services }
-    min_zoom:
-      lookup:
-        key: { col: way_area }
-        op: '>='
-        table:
-          # really big service area polygons tend to cover the parking lots and
-          # all the buildings (i.e: they're landuse areas).
-          - [ 11, 50000 ]
-          - [ 12, 10000 ]
-          # however, there are many smaller ones which appear to just cover a
-          # single building. ideally, these would be re-drawn to cover the whole
-          # area, but most seem to be >3000 square "meters".
-          - [ 13,  3000 ]
-          - [ 14,  1500 ]
-          - [ 15,  1000 ]
-        default: 17
-    output:
-      <<: *output_properties
-      kind: service_area
-  - filter: {highway: rest_area}
-    min_zoom: 11
-    output:
-      <<: *output_properties
-      kind: rest_area
   - filter: {amenity: grave_yard}
     min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
     output:

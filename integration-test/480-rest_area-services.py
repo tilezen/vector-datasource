@@ -6,11 +6,11 @@ from . import FixtureTest
 
 class RestAreaServices(FixtureTest):
     def test_rest_area_node(self):
-        self.generate_fixtures(dsl.way(159773030, wkt_loads('POINT (-76.73912905210828 40.99079246918038)'), {u'source': u'openstreetmap.org', u'highway': u'rest_area'}))  # noqa
+        self.generate_fixtures(dsl.way(159773030, wkt_loads('POINT (-76.73912905210828 40.99079246918038)'), {u'source': u'openstreetmap.org', u'highway': u'rest_area', u'name': u'Foo Rest Area'}))  # noqa
 
         self.assert_has_feature(
             16, 18798, 24573, 'pois',
-            {'kind': 'rest_area', 'id': 159773030, 'min_zoom': 11})
+            {'kind': 'rest_area', 'id': 159773030, 'min_zoom': 13})
 
     def test_rest_area_way(self):
         # Way: Crystal Springs Rest Area (97057565)

@@ -1040,3 +1040,14 @@ BEGIN
   RETURN 17;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- return the min zoom for a node that looks like a rest area.
+CREATE OR REPLACE FUNCTION tz_looks_like_service_area(name TEXT)
+RETURNS INTEGER AS $$
+BEGIN
+  IF name ILIKE '%rest area' THEN
+    RETURN 13
+  END IF;
+  RETURN 17;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

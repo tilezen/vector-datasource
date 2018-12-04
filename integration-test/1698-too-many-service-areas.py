@@ -155,3 +155,95 @@ class TooManyServiceAreasTest(FixtureTest):
                 'kind': u'service_area',
                 'min_zoom': 13,
             })
+
+
+class RestAreaTest(FixtureTest):
+
+    def test_rest_area_node(self):
+        import dsl
+
+        z, x, y = (13, 2418, 3054)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1114457072
+            dsl.point(1114457072, (-73.722089, 41.546596), {
+                'amenity': u'toilets',
+                'highway': u'rest_area',
+                'name': u'Stormville Rest Area',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1114457072,
+                'kind': u'rest_area',
+                'min_zoom': 13,
+            })
+
+    def test_not_a_rest_area_node(self):
+        import dsl
+
+        z, x, y = (16, 19323, 24610)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/5166808796
+            # NOTE: i've edited this since, as it's obviously not a rest area!
+            dsl.point(5166808796, (-73.855484, 40.835843), {
+                'highway': u'rest_area',
+                'name': u'Jerry\'s Pizza',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5166808796,
+                'kind': u'rest_area',
+                'min_zoom': 17,
+            })
+
+    def test_small_rest_area_way(self):
+        import dsl
+
+        z, x, y = (15, 9668, 12055)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/87098670
+            dsl.way(87098670, dsl.box_area(z, x, y, 1397), {
+                'area': u'yes',
+                'highway': u'rest_area',
+                'name': u'Clifton Park Rest Area',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 87098670,
+                'kind': u'rest_area',
+                'min_zoom': 15,
+            })
+
+    def test_large_rest_area_way(self):
+        import dsl
+
+        z, x, y = (11, 590, 754)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/319789716
+            dsl.way(319789716, dsl.box_area(z, x, y, 130087), {
+                'area': u'yes',
+                'highway': u'rest_area',
+                'name': u'Preble',
+                'source': u'openstreetmap.org',
+                'toilets': u'yes',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 319789716,
+                'kind': u'rest_area',
+                'min_zoom': 11,
+            })

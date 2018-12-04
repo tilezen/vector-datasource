@@ -120,3 +120,33 @@ def is_in(iso_code, z, x, y, way_id=-1):
         'kind': 'admin_area', 'iso_code': iso_code,
         'source': 'openstreetmap.org',
     })
+
+
+def box_area(z, x, y, area):
+    """
+    Returns a Shapely Polygon which is in the z/x/y tile and has the given
+    area in Mercator square meters.
+    """
+
+    from tilequeue.tile import coord_to_mercator_bounds
+    from tilequeue.tile import reproject_mercator_to_lnglat
+    from shapely.geometry import box
+    from shapely.ops import transform
+    from ModestMaps.Core import Coordinate
+    from math import sqrt
+
+    bounds = coord_to_mercator_bounds(Coordinate(zoom=z, column=x, row=y))
+    size = sqrt(area)
+
+    # make a shape with the given size
+    centre_x = 0.5 * (bounds[0] + bounds[2])
+    centre_y = 0.5 * (bounds[1] + bounds[3])
+
+    mercator_shape = box(
+        centre_x - 0.5 * size,
+        centre_y - 0.5 * size,
+        centre_x + 0.5 * size,
+        centre_y + 0.5 * size,
+    )
+
+    return transform(reproject_mercator_to_lnglat, mercator_shape)
