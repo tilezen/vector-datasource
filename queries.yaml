@@ -1302,7 +1302,8 @@ post_process:
   # multilinestrings which do not have nodes at junctions.
   #
   # note that the linestrings are already simplified by preceding simplify
-  # and clip stage.
+  # and clip stage. we don't want to simplify too much more at this stage, as
+  # that could lead to odd-looking double-simplified stuff.
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
@@ -1317,7 +1318,10 @@ post_process:
       # shorter than 0.1px at nominal zoom to be dropped.
       drop_short_segments: true
       drop_length_pixels: 0.1
-      # integrated simplification step tolerance
+      # integrated simplification step tolerance. NOTE: simplification is only
+      # performed if junction merging is set to true! the idea is to simplify
+      # away points at junctions where the road is straight, so it shouldn't
+      # need to be a large tolerance.
       simplify_tolerance: 1.0
 
   # we do want to merge at 15, but we don't want to merge junctions becase that
