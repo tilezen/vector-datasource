@@ -234,7 +234,7 @@ layers:
   buildings:
     simplify_before_intersect: yes
     area_threshold: 0.0
-    tolerance: 0.0
+    tolerance: 1.0
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
