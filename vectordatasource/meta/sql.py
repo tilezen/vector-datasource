@@ -177,6 +177,8 @@ KNOWN_FUNCS = {
     'util.tag_str_to_bool':               'notimplemented',
     'util.safe_int':                      'notimplemented',
     'util.true_or_none':                  'notimplemented',
+    'tz_looks_like_service_area':         'tz_looks_like_service_area',
+    'tz_looks_like_rest_area':            'tz_looks_like_rest_area',
 }
 
 

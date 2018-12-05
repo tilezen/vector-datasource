@@ -377,3 +377,27 @@ def mz_to_float_meters(length):
         return float(m.groups()[0])
 
     return None
+
+
+def tz_looks_like_service_area(name):
+    min_zoom = 17
+
+    if name is not None:
+        name = name.lower()
+        if name.endswith('service area') or \
+           name.endswith('services') or \
+           name.endswith('travel plaza'):
+            min_zoom = 13
+
+    return min_zoom
+
+
+def tz_looks_like_rest_area(name):
+    min_zoom = 17
+
+    if name is not None:
+        name = name.lower()
+        if name.endswith('rest area'):
+            min_zoom = 13
+
+    return min_zoom

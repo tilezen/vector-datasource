@@ -6,11 +6,11 @@ from . import FixtureTest
 
 class RestAreaServices(FixtureTest):
     def test_rest_area_node(self):
-        self.generate_fixtures(dsl.way(159773030, wkt_loads('POINT (-76.73912905210828 40.99079246918038)'), {u'source': u'openstreetmap.org', u'highway': u'rest_area'}))  # noqa
+        self.generate_fixtures(dsl.way(159773030, wkt_loads('POINT (-76.73912905210828 40.99079246918038)'), {u'source': u'openstreetmap.org', u'highway': u'rest_area', u'name': u'Foo Rest Area'}))  # noqa
 
         self.assert_has_feature(
             16, 18798, 24573, 'pois',
-            {'kind': 'rest_area', 'id': 159773030, 'min_zoom': 11})
+            {'kind': 'rest_area', 'id': 159773030, 'min_zoom': 13})
 
     def test_rest_area_way(self):
         # Way: Crystal Springs Rest Area (97057565)
@@ -21,12 +21,14 @@ class RestAreaServices(FixtureTest):
             {'kind': 'rest_area', 'id': 97057565, 'sort_rank': 41})
 
     def test_service_area_node(self):
+        # NOTE: this has been remapped as an area now. the test data here
+        # is superseded by the 1698-too-many-service-areas test.
         # node: Tiffin River
         self.generate_fixtures(dsl.way(200412620, wkt_loads('POINT (-84.41292493378698 41.6045519557572)'), {u'source': u'openstreetmap.org', u'name': u'Tiffin River', u'highway': u'services'}))  # noqa
 
         self.assert_has_feature(
             16, 17401, 24424, 'pois',
-            {'kind': 'service_area', 'id': 200412620, 'min_zoom': 11})
+            {'kind': 'service_area', 'id': 200412620, 'min_zoom': 17})
 
     def test_service_area_way(self):
         # Way: Nicole Driveway (274732386)
