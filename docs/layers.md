@@ -2167,7 +2167,8 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 
 * `id`: Unique traffic event ID. Can be referenced when checking for updated traffic information for specified event
 * `kind`: type of the incident
-* `min_zoom`: this value is derived from the internal `warning_level` used for the severity of the incidents which corresponds to a list of values: low (3), minor (2), major (1), critical (0). A suggestion for which zoom to draw a feature. The value is a float
+* `warning_level`: the severity of the incident that has occured, with three possible values: low (3), minor (2), major (1) and critical (0).
+* `min_zoom`: this value is derived from the `warning_level`. A suggestion for which zoom to draw a feature. The value is a float
 
 #### Possible values for the incident `kind` are:
 
@@ -2203,6 +2204,16 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
 * `drives_on_left`: set to `true` when the country drives on the left, e.g. In the U.K
+* `traffic_flow`: the flow of traffic due to the occurance of the Traffic Incident, see description below
+
+#### Traffic Incidents `traffic_flow` values:
+* `unknown`: traffic status unknown
+* `free`: Free flowing, not disturbed, traffic
+* `minor`: Minor traffic
+* `slow`: Slowly moving traffic
+* `queuing`: The traffic is in queues but still moves slowly
+* `stationary`: Stationary traffic, congestion
+* `none`: No traffic flow due to blockage or closure
 
 ## Water
 
