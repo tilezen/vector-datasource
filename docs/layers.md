@@ -1318,8 +1318,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
 * `embankment`: If the road or railway is on an embankment the value will be one of `yes`, `left` or `right` depending on whether the embankment is on both sides, the left side or the right side, respectively.
-* `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for `kind_detail` list.
-* `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for `kind_detail` list.
+* `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for list of values.
+* `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1400,10 +1400,13 @@ Railway `service` values are:
 
 **Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
-#### Roads hgv `kind_detail` values
+**Roads `hgv` values
 
-For `hgv`the `kind_detail` values are `no`, `designated`, `destination`, `delivery`, `local` and `agricultural`.
-For `hgv_restriction` the `kind_detail` values are `weight` (kg), `height` (cm), `length` (cm), `width` (cm), `wpa` (weight per axle, in kg), `kpra` (king pin to rear axle leght, in cm), `hazmat`, `other` and `multiple` if more than one.
+The `hgv` property indicates general truck heavy goods vehicle truck access, values include: `no`, `designated`, `destination`, `delivery`, `local` and `agricultural`.
+
+**Roads `hgv_restriction` values
+
+For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values include: `weight` (kg), `height` (cm), `length` (cm), `width` (cm), `wpa` (weight per axle, in kg), `kpra` (king pin to rear axle leght, in cm), `hazmat`, `other` and `multiple` if more than one.
 
 #### Roads layer network values
 
