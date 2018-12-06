@@ -2207,7 +2207,6 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * `traffic_flow`: the flow of traffic due to the occurance of the Traffic Incident, see description below
 
 #### Traffic Incidents `traffic_flow` values:
-* `unknown`: traffic status unknown
 * `free`: Free flowing, not disturbed, traffic
 * `minor`: Minor traffic
 * `slow`: Slowly moving traffic
