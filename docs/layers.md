@@ -1400,11 +1400,11 @@ Railway `service` values are:
 
 **Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
 
-**Roads `hgv` values
+**Roads `hgv` values:**
 
 The `hgv` property indicates general truck heavy goods vehicle truck access, values include: `no`, `designated`, `destination`, `delivery`, `local` and `agricultural`.
 
-**Roads `hgv_restriction` values
+**Roads `hgv_restriction` values:**
 
 For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values include: `weight` (kg), `height` (cm), `length` (cm), `width` (cm), `wpa` (weight per axle, in kg), `kpra` (king pin to rear axle leght, in cm), `hazmat`, `other` and `multiple` if more than one.
 
