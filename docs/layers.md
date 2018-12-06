@@ -542,9 +542,9 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `mud` - An area where the surface is bare mud.
 * `national_park`
 * `nature_reserve`
-* `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
-* `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
-* `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
+* `natural_forest`
+* `natural_park`
+* `natural_wood`
 * `naval_base`
 * `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. With `kind_detail` property.
 * `park`
