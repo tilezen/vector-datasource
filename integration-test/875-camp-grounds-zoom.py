@@ -12,7 +12,7 @@ class CampGroundsZoom(FixtureTest):
 
         self.assert_has_feature(
             16, 10599, 25679, 'landuse',
-            {'kind': 'camp_site', 'sort_rank': 92})
+            {'kind': 'camp_site', 'sort_rank': 95})
 
         self.assert_has_feature(
             16, 10599, 25679, 'pois',
@@ -21,7 +21,7 @@ class CampGroundsZoom(FixtureTest):
         # large campground in landuse zoom 13
         self.assert_has_feature(
             13, 1324, 3209, 'landuse',
-            {'kind': 'camp_site', 'sort_rank': 92})
+            {'kind': 'camp_site', 'sort_rank': 95})
 
         # large campground in point zoom 13
         self.assert_has_feature(
@@ -34,7 +34,7 @@ class CampGroundsZoom(FixtureTest):
 
         self.assert_has_feature(
             16, 10471, 25326, 'landuse',
-            {'kind': 'camp_site', 'sort_rank': 92})
+            {'kind': 'camp_site', 'sort_rank': 95})
 
         # small campground in point zoom 16
         self.assert_has_feature(
@@ -44,7 +44,7 @@ class CampGroundsZoom(FixtureTest):
         # small campground in landuse zoom 13
         self.assert_has_feature(
             13, 1308, 3165, 'landuse',
-            {'kind': 'camp_site', 'sort_rank': 92})
+            {'kind': 'camp_site', 'sort_rank': 95})
 
         # small campground in point zoom 13
         self.assert_no_matching_feature(

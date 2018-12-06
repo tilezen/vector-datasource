@@ -12,4 +12,4 @@ class WinterSportsResorts(FixtureTest):
         self.assert_has_feature(
             15, 5467, 12531, 'landuse',
             {'kind': 'winter_sports',
-             'sort_rank': 36})
+             'sort_rank': 39})
