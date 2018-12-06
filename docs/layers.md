@@ -511,6 +511,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `dog_park`
 * `embankment` - A raised area of land, usually to carry a road or railway.
 * `enclosure`
+* `low_emission_zone` - An area beloging to a low emission zone, such as the (London Low Emission Zone)[https://en.wikipedia.org/wiki/London_low_emission_zone]. (See also)[https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dlow_emission_zone].
 * `farm`
 * `farmland`
 * `farmyard`
@@ -1249,7 +1250,7 @@ Common values include: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pu
 ![image](images/mapzen-vector-tile-docs-roads.png)
 
 * Layer name: `roads`
-* Geometry types: `line`
+* Geometry types: `line`, `point`
 
 More than just roads, this OpenStreetMap and Natural Earth based transportation layer includes highways, major roads, minor roads, paths, railways, ferries, and ski pistes matching the selection found in High Road. Sort them with `sort_rank` to correctly represent layered overpasses, bridges and tunnels. Natural Earth roads at zooms < 8 and OpenStreetMap at zooms 8+. See zoom ranges section below for more information per kind.
 
@@ -1317,6 +1318,9 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
 * `embankment`: If the road or railway is on an embankment the value will be one of `yes`, `left` or `right` depending on whether the embankment is on both sides, the left side or the right side, respectively.
+* `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for list of values.
+* `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
+* `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1331,6 +1335,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `sport`: OpenStreetMap features
 * `state`: OpenStreetMap features
 * `symbol`: ski pistes from OpenStreetMap
+* `toll`: optional `boolean` value indicating whether a fee must be paid by general traffic to travel the feature.
+* `toll_hgv`: optional `boolean` value when tool only applies to certain classes of vehicles like heavy good vehicle trucks.
 
 #### Road transportation `kind` values (lines):
 
@@ -1346,7 +1352,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `racetrack`
 * `rail`
 
-#### Road Transportation `kind_detail` values and zoom ranges:
+#### Road transportation `kind_detail` values and zoom ranges:
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary`.
 
@@ -1394,6 +1400,15 @@ Railway `service` values are:
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
 **Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
+**Roads `hgv` values:**
+
+The `hgv` property indicates general truck heavy goods vehicle truck access, values include: `no`, `designated`, `destination`, `delivery`, `local` and `agricultural`.
+
+**Roads `hgv_restriction` values:**
+
+For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values include: `weight` (kg), `height` (cm), `length` (cm), `width` (cm), `wpa` (weight per axle, in kg), `kpra` (king pin to rear axle leght, in cm), `hazmat`, `other` and `multiple` if more than one.
+
 
 #### Roads layer network values
 
