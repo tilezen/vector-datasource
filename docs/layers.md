@@ -1319,7 +1319,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `distance`: ski pistes from OpenStreetMap
 * `embankment`: If the road or railway is on an embankment the value will be one of `yes`, `left` or `right` depending on whether the embankment is on both sides, the left side or the right side, respectively.
 * `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for list of values.
-* `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values.
+* `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
+* `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1407,6 +1408,7 @@ The `hgv` property indicates general truck heavy goods vehicle truck access, val
 **Roads `hgv_restriction` values:**
 
 For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values include: `weight` (kg), `height` (cm), `length` (cm), `width` (cm), `wpa` (weight per axle, in kg), `kpra` (king pin to rear axle leght, in cm), `hazmat`, `other` and `multiple` if more than one.
+
 
 #### Roads layer network values
 
@@ -2007,15 +2009,6 @@ Alpha-2 code | Country
 `YE` | Yemen
 `ZM` | Zambia
 `ZW` | Zimbabwe
-
-#### Road transportation `kind` values (points):
-
-* `hgv_restriction`: indicate point location for access limitations for heavy goods vehicle trucks. See also `hgv_restriction_shield_text`.
-* `hgv_restriction_shield_text`: paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
-
-#### Roads hgv `kind_detail` values
-
-For `hgv_restriction` the `kind_detail` values are `weight` (kg), `height` (cm), `length` (cm), `width` (cm), `wpa` (weight per axle, in kg), `kpra` (king pin to rear axle leght, in cm), `hazmat`, `other` and `multiple` if more than one.
 
 
 ## Transit
