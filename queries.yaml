@@ -210,6 +210,7 @@ layers:
   roads:
     geometry_types: [LineString, MultiLineString]
     simplify_start: 8
+    tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -233,7 +234,7 @@ layers:
   buildings:
     simplify_before_intersect: yes
     area_threshold: 0.0
-    tolerance: 0.0
+    tolerance: 1.0
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -279,6 +280,7 @@ layers:
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
     simplify_start: 8
+    tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -1300,7 +1302,8 @@ post_process:
   # multilinestrings which do not have nodes at junctions.
   #
   # note that the linestrings are already simplified by preceding simplify
-  # and clip stage.
+  # and clip stage. we don't want to simplify too much more at this stage, as
+  # that could lead to odd-looking double-simplified stuff.
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
@@ -1315,7 +1318,10 @@ post_process:
       # shorter than 0.1px at nominal zoom to be dropped.
       drop_short_segments: true
       drop_length_pixels: 0.1
-      # integrated simplification step tolerance
+      # integrated simplification step tolerance. NOTE: simplification is only
+      # performed if junction merging is set to true! the idea is to simplify
+      # away points at junctions where the road is straight, so it shouldn't
+      # need to be a large tolerance.
       simplify_tolerance: 1.0
 
   # we do want to merge at 15, but we don't want to merge junctions becase that
@@ -1330,8 +1336,6 @@ post_process:
       # shorter than 0.1px at nominal zoom to be dropped.
       drop_short_segments: true
       drop_length_pixels: 0.1
-      # integrated simplification step tolerance
-      simplify_tolerance: 1.0
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!
