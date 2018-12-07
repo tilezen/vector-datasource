@@ -1035,7 +1035,7 @@ CREATE OR REPLACE FUNCTION tz_looks_like_service_area(name TEXT)
 RETURNS INTEGER AS $$
 BEGIN
   IF name ILIKE '%service area' OR name ILIKE '%services' OR name ILIKE '%travel plaza' THEN
-    RETURN 13
+    RETURN 13;
   END IF;
   RETURN 17;
 END;
@@ -1046,7 +1046,7 @@ CREATE OR REPLACE FUNCTION tz_looks_like_rest_area(name TEXT)
 RETURNS INTEGER AS $$
 BEGIN
   IF name ILIKE '%rest area' THEN
-    RETURN 13
+    RETURN 13;
   END IF;
   RETURN 17;
 END;
