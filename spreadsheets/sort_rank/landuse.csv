@@ -18,6 +18,7 @@ groyne,*,225
 breakwater,*,224
 dam,*,223
 land,*,222
+wetland,*,220
 footway,*,115
 tower,*,114
 wilderness_hut,*,113
@@ -93,7 +94,6 @@ university,*,42
 farmland,*,41
 farm,*,40
 winter_sports,*,39
-wetland,*,38
 scrub,*,37
 meadow,*,36
 grass,*,35

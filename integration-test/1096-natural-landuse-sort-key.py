@@ -44,4 +44,4 @@ class NaturalLanduseSortKeyTest(FixtureTest):
         self._check({'natural': 'scrub'}, 'scrub', 37)
 
     def test_wetland(self):
-        self._check({'natural': 'wetland'}, 'wetland', 38)
+        self._check({'natural': 'wetland'}, 'wetland', 220)
