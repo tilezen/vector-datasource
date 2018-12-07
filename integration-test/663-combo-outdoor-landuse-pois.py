@@ -11,7 +11,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             13, 1318, 3160, 'landuse',
-            {'kind': 'water_park', 'sort_rank': 110})
+            {'kind': 'water_park', 'sort_rank': 116})
 
         self.assert_has_feature(
             13, 1318, 3160, 'pois',
@@ -230,7 +230,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 10479, 25338, 'landuse',
-            {'kind': 'dog_park', 'sort_rank': 100})
+            {'kind': 'dog_park', 'sort_rank': 106})
 
     def test_recreation_track_way(self):
         # Red Gra / Running Track
@@ -238,7 +238,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             15, 16384, 10951, 'landuse',
-            {'id': 95922608, 'kind': 'recreation_track', 'sort_rank': 62})
+            {'id': 95922608, 'kind': 'recreation_track', 'sort_rank': 68})
 
         # Cox Stadium recreation track
         self.assert_has_feature(
@@ -361,7 +361,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             14, 2618, 6348, 'landuse',
-            {'kind': 'caravan_site', 'sort_rank': 61})
+            {'kind': 'caravan_site', 'sort_rank': 67})
 
         self.assert_has_feature(
             14, 2618, 6348, 'pois',
@@ -389,7 +389,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 10474, 25332, 'landuse',
-            {'kind': 'picnic_site', 'sort_rank': 111})
+            {'kind': 'picnic_site', 'sort_rank': 117})
 
         self.assert_has_feature(
             16, 10474, 25332, 'pois',
@@ -417,7 +417,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 19303, 24607, 'landuse',
-            {'kind': 'fort', 'sort_rank': 50})
+            {'kind': 'fort', 'sort_rank': 53})
 
         self.assert_has_feature(
             16, 19303, 24607, 'pois',
