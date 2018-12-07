@@ -1,4 +1,5 @@
 kind,geometrytype,sort_rank
+embankment,*,274
 power_line,*,273
 power_minor_line,*,272
 crane,*,271
