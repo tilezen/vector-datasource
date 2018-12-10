@@ -260,6 +260,28 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
         self.assertEquals(1, len(features))
 
 
+class LanduseSortKeysAreUniqueTest(unittest.TestCase):
+
+    def _check_unique(self, csv_name):
+        import csv
+        import os.path
+
+        landuse_path = os.path.join(
+            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_rank',
+            csv_name)
+        with open(landuse_path) as fh:
+            rows = list(csv.reader(fh))
+            seen = set()
+            for row in rows[1:]:
+                sort_key = int(row[-1])
+                self.assertFalse(sort_key in seen, "Duplicate sort_key "
+                                 "value: %d" % (sort_key,))
+                seen.add(sort_key)
+
+    def test_landuse(self):
+        self._check_unique('landuse.csv')
+
+
 class SortKeyTest(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):

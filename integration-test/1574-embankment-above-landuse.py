@@ -25,7 +25,7 @@ class EmbankmentAboveLanduseTest(FixtureTest):
         # values aren't as important as the wetland one being more than the
         # water one.
         wetland_rank = 220
-        embankment_rank = 274
+        embankment_rank = 278
 
         self.assertTrue(embankment_rank > wetland_rank)
         self.assert_has_feature(

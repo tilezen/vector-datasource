@@ -447,6 +447,29 @@ filters:
       tier: 2
 
   ############################################################
+  # NO TIER
+  #
+  # these are often co-tagged landuse=military, but are "more
+  # specific", so we want them to match first.
+  ############################################################
+  - filter:
+      military: danger_area
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: danger_area
+    extra_columns: [way]
+  - filter:
+      military: range
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: range
+    extra_columns: [way]
+
+  ############################################################
   # TIER 3
   ############################################################
   - filter: {aeroway: aerodrome}
@@ -1145,14 +1168,6 @@ filters:
     output:
       <<: *output_properties
       kind: { col: man_made }
-  - filter:
-      military: danger_area
-      geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
-    output:
-      <<: *output_properties
-      kind: danger_area
-    extra_columns: [way]
 
   # whitelist fence_type if it's present, otherwise don't include it. this
   # means we don't get random values in the output that we can't document.
@@ -1219,6 +1234,11 @@ filters:
     output:
       <<: *output_properties
       kind: {col: landuse}
+  - filter: {waterway: boatyard}
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      kind: boatyard
   - filter:
       landuse:
         - wharf

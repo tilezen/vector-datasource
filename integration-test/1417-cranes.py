@@ -12,7 +12,7 @@ class TestCranes(FixtureTest):
         self.assert_has_feature(
             16, 32891, 21813, 'landuse',
             {'id': 173458931, 'kind': 'crane', 'min_zoom': 16,
-             'sort_rank': 271})
+             'sort_rank': 272})
 
     def test_crane_pois(self):
         self.generate_fixtures(dsl.way(1842715058, wkt_loads('POINT (0.6785790112917439 51.43642978244269)'), {u'source': u'openstreetmap.org', u'man_made': u'crane'}))  # noqa

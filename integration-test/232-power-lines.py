@@ -12,7 +12,7 @@ class PowerLines(FixtureTest):
         self.assert_has_feature(
             14, 2621, 6338, 'landuse',
             {'id': 29399873, 'kind': 'power_line', 'min_zoom': 14,
-             'sort_rank': 273})
+             'sort_rank': 274})
 
     def test_power_line2(self):
         self.generate_fixtures(dsl.way(4421231698, wkt_loads('POINT (-122.402439257504 37.75446525999031)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231699, wkt_loads('POINT (-122.402020912077 37.75450027509339)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231700, wkt_loads('POINT (-122.40175132766 37.75451405385149)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231702, wkt_loads('POINT (-122.401247732112 37.75454061701718)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231703, wkt_loads('POINT (-122.400758868934 37.75456931090729)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231704, wkt_loads('POINT (-122.40032606063 37.75459580302859)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231705, wkt_loads('POINT (-122.399943917308 37.75462435484847)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231706, wkt_loads('POINT (-122.399543538186 37.75463657104671)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231707, wkt_loads('POINT (-122.399190769774 37.7546561737791)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231709, wkt_loads('POINT (-122.398852913396 37.754680606163)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(4421231710, wkt_loads('POINT (-122.398554493058 37.75470816360948)'), {u'source': u'openstreetmap.org', u'power': u'pole'}),dsl.way(444660087, wkt_loads('LINESTRING (-122.402439257504 37.75446525999031, -122.402020912077 37.75450027509339, -122.40175132766 37.75451405385149, -122.401247732112 37.75454061701718, -122.400758868934 37.75456931090729, -122.40032606063 37.75459580302859, -122.399943917308 37.75462435484847, -122.399543538186 37.75463657104671, -122.399190769774 37.7546561737791, -122.398852913396 37.754680606163, -122.398554493058 37.75470816360948)'), {u'source': u'openstreetmap.org', u'power': u'minor_line'}))  # noqa
@@ -20,4 +20,4 @@ class PowerLines(FixtureTest):
         self.assert_has_feature(
             16, 10485, 25335, 'landuse',
             {'id': 444660087, 'kind': 'power_minor_line', 'min_zoom': 17,
-             'sort_rank': 272})
+             'sort_rank': 273})
