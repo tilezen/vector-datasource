@@ -489,6 +489,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `aviary`
 * `battlefield`
 * `beach` - Where the land meets the sea gradually.
+* `boatyard` - a place for building, fixing, and storing boats.
 * `breakwater`
 * `bridge`
 * `camp_site`
@@ -504,8 +505,8 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `crane`
 * `cutline`
 * `cutting` - A lowered area of land, usually to carry a road or railway.
-* `danger_area` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
+* `danger_area` - e.g: military training zones, firing ranges.
 * `dike`
 * `ditch` line.
 * `dog_park`
@@ -541,10 +542,10 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `military`
 * `mud` - An area where the surface is bare mud.
 * `national_park`
-* `nature_reserve`
 * `natural_forest`
 * `natural_park`
 * `natural_wood`
+* `nature_reserve`
 * `naval_base`
 * `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. With `kind_detail` property.
 * `park`
@@ -555,11 +556,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `pier` with mooring property.
 * `pitch`
 * `place_of_worship`
-* `plant`
 * `plant_nursery` - Land used for growing young plants.
+* `plant`
 * `playground`
-* `port`
 * `port_terminal`
+* `port`
 * `power_line` line.
 * `power_minor_line` line.
 * `prison`
@@ -567,6 +568,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `quarry`
 * `quay` with mooring property.
 * `railway`
+* `range` - e.g: military training zones where soldiers practice with their weapons
 * `recreation_ground`
 * `recreation_track`
 * `residential`
@@ -785,7 +787,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
-* `art`
 * `accountant`
 * `adit`
 * `administrative`
@@ -803,6 +804,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `aquarium`
 * `archaeological_site`
 * `architect`
+* `art`
 * `arts_centre` - A venue where arts are performed or exhibited.
 * `artwork`
 * `assisted_living`
@@ -823,24 +825,24 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `beauty`
 * `bed_and_breakfast`
 * `bench`
+* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `bicycle_parking`
-* `bicycle_rental` - Bicycle rental shop.
 * `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
+* `bicycle_rental` - Bicycle rental shop.
 * `bicycle_repair_station`
 * `bicycle` - Bicycle sales shop, often with bike repair service.
-* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
 * `blood_bank`
+* `boat_lift`
 * `boat_rental`
 * `boat_storage`
-* `boatyard`
-* `boat_lift`
+* `boatyard` - a place for building, fixing, and storing boats.
 * `bollard`
 * `bookmaker`
 * `books`
-* `brewery`
 * `border_control`
+* `brewery`
 * `bunker` - A reinforced military building. With `kind_detail` property.
 * `bureau_de_change`
 * `bus_station`
@@ -849,12 +851,12 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `camera` - A shop selling cameras.
 * `camp_site`
-* `car`
 * `car_parts` - A shop selling car parts.
 * `car_rental` - A business which rents cars.
 * `car_repair`
 * `car_sharing`
 * `car_wash`
+* `car`
 * `caravan_site`
 * `care_home`
 * `carousel`
@@ -894,8 +896,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
-* `danger_area` - e.g: military training zones, firing ranges.
 * `dam`
+* `danger_area` - e.g: military training zones, firing ranges.
 * `day_care`
 * `defibrillator`
 * `deli`
@@ -924,13 +926,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fashion`
 * `fast_food`
 * `ferry_terminal`
-* `financial`
 * `field_hospital` with `kind_detail` property.
+* `financial`
 * `fire_hydrant`
 * `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `firepit`
-* `fishing`
 * `fishing_area`
+* `fishing`
 * `fishmonger` - A shop selling fish and seafood.
 * `fitness_station`
 * `fitness`
@@ -945,16 +947,16 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `furniture`
 * `gallery` - An art gallery.
 * `gambling`
+* `garden_centre`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
-* `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate` with `kind_detail` property.
 * `generator` - A building or structure which generates power. With `kind_detail` property.
 * `geyser`
 * `gift`
-* `golf` - Shop selling golf equipment.
 * `golf_course`
+* `golf` - Shop selling golf equipment.
 * `government`
 * `grave_yard` with `kind_detail` and `denomination` properties. 
 * `greengrocer` - Shop selling fruits and vegetables.
@@ -968,11 +970,11 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `harbourmaster`
 * `hardware`
 * `hazard`
-* `healthcare` with `kind_detail` property.
 * `health_centre`
 * `healthcare_alternative`
 * `healthcare_centre`
 * `healthcare_laboratory`
+* `healthcare` with `kind_detail` property.
 * `helipad`
 * `heliport`
 * `hifi`
@@ -982,8 +984,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hostel`
 * `hot_spring`
 * `hotel`
-* `hunting`
 * `hunting_stand`
+* `hunting`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `industrial` - An industrial POI which didn't match a more specific kind.
@@ -991,9 +993,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `insurance`
 * `it`
 * `jewelry`
-* `kindergarten`
 * `karaoke_box`
 * `karaoke`
+* `kindergarten`
 * `landmark`
 * `laundry`
 * `lawyer`
@@ -1007,35 +1009,35 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `love_hotel`
 * `mall`
 * `marina`
+* `marketplace`
 * `mast`
 * `maze`
 * `memorial`
-* `marketplace`
 * `metal_construction`
 * `midwife`
 * `military`
 * `mineshaft`
-* `miniature_golf` - A venue for playing miniature golf.
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
+* `miniature_golf` - A venue for playing miniature golf.
 * `mobile_phone`
 * `money_transfer` - A business which specialises in transferring money between people, often internationally.
 * `monument`
 * `mooring` with `kind_detail` property.
 * `motel`
-* `motorcycle`
 * `motorcycle_parking`
+* `motorcycle`
 * `motorway_junction`
 * `museum`
 * `music`
 * `national_park`
 * `nature_reserve`
+* `naval_base`
 * `newsagent`
 * `newspaper`
 * `ngo`
 * `nightclub`
 * `notary`
 * `nursing_home` with `kind_detail` property. _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
-* `naval_base`
 * `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
 * `office` - An office which didn't match a more specific kind.
@@ -1046,8 +1048,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `outreach`
 * `painter`
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
-* `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
+* `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `perfumery`
 * `pet`
@@ -1084,7 +1086,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `pylon`
 * `quarry`
 * `quay` - if available, with `mooring` property.
-* `range` for military use.
+* `range` - e.g: military training zones where soldiers practice with their weapons
 * `ranger_station`
 * `rapid`
 * `recreation_ground`
@@ -1106,8 +1108,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `scuba_diving`
 * `service_area`
 * `shelter`
-* `shipyard`
 * `ship_chandler`
+* `shipyard`
 * `shoemaker`
 * `shoes`
 * `shop` - A shop or store which didn't match a more specific kind.
@@ -1179,17 +1181,17 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
 * `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
-* `waterway_fuel`
 * `watering_place`
 * `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
+* `waterway_fuel`
 * `wayside_cross`
+* `wharf` with mooring property.
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`
 * `wine`
 * `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `winter_sports`
-* `wharf` with mooring property.
 * `wood`
 * `works`
 * `workshop`
