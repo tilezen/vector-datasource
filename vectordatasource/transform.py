@@ -8172,6 +8172,7 @@ def whitelist(ctx):
     property_name = params.required('property')
     whitelist = params.required('whitelist', typ=list)
     remap = params.optional('remap', default={}, typ=dict)
+    where = params.optional('where')
 
     # check that we're in the zoom range where this post-processor is supposed
     # to operate.
@@ -8180,11 +8181,22 @@ def whitelist(ctx):
     if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
         return None
 
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
     layer = _find_layer(ctx.feature_layers, layer_name)
 
     features = layer['features']
     for feature in features:
         _, props, _ = feature
+
+        # skip this feature if there's a where clause and it evaluates truthy.
+        if where is not None:
+            local = props.copy()
+            local['zoom'] = ctx.nominal_zoom
+            if not eval(where, {}, local):
+                continue
+
         value = props.get(property_name)
         if value is not None:
             if value in whitelist:

@@ -921,16 +921,60 @@ post_process:
         - type
       where: >-
         kind == 'minor_road'
-  # keep "surface" until zoom 15.
-  - fn: vectordatasource.transform.drop_properties
+  # reduce precision of surface tags at roughly the same zoom as we drop the
+  # name (i.e: when we no longer want to uniquely identify the road). this gives
+  # us more opportunities to merge features with other features having the same
+  # set of properties, which can result in much fewer distinct features and
+  # therefore smaller tiles.
+  - fn: vectordatasource.transform.whitelist
     params:
-      source_layer: roads
+      layer: roads
       start_zoom: 0
       end_zoom: 15
-      properties:
-        - surface
+      property: surface
       where: >-
-        kind == 'minor_road'
+        (kind == 'minor_road') or
+        (kind in ('major_road', 'highway') and zoom < 11) or
+        (kind == 'path' and zoom < 12)
+      # map down to these three values (plus implicit missing / None value)
+      whitelist:
+        - paved
+        - compacted
+        - unpaved
+      remap:
+        # paved
+        asphalt: paved
+        metal: paved
+        metal_grid: paved
+        tartan: paved
+        wood: paved
+
+        # compacted
+        concrete: compacted
+        paving_stones: compacted
+        sett: compacted
+
+        # unpaved
+        artificial_turf: unpaved
+        clay: unpaved
+        cobblestone: unpaved
+        cobblestone_flattened: unpaved
+        concrete_lanes: unpaved
+        concrete_plates: unpaved
+        decoturf: unpaved
+        dirt: unpaved
+        earth: unpaved
+        fine_gravel: unpaved
+        grass: unpaved
+        grass_paver: unpaved
+        gravel: unpaved
+        ground: unpaved
+        mud: unpaved
+        pebblestone: unpaved
+        salt: unpaved
+        sand: unpaved
+        woodchips: unpaved
+
   # drop to get better merging at mid zooms.
   - fn: vectordatasource.transform.drop_properties
     params:

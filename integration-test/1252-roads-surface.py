@@ -12,10 +12,10 @@ class RoadsSurface(FixtureTest):
             15, 9371, 12546, 'roads',
             {'id': 190536019, 'kind': 'minor_road', 'surface': 'cobblestone'})
 
-        # and that surface property is dropped at earlier zooms
+        # and that surface property is simplified at some zooms
         self.assert_has_feature(
             13, 2342, 3136, 'roads',
-            {'id': 190536019, 'kind': 'minor_road', 'surface': type(None)})
+            {'id': 190536019, 'kind': 'minor_road', 'surface': 'unpaved'})
 
     def test_asphalt(self):
         # motorway in Kraków, Poland
@@ -60,7 +60,7 @@ class RoadsSurface(FixtureTest):
                 'kind': 'path',
                 'kind_detail': 'track',
                 'is_bicycle_related': True,
-                'surface': 'concrete_lanes',
+                'surface': 'concrete_lanes' if z >= 12 else 'unpaved',
                 'min_zoom': 8,
             }
 
