@@ -18,7 +18,7 @@ class RestAreaServices(FixtureTest):
 
         self.assert_has_feature(
             16, 10492, 25385, 'landuse',
-            {'kind': 'rest_area', 'id': 97057565, 'sort_rank': 41})
+            {'kind': 'rest_area', 'id': 97057565, 'sort_rank': 44})
 
     def test_service_area_node(self):
         # NOTE: this has been remapped as an area now. the test data here
@@ -36,4 +36,4 @@ class RestAreaServices(FixtureTest):
 
         self.assert_has_feature(
             16, 10900, 25256, 'landuse',
-            {'kind': 'service_area', 'id': 274732386, 'sort_rank': 42})
+            {'kind': 'service_area', 'id': 274732386, 'sort_rank': 45})
