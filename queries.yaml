@@ -975,6 +975,17 @@ post_process:
         sand: unpaved
         woodchips: unpaved
 
+  # # backfill surface=paved for minor roads at zooms 13 and 14
+  # - fn: vectordatasource.transform.backfill
+  #   params:
+  #     layer: roads
+  #     start_zoom: 13
+  #     end_zoom: 15
+  #     defaults:
+  #       surface: paved
+  #     where: >-
+  #       kind == 'minor_road'
+
   # drop to get better merging at mid zooms.
   - fn: vectordatasource.transform.drop_properties
     params:
