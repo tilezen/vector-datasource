@@ -83,7 +83,7 @@ filters:
       kind_detail: '6'
     table: osm
   - filter: {admin_level: '8', boundary: administrative}
-    min_zoom: 10
+    min_zoom: 11
     output:
       <<: *output_properties
       kind: locality
