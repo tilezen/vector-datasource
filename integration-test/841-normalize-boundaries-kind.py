@@ -103,64 +103,64 @@ class NormalizeBoundariesKindNaturalEarth(FixtureTest):
         # Admin-1 boundary
         self.assert_has_feature(
             7, 75, 70, 'boundaries',
-            {'id': int, 'kind': 'region', 'kind_detail': '4'})
+            {'kind': 'region', 'kind_detail': '4'})
 
     def test_admin1_statistical(self):
         # Admin-1 statistical boundary
         self.assert_has_feature(
             7, 101, 56, 'boundaries',
-            {'id': int, 'kind': 'region', 'kind_detail': '4'})
+            {'kind': 'region', 'kind_detail': '4'})
 
     def test_admin1_statistical_meta(self):
         # Admin-1 statistical meta bounds
         self.assert_has_feature(
             7, 26, 52, 'boundaries',
-            {'id': int, 'kind': 'region', 'kind_detail': '4'})
+            {'kind': 'region', 'kind_detail': '4'})
 
     def test_admin1_region(self):
         # Admin-1 region boundary
         self.assert_has_feature(
             7, 99, 57, 'boundaries',
-            {'id': int, 'kind': 'macroregion', 'kind_detail': '3'})
+            {'kind': 'macroregion', 'kind_detail': '3'})
 
     def test_disputed(self):
         # Disputed (please verify)
         self.assert_has_feature(
             7, 39, 71, 'boundaries',
-            {'id': int, 'kind': 'disputed', 'kind_detail': '2'})
+            {'kind': 'disputed', 'kind_detail': '2'})
 
     def test_indefinite(self):
         # Indefinite (please verify)
         self.assert_has_feature(
             7, 20, 44, 'boundaries',
-            {'id': int, 'kind': 'indefinite', 'kind_detail': '2'})
+            {'kind': 'indefinite', 'kind_detail': '2'})
 
     def test_indeterminant(self):
         # Indeterminant frontier
         self.assert_has_feature(
             7, 91, 50, 'boundaries',
-            {'id': int, 'kind': 'indeterminate', 'kind_detail': '2'})
+            {'kind': 'indeterminate', 'kind_detail': '2'})
 
     def test_international(self):
         # International boundary (verify)
         self.assert_has_feature(
             7, 67, 37, 'boundaries',
-            {'id': int, 'kind': 'country', 'kind_detail': '2'})
+            {'kind': 'country', 'kind_detail': '2'})
 
     def test_lease_limit(self):
         # Lease limit
         self.assert_has_feature(
             7, 86, 45, 'boundaries',
-            {'id': int, 'kind': 'lease_limit', 'kind_detail': '2'})
+            {'kind': 'lease_limit', 'kind_detail': '2'})
 
     def test_line_of_control(self):
         # Line of control (please verify)
         self.assert_has_feature(
             7, 90, 50, 'boundaries',
-            {'id': int, 'kind': 'line_of_control', 'kind_detail': '2'})
+            {'kind': 'line_of_control', 'kind_detail': '2'})
 
     def test_overlay(self):
         # Overlay limit
         self.assert_has_feature(
             7, 109, 49, 'boundaries',
-            {'id': int, 'kind': 'overlay_limit', 'kind_detail': '2'})
+            {'kind': 'overlay_limit', 'kind_detail': '2'})
