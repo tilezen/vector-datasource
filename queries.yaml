@@ -602,6 +602,20 @@ post_process:
       base_layer: boundaries
       start_zoom: 8
 
+  # drop id/id:left/id:right on boundaries up to zoom 12 inclusive.
+  # the left/right IDs tend to be unique as a pair, and so prevent merging.
+  # the id itself will be dropped by merging if it's possible to merge, and
+  # at mid and low zooms is of dubious usefulness.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: boundaries
+      start_zoom: 0
+      end_zoom: 13
+      properties:
+        - id
+        - "id:left"
+        - "id:right"
+
   # try to merge boundaries into as long segments as possible.
   - fn: vectordatasource.transform.merge_line_features
     params:
@@ -627,6 +641,14 @@ post_process:
       start_zoom: 0
       end_zoom: 7
       properties: [name]
+
+  # after dropping names, try again to merge boundaries into as few features as
+  # possible (to reduce tile size).
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: boundaries
+      start_zoom: 8
+      end_zoom: 15
 
   # before extracting the label placement points, remove small water areas which
   # are probably too small to label.

@@ -92,7 +92,7 @@ class FractionalPoisNe(FixtureTest):
         # transit, and water
         self.assert_has_feature(
             5, 9, 12, 'boundaries',
-            {'min_zoom': 2, 'id': int,
+            {'min_zoom': 2,
              'source': 'naturalearthdata.com',
              'kind': 'region'})
 
