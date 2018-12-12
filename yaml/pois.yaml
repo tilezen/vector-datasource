@@ -1836,15 +1836,22 @@ filters:
       capacity: {col: tags->capacity}
       ref: {col: ref}
   - filter:
-      amenity: [bicycle_parking, motorcycle_parking]
+      amenity: motorcycle_parking
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      <<: *cycle_parking_properties
+      kind: motorcycle_parking
+  - filter:
+      amenity: bicycle_parking
       name: true
     min_zoom: 17
     output:
       <<: *output_properties
       <<: *cycle_parking_properties
-      kind: {col: amenity}
+      kind: bicycle_parking
   - filter:
-      amenity: [bicycle_parking, motorcycle_parking]
+      amenity: bicycle_parking
     min_zoom: 19
     output:
       <<: *output_properties
