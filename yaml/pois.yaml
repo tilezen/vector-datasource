@@ -29,6 +29,37 @@ global:
     tram_routes: {col: tram_routes}
   - &health_facility_type_kind_detail
     kind_detail: {col: 'health_facility:type'}
+  # common properties for {bi|motor}cycle parking
+  - &cycle_parking_properties
+    access: {col: access}
+    operator: {col: operator}
+    capacity: {col: tags->capacity}
+    covered:
+      case:
+        - when:
+            covered: 'yes'
+          then: true
+        - when:
+            covered: 'no'
+          then: false
+    fee:
+      case:
+        - when:
+            fee: true
+            not:
+              fee: ['no', 'Free', 'free', '0', 'No', 'none']
+          then: true
+      # TODO tests expect this to be false and not omitted, is that what we want?
+        - else: false
+    cyclestreets_id: {col: tags->cyclestreets_id}
+    maxstay: {col: tags->maxstay}
+    surveillance:
+      case:
+        - when:
+            surveillance: true
+            not:
+              surveillance: ['no', 'none']
+          then: true
 
   - &tier1_min_zoom
     lookup:
@@ -147,6 +178,7 @@ global:
           - car_wash
           - charging_station
           - customs
+          - drinking_water
           - fuel
           - harbourmaster
           - hunting_stand
@@ -192,7 +224,7 @@ global:
             rest_area, street_lamp, traffic_signals, trailhead ]
         - historic: [landmark, wayside_cross]
         - landuse: quarry
-        - leisure: [ dog_park, firepit, fishing, pitch, slipway, swimming_area ]
+        - leisure: [ dog_park, firepit, fishing, pitch, playground, slipway, swimming_area ]
         - lock: yes
         - man_made: [ adit, communications_tower, crane, mast, mineshaft, obelisk, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
@@ -826,10 +858,24 @@ filters:
       tier: 6
   # hedge - no POI
   # pedestrian - no POI
-  # pitch
-  - filter: {leisure: pitch}
+  # pitch - either has a name, or shows at a higher zoom for some sports
+  - filter:
+      leisure: pitch
+      name: true
     # already clamped below area min
     min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: pitch
+      kind_detail: {col: sport}
+      tier: 6
+  # pitch - only show no-name pitches for some smaller set of sports, and at a
+  # higher zoom.
+  - filter:
+      leisure: pitch
+      sport: [baseball, basketball, football, hockey, soccer, tennis]
+    # already clamped below area min
+    min_zoom: 17
     output:
       <<: *output_properties
       kind: pitch
@@ -843,9 +889,18 @@ filters:
       kind: place_of_worship
       tier: 6
   # playground
-  - filter: { leisure: playground }
+  - filter:
+      leisure: playground
+      name: true
     # already clamped below area limit
     min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: playground
+      tier: 6
+  - filter:
+      leisure: playground
+    min_zoom: 18
     output:
       <<: *output_properties
       kind: playground
@@ -1671,23 +1726,42 @@ filters:
       kind: viewpoint
   - filter:
       tourism: information
+      name: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: information
   - filter:
-      amenity: [atm, bureau_de_change, bus_stop, drinking_water, emergency_phone,
+      tourism: information
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: information
+  - filter:
+      amenity: [atm, bureau_de_change, bus_stop, emergency_phone,
         karaoke, karaoke_box, money_transfer, post_box, telephone]
     min_zoom: 17
     output:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      highway: [bus_stop, street_lamp, traffic_signals]
+      amenity: drinking_water
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: drinking_water
+  - filter:
+      highway: [bus_stop, street_lamp]
     min_zoom: 17
     output:
       <<: *output_properties
       kind: {col: highway}
+  - filter:
+      highway: traffic_signals
+    min_zoom: 18
+    output:
+      <<: *output_properties
+      kind: traffic_signals
   # memorial plaques more specific than plain memorials
   - filter:
       any:
@@ -1761,40 +1835,21 @@ filters:
       operator: {col: operator}
       capacity: {col: tags->capacity}
       ref: {col: ref}
-  - filter: {amenity: [bicycle_parking, motorcycle_parking] }
+  - filter:
+      amenity: [bicycle_parking, motorcycle_parking]
+      name: true
     min_zoom: 17
     output:
       <<: *output_properties
+      <<: *cycle_parking_properties
       kind: {col: amenity}
-      access: {col: access}
-      operator: {col: operator}
-      capacity: {col: tags->capacity}
-      covered:
-        case:
-          - when:
-              covered: 'yes'
-            then: true
-          - when:
-              covered: 'no'
-            then: false
-      fee:
-        case:
-          - when:
-              fee: true
-              not:
-                fee: ['no', 'Free', 'free', '0', 'No', 'none']
-            then: true
-        # TODO tests expect this to be false and not omitted, is that what we want?
-          - else: false
-      cyclestreets_id: {col: tags->cyclestreets_id}
-      maxstay: {col: tags->maxstay}
-      surveillance:
-        case:
-          - when:
-              surveillance: true
-              not:
-                surveillance: ['no', 'none']
-            then: true
+  - filter:
+      amenity: [bicycle_parking, motorcycle_parking]
+    min_zoom: 19
+    output:
+      <<: *output_properties
+      <<: *cycle_parking_properties
+      kind: {col: amenity}
   - filter:
       amenity: [charging_station]
     min_zoom: 17

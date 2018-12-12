@@ -1064,7 +1064,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `physician`
 * `picnic_site`
 * `picnic_table`
-* `pitch`
+* `pitch` - With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
 * `place_of_worship` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plaque` - A memorial plaque.

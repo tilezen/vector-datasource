@@ -244,13 +244,21 @@ class PredictableLayersPois(FixtureTest):
             14, 2777, 6374, 'pois',
             {'id': 902365126, 'kind': 'plant', 'min_zoom': 14})
 
-    def test_pitch_node(self):
+    def test_pitch_node_named(self):
         # Node:2442093493 pitch in POIS
-        self.generate_fixtures(dsl.way(2442093493, wkt_loads('POINT (-120.068494697136 38.93153745806469)'), {u'source': u'openstreetmap.org', u'sport': u'volleyball', u'leisure': u'pitch'}))  # noqa
+        self.generate_fixtures(dsl.way(2442093493, wkt_loads('POINT (-120.068494697136 38.93153745806469)'), {u'source': u'openstreetmap.org', u'sport': u'volleyball', u'leisure': u'pitch', u'name': u'Volleyball pitch'}))  # noqa
 
         self.assert_has_feature(
             16, 10910, 25062, 'pois',
             {'id': 2442093493, 'kind': 'pitch', 'min_zoom': 16})
+
+    def test_pitch_node_unnamed_sport_in_whitelist(self):
+        # Node:2442093493 pitch in POIS
+        self.generate_fixtures(dsl.way(2442093493, wkt_loads('POINT (-120.068494697136 38.93153745806469)'), {u'source': u'openstreetmap.org', u'sport': u'basketball', u'leisure': u'pitch'}))  # noqa
+
+        self.assert_has_feature(
+            16, 10910, 25062, 'pois',
+            {'id': 2442093493, 'kind': 'pitch', 'min_zoom': 17})
 
     def test_protected_area_way(self):
         # Way:296573403 protected_area in POIS
