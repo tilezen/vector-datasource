@@ -173,6 +173,11 @@ def match_distance(actual, expected):
                     misses[exp_k] = "%r not an instance of %r" % (v, exp_v)
                     distance += 1
 
+            elif callable(exp_v):
+                if not exp_v(v):
+                    misses[exp_k] = "%r(%r) is not truthy" % (exp_v, v)
+                    distance += 1
+
             elif v != exp_v:
                 misses[exp_k] = "%r != %r" % (v, exp_v)
                 distance += 1
