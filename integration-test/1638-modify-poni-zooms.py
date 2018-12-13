@@ -44,7 +44,7 @@ class ModifyPoniZoomsTest(FixtureTest):
                 'kind': 'pitch',
             })
 
-    def test_sports_pitch_no_sports_whitelist(self):
+    def test_sports_pitch_no_name_volleyball(self):
         import dsl
 
         z, x, y = (16, 0, 0)
@@ -57,9 +57,10 @@ class ModifyPoniZoomsTest(FixtureTest):
             }),
         )
 
-        # volleyball isn't whitelisted, so POI should not be generated
-        self.assert_no_matching_feature(
+        self.assert_has_feature(
             z, x, y, 'pois', {
+                'id': 1,
+                'min_zoom': 17,
                 'kind': 'pitch',
             })
 
