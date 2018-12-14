@@ -20,7 +20,7 @@ class TurningCirclesAndLoops(FixtureTest):
         self.generate_fixtures(
             dsl.point(4260010359, (8.43452, 49.4596352),
                       {u'source': u'openstreetmap.org',
-                       u'highway': u'turning_loop'})
+                       u'highway': u'turning_loop'}))
 
         self.assert_has_feature(
             16, 34303, 22378, 'pois',
