@@ -197,7 +197,7 @@ filters:
   # OSM water place points (ocean, sea labels)
   #
   - filter: {name: true, place: ocean}
-    min_zoom: *water_polygon_min_zoom
+    min_zoom: 1
     output:
       <<: *output_properties
       kind: ocean
@@ -215,7 +215,7 @@ filters:
   #     - {kind: ocean}
   #   table: shp
   - filter: {meta.source: shp}
-    min_zoom: 1
+    min_zoom: 0
     output:
       <<: *output_properties
       kind: ocean
