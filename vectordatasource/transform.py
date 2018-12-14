@@ -8152,8 +8152,10 @@ def tags_set_ne_min_max_zoom(ctx):
     for _, props, _ in layer['features']:
         min_zoom = props.pop('__ne_min_zoom', None)
         if min_zoom is not None:
-            if math.ceil(min_zoom) == math.trunc(min_zoom) + 1:
-                props['min_zoom'] = math.ceil(min_zoom)
+            # don't overstuff features that are in the long tail of won't display
+            # but make their min_zoom consistent with when they show in tiles
+            if ceil(min_zoom) == trunc(min_zoom) + 1:
+                props['min_zoom'] = ceil(min_zoom)
             else:
                 props['min_zoom'] = min_zoom
 
