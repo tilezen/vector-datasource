@@ -1475,12 +1475,12 @@ filters:
       <<: *output_properties
       kind: toll_booth
   - filter: {highway: [turning_circle, turning_loop]}
-    min_zoom: 16
+    min_zoom: 17
     output:
       <<: *output_properties
       kind: { col: highway }
   - filter: {highway: mini_roundabout}
-    min_zoom: 15
+    min_zoom: 16
     output:
       <<: *output_properties
       kind: mini_roundabout
