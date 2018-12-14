@@ -8129,7 +8129,7 @@ def min_zoom_filter(ctx):
         for feature in features:
             _, props, _ = feature
             min_zoom = props.get('min_zoom')
-            if min_zoom is not None and min_zoom <= nominal_zoom + 1:
+            if min_zoom is not None and min_zoom <= nominal_zoom + 0.5:
                 new_features.append(feature)
 
         layer['features'] = new_features
