@@ -13,7 +13,7 @@ filters:
   - filter:
       place: continent
       name: true
-    min_zoom: 0
+    min_zoom: 1
     output:
       <<: *output_properties
       kind: continent

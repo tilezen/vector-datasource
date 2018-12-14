@@ -215,7 +215,7 @@ filters:
   #     - {kind: ocean}
   #   table: shp
   - filter: {meta.source: shp}
-    min_zoom: 0
+    min_zoom: 1
     output:
       <<: *output_properties
       kind: ocean

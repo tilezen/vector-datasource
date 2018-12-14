@@ -105,7 +105,7 @@ class FractionalPoisNe(FixtureTest):
     def test_water_osm(self):
         self.assert_has_feature(
             9, 150, 192, 'water',
-            {'min_zoom': 0,
+            {'min_zoom': 1,
              'source': 'openstreetmapdata.com',
              'kind': 'ocean',
              'name': type(None)})

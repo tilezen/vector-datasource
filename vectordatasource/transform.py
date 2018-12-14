@@ -2,6 +2,7 @@
 # transformation functions to apply to features
 
 from collections import defaultdict, namedtuple
+from math import ceil
 from numbers import Number
 from shapely.geometry.collection import GeometryCollection
 from shapely.geometry import box as Box
@@ -8129,7 +8130,7 @@ def min_zoom_filter(ctx):
         for feature in features:
             _, props, _ = feature
             min_zoom = props.get('min_zoom')
-            if min_zoom is not None and min_zoom <= nominal_zoom + 1:
+            if min_zoom is not None and min_zoom < nominal_zoom + 1:
                 new_features.append(feature)
 
         layer['features'] = new_features
@@ -8150,6 +8151,11 @@ def tags_set_ne_min_max_zoom(ctx):
     for _, props, _ in layer['features']:
         min_zoom = props.pop('__ne_min_zoom', None)
         if min_zoom is not None:
+            # don't overstuff features into tiles when they are in the
+            # long tail of won't display, but make their min_zoom
+            # consistent with when they actually show in tiles
+            if min_zoom % 1 > 0.5:
+                min_zoom = ceil(min_zoom)
             props['min_zoom'] = min_zoom
 
         max_zoom = props.pop('__ne_max_zoom', None)
