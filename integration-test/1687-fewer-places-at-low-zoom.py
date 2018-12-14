@@ -46,12 +46,12 @@ class LowZoomPlacesTest(FixtureTest):
         self.assert_no_matching_feature(
             0, 0, 0, 'water', {
                 'kind': 'ocean',
-                'label_placement': true,
+                'label_placement': True,
             })
 
         # should not exist at zoom 0
         self.assert_no_matching_feature(
             0, 0, 0, 'earth', {
                 'kind': 'continent',
-                'label_placement': true,
+                'label_placement': True,
             })
