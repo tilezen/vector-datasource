@@ -8129,7 +8129,7 @@ def min_zoom_filter(ctx):
         for feature in features:
             _, props, _ = feature
             min_zoom = props.get('min_zoom')
-            if min_zoom is not None and min_zoom <= nominal_zoom + 0.5:
+            if min_zoom is not None and min_zoom < nominal_zoom + 1:
                 new_features.append(feature)
 
         layer['features'] = new_features
@@ -8150,7 +8150,10 @@ def tags_set_ne_min_max_zoom(ctx):
     for _, props, _ in layer['features']:
         min_zoom = props.pop('__ne_min_zoom', None)
         if min_zoom is not None:
-            props['min_zoom'] = min_zoom
+            if math.ceil(min_zoom) == math.trunc(min_zoom) + 1:
+                props['min_zoom'] = math.ceil(min_zoom)
+            else:
+                props['min_zoom'] = min_zoom
 
         max_zoom = props.pop('__ne_max_zoom', None)
         if max_zoom is not None:
