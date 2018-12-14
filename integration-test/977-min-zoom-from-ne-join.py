@@ -27,11 +27,11 @@ class MinZoomFromNETest(FixtureTest):
             }),
         )
 
-    def test_uk_should_show_up_zooms_2_to_6(self):
+    def test_uk_should_show_up_zooms_1_to_6(self):
         from tilequeue.tile import deg2num
         # should show up in zooms within the range 1-6
 
-        for zoom in xrange(2, 6):
+        for zoom in xrange(1, 6):
             x, y = deg2num(self.lat, self.lon, zoom)
             self.assert_has_feature(
                 zoom, x, y, 'places', {
@@ -40,16 +40,10 @@ class MinZoomFromNETest(FixtureTest):
                     'max_zoom': 6.7,
                 })
 
-    def test_uk_should_not_show_up_zoom_0_to_1(self):
-        from tilequeue.tile import deg2num
-        # shouldn't be in the zoom 0 or 1 tiles because min_zoom >= 1.5
-
-        for zoom in xrange(0, 1):
-            x, y = deg2num(self.lat, self.lon, zoom)
-            self.assert_no_matching_feature(
-                zoom, x, y, 'places', {
-                    'id': 838090640
-                })
+    def test_uk_should_not_show_up_zoom_0(self):
+        # shouldn't be in the zoom 0 tile because min_zoom >= 1
+        self.assert_no_matching_feature(
+            0, 0, 0, 'places', {'id': 838090640})
 
     def test_uk_should_not_show_up_zoom_7(self):
         # shouldn't be in the zoom 0 tile because max_zoom < 7
