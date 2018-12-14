@@ -2,6 +2,8 @@
 # transformation functions to apply to features
 
 from collections import defaultdict, namedtuple
+from math import ceil
+from math import trunc
 from numbers import Number
 from shapely.geometry.collection import GeometryCollection
 from shapely.geometry import box as Box
