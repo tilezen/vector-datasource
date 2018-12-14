@@ -36,7 +36,7 @@ class MinZoomFromNETest(FixtureTest):
             self.assert_has_feature(
                 zoom, x, y, 'places', {
                     'id': 838090640,
-                    'min_zoom': 1.7,
+                    'min_zoom': 2.0,
                     'max_zoom': 6.7,
                 })
 
