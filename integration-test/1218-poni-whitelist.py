@@ -162,7 +162,7 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(110392851, wkt_loads('POINT (-122.5540299617 37.9050195779691)'), {u'source': u'openstreetmap.org', u'highway': u'mini_roundabout'}))  # noqa
 
         self.assert_has_feature(
-            15, 5228, 12650, 'pois',
+            16, 10456, 25300, 'pois',
             {'id': 110392851})
 
     def test_highway_platform(self):
