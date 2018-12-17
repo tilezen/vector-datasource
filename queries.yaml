@@ -1254,7 +1254,7 @@ post_process:
       source_layers: [buildings]
       pixel_area: 0.25
 
-  - fn: vectordatasource.transform.merge_building_features
+  - fn: vectordatasource.transform.quantize_height
     params:
       source_layer: buildings
       start_zoom: 13
@@ -1263,6 +1263,12 @@ post_process:
         13: vectordatasource.transform.quantize_height_round_nearest_20_meters
         14: vectordatasource.transform.quantize_height_round_nearest_10_meters
         15: vectordatasource.transform.quantize_height_round_nearest_10_meters
+
+  - fn: vectordatasource.transform.merge_building_features
+    params:
+      source_layer: buildings
+      start_zoom: 13
+      end_zoom: 16
       # todo: keep instead of drop?
       drop:
         - name
