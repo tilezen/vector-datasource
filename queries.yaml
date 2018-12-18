@@ -1278,6 +1278,20 @@ post_process:
       source_layer: buildings
       target_value_type: int
 
+  # fit min zoom onto the scale rank, as we'll be using the scale rank rather
+  # than the min zoom to calculate whether a building should make it into a
+  # tile. having them split separately means we can't merge them together.
+  - fn: vectordatasource.transform.clamp_min_zoom
+    params:
+      layer: buildings
+      start_zoom: 14
+      end_zoom: 16
+      property: scale_rank
+      clamp:
+        5: 15
+        4: 14
+        3: 14
+
   - fn: vectordatasource.transform.merge_building_features
     params:
       source_layer: buildings

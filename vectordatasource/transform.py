@@ -8285,3 +8285,39 @@ def backfill(ctx):
                 props[k] = v
 
     return None
+
+
+def clamp_min_zoom(ctx):
+    """
+    Clamps the min zoom for features depending on context.
+    """
+
+    params = _Params(ctx, 'clamp_min_zoom')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    clamp = params.required('clamp', typ=dict)
+    property_name = params.required('property')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+
+        value = props.get(property_name)
+        min_zoom = props.get('min_zoom')
+
+        if value is not None and min_zoom is not None:
+            min_val = clamp.get(value)
+            if min_val is not None and min_val > min_zoom:
+                props['min_zoom'] = min_val
+
+    return None
