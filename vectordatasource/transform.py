@@ -3452,6 +3452,42 @@ def _merge_features_by_property(
     return new_features
 
 
+def quantize_height(ctx):
+    """
+    Quantize the height property of features in the layer according to the
+    per-zoom configured quantize function.
+    """
+
+    params = _Params(ctx, 'quantize_height')
+    zoom = ctx.nominal_zoom
+    source_layer = params.required('source_layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    quantize_cfg = params.required('quantize', typ=dict)
+
+    layer = _find_layer(ctx.feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    quantize_fn_dotted_name = quantize_cfg.get(zoom)
+    if not quantize_fn_dotted_name:
+        # no changes at this zoom
+        return None
+
+    quantize_height_fn = resolve(quantize_fn_dotted_name)
+    for shape, props, fid in layer['features']:
+        height = props.get('height', None)
+        if height is not None:
+            props['height'] = quantize_height_fn(height)
+
+    return None
+
+
 def merge_building_features(ctx):
     zoom = ctx.nominal_zoom
     source_layer = ctx.params.get('source_layer')
@@ -3476,13 +3512,6 @@ def merge_building_features(ctx):
     # values which retain detail.
     tolerance = min(5, 0.4 * tolerance_for_zoom(zoom))
 
-    quantize_height_fn = None
-    quantize_cfg = ctx.params.get('quantize')
-    if quantize_cfg:
-        quantize_fn_dotted_name = quantize_cfg.get(zoom)
-        if quantize_fn_dotted_name:
-            quantize_height_fn = resolve(quantize_fn_dotted_name)
-
     def _props_pre((shape, props, fid)):
         if exclusions:
             for prop in exclusions:
@@ -3497,11 +3526,6 @@ def merge_building_features(ctx):
         if drop:
             for prop in drop:
                 props.pop(prop, None)
-
-        if quantize_height_fn:
-            height = props.get('height', None)
-            if height is not None:
-                props['height'] = quantize_height_fn(height)
 
         return props
 
@@ -8259,5 +8283,41 @@ def backfill(ctx):
         for k, v in defaults.iteritems():
             if k not in props:
                 props[k] = v
+
+    return None
+
+
+def clamp_min_zoom(ctx):
+    """
+    Clamps the min zoom for features depending on context.
+    """
+
+    params = _Params(ctx, 'clamp_min_zoom')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    clamp = params.required('clamp', typ=dict)
+    property_name = params.required('property')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+
+        value = props.get(property_name)
+        min_zoom = props.get('min_zoom')
+
+        if value is not None and min_zoom is not None:
+            min_val = clamp.get(value)
+            if min_val is not None and min_val > min_zoom:
+                props['min_zoom'] = min_val
 
     return None

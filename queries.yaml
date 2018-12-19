@@ -1254,7 +1254,7 @@ post_process:
       source_layers: [buildings]
       pixel_area: 0.25
 
-  - fn: vectordatasource.transform.merge_building_features
+  - fn: vectordatasource.transform.quantize_height
     params:
       source_layer: buildings
       start_zoom: 13
@@ -1263,6 +1263,44 @@ post_process:
         13: vectordatasource.transform.quantize_height_round_nearest_20_meters
         14: vectordatasource.transform.quantize_height_round_nearest_10_meters
         15: vectordatasource.transform.quantize_height_round_nearest_10_meters
+
+  # assign `scale_rank` - BEFORE merging, as we want to assign this based on
+  # the original area/height/volume of the building before it is possibly
+  # merged with others. clients might use scale_rank for filtering, in which
+  # case they want to see the original value.
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/scale_rank/buildings.csv
+    params:
+      source_layer: buildings
+      target_value_type: int
+
+  # fit min zoom onto the scale rank, as we'll be using the scale rank rather
+  # than the min zoom to calculate whether a building should make it into a
+  # tile. having them split separately means we can't merge them together.
+  #
+  # note: this only _increases_ the min_zoom to be inline with the min that
+  # matches the scale_rank, it will never _decrease_ the min_zoom. i.e: it will
+  # push a z14 building with scale_rank=5 down to z15, but won't lift a z17
+  # building up, no matter what its scale_rank.
+  - fn: vectordatasource.transform.clamp_min_zoom
+    params:
+      layer: buildings
+      start_zoom: 14
+      property: scale_rank
+      clamp:
+        5: 15
+        4: 14
+        3: 14
+
+  - fn: vectordatasource.transform.merge_building_features
+    params:
+      source_layer: buildings
+      start_zoom: 13
+      end_zoom: 16
       # todo: keep instead of drop?
       drop:
         - name
@@ -1282,17 +1320,6 @@ post_process:
       end_zoom: 15
       source_layers: [buildings]
       pixel_area: 0.25
-
-  # assign `scale_rank` - AFTER merging, as this changes the area and volume
-  - fn: vectordatasource.transform.csv_match_properties
-    resources:
-      matcher:
-        type: file
-        init_fn: vectordatasource.transform.CSVMatcher
-        path: spreadsheets/scale_rank/buildings.csv
-    params:
-      source_layer: buildings
-      target_value_type: int
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
@@ -1317,7 +1344,7 @@ post_process:
       source_layer: buildings
       start_zoom: 14
       end_zoom: 15
-      where: scale_rank > 3
+      where: scale_rank > 4
 
   - fn: vectordatasource.transform.drop_small_inners
     params:
