@@ -2198,7 +2198,7 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 
 * `id`: Unique traffic event ID. Can be referenced when checking for updated traffic information for specified event
 * `kind`: type of the incident
-* `min_zoom`: this value is derived from the internal `warning_level` used for the severity of the incidents which corresponds to a list of values: low (3), minor (2), major (1), critical (0). A suggestion for which zoom to draw a feature. The value is a float
+* `min_zoom`: this value is derived from the `warning_level`. A suggestion for which zoom to draw a feature. The value is a float
 
 #### Possible values for the incident `kind` are:
 
@@ -2222,6 +2222,8 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 * `description`: potentially long description and comment on the incident. Localized, like `title` mentioned above
 
 #### `optional` properties:
+
+* `warning_level`: the severity of the incident that has occured, with three possible values: `low` (least severer), `minor`, `major`, and `critical` (most severer).
 
 If the roads layer features include `linear_ref_id`, then traffic incidents layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
 
