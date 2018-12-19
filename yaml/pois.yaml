@@ -1513,11 +1513,12 @@ filters:
       state: {col: tags->state}
   - filter:
       railway: [halt, stop, tram_stop]
-# to work around overwriting when using the same key twice
+      # to work around overwriting when using the same key twice (because we
+      # want to say "when historic is not present, or is present and is 'no'".)
       any:
         historic: false
         all: {historic: 'no'}
-    min_zoom: 13
+    min_zoom: 16
     output:
       <<: *output_properties
       <<: *transit_properties
