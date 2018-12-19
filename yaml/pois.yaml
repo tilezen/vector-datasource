@@ -1535,13 +1535,13 @@ filters:
       <<: *transit_properties
       kind: bus_stop
   - filter: {public_transport: platform, tags->rail: 'yes'}
-    min_zoom: 15
+    min_zoom: 17
     output:
       <<: *output_properties
       <<: *transit_properties
       kind: platform
   - filter: {public_transport: platform, tags->light_rail: 'yes'}
-    min_zoom: 15
+    min_zoom: 17
     output:
       <<: *output_properties
       <<: *transit_properties
@@ -1553,7 +1553,7 @@ filters:
       <<: *transit_properties
       kind: bus_stop
   - filter: {public_transport: platform}
-    min_zoom: 15
+    min_zoom: 17
     output:
       <<: *output_properties
       <<: *transit_properties
