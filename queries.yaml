@@ -1285,7 +1285,6 @@ post_process:
     params:
       layer: buildings
       start_zoom: 14
-      end_zoom: 16
       property: scale_rank
       clamp:
         5: 15
