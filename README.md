@@ -69,7 +69,7 @@ Depending on the URL syntax, Mapzen vector tiles can return all of the map data,
 
 ### Build from source
 
-If you are interested in setting up your own version of this service, follow these [installation instructions](https://github.com/tilezen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or you can also try this [Vagrant VM](https://github.com/mapzen/vagrant-tiles), which will additionally set up other tile components as well.
+If you are interested in setting up your own version of this service, follow these [installation instructions](https://github.com/tilezen/vector-datasource/wiki/Mapzen-Vector-Tile-Service), or use [Docker](https://github.com/tilezen/vector-datasource/blob/master/Dockerfile)!
 
 ### Tests
 
