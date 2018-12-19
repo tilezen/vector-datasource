@@ -838,7 +838,8 @@ filters:
   # allotments
   - filter:
       landuse: allotments
-    min_zoom: 16
+      not: { access: [ "private", "no" ] }
+    min_zoom: { min: [ { max: [ 16, { col: zoom }, *tier6_min_zoom ] }, 17 ] }
     output:
       <<: *output_properties
       kind: allotments
@@ -857,7 +858,7 @@ filters:
   - filter:
       leisure: garden
       not: { access: [ "private", "no" ] }
-    min_zoom: { min: [ { max: [ 12, { col: zoom }, *tier6_min_zoom ] }, 16 ] }
+    min_zoom: { min: [ { max: [ 12, { col: zoom }, *tier6_min_zoom ] }, 17 ] }
     output:
       <<: *output_properties
       kind: garden
