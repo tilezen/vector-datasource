@@ -2,7 +2,6 @@ import requests
 import xml.etree.ElementTree as ET
 import tilequeue.tile as tile
 from ModestMaps.Core import Coordinate
-from jinja2 import Template
 import os
 from contextlib import contextmanager
 
@@ -105,11 +104,27 @@ def _make_ident(s):
     return s.lower().translate(None, ':-')
 
 
+def _almost_repr(value):
+    # we'd prefer not to have all the u'' stuff everywhere unless it's
+    # necessary, so try to see if we can return a plain str, if the string
+    # is all ASCII anyway.
+    if isinstance(value, unicode):
+        try:
+            value = value.encode('ascii')
+        except UnicodeEncodeError:
+            # just use the original
+            pass
+
+    return repr(value)
+
+
 def _render_template(name, args):
+    from jinja2 import Environment, FileSystemLoader
+
     d = os.path.dirname(os.path.realpath(__file__))
-    template_file = os.path.join(d, 'templates', '%s.jinja2' % (name,))
-    with open(template_file) as fh:
-        template = Template(fh.read())
+    env = Environment(loader=FileSystemLoader(os.path.join(d, 'templates')))
+    env.filters['repr'] = _almost_repr
+    template = env.get_template('%s.jinja2' % (name,))
 
     output = template.render(**args)
     return output
