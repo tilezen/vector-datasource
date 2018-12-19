@@ -126,3 +126,32 @@ class BuildingScaleRankTest(FixtureTest):
             z, x, y, 'buildings', {
                 'scale_rank': (lambda r: r != 4)
             })
+
+    def test_tiny_shed_z17(self):
+        # check that a tiny shed, assigned zoom 17 in the buildings.yaml,
+        # doesn't get re-assigned a lower zoom. it should stay at z17.
+        z, x, y = (16, 0, 0)
+
+        # make one 1x1m building.
+        self._setup_row(z, x, y, 1, 1, 1)
+
+        self.assert_n_matching_features(
+            z, x, y, 'buildings', {
+                'kind': 'building',
+                'min_zoom': 17,
+            }, 1)
+
+    def test_slightly_larger_outbuilding_z16(self):
+        # check that a small building (or large shed), assigned zoom 16 in the
+        # buildings.yaml, doesn't get re-assigned a lower zoom. it should stay
+        # at z16.
+        z, x, y = (16, 0, 0)
+
+        # make one 4x4m building.
+        self._setup_row(z, x, y, 4, 4, 1)
+
+        self.assert_n_matching_features(
+            z, x, y, 'buildings', {
+                'kind': 'building',
+                'min_zoom': 16,
+            }, 1)

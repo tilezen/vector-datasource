@@ -1281,6 +1281,11 @@ post_process:
   # fit min zoom onto the scale rank, as we'll be using the scale rank rather
   # than the min zoom to calculate whether a building should make it into a
   # tile. having them split separately means we can't merge them together.
+  #
+  # note: this only _increases_ the min_zoom to be inline with the min that
+  # matches the scale_rank, it will never _decrease_ the min_zoom. i.e: it will
+  # push a z14 building with scale_rank=5 down to z15, but won't lift a z17
+  # building up, no matter what its scale_rank.
   - fn: vectordatasource.transform.clamp_min_zoom
     params:
       layer: buildings
