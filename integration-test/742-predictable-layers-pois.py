@@ -427,8 +427,8 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(433247531, wkt_loads('POLYGON ((-1.72388733215078 51.77740627297298, -1.72255701704653 51.77782451358231, -1.71885550891832 51.77827587560999, -1.71869668677608 51.77668577843119, -1.72165573732197 51.77702126586529, -1.72293251283529 51.7767092893118, -1.72335094809463 51.77667610728528, -1.72353330609731 51.77672257323179, -1.72385526229514 51.77692839012048, -1.72388733215078 51.77740627297298))'), {u'way_area': u'112601', u'source': u'openstreetmap.org', u'landuse': u'wood', u'name': u"No Man's Land Plantation"}))  # noqa
 
         self.assert_has_feature(
-            14, 8113, 5428, 'pois',
-            {'id': 433247531, 'kind': 'wood'})
+            16, 32454, 21713, 'pois',
+            {'id': 433247531, 'kind': 'wood', 'min_zoom': 17})
 
         # Label placement landuse: wood in landuse
         self.assert_no_matching_feature(

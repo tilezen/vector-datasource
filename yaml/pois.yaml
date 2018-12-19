@@ -489,7 +489,7 @@ filters:
       kind: wood
       tier: 2
   - filter: {landuse: wood}
-    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: 17
     output:
       <<: *output_properties
       kind: wood
