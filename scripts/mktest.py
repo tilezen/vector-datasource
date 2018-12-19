@@ -2,7 +2,6 @@ import requests
 import xml.etree.ElementTree as ET
 import tilequeue.tile as tile
 from ModestMaps.Core import Coordinate
-from jinja2 import Template
 import os
 from contextlib import contextmanager
 
