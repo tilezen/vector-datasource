@@ -294,8 +294,8 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(2073000913, wkt_loads('POINT (-122.4514815228 37.72302879364989)'), {u'source': u'openstreetmap.org', u'public_transport': u'platform'}))  # noqa
 
         self.assert_has_feature(
-            15, 5238, 12671, 'pois',
-            {'id': 2073000913})
+            16, 10476, 25342, 'pois',
+            {'id': 2073000913, 'min_zoom': 17})
 
     def test_public_transport_stop_area(self):
         self.generate_fixtures(dsl.way(2991866242, wkt_loads('POINT (-122.714192210673 38.43852797107748)'), {u'source': u'openstreetmap.org', u'public_transport': u'stop_area'}))  # noqa
