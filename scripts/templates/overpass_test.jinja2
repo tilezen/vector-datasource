@@ -8,7 +8,7 @@
             # https://www.openstreetmap.org/{{elt_type}}/{{elt_id}}
             {{geom_fn_name}}({{elt_id}}, {{geom_fn_arg}}, {
         {%- for k, v in tags|dictsort %}
-                '{{k}}': u'{{v}}',
+                {{k|repr}}: {{v|repr}},
         {%- endfor %}
             }),
         )
@@ -18,7 +18,7 @@
                 'id': {{elt_id}},
         {%- if expect is not none %}
         {%-   for k, v in expect|dictsort %}
-                '{{k}}': u'{{v}}',
+                {{k|repr}}: {{v|repr}},
         {%-   endfor %}
         {%- endif %}
             })
