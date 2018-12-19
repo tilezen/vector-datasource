@@ -7,7 +7,7 @@ The [Nextzen vector tile service](https://developers.nextzen.org/) provides worl
 ### Quick links
 
 * [Documentation for Tilezen Vector Tile service](https://mapzen.com/documentation/vector-tiles/)
-* [Get a Mapzen developer API key](https://mapzen.com/developers)
+* [Get a Nextzen developer API key](https://developers.nextzen.org/)
 * [Build from source](https://github.com/tilezen/vector-datasource#build-from-source)
 
 ![Contents of an example vector tile](docs/images/vector-tile-example.png)
