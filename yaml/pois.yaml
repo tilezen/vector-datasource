@@ -548,7 +548,7 @@ filters:
       tier: 3
   # university
   - filter: {amenity: university}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 15 ] }
+    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 16 ] }
     output:
       <<: *output_properties
       kind: university
@@ -835,7 +835,14 @@ filters:
   ############################################################
   # TIER 6
   ############################################################
-  # allotments - no POI
+  # allotments
+  - filter:
+      landuse: allotments
+    min_zoom: 16
+    output:
+      <<: *output_properties
+      kind: allotments
+      tier: 6
   # artwork, hanami
   - filter:
       tourism: [artwork, hanami, trail_riding_station]
