@@ -154,7 +154,6 @@ class PostOfficeTest(FixtureTest):
                 'name': 'RCFD Jersey Station',
                 'ref': '#174',
                 'source': 'openstreetmap.org',
-                'source_url': 'http://www.ci.rancho-cucamonga.ca.us/fire/images/MapofFireStationLocations.jpg',
             }),
         )
 
