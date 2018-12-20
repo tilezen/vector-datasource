@@ -58,21 +58,46 @@ class HistoricTransitStops(FixtureTest):
 
         self.assert_has_feature(
             16, 19306, 24648, 'pois',
-            {'id': 2986320002, 'min_zoom': 13})
+            {'id': 2986320002, 'min_zoom': 16})
 
     def test_current_tram_stop(self):
         # Current tram stop
         self.generate_fixtures(dsl.way(257074010, wkt_loads('POINT (-122.413997610771 37.77939210258558)'), {u'name': u'Civic Center', u'wikipedia': u'en:Civic Center / UN Plaza Station', u'source': u'openstreetmap.org', u'operator': u'San Francisco Municipal Railway', u'railway': u'tram_stop', u'network': u'Muni'}))  # noqa
 
         self.assert_has_feature(
-            13, 1310, 3166, 'pois',
-            {'id': 257074010})
+            16, 10483, 25330, 'pois',
+            {'id': 257074010, 'kind': 'tram_stop', 'min_zoom': 16})
 
     def test_current_railway_halt(self):
         # Current railway halt
-        # http://www.openstreetmap.org/node/302735255
-        self.generate_fixtures(dsl.way(302735255, wkt_loads('POINT (16.8020703892136 48.10800269583749)'), {u'railway:ref': u'Reg H1', u'uic_ref': u'8101787', u'name': u'Wildungsmauer', u'railway:position': u'38.0', u'uic_name': u'Wildungsmauer', u'source': u'openstreetmap.org', u'train': u'yes', u'public_transport': u'stop_position', u'operator': u'\xd6BB', u'railway:position:exact': u'37.985', u'railway': u'halt', u'ref': u'1'}))  # noqa
+        import dsl
+
+        z, x, y = (16, 35826, 22751)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/302735255
+            dsl.point(302735255, (16.8020704, 48.1080027), {
+                'name': u'Wildungsmauer',
+                'network': u'VOR',
+                'operator': u'ÖBB-Infrastruktur AG',
+                'public_transport': u'stop_position',
+                'railway': u'halt',
+                'railway:platform_height': u'38',
+                'railway:platform_length': u'142',
+                'railway:position': u'38.0',
+                'railway:position:exact': u'37.985',
+                'railway:ref': u'Reg H1',
+                'ref': u'1',
+                'source': u'openstreetmap.org',
+                'train': u'yes',
+                'uic_name': u'Wildungsmauer',
+                'uic_ref': u'8101787',
+            }),
+        )
 
         self.assert_has_feature(
-            13, 4478, 2843, 'pois',
-            {'id': 302735255})
+            z, x, y, 'pois', {
+                'id': 302735255,
+                'kind': u'halt',
+                'min_zoom': 16,
+            })

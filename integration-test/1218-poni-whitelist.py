@@ -308,8 +308,8 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(2382580308, wkt_loads('POINT (-75.130406997023 40.30634839166561)'), {u'source': u'openstreetmap.org', u'railway': u'halt'}))  # noqa
 
         self.assert_has_feature(
-            15, 9545, 12368, 'pois',
-            {'id': 2382580308})
+            16, 19090, 24737, 'pois',
+            {'id': 2382580308, 'kind': 'halt', 'min_zoom': 16})
 
     def test_railway_platform(self):
         self.generate_fixtures(dsl.way(3987143106, wkt_loads('POINT (-72.0929836528225 41.354925008914)'), {u'source': u'openstreetmap.org', u'railway': u'platform'}))  # noqa
@@ -322,16 +322,16 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(1130268570, wkt_loads('POINT (-76.9349771452377 38.9629633645972)'), {u'source': u'openstreetmap.org', u'railway': u'stop', u'rail': u'yes', u'public_transport': u'stop_position'}))  # noqa
 
         self.assert_has_feature(
-            15, 9381, 12527, 'pois',
-            {'id': 1130268570})
+            16, 18762, 25055, 'pois',
+            {'id': 1130268570, 'kind': 'stop', 'min_zoom': 16})
 
     def test_public_transport_stop_position(self):
         # originally from 661-historic-transit-stops.py
         self.generate_fixtures(dsl.way(3721890342, wkt_loads('POINT (-122.15620591773 37.438295280187)'), {u'source': u'openstreetmap.org', u'railway': u'stop', u'network': u'Caltrain', u'public_transport': u'stop_position'}))  # noqa
 
         self.assert_has_feature(
-            13, 1316, 3176, 'pois',
-            {'id': 3721890342})
+            16, 10530, 25408, 'pois',
+            {'id': 3721890342, 'kind': 'stop', 'min_zoom': 16})
 
     def test_railway_subway_entrance(self):
         self.generate_fixtures(dsl.way(3833748147, wkt_loads('POINT (-77.08494522253518 38.89059997067759)'), {u'source': u'openstreetmap.org', u'railway': u'subway_entrance', u'highway': u'elevator', u'subway_entrance': u'elevator'}))  # noqa
@@ -348,7 +348,7 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(1719012916, wkt_loads('POINT (-122.433744377346 37.73245189929369)'), {u'source': u'openstreetmap.org', u'railway': u'tram_stop'}))  # noqa
 
         self.assert_has_feature(
-            15, 5239, 12670, 'pois',
+            16, 10479, 25340, 'pois',
             {'id': 1719012916})
 
     def test_railway_level_crossing(self):
