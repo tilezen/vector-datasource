@@ -195,12 +195,25 @@ class PredictableLayersPois(FixtureTest):
              'label_placement': True})
 
     def test_nature_reserve_node(self):
-        # Node:1262562806 nature_reserve in POIS
-        self.generate_fixtures(dsl.way(1262562806, wkt_loads('POINT (-93.05604621599589 39.65888526038069)'), {u'source': u'openstreetmap.org', u'name': u'Nannie B. Floyd Memorial Conservation Area', u'leisure': u'nature_reserve'}))  # noqa
+        import dsl
+
+        z, x, y = (16, 15827, 24891)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/1262562806
+            dsl.point(1262562806, (-93.0560463, 39.6588853), {
+                'leisure': u'nature_reserve',
+                'name': u'Nannie B. Floyd Memorial Conservation Area',
+                'source': u'openstreetmap.org',
+            }),
+        )
 
         self.assert_has_feature(
-            10, 247, 388, 'pois',
-            {'id': 1262562806, 'kind': 'nature_reserve', 'min_zoom': 10})
+            z, x, y, 'pois', {
+                'id': 1262562806,
+                'kind': 'nature_reserve',
+                'min_zoom': 16,
+            })
 
     def test_park_way(self):
         # Way:23871270 park in POIS
