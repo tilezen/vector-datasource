@@ -1025,7 +1025,7 @@ filters:
       kind: waterway_fuel
   - filter:
       amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
