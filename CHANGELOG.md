@@ -29,9 +29,6 @@ v1.6.0
   * **roads**: Drop `all_bicycle_networks` and `all_bicyle_shield_texts` until the max zoom, for all network types. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
   * **roads**: Drop `bicycle_network` and `bicycle_shield_text` from some mid-zooms depending on network type. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
   * **roads**: Drop `all_networks` and `all_shield_texts` properties from roads at low- and mid-zooms. [Issue #1642](https://github.com/tilezen/vector-datasource/issues/1642).
-  * **roads**: Document new heavy good vehicle (hgv, or truck) properties in schema (but not yet added to tile content), thanks [@musculman](https://github.com/musculman) at HERE! [Issue #1553](https://github.com/tilezen/vector-datasource/issues/1553).
-  * **traffic_flow**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705).
-  * **traffic_incidents**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705) and [PR #1719](https://github.com/tilezen/vector-datasource/pull/1719).
   * **water**: Merge water lines with same properties, thanks [@sensescape](https://github.com/sensescape). [Issue #1135](https://github.com/tilezen/vector-datasource/issues/1135).
   * **water**: Remove water point labels generated from lines. [Issue #1702](https://github.com/tilezen/vector-datasource/issues/1702).
   * **water**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
@@ -48,6 +45,9 @@ v1.6.0
   #### DOCUMENTATION CHANGES
 
   * Updated Layers documentation for v1.6 schema changes.
+  * **roads**: Document new heavy good vehicle (hgv, or truck) properties in schema (but not yet added to tile content), thanks [@musculman](https://github.com/musculman) at HERE! [Issue #1553](https://github.com/tilezen/vector-datasource/issues/1553).
+  * **traffic_flow**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705).
+  * **traffic_incidents**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705) and [PR #1719](https://github.com/tilezen/vector-datasource/pull/1719).
   * TODO: Updated tilejson/tilejson.json.erb for v1.5 and v1.6 schema changes.
 
   #### INTERNAL CHANGES
