@@ -5,7 +5,7 @@ v1.6.0
 
   #### ENHANCEMENTS
 
-  * **Significant file size reductions** of ~30% globally by additional geometry simplification, dropping features, dropping properties, and more aggressive merging to multi-lines and multi-polygons in low- and mid-zooms. _Sizes are given in bytes on the chart below, based on sampling of top 100,000 tiles from openstreetmap.org logs._
+  * **Significant file size reductions** of ~30% globally by additional geometry simplification, dropping features, dropping properties, and more aggressive merging to multi-lines and multi-polygons in low- and mid-zooms. _Chart shows sizes in bytes, based on sampling of top 100,000 tiles from openstreetmap.org logs._
 ![tilezen_size_v1d5_versus_v1d6](https://user-images.githubusercontent.com/853051/50316832-3cd43f80-046d-11e9-855e-5c2e0487dc48.gif)
   * **boundaries**: Merge lines with same properties into multi-lines, at most zooms. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
   * **boundaries**: Strip long `name`, `name:left`, and `name:right` properties from boundaries when geometry length can't fit the text, at mid-zooms (<11), to enable merging. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
