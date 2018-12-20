@@ -15,15 +15,8 @@ v1.6.0
   * **earth**: Truncate `min_zoom` floats to tenths place (and often just ints), to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **landuse**: Add `allotments` (community gardens), was already in POIs layer. [PR #1742](https://github.com/tilezen/vector-datasource/pull/1742)
   * **landuse**: Add `boatyard` and military firing `range` polygons, they already had POIs. [PR #1720](https://github.com/tilezen/vector-datasource/pull/1720). 
-  * **landuse**: Update and/or add **sort_rank** for `airfield`, `boatyard`, `container_terminal`, `danger_area`, `embankment` lines, `ferry_terminal`, `natural_forest`, `natural_park`, `natural_wood`, `naval_base`, `port_terminal`, `quay`, `range`, `shipyard`, `wetland`, and `wharf`. Some other kinds are also affected due to sort_rank ordering. Issues [#1096](https://github.com/tilezen/vector-datasource/issues/1096), [#1588](https://github.com/tilezen/vector-datasource/issues/1588), [#1574](https://github.com/tilezen/vector-datasource/issues/1574), and [#1569](https://github.com/tilezen/vector-datasource/issues/1569).
   * **places**: Use the Natural Earth v4.1 `min_zoom` property to cull more places at low-zooms, and reduce tile overpacking. [Issue #1687](https://github.com/tilezen/vector-datasource/issues/1687) and [PR #1693](https://github.com/tilezen/vector-datasource/pull/1693) and [PR #1734](https://github.com/tilezen/vector-datasource/pull/1734). [Issue #1729](https://github.com/tilezen/vector-datasource/issues/1729)
   * **pois**: Add `turning_circle` and `turning_loop`, thanks [@westnordost](https://github.com/westnordost). [Issue #1695](https://github.com/tilezen/vector-datasource/issues/1695).
-  * **pois**: Remove bogus `service_area` and `rest_area` features at mid zooms. [Issue #1698](https://github.com/tilezen/vector-datasource/issues/1698).
-  * **pois**: Refine `min_zoom` for `pitch`, `playground`, and `bicycle_parking` if they have a name, and push back no-name to a later zoom. Modify `min_zoom` for `drinking_water` and `traffic_signals`. [Issue #1638](https://github.com/tilezen/vector-datasource/issues/1638) and [PR #1727](https://github.com/tilezen/vector-datasource/pull/1727)
-  * **pois**: Modify `min_zoom` of `nursing_home` until z15. [Issue #1634](https://github.com/tilezen/vector-datasource/issues/1634).
-  * **pois**: Modify default `min_zoom` of `garden`, `allotments`, and `university`. [Issue #1636](https://github.com/tilezen/vector-datasource/issues/1636).
-  * **pois**: Modify default `min_zoom` of tram stops, railway stops, and railway halts down to zoom 16. [Issue #1635](https://github.com/tilezen/vector-datasource/issues/1635)
-  * **pois**: Modify default `min_zoom` of early `wood` & `platform`. [Issue #1637](https://github.com/tilezen/vector-datasource/issues/1637)
   * **roads**: Add cross-junction and multi-pass merging to remove more vertices and reduce overall feature count, thanks [@bcamper](https://github.com/bcamper). [Issue #1227](https://github.com/tilezen/vector-datasource/issues/1227), [PR #1703](https://github.com/tilezen/vector-datasource/pull/1703), [PR #1706](https://github.com/tilezen/vector-datasource/pull/1706), [PR #1708](https://github.com/tilezen/vector-datasource/pull/1708), [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **roads**: Double simplification tolerance. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **roads**: Reduce precision of `surface` tags at mid-zooms to just `paved`, `compacted`, and `unpaved` to increase road merging. Thanks [@matkoniecz](https://github.com/matkoniecz). [Issue #1716](https://github.com/tilezen/vector-datasource/issues/1716).
@@ -40,7 +33,14 @@ v1.6.0
   #### BUG FIXES
 
   * **boundaries**: Drop buffered land polygons from low zooms introduced in v1.5 in error. [PR #1699](https://github.com/tilezen/vector-datasource/pull/1699).
+  * **landuse**: Update and/or add **sort_rank** for `airfield`, `boatyard`, `container_terminal`, `danger_area`, `embankment` lines, `ferry_terminal`, `natural_forest`, `natural_park`, `natural_wood`, `naval_base`, `port_terminal`, `quay`, `range`, `shipyard`, `wetland`, and `wharf`. Some other kinds are also affected due to sort_rank ordering. Issues [#1096](https://github.com/tilezen/vector-datasource/issues/1096), [#1588](https://github.com/tilezen/vector-datasource/issues/1588), [#1574](https://github.com/tilezen/vector-datasource/issues/1574), and [#1569](https://github.com/tilezen/vector-datasource/issues/1569).
   * **pois**: Allow no-name `drinking_water` and `playground` features.
+  * **pois**: Remove bogus `service_area` and `rest_area` features at mid zooms. [Issue #1698](https://github.com/tilezen/vector-datasource/issues/1698).
+  * **pois**: Refine `min_zoom` for `pitch`, `playground`, and `bicycle_parking` if they have a name, and push back no-name to a later zoom. Modify `min_zoom` for `drinking_water` and `traffic_signals`. [Issue #1638](https://github.com/tilezen/vector-datasource/issues/1638) and [PR #1727](https://github.com/tilezen/vector-datasource/pull/1727)
+  * **pois**: Modify `min_zoom` of `nursing_home` until z15. [Issue #1634](https://github.com/tilezen/vector-datasource/issues/1634).
+  * **pois**: Modify default `min_zoom` of `garden`, `allotments`, and `university`. [Issue #1636](https://github.com/tilezen/vector-datasource/issues/1636).
+  * **pois**: Modify default `min_zoom` of tram stops, railway stops, and railway halts down to zoom 16. [Issue #1635](https://github.com/tilezen/vector-datasource/issues/1635)
+  * **pois**: Modify default `min_zoom` of early `wood` & `platform`. [Issue #1637](https://github.com/tilezen/vector-datasource/issues/1637)
   * **water**: Remove water point labels generated from lines. [Issue #1702](https://github.com/tilezen/vector-datasource/issues/1702).
 
   #### DOCUMENTATION CHANGES
