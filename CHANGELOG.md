@@ -34,7 +34,7 @@ v1.6.0
   * **water**: Merge water lines with same properties to improve labeling and rendering, thanks [@sensescape](https://github.com/sensescape). [Issue #1135](https://github.com/tilezen/vector-datasource/issues/1135).
   * **water**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **water**: Drop `name` property when it doesn't fit on feature at all zooms but max, to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
-  * **water**: Drop smaller water features across at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Drop smaller water polygons across at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **water**: Truncate `min_zoom` floats to tenths place (and often just ints). [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
 
   #### BUG FIXES
