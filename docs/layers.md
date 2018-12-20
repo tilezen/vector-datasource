@@ -92,13 +92,13 @@ Most Tilezen vector tile content is updated minutely from OpenStreetMap. Low and
 
 #### Changelog
 
-The current version of Tilezen vector tile data schema is **v1.5.0**.
+The current version of Tilezen vector tile data schema is **v1.6.0**.
 
 Tiles are still in active development, but Tilezen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
 You can send your feedback at hello@nextzen.org or via our [Gitter chat](https://gitter.im/tilezen/tilezen-chat) room.
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.5.0/CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.6.0/CHANGELOG.md).
 
 #### Feature ordering
 
@@ -121,13 +121,18 @@ draw:
 
 ### Layer reference
 
-Tilezen vector tiles include 9 layers:
+Tilezen vector tiles include 9 default layers (and 2 optional layers):
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
 These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
 
 While the service can return just a single layer or combination of layers, the `all` layer is more performant.
+
+The Tilezen vector tiles schema defines 2 optional layers:
+
+* `traffic_flow` and `traffic_incidents`
+
 
 ## Boundaries
 
