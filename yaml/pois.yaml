@@ -1055,7 +1055,7 @@ filters:
       <<: *output_properties
       kind: {col: shop}
   - filter: {amenity: nursing_home}
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.25 ] } } }
+    min_zoom: { clamp: { min: 15, max: 16, value: { sum: [ { col: zoom }, 1.25 ] } } }
     output:
       <<: *output_properties
       kind: nursing_home
