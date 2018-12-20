@@ -5,9 +5,9 @@ v1.6.0
 
   #### ENHANCEMENTS
 
-  * **boundaries**: Strip long names from boundaries. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
-  * **boundaries**: Remove id, id:left and id:right properties at mid and low zooms (z<13) to reduce file size. [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
-  * **boundaries**: Push locality boundary features down to min zoom 11. [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
+  * **boundaries**: Strip long `name` properties from boundaries when geometry length can't fit the text, at all zooms except max zoom. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
+  * **boundaries**: Remove `id`, `id:left` and `id:right` properties at mid and low zooms (z<13). [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
+  * **boundaries**: Push `locality` lines down to min zoom 11 (was 10). [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
   * **boundaries**: Double simplification tolerance boundaries layers. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **buildings:** Improve building merging and remove some mid-zoom content. Issues [#1686](https://github.com/tilezen/vector-datasource/issues/1686) and [#1732](https://github.com/tilezen/vector-datasource/issues/1732) [PR #1689](https://github.com/tilezen/vector-datasource/pull/1689), [#1704](https://github.com/tilezen/vector-datasource/pull/1704), and [PR #1739](https://github.com/tilezen/vector-datasource/pull/1739)
   * **landuse**: Add `allotments` (community gardens), was already in POIs layer. [PR #1742](https://github.com/tilezen/vector-datasource/pull/1742)
@@ -21,7 +21,7 @@ v1.6.0
   * **pois**: Modify `min_zoom` of some gardens, allotments, and university. [Issue #1636](https://github.com/tilezen/vector-datasource/issues/1636).
   * **pois**: Modify `min_zoom` of tram stops, railway stops and halts down to zoom 16. [Issue #1635](https://github.com/tilezen/vector-datasource/issues/1635)
   * **pois**: Modify `min_zoom` of early wood & platform [Issue #1637](https://github.com/tilezen/vector-datasource/issues/1637)
-  * **roads**: Add cross-junction merging to reduce file size, thanks @bcamper. [Issue #1227](https://github.com/tilezen/vector-datasource/issues/1227), [PR #1703](https://github.com/tilezen/vector-datasource/pull/1703), [PR #1706](https://github.com/tilezen/vector-datasource/pull/1706), [PR #1708](https://github.com/tilezen/vector-datasource/pull/1708), [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
+  * **roads**: Add cross-junction and multi-pass merging to remove more vertices and reduce overall feature count, thanks @bcamper. [Issue #1227](https://github.com/tilezen/vector-datasource/issues/1227), [PR #1703](https://github.com/tilezen/vector-datasource/pull/1703), [PR #1706](https://github.com/tilezen/vector-datasource/pull/1706), [PR #1708](https://github.com/tilezen/vector-datasource/pull/1708), [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **roads**: Double simplification tolerance roads layers. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **roads**: Reduce precision of **surface** tags at mid-zooms to just `paved`, `compacted`, and `unpaved` to improve road merging. Thanks @matkoniecz. [Issue #1716](https://github.com/tilezen/vector-datasource/issues/1716).
   * **roads**: Drop some properties from `minor_road` kind features at mid zooms to improve merging, including: `colour`, `cutting`, `embankment`, `motor_vehicle`, `operator`, `route`, `route_name`, `state`, `symbol`, `type`. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1710](https://github.com/tilezen/vector-datasource/pull/1710).
