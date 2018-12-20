@@ -26,23 +26,22 @@ v1.6.0
   * **pois**: Modify default `min_zoom` of early `wood` & `platform`. [Issue #1637](https://github.com/tilezen/vector-datasource/issues/1637)
   * **roads**: Add cross-junction and multi-pass merging to remove more vertices and reduce overall feature count, thanks [@bcamper](https://github.com/bcamper). [Issue #1227](https://github.com/tilezen/vector-datasource/issues/1227), [PR #1703](https://github.com/tilezen/vector-datasource/pull/1703), [PR #1706](https://github.com/tilezen/vector-datasource/pull/1706), [PR #1708](https://github.com/tilezen/vector-datasource/pull/1708), [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **roads**: Double simplification tolerance. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
-  * **roads**: Reduce precision of `surface` tags at mid-zooms to just `paved`, `compacted`, and `unpaved` to improve road merging. Thanks [@matkoniecz](https://github.com/matkoniecz). [Issue #1716](https://github.com/tilezen/vector-datasource/issues/1716).
-  * **roads**: Drop some properties from `minor_road` kind features at mid zooms to improve merging, including: `colour`, `cutting`, `embankment`, `motor_vehicle`, `operator`, `route`, `route_name`, `state`, `symbol`, `type`. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1710](https://github.com/tilezen/vector-datasource/pull/1710).
-  * **roads**: Drop `all_bicycle_networks` and `all_bicyle_shield_texts` until the max zoom, for all network types. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
-  * **roads**: Drop `bicycle_network` and `bicycle_shield_text` from some mid-zooms depending on network type. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
-  * **roads**: Drop `all_networks` and `all_shield_texts` properties from roads at low- and mid-zooms. [Issue #1642](https://github.com/tilezen/vector-datasource/issues/1642).
-  * **water**: Merge water lines with same properties, thanks [@sensescape](https://github.com/sensescape). [Issue #1135](https://github.com/tilezen/vector-datasource/issues/1135).
-  * **water**: Remove water point labels generated from lines. [Issue #1702](https://github.com/tilezen/vector-datasource/issues/1702).
+  * **roads**: Reduce precision of `surface` tags at mid-zooms to just `paved`, `compacted`, and `unpaved` to increase road merging. Thanks [@matkoniecz](https://github.com/matkoniecz). [Issue #1716](https://github.com/tilezen/vector-datasource/issues/1716).
+  * **roads**: Drop some properties from `minor_road` kind features at mid zooms to increase merging, including: `colour`, `cutting`, `embankment`, `motor_vehicle`, `operator`, `route`, `route_name`, `state`, `symbol`, `type`. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1710](https://github.com/tilezen/vector-datasource/pull/1710).
+  * **roads**: Drop `all_networks` and `all_shield_texts` properties from roads at low- and mid-zooms, to increase merging. [Issue #1642](https://github.com/tilezen/vector-datasource/issues/1642).
+  * **roads**: Drop `all_bicycle_networks` and `all_bicyle_shield_texts` until the max zoom, for all network types, to increase merging. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
+  * **roads**: Drop `bicycle_network` and `bicycle_shield_text` from some mid-zooms depending on network type, to increase merging. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
+  * **water**: Merge water lines with same properties to improve labeling and rendering, thanks [@sensescape](https://github.com/sensescape). [Issue #1135](https://github.com/tilezen/vector-datasource/issues/1135).
   * **water**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Drop `name` property when it doesn't fit on feature at all zooms but max, to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **water**: Drop smaller water features across at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
-  * **water**: Drop `name` property when it doesn't fit on feature at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **water**: Truncate `min_zoom` floats to tenths place (and often just ints). [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
 
   #### BUG FIXES
 
-  * **boundaries**: Drop intermediate buffered land polygons from low zooms. [PR #1699](https://github.com/tilezen/vector-datasource/pull/1699).
-  * **boundaries**: Fix recurring issue with martime_boundary property assignment. [Issue #1726](https://github.com/tilezen/vector-datasource/issues/1726)
+  * **boundaries**: Drop buffered land polygons from low zooms introduced in v1.5 in error. [PR #1699](https://github.com/tilezen/vector-datasource/pull/1699).
   * **pois**: Allow no-name `drinking_water` and `playground` features.
+  * **water**: Remove water point labels generated from lines. [Issue #1702](https://github.com/tilezen/vector-datasource/issues/1702).
 
   #### DOCUMENTATION CHANGES
 
