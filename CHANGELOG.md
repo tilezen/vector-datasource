@@ -6,11 +6,13 @@ v1.6.0
   #### ENHANCEMENTS
 
   * **boundaries**: Merge lines with same properties into multi-lines, at most zooms. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
-  * **boundaries**: Strip long `name` properties from boundaries when geometry length can't fit the text, at mid-zooms (<11), to enable merging. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
+  * **boundaries**: Strip long `name`, `name:left`, and `name:right` properties from boundaries when geometry length can't fit the text, at mid-zooms (<11), to enable merging. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
   * **boundaries**: Remove `id`, `id:left` and `id:right` properties at low- and mid-zooms (<13), to enable merging. [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
   * **boundaries**: Push `locality` lines down to `min_zoom` **11** (was 10), to reduce file size. [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
   * **boundaries**: Double simplification tolerance. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
   * **buildings:** Improve polygon merging at zooms 13, 14, and 15. Remove some mid-zoom content at zoom 13 and 14, and refactor `min_zoom`. Issues [#1686](https://github.com/tilezen/vector-datasource/issues/1686) and [#1732](https://github.com/tilezen/vector-datasource/issues/1732) [PR #1689](https://github.com/tilezen/vector-datasource/pull/1689), [#1704](https://github.com/tilezen/vector-datasource/pull/1704), and [PR #1739](https://github.com/tilezen/vector-datasource/pull/1739)
+  * **earth**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **earth**: Truncate `min_zoom` floats to tenths place (and often just ints). [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **landuse**: Add `allotments` (community gardens), was already in POIs layer. [PR #1742](https://github.com/tilezen/vector-datasource/pull/1742)
   * **landuse**: Add `boatyard` and military firing `range` polygons, they already had POIs. [PR #1720](https://github.com/tilezen/vector-datasource/pull/1720). 
   * **landuse**: Update and/or add **sort_rank** for `airfield`, `boatyard`, `container_terminal`, `danger_area`, `embankment` lines, `ferry_terminal`, `natural_forest`, `natural_park`, `natural_wood`, `naval_base`, `port_terminal`, `quay`, `range`, `shipyard`, `wetland`, and `wharf`. Some other kinds are also affected due to sort_rank ordering. Issues [#1096](https://github.com/tilezen/vector-datasource/issues/1096), [#1588](https://github.com/tilezen/vector-datasource/issues/1588), [#1574](https://github.com/tilezen/vector-datasource/issues/1574), and [#1569](https://github.com/tilezen/vector-datasource/issues/1569).
@@ -33,8 +35,8 @@ v1.6.0
   * **water**: Remove water point labels generated from lines. [Issue #1702](https://github.com/tilezen/vector-datasource/issues/1702).
   * **water**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **water**: Drop smaller water features across at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
-  * **water**: Drop name that don't fit on feature at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
-  * **water**: Truncate water and earth `min_zoom` floats to tenths place. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Drop `name` property when it doesn't fit on feature at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Truncate `min_zoom` floats to tenths place (and often just ints). [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
 
   #### BUG FIXES
 
