@@ -54,7 +54,7 @@ v1.6.0
   * Add gunicorn to dependencies, thanks @rwrx. [PR #1690](https://github.com/tilezen/vector-datasource/pull/1690)
   * Use raw strings for regular expressions containing regular expression. [4b20755b289ee3158f5cd8677f40b17622464fe6](https://github.com/tilezen/vector-datasource/commit/4b20755b289ee3158f5cd8677f40b17622464fe6).
   * Refactor common properties for {bi|motor}cycle parking in YAML code.
-  * Represent numbers as numbers (not strings), and allow strings not just Unicode strings  #1744
+  * Represent numbers as numbers (not strings), and allow strings not just Unicode strings. [PR #1744](https://github.com/tilezen/vector-datasource/pull/1744)
   * Update simplification process, address bugs. [d66f438ed0c86446e5f671dc036e786a5909d3ab](https://github.com/tilezen/vector-datasource/commit/d66f438ed0c86446e5f671dc036e786a5909d3ab)
   * No **database migrations** were provided, v1.5 was the last version that included those, as we've migrated to global RAWR tile builds.
   
