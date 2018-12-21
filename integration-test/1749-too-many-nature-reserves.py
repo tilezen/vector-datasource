@@ -61,6 +61,6 @@ class NatureReserveTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 105703183,
                 'kind': 'nature_reserve',
-                'min_zoom': 15,
+                'min_zoom': 16,
                 'name': 'Jug Island',
             })
