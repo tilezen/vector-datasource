@@ -49,9 +49,9 @@ v1.6.0
 
   * Updated Layers documentation for v1.6 schema changes.
   * **roads**: Document new heavy good vehicle (hgv, or truck) properties in schema (but not yet added to tile content), thanks [@musculman](https://github.com/musculman) at HERE! [Issue #1553](https://github.com/tilezen/vector-datasource/issues/1553).
-  * **traffic_flow**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705).
-  * **traffic_incidents**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705) and [PR #1719](https://github.com/tilezen/vector-datasource/pull/1719).
-  * Updated tilejson/tilejson.json.erb for v1.5 and v1.6 schema changes.
+  * **traffic_flow**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [Issue #1598](https://github.com/tilezen/vector-datasource/pull/1598) and [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705).
+  * **traffic_incidents**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [Issue #1598](https://github.com/tilezen/vector-datasource/pull/1598) and [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705) and [PR #1719](https://github.com/tilezen/vector-datasource/pull/1719).
+  * Updated `tilejson` for **v1.5** and **v1.6** schema changes.
 
   #### INTERNAL CHANGES
 
