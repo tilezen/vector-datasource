@@ -1,3 +1,68 @@
+v1.6.0
+------
+* **Release date:** 2018-12-21.
+* **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.2.1](https://github.com/tilezen/tilequeue/releases/tag/v2.2.1) and [rawr_tiles v1.0.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.0.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
+
+  #### ENHANCEMENTS
+
+  * **Significant file size reductions** of between 23% (p50) and 30% (p90) globally by additional geometry simplification, dropping features, dropping properties, and more aggressive merging to multi-lines and multi-polygons in low- and mid-zooms. _Chart shows sizes in bytes (logarithmic scale), based on top 100,000 tiles from openstreetmap.org logs at 512 pixel zoom. NOTE: all other zooms in this document use nominal 256 pixel zooms, offset by 1)._
+![tilezen_size_v1d5_versus_v1d6](https://github.com/tilezen/vector-datasource/raw/master/docs/images/tilezen-v1d5-versus-v1d6-size-zooms.gif)
+  * **boundaries**: Merge lines with same properties into multi-lines, at most zooms. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
+  * **boundaries**: Strip long `name`, `name:left`, and `name:right` properties from boundaries when geometry length can't fit the text, at mid-zooms (<11), to enable merging. [Issue #1683](https://github.com/tilezen/vector-datasource/issues/1683).
+  * **boundaries**: Remove `id`, `id:left` and `id:right` properties at low- and mid-zooms (<13), to enable merging. [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
+  * **boundaries**: Push `locality` lines down to `min_zoom` **11** (was 10), to reduce file size. [Issue #1715](https://github.com/tilezen/vector-datasource/issues/1715).
+  * **boundaries**: Double simplification tolerance. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
+  * **buildings:** Improve polygon merging at zooms 13, 14, and 15 including via [aggregation](https://en.wikipedia.org/wiki/Cartographic_generalization#Aggregation) of adjacent features. Remove some mid-zoom content at zoom 13 and 14, and refactor `min_zoom`. Issues [#1686](https://github.com/tilezen/vector-datasource/issues/1686) and [#1732](https://github.com/tilezen/vector-datasource/issues/1732) [PR #1689](https://github.com/tilezen/vector-datasource/pull/1689), [#1704](https://github.com/tilezen/vector-datasource/pull/1704), and [PR #1739](https://github.com/tilezen/vector-datasource/pull/1739)
+  * **earth**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **earth**: Truncate `min_zoom` floats to tenths place (and often just ints), to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **landuse**: Add `allotments` (community gardens), was already in POIs layer. [PR #1742](https://github.com/tilezen/vector-datasource/pull/1742)
+  * **landuse**: Add `boatyard` and military firing `range` polygons, they already had POIs. [PR #1720](https://github.com/tilezen/vector-datasource/pull/1720). 
+  * **places**: Use the Natural Earth v4.1 `min_zoom` property to cull more places at low-zooms, and reduce tile overpacking. [Issue #1687](https://github.com/tilezen/vector-datasource/issues/1687) and [PR #1693](https://github.com/tilezen/vector-datasource/pull/1693) and [PR #1734](https://github.com/tilezen/vector-datasource/pull/1734). [Issue #1729](https://github.com/tilezen/vector-datasource/issues/1729)
+  * **pois**: Add `turning_circle` and `turning_loop`, thanks [@westnordost](https://github.com/westnordost). [Issue #1695](https://github.com/tilezen/vector-datasource/issues/1695).
+  * **roads**: Add cross-junction and multi-pass merging to remove more vertices and reduce overall feature count, thanks [@bcamper](https://github.com/bcamper). [Issue #1227](https://github.com/tilezen/vector-datasource/issues/1227), [PR #1703](https://github.com/tilezen/vector-datasource/pull/1703), [PR #1706](https://github.com/tilezen/vector-datasource/pull/1706), [PR #1708](https://github.com/tilezen/vector-datasource/pull/1708), [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
+  * **roads**: Double simplification tolerance. [Issue #641](https://github.com/tilezen/vector-datasource/issues/641) and [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
+  * **roads**: Reduce precision of `surface` tags at mid-zooms to just `paved`, `compacted`, and `unpaved` to increase road merging. Thanks [@matkoniecz](https://github.com/matkoniecz). [Issue #1716](https://github.com/tilezen/vector-datasource/issues/1716).
+  * **roads**: Drop some properties from `minor_road` kind features at mid zooms to increase merging, including: `colour`, `cutting`, `embankment`, `motor_vehicle`, `operator`, `route`, `route_name`, `state`, `symbol`, `type`. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1710](https://github.com/tilezen/vector-datasource/pull/1710).
+  * **roads**: Drop `all_networks` and `all_shield_texts` properties from roads at low- and mid-zooms, to increase merging. [Issue #1642](https://github.com/tilezen/vector-datasource/issues/1642).
+  * **roads**: Drop `all_bicycle_networks` and `all_bicyle_shield_texts` until the max zoom, for all network types, to increase merging. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
+  * **roads**: Drop `bicycle_network` and `bicycle_shield_text` from some mid-zooms depending on network type, to increase merging. [Issue #1331](https://github.com/tilezen/vector-datasource/issues/1331) and [PR #1707](https://github.com/tilezen/vector-datasource/pull/1707).
+  * **water**: Merge water lines with same properties to improve labeling and rendering, thanks [@sensescape](https://github.com/sensescape). [Issue #1135](https://github.com/tilezen/vector-datasource/issues/1135).
+  * **water**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Drop `name` property when it doesn't fit on feature at all zooms but max, to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Drop smaller water polygons across at all zooms but max. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+  * **water**: Truncate `min_zoom` floats to tenths place (and often just ints), to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
+
+  #### BUG FIXES
+
+  * **boundaries**: Drop buffered land polygons from low zooms introduced in v1.5 in error. [PR #1699](https://github.com/tilezen/vector-datasource/pull/1699).
+  * **landuse**: Update and/or add **sort_rank** for `airfield`, `boatyard`, `container_terminal`, `danger_area`, `embankment` lines, `ferry_terminal`, `natural_forest`, `natural_park`, `natural_wood`, `naval_base`, `port_terminal`, `quay`, `range`, `shipyard`, `wetland`, and `wharf`. Some other kinds are also affected due to sort_rank ordering. Issues [#1096](https://github.com/tilezen/vector-datasource/issues/1096), [#1588](https://github.com/tilezen/vector-datasource/issues/1588), [#1574](https://github.com/tilezen/vector-datasource/issues/1574), and [#1569](https://github.com/tilezen/vector-datasource/issues/1569).
+  * **pois**: Allow no-name `drinking_water` and `playground` features.
+  * **pois**: Remove bogus `service_area` and `rest_area` features at mid zooms. [Issue #1698](https://github.com/tilezen/vector-datasource/issues/1698).
+  * **pois**: Refine `min_zoom` for `pitch`, `playground`, and `bicycle_parking` if they have a name, and push back no-name to a later zoom. Modify `min_zoom` for `drinking_water` and `traffic_signals`. [Issue #1638](https://github.com/tilezen/vector-datasource/issues/1638) and [PR #1727](https://github.com/tilezen/vector-datasource/pull/1727)
+  * **pois**: Modify `min_zoom` of `nursing_home` until z15. [Issue #1634](https://github.com/tilezen/vector-datasource/issues/1634).
+  * **pois**: Modify default `min_zoom` of `garden`, `allotments`, and `university`. [Issue #1636](https://github.com/tilezen/vector-datasource/issues/1636).
+  * **pois**: Modify default `min_zoom` of tram stops, railway stops, and railway halts down to zoom 16. [Issue #1635](https://github.com/tilezen/vector-datasource/issues/1635)
+  * **pois**: Modify default `min_zoom` of early `wood` & `platform`. [Issue #1637](https://github.com/tilezen/vector-datasource/issues/1637)
+  * **water**: Remove water point labels generated from lines. [Issue #1702](https://github.com/tilezen/vector-datasource/issues/1702).
+
+  #### DOCUMENTATION CHANGES
+
+  * Updated Layers documentation for v1.6 schema changes.
+  * **roads**: Document new heavy good vehicle (hgv, or truck) properties in schema (but not yet added to tile content), thanks [@musculman](https://github.com/musculman) at HERE! [Issue #1553](https://github.com/tilezen/vector-datasource/issues/1553).
+  * **traffic_flow**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [Issue #1598](https://github.com/tilezen/vector-datasource/pull/1598) and [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705).
+  * **traffic_incidents**: Add new optional layer definition, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here) at HERE! [Issue #1598](https://github.com/tilezen/vector-datasource/pull/1598) and [PR #1705](https://github.com/tilezen/vector-datasource/pull/1705) and [PR #1719](https://github.com/tilezen/vector-datasource/pull/1719).
+  * Updated `tilejson` for **v1.5** and **v1.6** schema changes.
+
+  #### INTERNAL CHANGES
+
+  * Add gunicorn to dependencies, thanks [@rwrx](https://github.com/rwrx). [PR #1690](https://github.com/tilezen/vector-datasource/pull/1690)
+  * Use raw strings for regular expressions containing regular expression. [4b2075](https://github.com/tilezen/vector-datasource/commit/4b20755b289ee3158f5cd8677f40b17622464fe6).
+  * Refactor common properties for `{bi|motor}cycle_parking` in YAML code.
+  * Represent numbers as numbers (not strings), and allow strings not just Unicode strings. [PR #1744](https://github.com/tilezen/vector-datasource/pull/1744)
+  * Update simplification process, address bugs. [d66f43](https://github.com/tilezen/vector-datasource/commit/d66f438ed0c86446e5f671dc036e786a5909d3ab)
+  * NOTE: No **database migrations** were provided, v1.5 was the last version that included those, as we've migrated to global RAWR tile builds.
+  
+
 v1.5.0
 ------
 * **Release date:** 2018-09-21.
