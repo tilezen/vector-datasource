@@ -233,7 +233,7 @@ global:
         - natural: [ cave_entrance, peak, volcano, geyser, hot_spring, rock, saddle,
             stone, spring, tree, waterfall ]
         - power: [ pole, tower, generator ]
-        - public_transport: [ platform, stop_area ]
+        - public_transport: [ platform, station, stop_area ]
         - railway: [ halt, level_crossing, platform, stop, subway_entrance, tram_stop ]
         - "health_facility:type": [field_hospital, health_centre]
         - "seamark:building:function": harbour_master
@@ -1519,6 +1519,19 @@ filters:
       <<: *transit_properties
       kind: station
       state: {col: tags->state}
+  # also count a public_transport=station as a station, if it has railway-ish
+  # tags.
+  - filter:
+      public_transport: station
+      any:
+        rail: true
+        light_rail: true
+        railway: true
+    min_zoom: 10
+    output:
+      <<: *output_properties
+      <<: *transit_properties
+      kind: station
   - filter:
       railway: [halt, stop, tram_stop]
       # to work around overwriting when using the same key twice (because we
