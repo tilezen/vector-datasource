@@ -145,6 +145,20 @@ global:
         - [ 14,  50000 ]
         - [ 15,   5000 ]
       default: 16
+  - &small_parks_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 8,   400000000 ]
+        - [ 9,    40000000 ]
+        - [ 10,   10000000 ]
+        - [ 11,    4000000 ]
+        - [ 12,    2000000 ]
+        - [ 13,     200000 ]
+        - [ 14,     100000 ]
+        - [ 15,      10000 ]
+      default: 16
   - &us_forest_service
         - United States Forest Service
         - US Forest Service
@@ -341,7 +355,7 @@ filters:
         leisure: park
         landuse: park
       park:type: state_recreational_area
-    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: park
@@ -384,7 +398,7 @@ filters:
         any:
           - operator: *us_forest_service
           - operator: *us_parks_service
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 5 ] }, *tier2_min_zoom ] }, 10 ] }
+    min_zoom: *tier2_min_zoom
     output:
       <<: *output_properties
       kind: nature_reserve
@@ -434,7 +448,7 @@ filters:
         leisure: park
         landuse: park
         boundary: national_park
-    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: *small_parks_min_zoom
     output:
       <<: *output_properties
       kind: park
@@ -466,7 +480,7 @@ filters:
 
   # nature reserves
   - filter: {leisure: nature_reserve}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 5 ] }, *tier2_min_zoom ] }, 10 ] }
+    min_zoom: *small_parks_min_zoom
     output:
       <<: *output_properties
       kind: nature_reserve
@@ -951,15 +965,6 @@ filters:
     output:
       <<: *output_properties
       kind: battlefield
-  # park w/ US Parks Service operator
-  - filter:
-      any:
-        leisure: park
-        landuse: park
-    min_zoom: { clamp: { min: 9, max: 14, value: { sum: [ { col: zoom }, 2 ] } } }
-    output:
-      <<: *output_properties
-      kind: park
 
   - filter:
       natural: [peak, volcano]
@@ -1011,7 +1016,7 @@ filters:
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
         post_office, theatre]
-    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 3.0 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
@@ -1025,7 +1030,7 @@ filters:
       kind: waterway_fuel
   - filter:
       amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
-    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
