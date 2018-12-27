@@ -1011,7 +1011,7 @@ filters:
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
         post_office, theatre]
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 3.7 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
