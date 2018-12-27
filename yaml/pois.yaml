@@ -1119,17 +1119,17 @@ filters:
       <<: *output_properties
       kind: mall
   - filter: {amenity: prison}
-    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
+    min_zoom: { clamp: { min: 12, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
     output:
       <<: *output_properties
       kind: prison
   - filter: {tourism: museum}
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.43 ] } } }
+    min_zoom: { clamp: { min: 12, max: 16, value: { sum: [ { col: zoom }, 1.43 ] } } }
     output:
       <<: *output_properties
       kind: museum
   - filter: {historic: landmark}
-    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 1.76 ] } } }
+    min_zoom: { clamp: { min: 12, max: 15, value: { sum: [ { col: zoom }, 1.76 ] } } }
     output:
       <<: *output_properties
       kind: landmark
