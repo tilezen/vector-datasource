@@ -1119,7 +1119,7 @@ filters:
       <<: *output_properties
       kind: {col: shop}
   - filter: {shop: mall}
-    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
+    min_zoom: { clamp: { min: 12, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
     output:
       <<: *output_properties
       kind: mall
@@ -1139,7 +1139,7 @@ filters:
       <<: *output_properties
       kind: landmark
   - filter: {leisure: marina}
-    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.45 ] } } }
+    min_zoom: { clamp: { min: 12, max: 17, value: { sum: [ { col: zoom }, 3.45 ] } } }
     output:
       <<: *output_properties
       kind: marina
@@ -1167,7 +1167,7 @@ filters:
       any:
         amenity: ferry_terminal
         landuse: ferry_terminal
-    min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
+    min_zoom: { clamp: { min: 11, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
     output:
       <<: *output_properties
       kind: ferry_terminal
@@ -1222,7 +1222,7 @@ filters:
       <<: *output_properties
       kind: fitness
   - filter: {leisure: fitness_station}
-    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
+    min_zoom: { clamp: { min: 17, max: 18, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output:
       <<: *output_properties
       kind: fitness_station
