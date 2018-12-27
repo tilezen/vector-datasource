@@ -1119,7 +1119,7 @@ filters:
       <<: *output_properties
       kind: mall
   - filter: {amenity: prison}
-    min_zoom: { clamp: { min: 12, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
+    min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
     output:
       <<: *output_properties
       kind: prison
