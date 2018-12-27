@@ -20,6 +20,7 @@ breakwater,*,224
 dam,*,223
 land,*,222
 wetland,*,220
+mud,*,219
 footway,*,125
 tower,*,124
 wilderness_hut,*,123
