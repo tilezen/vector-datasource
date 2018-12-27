@@ -7,7 +7,7 @@ class HideEarlyLandmarkTest(FixtureTest):
     def test_prison_rikers_island(self):
         import dsl
 
-        z, x, y = (12, 1207, 1538)
+        z, x, y = (13, 2414, 3077)
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/relation/3955540
@@ -32,7 +32,7 @@ class HideEarlyLandmarkTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 3955540,
                 'kind': 'prison',
-                'min_zoom': 12,
+                'min_zoom': 13,
             })
 
     def test_museum_petit_palais(self):
