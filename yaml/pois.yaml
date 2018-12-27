@@ -1011,7 +1011,7 @@ filters:
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
         post_office, theatre]
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
@@ -1019,26 +1019,26 @@ filters:
       any:
         - waterway: fuel
         - "seamark:small_craft_facility:category": 'fuel_station'
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 2.7 ] } } }
     output:
       <<: *output_properties
       kind: waterway_fuel
   - filter:
       amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
       kind_detail: {col: cuisine}
   - filter:
       shop: [coffee, deli]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
       <<: *output_properties
       kind: {col: shop}
   - filter:
       amenity: [pharmacy, veterinary]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
@@ -1047,13 +1047,13 @@ filters:
       craft: [brewery, carpenter, confectionery, dressmaker, electrician, gardener,
         handicraft, hvac, metal_construction, painter, photographer, photographic_laboratory,
         plumber, pottery, sawmill, shoemaker, stonemason, tailor, winery]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
       kind: {col: craft}
   - filter:
       shop: [charity, chemist, cosmetics, fishmonger, furniture, golf, pet, shoes, variety_store]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
       kind: {col: shop}
@@ -1069,17 +1069,17 @@ filters:
       kind: nursing_home
       <<: *health_facility_type_kind_detail
   - filter: {shop: music}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output:
       <<: *output_properties
       kind: music
   - filter: {amenity: community_centre}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output:
       <<: *output_properties
       kind: community_centre
   - filter: {shop: sports}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.53 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 1.53 ] } } }
     output:
       <<: *output_properties
       kind: sports
@@ -1114,27 +1114,27 @@ filters:
       <<: *output_properties
       kind: {col: shop}
   - filter: {shop: mall}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.77 ] } } }
     output:
       <<: *output_properties
       kind: mall
   - filter: {amenity: prison}
-    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
+    min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.55 ] } } }
     output:
       <<: *output_properties
       kind: prison
   - filter: {tourism: museum}
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.43 ] } } }
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 1.43 ] } } }
     output:
       <<: *output_properties
       kind: museum
   - filter: {historic: landmark}
-    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 1.76 ] } } }
+    min_zoom: { clamp: { min: 11, max: 15, value: { sum: [ { col: zoom }, 1.76 ] } } }
     output:
       <<: *output_properties
       kind: landmark
   - filter: {leisure: marina}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.45 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.45 ] } } }
     output:
       <<: *output_properties
       kind: marina
@@ -1143,18 +1143,18 @@ filters:
           - when: {sanitary_dump_station: ['yes', 'customers', 'public']}
             then: {col: sanitary_dump_station}
   - filter: {amenity: townhall}
-    min_zoom: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.85 ] } } }
+    min_zoom: { clamp: { min: 12, max: 16, value: { sum: [ { col: zoom }, 1.85 ] } } }
     output:
       <<: *output_properties
       kind: townhall
   - filter:
       shop: [laundry, dry_cleaning, toys, ice_cream, wine, alcohol]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output:
       <<: *output_properties
       kind: {col: shop}
   - filter: {amenity: ice_cream}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output:
       <<: *output_properties
       kind: ice_cream
@@ -1162,24 +1162,24 @@ filters:
       any:
         amenity: ferry_terminal
         landuse: ferry_terminal
-    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
+    min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
     output:
       <<: *output_properties
       kind: ferry_terminal
   - filter: {shop: electronics}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
       <<: *output_properties
       kind: electronics
   - filter:
       shop: [department_store, supermarket, doityourself, hardware, trade, garden_centre]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
     output:
       <<: *output_properties
       kind: {col: shop}
   - filter:
       amenity: [marketplace]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.29 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
@@ -1188,23 +1188,23 @@ filters:
       any:
         tags->rental: ski
         amenity: ski_rental
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output:
       <<: *output_properties
       kind: ski_rental
 
   - filter: {shop: ski}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output:
       <<: *output_properties
       kind: ski
   - filter: {amenity: ski_school}
-    min_zoom: { clamp: { min: 0, max: 15, value: { sum: [ { col: zoom }, 2.3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.3 ] } } }
     output:
       <<: *output_properties
       kind: ski_school
   - filter: {man_made: snow_cannon}
-    min_zoom: { clamp: { min: 0, max: 18, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    min_zoom: { clamp: { min: 13, max: 18, value: { sum: [ { col: zoom }, 4.9 ] } } }
     output:
       <<: *output_properties
       kind: snow_cannon
@@ -1212,12 +1212,12 @@ filters:
       any:
         leisure: [fitness_centre, gym]
         amenity: gym
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output:
       <<: *output_properties
       kind: fitness
   - filter: {leisure: fitness_station}
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.98 ] } } }
     output:
       <<: *output_properties
       kind: fitness_station
@@ -1228,7 +1228,7 @@ filters:
       kind: {col: leisure}
   - filter:
       tourism: [hotel, motel]
-    min_zoom: { clamp: { min: 0, max: 17, value: { sum: [ { col: zoom }, 4.3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 4.3 ] } } }
     output:
       <<: *output_properties
       kind: {col: tourism}
