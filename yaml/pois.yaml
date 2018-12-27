@@ -1524,6 +1524,19 @@ filters:
       <<: *transit_properties
       kind: station
       state: {col: tags->state}
+  # also count a public_transport=station as a station, if it has railway-ish
+  # tags.
+  - filter:
+      public_transport: station
+      any:
+        rail: true
+        light_rail: true
+        railway: true
+    min_zoom: 10
+    output:
+      <<: *output_properties
+      <<: *transit_properties
+      kind: station
   - filter:
       railway: [halt, stop, tram_stop]
       # to work around overwriting when using the same key twice (because we
