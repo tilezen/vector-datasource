@@ -388,12 +388,35 @@ class _OverpassWay(object):
         return 'dsl.way'
 
 
-class _OverpassWayArea(_OverpassWay):
+class _OverpassWayArea(object):
     def __init__(self, query):
-        super(_OverpassWayArea, self).__init__(query)
+        from shapely.geometry import Polygon
+        from shapely.ops import transform
+        from tilequeue.tile import reproject_lnglat_to_mercator
+        from tilequeue.tile import reproject_mercator_to_lnglat
+
+        element = _overpass_find('way', query)
+
+        ring = tuple((p['lon'], p['lat']) for p in element['geometry'])
+        poly = Polygon(ring)
+        poly_merc = transform(reproject_lnglat_to_mercator, poly)
+
+        point = poly_merc.centroid
+        lng, lat = reproject_mercator_to_lnglat(point.x, point.y)
+
+        self.position = (lat, lng)
+        self.element_id = element['id']
+        self.tags = element.get('tags', {})
+        self.area = poly_merc.area
+
+    def element_type(self):
+        return 'way'
+
+    def geom_fn_name(self):
+        return 'dsl.way'
 
     def geom_fn_arg(self):
-        return 'dsl.tile_box(z, x, y)'
+        return 'dsl.box_area(z, x, y, %d)' % (int(self.area),)
 
 
 class _OverpassWayLine(_OverpassWay):
@@ -402,6 +425,50 @@ class _OverpassWayLine(_OverpassWay):
 
     def geom_fn_arg(self):
         return 'dsl.tile_diagonal(z, x, y)'
+
+
+class _OverpassRel(object):
+    def __init__(self, query):
+        from shapely.ops import polygonize
+        from shapely.ops import transform
+        from tilequeue.tile import reproject_lnglat_to_mercator
+        from tilequeue.tile import reproject_mercator_to_lnglat
+
+        element = _overpass_find('relation', query)
+        assert element['members']
+        total_area = 0
+        largest_area = 0
+        point = None
+
+        lines = []
+        for m in element['members']:
+            lines.append(tuple((p['lon'], p['lat']) for p in m['geometry']))
+
+        for poly in polygonize(lines):
+            poly_merc = transform(reproject_lnglat_to_mercator, poly)
+            area = poly_merc.area
+            total_area += area
+            if area > largest_area:
+                largest_area = area
+                point = poly_merc.centroid
+
+        assert point
+        assert largest_area > 0
+
+        lng, lat = reproject_mercator_to_lnglat(point.x, point.y)
+        self.position = (lat, lng)
+        self.element_id = element['id']
+        self.tags = element.get('tags', {})
+        self.area = total_area
+
+    def element_type(self):
+        return 'relation'
+
+    def geom_fn_name(self):
+        return 'dsl.way'
+
+    def geom_fn_arg(self):
+        return 'dsl.box_area(z, x, y, %d)' % (int(self.area),)
 
 
 def _overpass_element(layer_name, query_fn, args):
@@ -446,6 +513,9 @@ def overpass_test(args):
 
     if args.poi_poly:
         _overpass_element('pois', _OverpassWayArea, args)
+
+    if args.poi_poly_rel:
+        _overpass_element('pois', _OverpassRel, args)
 
     if args.landuse:
         _overpass_element('landuse', _OverpassWayArea, args)
@@ -547,6 +617,9 @@ if __name__ == '__main__':
     overpass_parser.add_argument(
         '--landuse-label', action='store_true', help='Make a test for a point '
         'in the landuse layer from a node.')
+    overpass_parser.add_argument(
+        '--poi-poly-rel', action='store_true', help='Make a test for a POI '
+        'multipolygon relation.')
     overpass_parser.add_argument(
         '--expect',
         help='JSON-encoded dict of expected properties.')
