@@ -1838,7 +1838,7 @@ filters:
       <<: *output_properties
       kind: {col: office}
   - filter: {shop: bicycle}
-    min_zoom: 15
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
       <<: *output_properties
       kind: bicycle
