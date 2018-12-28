@@ -70,7 +70,7 @@ class ParkingTest(FixtureTest):
                 'capacity': int,
             })
 
-    def test_parking_huge(self):
+    def test_parking_huge_1(self):
         import dsl
 
         z, x, y = (15, 5234, 12670)
@@ -94,14 +94,14 @@ class ParkingTest(FixtureTest):
                 'capacity': int,
             })
 
-    def test_parking_mega(self):
+    def test_parking_huge_2(self):
         import dsl
 
-        z, x, y = (14, 2950, 6427)
+        z, x, y = (15, 5900, 12855)
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/52175579
-            dsl.way(52175579, dsl.box_area(z, x, y, 16489), {
+            dsl.way(52175579, dsl.box_area(z, x, y, 31611), {
                 'amenity': 'parking',
                 'source': 'openstreetmap.org',
                 'building':	'yes',
@@ -114,6 +114,31 @@ class ParkingTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 52175579,
+                'kind': 'parking',
+                'min_zoom': 15,
+                'capacity': int,
+            })
+
+    def test_parking_mega(self):
+        import dsl
+
+        z, x, y = (14, 2950, 6428)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/73540518
+            dsl.way(73540518, dsl.box_area(z, x, y, 55615), {
+                'amenity': 'parking',
+                'source': 'openstreetmap.org',
+                'building':	'yes',
+                'fee': 'yes',
+                'name': 'MGM Grand Self Parking',
+                'parking': 'multi-storey',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 73540518,
                 'kind': 'parking',
                 'min_zoom': 14,
                 'capacity': int,
