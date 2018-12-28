@@ -214,14 +214,14 @@ class PostOfficeTest(FixtureTest):
                 'min_zoom': 14,
             })
 
-    def test_theatre_14_way(self):
+    def test_theatre_15_way(self):
         import dsl
 
-        z, x, y = (14, 2806, 6538)
+        z, x, y = (15, 5612, 13077)
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/133701914
-            dsl.way(133701914, dsl.tile_box(z, x, y), {
+            dsl.way(133701914, dsl.box_area(z, x, y, 24691), {
                 'amenity': 'theatre',
                 'name': 'Hollywood Bowl',
                 'source': 'openstreetmap.org',
@@ -233,7 +233,7 @@ class PostOfficeTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 133701914,
                 'kind': 'theatre',
-                'min_zoom': 14,
+                'min_zoom': 15,
             })
 
     def test_library_14_way(self):

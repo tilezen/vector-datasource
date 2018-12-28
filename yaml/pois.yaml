@@ -1042,11 +1042,17 @@ filters:
       kind: waterway_fuel
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
-        post_office, theatre]
+        post_office]
     min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 3.0 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
+  - filter:
+      amenity: theatre
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    output:
+      <<: *output_properties
+      kind: theatre
   - filter:
       any:
         - waterway: fuel
@@ -1696,7 +1702,14 @@ filters:
       <<: *output_properties
       kind: offshore_platform
   - filter: {man_made: water_tower}
-    min_zoom: 15
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 15, 20 ]  # z15 if height >= 20m
+          - [ 16, 10 ]  # z16 if height >= 10m
+        default: 17
     output:
       <<: *output_properties
       kind: water_tower
@@ -1884,7 +1897,7 @@ filters:
       <<: *output_properties
       kind: {col: office}
   - filter: {shop: bicycle}
-    min_zoom: 15
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
       <<: *output_properties
       kind: bicycle

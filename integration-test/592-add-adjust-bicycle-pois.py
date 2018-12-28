@@ -10,8 +10,8 @@ class AddAdjustBicyclePois(FixtureTest):
         self.generate_fixtures(dsl.way(414269441, wkt_loads('POINT (-122.420868195558 37.75571996934519)'), {u'shop': u'bicycle', u'addr:housenumber': u'1077', u'source': u'openstreetmap.org', u'name': u'Valencia Cyclery', u'addr:street': u'Valencia Street'}))  # noqa
 
         self.assert_has_feature(
-            15, 5240, 12667, 'pois',
-            {'kind': 'bicycle', 'min_zoom': 15})
+            16, 10481, 25335, 'pois',
+            {'kind': 'bicycle', 'min_zoom': 17})
 
     def test_bicycle_rental(self):
         # San Francisco Bicycle Rentals
