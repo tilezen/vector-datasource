@@ -555,7 +555,7 @@ filters:
             then: { col: bunker_type }
   # military
   - filter: {landuse: military}
-    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    min_zoom: *small_parks_min_zoom
     output:
       <<: *output_properties
       kind: military
