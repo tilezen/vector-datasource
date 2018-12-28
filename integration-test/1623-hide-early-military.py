@@ -39,7 +39,7 @@ class MilitaryTest(FixtureTest):
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/relation/6159308
-            dsl.way(6159308, dsl.box_area(z, x, y, 4576620000), {
+            dsl.relation(6159308, dsl.box_area(z, x, y, 4576620000), {
                 'landuse': 'military',
                 'name': 'Fort Irwin',
                 'source': 'openstreetmap.org',
