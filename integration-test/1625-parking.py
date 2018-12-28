@@ -114,7 +114,7 @@ class ParkingTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 52175579,
-                'kind': 'parking',
+                'kind': 'parking_garage',
                 'min_zoom': 15,
                 'capacity': int,
             })
@@ -139,7 +139,7 @@ class ParkingTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 73540518,
-                'kind': 'parking',
+                'kind': 'parking_garage',
                 'min_zoom': 14,
                 'capacity': int,
             })
