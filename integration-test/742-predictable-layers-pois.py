@@ -373,8 +373,8 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(4214350591, wkt_loads('POINT (-122.504766082024 37.7527564602091)'), {u'source': u'openstreetmap.org', u'name': u'Noriega Substation', u'power': u'substation'}))  # noqa
 
         self.assert_has_feature(
-            15, 5233, 12668, 'pois',
-            {'id': 4214350591, 'kind': 'substation', 'min_zoom': 15})
+            16, 10466, 25336, 'pois',
+            {'id': 4214350591, 'kind': 'substation', 'min_zoom': 17})
 
     def test_village_green_way(self):
         # village_green in POIS

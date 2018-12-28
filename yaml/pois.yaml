@@ -699,7 +699,15 @@ filters:
       tier: 4
   # substation
   - filter: {power: substation}
-    min_zoom: 15
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 14, 200000 ]
+          - [ 15,  50000 ]
+          - [ 16,  10000 ]
+        default: 17
     output:
       <<: *output_properties
       kind: substation
