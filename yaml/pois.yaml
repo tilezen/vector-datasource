@@ -1662,7 +1662,14 @@ filters:
       <<: *output_properties
       kind: offshore_platform
   - filter: {man_made: water_tower}
-    min_zoom: 15
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 15, 20 ]  # z15 if height >= 20m
+          - [ 16, 10 ]  # z16 if height >= 10m
+        default: 17
     output:
       <<: *output_properties
       kind: water_tower

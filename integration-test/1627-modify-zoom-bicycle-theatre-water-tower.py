@@ -181,3 +181,73 @@ class TheatreTest(FixtureTest):
                 'kind': 'theatre',
                 'min_zoom': lambda z: 15 <= z < 16,
             })
+
+
+class WaterTowerTest(FixtureTest):
+
+    def test_water_tower_no_height(self):
+        import dsl
+
+        z, x, y = (16, 10477, 25334)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/247759532
+            dsl.way(247759532, dsl.box_area(z, x, y, 448), {
+                'man_made': 'water_tower',
+                'name': 'Ashbury tank',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 247759532,
+                'kind': 'water_tower',
+                'min_zoom': 17,
+            })
+
+    def test_water_tower_tall(self):
+        import dsl
+
+        z, x, y = (15, 5240, 12671)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/424957085
+            dsl.way(424957085, dsl.box_area(z, x, y, 146), {
+                'building': 'yes',
+                'height': '23',
+                'man_made': 'water_tower',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 424957085,
+                'kind': 'water_tower',
+                'min_zoom': 15,
+            })
+
+    def test_water_tower_short(self):
+        import dsl
+
+        z, x, y = (16, 11310, 26168)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/470968538
+            dsl.way(470968538, dsl.box_area(z, x, y, 198), {
+                'ele': '300.5',
+                'height': '10.9',
+                'lacounty:ain': '8277036900',
+                'lacounty:bld_id': '600581840682',
+                'man_made': 'water_tower',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 470968538,
+                'kind': 'water_tower',
+                'min_zoom': 16,
+            })

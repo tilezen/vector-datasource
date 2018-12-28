@@ -61,8 +61,8 @@ class ManMadeOutdoorLandmarks(FixtureTest):
         self.generate_fixtures(dsl.way(1501843094, wkt_loads('POINT (-122.428099094606 37.70762977463859)'), {u'source': u'openstreetmap.org', u'man_made': u'water_tower'}))  # noqa
 
         self.assert_has_feature(
-            15, 5240, 12673, 'pois',
-            {'kind': 'water_tower', 'min_zoom': 15})
+            16, 10480, 25346, 'pois',
+            {'kind': 'water_tower', 'min_zoom': 17})
 
     def test_mast(self):
         # This isn't part of the work, but because we split water_tower
