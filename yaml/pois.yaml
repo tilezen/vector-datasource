@@ -956,12 +956,6 @@ filters:
           - [ 16,  100 ]
           - [ 17,   10 ]
         default: 18
-
-
- - [ 15, 1000 ]    # was 350
-           - [ 16,   200 ]    # was 130
-           - [ 17,      45 ]    # no change, seems fine
-
     output:
       <<: *output_properties
       kind:
