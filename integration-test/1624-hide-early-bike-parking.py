@@ -24,7 +24,7 @@ class HideEarlyBikeParkingTest(FixtureTest):
                 'min_zoom': 19,
             })
 
-    def test_car_sharing(self):
+    def test_car_sharing_with_name(self):
         import dsl
 
         z, x, y = (16, 10484, 25327)
@@ -45,6 +45,26 @@ class HideEarlyBikeParkingTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 1409407263,
+                'kind': 'car_sharing',
+                'min_zoom': 17,
+            })
+
+    def test_car_sharing_no_name(self):
+        import dsl
+
+        z, x, y = (16, 10484, 25327)
+
+        self.generate_fixtures(
+            dsl.point(1409407264, (-122.404247, 37.792022), {
+                'amenity': 'car_sharing',
+                'operator': 'City CarShare',
+                'website': 'http://www.citycarshare.org/',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1409407264,
                 'kind': 'car_sharing',
                 'min_zoom': 19,
             })
