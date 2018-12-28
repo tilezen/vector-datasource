@@ -120,7 +120,7 @@ class HideEarlySchoolTest(FixtureTest):
                 'min_zoom': 16,
             })
 
-    def test_school_18_node(self):
+    def test_school_17_node(self):
         import dsl
 
         z, x, y = (16, 10477, 25332)
@@ -143,7 +143,7 @@ class HideEarlySchoolTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 358803287,
                 'kind': 'school',
-                'min_zoom': 18,
+                'min_zoom': 17,
             })
 
     def test_kindergarten(self):
@@ -165,5 +165,5 @@ class HideEarlySchoolTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 256908810,
                 'kind': 'kindergarten',
-                'min_zoom': 18,
+                'min_zoom': 17,
             })
