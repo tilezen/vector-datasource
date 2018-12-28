@@ -39,7 +39,7 @@ class MilitaryTest(FixtureTest):
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/relation/6159308
-            dsl.relation(6159308, dsl.box_area(z, x, y, 4576620000), {
+            dsl.way(6159308, dsl.box_area(z, x, y, 4576620000), {
                 'landuse': 'military',
                 'name': 'Fort Irwin',
                 'source': 'openstreetmap.org',
@@ -48,7 +48,7 @@ class MilitaryTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'pois', {
-                'id': -6159308,
+                'id': 6159308,
                 'kind': 'military',
                 'min_zoom': 8,
             })
