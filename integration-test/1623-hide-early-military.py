@@ -31,3 +31,24 @@ class MilitaryTest(FixtureTest):
                 'kind': 'military',
                 'min_zoom': 11,
             })
+
+    def test_military_z8(self):
+        import dsl
+
+        z, x, y = (8, 45, 101)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/6159308
+            dsl.way(6159308, dsl.box_area(z, x, y, 4576620000), {
+                'landuse': 'military',
+                'name': 'Fort Irwin',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': -6159308,
+                'kind': 'military',
+                'min_zoom': 8,
+            })
