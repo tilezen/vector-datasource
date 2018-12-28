@@ -87,7 +87,7 @@ class ParkingTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 162093420,
                 'kind': 'parking',
-                'min_zoom': 17,
+                'min_zoom': 16,
                 'capacity': int,
             })
 
