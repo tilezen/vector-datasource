@@ -576,7 +576,7 @@ filters:
         default: 16
     output:
       <<: *output_properties
-      kind: { col: amenity }
+      kind: university
       tier: 3
   # college
   - filter: {amenity: college}
