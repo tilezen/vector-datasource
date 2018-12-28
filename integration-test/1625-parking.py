@@ -27,6 +27,27 @@ class ParkingTest(FixtureTest):
                 'capacity': type(None),  # should _not_ set capacity
             })
 
+    def test_parking_tiny(self):
+        import dsl
+
+        z, x, y = (16, 10466, 25340)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/257593333
+            dsl.way(257593333, dsl.box_area(z, x, y, 678), {
+                'amenity': 'parking',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 257593333,
+                'kind': 'parking',
+                'min_zoom': 17,
+                'capacity': int,
+            })
+
     def test_parking_small(self):
         import dsl
 
