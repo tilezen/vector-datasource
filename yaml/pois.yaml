@@ -1637,7 +1637,7 @@ filters:
     output:
       <<: *output_properties
       kind: car_sharing
-- filter:
+  - filter:
       barrier: [block, bollard, cattle_grid]
     min_zoom: 16
     output:
