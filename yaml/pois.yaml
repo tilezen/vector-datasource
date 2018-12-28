@@ -1619,11 +1619,17 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
   - filter:
-      amenity: [bus_station, car_rental, car_sharing, recycling, shelter]
+      amenity: [bus_station, car_rental, recycling, shelter]
     min_zoom: 16
     output:
       <<: *output_properties
       kind: {col: amenity}
+  - filter:
+      amenity: car_sharing
+    min_zoom: 19
+    output:
+      <<: *output_properties
+      kind: car_sharing
   - filter:
       barrier: [block, bollard, cattle_grid]
     min_zoom: 16
