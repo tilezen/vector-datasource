@@ -1583,7 +1583,7 @@ filters:
       <<: *transit_properties
       kind: platform
   - filter: {highway: platform}
-    min_zoom: 17
+    min_zoom: 18
     output:
       <<: *output_properties
       <<: *transit_properties
@@ -1601,7 +1601,7 @@ filters:
       <<: *transit_properties
       kind: platform
   - filter: {public_transport: platform, tags->bus: 'yes'}
-    min_zoom: 17
+    min_zoom: 18
     output:
       <<: *output_properties
       <<: *transit_properties
@@ -1803,9 +1803,15 @@ filters:
       <<: *output_properties
       kind: information
   - filter:
-      amenity: [atm, bureau_de_change, bus_stop, emergency_phone,
-        karaoke, karaoke_box, money_transfer, post_box, telephone]
+      amenity: [bureau_de_change, emergency_phone, karaoke, karaoke_box,
+        money_transfer]
     min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: {col: amenity}
+  - filter:
+      amenity: [atm, post_box, telephone]
+    min_zoom: 18
     output:
       <<: *output_properties
       kind: {col: amenity}
@@ -1817,7 +1823,7 @@ filters:
       kind: drinking_water
   - filter:
       highway: [bus_stop, street_lamp]
-    min_zoom: 17
+    min_zoom: 18
     output:
       <<: *output_properties
       kind: {col: highway}
