@@ -941,11 +941,23 @@ filters:
       kind: playground
       tier: 6
   # school
-  - filter: {amenity: school}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.3 ] }, *tier6_min_zoom ] }, 15 ] }
+  - filter:
+      amenity:
+        - school
+        - kindergarten
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 13,  100000 ]
+          - [ 14,   50000 ]
+          - [ 15,   10000 ]
+          - [ 16,    5000 ]
+        default: 17
     output:
       <<: *output_properties
-      kind: school
+      kind: { col: amenity }
       tier: 6
   # tree_row - no POI
   # wilderness_hut
@@ -1362,7 +1374,7 @@ filters:
       <<: *output_properties
       kind: blood_bank
   - filter:
-      amenity: [baby_hatch, kindergarten, childcare]
+      amenity: [baby_hatch, childcare]
     min_zoom: 17
     output:
       <<: *output_properties
