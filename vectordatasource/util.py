@@ -20,7 +20,7 @@ def to_float(x):
 
 def calculate_way_area(shape):
     result = 0
-    if shape.type in ('MultiPolygon', 'Polygon'):
+    if shape and shape.type in ('MultiPolygon', 'Polygon'):
         result = shape.area
     return result
 

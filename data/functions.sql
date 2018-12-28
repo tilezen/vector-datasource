@@ -1051,3 +1051,31 @@ BEGIN
   RETURN 17;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- return the capacity of a parking lot, or estimate it from the area and building levels.
+CREATE OR REPLACE FUNCTION tz_estimate_parking_capacity(capacity TEXT, parking TEXT, levels TEXT, way_area REAL)
+RETURNS INTEGER AS $$
+DECLARE
+  levels_int INTEGER;
+  spaces_per_level INTEGER;
+BEGIN
+  -- if the capacity is set, then use that.
+  IF capacity ~ '^[0-9]+$' THEN
+    RETURN capacity::integer;
+  END IF;
+  -- otherwise, try to use the information we have to guess the capacity
+  spaces_per_level := (way_area / 46.0)::integer;
+  levels_int := CASE
+    WHEN levels ~ '^[0-9]+$' THEN levels::integer
+    WHEN parking = 'multi-storey' THEN 2
+    ELSE 1
+  END;
+  -- if we get a silly answer, don't set that - just return NULL to indicate
+  -- that we're unsure.
+  IF levels_int * spaces_per_level > 0 THEN
+    RETURN levels_int * spaces_per_level;
+  ELSE
+    RETURN NULL;
+  END IF;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;

@@ -973,7 +973,16 @@ filters:
   ############################################################
   # parking
   - filter: {amenity: parking}
-    min_zoom: 17
+    min_zoom:
+      lookup:
+        key:  { call: { func: tz_estimate_parking_capacity, args: [ { col: capacity }, { col: 'parking' }, { col: 'building:levels' }, { col: 'way_area' } ] } }
+        op: '>='
+        table:
+          - [ 14, 2000 ]
+          - [ 15,  350 ]
+          - [ 16,  100 ]
+          - [ 17,   10 ]
+        default: 18
     output:
       <<: *output_properties
       kind:
@@ -983,6 +992,7 @@ filters:
             then: 'parking_garage'
           - else: 'parking'
       tier: 6
+      capacity:  { call: { func: tz_estimate_parking_capacity, args: [ { col: capacity }, { col: 'parking' }, { col: 'building:levels' }, { col: 'way_area' } ] } }
 
   ############################################################
   # NOT IN ANY TIER

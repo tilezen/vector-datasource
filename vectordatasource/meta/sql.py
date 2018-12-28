@@ -179,6 +179,7 @@ KNOWN_FUNCS = {
     'util.true_or_none':                  'notimplemented',
     'tz_looks_like_service_area':         'tz_looks_like_service_area',
     'tz_looks_like_rest_area':            'tz_looks_like_rest_area',
+    'tz_estimate_parking_capacity':       'tz_estimate_parking_capacity',
 }
 
 
