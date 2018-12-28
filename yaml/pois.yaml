@@ -626,7 +626,14 @@ filters:
       tier: 4
   # golf_course
   - filter: {leisure: golf_course}
-    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 2 ] }, *tier4_min_zoom ] }, 14 ] }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 12, 2000000 ]
+          - [ 13,  500000 ]
+        default: 14
     output:
       <<: *output_properties
       kind: golf_course
