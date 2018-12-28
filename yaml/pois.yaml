@@ -939,8 +939,7 @@ filters:
           - [ 14,   50000 ]
           - [ 15,   10000 ]
           - [ 16,    5000 ]
-          - [ 17,    2000 ]
-        default: 18
+        default: 17
     output:
       <<: *output_properties
       kind: { col: amenity }
