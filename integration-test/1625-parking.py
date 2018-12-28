@@ -66,7 +66,7 @@ class ParkingTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 162093420,
                 'kind': 'parking',
-                'min_zoom': 16,
+                'min_zoom': 17,
                 'capacity': int,
             })
 
@@ -91,5 +91,30 @@ class ParkingTest(FixtureTest):
                 'id': 32928608,
                 'kind': 'parking',
                 'min_zoom': 15,
+                'capacity': int,
+            })
+
+    def test_parking_mega(self):
+        import dsl
+
+        z, x, y = (14, 2950, 6427)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/52175579
+            dsl.way(52175579, dsl.box_area(z, x, y, 16489), {
+                'amenity': 'parking',
+                'source': 'openstreetmap.org',
+                'building':	'yes',
+                'fee': 'yes',
+                'name': 'Aria and Vdara Self Parking',
+                'parking': 'multi-storey',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 52175579,
+                'kind': 'parking',
+                'min_zoom': 14,
                 'capacity': int,
             })
