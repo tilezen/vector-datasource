@@ -951,6 +951,7 @@ filters:
         key:  { call: { func: tz_estimate_parking_capacity, args: [ { col: capacity }, { col: 'parking' }, { col: 'building:levels' }, { col: 'way_area' } ] } }
         op: '>='
         table:
+          - [ 14, 2000 ]
           - [ 15, 1000 ]
           - [ 16,  200 ]
           - [ 17,   45 ]
