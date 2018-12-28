@@ -94,3 +94,90 @@ class BikeShopTest(FixtureTest):
                 # min_zoom between 16 and 17, less than the node at z17
                 'min_zoom': lambda z: 16 <= z < 17,
             })
+
+
+class TheatreTest(FixtureTest):
+
+    def test_theatre_node(self):
+        import dsl
+
+        z, x, y = (16, 10483, 25329)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/358805392
+            dsl.point(358805392, (-122.411371, 37.782168), {
+                'amenity': 'theatre',
+                'ele': '14',
+                'gnis:county_id': '075',
+                'gnis:created': '01/01/1995',
+                'gnis:feature_id': '1657186',
+                'gnis:state_id': '06',
+                'name': 'Market Street Theatre',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 358805392,
+                'kind': 'theatre',
+                'min_zoom': 17,
+            })
+
+    def test_theatre_medium_way(self):
+        import dsl
+
+        z, x, y = (16, 10483, 25330)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/35115840
+            dsl.way(35115840, dsl.box_area(z, x, y, 4782), {
+                'amenity': 'theatre',
+                'building': 'yes',
+                'height': '46 m',
+                'name': 'Orpheum Theatre',
+                'source': 'openstreetmap.org',
+                'wikidata': 'Q7103971',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 35115840,
+                'kind': 'theatre',
+                'min_zoom': lambda z: 16 <= z < 17,
+            })
+
+    def test_theatre_large_way(self):
+        import dsl
+
+        z, x, y = (15, 9650, 12314)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/266170808
+            dsl.way(266170808, dsl.box_area(z, x, y, 7492), {
+                'amenity': 'theatre',
+                'building': 'yes',
+                'building:colour': '#CAC3A9',
+                'building:part': 'yes',
+                'height': '30',
+                'name': 'Radio City Music Hall',
+                'nycdoitt:bin': '1083862',
+                'opening_hours': '09:30-17:00',
+                'roof:colour': '#956C66',
+                'roof:material': 'concrete',
+                'roof:shape': 'flat',
+                'source': 'openstreetmap.org',
+                'tourism': 'yes',
+                'website': 'http://www.radiocity.com/',
+                'wikidata': 'Q753437',
+                'wikipedia': 'en:Radio City Music Hall',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 266170808,
+                'kind': 'theatre',
+                'min_zoom': lambda z: 15 <= z < 16,
+            })

@@ -1015,11 +1015,17 @@ filters:
       kind: waterway_fuel
   - filter:
       amenity: [bank, cinema, courthouse, embassy, fire_station, fuel, library, police,
-        post_office, theatre]
+        post_office]
     min_zoom: { clamp: { min: 14, max: 16, value: { sum: [ { col: zoom }, 3.0 ] } } }
     output:
       <<: *output_properties
       kind: {col: amenity}
+  - filter:
+      amenity: theatre
+    min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    output:
+      <<: *output_properties
+      kind: theatre
   - filter:
       any:
         - waterway: fuel
