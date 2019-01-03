@@ -562,14 +562,34 @@ filters:
       tier: 3
   # university
   - filter: {amenity: university}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 16 ] }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 10, 10000000 ]
+          - [ 11,  1000000 ]
+          - [ 12,   500000 ]
+          - [ 13,   100000 ]
+          - [ 14,    50000 ]
+          - [ 15,     2000 ]
+        default: 16
     output:
       <<: *output_properties
       kind: university
       tier: 3
   # college
   - filter: {amenity: college}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.35 ] }, *tier3_min_zoom ] }, 16 ] }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 12,   500000 ]
+          - [ 13,   100000 ]
+          - [ 14,    50000 ]
+          - [ 15,     2000 ]
+        default: 16
     output:
       <<: *output_properties
       kind: college
