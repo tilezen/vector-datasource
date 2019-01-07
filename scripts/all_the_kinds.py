@@ -134,7 +134,7 @@ def parse_start_zoom(expr):
 
         elif expr.keys() == ['clamp']:
             clamp = expr['clamp']
-            start_zoom = min(parse_start_zoom(clamp['min']),
+            start_zoom = max(parse_start_zoom(clamp['min']),
                              parse_start_zoom(clamp['value']))
 
         elif expr.keys() == ['sum']:
