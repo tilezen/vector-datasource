@@ -5,14 +5,24 @@ from . import FixtureTest
 class WaterLayerTooBigTest(FixtureTest):
 
     def test_drop_label(self):
-        from tilequeue.tile import calc_meters_per_pixel_area
         from shapely.ops import transform
         from tilequeue.tile import reproject_mercator_to_lnglat
         import math
         import dsl
 
+        thresholds = {
+            8:    200000000,
+            9:    100000000,
+            10:    10000000,
+            11:     4000000,
+            12:      750000,
+            13:      100000,
+            14:       50000,
+            15:       10000,
+        }
+
         for zoom in range(8, 16):
-            area = 270.0 * calc_meters_per_pixel_area(zoom)
+            area = thresholds.get(zoom)
             radius = math.sqrt(area / math.pi)
 
             coord = 2 ** (zoom - 1)

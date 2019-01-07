@@ -650,19 +650,42 @@ post_process:
       start_zoom: 8
       end_zoom: 15
 
+  # no lake labels at zoom 0-3:
+  # https://github.com/tilezen/vector-datasource/issues/1730
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 4
+      properties: [name]
+      geom_types: [Polygon, MultiPolygon]
+      where: >-
+        kind == 'lake'
+
   # before extracting the label placement points, remove small water areas which
   # are probably too small to label.
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: water
-      start_zoom: 0
+      start_zoom: 4
       end_zoom: 16
       properties: [name]
       geom_types: [Polygon, MultiPolygon]
-      # NOTE: the 270 factor comes from curve fitting the area table from the
-      # walkabout style, with 270 being the min, ranging up to 1070.
       where: >-
-        area < 270.0 * pixel_area
+        area < {
+            4:  40000000000,
+            5:  10000000000,
+            6:   5000000000,
+            7:    400000000,
+            8:    200000000,
+            9:    100000000,
+            10:    10000000,
+            11:     4000000,
+            12:      750000,
+            13:      100000,
+            14:       50000,
+            15:       10000,
+        }.get(zoom)
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
