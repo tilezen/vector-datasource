@@ -313,33 +313,33 @@ class PlacesTest(unittest.TestCase):
     def test_wof_is_landuse_aoi(self):
         meta = _make_metadata('wof')
 
-        props = dict(is_landuse_aoi=True)
+        props = dict(is_landuse_aoi=True, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertTrue(out_props.get('is_landuse_aoi'))
 
-        props = dict(is_landuse_aoi=False)
+        props = dict(is_landuse_aoi=False, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
-        props = dict(is_landuse_aoi=None)
+        props = dict(is_landuse_aoi=None, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
-        props = dict()
+        props = dict(placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
     def test_wof_area(self):
         meta = _make_metadata('wof')
 
-        props = dict(area=3.14159)
+        props = dict(area=3.14159, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         area = out_props.get('area')
         self.assertIsNotNone(area)
         self.assertTrue(isinstance(area, int))
         self.assertEquals(3, area)
 
-        props = dict(area=None)
+        props = dict(area=None, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('area'))
 

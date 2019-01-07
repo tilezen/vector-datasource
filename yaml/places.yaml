@@ -39,7 +39,13 @@ global:
       default: 10
 
 filters:
-  - filter: {meta.source: wof}
+  - filter:
+      meta.source: wof
+      placetype:
+        - neighbourhood
+        - microhood
+        - macrohood
+        - borough
     min_zoom: {col: min_zoom}
     output:
       <<: *output_properties
