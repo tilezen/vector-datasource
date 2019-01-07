@@ -188,15 +188,17 @@ def node_test(args):
 
 def _shapefile_iterator(sf, field_names):
     from shapely.geometry import shape as make_shape
+    from collections import defaultdict
 
     fid = 0
     for row in sf.iterShapeRecords():
         shape = make_shape(row.shape.__geo_interface__)
-        props = {}
+        props = defaultdict(lambda: None)
         for k, v in zip(field_names, row.record):
             if isinstance(v, str):
                 v = unicode(v.rstrip(), 'utf-8')
-            props[k] = v
+            if v:
+                props[k] = v
         yield shape, props, fid
         fid += 1
 
@@ -249,6 +251,8 @@ def _ne_features_from_zip(zipfile):
 
 def naturalearth_test(args):
     import json
+    from shapely.ops import transform
+    from tilequeue.tile import reproject_lnglat_to_mercator
 
     where = compile(args.where, '<command line arguments>', 'eval')
 
@@ -272,11 +276,23 @@ def naturalearth_test(args):
 
     if shape.geom_type in ('Point', 'Multipoint'):
         geom_func = 'tile_centre_shape'
+        geom_extra_args = ''
         lon, lat = shape.coords[0]
+
+    elif shape.geom_type in ('Polygon', 'MultiPolygon'):
+        shape_merc = transform(reproject_lnglat_to_mercator, shape)
+        geom_func = 'box_area'
+        geom_extra_args = ', %f' % (shape_merc.area,)
+        lon, lat = shape.representative_point().coords[0]
 
     else:
         raise RuntimeError("Haven't implemented NE shape type %r yet."
                            % (shape.geom_type,))
+
+    # check that lon & lat are within expected range. helps to catch shape
+    # files which have been projected to mercator.
+    assert -90 <= lat <= 90
+    assert -180 <= lon <= 180
 
     x, y = tile.deg2num(lat, lon, args.zoom)
     coord = Coordinate(zoom=args.zoom, column=x, row=y)
@@ -294,6 +310,7 @@ def naturalearth_test(args):
         props=props,
         expect=expect,
         layer_name=args.layer_name,
+        geom_extra_args=geom_extra_args,
     )
 
     output = _render_template('naturalearth_test', args)
