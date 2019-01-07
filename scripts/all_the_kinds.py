@@ -179,7 +179,6 @@ def parse_item(layer_name, item, sort_rank):
             all_kinds = parse_filter_for_col(kind['col'], item['filter'])
 
         elif kind.keys() == ['case']:
-            # TODO: figure this out
             all_kinds = parse_case_for_kinds(kind['case'])
 
         else:
