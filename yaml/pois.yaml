@@ -33,7 +33,7 @@ global:
   - &cycle_parking_properties
     access: {col: access}
     operator: {col: operator}
-    capacity: {col: tags->capacity}
+    capacity: {col: capacity}
     covered:
       case:
         - when:
@@ -50,8 +50,8 @@ global:
               fee: ['no', 'Free', 'free', '0', 'No', 'none']
           then: true
         - else: false
-    cyclestreets_id: {col: tags->cyclestreets_id}
-    maxstay: {col: tags->maxstay}
+    cyclestreets_id: {col: cyclestreets_id}
+    maxstay: {col: maxstay}
     surveillance:
       case:
         - when:
@@ -252,15 +252,15 @@ global:
         - "health_facility:type": [field_hospital, health_centre]
         - "seamark:building:function": harbour_master
         - "seamark:small_craft_facility:category": fuel_station
-        - tags->icn_ref: true
-        - tags->iwn_ref: true
-        - tags->lcn_ref: true
-        - tags->lwn_ref: true
-        - tags->ncn_ref: true
-        - tags->nwn_ref: true
-        - tags->rcn_ref: true
-        - tags->rwn_ref: true
-        - tags->whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
+        - icn_ref: true
+        - iwn_ref: true
+        - lcn_ref: true
+        - lwn_ref: true
+        - ncn_ref: true
+        - nwn_ref: true
+        - rcn_ref: true
+        - rwn_ref: true
+        - whitewater: [ egress, hazard, put_in, put_in;egress, rapid ]
         - tourism: [ alpine_hut, information, picnic_site, viewpoint, wilderness_hut ]
         - waterway:
           - boat_lift
@@ -1049,7 +1049,7 @@ filters:
       <<: *output_properties
       <<: *transit_properties
       kind: station
-      state: {col: tags->state}
+      state: {col: state}
   - filter: {natural: spring}
     min_zoom: 14
     output:
@@ -1254,7 +1254,7 @@ filters:
 
   - filter:
       any:
-        tags->rental: ski
+        rental: ski
         amenity: ski_rental
     min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output:
@@ -1311,11 +1311,11 @@ filters:
       <<: *output_properties
       kind: monument
   - filter:
-      tags->zoo: [enclosure, petting_zoo, aviary]
+      zoo: [enclosure, petting_zoo, aviary]
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: {col: tags->zoo}
+      kind: {col: zoo}
   - filter:
       any:
         - {waterway: waterfall}
@@ -1384,7 +1384,7 @@ filters:
     min_zoom: 17
     output:
       <<: *output_properties
-      kind: {col: tags->healthcare}
+      kind: {col: healthcare}
       <<: *health_facility_type_kind_detail
   - filter: {healthcare: alternative}
     min_zoom: 17
@@ -1586,7 +1586,7 @@ filters:
       <<: *output_properties
       <<: *transit_properties
       kind: station
-      state: {col: tags->state}
+      state: {col: state}
   # also count a public_transport=station as a station, if it has railway-ish
   # tags.
   - filter:
@@ -1624,19 +1624,19 @@ filters:
       <<: *output_properties
       <<: *transit_properties
       kind: bus_stop
-  - filter: {public_transport: platform, tags->rail: 'yes'}
+  - filter: {public_transport: platform, rail: 'yes'}
     min_zoom: 17
     output:
       <<: *output_properties
       <<: *transit_properties
       kind: platform
-  - filter: {public_transport: platform, tags->light_rail: 'yes'}
+  - filter: {public_transport: platform, light_rail: 'yes'}
     min_zoom: 17
     output:
       <<: *output_properties
       <<: *transit_properties
       kind: platform
-  - filter: {public_transport: platform, tags->bus: 'yes'}
+  - filter: {public_transport: platform, bus: 'yes'}
     min_zoom: 18
     output:
       <<: *output_properties
@@ -1654,7 +1654,7 @@ filters:
       <<: *output_properties
       <<: *transit_properties
       kind: stop_area
-  - filter: {tags->site: stop_area}
+  - filter: {site: stop_area}
     min_zoom: 15
     output:
       <<: *output_properties
@@ -1754,68 +1754,68 @@ filters:
       <<: *output_properties
       kind: ranger_station
   - filter:
-      tags->icn_ref: true
+      icn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: bicycle_junction
-      ref: {col: tags->icn_ref}
+      ref: {col: icn_ref}
       bicycle_network: icn
   - filter:
-      tags->ncn_ref: true
+      ncn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: bicycle_junction
-      ref: {col: tags->ncn_ref}
+      ref: {col: ncn_ref}
       bicycle_network: ncn
   - filter:
-      tags->rcn_ref: true
+      rcn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: bicycle_junction
-      ref: {col: tags->rcn_ref}
+      ref: {col: rcn_ref}
       bicycle_network: rcn
   - filter:
-      tags->lcn_ref: true
+      lcn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: bicycle_junction
-      ref: {col: tags->lcn_ref}
+      ref: {col: lcn_ref}
       bicycle_network: lcn
   - filter:
-      tags->iwn_ref: true
+      iwn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: walking_junction
-      ref: {col: tags->iwn_ref}
+      ref: {col: iwn_ref}
       walking_network: iwn
   - filter:
-      tags->nwn_ref: true
+      nwn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: walking_junction
-      ref: {col: tags->nwn_ref}
+      ref: {col: nwn_ref}
       walking_network: nwn
   - filter:
-      tags->rwn_ref: true
+      rwn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: walking_junction
-      ref: {col: tags->rwn_ref}
+      ref: {col: rwn_ref}
       walking_network: rwn
   - filter:
-      tags->lwn_ref: true
+      lwn_ref: true
     min_zoom: 16
     output:
       <<: *output_properties
       kind: walking_junction
-      ref: {col: tags->lwn_ref}
+      ref: {col: lwn_ref}
       walking_network: lwn
   - filter: {tourism: camp_site}
     min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 4.9 ] } } }
@@ -1945,9 +1945,9 @@ filters:
     output:
       <<: *output_properties
       kind: bicycle_rental_station
-      network:  {col: tags->network}
+      network:  {col: network}
       operator: {col: operator}
-      capacity: {col: tags->capacity}
+      capacity: {col: capacity}
       ref: {col: ref}
   - filter:
       amenity: motorcycle_parking
@@ -2132,23 +2132,23 @@ filters:
     output:
       <<: *output_properties
       kind: trailhead
-  - filter: {tags->whitewater: put_in;egress}
+  - filter: {whitewater: put_in;egress}
     min_zoom: 14
     output:
       <<: *output_properties
       kind: put_in_egress
   - filter:
-      tags->whitewater: [put_in, egress]
+      whitewater: [put_in, egress]
     min_zoom: 14
     output:
       <<: *output_properties
-      kind: {col: tags->whitewater}
+      kind: {col: whitewater}
   - filter:
-      tags->whitewater: [hazard, rapid]
+      whitewater: [hazard, rapid]
     min_zoom: 15
     output:
       <<: *output_properties
-      kind: {col: tags->whitewater}
+      kind: {col: whitewater}
   - filter: {shop: gas}
     min_zoom: 18
     output:

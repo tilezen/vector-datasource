@@ -325,7 +325,7 @@ filters:
   #
   #############################################################
   - filter:
-      "tags->whitewater": portage_way
+      "whitewater": portage_way
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -421,8 +421,8 @@ filters:
         - {bicycle: designated}
         - {foot: designated}
         - {horse: designated}
-        - {tags->snowmobile: designated}
-        - {tags->ski: designated}
+        - {snowmobile: designated}
+        - {ski: designated}
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -431,7 +431,7 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: footway
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter:
       highway: steps
       all:
@@ -440,8 +440,8 @@ filters:
           - {bicycle: designated}
           - {foot: designated}
           - {horse: designated}
-          - {tags->snowmobile: designated}
-          - {tags->ski: designated}
+          - {snowmobile: designated}
+          - {ski: designated}
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -450,10 +450,10 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: steps
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter:
       highway: footway
-      tags->footway: [sidewalk, crossing]
+      footway: [sidewalk, crossing]
     min_zoom: { clamp: { min: 0, max: 15, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -462,7 +462,7 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: footway
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter:
       highway: [footway, steps]
     min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
@@ -473,7 +473,7 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: {col: highway}
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter: {highway: corridor}
     min_zoom: 16
     table: osm
@@ -764,7 +764,7 @@ filters:
   #
   #############################################################
   - filter:
-      "tags->piste:type":
+      "piste:type":
         - nordic
         - downhill
         - sleigh
@@ -775,15 +775,15 @@ filters:
         - snow_park
         - playground
         - ski_jump
-      not: {"tags->piste:abandoned": "yes"}
-      "tags->piste:name": true
+      not: {"piste:abandoned": "yes"}
+      "piste:name": true
     min_zoom: 13
     table: osm
     output:
       <<: *osm_piste_properties
-      name: {col: "tags->piste:name"}
+      name: {col: "piste:name"}
   - filter:
-      "tags->piste:type":
+      "piste:type":
         - nordic
         - downhill
         - sleigh
@@ -794,7 +794,7 @@ filters:
         - snow_park
         - playground
         - ski_jump
-      not: {"tags->piste:abandoned": "yes"}
+      not: {"piste:abandoned": "yes"}
     min_zoom: 13
     table: osm
     output:
