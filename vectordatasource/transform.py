@@ -132,6 +132,42 @@ def _remove_properties(properties, *property_names):
     return properties
 
 
+def _is_name(key):
+    """
+    Return True if this key looks like a name.
+
+    This isn't as simple as testing if key == 'name', as there are alternative
+    name-like tags such as 'official_name', translated names such as 'name:en',
+    and left/right names for boundaries. This function aims to match all of
+    those variants.
+    """
+
+    # simplest and most common case first
+    if key == 'name':
+        return True
+
+    # translations next
+    if key.startswith('name:'):
+        return True
+
+    # then any of the alternative forms of name
+    return any(key.startswith(p) for p in tag_name_alternates)
+
+
+def _remove_names(props):
+    """
+    Remove entries in the props dict for which the key looks like a name.
+
+    Modifies the props dict in-place and also returns it.
+    """
+
+    for k in props.keys():
+        if _is_name(k):
+            props.pop(k)
+
+    return props
+
+
 def _building_calc_levels(levels):
     levels = max(levels, 1)
     levels = (levels * 3) + 2
@@ -2326,6 +2362,17 @@ def drop_properties(ctx):
 
     def action(p):
         return _remove_properties(p, *properties)
+
+    return _project_properties(ctx, action)
+
+
+def drop_names(ctx):
+    """
+    Drop all names on properties for features in this layer.
+    """
+
+    def action(p):
+        return _remove_names(p)
 
     return _project_properties(ctx, action)
 

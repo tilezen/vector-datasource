@@ -616,6 +616,15 @@ post_process:
         - "id:left"
         - "id:right"
 
+  # drop any name on locality boundaries at zooms 11 and 12 (min two zooms).
+  - fn: vectordatasource.transform.drop_names
+    params:
+      source_layer: boundaries
+      start_zoom: 11
+      end_zoom: 13
+      where: >-
+        kind == 'locality'
+
   # try to merge boundaries into as long segments as possible.
   - fn: vectordatasource.transform.merge_line_features
     params:
