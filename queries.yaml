@@ -648,12 +648,11 @@ post_process:
       pixels_per_letter: 11
 
   # drop names on boundary lines (country, region, macroregion) except zoom 7 from Natural Earth
-  - fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_names
     params:
       source_layer: boundaries
       start_zoom: 0
       end_zoom: 7
-      properties: [name]
 
   # after dropping names, try again to merge boundaries into as few features as
   # possible (to reduce tile size).
@@ -665,24 +664,22 @@ post_process:
 
   # no lake labels at zoom 0-3:
   # https://github.com/tilezen/vector-datasource/issues/1730
-  - fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_names
     params:
       source_layer: water
       start_zoom: 0
       end_zoom: 4
-      properties: [name]
       geom_types: [Polygon, MultiPolygon]
       where: >-
         kind == 'lake'
 
   # before extracting the label placement points, remove small water areas which
   # are probably too small to label.
-  - fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_names
     params:
       source_layer: water
       start_zoom: 4
       end_zoom: 16
-      properties: [name]
       geom_types: [Polygon, MultiPolygon]
       where: >-
         area < {

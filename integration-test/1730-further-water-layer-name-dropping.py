@@ -44,10 +44,20 @@ class LowZoomWaterTest(FixtureTest):
             }),
         )
 
+        # should NOT get a label placement point
         self.assert_no_matching_feature(
             z, x, y, 'water', {
                 'kind': 'lake',
                 'label_placement': True,
+            })
+
+        # should get a polygon - but it should NOT have any names or name
+        # translations.
+        self.assert_has_feature(
+            z, x, y, 'water', {
+                'kind': 'lake',
+                'name': type(None),
+                'name:fr': type(None),
             })
 
     def test_no_label_lake_athabasca_z4(self):
@@ -85,8 +95,18 @@ class LowZoomWaterTest(FixtureTest):
             }),
         )
 
+        # we shouldn't get a label placement point
         self.assert_no_matching_feature(
             z, x, y, 'water', {
                 'kind': 'lake',
                 'label_placement': True,
+            })
+
+        # but we should get a lake polygon, but that lake polygon shouldn't
+        # have names or name translations on it.
+        self.assert_has_feature(
+            z, x, y, 'water', {
+                'kind': 'lake',
+                'name': type(None),
+                'name:fr': type(None),
             })
