@@ -82,6 +82,10 @@ filters:
       kind: county
       kind_detail: '6'
     table: osm
+  # NOTE: the min_zoom of 11 here needs to be reflected in the early
+  # name-dropping in queries.yaml - so that the two match and we don't get
+  # names popping in and out. if the min_zoom is changed here, then it should
+  # also be changed there (and vice-versa)!
   - filter: {admin_level: '8', boundary: administrative}
     min_zoom: 11
     output:
