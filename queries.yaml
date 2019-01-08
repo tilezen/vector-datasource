@@ -673,8 +673,13 @@ post_process:
       where: >-
         kind == 'lake'
 
-  # before extracting the label placement points, remove small water areas which
-  # are probably too small to label.
+  # some water polygon features are too small to need a label - and if we label
+  # them then the label is often so prominent that it hides the polygon it's
+  # for! see the images here for examples of this:
+  # https://github.com/tilezen/vector-datasource/issues/1477#issuecomment-447162484
+  #
+  # therefore, we want to remove the name properties from those small water
+  # polygon features before we extract the label placements in a following step.
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: water
