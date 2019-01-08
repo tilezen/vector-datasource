@@ -420,7 +420,7 @@ filters:
       any:
         all:
           not: { operator: *us_forest_service }
-          protect_class: ['2', '3', '5']
+          protect_class: ['2', '3']
         operator: *us_parks_service
         operator:en: Parks Canada
         designation: national_park
@@ -437,7 +437,7 @@ filters:
   - filter:
       boundary: national_park
       not: { operator: *us_forest_service }
-      protect_class: ['2', '3', '5']
+      protect_class: ['2', '3']
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.5 ] }, *tier2_min_zoom ] }, 10 ] }
     output:
       <<: *output_properties
