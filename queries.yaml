@@ -617,6 +617,10 @@ post_process:
         - "id:right"
 
   # drop any name on locality boundaries at zooms 11 and 12 (min two zooms).
+  #
+  # NOTE: the start_zoom of 11 here comes in because this is the first zoom
+  # at which we show locality boundaries. if that changes (in boundaries.yaml)
+  # then it needs to change here, and vice-versa!
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: boundaries
