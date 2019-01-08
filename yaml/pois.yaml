@@ -602,7 +602,16 @@ filters:
   # bridge - no POIs
   # cemetery
   - filter: {landuse: cemetery}
-    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 12, 3000000 ]
+          - [ 13,  100000 ]
+          - [ 14,   50000 ]
+          - [ 15,    2000 ]
+        default: 16
     output:
       <<: *output_properties
       kind: cemetery
