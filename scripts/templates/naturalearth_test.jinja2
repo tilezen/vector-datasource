@@ -8,7 +8,7 @@
         {%- if iso_code is not none %}
             dsl.is_in('{{iso_code}}', z, x, y),
         {%- endif %}
-            dsl.way({{ne_id}}, dsl.{{geom_func}}(z, x, y), {
+            dsl.way({{ne_id}}, dsl.{{geom_func}}(z, x, y{{geom_extra_args}}), {
         {%- for k, v in props|dictsort %}
                 '{{k}}': u'{{v}}',
         {%- endfor %}
