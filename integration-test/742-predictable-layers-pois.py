@@ -67,12 +67,12 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(375855355, wkt_loads('POLYGON ((-122.925877332767 45.5089216821027, -122.925871583549 45.50933780500298, -122.925655898049 45.5092836021792, -122.925394039144 45.5092535104612, -122.925095079817 45.50922587391108, -122.92477258463 45.50921259073521, -122.924453233547 45.50924475993769, -122.924187242391 45.50928479829319, -122.923901218805 45.50932779542619, -122.923654900754 45.50936481196539, -122.923413074279 45.50937135910589, -122.92298996778 45.50942209941851, -122.922743200572 45.5094516874209, -122.9227501176 45.50889788557148, -122.922981523617 45.50889788557148, -122.923488622595 45.5088976967102, -122.923771681741 45.5088975708025, -122.923843726627 45.5087860165587, -122.923847679214 45.50847080537579, -122.924018987938 45.50847067946721, -122.924253088901 45.50847061651298, -122.924487100033 45.50847061651298, -122.924541537939 45.50847061651298, -122.924534441248 45.5087138713149, -122.924629033848 45.50874786646749, -122.924789113632 45.50880528045639, -122.925022226448 45.50881289787809, -122.92585990545 45.50883770170709, -122.92585756983 45.50892149324138, -122.925877332767 45.5089216821027))'), {u'operator': u'City of Hillsboro', u'source': u'openstreetmap.org', u'landuse': u'forest', u'way_area': u'29977.9', u'name': u'Lexington Estates'}))  # noqa
 
         self.assert_has_feature(
-            14, 2597, 5860, 'pois',
+            15, 5195, 11721, 'pois',
             {'id': 375855355, 'kind': 'forest'})
 
         # Label placement forest in landuse
         self.assert_no_matching_feature(
-            14, 2597, 5860, 'landuse',
+            15, 5195, 11721, 'landuse',
             {'id': 375855355, 'kind': 'forest', 'label_placement': True})
 
     def test_forest_node(self):
@@ -80,8 +80,8 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(357559979, wkt_loads('POINT (-117.534299580093 41.6832263153935)'), {u'gnis:state_id': u'32', u'name': u'Santa Rosa Ranger District', u'gnis:county_id': u'013', u'ele': u'2187', u'source': u'openstreetmap.org', u'gnis:created': u'05/01/1990', u'gnis:feature_id': u'862882', u'landuse': u'forest'}))  # noqa
 
         self.assert_has_feature(
-            14, 2842, 6101, 'pois',
-            {'id': 357559979, 'kind': 'forest', 'min_zoom': 14})
+            16, 11371, 24405, 'pois',
+            {'id': 357559979, 'kind': 'forest', 'min_zoom': 16})
 
     def test_forest_protect_class(self):
         # Way:432810821 landuse: Forest protect class in POIS
@@ -322,8 +322,8 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(1462300228, wkt_loads('POINT (11.0625186229689 49.62113429765858)'), {u'source': u'openstreetmap.org', u'boundary': u'protected_area', u'name': u'Tongrube Marloffstein'}))  # noqa
 
         self.assert_has_feature(
-            14, 8695, 5583, 'pois',
-            {'id': 1462300228, 'kind': 'protected_area', 'min_zoom': 14})
+            16, 34781, 22333, 'pois',
+            {'id': 1462300228, 'kind': 'protected_area', 'min_zoom': 16})
 
     def test_quarry_way(self):
         # quarry in POIS

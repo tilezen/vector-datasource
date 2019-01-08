@@ -78,7 +78,8 @@ global:
         - [ 13,    100000 ]
         - [ 14,     50000 ]
         - [ 15,      2000 ]
-      default: 16
+        - [ 16,      1000 ]
+      default: 17
   - &tier2_min_zoom
     lookup:
       key: { col: way_area }
@@ -159,6 +160,23 @@ global:
         - [ 14,     100000 ]
         - [ 15,      10000 ]
       default: 16
+  - &green_areas_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 6,  5000000000 ]
+        - [ 7,  2500000000 ]
+        - [ 8,  1000000000 ]
+        - [ 9,   100000000 ]
+        - [ 10,   50000000 ]
+        - [ 11,   25000000 ]
+        - [ 12,    5000000 ]
+        - [ 13,     200000 ]
+        - [ 14,      50000 ]
+        - [ 15,      10000 ]
+        - [ 16,       1000 ]
+      default: 17
   - &us_forest_service
         - United States Forest Service
         - US Forest Service
@@ -345,7 +363,7 @@ filters:
   - filter:
       boundary: national_park
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -364,7 +382,7 @@ filters:
       boundary: national_park
       protect_class: '6'
       protection_title: National Forest
-    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -373,7 +391,7 @@ filters:
       boundary: national_park
       protect_class: '6'
       protection_title: National Forest
-    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -383,7 +401,7 @@ filters:
       any:
         - protect_class: '6'
         - designation: area_of_outstanding_natural_beauty
-    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: park
@@ -398,7 +416,7 @@ filters:
         any:
           - operator: *us_forest_service
           - operator: *us_parks_service
-    min_zoom: *tier2_min_zoom
+    min_zoom: { max: [ 9, *green_areas_min_zoom ] }
     output:
       <<: *output_properties
       kind: nature_reserve
@@ -410,7 +428,7 @@ filters:
   - filter:
       historic: battlefield
       not: {operator: *us_forest_service}
-    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 4 ] }, *tier1_min_zoom ] }, 17 ] }
+    min_zoom: { max: [ 10, *tier1_min_zoom ] }
     output:
       <<: *output_properties
       kind: battlefield
@@ -425,7 +443,7 @@ filters:
         operator:en: Parks Canada
         designation: national_park
         protection_title: National Park
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.5 ] }, *tier1_min_zoom ] }, 10 ] }
+    min_zoom: { max: [ 6, *tier1_min_zoom ] }
     output:
       <<: *output_properties
       kind: national_park
@@ -438,7 +456,7 @@ filters:
       boundary: national_park
       not: { operator: *us_forest_service }
       protect_class: ['2', '3', '5']
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.5 ] }, *tier2_min_zoom ] }, 10 ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: national_park
@@ -458,7 +476,7 @@ filters:
   - filter:
       landuse: forest
       protect_class: '6'
-    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -466,13 +484,13 @@ filters:
   - filter:
       landuse: forest
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
       tier: 2
   - filter: {landuse: forest}
-    min_zoom: { min: [ { max: [ 10, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -480,14 +498,14 @@ filters:
 
   # nature reserves
   - filter: {leisure: nature_reserve}
-    min_zoom: *small_parks_min_zoom
+    min_zoom: { max: [ 9, *small_parks_min_zoom ] }
     output:
       <<: *output_properties
       kind: nature_reserve
       tier: 2
   # protected areas
   - filter: {boundary: protected_area}
-    min_zoom: { min: [ { max: [ 7, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: protected_area
@@ -497,7 +515,7 @@ filters:
   - filter:
       landuse: wood
       operator: *us_forest_service
-    min_zoom: { min: [ { max: [ 9, { sum: [ { col: zoom }, 2 ] }, *tier2_min_zoom ] }, 14 ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: wood
