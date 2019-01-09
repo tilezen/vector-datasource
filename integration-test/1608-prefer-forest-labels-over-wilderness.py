@@ -205,3 +205,139 @@ class ForestTest(FixtureTest):
                 'kind': 'nature_reserve',
                 'min_zoom': 7,
             })
+
+    def test_stanislaus_national_forest(self):
+        import dsl
+
+        z, x, y = (7, 21, 49)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/972008
+            dsl.way(972008, dsl.box_area(z, x, y, 5882440714), {
+                'attribution': 'USDA-Forest Service, Pacific Southwest Region',
+                'boundary': 'national_park',
+                'boundary:type': 'protected_area',
+                'name': 'Stanislaus National Forest',
+                'name:de': 'Nationalforst Stanislaus',
+                'operator': 'United States Forest Service',
+                'ownership': 'national',
+                'protect_class': '6',
+                'protected': 'perpetuity',
+                'protection_title': 'National Forest',
+                'source': 'openstreetmap.org',
+                'type': 'multipolygon',
+                'website': 'http://www.fs.usda.gov/stanislaus',
+                'wikidata': 'Q2898163',
+                'wikipedia': 'en:Stanislaus National Forest',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 972008,
+                'kind': 'forest',
+                'min_zoom': 7,
+            })
+
+    def test_emigrant_wilderness(self):
+        import dsl
+
+        z, x, y = (10, 171, 394)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/5366680
+            dsl.way(5366680, dsl.box_area(z, x, y, 739870504), {
+                'boundary': 'protected_area',
+                'leisure': 'nature_reserve',
+                'name': 'Emigrant Wilderness',
+                'operator': 'US Forest Service',
+                'ownership': 'national',
+                'protect_class': '1b',
+                'protection_title': 'Wilderness Area',
+                'source': 'openstreetmap.org',
+                'type': 'boundary',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5366680,
+                'kind': 'nature_reserve',
+                'min_zoom': 9,
+            })
+
+    def test_hoover_wilderness(self):
+        import dsl
+
+        z, x, y = (10, 172, 394)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/5372299
+            dsl.way(5372299, dsl.box_area(z, x, y, 840685203), {
+                'boundary': 'protected_area',
+                'leisure': 'nature_reserve',
+                'name': 'Hoover Wilderness',
+                'operator': 'US Forest Service',
+                'ownership': 'national',
+                'protect_class': '1b',
+                'protection_title': 'Wilderness Area',
+                'source': 'openstreetmap.org',
+                'type': 'boundary',
+                'wikidata': 'Q6317507',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5372299,
+                'kind': 'nature_reserve',
+                'min_zoom': 9,
+            })
+
+    def test_algonquin_provincial_park(self):
+        # provincial park, although a large one, isn't a national park. so
+        # should appear with other parks around zoom 8.
+        import dsl
+
+        z, x, y = (8, 72, 91)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/910784
+            dsl.way(910784, dsl.box_area(z, x, y, 15694581677), {
+                'boundary': 'national_park',
+                'date:protected': '1893',
+                'governance_type': 'sub-national ministry or agency',
+                'heritage': '2',
+                'heritage:operator': 'hsamboc',
+                'hsamboc:criteria': 'National Historic Site of Canada',
+                'hsamboc:inscription_date': '1992-06-07',
+                'is_in': 'Ontario',
+                'is_in:zone': 'ALGONQUIN',
+                'iucn_level': 'II',
+                'leisure': 'nature_reserve',
+                'name': 'Algonquin Provincial Park',
+                'name:short': 'ALGONQUIN',
+                'operator': 'Ontario Parks',
+                'operator:url': 'www.ontarioparks.com/english/',
+                'protect_class': '2',
+                'protection_title': 'Provincial Park',
+                'ref:hsamboc': '3249',
+                'short_name': 'Algonquin Park',
+                'site_ownership': 'national',
+                'site_status': 'designated',
+                'source': 'openstreetmap.org',
+                'source:type': 'Provincial Park',
+                'type': 'multipolygon',
+                'WDPA_ID:ref': '4167',
+                'website': 'http://www.ontarioparks.com/park/algonquin',
+                'wikidata': 'Q1543478',
+                'wikipedia': 'en:Algonquin Provincial Park',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 910784,
+                'kind': 'park',
+                'min_zoom': 8,
+            })

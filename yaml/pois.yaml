@@ -192,6 +192,30 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  - &not_national_park_protection_title
+        - Conservation Area
+        - Conservation Park
+        - Environmental use
+        - Forest Reserve
+        - National Forest
+        - National Wildlife Refuge
+        - Nature Refuge
+        - Nature Reserve
+        - Protected Site
+        - Provincial Park
+        - Public Access Land
+        - Regional Reserve
+        - Resources Reserve
+        - State Forest
+        - State Game Land
+        - State Park
+        - Watershed Recreation Unit
+        - Wild Forest
+        - Wilderness Area
+        - Wilderness Study Area
+        - Wildlife Management
+        - Wildlife Management Area
+        - Wildlife Sanctuary
   - &no_name_okay
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
@@ -441,11 +465,12 @@ filters:
       tier: 1
   - filter:
       boundary: national_park
-      not: { protection_title: National Monument }
+      not:
+        any:
+          - operator: *us_forest_service
+          - protection_title: *not_national_park_protection_title
       any:
-        all:
-          not: { operator: *us_forest_service }
-          protect_class: ['2', '3']
+        protect_class: ['2', '3']
         operator: *us_parks_service
         operator:en: Parks Canada
         designation: national_park
@@ -461,8 +486,15 @@ filters:
   ############################################################
   - filter:
       boundary: national_park
-      not: { operator: *us_forest_service }
-      protect_class: ['2', '3']
+      not:
+        any:
+          - operator: *us_forest_service
+          - protection_title: *not_national_park_protection_title
+      any:
+        protect_class: ['2', '3']
+        protect_title:
+          - National Park
+          - National Monument
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
