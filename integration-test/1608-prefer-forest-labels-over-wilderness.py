@@ -25,14 +25,11 @@ class ForestTest(FixtureTest):
             }),
         )
 
-        # TODO: should be national park, or nature_reserve? on the one hand,
-        # it is tagged as operated by NPS, but its name contains "recreation
-        # area", not "park"?
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 5908558,
-                'kind': 'national_park',
-                'min_zoom': 6,
+                'kind': 'nature_reserve',
+                'min_zoom': 9,
             })
 
     def test_waterton_lakes_national_park(self):

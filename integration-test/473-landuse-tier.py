@@ -44,7 +44,7 @@ class LanduseTier(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois',
             {'kind': 'national_park', 'id': -1453306, 'tier': 1,
-             'min_zoom': 6})
+             'min_zoom': 5})
 
     def test_national_park(self):
         import dsl
