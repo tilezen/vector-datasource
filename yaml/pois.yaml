@@ -438,7 +438,7 @@ filters:
       any:
         all:
           not: { operator: *us_forest_service }
-          protect_class: ['2', '3', '5']
+          protect_class: ['2', '3']
         operator: *us_parks_service
         operator:en: Parks Canada
         designation: national_park
@@ -455,7 +455,7 @@ filters:
   - filter:
       boundary: national_park
       not: { operator: *us_forest_service }
-      protect_class: ['2', '3', '5']
+      protect_class: ['2', '3']
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
@@ -620,7 +620,16 @@ filters:
   # bridge - no POIs
   # cemetery
   - filter: {landuse: cemetery}
-    min_zoom: { min: [ { max: [ 12, { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 14 ] }
+    min_zoom:
+      lookup:
+        key: { col: way_area }
+        op: '>='
+        table:
+          - [ 12, 3000000 ]
+          - [ 13,  100000 ]
+          - [ 14,   50000 ]
+          - [ 15,    2000 ]
+        default: 16
     output:
       <<: *output_properties
       kind: cemetery

@@ -648,12 +648,11 @@ post_process:
       pixels_per_letter: 11
 
   # drop names on boundary lines (country, region, macroregion) except zoom 7 from Natural Earth
-  - fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_names
     params:
       source_layer: boundaries
       start_zoom: 0
       end_zoom: 7
-      properties: [name]
 
   # after dropping names, try again to merge boundaries into as few features as
   # possible (to reduce tile size).
@@ -663,19 +662,45 @@ post_process:
       start_zoom: 8
       end_zoom: 15
 
-  # before extracting the label placement points, remove small water areas which
-  # are probably too small to label.
-  - fn: vectordatasource.transform.drop_properties
+  # no lake labels at zoom 0-3:
+  # https://github.com/tilezen/vector-datasource/issues/1730
+  - fn: vectordatasource.transform.drop_names
     params:
       source_layer: water
       start_zoom: 0
-      end_zoom: 16
-      properties: [name]
+      end_zoom: 4
       geom_types: [Polygon, MultiPolygon]
-      # NOTE: the 270 factor comes from curve fitting the area table from the
-      # walkabout style, with 270 being the min, ranging up to 1070.
       where: >-
-        area < 270.0 * pixel_area
+        kind == 'lake'
+
+  # some water polygon features are too small to need a label - and if we label
+  # them then the label is often so prominent that it hides the polygon it's
+  # for! see the images here for examples of this:
+  # https://github.com/tilezen/vector-datasource/issues/1477#issuecomment-447162484
+  #
+  # therefore, we want to remove the name properties from those small water
+  # polygon features before we extract the label placements in a following step.
+  - fn: vectordatasource.transform.drop_names
+    params:
+      source_layer: water
+      start_zoom: 4
+      end_zoom: 16
+      geom_types: [Polygon, MultiPolygon]
+      where: >-
+        area < {
+            4:  40000000000,
+            5:  10000000000,
+            6:   5000000000,
+            7:    400000000,
+            8:    200000000,
+            9:    100000000,
+            10:    10000000,
+            11:     4000000,
+            12:      750000,
+            13:      100000,
+            14:       50000,
+            15:       10000,
+        }.get(zoom)
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
