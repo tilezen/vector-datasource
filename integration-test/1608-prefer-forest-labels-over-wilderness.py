@@ -145,3 +145,63 @@ class ForestTest(FixtureTest):
                 'kind': 'nature_reserve',
                 'min_zoom': 9,
             })
+
+    def test_desert_national_wildlife_refuge(self):
+        import dsl
+
+        z, x, y = (9, 91, 199)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/5982772
+            dsl.way(5982772, dsl.box_area(z, x, y, 10301141266), {
+                'boundary': 'protected_area',
+                'leisure': 'nature_reserve',
+                'name': 'Desert National Wildlife Refuge',
+                'operator': 'US Fish and Wildlife Service',
+                'ownership': 'national',
+                'protect_class': '4',
+                'protection_title': 'National Wildlife Refuge',
+                'source': 'openstreetmap.org',
+                'type': 'boundary',
+                'wikidata': 'Q5263981',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 5982772,
+                'kind': 'nature_reserve',
+                'min_zoom': 9,
+            })
+
+    def test_white_sands_national_monument(self):
+        import dsl
+
+        z, x, y = (9, 104, 206)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/1504622
+            dsl.way(1504622, dsl.box_area(z, x, y, 856339892), {
+                'boundary': 'national_park',
+                'boundary:type': 'protected_area',
+                'gnis:feature_id': '914261',
+                'leisure': 'nature_reserve',
+                'name': 'White Sands National Monument',
+                'operator': 'National Park Service',
+                'ownership': 'national',
+                'protect_class': '3',
+                'protection_title': 'National Monument',
+                'source': 'openstreetmap.org',
+                'type': 'boundary',
+                'website': 'http://www.nps.gov/whsa',
+                'wikidata': 'Q1200164',
+                'wikipedia': 'en:White Sands National Monument',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1504622,
+                'kind': 'nature_reserve',
+                'min_zoom': 7,
+            })

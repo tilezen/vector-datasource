@@ -419,6 +419,14 @@ filters:
       <<: *output_properties
       kind: nature_reserve
       tier: 2
+  - filter:
+      leisure: nature_reserve
+      protection_title: National Monument
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: nature_reserve
+      tier: 2
 
   ############################################################
   # TIER 1
@@ -433,6 +441,7 @@ filters:
       tier: 1
   - filter:
       boundary: national_park
+      not: { protection_title: National Monument }
       any:
         all:
           not: { operator: *us_forest_service }
