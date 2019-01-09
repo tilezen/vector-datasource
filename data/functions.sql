@@ -1079,3 +1079,18 @@ BEGIN
   END IF;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- try to convert a string into an integer, returning null if that fails.
+CREATE OR REPLACE FUNCTION tz_safe_int(t text)
+RETURNS INTEGER AS $$
+DECLARE
+  val INTEGER DEFAULT NULL;
+BEGIN
+  BEGIN
+    val := (t)::INTEGER;
+  EXCEPTION WHEN OTHERS THEN
+    RETURN NULL;
+  END;
+  RETURN val;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
