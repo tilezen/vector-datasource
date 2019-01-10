@@ -446,6 +446,7 @@ filters:
   - filter:
       leisure: nature_reserve
       protection_title: National Monument
+      not: { protect_class: ['1', '1a', '1b'] }
     min_zoom: { max: [ 7, *tier2_min_zoom ] }
     output:
       <<: *output_properties
@@ -541,6 +542,26 @@ filters:
     output:
       <<: *output_properties
       kind: nature_reserve
+      tier: 2
+  # Bureau of Land Management protected areas
+  - filter:
+      boundary: protected_area
+      operator:
+        - BLM
+        - US Bureau of Land Management
+    min_zoom: { max: [ 9, *small_parks_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: protected_area
+      tier: 2
+  # scientific protected areas?
+  - filter:
+      boundary: protected_area
+      protect_class: ['1', '1a', '1b']
+    min_zoom: { max: [ 9, *small_parks_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: protected_area
       tier: 2
   # protected areas
   - filter: {boundary: protected_area}

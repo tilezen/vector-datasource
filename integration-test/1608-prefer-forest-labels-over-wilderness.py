@@ -341,3 +341,119 @@ class ForestTest(FixtureTest):
                 'kind': 'park',
                 'min_zoom': 8,
             })
+
+
+class BlmTest(FixtureTest):
+
+    def test_blm_public_lands(self):
+        import dsl
+
+        z, x, y = (9, 107, 183)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/2517672
+            dsl.way(2517672, dsl.box_area(z, x, y, 1172619201), {
+                'boundary': 'protected_area',
+                'name': 'BLM',
+                'operator': 'US Bureau of Land Management',
+                'ownership': 'national',
+                'protect_class': '27',
+                'protection_title': 'Public Access Land',
+                'source': 'openstreetmap.org',
+                'type': 'multipolygon',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 2517672,
+                'kind': 'protected_area',
+                'min_zoom': 9,
+            })
+
+
+class ScientificProtectedAreasTest(FixtureTest):
+
+    def test_cumberland_island_national_seashore(self):
+        import dsl
+
+        z, x, y = (9, 140, 209)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/4269033
+            dsl.way(4269033, dsl.box_area(z, x, y, 202731274), {
+                'boundary': 'protected_area',
+                'name': 'Cumberland Island National Seashore',
+                'protect_class': '1',
+                'protection_title': 'National Seashore',
+                'source': 'openstreetmap.org',
+                'type': 'multipolygon',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 4269033,
+                'kind': 'protected_area',
+                'min_zoom': 9,
+            })
+
+    def test_buck_island_reef(self):
+        # NOTE: this is also tagged as a national monument... so should it be
+        # treated as a "strict nature reserve" and held back a few zooms or
+        # promoted as a national monument??? for the moment, i've taken the
+        # view that it should be held back.
+        import dsl
+
+        z, x, y = (9, 164, 230)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/8973739
+            dsl.way(8973739, dsl.box_area(z, x, y, 88094771), {
+                'boundary': 'protected_area',
+                'leisure': 'nature_reserve',
+                'name': 'Buck Island Reef National Monument',
+                'operator': 'National Park Service',
+                'protect_class': '1a',
+                'protected_area': 'nature_reserve_strict',
+                'protection_title': 'National Monument',
+                'seamark:name': 'Buck Island Reef NM',
+                'seamark:type': 'protected_area',
+                'source': 'openstreetmap.org',
+                'type': 'boundary',
+                'website': 'https://www.nps.gov/buis',
+                'wikidata': 'Q999352',
+                'wikipedia': 'en:Buck Island Reef National Monument',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 8973739,
+                'kind': 'nature_reserve',
+                'min_zoom': 9,
+            })
+
+    def test_little_lake_creek_wilderness(self):
+        import dsl
+
+        z, x, y = (10, 239, 420)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/209936201
+            dsl.way(209936201, dsl.box_area(z, x, y, 21727129), {
+                'boundary': 'protected_area',
+                'landuse': 'conservation',
+                'name': 'Little Lake Creek Wilderness',
+                'protect_class': '1b',
+                'source': 'openstreetmap.org',
+                'wikidata': 'Q27973601',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 209936201,
+                'kind': 'protected_area',
+                'min_zoom': 10,
+            })
