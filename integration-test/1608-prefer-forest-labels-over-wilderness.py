@@ -401,6 +401,35 @@ class BlmTest(FixtureTest):
                 'min_zoom': 8,
             })
 
+    def test_arapahoe_national_forest(self):
+        import dsl
+
+        z, x, y = (8, 52, 97)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/396026
+            dsl.way(396026, dsl.box_area(z, x, y, 3218601885), {
+                'attribution': 'US Forest Service',
+                'boundary': 'national_park',
+                'boundary:type': 'protected_area',
+                'name': 'Arapaho National Forest',
+                'operator': 'United States Forest Service',
+                'ownership': 'national',
+                'protect_class': '6',
+                'protected': 'perpetuity',
+                'protection_title': 'National Forest',
+                'source': 'openstreetmap.org',
+                'type': 'multipolygon',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 396026,
+                'kind': 'forest',
+                'min_zoom': 8,
+            })
+
 
 class ScientificProtectedAreasTest(FixtureTest):
 

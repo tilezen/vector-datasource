@@ -406,7 +406,7 @@ filters:
       boundary: national_park
       protect_class: '6'
       protection_title: National Forest
-    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    min_zoom: { max: [ 8, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -415,7 +415,7 @@ filters:
       boundary: national_park
       protect_class: '6'
       protection_title: National Forest
-    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    min_zoom: { max: [ 8, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -516,7 +516,7 @@ filters:
   - filter:
       landuse: forest
       protect_class: '6'
-    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    min_zoom: { max: [ 8, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
@@ -524,7 +524,7 @@ filters:
   - filter:
       landuse: forest
       operator: *us_forest_service
-    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    min_zoom: { max: [ 8, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
