@@ -387,7 +387,7 @@ filters:
   - filter:
       boundary: national_park
       operator: *us_forest_service
-    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    min_zoom: { max: [ 8, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest

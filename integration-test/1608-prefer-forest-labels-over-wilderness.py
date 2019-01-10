@@ -209,7 +209,7 @@ class ForestTest(FixtureTest):
     def test_stanislaus_national_forest(self):
         import dsl
 
-        z, x, y = (7, 21, 49)
+        z, x, y = (8, 42, 98)
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/relation/972008
@@ -236,7 +236,7 @@ class ForestTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 972008,
                 'kind': 'forest',
-                'min_zoom': 7,
+                'min_zoom': 8,
             })
 
     def test_emigrant_wilderness(self):
@@ -369,6 +369,36 @@ class BlmTest(FixtureTest):
                 'id': 2517672,
                 'kind': 'protected_area',
                 'min_zoom': 9,
+            })
+
+    def test_okanogan_wenatchee_national_forest(self):
+        import dsl
+
+        z, x, y = (8, 42, 89)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/1447414
+            dsl.way(1447414, dsl.box_area(z, x, y, 38300253290), {
+                'boundary': 'national_park',
+                'boundary:type': 'protected_area',
+                'name': 'Okanogan-Wenatchee National Forest',
+                'operator': 'United States Forest Service',
+                'ownership': 'national',
+                'protect_class': '6',
+                'protected': 'perpetuity',
+                'protection_title': 'National Forest',
+                'source': 'openstreetmap.org',
+                'type': 'multipolygon',
+                'website': 'http://www.fs.usda.gov/okawen/',
+                'wikidata': 'Q3079103',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1447414,
+                'kind': 'forest',
+                'min_zoom': 8,
             })
 
 
