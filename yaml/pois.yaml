@@ -443,15 +443,6 @@ filters:
       <<: *output_properties
       kind: nature_reserve
       tier: 2
-  - filter:
-      leisure: nature_reserve
-      protection_title: National Monument
-      not: { protect_class: ['1', '1a', '1b'] }
-    min_zoom: { max: [ 7, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: nature_reserve
-      tier: 2
 
   ############################################################
   # TIER 1
@@ -529,7 +520,7 @@ filters:
       <<: *output_properties
       kind: forest
       tier: 2
-  - filter: {landuse: forest}
+  - filter: { landuse: forest }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
@@ -580,7 +571,7 @@ filters:
       <<: *output_properties
       kind: wood
       tier: 2
-  - filter: {landuse: wood}
+  - filter: { landuse: wood }
     min_zoom: 17
     output:
       <<: *output_properties

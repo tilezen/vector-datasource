@@ -202,8 +202,8 @@ class ForestTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 1504622,
-                'kind': 'nature_reserve',
-                'min_zoom': 7,
+                'kind': 'national_park',
+                'min_zoom': 6,
             })
 
     def test_stanislaus_national_forest(self):
