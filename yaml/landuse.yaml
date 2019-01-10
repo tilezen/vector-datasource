@@ -118,6 +118,20 @@ global:
         - [ 14,  50000 ]
         - [ 15,   5000 ]
       default: 16
+  - &small_parks_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        - [ 8,   400000000 ]
+        - [ 9,    40000000 ]
+        - [ 10,   10000000 ]
+        - [ 11,    4000000 ]
+        - [ 12,    2000000 ]
+        - [ 13,     200000 ]
+        - [ 14,     100000 ]
+        - [ 15,      10000 ]
+      default: 16
   - &us_forest_service
         - United States Forest Service
         - US Forest Service
@@ -133,6 +147,30 @@ global:
         - US National Park Service
         - U.S. National Park Service
         - US National Park service
+  - &not_national_park_protection_title
+        - Conservation Area
+        - Conservation Park
+        - Environmental use
+        - Forest Reserve
+        - National Forest
+        - National Wildlife Refuge
+        - Nature Refuge
+        - Nature Reserve
+        - Protected Site
+        - Provincial Park
+        - Public Access Land
+        - Regional Reserve
+        - Resources Reserve
+        - State Forest
+        - State Game Land
+        - State Park
+        - Watershed Recreation Unit
+        - Wild Forest
+        - Wilderness Area
+        - Wilderness Study Area
+        - Wildlife Management
+        - Wildlife Management Area
+        - Wildlife Sanctuary
   # whitelist for leaf_type
   - &leaftype_kind_detail
     kind_detail:
@@ -262,9 +300,7 @@ filters:
       leisure: nature_reserve
       protect_class: ['4', '5']
       not:
-        any:
-          - operator: *us_forest_service
-          - operator: *us_parks_service
+        - operator: *us_forest_service
     min_zoom: *tier2_min_zoom
     output:
       <<: *output_properties
@@ -297,6 +333,7 @@ filters:
   ############################################################
   - filter:
       historic: battlefield
+      not: {operator: *us_forest_service}
     min_zoom: *tier1_min_zoom
     output:
       <<: *output_properties
@@ -304,10 +341,12 @@ filters:
       tier: 1
   - filter:
       boundary: national_park
+      not:
+        any:
+          - operator: *us_forest_service
+          - protection_title: *not_national_park_protection_title
       any:
-        all:
-          not: { operator: *us_forest_service }
-          protect_class: ['2', '3']
+        protect_class: ['2', '3']
         operator: *us_parks_service
         operator:en: Parks Canada
         designation: national_park
@@ -323,8 +362,15 @@ filters:
   ############################################################
   - filter:
       boundary: national_park
-      not: { operator: *us_forest_service }
-      protect_class: ['2', '3']
+      not:
+        any:
+          - operator: *us_forest_service
+          - protection_title: *not_national_park_protection_title
+      any:
+        protect_class: ['2', '3']
+        protect_title:
+          - National Park
+          - National Monument
     min_zoom: *tier2_min_zoom
     output:
       <<: *output_properties
@@ -341,7 +387,19 @@ filters:
       kind: park
       tier: 2
 
-  - filter: { landuse: forest, operator: *us_forest_service }
+  # forests
+  - filter:
+      landuse: forest
+      protect_class: '6'
+    min_zoom: { max: [ 6, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: forest
+      <<: *leaftype_kind_detail
+      tier: 2
+  - filter:
+      landuse: forest
+      operator: *us_forest_service
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
       <<: *output_properties
@@ -356,12 +414,34 @@ filters:
       <<: *leaftype_kind_detail
       tier: 2
 
+  # nature reserves
   - filter: {leisure: nature_reserve}
     min_zoom: *tier2_min_zoom
     output:
       <<: *output_properties
       kind: nature_reserve
       tier: 2
+  # Bureau of Land Management protected areas
+  - filter:
+      boundary: protected_area
+      operator:
+        - BLM
+        - US Bureau of Land Management
+    min_zoom: { max: [ 9, *small_parks_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: protected_area
+      tier: 2
+  # scientific protected areas?
+  - filter:
+      boundary: protected_area
+      protect_class: ['1', '1a', '1b']
+    min_zoom: { max: [ 9, *small_parks_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: protected_area
+      tier: 2
+  # protected areas
   - filter: {boundary: protected_area}
     min_zoom: *tier2_min_zoom
     output:
@@ -369,7 +449,10 @@ filters:
       kind: protected_area
       tier: 2
 
-  - filter: { landuse: wood, operator: *us_forest_service }
+  # woods
+  - filter:
+      landuse: wood
+      operator: *us_forest_service
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
       <<: *output_properties

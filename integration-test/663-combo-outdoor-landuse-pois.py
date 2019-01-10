@@ -115,7 +115,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             11, 582, 796, 'pois',
-            {'kind': 'battlefield', 'min_zoom': 10.07})
+            {'kind': 'battlefield', 'min_zoom': 10})
 
         self.assert_has_feature(
             11, 582, 796, 'landuse',

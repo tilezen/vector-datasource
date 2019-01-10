@@ -175,7 +175,7 @@ KNOWN_FUNCS = {
     'mz_calculate_ferry_level':           'mz_calculate_ferry_level',
     'util.is_building':                   'mz_calculate_is_building_or_part',
     'util.tag_str_to_bool':               'notimplemented',
-    'util.safe_int':                      'notimplemented',
+    'util.safe_int':                      'tz_safe_int',
     'util.true_or_none':                  'notimplemented',
     'tz_looks_like_service_area':         'tz_looks_like_service_area',
     'tz_looks_like_rest_area':            'tz_looks_like_rest_area',
