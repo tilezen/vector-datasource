@@ -1087,7 +1087,7 @@ filters:
     output:
       <<: *output_properties
       kind: natural_park
-  - filter: {natural: [grassland, sand, shingle, heath, bare_rock, desert]}
+  - filter: {natural: [bare_rock, desert, grassland, heath, sand, shingle]}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
