@@ -1087,6 +1087,16 @@ filters:
     output:
       <<: *output_properties
       kind: natural_park
+  - filter: {natural: [grassland, sand, shingle, heath, bare_rock, desert]}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: {col: natural}
+  - filter: {landuse: vineyard}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: vineyard
   - filter:
       highway: footway
       geom_type: polygon
