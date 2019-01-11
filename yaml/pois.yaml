@@ -1507,7 +1507,7 @@ filters:
       <<: *output_properties
       kind: {col: amenity}
       <<: *health_facility_type_kind_detail
-  - filter: {healthcare: [bank, blood, chiropractor, donation, hospice, midwife, midwife_occupational, optometrist_paediatrics, physiotherapist_physiotherapy, podiatrist_psychotherapist, rehabilitation, speech, therapist, therapist]}
+  - filter: {healthcare: [chiropractor, hospice, midwife, occupational_therapist, optometrist, paediatrics, physiotherapist, podiatrist, psychotherapist, rehabilitation, speech_therapist]}
     min_zoom: 17
     output:
       <<: *output_properties
