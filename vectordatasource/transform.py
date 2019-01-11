@@ -266,7 +266,7 @@ def road_classifier(shape, properties, fid, zoom):
         properties['is_link'] = True
     if tunnel in ('yes', 'true'):
         properties['is_tunnel'] = True
-    if bridge in ('yes', 'true'):
+    if bridge and bridge != 'no':
         properties['is_bridge'] = True
 
     return shape, properties, fid
