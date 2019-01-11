@@ -603,12 +603,19 @@ filters:
   ############################################################
   # TIER 4
   ############################################################
-  # cemetery
-  - filter: {landuse: cemetery}
+  # cemetery & grave_yard
+  - filter:
+      any:
+        landuse: cemetery
+        amenity: grave_yard
     min_zoom: *tier4_min_zoom
     output:
       <<: *output_properties
-      kind: cemetery
+      kind:
+        case:
+          - when: { landuse: cemetery }
+            then: cemetery
+          - else: grave_yard
       tier: 4
       kind_detail: { col: religion }
       denomination: { col: denomination }
@@ -1295,13 +1302,6 @@ filters:
     output:
       <<: *output_properties
       kind: gate
-  - filter: {amenity: grave_yard}
-    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
-    output:
-      <<: *output_properties
-      kind: grave_yard
-      kind_detail: { col: religion }
-      denomination: { col: denomination }
   - filter:
       man_made: crane
       geom_type: line

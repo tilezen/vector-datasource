@@ -669,8 +669,11 @@ filters:
   ############################################################
   # breakwater - no POIs
   # bridge - no POIs
-  # cemetery
-  - filter: {landuse: cemetery}
+  # cemetery & grave_yard
+  - filter:
+      any:
+        landuse: cemetery
+        amenity: grave_yard
     min_zoom:
       lookup:
         key: { col: way_area }
@@ -683,7 +686,11 @@ filters:
         default: 16
     output:
       <<: *output_properties
-      kind: cemetery
+      kind:
+        case:
+          - when: { landuse: cemetery }
+            then: cemetery
+          - else: grave_yard
       tier: 4
       kind_detail: { col: religion }
       denomination: { col: denomination }
@@ -2390,13 +2397,6 @@ filters:
       <<: *output_properties
       kind: picnic_site
 
-  - filter: {amenity: grave_yard}
-    min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3 ] } } }
-    output:
-      <<: *output_properties
-      kind: grave_yard
-      kind_detail: { col: religion }
-      denomination: { col: denomination }
   - filter: {landuse: quarry}
     min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 3 ] } } }
     output:
