@@ -878,6 +878,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `childcare`
 * `childrens_centre`
+* `chiropractor`
 * `cinema`
 * `clinic` with `kind_detail` property.
 * `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
@@ -986,6 +987,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `horse_riding`
+* `hospice`
 * `hospital` with `kind_detail` property.
 * `hostel`
 * `hot_spring`
@@ -1021,6 +1023,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `memorial`
 * `metal_construction`
 * `midwife`
+* `midwife`
 * `military`
 * `mineshaft`
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
@@ -1046,12 +1049,15 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `nursing_home` with `kind_detail` property. _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
+* `occupational_therapist`
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
+* `optometrist`
 * `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
 * `outdoor`
 * `outreach`
+* `paediatrics`
 * `painter`
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
 * `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
@@ -1067,6 +1073,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `photographer`
 * `photographic_laboratory`
 * `physician`
+* `physiotherapist`
 * `picnic_site`
 * `picnic_table`
 * `pitch` - With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
@@ -1075,6 +1082,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `plaque` - A memorial plaque.
 * `playground` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plumber`
+* `podiatrist`
 * `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `political_party`
 * `port_terminal`
@@ -1086,6 +1094,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `power_wind`
 * `prison`
 * `protected_area`
+* `psychotherapist`
 * `pub`
 * `put_in_egress`
 * `put_in`
@@ -1099,6 +1108,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `recreation_track`
 * `recycling`
 * `refugee_camp`
+* `rehabilitation`
 * `religion`
 * `research`
 * `residential_home`
@@ -1130,6 +1140,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `snowmobile`
 * `social_facility` with `kind_detail` property.
 * `soup_kitchen`
+* `speech_therapist`
 * `sports_centre`
 * `sports`
 * `spring`
