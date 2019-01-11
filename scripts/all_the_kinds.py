@@ -13,9 +13,12 @@ KNOWN_FUNCS = {
 
 
 # structures to return data from the parsing functions. basically a key->value
-# mapping where the keys are (layer, kind) tuples and the values are the other
-# stuff we parsed out of the various YAML/CSV files.
-KindKey = namedtuple('KindKey', 'layer kind')
+# mapping where the keys are (layer, kind, kind_detail) tuples and the values
+# are the other stuff we parsed out of the various YAML/CSV files.
+#
+# note that kind_detail might be None if the command line options are
+# configured to ignore that.
+KindKey = namedtuple('KindKey', 'layer kind kind_detail')
 KindInfo = namedtuple('KindInfo', 'min_zoom sort_rank')
 
 
@@ -38,7 +41,9 @@ KindInfo = namedtuple('KindInfo', 'min_zoom sort_rank')
 # theoretically, this can be arbitrarily complex, but it turns out that in all
 # the cases we have at the time of writing, the whitelist is available at the
 # top level of the filter! lucky us :-)
-def parse_filter_for_col(col, filter_defn):
+def parse_filter_for_col(col, item):
+    filter_defn = item['filter']
+
     if col.startswith('tags->'):
         raise AssertionError("Output kind column starts with deprecated "
                              "'tags->' prefix: %r" % (col,))
@@ -75,16 +80,37 @@ def parse_filter_for_col(col, filter_defn):
 #
 # which means the kind could be either "fitness" or "sports_centre", and should
 # return both.
-def parse_case_for_kinds(case_stmt):
+def parse_case_for_kinds(case_stmt, item):
     all_kinds = []
+    has_else = False
     for case in case_stmt:
         if case.keys() == ['else']:
-            all_kinds.append(case['else'])
+            values = parse_col_values(case['else'], item)
+            has_else = True
+
         else:
             assert sorted(case.keys()) == ['then', 'when']
-            value = case['then']
-            assert isinstance(value, (str, unicode))
-            all_kinds.append(value)
+            when = case['when']
+            then = case['then']
+
+            # if the when statement whitelists its own col, then we can use
+            # that. otherwise, we have to look in the filter.
+            if isinstance(then, dict) and \
+               then.keys() == ['col'] and \
+               then['col'] in when:
+                col = then['col']
+                values = parse_col_values(when[col], item)
+            else:
+                values = parse_col_values(then, item)
+
+        assert isinstance(values, list)
+        for value in values:
+            assert isinstance(value, (str, unicode, type(None)))
+        all_kinds.extend(values)
+
+    # if there's no else statement, then the fall-through default is None
+    if not has_else and None not in all_kinds:
+        all_kinds.append(None)
 
     return all_kinds
 
@@ -162,52 +188,244 @@ def parse_start_zoom(expr):
     return start_zoom
 
 
+_RETURN_VALUES = {
+    'mz_building_kind_detail': [
+        None,
+        'abandoned',
+        'administrative',
+        'agricultural',
+        'airport',
+        'allotment_house',
+        'apartments',
+        'arbour',
+        'bank',
+        'barn',
+        'basilica',
+        'beach_hut',
+        'bell_tower',
+        'boathouse',
+        'brewery',
+        'bridge',
+        'bungalow',
+        'bunker',
+        'cabin',
+        'carport',
+        'castle',
+        'cathedral',
+        'chapel',
+        'chimney',
+        'church',
+        'civic',
+        'clinic',
+        'clubhouse',
+        'collapsed',
+        'college',
+        'commercial',
+        'construction',
+        'container',
+        'convent',
+        'cowshed',
+        'dam',
+        'damaged',
+        'depot',
+        'destroyed',
+        'detached',
+        'disused',
+        'dormitory',
+        'duplex',
+        'factory',
+        'farm',
+        'farm_auxiliary',
+        'fire_station',
+        'garage',
+        'garages',
+        'gazebo',
+        'ger',
+        'glasshouse',
+        'government',
+        'grandstand',
+        'greenhouse',
+        'hangar',
+        'healthcare',
+        'hermitage',
+        'hospital',
+        'hotel',
+        'house',
+        'houseboat',
+        'hut',
+        'industrial',
+        'kindergarten',
+        'kiosk',
+        'library',
+        'mall',
+        'manor',
+        'manufacture',
+        'mixed_use',
+        'mobile_home',
+        'monastery',
+        'mortuary',
+        'mosque',
+        'museum',
+        'office',
+        'outbuilding',
+        'parking',
+        'pavilion',
+        'power',
+        'prison',
+        'proposed',
+        'pub',
+        'public',
+        'residential',
+        'restaurant',
+        'retail',
+        'roof',
+        'ruin',
+        'ruins',
+        'school',
+        'semidetached_house',
+        'service',
+        'shed',
+        'shelter',
+        'shop',
+        'shrine',
+        'silo',
+        'slurry_tank',
+        'stable',
+        'stadium',
+        'static_caravan',
+        'storage',
+        'storage_tank',
+        'store',
+        'substation',
+        'summer_cottage',
+        'summer_house',
+        'supermarket',
+        'synagogue',
+        'tank',
+        'temple',
+        'terrace',
+        'tower',
+        'train_station',
+        'transformer_tower',
+        'transportation',
+        'university',
+        'utility',
+        'veranda',
+        'warehouse',
+        'wayside_shrine',
+        'works',
+    ],
+    'mz_building_part_kind_detail': [
+        None,
+        'arch',
+        'balcony',
+        'base',
+        'column',
+        'door',
+        'elevator',
+        'entrance',
+        'floor',
+        'hall',
+        'main',
+        'passageway',
+        'pillar',
+        'porch',
+        'ramp',
+        'roof',
+        'room',
+        'steps',
+        'stilobate',
+        'tier',
+        'tower',
+        'verticalpassage',
+        'wall',
+        'window',
+    ],
+}
+
+
+def all_possible_return_values_of(func):
+    return _RETURN_VALUES[func]
+
+
 # need this to pass into the CSVMatcher, which expects a Shapely geometry.
 FakeShape = namedtuple('FakeShape', 'type')
 
 
-def parse_item(layer_name, item, sort_rank):
+def parse_col_values(col, item):
+    if isinstance(col, (str, unicode)):
+        all_kinds = [col]
+
+    elif col is None:
+        all_kinds = [None]
+
+    elif isinstance(col, list):
+        for c in col:
+            assert isinstance(c, (str, unicode))
+
+        all_kinds = col
+
+    elif isinstance(col, dict):
+        if col.keys() == ['col']:
+            all_kinds = parse_filter_for_col(col['col'], item)
+
+        elif col.keys() == ['case']:
+            all_kinds = parse_case_for_kinds(col['case'], item)
+
+        elif col.keys() == ['call']:
+            all_kinds = all_possible_return_values_of(col['call']['func'])
+
+        else:
+            raise ValueError("Don't understand dict column with keys %r in %r"
+                             % (col.keys(), col))
+
+    else:
+        raise ValueError("Don't understand column %s in %r" % (type(col), col))
+
+    return all_kinds
+
+
+def parse_item(layer_name, item, sort_rank, include_kind_detail):
     kind = item['output'].get('kind')
     if not kind:
         return {}
 
-    if isinstance(kind, (str, unicode)):
-        all_kinds = [kind]
+    all_kinds = parse_col_values(kind, item)
 
-    elif isinstance(kind, dict):
-        if kind.keys() == ['col']:
-            all_kinds = parse_filter_for_col(kind['col'], item['filter'])
-
-        elif kind.keys() == ['case']:
-            all_kinds = parse_case_for_kinds(kind['case'])
-
-        else:
-            raise ValueError("Don't understand dict kind with keys %r in %r"
-                             % (kind.keys(), kind))
-
+    kind_detail = item['output'].get('kind_detail')
+    if kind_detail:
+        kind_details = parse_col_values(kind_detail, item)
     else:
-        raise ValueError("Don't understand kind %s in %r" % (type(kind), kind))
+        kind_details = [None]
 
     values = {}
     for k in all_kinds:
-        key = KindKey(layer_name, k)
+        for kind_detail in kind_details:
+            key = KindKey(layer_name, k, kind_detail)
 
-        # we need to fake up some of this data, so the sort ranks might not be
-        # exactly correct...
-        shape = FakeShape(None)
-        props = {'kind': k}
-        zoom = 16
-        result = sort_rank(shape, props, zoom)
-        if result is None:
-            sort_rank_val = None
-        else:
-            sort_rank_key, sort_rank_val = result
-            assert sort_rank_key == 'sort_rank'
-            sort_rank_val = int(sort_rank_val)
+            if not isinstance(k, (str, unicode)):
+                import pdb; pdb.set_trace()
+            assert isinstance(k, (str, unicode))
+            if not isinstance(kind_detail, (str, unicode, type(None))):
+                import pdb; pdb.set_trace()
+            assert isinstance(kind_detail, (str, unicode, type(None)))
 
-        info = KindInfo(parse_start_zoom(item['min_zoom']), sort_rank_val)
+            # we need to fake up some of this data, so the sort ranks might
+            # not be exactly correct...
+            shape = FakeShape(None)
+            props = {'kind': k, 'kind_detail': kind_detail}
+            zoom = 16
+            result = sort_rank(shape, props, zoom)
+            if result is None:
+                sort_rank_val = None
+            else:
+                sort_rank_key, sort_rank_val = result
+                assert sort_rank_key == 'sort_rank'
+                sort_rank_val = int(sort_rank_val)
 
-        values[key] = info
+            info = KindInfo(parse_start_zoom(item['min_zoom']), sort_rank_val)
+
+            values[key] = info
 
     return values
 
@@ -224,7 +442,7 @@ def no_matcher(shape, props, zoom):
     return None
 
 
-def parse_all_kinds(yaml_path, sort_rank_path):
+def parse_all_kinds(yaml_path, sort_rank_path, include_kind_detail):
     from glob import glob
     from os.path import join, split, exists
     from yaml import load as yaml_load
@@ -247,7 +465,8 @@ def parse_all_kinds(yaml_path, sort_rank_path):
                 sort_rank = CSVMatcher(fh)
 
         for item in yaml_data['filters']:
-            kinds = parse_item(layer_name, item, sort_rank)
+            kinds = parse_item(layer_name, item, sort_rank,
+                               include_kind_detail)
             for k, v in kinds.iteritems():
                 prev_v = all_kinds.get(k)
                 if prev_v is not None:
@@ -270,6 +489,8 @@ if __name__ == '__main__':
                         default=yaml_path)
     parser.add_argument('--sort-rank-path', help='Directory containing sort '
                         'rank CSVs.', default=sort_rank_path)
+    parser.add_argument('--kind-detail', help='Include kind_detail.',
+                        action='store_true', default=False)
     args = parser.parse_args()
 
     if args.yaml_path:
@@ -278,10 +499,17 @@ if __name__ == '__main__':
     if args.sort_rank_path:
         sort_rank_path = args.sort_rank_path
 
-    all_kinds = parse_all_kinds(yaml_path, sort_rank_path)
+    all_kinds = parse_all_kinds(yaml_path, sort_rank_path, args.kind_detail)
 
-    print "%12s %30s %8s %s" % ("LAYER", "KIND", "MIN_ZOOM", "SORT_RANK")
+    row_fmt = "%(layer)12s %(kind)30s %(min_zoom)8s %(sort_rank)s"
+    if args.kind_detail:
+        row_fmt = "%(layer)12s %(kind)30s %(kind_detail)30s " \
+                  "%(min_zoom)8s %(sort_rank)s"
+
+    print row_fmt % dict(layer="LAYER", kind="KIND", kind_detail="KIND_DETAIL",
+                         min_zoom="MIN_ZOOM", sort_rank="SORT_RANK")
     for k in sorted(all_kinds):
         v = all_kinds[k]
-        print "%12s %30s %8s %r" % (k.layer, k.kind, repr(v.min_zoom),
-                                    v.sort_rank)
+        print row_fmt % \
+            dict(layer=k.layer, kind=k.kind, kind_detail=k.kind_detail,
+                 min_zoom=repr(v.min_zoom), sort_rank=repr(v.sort_rank))

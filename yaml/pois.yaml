@@ -216,6 +216,38 @@ global:
         - Wildlife Management
         - Wildlife Management Area
         - Wildlife Sanctuary
+  # whitelist of religions to use in kind_detail (do not use for plain
+  # religion tag)
+  - &religion_kind_detail
+    kind_detail:
+      case:
+        - when:
+            religion:
+              - animist
+              - bahai
+              - buddhist
+              - caodaism
+              - catholic
+              - christian
+              - confucian
+              - hindu
+              - jain
+              - jewish
+              - multifaith
+              - muslim
+              - pagan
+              - pastafarian
+              - scientologist
+              - shinto
+              - sikh
+              - spiritualist
+              - taoist
+              - tenrikyo
+              - unitarian_universalist
+              - voodoo
+              - yazidi
+              - zoroastrian
+          then: {col: religion}
   - &no_name_okay
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
@@ -734,7 +766,7 @@ filters:
             then: cemetery
           - else: grave_yard
       tier: 4
-      kind_detail: { col: religion }
+      <<: *religion_kind_detail
       denomination: { col: denomination }
   # commercial - no POI
   # cutline - no POI
