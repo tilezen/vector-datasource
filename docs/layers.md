@@ -1191,6 +1191,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
 * `waterway_fuel`
 * `wayside_cross`
+* `wetland` with `kind_detail` property.
 * `wharf` with mooring property.
 * `wilderness_hut`
 * `wildlife_park`
@@ -1250,6 +1251,10 @@ Common values include `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` buc
 #### **water_well** `kind_detail` values:
 
 Common values include: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
+
+#### Wetland `kind_detail` values
+
+The value of the OpenStreetMap `wetland` tag. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
 
 
 ## Roads (Transportation)

@@ -376,6 +376,27 @@ filters:
       <<: *output_properties
       kind: national_park
       tier: 2
+
+  ############################################################
+  # mid-tier 2 overrides
+  #
+  # the boundary=national_park appears to get used for a ton of
+  # stuff that isn't actually a national park, so we match a
+  # few things in advance which seem to be more specific.
+  ############################################################
+  - filter: {natural: wetland}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: wetland
+      kind_detail:
+        case:
+          - when: { wetland: [bog, fen, mangrove, marsh, mud, reedbed, saltern, saltmarsh, string_bog, swamp, tidalflat, wet_meadow] }
+            then: {col: wetland}
+
+  ############################################################
+  # TIER 2 (continued...)
+  ############################################################
   - filter:
       any:
         leisure: park
@@ -1073,15 +1094,6 @@ filters:
     output:
       <<: *output_properties
       kind: scrub
-  - filter: {natural: wetland}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
-    output:
-      <<: *output_properties
-      kind: wetland
-      kind_detail:
-        case:
-          - when: { wetland: [bog, fen, mangrove, marsh, mud, reedbed, saltern, saltmarsh, string_bog, swamp, tidalflat, wet_meadow] }
-            then: {col: wetland}
   - filter: {natural: park}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
