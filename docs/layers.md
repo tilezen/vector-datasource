@@ -1253,6 +1253,7 @@ Common values include `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` buc
 Common values include: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
 
 #### Wetland `kind_detail` values
+
 The value of the OpenStreetMap `wetland` tag. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
 
 
