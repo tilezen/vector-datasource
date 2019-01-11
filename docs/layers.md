@@ -1030,7 +1030,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `memorial`
 * `metal_construction`
 * `midwife`
-* `midwife`
 * `military`
 * `mineshaft`
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
