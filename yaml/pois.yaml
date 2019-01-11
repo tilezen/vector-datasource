@@ -445,6 +445,27 @@ filters:
       tier: 2
 
   ############################################################
+  # TIER 6 OVERRIDES
+  #
+  # These are things which are "more specific" than things in
+  # tier 1, so they should match first.
+  ############################################################
+  # common
+  - filter:
+      boundary:type: protected_area
+      leisure: common
+      protect_class: '5'
+      not:
+        any:
+          - operator: *us_forest_service
+          - operator: *us_parks_service
+    min_zoom: *tier6_min_zoom
+    output:
+      <<: *output_properties
+      kind: common
+      tier: 6
+
+  ############################################################
   # TIER 1
   ############################################################
   - filter:
