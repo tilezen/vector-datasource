@@ -492,6 +492,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `artwork`
 * `attraction`
 * `aviary`
+* `bare_rock`
 * `battlefield`
 * `beach` - Where the land meets the sea gradually.
 * `boatyard` - a place for building, fixing, and storing boats.
@@ -512,6 +513,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `cutting` - A lowered area of land, usually to carry a road or railway.
 * `dam` - polygon, line
 * `danger_area` - e.g: military training zones, firing ranges.
+* `desert`
 * `dike`
 * `ditch` line.
 * `dog_park`
@@ -533,11 +535,13 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `glacier`
 * `golf_course`
 * `grass`
+* `grassland`
 * `grave_yard` with `kind_detail` and `denomination` properties. 
 * `groyne`
 * `guard_rail` line.
 * `hanami`
 * `harbour`
+* `heath`
 * `hospital`
 * `industrial`
 * `kerb` line.
@@ -586,10 +590,12 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `roller_coaster`
 * `runway`
 * `rural`
+* `sand`
 * `school`
 * `scree`
 * `scrub`
 * `service_area`
+* `shingle`
 * `shipyard`
 * `snow_fence`
 * `sports_centre`
@@ -606,6 +612,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `urban_area`
 * `urban`
 * `village_green`
+* `vineyard`
 * `wall` line with `kind_detail` property.
 * `wastewater_plant`
 * `water_park`
