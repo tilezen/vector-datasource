@@ -8267,7 +8267,7 @@ def whitelist(ctx):
     for feature in features:
         _, props, _ = feature
 
-        # skip this feature if there's a where clause and it evaluates truthy.
+        # skip this feature if there's a where clause and it evaluates falsey.
         if where is not None:
             local = props.copy()
             local['zoom'] = ctx.nominal_zoom
@@ -8287,6 +8287,51 @@ def whitelist(ctx):
             else:
                 # drop the property
                 props.pop(property_name)
+
+    return None
+
+
+def remap(ctx):
+    """
+    Maps some values for a particular property to others. Similar to whitelist,
+    but won't remove the property if there's no match.
+    """
+
+    params = _Params(ctx, 'remap')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    property_name = params.required('property')
+    remap = params.optional('remap', default={}, typ=dict)
+    where = params.optional('where')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+
+        # skip this feature if there's a where clause and it evaluates falsey.
+        if where is not None:
+            local = props.copy()
+            local['zoom'] = ctx.nominal_zoom
+            if not eval(where, {}, local):
+                continue
+
+        value = props.get(property_name)
+        if value in remap:
+            # replace with replacement value
+            props[property_name] = remap[value]
 
     return None
 

@@ -335,6 +335,60 @@ post_process:
       start_zoom: 4
       properties: [barrier]
 
+  # coarsen the landuse kinds at mid & low zooms to help improve merging.
+  #
+  # do this _early_; before we assign sort_rank and to avoid inconsistency when
+  # we join (e.g: roads) onto landuse and wouldn't want the road landuse_kind to
+  # be different from the polygon in case that makes it the wrong colour.
+  #
+  # **NOTE** WE'RE CHANGING THE KINDS HERE!
+  - fn: vectordatasource.transform.remap
+    params:
+      layer: landuse
+      start_zoom: 0
+      end_zoom: 13
+      property: kind
+      # note that we don't need to remap things to themselves, e.g:
+      # kind=desert stays as-is.
+      remap:
+        # barren
+        quarry: barren
+        scree: barren
+        shingle: barren
+
+        # desert
+        bare_rock: desert
+        sand: desert
+
+        # farmland
+        allotments: farmland
+        farm: farmland
+        orchard: farmland
+        plant_nursery: farmland
+        vineyard: farmland
+
+        # forest
+        natural_wood: forest
+        wood: forest
+
+        # grassland
+        grass: grassland
+        heath: grassland
+        meadow: grassland
+        village_green: grassland
+
+        # urban_area
+        cemetery: urban_area
+        commercial: urban_area
+        industrial: urban_area
+        recreation_ground: urban_area
+        residential: urban_area
+        retail: urban_area
+        school: urban_area
+
+        # wetland
+        mud: wetland
+
   # sort key
   - fn: vectordatasource.transform.csv_match_properties
     resources:
