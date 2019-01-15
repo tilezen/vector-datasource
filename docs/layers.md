@@ -665,7 +665,7 @@ At zoom 12 and below, we consolidate some landuse kinds to reduce the amount of 
 
 The current mappings are:
 
-* `allotments` -> `farmland`
+* `allotments` -> `urban_area`
 * `bare_rock` -> `desert`
 * `cemetery` -> `urban_area`
 * `commercial` -> `urban_area`
@@ -686,7 +686,7 @@ The current mappings are:
 * `school` -> `urban_area`
 * `scree` -> `barren`
 * `shingle` -> `barren`
-* `village_green` -> `grassland`
+* `village_green` -> `urban_area`
 * `vineyard` -> `farmland`
 * `wood` -> `forest`
 

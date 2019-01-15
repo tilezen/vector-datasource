@@ -27,8 +27,8 @@ class LanduseTest(FixtureTest):
     def test_grassland_landuse_grass(self):
         self._check_remap({'landuse': 'grass'}, 'grassland')
 
-    def test_grassland_landuse_village_green(self):
-        self._check_remap({'landuse': 'village_green'}, 'grassland')
+    def test_urban_area_landuse_village_green(self):
+        self._check_remap({'landuse': 'village_green'}, 'urban_area')
 
     def test_grassland_natural_grassland(self):
         self._check_remap({'natural': 'grassland'}, 'grassland')
@@ -51,8 +51,8 @@ class LanduseTest(FixtureTest):
     def test_farmland_landuse_plant_nursery(self):
         self._check_remap({'landuse': 'plant_nursery'}, 'farmland')
 
-    def test_farmland_landuse_allotments(self):
-        self._check_remap({'landuse': 'allotments'}, 'farmland')
+    def test_urban_area_landuse_allotments(self):
+        self._check_remap({'landuse': 'allotments'}, 'urban_area')
 
     def test_scrub_natural_scrub(self):
         self._check_remap({'natural': 'scrub'}, 'scrub')

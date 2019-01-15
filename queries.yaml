@@ -361,7 +361,6 @@ post_process:
         sand: desert
 
         # farmland
-        allotments: farmland
         farm: farmland
         orchard: farmland
         plant_nursery: farmland
@@ -375,9 +374,9 @@ post_process:
         grass: grassland
         heath: grassland
         meadow: grassland
-        village_green: grassland
 
         # urban_area
+        allotments: urban_area
         cemetery: urban_area
         commercial: urban_area
         industrial: urban_area
@@ -385,6 +384,7 @@ post_process:
         residential: urban_area
         retail: urban_area
         school: urban_area
+        village_green: urban_area
 
         # wetland
         mud: wetland
