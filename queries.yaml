@@ -1387,7 +1387,7 @@ post_process:
   - fn: vectordatasource.transform.drop_small_inners
     params:
       end_zoom: 14
-      source_layers: [landuse, water]
+      source_layers: [water]
       pixel_area: 0.1
 
   # drop this layer before simplify_and_clip - we don't want it in the output,
@@ -1421,12 +1421,64 @@ post_process:
       where: >-
         landuse_kind in ('residential', 'industrial')
 
-  # merge any remaining polygons by their properties.
+  # drop osm_relation tag, used to indicate that shapes came from OSM relations.
+  # however, it interferes with merging.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: landuse
+      start_zoom: 4
+      end_zoom: 15
+      properties:
+        - osm_relation
+
+  # drop names on landuse areas at mid and low zooms. it interferes with
+  # merging, and anything that we would have labelled would have become a
+  # label by now anyway (see handle_label_placement around line 716-ish).
+  - fn: vectordatasource.transform.drop_names
+    params:
+      source_layer: landuse
+      start_zoom: 4
+      end_zoom: 13
+
+  # drop small inners before merge, as not having to consider these can speed up
+  # the buffer & clipping algorithms.
+  - fn: vectordatasource.transform.drop_small_inners
+    params:
+      end_zoom: 15
+      source_layers: [landuse]
+      pixel_area: 0.8
+
+  # merge at mid and low zooms, buffering to try and eliminate small gaps
+  # between adjacent polygons.
   - fn: vectordatasource.transform.merge_polygon_features
     params:
       source_layer: landuse
       start_zoom: 4
       end_zoom: 13
+      merge_min_zooms: true
+      buffer_merge: true
+      # this formula seems to give a good balance between larger values, which
+      # merge more but can merge everything into a blob if too large, and small
+      # values which retain detail.
+      buffer_merge_tolerance: >-
+        min(150, 0.6 * tolerance_for_zoom)
+
+  # merge at high-ish zooms without buffering - but we still want to merge
+  # multiple small polygons together to get file size savings.
+  - fn: vectordatasource.transform.merge_polygon_features
+    params:
+      source_layer: landuse
+      start_zoom: 13
+      end_zoom: 15
+      merge_min_zooms: true
+
+  # drop small inners after merge, as small inners could have been introduced
+  # by the merge algorithm.
+  - fn: vectordatasource.transform.drop_small_inners
+    params:
+      end_zoom: 15
+      source_layers: [landuse]
+      pixel_area: 0.8
 
   # first, merge linestrings together where the properties are the same, and
   # make sure we merge across junctions. this will create a set of non-simple

@@ -971,7 +971,7 @@ class MergeBuildingTest(unittest.TestCase):
 
     def test_merge_buildings(self):
         from shapely.wkb import loads
-        from vectordatasource.transform import _merge_buildings
+        from vectordatasource.transform import _merge_polygons_with_buffer
 
         mp = loads(
             '01060000000200000001030000000100000005000000295C8FC2F57A9040'
@@ -983,7 +983,7 @@ class MergeBuildingTest(unittest.TestCase):
             '8FC2F528439040713D0A070C6B5941'.decode('hex')
         )
         tolerance = 1.9109257071294063
-        result = _merge_buildings(mp, tolerance)
+        result = _merge_polygons_with_buffer(mp, tolerance)
 
         self.assertEquals(len(result), 1)
         self.assertTrue(result[0].is_valid)
