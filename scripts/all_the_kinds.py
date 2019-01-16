@@ -403,11 +403,7 @@ def parse_item(layer_name, item, sort_rank, include_kind_detail):
         for kind_detail in kind_details:
             key = KindKey(layer_name, k, kind_detail)
 
-            if not isinstance(k, (str, unicode)):
-                import pdb; pdb.set_trace()
             assert isinstance(k, (str, unicode))
-            if not isinstance(kind_detail, (str, unicode, type(None))):
-                import pdb; pdb.set_trace()
             assert isinstance(kind_detail, (str, unicode, type(None)))
 
             # we need to fake up some of this data, so the sort ranks might
