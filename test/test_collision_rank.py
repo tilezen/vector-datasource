@@ -51,3 +51,36 @@ class CollisionRankTest(TestCase):
             rank = ranker((shape, props, fid))
 
             self.assertEqual(rank, expected_rank)
+
+    def test_reserved_blocks(self):
+        # test that if we overflow the reserved block by having too many items
+        # in the preceding section, then the code fails with an error.
+        from vectordatasource.collision import CollisionRanker
+
+        with self.assertRaises(AssertionError):
+            CollisionRanker([
+                {'foo': 'bar'},
+                {'baz': 'bat'},
+                {'_reserved': {'from': 2, 'to': 10}},
+            ])
+
+    def test_skips_reserved_blocks(self):
+        # test that we skip reserved blocks in the numbering
+        from vectordatasource.collision import CollisionRanker
+
+        ranker = CollisionRanker([
+            # should be 1
+            {'kind': 'foo'},
+            # should skip 2-9 as unused
+            # should skip 10-20 as reserved
+            {'_reserved': {'from': 10, 'to': 20}},
+            # should be 21
+            {'kind': 'bar'},
+        ])
+
+        shape = None
+        props = {'kind': 'bar'}
+        fid = 1
+        rank = ranker((shape, props, fid))
+
+        self.assertEqual(rank, 21)
