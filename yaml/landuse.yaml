@@ -1302,7 +1302,24 @@ filters:
     output:
       <<: *output_properties
       kind: wall
-      kind_detail: { col: wall }
+      kind_detail:
+        case:
+          - when:
+              wall:
+                - dry_stone
+                - noise_barrier
+                - brick
+                - stone
+                - pise
+                - castle_wall
+                - seawall
+                - jersey_barrier
+                - flood_wall
+                - concrete
+                - gabion
+            then: { col: wall }
+          - when: {wall: [drystone, stone_wall]}
+            then: dry_stone
   - filter: {barrier: [kerb, guard_rail, ditch]}
     min_zoom: 16
     output:
@@ -1364,7 +1381,17 @@ filters:
     output:
       <<: *output_properties
       kind: crane
-      kind_detail: {col: "crane:type"}
+      kind_detail:
+        case:
+          - when:
+              "crane:type":
+                - portal_crane
+                - gantry_crane
+                - travel_lift
+                - floor-mounted_crane
+                - shiploader
+                - tower_crane
+            then: {col: "crane:type"}
   - filter:
       landuse:
         - shipyard
