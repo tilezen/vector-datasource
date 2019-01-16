@@ -3221,9 +3221,10 @@ def _merge_polygons(polygon_shapes):
     return [result]
 
 
-def _merge_buildings(polygon_shapes, tolerance):
+def _merge_polygons_with_buffer(polygon_shapes, tolerance):
     """
-    Merges building polygons together.
+    Merges polygons together with a buffer operation to blend together
+    adjacent polygons. Originally designed for buildings.
 
     It does this by first merging the polygons into a single MultiPolygon and
     then dilating or buffering the polygons by a small amount (tolerance). The
@@ -3426,7 +3427,8 @@ def _merge_features_by_property(
         update_props_pre_fn=None,
         update_props_post_fn=None,
         max_merged_features=None,
-        merge_shape_fn=None):
+        merge_shape_fn=None,
+        merge_props_fn=None):
 
     assert geom_dim in (_POLYGON_DIMENSION, _LINE_DIMENSION)
     if merge_shape_fn is not None:
@@ -3456,10 +3458,12 @@ def _merge_features_by_property(
 
         frozen_props = _freeze(props)
         if frozen_props in features_by_property:
-            features_by_property[frozen_props][-1].append(shape)
+            record = features_by_property[frozen_props]
+            record[-1].append(shape)
+            record[-2].append(orig_props)
         else:
             features_by_property[frozen_props] = (
-                (fid, p_id, orig_props, [shape]))
+                (fid, p_id, [orig_props], [shape]))
 
     new_features = []
     for frozen_props, (fid, p_id, orig_props, shapes) in \
@@ -3467,7 +3471,7 @@ def _merge_features_by_property(
 
         if len(shapes) == 1:
             # restore original properties if we only have a single shape
-            new_features.append((shapes[0], orig_props, fid))
+            new_features.append((shapes[0], orig_props[0], fid))
             continue
 
         num_shapes = len(shapes)
@@ -3487,8 +3491,11 @@ def _merge_features_by_property(
             if merged_shape is None or merged_shape.is_empty:
                 continue
 
-            # thaw the frozen properties to use in the new feature.
-            props = _thaw(frozen_props)
+            if merge_props_fn is None:
+                # thaw the frozen properties to use in the new feature.
+                props = _thaw(frozen_props)
+            else:
+                props = merge_props_fn(orig_props)
 
             if update_props_post_fn:
                 props = update_props_post_fn((merged_shape, props, fid))
@@ -3586,7 +3593,7 @@ def merge_building_features(ctx):
         return props
 
     def _merge_polygons(shapes):
-        return _merge_buildings(shapes, tolerance)
+        return _merge_polygons_with_buffer(shapes, tolerance)
 
     layer['features'] = _merge_features_by_property(
         layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
@@ -3607,6 +3614,9 @@ def merge_polygon_features(ctx):
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
+    merge_min_zooms = ctx.params.get('merge_min_zooms', False)
+    buffer_merge = ctx.params.get('buffer_merge', False)
+    buffer_merge_tolerance = ctx.params.get('buffer_merge_tolerance')
 
     assert source_layer, 'merge_polygon_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -3618,9 +3628,19 @@ def merge_polygon_features(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
+    tfz = tolerance_for_zoom(zoom)
+    if buffer_merge_tolerance:
+        tolerance = eval(buffer_merge_tolerance, {}, {
+            'tolerance_for_zoom': tfz,
+        })
+    else:
+        tolerance = tfz
+
     def _props_pre((shape, props, fid)):
         # drop area while merging, as we'll recalculate after.
         props.pop('area', None)
+        if merge_min_zooms:
+            props.pop('min_zoom', None)
         return props
 
     def _props_post((merged_shape, props, fid)):
@@ -3629,8 +3649,28 @@ def merge_polygon_features(ctx):
         props['area'] = area
         return props
 
+    def _props_merge(all_props):
+        merged_props = None
+        for props in all_props:
+            if merged_props is None:
+                merged_props = props.copy()
+            else:
+                min_zoom = props.get('min_zoom')
+                merged_min_zoom = merged_props.get('min_zoom')
+                if min_zoom and (merged_min_zoom is None or
+                                 min_zoom < merged_min_zoom):
+                    merged_props['min_zoom'] = min_zoom
+        return merged_props
+
+    def _merge_polygons(shapes):
+        return _merge_polygons_with_buffer(shapes, tolerance)
+
+    merge_props_fn = _props_merge if merge_min_zooms else None
+    merge_shape_fn = _merge_polygons if buffer_merge else None
+
     layer['features'] = _merge_features_by_property(
-        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post)
+        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
+        merge_props_fn=merge_props_fn, merge_shape_fn=merge_shape_fn)
     return layer
 
 
