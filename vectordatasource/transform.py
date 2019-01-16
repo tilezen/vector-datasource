@@ -8408,3 +8408,48 @@ def clamp_min_zoom(ctx):
                 props['min_zoom'] = min_val
 
     return None
+
+
+def load_collision_ranker(fh):
+    import yaml
+    from vectordatasource.collision import CollisionRanker
+
+    data = yaml.load(fh)
+    assert isinstance(data, list)
+
+    return CollisionRanker(data)
+
+
+def add_collision_rank(ctx):
+    """
+    Add or update a collision_rank property on features in the given layers.
+    The collision rank is looked up from a YAML file consisting of a list of
+    filters (same syntax as in kind/min_zoom YAML) and "_reserved" blocks.
+    Collision rank indices are automatically assigned based on where in the
+    list a matching filter is found.
+    """
+
+    feature_layers = ctx.feature_layers
+    zoom = ctx.nominal_zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    ranker = ctx.resources.get('ranker')
+
+    assert ranker, 'add_collision_rank: missing ranker resource'
+
+    if zoom < start_zoom:
+        return None
+
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    for layer in feature_layers:
+        layer_name = layer['layer_datum']['name']
+        for shape, props, fid in layer['features']:
+            props_with_layer = props.copy()
+            props_with_layer['layer'] = layer_name
+            rank = ranker((shape, props_with_layer, fid))
+            if rank is not None:
+                props['collision_rank'] = rank
+
+    return None

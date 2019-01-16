@@ -1,0 +1,6 @@
+- layer: earth
+  kind: continent
+- layer: water
+  kind: ocean
+- layer: places
+  kind: country

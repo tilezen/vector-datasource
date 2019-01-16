@@ -1592,3 +1592,11 @@ post_process:
   - fn: vectordatasource.transform.max_zoom_filter
     params:
       layers: [places]
+
+  # collision rank
+  - fn: vectordatasource.transform.add_collision_rank
+    resources:
+      ranker:
+        type: file
+        init_fn: vectordatasource.transform.load_collision_ranker
+        path: spreadsheets/collision_rank.yaml
