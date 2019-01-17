@@ -226,6 +226,18 @@ class ItemList(object):
                     assert fid not in items
                     items[fid] = rank
 
+        self.test_instance.assertTrue(items, msg="Expected some items, but "
+                                      "received an empty tile.")
+        # note that we only get inside this "if" statement if we're in
+        # "download only" mode, as it short-circuits the assertions.
+        # otherwise a genuinely empty tile would have triggered the assertion
+        # already.
+        #
+        # i'm really looking forward to the day when we remove all
+        # non-generative fixtures, and we can remove this hack too!
+        if not items:
+            return
+
         rank = 0
         for item_fid in order:
             self.test_instance.assertTrue(

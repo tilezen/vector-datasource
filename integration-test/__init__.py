@@ -1265,8 +1265,11 @@ def expand_bbox(bounds, padding):
 
 class EmptyContext(object):
 
+    def __init__(self, factory=list):
+        self.factory = factory
+
     def __enter__(self):
-        return []
+        return self.factory()
 
     def __exit__(self, type, value, traceback):
         pass
@@ -1388,7 +1391,7 @@ class DownloadOnlyInstance(object):
         return EmptyContext()
 
     def tile(self, z, x, y):
-        return EmptyContext()
+        return EmptyContext(dict)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         return EmptyContext()
@@ -1443,7 +1446,7 @@ class CollectTilesInstance(object):
 
     def tile(self, z, x, y):
         self._add_tile(z, x, y)
-        return EmptyContext()
+        return EmptyContext(dict)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         self._add_tile(z, x, y)
