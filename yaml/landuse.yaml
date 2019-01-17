@@ -1357,3 +1357,17 @@ filters:
     output:
       <<: *output_properties
       kind: quay
+
+  # Low Emissions Zones
+  - filter:
+      any:
+        - {boundary: low_emission_zone}
+        # NOTE: this seems to be an outdated tag, but still used on 15 objects
+        # at the time of writing, including the London "Ultra Low Emission Zone"
+        # -- although this won't show up as it hasn't been mapped enough to form
+        # a closed polygon yet.
+        - {type: LEZ}
+    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 6.5 ] } } }
+    output:
+      <<: *output_properties
+      kind: low_emission_zone
