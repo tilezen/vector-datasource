@@ -402,8 +402,6 @@ def parse_item(layer_name, item, sort_rank, include_kind_detail):
     values = {}
     for k in all_kinds:
         for kind_detail in kind_details:
-            key = KindKey(layer_name, k, kind_detail)
-
             assert isinstance(k, (str, unicode))
             assert isinstance(kind_detail, (str, unicode, type(None)))
 
@@ -422,7 +420,17 @@ def parse_item(layer_name, item, sort_rank, include_kind_detail):
 
             info = KindInfo(parse_start_zoom(item['min_zoom']), sort_rank_val)
 
-            values[key] = info
+            kd = kind_detail if include_kind_detail else None
+            key = KindKey(layer_name, k, kd)
+            val = values.get(key)
+
+            if include_kind_detail or val is None:
+                values[key] = info
+
+            else:
+                # if we are not including kind detail, still need to aggregate
+                # all the different kind detail min zooms and sort ranks.
+                values[key] = merge_info(val, info)
 
     return values
 
