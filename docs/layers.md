@@ -493,6 +493,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `attraction`
 * `aviary`
 * `bare_rock`
+* `barren` - Only used at mid and low zooms, see "Low zoom consolidation" below.
 * `battlefield`
 * `beach` - Where the land meets the sea gradually.
 * `boatyard` - a place for building, fixing, and storing boats.
@@ -609,7 +610,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `tower`
 * `trail_riding_station`
 * `university`
-* `urban_area`
+* `urban_area` - Only used at mid and low zooms, see "Low zoom consolidation" below.
 * `urban`
 * `village_green`
 * `vineyard`
@@ -657,6 +658,37 @@ The value of the OpenStreetMap `wetland` tag. If available, value will be one of
 #### Orchard `kind_detail` values
 
 The tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
+
+### Low zoom consolidation
+
+At zoom 12 and below, we consolidate some landuse kinds to reduce the amount of superfluous detail and give adjacent landuse areas a better chance to merge together. This merging allows them to form an appropriately-sized polygon for the zoom level, and avoid the "billion colour patchwork" that comes from keeping each distinct feature.
+
+The current mappings are:
+
+* `allotments` -> `urban_area`
+* `bare_rock` -> `desert`
+* `cemetery` -> `urban_area`
+* `commercial` -> `urban_area`
+* `farm` -> `farmland`
+* `grass` -> `grassland`
+* `heath` -> `grassland`
+* `industrial` -> `urban_area`
+* `meadow` -> `grassland`
+* `mud` -> `wetland`
+* `natural_wood` -> `forest`
+* `orchard` -> `farmland`
+* `plant_nursery` -> `farmland`
+* `quarry` -> `barren`
+* `recreation_ground` -> `urban_area`
+* `residential` -> `urban_area`
+* `retail` -> `urban_area`
+* `sand` -> `desert`
+* `school` -> `urban_area`
+* `scree` -> `barren`
+* `shingle` -> `barren`
+* `village_green` -> `urban_area`
+* `vineyard` -> `farmland`
+* `wood` -> `forest`
 
 
 ## Places
