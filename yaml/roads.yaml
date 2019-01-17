@@ -27,7 +27,10 @@ global:
       motor_vehicle: {col: tags->motor_vehicle}
       access: {col: access}
       bicycle: {col: bicycle}
-      hgv: {col: hgv}
+      hgv:
+        case:
+          - when: {hgv: [agricultural, delivery, designated, destination, local, 'no']}
+            then: {col: hgv}
       service: {col: service}
       sport: {col: sport}
       surface:

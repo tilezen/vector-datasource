@@ -50,3 +50,23 @@ class HgvRoadPropertiesTest(FixtureTest):
                     'kind_detail': 'unclassified',
                     'hgv': value,
                 })
+
+    def test_hgv_whitelist(self):
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'highway': 'unclassified',
+                'hgv': 'not_a_whitelisted_value',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'kind': 'minor_road',
+                'kind_detail': 'unclassified',
+                'hgv': type(None),
+            })
