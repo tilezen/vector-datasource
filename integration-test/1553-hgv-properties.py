@@ -2,7 +2,7 @@
 from . import FixtureTest
 
 
-class HgvTest(FixtureTest):
+class LowEmissionZoneTest(FixtureTest):
 
     def test_low_emission_zone_way(self):
         import dsl
@@ -25,3 +25,28 @@ class HgvTest(FixtureTest):
                 'min_zoom': lambda z: 12 <= z < 13,
                 'kind': 'low_emission_zone',
             })
+
+
+class HgvRoadPropertiesTest(FixtureTest):
+
+    def test_hgv_access(self):
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        for value in ('no', 'designated', 'destination', 'delivery', 'local',
+                      'agricultural'):
+            self.generate_fixtures(
+                dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                    'highway': 'unclassified',
+                    'hgv': value,
+                    'source': 'openstreetmap.org',
+                }),
+            )
+
+            self.assert_has_feature(
+                z, x, y, 'roads', {
+                    'kind': 'minor_road',
+                    'kind_detail': 'unclassified',
+                    'hgv': value,
+                })

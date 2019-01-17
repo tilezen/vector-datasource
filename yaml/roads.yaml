@@ -27,6 +27,7 @@ global:
       motor_vehicle: {col: tags->motor_vehicle}
       access: {col: access}
       bicycle: {col: bicycle}
+      hgv: {col: hgv}
       service: {col: service}
       sport: {col: sport}
       surface:
