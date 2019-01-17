@@ -177,6 +177,39 @@ global:
       case:
         - when: {leaf_type: [broadleaved, leafless, mixed, needleleaved]}
           then: {col: leaf_type}
+  # whitelist of religions to use in kind_detail (do not use for plain
+  # religion tag)
+  - &religion_kind_detail
+    kind_detail:
+      case:
+        - when:
+            religion:
+              - animist
+              - bahai
+              - buddhist
+              - caodaism
+              - catholic
+              - christian
+              - confucian
+              - hindu
+              - jain
+              - jewish
+              - multifaith
+              - muslim
+              - pagan
+              - pastafarian
+              - scientologist
+              - shinto
+              - sikh
+              - spiritualist
+              - taoist
+              - tenrikyo
+              - unitarian_universalist
+              - voodoo
+              - yazidi
+              - zoroastrian
+          then: {col: religion}
+
 filters:
   - filter: {meta.source: ne}
     min_zoom: 4
@@ -190,47 +223,47 @@ filters:
   # and should override more generic tags below, but these
   # aren't in any tier.
   ############################################################
-  - filter: {tags->zoo: enclosure}
+  - filter: {zoo: enclosure}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: enclosure
-  - filter: {tags->zoo: petting_zoo}
+  - filter: {zoo: petting_zoo}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: petting_zoo
-  - filter: {tags->zoo: aviary}
+  - filter: {zoo: aviary}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: aviary
-  - filter: {tags->attraction: animal}
+  - filter: {attraction: animal}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: animal
-  - filter: {tags->attraction: water_slide}
+  - filter: {attraction: water_slide}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: water_slide
-  - filter: {tags->attraction: roller_coaster}
+  - filter: {attraction: roller_coaster}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: roller_coaster
-  - filter: {tags->attraction: summer_toboggan}
+  - filter: {attraction: summer_toboggan}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: summer_toboggan
-  - filter: {tags->attraction: carousel}
+  - filter: {attraction: carousel}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: carousel
-  - filter: {tags->attraction: amusement_ride}
+  - filter: {attraction: amusement_ride}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
       <<: *output_properties
@@ -638,7 +671,7 @@ filters:
             then: cemetery
           - else: grave_yard
       tier: 4
-      kind_detail: { col: religion }
+      <<: *religion_kind_detail
       denomination: { col: denomination }
   # commercial
   - filter: {landuse: commercial}
@@ -1269,7 +1302,24 @@ filters:
     output:
       <<: *output_properties
       kind: wall
-      kind_detail: { col: wall }
+      kind_detail:
+        case:
+          - when:
+              wall:
+                - dry_stone
+                - noise_barrier
+                - brick
+                - stone
+                - pise
+                - castle_wall
+                - seawall
+                - jersey_barrier
+                - flood_wall
+                - concrete
+                - gabion
+            then: { col: wall }
+          - when: {wall: [drystone, stone_wall]}
+            then: dry_stone
   - filter: {barrier: [kerb, guard_rail, ditch]}
     min_zoom: 16
     output:
@@ -1331,7 +1381,17 @@ filters:
     output:
       <<: *output_properties
       kind: crane
-      kind_detail: {col: "crane:type"}
+      kind_detail:
+        case:
+          - when:
+              "crane:type":
+                - portal_crane
+                - gantry_crane
+                - travel_lift
+                - floor-mounted_crane
+                - shiploader
+                - tower_crane
+            then: {col: "crane:type"}
   - filter:
       landuse:
         - shipyard
