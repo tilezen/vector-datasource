@@ -8453,3 +8453,72 @@ def clamp_min_zoom(ctx):
                 props['min_zoom'] = min_val
 
     return None
+
+
+def add_vehicle_restrictions(shape, props, fid, zoom):
+    """
+    Parse the maximum height, weight, length, etc... restrictions on vehicles
+    and create the `hgv_restriction` and `hgv_restriction_shield_text`.
+    """
+
+    from math import floor
+
+    def _one_dp(val, unit):
+        deci = int(floor(10 * val))
+        if deci % 10 == 0:
+            return "%d%s" % (deci / 10, unit)
+        return "%.1f%s" % (0.1 * deci, unit)
+
+    def _metres(val):
+        # parse metres or feet and inches, return cm
+        metres = _to_float_meters(val)
+        if metres:
+            return True, _one_dp(metres, 'm')
+        return False, None
+
+    def _tonnes(val):
+        tonnes = to_float(val)
+        if tonnes:
+            return True, _one_dp(tonnes, 't')
+        return False, None
+
+    def _false(val):
+        return val == 'no', None
+
+    Restriction = namedtuple('Restriction', 'kind parse')
+
+    restrictions = {
+        'maxwidth': Restriction('width', _metres),
+        'maxlength': Restriction('length', _metres),
+        'maxheight': Restriction('height', _metres),
+        'maxweight': Restriction('weight', _tonnes),
+        'maxaxleload': Restriction('wpa', _tonnes),
+        'hazmat': Restriction('hazmat', _false),
+    }
+
+    hgv_restriction = None
+    hgv_restriction_shield_text = None
+
+    for osm_key, restriction in restrictions.items():
+        osm_val = props.pop(osm_key, None)
+        if osm_val is None:
+            continue
+
+        restricted, shield_text = restriction.parse(osm_val)
+        if not restricted:
+            continue
+
+        if hgv_restriction is None:
+            hgv_restriction = restriction.kind
+            hgv_restriction_shield_text = shield_text
+
+        else:
+            hgv_restriction = 'multiple'
+            hgv_restriction_shield_text = None
+
+    if hgv_restriction:
+        props['hgv_restriction'] = hgv_restriction
+    if hgv_restriction_shield_text:
+        props['hgv_restriction_shield_text'] = hgv_restriction_shield_text
+
+    return shape, props, fid
