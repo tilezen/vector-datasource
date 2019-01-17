@@ -1088,6 +1088,12 @@ class FixtureFeatureFetcher(object):
             yield tile_layers.keys()
         return inner(z, x, y)
 
+    def tile(self, z, x, y):
+        @contextmanager
+        def inner(z, x, y):
+            yield self._generate_tile(z, x, y)
+        return inner(z, x, y)
+
     def features_in_mvt_layer(self, z, x, y, layer):
         @contextmanager
         def inner(z, x, y, layer):
@@ -1330,6 +1336,9 @@ class RunTestInstance(object):
     def layers_in_tile(self, z, x, y):
         return self.assertions.ff.layers_in_tile(z, x, y)
 
+    def tile(self, z, x, y):
+        return self.assertions.ff.tile(z, x, y)
+
     def features_in_mvt_layer(self, z, x, y, layer):
         return self.assertions.ff.features_in_mvt_layer(z, x, y, layer)
 
@@ -1376,6 +1385,9 @@ class DownloadOnlyInstance(object):
         return EmptyContext()
 
     def layers_in_tile(self, z, x, y):
+        return EmptyContext()
+
+    def tile(self, z, x, y):
         return EmptyContext()
 
     def features_in_mvt_layer(self, z, x, y, layer):
@@ -1426,6 +1438,10 @@ class CollectTilesInstance(object):
         return EmptyContext()
 
     def layers_in_tile(self, z, x, y):
+        self._add_tile(z, x, y)
+        return EmptyContext()
+
+    def tile(self, z, x, y):
         self._add_tile(z, x, y)
         return EmptyContext()
 
@@ -1485,6 +1501,9 @@ class FixtureTest(unittest.TestCase):
 
     def layers_in_tile(self, z, x, y):
         return self.test_instance.layers_in_tile(z, x, y)
+
+    def tile(self, z, x, y):
+        return self.test_instance.tile(z, x, y)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         return self.test_instance.features_in_mvt_layer(z, x, y, layer)
