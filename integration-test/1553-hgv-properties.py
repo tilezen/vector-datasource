@@ -81,7 +81,8 @@ class HgvRoadPropertiesTest(FixtureTest):
             'highway': 'unclassified',
             'source': 'openstreetmap.org',
         })
-        self.generate_fixtures(dsl.way(1, dsl.tile_diagonal(z, x, y), all_tags))
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), all_tags))
 
         expect = {
             'kind': 'minor_road',
