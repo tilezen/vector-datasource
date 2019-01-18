@@ -175,9 +175,37 @@ class CollisionRankTest(FixtureTest):
             rank=2866)
 
     def test_non_maritime_boundary(self):
+        from tilequeue.tile import coord_to_bounds
+        from shapely.geometry import LineString
+        from ModestMaps.Core import Coordinate
         import dsl
 
         z, x, y = (8, 44, 88)
+
+        left_props = {
+            'source': 'openstreetmap.org',
+            'boundary': 'administrative',
+            'admin_level': '2',
+            'name': 'Country 1',
+        }
+        right_props = {
+            'source': 'openstreetmap.org',
+            'boundary': 'administrative',
+            'admin_level': '2',
+            'name': 'Country 2',
+        }
+
+        minx, miny, maxx, maxy = coord_to_bounds(
+            Coordinate(zoom=z, column=x, row=y))
+
+        # move the coordinate points slightly out of the tile, so that we
+        # don't get borders along the sides of the tile.
+        w = maxx - minx
+        h = maxy - miny
+        minx -= 0.5 * w
+        miny -= 0.5 * h
+        maxx += 0.5 * w
+        maxy += 0.5 * h
 
         self.generate_fixtures(
             dsl.way(1, dsl.tile_box(z, x, y), {
@@ -186,11 +214,26 @@ class CollisionRankTest(FixtureTest):
                 'min_zoom': 0,
                 'kind': 'maritime',
             }),
-            dsl.way(2, dsl.tile_diagonal(z, x, y), {
-                'source': 'openstreetmap.org',
-                'boundary': 'administrative',
-                'admin_level': '2',
-            }),
+            dsl.way(
+                1,
+                LineString([
+                    [minx, miny],
+                    [minx, maxy],
+                    [maxx, maxy],
+                    [minx, miny],
+                ]),
+                left_props,
+            ),
+            dsl.way(
+                2,
+                LineString([
+                    [minx, miny],
+                    [maxx, maxy],
+                    [maxx, miny],
+                    [minx, miny],
+                ]),
+                right_props,
+            ),
         )
 
         self.assert_has_feature(
@@ -208,6 +251,7 @@ class CollisionRankTest(FixtureTest):
         self.generate_fixtures(
             dsl.way(2, dsl.tile_diagonal(z, x, y), {
                 'source': 'openstreetmap.org',
+                'name': 'Country 1',
                 'boundary': 'administrative',
                 'admin_level': '2',
             }),
@@ -315,3 +359,104 @@ class CollisionOrderTest(FixtureTest):
         fuel = items.append(tags={'amenity': 'fuel'})
 
         items.assert_order([fuel, police])
+
+
+# we should only apply a collision_rank where there's a label, so the feature
+# should either be a PONI (POI with no name) or a named feature. we also extend
+# this to include shield text and ref.
+class WhereTest(FixtureTest):
+
+    def test_toilets(self):
+        # toilets are PONIs - we want to see an icon on the map even if it's
+        # not a famous enough set of facilities that it got a name.
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'amenity': 'toilets',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'kind': 'toilets',
+                'collision_rank': int,
+            })
+
+    def test_road_no_name_no_shield(self):
+        # we'll only need a collision rank on a road if it has some form of
+        # label, which means a name, ref, shield_text or one of the shield
+        # text variants. if it has none of them, we still want the feature,
+        # but no the collision_rank.
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'highway': 'unclassified',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'kind': 'minor_road',
+                'collision_rank': type(None),
+            })
+
+    def test_road_ref(self):
+        # if the road has no name and no shield text, but does have a ref, then
+        # we want to keep it.
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'highway': 'unclassified',
+                'ref': '1',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'kind': 'minor_road',
+                'name': type(None),
+                'shield_text': type(None),
+                'ref': '1',
+                'collision_rank': int,
+            })
+
+    def test_road_shield_text(self):
+        # if the road has no name, but does have a shield, then we want to give
+        # it a collision_rank.
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.is_in('US', z, x, y),
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'highway': 'motorway',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.relation(1, {
+                'network': 'US-I',
+                'ref': '101',
+                'type': 'route',
+                'route': 'road',
+            }, ways=[1]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'kind': 'highway',
+                'name': type(None),
+                'shield_text': '101',
+                'collision_rank': int,
+            })
