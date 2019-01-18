@@ -96,7 +96,7 @@ class CollisionRankTest(FixtureTest):
             {'railway': 'station'},
             geom_type='polygon',
             layer='transit', kind='station',
-            rank=3735)
+            rank=3712)
 
     def test_pois_aviary(self):
         self._check_rank(
@@ -108,7 +108,7 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'office': 'travel_agent'},
             layer='pois', kind='travel_agent',
-            rank=3733)
+            rank=3710)
 
     def test_pois_aerodrome(self):
         self._check_rank(
@@ -147,13 +147,13 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'shop': 'tobacco'},
             layer='pois', kind='tobacco',
-            rank=3731)
+            rank=3708)
 
     def test_pois_healthcare_centre(self):
         self._check_rank(
             {'healthcare': 'centre'},
             layer='pois', kind='healthcare_centre',
-            rank=3411)
+            rank=3410)
 
     def test_pois_generator(self):
         self._check_rank(
@@ -165,7 +165,7 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'amenity': 'post_box'},
             layer='pois', kind='post_box',
-            rank=4308)
+            rank=4283)
 
     def test_landuse_grass(self):
         self._check_rank(

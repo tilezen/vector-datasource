@@ -683,7 +683,6 @@
 - {$layer: 'pois', kind: 'bakery'}
 - {$layer: 'pois', kind: 'beauty'}
 - {$layer: 'pois', kind: 'bed_and_breakfast'}
-- {$layer: 'pois', kind: 'blood'}
 - {$layer: 'pois', kind: 'blood_bank'}
 - {$layer: 'pois', kind: 'books'}
 - {$layer: 'pois', kind: 'butcher'}
@@ -746,18 +745,15 @@
 - {$layer: 'pois', kind: 'ngo'}
 - {$layer: 'pois', kind: 'notary'}
 - {$layer: 'pois', kind: 'optician'}
-- {$layer: 'pois', kind: 'paediatrics'}
 # reserve for kind_details
 - _reserved: {count: 20}
-- {$layer: 'pois', kind: 'optometrist_paediatrics'}
+- {$layer: 'pois', kind: 'optometrist'}
+- {$layer: 'pois', kind: 'paediatrics'}
 # reserve for kind_details
 - _reserved: {count: 20}
 - {$layer: 'pois', kind: 'perfumery'}
 - {$layer: 'pois', kind: 'petting_zoo'}
 - {$layer: 'pois', kind: 'physician'}
-# reserve for kind_details
-- _reserved: {count: 20}
-- {$layer: 'pois', kind: 'physiotherapist_physiotherapy'}
 # reserve for kind_details
 - _reserved: {count: 20}
 - {$layer: 'pois', kind: 'physiotherapist'}
@@ -785,7 +781,6 @@
 - {$layer: 'pois', kind: 'speech_therapist'}
 # reserve for kind_details
 - _reserved: {count: 20}
-- {$layer: 'pois', kind: 'speech'}
 - {$layer: 'pois', kind: 'stationery'}
 - {$layer: 'pois', kind: 'studio'}
 # reserve for kind_details
@@ -809,13 +804,11 @@
 - {$layer: 'pois', kind: 'bookmaker'}
 - {$layer: 'pois', kind: 'bureau_de_change'}
 - {$layer: 'pois', kind: 'car_parts'}
-- {$layer: 'pois', kind: 'donation'}
 - {$layer: 'pois', kind: 'hanami'}
 - {$layer: 'pois', kind: 'healthcare_alternative'}
 # reserve for kind_details
 - _reserved: {count: 20}
 - {$layer: 'pois', kind: 'it'}
-- {$layer: 'pois', kind: 'midwife_occupational'}
 - {$layer: 'pois', kind: 'occupational_therapist'}
 # reserve for kind_details
 - _reserved: {count: 20}
