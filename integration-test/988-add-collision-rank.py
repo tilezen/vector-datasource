@@ -174,6 +174,52 @@ class CollisionRankTest(FixtureTest):
             layer='landuse', kind='grass',
             rank=2866)
 
+    def test_non_maritime_boundary(self):
+        import dsl
+
+        z, x, y = (8, 44, 88)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                'source': 'tilezen.org',
+                'maritime_boundary': True,
+                'min_zoom': 0,
+                'kind': 'maritime',
+            }),
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'source': 'openstreetmap.org',
+                'boundary': 'administrative',
+                'admin_level': '2',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'country',
+                'maritime_boundary': type(None),
+                'collision_rank': 772,
+            })
+
+    def test_maritime_boundary(self):
+        import dsl
+
+        z, x, y = (8, 44, 88)
+
+        self.generate_fixtures(
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'source': 'openstreetmap.org',
+                'boundary': 'administrative',
+                'admin_level': '2',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'country',
+                'maritime_boundary': True,
+                'collision_rank': 2340,
+            })
+
 
 # helper class to make it easier to write CollisionOrderTest.
 #

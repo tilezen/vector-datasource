@@ -135,17 +135,18 @@
 - {$layer: 'boundaries', kind: 'aboriginal_lands'}
 # reserve for kind_details
 - _reserved: {count: 20}
-- {$layer: 'boundaries', kind: 'county'}
-- {$layer: 'boundaries', kind: 'region'}
-- {$layer: 'boundaries', kind: 'macroregion'}
-- {$layer: 'boundaries', kind: 'map_unit'}
-- {$layer: 'boundaries', kind: 'indefinite'}
-- {$layer: 'boundaries', kind: 'indeterminate'}
-- {$layer: 'boundaries', kind: 'lease_limit'}
-- {$layer: 'boundaries', kind: 'overlay_limit'}
-- {$layer: 'boundaries', kind: 'line_of_control'}
-- {$layer: 'boundaries', kind: 'disputed'}
-- {$layer: 'boundaries', kind: 'country'}
+# NOTE: maritime boundaries come later!
+- {$layer: 'boundaries', kind: 'county', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'region', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'macroregion', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'map_unit', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'indefinite', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'indeterminate', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'lease_limit', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'overlay_limit', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'line_of_control', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'disputed', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'country', not: {maritime_boundary: true}}
 - {$layer: 'pois', kind: 'college'}
 - {$layer: 'pois', kind: 'hospital'}
 # reserve for kind_details
@@ -399,7 +400,7 @@
 - {$layer: 'water', kind: 'riverbank'}
 - {$layer: 'earth', kind: 'cliff'}
 - {$layer: 'earth', kind: 'arete'}
-- {$layer: 'boundaries', kind: 'maritime'}
+- {$layer: 'boundaries', maritime_boundary: true}
 # for shields & etc
 - _reserved: {count: 10}
 - {$layer: 'roads', kind: 'minor_road', kind_detail: 'unclassified'}
