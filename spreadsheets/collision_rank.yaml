@@ -903,6 +903,7 @@
 - {$layer: 'buildings', kind: 'building_part'}
 # reserve for kind_details
 - _reserved: {count: 50}
+- {$layer: 'pois', kind: 'traffic_signals'}
 - {$layer: 'pois', kind: 'atm'}
 - {$layer: 'pois', kind: 'bus_stop'}
 - {$layer: 'pois', kind: 'firepit'}
@@ -935,7 +936,6 @@
 - {$layer: 'pois', kind: 'post_box'}
 - {$layer: 'pois', kind: 'power_pole'}
 - {$layer: 'pois', kind: 'street_lamp'}
-- {$layer: 'pois', kind: 'traffic_signals'}
 - {$layer: 'pois', kind: 'waste_basket'}
 - {$layer: 'pois', kind: 'water_point'}
 - {$layer: 'pois', kind: 'watering_place'}

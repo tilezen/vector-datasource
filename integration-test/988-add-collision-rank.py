@@ -165,7 +165,7 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'amenity': 'post_box'},
             layer='pois', kind='post_box',
-            rank=4307)
+            rank=4308)
 
     def test_landuse_grass(self):
         self._check_rank(
