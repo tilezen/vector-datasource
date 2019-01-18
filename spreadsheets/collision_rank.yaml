@@ -1,0 +1,937 @@
+# reserved for UX/UI
+- _reserved: {from: 1, to: 99}
+# reserved for house theme overlays
+- _reserved: {from: 100, to: 199}
+# reserved for data overlays
+- _reserved: {from: 200, to: 299}
+- {$layer: 'earth', kind: 'continent'}
+- {$layer: 'water', kind: 'ocean'}
+- {$layer: 'places', kind: 'country'}
+# reserved for population_rank
+- _reserved: {count: 19}
+- {$layer: 'places', kind: 'locality'}
+# reserved for population_rank; guess the pop from kind_detail ala
+# _default_min_zoom_for_place_kind() : city, farm, hamlet, isolated_dwelling,
+# locality, scientific_station, town, village,
+- _reserved: {count: 19}
+- {$layer: 'pois', kind: 'national_park'}
+- {$layer: 'places', kind: 'region'}
+# reserved for population_rank
+- _reserved: {count: 19}
+- {$layer: 'water', kind: 'sea'}
+- {$layer: 'pois', kind: 'nature_reserve'}
+- {$layer: 'water', kind: 'lake'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'highway', kind_detail: 'motorway'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'highway', kind_detail: 'motorway_link'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'highway', kind_detail: 'trunk'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'highway'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'forest'}
+- {$layer: 'earth', kind: 'island'}
+- {$layer: 'water', kind: 'water'}
+- {$layer: 'pois', kind: 'protected_area'}
+- {$layer: 'water', kind: 'bay'}
+- {$layer: 'water', kind: 'fjord'}
+- {$layer: 'water', kind: 'strait'}
+- {$layer: 'water', kind: 'playa'}
+- {$layer: 'pois', kind: 'aerodrome'}
+- {$layer: 'pois', kind: 'military'}
+- {$layer: 'pois', kind: 'naval_base'}
+- {$layer: 'pois', kind: 'airport'}
+- {$layer: 'pois', kind: 'airfield'}
+- {$layer: 'pois', kind: 'park'}
+- {$layer: 'pois', kind: 'volcano'}
+- {$layer: 'pois', kind: 'wood'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'peak'}
+- {$layer: 'water', kind: 'river'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'transit', kind: 'train'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'beach'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'university'}
+- {$layer: 'pois', kind: 'battlefield'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'primary'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'primary_link'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'secondary'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'secondary_link'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'tertiary'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'tertiary_link'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'trunk'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road', kind_detail: 'trunk_link'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'major_road'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'water', kind: 'reef'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'water', kind: 'canal'}
+- {$layer: 'earth', kind: 'archipelago'}
+- {$layer: 'pois', kind: 'ferry_terminal'}
+- {$layer: 'pois', kind: 'rest_area'}
+- {$layer: 'pois', kind: 'service_area'}
+- {$layer: 'pois', kind: 'stadium'}
+- {$layer: 'pois', kind: 'station'}
+- {$layer: 'pois', kind: 'zoo'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'transit', kind: 'subway'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'boundaries', kind: 'aboriginal_lands'}
+# reserve for kind_details
+- _reserved: {count: 20}
+# NOTE: maritime boundaries come later!
+- {$layer: 'boundaries', kind: 'county', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'region', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'macroregion', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'map_unit', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'indefinite', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'indeterminate', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'lease_limit', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'overlay_limit', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'line_of_control', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'disputed', not: {maritime_boundary: true}}
+- {$layer: 'boundaries', kind: 'country', not: {maritime_boundary: true}}
+- {$layer: 'pois', kind: 'college'}
+- {$layer: 'pois', kind: 'hospital'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'landmark'}
+- {$layer: 'pois', kind: 'mall'}
+- {$layer: 'pois', kind: 'museum'}
+- {$layer: 'pois', kind: 'winter_sports'}
+- {$layer: 'pois', kind: 'casino'}
+- {$layer: 'pois', kind: 'golf_course'}
+- {$layer: 'pois', kind: 'marina'}
+- {$layer: 'pois', kind: 'sports_centre'}
+- {$layer: 'pois', kind: 'garden'}
+- {$layer: 'pois', kind: 'recreation_ground'}
+- {$layer: 'pois', kind: 'waterfall'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'ferry'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'transit', kind: 'light_rail'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'townhall'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'transit', kind: 'tram'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'cemetery'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'pois', kind: 'dam'}
+- {$layer: 'pois', kind: 'motorway_junction'}
+- {$layer: 'pois', kind: 'place_of_worship'}
+- {$layer: 'pois', kind: 'plant'}
+- {$layer: 'pois', kind: 'port_terminal'}
+- {$layer: 'pois', kind: 'quarry'}
+- {$layer: 'pois', kind: 'wastewater_plant'}
+- {$layer: 'pois', kind: 'water_works'}
+- {$layer: 'pois', kind: 'works'}
+- {$layer: 'places', kind: 'borough'}
+# for shields, kind_detail & etc
+- _reserved: {count: 50}
+- {$layer: 'roads', kind: 'path'}
+# for shields, kind_detail & etc
+- _reserved: {count: 50}
+- {$layer: 'pois', kind: 'camp_site'}
+- {$layer: 'pois', kind: 'chemist'}
+- {$layer: 'pois', kind: 'community_centre'}
+- {$layer: 'pois', kind: 'cosmetics'}
+- {$layer: 'pois', kind: 'danger_area'}
+- {$layer: 'pois', kind: 'department_store'}
+- {$layer: 'pois', kind: 'doityourself'}
+- {$layer: 'pois', kind: 'fort'}
+- {$layer: 'pois', kind: 'garden_centre'}
+- {$layer: 'pois', kind: 'golf'}
+- {$layer: 'pois', kind: 'grave_yard'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'pois', kind: 'hotel'}
+- {$layer: 'pois', kind: 'marketplace'}
+- {$layer: 'pois', kind: 'motel'}
+- {$layer: 'pois', kind: 'music'}
+- {$layer: 'pois', kind: 'pet'}
+- {$layer: 'pois', kind: 'pharmacy'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'range'}
+- {$layer: 'pois', kind: 'school'}
+- {$layer: 'pois', kind: 'shoes'}
+- {$layer: 'pois', kind: 'ski'}
+- {$layer: 'pois', kind: 'supermarket'}
+- {$layer: 'pois', kind: 'theme_park'}
+- {$layer: 'pois', kind: 'toys'}
+- {$layer: 'pois', kind: 'variety_store'}
+- {$layer: 'pois', kind: 'water_park'}
+- {$layer: 'pois', kind: 'winery'}
+- {$layer: 'pois', kind: 'alcohol'}
+- {$layer: 'pois', kind: 'alpine_hut'}
+- {$layer: 'pois', kind: 'brewery'}
+- {$layer: 'pois', kind: 'charity'}
+- {$layer: 'pois', kind: 'coffee'}
+- {$layer: 'pois', kind: 'confectionery'}
+- {$layer: 'pois', kind: 'deli'}
+- {$layer: 'pois', kind: 'electronics'}
+- {$layer: 'pois', kind: 'furniture'}
+- {$layer: 'pois', kind: 'hardware'}
+- {$layer: 'pois', kind: 'ice_cream'}
+- {$layer: 'pois', kind: 'kindergarten'}
+- {$layer: 'pois', kind: 'wine'}
+- {$layer: 'pois', kind: 'gardener'}
+- {$layer: 'pois', kind: 'sports'}
+- {$layer: 'earth', kind: 'valley'}
+- {$layer: 'boundaries', kind: 'locality'}
+- {$layer: 'pois', kind: 'handicraft'}
+- {$layer: 'pois', kind: 'ski_school'}
+- {$layer: 'pois', kind: 'veterinary'}
+# reserve for kind_details
+- _reserved: {count: 20}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'portage_way'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'dressmaker'}
+- {$layer: 'pois', kind: 'dry_cleaning'}
+- {$layer: 'pois', kind: 'fishmonger'}
+- {$layer: 'pois', kind: 'laundry'}
+- {$layer: 'pois', kind: 'prison'}
+- {$layer: 'water', kind: 'dock'}
+- {$layer: 'pois', kind: 'container_terminal'}
+- {$layer: 'pois', kind: 'electrician'}
+- {$layer: 'pois', kind: 'hvac'}
+- {$layer: 'pois', kind: 'metal_construction'}
+- {$layer: 'pois', kind: 'offshore_platform'}
+- {$layer: 'pois', kind: 'painter'}
+- {$layer: 'pois', kind: 'photographer'}
+- {$layer: 'pois', kind: 'photographic_laboratory'}
+- {$layer: 'pois', kind: 'plumber'}
+- {$layer: 'pois', kind: 'pottery'}
+- {$layer: 'pois', kind: 'sawmill'}
+- {$layer: 'pois', kind: 'shoemaker'}
+- {$layer: 'pois', kind: 'ski_rental'}
+- {$layer: 'pois', kind: 'stonemason'}
+- {$layer: 'pois', kind: 'tailor'}
+- {$layer: 'pois', kind: 'trade'}
+- {$layer: 'pois', kind: 'waterway_fuel'}
+- {$layer: 'pois', kind: 'carpenter'}
+- {$layer: 'places', kind: 'macrohood'}
+- {$layer: 'pois', kind: 'aquarium'}
+- {$layer: 'pois', kind: 'bank'}
+- {$layer: 'pois', kind: 'beach_resort'}
+- {$layer: 'pois', kind: 'caravan_site'}
+- {$layer: 'pois', kind: 'cinema'}
+- {$layer: 'pois', kind: 'fuel'}
+- {$layer: 'pois', kind: 'library'}
+- {$layer: 'pois', kind: 'resort'}
+- {$layer: 'pois', kind: 'summer_camp'}
+- {$layer: 'landuse', kind: 'ferry_terminal'}
+- {$layer: 'landuse', kind: 'aerodrome'}
+- {$layer: 'pois', kind: 'fire_station'}
+- {$layer: 'pois', kind: 'ranger_station'}
+- {$layer: 'pois', kind: 'fitness'}
+- {$layer: 'pois', kind: 'embassy'}
+- {$layer: 'water', kind: 'basin'}
+- {$layer: 'water', kind: 'stream'}
+# for shields & etc
+- _reserved: {count: 50}
+- {$layer: 'roads', kind: 'piste'}
+# for shields & etc
+- _reserved: {count: 50}
+# for shields, kind_detail & etc
+- _reserved: {count: 50}
+- {$layer: 'roads', kind: 'aerialway'}
+# for shields, kind_detail & etc
+- _reserved: {count: 50}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'aeroway', kind_detail: 'runway'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'aeroway', kind_detail: 'taxiway'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'aeroway'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'courthouse'}
+- {$layer: 'pois', kind: 'lighthouse'}
+- {$layer: 'pois', kind: 'obelisk'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'police'}
+- {$layer: 'pois', kind: 'post_office'}
+- {$layer: 'pois', kind: 'ruins'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'watermill'}
+- {$layer: 'pois', kind: 'windmill'}
+- {$layer: 'places', kind: 'neighbourhood'}
+- {$layer: 'pois', kind: 'border_control'}
+- {$layer: 'pois', kind: 'customs'}
+- {$layer: 'earth', kind: 'ridge'}
+- {$layer: 'pois', kind: 'boatyard'}
+- {$layer: 'pois', kind: 'shipyard'}
+- {$layer: 'pois', kind: 'spring'}
+- {$layer: 'pois', kind: 'substation'}
+- {$layer: 'pois', kind: 'gate'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'horse_riding'}
+- {$layer: 'pois', kind: 'wharf'}
+- {$layer: 'pois', kind: 'adult_gaming_centre'}
+- {$layer: 'pois', kind: 'egress'}
+- {$layer: 'pois', kind: 'parking'}
+- {$layer: 'pois', kind: 'parking_garage'}
+- {$layer: 'pois', kind: 'put_in'}
+- {$layer: 'pois', kind: 'put_in_egress'}
+- {$layer: 'pois', kind: 'quay'}
+- {$layer: 'pois', kind: 'saddle'}
+- {$layer: 'pois', kind: 'arts_centre'}
+- {$layer: 'pois', kind: 'bar'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'bicycle'}
+- {$layer: 'pois', kind: 'biergarten'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'cafe'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'fast_food'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'field_hospital'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'gallery'}
+- {$layer: 'pois', kind: 'health_centre'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'nightclub'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'observatory'}
+- {$layer: 'pois', kind: 'outdoor'}
+- {$layer: 'pois', kind: 'pub'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'restaurant'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'theatre'}
+- {$layer: 'pois', kind: 'toll_booth'}
+- {$layer: 'pois', kind: 'trailhead'}
+- {$layer: 'pois', kind: 'viewpoint'}
+- {$layer: 'pois', kind: 'water_tower'}
+- {$layer: 'pois', kind: 'wilderness_hut'}
+- {$layer: 'pois', kind: 'nursing_home'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'telescope'}
+- {$layer: 'landuse', kind: 'city_wall'}
+- {$layer: 'water', kind: 'riverbank'}
+- {$layer: 'earth', kind: 'cliff'}
+- {$layer: 'earth', kind: 'arete'}
+- {$layer: 'boundaries', maritime_boundary: true}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road', kind_detail: 'unclassified'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road', kind_detail: 'living_street'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road', kind_detail: 'residential'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road', kind_detail: 'road'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road', kind_detail: 'service'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road', kind_detail: 'raceway'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'roads', kind: 'minor_road'}
+# for shields & etc
+- _reserved: {count: 10}
+# for shields & etc
+- _reserved: {count: 50}
+- {$layer: 'roads', kind: 'racetrack'}
+# for shields & etc
+- _reserved: {count: 50}
+# for shields & etc
+- _reserved: {count: 20}
+- {$layer: 'roads', kind: 'rail'}
+# for shields & etc
+- _reserved: {count: 20}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'transit', kind: 'monorail'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'transit', kind: 'funicular'}
+# for shields & etc
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'beacon'}
+- {$layer: 'pois', kind: 'cave_entrance'}
+- {$layer: 'pois', kind: 'communications_tower'}
+- {$layer: 'pois', kind: 'cross'}
+- {$layer: 'pois', kind: 'dune'}
+- {$layer: 'pois', kind: 'farm'}
+- {$layer: 'pois', kind: 'generator'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'geyser'}
+- {$layer: 'pois', kind: 'hazard'}
+- {$layer: 'pois', kind: 'lock'}
+- {$layer: 'pois', kind: 'mineshaft'}
+- {$layer: 'pois', kind: 'monument'}
+- {$layer: 'pois', kind: 'power_wind'}
+- {$layer: 'pois', kind: 'rapid'}
+- {$layer: 'pois', kind: 'sinkhole'}
+- {$layer: 'landuse', kind: 'cutting'}
+- {$layer: 'landuse', kind: 'ditch'}
+- {$layer: 'landuse', kind: 'gate'}
+- {$layer: 'landuse', kind: 'grave_yard'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'landuse', kind: 'guard_rail'}
+- {$layer: 'landuse', kind: 'harbour'}
+- {$layer: 'landuse', kind: 'kerb'}
+- {$layer: 'landuse', kind: 'orchard'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'landuse', kind: 'plant_nursery'}
+- {$layer: 'landuse', kind: 'port'}
+- {$layer: 'landuse', kind: 'scree'}
+- {$layer: 'landuse', kind: 'urban_area'}
+- {$layer: 'landuse', kind: 'urban'}
+- {$layer: 'landuse', kind: 'rural'}
+- {$layer: 'landuse', kind: 'protected_area'}
+- {$layer: 'landuse', kind: 'national_park'}
+- {$layer: 'landuse', kind: 'residential'}
+- {$layer: 'landuse', kind: 'industrial'}
+- {$layer: 'landuse', kind: 'nature_reserve'}
+- {$layer: 'landuse', kind: 'park'}
+- {$layer: 'landuse', kind: 'battlefield'}
+- {$layer: 'landuse', kind: 'rock'}
+- {$layer: 'landuse', kind: 'stone'}
+- {$layer: 'landuse', kind: 'glacier'}
+- {$layer: 'landuse', kind: 'wood'}
+- {$layer: 'landuse', kind: 'forest'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'natural_park'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'natural_forest'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'natural_wood'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'grass'}
+- {$layer: 'landuse', kind: 'meadow'}
+- {$layer: 'landuse', kind: 'scrub'}
+- {$layer: 'landuse', kind: 'winter_sports'}
+- {$layer: 'landuse', kind: 'farm'}
+- {$layer: 'landuse', kind: 'farmland'}
+- {$layer: 'landuse', kind: 'university'}
+- {$layer: 'landuse', kind: 'college'}
+- {$layer: 'landuse', kind: 'rest_area'}
+- {$layer: 'landuse', kind: 'service_area'}
+- {$layer: 'landuse', kind: 'commercial'}
+- {$layer: 'landuse', kind: 'retail'}
+- {$layer: 'landuse', kind: 'military'}
+- {$layer: 'landuse', kind: 'naval_base'}
+- {$layer: 'landuse', kind: 'danger_area'}
+- {$layer: 'landuse', kind: 'range'}
+- {$layer: 'landuse', kind: 'prison'}
+- {$layer: 'landuse', kind: 'fort'}
+- {$layer: 'landuse', kind: 'theme_park'}
+- {$layer: 'landuse', kind: 'wildlife_park'}
+- {$layer: 'landuse', kind: 'winery'}
+- {$layer: 'landuse', kind: 'zoo'}
+- {$layer: 'landuse', kind: 'resort'}
+- {$layer: 'landuse', kind: 'trail_riding_station'}
+- {$layer: 'landuse', kind: 'hospital'}
+- {$layer: 'landuse', kind: 'aquarium'}
+- {$layer: 'landuse', kind: 'golf_course'}
+- {$layer: 'landuse', kind: 'boatyard'}
+- {$layer: 'landuse', kind: 'shipyard'}
+- {$layer: 'landuse', kind: 'container_terminal'}
+- {$layer: 'landuse', kind: 'port_terminal'}
+- {$layer: 'landuse', kind: 'wharf'}
+- {$layer: 'landuse', kind: 'quay'}
+- {$layer: 'landuse', kind: 'recreation_ground'}
+- {$layer: 'landuse', kind: 'caravan_site'}
+- {$layer: 'landuse', kind: 'recreation_track'}
+- {$layer: 'landuse', kind: 'airfield'}
+- {$layer: 'landuse', kind: 'stadium'}
+- {$layer: 'landuse', kind: 'sports_centre'}
+- {$layer: 'landuse', kind: 'village_green'}
+- {$layer: 'landuse', kind: 'common'}
+- {$layer: 'landuse', kind: 'railway'}
+- {$layer: 'landuse', kind: 'quarry'}
+- {$layer: 'landuse', kind: 'place_of_worship'}
+- {$layer: 'landuse', kind: 'cemetery'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'landuse', kind: 'school'}
+- {$layer: 'landuse', kind: 'fuel'}
+- {$layer: 'landuse', kind: 'cinema'}
+- {$layer: 'landuse', kind: 'library'}
+- {$layer: 'landuse', kind: 'theatre'}
+- {$layer: 'landuse', kind: 'aviary'}
+- {$layer: 'landuse', kind: 'petting_zoo'}
+- {$layer: 'landuse', kind: 'camp_site'}
+- {$layer: 'landuse', kind: 'beach'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'garden'}
+- {$layer: 'landuse', kind: 'dog_park'}
+- {$layer: 'landuse', kind: 'pedestrian'}
+- {$layer: 'landuse', kind: 'playground'}
+- {$layer: 'landuse', kind: 'attraction'}
+- {$layer: 'landuse', kind: 'water_park'}
+- {$layer: 'landuse', kind: 'wilderness_hut'}
+- {$layer: 'landuse', kind: 'tower'}
+- {$layer: 'landuse', kind: 'footway'}
+- {$layer: 'landuse', kind: 'mud'}
+- {$layer: 'pois', kind: 'wetland'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'landuse', kind: 'wetland'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'landuse', kind: 'land'}
+- {$layer: 'landuse', kind: 'dam'}
+- {$layer: 'landuse', kind: 'groyne'}
+- {$layer: 'landuse', kind: 'dike'}
+- {$layer: 'landuse', kind: 'pier'}
+- {$layer: 'landuse', kind: 'bridge'}
+- {$layer: 'pois', kind: 'stop_area'}
+- {$layer: 'places', kind: 'microhood'}
+- {$layer: 'pois', kind: 'aeroway_gate'}
+- {$layer: 'pois', kind: 'bicycle_rental'}
+- {$layer: 'pois', kind: 'boat_rental'}
+- {$layer: 'pois', kind: 'bus_station'}
+- {$layer: 'pois', kind: 'camera'}
+- {$layer: 'pois', kind: 'car_rental'}
+- {$layer: 'pois', kind: 'copyshop'}
+- {$layer: 'pois', kind: 'dive_centre'}
+- {$layer: 'pois', kind: 'dog_park'}
+- {$layer: 'pois', kind: 'fishing'}
+- {$layer: 'pois', kind: 'fishing_area'}
+- {$layer: 'pois', kind: 'funeral_directors'}
+- {$layer: 'pois', kind: 'harbourmaster'}
+- {$layer: 'pois', kind: 'helipad'}
+- {$layer: 'pois', kind: 'heliport'}
+- {$layer: 'pois', kind: 'hot_spring'}
+- {$layer: 'pois', kind: 'hunting'}
+- {$layer: 'pois', kind: 'information'}
+- {$layer: 'earth', kind: 'islet'}
+- {$layer: 'pois', kind: 'mini_roundabout'}
+- {$layer: 'pois', kind: 'miniature_golf'}
+- {$layer: 'pois', kind: 'photo'}
+- {$layer: 'pois', kind: 'picnic_site'}
+- {$layer: 'pois', kind: 'snow_cannon'}
+- {$layer: 'pois', kind: 'swimming_area'}
+- {$layer: 'pois', kind: 'tyres'}
+- {$layer: 'pois', kind: 'block'}
+- {$layer: 'pois', kind: 'bunker'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'shelter'}
+- {$layer: 'pois', kind: 'recreation_track'}
+- {$layer: 'pois', kind: 'recycling'}
+- {$layer: 'pois', kind: 'adit'}
+- {$layer: 'pois', kind: 'allotments'}
+- {$layer: 'pois', kind: 'archaeological_site'}
+- {$layer: 'pois', kind: 'bicycle_junction'}
+- {$layer: 'pois', kind: 'boat_lift'}
+- {$layer: 'pois', kind: 'pitch'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'bollard'}
+- {$layer: 'pois', kind: 'cattle_grid'}
+- {$layer: 'pois', kind: 'crane'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'ford'}
+- {$layer: 'pois', kind: 'halt'}
+- {$layer: 'pois', kind: 'plaque'}
+- {$layer: 'pois', kind: 'power_tower'}
+- {$layer: 'pois', kind: 'stop'}
+- {$layer: 'pois', kind: 'tram_stop'}
+- {$layer: 'pois', kind: 'tree'}
+- {$layer: 'pois', kind: 'walking_junction'}
+- {$layer: 'pois', kind: 'wayside_cross'}
+- {$layer: 'landuse', kind: 'taxiway'}
+- {$layer: 'landuse', kind: 'runway'}
+- {$layer: 'landuse', kind: 'wastewater_plant'}
+- {$layer: 'landuse', kind: 'water_works'}
+- {$layer: 'landuse', kind: 'works'}
+- {$layer: 'landuse', kind: 'enclosure'}
+- {$layer: 'landuse', kind: 'roller_coaster'}
+- {$layer: 'landuse', kind: 'allotments'}
+- {$layer: 'landuse', kind: 'generator'}
+- {$layer: 'landuse', kind: 'maze'}
+- {$layer: 'landuse', kind: 'hanami'}
+- {$layer: 'landuse', kind: 'amusement_ride'}
+- {$layer: 'landuse', kind: 'picnic_site'}
+- {$layer: 'landuse', kind: 'crane'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'embankment'}
+- {$layer: 'transit', kind: 'halt'}
+- {$layer: 'transit', kind: 'stop'}
+- {$layer: 'transit', kind: 'tram_stop'}
+- {$layer: 'pois', kind: 'accountant'}
+- {$layer: 'pois', kind: 'administrative'}
+- {$layer: 'pois', kind: 'advertising_agency'}
+- {$layer: 'pois', kind: 'ambulatory_care'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'architect'}
+- {$layer: 'pois', kind: 'art'}
+- {$layer: 'pois', kind: 'association'}
+- {$layer: 'pois', kind: 'aviary'}
+- {$layer: 'pois', kind: 'baby_hatch'}
+- {$layer: 'pois', kind: 'bakery'}
+- {$layer: 'pois', kind: 'beauty'}
+- {$layer: 'pois', kind: 'bed_and_breakfast'}
+- {$layer: 'pois', kind: 'blood_bank'}
+- {$layer: 'pois', kind: 'books'}
+- {$layer: 'pois', kind: 'butcher'}
+- {$layer: 'pois', kind: 'car'}
+- {$layer: 'pois', kind: 'carousel'}
+- {$layer: 'pois', kind: 'chalet'}
+- {$layer: 'pois', kind: 'childcare'}
+- {$layer: 'pois', kind: 'chiropractor'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'clinic'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'clothes'}
+- {$layer: 'pois', kind: 'company'}
+- {$layer: 'pois', kind: 'computer'}
+- {$layer: 'pois', kind: 'consulting'}
+- {$layer: 'pois', kind: 'convenience'}
+- {$layer: 'pois', kind: 'craft'}
+- {$layer: 'pois', kind: 'dentist'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'dispensary'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'doctors'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'educational_institution'}
+- {$layer: 'pois', kind: 'employment_agency'}
+- {$layer: 'pois', kind: 'estate_agent'}
+- {$layer: 'pois', kind: 'fashion'}
+- {$layer: 'pois', kind: 'financial'}
+- {$layer: 'pois', kind: 'florist'}
+- {$layer: 'pois', kind: 'foundation'}
+- {$layer: 'pois', kind: 'gift'}
+- {$layer: 'pois', kind: 'government'}
+- {$layer: 'pois', kind: 'greengrocer'}
+- {$layer: 'pois', kind: 'grocery'}
+- {$layer: 'pois', kind: 'guest_house'}
+- {$layer: 'pois', kind: 'hairdresser'}
+- {$layer: 'pois', kind: 'healthcare_centre'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'hifi'}
+- {$layer: 'pois', kind: 'hospice'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'hostel'}
+- {$layer: 'pois', kind: 'jewelry'}
+- {$layer: 'pois', kind: 'karaoke'}
+- {$layer: 'pois', kind: 'lawyer'}
+- {$layer: 'pois', kind: 'midwife'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'mobile_phone'}
+- {$layer: 'pois', kind: 'motorcycle'}
+- {$layer: 'pois', kind: 'newsagent'}
+- {$layer: 'pois', kind: 'newspaper'}
+- {$layer: 'pois', kind: 'ngo'}
+- {$layer: 'pois', kind: 'notary'}
+- {$layer: 'pois', kind: 'optician'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'optometrist'}
+- {$layer: 'pois', kind: 'paediatrics'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'perfumery'}
+- {$layer: 'pois', kind: 'petting_zoo'}
+- {$layer: 'pois', kind: 'physician'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'physiotherapist'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'playground'}
+- {$layer: 'pois', kind: 'psychotherapist'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'podiatrist'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'political_party'}
+- {$layer: 'pois', kind: 'rehabilitation'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'religion'}
+- {$layer: 'pois', kind: 'research'}
+- {$layer: 'pois', kind: 'sanitary_dump_station'}
+- {$layer: 'pois', kind: 'scuba_diving'}
+- {$layer: 'pois', kind: 'snowmobile'}
+- {$layer: 'pois', kind: 'social_facility'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'speech_therapist'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'stationery'}
+- {$layer: 'pois', kind: 'studio'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'tax_advisor'}
+- {$layer: 'pois', kind: 'telecommunication'}
+- {$layer: 'pois', kind: 'therapist'}
+- {$layer: 'pois', kind: 'tobacco'}
+- {$layer: 'pois', kind: 'travel_agency'}
+- {$layer: 'pois', kind: 'travel_agent'}
+- {$layer: 'pois', kind: 'wildlife_park'}
+- {$layer: 'transit', kind: 'station'}
+- {$layer: 'transit', kind: 'stop_area'}
+- {$layer: 'transit', kind: 'platform'}
+- {$layer: 'buildings', kind: 'building'}
+# reserve for kind_details
+- _reserved: {count: 200}
+- {$layer: 'pois', kind: 'atv'}
+- {$layer: 'pois', kind: 'bicycle_rental_station'}
+- {$layer: 'pois', kind: 'boat_storage'}
+- {$layer: 'pois', kind: 'bookmaker'}
+- {$layer: 'pois', kind: 'bureau_de_change'}
+- {$layer: 'pois', kind: 'car_parts'}
+- {$layer: 'pois', kind: 'hanami'}
+- {$layer: 'pois', kind: 'healthcare_alternative'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'it'}
+- {$layer: 'pois', kind: 'occupational_therapist'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'money_transfer'}
+- {$layer: 'pois', kind: 'roller_coaster'}
+- {$layer: 'pois', kind: 'amusement_ride'}
+- {$layer: 'pois', kind: 'animal'}
+- {$layer: 'pois', kind: 'artwork'}
+- {$layer: 'pois', kind: 'attraction'}
+- {$layer: 'pois', kind: 'bicycle_parking'}
+- {$layer: 'pois', kind: 'car_repair'}
+- {$layer: 'pois', kind: 'healthcare_laboratory'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'insurance'}
+- {$layer: 'pois', kind: 'car_wash'}
+- {$layer: 'pois', kind: 'subway_entrance'}
+- {$layer: 'pois', kind: 'gambling'}
+- {$layer: 'pois', kind: 'office'}
+- {$layer: 'pois', kind: 'car_sharing'}
+- {$layer: 'pois', kind: 'charging_station'}
+- {$layer: 'pois', kind: 'enclosure'}
+- {$layer: 'pois', kind: 'lottery'}
+- {$layer: 'pois', kind: 'ship_chandler'}
+- {$layer: 'pois', kind: 'slipway'}
+- {$layer: 'pois', kind: 'summer_toboggan'}
+- {$layer: 'pois', kind: 'industrial'}
+- {$layer: 'pois', kind: 'shop'}
+- {$layer: 'pois', kind: 'slaughterhouse'}
+- {$layer: 'pois', kind: 'stone'}
+- {$layer: 'pois', kind: 'trail_riding_station'}
+- {$layer: 'pois', kind: 'turning_circle'}
+- {$layer: 'pois', kind: 'turning_loop'}
+- {$layer: 'pois', kind: 'water_slide'}
+- {$layer: 'pois', kind: 'water_well'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'defibrillator'}
+- {$layer: 'pois', kind: 'elevator'}
+- {$layer: 'pois', kind: 'emergency_phone'}
+- {$layer: 'pois', kind: 'fitness_station'}
+- {$layer: 'pois', kind: 'hunting_stand'}
+- {$layer: 'pois', kind: 'karaoke_box'}
+- {$layer: 'pois', kind: 'lifeguard_tower'}
+- {$layer: 'pois', kind: 'mast'}
+- {$layer: 'pois', kind: 'maze'}
+- {$layer: 'pois', kind: 'memorial'}
+- {$layer: 'pois', kind: 'mooring'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'pois', kind: 'motorcycle_parking'}
+- {$layer: 'pois', kind: 'petroleum_well'}
+- {$layer: 'pois', kind: 'platform'}
+- {$layer: 'pois', kind: 'pylon'}
+- {$layer: 'pois', kind: 'rock'}
+- {$layer: 'earth', kind: 'earth'}
+- {$layer: 'landuse', kind: 'apron'}
+- {$layer: 'landuse', kind: 'substation'}
+- {$layer: 'landuse', kind: 'summer_toboggan'}
+- {$layer: 'landuse', kind: 'plant'}
+- {$layer: 'landuse', kind: 'pitch'}
+- {$layer: 'landuse', kind: 'animal'}
+- {$layer: 'landuse', kind: 'artwork'}
+- {$layer: 'landuse', kind: 'carousel'}
+- {$layer: 'landuse', kind: 'water_slide'}
+- {$layer: 'landuse', kind: 'parking'}
+- {$layer: 'water', kind: 'fountain'}
+- {$layer: 'water', kind: 'ditch'}
+- {$layer: 'water', kind: 'drain'}
+- {$layer: 'water', kind: 'swimming_pool'}
+- {$layer: 'landuse', kind: 'breakwater'}
+- {$layer: 'landuse', kind: 'cutline'}
+- {$layer: 'landuse', kind: 'hedge'}
+- {$layer: 'landuse', kind: 'tree_row'}
+- {$layer: 'landuse', kind: 'retaining_wall'}
+- {$layer: 'landuse', kind: 'snow_fence'}
+- {$layer: 'landuse', kind: 'fence'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'landuse', kind: 'wall'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'landuse', kind: 'power_minor_line'}
+- {$layer: 'landuse', kind: 'power_line'}
+- {$layer: 'transit', kind: 'bus_stop'}
+- {$layer: 'buildings', kind: 'building_part'}
+# reserve for kind_details
+- _reserved: {count: 50}
+- {$layer: 'pois', kind: 'traffic_signals'}
+- {$layer: 'pois', kind: 'atm'}
+- {$layer: 'pois', kind: 'bus_stop'}
+- {$layer: 'pois', kind: 'firepit'}
+- {$layer: 'pois', kind: 'life_ring'}
+- {$layer: 'pois', kind: 'picnic_table'}
+- {$layer: 'pois', kind: 'shower'}
+- {$layer: 'pois', kind: 'taxi'}
+- {$layer: 'pois', kind: 'telephone'}
+- {$layer: 'pois', kind: 'toilets'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'waste_disposal'}
+- {$layer: 'pois', kind: 'bbq'}
+- {$layer: 'pois', kind: 'bicycle_repair_station'}
+- {$layer: 'pois', kind: 'cycle_barrier'}
+- {$layer: 'pois', kind: 'drinking_water'}
+- {$layer: 'pois', kind: 'phone'}
+- {$layer: 'buildings', kind: 'address'}
+- {$layer: 'pois', kind: 'bench'}
+- {$layer: 'buildings', kind: 'entrance'}
+# reserve for kind_details
+- _reserved: {count: 20}
+- {$layer: 'buildings', kind: 'exit'}
+# reserve for kind_details
+- _reserved: {count: 10}
+- {$layer: 'pois', kind: 'fire_hydrant'}
+- {$layer: 'pois', kind: 'gas_canister'}
+- {$layer: 'pois', kind: 'level_crossing'}
+- {$layer: 'pois', kind: 'love_hotel'}
+- {$layer: 'pois', kind: 'post_box'}
+- {$layer: 'pois', kind: 'power_pole'}
+- {$layer: 'pois', kind: 'street_lamp'}
+- {$layer: 'pois', kind: 'waste_basket'}
+- {$layer: 'pois', kind: 'water_point'}
+- {$layer: 'pois', kind: 'watering_place'}
+# catch-all, assign lowest priority
+- { $layer: true }

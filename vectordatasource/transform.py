@@ -168,6 +168,18 @@ def _remove_names(props):
     return props
 
 
+def _has_name(props):
+    """
+    Return true if any of the props look like a name.
+    """
+
+    for k in props.keys():
+        if _is_name(k):
+            return True
+
+    return False
+
+
 def _building_calc_levels(levels):
     levels = max(levels, 1)
     levels = (levels * 3) + 2
@@ -8451,5 +8463,65 @@ def clamp_min_zoom(ctx):
             min_val = clamp.get(value)
             if min_val is not None and min_val > min_zoom:
                 props['min_zoom'] = min_val
+
+    return None
+
+
+def load_collision_ranker(fh):
+    import yaml
+    from vectordatasource.collision import CollisionRanker
+
+    data = yaml.load(fh)
+    assert isinstance(data, list)
+
+    return CollisionRanker(data)
+
+
+def add_collision_rank(ctx):
+    """
+    Add or update a collision_rank property on features in the given layers.
+    The collision rank is looked up from a YAML file consisting of a list of
+    filters (same syntax as in kind/min_zoom YAML) and "_reserved" blocks.
+    Collision rank indices are automatically assigned based on where in the
+    list a matching filter is found.
+    """
+
+    feature_layers = ctx.feature_layers
+    zoom = ctx.nominal_zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    ranker = ctx.resources.get('ranker')
+    where = ctx.params.get('where')
+
+    assert ranker, 'add_collision_rank: missing ranker resource'
+
+    if zoom < start_zoom:
+        return None
+
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    if where:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    for layer in feature_layers:
+        layer_name = layer['layer_datum']['name']
+        for shape, props, fid in layer['features']:
+            # use the "where" clause to limit the selection of features which
+            # we add collision_rank to.
+            add_collision_rank = True
+            if where:
+                local = defaultdict(lambda: None)
+                local.update(props)
+                local['layer_name'] = layer_name
+                local['_has_name'] = _has_name(props)
+                add_collision_rank = eval(where, {}, local)
+
+            if add_collision_rank:
+                props_with_layer = props.copy()
+                props_with_layer['$layer'] = layer_name
+                rank = ranker((shape, props_with_layer, fid))
+                if rank is not None:
+                    props['collision_rank'] = rank
 
     return None
