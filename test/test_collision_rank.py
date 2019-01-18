@@ -136,3 +136,26 @@ class CollisionRankTest(TestCase):
         # $layer match
         _, props, _ = feature_layers[0]['features'][0]
         self.assertEqual(props.get('collision_rank'), 1)
+
+    def test_reserved_count(self):
+        """
+        Test that we can reserve a specific number of collision rank indices
+        without needing to specify the exact start/end.
+        """
+        from vectordatasource.collision import CollisionRanker
+
+        ranker = CollisionRanker([
+            # should be 1
+            {'kind': 'foo'},
+            # should skip 2-10 (count 9) as reserved
+            {'_reserved': {'count': 9}},
+            # should be 11
+            {'kind': 'bar'},
+        ])
+
+        shape = None
+        props = {'kind': 'bar'}
+        fid = 1
+        rank = ranker((shape, props, fid))
+
+        self.assertEqual(rank, 11)

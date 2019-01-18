@@ -46,133 +46,133 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'place': 'continent'},
             zoom=1, layer='earth',
-            kind='continent', rank=303)
+            kind='continent', rank=300)
 
     def test_transit_subway(self):
         self._check_rank(
             {'route': 'subway'},
             geom_type='line',
             layer='transit',
-            kind='subway', rank=768)
+            kind='subway', rank=730)
 
     def test_pois_swimming_area(self):
         self._check_rank(
             {'leisure': 'swimming_area'},
             layer='pois',
-            kind='swimming_area', rank=3174)
+            kind='swimming_area', rank=3064)
 
     def test_pois_battlefield(self):
         self._check_rank(
             {'historic': 'battlefield'},
             layer='pois',
-            kind='battlefield', rank=529)
+            kind='battlefield', rank=511)
 
     def test_pois_picnic_site(self):
         self._check_rank(
             {'tourism': 'picnic_site'},
             layer='pois', kind='picnic_site',
-            rank=3172)
+            rank=3062)
 
     def test_water_ocean(self):
         self._check_rank(
             {'place': 'ocean'},
             layer='water', kind='ocean',
-            rank=304)
+            rank=301)
 
     def test_pois_doityourself(self):
         self._check_rank(
             {'shop': 'doityourself'},
             layer='pois', kind='doityourself',
-            rank=1088)
+            rank=1038)
 
     def test_pois_shelter(self):
         self._check_rank(
             {'amenity': 'shelter'},
             layer='pois', kind='shelter',
-            rank=3199)
+            rank=3088)
 
     def test_transit_station(self):
         self._check_rank(
             {'railway': 'station'},
             geom_type='polygon',
             layer='transit', kind='station',
-            rank=3869)
+            rank=3735)
 
     def test_pois_aviary(self):
         self._check_rank(
             {'zoo': 'aviary'},
             layer='pois', kind='aviary',
-            rank=3389)
+            rank=3274)
 
     def test_pois_travel_agent(self):
         self._check_rank(
             {'office': 'travel_agent'},
             layer='pois', kind='travel_agent',
-            rank=3867)
+            rank=3733)
 
     def test_pois_aerodrome(self):
         self._check_rank(
             {'aeroway': 'aerodrome'},
             layer='pois', kind='aerodrome',
-            rank=472)
+            rank=458)
 
     def test_pois_caravan_site(self):
         self._check_rank(
             {'tourism': 'caravan_site'},
             layer='pois', kind='caravan_site',
-            rank=1273)
+            rank=1218)
 
     def test_water_riverbank(self):
         self._check_rank(
             {'waterway': 'riverbank'},
             geom_type='line',
             layer='water', kind='riverbank',
-            rank=2415)
+            rank=2337)
 
     def test_pois_wood(self):
         self._check_rank(
             {'landuse': 'wood'},
             geom_type='polygon',
             layer='pois', kind='wood',
-            rank=479)
+            rank=465)
 
     def test_landuse_industrial(self):
         self._check_rank(
             {'landuse': 'industrial'},
             geom_type='polygon',
             layer='landuse', kind='industrial',
-            rank=2916)
+            rank=2814)
 
     def test_pois_tobacco(self):
         self._check_rank(
             {'shop': 'tobacco'},
             layer='pois', kind='tobacco',
-            rank=3865)
+            rank=3731)
 
     def test_pois_healthcare_centre(self):
         self._check_rank(
             {'healthcare': 'centre'},
             layer='pois', kind='healthcare_centre',
-            rank=3531)
+            rank=3411)
 
     def test_pois_generator(self):
         self._check_rank(
             {'power': 'generator'},
             layer='pois', kind='generator',
-            rank=2767)
+            rank=2668)
 
     def test_pois_post_box(self):
         self._check_rank(
             {'amenity': 'post_box'},
             layer='pois', kind='post_box',
-            rank=4453)
+            rank=4307)
 
     def test_landuse_grass(self):
         self._check_rank(
             {'landuse': 'grass'},
             geom_type='polygon',
             layer='landuse', kind='grass',
-            rank=2972)
+            rank=2866)
 
 
 # helper class to make it easier to write CollisionOrderTest.

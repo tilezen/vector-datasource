@@ -22,16 +22,25 @@ class CollisionRanker(object):
                 assert case.keys() == ['_reserved']
 
                 reserved = case['_reserved']
-                from_index = reserved['from']
-                to_index = reserved['to']
 
-                # check that we've not used this index already.
-                assert index <= from_index, "Unable to satisfy reserved " \
-                    "block: already at index %d, and wanted to reserve " \
-                    "from %d." % (index, from_index)
+                # we can reserve either a specific range of indices, or a
+                # count.
+                if reserved.keys() == ['count']:
+                    # just increment the index to skip. we can't collide with
+                    # anything, so there's no assertion to make.
+                    index += reserved['count']
 
-                # start counting again past the "to" reserved index.
-                index = to_index + 1
+                else:
+                    from_index = reserved['from']
+                    to_index = reserved['to']
+
+                    # check that we've not used this index already.
+                    assert index <= from_index, "Unable to satisfy reserved " \
+                        "block: already at index %d, and wanted to reserve " \
+                        "from %d." % (index, from_index)
+
+                    # start counting again past the "to" reserved index.
+                    index = to_index + 1
 
             else:
                 matcher = create_matcher(
