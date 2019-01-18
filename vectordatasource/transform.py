@@ -8447,7 +8447,7 @@ def add_collision_rank(ctx):
         layer_name = layer['layer_datum']['name']
         for shape, props, fid in layer['features']:
             props_with_layer = props.copy()
-            props_with_layer['layer'] = layer_name
+            props_with_layer['$layer'] = layer_name
             rank = ranker((shape, props_with_layer, fid))
             if rank is not None:
                 props['collision_rank'] = rank

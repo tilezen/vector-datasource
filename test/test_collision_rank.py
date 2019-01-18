@@ -84,3 +84,55 @@ class CollisionRankTest(TestCase):
         rank = ranker((shape, props, fid))
 
         self.assertEqual(rank, 21)
+
+    def test_transform_adds_layer(self):
+        """
+        Tests that the "$layer" pseudo-property is being injected by the
+        add_collision_rank post-processor. We use the $-prefix so that it
+        doesn't clash with the "layer" property, which represents something
+        close to z-order for features.
+        """
+
+        from ModestMaps.Core import Coordinate
+        from shapely.geometry import Point
+        from tilequeue.process import Context
+        from tilequeue.tile import coord_to_bounds
+        from tilequeue.tile import num2deg
+        from vectordatasource.collision import CollisionRanker
+        from vectordatasource.transform import add_collision_rank
+
+        z, x, y = (16, 0, 0)
+
+        ranker = CollisionRanker([
+            {"$layer": "foo"},
+        ])
+
+        shape = Point(*num2deg(x + 0.5, y + 0.5, z))
+        feature_layers = [
+            dict(
+                layer_datum=dict(name='foo'),
+                features=[
+                    (shape, {}, 1),
+                ],
+            ),
+        ]
+        nominal_zoom = z
+        padded_bounds = coord_to_bounds(Coordinate(zoom=z, column=x, row=y))
+        params = {}
+        resources = {'ranker': ranker}
+
+        ctx = Context(
+            feature_layers,
+            nominal_zoom,
+            padded_bounds,
+            params,
+            resources,
+        )
+
+        # NOTE: modifies layers in-place, doesn't return anything
+        add_collision_rank(ctx)
+
+        # we should have assigned the collision rank because of the
+        # $layer match
+        _, props, _ = feature_layers[0]['features'][0]
+        self.assertEqual(props.get('collision_rank'), 1)
