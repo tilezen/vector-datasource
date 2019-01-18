@@ -149,3 +149,58 @@ class HgvRoadPropertiesTest(FixtureTest):
             {'maxheight': 1.5,
              'maxweight': 1.5},
             restriction='multiple')
+
+
+class TollTest(FixtureTest):
+
+    def test_toll(self):
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        values = {
+            'yes': True,
+            'some_random_value': True,
+            'no': type(None),
+        }
+
+        for value, expect in values.items():
+            self.generate_fixtures(
+                dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                    'highway': 'unclassified',
+                    'toll': value,
+                    'source': 'openstreetmap.org',
+                }),
+            )
+
+            self.assert_has_feature(
+                z, x, y, 'roads', {
+                    'kind': 'minor_road',
+                    'toll': expect,
+                })
+
+    def test_hgv_toll(self):
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        values = {
+            'yes': True,
+            'some_random_value': True,
+            'no': type(None),
+        }
+
+        for value, expect in values.items():
+            self.generate_fixtures(
+                dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                    'highway': 'unclassified',
+                    'toll:hgv': value,
+                    'source': 'openstreetmap.org',
+                }),
+            )
+
+            self.assert_has_feature(
+                z, x, y, 'roads', {
+                    'kind': 'minor_road',
+                    'toll_hgv': expect,
+                })
