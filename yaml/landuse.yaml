@@ -461,7 +461,7 @@ filters:
       <<: *leaftype_kind_detail
       tier: 2
   - filter: { landuse: forest }
-    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: forest
