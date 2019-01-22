@@ -168,7 +168,7 @@ class DemoteEarlyLandcover(FixtureTest):
 
     ######################################################################
     #
-    # zoom 11+
+    # zoom 12+
     #
     ######################################################################
 
@@ -191,3 +191,104 @@ class DemoteEarlyLandcover(FixtureTest):
 
     def test_aquarium(self):
         self._check_min_zoom({'tourism': 'aquarium'}, 'aquarium', 12)
+
+    ######################################################################
+    #
+    # zoom 13+
+    #
+    ######################################################################
+
+    def test_petting_zoo(self):
+        self._check_min_zoom({'zoo': 'petting_zoo'}, 'petting_zoo', 13)
+
+    def test_playground(self):
+        self._check_min_zoom({'leisure': 'playground'}, 'playground', 13)
+
+    def test_substation(self):
+        self._check_min_zoom({'power': 'substation'}, 'substation', 13)
+
+    def test_allotments(self):
+        self._check_min_zoom({'landuse': 'allotments'}, 'allotments', 13)
+
+    def test_pedestrian(self):
+        self._check_min_zoom({'highway': 'pedestrian'}, 'pedestrian', 13)
+
+    def test_fuel(self):
+        self._check_min_zoom({'amenity': 'fuel'}, 'fuel', 13)
+
+    def test_bridge(self):
+        self._check_min_zoom({'man_made': 'bridge'}, 'bridge', 13)
+
+    def test_footway(self):
+        self._check_min_zoom({'highway': 'footway'}, 'footway', 13)
+
+    def test_tower(self):
+        self._check_min_zoom({'man_made': 'tower'}, 'tower', 13)
+
+    def test_apron(self):
+        self._check_min_zoom({'aeroway': 'apron'}, 'apron', 13)
+
+    def test_hedge(self):
+        self._check_min_zoom({'barrier': 'hedge'}, 'hedge', 13)
+
+    def test_library(self):
+        self._check_min_zoom({'amenity': 'library'}, 'library', 13)
+
+    def test_theatre(self):
+        self._check_min_zoom({'amenity': 'theatre'}, 'theatre', 13)
+
+    def test_breakwater(self):
+        self._check_min_zoom({'man_made': 'breakwater'}, 'breakwater', 13)
+
+    def test_picnic_site(self):
+        self._check_min_zoom({'tourism': 'picnic_site'}, 'picnic_site', 13)
+
+    def test_dog_park(self):
+        self._check_min_zoom({'leisure': 'dog_park'}, 'dog_park', 13)
+
+    def test_cinema(self):
+        self._check_min_zoom({'amenity': 'cinema'}, 'cinema', 13)
+
+    def test_water_park(self):
+        self._check_min_zoom({'leisure': 'water_park'}, 'water_park', 13)
+
+    def test_harbour(self):
+        self._check_min_zoom({'landuse': 'harbour'}, 'harbour', 13)
+
+    def test_groyne(self):
+        self._check_min_zoom({'man_made': 'groyne'}, 'groyne', 13)
+
+    def test_runway(self):
+        self._check_min_zoom({'aeroway': 'runway'}, 'runway', 13)
+
+    def test_tree_row(self):
+        self._check_min_zoom({'natural': 'tree_row'}, 'tree_row', 13)
+
+    def test_animal(self):
+        self._check_min_zoom({'attraction': 'animal'}, 'animal', 13)
+
+    def test_taxiway(self):
+        self._check_min_zoom({'aeroway': 'taxiway'}, 'taxiway', 13)
+
+    def test_enclosure(self):
+        self._check_min_zoom({'zoo': 'enclosure'}, 'enclosure', 13)
+
+    def test_cutline(self):
+        self._check_min_zoom({'man_made': 'cutline'}, 'cutline', 13)
+
+    def test_trail_riding_station(self):
+        self._check_min_zoom({'tourism': 'trail_riding_station'},
+                             'trail_riding_station', 13)
+
+    def test_aviary(self):
+        self._check_min_zoom({'zoo': 'aviary'}, 'aviary', 13)
+
+    def test_dike(self):
+        self._check_min_zoom({'man_made': 'dike'}, 'dike', 13)
+
+    def test_summer_toboggan(self):
+        self._check_min_zoom({'attraction': 'summer_toboggan'},
+                             'summer_toboggan', 13)
+
+    def test_winery(self):
+        self._check_min_zoom({'tourism': 'winery'}, 'winery', 13)

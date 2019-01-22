@@ -224,22 +224,22 @@ filters:
   # aren't in any tier.
   ############################################################
   - filter: {zoo: enclosure}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: enclosure
   - filter: {zoo: petting_zoo}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: petting_zoo
   - filter: {zoo: aviary}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: aviary
   - filter: {attraction: animal}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: animal
@@ -254,7 +254,7 @@ filters:
       <<: *output_properties
       kind: roller_coaster
   - filter: {attraction: summer_toboggan}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: summer_toboggan
@@ -710,7 +710,7 @@ filters:
       tier: 4
   # substation
   - filter: { power: [substation, station, sub_station] }
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: substation
@@ -779,7 +779,7 @@ filters:
         - port_terminal
         - ferry_terminal
         - container_terminal
-    min_zoom: { clamp: { min: 11, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 1.81 ] } } }
     output:
       <<: *output_properties
       kind: {col: landuse}
@@ -819,14 +819,14 @@ filters:
       tier: 4
   # bridge
   - filter: {man_made: bridge}
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: bridge
       tier: 4
   # tower
   - filter: {man_made: tower}
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: tower
@@ -835,7 +835,7 @@ filters:
   - filter:
       man_made: breakwater
       geom_type: polygon
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: breakwater
@@ -851,7 +851,7 @@ filters:
   - filter:
       man_made: groyne
       geom_type: polygon
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: groyne
@@ -860,7 +860,7 @@ filters:
   - filter:
       man_made: dike
       geom_type: polygon
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: dike
@@ -869,7 +869,7 @@ filters:
   - filter:
       man_made: cutline
       geom_type: polygon
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: cutline
@@ -901,7 +901,7 @@ filters:
       tier: 5
   # winery
   - filter: {tourism: winery}
-    min_zoom: *tier5_min_zoom
+    min_zoom: { max: [ 13, *tier5_min_zoom ] }
     output:
       <<: *output_properties
       kind: winery
@@ -982,7 +982,7 @@ filters:
       tier: 6
   # allotments
   - filter: {landuse: allotments}
-    min_zoom: *tier6_min_zoom
+    min_zoom: { max: [ 13, *tier6_min_zoom ] }
     output:
       <<: *output_properties
       kind: allotments
@@ -991,7 +991,7 @@ filters:
   - filter:
       highway: pedestrian
       geom_type: polygon
-    min_zoom: *tier6_min_zoom
+    min_zoom: { max: [ 13, *tier6_min_zoom ] }
     output:
       <<: *output_properties
       kind: pedestrian
@@ -1019,7 +1019,7 @@ filters:
       tier: 6
   # playground
   - filter: {leisure: playground}
-    min_zoom: *tier6_min_zoom
+    min_zoom: { max: [ 13, *tier6_min_zoom ] }
     output:
       <<: *output_properties
       kind: playground
@@ -1138,27 +1138,27 @@ filters:
   - filter:
       highway: footway
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: footway
   - filter: {amenity: library}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: library
   - filter: {amenity: fuel}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: fuel
   - filter: {amenity: cinema}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: cinema
   - filter: {amenity: theatre}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: theatre
@@ -1170,24 +1170,24 @@ filters:
   - filter:
       aeroway: runway
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: runway
   - filter:
       aeroway: taxiway
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: taxiway
   - filter: {aeroway: apron}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: apron
   - filter: {tourism: trail_riding_station}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: trail_riding_station
@@ -1197,7 +1197,7 @@ filters:
       <<: *output_properties
       kind: scree
   - filter: {leisure: water_park}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: water_park
@@ -1218,7 +1218,7 @@ filters:
       kind: dam
     extra_columns: [way]
   - filter: {leisure: dog_park}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: dog_park
@@ -1248,17 +1248,17 @@ filters:
       <<: *output_properties
       kind: caravan_site
   - filter: {tourism: picnic_site}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: picnic_site
   - filter: {natural: tree_row}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: tree_row
   - filter: {barrier: hedge}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: hedge
