@@ -557,7 +557,7 @@ filters:
       kind: rural
       tier: 2
   - filter: {landuse: residential}
-    min_zoom: *tier2_min_zoom
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: residential

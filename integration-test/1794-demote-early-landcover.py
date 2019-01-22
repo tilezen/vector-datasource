@@ -97,3 +97,32 @@ class DemoteEarlyLandcover(FixtureTest):
                 'kind': 'natural_wood',
                 'min_zoom': 9,
             })
+
+    def test_residential(self):
+        # having looked at this area on aerial imagery, it's a bit of a
+        # stretch to call it "residential". there are houses, but they're
+        # not exactly tightly packed. the population of allegedly 100,000
+        # seems unrealistic. still, it serves as an example of the kind of
+        # data that's out there.
+        import dsl
+
+        z, x, y = (14, 4478, 6953)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/6612640
+            dsl.way(6612640, dsl.box_area(z, x, y, 320463090), {
+                'addr:state': 'Florida',
+                'landuse': 'residential',
+                'name': 'Golden Gate Estates',
+                'population': '100000',
+                'source': 'openstreetmap.org',
+                'type': 'multipolygon',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 6612640,
+                'kind': 'residential',
+                'min_zoom': 9,
+            })
