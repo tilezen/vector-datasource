@@ -189,6 +189,9 @@ class DemoteEarlyLandcover(FixtureTest):
     def test_caravan_site(self):
         self._check_min_zoom({'tourism': 'caravan_site'}, 'caravan_site', 12)
 
+    def test_camp_site(self):
+        self._check_min_zoom({'tourism': 'camp_site'}, 'camp_site', 12)
+
     def test_aquarium(self):
         self._check_min_zoom({'tourism': 'aquarium'}, 'aquarium', 12)
 
@@ -292,3 +295,25 @@ class DemoteEarlyLandcover(FixtureTest):
 
     def test_winery(self):
         self._check_min_zoom({'tourism': 'winery'}, 'winery', 13)
+
+    ######################################################################
+    #
+    # zoom 15+
+    #
+    ######################################################################
+
+    def test_amusement_ride(self):
+        self._check_min_zoom({'attraction': 'amusement_ride'},
+                             'amusement_ride', 15, tile_zoom=15)
+
+    def test_carousel(self):
+        self._check_min_zoom({'attraction': 'carousel'}, 'carousel', 15,
+                             tile_zoom=15)
+
+    def test_water_slide(self):
+        self._check_min_zoom({'attraction': 'water_slide'}, 'water_slide', 15,
+                             tile_zoom=15)
+
+    def test_roller_coaster(self):
+        self._check_min_zoom({'attraction': 'roller_coaster'},
+                             'roller_coaster', 15, tile_zoom=15)

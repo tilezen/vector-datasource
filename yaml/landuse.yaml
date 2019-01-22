@@ -244,12 +244,12 @@ filters:
       <<: *output_properties
       kind: animal
   - filter: {attraction: water_slide}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 15, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: water_slide
   - filter: {attraction: roller_coaster}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 15, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: roller_coaster
@@ -259,12 +259,12 @@ filters:
       <<: *output_properties
       kind: summer_toboggan
   - filter: {attraction: carousel}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 15, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: carousel
   - filter: {attraction: amusement_ride}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 15, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: amusement_ride
@@ -1358,7 +1358,7 @@ filters:
       <<: *output_properties
       kind: power_minor_line
   - filter: {tourism: camp_site}
-    min_zoom: { clamp: { min: 13, max: 16, value: { col: zoom } } }
+    min_zoom: { max: [ 12, *tier5_min_zoom ] }
     output:
       <<: *output_properties
       kind: camp_site
