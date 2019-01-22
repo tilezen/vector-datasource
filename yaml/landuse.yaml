@@ -269,7 +269,7 @@ filters:
       <<: *output_properties
       kind: amusement_ride
   - filter: {historic: fort}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: fort
@@ -585,7 +585,7 @@ filters:
   - filter:
       military: danger_area
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: danger_area
@@ -593,7 +593,7 @@ filters:
   - filter:
       military: range
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: range
@@ -1163,7 +1163,7 @@ filters:
       <<: *output_properties
       kind: theatre
   - filter: {amenity: prison}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: prison
@@ -1212,7 +1212,7 @@ filters:
   - filter:
       waterway: dam
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: dam

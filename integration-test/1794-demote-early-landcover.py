@@ -126,3 +126,36 @@ class DemoteEarlyLandcover(FixtureTest):
                 'kind': 'residential',
                 'min_zoom': 9,
             })
+
+    def _check_min_zoom(self, tags, kind, min_zoom, tile_zoom=14):
+        import dsl
+
+        z, x, y = (tile_zoom, 0, 0)
+
+        shape = dsl.tile_box(min_zoom, 0, 0)
+        all_tags = tags.copy()
+        all_tags['source'] = 'openstreetmap.org'
+
+        self.generate_fixtures(dsl.way(1, shape, all_tags))
+
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 1,
+                'kind': kind,
+                'min_zoom': min_zoom,
+            })
+
+    def test_dam(self):
+        self._check_min_zoom({'waterway': 'dam'}, 'dam', 11)
+
+    def test_prison(self):
+        self._check_min_zoom({'amenity': 'prison'}, 'prison', 11)
+
+    def test_fort(self):
+        self._check_min_zoom({'historic': 'fort'}, 'fort', 11)
+
+    def test_range(self):
+        self._check_min_zoom({'military': 'range'}, 'range', 11)
+
+    def test_danger_area(self):
+        self._check_min_zoom({'military': 'danger_area'}, 'danger_area', 11)
