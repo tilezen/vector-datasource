@@ -536,15 +536,8 @@ filters:
       <<: *leaftype_kind_detail
       tier: 2
 
-  - filter: { natural: wood, operator: *us_forest_service }
-    min_zoom: { max: [ 6, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: natural_wood
-      <<: *leaftype_kind_detail
-      tier: 2
   - filter: { natural: wood }
-    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: natural_wood
