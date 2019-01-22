@@ -842,7 +842,7 @@ filters:
   - filter:
       man_made: breakwater
       geom_type: polygon
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: breakwater

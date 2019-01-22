@@ -348,13 +348,21 @@ post_process:
       start_zoom: 0
       end_zoom: 13
       property: kind
+      # don't want to apply this to linear features such as dams?
+      where: >-
+        geom_type in ('Polygon', 'MultiPolygon')
       # note that we don't need to remap things to themselves, e.g:
       # kind=desert stays as-is.
       remap:
+        # aerodrome
+        airfield: aerodrome
+
         # barren
         quarry: barren
+        rock: barren
         scree: barren
         shingle: barren
+        stone: barren
 
         # desert
         bare_rock: desert
@@ -367,24 +375,54 @@ post_process:
         vineyard: farmland
 
         # forest
+        cutline: forest
         natural_wood: forest
         wood: forest
 
         # grassland
+        common: grassland
         grass: grassland
         heath: grassland
         meadow: grassland
+        scrub: grassland
+
+        # land
+        dam: land
+
+        # military
+        danger_area: military
+        range: military
+
+        # university
+        college: university
 
         # urban_area
         allotments: urban_area
-        cemetery: urban_area
+        artwork: urban_area
+        attraction: urban_area
+        cinema: urban_area
         commercial: urban_area
+        container_terminal: urban_area
+        ferry_terminal: urban_area
+        fort: urban_area
+        generator: urban_area
         industrial: urban_area
+        pitch: urban_area
+        place_of_worship: urban_area
+        plant: urban_area
+        port: urban_area
+        port_terminal: urban_area
+        prison: urban_area
+        railway: urban_area
         recreation_ground: urban_area
         residential: urban_area
         retail: urban_area
         school: urban_area
+        service_area: urban_area
         village_green: urban_area
+        wastewater_plant: urban_area
+        water_works: urban_area
+        works: urban_area
 
         # wetland
         mud: wetland

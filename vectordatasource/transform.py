@@ -8371,12 +8371,13 @@ def remap(ctx):
 
     features = layer['features']
     for feature in features:
-        _, props, _ = feature
+        shape, props, _ = feature
 
         # skip this feature if there's a where clause and it evaluates falsey.
         if where is not None:
             local = props.copy()
             local['zoom'] = ctx.nominal_zoom
+            local['geom_type'] = shape.geom_type
             if not eval(where, {}, local):
                 continue
 
