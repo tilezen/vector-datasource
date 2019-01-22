@@ -724,14 +724,14 @@ filters:
       tier: 4
   # sports_centre
   - filter: {leisure: sports_centre}
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 12, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: sports_centre
       tier: 4
   # recreation_ground
   - filter: {landuse: recreation_ground}
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 12, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: recreation_ground
@@ -805,7 +805,7 @@ filters:
       kind: pier
   # wastewater_plant
   - filter: {man_made: wastewater_plant}
-    min_zoom: *tier4_min_zoom
+    min_zoom: { max: [ 12, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: wastewater_plant
@@ -894,7 +894,7 @@ filters:
       tier: 5
   # aquarium
   - filter: {tourism: aquarium}
-    min_zoom: *tier5_min_zoom
+    min_zoom: { max: [ 12, *tier5_min_zoom ] }
     output:
       <<: *output_properties
       kind: aquarium
@@ -1223,7 +1223,7 @@ filters:
       <<: *output_properties
       kind: dog_park
   - filter: {leisure: track}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 12, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: recreation_track
@@ -1243,7 +1243,7 @@ filters:
       <<: *output_properties
       kind: mud
   - filter: {tourism: caravan_site}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 12, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: caravan_site

@@ -145,6 +145,12 @@ class DemoteEarlyLandcover(FixtureTest):
                 'min_zoom': min_zoom,
             })
 
+    ######################################################################
+    #
+    # zoom 11+
+    #
+    ######################################################################
+
     def test_dam(self):
         self._check_min_zoom({'waterway': 'dam'}, 'dam', 11)
 
@@ -159,3 +165,29 @@ class DemoteEarlyLandcover(FixtureTest):
 
     def test_danger_area(self):
         self._check_min_zoom({'military': 'danger_area'}, 'danger_area', 11)
+
+    ######################################################################
+    #
+    # zoom 11+
+    #
+    ######################################################################
+
+    def test_sports_cente(self):
+        self._check_min_zoom({'leisure': 'sports_centre'}, 'sports_centre', 12)
+
+    def test_recreation_ground(self):
+        self._check_min_zoom(
+            {'landuse': 'recreation_ground'}, 'recreation_ground', 12)
+
+    def test_recreation_track(self):
+        self._check_min_zoom({'leisure': 'track'}, 'recreation_track', 12)
+
+    def test_wastewater_plant(self):
+        self._check_min_zoom(
+            {'man_made': 'wastewater_plant'}, 'wastewater_plant', 12)
+
+    def test_caravan_site(self):
+        self._check_min_zoom({'tourism': 'caravan_site'}, 'caravan_site', 12)
+
+    def test_aquarium(self):
+        self._check_min_zoom({'tourism': 'aquarium'}, 'aquarium', 12)
