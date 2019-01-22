@@ -665,11 +665,23 @@ At zoom 12 and below, we consolidate some landuse kinds to reduce the amount of 
 
 The current mappings are:
 
+* `airfield` -> `aerodrome`
 * `allotments` -> `urban_area`
+* `artwork` -> `urban_area`
+* `attraction` -> `urban_area`
 * `bare_rock` -> `desert`
-* `cemetery` -> `urban_area`
+* `cinema` -> `urban_area`
+* `college` -> `university`
 * `commercial` -> `urban_area`
+* `common` -> `grassland`
+* `container_terminal` -> `urban_area`
+* `cutline` -> `forest`
+* `dam` -> `land`
+* `danger_area` -> `military`
 * `farm` -> `farmland`
+* `ferry_terminal` -> `urban_area`
+* `fort` -> `urban_area`
+* `generator` -> `urban_area`
 * `grass` -> `grassland`
 * `heath` -> `grassland`
 * `industrial` -> `urban_area`
@@ -677,18 +689,33 @@ The current mappings are:
 * `mud` -> `wetland`
 * `natural_wood` -> `forest`
 * `orchard` -> `farmland`
+* `pitch` -> `urban_area`
+* `place_of_worship` -> `urban_area`
+* `plant` -> `urban_area`
 * `plant_nursery` -> `farmland`
+* `port` -> `urban_area`
+* `port_terminal` -> `urban_area`
+* `prison` -> `urban_area`
 * `quarry` -> `barren`
+* `railway` -> `urban_area`
+* `range` -> `military`
 * `recreation_ground` -> `urban_area`
 * `residential` -> `urban_area`
 * `retail` -> `urban_area`
+* `rock` -> `barren`
 * `sand` -> `desert`
 * `school` -> `urban_area`
 * `scree` -> `barren`
+* `scrub` -> `grassland`
+* `service_area` -> `urban_area`
 * `shingle` -> `barren`
+* `stone` -> `barren`
 * `village_green` -> `urban_area`
 * `vineyard` -> `farmland`
+* `wastewater_plant` -> `urban_area`
+* `water_works` -> `urban_area`
 * `wood` -> `forest`
+* `works` -> `urban_area`
 
 
 ## Places
