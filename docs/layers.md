@@ -670,16 +670,12 @@ The current mappings are:
 * `artwork` -> `urban_area`
 * `attraction` -> `urban_area`
 * `bare_rock` -> `desert`
-* `cinema` -> `urban_area`
 * `college` -> `university`
 * `commercial` -> `urban_area`
 * `common` -> `grassland`
-* `container_terminal` -> `urban_area`
-* `cutline` -> `forest`
 * `dam` -> `barren`
 * `danger_area` -> `military`
 * `farm` -> `farmland`
-* `ferry_terminal` -> `urban_area`
 * `fort` -> `urban_area`
 * `generator` -> `urban_area`
 * `grass` -> `grassland`
@@ -694,8 +690,6 @@ The current mappings are:
 * `place_of_worship` -> `urban_area`
 * `plant` -> `urban_area`
 * `plant_nursery` -> `farmland`
-* `port` -> `urban_area`
-* `port_terminal` -> `urban_area`
 * `prison` -> `urban_area`
 * `quarry` -> `barren`
 * `railway` -> `urban_area`

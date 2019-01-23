@@ -30,29 +30,17 @@ class LandUseTest(FixtureTest):
     def test_attraction_urban_area(self):
         self._check_remap({'tourism': 'attraction'}, 'urban_area')
 
-    def test_cinema_urban_area(self):
-        self._check_remap({'amenity': 'cinema'}, 'urban_area')
-
     def test_college_university(self):
         self._check_remap({'amenity': 'college'}, 'university')
 
     def test_common_grassland(self):
         self._check_remap({'leisure': 'common'}, 'grassland')
 
-    def test_container_terminal_urban_area(self):
-        self._check_remap({'landuse': 'container_terminal'}, 'urban_area')
-
-    def test_cutline_forest(self):
-        self._check_remap({'man_made': 'cutline'}, 'forest')
-
     def test_dam_barren(self):
         self._check_remap({'waterway': 'dam'}, 'barren')
 
     def test_danger_area_military(self):
         self._check_remap({'military': 'danger_area'}, 'military')
-
-    def test_ferry_terminal_urban_area(self):
-        self._check_remap({'landuse': 'ferry_terminal'}, 'urban_area')
 
     def test_fort_urban_area(self):
         self._check_remap({'historic': 'fort'}, 'urban_area')
@@ -71,12 +59,6 @@ class LandUseTest(FixtureTest):
 
     def test_plant_urban_area(self):
         self._check_remap({'power': 'plant'}, 'urban_area')
-
-    def test_port_urban_area(self):
-        self._check_remap({'landuse': 'port'}, 'urban_area')
-
-    def test_port_terminal_urban_area(self):
-        self._check_remap({'landuse': 'port_terminal'}, 'urban_area')
 
     def test_prison_urban_area(self):
         self._check_remap({'amenity': 'prison'}, 'urban_area')

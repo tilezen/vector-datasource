@@ -377,7 +377,6 @@ post_process:
         vineyard: farmland
 
         # forest
-        cutline: forest
         natural_wood: forest
         wood: forest
 
@@ -399,18 +398,13 @@ post_process:
         allotments: urban_area
         artwork: urban_area
         attraction: urban_area
-        cinema: urban_area
         commercial: urban_area
-        container_terminal: urban_area
-        ferry_terminal: urban_area
         fort: urban_area
         generator: urban_area
         industrial: urban_area
         pitch: urban_area
         place_of_worship: urban_area
         plant: urban_area
-        port: urban_area
-        port_terminal: urban_area
         prison: urban_area
         railway: urban_area
         residential: urban_area
