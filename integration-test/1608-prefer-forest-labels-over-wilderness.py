@@ -236,7 +236,7 @@ class ForestTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 972008,
                 'kind': 'forest',
-                'min_zoom': 8,
+                'min_zoom': 7,
             })
 
     def test_emigrant_wilderness(self):
@@ -398,7 +398,7 @@ class BlmTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 1447414,
                 'kind': 'forest',
-                'min_zoom': 8,
+                'min_zoom': 7,
             })
 
     def test_arapahoe_national_forest(self):
@@ -427,7 +427,7 @@ class BlmTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 396026,
                 'kind': 'forest',
-                'min_zoom': 8,
+                'min_zoom': 7,
             })
 
 
