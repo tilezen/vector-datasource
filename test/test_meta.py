@@ -518,7 +518,7 @@ class LanduseMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.landuse.fn(shape, props, None, meta)
-        self.assertEquals(9, out_min_zoom)
+        self.assertEquals(13, out_min_zoom)
 
     def test_medium_zoo(self):
         import shapely.geometry
@@ -526,8 +526,8 @@ class LanduseMinZoomTest(unittest.TestCase):
             calculate_1px_zoom
         import math
 
-        target_zoom = 11.0
-        # want a zoom 11 feature, so make one with a triangle.
+        target_zoom = 14.0
+        # want a zoom 14 feature, so make one with a triangle.
         target_area = math.exp((17.256 - target_zoom) * math.log(4))
         # make area with a half-square triangle.
         s = math.sqrt(target_area * 2.0)

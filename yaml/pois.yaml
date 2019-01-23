@@ -2105,7 +2105,7 @@ filters:
       ref: {col: lwn_ref}
       walking_network: lwn
   - filter: {tourism: camp_site}
-    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    min_zoom: { max: [ 13, *tier5_min_zoom ] }
     output:
       <<: *output_properties
       kind: camp_site
