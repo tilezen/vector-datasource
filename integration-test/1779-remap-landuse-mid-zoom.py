@@ -51,8 +51,9 @@ class LanduseTest(FixtureTest):
     def test_farmland_landuse_plant_nursery(self):
         self._check_remap({'landuse': 'plant_nursery'}, 'farmland')
 
-    def test_urban_area_landuse_allotments(self):
-        self._check_remap({'landuse': 'allotments'}, 'urban_area')
+    # there used to be a test here for allotments, but they now have a
+    # min_zoom of 13, which means they don't appear at any zooms where we
+    # remap.
 
     def test_scrub_natural_scrub(self):
         self._check_remap({'natural': 'scrub'}, 'scrub')
