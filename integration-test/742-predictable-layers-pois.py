@@ -330,8 +330,8 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(362159618, wkt_loads('POLYGON ((-121.950923807319 47.19841420635209, -121.950259413334 47.19923740699769, -121.950363617907 47.20119339573959, -121.95022033662 47.20152090251779, -121.949803518328 47.20178639758358, -121.949334507918 47.20183949643739, -121.9452310037 47.20096329752068, -121.944866287695 47.20117569591198, -121.94513991453 47.20280417739327, -121.945491604964 47.20385739659169, -121.945178901414 47.20461856743319, -121.943563640701 47.20540621395919, -121.941922239014 47.20377781235158, -121.940059402609 47.1961747698475, -121.941127589314 47.19555521377131, -121.942365108449 47.1954046880206, -121.943667845274 47.19569676618629, -121.945608835108 47.19636948597748, -121.947276287939 47.1967058731945, -121.947901605208 47.1970775996474, -121.948670113934 47.19837880483669, -121.948722306052 47.19724576075879, -121.950923807319 47.19841420635209))'), {u'way_area': u'1.09671e+06', u'source': u'openstreetmap.org', u'landuse': u'quarry', u'name': u'Corliss Resources'}))  # noqa
 
         self.assert_has_feature(
-            12, 660, 1437, 'pois',
-            {'id': 362159618, 'kind': 'quarry', 'min_zoom': 12})
+            13, 1321, 2874, 'pois',
+            {'id': 362159618, 'kind': 'quarry', 'min_zoom': 13})
 
         # Label placement quarry in landuse
         self.assert_no_matching_feature(
@@ -343,8 +343,8 @@ class PredictableLayersPois(FixtureTest):
         self.generate_fixtures(dsl.way(585365655, wkt_loads('POINT (-122.377643060717 37.74618397134519)'), {u'note': u'Record <a href="http://tin.er.usgs.gov/mineplant/show.php?labno=4035">4035</a> of the <a href="http://tin.er.usgs.gov/mineplant/">Active mines and mineral plants in the US</a>', u'source': u'openstreetmap.org', u'landuse': u'quarry', u'man_made': u'mine', u'name': u'Tidewater San Francisco'}))  # noqa
 
         self.assert_has_feature(
-            14, 2622, 6334, 'pois',
-            {'id': 585365655, 'kind': 'quarry', 'min_zoom': 14})
+            16, 10489, 25337, 'pois',
+            {'id': 585365655, 'kind': 'quarry', 'min_zoom': 16})
 
     def test_recreation_ground_way(self):
         # landuse=recreation_ground in POIS
