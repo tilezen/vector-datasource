@@ -359,6 +359,7 @@ post_process:
 
         # barren
         dam: barren
+        land: barren
         quarry: barren
         rock: barren
         scree: barren

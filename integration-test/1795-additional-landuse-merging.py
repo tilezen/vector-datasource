@@ -60,8 +60,8 @@ class LandUseTest(FixtureTest):
     def test_generator_urban_area(self):
         self._check_remap({'power': 'generator'}, 'urban_area')
 
-    def test_land_stays_same(self):
-        self._check_remap({'natural': 'land'}, 'land')
+    def test_land_barren(self):
+        self._check_remap({'natural': 'land'}, 'barren')
 
     def test_pitch_urban_area(self):
         self._check_remap({'leisure': 'pitch'}, 'urban_area')

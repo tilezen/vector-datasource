@@ -685,6 +685,7 @@ The current mappings are:
 * `grass` -> `grassland`
 * `heath` -> `grassland`
 * `industrial` -> `urban_area`
+* `land` -> `barren`
 * `meadow` -> `grassland`
 * `mud` -> `wetland`
 * `natural_wood` -> `forest`
