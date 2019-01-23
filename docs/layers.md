@@ -699,15 +699,12 @@ The current mappings are:
 * `quarry` -> `barren`
 * `railway` -> `urban_area`
 * `range` -> `military`
-* `recreation_ground` -> `urban_area`
 * `residential` -> `urban_area`
 * `retail` -> `urban_area`
 * `rock` -> `barren`
 * `sand` -> `desert`
-* `school` -> `urban_area`
 * `scree` -> `barren`
 * `scrub` -> `grassland`
-* `service_area` -> `urban_area`
 * `shingle` -> `barren`
 * `stone` -> `barren`
 * `village_green` -> `urban_area`

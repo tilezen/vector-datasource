@@ -412,11 +412,8 @@ post_process:
         port_terminal: urban_area
         prison: urban_area
         railway: urban_area
-        recreation_ground: urban_area
         residential: urban_area
         retail: urban_area
-        school: urban_area
-        service_area: urban_area
         village_green: urban_area
         wastewater_plant: urban_area
         water_works: urban_area

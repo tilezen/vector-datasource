@@ -94,11 +94,12 @@ class LanduseTest(FixtureTest):
         # i.e: checking that it's _not_ remapped.
         self._check_remap({'landuse': 'cemetery'}, 'cemetery')
 
-    def test_urban_area_landuse_recreation_ground(self):
-        self._check_remap({'landuse': 'recreation_ground'}, 'urban_area')
+    def test_landuse_recreation_ground_not_remapped(self):
+        self._check_remap(
+            {'landuse': 'recreation_ground'}, 'recreation_ground')
 
-    def test_urban_area_amenity_school(self):
-        self._check_remap({'amenity': 'school'}, 'urban_area')
+    def test_school_not_remapped(self):
+        self._check_remap({'amenity': 'school'}, 'school')
 
     def test_glacier_natural_glacier(self):
         self._check_remap({'natural': 'glacier'}, 'glacier')

@@ -93,8 +93,8 @@ class LandUseTest(FixtureTest):
     def test_scrub_grassland(self):
         self._check_remap({'natural': 'scrub'}, 'grassland')
 
-    def test_service_area_urban_area(self):
-        self._check_remap({'highway': 'services'}, 'urban_area')
+    def test_service_area_not_remapped(self):
+        self._check_remap({'highway': 'services'}, 'service_area')
 
     def test_stone_barren(self):
         self._check_remap({'natural': 'stone'}, 'barren')
