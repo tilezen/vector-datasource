@@ -676,7 +676,7 @@ The current mappings are:
 * `common` -> `grassland`
 * `container_terminal` -> `urban_area`
 * `cutline` -> `forest`
-* `dam` -> `land`
+* `dam` -> `barren`
 * `danger_area` -> `military`
 * `farm` -> `farmland`
 * `ferry_terminal` -> `urban_area`

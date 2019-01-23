@@ -358,6 +358,7 @@ post_process:
         airfield: aerodrome
 
         # barren
+        dam: barren
         quarry: barren
         rock: barren
         scree: barren
@@ -385,9 +386,6 @@ post_process:
         heath: grassland
         meadow: grassland
         scrub: grassland
-
-        # land
-        dam: land
 
         # military
         danger_area: military

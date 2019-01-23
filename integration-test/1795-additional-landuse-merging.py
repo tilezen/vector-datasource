@@ -45,8 +45,8 @@ class LandUseTest(FixtureTest):
     def test_cutline_forest(self):
         self._check_remap({'man_made': 'cutline'}, 'forest')
 
-    def test_dam_land(self):
-        self._check_remap({'waterway': 'dam'}, 'land')
+    def test_dam_barren(self):
+        self._check_remap({'waterway': 'dam'}, 'barren')
 
     def test_danger_area_military(self):
         self._check_remap({'military': 'danger_area'}, 'military')
