@@ -1088,6 +1088,12 @@ class FixtureFeatureFetcher(object):
             yield tile_layers.keys()
         return inner(z, x, y)
 
+    def tile(self, z, x, y):
+        @contextmanager
+        def inner(z, x, y):
+            yield self._generate_tile(z, x, y)
+        return inner(z, x, y)
+
     def features_in_mvt_layer(self, z, x, y, layer):
         @contextmanager
         def inner(z, x, y, layer):
@@ -1259,8 +1265,11 @@ def expand_bbox(bounds, padding):
 
 class EmptyContext(object):
 
+    def __init__(self, factory=list):
+        self.factory = factory
+
     def __enter__(self):
-        return []
+        return self.factory()
 
     def __exit__(self, type, value, traceback):
         pass
@@ -1330,6 +1339,9 @@ class RunTestInstance(object):
     def layers_in_tile(self, z, x, y):
         return self.assertions.ff.layers_in_tile(z, x, y)
 
+    def tile(self, z, x, y):
+        return self.assertions.ff.tile(z, x, y)
+
     def features_in_mvt_layer(self, z, x, y, layer):
         return self.assertions.ff.features_in_mvt_layer(z, x, y, layer)
 
@@ -1377,6 +1389,9 @@ class DownloadOnlyInstance(object):
 
     def layers_in_tile(self, z, x, y):
         return EmptyContext()
+
+    def tile(self, z, x, y):
+        return EmptyContext(dict)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         return EmptyContext()
@@ -1428,6 +1443,10 @@ class CollectTilesInstance(object):
     def layers_in_tile(self, z, x, y):
         self._add_tile(z, x, y)
         return EmptyContext()
+
+    def tile(self, z, x, y):
+        self._add_tile(z, x, y)
+        return EmptyContext(dict)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         self._add_tile(z, x, y)
@@ -1485,6 +1504,9 @@ class FixtureTest(unittest.TestCase):
 
     def layers_in_tile(self, z, x, y):
         return self.test_instance.layers_in_tile(z, x, y)
+
+    def tile(self, z, x, y):
+        return self.test_instance.tile(z, x, y)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         return self.test_instance.features_in_mvt_layer(z, x, y, layer)

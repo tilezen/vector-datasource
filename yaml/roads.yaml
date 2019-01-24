@@ -14,17 +14,17 @@ global:
       ref: {col: ref}
       operator: {col: operator}
       route: {col: route}
-      type: {col: tags->type}
-      colour: {col: tags->colour}
-      state: {col: tags->state}
-      symbol: {col: tags->symbol}
-      description: {col: tags->description}
-      distance: {col: tags->distance}
-      ascent: {col: tags->ascent}
-      descent: {col: tags->descent}
-      roundtrip: {col: tags->roundtrip}
-      route_name: {col: tags->route_name}
-      motor_vehicle: {col: tags->motor_vehicle}
+      type: {col: type}
+      colour: {col: colour}
+      state: {col: state}
+      symbol: {col: symbol}
+      description: {col: description}
+      distance: {col: distance}
+      ascent: {col: ascent}
+      descent: {col: descent}
+      roundtrip: {col: roundtrip}
+      route_name: {col: route_name}
+      motor_vehicle: {col: motor_vehicle}
       access: {col: access}
       bicycle: {col: bicycle}
       hgv:
@@ -38,12 +38,12 @@ global:
           - { when: { surface: 'concrete:plates' }, then: 'concrete_plates' }
           - { when: { surface: 'concrete:lanes' }, then: 'concrete_lanes' }
           - { when: { surface: 'cobblestone:flattened' }, then: 'cobblestone_flattened' }
-          - else: { col: 'tags->surface' }
+          - else: { col: 'surface' }
       # NOTE: moved directly to sql
       # bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
       bicycle_network: {col: mz_cycling_network}
       oneway: {col: oneway}
-      oneway_bicycle: {col: "tags->oneway:bicycle"}
+      oneway_bicycle: {col: "oneway:bicycle"}
       cycleway:
         case:
           - when:
@@ -128,33 +128,33 @@ global:
       ref: {col: ref}
       operator: {col: operator}
       route: {col: route}
-      type: {col: tags->type}
-      colour: {col: tags->colour}
-      network: {col: tags->network}
-      state: {col: tags->state}
-      description: {col: tags->description}
-      distance: {col: tags->distance}
-      ascent: {col: tags->ascent}
-      descent: {col: tags->descent}
-      roundtrip: {col: tags->roundtrip}
-      route_name: {col: tags->route_name}
-      kind_detail: {col: "tags->piste:type"}
-      piste_difficulty: {col: "tags->piste:difficulty"}
-      piste_grooming: {col: "tags->piste:grooming"}
-      piste_name: {col: "tags->piste:name"}
-      ski: {col: tags->ski}
-      snowshoe: {col: tags->snowshoe}
-      symbol: {col: tags->symbol}
+      type: {col: type}
+      colour: {col: colour}
+      network: {col: network}
+      state: {col: state}
+      description: {col: description}
+      distance: {col: distance}
+      ascent: {col: ascent}
+      descent: {col: descent}
+      roundtrip: {col: roundtrip}
+      route_name: {col: route_name}
+      kind_detail: {col: "piste:type"}
+      piste_difficulty: {col: "piste:difficulty"}
+      piste_grooming: {col: "piste:grooming"}
+      piste_name: {col: "piste:name"}
+      ski: {col: ski}
+      snowshoe: {col: snowshoe}
+      symbol: {col: symbol}
   - &osm_footway_properties
       <<: *output_properties
       foot: {col: foot}
       horse: {col: horse}
       tracktype: {col: tracktype}
-      incline: {col: tags->incline}
-      ramp: {col: tags->ramp}
-      ramp_bicycle: {col: "tags->ramp:bicycle"}
-      trail_visibility: {col: tags->trail_visibility}
-      sac_scale: {col: tags->sac_scale}
+      incline: {col: incline}
+      ramp: {col: ramp}
+      ramp_bicycle: {col: "ramp:bicycle"}
+      trail_visibility: {col: trail_visibility}
+      sac_scale: {col: sac_scale}
   - &ne_properties
       <<: *output_properties
       ref: {col: name}

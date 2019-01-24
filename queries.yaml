@@ -1647,3 +1647,20 @@ post_process:
   - fn: vectordatasource.transform.max_zoom_filter
     params:
       layers: [places]
+
+  # collision rank
+  - fn: vectordatasource.transform.add_collision_rank
+    params:
+      where: >-
+        layer_name == 'pois' or
+        _has_name or
+        ref is not None or
+        shield_text is not None or
+        bicycle_shield_text is not None or
+        bus_shield_text is not None or
+        walking_shield_text is not None
+    resources:
+      ranker:
+        type: file
+        init_fn: vectordatasource.transform.load_collision_ranker
+        path: spreadsheets/collision_rank.yaml

@@ -34,16 +34,16 @@ class CampGroundsZoom(FixtureTest):
 
         self.assert_has_feature(
             16, 10471, 25326, 'landuse',
-            {'kind': 'camp_site', 'sort_rank': 105})
+            {'kind': 'camp_site', 'sort_rank': 105, 'min_zoom': 14})
 
         # small campground in point zoom 16
         self.assert_has_feature(
             16, 10471, 25326, 'pois',
             {'kind': 'camp_site'})
 
-        # small campground in landuse zoom 13
+        # small campground in landuse zoom 14
         self.assert_has_feature(
-            13, 1308, 3165, 'landuse',
+            14, 2617, 6331, 'landuse',
             {'kind': 'camp_site', 'sort_rank': 105})
 
         # small campground in point zoom 13

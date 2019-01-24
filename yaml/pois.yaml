@@ -28,7 +28,10 @@ global:
     light_rail_routes: {col: light_rail_routes}
     tram_routes: {col: tram_routes}
   - &health_facility_type_kind_detail
-    kind_detail: {col: 'health_facility:type'}
+    kind_detail:
+      case:
+        - when: {'health_facility:type': [CSCom, chemist_dispensing, clinic, counselling_centre, dispensary, first_aid, health_center, health_centre, hospital, laboratory, medical_clinic, office, pharmacy]}
+          then: {col: 'health_facility:type'}
   # common properties for {bi|motor}cycle parking
   - &cycle_parking_properties
     access: {col: access}
@@ -216,6 +219,163 @@ global:
         - Wildlife Management
         - Wildlife Management Area
         - Wildlife Sanctuary
+  # whitelist of religions to use in kind_detail (do not use for plain
+  # religion tag)
+  - &religion_kind_detail
+    kind_detail:
+      case:
+        - when:
+            religion:
+              - animist
+              - bahai
+              - buddhist
+              - caodaism
+              - catholic
+              - christian
+              - confucian
+              - hindu
+              - jain
+              - jewish
+              - multifaith
+              - muslim
+              - pagan
+              - pastafarian
+              - scientologist
+              - shinto
+              - sikh
+              - spiritualist
+              - taoist
+              - tenrikyo
+              - unitarian_universalist
+              - voodoo
+              - yazidi
+              - zoroastrian
+          then: {col: religion}
+  - &sport_kind_detail
+    kind_detail:
+      case:
+        - when:
+            sport:
+              - 10pin
+              - 9pin
+              - american_football
+              - archery
+              - athletics
+              - badminton
+              - baseball
+              - basketball
+              - beachvolleyball
+              - billiards
+              - bmx
+              - boules
+              - bowls
+              - canoe
+              - chess
+              - climbing
+              - cricket
+              - cricket_nets
+              - cycling
+              - equestrian
+              - exercise
+              - field_hockey
+              - fitness
+              - football
+              - free_flying
+              - futsal
+              - gaelic_games
+              - golf
+              - gymnastics
+              - handball
+              - hockey
+              - horse_racing
+              - ice_hockey
+              - ice_skating
+              - karting
+              - model_aerodrome
+              - motocross
+              - motor
+              - multi
+              - netball
+              - padel
+              - pelota
+              - rugby
+              - rugby_league
+              - rugby_union
+              - running
+              - scuba_diving
+              - shooting
+              - skateboard
+              - skating
+              - skiing
+              - soccer
+              - soccer;basketball
+              - softball
+              - swimming
+              - table_tennis
+              - team_handball
+              - tennis
+              - trampoline
+              - volleyball
+              - yoga
+          then: {col: sport}
+  - &cuisine_kind_detail
+    kind_detail:
+      case:
+        - when:
+            cuisine:
+              - american
+              - asian
+              - barbecue
+              - breakfast
+              - burger
+              - cake
+              - chicken
+              - chinese
+              - coffee_shop
+              - crepe
+              - donut
+              - fish
+              - fish_and_chips
+              - french
+              - friture
+              - georgian
+              - german
+              - greek
+              - ice_cream
+              - indian
+              - international
+              - italian
+              - japanese
+              - kebab
+              - korean
+              - lebanese
+              - local
+              - mediterranean
+              - mexican
+              - noodle
+              - pizza
+              - ramen
+              - regional
+              - sandwich
+              - seafood
+              - spanish
+              - steak_house
+              - sushi
+              - tapas
+              - thai
+              - turkish
+              - vegetarian
+              - vietnamese
+          then: {col: cuisine}
+        - when:
+            cuisine:
+              - italian_pizza
+              - italian;pizza
+          then: italian
+        - when:
+            cuisine:
+              - pizza;italian
+          then: pizza
   - &no_name_okay
         - aerialway: pylon
         - aeroway: [ gate, helipad ]
@@ -734,7 +894,7 @@ filters:
             then: cemetery
           - else: grave_yard
       tier: 4
-      kind_detail: { col: religion }
+      <<: *religion_kind_detail
       denomination: { col: denomination }
   # commercial - no POI
   # cutline - no POI
@@ -1050,7 +1210,7 @@ filters:
     output:
       <<: *output_properties
       kind: pitch
-      kind_detail: {col: sport}
+      <<: *sport_kind_detail
       tier: 6
   # pitch - only show no-name pitches for some smaller set of sports, and at a
   # higher zoom.
@@ -1061,7 +1221,7 @@ filters:
     output:
       <<: *output_properties
       kind: pitch
-      kind_detail: {col: sport}
+      <<: *sport_kind_detail
       tier: 6
   # place_of_worship
   - filter: {amenity: place_of_worship}
@@ -1224,7 +1384,7 @@ filters:
     output:
       <<: *output_properties
       kind: {col: amenity}
-      kind_detail: {col: cuisine}
+      <<: *cuisine_kind_detail
   - filter:
       shop: [coffee, deli]
     min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
@@ -1945,7 +2105,7 @@ filters:
       ref: {col: lwn_ref}
       walking_network: lwn
   - filter: {tourism: camp_site}
-    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 4.9 ] } } }
+    min_zoom: { max: [ 13, *tier5_min_zoom ] }
     output:
       <<: *output_properties
       kind: camp_site
@@ -2373,7 +2533,17 @@ filters:
     output:
       <<: *output_properties
       kind: crane
-      kind_detail: {col: "crane:type"}
+      kind_detail:
+        case:
+          - when:
+              "crane:type":
+                - portal_crane
+                - gantry_crane
+                - travel_lift
+                - floor-mounted_crane
+                - shiploader
+                - tower_crane
+            then: {col: "crane:type"}
   - filter: {leisure: water_park}
     min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.34 ] } } }
     output:
