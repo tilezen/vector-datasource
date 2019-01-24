@@ -477,7 +477,7 @@ post_process:
   - fn: vectordatasource.transform.exterior_boundaries
     params:
       base_layer: water
-      start_zoom: 9
+      start_zoom: 8
       prop_transform:
         kind: true
         id: true
