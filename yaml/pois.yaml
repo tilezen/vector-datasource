@@ -2601,7 +2601,7 @@ filters:
       kind: picnic_site
 
   - filter: {landuse: quarry}
-    min_zoom: { clamp: { min: 12, max: 14, value: { sum: [ { col: zoom }, 3 ] } } }
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 3.5 ] } } }
     output:
       <<: *output_properties
       kind: quarry
