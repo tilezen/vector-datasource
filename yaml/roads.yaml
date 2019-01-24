@@ -27,6 +27,10 @@ global:
       motor_vehicle: {col: motor_vehicle}
       access: {col: access}
       bicycle: {col: bicycle}
+      hgv:
+        case:
+          - when: {hgv: [agricultural, delivery, designated, destination, local, 'no']}
+            then: {col: hgv}
       service: {col: service}
       sport: {col: sport}
       surface:
@@ -90,6 +94,28 @@ global:
             then: {col: embankment}
           - when: {embankment: [both, two_sided]}
             then: 'yes'
+
+      # tolls
+      toll:
+        case:
+          - when:
+              toll: true
+              not: {toll: 'no'}
+            then: true
+      toll_hgv:
+        case:
+          - when:
+              "toll:hgv": true
+              not: {"toll:hgv": 'no'}
+            then: true
+
+      # vehicle dimensions / content restrictions
+      maxweight: {col: maxweight}
+      maxheight: {col: maxheight}
+      maxwidth: {col: maxwidth}
+      maxlength: {col: maxlength}
+      maxaxleload: {col: maxaxleload}
+      hazmat: {col: hazmat}
   - &osm_network
       mz_networks: {col: mz_networks}
       network: {col: network}

@@ -225,6 +225,7 @@ layers:
       - vectordatasource.transform.normalize_cycleway
       - vectordatasource.transform.add_is_bicycle_related
       - vectordatasource.transform.add_road_network_from_ncat
+      - vectordatasource.transform.add_vehicle_restrictions
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
