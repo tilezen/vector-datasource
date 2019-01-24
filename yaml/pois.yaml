@@ -546,6 +546,15 @@ filters:
   ############################################################
   - filter:
       boundary: national_park
+      protect_class: '6'
+      protection_title: National Forest
+    min_zoom: { max: [ 7, *tier2_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: forest
+      tier: 2
+  - filter:
+      boundary: national_park
       operator: *us_forest_service
     min_zoom: { max: [ 8, *tier2_min_zoom ] }
     output:
@@ -561,24 +570,6 @@ filters:
     output:
       <<: *output_properties
       kind: park
-      tier: 2
-  - filter:
-      boundary: national_park
-      protect_class: '6'
-      protection_title: National Forest
-    min_zoom: { max: [ 8, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: forest
-      tier: 2
-  - filter:
-      boundary: national_park
-      protect_class: '6'
-      protection_title: National Forest
-    min_zoom: { max: [ 8, *tier2_min_zoom ] }
-    output:
-      <<: *output_properties
-      kind: forest
       tier: 2
   - filter:
       boundary: national_park
