@@ -2,7 +2,30 @@
 from . import FixtureTest
 
 
-class LowZoomWaterTest(FixtureTest):
+# for Natural Earth lakes (and it looks like only lakes?) we query both the
+# shape and its boundary, so we end up with two copies of the data.
+class NELakeFixtureTest(FixtureTest):
+
+    def generate_fixtures(self, *objs):
+        from dsl import Feature
+
+        boundaries = []
+        for feature in objs:
+            if feature.shape.geom_type in ('Polygon', 'MultiPolygon'):
+                props = feature.properties.copy()
+                props['boundary'] = True
+                boundary = Feature(
+                    feature.fid,
+                    feature.shape.boundary,
+                    props)
+                boundaries.append(boundary)
+
+        new_objs = list(objs)
+        new_objs.extend(boundaries)
+        FixtureTest.generate_fixtures(self, *new_objs)
+
+
+class LowZoomWaterTest(NELakeFixtureTest):
 
     def test_no_lake_labels_z3(self):
         import dsl
@@ -92,6 +115,45 @@ class LowZoomWaterTest(FixtureTest):
                 'source': u'naturalearthdata.com',
                 'wdid_score': 4,
                 'wikidataid': u'Q272463',
+            }),
+        )
+
+        # we shouldn't get a label placement point
+        self.assert_no_matching_feature(
+            z, x, y, 'water', {
+                'kind': 'lake',
+                'label_placement': True,
+            })
+
+        # but we should get a lake polygon, but that lake polygon shouldn't
+        # have names or name translations on it.
+        self.assert_has_feature(
+            z, x, y, 'water', {
+                'kind': 'lake',
+                'name': type(None),
+                'name:fr': type(None),
+            })
+
+    def test_no_label_boundary(self):
+        # test that the boundary of the lake doesn't contribute a label
+        # to the tile, and that we strip names from the boundaries.
+        import dsl
+
+        z, x, y = (4, 3, 4)
+        area = 30000000000
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.box_area(z, x, y, area, include_boundary=True), {
+                'featurecla': u'Lake',
+                'label': u'Lake',
+                'min_label': 3.7,
+                'min_zoom': 2.0,
+                'name': u'Lake',
+                'ne_id': u'1',
+                'scalerank': 2,
+                'source': u'naturalearthdata.com',
+                'wdid_score': 4,
+                'wikidataid': u'Q999999999',
             }),
         )
 
