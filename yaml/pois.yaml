@@ -673,7 +673,7 @@ filters:
   # few things in advance which seem to be more specific.
   ############################################################
   - filter: {natural: wetland}
-    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    min_zoom: { max: [ 15, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: wetland
