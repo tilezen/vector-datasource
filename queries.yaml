@@ -485,6 +485,26 @@ post_process:
         boundary: [true]
         area: true
       snap_tolerance: 0.125
+
+  # the NE water queries pull in the full set of object properties for boundary
+  # lines, which we don't want. strip them off here.
+  - fn: vectordatasource.transform.drop_names
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 8
+      geom_types: [LineString, MultiLineString]
+      where: >-
+        kind == 'lake' and boundary
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 8
+      properties: [mz_label_placement]
+      where: >-
+        kind == 'lake' and boundary
+
   # have to do the water properties matching _after_ exterior boundaries
   # as it depends on having the "boundary: yes" property available.
   - fn: vectordatasource.transform.csv_match_properties
