@@ -1,3 +1,8 @@
+# clip input to the bounds of EPSG:3857 _before_ projecting. this ensures that
+# there are no unprojectable points, but that the data fills the all the way to
+# the corners of the world.
+OGR_CLIP_OPTS=-clipsrc -180 -85.051128779806604 180 85.051128779806604
+
 all: download shapefiles
 
 upload: shapefiles
@@ -22,7 +27,7 @@ download: {{ src_shapefile_zips }}
 	touch {{ shapefile.src_shp }}
 
 {{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
-	OGR_ENABLE_PARTIAL_REPROJECTION=1 ogr2ogr -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.tgt_shp }} {{ shapefile.src_shp }}
+	ogr2ogr $(OGR_CLIP_OPTS) -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.tgt_shp }} {{ shapefile.src_shp }}
 {% if shapefile.tile %}
 	python tile-shapefile.py {{ shapefile.tgt_shp }} tiled-{{ shapefile.tgt_shp }}
 	rm -f {{ shapefile.tgt_shp_wildcard }}
