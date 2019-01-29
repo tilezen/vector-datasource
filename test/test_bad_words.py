@@ -36,12 +36,49 @@ class TestComparison(TestCase):
         badwords = BadWords([u'foo'])
         self.assertTrue(badwords.is_bad(u'foo'))
 
-    def test_substring(self):
-        # word is bad, even as part of a larger string
+    # def test_substring(self):
+    #     # word is bad, even as part of a larger string
+    #     from vectordatasource.badwords import BadWords
+
+    #     badwords = BadWords([u'foo'])
+    #     self.assertTrue(badwords.is_bad(u'xfoox'))
+
+    def test_starts_with(self):
+        # word is bad when it starts a longer word?
         from vectordatasource.badwords import BadWords
 
         badwords = BadWords([u'foo'])
-        self.assertTrue(badwords.is_bad(u'xfoox'))
+        self.assertTrue(badwords.is_bad(u'Fooville'))
+        self.assertTrue(badwords.is_bad(u'Footropolis'))
+
+    def test_multiple_words(self):
+        # some bad "words" are really bad phrases
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords([u'foo bar'])
+        self.assertFalse(badwords.is_bad(u'foo'))
+        self.assertFalse(badwords.is_bad(u'bar'))
+        self.assertTrue(badwords.is_bad(u'foo bar'))
+
+        # should it be bad or OK if we drop the space?
+        self.assertTrue(badwords.is_bad(u'foobar'))
+
+    def test_space_delimited(self):
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords([u'foo'])
+        self.assertTrue(badwords.is_bad(u' foo'))
+        self.assertTrue(badwords.is_bad(u'foo '))
+        self.assertTrue(badwords.is_bad(u' foo '))
+        self.assertTrue(badwords.is_bad(u'the foo word'))
+
+    def test_punctuation_delimited(self):
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords([u'foo'])
+        self.assertTrue(badwords.is_bad(u'bad,foo,word'))
+        self.assertTrue(badwords.is_bad(u'foo,'))
+        self.assertTrue(badwords.is_bad(u',foo'))
 
     def test_not_bad(self):
         from vectordatasource.badwords import BadWords
@@ -77,3 +114,31 @@ class TestComparison(TestCase):
 
         badwords = BadWords([u'foo'])
         self.assertTrue(badwords.is_bad(u'fôó'))
+
+
+class TestExact(TestCase):
+
+    def test_exact_word(self):
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords(exact_words=[u'foo'])
+        self.assertTrue(badwords.is_bad(u'foo'))
+
+    def test_not_match_longer_word(self):
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords(exact_words=[u'foo'])
+        self.assertFalse(badwords.is_bad(u'foob'))
+        self.assertFalse(badwords.is_bad(u'xfoo'))
+
+    def test_match_when_space_delimited(self):
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords(exact_words=[u'foo'])
+        self.assertTrue(badwords.is_bad(u'the foo word'))
+
+    def test_not_match_when_space_delimited_longer_word(self):
+        from vectordatasource.badwords import BadWords
+
+        badwords = BadWords(exact_words=[u'foo'])
+        self.assertFalse(badwords.is_bad(u'the foob word'))
