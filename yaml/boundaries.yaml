@@ -159,22 +159,16 @@ filters:
         - 'Line of control (please verify)'
         - 'Overlay limit'
         - 'Unrecognized'
+        - 'Map unit boundary'
         - 'Breakaway'
         - 'Claim boundary'
         - 'Elusive frontier'
         - 'Reference line'
-    min_zoom: 0
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       <<: *ne_localized_kind_properties
       kind: *ne_country_boundaries_kind
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: Map unit boundary}
-    min_zoom: 5
-    output:
-      <<: *output_properties
-      kind: map_unit
       kind_detail: '2'
     table: ne
 
