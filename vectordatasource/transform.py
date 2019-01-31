@@ -8595,3 +8595,35 @@ def add_collision_rank(ctx):
                     props['collision_rank'] = rank
 
     return None
+
+
+# mappings from the fclass_XXX values in the Natural Earth disputed areas data
+# to the matching Tilezen kind.
+_REMAP_VIEWPOINT_KIND = {
+    'Disputed (please verify)': 'disputed',
+    'Indefinite (please verify)': 'indefinite',
+    'Indeterminant frontier': 'indeterminate',
+    'International boundary (verify)': 'country',
+    'Lease limit': 'lease_limit',
+    'Line of control (please verify)': 'line_of_control',
+    'Overlay limit': 'overlay_limit',
+    'Unrecognized': 'unrecognized',
+    'Map unit boundary': 'map_unit',
+    'Breakaway': 'disputed_breakaway',
+    'Claim boundary': 'disputed_claim',
+    'Elusive frontier': 'disputed_elusive',
+    'Reference line': 'disputed_reference_line',
+}
+
+
+def remap_viewpoint_kinds(shape, props, fid, zoom):
+    """
+    Remap Natural Earth kinds in kind:* country viewpoints into the standard
+    Tilezen nomenclature.
+    """
+
+    for key in props.keys():
+        if key.startswith('kind:'):
+            props[key] = _REMAP_VIEWPOINT_KIND.get(props[key])
+
+    return (shape, props, fid)

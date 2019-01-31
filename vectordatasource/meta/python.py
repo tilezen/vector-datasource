@@ -104,6 +104,14 @@ def parse_sum(ast_state, orig):
     return left
 
 
+# known operators for table lookup
+_KNOWN_OPS = {
+    '>=': ast.GtE,
+    '<=': ast.LtE,
+    '==': ast.Eq,
+}
+
+
 def parse_lookup(ast_state, l):
     assert isinstance(l, dict)
     assert set(l.keys()) >= set(('key', 'op', 'table'))
@@ -111,8 +119,9 @@ def parse_lookup(ast_state, l):
     key = ast_value(ast_state, l['key'])
 
     # only support >=, <= for now
-    assert l['op'] in ['>=', '<=']
-    op = ast.GtE() if l['op'] == '>=' else ast.LtE()
+    assert l['op'] in _KNOWN_OPS, '%r is not one of %r known binary ' \
+        'operators' % (l['op'], _KNOWN_OPS.keys())
+    op = _KNOWN_OPS[l['op']]()
 
     default = ast_value(ast_state, l.get('default'))
 

@@ -291,6 +291,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.remap_viewpoint_kinds
     area-inclusion-threshold: 1
   transit:
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]

@@ -116,6 +116,39 @@ def parse_case_for_kinds(case_stmt, item):
     return all_kinds
 
 
+def parse_lookup_for_kinds(lookup_stmt, item):
+    """
+    Parse a lookup statement to get all the possible return values.
+    """
+
+    any_default = False
+    all_kinds = set()
+
+    op = {
+        '>=': lambda x, y: x >= y,
+        '<=': lambda x, y: x <= y,
+        '==': lambda x, y: x == y,
+    }[lookup_stmt['op']]
+
+    all_table_keys = parse_col_values(lookup_stmt['key'], item)
+    for key in all_table_keys:
+        for output, comparison in lookup_stmt['table']:
+            if op(comparison, key):
+                all_kinds.add(output)
+                break
+        else:
+            any_default = True
+
+    if any_default:
+        if 'default' in lookup_stmt:
+            for val in parse_col_values(lookup_stmt['default'], item):
+                all_kinds.add(val)
+        else:
+            all_kinds.add(None)
+
+    return list(all_kinds)
+
+
 def parse_start_zoom(expr):
     """
     Parse the min zoom expression to find the minimum min_zoom at which the
@@ -375,6 +408,9 @@ def parse_col_values(col, item):
 
         elif col.keys() == ['call']:
             all_kinds = all_possible_return_values_of(col['call']['func'])
+
+        elif col.keys() == ['lookup']:
+            all_kinds = parse_lookup_for_kinds(col['lookup'], item)
 
         else:
             raise ValueError("Don't understand dict column with keys %r in %r"

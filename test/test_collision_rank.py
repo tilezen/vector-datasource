@@ -127,6 +127,7 @@ class CollisionRankTest(TestCase):
             padded_bounds,
             params,
             resources,
+            log=None,
         )
 
         # NOTE: modifies layers in-place, doesn't return anything
