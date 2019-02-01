@@ -1494,6 +1494,16 @@ post_process:
       source_layers: [water]
       pixel_area: 0.1
 
+  # before we drop admin_areas, use them to strip out bad words by country and
+  # language.
+  - fn: vectordatasource.transform.strip_bad_words
+    params: {}
+    resources:
+      badwords:
+        type: yaml_tree
+        init_fn: vectordatasource.transform.BadWordsFilter
+        path: spreadsheets/badwords
+
   # drop this layer before simplify_and_clip - we don't want it in the output,
   # so don't waste time simplifying and clipping it to the tile.
   - fn: vectordatasource.transform.drop_layer

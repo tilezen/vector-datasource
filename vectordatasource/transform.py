@@ -26,6 +26,7 @@ from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
 from util import to_float
+from vectordatasource.badwords import BadWords
 from zope.dottedname.resolve import resolve
 import csv
 import pycountry
@@ -8627,3 +8628,48 @@ def remap_viewpoint_kinds(shape, props, fid, zoom):
             props[key] = _REMAP_VIEWPOINT_KIND.get(props[key])
 
     return (shape, props, fid)
+
+
+class BadWordsAction(object):
+
+    def __init__(self, data):
+        unicode_words = []
+        for word in data['words']:
+            if isinstance(word, unicode):
+                unicode_words.append(word)
+            elif isinstance(word, str):
+                unicode_words.append(word.decode('utf-8'))
+            else:
+                raise ValueError("Expected unicode or UTF-8 encoded str, "
+                                 "but got %r" % (word,))
+
+        self.badwords = BadWords(unicode_words)
+        self.exceptions = data.get('except', [])
+        self.action = data['action']
+
+
+class BadWordsFilter(object):
+
+    def __init__(self, data):
+        self.global_filter = map(BadWordsAction, data['global'])
+
+        self.countries = {}
+        for iso_code, cdata in data.get('countries', {}).iteritems():
+            self.countries[iso_code] = map(BadWordsAction, cdata)
+
+        self.languages = {}
+        for iso_code, ldata in data.get('languages', {}).iteritems():
+            self.countries[iso_code] = map(BadWordsAction, ldata)
+
+
+def strip_bad_words(ctx):
+    """
+    Strip bad words depending on context (country, language).
+    """
+
+    badwords = ctx.resources.get('badwords')
+    assert badwords, 'strip_bad_words: missing badwords resource'
+
+    # TODO: actual stuff
+
+    return None
