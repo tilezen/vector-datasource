@@ -1,0 +1,9 @@
+# these are specific overrides for the USA, *added* to the global list. this is
+# for stuff that's specifically bad in the USA and nowhere else.
+#
+# it's a slightly different thing from saying that these are more offensive to
+# people in the USA, but since people in the USA are mostly looking at places
+# in the USA, then there's at least a strong correlation.
+
+- words: [damn]
+  action: { hide_until_zoom: 16 }

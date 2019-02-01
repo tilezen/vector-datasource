@@ -1,0 +1,9 @@
+# the bad words here will be *added* to the global list if the tile overlaps a
+# country marked as speaking this language. this is useful for when words in one
+# language are dictionary words in a different language.
+
+# note that we don't have to whitelist or except the many places called "Heck"
+# in Germany and Austria, because those places won't be marked as primarily
+# speaking English.
+- words: [heck]
+  action: drop

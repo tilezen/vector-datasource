@@ -1,0 +1,26 @@
+# global bad words list. this is applied to _all_ tiles, so make sure that stuff
+# you put in here is genuinely bad globally.
+
+# darn is one of the worst swears imaginable - we want to drop it whenever we
+# find it, except for a few specific uses.
+- words: [darn]
+  except:
+    # a mountain called "Darn". this will allow things called "Darn" in tiles
+    # containing the point 66.41/-22.56 from zoom 16 up to zoom 12. the lower
+    # the min_zoom, the less precise a tile is, and the more other features
+    # might creep in - so best to use as high a zoom as you can.
+    - { lat: 66.4118200, lng: -22.5571000, min_zoom: 12 }
+    # places called "Darnford" or "Darnton"
+    - { word: Darnford }
+    - { word: Darnton }
+  action: drop
+
+# fiddlesticks is bad, but appears in a bunch of place names and businesses.
+# so we might not want to drop it entirely
+- words: [fiddlesticks]
+  action: { hide_until_zoom: 16 }
+
+# doggone is bad, but we might need to keep it in some prominent place names,
+# so we just censor ourselves. adults will know what we mean.
+- words: [doggone]
+  action: { replace_with: "d*****e" }
