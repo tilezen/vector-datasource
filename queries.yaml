@@ -777,35 +777,6 @@ post_process:
       where: >-
         kind == 'lake'
 
-  # some water polygon features are too small to need a label - and if we label
-  # them then the label is often so prominent that it hides the polygon it's
-  # for! see the images here for examples of this:
-  # https://github.com/tilezen/vector-datasource/issues/1477#issuecomment-447162484
-  #
-  # therefore, we want to remove the name properties from those small water
-  # polygon features before we extract the label placements in a following step.
-  - fn: vectordatasource.transform.drop_names
-    params:
-      source_layer: water
-      start_zoom: 4
-      end_zoom: 16
-      geom_types: [Polygon, MultiPolygon]
-      where: >-
-        area < {
-            4:  40000000000,
-            5:  10000000000,
-            6:   5000000000,
-            7:    400000000,
-            8:    200000000,
-            9:    100000000,
-            10:    10000000,
-            11:     4000000,
-            12:      750000,
-            13:      100000,
-            14:       50000,
-            15:       10000,
-        }.get(zoom)
-
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:
@@ -816,6 +787,40 @@ post_process:
       label_property_value: true
       label_where: >-
         'name' in properties
+
+  # some water polygon features are too small to need a label - and if we label
+  # them then the label is often so prominent that it hides the polygon it's
+  # for! see the images here for examples of this:
+  # https://github.com/tilezen/vector-datasource/issues/1477#issuecomment-447162484
+  #
+  # we want to reset min_zoom on these features and screen them out if they
+  # don't meet minimum sizes per zoom.
+  - fn: vectordatasource.transform.update_min_zoom
+    params:
+      source_layer: water
+      start_zoom: 4
+      end_zoom: 16
+      # the inclusion of "None" in the list might seem odd, but None compares
+      # numerically smaller than any integer, so acts as a default for this
+      # table.
+      min_zoom: >-
+        [min_zoom for min_zoom, area_threshold in [
+            (4,  40000000000),
+            (5,  10000000000),
+            (6,   5000000000),
+            (7,    400000000),
+            (8,    200000000),
+            (9,    100000000),
+            (10,    10000000),
+            (11,     4000000),
+            (12,      750000),
+            (13,      100000),
+            (14,       50000),
+            (15,       10000),
+            (16,        None),
+        ] if area >= area_threshold][0]
+      where: >-
+        kind == 'lake' and label_placement
 
   - fn: vectordatasource.transform.handle_label_placement
     params:

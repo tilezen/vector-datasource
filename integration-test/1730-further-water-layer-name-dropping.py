@@ -172,3 +172,52 @@ class LowZoomWaterTest(NELakeFixtureTest):
                 'name': type(None),
                 'name:fr': type(None),
             })
+
+
+class WaterLabelZoomAdjustmentTest(FixtureTest):
+
+    def test_label_lake_athabasca_z5(self):
+        import dsl
+
+        z, x, y = (5, 6, 9)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.box_area(z, x, y, 31390412728.710949), {
+                'featurecla': u'Lake',
+                'label': u'Lake Athabasca',
+                'min_label': 3.7,
+                'min_zoom': 2.0,
+                'name': u'Lake Athabasca',
+                'name_abb': u'L. Athabasca',
+                'name_de': u'Athabascasee',
+                'name_en': u'Lake Athabasca',
+                'name_es': u'Lago Athabasca',
+                'name_fr': u'lac Athabasca',
+                'name_hu': u'Atabaszk-tó',
+                'name_it': u'Athabasca',
+                'name_ja': u'アサバスカ湖',
+                'name_nl': u'Athabascameer',
+                'name_pl': u'Athabaska',
+                'name_pt': u'Lago Athabasca',
+                'name_ru': u'Атабаска',
+                'name_sv': u'Athabascasjön',
+                'name_tr': u'Athabasca Gölü',
+                'name_zh': u'阿薩巴斯卡湖',
+                'ne_id': u'1159106863',
+                'scalerank': 2,
+                'source': u'naturalearthdata.com',
+                'wdid_score': 4,
+                'wikidataid': u'Q272463',
+            }),
+        )
+
+        # we should get a label placement point, and its zoom should have been
+        # adjusted. we should also have all the names at this point.
+        self.assert_has_feature(
+            z, x, y, 'water', {
+                'kind': 'lake',
+                'label_placement': True,
+                'min_zoom': 5,
+                'name': str,
+                'name:de': str,
+            })

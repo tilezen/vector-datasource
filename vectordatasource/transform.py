@@ -8627,3 +8627,55 @@ def remap_viewpoint_kinds(shape, props, fid, zoom):
             props[key] = _REMAP_VIEWPOINT_KIND.get(props[key])
 
     return (shape, props, fid)
+
+
+def update_min_zoom(ctx):
+    """
+    Update the min zoom for features matching the Python fragment "where"
+    clause. If none is provided, update all features.
+
+    The new min_zoom is calculated by evaluating a Python fragment passed
+    in through the "min_zoom" parameter. This is evaluated in the context
+    of the features' parameters, plus a zoom variable.
+
+    If the min zoom is lower than the current min zoom, the current one is
+    kept. If the min zoom is increased, then it's checked against the
+    current zoom and the feature dropped if it's not in range.
+    """
+
+    params = _Params(ctx, 'update_min_zoom')
+    layer_name = params.required('source_layer')
+    start_zoom = params.optional('start_zoom', typ=int, default=0)
+    end_zoom = params.optional('end_zoom', typ=int)
+    min_zoom = params.required('min_zoom')
+    where = params.optional('where')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    zoom = ctx.nominal_zoom
+
+    if zoom < start_zoom or \
+       (end_zoom is not None and zoom >= end_zoom):
+        return None
+
+    min_zoom = compile(min_zoom, 'queries.yaml', 'eval')
+    if where:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    new_features = []
+    for shape, props, fid in layer['features']:
+        local = defaultdict(lambda: None)
+        local.update(props)
+        local['zoom'] = zoom
+
+        if where and eval(where, {}, local):
+            new_min_zoom = eval(min_zoom, {}, local)
+            if new_min_zoom > props.get('min_zoom'):
+                props['min_zoom'] = new_min_zoom
+                if new_min_zoom >= zoom + 1 and zoom < 16:
+                    # DON'T add feature - it's masked by min zoom.
+                    continue
+
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer
