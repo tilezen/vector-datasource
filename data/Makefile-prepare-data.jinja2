@@ -16,14 +16,14 @@ shapefiles.tar.gz: {{ tgt_shapefile_zips }}
 
 download: {{ src_shapefile_zips }}
 
-{% for shapefile in shapefiles %}
-{{ shapefile.src_zip }}:
-	wget '{{ shapefile.url }}' -O {{ shapefile.src_zip }}
+{% for download in downloads %}
+{{ download.tgt }}:
+	wget '{{ download.url }}' -O {{ download.tgt }}
 {% endfor %}
 
 {% for shapefile in reproj_shapefiles %}
 {{ shapefile.src_shp }}: {{ shapefile.src_zip }}
-	unzip -o {{ shapefile.src_zip }}
+	unzip -o {{ shapefile.src_zip }} '{{ shapefile.src_wildcard }}'
 	touch {{ shapefile.src_shp }}
 
 {{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
@@ -41,7 +41,7 @@ download: {{ src_shapefile_zips }}
 
 {% for shapefile in tile_shapefiles %}
 {{ shapefile.src_shp }}: {{ shapefile.src_zip }}
-	unzip -o {{ shapefile.src_zip }}
+	unzip -o {{ shapefile.src_zip }} '{{ shapefile.src_wildcard }}'
 	touch {{ shapefile.src_shp }}
 
 {{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}

@@ -225,6 +225,7 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
             params=params,
             unpadded_bounds=None,
             resources=None,
+            log=None,
         )
         result = drop_features_mz_min_pixels(ctx)
         return result
@@ -352,7 +353,8 @@ class BuildingsUnifyTest(unittest.TestCase):
             nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer='buildings'),
-            resources=None)
+            resources=None,
+            log=None)
         from vectordatasource.transform import buildings_unify
         buildings_unify(ctx)
         return building_feature_layer['features']
@@ -418,7 +420,8 @@ class DropMergedIdTest(unittest.TestCase):
             nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
-            resources=None)
+            resources=None,
+            log=None)
         merged_feature_layer = merge_fn(ctx)
         merged_features = merged_feature_layer['features']
         self.assertEquals(1, len(merged_features))
@@ -527,7 +530,8 @@ class DropMergedIdTest(unittest.TestCase):
             nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
-            resources=None)
+            resources=None,
+            log=None)
         merged_feature_layer = merge_polygon_features(ctx)
         merged_features = merged_feature_layer['features']
         self.assertEquals(2, len(merged_features))
@@ -673,6 +677,7 @@ class RankBoundsTest(unittest.TestCase):
             unpadded_bounds=bounds,
             params=params,
             resources=None,
+            log=None,
         )
         rank_features(ctx)
         rank = props.get('rank')
@@ -724,7 +729,7 @@ class SimplifyAndClipTest(unittest.TestCase):
         resources = None
 
         ctx = Context(feature_layers, nominal_zoom, unpadded_bounds, params,
-                      resources)
+                      resources, log=None)
         simplify_and_clip(ctx)
 
         self.assertEquals(1, len(ctx.feature_layers))
@@ -787,7 +792,7 @@ class AdminBoundaryTest(unittest.TestCase):
         resources = None
 
         ctx = Context(feature_layers, nominal_zoom, unpadded_bounds, params,
-                      resources)
+                      resources, log=None)
 
         # the test is simply that an exception isn't thrown.
         admin_boundaries(ctx)

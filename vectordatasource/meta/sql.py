@@ -9,6 +9,7 @@ LAYER_TABLES = {
     'boundaries': [
         'ne_10m_admin_0_boundary_lines_land',
         'ne_10m_admin_0_boundary_lines_map_units',
+        'ne_10m_admin_0_boundary_lines_disputed_areas',
         'ne_10m_admin_1_states_provinces_lines',
         'ne_110m_admin_0_boundary_lines_land',
         'ne_50m_admin_0_boundary_lines_land',
