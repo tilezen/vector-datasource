@@ -20,7 +20,7 @@ nav:
     - Changelog: CHANGELOG.md
     - SemVer: SEMANTIC-VERSIONING.md
     - Contributing: CONTRIBUTING.md
-    - Tests: TESTS.md
+    - Tests: tests.md
     - Performance: PERFORMANCE.md
 #    - releasing.md
 
