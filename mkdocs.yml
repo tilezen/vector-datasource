@@ -16,14 +16,14 @@ nav:
     - Data sources: data-sources.md
     - Attribution requirements: attribution.md
   - Development:
-    - License: LICENSE.md
-    - Changelog: ../CHANGELOG.md
-    - SemVer: ../SEMANTIC-VERSIONING.md
-    - Contributing: ../CONTRIBUTING.md
-    - Tests: ../TESTS.md
-    - Performance: ../PERFORMANCE.md
+    - License: LICENSE
+    - Changelog: CHANGELOG.md
+    - SemVer: SEMANTIC-VERSIONING.md
+    - Contributing: CONTRIBUTING.md
+    - Tests: TESTS.md
+    - Performance: PERFORMANCE.md
 #    - releasing.md
-  
+
 theme: readthedocs
 markdown_extensions:
   - toc:
