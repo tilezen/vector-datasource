@@ -57,7 +57,9 @@ zoom::int,layer::int,kind,kind_detail,service,is_bridge,is_tunnel,sort_rank
 *,*,major_road,trunk,*,*,*,381
 *,*,major_road,primary,*,*,*,380
 *,*,major_road,secondary,*,*,*,379
+*,*,aeroway,runway,*,*,*,378
 *,*,major_road,tertiary,*,*,*,377
+*,*,aeroway,taxiway,*,*,*,378
 *,*,minor_road,raceway,*,*,*,375
 *,*,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,374
 *,*,minor_road,residential;unclassified;road;living_street,*,*,*,360
@@ -67,6 +69,4 @@ zoom::int,layer::int,kind,kind_detail,service,is_bridge,is_tunnel,sort_rank
 *,*,rail,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,yard,*,*,359
 *,*,rail,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,+,*,*,357
 *,*,path;piste;portage_way,*,*,*,*,354
-*,*,aeroway,runway,*,*,*,62
-*,*,aeroway,taxiway,*,*,*,61
 *,*,*,*,*,*,*,355
