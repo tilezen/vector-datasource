@@ -124,7 +124,7 @@ class DemoteEarlyLandcover(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 6612640,
                 'kind': 'residential',
-                'min_zoom': 9,
+                'min_zoom': 10,
             })
 
     def _check_min_zoom(self, tags, kind, min_zoom, tile_zoom=14):
