@@ -34,9 +34,20 @@ class AerodromeSortTest(FixtureTest):
                 assert kind not in landuse_kinds
                 landuse_kinds[kind] = sort_rank
 
-        self.assertTrue(landuse_kinds['aerodrome'] < landuse_kinds['runway'])
-        self.assertTrue(landuse_kinds['aerodrome'] < landuse_kinds['taxiway'])
-        self.assertTrue(landuse_kinds['aerodrome'] < landuse_kinds['apron'])
+        # dealing with the --download-only mode of the tests. because it
+        # yields [] into the features_in_tile_layer call, we end up with
+        # no landuse_kinds entries. we don't want that to be OK in the
+        # regular test mode, so we can assert the landuse kinds is truthy
+        # (which will short-circuit in --download-only mode) and then use
+        # an if to guard the actual tests. this is super-ugly and should
+        # go away when we don't need --download-only any more: when we've
+        # converted all the tests to generative.
+        self.assertTrue(landuse_kinds)
+        if landuse_kinds:
+            aerodrome_rank = landuse_kinds['aerodrome']
+            self.assertTrue(aerodrome_rank < landuse_kinds['runway'])
+            self.assertTrue(aerodrome_rank < landuse_kinds['taxiway'])
+            self.assertTrue(aerodrome_rank < landuse_kinds['apron'])
 
         roads_kinds = {}
         with self.features_in_tile_layer(z, x, y, 'roads') as features:
@@ -46,5 +57,8 @@ class AerodromeSortTest(FixtureTest):
                 assert kind_detail not in roads_kinds
                 roads_kinds[kind_detail] = sort_rank
 
-        self.assertTrue(landuse_kinds['aerodrome'] < roads_kinds['runway'])
-        self.assertTrue(landuse_kinds['aerodrome'] < roads_kinds['taxiway'])
+        self.assertTrue(roads_kinds)
+        if roads_kinds:
+            aerodrome_rank = landuse_kinds['aerodrome']
+            self.assertTrue(aerodrome_rank < roads_kinds['runway'])
+            self.assertTrue(aerodrome_rank < roads_kinds['taxiway'])
