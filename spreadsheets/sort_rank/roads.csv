@@ -59,7 +59,7 @@ zoom::int,layer::int,kind,kind_detail,service,is_bridge,is_tunnel,sort_rank
 *,*,major_road,secondary,*,*,*,379
 *,*,aeroway,runway,*,*,*,378
 *,*,major_road,tertiary,*,*,*,377
-*,*,aeroway,taxiway,*,*,*,378
+*,*,aeroway,taxiway,*,*,*,376
 *,*,minor_road,raceway,*,*,*,375
 *,*,highway,motorway_link;trunk_link;primary_link;secondary_link;tertiary_link,*,*,*,374
 *,*,minor_road,residential;unclassified;road;living_street,*,*,*,360
