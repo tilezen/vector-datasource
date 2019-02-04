@@ -1487,7 +1487,7 @@ The `hgv` property indicates general truck heavy goods vehicle truck access, val
 
 **Roads `hgv_restriction` values:**
 
-For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle leght, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `other` and `multiple` if more than one.
+For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values (units vary) include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle length, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `other` and `multiple` if more than one.
 
 
 #### Roads layer network values
