@@ -1,6 +1,7 @@
-Copyright 2015-2016 Mapzen
+Copyright 2015-2018 Mapzen
+Copyright 2019 Linux Foundation
 
-Licensed under a [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/) License (CC-BY-4.0).
+Documentation is licensed under a [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/) License (CC-BY-4.0).
 
 
 ## creative commons
