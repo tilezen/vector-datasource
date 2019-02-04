@@ -8,13 +8,15 @@ nav:
 #  - Terminology: terminology.md
   - Public APIs:
     - Layers Overview: layers.md
+  - Overviews:
     - "Display Tiles": display-tiles.md
     - "Use Service": use-service.md
-    - "API Keys and Rate Limits": api-keys-and-rate-limits.md
+    - "HTTP Status Codes": http-status-codes.md
   - Data sources:
     - Data sources: data-sources.md
     - Attribution requirements: attribution.md
   - Development:
+    - License: LICENSE.md
     - Changelog: ../CHANGELOG.md
     - SemVer: ../SEMANTIC-VERSIONING.md
     - Contributing: ../CONTRIBUTING.md
