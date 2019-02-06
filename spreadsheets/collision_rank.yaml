@@ -8,7 +8,25 @@
 - {$layer: 'water', kind: 'ocean'}
 - {$layer: 'places', kind: 'country'}
 # reserved for population_rank
-- _reserved: {count: 19}
+- {$layer: 'places', kind: 'locality', population_rank: 18}
+- {$layer: 'places', kind: 'locality', population_rank: 17}
+- {$layer: 'places', kind: 'locality', population_rank: 16}
+- {$layer: 'places', kind: 'locality', population_rank: 15}
+- {$layer: 'places', kind: 'locality', population_rank: 14}
+- {$layer: 'places', kind: 'locality', population_rank: 13}
+- {$layer: 'places', kind: 'locality', population_rank: 12}
+- {$layer: 'places', kind: 'locality', population_rank: 11}
+- {$layer: 'places', kind: 'locality', population_rank: 10}
+- {$layer: 'places', kind: 'locality', population_rank: 9}
+- {$layer: 'places', kind: 'locality', population_rank: 8}
+- {$layer: 'places', kind: 'locality', population_rank: 7}
+- {$layer: 'places', kind: 'locality', population_rank: 6}
+- {$layer: 'places', kind: 'locality', population_rank: 5}
+- {$layer: 'places', kind: 'locality', population_rank: 4}
+- {$layer: 'places', kind: 'locality', population_rank: 3}
+- {$layer: 'places', kind: 'locality', population_rank: 2}
+- {$layer: 'places', kind: 'locality', population_rank: 1}
+- _reserved: {count: 1}
 - {$layer: 'places', kind: 'locality'}
 # reserved for population_rank; guess the pop from kind_detail ala
 # _default_min_zoom_for_place_kind() : city, farm, hamlet, isolated_dwelling,
