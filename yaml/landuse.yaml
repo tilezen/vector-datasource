@@ -418,7 +418,7 @@ filters:
   # few things in advance which seem to be more specific.
   ############################################################
   - filter: {natural: wetland}
-    min_zoom: { max: [ 9, *tier4_min_zoom ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: wetland
@@ -557,20 +557,20 @@ filters:
       kind: rural
       tier: 2
   - filter: {landuse: residential}
-    min_zoom: { max: [ 9, *tier2_min_zoom ] }
+    min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: residential
       tier: 2
 
   - filter: { landuse: farm }
-    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: farm
       tier: 2
   - filter: { landuse: farmland }
-    min_zoom: { max: [ 10, *tier2_min_zoom ] }
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: farmland
@@ -928,7 +928,7 @@ filters:
             then: {col: surface}
   # orchard
   - filter: { landuse: orchard }
-    min_zoom: *tier5_min_zoom
+    min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
       <<: *output_properties
       kind: orchard
