@@ -2284,6 +2284,7 @@ If the roads layer features include `linear_ref_id`, then traffic flow layer fea
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
 * `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
@@ -2335,6 +2336,7 @@ If the roads layer features include `linear_ref_id`, then traffic incidents laye
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
 * `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
