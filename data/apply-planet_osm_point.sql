@@ -1,5 +1,7 @@
-DO $$
-BEGIN
+--DO $$
+--BEGIN
+
+\timing on
 
 --------------------------------------------------------------------------------
 -- planet_osm_point
@@ -76,6 +78,6 @@ CREATE INDEX
     mz_poi_min_zoom IS NOT NULL OR
     mz_water_min_zoom IS NOT NULL;
 
-END $$;
+--END $$;
 
 ANALYZE planet_osm_point;

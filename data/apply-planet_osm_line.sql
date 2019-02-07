@@ -1,5 +1,7 @@
-DO $$
-BEGIN
+--DO $$
+--BEGIN
+
+\timing on
 
 --------------------------------------------------------------------------------
 -- planet_osm_line
@@ -81,6 +83,6 @@ CREATE INDEX
     mz_transit_level IS NOT NULL OR
     mz_water_min_zoom IS NOT NULL;
 
-END $$;
+--END $$;
 
 ANALYZE planet_osm_line;

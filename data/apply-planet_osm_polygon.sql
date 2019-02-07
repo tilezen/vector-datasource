@@ -1,5 +1,7 @@
-DO $$
-BEGIN
+--DO $$
+--BEGIN
+
+\timing on
 
 --------------------------------------------------------------------------------
 -- planet_osm_polygon
@@ -113,6 +115,6 @@ CREATE INDEX
     mz_water_min_zoom IS NOT NULL;
 
 
-END $$;
+--END $$;
 
 ANALYZE planet_osm_polygon;
