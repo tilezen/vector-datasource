@@ -56,6 +56,9 @@ filters:
     # note: min_zoom needs to be smaller than any min_label in
     # ne_10m_admin_0_countries to make sure we're not dropping any by not being
     # included in the PostgreSQL index.
+    #
+    # note: also, we knock this down to 6 during post-processing for any country
+    # which doesn't match an NE curated one.
     min_zoom: 1
     output:
       <<: *output_properties
@@ -67,6 +70,9 @@ filters:
     # note: min_zoom needs to be smaller than any min_label in
     # ne_10m_admin_1_states_provinces to make sure we're not dropping any by
     # not being included in the PostgreSQL index.
+    #
+    # note: also, we knock this down to 6 during post-processing for any state
+    # which doesn't match an NE curated one.
     min_zoom: 3
     output:
       <<: *output_properties
@@ -79,6 +85,9 @@ filters:
     # note: min_zoom needs to be smaller than any min_label in
     # ne_10m_admin_1_states_provinces to make sure we're not dropping any by
     # not being included in the PostgreSQL index.
+    #
+    # note: also, we knock this down to 6 during post-processing for any province
+    # which doesn't match an NE curated one.
     min_zoom: 3
     output:
       <<: *output_properties
