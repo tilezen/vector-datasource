@@ -1168,20 +1168,28 @@ filters:
       <<: *output_properties
       kind: prison
   - filter:
-      aeroway: runway
+      any:
+        - aeroway: runway
+        - "area:aeroway": runway
       geom_type: polygon
     min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: runway
   - filter:
-      aeroway: taxiway
+      any:
+        - aeroway: taxiway
+        - "area:aeroway": taxiway
       geom_type: polygon
     min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: taxiway
-  - filter: {aeroway: apron}
+  - filter:
+      any:
+        - aeroway: apron
+        - "area:aeroway": apron
+      geom_type: polygon
     min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties

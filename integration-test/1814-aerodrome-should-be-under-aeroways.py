@@ -62,3 +62,34 @@ class AerodromeSortTest(FixtureTest):
             aerodrome_rank = landuse_kinds['aerodrome']
             self.assertTrue(aerodrome_rank < roads_kinds['runway'])
             self.assertTrue(aerodrome_rank < roads_kinds['taxiway'])
+
+            # however, we also want the roads to be _under_ the landuse
+            # polygons for the same type, due to the styling adding a
+            # casing which looks weird.
+            self.assertLess(roads_kinds['runway'], landuse_kinds['runway'])
+            self.assertLess(roads_kinds['taxiway'], landuse_kinds['taxiway'])
+
+
+class AerowayAreaTest(FixtureTest):
+
+    def _check(self, tags, kind):
+        import dsl
+
+        z, x, y = 16, 0, 0
+        tags['source'] = 'openstreetmap.org'
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), tags),
+        )
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'kind': kind,
+            })
+
+    def test_taxiway(self):
+        self._check({'area:aeroway': 'taxiway'}, 'taxiway')
+
+    def test_runway(self):
+        self._check({'area:aeroway': 'runway'}, 'runway')
+
+    def test_apron(self):
+        self._check({'area:aeroway': 'apron'}, 'apron')
