@@ -375,6 +375,39 @@ def place_population_int(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def population_rank(shape, properties, fid, zoom):
+    population = properties.get('population')
+    pop_breaks = [
+        1000000000,
+        100000000,
+        50000000,
+        20000000,
+        10000000,
+        5000000,
+        1000000,
+        500000,
+        200000,
+        100000,
+        50000,
+        20000,
+        10000,
+        5000,
+        2000,
+        1000,
+        200,
+        0,
+    ]
+    for i, pop_break in enumerate(pop_breaks):
+        if population >= pop_break:
+            rank = len(pop_breaks) - i
+            break
+    else:
+        rank = 0
+
+    properties['population_rank'] = rank
+    return (shape, properties, fid)
+
+
 def pois_capacity_int(shape, properties, fid, zoom):
     pois_capacity_str = properties.pop('capacity', None)
     capacity = to_float(pois_capacity_str)
