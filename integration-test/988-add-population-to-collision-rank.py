@@ -181,3 +181,33 @@ class CountryTest(FixtureTest):
                 'kind': 'region',
                 'population_rank': 17,
             })
+
+    def _rank(self, place, population):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'place': place,
+                'name': 'Foo State',
+                'population': str(population),
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        with self.features_in_tile_layer(z, x, y, 'places') as features:
+            assert len(features) == 1
+            return features[0]['properties'].get('collision_rank')
+
+    def test_region_collision_rank(self):
+        rank1 = self._rank('state', 500000)
+        rank2 = self._rank('state', 100000)
+
+        self.assertLess(rank1, rank2)
+
+    def test_country_collision_rank(self):
+        rank1 = self._rank('country', 5000000)
+        rank2 = self._rank('country', 1000000)
+
+        self.assertLess(rank1, rank2)

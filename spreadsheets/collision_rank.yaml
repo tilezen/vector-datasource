@@ -6,8 +6,25 @@
 - _reserved: {from: 200, to: 299}
 - {$layer: 'earth', kind: 'continent'}
 - {$layer: 'water', kind: 'ocean'}
+- {$layer: 'places', kind: 'country', population_rank: 18}
+- {$layer: 'places', kind: 'country', population_rank: 17}
+- {$layer: 'places', kind: 'country', population_rank: 16}
+- {$layer: 'places', kind: 'country', population_rank: 15}
+- {$layer: 'places', kind: 'country', population_rank: 14}
+- {$layer: 'places', kind: 'country', population_rank: 13}
+- {$layer: 'places', kind: 'country', population_rank: 12}
+- {$layer: 'places', kind: 'country', population_rank: 11}
+- {$layer: 'places', kind: 'country', population_rank: 10}
+- {$layer: 'places', kind: 'country', population_rank: 9}
+- {$layer: 'places', kind: 'country', population_rank: 8}
+- {$layer: 'places', kind: 'country', population_rank: 7}
+- {$layer: 'places', kind: 'country', population_rank: 6}
+- {$layer: 'places', kind: 'country', population_rank: 5}
+- {$layer: 'places', kind: 'country', population_rank: 4}
+- {$layer: 'places', kind: 'country', population_rank: 3}
+- {$layer: 'places', kind: 'country', population_rank: 2}
+- {$layer: 'places', kind: 'country', population_rank: 1}
 - {$layer: 'places', kind: 'country'}
-# reserved for population_rank
 - {$layer: 'places', kind: 'locality', population_rank: 18, country_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 18, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 18}
@@ -69,9 +86,25 @@
 # _default_min_zoom_for_place_kind() : city, farm, hamlet, isolated_dwelling,
 # locality, scientific_station, town, village,
 - {$layer: 'pois', kind: 'national_park'}
+- {$layer: 'places', kind: 'region', population_rank: 18}
+- {$layer: 'places', kind: 'region', population_rank: 17}
+- {$layer: 'places', kind: 'region', population_rank: 16}
+- {$layer: 'places', kind: 'region', population_rank: 15}
+- {$layer: 'places', kind: 'region', population_rank: 14}
+- {$layer: 'places', kind: 'region', population_rank: 13}
+- {$layer: 'places', kind: 'region', population_rank: 12}
+- {$layer: 'places', kind: 'region', population_rank: 11}
+- {$layer: 'places', kind: 'region', population_rank: 10}
+- {$layer: 'places', kind: 'region', population_rank: 9}
+- {$layer: 'places', kind: 'region', population_rank: 8}
+- {$layer: 'places', kind: 'region', population_rank: 7}
+- {$layer: 'places', kind: 'region', population_rank: 6}
+- {$layer: 'places', kind: 'region', population_rank: 5}
+- {$layer: 'places', kind: 'region', population_rank: 4}
+- {$layer: 'places', kind: 'region', population_rank: 3}
+- {$layer: 'places', kind: 'region', population_rank: 2}
+- {$layer: 'places', kind: 'region', population_rank: 1}
 - {$layer: 'places', kind: 'region'}
-# reserved for population_rank
-- _reserved: {count: 19}
 - {$layer: 'water', kind: 'sea'}
 - {$layer: 'pois', kind: 'nature_reserve'}
 - {$layer: 'water', kind: 'lake'}
