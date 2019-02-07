@@ -98,18 +98,22 @@ class PopulationRankTest(FixtureTest):
                 'population_rank': 0,
             })
 
-    def _rank_for_pop(self, population):
+    def _rank_for_pop(self, population, capital=None):
         import dsl
 
         z, x, y = 16, 0, 0
 
+        tags = {
+            'place': 'city',
+            'population': population,
+            'name': 'Fooville',
+            'source': 'openstreetmap.org',
+        }
+        if capital:
+            tags[capital] = 'yes'
+
         self.generate_fixtures(
-            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
-                'place': 'city',
-                'population': population,
-                'name': 'Fooville',
-                'source': 'openstreetmap.org',
-            }),
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), tags),
         )
 
         with self.features_in_tile_layer(z, x, y, 'places') as features:
@@ -125,3 +129,12 @@ class PopulationRankTest(FixtureTest):
             rank = self._rank_for_pop(population)
             self.assertLessEqual(rank, last)
             last = rank
+
+    def test_capital_ranks_earlier(self):
+        population = 10000000
+        country_capital = self._rank_for_pop(population, capital='capital')
+        state_capital = self._rank_for_pop(population, capital='state_capital')
+        not_capital = self._rank_for_pop(population)
+
+        self.assertLess(country_capital, state_capital)
+        self.assertLess(state_capital, not_capital)

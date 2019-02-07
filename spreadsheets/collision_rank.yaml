@@ -8,30 +8,66 @@
 - {$layer: 'water', kind: 'ocean'}
 - {$layer: 'places', kind: 'country'}
 # reserved for population_rank
+- {$layer: 'places', kind: 'locality', population_rank: 18, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 18, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 18}
+- {$layer: 'places', kind: 'locality', population_rank: 17, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 17, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 17}
+- {$layer: 'places', kind: 'locality', population_rank: 16, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 16, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 16}
+- {$layer: 'places', kind: 'locality', population_rank: 15, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 15, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 15}
+- {$layer: 'places', kind: 'locality', population_rank: 14, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 14, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 14}
+- {$layer: 'places', kind: 'locality', population_rank: 13, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 13, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 13}
+- {$layer: 'places', kind: 'locality', population_rank: 12, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 12, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 12}
+- {$layer: 'places', kind: 'locality', population_rank: 11, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 11, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 11}
+- {$layer: 'places', kind: 'locality', population_rank: 10, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 10, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 10}
+- {$layer: 'places', kind: 'locality', population_rank: 9, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 9, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 9}
+- {$layer: 'places', kind: 'locality', population_rank: 8, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 8, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 8}
+- {$layer: 'places', kind: 'locality', population_rank: 7, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 7, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 7}
+- {$layer: 'places', kind: 'locality', population_rank: 6, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 6, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 6}
+- {$layer: 'places', kind: 'locality', population_rank: 5, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 5, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 5}
+- {$layer: 'places', kind: 'locality', population_rank: 4, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 4, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 4}
+- {$layer: 'places', kind: 'locality', population_rank: 3, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 3, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 3}
+- {$layer: 'places', kind: 'locality', population_rank: 2, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 2, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 2}
+- {$layer: 'places', kind: 'locality', population_rank: 1, country_capital: true}
+- {$layer: 'places', kind: 'locality', population_rank: 1, region_capital: true}
 - {$layer: 'places', kind: 'locality', population_rank: 1}
-- _reserved: {count: 1}
+- {$layer: 'places', kind: 'locality', country_capital: true}
+- {$layer: 'places', kind: 'locality', region_capital: true}
 - {$layer: 'places', kind: 'locality'}
 # reserved for population_rank; guess the pop from kind_detail ala
 # _default_min_zoom_for_place_kind() : city, farm, hamlet, isolated_dwelling,
 # locality, scientific_station, town, village,
-- _reserved: {count: 19}
 - {$layer: 'pois', kind: 'national_park'}
 - {$layer: 'places', kind: 'region'}
 # reserved for population_rank
