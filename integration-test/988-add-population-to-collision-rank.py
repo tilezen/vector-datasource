@@ -138,3 +138,46 @@ class PopulationRankTest(FixtureTest):
 
         self.assertLess(country_capital, state_capital)
         self.assertLess(state_capital, not_capital)
+
+
+class CountryTest(FixtureTest):
+
+    def test_country_population_rank(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'place': 'country',
+                'name': 'Foo Country',
+                'population': '1000000000',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'kind': 'country',
+                'population_rank': 18,
+            })
+
+    def test_region_population_rank(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'place': 'state',
+                'name': 'Foo State',
+                'population': '100000000',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'kind': 'region',
+                'population_rank': 17,
+            })
