@@ -2327,6 +2327,7 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 
 #### `optional` properties:
 
+* `incident_id`: used to identify an incident that is common across multiple features. E.g. Where `road_kind` may differ across features but affected by a common incident
 * `warning_level`: the severity of the incident that has occured, with three possible values: `low` (least severer), `minor`, `major`, and `critical` (most severer).
 
 If the roads layer features include `linear_ref_id`, then traffic incidents layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
