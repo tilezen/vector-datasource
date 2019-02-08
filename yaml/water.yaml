@@ -18,6 +18,24 @@ globals:
           - when:
               intermittent: 'yes'
             then: true
+  - &water_polygon_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        # OSM data starts at z8, but we should include some stuff at z7 so that
+        # the transition doesn't have a gap in it.
+        - [ 7,   160000000 ]
+        - [ 8,    20000000 ]
+        - [ 9,     5000000 ]
+        - [ 10,    1000000 ]
+        - [ 11,     200000 ]
+        - [ 12,      50000 ]
+        - [ 13,      20000 ]
+        - [ 14,       2000 ]
+        - [ 15,       1000 ]
+        - [ 16,        400 ]
+      default: 17
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
@@ -26,7 +44,7 @@ globals:
 
 filters:
   - filter: {waterway: riverbank}
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: riverbank
@@ -44,7 +62,7 @@ filters:
       kind: fountain
     table: osm
   - filter: {natural: water}
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: water
@@ -74,7 +92,7 @@ filters:
       kind: basin
     table: osm
   - filter: {landuse: reservoir}
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: lake
@@ -84,7 +102,7 @@ filters:
       any:
         amenity: swimming_pool
         leisure: swimming_pool
-    min_zoom: *water_standard_min_zoom
+    min_zoom: *water_polygon_min_zoom
     output:
       <<: *water_standard_properties_osm
       kind: swimming_pool
@@ -132,6 +150,10 @@ filters:
           - when: { reef: [coral, rock, sand] }
             then: { col: reef }
     table: osm
+
+  #
+  # NE features
+  #
   - filter: {featurecla: Coastline}
     min_zoom: 0
     output:
@@ -139,39 +161,43 @@ filters:
       kind: ocean
     table: ne
   - filter: {featurecla: Alkaline Lake}
-    min_zoom: 0
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: lake
       alkaline: true
     table: ne
   - filter: {featurecla: Lake}
-    min_zoom: 0
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: lake
     table: ne
   - filter: {featurecla: Reservoir}
-    min_zoom: 0
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: lake
       reservoir: true
     table: ne
   - filter: {featurecla: Playa}
-    min_zoom: 0
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: playa
     table: ne
   - filter: {featurecla: Ocean}
-    min_zoom: 0
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
       kind: ocean
     table: ne
+
+  #
+  # OSM water place points (ocean, sea labels)
+  #
   - filter: {name: true, place: ocean}
-    min_zoom: 0
+    min_zoom: 1
     output:
       <<: *output_properties
       kind: ocean

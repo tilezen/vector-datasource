@@ -173,6 +173,11 @@ def match_distance(actual, expected):
                     misses[exp_k] = "%r not an instance of %r" % (v, exp_v)
                     distance += 1
 
+            elif callable(exp_v):
+                if not exp_v(v):
+                    misses[exp_k] = "%r(%r) is not truthy" % (exp_v, v)
+                    distance += 1
+
             elif v != exp_v:
                 misses[exp_k] = "%r != %r" % (v, exp_v)
                 distance += 1
@@ -915,7 +920,7 @@ class FixtureEnvironment(object):
         label_placement_layers = {
             'point': set(['earth', 'water']),
             'polygon': set(['buildings', 'earth', 'landuse', 'water']),
-            'linestring': set(['earth', 'landuse', 'water']),
+            'linestring': set(['earth', 'landuse']),
         }
 
         self.layer_data = layer_data
@@ -1081,6 +1086,12 @@ class FixtureFeatureFetcher(object):
         def inner(z, x, y):
             tile_layers = self._generate_tile(z, x, y)
             yield tile_layers.keys()
+        return inner(z, x, y)
+
+    def tile(self, z, x, y):
+        @contextmanager
+        def inner(z, x, y):
+            yield self._generate_tile(z, x, y)
         return inner(z, x, y)
 
     def features_in_mvt_layer(self, z, x, y, layer):
@@ -1254,8 +1265,11 @@ def expand_bbox(bounds, padding):
 
 class EmptyContext(object):
 
+    def __init__(self, factory=list):
+        self.factory = factory
+
     def __enter__(self):
-        return []
+        return self.factory()
 
     def __exit__(self, type, value, traceback):
         pass
@@ -1325,6 +1339,9 @@ class RunTestInstance(object):
     def layers_in_tile(self, z, x, y):
         return self.assertions.ff.layers_in_tile(z, x, y)
 
+    def tile(self, z, x, y):
+        return self.assertions.ff.tile(z, x, y)
+
     def features_in_mvt_layer(self, z, x, y, layer):
         return self.assertions.ff.features_in_mvt_layer(z, x, y, layer)
 
@@ -1346,10 +1363,11 @@ class DownloadOnlyInstance(object):
 
     def load_fixtures(self, urls, clip, simplify):
         self.env.ensure_fixture_file(urls, clip, simplify)
+        raise unittest.SkipTest("download only instance doesn't run tests")
 
     def generate_fixtures(self, objs):
         # there is nothing to download for a generated fixture.
-        pass
+        raise unittest.SkipTest("download only instance doesn't run tests")
 
     def assert_has_feature(self, z, x, y, layer, props):
         pass
@@ -1372,6 +1390,9 @@ class DownloadOnlyInstance(object):
 
     def layers_in_tile(self, z, x, y):
         return EmptyContext()
+
+    def tile(self, z, x, y):
+        return EmptyContext(dict)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         return EmptyContext()
@@ -1423,6 +1444,10 @@ class CollectTilesInstance(object):
     def layers_in_tile(self, z, x, y):
         self._add_tile(z, x, y)
         return EmptyContext()
+
+    def tile(self, z, x, y):
+        self._add_tile(z, x, y)
+        return EmptyContext(dict)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         self._add_tile(z, x, y)
@@ -1480,6 +1505,9 @@ class FixtureTest(unittest.TestCase):
 
     def layers_in_tile(self, z, x, y):
         return self.test_instance.layers_in_tile(z, x, y)
+
+    def tile(self, z, x, y):
+        return self.test_instance.tile(z, x, y)
 
     def features_in_mvt_layer(self, z, x, y, layer):
         return self.test_instance.features_in_mvt_layer(z, x, y, layer)

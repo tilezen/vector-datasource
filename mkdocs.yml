@@ -1,0 +1,30 @@
+# https://www.mkdocs.org/user-guide/configuration/
+
+site_name: Tilezen Docs
+repo_url: https://github.com/tilezen/vector-datasource/
+nav:
+  - Introduction: index.md
+#  - Introduction for Users: valhalla-intro.md
+#  - Terminology: terminology.md
+  - Public APIs:
+    - Layers Overview: layers.md
+  - Overviews:
+    - "Display Tiles": display-tiles.md
+    - "Use Service": use-service.md
+    - "HTTP Status Codes": http-status-codes.md
+  - Data sources:
+    - Data sources: data-sources.md
+    - Attribution requirements: attribution.md
+  - Development:
+    - License: LICENSE.md
+    - Changelog: CHANGELOG.md
+    - SemVer: SEMANTIC-VERSIONING.md
+    - Contributing: CONTRIBUTING.md
+    - Tests: TESTS.md
+    - Performance: PERFORMANCE.md
+#    - releasing.md
+
+theme: readthedocs
+markdown_extensions:
+  - toc:
+      permalink: True

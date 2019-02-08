@@ -56,11 +56,11 @@ globals:
         any:
           way_area: { min: 5000 }
           volume: { min: 150000 }
-        not: { "tags->location": "underground" }
+        not: { location: "underground" }
   - &z14_area_volume
       any:
-        way_area: { min: 3000 }
-        volume: { min: 100000 }
+        way_area: { min: 500 }
+        volume: { min: 50000 }
   - &z15_area_volume
       way_area: { min: 20 }
   - &z16_area_volume

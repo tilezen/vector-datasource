@@ -30,16 +30,28 @@ class LowZoomPlacesTest(FixtureTest):
                 'name': 'Guam',
             })
 
-        # should exist at zoom 2 (one past the min zoom)
-        self.assert_has_feature(
+        # should not exist at zoom 2 (one past the min zoom)
+        self.assert_no_matching_feature(
             z-1, x//2, y//2, 'places', {
-                'id': 607976629,
-                'kind': 'country',
-                'name': 'Guam',
+                'id': 607976629
             })
 
         # should not exist at zoom 1
         self.assert_no_matching_feature(
             z-2, x//4, y//4, 'places', {
                 'id': 607976629,
+            })
+
+        # should not exist at zoom 0
+        self.assert_no_matching_feature(
+            0, 0, 0, 'water', {
+                'kind': 'ocean',
+                'label_placement': True,
+            })
+
+        # should not exist at zoom 0
+        self.assert_no_matching_feature(
+            0, 0, 0, 'earth', {
+                'kind': 'continent',
+                'label_placement': True,
             })

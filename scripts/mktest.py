@@ -2,7 +2,6 @@ import requests
 import xml.etree.ElementTree as ET
 import tilequeue.tile as tile
 from ModestMaps.Core import Coordinate
-from jinja2 import Template
 import os
 from contextlib import contextmanager
 
@@ -100,14 +99,32 @@ def routes_using(way_id):
 def _make_ident(s):
     if isinstance(s, unicode):
         s = s.encode('ascii', 'replace')
+    elif isinstance(s, (int, long, bool, float)):
+        s = repr(s)
     return s.lower().translate(None, ':-')
 
 
+def _almost_repr(value):
+    # we'd prefer not to have all the u'' stuff everywhere unless it's
+    # necessary, so try to see if we can return a plain str, if the string
+    # is all ASCII anyway.
+    if isinstance(value, unicode):
+        try:
+            value = value.encode('ascii')
+        except UnicodeEncodeError:
+            # just use the original
+            pass
+
+    return repr(value)
+
+
 def _render_template(name, args):
+    from jinja2 import Environment, FileSystemLoader
+
     d = os.path.dirname(os.path.realpath(__file__))
-    template_file = os.path.join(d, 'templates', '%s.jinja2' % (name,))
-    with open(template_file) as fh:
-        template = Template(fh.read())
+    env = Environment(loader=FileSystemLoader(os.path.join(d, 'templates')))
+    env.filters['repr'] = _almost_repr
+    template = env.get_template('%s.jinja2' % (name,))
 
     output = template.render(**args)
     return output
@@ -171,15 +188,17 @@ def node_test(args):
 
 def _shapefile_iterator(sf, field_names):
     from shapely.geometry import shape as make_shape
+    from collections import defaultdict
 
     fid = 0
     for row in sf.iterShapeRecords():
         shape = make_shape(row.shape.__geo_interface__)
-        props = {}
+        props = defaultdict(lambda: None)
         for k, v in zip(field_names, row.record):
             if isinstance(v, str):
                 v = unicode(v.rstrip(), 'utf-8')
-            props[k] = v
+            if v:
+                props[k] = v
         yield shape, props, fid
         fid += 1
 
@@ -232,6 +251,8 @@ def _ne_features_from_zip(zipfile):
 
 def naturalearth_test(args):
     import json
+    from shapely.ops import transform
+    from tilequeue.tile import reproject_lnglat_to_mercator
 
     where = compile(args.where, '<command line arguments>', 'eval')
 
@@ -255,11 +276,23 @@ def naturalearth_test(args):
 
     if shape.geom_type in ('Point', 'Multipoint'):
         geom_func = 'tile_centre_shape'
+        geom_extra_args = ''
         lon, lat = shape.coords[0]
+
+    elif shape.geom_type in ('Polygon', 'MultiPolygon'):
+        shape_merc = transform(reproject_lnglat_to_mercator, shape)
+        geom_func = 'box_area'
+        geom_extra_args = ', %f' % (shape_merc.area,)
+        lon, lat = shape.representative_point().coords[0]
 
     else:
         raise RuntimeError("Haven't implemented NE shape type %r yet."
                            % (shape.geom_type,))
+
+    # check that lon & lat are within expected range. helps to catch shape
+    # files which have been projected to mercator.
+    assert -90 <= lat <= 90
+    assert -180 <= lon <= 180
 
     x, y = tile.deg2num(lat, lon, args.zoom)
     coord = Coordinate(zoom=args.zoom, column=x, row=y)
@@ -277,6 +310,7 @@ def naturalearth_test(args):
         props=props,
         expect=expect,
         layer_name=args.layer_name,
+        geom_extra_args=geom_extra_args,
     )
 
     output = _render_template('naturalearth_test', args)
@@ -371,12 +405,35 @@ class _OverpassWay(object):
         return 'dsl.way'
 
 
-class _OverpassWayArea(_OverpassWay):
+class _OverpassWayArea(object):
     def __init__(self, query):
-        super(_OverpassWayArea, self).__init__(query)
+        from shapely.geometry import Polygon
+        from shapely.ops import transform
+        from tilequeue.tile import reproject_lnglat_to_mercator
+        from tilequeue.tile import reproject_mercator_to_lnglat
+
+        element = _overpass_find('way', query)
+
+        ring = tuple((p['lon'], p['lat']) for p in element['geometry'])
+        poly = Polygon(ring)
+        poly_merc = transform(reproject_lnglat_to_mercator, poly)
+
+        point = poly_merc.centroid
+        lng, lat = reproject_mercator_to_lnglat(point.x, point.y)
+
+        self.position = (lat, lng)
+        self.element_id = element['id']
+        self.tags = element.get('tags', {})
+        self.area = poly_merc.area
+
+    def element_type(self):
+        return 'way'
+
+    def geom_fn_name(self):
+        return 'dsl.way'
 
     def geom_fn_arg(self):
-        return 'dsl.tile_box(z, x, y)'
+        return 'dsl.box_area(z, x, y, %d)' % (int(self.area),)
 
 
 class _OverpassWayLine(_OverpassWay):
@@ -385,6 +442,50 @@ class _OverpassWayLine(_OverpassWay):
 
     def geom_fn_arg(self):
         return 'dsl.tile_diagonal(z, x, y)'
+
+
+class _OverpassRel(object):
+    def __init__(self, query):
+        from shapely.ops import polygonize
+        from shapely.ops import transform
+        from tilequeue.tile import reproject_lnglat_to_mercator
+        from tilequeue.tile import reproject_mercator_to_lnglat
+
+        element = _overpass_find('relation', query)
+        assert element['members']
+        total_area = 0
+        largest_area = 0
+        point = None
+
+        lines = []
+        for m in element['members']:
+            lines.append(tuple((p['lon'], p['lat']) for p in m['geometry']))
+
+        for poly in polygonize(lines):
+            poly_merc = transform(reproject_lnglat_to_mercator, poly)
+            area = poly_merc.area
+            total_area += area
+            if area > largest_area:
+                largest_area = area
+                point = poly_merc.centroid
+
+        assert point
+        assert largest_area > 0
+
+        lng, lat = reproject_mercator_to_lnglat(point.x, point.y)
+        self.position = (lat, lng)
+        self.element_id = element['id']
+        self.tags = element.get('tags', {})
+        self.area = total_area
+
+    def element_type(self):
+        return 'relation'
+
+    def geom_fn_name(self):
+        return 'dsl.way'
+
+    def geom_fn_arg(self):
+        return 'dsl.box_area(z, x, y, %d)' % (int(self.area),)
 
 
 def _overpass_element(layer_name, query_fn, args):
@@ -429,6 +530,9 @@ def overpass_test(args):
 
     if args.poi_poly:
         _overpass_element('pois', _OverpassWayArea, args)
+
+    if args.poi_poly_rel:
+        _overpass_element('pois', _OverpassRel, args)
 
     if args.landuse:
         _overpass_element('landuse', _OverpassWayArea, args)
@@ -530,6 +634,9 @@ if __name__ == '__main__':
     overpass_parser.add_argument(
         '--landuse-label', action='store_true', help='Make a test for a point '
         'in the landuse layer from a node.')
+    overpass_parser.add_argument(
+        '--poi-poly-rel', action='store_true', help='Make a test for a POI '
+        'multipolygon relation.')
     overpass_parser.add_argument(
         '--expect',
         help='JSON-encoded dict of expected properties.')

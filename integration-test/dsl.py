@@ -120,3 +120,51 @@ def is_in(iso_code, z, x, y, way_id=-1):
         'kind': 'admin_area', 'iso_code': iso_code,
         'source': 'openstreetmap.org',
     })
+
+
+def box_area(z, x, y, area, include_boundary=False):
+    """
+    Returns a Shapely Polygon which is in the z/x/y tile and has the given
+    area in Mercator square meters.
+
+    If include_boundary is truthy, set up the shape such that the boundary
+    is part of the tile. Try to keep the centroid within the tile. If that
+    isn't possible, throw an exception.
+    """
+
+    from ModestMaps.Core import Coordinate
+    from math import sqrt
+    from shapely.geometry import box
+    from shapely.ops import transform
+    from tilequeue.tile import coord_to_mercator_bounds
+    from tilequeue.tile import half_earth_circum
+    from tilequeue.tile import reproject_mercator_to_lnglat
+
+    bounds = coord_to_mercator_bounds(Coordinate(zoom=z, column=x, row=y))
+
+    if include_boundary:
+        # make the shape 90% of the tile's height, and whatever width is
+        # necessary for that without wrapping around the world.
+        size_y = 0.9 * (bounds[3] - bounds[1])
+        size_x = area / size_y
+
+    else:
+        # otherwise, a square shape is easiest to reason about.
+        size_y = size_x = sqrt(area)
+
+    # make a shape with the given size
+    centre_x = 0.5 * (bounds[0] + bounds[2])
+    centre_y = 0.5 * (bounds[1] + bounds[3])
+
+    def _check(coord):
+        assert -half_earth_circum <= coord <= half_earth_circum
+        return coord
+
+    mercator_shape = box(
+        _check(centre_x - 0.5 * size_x),
+        _check(centre_y - 0.5 * size_y),
+        _check(centre_x + 0.5 * size_x),
+        _check(centre_y + 0.5 * size_y),
+    )
+
+    return transform(reproject_mercator_to_lnglat, mercator_shape)

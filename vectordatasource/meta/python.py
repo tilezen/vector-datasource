@@ -104,6 +104,14 @@ def parse_sum(ast_state, orig):
     return left
 
 
+# known operators for table lookup
+_KNOWN_OPS = {
+    '>=': ast.GtE,
+    '<=': ast.LtE,
+    '==': ast.Eq,
+}
+
+
 def parse_lookup(ast_state, l):
     assert isinstance(l, dict)
     assert set(l.keys()) >= set(('key', 'op', 'table'))
@@ -111,8 +119,9 @@ def parse_lookup(ast_state, l):
     key = ast_value(ast_state, l['key'])
 
     # only support >=, <= for now
-    assert l['op'] in ['>=', '<=']
-    op = ast.GtE() if l['op'] == '>=' else ast.LtE()
+    assert l['op'] in _KNOWN_OPS, '%r is not one of %r known binary ' \
+        'operators' % (l['op'], _KNOWN_OPS.keys())
+    op = _KNOWN_OPS[l['op']]()
 
     default = ast_value(ast_state, l.get('default'))
 
@@ -484,11 +493,7 @@ def make_zoom_assignment():
 
 
 def parse_layer_from_yaml(
-        ast_state, yaml_data, layer_name, output_fn, fn_name_fn):
-    matchers = []
-    for yaml_datum in yaml_data['filters']:
-        matcher = create_matcher(yaml_datum, output_fn)
-        matchers.append(matcher)
+        ast_state, matchers, fn_name):
     stmts = []
     for matcher in matchers:
         # columns in the query should be those needed by the rule, union those
@@ -509,7 +514,7 @@ def parse_layer_from_yaml(
     stmts = prepend_statements + stmts
 
     func = ast.FunctionDef(
-        fn_name_fn(layer_name),
+        fn_name,
         ast.arguments([
             ast.Name('shape', ast.Param()),
             ast.Name('props', ast.Param()),
@@ -525,6 +530,49 @@ def make_empty_ast_state():
     return AstState(False, False, False)
 
 
+class FilterCompiler(object):
+
+    def __init__(self):
+        scope = {}
+        import_asts = []
+
+        # add in required functions into scope for call availability
+        for func_name in dir(function):
+            fn = getattr(function, func_name)
+            if callable(fn):
+                scope[func_name] = fn
+                import_ast = ast.ImportFrom(
+                    'vectordatasource.meta.function',
+                    [ast.alias(func_name, None)],
+                    0,
+                )
+                import_asts.append(import_ast)
+
+        scope['util'] = util
+        utils_import_ast = ast.ImportFrom(
+            'vectordatasource',
+            [ast.alias('util', None)],
+            0,
+        )
+        import_asts.append(utils_import_ast)
+
+        self.import_asts = import_asts
+        self.scope = scope
+
+    def compile(self, matchers, fn_name):
+        ast_state = make_empty_ast_state()
+        ast_fn = parse_layer_from_yaml(
+            ast_state, matchers, fn_name)
+
+        mod = ast.Module([ast_fn])
+        mod_with_linenos = ast.fix_missing_locations(mod)
+        code = compile(mod_with_linenos, '<string>', 'exec')
+        exec code in self.scope
+        compiled_fn = self.scope[fn_name]
+
+        return ast_fn, compiled_fn
+
+
 LayerParseResult = namedtuple(
     'LayerParseResult', 'layer_data import_asts')
 
@@ -534,47 +582,25 @@ def parse_layers(yaml_path, output_fn, fn_name_fn):
     layers = ('landuse', 'pois', 'transit', 'water', 'places', 'boundaries',
               'buildings', 'roads', 'earth', 'admin_areas')
 
-    scope = {}
-    import_asts = []
-
-    # add in required functions into scope for call availability
-    for func_name in dir(function):
-        fn = getattr(function, func_name)
-        if callable(fn):
-            scope[func_name] = fn
-            import_ast = ast.ImportFrom(
-                'vectordatasource.meta.function',
-                [ast.alias(func_name, None)],
-                0,
-            )
-            import_asts.append(import_ast)
-
-    scope['util'] = util
-    utils_import_ast = ast.ImportFrom(
-        'vectordatasource',
-        [ast.alias('util', None)],
-        0,
-    )
-    import_asts.append(utils_import_ast)
+    filter_compiler = FilterCompiler()
 
     for layer in layers:
         file_path = os.path.join(yaml_path, '%s.yaml' % layer)
         with open(file_path) as fh:
             yaml_data = yaml.load(fh)
 
-        ast_state = make_empty_ast_state()
-        ast_fn = parse_layer_from_yaml(
-            ast_state, yaml_data, layer, output_fn, fn_name_fn)
+        matchers = []
+        for yaml_datum in yaml_data['filters']:
+            matcher = create_matcher(yaml_datum, output_fn)
+            matchers.append(matcher)
 
-        mod = ast.Module([ast_fn])
-        mod_with_linenos = ast.fix_missing_locations(mod)
-        code = compile(mod_with_linenos, '<string>', 'exec')
-        exec code in scope
-        compiled_fn = scope[fn_name_fn(layer)]
+        fn_name = fn_name_fn(layer)
+        ast_fn, compiled_fn = filter_compiler.compile(matchers, fn_name)
         layer_datum = FunctionData(layer, ast_fn, compiled_fn)
         layer_data.append(layer_datum)
 
-    layer_parse_result = LayerParseResult(layer_data, import_asts)
+    layer_parse_result = LayerParseResult(
+        layer_data, filter_compiler.import_asts)
     return layer_parse_result
 
 

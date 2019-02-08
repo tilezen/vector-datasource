@@ -92,13 +92,13 @@ Most Tilezen vector tile content is updated minutely from OpenStreetMap. Low and
 
 #### Changelog
 
-The current version of Tilezen vector tile data schema is **v1.5.0**.
+The current version of Tilezen vector tile data schema is **v1.6.0**.
 
 Tiles are still in active development, but Tilezen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
 You can send your feedback at hello@nextzen.org or via our [Gitter chat](https://gitter.im/tilezen/tilezen-chat) room.
 
-Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.5.0/CHANGELOG.md).
+Read the full details in the project [CHANGELOG](https://github.com/mapzen/vector-datasource/tree/v1.6.0/CHANGELOG.md).
 
 #### Feature ordering
 
@@ -121,13 +121,18 @@ draw:
 
 ### Layer reference
 
-Tilezen vector tiles include 9 layers:
+Tilezen vector tiles include 9 default layers (and 2 optional layers):
 
 * `boundaries`, `buildings`, `earth`, `landuse`, `places`, `pois`, `roads`, `transit`, and `water`
 
 These individual layers are grouped into an `all` layer – use this special layer for all your general purpose mapping needs.
 
 While the service can return just a single layer or combination of layers, the `all` layer is more performant.
+
+The Tilezen vector tiles schema defines 2 optional layers:
+
+* `traffic_flow` and `traffic_incidents`
+
 
 ## Boundaries
 
@@ -141,8 +146,8 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 #### Boundaries properties (common):
 
-* `name`
-* `id`
+* `name`: A suggested label, formed from the left and right region names, if available. If the name appears to be too long to be rendered on the geometry at a particular zoom it may be omitted.
+* `id`: Identifier for the feature, only provided at zoom 13+.
 * `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes normalized Natural Earth values.
 * `kind_detail`: mapping of OpenStreetMap's `admin_level` values. `2` for countries, `4` for regions, and `6`, `8` (zoom 10+)
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
@@ -151,8 +156,8 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 #### Boundaries properties (common optional):
 
-* `id:left`: For the relation on the left side of the boundary line.
-* `id:right`: For the relation on the right side of the boundary line.
+* `id:left`: For the relation on the left side of the boundary line. This is only provided at zoom 13+.
+* `id:right`: For the relation on the right side of the boundary line. This is only provided at zoom 13+.
 * `name:left`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `name:right`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `maritime_boundary`: a special Tilezen calculated value loosely coupled with OpenStreetMap's maritime tag, but with spatial buffer processing for lines falling in the ocean.
@@ -487,8 +492,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `artwork`
 * `attraction`
 * `aviary`
+* `bare_rock`
+* `barren` - Only used at mid and low zooms, see "Low zoom consolidation" below.
 * `battlefield`
 * `beach` - Where the land meets the sea gradually.
+* `boatyard` - a place for building, fixing, and storing boats.
 * `breakwater`
 * `bridge`
 * `camp_site`
@@ -504,8 +512,9 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `crane`
 * `cutline`
 * `cutting` - A lowered area of land, usually to carry a road or railway.
-* `danger_area` - e.g: military training zones, firing ranges.
 * `dam` - polygon, line
+* `danger_area` - e.g: military training zones, firing ranges.
+* `desert`
 * `dike`
 * `ditch` line.
 * `dog_park`
@@ -526,25 +535,28 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `glacier`
 * `golf_course`
 * `grass`
+* `grassland`
 * `grave_yard` with `kind_detail` and `denomination` properties. 
 * `groyne`
 * `guard_rail` line.
 * `hanami`
 * `harbour`
+* `heath`
 * `hospital`
 * `industrial`
 * `kerb` line.
 * `land`
 * `library`
+* `low_emission_zone` - An area beloging to a low emission zone, such as the (London Low Emission Zone)[https://en.wikipedia.org/wiki/London_low_emission_zone]. (See also)[https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dlow_emission_zone].
 * `maze`
 * `meadow`
 * `military`
 * `mud` - An area where the surface is bare mud.
 * `national_park`
+* `natural_forest`
+* `natural_park`
+* `natural_wood`
 * `nature_reserve`
-* `natural_forest` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
-* `natural_park` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
-* `natural_wood` - _See planned bug fix in [#1096](https://github.com/tilezen/vector-datasource/issues/1096)._
 * `naval_base`
 * `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. With `kind_detail` property.
 * `park`
@@ -555,11 +567,11 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `pier` with mooring property.
 * `pitch`
 * `place_of_worship`
-* `plant`
 * `plant_nursery` - Land used for growing young plants.
+* `plant`
 * `playground`
-* `port`
 * `port_terminal`
+* `port`
 * `power_line` line.
 * `power_minor_line` line.
 * `prison`
@@ -567,6 +579,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `quarry`
 * `quay` with mooring property.
 * `railway`
+* `range` - e.g: military training zones where soldiers practice with their weapons
 * `recreation_ground`
 * `recreation_track`
 * `residential`
@@ -578,10 +591,12 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `roller_coaster`
 * `runway`
 * `rural`
+* `sand`
 * `school`
 * `scree`
 * `scrub`
 * `service_area`
+* `shingle`
 * `shipyard`
 * `snow_fence`
 * `sports_centre`
@@ -595,9 +610,10 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `tower`
 * `trail_riding_station`
 * `university`
-* `urban_area`
+* `urban_area` - Only used at mid and low zooms, see "Low zoom consolidation" below.
 * `urban`
 * `village_green`
+* `vineyard`
 * `wall` line with `kind_detail` property.
 * `wastewater_plant`
 * `water_park`
@@ -643,6 +659,56 @@ The value of the OpenStreetMap `wetland` tag. If available, value will be one of
 
 The tree or shrub type. Values are: `agave_plants`, `almond_trees`, `apple_trees`, `avocado_trees`, `banana_plants`, `cherry_trees`, `coconut_palms`, `coffea_plants`, `date_palms`, `hazel_plants`, `hop_plants`, `kiwi_plants`, `macadamia_trees`, `mango_trees`, `oil_palms`, `olive_trees`, `orange_trees`, `papaya_trees`, `peach_trees`, `persimmon_trees`, `pineapple_plants`, `pitaya_plants`, `plum_trees`, `rubber_trees`, `tea_plants`, and `walnut_trees`.
 
+### Low zoom consolidation
+
+At zoom 12 and below, we consolidate some landuse kinds to reduce the amount of superfluous detail and give adjacent landuse areas a better chance to merge together. This merging allows them to form an appropriately-sized polygon for the zoom level, and avoid the "billion colour patchwork" that comes from keeping each distinct feature.
+
+The current mappings are:
+
+* `airfield` -> `aerodrome`
+* `allotments` -> `urban_area`
+* `artwork` -> `urban_area`
+* `attraction` -> `urban_area`
+* `bare_rock` -> `desert`
+* `college` -> `university`
+* `commercial` -> `urban_area`
+* `common` -> `grassland`
+* `dam` -> `barren`
+* `danger_area` -> `military`
+* `farm` -> `farmland`
+* `fort` -> `urban_area`
+* `generator` -> `urban_area`
+* `grass` -> `grassland`
+* `heath` -> `grassland`
+* `industrial` -> `urban_area`
+* `land` -> `barren`
+* `meadow` -> `grassland`
+* `mud` -> `wetland`
+* `natural_wood` -> `forest`
+* `orchard` -> `farmland`
+* `pitch` -> `urban_area`
+* `place_of_worship` -> `urban_area`
+* `plant` -> `urban_area`
+* `plant_nursery` -> `farmland`
+* `prison` -> `urban_area`
+* `quarry` -> `barren`
+* `railway` -> `urban_area`
+* `range` -> `military`
+* `residential` -> `urban_area`
+* `retail` -> `urban_area`
+* `rock` -> `barren`
+* `sand` -> `desert`
+* `scree` -> `barren`
+* `scrub` -> `grassland`
+* `shingle` -> `barren`
+* `stone` -> `barren`
+* `village_green` -> `urban_area`
+* `vineyard` -> `farmland`
+* `wastewater_plant` -> `urban_area`
+* `water_works` -> `urban_area`
+* `wood` -> `forest`
+* `works` -> `urban_area`
+
 
 ## Places
 
@@ -666,6 +732,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
+* `population_rank`: A value from 18 down to 0, indicating how large the population is on a particular place. A larger value indicates a bigger population. See "Population Rank" below for more details.
 * `source`: `openstreetmap`, `naturalearthdata.com`, or `whosonfirst.org`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
@@ -701,6 +768,30 @@ Primarily these are available for features of kind `locality` or `region`.
 * `state`
 * `town`
 * `village`
+
+#### Population Rank
+
+The values of population rank are derived from the `population` value as follows:
+
+* 18: Over 1b
+* 17: 100m to 1b
+* 16: 50m to 100m
+* 15: 20m to 50m
+* 14: 10m to 20m
+* 13: 5m to 10m
+* 12: 1m to 5m
+* 11: 500k to 1m
+* 10: 200k to 500k
+* 9: 100k to 200k
+* 8: 50k to 100k
+* 7: 20k to 50k
+* 6: 10k to 20k
+* 5: 5k to 10k
+* 4: 2k to 5k
+* 3: 1k to 2k
+* 2: 200 to 1k
+* 1: Less than 200
+* 0: No `population` value available.
 
 ## Points of Interest
 
@@ -785,7 +876,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
-* `art`
 * `accountant`
 * `adit`
 * `administrative`
@@ -803,6 +893,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `aquarium`
 * `archaeological_site`
 * `architect`
+* `art`
 * `arts_centre` - A venue where arts are performed or exhibited.
 * `artwork`
 * `assisted_living`
@@ -823,24 +914,24 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `beauty`
 * `bed_and_breakfast`
 * `bench`
+* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `bicycle_parking`
-* `bicycle_rental` - Bicycle rental shop.
 * `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
+* `bicycle_rental` - Bicycle rental shop.
 * `bicycle_repair_station`
 * `bicycle` - Bicycle sales shop, often with bike repair service.
-* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
 * `biergarten`
 * `block`
 * `blood_bank`
+* `boat_lift`
 * `boat_rental`
 * `boat_storage`
-* `boatyard`
-* `boat_lift`
+* `boatyard` - a place for building, fixing, and storing boats.
 * `bollard`
 * `bookmaker`
 * `books`
-* `brewery`
 * `border_control`
+* `brewery`
 * `bunker` - A reinforced military building. With `kind_detail` property.
 * `bureau_de_change`
 * `bus_station`
@@ -849,12 +940,12 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `camera` - A shop selling cameras.
 * `camp_site`
-* `car`
 * `car_parts` - A shop selling car parts.
 * `car_rental` - A business which rents cars.
 * `car_repair`
 * `car_sharing`
 * `car_wash`
+* `car`
 * `caravan_site`
 * `care_home`
 * `carousel`
@@ -870,6 +961,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `childcare`
 * `childrens_centre`
+* `chiropractor`
 * `cinema`
 * `clinic` with `kind_detail` property.
 * `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
@@ -894,8 +986,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
 * `cycle_barrier` - Barrier for bicycles.
 * `dairy_kitchen`
-* `danger_area` - e.g: military training zones, firing ranges.
 * `dam`
+* `danger_area` - e.g: military training zones, firing ranges.
 * `day_care`
 * `defibrillator`
 * `deli`
@@ -924,13 +1016,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `fashion`
 * `fast_food`
 * `ferry_terminal`
-* `financial`
 * `field_hospital` with `kind_detail` property.
+* `financial`
 * `fire_hydrant`
 * `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `firepit`
-* `fishing`
 * `fishing_area`
+* `fishing`
 * `fishmonger` - A shop selling fish and seafood.
 * `fitness_station`
 * `fitness`
@@ -945,16 +1037,16 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `furniture`
 * `gallery` - An art gallery.
 * `gambling`
+* `garden_centre`
 * `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `gardener`
-* `garden_centre`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate` with `kind_detail` property.
 * `generator` - A building or structure which generates power. With `kind_detail` property.
 * `geyser`
 * `gift`
-* `golf` - Shop selling golf equipment.
 * `golf_course`
+* `golf` - Shop selling golf equipment.
 * `government`
 * `grave_yard` with `kind_detail` and `denomination` properties. 
 * `greengrocer` - Shop selling fruits and vegetables.
@@ -968,22 +1060,23 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `harbourmaster`
 * `hardware`
 * `hazard`
-* `healthcare` with `kind_detail` property.
 * `health_centre`
 * `healthcare_alternative`
 * `healthcare_centre`
 * `healthcare_laboratory`
+* `healthcare` with `kind_detail` property.
 * `helipad`
 * `heliport`
 * `hifi`
 * `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 * `horse_riding`
+* `hospice`
 * `hospital` with `kind_detail` property.
 * `hostel`
 * `hot_spring`
 * `hotel`
-* `hunting`
 * `hunting_stand`
+* `hunting`
 * `hvac`
 * `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `industrial` - An industrial POI which didn't match a more specific kind.
@@ -991,9 +1084,9 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `insurance`
 * `it`
 * `jewelry`
-* `kindergarten`
 * `karaoke_box`
 * `karaoke`
+* `kindergarten`
 * `landmark`
 * `laundry`
 * `lawyer`
@@ -1007,47 +1100,50 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `love_hotel`
 * `mall`
 * `marina`
+* `marketplace`
 * `mast`
 * `maze`
 * `memorial`
-* `marketplace`
 * `metal_construction`
 * `midwife`
 * `military`
 * `mineshaft`
-* `miniature_golf` - A venue for playing miniature golf.
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
+* `miniature_golf` - A venue for playing miniature golf.
 * `mobile_phone`
 * `money_transfer` - A business which specialises in transferring money between people, often internationally.
 * `monument`
 * `mooring` with `kind_detail` property.
 * `motel`
-* `motorcycle`
 * `motorcycle_parking`
+* `motorcycle`
 * `motorway_junction`
 * `museum`
 * `music`
 * `national_park`
 * `nature_reserve`
+* `naval_base`
 * `newsagent`
 * `newspaper`
 * `ngo`
 * `nightclub`
 * `notary`
 * `nursing_home` with `kind_detail` property. _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
-* `naval_base`
 * `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
+* `occupational_therapist`
 * `office` - An office which didn't match a more specific kind.
 * `offshore_platform`
 * `optician`
+* `optometrist`
 * `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
 * `outdoor`
 * `outreach`
+* `paediatrics`
 * `painter`
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
-* `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
+* `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `perfumery`
 * `pet`
@@ -1059,14 +1155,16 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `photographer`
 * `photographic_laboratory`
 * `physician`
+* `physiotherapist`
 * `picnic_site`
 * `picnic_table`
-* `pitch`
+* `pitch` - With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
 * `place_of_worship` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plaque` - A memorial plaque.
 * `playground` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `plumber`
+* `podiatrist`
 * `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `political_party`
 * `port_terminal`
@@ -1078,19 +1176,21 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `power_wind`
 * `prison`
 * `protected_area`
+* `psychotherapist`
 * `pub`
 * `put_in_egress`
 * `put_in`
 * `pylon`
 * `quarry`
 * `quay` - if available, with `mooring` property.
-* `range` for military use.
+* `range` - e.g: military training zones where soldiers practice with their weapons
 * `ranger_station`
 * `rapid`
 * `recreation_ground`
 * `recreation_track`
 * `recycling`
 * `refugee_camp`
+* `rehabilitation`
 * `religion`
 * `research`
 * `residential_home`
@@ -1106,8 +1206,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `scuba_diving`
 * `service_area`
 * `shelter`
-* `shipyard`
 * `ship_chandler`
+* `shipyard`
 * `shoemaker`
 * `shoes`
 * `shop` - A shop or store which didn't match a more specific kind.
@@ -1122,6 +1222,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `snowmobile`
 * `social_facility` with `kind_detail` property.
 * `soup_kitchen`
+* `speech_therapist`
 * `sports_centre`
 * `sports`
 * `spring`
@@ -1179,17 +1280,18 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
 * `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
 * `waterfall`
-* `waterway_fuel`
 * `watering_place`
 * `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
+* `waterway_fuel`
 * `wayside_cross`
+* `wetland` with `kind_detail` property.
+* `wharf` with mooring property.
 * `wilderness_hut`
 * `wildlife_park`
 * `windmill`
 * `wine`
 * `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
 * `winter_sports`
-* `wharf` with mooring property.
 * `wood`
 * `works`
 * `workshop`
@@ -1243,13 +1345,17 @@ Common values include `pit_latrine`, ` flush`, ` chemical`, ` pour_flush`, ` buc
 
 Common values include: `drinkable_powered`, `drinkable_manual`, `drinkable_no_pump`, `drinkable`, `not_drinkable_powered`, `not_drinkable_manual`, `not_drinkable_no_pump`, `not_drinkable`.
 
+#### Wetland `kind_detail` values
+
+The value of the OpenStreetMap `wetland` tag. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
+
 
 ## Roads (Transportation)
 
 ![image](images/mapzen-vector-tile-docs-roads.png)
 
 * Layer name: `roads`
-* Geometry types: `line`
+* Geometry types: `line`, `point`
 
 More than just roads, this OpenStreetMap and Natural Earth based transportation layer includes highways, major roads, minor roads, paths, railways, ferries, and ski pistes matching the selection found in High Road. Sort them with `sort_rank` to correctly represent layered overpasses, bridges and tunnels. Natural Earth roads at zooms < 8 and OpenStreetMap at zooms 8+. See zoom ranges section below for more information per kind.
 
@@ -1304,7 +1410,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_bus_networks` and `all_bus_shield_texts`: All of the bus and trolley-bus routes of which this road is a part, and each corresponding shield text. See `bus_network` and `bus_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bus_network`: Note that this is often not present for bus routes / networks. This may be replaced with `operator` in the future, see [issue 1194](https://github.com/tilezen/vector-datasource/issues/1194).
 * `bus_shield_text`: Contains text intended to be displayed on a shield related to the bus or trolley-bus network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
-* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`. `cobblestone:flattened`, `concrete:plates` and `concrete:lanes` values are transformed to `cobblestone_flattened`, `concrete_plates` and `concrete_lanes` respectively.
+* `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`. `cobblestone:flattened`, `concrete:plates` and `concrete:lanes` values are transformed to `cobblestone_flattened`, `concrete_plates` and `concrete_lanes` respectively. These values are simplified at lower zooms, see the section "Roads surface values simplification" for more details.
 
 #### Road properties (optional):
 
@@ -1317,6 +1423,9 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `description`: OpenStreetMap features
 * `distance`: ski pistes from OpenStreetMap
 * `embankment`: If the road or railway is on an embankment the value will be one of `yes`, `left` or `right` depending on whether the embankment is on both sides, the left side or the right side, respectively.
+* `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for list of values.
+* `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
+* `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1331,6 +1440,8 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `sport`: OpenStreetMap features
 * `state`: OpenStreetMap features
 * `symbol`: ski pistes from OpenStreetMap
+* `toll`: optional `boolean` value indicating whether a fee must be paid by general traffic to travel the feature.
+* `toll_hgv`: optional `boolean` value when tool only applies to certain classes of vehicles like heavy good vehicle trucks.
 
 #### Road transportation `kind` values (lines):
 
@@ -1346,7 +1457,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `racetrack`
 * `rail`
 
-#### Road Transportation `kind_detail` values and zoom ranges:
+#### Road transportation `kind_detail` values and zoom ranges:
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary`.
 
@@ -1394,6 +1505,15 @@ Railway `service` values are:
 ![image](images/mapzen-vector-tile-docs-roads-piers.png)
 
 **Piers** and **quays** start showing up at zoom 13+ with `kind_detail` values of `pier` and `quay`, respectively. If mooring information is available, the `mooring` property will be one of `no`, `yes`, `commercial`, `cruise`, `customers`, `declaration`, `ferry`, `guest`, `private`, `public`, `waiting`, `yacht` or `yachts`.
+
+**Roads `hgv` values:**
+
+The `hgv` property indicates general truck heavy goods vehicle truck access, values include: `no`, `designated`, `destination`, `delivery`, `local` and `agricultural`.
+
+**Roads `hgv_restriction` values:**
+
+For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle leght, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `other` and `multiple` if more than one.
+
 
 #### Roads layer network values
 
@@ -1996,6 +2116,20 @@ Alpha-2 code | Country
 `ZW` | Zimbabwe
 
 
+#### Roads surface values simplification
+
+At lower zooms,
+
+* 14 or lower for `minor_road`,
+* 12 or lower for `path` and
+* 11 or lower for `major_road`
+
+The range of `surface` values is simplified to just 3: `paved`, `compacted` or `unpaved`. The detailed range of values is mapped down as follows:
+
+* `asphalt`, `metal`, `metal_grid`, `paved`, `tartan`, `wood` are simplified to `paved`.
+* `concrete`, `paving_stones`, `sett` are simplified to `compacted`.
+* `artificial_turf`, `clay`, `cobblestone`, `cobblestone_flattened`, `concrete_lanes`, `concrete_plates`, `decoturf`, `dirt`, `earth`, `fine_gravel`, `grass`, `grass_paver`, `gravel`, `ground`, `mud`, `pebblestone`, `salt`, `sand`, `woodchips` are simplified to `unpaved`.
+
 ## Transit
 
 ![image](images/mapzen-vector-tile-docs-transit.png)
@@ -2107,6 +2241,106 @@ Transit lines may have their colours mapped onto one of these CSS colours. The i
 * `white`
 * `yellow`
 * `yellowgreen`
+
+## Traffic Flow
+
+![image](images/mapzen-vector-tile-docs-traffic-flow.png)
+
+This **optional** layer is meant to be updated every few minutes, due to the highly dynamic nature of the data. Consideration should be given to rendering the features from this layer linked to the **roads** layer when linear referencing is available, or as an overlay
+
+* Layer name: `traffic_flow`
+* Geometry types: `line`
+
+#### `common` properties:
+
+* `id`: Unique traffic event ID. Can be referenced when checking for updated traffic information for specified event
+* `kind`: the **severity** of the flow information as seen by traffic provider to indicate the traffic "color"
+* `min_zoom`: this value is derived from combination of `road_kind`, `kind`, and `kind_detail` values. A suggestion for which zoom to draw a feature. The value is a float
+
+#### Possible `kind` values for traffic flow:
+
+* `unknown`: traffic status unknown
+* `free`: Free flowing, not disturbed, traffic
+* `minor`: Minor traffic
+* `slow`: Slowly moving traffic
+* `queuing`: The traffic is in queues but still moves slowly
+* `stationary`: Stationary traffic, congestion
+* `none`: No traffic flow due to blockage or closure
+
+#### `common-optional` properties:
+
+* `source`: provider of traffic information
+* `congestion`: the level of traffic flow, with 0.0 representing completely free flowing traffic to 1.0 completely congested traffic
+* `speed`: speed in km/h
+* `drives_on_left`: set to `true` when the country drives on the left, e.g. In the U.K
+* `sort_rank`: a suggestion for which order to draw flow features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers
+
+#### `optional` properties:
+
+If the roads layer features include `linear_ref_id`, then traffic flow layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
+
+* `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md).
+
+However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
+
+* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `is_bridge`: set to `true` when the linear is a bridge
+* `is_tunnel`: set to `true` when the linear is a tunnel
+* `is_link`: set to true when the linear is a slip-road
+
+## Traffic Incidents
+
+![image](images/mapzen-vector-tile-docs-traffic-incidents.png)
+
+This **optional** layer is meant to be updated every few minutes, due to the highly dynamic nature of the information contained within this layer. Consideration should be given to rendering the features from this layer either linked to the **roads** layer for linear geometries or as an overlay, and always as an overlay for point geometries
+
+* Layer name: `traffic_incidents`
+* Geometry types: `line`, `point`
+
+#### `common` properties:
+
+* `id`: Unique traffic event ID. Can be referenced when checking for updated traffic information for specified event
+* `kind`: type of the incident
+* `min_zoom`: this value is derived from the `warning_level`. A suggestion for which zoom to draw a feature. The value is a float
+
+#### Possible values for the incident `kind` are:
+
+* `accident`: there has been a collision
+* `congestion`: there has been a build up of vehicles
+* `construction`: building or roadworks are taking place
+* `disabled_vehicle`: a vehicle is unable to move and is obstructing the road
+* `mass_transit`: a large amount of people are migrating from one location to another
+* `planned_event`: an organised event is taking place causing disruption
+* `road_hazard`: there are dangerous objects on the surface of the road
+* `weather`: weather conditions are causing disruptions
+* `other`: an incident not explainable with the labels above has occurred
+
+#### `common-optional` properties:
+
+* `source`: provider of traffic information
+* `sort_rank`: a suggestion for which order to draw flow features (for traffic incident line geometries only). The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers
+* `start_time`: the time the incident begins/begun as [unix time](https://en.wikipedia.org/wiki/Unix_time). At least one of the `start_time` or `stop_time` must be set
+* `stop_time`: the time the incident ends/ended as [unix time](https://en.wikipedia.org/wiki/Unix_time). At least one of the `start_time` or `stop_time` must be set
+* `title`: a short description of the incident, localized, such as `title:en` for English and `title:de` for German. Could be used for a title of a pop-up shown in the screen
+* `description`: potentially long description and comment on the incident. Localized, like `title` mentioned above
+
+#### `optional` properties:
+
+* `warning_level`: the severity of the incident that has occured, with three possible values: `low` (least severer), `minor`, `major`, and `critical` (most severer).
+
+If the roads layer features include `linear_ref_id`, then traffic incidents layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
+
+* `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md).
+
+However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
+
+* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `is_bridge`: set to `true` when the linear is a bridge
+* `is_tunnel`: set to `true` when the linear is a tunnel
+* `is_link`: set to true when the linear is a slip-road
+* `drives_on_left`: set to `true` when the country drives on the left, e.g. In the U.K
 
 ## Water
 

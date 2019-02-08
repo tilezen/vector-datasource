@@ -14,19 +14,23 @@ global:
       ref: {col: ref}
       operator: {col: operator}
       route: {col: route}
-      type: {col: tags->type}
-      colour: {col: tags->colour}
-      state: {col: tags->state}
-      symbol: {col: tags->symbol}
-      description: {col: tags->description}
-      distance: {col: tags->distance}
-      ascent: {col: tags->ascent}
-      descent: {col: tags->descent}
-      roundtrip: {col: tags->roundtrip}
-      route_name: {col: tags->route_name}
-      motor_vehicle: {col: tags->motor_vehicle}
+      type: {col: type}
+      colour: {col: colour}
+      state: {col: state}
+      symbol: {col: symbol}
+      description: {col: description}
+      distance: {col: distance}
+      ascent: {col: ascent}
+      descent: {col: descent}
+      roundtrip: {col: roundtrip}
+      route_name: {col: route_name}
+      motor_vehicle: {col: motor_vehicle}
       access: {col: access}
       bicycle: {col: bicycle}
+      hgv:
+        case:
+          - when: {hgv: [agricultural, delivery, designated, destination, local, 'no']}
+            then: {col: hgv}
       service: {col: service}
       sport: {col: sport}
       surface:
@@ -34,12 +38,12 @@ global:
           - { when: { surface: 'concrete:plates' }, then: 'concrete_plates' }
           - { when: { surface: 'concrete:lanes' }, then: 'concrete_lanes' }
           - { when: { surface: 'cobblestone:flattened' }, then: 'cobblestone_flattened' }
-          - else: { col: 'tags->surface' }
+          - else: { col: 'surface' }
       # NOTE: moved directly to sql
       # bicycle_network: {call: { func: mz_cycling_network, args: [tags, osm_id] }}
       bicycle_network: {col: mz_cycling_network}
       oneway: {col: oneway}
-      oneway_bicycle: {col: "tags->oneway:bicycle"}
+      oneway_bicycle: {col: "oneway:bicycle"}
       cycleway:
         case:
           - when:
@@ -90,6 +94,28 @@ global:
             then: {col: embankment}
           - when: {embankment: [both, two_sided]}
             then: 'yes'
+
+      # tolls
+      toll:
+        case:
+          - when:
+              toll: true
+              not: {toll: 'no'}
+            then: true
+      toll_hgv:
+        case:
+          - when:
+              "toll:hgv": true
+              not: {"toll:hgv": 'no'}
+            then: true
+
+      # vehicle dimensions / content restrictions
+      maxweight: {col: maxweight}
+      maxheight: {col: maxheight}
+      maxwidth: {col: maxwidth}
+      maxlength: {col: maxlength}
+      maxaxleload: {col: maxaxleload}
+      hazmat: {col: hazmat}
   - &osm_network
       mz_networks: {col: mz_networks}
       network: {col: network}
@@ -102,33 +128,33 @@ global:
       ref: {col: ref}
       operator: {col: operator}
       route: {col: route}
-      type: {col: tags->type}
-      colour: {col: tags->colour}
-      network: {col: tags->network}
-      state: {col: tags->state}
-      description: {col: tags->description}
-      distance: {col: tags->distance}
-      ascent: {col: tags->ascent}
-      descent: {col: tags->descent}
-      roundtrip: {col: tags->roundtrip}
-      route_name: {col: tags->route_name}
-      kind_detail: {col: "tags->piste:type"}
-      piste_difficulty: {col: "tags->piste:difficulty"}
-      piste_grooming: {col: "tags->piste:grooming"}
-      piste_name: {col: "tags->piste:name"}
-      ski: {col: tags->ski}
-      snowshoe: {col: tags->snowshoe}
-      symbol: {col: tags->symbol}
+      type: {col: type}
+      colour: {col: colour}
+      network: {col: network}
+      state: {col: state}
+      description: {col: description}
+      distance: {col: distance}
+      ascent: {col: ascent}
+      descent: {col: descent}
+      roundtrip: {col: roundtrip}
+      route_name: {col: route_name}
+      kind_detail: {col: "piste:type"}
+      piste_difficulty: {col: "piste:difficulty"}
+      piste_grooming: {col: "piste:grooming"}
+      piste_name: {col: "piste:name"}
+      ski: {col: ski}
+      snowshoe: {col: snowshoe}
+      symbol: {col: symbol}
   - &osm_footway_properties
       <<: *output_properties
       foot: {col: foot}
       horse: {col: horse}
       tracktype: {col: tracktype}
-      incline: {col: tags->incline}
-      ramp: {col: tags->ramp}
-      ramp_bicycle: {col: "tags->ramp:bicycle"}
-      trail_visibility: {col: tags->trail_visibility}
-      sac_scale: {col: tags->sac_scale}
+      incline: {col: incline}
+      ramp: {col: ramp}
+      ramp_bicycle: {col: "ramp:bicycle"}
+      trail_visibility: {col: trail_visibility}
+      sac_scale: {col: sac_scale}
   - &ne_properties
       <<: *output_properties
       ref: {col: name}
@@ -325,7 +351,7 @@ filters:
   #
   #############################################################
   - filter:
-      "tags->whitewater": portage_way
+      "whitewater": portage_way
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -421,8 +447,8 @@ filters:
         - {bicycle: designated}
         - {foot: designated}
         - {horse: designated}
-        - {tags->snowmobile: designated}
-        - {tags->ski: designated}
+        - {snowmobile: designated}
+        - {ski: designated}
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -431,7 +457,7 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: footway
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter:
       highway: steps
       all:
@@ -440,8 +466,8 @@ filters:
           - {bicycle: designated}
           - {foot: designated}
           - {horse: designated}
-          - {tags->snowmobile: designated}
-          - {tags->ski: designated}
+          - {snowmobile: designated}
+          - {ski: designated}
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -450,10 +476,10 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: steps
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter:
       highway: footway
-      tags->footway: [sidewalk, crossing]
+      footway: [sidewalk, crossing]
     min_zoom: { clamp: { min: 0, max: 15, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
@@ -462,7 +488,7 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: footway
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter:
       highway: [footway, steps]
     min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
@@ -473,7 +499,7 @@ filters:
       <<: *osm_footway_properties
       kind: path
       kind_detail: {col: highway}
-      footway: {col: tags->footway}
+      footway: {col: footway}
   - filter: {highway: corridor}
     min_zoom: 16
     table: osm
@@ -764,7 +790,7 @@ filters:
   #
   #############################################################
   - filter:
-      "tags->piste:type":
+      "piste:type":
         - nordic
         - downhill
         - sleigh
@@ -775,15 +801,15 @@ filters:
         - snow_park
         - playground
         - ski_jump
-      not: {"tags->piste:abandoned": "yes"}
-      "tags->piste:name": true
+      not: {"piste:abandoned": "yes"}
+      "piste:name": true
     min_zoom: 13
     table: osm
     output:
       <<: *osm_piste_properties
-      name: {col: "tags->piste:name"}
+      name: {col: "piste:name"}
   - filter:
-      "tags->piste:type":
+      "piste:type":
         - nordic
         - downhill
         - sleigh
@@ -794,7 +820,7 @@ filters:
         - snow_park
         - playground
         - ski_jump
-      not: {"tags->piste:abandoned": "yes"}
+      not: {"piste:abandoned": "yes"}
     min_zoom: 13
     table: osm
     output:

@@ -67,6 +67,6 @@ zoom::int,layer::int,kind,kind_detail,service,is_bridge,is_tunnel,sort_rank
 *,*,rail,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,yard,*,*,359
 *,*,rail,rail;tram;light_rail;narrow_gauge;monorail;subway;funicular,+,*,*,357
 *,*,path;piste;portage_way,*,*,*,*,354
-*,*,aeroway,runway,*,*,*,62
-*,*,aeroway,taxiway,*,*,*,61
+*,*,aeroway,runway,*,*,*,76
+*,*,aeroway,taxiway,*,*,*,75
 *,*,*,*,*,*,*,355

@@ -12,8 +12,7 @@ SELECT
 
   -- only certain layers return back mz_label_placement
   CASE WHEN mz_earth_min_zoom IS NOT NULL OR
-            mz_landuse_min_zoom IS NOT NULL OR
-            mz_water_min_zoom IS NOT NULL
+            mz_landuse_min_zoom IS NOT NULL
     THEN {% filter geometry %}mz_label_placement{% endfilter %}
   END AS __label__,
 

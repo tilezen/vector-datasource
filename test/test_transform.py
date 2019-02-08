@@ -225,6 +225,7 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
             params=params,
             unpadded_bounds=None,
             resources=None,
+            log=None,
         )
         result = drop_features_mz_min_pixels(ctx)
         return result
@@ -258,6 +259,28 @@ class DropFeaturesMinPixelsTest(unittest.TestCase):
         self._call_fut(feature_layers, zoom)
         features = feature_layers[0]['features']
         self.assertEquals(1, len(features))
+
+
+class LanduseSortKeysAreUniqueTest(unittest.TestCase):
+
+    def _check_unique(self, csv_name):
+        import csv
+        import os.path
+
+        landuse_path = os.path.join(
+            os.path.dirname(__file__), '..', 'spreadsheets', 'sort_rank',
+            csv_name)
+        with open(landuse_path) as fh:
+            rows = list(csv.reader(fh))
+            seen = set()
+            for row in rows[1:]:
+                sort_key = int(row[-1])
+                self.assertFalse(sort_key in seen, "Duplicate sort_key "
+                                 "value: %d" % (sort_key,))
+                seen.add(sort_key)
+
+    def test_landuse(self):
+        self._check_unique('landuse.csv')
 
 
 class SortKeyTest(unittest.TestCase):
@@ -330,7 +353,8 @@ class BuildingsUnifyTest(unittest.TestCase):
             nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer='buildings'),
-            resources=None)
+            resources=None,
+            log=None)
         from vectordatasource.transform import buildings_unify
         buildings_unify(ctx)
         return building_feature_layer['features']
@@ -396,7 +420,8 @@ class DropMergedIdTest(unittest.TestCase):
             nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
-            resources=None)
+            resources=None,
+            log=None)
         merged_feature_layer = merge_fn(ctx)
         merged_features = merged_feature_layer['features']
         self.assertEquals(1, len(merged_features))
@@ -505,7 +530,8 @@ class DropMergedIdTest(unittest.TestCase):
             nominal_zoom=0,
             unpadded_bounds=None,
             params=dict(source_layer=layer_name),
-            resources=None)
+            resources=None,
+            log=None)
         merged_feature_layer = merge_polygon_features(ctx)
         merged_features = merged_feature_layer['features']
         self.assertEquals(2, len(merged_features))
@@ -651,6 +677,7 @@ class RankBoundsTest(unittest.TestCase):
             unpadded_bounds=bounds,
             params=params,
             resources=None,
+            log=None,
         )
         rank_features(ctx)
         rank = props.get('rank')
@@ -702,7 +729,7 @@ class SimplifyAndClipTest(unittest.TestCase):
         resources = None
 
         ctx = Context(feature_layers, nominal_zoom, unpadded_bounds, params,
-                      resources)
+                      resources, log=None)
         simplify_and_clip(ctx)
 
         self.assertEquals(1, len(ctx.feature_layers))
@@ -765,7 +792,7 @@ class AdminBoundaryTest(unittest.TestCase):
         resources = None
 
         ctx = Context(feature_layers, nominal_zoom, unpadded_bounds, params,
-                      resources)
+                      resources, log=None)
 
         # the test is simply that an exception isn't thrown.
         admin_boundaries(ctx)
@@ -949,7 +976,7 @@ class MergeBuildingTest(unittest.TestCase):
 
     def test_merge_buildings(self):
         from shapely.wkb import loads
-        from vectordatasource.transform import _merge_buildings
+        from vectordatasource.transform import _merge_polygons_with_buffer
 
         mp = loads(
             '01060000000200000001030000000100000005000000295C8FC2F57A9040'
@@ -961,7 +988,33 @@ class MergeBuildingTest(unittest.TestCase):
             '8FC2F528439040713D0A070C6B5941'.decode('hex')
         )
         tolerance = 1.9109257071294063
-        result = _merge_buildings(mp, tolerance)
+        result = _merge_polygons_with_buffer(mp, tolerance)
 
         self.assertEquals(len(result), 1)
         self.assertTrue(result[0].is_valid)
+
+
+class AngleAtTest(unittest.TestCase):
+
+    def _check(self, coords, angle):
+        from shapely.geometry import LineString
+        from vectordatasource.transform import _angle_at
+
+        ls = LineString(coords)
+        self.assertEqual(_angle_at(ls, ls.coords[0]), angle)
+        self.assertEqual(_angle_at(ls, ls.coords[-1]), angle)
+
+    def test_angle_at_zero(self):
+        self._check([[0, 0], [1, 0]], 0)
+
+    def test_angle_at_180(self):
+        self._check([[1, 0], [0, 0]], 0)
+
+    def test_angle_at_90(self):
+        self._check([[0, 0], [0, 1]], 90)
+
+    def test_angle_at_270(self):
+        self._check([[0, 1], [0, 0]], 90)
+
+    def test_angle_at_degenerate(self):
+        self._check([[0, 0], [0, 0]], None)

@@ -30,6 +30,60 @@ global:
         - [ 7,   9 ]
       default: null
 
+  #
+  - &ne_country_boundaries_kind
+    lookup:
+      key: { col: featurecla }
+      op: '=='
+      table:
+        - [ 'disputed', 'Disputed (please verify)' ]
+        - [ 'indefinite', 'Indefinite (please verify)' ]
+        - [ 'indeterminate', 'Indeterminant frontier' ]
+        - [ 'country', 'International boundary (verify)' ]
+        - [ 'lease_limit', 'Lease limit' ]
+        - [ 'line_of_control', 'Line of control (please verify)' ]
+        - [ 'overlay_limit', 'Overlay limit' ]
+        - [ 'unrecognized', 'Unrecognized' ]
+        - [ 'map_unit', 'Map unit boundary' ]
+        - [ 'disputed_breakaway', 'Breakaway' ]
+        - [ 'disputed_claim', 'Claim boundary' ]
+        - [ 'disputed_elusive', 'Elusive frontier' ]
+        - [ 'disputed_reference_line', 'Reference line' ]
+      default: null
+
+  - &ne_localized_kind_properties
+    'kind:iso': {col: fclass_iso }
+    'kind:us': {col: fclass_us }
+    'kind:fr': {col: fclass_fr }
+    'kind:ru': {col: fclass_ru }
+    'kind:es': {col: fclass_es }
+    'kind:cn': {col: fclass_cn }
+    'kind:tw': {col: fclass_tw }
+    'kind:in': {col: fclass_in }
+    'kind:np': {col: fclass_np }
+    'kind:pk': {col: fclass_pk }
+    'kind:de': {col: fclass_de }
+    'kind:gb': {col: fclass_gb }
+    'kind:br': {col: fclass_br }
+    'kind:il': {col: fclass_il }
+    'kind:ps': {col: fclass_ps }
+    'kind:sa': {col: fclass_sa }
+    'kind:eg': {col: fclass_eg }
+    'kind:ma': {col: fclass_ma }
+    'kind:pt': {col: fclass_pt }
+    'kind:ar': {col: fclass_ar }
+    'kind:jp': {col: fclass_jp }
+    'kind:ko': {col: fclass_ko }
+    'kind:vn': {col: fclass_vn }
+    'kind:tr': {col: fclass_tr }
+    'kind:id': {col: fclass_id }
+    'kind:pl': {col: fclass_pl }
+    'kind:gr': {col: fclass_gr }
+    'kind:it': {col: fclass_it }
+    'kind:nl': {col: fclass_nl }
+    'kind:se': {col: fclass_se }
+    'kind:bd': {col: fclass_bd }
+
 filters:
 
   # kind pre-generated for buffered_land
@@ -82,8 +136,12 @@ filters:
       kind: county
       kind_detail: '6'
     table: osm
+  # NOTE: the min_zoom of 11 here needs to be reflected in the early
+  # name-dropping in queries.yaml - so that the two match and we don't get
+  # names popping in and out. if the min_zoom is changed here, then it should
+  # also be changed there (and vice-versa)!
   - filter: {admin_level: '8', boundary: administrative}
-    min_zoom: 10
+    min_zoom: 11
     output:
       <<: *output_properties
       kind: locality
@@ -91,62 +149,29 @@ filters:
     table: osm
 
   # ne
-  - filter: {featurecla: Disputed (please verify)}
-    min_zoom: 0
+  - filter:
+      featurecla:
+        - 'Disputed (please verify)'
+        - 'Indefinite (please verify)'
+        - 'Indeterminant frontier'
+        - 'International boundary (verify)'
+        - 'Lease limit'
+        - 'Line of control (please verify)'
+        - 'Overlay limit'
+        - 'Unrecognized'
+        - 'Map unit boundary'
+        - 'Breakaway'
+        - 'Claim boundary'
+        - 'Elusive frontier'
+        - 'Reference line'
+    min_zoom: { col: min_zoom }
     output:
       <<: *output_properties
-      kind: disputed
+      <<: *ne_localized_kind_properties
+      kind: *ne_country_boundaries_kind
       kind_detail: '2'
     table: ne
-  - filter: {featurecla: Indefinite (please verify)}
-    min_zoom: 0
-    output:
-      <<: *output_properties
-      kind: indefinite
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: Indeterminant frontier}
-    min_zoom: 0
-    output:
-      <<: *output_properties
-      kind: indeterminate
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: International boundary (verify)}
-    min_zoom: 0
-    output:
-      <<: *output_properties
-      kind: country
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: Lease limit}
-    min_zoom: 0
-    output:
-      <<: *output_properties
-      kind: lease_limit
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: Line of control (please verify)}
-    min_zoom: 0
-    output:
-      <<: *output_properties
-      kind: line_of_control
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: Overlay limit}
-    min_zoom: 0
-    output:
-      <<: *output_properties
-      kind: overlay_limit
-      kind_detail: '2'
-    table: ne
-  - filter: {featurecla: Map unit boundary}
-    min_zoom: 5
-    output:
-      <<: *output_properties
-      kind: map_unit
-      kind_detail: '2'
-    table: ne
+
   - filter: {featurecla: Admin-1 region boundary}
     min_zoom: *ne_region_boundaries_min_zoom
     output:

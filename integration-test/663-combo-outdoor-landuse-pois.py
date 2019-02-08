@@ -11,7 +11,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             13, 1318, 3160, 'landuse',
-            {'kind': 'water_park', 'sort_rank': 107})
+            {'kind': 'water_park', 'sort_rank': 121})
 
         self.assert_has_feature(
             13, 1318, 3160, 'pois',
@@ -115,7 +115,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             11, 582, 796, 'pois',
-            {'kind': 'battlefield', 'min_zoom': 10.07})
+            {'kind': 'battlefield', 'min_zoom': 10})
 
         self.assert_has_feature(
             11, 582, 796, 'landuse',
@@ -189,7 +189,7 @@ class ComboOutdoorLandusePois(FixtureTest):
         self.generate_fixtures(dsl.way(189656737, wkt_loads('POLYGON ((-119.789060343112 37.94813892096909, -119.789017403642 37.94832076250939, -119.788941496 37.94841178936769, -119.788826601476 37.9483809748407, -119.788329743292 37.94814848413098, -119.788040665433 37.94793079792151, -119.787833873255 37.94772409105717, -119.787719607551 37.94777559073129, -119.78769427506 37.94774321748778, -119.787665079813 37.94770878990909, -119.78775068926 37.94765785689778, -119.787658072954 37.94752538839991, -119.78767136802 37.94751738361128, -119.787606779151 37.94740085362629, -119.787624116636 37.947394903154, -119.787499520306 37.94707959827269, -119.787451011281 37.94675125755689, -119.787461431738 37.94649219675929, -119.787555036191 37.94650686060238, -119.787880136492 37.9469248143209, -119.788051804543 37.94708979912581, -119.78829318186 37.9472209224657, -119.7885400389 37.9472843942955, -119.788638584087 37.94737776012397, -119.788673887877 37.94741147946841, -119.788717007011 37.94744930745397, -119.78878159588 37.94748366431551, -119.788792106169 37.94753821022748, -119.78880279612 37.94774116316769, -119.788899365014 37.94781306433669, -119.788985243955 37.9478638555634, -119.789028093594 37.94794850752979, -119.789060343112 37.94813892096909))'), {u'name': u"O'Shaughnessy Dam", u'way_area': u'20361.8', u'wikipedia': u"en:O'Shaughnessy Dam (California)", u'source': u'openstreetmap.org', u'wikidata': u'Q7071958', u'waterway': u'dam'}))  # noqa
 
         self.assert_has_feature(
-            12, 685, 1580, 'landuse',
+            13, 1370, 3161, 'landuse',
             {'kind': 'dam', 'sort_rank': 223})
 
         self.assert_has_feature(
@@ -230,7 +230,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 10479, 25338, 'landuse',
-            {'kind': 'dog_park', 'sort_rank': 97})
+            {'kind': 'dog_park', 'sort_rank': 111})
 
     def test_recreation_track_way(self):
         # Red Gra / Running Track
@@ -238,7 +238,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             15, 16384, 10951, 'landuse',
-            {'id': 95922608, 'kind': 'recreation_track', 'sort_rank': 59})
+            {'id': 95922608, 'kind': 'recreation_track', 'sort_rank': 72})
 
         # Cox Stadium recreation track
         self.assert_has_feature(
@@ -361,7 +361,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             14, 2618, 6348, 'landuse',
-            {'kind': 'caravan_site', 'sort_rank': 58})
+            {'kind': 'caravan_site', 'sort_rank': 71})
 
         self.assert_has_feature(
             14, 2618, 6348, 'pois',
@@ -389,7 +389,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 10474, 25332, 'landuse',
-            {'kind': 'picnic_site', 'sort_rank': 108})
+            {'kind': 'picnic_site', 'sort_rank': 122})
 
         self.assert_has_feature(
             16, 10474, 25332, 'pois',
@@ -417,7 +417,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 19303, 24607, 'landuse',
-            {'kind': 'fort', 'sort_rank': 47})
+            {'kind': 'fort', 'sort_rank': 53})
 
         self.assert_has_feature(
             16, 19303, 24607, 'pois',

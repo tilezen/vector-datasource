@@ -27,26 +27,30 @@ class MinZoomFromNETest(FixtureTest):
             }),
         )
 
-    def test_uk_should_show_up_zooms_1_to_6(self):
+    def test_uk_should_show_up_zooms_2_to_6(self):
         from tilequeue.tile import deg2num
-        # should show up in zooms within the range 1-6
+        # should show up in zooms within the range 2-6
 
-        for zoom in xrange(1, 6):
+        for zoom in xrange(2, 6):
             x, y = deg2num(self.lat, self.lon, zoom)
             self.assert_has_feature(
                 zoom, x, y, 'places', {
                     'id': 838090640,
-                    'min_zoom': 1.7,
+                    'min_zoom': 2.0,
                     'max_zoom': 6.7,
                 })
 
-    def test_uk_should_not_show_up_zoom_0(self):
-        # shouldn't be in the zoom 0 tile because min_zoom >= 1
-        self.assert_no_matching_feature(
-            0, 0, 0, 'places', {'id': 838090640})
+    def test_uk_should_not_show_up_zoom_0_to_1(self):
+        from tilequeue.tile import deg2num
+        # shouldn't be in the zoom 0 or zoom 1 tiles because min_zoom >= 1.5
+
+        for zoom in xrange(0, 1):
+            x, y = deg2num(self.lat, self.lon, zoom)
+            self.assert_no_matching_feature(
+                zoom, x, y, 'places', {'id': 838090640})
 
     def test_uk_should_not_show_up_zoom_7(self):
-        # shouldn't be in the zoom 0 tile because max_zoom < 7
+        # shouldn't be in the zoom 7 tile because max_zoom < 7
         from tilequeue.tile import deg2num
 
         zoom = 7
@@ -64,7 +68,7 @@ class MinZoomFromAdminAreaBasedDefault(FixtureTest):
         from tilequeue.tile import deg2num
 
         lon, lat = (-3.2765753, 54.7023545)
-        z = 5
+        z = 6
         x, y = deg2num(lat, lon, z)
 
         self.generate_fixtures(
@@ -83,7 +87,7 @@ class MinZoomFromAdminAreaBasedDefault(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 838090640,
-                'min_zoom': 1.7,
+                'min_zoom': 6,
                 'max_zoom': 6.7,
             })
 

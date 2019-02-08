@@ -40,5 +40,5 @@ class SortKeyBoundary(FixtureTest):
             'https://www.openstreetmap.org/relation/112271',
         ], clip=self.tile_bbox(10, 163, 396, padding=0.1))
         self.assert_has_feature(
-            10, 163, 396, "boundaries",
+            11, 326, 792, "boundaries",
             {"kind": "locality", "sort_rank": 252})

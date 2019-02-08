@@ -313,33 +313,33 @@ class PlacesTest(unittest.TestCase):
     def test_wof_is_landuse_aoi(self):
         meta = _make_metadata('wof')
 
-        props = dict(is_landuse_aoi=True)
+        props = dict(is_landuse_aoi=True, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertTrue(out_props.get('is_landuse_aoi'))
 
-        props = dict(is_landuse_aoi=False)
+        props = dict(is_landuse_aoi=False, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
-        props = dict(is_landuse_aoi=None)
+        props = dict(is_landuse_aoi=None, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
-        props = dict()
+        props = dict(placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('is_landuse_aoi'))
 
     def test_wof_area(self):
         meta = _make_metadata('wof')
 
-        props = dict(area=3.14159)
+        props = dict(area=3.14159, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         area = out_props.get('area')
         self.assertIsNotNone(area)
         self.assertTrue(isinstance(area, int))
         self.assertEquals(3, area)
 
-        props = dict(area=None)
+        props = dict(area=None, placetype='neighbourhood')
         out_props = self.places.fn(None, props, None, meta)
         self.assertIsNone(out_props.get('area'))
 
@@ -518,7 +518,7 @@ class LanduseMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.landuse.fn(shape, props, None, meta)
-        self.assertEquals(9, out_min_zoom)
+        self.assertEquals(13, out_min_zoom)
 
     def test_medium_zoo(self):
         import shapely.geometry
@@ -526,8 +526,8 @@ class LanduseMinZoomTest(unittest.TestCase):
             calculate_1px_zoom
         import math
 
-        target_zoom = 11.0
-        # want a zoom 11 feature, so make one with a triangle.
+        target_zoom = 14.0
+        # want a zoom 14 feature, so make one with a triangle.
         target_area = math.exp((17.256 - target_zoom) * math.log(4))
         # make area with a half-square triangle.
         s = math.sqrt(target_area * 2.0)
@@ -639,7 +639,7 @@ class PoisMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.pois.fn(shape, props, None, meta)
-        self.assertEquals(14, out_min_zoom)
+        self.assertEquals(16, out_min_zoom)
 
 
 class RoadsMinZoomTest(unittest.TestCase):
@@ -694,7 +694,7 @@ class WaterMinZoomTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_min_zoom = self.water.fn(shape, props, None, meta)
-        self.assertEquals(16, out_min_zoom)
+        self.assertEquals(17, out_min_zoom)
 
 
 class RoundTripRuleTest(unittest.TestCase):
@@ -715,30 +715,23 @@ class RoundTripRuleTest(unittest.TestCase):
                 output=dict(kind='triggered')
             )],
         )
-        from vectordatasource.meta.python import make_empty_ast_state
+        from vectordatasource.meta.python import FilterCompiler
+        from vectordatasource.meta.python import create_matcher
         from vectordatasource.meta.python import output_kind
-        from vectordatasource.meta.python import make_function_name_props
-        from vectordatasource.meta.python import parse_layer_from_yaml
-        ast_state = make_empty_ast_state()
-        ast_fn = parse_layer_from_yaml(
-            ast_state, yaml_data, 'fn_name', output_kind,
-            make_function_name_props)
 
-        # first check that if we compile the function from the ast, we
-        # get an expected result
-        import ast
-        mod = ast.Module([ast_fn])
-        mod_with_linenos = ast.fix_missing_locations(mod)
-        code = compile(mod_with_linenos, '<string>', 'exec')
-        scope = {}
-        exec code in scope
-        fn = scope['fn_name_props']
+        matchers = []
+        for yaml_datum in yaml_data['filters']:
+            matcher = create_matcher(yaml_datum, output_kind)
+            matchers.append(matcher)
+
+        fc = FilterCompiler()
+        ast_fn, compiled_fn = fc.compile(matchers, 'fn_name_props')
 
         shape = None
         props = dict(some='value')
         fid = 42
         meta = make_test_metadata()
-        result = fn(shape, props, fid, meta)
+        result = compiled_fn(shape, props, fid, meta)
         self.assertIsNone(result)
 
         # now, round trip it through the ast formatter
@@ -747,6 +740,7 @@ class RoundTripRuleTest(unittest.TestCase):
         formatter = astformatter.ASTFormatter()
         code_str = formatter.format(ast_fn, mode='exec')
 
+        import ast
         mod = ast.parse(code_str)
         mod_with_linenos = ast.fix_missing_locations(mod)
         code = compile(mod_with_linenos, '<string>', 'exec')

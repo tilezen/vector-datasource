@@ -60,17 +60,17 @@ filters:
     output:
       <<: *output_properties
       kind: bus_stop
-  - filter: {public_transport: platform, tags->rail: 'yes'}
+  - filter: {public_transport: platform, rail: 'yes'}
     min_zoom: 15
     output:
       <<: *output_properties
       kind: platform
-  - filter: {public_transport: platform, tags->light_rail: 'yes'}
+  - filter: {public_transport: platform, light_rail: 'yes'}
     min_zoom: 15
     output:
       <<: *output_properties
       kind: platform
-  - filter: {public_transport: platform, tags->bus: 'yes'}
+  - filter: {public_transport: platform, bus: 'yes'}
     min_zoom: 17
     output:
       <<: *output_properties
@@ -91,7 +91,7 @@ filters:
     output:
       <<: *output_properties
       kind: {col: railway}
-  - filter: {tags->site: stop_area}
+  - filter: {site: stop_area}
     min_zoom: 15
     output:
       <<: *output_properties

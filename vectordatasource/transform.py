@@ -2,6 +2,7 @@
 # transformation functions to apply to features
 
 from collections import defaultdict, namedtuple
+from math import ceil
 from numbers import Number
 from shapely.geometry.collection import GeometryCollection
 from shapely.geometry import box as Box
@@ -131,6 +132,54 @@ def _remove_properties(properties, *property_names):
     return properties
 
 
+def _is_name(key):
+    """
+    Return True if this key looks like a name.
+
+    This isn't as simple as testing if key == 'name', as there are alternative
+    name-like tags such as 'official_name', translated names such as 'name:en',
+    and left/right names for boundaries. This function aims to match all of
+    those variants.
+    """
+
+    # simplest and most common case first
+    if key == 'name':
+        return True
+
+    # translations next
+    if key.startswith('name:'):
+        return True
+
+    # then any of the alternative forms of name
+    return any(key.startswith(p) for p in tag_name_alternates)
+
+
+def _remove_names(props):
+    """
+    Remove entries in the props dict for which the key looks like a name.
+
+    Modifies the props dict in-place and also returns it.
+    """
+
+    for k in props.keys():
+        if _is_name(k):
+            props.pop(k)
+
+    return props
+
+
+def _has_name(props):
+    """
+    Return true if any of the props look like a name.
+    """
+
+    for k in props.keys():
+        if _is_name(k):
+            return True
+
+    return False
+
+
 def _building_calc_levels(levels):
     levels = max(levels, 1)
     levels = (levels * 3) + 2
@@ -229,7 +278,7 @@ def road_classifier(shape, properties, fid, zoom):
         properties['is_link'] = True
     if tunnel in ('yes', 'true'):
         properties['is_tunnel'] = True
-    if bridge in ('yes', 'true'):
+    if bridge and bridge != 'no':
         properties['is_bridge'] = True
 
     return shape, properties, fid
@@ -324,6 +373,39 @@ def place_population_int(shape, properties, fid, zoom):
     if population is not None:
         properties['population'] = int(population)
     return shape, properties, fid
+
+
+def population_rank(shape, properties, fid, zoom):
+    population = properties.get('population')
+    pop_breaks = [
+        1000000000,
+        100000000,
+        50000000,
+        20000000,
+        10000000,
+        5000000,
+        1000000,
+        500000,
+        200000,
+        100000,
+        50000,
+        20000,
+        10000,
+        5000,
+        2000,
+        1000,
+        200,
+        0,
+    ]
+    for i, pop_break in enumerate(pop_breaks):
+        if population >= pop_break:
+            rank = len(pop_breaks) - i
+            break
+    else:
+        rank = 0
+
+    properties['population_rank'] = rank
+    return (shape, properties, fid)
 
 
 def pois_capacity_int(shape, properties, fid, zoom):
@@ -2294,9 +2376,12 @@ def _project_properties(ctx, action):
             new_features.append((shape, props, fid))
             continue
 
-        # copy params to add a 'zoom' one. would prefer '$zoom', but apparently
-        # that's not allowed in python syntax.
-        local = props.copy()
+        # we're going to use a defaultdict for this, so that references to
+        # properties which don't exist just end up as None without causing an
+        # exception. we also add a 'zoom' one. would prefer '$zoom', but
+        # apparently that's not allowed in python syntax.
+        local = defaultdict(lambda: None)
+        local.update(props)
         local['zoom'] = zoom
 
         # allow decisions based on meters per pixel zoom too.
@@ -2322,6 +2407,17 @@ def drop_properties(ctx):
 
     def action(p):
         return _remove_properties(p, *properties)
+
+    return _project_properties(ctx, action)
+
+
+def drop_names(ctx):
+    """
+    Drop all names on properties for features in this layer.
+    """
+
+    def action(p):
+        return _remove_names(p)
 
     return _project_properties(ctx, action)
 
@@ -3170,9 +3266,10 @@ def _merge_polygons(polygon_shapes):
     return [result]
 
 
-def _merge_buildings(polygon_shapes, tolerance):
+def _merge_polygons_with_buffer(polygon_shapes, tolerance):
     """
-    Merges building polygons together.
+    Merges polygons together with a buffer operation to blend together
+    adjacent polygons. Originally designed for buildings.
 
     It does this by first merging the polygons into a single MultiPolygon and
     then dilating or buffering the polygons by a small amount (tolerance). The
@@ -3375,7 +3472,8 @@ def _merge_features_by_property(
         update_props_pre_fn=None,
         update_props_post_fn=None,
         max_merged_features=None,
-        merge_shape_fn=None):
+        merge_shape_fn=None,
+        merge_props_fn=None):
 
     assert geom_dim in (_POLYGON_DIMENSION, _LINE_DIMENSION)
     if merge_shape_fn is not None:
@@ -3405,10 +3503,12 @@ def _merge_features_by_property(
 
         frozen_props = _freeze(props)
         if frozen_props in features_by_property:
-            features_by_property[frozen_props][-1].append(shape)
+            record = features_by_property[frozen_props]
+            record[-1].append(shape)
+            record[-2].append(orig_props)
         else:
             features_by_property[frozen_props] = (
-                (fid, p_id, orig_props, [shape]))
+                (fid, p_id, [orig_props], [shape]))
 
     new_features = []
     for frozen_props, (fid, p_id, orig_props, shapes) in \
@@ -3416,7 +3516,7 @@ def _merge_features_by_property(
 
         if len(shapes) == 1:
             # restore original properties if we only have a single shape
-            new_features.append((shapes[0], orig_props, fid))
+            new_features.append((shapes[0], orig_props[0], fid))
             continue
 
         num_shapes = len(shapes)
@@ -3436,8 +3536,11 @@ def _merge_features_by_property(
             if merged_shape is None or merged_shape.is_empty:
                 continue
 
-            # thaw the frozen properties to use in the new feature.
-            props = _thaw(frozen_props)
+            if merge_props_fn is None:
+                # thaw the frozen properties to use in the new feature.
+                props = _thaw(frozen_props)
+            else:
+                props = merge_props_fn(orig_props)
 
             if update_props_post_fn:
                 props = update_props_post_fn((merged_shape, props, fid))
@@ -3446,6 +3549,42 @@ def _merge_features_by_property(
 
     new_features.extend(skipped_features)
     return new_features
+
+
+def quantize_height(ctx):
+    """
+    Quantize the height property of features in the layer according to the
+    per-zoom configured quantize function.
+    """
+
+    params = _Params(ctx, 'quantize_height')
+    zoom = ctx.nominal_zoom
+    source_layer = params.required('source_layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    quantize_cfg = params.required('quantize', typ=dict)
+
+    layer = _find_layer(ctx.feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    quantize_fn_dotted_name = quantize_cfg.get(zoom)
+    if not quantize_fn_dotted_name:
+        # no changes at this zoom
+        return None
+
+    quantize_height_fn = resolve(quantize_fn_dotted_name)
+    for shape, props, fid in layer['features']:
+        height = props.get('height', None)
+        if height is not None:
+            props['height'] = quantize_height_fn(height)
+
+    return None
 
 
 def merge_building_features(ctx):
@@ -3472,13 +3611,6 @@ def merge_building_features(ctx):
     # values which retain detail.
     tolerance = min(5, 0.4 * tolerance_for_zoom(zoom))
 
-    quantize_height_fn = None
-    quantize_cfg = ctx.params.get('quantize')
-    if quantize_cfg:
-        quantize_fn_dotted_name = quantize_cfg.get(zoom)
-        if quantize_fn_dotted_name:
-            quantize_height_fn = resolve(quantize_fn_dotted_name)
-
     def _props_pre((shape, props, fid)):
         if exclusions:
             for prop in exclusions:
@@ -3494,11 +3626,6 @@ def merge_building_features(ctx):
             for prop in drop:
                 props.pop(prop, None)
 
-        if quantize_height_fn:
-            height = props.get('height', None)
-            if height is not None:
-                props['height'] = quantize_height_fn(height)
-
         return props
 
     def _props_post((merged_shape, props, fid)):
@@ -3511,7 +3638,7 @@ def merge_building_features(ctx):
         return props
 
     def _merge_polygons(shapes):
-        return _merge_buildings(shapes, tolerance)
+        return _merge_polygons_with_buffer(shapes, tolerance)
 
     layer['features'] = _merge_features_by_property(
         layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
@@ -3532,6 +3659,9 @@ def merge_polygon_features(ctx):
     source_layer = ctx.params.get('source_layer')
     start_zoom = ctx.params.get('start_zoom', 0)
     end_zoom = ctx.params.get('end_zoom')
+    merge_min_zooms = ctx.params.get('merge_min_zooms', False)
+    buffer_merge = ctx.params.get('buffer_merge', False)
+    buffer_merge_tolerance = ctx.params.get('buffer_merge_tolerance')
 
     assert source_layer, 'merge_polygon_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -3543,9 +3673,19 @@ def merge_polygon_features(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
+    tfz = tolerance_for_zoom(zoom)
+    if buffer_merge_tolerance:
+        tolerance = eval(buffer_merge_tolerance, {}, {
+            'tolerance_for_zoom': tfz,
+        })
+    else:
+        tolerance = tfz
+
     def _props_pre((shape, props, fid)):
         # drop area while merging, as we'll recalculate after.
         props.pop('area', None)
+        if merge_min_zooms:
+            props.pop('min_zoom', None)
         return props
 
     def _props_post((merged_shape, props, fid)):
@@ -3554,8 +3694,28 @@ def merge_polygon_features(ctx):
         props['area'] = area
         return props
 
+    def _props_merge(all_props):
+        merged_props = None
+        for props in all_props:
+            if merged_props is None:
+                merged_props = props.copy()
+            else:
+                min_zoom = props.get('min_zoom')
+                merged_min_zoom = merged_props.get('min_zoom')
+                if min_zoom and (merged_min_zoom is None or
+                                 min_zoom < merged_min_zoom):
+                    merged_props['min_zoom'] = min_zoom
+        return merged_props
+
+    def _merge_polygons(shapes):
+        return _merge_polygons_with_buffer(shapes, tolerance)
+
+    merge_props_fn = _props_merge if merge_min_zooms else None
+    merge_shape_fn = _merge_polygons if buffer_merge else None
+
     layer['features'] = _merge_features_by_property(
-        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post)
+        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
+        merge_props_fn=merge_props_fn, merge_shape_fn=merge_shape_fn)
     return layer
 
 
@@ -3580,6 +3740,13 @@ def _angle_at(linestring, pt):
         dy = -dy
 
     a = math.atan2(dy, dx) / math.pi * 180.0
+
+    # wrap around at exactly 180, because we don't care about the direction of
+    # the road, only what angle the line is at, and 180 is horizontal same as
+    # 0.
+    if a == 180.0:
+        a = 0.0
+
     assert 0 <= a < 180
     return a
 
@@ -3679,10 +3846,83 @@ def _merge_junctions_in_multilinestring(mls, angle_tolerance):
         return MultiLineString(merged_geoms)
 
 
-def _merge_junctions(features, angle_tolerance):
+def _loop_merge_junctions(geom, angle_tolerance):
+    """
+    Keep applying junction merging to the MultiLineString until there are no
+    merge opportunities left.
+
+    A single merge step will only carry out one merge per LineString, which
+    means that the other endpoint might miss out on a possible merge. So we
+    loop over the merge until all opportunities are exhausted: either we end
+    up with a single LineString or we run a step and it fails to merge any
+    candidates.
+
+    For a total number of possible merges, N, we could potentially be left
+    with two thirds of these left over, depending on the order of the
+    candidates. This means we should need only O(log N) steps to merge them
+    all.
+    """
+
+    if geom.geom_type != 'MultiLineString':
+        return geom
+
+    # keep track of the number of linestrings in the multilinestring. we'll
+    # use that to figure out if we've merged as much as we possibly can.
+    mls_size = len(geom.geoms)
+
+    while True:
+        geom = _merge_junctions_in_multilinestring(geom, angle_tolerance)
+
+        # merged everything down to a single linestring
+        if geom.geom_type == 'LineString':
+            break
+
+        # made no progress
+        elif len(geom.geoms) == mls_size:
+            break
+
+        assert len(geom.geoms) < mls_size, \
+            "Number of geometries should stay the same or reduce after merge."
+
+        # otherwise, keep looping
+        mls_size = len(geom.geoms)
+
+    return geom
+
+
+def _simplify_line_collection(shape, tolerance):
+    """
+    Calling simplify on a MultiLineString doesn't always simplify if it would
+    make the MultiLineString non-simple.
+
+    However, we're trying to sort linestrings into nonoverlapping sets, and we
+    don't care whether they overlap at this point. However, we do want to make
+    sure that any colinear points in the individual LineStrings are removed.
+    """
+
+    if shape.geom_type == 'LineString':
+        shape = shape.simplify(tolerance)
+
+    elif shape.geom_type == 'MultiLineString':
+        new_geoms = []
+        for geom in shape.geoms:
+            new_geoms.append(geom.simplify(tolerance))
+        shape = MultiLineString(new_geoms)
+
+    return shape
+
+
+def _merge_junctions(features, angle_tolerance, simplify_tolerance):
     """
     Merge LineStrings within MultiLineStrings within features across junction
     boundaries where the lines appear to continue at the same angle.
+
+    If simplify_tolerance is provided, apply a simplification step. This can
+    help to remove colinear junction points left over from any merging.
+
+    Finally, group the lines into non-overlapping sets, each of which generates
+    a separate MultiLineString feature to ensure they're already simple and
+    further geometric operations won't re-introduce intersection points.
 
     Returns a new list of features.
     """
@@ -3690,14 +3930,19 @@ def _merge_junctions(features, angle_tolerance):
     new_features = []
     for shape, props, fid in features:
         if shape.geom_type == 'MultiLineString':
-            shape = _merge_junctions_in_multilinestring(
-                shape, angle_tolerance)
-            if shape.geom_type == 'MultiLineString':
-                disjoint_shapes = _linestring_nonoverlapping_partition(shape)
-                for disjoint_shape in disjoint_shapes:
-                    new_features.append((disjoint_shape, props, None))
-                continue
-        new_features.append((shape, props, fid))
+            shape = _loop_merge_junctions(shape, angle_tolerance)
+
+        if simplify_tolerance > 0.0:
+            shape = _simplify_line_collection(shape, simplify_tolerance)
+
+        if shape.geom_type == 'MultiLineString':
+            disjoint_shapes = _linestring_nonoverlapping_partition(shape)
+            for disjoint_shape in disjoint_shapes:
+                new_features.append((disjoint_shape, props, None))
+
+        else:
+            new_features.append((shape, props, fid))
+
     return new_features
 
 
@@ -3834,6 +4079,8 @@ def merge_line_features(ctx):
         'drop_short_segments', default=False, typ=bool)
     short_segment_factor = params.optional(
         'drop_length_pixels', default=0.1, typ=float)
+    simplify_tolerance = params.optional(
+        'simplify_tolerance', default=0.0, typ=float)
 
     assert source_layer, 'merge_line_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -3855,7 +4102,7 @@ def merge_line_features(ctx):
 
     if merge_junctions:
         layer['features'] = _merge_junctions(
-            layer['features'], junction_angle_tolerance)
+            layer['features'], junction_angle_tolerance, simplify_tolerance)
 
     return layer
 
@@ -7664,6 +7911,18 @@ def truncate_min_zoom_to_2dp(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def truncate_min_zoom_to_1dp(shape, properties, fid, zoom):
+    """
+    Truncate the "min_zoom" property to one decimal place.
+    """
+
+    min_zoom = properties.get('min_zoom')
+    if min_zoom:
+        properties['min_zoom'] = round(min_zoom, 1)
+
+    return shape, properties, fid
+
+
 class Palette(object):
     """
     A collection of named colours which allows relatively fast lookup of the
@@ -8027,7 +8286,7 @@ def min_zoom_filter(ctx):
         for feature in features:
             _, props, _ = feature
             min_zoom = props.get('min_zoom')
-            if min_zoom is not None and min_zoom <= nominal_zoom + 1:
+            if min_zoom is not None and min_zoom < nominal_zoom + 1:
                 new_features.append(feature)
 
         layer['features'] = new_features
@@ -8048,10 +8307,419 @@ def tags_set_ne_min_max_zoom(ctx):
     for _, props, _ in layer['features']:
         min_zoom = props.pop('__ne_min_zoom', None)
         if min_zoom is not None:
+            # don't overstuff features into tiles when they are in the
+            # long tail of won't display, but make their min_zoom
+            # consistent with when they actually show in tiles
+            if min_zoom % 1 > 0.5:
+                min_zoom = ceil(min_zoom)
             props['min_zoom'] = min_zoom
+
+        elif props.get('kind') == 'country':
+            # countries and regions which don't have a min zoom joined from NE
+            # are probably either vandalism or unrecognised countries. either
+            # way, we probably don't want to see them at zoom, which is lower
+            # than most of the curated NE min zooms. see issue #1826 for more
+            # information.
+            props['min_zoom'] = max(6, props['min_zoom'])
+
+        elif props.get('kind') == 'region':
+            props['min_zoom'] = max(8, props['min_zoom'])
 
         max_zoom = props.pop('__ne_max_zoom', None)
         if max_zoom is not None:
             props['max_zoom'] = max_zoom
 
     return None
+
+
+def whitelist(ctx):
+    """
+    Applies a whitelist to a particular property on all features in the layer,
+    optionally also remapping some values.
+    """
+
+    params = _Params(ctx, 'whitelist')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    property_name = params.required('property')
+    whitelist = params.required('whitelist', typ=list)
+    remap = params.optional('remap', default={}, typ=dict)
+    where = params.optional('where')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+
+        # skip this feature if there's a where clause and it evaluates falsey.
+        if where is not None:
+            local = props.copy()
+            local['zoom'] = ctx.nominal_zoom
+            if not eval(where, {}, local):
+                continue
+
+        value = props.get(property_name)
+        if value is not None:
+            if value in whitelist:
+                # leave value as-is
+                continue
+
+            elif value in remap:
+                # replace with replacement value
+                props[property_name] = remap[value]
+
+            else:
+                # drop the property
+                props.pop(property_name)
+
+    return None
+
+
+def remap(ctx):
+    """
+    Maps some values for a particular property to others. Similar to whitelist,
+    but won't remove the property if there's no match.
+    """
+
+    params = _Params(ctx, 'remap')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    property_name = params.required('property')
+    remap = params.optional('remap', default={}, typ=dict)
+    where = params.optional('where')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        shape, props, _ = feature
+
+        # skip this feature if there's a where clause and it evaluates falsey.
+        if where is not None:
+            local = props.copy()
+            local['zoom'] = ctx.nominal_zoom
+            local['geom_type'] = shape.geom_type
+            if not eval(where, {}, local):
+                continue
+
+        value = props.get(property_name)
+        if value in remap:
+            # replace with replacement value
+            props[property_name] = remap[value]
+
+    return None
+
+
+def backfill(ctx):
+    """
+    Backfills default values for some features. In other words, if the feature
+    lacks some or all of the defaults, then set those defaults.
+    """
+
+    params = _Params(ctx, 'whitelist')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    defaults = params.required('defaults', typ=dict)
+    where = params.optional('where')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    if where is not None:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+
+        # skip this feature if there's a where clause and it evaluates truthy.
+        if where is not None:
+            local = props.copy()
+            local['zoom'] = ctx.nominal_zoom
+            if not eval(where, {}, local):
+                continue
+
+        for k, v in defaults.iteritems():
+            if k not in props:
+                props[k] = v
+
+    return None
+
+
+def clamp_min_zoom(ctx):
+    """
+    Clamps the min zoom for features depending on context.
+    """
+
+    params = _Params(ctx, 'clamp_min_zoom')
+    layer_name = params.required('layer')
+    start_zoom = params.optional('start_zoom', default=0, typ=int)
+    end_zoom = params.optional('end_zoom', typ=int)
+    clamp = params.required('clamp', typ=dict)
+    property_name = params.required('property')
+
+    # check that we're in the zoom range where this post-processor is supposed
+    # to operate.
+    if ctx.nominal_zoom < start_zoom:
+        return None
+    if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    features = layer['features']
+    for feature in features:
+        _, props, _ = feature
+
+        value = props.get(property_name)
+        min_zoom = props.get('min_zoom')
+
+        if value is not None and min_zoom is not None:
+            min_val = clamp.get(value)
+            if min_val is not None and min_val > min_zoom:
+                props['min_zoom'] = min_val
+
+    return None
+
+
+def add_vehicle_restrictions(shape, props, fid, zoom):
+    """
+    Parse the maximum height, weight, length, etc... restrictions on vehicles
+    and create the `hgv_restriction` and `hgv_restriction_shield_text`.
+    """
+
+    from math import floor
+
+    def _one_dp(val, unit):
+        deci = int(floor(10 * val))
+        if deci % 10 == 0:
+            return "%d%s" % (deci / 10, unit)
+        return "%.1f%s" % (0.1 * deci, unit)
+
+    def _metres(val):
+        # parse metres or feet and inches, return cm
+        metres = _to_float_meters(val)
+        if metres:
+            return True, _one_dp(metres, 'm')
+        return False, None
+
+    def _tonnes(val):
+        tonnes = to_float(val)
+        if tonnes:
+            return True, _one_dp(tonnes, 't')
+        return False, None
+
+    def _false(val):
+        return val == 'no', None
+
+    Restriction = namedtuple('Restriction', 'kind parse')
+
+    restrictions = {
+        'maxwidth': Restriction('width', _metres),
+        'maxlength': Restriction('length', _metres),
+        'maxheight': Restriction('height', _metres),
+        'maxweight': Restriction('weight', _tonnes),
+        'maxaxleload': Restriction('wpa', _tonnes),
+        'hazmat': Restriction('hazmat', _false),
+    }
+
+    hgv_restriction = None
+    hgv_restriction_shield_text = None
+
+    for osm_key, restriction in restrictions.items():
+        osm_val = props.pop(osm_key, None)
+        if osm_val is None:
+            continue
+
+        restricted, shield_text = restriction.parse(osm_val)
+        if not restricted:
+            continue
+
+        if hgv_restriction is None:
+            hgv_restriction = restriction.kind
+            hgv_restriction_shield_text = shield_text
+
+        else:
+            hgv_restriction = 'multiple'
+            hgv_restriction_shield_text = None
+
+    if hgv_restriction:
+        props['hgv_restriction'] = hgv_restriction
+    if hgv_restriction_shield_text:
+        props['hgv_restriction_shield_text'] = hgv_restriction_shield_text
+
+    return shape, props, fid
+
+
+def load_collision_ranker(fh):
+    import yaml
+    from vectordatasource.collision import CollisionRanker
+
+    data = yaml.load(fh)
+    assert isinstance(data, list)
+
+    return CollisionRanker(data)
+
+
+def add_collision_rank(ctx):
+    """
+    Add or update a collision_rank property on features in the given layers.
+    The collision rank is looked up from a YAML file consisting of a list of
+    filters (same syntax as in kind/min_zoom YAML) and "_reserved" blocks.
+    Collision rank indices are automatically assigned based on where in the
+    list a matching filter is found.
+    """
+
+    feature_layers = ctx.feature_layers
+    zoom = ctx.nominal_zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    ranker = ctx.resources.get('ranker')
+    where = ctx.params.get('where')
+
+    assert ranker, 'add_collision_rank: missing ranker resource'
+
+    if zoom < start_zoom:
+        return None
+
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    if where:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    for layer in feature_layers:
+        layer_name = layer['layer_datum']['name']
+        for shape, props, fid in layer['features']:
+            # use the "where" clause to limit the selection of features which
+            # we add collision_rank to.
+            add_collision_rank = True
+            if where:
+                local = defaultdict(lambda: None)
+                local.update(props)
+                local['layer_name'] = layer_name
+                local['_has_name'] = _has_name(props)
+                add_collision_rank = eval(where, {}, local)
+
+            if add_collision_rank:
+                props_with_layer = props.copy()
+                props_with_layer['$layer'] = layer_name
+                rank = ranker((shape, props_with_layer, fid))
+                if rank is not None:
+                    props['collision_rank'] = rank
+
+    return None
+
+
+# mappings from the fclass_XXX values in the Natural Earth disputed areas data
+# to the matching Tilezen kind.
+_REMAP_VIEWPOINT_KIND = {
+    'Disputed (please verify)': 'disputed',
+    'Indefinite (please verify)': 'indefinite',
+    'Indeterminant frontier': 'indeterminate',
+    'International boundary (verify)': 'country',
+    'Lease limit': 'lease_limit',
+    'Line of control (please verify)': 'line_of_control',
+    'Overlay limit': 'overlay_limit',
+    'Unrecognized': 'unrecognized',
+    'Map unit boundary': 'map_unit',
+    'Breakaway': 'disputed_breakaway',
+    'Claim boundary': 'disputed_claim',
+    'Elusive frontier': 'disputed_elusive',
+    'Reference line': 'disputed_reference_line',
+}
+
+
+def remap_viewpoint_kinds(shape, props, fid, zoom):
+    """
+    Remap Natural Earth kinds in kind:* country viewpoints into the standard
+    Tilezen nomenclature.
+    """
+
+    for key in props.keys():
+        if key.startswith('kind:'):
+            props[key] = _REMAP_VIEWPOINT_KIND.get(props[key])
+
+    return (shape, props, fid)
+
+
+def update_min_zoom(ctx):
+    """
+    Update the min zoom for features matching the Python fragment "where"
+    clause. If none is provided, update all features.
+
+    The new min_zoom is calculated by evaluating a Python fragment passed
+    in through the "min_zoom" parameter. This is evaluated in the context
+    of the features' parameters, plus a zoom variable.
+
+    If the min zoom is lower than the current min zoom, the current one is
+    kept. If the min zoom is increased, then it's checked against the
+    current zoom and the feature dropped if it's not in range.
+    """
+
+    params = _Params(ctx, 'update_min_zoom')
+    layer_name = params.required('source_layer')
+    start_zoom = params.optional('start_zoom', typ=int, default=0)
+    end_zoom = params.optional('end_zoom', typ=int)
+    min_zoom = params.required('min_zoom')
+    where = params.optional('where')
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    zoom = ctx.nominal_zoom
+
+    if zoom < start_zoom or \
+       (end_zoom is not None and zoom >= end_zoom):
+        return None
+
+    min_zoom = compile(min_zoom, 'queries.yaml', 'eval')
+    if where:
+        where = compile(where, 'queries.yaml', 'eval')
+
+    new_features = []
+    for shape, props, fid in layer['features']:
+        local = defaultdict(lambda: None)
+        local.update(props)
+        local['zoom'] = zoom
+
+        if where and eval(where, {}, local):
+            new_min_zoom = eval(min_zoom, {}, local)
+            if new_min_zoom > props.get('min_zoom'):
+                props['min_zoom'] = new_min_zoom
+                if new_min_zoom >= zoom + 1 and zoom < 16:
+                    # DON'T add feature - it's masked by min zoom.
+                    continue
+
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer

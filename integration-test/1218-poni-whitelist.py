@@ -162,7 +162,7 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(110392851, wkt_loads('POINT (-122.5540299617 37.9050195779691)'), {u'source': u'openstreetmap.org', u'highway': u'mini_roundabout'}))  # noqa
 
         self.assert_has_feature(
-            15, 5228, 12650, 'pois',
+            16, 10457, 25301, 'pois',
             {'id': 110392851})
 
     def test_highway_platform(self):
@@ -198,15 +198,15 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(3356570361, wkt_loads('POINT (-122.153005130541 38.21004035449701)'), {u'source': u'openstreetmap.org', u'landuse': u'quarry', u'resource': u'rock'}))  # noqa
 
         self.assert_has_feature(
-            15, 5265, 12615, 'pois',
+            16, 10530, 25230, 'pois',
             {'id': 3356570361})
 
         # Way:184367568 quarry in POIS
         self.generate_fixtures(dsl.way(184367568, wkt_loads('POLYGON ((-120.977489333016 37.75803770943879, -120.977486997396 37.76081756655368, -120.976233937406 37.76077552360858, -120.975400929643 37.7607743873124, -120.974583372903 37.76077332203479, -120.973504316584 37.76062567440368, -120.97213699089 37.76035516386188, -120.971016971394 37.7601061001177, -120.970661597867 37.7599816034407, -120.97063294161 37.75963545470499, -120.970616682103 37.7594398664594, -120.970625485593 37.75941607482559, -120.970835242212 37.75885182025329, -120.970928667001 37.7585999816441, -120.971144981322 37.75855530967489, -120.971802368447 37.75841951808628, -120.971967209301 37.7582608575149, -120.9720635087 37.75745135660739, -120.971951219289 37.75722600441009, -120.972019042093 37.75718296511631, -120.972093961588 37.75713530936738, -120.972331386317 37.7569844584784, -120.972452838544 37.75689695914001, -120.972641574585 37.75557287981598, -120.972647683129 37.75482471444889, -120.975799062977 37.75418158732738, -120.975874970619 37.75416880285528, -120.976019329885 37.7541445833771, -120.976370571161 37.75533779164638, -120.976515469416 37.75582998445129, -120.976667733857 37.7561338213188, -120.976875693845 37.75641066831778, -120.97701762766 37.7564229552437, -120.977076287648 37.75642806887698, -120.977279396734 37.75644568250009, -120.977288110392 37.75651152048169, -120.977319461596 37.7567493747943, -120.977408125314 37.75742181157429, -120.977429145892 37.7575811841611, -120.977489333016 37.75803770943879))'), {u'attribution': u'Farmland Mapping and Monitoring Program', u'way_area': u'508870', u'source': u'openstreetmap.org', u'FMMP_modified': u'no', u'addr:county': u'San Joaquin', u'landuse': u'quarry', u'FMMP_reviewed': u'no'}))  # noqa
 
         self.assert_has_feature(
-            12, 671, 1583, 'pois',
-            {'id': 184367568})
+            14, 2686, 6333, 'pois',
+            {'id': 184367568, 'min_zoom': 13})
 
     def test_leisure_dog_park(self):
         self.generate_fixtures(dsl.way(1229112075, wkt_loads('POINT (-122.484834531995 37.73619356828728)'), {u'source': u'openstreetmap.org', u'leisure': u'dog_park'}))  # noqa
@@ -294,8 +294,8 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(2073000913, wkt_loads('POINT (-122.4514815228 37.72302879364989)'), {u'source': u'openstreetmap.org', u'public_transport': u'platform'}))  # noqa
 
         self.assert_has_feature(
-            15, 5238, 12671, 'pois',
-            {'id': 2073000913})
+            16, 10476, 25342, 'pois',
+            {'id': 2073000913, 'min_zoom': 17})
 
     def test_public_transport_stop_area(self):
         self.generate_fixtures(dsl.way(2991866242, wkt_loads('POINT (-122.714192210673 38.43852797107748)'), {u'source': u'openstreetmap.org', u'public_transport': u'stop_area'}))  # noqa
@@ -308,30 +308,30 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(2382580308, wkt_loads('POINT (-75.130406997023 40.30634839166561)'), {u'source': u'openstreetmap.org', u'railway': u'halt'}))  # noqa
 
         self.assert_has_feature(
-            15, 9545, 12368, 'pois',
-            {'id': 2382580308})
+            16, 19090, 24737, 'pois',
+            {'id': 2382580308, 'kind': 'halt', 'min_zoom': 16})
 
     def test_railway_platform(self):
         self.generate_fixtures(dsl.way(3987143106, wkt_loads('POINT (-72.0929836528225 41.354925008914)'), {u'source': u'openstreetmap.org', u'railway': u'platform'}))  # noqa
 
         self.assert_has_feature(
-            15, 9821, 12242, 'pois',
-            {'id': 3987143106})
+            16, 19643, 24485, 'pois',
+            {'id': 3987143106, 'min_zoom': 17})
 
     def test_railway_stop(self):
         self.generate_fixtures(dsl.way(1130268570, wkt_loads('POINT (-76.9349771452377 38.9629633645972)'), {u'source': u'openstreetmap.org', u'railway': u'stop', u'rail': u'yes', u'public_transport': u'stop_position'}))  # noqa
 
         self.assert_has_feature(
-            15, 9381, 12527, 'pois',
-            {'id': 1130268570})
+            16, 18762, 25055, 'pois',
+            {'id': 1130268570, 'kind': 'stop', 'min_zoom': 16})
 
     def test_public_transport_stop_position(self):
         # originally from 661-historic-transit-stops.py
         self.generate_fixtures(dsl.way(3721890342, wkt_loads('POINT (-122.15620591773 37.438295280187)'), {u'source': u'openstreetmap.org', u'railway': u'stop', u'network': u'Caltrain', u'public_transport': u'stop_position'}))  # noqa
 
         self.assert_has_feature(
-            13, 1316, 3176, 'pois',
-            {'id': 3721890342})
+            16, 10530, 25408, 'pois',
+            {'id': 3721890342, 'kind': 'stop', 'min_zoom': 16})
 
     def test_railway_subway_entrance(self):
         self.generate_fixtures(dsl.way(3833748147, wkt_loads('POINT (-77.08494522253518 38.89059997067759)'), {u'source': u'openstreetmap.org', u'railway': u'subway_entrance', u'highway': u'elevator', u'subway_entrance': u'elevator'}))  # noqa
@@ -348,7 +348,7 @@ class PoniWhitelist(FixtureTest):
         self.generate_fixtures(dsl.way(1719012916, wkt_loads('POINT (-122.433744377346 37.73245189929369)'), {u'source': u'openstreetmap.org', u'railway': u'tram_stop'}))  # noqa
 
         self.assert_has_feature(
-            15, 5239, 12670, 'pois',
+            16, 10479, 25340, 'pois',
             {'id': 1719012916})
 
     def test_railway_level_crossing(self):

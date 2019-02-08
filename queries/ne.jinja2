@@ -1,4 +1,5 @@
 {% set ne_languages = ['ar', 'bn', 'de', 'en', 'es', 'fr', 'el', 'hi', 'hu', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'sv', 'tr', 'vi', 'zh'] %}
+{% set ne_viewpoints = ['iso', 'ar', 'bd', 'br', 'cn', 'de', 'eg', 'es', 'fr', 'gb', 'gr', 'id', 'il', 'in', 'it', 'jp', 'ko', 'ma', 'nl', 'np', 'pk', 'pl', 'ps', 'pt', 'ru', 'sa', 'se', 'tr', 'tw', 'us', 'vn'] %}
 
 {% macro ne_common_properties() %}
 
@@ -9,7 +10,7 @@
 
 {% endmacro %}
 
-{% macro ne_boundaries_query(name, table) %}
+{% macro ne_boundaries_query(name, viewpoints, table) %}
 
 SELECT
 
@@ -23,6 +24,11 @@ SELECT
   jsonb_build_object(
 {% if name %}
     'name', name,
+{% endif %}
+{% if viewpoints %}
+  {%- for vpt in ne_viewpoints %}
+    'fclass_{{vpt}}', fclass_{{vpt}},
+  {%- endfor %}
 {% endif %}
     'min_zoom', mz_boundary_min_zoom,
     'featurecla', featurecla,

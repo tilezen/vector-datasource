@@ -31,7 +31,7 @@ class InvalidWkbPolygons(FixtureTest):
         # Caspian Sea
         self.load_fixtures([
             'file://integration-test/fixtures/ne_10m_ocean/'
-            '1030-invalid-wkb-polygon.shp',
+            '1030-invalid-wkb-polygon-v2.shp',
         ], clip=self.tile_bbox(5, 20, 12))
 
         self.assert_has_feature(
@@ -42,7 +42,7 @@ class InvalidWkbPolygons(FixtureTest):
         # Baltic Sea - JSON format
         self.load_fixtures([
             'file://integration-test/fixtures/ne_10m_ocean/'
-            '1030-invalid-wkb-polygon.shp',
+            '1030-invalid-wkb-polygon-v2.shp',
         ], clip=self.tile_bbox(5, 17, 9))
 
         self.assert_has_feature(
@@ -56,7 +56,7 @@ class InvalidWkbPolygons(FixtureTest):
         # stack when encoding the MVT hasn't broken the polygon.
         self.load_fixtures([
             'file://integration-test/fixtures/ne_10m_ocean/'
-            '1030-invalid-wkb-polygon.shp',
+            '1030-invalid-wkb-polygon-v2.shp',
         ])
 
         with self.features_in_mvt_layer(5, 17, 9, 'water') as features:

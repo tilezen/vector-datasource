@@ -75,7 +75,6 @@ class MaritimeBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'id': 2,
                 'kind': 'country',
                 'maritime_boundary': type(None),
             })
@@ -95,7 +94,6 @@ class MaritimeBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'id': 2,
                 'kind': 'country',
                 'maritime_boundary': True,
             })
