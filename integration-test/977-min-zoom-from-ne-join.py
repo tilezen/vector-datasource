@@ -68,7 +68,7 @@ class MinZoomFromAdminAreaBasedDefault(FixtureTest):
         from tilequeue.tile import deg2num
 
         lon, lat = (-3.2765753, 54.7023545)
-        z = 5
+        z = 6
         x, y = deg2num(lat, lon, z)
 
         self.generate_fixtures(
@@ -87,7 +87,7 @@ class MinZoomFromAdminAreaBasedDefault(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 838090640,
-                'min_zoom': 1.7,
+                'min_zoom': 6,
                 'max_zoom': 6.7,
             })
 

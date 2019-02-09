@@ -1363,10 +1363,11 @@ class DownloadOnlyInstance(object):
 
     def load_fixtures(self, urls, clip, simplify):
         self.env.ensure_fixture_file(urls, clip, simplify)
+        raise unittest.SkipTest("download only instance doesn't run tests")
 
     def generate_fixtures(self, objs):
         # there is nothing to download for a generated fixture.
-        pass
+        raise unittest.SkipTest("download only instance doesn't run tests")
 
     def assert_has_feature(self, z, x, y, layer, props):
         pass

@@ -375,6 +375,39 @@ def place_population_int(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
+def population_rank(shape, properties, fid, zoom):
+    population = properties.get('population')
+    pop_breaks = [
+        1000000000,
+        100000000,
+        50000000,
+        20000000,
+        10000000,
+        5000000,
+        1000000,
+        500000,
+        200000,
+        100000,
+        50000,
+        20000,
+        10000,
+        5000,
+        2000,
+        1000,
+        200,
+        0,
+    ]
+    for i, pop_break in enumerate(pop_breaks):
+        if population >= pop_break:
+            rank = len(pop_breaks) - i
+            break
+    else:
+        rank = 0
+
+    properties['population_rank'] = rank
+    return (shape, properties, fid)
+
+
 def pois_capacity_int(shape, properties, fid, zoom):
     pois_capacity_str = properties.pop('capacity', None)
     capacity = to_float(pois_capacity_str)
@@ -8280,6 +8313,17 @@ def tags_set_ne_min_max_zoom(ctx):
             if min_zoom % 1 > 0.5:
                 min_zoom = ceil(min_zoom)
             props['min_zoom'] = min_zoom
+
+        elif props.get('kind') == 'country':
+            # countries and regions which don't have a min zoom joined from NE
+            # are probably either vandalism or unrecognised countries. either
+            # way, we probably don't want to see them at zoom, which is lower
+            # than most of the curated NE min zooms. see issue #1826 for more
+            # information.
+            props['min_zoom'] = max(6, props['min_zoom'])
+
+        elif props.get('kind') == 'region':
+            props['min_zoom'] = max(8, props['min_zoom'])
 
         max_zoom = props.pop('__ne_max_zoom', None)
         if max_zoom is not None:

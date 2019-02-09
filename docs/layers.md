@@ -732,6 +732,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
 * `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
+* `population_rank`: A value from 18 down to 0, indicating how large the population is on a particular place. A larger value indicates a bigger population. See "Population Rank" below for more details.
 * `source`: `openstreetmap`, `naturalearthdata.com`, or `whosonfirst.org`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
 
@@ -767,6 +768,30 @@ Primarily these are available for features of kind `locality` or `region`.
 * `state`
 * `town`
 * `village`
+
+#### Population Rank
+
+The values of population rank are derived from the `population` value as follows:
+
+* 18: Over 1b
+* 17: 100m to 1b
+* 16: 50m to 100m
+* 15: 20m to 50m
+* 14: 10m to 20m
+* 13: 5m to 10m
+* 12: 1m to 5m
+* 11: 500k to 1m
+* 10: 200k to 500k
+* 9: 100k to 200k
+* 8: 50k to 100k
+* 7: 20k to 50k
+* 6: 10k to 20k
+* 5: 5k to 10k
+* 4: 2k to 5k
+* 3: 1k to 2k
+* 2: 200 to 1k
+* 1: Less than 200
+* 0: No `population` value available.
 
 ## Points of Interest
 
@@ -2259,6 +2284,7 @@ If the roads layer features include `linear_ref_id`, then traffic flow layer fea
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
 * `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
@@ -2310,6 +2336,7 @@ If the roads layer features include `linear_ref_id`, then traffic incidents laye
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
 * `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road

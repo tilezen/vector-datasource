@@ -53,25 +53,25 @@ class CollisionRankTest(FixtureTest):
             {'route': 'subway'},
             geom_type='line',
             layer='transit',
-            kind='subway', rank=730)
+            kind='subway', rank=765)
 
     def test_pois_swimming_area(self):
         self._check_rank(
             {'leisure': 'swimming_area'},
             layer='pois',
-            kind='swimming_area', rank=3064)
+            kind='swimming_area', rank=3099)
 
     def test_pois_battlefield(self):
         self._check_rank(
             {'historic': 'battlefield'},
             layer='pois',
-            kind='battlefield', rank=511)
+            kind='battlefield', rank=546)
 
     def test_pois_picnic_site(self):
         self._check_rank(
             {'tourism': 'picnic_site'},
             layer='pois', kind='picnic_site',
-            rank=3062)
+            rank=3097)
 
     def test_water_ocean(self):
         self._check_rank(
@@ -83,96 +83,96 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'shop': 'doityourself'},
             layer='pois', kind='doityourself',
-            rank=1038)
+            rank=1073)
 
     def test_pois_shelter(self):
         self._check_rank(
             {'amenity': 'shelter'},
             layer='pois', kind='shelter',
-            rank=3088)
+            rank=3123)
 
     def test_transit_station(self):
         self._check_rank(
             {'railway': 'station'},
             geom_type='polygon',
             layer='transit', kind='station',
-            rank=3712)
+            rank=3747)
 
     def test_pois_aviary(self):
         self._check_rank(
             {'zoo': 'aviary'},
             layer='pois', kind='aviary',
-            rank=3274)
+            rank=3309)
 
     def test_pois_travel_agent(self):
         self._check_rank(
             {'office': 'travel_agent'},
             layer='pois', kind='travel_agent',
-            rank=3710)
+            rank=3745)
 
     def test_pois_aerodrome(self):
         self._check_rank(
             {'aeroway': 'aerodrome'},
             layer='pois', kind='aerodrome',
-            rank=458)
+            rank=493)
 
     def test_pois_caravan_site(self):
         self._check_rank(
             {'tourism': 'caravan_site'},
             layer='pois', kind='caravan_site',
-            rank=1218)
+            rank=1253)
 
     def test_water_riverbank(self):
         self._check_rank(
             {'waterway': 'riverbank'},
             geom_type='line',
             layer='water', kind='riverbank',
-            rank=2337)
+            rank=2372)
 
     def test_pois_wood(self):
         self._check_rank(
             {'landuse': 'wood'},
             geom_type='polygon',
             layer='pois', kind='wood',
-            rank=465)
+            rank=500)
 
     def test_landuse_industrial(self):
         self._check_rank(
             {'landuse': 'industrial'},
             geom_type='polygon',
             layer='landuse', kind='industrial',
-            rank=2814)
+            rank=2849)
 
     def test_pois_tobacco(self):
         self._check_rank(
             {'shop': 'tobacco'},
             layer='pois', kind='tobacco',
-            rank=3708)
+            rank=3743)
 
     def test_pois_healthcare_centre(self):
         self._check_rank(
             {'healthcare': 'centre'},
             layer='pois', kind='healthcare_centre',
-            rank=3410)
+            rank=3445)
 
     def test_pois_generator(self):
         self._check_rank(
             {'power': 'generator'},
             layer='pois', kind='generator',
-            rank=2668)
+            rank=2703)
 
     def test_pois_post_box(self):
         self._check_rank(
             {'amenity': 'post_box'},
             layer='pois', kind='post_box',
-            rank=4283)
+            rank=4318)
 
     def test_landuse_grass(self):
         self._check_rank(
             {'landuse': 'grass'},
             geom_type='polygon',
             layer='landuse', kind='grass',
-            rank=2866)
+            rank=2901)
 
     def test_non_maritime_boundary(self):
         from tilequeue.tile import coord_to_bounds
@@ -240,7 +240,7 @@ class CollisionRankTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'kind': 'country',
                 'maritime_boundary': type(None),
-                'collision_rank': 772,
+                'collision_rank': 807,
             })
 
     def test_maritime_boundary(self):
@@ -261,7 +261,7 @@ class CollisionRankTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'kind': 'country',
                 'maritime_boundary': True,
-                'collision_rank': 2340,
+                'collision_rank': 2375,
             })
 
 

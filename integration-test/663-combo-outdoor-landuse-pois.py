@@ -11,7 +11,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             13, 1318, 3160, 'landuse',
-            {'kind': 'water_park', 'sort_rank': 120})
+            {'kind': 'water_park', 'sort_rank': 121})
 
         self.assert_has_feature(
             13, 1318, 3160, 'pois',
@@ -230,7 +230,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 10479, 25338, 'landuse',
-            {'kind': 'dog_park', 'sort_rank': 110})
+            {'kind': 'dog_park', 'sort_rank': 111})
 
     def test_recreation_track_way(self):
         # Red Gra / Running Track
@@ -389,7 +389,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             16, 10474, 25332, 'landuse',
-            {'kind': 'picnic_site', 'sort_rank': 121})
+            {'kind': 'picnic_site', 'sort_rank': 122})
 
         self.assert_has_feature(
             16, 10474, 25332, 'pois',

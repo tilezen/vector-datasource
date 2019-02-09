@@ -792,15 +792,22 @@ filters:
       kind: {col: aeroway}
       tier: 3
   # airfield, naval_base
-  - filter: {military: [airfield, range, naval_base]}
+  - filter: {military: [airfield, naval_base]}
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
     output:
       <<: *output_properties
       kind: {col: military}
       tier: 3
+  - filter:
+      military: range
+    min_zoom: { clamp: { max: 16, min: 11, value: { sum: [ { col: zoom }, 1 ] } } }
+    output:
+      <<: *output_properties
+      kind: range
+      tier: 3
   # danger_area
   - filter: {military: danger_area}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 2.55 ] }, *tier3_min_zoom ] }, 15 ] }
+    min_zoom: { clamp: { max: 16, min: 11, value: { sum: [ { col: zoom }, 1 ] } } }
     output:
       <<: *output_properties
       kind: danger_area
@@ -972,7 +979,7 @@ filters:
   # retail - no POI
   # sports_centre
   - filter: {leisure: sports_centre}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.98 ] }, *tier4_min_zoom ] }, 17 ] }
+    min_zoom: { max: [ 12, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind:
@@ -1062,21 +1069,33 @@ filters:
       kind: zoo
       tier: 4
   # other random landuse
-  - filter: {landuse: [container_terminal, port_terminal, quay, shipyard, wharf]}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+  - filter: {landuse: [container_terminal, port_terminal]}
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 2.81 ] } } }
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+      tier: 4
+  - filter: {landuse: [shipyard]}
+    min_zoom: { max: [ 15, *tier4_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: {col: landuse}
+      tier: 4
+  - filter: {landuse: [quay, wharf]}
+    min_zoom: 16
     output:
       <<: *output_properties
       kind: {col: landuse}
       tier: 4
   # seems odd quay is both landuse and man_made...
   - filter: {man_made: quay}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    min_zoom: 16
     output:
       <<: *output_properties
       kind: quay
       tier: 4
   - filter: {waterway: boatyard}
-    min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3 ] }, *tier4_min_zoom ] }, 13 ] }
+    min_zoom: { max: [ 15, *tier4_min_zoom ] }
     output:
       <<: *output_properties
       kind: {col: waterway}
@@ -1508,7 +1527,7 @@ filters:
       any:
         amenity: ferry_terminal
         landuse: ferry_terminal
-    min_zoom: { clamp: { min: 11, max: 15, value: { sum: [ { col: zoom }, 3.2 ] } } }
+    min_zoom: { clamp: { min: 13, max: 16, value: { sum: [ { col: zoom }, 2.81 ] } } }
     output:
       <<: *output_properties
       kind: ferry_terminal
