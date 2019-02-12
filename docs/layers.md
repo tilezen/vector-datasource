@@ -2277,6 +2277,8 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 
 #### `optional` properties:
 
+* `root_id`: an identifier which can be used to link or group together multiple traffic flow features, which are related by being part of a common traffic flow that is for example, split across different types of roads
+
 If the roads layer features include `linear_ref_id`, then traffic flow layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
 
 * `linear_ref_id`: identifier link to a linear references system, eg [SharedStreet](https://github.com/sharedstreets/sharedstreets-ref-system/blob/master/OSMLR.md).
@@ -2327,7 +2329,7 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 
 #### `optional` properties:
 
-* `incident_id`: used to identify an incident that is common across multiple features. E.g. Where `road_kind` may differ across features but affected by a common incident
+* `root_id`: an identifier which can be used to link or group together multiple traffic incident features of type `line`, which are related by being part of a common traffic incident that is for example, split across different types of roads
 * `warning_level`: the severity of the incident that has occured, with three possible values: `low` (least severer), `minor`, `major`, and `critical` (most severer).
 
 If the roads layer features include `linear_ref_id`, then traffic incidents layer features may include the following, in which case the traffic data should be delivered without geometry and run-time linked with the roads layer.
