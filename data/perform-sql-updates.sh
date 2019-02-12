@@ -38,10 +38,15 @@ echo "done."
 
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."
-psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
-psql $PSQLOPTS  $@ -f apply-planet_osm_polygon.sql &
-psql $PSQLOPTS  $@ -f apply-planet_osm_line.sql &
-psql $PSQLOPTS  $@ -f apply-planet_osm_point.sql &
+psql $PSQLOPTS  $@ -e -f apply-updates-non-planet-tables.sql > non_planet.log 2>&1  &
+psql $PSQLOPTS  $@ -e -f apply-planet_osm_polygon.sql > polygon.log 2>&1  &
+psql $PSQLOPTS  $@ -e -f apply-planet_osm_line.sql > line.log 2>&1  &
+psql $PSQLOPTS  $@ -e -f apply-planet_osm_point.sql > point.log 2>&1 &
+wait
+echo -e "\nBuilding database indexes..."
+for sql in indexes/*.sql; do
+    psql $PSQLOPTS  $@ -f $sql &
+done
 wait
 echo "done."
 

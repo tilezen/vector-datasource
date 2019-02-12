@@ -1,0 +1,2 @@
+
+CREATE INDEX ne_50m_urban_areas_way_area_index ON ne_50m_urban_areas(way_area)
