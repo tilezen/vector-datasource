@@ -1,7 +1,5 @@
---DO $$
---BEGIN
-
-\timing on
+DO $$
+BEGIN
 
 --------------------------------------------------------------------------------
 -- planet_osm_polygon
@@ -15,9 +13,9 @@ UPDATE planet_osm_polygon SET
    mz_poi_min_zoom = mz_calculate_min_zoom_pois(planet_osm_polygon.*),
    mz_transit_level = mz_calculate_min_zoom_transit(planet_osm_polygon.*),
    mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_polygon.*),
-   mz_label_placement = ST_PointOnSurface(way);
+   mz_label_placement = ST_PointOnSurface(way)
+ WHERE
+   SHARDING;
 
 
---END $$;
-
-ANALYZE planet_osm_polygon;
+END $$;
