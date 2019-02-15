@@ -5,6 +5,11 @@ v1.7.0
 
   #### ENHANCEMENTS
 
+  * **all layers**: Add `collision_rank` property for label collisions for **pois** layer, and other layers for features with `name` properties, or `ref`, `shield_text`, `bicycle_shield_text`, `bus_shield_text`, or `walking_shield_text`. We now recommend colliding labels client side first with `min_zoom`, and then to tie break with the new `collision_rank` values. (Issue [#988](https://github.com/tilezen/vector-datasource/issues/988))
+  * **boundaries**: Adds support for alternate points of view in boundaries layer with `kind:*` properties (like `kind:iso`). Currently this is only for zooms 5, 6 and 7 from Natural Earth. We plan to add more lower zoom data from Natural Earth, and high-zoom data from OpenStreetMap in the next release. (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
+    * The following country and international organizations worldviews are supported: Argentina (`ar`), Bangladesh (`bd`), Brazil (`br`), China (`cn`), Egypt (`eg`), France (`fr`), Germany (`de`), Greece (`gr`), India (`in`), Indonesia (`id`), Israel (`il`), Italy (`it`), Japan (`jp`), Morocco (`ma`), Nepal (`np`), Netherlands (`nl`), Pakistan (`pk`), Palestine (`ps`), Poland (`pl`), Portugal (`pt`), Russia (`ru`), Saudi Arabia (`sa`), South Korea (`ko`), Spain (`es`), Sweden (`se`), Taiwan (`tw`), Turkey (`tr`), United Kingdom (`gb`), United States (`us`), Vietnam (`vn'
+ISO (`iso`).
+  * **boundaries**: Add new disputed boundary lines with kind values of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, `disputed_reference_line`, from Natural Earth, at low zooms, for alternate points of view (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
   * **landuse**: ☂ Reduce layer size at mid-zooms (Issue [#1721](https://github.com/tilezen/vector-datasource/issues/1721))
   * **landuse**: Additional landuse merging at low- and mid-zooms, including to `urban_area` which was previously low-zoom only. (Issue [#1795](https://github.com/tilezen/vector-datasource/issues/1795))
   * **landuse**: Remap landuse kinds at mid- and low-zooms to improve merging. This is similar to what we already did for roads. (Issue [#1779](https://github.com/tilezen/vector-datasource/issues/1779))
@@ -16,13 +21,10 @@ v1.7.0
   * **roads**: Populate data for truck `hgv` routing restriction properties and related shields (whitelisted: `agricultural`, `delivery`, `designated`, `destination`, `local`, `no`), added to schema in v1.6, including `maxweight`, `maxheight`, `maxwidth`, `maxlength`, `maxaxleload`, `hazmat`. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
   * **roads**: Add `toll` and `toll_hgv` boolean properties. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553)
   TODO provide details
-  * **boundaries**: Support alternate points of view in boundaries layer with `kind:*` properties (like `kind:iso`), for the following countries or international organizations: `iso`, `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `us`, `vn`. (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
-  * **boundaries**: Add new disputed boundary lines with kind values of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, `disputed_reference_line`, from Natural Earth, at low zooms, for alternate points of view (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
   * **places**: Add `population_rank` to `locality`, `country`, and other kinds. A value from 0 (no population) up to 18 (over 1 billion people).
   * **traffic_flow**: Add `road_kind_detail` to enable data-driven client-side traffic line offseting, thanks @zaczkows! (Issue [#1829](https://github.com/tilezen/vector-datasource/issues/1829))
   * **traffic_flow**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
   * **traffic_incidents**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
-  * **all layers**: Add `collision_rank` property for label collisions for **pois** layer, and other layers with features with `name` properties, or `ref`, `shield_text`, `bicycle_shield_text`, `bus_shield_text`, or `walking_shield_text`. We now recommend colliding labels client side first with `min_zoom`, and then to tie break with the new `collision_rank` values. (Issue [#988](https://github.com/tilezen/vector-datasource/issues/988))
 
   #### BUG FIXES
 
