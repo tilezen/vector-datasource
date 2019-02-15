@@ -547,7 +547,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `kerb` line.
 * `land`
 * `library`
-* `low_emission_zone` - An area beloging to a low emission zone, such as the (London Low Emission Zone)[https://en.wikipedia.org/wiki/London_low_emission_zone]. (See also)[https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dlow_emission_zone].
+* `low_emission_zone` - An area beloging to a low emission zone, such as the [London Low Emission Zone](https://en.wikipedia.org/wiki/London_low_emission_zone). Check also the [OSM wiki](https://wiki.openstreetmap.org/wiki/Tag:boundary%3Dlow_emission_zone).
 * `maze`
 * `meadow`
 * `military`
