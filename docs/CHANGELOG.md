@@ -19,8 +19,7 @@ ISO (`iso`).
   * **pois**: Add `common` kind to match the existing landuse layer polygons.
   * **roads**: Populate data for truck `hgv` routing restriction properties and related shields (whitelisted: `agricultural`, `delivery`, `designated`, `destination`, `local`, `no`), added to schema in v1.6, including `maxweight`, `maxheight`, `maxwidth`, `maxlength`, `maxaxleload`, `hazmat`. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
   * **roads**: Add `toll` and `toll_hgv` boolean properties. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553)
-  TODO provide details
-  * **places**: Add `population_rank` to `locality`, `country`, and other kinds. A value from 0 (no population) up to 18 (over 1 billion people).
+  * **places**: Add `population_rank` to `locality`, `region`, `country`, and other kinds useful for setting text size and colliding labels. An integar value from 0 (no population) up to 18 (over 1 billion people). See documentation for more details.
   * **traffic_flow**: Add `road_kind_detail` to enable data-driven client-side traffic line offseting, thanks @zaczkows! (Issue [#1829](https://github.com/tilezen/vector-datasource/issues/1829))
   * **traffic_flow**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
   * **traffic_incidents**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
@@ -129,7 +128,7 @@ ISO (`iso`).
   * Add `gunicorn` to dependencies, thanks [@rwrx](https://github.com/rwrx). [PR #1690](https://github.com/tilezen/vector-datasource/pull/1690)
   * Bump `PyYAML` version for CVE-2017-18342.
   * Stop using `tags->` in YAML (Issue [#1199](https://github.com/tilezen/vector-datasource/issues/1199))
-  * Add ability to make tests from relations, and calculate the area for TODO
+  * Add ability to make tests from relations
   * Estimate `capacity` for parking lots and garages based on area and parking type with new `tz_estimate_parking_capacity` function.
   * Protect against `None` shapes in way area calculation.
   * Add `all_the_kinds` script to output all the `kind` and `kind_detail` values per `$layer`, with their `min_zoom` from the YAML files.
