@@ -19,13 +19,13 @@ v1.7.0
   * **roads**: Populate data for truck `hgv` routing restriction properties and related shields (whitelisted: `agricultural`, `delivery`, `designated`, `destination`, `local`, `no`), added to schema in v1.6, including `maxweight`, `maxheight`, `maxwidth`, `maxlength`, `maxaxleload`, `hazmat`. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
   * **roads**: Add `toll` and `toll_hgv` boolean properties. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553)
   * **places**: Add `population_rank` to `locality`, `region`, `country`, and other kinds useful for setting text size and colliding labels. An integar value from 0 (no population) up to 18 (over 1 billion people). See documentation for more details.
-  * **traffic_flow**: Add `road_kind_detail` to enable data-driven client-side traffic line offseting, thanks @zaczkows! (Issue [#1829](https://github.com/tilezen/vector-datasource/issues/1829))
-  * **traffic_flow**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
-  * **traffic_incidents**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
+  * **traffic_flow**: Add `road_kind_detail` to enable data-driven client-side traffic line offseting, thanks [@zaczkows](https://github.com/zaczkows)! (Issue [#1829](https://github.com/tilezen/vector-datasource/issues/1829))
+  * **traffic_flow**: Add `is_hov_lane` to enable client-side filtering, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
+  * **traffic_incidents**: Add `is_hov_lane` to enable client-side filtering, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
 
   #### BUG FIXES
 
-  * **landuse**: Fix v1.6 regression where `aerodrome` polygons sorted above `runway` and `taxiway` polygons in error, thanks @bcamper! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
+  * **landuse**: Fix v1.6 regression where `aerodrome` polygons sorted above `runway` and `taxiway` polygons in error, thanks [@bcamper](https://github.com/bcamper)! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
   * **landuse**: Add additional filter for newer OSM `area:aeroway` tagging of `runway`, `taxiway`, and `apron` polygons to restore features from prior year's tile builds. (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
   * **landuse**: Better differentiate between parks that should be `common` instead of `national_park` (Issue [#1082](https://github.com/tilezen/vector-datasource/issues/1082))
   * **landuse**: Better differentiate between parks that should be `park` instead of `national_park` (Issue [#1728](https://github.com/tilezen/vector-datasource/issues/1728))
@@ -101,7 +101,7 @@ v1.7.0
   * **boundaries**: Drop `name`, `name:left`, and `name:right` from `locality` lines at zoom 11 and 12 (Issue [#1738](https://github.com/tilezen/vector-datasource/issues/1738))
   * **boundaries**: Boundary `name:left` and `name:right` values sometimes flipped, especially for `country` and `region` features (Issue [#1770](https://github.com/tilezen/vector-datasource/issues/1770))
   * **boundaries**: Made `min_zoom` of `country` lines depend on the data.
-  * **roads**: Fix v1.6 regression where `runway` and `taxiway` lines were sorted below **landuse** layer polygons for the same in error, thanks @bcamper! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
+  * **roads**: Fix v1.6 regression where `runway` and `taxiway` lines were sorted below **landuse** layer polygons for the same in error, thanks [@bcamper](https://github.com/bcamper)! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
   * **roads**: Expand `is_bridge` to include viaduct and any other not "no" bridges (Issue [#1314](https://github.com/tilezen/vector-datasource/issues/1314))
   * **earth**: Add `min_zoom` properties. (Issue [#1073](https://github.com/tilezen/vector-datasource/issues/1073))
   * **water**: Drop all lake name variants zooms 0-4 (again). Drop additional lake names and variants at mid- and high-zooms (zooms 5-15) based on area. (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
