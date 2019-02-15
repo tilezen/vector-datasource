@@ -1,2 +1,1 @@
-
-CREATE INDEX ne_10m_urban_areas_way_area_index ON ne_10m_urban_areas(way_area)
+CREATE INDEX ne_10m_urban_areas_way_area_index ON ne_10m_urban_areas(way_area);

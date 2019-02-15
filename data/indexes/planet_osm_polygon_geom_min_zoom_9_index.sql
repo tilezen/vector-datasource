@@ -1,5 +1,3 @@
-
-
 -- ladder the rest of the polygon queries
 CREATE INDEX
   planet_osm_polygon_geom_min_zoom_9_index
@@ -11,4 +9,4 @@ CREATE INDEX
     mz_landuse_min_zoom < 9 OR
     mz_poi_min_zoom < 9 OR
     mz_transit_level < 9 OR
-    mz_water_min_zoom < 9
+    mz_water_min_zoom < 9;

@@ -1,5 +1,3 @@
-
-
 CREATE INDEX
   planet_osm_polygon_geom_min_zoom_index
   ON planet_osm_polygon USING gist(way)
@@ -10,4 +8,4 @@ CREATE INDEX
     mz_landuse_min_zoom IS NOT NULL OR
     mz_poi_min_zoom IS NOT NULL OR
     mz_transit_level IS NOT NULL OR
-    mz_water_min_zoom IS NOT NULL
+    mz_water_min_zoom IS NOT NULL;
