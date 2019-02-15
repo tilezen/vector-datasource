@@ -10,9 +10,8 @@ v1.7.0
     * The following country and international organizations worldviews are supported: Argentina (`ar`), Bangladesh (`bd`), Brazil (`br`), China (`cn`), Egypt (`eg`), France (`fr`), Germany (`de`), Greece (`gr`), India (`in`), Indonesia (`id`), Israel (`il`), Italy (`it`), Japan (`jp`), Morocco (`ma`), Nepal (`np`), Netherlands (`nl`), Pakistan (`pk`), Palestine (`ps`), Poland (`pl`), Portugal (`pt`), Russia (`ru`), Saudi Arabia (`sa`), South Korea (`ko`), Spain (`es`), Sweden (`se`), Taiwan (`tw`), Turkey (`tr`), United Kingdom (`gb`), United States (`us`), Vietnam (`vn'
 ISO (`iso`).
   * **boundaries**: Add new disputed boundary lines with kind values of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, `disputed_reference_line`, from Natural Earth, at low zooms, for alternate points of view (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
-  * **landuse**: ☂ Reduce layer size at mid-zooms (Issue [#1721](https://github.com/tilezen/vector-datasource/issues/1721))
-  * **landuse**: Additional landuse merging at low- and mid-zooms, including to `urban_area` which was previously low-zoom only. (Issue [#1795](https://github.com/tilezen/vector-datasource/issues/1795))
   * **landuse**: Remap landuse kinds at mid- and low-zooms to improve merging. This is similar to what we already did for roads. (Issue [#1779](https://github.com/tilezen/vector-datasource/issues/1779))
+  * **landuse**: Additional landuse merging at low- and mid-zooms, including to `urban_area` which was previously low-zoom only. (Issues [#1721](https://github.com/tilezen/vector-datasource/issues/1721) and [#1795](https://github.com/tilezen/vector-datasource/issues/1795))
   * **landuse**: Add `grassland`, `vineyard`, `bare_rock`, `barren` (low- and mid-zooms only), `desert`, `heath`, `sand`, `shingle`, and other natural "landcover" types, starting at zoom 9 (Issue [#1259](https://github.com/tilezen/vector-datasource/issues/1259))
   * **landuse**: Add `kind_detail` property for `wetland` features. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`. (Issue [#1253](https://github.com/tilezen/vector-datasource/issues/1253))
   * **landuse**: Add `low_emission_zone` data, added to schema in v1.6. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
@@ -30,32 +29,28 @@ ISO (`iso`).
 
   * **landuse**: Fix v1.6 regression where `aerodrome` polygons sorted above `runway` and `taxiway` polygons in error, thanks @bcamper! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
   * **landuse**: Add additional filter for newer OSM `area:aeroway` tagging of `runway`, `taxiway`, and `apron` polygons to restore features from prior year's tile builds. (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
-  * **landuse**: Restore national forests `forests` to zoom 7 (Issue [#1801](https://github.com/tilezen/vector-datasource/issues/1801))
-  * **landuse**: "park" in Marin shouldn't be `national_park` (instead `common`) (Issue [#1082](https://github.com/tilezen/vector-datasource/issues/1082))
-  * **landuse**: Henry Coe State Park is incorrectly marked as kind `national_park` (Issue [#1728](https://github.com/tilezen/vector-datasource/issues/1728))
+  * **landuse**: Better differentiate between parks that should be `common` instead of `national_park` (Issue [#1082](https://github.com/tilezen/vector-datasource/issues/1082))
+  * **landuse**: Better differentiate between parks that should be `park` instead of `national_park` (Issue [#1728](https://github.com/tilezen/vector-datasource/issues/1728))
   * **landuse**: Features of kind `mud` now sorts above `water` and below `wetland` (Issue [#1753](https://github.com/tilezen/vector-datasource/issues/1753))
-  * **landuse**: Demoted many `nature_reserves` from zoom 10 (Issue [#1749](https://github.com/tilezen/vector-datasource/issues/1749))
-  * **landuse**: Landcover related landuse should all show at zoom 9 (Issue [#1813](https://github.com/tilezen/vector-datasource/issues/1813))
-  * **landuse**: Demote some early landcover down a few zooms (Issue [#1794](https://github.com/tilezen/vector-datasource/issues/1794))
-  * **landuse**: BLM managed `protected_areas` are now filtered separately.
-  * **landuse**: Pull Yellowstone (and other such huge national parks) up to z5. Don't…  …
-  * **landuse**: Add special cases for BLM-managed areas and things in 'strict' or 'sc…  …
-  * **landuse**: Harmonise kind assignment for national parks, forests, etc... between…  …
-  * **landuse**: Add `protection_title` based filtering for national parks.
-  * **landuse**: Promote some landcover-ish landuses up a few zooms to zoom 9, like `farm` and `farmland`, `orchard`.
-  * **landuse**: Push `forest` down a little further.
-  * **landuse**: Start `natural_wood` at zoom 9.
-  * **landuse**: Limit `residential` areas to zoom 9+.
-  * **landuse**: Pushed `dam`, `prison`, `fort`, `range`, and `danger_area` kinds down to z11+.
-  * **landuse**: Push down `aquarium`, `recreation_ground`, `track`, `sports_centre`, `wastewater_plant`, `caravan_site` to zoom 12+.
-  * **landuse**: Push down `harbour`, `port`, `port_terminal`, `ferry_terminal`, `container_terminal` to zoom 13+.
-  * **landuse**: Push down `enclosure`, `petting_zoo`, `aviary`, `animal`, `summer_toboggan`, `winery`, `allotments`, `pedestrian`, `playground` to zoom 13+.
-  * **landuse**: Push down `bridge`, `tower`, `breakwater`, `groyne`, `dike`, `cutline` to zoom 13+.
-  * **landuse**: Push down `footway`, `library`, `fuel`, `cinema`, `theatre`, `runway`, `taxiway`, `apron`, `trail_riding_station`, `water_park`, `dog_park`, `picnic_site`, `tree_row`, `hedge`, to zoom 13+.
-  * **landuse**: Limit `amusement_ride`, `carousel`, `water_slide`, `roller_coaster` to zoom 15+.
-  * **landuse**: Limit `marsh` to z15.
-  * **landuse**: Limit `quarry` to zoom 13+, area graded down to zoom 16.
-  * **landuse**: Promote some `camp_site` to zoom 12, and area grade the rest.
+  * **landuse**: Change area greating of `nature_reserves` to start zoom 8+, but demote most zoom 10 features to zoom 15. (Issue [#1749](https://github.com/tilezen/vector-datasource/issues/1749))
+  * **landuse**: Landcover related landuse should all show at zoom 9. (Issue [#1813](https://github.com/tilezen/vector-datasource/issues/1813))
+    * Limit generic `forest` and `natural_wood` to zoom 9+.
+    * Promote some landcover-ish landuses up a few zooms to zoom 9, like `farm` and `farmland`, `orchard`.
+    * Limit `residential` areas to zoom 9+.
+  * **landuse**: Adjust earliest `min_zoom` for many landcover kinds (Issue [#1794](https://github.com/tilezen/vector-datasource/issues/1794))
+    * Pushed `dam`, `prison`, `fort`, `range`, and `danger_area` kinds down to z11+.
+    * Push down `aquarium`, `recreation_ground`, `track`, `sports_centre`, `wastewater_plant`, `caravan_site` to zoom 12+.
+    * Promote some `camp_site` to zoom 12+, and area grade the rest.
+    * Push down `harbour`, `port`, `port_terminal`, `ferry_terminal`, `container_terminal` to zoom 13+.
+    * Push down `enclosure`, `petting_zoo`, `aviary`, `animal`, `summer_toboggan`, `winery`, `allotments`, `pedestrian`, `playground` to zoom 13+.
+    * Push down `bridge`, `tower`, `breakwater`, `groyne`, `dike`, `cutline` to zoom 13+.
+    * Push down `footway`, `library`, `fuel`, `cinema`, `theatre`, `runway`, `taxiway`, `apron`, `trail_riding_station`, `water_park`, `dog_park`, `picnic_site`, `tree_row`, `hedge`, to zoom 13+.
+    * Limit `quarry` to zoom 13+, area graded down to zoom 16.
+    * Limit `amusement_ride`, `carousel`, `water_slide`, `roller_coaster` to zoom 15+.
+    * Limit `marsh` to z15.
+    * Harmonise kind assignment for `national_park`, `forest`, and other low-zoom green areas.
+    * Add `protection_title` based filtering for `national_park`.
+    * BLM managed `protected_areas` are now filtered separately in the United States.
   * **landuse**: Whitelist `kind_detail` values:
     * For _crane_ relaed kind: `portal_crane`, `gantry_crane`, `travel_lift`, `floor-mounted_crane`, `shiploader`, `tower_crane`.
     * For _religion_ related kinds: `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
@@ -159,7 +154,6 @@ ISO (`iso`).
   * Add new `add_collision_rank` function.
   * Add new `update_min_zoom` function.
   * Refactor order of landuse layer property dropping, and small inner geometry dropping for merging.
-  * Move Natural Earth feature class to kind mapping to Python in `remap_viewpoint_kinds`.
   * **boundaries**: [REPEAT] Boundaries layer features tagged `maritime_boundary=1` in error (Issue [#1726](https://github.com/tilezen/vector-datasource/issues/1726))
   * **boundaries**: [REPEAT 2] Boundaries layer features tagged `maritime_boundary=1` in error (Issue [#1811](https://github.com/tilezen/vector-datasource/issues/1811))
 
