@@ -1,5 +1,3 @@
-\timing on
-
 -- correct the invalid data in the ne tables from reprojection
 UPDATE ne_10m_lakes SET the_geom=ST_MakeValid(the_geom) WHERE NOT ST_IsValid(the_geom);
 UPDATE ne_110m_land SET the_geom=ST_MakeValid(the_geom) WHERE NOT ST_IsValid(the_geom);
