@@ -154,8 +154,6 @@ ISO (`iso`).
   * Add new `add_collision_rank` function.
   * Add new `update_min_zoom` function.
   * Refactor order of landuse layer property dropping, and small inner geometry dropping for merging.
-  * **boundaries**: [REPEAT] Boundaries layer features tagged `maritime_boundary=1` in error (Issue [#1726](https://github.com/tilezen/vector-datasource/issues/1726))
-  * **boundaries**: [REPEAT 2] Boundaries layer features tagged `maritime_boundary=1` in error (Issue [#1811](https://github.com/tilezen/vector-datasource/issues/1811))
 
 
 v1.6.0
