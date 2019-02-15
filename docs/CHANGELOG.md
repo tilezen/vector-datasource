@@ -133,7 +133,7 @@ ISO (`iso`).
 
   * Add `gunicorn` to dependencies, thanks [@rwrx](https://github.com/rwrx). [PR #1690](https://github.com/tilezen/vector-datasource/pull/1690)
   * Bump `PyYAML` version for CVE-2017-18342.
-  * Stop using `tags-> in YAML (Issue [#1199](https://github.com/tilezen/vector-datasource/issues/1199))
+  * Stop using `tags->` in YAML (Issue [#1199](https://github.com/tilezen/vector-datasource/issues/1199))
   * Add ability to make tests from relations, and calculate the area for TODO
   * Estimate `capacity` for parking lots and garages based on area and parking type with new `tz_estimate_parking_capacity` function.
   * Protect against `None` shapes in way area calculation.
