@@ -148,7 +148,6 @@ ISO (`iso`).
   * Deal with 'download only' test mode.
   * Skip download only tests after downloading fixtures (if any).
   * Update assets bundle for #1552 & #1809, and updated OSMdata.com land, water.
-  * Reorder under specific national parks, but above the generic tier2 na…  …
   * Guard against future airport runway polygons in landuse versus runway lines in roads `sort_rank` errors with a test.
   * Don't create a zero area property on points in SQL templating.
   * Support for multiple shapefiles in a single ZIP for asset bundle creation. (Issue [#1809](https://github.com/tilezen/vector-datasource/issues/1809))
