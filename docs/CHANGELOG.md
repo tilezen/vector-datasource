@@ -111,7 +111,7 @@ TODO release tilequeue with changelog
   * **water**: Drop all lake name variants zooms 0-4, again. (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
   * **water**: Drop additional lake names and variants at mid- and high-zooms (zooms 5-15) based on area (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
   * **water**: Update min zoom of water label points based on their inclusion in tiles not just their raw NE data value.
-  * **water**: 0/0/0 tile has clipped water content (Issue [#1806](https://github.com/tilezen/vector-datasource/issues/1806))
+  * **water**: 0/0/0 tile has clipped water content (Issues [#1806](https://github.com/tilezen/vector-datasource/issues/1806) and [#1107](https://github.com/tilezen/vector-datasource/issues/1107))
   * **water**: Extract water boundaries at zoom 8, with the switch to OSM data from NE.
   * **places**: Don't emit `area=0` on point labels (Issue [#1825](https://github.com/tilezen/vector-datasource/issues/1825))
   * **places**: Default `country` labels to **zoom 6** instead of 1 when there isn't Natural Earth match (Issue [#1826](https://github.com/tilezen/vector-datasource/issues/1826))
