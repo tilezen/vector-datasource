@@ -111,8 +111,7 @@ ISO (`iso`).
   * **roads**: Fix v1.6 regression where `runway` and `taxiway` lines were sorted below **landuse** layer polygons for the same in error, thanks @bcamper! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
   * **roads**: Expand `is_bridge` to include viaduct and any other not "no" bridges (Issue [#1314](https://github.com/tilezen/vector-datasource/issues/1314))
   * **earth**: Add `min_zoom` properties. (Issue [#1073](https://github.com/tilezen/vector-datasource/issues/1073))
-  * **water**: Drop all lake name variants zooms 0-4, again. (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
-  * **water**: Drop additional lake names and variants at mid- and high-zooms (zooms 5-15) based on area (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
+  * **water**: Drop all lake name variants zooms 0-4 (again). Drop additional lake names and variants at mid- and high-zooms (zooms 5-15) based on area. (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
   * **water**: Update min zoom of water label points based on their inclusion in tiles not just their raw NE data value.
   * **water**: 0/0/0 tile has clipped water content (Issues [#1806](https://github.com/tilezen/vector-datasource/issues/1806) and [#1107](https://github.com/tilezen/vector-datasource/issues/1107))
   * **water**: Extract water boundaries at zoom 8, with the switch to OSM data from NE.
