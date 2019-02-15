@@ -1,8 +1,6 @@
 v1.7.0
 ------
-TODO date in feb
-* **Release date:** 2019-02-xx.
-TODO release tilequeue with changelog
+* **Release date:** 2019-02-15.
 * **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.3.0](https://github.com/tilezen/tilequeue/releases/tag/v2.3.0) and [rawr_tiles v1.0.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.0.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
 
   #### ENHANCEMENTS
@@ -15,15 +13,15 @@ TODO release tilequeue with changelog
   * **landuse**: Add `low_emission_zone` data, added to schema in v1.6. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
   * **pois**: Add `wetland` features, with `kind_detail`, see landuse item above for values.
   * **pois**: Add `common` kind to match the existing landuse layer polygons.
-  TODO verify
-  * **roads**: Populate data for truck `hgv` routing restriction properties (whitelisted: `agricultural`, `delivery`, `designated`, `destination`, `local`, `no`), added to schema in v1.6, including `maxweight`, `maxheight`, `maxwidth`, `maxlength`, `maxaxleload`, `hazmat``. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
+  * **roads**: Populate data for truck `hgv` routing restriction properties and related shields (whitelisted: `agricultural`, `delivery`, `designated`, `destination`, `local`, `no`), added to schema in v1.6, including `maxweight`, `maxheight`, `maxwidth`, `maxlength`, `maxaxleload`, `hazmat`. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
   * **roads**: Add `toll` and `toll_hgv` boolean properties. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553)
   TODO provide details
   * **boundaries**: Support alternate points of view in boundaries layer with `kind:*` properties (like `kind:iso`), for the following countries or international organizations: `iso`, `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `us`, `vn`. (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
-  TODO final Natural Earth data, at least for pre2?
   * **boundaries**: Add new disputed boundary lines with kind values of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, `disputed_reference_line`, from Natural Earth, at low zooms, for alternate points of view (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
   * **places**: Add `population_rank` to `locality`, `country`, and other kinds. A value from 0 (no population) up to 18 (over 1 billion people).
   * **traffic_flow**: Add `road_kind_detail` to enable data-driven client-side traffic line offseting, thanks @zaczkows! (Issue [#1829](https://github.com/tilezen/vector-datasource/issues/1829))
+  * **traffic_flow**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
+  * **traffic_incidents**: Add `is_hov_lane` to enable client-side filtering, thanks @conor-ettinoffe-here! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
   * **all layers**: Add `collision_rank` property for label collisions for **pois** layer, and other layers with features with `name` properties, or `ref`, `shield_text`, `bicycle_shield_text`, `bus_shield_text`, or `walking_shield_text`. We now recommend colliding labels client side first with `min_zoom`, and then to tie break with the new `collision_rank` values. (Issue [#988](https://github.com/tilezen/vector-datasource/issues/988))
 
   #### BUG FIXES
@@ -119,7 +117,7 @@ TODO release tilequeue with changelog
 
   #### DOCUMENTATION CHANGES
 
-    TODO update JSON
+  * TODO: Updated TileJSON for v1.7 schema changes.
   * Updated Layers documentation for v1.7 schema changes.
   * Publish docs to [tilezen.readthedocs.io](https://tilezen.readthedocs.io).
   * Update documentation formatting for ReadTheDocs.io Markdown requirements.
@@ -138,14 +136,13 @@ TODO release tilequeue with changelog
   * Add `all_the_kinds` script to output all the `kind` and `kind_detail` values per `$layer`, with their `min_zoom` from the YAML files.
   * Add whitelists to `kind_detail` in each layer YAML so that we can enumerate all possible values for the script.
   * Extend Natural Earth test generator to support polygons.
-  * Use new `drop_names` post-process function to drop all the names, not just the TODO
+  * Use new `drop_names` post-process function to drop _all_ the localized names (not just the default name)
   * Add `CollisionRanker` to support YAML-based spreadsheets for `collision_rank` logic, including reserved, gaps, and filters across layers.
   * Add `safe_int` implementation for SQL.
   * Expose a test method that can return the whole tile. Used in new `collision_rank` tests.
   * Clip to Mercator world bounds before projecting shapefiles.
   * Deal with 'download only' test mode.
   * Skip download only tests after downloading fixtures (if any).
-  TODO osm land/water
   * Update assets bundle for #1552 & #1809, and updated OSMdata.com land, water.
   * Reorder under specific national parks, but above the generic tier2 na…  …
   * Guard against future airport runway polygons in landuse versus runway lines in roads `sort_rank` errors with a test.
@@ -406,7 +403,7 @@ v1.5.0
   * **Update MapboxGL demo**, thanks to Apollo Mapping
   * Use service wording changes (Less > Fewer)
   * Updated Layers documentation for v1.5 schema changes.
-  * TODO: Updated tilejson/tilejson.json.erb for v1.5 schema changes.
+  * Updated tilejson/tilejson.json.erb for v1.5 schema changes.
 
 
   #### INTERNAL CHANGES
