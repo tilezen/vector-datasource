@@ -154,12 +154,12 @@ ISO (`iso`).
   * Add support for `==` operator in YAML evaluation.
   * Add new `drop_names` function to drop all name variant properties.
   * Add new `remap` function to remap landuse kind values at low- and mid-zooms.
-  * Add new `add_vehicle_restrictions` function for hgv.
+  * Add new `remap_viewpoint_kinds` function remap Natural Earth's points of view to kinds (and drop null values).
+  * Add new `add_vehicle_restrictions` function for hgv (heavy good vehicles) trucks.
   * Add new `add_collision_rank` function.
   * Add new `update_min_zoom` function.
   * Refactor order of landuse layer property dropping, and small inner geometry dropping for merging.
   * Move Natural Earth feature class to kind mapping to Python in `remap_viewpoint_kinds`.
-  * Add new function to support remapping Natural Earth's points of view to kinds and drop null values.
   * **boundaries**: [REPEAT] Boundaries layer features tagged `maritime_boundary=1` in error (Issue [#1726](https://github.com/tilezen/vector-datasource/issues/1726))
   * **boundaries**: [REPEAT 2] Boundaries layer features tagged `maritime_boundary=1` in error (Issue [#1811](https://github.com/tilezen/vector-datasource/issues/1811))
 
