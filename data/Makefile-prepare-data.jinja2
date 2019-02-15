@@ -23,8 +23,9 @@ download: {{ src_shapefile_zips }}
 
 {% for shapefile in reproj_shapefiles %}
 {{ shapefile.src_shp }}: {{ shapefile.src_zip }}
-	unzip -o {{ shapefile.src_zip }} '{{ shapefile.src_wildcard }}'
-	touch {{ shapefile.src_shp }}
+	unzip {% if shapefile.junk_dirs %}-j{% endif %} -o {{ shapefile.src_zip }} '{% if shapefile.junk_dirs %}*/{% endif %}{{ shapefile.src_wildcard }}'
+	touch --no-create {{ shapefile.src_shp }}
+	[ -f {{ shapefile.src_shp }} ]
 
 {{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
 	ogr2ogr $(OGR_CLIP_OPTS) -t_srs EPSG:3857 -lco encoding=utf8 {{ shapefile.tgt_shp }} {{ shapefile.src_shp }}

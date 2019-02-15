@@ -1,5 +1,5 @@
 bucket: tilezen-assets
-datestamp: 20190204
+datestamp: 20190215
 
 shapefiles:
 
@@ -97,7 +97,7 @@ shapefiles:
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip
     prj: 4326
 
-  # TEMPORARY DISABLE TO PULL IN v5-PRE1 DATA
+  # TEMPORARY DISABLE TO PULL IN v5-PRE2 DATA
   #
   #- name: ne_10m_admin_0_boundary_lines_land
   #  url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
@@ -109,18 +109,21 @@ shapefiles:
 
   - name: ne_10m_admin_0_boundary_lines_disputed_areas
     shapefile-name: ne_10m_admin_0_boundary_lines_disputed_areas.shp
-    url: https://github.com/tilezen/vector-datasource/files/2811297/ne_v5.0.0-pre1-boundaries-pov.zip
+    url: https://github.com/tilezen/vector-datasource/files/2868291/ne_v5.0.0-pre2-boundaries-pov.zip
     prj: 4326
+    junk_dirs: yes
 
   - name: ne_10m_admin_0_boundary_lines_land
     shapefile-name: ne_10m_admin_0_boundary_lines_land.shp
-    url: https://github.com/tilezen/vector-datasource/files/2811297/ne_v5.0.0-pre1-boundaries-pov.zip
+    url: https://github.com/tilezen/vector-datasource/files/2868291/ne_v5.0.0-pre2-boundaries-pov.zip
     prj: 4326
+    junk_dirs: yes
 
   - name: ne_10m_admin_0_boundary_lines_map_units
     shapefile-name: ne_10m_admin_0_boundary_lines_map_units.shp
-    url: https://github.com/tilezen/vector-datasource/files/2811297/ne_v5.0.0-pre1-boundaries-pov.zip
+    url: https://github.com/tilezen/vector-datasource/files/2868291/ne_v5.0.0-pre2-boundaries-pov.zip
     prj: 4326
+    junk_dirs: yes
 
   - name: ne_50m_admin_1_states_provinces_lines
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
