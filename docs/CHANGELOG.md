@@ -1,3 +1,159 @@
+v1.7.0
+------
+* **Release date:** 2019-02-15.
+* **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.3.0](https://github.com/tilezen/tilequeue/releases/tag/v2.3.0) and [rawr_tiles v1.0.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.0.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
+
+  #### ENHANCEMENTS
+
+  * **all layers**: Add `collision_rank` property for label collisions for **pois** layer, and other layers for features with `name` properties, or `ref`, `shield_text`, `bicycle_shield_text`, `bus_shield_text`, or `walking_shield_text`. We now recommend colliding labels client side first with `min_zoom`, and then to tie break with the new `collision_rank` values. (Issue [#988](https://github.com/tilezen/vector-datasource/issues/988))
+  * **boundaries**: Adds support for alternate points of view in boundaries layer with `kind:*` properties (like `kind:iso`). Currently this is only for zooms 5, 6 and 7 from Natural Earth. We plan to add more lower zoom data from Natural Earth, and high-zoom data from OpenStreetMap in the next release. (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552)) The following country and international organizations worldviews are supported: 
+    * Argentina (`ar`), Bangladesh (`bd`), Brazil (`br`), China (`cn`), Egypt (`eg`), France (`fr`), Germany (`de`), Greece (`gr`), India (`in`), Indonesia (`id`), Israel (`il`), Italy (`it`), Japan (`jp`), Morocco (`ma`), Nepal (`np`), Netherlands (`nl`), Pakistan (`pk`), Palestine (`ps`), Poland (`pl`), Portugal (`pt`), Russia (`ru`), Saudi Arabia (`sa`), South Korea (`ko`), Spain (`es`), Sweden (`se`), Taiwan (`tw`), Turkey (`tr`), United Kingdom (`gb`), United States (`us`), Vietnam (`vn`), ISO (`iso`)
+  * **boundaries**: Add new disputed boundary lines with kind values of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, `disputed_reference_line`, from Natural Earth at low zooms, for alternate points of view (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552))
+  * **landuse**: Remap landuse kinds at mid- and low-zooms to improve merging. This is similar to what we already did for roads. (Issue [#1779](https://github.com/tilezen/vector-datasource/issues/1779))
+  * **landuse**: Additional landuse kind merging at low- and mid-zooms, including to `urban_area` which was previously low-zoom only. (Issues [#1721](https://github.com/tilezen/vector-datasource/issues/1721) and [#1795](https://github.com/tilezen/vector-datasource/issues/1795))
+  * **landuse**: Add new kinds for `grassland`, `vineyard`, `bare_rock`, `barren` (low- and mid-zooms only), `desert`, `heath`, `sand`, `shingle`, and other natural "landcover" features, starting at zoom 9 (Issue [#1259](https://github.com/tilezen/vector-datasource/issues/1259))
+  * **landuse**: Add `kind_detail` property for `wetland` features. If available, value will be one of: `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`. (Issue [#1253](https://github.com/tilezen/vector-datasource/issues/1253))
+  * **landuse**: Add `low_emission_zone` kind data, added to schema in v1.6. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
+  * **pois**: Add `wetland` kind, with `kind_detail`, see landuse item above for values.
+  * **pois**: Add `common` kind, to match the existing landuse layer polygons.
+  * **roads**: Populate data for truck `hgv` routing restriction properties and related shields (whitelisted: `agricultural`, `delivery`, `designated`, `destination`, `local`, `no`), added to schema in v1.6, including `maxweight`, `maxheight`, `maxwidth`, `maxlength`, `maxaxleload`, `hazmat`. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553))
+  * **roads**: Add `toll` and `toll_hgv` boolean properties. (Issue [#1553](https://github.com/tilezen/vector-datasource/issues/1553)
+  * **places**: Add `population_rank` property to `locality`, `region`, `country`, and other kinds useful for setting text size and colliding labels. An integar value from 0 (no population) up to 18 (over 1 billion people). See documentation for more details.
+  * **traffic_flow**: Add `road_kind_detail` property to enable data-driven client-side traffic line offseting, thanks [@zaczkows](https://github.com/zaczkows)! (Issue [#1829](https://github.com/tilezen/vector-datasource/issues/1829))
+  * **traffic_flow**: Add `is_hov_lane` property to enable client-side filtering, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
+  * **traffic_incidents**: Add `is_hov_lane` property to enable client-side filtering, thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (PR [#1831](https://github.com/tilezen/vector-datasource/issues/1831))
+
+  #### BUG FIXES
+
+  * **landuse**: Fix v1.6 regression where `aerodrome` polygons sorted above `runway` and `taxiway` polygons in error, thanks [@bcamper](https://github.com/bcamper)! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
+  * **landuse**: Add additional filter for newer OSM `area:aeroway` tagging of `runway`, `taxiway`, and `apron` polygons to restore features from prior year's tile builds. (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
+  * **landuse**: Better differentiate between parks that should be `common` instead of `national_park` (Issue [#1082](https://github.com/tilezen/vector-datasource/issues/1082))
+  * **landuse**: Better differentiate between parks that should be `park` instead of `national_park` (Issue [#1728](https://github.com/tilezen/vector-datasource/issues/1728))
+  * **landuse**: Features of kind `mud` now sorts above `water` and below `wetland` (Issue [#1753](https://github.com/tilezen/vector-datasource/issues/1753))
+  * **landuse**: Deal with US National Forest, US National Park server side performance (Issue [#475](https://github.com/tilezen/vector-datasource/issues/475))
+    * Harmonise kind assignment for `national_park`, `forest`, and other low-zoom green areas.
+    * Add `protection_title` based filtering for `national_park`.
+    * BLM managed `protected_areas` are now filtered separately in the United States.
+  * **landuse**: Change area grading of `nature_reserve` to start zoom 8+, but demote most zoom 10 features to zoom 15. (Issue [#1749](https://github.com/tilezen/vector-datasource/issues/1749))
+  * **landuse**: Show all landcover kinds consistently starting at zoom 9. (Issue [#1813](https://github.com/tilezen/vector-datasource/issues/1813))
+    * Limit generic `forest` and `natural_wood` to zoom 9+.
+    * Promote some landcover-ish landuses up a few zooms to zoom 9+, like `farm` and `farmland`, `orchard`.
+    * Limit `residential` areas to zoom 9+.
+  * **landuse**: Adjust earliest `min_zoom` for many landcover kinds (Issue [#1794](https://github.com/tilezen/vector-datasource/issues/1794))
+    * Pushed `dam`, `prison`, `fort`, `range`, and `danger_area` kinds down to z11+.
+    * Push down `aquarium`, `recreation_ground`, `track`, `sports_centre`, `wastewater_plant`, `caravan_site` to zoom 12+.
+    * Promote some `camp_site` to zoom 12+, and area grade the rest.
+    * Push down `harbour`, `port`, `port_terminal`, `ferry_terminal`, `container_terminal` to zoom 13+.
+    * Push down `enclosure`, `petting_zoo`, `aviary`, `animal`, `summer_toboggan`, `winery`, `allotments`, `pedestrian`, `playground` to zoom 13+.
+    * Push down `bridge`, `tower`, `breakwater`, `groyne`, `dike`, `cutline` to zoom 13+.
+    * Push down `footway`, `library`, `fuel`, `cinema`, `theatre`, `runway`, `taxiway`, `apron`, `trail_riding_station`, `water_park`, `dog_park`, `picnic_site`, `tree_row`, `hedge`, to zoom 13+.
+    * Limit `quarry` to zoom 13+, area graded down to zoom 16.
+    * Limit `amusement_ride`, `carousel`, `water_slide`, `roller_coaster` to zoom 15+.
+    * Limit `marsh` to z15.
+  * **landuse**: Whitelist `kind_detail` values:
+    * For _crane_ related kinds: `portal_crane`, `gantry_crane`, `travel_lift`, `floor-mounted_crane`, `shiploader`, `tower_crane`.
+    * For _religion_ related kinds: `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+    * For _wall_ related kinds: `dry_stone`, `noise_barrier`, `brick`, `stone`, `pise`, `castle_wall`, `seawall`, `jersey_barrier`, `flood_wall`, `concrete`, `gabion`.
+  * **pois**: Fix junk `healthcare` values and kinds introduced in v1.5. Added: `chiropractor`, `hospice`, `occupational_therapist`, `optometrist`, `paediatrics`, `physiotherapist`, `podiatrist`, `psychotherapist`, `rehabilitation`, and `speech_therapist` kinds. (Issue [#1596](https://github.com/tilezen/vector-datasource/issues/1596))
+  * **pois**: Better differentiate between parks that should be `common` instead of `national_park` (Issue [#1082](https://github.com/tilezen/vector-datasource/issues/1082))
+  * **pois**: Better differentiate between parks that should be `park` instead of `national_park` (Issue [#1728](https://github.com/tilezen/vector-datasource/issues/1728))
+  * **pois**: Deal with US National Forest, US National Park server side performance, same as landcover (Issue [#475](https://github.com/tilezen/vector-datasource/issues/475))
+  * **pois**: Prefer `forest` labels over wilderness at zoom 7 (Issue [#1608](https://github.com/tilezen/vector-datasource/issues/1608))
+  * **pois**: Add `public_transport=station` with `railway=halt` as a synonym for `station` kind. Require names on `station` features. (Issue [#1747](https://github.com/tilezen/vector-datasource/issues/1747))
+  * **pois**: Match new landuse kind and `min_zoom` changes in **landuse** layer for "parks" at low-zooms.
+  * **pois**: Clamp POIs with unlimited `min_zoom` ranges to min 13. Technically affected most kinds, though actual occurrence was rare. (Issue [#1750](https://github.com/tilezen/vector-datasource/issues/1750))
+  * **pois**: Limit `min_zoom` for POIs to at least match their landuse AOIs.
+  * **pois**: POIs for `park` labels shown too soon (Issue [#1767](https://github.com/tilezen/vector-datasource/issues/1767))
+  * **pois**: POI labels for `park` show up too late / too early (Issue [#1081](https://github.com/tilezen/vector-datasource/issues/1081))
+  * **pois**: Too many `park` and `nature_reserve` labeled at zoom 10 (Issue [#1609](https://github.com/tilezen/vector-datasource/issues/1609))
+  * **pois**: Hide early `cafe`, `restaurant` kinds to zoom 15 (Issue [#1632](https://github.com/tilezen/vector-datasource/issues/1632))
+  * **pois**: Hide early `post_office` (Issue [#1631](https://github.com/tilezen/vector-datasource/issues/1631))
+  * **pois**: Hide early `museums` and `landmarks`, show z12+. (Issue [#1630](https://github.com/tilezen/vector-datasource/issues/1630))
+  * **pois**: Hide early `prison`, show z13+. (Issue [#1630](https://github.com/tilezen/vector-datasource/issues/1630))
+  * **pois**: Hide early `atm`, `bus_stop`, `drinking_water`, `post_box`, `telephone` to zoom 18. (Issue [#1626](https://github.com/tilezen/vector-datasource/issues/1626))
+  * **pois**: Hide early `parking` when no area, show large parking lots and garages earlier based on estimated capacity (Issue [#1625](https://github.com/tilezen/vector-datasource/issues/1625))
+  * **pois**: Modify `min_zoom` of `bicycle` to area grades from zoom 15 to 17. (Issue [#1627](https://github.com/tilezen/vector-datasource/issues/1627))
+  * **pois**: Push `water_tower` zoom down depending on height: zoom 15 if taller than 20 meters, zoom 16 if taller than 10 meters, else zoom 17. (Issue [#1627](https://github.com/tilezen/vector-datasource/issues/1627))
+  * **pois**: Push `theatre` down to z15 min. (Issue [#1627](https://github.com/tilezen/vector-datasource/issues/1627))
+  * **pois**: Hide early `bicycle_parking` and `car_sharing` to z19, unless `car_sharing` has name (Issue [#1624](https://github.com/tilezen/vector-datasource/issues/1624))
+  * **pois**: Hide early `military` POIs (Issue [#1623](https://github.com/tilezen/vector-datasource/issues/1623))
+  * **pois**: Hide early `university`, `college` (Issue [#1622](https://github.com/tilezen/vector-datasource/issues/1622))
+  * **pois**: Hide early `school`, `kindergarten` (default 17 for point geoms, arae grade polyons zoom 13+) (Issue [#1621](https://github.com/tilezen/vector-datasource/issues/1621))
+  * **pois**: Hide some earlier `golf_course` (Issue [#1619](https://github.com/tilezen/vector-datasource/issues/1619))
+  * **pois**: Hide early `cemetery`  (Issue [#1611](https://github.com/tilezen/vector-datasource/issues/1611))
+  * **pois**: Limit zoom range of `range` to zoom 11+.
+  * **pois**: Limit zoom range of `quarry` to zoom 13+ (Issue [#1799](https://github.com/tilezen/vector-datasource/issues/1799))
+  * **pois**: Limit zoom range of `marsh` to zoom 15+ (Issue [#1800](https://github.com/tilezen/vector-datasource/issues/1800))
+  * **pois**: Limit zoom range of `substations` (varies by area) (Issue [#1612](https://github.com/tilezen/vector-datasource/issues/1612))
+  * **pois**: Consolidate `graveyard` and `cemetery` to share same zoom ranges (Issue [#1780](https://github.com/tilezen/vector-datasource/issues/1780))
+  * **pois**: Use same tier 2 zoom range for `nature_reserve` POIs as the landuse polygons.
+  * **pois**: Fix tier 1, 3, and 4 area thresholds to not duplicate zoom 12 test.
+  * **pois**: Fix tier3 POIs zoom 12 area threshold to 200000 (Issue [#1769](https://github.com/tilezen/vector-datasource/issues/1769))
+  * **pois**: Simplify most tier 1 & 2 POI min zooms to area-based thresholds.
+  * **pois**: Default `fitness_station` to zoom 18 instead of 17.
+  * **pois**: Whitelist `kind_detail` values:
+    * For _crane_ relaed kind: `portal_crane`, `gantry_crane`, `travel_lift`, `floor-mounted_crane`, `shiploader`, `tower_crane`.
+    * For _cuisine_ related kinds: `american`, `asian`, `barbecue`, `breakfast`, `burger`, `cake`, `chicken`, `chinese`, `coffee_shop`, `crepe`, `donut`, `fish`, `fish_and_chips`, `french`, `friture`, `georgian`, `german`, `greek`, `ice_cream`, `indian`, `international`, `italian`, `japanese`, `kebab`, `korean`, `lebanese`, `local`, `mediterranean`, `mexican`, `noodle`, `pizza`, `ramen`, `regional`, `sandwich`, `seafood`, `spanish`, `steak_house`, `sushi`, `tapas`, `thai`, `turkish`, `vegetarian`, `vietnamese`.
+    * For _health_facility_ related kinds: `CSCom`, `chemist_dispensing`, `clinic`, `counselling_centre`, `dispensary`, `first_aid`, `health_center`, `health_centre`, `hospital`, `laboratory`, `medical_clinic`, `office`, `pharmacy`.
+    * For _religion_ related kinds: `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
+    * For _sports_ related kinds: `10pin`, `9pin`, `american_football`, `archery`, `athletics`, `badminton`, `baseball`, `basketball`, `beachvolleyball`, `billiards`, `bmx`, `boules`, `bowls`, `canoe`, `chess`, `climbing`, `cricket`, `cricket_nets`, `cycling`, `equestrian`, `exercise`, `field_hockey`, `fitness`, `football`, `free_flying`, `futsal`, `gaelic_games`, `golf`, `gymnastics`, `handball`, `hockey`, `horse_racing`, `ice_hockey`, `ice_skating`, `karting`, `model_aerodrome`, `motocross`, `motor`, `multi`, `netball`, `padel`, `pelota`, `rugby`, `rugby_league`, `rugby_union`, `running`, `scuba_diving`, `shooting`, `skateboard`, `skating`, `skiing`, `soccer`, `soccer;basketball`, `softball`, `swimming`, `table_tennis`, `team_handball`, `tennis`, `trampoline`, `volleyball`, `yoga`.
+    * For _wall_ related kinds: `dry_stone`, `noise_barrier`, `brick`, `stone`, `pise`, `castle_wall`, `seawall`, `jersey_barrier`, `flood_wall`, `concrete`, `gabion`.
+  * **boundaries**: Drop `name`, `name:left`, and `name:right` from `locality` lines at zoom 11 and 12 (Issue [#1738](https://github.com/tilezen/vector-datasource/issues/1738))
+  * **boundaries**: Fix boundary `name:left` and `name:right` values that were sometimes flipped, especially for `country` and `region` features (Issue [#1770](https://github.com/tilezen/vector-datasource/issues/1770))
+  * **boundaries**: Made `min_zoom` of `country` lines depend on the data.
+  * **roads**: Fix v1.6 regression where `runway` and `taxiway` lines were sorted below **landuse** layer polygons for the same in error, thanks [@bcamper](https://github.com/bcamper)! (Issue [#1814](https://github.com/tilezen/vector-datasource/issues/1814))
+  * **roads**: Expand `is_bridge` logic to include viaduct and any other not "no" bridges (Issue [#1314](https://github.com/tilezen/vector-datasource/issues/1314))
+  * **earth**: Add `min_zoom` properties. (Issue [#1073](https://github.com/tilezen/vector-datasource/issues/1073))
+  * **water**: 0/0/0 tile has clipped water content (Issues [#1806](https://github.com/tilezen/vector-datasource/issues/1806) and [#1107](https://github.com/tilezen/vector-datasource/issues/1107))
+  * **water**: Drop all `lake` name variants zooms 0-4 (again). Drop additional lake names and variants at mid- and high-zooms (zooms 5-15) based on area. (Issue [#1730](https://github.com/tilezen/vector-datasource/issues/1730))
+  * **water**: Update `min_zoom` of label placement points based on their inclusion in tiles, not just their raw NE data value.
+  * **water**: Extract water boundaries at zoom 8, with the switch to OSM data from NE.
+  * **places**: Don't emit `area=0` on point labels (Issue [#1825](https://github.com/tilezen/vector-datasource/issues/1825))
+  * **places**: Default `country` labels to **zoom 6** instead of 1 when there isn't Natural Earth match (Issue [#1826](https://github.com/tilezen/vector-datasource/issues/1826))
+  * **places**: Default `region` labels to **zoom 8** instead of 1 when there isn't Natural Earth match (Issue [#1826](https://github.com/tilezen/vector-datasource/issues/1826))
+
+  #### DOCUMENTATION CHANGES
+
+  * TODO: Updated TileJSON for v1.7 schema changes.
+  * Updated Layers documentation for v1.7 schema changes.
+  * Publish docs to [tilezen.readthedocs.io](https://tilezen.readthedocs.io).
+  * Update documentation formatting for ReadTheDocs.io Markdown requirements.
+  * Restructure some file layout for ReadTheDocs.io build system, including: `CHANGELOG`, `LICENSE`, `CONTRIBUTING`, `MIGRATION_GUIDE`, `PERFORMANCE`, `SEMANTIC-VERSIONING`, and `TEST` files.
+  * Corrected order of `low_emission_zone` in list.
+  * Generalized `hgv_restriction` property units to mostly meters for heavy goods vehicle truck access restrictions.
+
+  #### INTERNAL CHANGES
+
+  * Add `gunicorn` to dependencies, thanks [@rwrx](https://github.com/rwrx). [PR #1690](https://github.com/tilezen/vector-datasource/pull/1690)
+  * Bump `PyYAML` version for CVE-2017-18342.
+  * Stop using `tags->` in YAML (Issue [#1199](https://github.com/tilezen/vector-datasource/issues/1199))
+  * Add ability to make tests from relations
+  * Estimate `capacity` for parking lots and garages based on area and parking type with new `tz_estimate_parking_capacity` function.
+  * Protect against `None` shapes in way area calculation.
+  * Add `all_the_kinds` script to output all the `kind` and `kind_detail` values per `$layer`, with their `min_zoom` from the YAML files.
+  * Add whitelists to `kind_detail` in each layer YAML so that we can enumerate all possible values for the script.
+  * Extend Natural Earth test generator to support polygons.
+  * Use new `drop_names` post-process function to drop _all_ the localized names (not just the default name)
+  * Add `CollisionRanker` to support YAML-based spreadsheets for `collision_rank` logic, including reserved, gaps, and filters across layers.
+  * Add `safe_int` implementation for SQL.
+  * Expose a test method that can return the whole tile. Used in new `collision_rank` tests.
+  * Clip to Mercator world bounds before projecting shapefiles.
+  * Deal with 'download only' test mode.
+  * Skip download only tests after downloading fixtures (if any).
+  * Update assets bundle for #1552 & #1809, and updated OSMdata.com land, water.
+  * Guard against future airport runway polygons in landuse versus runway lines in roads `sort_rank` errors with a test.
+  * Don't create a zero area property on points in SQL templating.
+  * Support for multiple shapefiles in a single ZIP for asset bundle creation. (Issue [#1809](https://github.com/tilezen/vector-datasource/issues/1809))
+  * Add support for `==` operator in YAML evaluation.
+  * Add new `drop_names` function to drop all name variant properties.
+  * Add new `remap` function to remap landuse kind values at low- and mid-zooms.
+  * Add new `remap_viewpoint_kinds` function remap Natural Earth's points of view to kinds (and drop null values).
+  * Add new `add_vehicle_restrictions` function for hgv (heavy good vehicles) trucks.
+  * Add new `add_collision_rank` function.
+  * Add new `update_min_zoom` function.
+  * Refactor order of landuse layer property dropping, and small inner geometry dropping for merging.
+
+
 v1.6.0
 ------
 * **Release date:** 2018-12-26.
@@ -16,7 +172,7 @@ v1.6.0
   * **earth**: Simplify at zoom 8 to match the transition from Natural Earth to OpenStreetMap, significantly reducing file size at that zoom. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **earth**: Truncate `min_zoom` floats to tenths place (and often just ints), to improve merging. [Issue #1477](https://github.com/tilezen/vector-datasource/issues/1477) and [PR #1714](https://github.com/tilezen/vector-datasource/pull/1714).
   * **landuse**: Add `allotments` (community gardens), was already in POIs layer. [PR #1742](https://github.com/tilezen/vector-datasource/pull/1742)
-  * **landuse**: Add `boatyard` and military firing `range` polygons, they already had POIs. [PR #1720](https://github.com/tilezen/vector-datasource/pull/1720). 
+  * **landuse**: Add `boatyard` and military firing `range` polygons, they already had POIs. [PR #1720](https://github.com/tilezen/vector-datasource/pull/1720).
   * **places**: Use the Natural Earth v4.1 `min_zoom` property to cull more places at low-zooms, and reduce tile overpacking. [Issue #1687](https://github.com/tilezen/vector-datasource/issues/1687) and [PR #1693](https://github.com/tilezen/vector-datasource/pull/1693) and [PR #1734](https://github.com/tilezen/vector-datasource/pull/1734). [Issue #1729](https://github.com/tilezen/vector-datasource/issues/1729)
   * **pois**: Add `turning_circle` and `turning_loop`, thanks [@westnordost](https://github.com/westnordost). [Issue #1695](https://github.com/tilezen/vector-datasource/issues/1695).
   * **roads**: Add cross-junction and multi-pass merging to remove more vertices and reduce overall feature count, thanks [@bcamper](https://github.com/bcamper). [Issue #1227](https://github.com/tilezen/vector-datasource/issues/1227), [PR #1703](https://github.com/tilezen/vector-datasource/pull/1703), [PR #1706](https://github.com/tilezen/vector-datasource/pull/1706), [PR #1708](https://github.com/tilezen/vector-datasource/pull/1708), [PR #1718](https://github.com/tilezen/vector-datasource/pull/1718).
@@ -61,7 +217,7 @@ v1.6.0
   * Represent numbers as numbers (not strings), and allow strings not just Unicode strings. [PR #1744](https://github.com/tilezen/vector-datasource/pull/1744)
   * Update simplification process, address bugs. [d66f43](https://github.com/tilezen/vector-datasource/commit/d66f438ed0c86446e5f671dc036e786a5909d3ab)
   * NOTE: No **database migrations** were provided, v1.5 was the last version that included those, as we've migrated to global RAWR tile builds.
-  
+
 
 v1.5.0
 ------
@@ -80,7 +236,7 @@ v1.5.0
   * **landuse**: Add **kind_detail** optional property for `wetland` when _wetland_ is `bog`, `fen`, `mangrove`, `marsh`, `mud`, `reedbed`, `saltern`, `saltmarsh`, `string_bog`, `swamp`, `tidalflat`, `wet_meadow`.
   * **landuse**: Add **kind_detail** optional property for `cemetery` and `grave_yard` kinds, with common values: `animist`, `bahai`, `buddhist`, `caodaism`, `catholic`, `christian`, `confucian`, `hindu`, `jain`, `jewish`, `multifaith`, `muslim`, `pagan`, `pastafarian`, `scientologist`, `shinto`, `sikh`, `spiritualist`, `taoist`, `tenrikyo`, `unitarian_universalist`, `voodoo`, `yazidi`, and `zoroastrian`.
   * **landuse**: Add **denomination** optional property for `cemetery` and `grave_yard` kinds, with common values: `adventist`, `anglican`, `armenian_apostolic`, `assemblies_of_god`, `baptist`, `buddhist`, `bulgarian_orthodox`, `catholic`, `christian`, `church_of_scotland`, `episcopal`, `evangelical`, `greek_catholic`, `greek_orthodox`, `iglesia_ni_cristo`, `jehovahs_witness`, `lutheran`, `mennonite`, `methodist`, `mormon`, `new_apostolic`, `nondenominational`, `orthodox`, `pentecostal`, `presbyterian`, `protestant`, `quaker`, `reformed`, `roman_catholic`, `romanian_orthodox`, `russian_orthodox`, `salvation_army`, `serbian_orthodox`, `seventh_day_adventist`, `shia`, `shingon_shu`, `sunni`, `theravada`, `tibetan`, `united`, `united_methodist`, `united_reformed`, `uniting`, and `曹洞宗`.
-  * **landuse**: Add `airfield` kind for military airfields. 
+  * **landuse**: Add `airfield` kind for military airfields.
   * **landuse**: Add `container_terminal` kind.
   * **landuse**: Add `crane` kind as line geometry. [Issue #1417](https://github.com/tilezen/vector-datasource/issues/1417).
   * **landuse**: Add `cutting` kind.
@@ -95,7 +251,7 @@ v1.5.0
   * **landuse**: Add `mud` kind.
   * **landuse**: Add `naval_base` kind for military.
   * **landuse**: Add `orchard` kind with optional **kind_detail** values: `agave_plants`, ` almond_trees`, ` apple_trees`, ` avocado_trees`, ` banana_plants`, ` cherry_trees`, ` coconut_palms`, ` coffea_plants`, ` date_palms`, ` hazel_plants`, ` hop_plants`, ` kiwi_plants`, ` macadamia_trees`, ` mango_trees`, ` oil_palms`, ` olive_trees`, ` orange_trees`, ` papaya_trees`, ` peach_trees`, ` persimmon_trees`, ` pineapple_plants`, ` pitaya_plants`, ` plum_trees`, ` rubber_trees`, ` tea_plants`, ` walnut_trees`.
-  * **landuse**: Add `pier` polygon when's used for mooring. 
+  * **landuse**: Add `pier` polygon when's used for mooring.
   * **landuse**: Add `plant_nursery` kind.
   * **landuse**: Add `port_terminal` kind.
   * **landuse**: Add `port` kind.
@@ -240,8 +396,8 @@ v1.5.0
   * **Update MapboxGL demo**, thanks to Apollo Mapping
   * Use service wording changes (Less > Fewer)
   * Updated Layers documentation for v1.5 schema changes.
-  * TODO: Updated tilejson/tilejson.json.erb for v1.5 schema changes.
-  
+  * Updated tilejson/tilejson.json.erb for v1.5 schema changes.
+
 
   #### INTERNAL CHANGES
 
@@ -350,7 +506,7 @@ v1.3.0
   * Fix test failures based on upstream OpenStreetMap data changes.
   * _NOTE: while the v1.3.0 release was tagged correctly the VERSION file was stuck at v1.2.0 leading to the incorrectly report in Python installs as v1.2.0._
 
-  
+
 
 v1.2.0
 ------
