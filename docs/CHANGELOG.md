@@ -114,7 +114,7 @@ v1.7.0
 
   #### DOCUMENTATION CHANGES
 
-  * TODO: Updated TileJSON for v1.7 schema changes.
+  * Updated TileJSON for v1.7 schema changes.
   * Updated Layers documentation for v1.7 schema changes.
   * Publish docs to [tilezen.readthedocs.io](https://tilezen.readthedocs.io).
   * Update documentation formatting for ReadTheDocs.io Markdown requirements.
