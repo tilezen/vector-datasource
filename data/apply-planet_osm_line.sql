@@ -14,6 +14,9 @@ UPDATE planet_osm_line SET
     mz_water_min_zoom = mz_calculate_min_zoom_water(planet_osm_line.*),
     mz_label_placement = ST_PointOnSurface(way)
   WHERE
+    -- NOTE: the following line isn't SQL syntax, it's replaced in the
+    -- perform-sql-updates.sh script with a range over osm_id when we're
+    -- sharding the query to make use of all CPUs, or TRUE if we're not.
     SHARDING;
 
 END $$;
