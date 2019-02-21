@@ -38,7 +38,7 @@ echo "done."
 
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."
-psql $PSQLOPTS  $@ -e -f apply-updates-non-planet-tables.sql &
+psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
 
 # use postgres' own estimate of the percentile breakdown of the osm_id column to
 # guide the distribution of jobs, so hopefully they end up mostly evenly sized.
