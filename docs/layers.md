@@ -1141,7 +1141,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `outreach`
 * `paediatrics`
 * `painter`
-* `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
+* `park`
 * `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
 * `parking`
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
