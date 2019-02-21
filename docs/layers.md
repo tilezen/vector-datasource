@@ -937,7 +937,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `bus_station`
 * `bus_stop`
 * `butcher`
-* `cafe` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `cafe`
 * `camera` - A shop selling cameras.
 * `camp_site`
 * `car_parts` - A shop selling car parts.
@@ -1019,7 +1019,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `field_hospital` with `kind_detail` property.
 * `financial`
 * `fire_hydrant`
-* `fire_station` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `fire_station`
 * `firepit`
 * `fishing_area`
 * `fishing`
@@ -1038,7 +1038,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `gallery` - An art gallery.
 * `gambling`
 * `garden_centre`
-* `garden` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `garden`
 * `gardener`
 * `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
 * `gate` with `kind_detail` property.
@@ -1128,7 +1128,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `ngo`
 * `nightclub`
 * `notary`
-* `nursing_home` with `kind_detail` property. _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `nursing_home` with `kind_detail` property.
 * `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
 * `observatory`
 * `occupational_therapist`
@@ -1143,7 +1143,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `painter`
 * `park` - _See planned bug fixes in [#1081](https://github.com/tilezen/vector-datasource/issues/1081)._
 * `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
-* `parking` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `parking`
 * `peak` A mountain peak. See above for properties available on peaks and volcanos.
 * `perfumery`
 * `pet`
@@ -1159,13 +1159,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `picnic_site`
 * `picnic_table`
 * `pitch` - With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
-* `place_of_worship` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
-* `plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `place_of_worship`
+* `plant`
 * `plaque` - A memorial plaque.
-* `playground` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `playground`
 * `plumber`
 * `podiatrist`
-* `police` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `police`
 * `political_party`
 * `port_terminal`
 * `post_box`
@@ -1196,13 +1196,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `residential_home`
 * `resort`
 * `rest_area`
-* `restaurant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `restaurant`
 * `rock`
 * `roller_coaster`
 * `saddle`
 * `sanitary_dump_station`
 * `sawmill`
-* `school` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `school`
 * `scuba_diving`
 * `service_area`
 * `shelter`
@@ -1233,7 +1233,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `stonemason`
 * `street_lamp`
 * `studio` - A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
-* `substation` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `substation`
 * `subway_entrance`
 * `summer_camp`
 * `summer_toboggan`
@@ -1272,13 +1272,13 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
 * `waste_basket`
 * `waste_disposal`
-* `wastewater_plant` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `wastewater_plant`
 * `water_park`
 * `water_point`
 * `water_slide`
 * `water_tower`
 * `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
-* `water_works` - _See planned bug fixes in [#1085](https://github.com/tilezen/vector-datasource/issues/1085)._
+* `water_works`
 * `waterfall`
 * `watering_place`
 * `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
