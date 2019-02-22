@@ -57,15 +57,15 @@ for tbl in polygon line point; do
 
     # try to paralellise across 4 processors.
     if [ -n "${breaks[25]}" ] && [ -n "${breaks[50]}" ] && [ -n "${breaks[75]}" ]; then
-        sed "s/SHARDING/osm_id < ${breaks[25]}/" "${sql_script}" | psql $PSQLOPTS $@ &
-        sed "s/SHARDING/osm_id >= ${breaks[25]} AND osm_id < ${breaks[50]}/" "${sql_script}" | psql $PSQLOPTS $@ &
-        sed "s/SHARDING/osm_id >= ${breaks[50]} AND osm_id < ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
-        sed "s/SHARDING/osm_id >= ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id < ${breaks[25]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[25]} AND osm_id < ${breaks[50]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[50]} AND osm_id < ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
 
     else
         # if no breaks, just use the serial version
         echo "Serial build for planet_osm_${tbl} - this might be slower."
-        sed "s/SHARDING/TRUE/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/TRUE/" "${sql_script}" | psql $PSQLOPTS $@ &
     fi
 done
 wait
