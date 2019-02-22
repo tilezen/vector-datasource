@@ -42,6 +42,13 @@ psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
 
 # use postgres' own estimate of the percentile breakdown of the osm_id column to
 # guide the distribution of jobs, so hopefully they end up mostly evenly sized.
+#
+# NOTE: currently hard-coded to 4-way parallelism. should be enough to keep a
+# 4-core system busy, or more cores for a short while since points, lines and
+# polygons are run concurrently. figuring out how many cores a remote postgres
+# server has seems non-trivial, and the complexity of writing variable-level
+# parallel code in shell script makes me call 4-way fixed "good enough" for
+# now.
 for tbl in polygon line point; do
     sql_script="apply-planet_osm_${tbl}.sql"
     for pct in 25 50 75; do
