@@ -1,0 +1,1 @@
+CREATE INDEX ne_10m_admin_0_map_units_wikidata_index ON ne_10m_admin_0_map_units(wikidataid);

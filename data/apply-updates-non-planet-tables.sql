@@ -156,51 +156,17 @@ UPDATE ne_50m_urban_areas SET mz_label_placement = ST_PointOnSurface(the_geom);
 UPDATE ne_10m_urban_areas SET mz_label_placement = ST_PointOnSurface(the_geom);
 
 UPDATE ne_10m_urban_areas SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_10m_urban_areas_way_area_index ON ne_10m_urban_areas(way_area);
-
 UPDATE ne_50m_urban_areas SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_50m_urban_areas_way_area_index ON ne_50m_urban_areas(way_area);
-
 UPDATE ne_110m_ocean SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_110m_ocean_wayarea_index ON ne_110m_ocean(way_area);
-
 UPDATE ne_110m_lakes SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_110m_lakes_wayarea_index ON ne_110m_lakes(way_area);
-
 UPDATE ne_50m_ocean SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_50m_ocean_wayarea_index ON ne_50m_ocean(way_area);
-
 UPDATE ne_50m_lakes SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_50m_lakes_wayarea_index ON ne_50m_lakes(way_area);
-
 UPDATE ne_50m_playas SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_50m_playas_wayarea_index ON ne_50m_playas(way_area);
-
 UPDATE ne_10m_ocean SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_10m_ocean_wayarea_index ON ne_10m_ocean(way_area);
-
 UPDATE ne_10m_lakes SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_10m_lakes_wayarea_index ON ne_10m_lakes(way_area);
-
 UPDATE ne_10m_playas SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_10m_playas_wayarea_index ON ne_10m_playas(way_area);
-
 UPDATE water_polygons SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX water_polygons_wayarea_index ON water_polygons(way_area);
-
 UPDATE ne_110m_land SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_110m_land_wayarea_index ON ne_110m_land(way_area);
-
 UPDATE ne_50m_land SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_50m_land_wayarea_index ON ne_50m_land(way_area);
-
 UPDATE ne_10m_land SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX ne_10m_land_way_area_index ON ne_10m_land(way_area);
-
 UPDATE land_polygons SET way_area=ST_Area(the_geom) WHERE the_geom IS NOT NULL;
-CREATE INDEX land_polygons_wayarea_index ON land_polygons(way_area);
-
--- we look up min_label, max_label by wikidata ID.
-CREATE INDEX ne_10m_admin_0_countries_wikidata_index ON ne_10m_admin_0_countries(wikidataid);
-CREATE INDEX ne_10m_admin_0_map_units_wikidata_index ON ne_10m_admin_0_map_units(wikidataid);
-CREATE INDEX ne_10m_admin_1_states_provinces_wikidata_index ON ne_10m_admin_1_states_provinces(wikidataid);
