@@ -1426,6 +1426,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for list of values.
 * `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
 * `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
+* `hgv_time_restrictions`: optional array of times specifying when access to `hgv` is restricted.
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1514,6 +1515,17 @@ The `hgv` property indicates general truck heavy goods vehicle truck access, val
 
 For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values (units vary) include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle length, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `other` and `multiple` if more than one.
 
+**Roads `hgv_time_restrictions` values:**
+The `hgv_time_restrictions` property gives information when HGVs may use the given street. It is an array of time durations, because there may be more than one time duration e.g. 8am-9am and 3pm-4pm. The `hgv` property must also be defined to define which type of HGVs that the time restriction applies to.
+
+A time duration is a start and end time on a number of given weekdays. See [OSM Wiki](https://wiki.openstreetmap.org/wiki/Conditional_restrictions) for examples of some restrictions.
+
+The time duration structure looks like:
+- `days_of_week`, which is a set with any combination of the following days: `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` and `Saturday`.
+- `start_time`, optional, seconds since midnight when the restriction starts. If specified, `end_time` must also be specified.
+- `end_time`, optional, seconds since mighnight when the restriction ends. If specified `start_time` must also be specified.
+- `dawn_to_dusk`, optional, restriction applies during day time
+- `dusk_to_dawn`, optional, restriction applies during night time
 
 #### Roads layer network values
 
