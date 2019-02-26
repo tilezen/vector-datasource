@@ -2403,9 +2403,12 @@ def drop_properties(ctx):
     """
 
     properties = ctx.params.get('properties')
+    all_name_variants = ctx.params.get('all_name_variants', False)
     assert properties, 'drop_properties: missing properties'
 
     def action(p):
+        if all_name_variants and 'name' in properties:
+            p = _remove_names(p)
         return _remove_properties(p, *properties)
 
     return _project_properties(ctx, action)
@@ -3912,7 +3915,8 @@ def _simplify_line_collection(shape, tolerance):
     return shape
 
 
-def _merge_junctions(features, angle_tolerance, simplify_tolerance):
+def _merge_junctions(features, angle_tolerance, simplify_tolerance,
+                     split_threshold):
     """
     Merge LineStrings within MultiLineStrings within features across junction
     boundaries where the lines appear to continue at the same angle.
@@ -3923,6 +3927,9 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
     Finally, group the lines into non-overlapping sets, each of which generates
     a separate MultiLineString feature to ensure they're already simple and
     further geometric operations won't re-introduce intersection points.
+
+    Large linestrings, with more than split_threshold members, use a slightly
+    different algorithm which is more efficient at very large sizes.
 
     Returns a new list of features.
     """
@@ -3936,7 +3943,8 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
             shape = _simplify_line_collection(shape, simplify_tolerance)
 
         if shape.geom_type == 'MultiLineString':
-            disjoint_shapes = _linestring_nonoverlapping_partition(shape)
+            disjoint_shapes = _linestring_nonoverlapping_partition(
+                shape, split_threshold)
             for disjoint_shape in disjoint_shapes:
                 new_features.append((disjoint_shape, props, None))
 
@@ -3946,7 +3954,108 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
     return new_features
 
 
-def _linestring_nonoverlapping_partition(mls):
+def _first_positive_integer_not_in(s):
+    """
+    Given a set of positive integers, s, return the smallest positive integer
+    which is _not_ in s.
+
+    For example:
+
+    >>> _first_positive_integer_not_in(set())
+    1
+    >>> _first_positive_integer_not_in(set([1]))
+    2
+    >>> _first_positive_integer_not_in(set([1,3,4]))
+    2
+    >>> _first_positive_integer_not_in(set([1,2,3,4]))
+    5
+    """
+
+    if len(s) == 0:
+        return 1
+
+    last = max(s)
+    for i in xrange(1, last):
+        if i not in s:
+            return i
+    return last + 1
+
+
+# utility class so that we can store the array index of the geometry
+# inside the shape index.
+class _geom_with_index(object):
+    def __init__(self, geom, index):
+        self.geom = geom
+        self.index = index
+        self._geom = geom._geom
+        self.is_empty = geom.is_empty
+
+
+class OrderedSTRTree(object):
+    """
+    An STR-tree geometry index which remembers the array index of the
+    geometries it was built with, and only returns geometries with lower
+    indices when queried.
+
+    This is used as a substitute for a dynamic index, where we'd be able
+    to add new geometries as the algorithm progressed.
+    """
+
+    def __init__(self, geoms):
+        self.shape_index = STRtree([
+            _geom_with_index(g, i) for i, g in enumerate(geoms)
+        ])
+
+    def query(self, shape, idx):
+        """
+        Return the index elements which have bounding boxes intersecting the
+        given shape _and_ have array indices less than idx.
+        """
+
+        for geom in self.shape_index.query(shape):
+            if geom.index < idx:
+                yield geom
+
+
+class SplitOrderedSTRTree(object):
+    """
+    An ordered STR-tree index which splits the geometries it is managing.
+
+    This is a simple, first-order approximation to a dynamic index. If the
+    input geometries are sorted by increasing size, then the "small" first
+    section are much less likely to overlap, and we know we're not interested
+    in anything in the "big" section because the index isn't large enough.
+
+    This should cut down the number of expensive queries, as well as the
+    number of subsequent intersection tests to check if the shapes within the
+    bounding boxes intersect.
+    """
+
+    def __init__(self, geoms):
+        split = int(0.75 * len(geoms))
+        self.small_index = STRtree([
+            _geom_with_index(g, i) for i, g in enumerate(geoms[0:split])
+        ])
+        self.big_index = STRtree([
+            _geom_with_index(g, i + split) for i, g in enumerate(geoms[split:])
+        ])
+        self.split = split
+
+    def query(self, shape, i):
+        for geom in self.small_index.query(shape):
+            if geom.index < i:
+                yield geom
+
+        # don't need to query the big index at all unless i >= split. this
+        # should cut down on the number of yielded items that need further
+        # intersection tests.
+        if i >= self.split:
+            for geom in self.big_index.query(shape):
+                if geom.index < i:
+                    yield geom
+
+
+def _linestring_nonoverlapping_partition(mls, split_threshold=15000):
     """
     Given a MultiLineString input, returns a list of MultiLineStrings
     which are individually simple, but cover all the points in the
@@ -3969,35 +4078,6 @@ def _linestring_nonoverlapping_partition(mls):
     # only interested in MultiLineStrings for this method!
     assert mls.geom_type == 'MultiLineString'
 
-    class _Bucket(object):
-        def __init__(self, first_shape):
-            self.shapes = [first_shape]
-            self.bounds = first_shape.bounds
-
-        def add(self, shape):
-            """
-            If the shape doesn't intersect any other shape in the bucket,
-            then add it and return True. Otherwise return False.
-            """
-
-            assert shape.geom_type == 'LineString'
-
-            bounds = shape.bounds
-            if _intersects_bounds(self.bounds, bounds):
-                for s in self.shapes:
-                    if s.intersects(shape):
-                        return False
-
-            self.shapes.append(shape)
-            self.bounds = _union_bounds(self.bounds, bounds)
-            return True
-
-        def as_shape(self):
-            if len(self.shapes) == 1:
-                return self.shapes[0]
-            else:
-                return MultiLineString(self.shapes)
-
     # simple (and sub-optimal) greedy algorithm for making sure that
     # linestrings don't intersect: put each into the first bucket which
     # doesn't already contain a linestring which intersects it.
@@ -4018,19 +4098,71 @@ def _linestring_nonoverlapping_partition(mls):
     # of 3 buckets. optimally, we can bucket 1 & 3 together and 2 & 4
     # together to only use 2 buckets. however, making this optimal seems
     # like it might be a Hard problem.
-    buckets = []
-    for shape in sorted(mls.geoms, key=lambda l: l.bounds[0]):
-        for bucket in buckets:
-            if bucket.add(shape):
-                break
-        else:
-            # if it didn't fit in any existing bucket, then make a new
-            # bucket for it.
-            buckets.append(_Bucket(shape))
+    #
+    # note that we don't create physical buckets, but assign each shape a
+    # bucket ID which hasn't been assigned to any other intersecting shape.
+    # we can assign these in an arbitrary order, and use an index to reduce
+    # the number of intersection tests needed down to O(n log n). this can
+    # matter quite a lot at low zooms, where it's possible to get 150,000
+    # tiny road segments in a single shape!
+
+    # sort the geometries before we use them. this can help if we sort things
+    # which have fewer intersections towards the front of the array, so that
+    # they can be done more quickly.
+    def _bbox_area(geom):
+        minx, miny, maxx, maxy = geom.bounds
+        return (maxx - minx) * (maxy - miny)
+
+    # if there's a large number of geoms, switch to the split index and sort
+    # so that the spatially largest objects are towards the end of the list.
+    # this should make it more likely that earlier queries are fast.
+    if len(mls.geoms) > split_threshold:
+        geoms = sorted(mls.geoms, key=_bbox_area)
+        shape_index = SplitOrderedSTRTree(geoms)
+    else:
+        geoms = mls.geoms
+        shape_index = OrderedSTRTree(geoms)
+
+    # first, assign everything the "null" bucket with index zero. this means
+    # we haven't gotten around to it yet, and we can use it as a sentinel
+    # value to check for logic errors.
+    bucket_for_shape = [0] * len(geoms)
+
+    for idx, shape in enumerate(geoms):
+        overlapping_buckets = set()
+
+        # assign the lowest bucket ID that hasn't been assigned to any
+        # overlapping shape with a lower index. this is because:
+        #  1. any overlapping shape would cause the insertion of a point if it
+        #     were allowed in this bucket, and
+        #  2. we're assigning in-order, so shapes at higher array indexes will
+        #     still be assigned to the null bucket. we'll get to them later!
+        for indexed_shape in shape_index.query(shape, idx):
+            if indexed_shape.geom.intersects(shape):
+                bucket = bucket_for_shape[indexed_shape.index]
+                assert bucket > 0
+                overlapping_buckets.add(bucket)
+
+        bucket_for_shape[idx] = _first_positive_integer_not_in(
+            overlapping_buckets)
 
     results = []
-    for bucket in buckets:
-        results.append(bucket.as_shape())
+    for bucket_id in set(bucket_for_shape):
+        # by this point, no shape should be assigned to the null bucket any
+        # more.
+        assert bucket_id > 0
+
+        # collect all the shapes which have been assigned to this bucket.
+        shapes = []
+        for idx, shape in enumerate(geoms):
+            if bucket_for_shape[idx] == bucket_id:
+                shapes.append(shape)
+
+        if len(shapes) == 1:
+            results.append(shapes[0])
+        else:
+            results.append(MultiLineString(shapes))
+
     return results
 
 
@@ -4081,6 +4213,8 @@ def merge_line_features(ctx):
         'drop_length_pixels', default=0.1, typ=float)
     simplify_tolerance = params.optional(
         'simplify_tolerance', default=0.0, typ=float)
+    split_threshold = params.optional(
+        'split_threshold', default=15000, typ=int)
 
     assert source_layer, 'merge_line_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -4102,7 +4236,8 @@ def merge_line_features(ctx):
 
     if merge_junctions:
         layer['features'] = _merge_junctions(
-            layer['features'], junction_angle_tolerance, simplify_tolerance)
+            layer['features'], junction_angle_tolerance, simplify_tolerance,
+            split_threshold)
 
     return layer
 

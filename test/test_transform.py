@@ -1018,3 +1018,22 @@ class AngleAtTest(unittest.TestCase):
 
     def test_angle_at_degenerate(self):
         self._check([[0, 0], [0, 0]], None)
+
+
+class FirstPositiveIntegerNotInTest(unittest.TestCase):
+
+    def _check(self, value, expect):
+        from vectordatasource.transform import _first_positive_integer_not_in
+        self.assertEqual(_first_positive_integer_not_in(value), expect)
+
+    def test_empty(self):
+        self._check(set(), 1)
+
+    def test_one(self):
+        self._check(set([1]), 2)
+
+    def test_hole(self):
+        self._check(set([1, 3, 4]), 2)
+
+    def test_filled_hole(self):
+        self._check(set([1, 2, 3, 4]), 5)
