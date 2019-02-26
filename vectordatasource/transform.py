@@ -3915,7 +3915,8 @@ def _simplify_line_collection(shape, tolerance):
     return shape
 
 
-def _merge_junctions(features, angle_tolerance, simplify_tolerance):
+def _merge_junctions(features, angle_tolerance, simplify_tolerance,
+                     split_threshold):
     """
     Merge LineStrings within MultiLineStrings within features across junction
     boundaries where the lines appear to continue at the same angle.
@@ -3926,6 +3927,9 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
     Finally, group the lines into non-overlapping sets, each of which generates
     a separate MultiLineString feature to ensure they're already simple and
     further geometric operations won't re-introduce intersection points.
+
+    Large linestrings, with more than split_threshold members, use a slightly
+    different algorithm which is more efficient at very large sizes.
 
     Returns a new list of features.
     """
@@ -3939,7 +3943,8 @@ def _merge_junctions(features, angle_tolerance, simplify_tolerance):
             shape = _simplify_line_collection(shape, simplify_tolerance)
 
         if shape.geom_type == 'MultiLineString':
-            disjoint_shapes = _linestring_nonoverlapping_partition(shape)
+            disjoint_shapes = _linestring_nonoverlapping_partition(
+                shape, split_threshold)
             for disjoint_shape in disjoint_shapes:
                 new_features.append((disjoint_shape, props, None))
 
@@ -4050,7 +4055,7 @@ class SplitOrderedSTRTree(object):
                     yield geom
 
 
-def _linestring_nonoverlapping_partition(mls):
+def _linestring_nonoverlapping_partition(mls, split_threshold=15000):
     """
     Given a MultiLineString input, returns a list of MultiLineStrings
     which are individually simple, but cover all the points in the
@@ -4111,7 +4116,7 @@ def _linestring_nonoverlapping_partition(mls):
     # if there's a large number of geoms, switch to the split index and sort
     # so that the spatially largest objects are towards the end of the list.
     # this should make it more likely that earlier queries are fast.
-    if len(mls.geoms) > 15000:
+    if len(mls.geoms) > split_threshold:
         geoms = sorted(mls.geoms, key=_bbox_area)
         shape_index = SplitOrderedSTRTree(geoms)
     else:
@@ -4208,6 +4213,8 @@ def merge_line_features(ctx):
         'drop_length_pixels', default=0.1, typ=float)
     simplify_tolerance = params.optional(
         'simplify_tolerance', default=0.0, typ=float)
+    split_threshold = params.optional(
+        'split_threshold', default=15000, typ=int)
 
     assert source_layer, 'merge_line_features: missing source layer'
     layer = _find_layer(ctx.feature_layers, source_layer)
@@ -4229,7 +4236,8 @@ def merge_line_features(ctx):
 
     if merge_junctions:
         layer['features'] = _merge_junctions(
-            layer['features'], junction_angle_tolerance, simplify_tolerance)
+            layer['features'], junction_angle_tolerance, simplify_tolerance,
+            split_threshold)
 
     return layer
 
