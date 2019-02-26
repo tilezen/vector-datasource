@@ -2403,9 +2403,12 @@ def drop_properties(ctx):
     """
 
     properties = ctx.params.get('properties')
+    all_name_variants = ctx.params.get('all_name_variants', False)
     assert properties, 'drop_properties: missing properties'
 
     def action(p):
+        if all_name_variants and 'name' in properties:
+            p = _remove_names(p)
         return _remove_properties(p, *properties)
 
     return _project_properties(ctx, action)
