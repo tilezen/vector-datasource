@@ -565,8 +565,10 @@ class DropMergedIdTest(unittest.TestCase):
         def _drop_all_props((shape, props, fid)):
             return None
 
+        tolerance = 1.0e-4
         merged_features = _merge_features_by_property(
-            buildings, _POLYGON_DIMENSION, update_props_pre_fn=_drop_all_props)
+            buildings, _POLYGON_DIMENSION, tolerance,
+            update_props_pre_fn=_drop_all_props)
 
         self.assertEquals(2, len(merged_features))
         for f in merged_features:
