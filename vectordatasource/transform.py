@@ -3178,7 +3178,7 @@ def quantize_height_round_nearest_meter(height):
     return round(height)
 
 
-def _merge_lines(linestring_shapes):
+def _merge_lines(linestring_shapes, _unused_tolerance):
     list_of_linestrings = []
     for shape in linestring_shapes:
         list_of_linestrings.extend(_flatten_geoms(shape))
@@ -3248,7 +3248,7 @@ def _drop_small_outers_multi(shape, area_tolerance):
     return shape
 
 
-def _merge_polygons(polygon_shapes):
+def _merge_polygons(polygon_shapes, tolerance):
     """
     Merge a list of polygons together into a single shape. Returns list of
     shapes, which might be empty.
@@ -3264,9 +3264,36 @@ def _merge_polygons(polygon_shapes):
     if not list_of_polys:
         return []
 
-    result = shapely.ops.unary_union(list_of_polys)
+    # first, try to merge the polygons as they are.
+    try:
+        result = shapely.ops.unary_union(list_of_polys)
+        return [result]
 
-    return [result]
+    except ValueError:
+        pass
+
+    # however, this can lead to numerical instability where polygons _almost_
+    # touch, so sometimes buffering them outwards a little bit can help.
+    try:
+        from shapely.geometry import JOIN_STYLE
+
+        # don't buffer by the full pixel, instead choose a smaller value that
+        # shouldn't be noticable.
+        buffer_size = tolerance / 16.0
+
+        list_of_buffered = [
+            p.buffer(buffer_size, join_style=JOIN_STYLE.mitre, mitre_limit=1.5)
+            for p in list_of_polys
+        ]
+        result = shapely.ops.unary_union(list_of_buffered)
+        return [result]
+
+    except ValueError:
+        pass
+
+    # ultimately, if it's not possible to merge them then bail.
+    # TODO: when we get a logger in here, let's log a big FAIL message.
+    return []
 
 
 def _merge_polygons_with_buffer(polygon_shapes, tolerance):
@@ -3296,7 +3323,7 @@ def _merge_polygons_with_buffer(polygon_shapes, tolerance):
     # opposing sides of the polygon meet eachother exactly.
     epsilon = tolerance * 1.0e-6
 
-    result = _merge_polygons(polygon_shapes)
+    result = _merge_polygons(polygon_shapes, tolerance)
     if not result:
         return result
 
@@ -3367,12 +3394,14 @@ def _intersects_bounds(a, b):
 #           either calls to leaf() or node().
 #   * root: called once at the root with the results of the top node (or leaf
 #           if it's a degenerate single-level tree).
+#   * tolerance: a length that is approximately a pixel, or the size by which
+#                things can be simplified or snapped to.
 #
 # These allow us to merge transformed versions of geometry, where leaf()
 # transforms the geometry to some other form (e.g: buffered for buildings),
 # node merges those recursively, and then root reverses the buffering.
 #
-RecursiveMerger = namedtuple('RecursiveMerger', 'leaf node root')
+RecursiveMerger = namedtuple('RecursiveMerger', 'leaf node root tolerance')
 
 
 # A bucket used to sort shapes into the next level of the quad tree.
@@ -3415,9 +3444,9 @@ def _merge_shapes_recursively(shapes, shapes_per_merge, merger, depth=0,
     # of shapes by 5 levels down, then perhaps there are particularly large
     # shapes which are preventing things getting split up correctly.
     if len(shapes) <= shapes_per_merge and depth == 0:
-        return merger.root(merger.leaf(shapes))
+        return merger.root(merger.leaf(shapes, merger.tolerance))
     elif depth >= 5:
-        return merger.leaf(shapes)
+        return merger.leaf(shapes, merger.tolerance)
 
     # on the first call, figure out what the bounds of the shapes are. when
     # recursing, use the bounds passed in from the parent.
@@ -3460,7 +3489,7 @@ def _merge_shapes_recursively(shapes, shapes_per_merge, merger, depth=0,
 
         # don't add empty lists!
         elif bucket.shapes:
-            grouped_shapes.extend(merger.leaf(bucket.shapes))
+            grouped_shapes.extend(merger.leaf(bucket.shapes, merger.tolerance))
 
     fn = merger.root if depth == 0 else merger.node
     return fn(grouped_shapes)
@@ -3471,7 +3500,7 @@ def _noop(x):
 
 
 def _merge_features_by_property(
-        features, geom_dim,
+        features, geom_dim, tolerance,
         update_props_pre_fn=None,
         update_props_post_fn=None,
         max_merged_features=None,
@@ -3530,7 +3559,8 @@ def _merge_features_by_property(
             # them all to have duplicate IDs.
             fid = None
 
-        merger = RecursiveMerger(root=_noop, node=_noop, leaf=_merge_shape_fn)
+        merger = RecursiveMerger(root=_noop, node=_noop, leaf=_merge_shape_fn,
+                                 tolerance=tolerance)
 
         for merged_shape in _merge_shapes_recursively(
                 shapes, shapes_per_merge, merger):
@@ -3640,12 +3670,10 @@ def merge_building_features(ctx):
             props['volume'] = height * area
         return props
 
-    def _merge_polygons(shapes):
-        return _merge_polygons_with_buffer(shapes, tolerance)
-
     layer['features'] = _merge_features_by_property(
-        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
-        max_merged_features, merge_shape_fn=_merge_polygons)
+        layer['features'], _POLYGON_DIMENSION, tolerance, _props_pre,
+        _props_post, max_merged_features,
+        merge_shape_fn=_merge_polygons_with_buffer)
     return layer
 
 
@@ -3710,15 +3738,13 @@ def merge_polygon_features(ctx):
                     merged_props['min_zoom'] = min_zoom
         return merged_props
 
-    def _merge_polygons(shapes):
-        return _merge_polygons_with_buffer(shapes, tolerance)
-
     merge_props_fn = _props_merge if merge_min_zooms else None
-    merge_shape_fn = _merge_polygons if buffer_merge else None
+    merge_shape_fn = _merge_polygons_with_buffer if buffer_merge else None
 
     layer['features'] = _merge_features_by_property(
-        layer['features'], _POLYGON_DIMENSION, _props_pre, _props_post,
-        merge_props_fn=merge_props_fn, merge_shape_fn=merge_shape_fn)
+        layer['features'], _POLYGON_DIMENSION, tolerance, _props_pre,
+        _props_post, merge_props_fn=merge_props_fn,
+        merge_shape_fn=merge_shape_fn)
     return layer
 
 
@@ -4227,7 +4253,7 @@ def merge_line_features(ctx):
         return None
 
     layer['features'] = _merge_features_by_property(
-        layer['features'], _LINE_DIMENSION)
+        layer['features'], _LINE_DIMENSION, simplify_tolerance)
 
     if drop_short_segments:
         tolerance = short_segment_factor * tolerance_for_zoom(zoom)
