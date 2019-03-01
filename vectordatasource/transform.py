@@ -192,15 +192,24 @@ def _building_calc_min_levels(min_levels):
     return min_levels
 
 
+# slightly bigger than the tallest structure in the world. at the time
+# of writing, the Burj Khalifa at 829.8m. this is used as a check to make
+# sure that nonsense values (e.g: buildings a million meters tall) don't
+# make it into the data.
+TALLEST_STRUCTURE_METERS = 1000.0
+
+
 def _building_calc_height(height_val, levels_val, levels_calc_fn):
     height = _to_float_meters(height_val)
-    if height is not None:
+    if height is not None and 0 <= height <= TALLEST_STRUCTURE_METERS:
         return height
     levels = _to_float_meters(levels_val)
     if levels is None:
         return None
     levels = levels_calc_fn(levels)
-    return levels
+    if 0 <= levels <= TALLEST_STRUCTURE_METERS:
+        return levels
+    return None
 
 
 def add_id_to_properties(shape, properties, fid, zoom):

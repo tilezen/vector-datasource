@@ -1039,3 +1039,22 @@ class FirstPositiveIntegerNotInTest(unittest.TestCase):
 
     def test_filled_hole(self):
         self._check(set([1, 2, 3, 4]), 5)
+
+
+class BuildingHeightCalculation(unittest.TestCase):
+
+    def test_nonsense_height(self):
+        # test that a nonsensically large value for a height input
+        # doesn't get returned in the output.
+        from vectordatasource.transform import _building_calc_height
+        from vectordatasource.transform import _building_calc_levels
+        height = _building_calc_height('1e6', None, _building_calc_levels)
+        self.assertIsNone(height)
+
+    def test_nonsense_levels(self):
+        # test that a nonsensically large value for the number of levels in
+        # a building doesn't get into the output.
+        from vectordatasource.transform import _building_calc_height
+        from vectordatasource.transform import _building_calc_levels
+        height = _building_calc_height(None, '1000', _building_calc_levels)
+        self.assertIsNone(height)
