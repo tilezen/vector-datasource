@@ -36,7 +36,7 @@ class AerodromeTest(FixtureTest):
         self._check('private', 'private')
 
     def test_military_public(self):
-        self._check('military/public', 'military/public')
+        self._check('military/public', 'military_public')
 
     def test_airfield(self):
         self._check('airfield', 'airfield')

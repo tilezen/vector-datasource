@@ -793,8 +793,10 @@ filters:
       kind: {col: aeroway}
       kind_detail:
         case:
-          - when: { "aerodrome:type": [public, private, "military/public", airfield, international, regional, gliding] }
+          - when: { "aerodrome:type": [public, private, airfield, international, regional, gliding] }
             then: { col: "aerodrome:type" }
+          - when: { "aerodrome:type": "military/public" }
+            then: military_public
       tier: 3
   # airfield, naval_base
   - filter: { military: [airfield, naval_base] }

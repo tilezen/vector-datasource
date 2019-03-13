@@ -482,7 +482,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 #### Landuse `kind` values:
 
-* `aerodrome` - with `kind_detail` in `public`, `private`, `military/public`, `airfield`, `international`, `regional`, `gliding`.
+* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`.
 * `airfield`
 * `allotments`
 * `amusement_ride`
@@ -881,7 +881,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `administrative`
 * `adult_gaming_centre`
 * `advertising_agency`
-* `aerodrome` - with `kind_detail` in `public`, `private`, `military/public`, `airfield`, `international`, `regional`, `gliding`.
+* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`.
 * `aeroway_gate`
 * `airfield` for military use.
 * `airport`
