@@ -1513,6 +1513,32 @@ post_process:
       source_layers: [water]
       pixel_area: 0.1
 
+  # merge aerodrome kind_detail onto runway lines
+  - fn: vectordatasource.transform.overlap
+    params:
+      base_layer: roads
+      cutting_layer: landuse
+      attribute: kind_detail
+      target_attribute: aerodrome_kind_detail
+      linear: true
+      base_where: >-
+        kind == 'aeroway' and kind_detail == 'runway'
+      cutting_where: >-
+        kind == 'aerodrome' and kind_detail is not None
+
+  # merge aerodrome kind_detail onto runway polygons
+  - fn: vectordatasource.transform.overlap
+    params:
+      base_layer: landuse
+      cutting_layer: landuse
+      attribute: kind_detail
+      target_attribute: kind_detail
+      linear: true
+      base_where: >-
+        kind == 'runway'
+      cutting_where: >-
+        kind == 'aerodrome' and kind_detail is not None
+
   # drop this layer before simplify_and_clip - we don't want it in the output,
   # so don't waste time simplifying and clipping it to the tile.
   - fn: vectordatasource.transform.drop_layer
