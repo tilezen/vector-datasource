@@ -11,27 +11,56 @@ def _freeze(thing):
     return thing
 
 
-def _query_highway(highway):
-    # beware: overpass wants (south,west,north,east) coords for bbox,
-    # in defiance of conventional x, y coordinate ordering.
-    bbox = "36.563,-122.377,37.732,-120.844"
-    overpass = "http://overpass-api.de/api/interpreter?data="
-    return overpass + 'way(' + bbox + ')[highway=' + highway + ']%3B>%3B'
-
-
 class MergeSameRoads(FixtureTest):
 
     def test_roads_merged(self):
         from collections import defaultdict
         from shapely.geometry import asShape
+        from tilequeue.tile import coord_to_bounds
+        from shapely.geometry import LineString
+        from ModestMaps.Core import Coordinate
+        import dsl
+
+        z, x, y = 8, 41, 99
+
+        bounds = coord_to_bounds(Coordinate(zoom=z, column=x, row=y))
+
+        def _line(frac):
+            return LineString([
+                [bounds[0] + frac * (bounds[2] - bounds[0]), bounds[1]],
+                [bounds[0] + frac * (bounds[2] - bounds[0]), bounds[3]],
+            ])
 
         # count the unique parameters - there should only be one, indicating
         # that the roads have been merged.
-        self.load_fixtures(
-            [_query_highway(t) for t in ('motorway', 'primary', 'trunk')],
-            clip=self.tile_bbox(8, 41, 99))
+        self.generate_fixtures(
+            dsl.way(1, _line(0.1), {
+                'highway': 'motorway',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.way(2, _line(0.2), {
+                'highway': 'motorway',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.way(3, _line(0.3), {
+                'highway': 'primary',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.way(4, _line(0.4), {
+                'highway': 'primary',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.way(5, _line(0.5), {
+                'highway': 'trunk',
+                'source': 'openstreetmap.org',
+            }),
+            dsl.way(6, _line(0.6), {
+                'highway': 'trunk',
+                'source': 'openstreetmap.org',
+            }),
+        )
 
-        with self.features_in_tile_layer(8, 41, 99, 'roads') as roads:
+        with self.features_in_tile_layer(z, x, y, 'roads') as roads:
             features = defaultdict(list)
 
             for road in roads:
