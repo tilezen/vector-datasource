@@ -112,7 +112,10 @@ class BuildingScaleRankTest(FixtureTest):
         # rank and are merged at z14.
         z, x, y = (14, 0, 0)
 
-        self._setup_row(z, x, y, 10, 50, 10, landuse_kind='retail')
+        # z14 area cutoff is 500, so make sure width*depth >= 500, preferably
+        # by a margin that means numerical noise won't push it under the
+        # threshold.
+        self._setup_row(z, x, y, 11, 50, 10, landuse_kind='retail')
 
         # should be only 1 building feature now
         self.assert_n_matching_features(
