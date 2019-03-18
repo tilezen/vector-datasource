@@ -1091,13 +1091,16 @@ def _find_layer(feature_layers, name):
     return None
 
 
-# shared implementation of the intercut algorithm, used
-# both when cutting shapes and using overlap to determine
-# inside / outsideness.
-def _intercut_impl(intersect_func, feature_layers,
-                   base_layer, cutting_layer, attribute,
-                   target_attribute, cutting_attrs,
-                   keep_geom_type):
+# shared implementation of the intercut algorithm, used both when cutting
+# shapes and using overlap to determine inside / outsideness.
+#
+# the filter_fn are used to filter which features from the base layer are cut
+# with which features from the cutting layer. cutting layer features which do
+# not match the filter are ignored, base layer features are left in the layer
+# unchanged.
+def _intercut_impl(intersect_func, feature_layers, base_layer, cutting_layer,
+                   attribute, target_attribute, cutting_attrs, keep_geom_type,
+                   cutting_filter_fn=None, base_filter_fn=None):
     # the target attribute can default to the attribute if
     # they are distinct. but often they aren't, and that's
     # why target_attribute is a separate parameter.
@@ -1125,21 +1128,54 @@ def _intercut_impl(intersect_func, feature_layers,
     base_features = base['features']
     cutting_features = cutting['features']
 
+    # filter out any features that we don't want to cut with
+    if cutting_filter_fn is not None:
+        cutting_features = filter(cutting_filter_fn, cutting_features)
+
+    # short-cut return if there are no cutting features => there's nothing
+    # to do.
+    if not cutting_features:
+        return base
+
     # make a cutter object to help out
     cutter = _Cutter(cutting_features, cutting_attrs,
                      attribute, target_attribute,
                      keep_geom_type, intersect_func)
 
+    skipped_features = []
     for base_feature in base_features:
-        # we use shape to track the current remainder of the
-        # shape after subtracting bits which are inside cuts.
-        shape, props, fid = base_feature
+        if base_filter_fn is None or base_filter_fn(base_feature):
+            # we use shape to track the current remainder of the
+            # shape after subtracting bits which are inside cuts.
+            shape, props, fid = base_feature
 
-        cutter.cut(shape, props, fid)
+            cutter.cut(shape, props, fid)
 
-    base['features'] = cutter.new_features
+        else:
+            skipped_features.append(base_feature)
+
+    base['features'] = cutter.new_features + skipped_features
 
     return base
+
+
+class Where(object):
+    """
+    A "where" clause for filtering features based on their properties.
+
+    This is commonly used in post-processing steps to configure which features
+    in the layer we want to operate on, allowing us to write simple Python
+    expressions in the YAML.
+    """
+
+    def __init__(self, where):
+        self.fn = compile(where, 'queries.yaml', 'eval')
+
+    def __call__(self, feature):
+        shape, props, fid = feature
+        local = defaultdict(lambda: None)
+        local.update(props)
+        return eval(self.fn, {}, local)
 
 
 # intercut takes features from a base layer and cuts each
@@ -1174,6 +1210,14 @@ def _intercut_impl(intersect_func, feature_layers,
 # - keep_geom_type: if truthy, then filter the output to be
 #     the same type as the input. defaults to True, because
 #     this seems like an eminently sensible behaviour.
+# - base_where: if truthy, a Python expression which is
+#     evaluated in the context of a feature's properties and
+#     can return True if the feature is to be cut and False
+#     if it should be passed through unmodified.
+# - cutting_where: if truthy, a Python expression which is
+#     evaluated in the context of a feature's properties and
+#     can return True if the feature is to be used for cutting
+#     and False if it should be ignored.
 #
 # returns a feature layer which is the base layer cut by the
 # cutting layer.
@@ -1198,10 +1242,19 @@ def intercut(ctx):
     target_attribute = ctx.params.get('target_attribute')
     cutting_attrs = ctx.params.get('cutting_attrs')
     keep_geom_type = ctx.params.get('keep_geom_type', True)
+    base_where = ctx.params.get('base_where')
+    cutting_where = ctx.params.get('cutting_where')
+
+    # compile the where-clauses, if any were configured
+    if base_where:
+        base_where = Where(base_where)
+    if cutting_where:
+        cutting_where = Where(cutting_where)
 
     return _intercut_impl(
         _intersect_cut, feature_layers, base_layer, cutting_layer,
-        attribute, target_attribute, cutting_attrs, keep_geom_type)
+        attribute, target_attribute, cutting_attrs, keep_geom_type,
+        base_filter_fn=base_where, cutting_filter_fn=cutting_where)
 
 
 # overlap measures the area overlap between each feature in
@@ -1241,6 +1294,8 @@ def overlap(ctx):
     cutting_attrs = ctx.params.get('cutting_attrs')
     keep_geom_type = ctx.params.get('keep_geom_type', True)
     min_fraction = ctx.params.get('min_fraction', 0.8)
+    base_where = ctx.params.get('base_where')
+    cutting_where = ctx.params.get('cutting_where')
 
     # use a different function for linear overlaps (i.e: roads with polygons)
     # than area overlaps. keeping this explicit (rather than relying on the
@@ -1252,10 +1307,17 @@ def overlap(ctx):
     else:
         overlap_fn = _intersect_overlap(min_fraction)
 
+    # compile the where-clauses, if any were configured
+    if base_where:
+        base_where = Where(base_where)
+    if cutting_where:
+        cutting_where = Where(cutting_where)
+
     return _intercut_impl(
         overlap_fn, feature_layers, base_layer,
         cutting_layer, attribute, target_attribute, cutting_attrs,
-        keep_geom_type)
+        keep_geom_type, cutting_filter_fn=cutting_where,
+        base_filter_fn=base_where)
 
 
 # intracut cuts a layer with a set of features from that same
