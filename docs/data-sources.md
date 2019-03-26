@@ -6,7 +6,7 @@ Mapzen Vector Tiles are powered by several major open data sets and we owe a tre
 
 ## What is sourced at what zooms?
 
-Generally speaking, **Natural Earth** is used at low-zooms, and **OpenStreetMap** is relied on in mid- and high-zooms. Data from **openstreetmapdata.com** is used at the same zooms as the raw OSM data, and is derived from the OSM data. **Who's On First** neighbourhood labels generally come in at high-zooms.
+Generally speaking, **Natural Earth** is used at low-zooms, and **OpenStreetMap** is relied on in mid- and high-zooms. Data from **osmdata.openstreetmap.de** is used at the same zooms as the raw OSM data, and is derived from the OSM data. **Who's On First** neighbourhood labels generally come in at high-zooms.
 
 When possible, we annotate individual map features in each tile with a `source` property.
 
@@ -21,11 +21,11 @@ With its coverage of roads, POIs, landuse, as well as rich metadata, OpenStreetM
 
 All OpenStreetMap data is licensed under the [ODbL](http://opendatacommons.org/licenses/odbl/), a [share-alike](https://en.wikipedia.org/wiki/Share-alike) license which also requires attribution.
 
-## openstreetmapdata.com
+## osmdata.openstreetmap.de
 
-`source:openstreetmapdata.com`
+`source:osmdata.openstreetmap.de`
 
-We include coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) at mid- and high-zooms. This service was created by Jochen Topf and Christoph Hormann for the OpenStreetMap community and the general public and it rocks!
+We include coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) at mid- and high-zooms. This service, now run by [FOSSGIS e.V.](https://www.fossgis.de/), replaces `openstreetmapdata.com` - it's the same service, but a different hosting arrangement. The service was created by Jochen Topf and Christoph Hormann for the OpenStreetMap community and the general public and it rocks!
 
 As they say, "The coastline in OpenStreetMap is often broken. The update process will try to repair it, but this does not always work. If the OSM data can't be repaired automatically, the data here will not be updated."
 

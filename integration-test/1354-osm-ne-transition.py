@@ -7,7 +7,10 @@ class OsmNeTransition(FixtureTest):
         # checks that the OSM->NE transition happens for the given layer
         # between the z/x/y coordinate given and the parent tile
         # (z-1)/(x/2)/(y/2)
-        osm = {'source': set(['openstreetmap.org', 'openstreetmapdata.com'])}
+        osm = {'source': set([
+            'openstreetmap.org',
+            'osmdata.openstreetmap.de',
+        ])}
         ne = {'source': 'naturalearthdata.com'}
 
         # assert OSM feature exists at upper zoom level

@@ -9,7 +9,7 @@ SELECT
 {% endif %}
     {% filter geometry %}mz_label_placement{% endfilter %} AS __label__,
     jsonb_build_object(
-      'source', 'openstreetmapdata.com',
+      'source', 'osmdata.openstreetmap.de',
       'area', way_area,
       'min_zoom', {{ min_zoom }}
     ) AS __properties__,

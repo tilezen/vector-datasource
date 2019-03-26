@@ -686,7 +686,9 @@ class FixtureShapeSource(object):
                         admin_level=2,
                     )
                 else:
-                    override_properties = dict(source="openstreetmapdata.com")
+                    override_properties = dict(
+                        source="osmdata.openstreetmap.de",
+                    )
                 _convert_shape_to_geojson(
                     shpfile, jsonfile, override_properties, clip, simplify)
                 jsonfiles.append(jsonfile)
