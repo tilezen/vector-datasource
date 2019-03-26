@@ -50,17 +50,17 @@ class AddIslandLabels(FixtureTest):
             {'kind': 'earth', 'source': 'naturalearthdata.com'})
 
     def test_openstreetmapdata_land(self):
-        # OSM derived data from openstreetmapdata.com
+        # OSM derived data from osmdata.openstreetmap.de
         self.generate_fixtures(
             dsl.way(1, dsl.tile_box(8, 40, 98), {
-                u'source': u'openstreetmapdata.com',
+                u'source': u'osmdata.openstreetmap.de',
                 u'fid': 35442,
             }),
         )
 
         self.assert_has_feature(
             8, 40, 98, 'earth',
-            {'kind': 'earth', 'source': 'openstreetmapdata.com'})
+            {'kind': 'earth', 'source': 'osmdata.openstreetmap.de'})
 
     def test_osm_continent_label(self):
         # NODE continent labels (from places)

@@ -420,14 +420,14 @@ Exits can have an optional `kind_detail`. If present, it will be one of:
 * Layer name: `earth`
 * Geometry types: `polygon`, `line`, `point`.
 
-Polygons representing earth landmass and natural feature lines. Uses coastline-derived land polygons from [openstreetmapdata.com](http://openstreetmapdata.com). Natural lines from OpenStreetMap representing cliffs, aretes. This layer also includes earth `label_placement` lines for ridges and valleys (which should not otherwise be symbolized).
+Polygons representing earth landmass and natural feature lines. Uses coastline-derived land polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de). Natural lines from OpenStreetMap representing cliffs, aretes. This layer also includes earth `label_placement` lines for ridges and valleys (which should not otherwise be symbolized).
 
 _Uses Natural Earth until zoom 7, then switches to OSM land at zoom 8+._
 
 **Earth properties:**
 
 * `name`: generally only for lines or label placement points
-* `id`: The `osm_id` **or** funky value when from Natural Earth or OpenStreetMapData.com
+* `id`: The `osm_id` **or** funky value when from Natural Earth or OSMData.OpenStreetMap.de
 * `kind`: either `earth` or "natural" value from OSM tag.
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
@@ -2352,7 +2352,7 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * Layer name: `water`
 * Geometry types: `point`, `line`, and `polygon`
 
-Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [openstreetmapdata.com](http://openstreetmapdata.com) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
+Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 
@@ -2362,7 +2362,7 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 
 * `name`: including localized name variants
 * `kind`: detailed below, per geometry type
-* `source`: one of `naturalearthdata.com`, `openstreetmapdata.com`, `openstreetmap.org`
+* `source`: one of `naturalearthdata.com`, `osmdata.openstreetmap.de`, `openstreetmap.org`
 * `boundary`: `true`, on lines only. See description above. _See proposed bug fix in [#735](https://github.com/tilezen/vector-datasource/issues/735)._
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
 * `min_zoom`: a suggestion for which zoom to draw a feature. The value is a float.
@@ -2401,4 +2401,4 @@ Additionally, a `reservoir: true` or `alkaline: true` value can be present on th
 
 * `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
 * `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984)._
-* Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from openstreetmapdata.com.
+* Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from osmdata.openstreetmap.de.

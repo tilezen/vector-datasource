@@ -1,5 +1,5 @@
 bucket: tilezen-assets
-datestamp: 20190215
+datestamp: 20190326
 
 shapefiles:
 
@@ -10,13 +10,13 @@ shapefiles:
   #   - tile: whether to tile the data source before importing
 
   - name: water_polygons
-    url: http://data.openstreetmapdata.com/water-polygons-split-3857.zip
+    url: https://osmdata.openstreetmap.de/download/water-polygons-split-3857.zip
     prj: 3857
     shapefile-name: water-polygons-split-3857/water_polygons.shp
     directory: water-polygons-split-3857
 
   - name: land_polygons
-    url: http://data.openstreetmapdata.com/land-polygons-split-3857.zip
+    url: https://osmdata.openstreetmap.de/download/land-polygons-split-3857.zip
     prj: 3857
     directory: land-polygons-split-3857
     shapefile-name: land-polygons-split-3857/land_polygons.shp

@@ -12,7 +12,7 @@ Attribution is required for most of our data providers. Example language is prov
 
 ***Optional full attribution including all data projects:***
 
-> Mapzen, © OpenStreetMap contributors, Who's On First, Natural Earth, and openstreetmapdata.com
+> Mapzen, © OpenStreetMap contributors, Who's On First, Natural Earth, and osmdata.openstreetmap.de
 
 ### Where to attribute
 
@@ -31,9 +31,9 @@ Attribution needs to "appear in a place that is reasonable to the medium or mean
 ```
 
 
-### openstreetmapdata.com
+### osmdata.openstreetmap.de
 
-We include OSM-derived water and earth polygons from [openstreetmapdata.com](http://openstreetmapdata.com) at mid- and high-zooms. This data is under the OSM ODbL license.
+We include OSM-derived water and earth polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) at mid- and high-zooms. This data is under the OSM ODbL license.
 
 ```
 © OpenStreetMap contributors
