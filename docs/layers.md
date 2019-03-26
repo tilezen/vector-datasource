@@ -2313,6 +2313,7 @@ This **optional** layer is meant to be updated every few minutes, due to the hig
 * `disabled_vehicle`: a vehicle is unable to move and is obstructing the road
 * `mass_transit`: a large amount of people are migrating from one location to another
 * `planned_event`: an organised event is taking place causing disruption
+* `road_closure`: the road has been closed, e.g. police presence
 * `road_hazard`: there are dangerous objects on the surface of the road
 * `weather`: weather conditions are causing disruptions
 * `other`: an incident not explainable with the labels above has occurred
