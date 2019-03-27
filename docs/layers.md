@@ -665,7 +665,6 @@ At zoom 12 and below, we consolidate some landuse kinds to reduce the amount of 
 
 The current mappings are:
 
-* `airfield` -> `aerodrome`
 * `allotments` -> `urban_area`
 * `artwork` -> `urban_area`
 * `attraction` -> `urban_area`
@@ -683,6 +682,7 @@ The current mappings are:
 * `industrial` -> `urban_area`
 * `land` -> `barren`
 * `meadow` -> `grassland`
+* `military_airfield` -> `aerodrome`
 * `mud` -> `wetland`
 * `natural_wood` -> `forest`
 * `orchard` -> `farmland`
@@ -883,7 +883,6 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `advertising_agency`
 * `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`.
 * `aeroway_gate`
-* `airfield` for military use.
 * `airport`
 * `alcohol`
 * `alpine_hut`
@@ -1106,6 +1105,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `memorial`
 * `metal_construction`
 * `midwife`
+* `military_airfield`
 * `military`
 * `mineshaft`
 * `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
