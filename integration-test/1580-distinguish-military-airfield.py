@@ -85,6 +85,13 @@ class MilitaryAirfieldTest(FixtureTest):
                 'kind': 'airfield',
             })
 
+        # check landuse too
+        self.assert_has_feature(
+            z, x, y, 'landuse', {
+                'id': 166164837,
+                'kind': 'airfield',
+            })
+
     def test_solo_way(self):
         import dsl
 
