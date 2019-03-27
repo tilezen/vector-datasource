@@ -486,6 +486,7 @@ post_process:
         source: true
         boundary: [true]
         area: true
+        intermittent: true
       snap_tolerance: 0.125
 
   # the NE water queries pull in the full set of object properties for boundary
