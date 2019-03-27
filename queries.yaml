@@ -358,7 +358,7 @@ post_process:
       # kind=desert stays as-is.
       remap:
         # aerodrome
-        military_airfield: aerodrome
+        airfield: aerodrome
 
         # barren
         dam: barren

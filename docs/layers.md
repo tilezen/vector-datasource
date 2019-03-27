@@ -665,6 +665,7 @@ At zoom 12 and below, we consolidate some landuse kinds to reduce the amount of 
 
 The current mappings are:
 
+* `airfield` -> `aerodrome`
 * `allotments` -> `urban_area`
 * `artwork` -> `urban_area`
 * `attraction` -> `urban_area`
@@ -682,7 +683,6 @@ The current mappings are:
 * `industrial` -> `urban_area`
 * `land` -> `barren`
 * `meadow` -> `grassland`
-* `military_airfield` -> `aerodrome`
 * `mud` -> `wetland`
 * `natural_wood` -> `forest`
 * `orchard` -> `farmland`
