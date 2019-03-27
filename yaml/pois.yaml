@@ -783,6 +783,19 @@ filters:
   ############################################################
   # TIER 3
   ############################################################
+  # (military) airfield
+  - filter:
+      any:
+        - { military: airfield }
+        # backfill for things tagged primarily as aeroways, but we want to show as military.
+        - all:
+            aeroway: aerodrome
+            "aerodrome:type": military
+    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
+    output:
+      <<: *output_properties
+      kind: military_airfield
+      tier: 3
   # aerodrome
   - filter:
       aeroway: [aerodrome, airport, heliport]
@@ -798,19 +811,12 @@ filters:
           - when: { "aerodrome:type": "military/public" }
             then: military_public
       tier: 3
-  # airfield, naval_base
-  - filter: { military: [airfield, naval_base] }
+  # naval_base
+  - filter: { military: naval_base }
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
     output:
       <<: *output_properties
       kind: {col: military}
-      tier: 3
-  # backfill for things tagged primarily as aeroways, but we want to show as military.
-  - filter: { aeroway: aerodrome, "aerodrome:type": military }
-    min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
-    output:
-      <<: *output_properties
-      kind: airfield
       tier: 3
   - filter:
       military: range
