@@ -6,7 +6,7 @@ class MilitaryAirfieldTest(FixtureTest):
 
     def test_combo(self):
         # tagged both military=airfield and aeroway=aerodrome, prefer
-        # military_airfield as per
+        # (military) airfield as per
         # https://github.com/tilezen/vector-datasource/issues/1580
         import dsl
 
@@ -31,7 +31,7 @@ class MilitaryAirfieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 412044660,
-                'kind': u'military_airfield',
+                'kind': u'airfield',
             })
 
     def test_solo(self):
@@ -52,7 +52,7 @@ class MilitaryAirfieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 4226596407,
-                'kind': u'military_airfield',
+                'kind': u'airfield',
             })
 
     def test_combo_poly(self):
@@ -82,7 +82,7 @@ class MilitaryAirfieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 166164837,
-                'kind': 'military_airfield',
+                'kind': 'airfield',
             })
 
     def test_solo_way(self):
@@ -104,5 +104,5 @@ class MilitaryAirfieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 164058691,
-                'kind': 'military_airfield',
+                'kind': 'airfield',
             })

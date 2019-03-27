@@ -794,7 +794,7 @@ filters:
     min_zoom: { min: [ { max: [ 8, { sum: [ { col: zoom }, 2 ] }, *tier3_min_zoom ] }, 14 ] }
     output:
       <<: *output_properties
-      kind: military_airfield
+      kind: airfield
       tier: 3
   # aerodrome
   - filter:

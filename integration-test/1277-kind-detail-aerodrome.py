@@ -67,7 +67,8 @@ class AerodromeTest(FixtureTest):
             }),
         )
 
+        # note: kind=airfield means a _military_ airfield
         self.assert_has_feature(
             z, x, y, 'pois', {
-                'kind': 'military_airfield',
+                'kind': 'airfield',
             })

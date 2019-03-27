@@ -35,7 +35,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'pois', {
                 'id': 368396366,
-                'kind': u'military_airfield',
+                'kind': u'airfield',
             })
 
     def test_airfield_way(self):
@@ -58,7 +58,6 @@ class KindsForMakiIconSupportTest(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 468561706,
                 'kind': u'airfield',
-                'kind_detail': u'military',
             })
 
     def test_chain_gate_node(self):
