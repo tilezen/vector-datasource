@@ -836,6 +836,14 @@ post_process:
         'name' in properties or
         ('sport' in properties and properties.get('kind', 'rock') not in ('rock', 'stone'))
 
+  # drop any polygon features with tz_drop_polygon
+  - fn: vectordatasource.transform.drop_features_where
+    params:
+      source_layer: landuse
+      where: >-
+        properties.get('tz_drop_polygon', False) and
+        geom_type in ('Polygon', 'MultiPolygon')
+
   # drop mz_label placement at zooms we don't apply handle_label_placement
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1406,8 +1414,11 @@ post_process:
       end_zoom: 16
       items_matching: { kind: [peak, volcano] }
       max_items: 5
+
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
+  - fn: vectordatasource.transform.drop_properties_with_prefix
+    params: {prefix: tz_}
 
   # drop small inners in buildings before we do the merge.
   - fn: vectordatasource.transform.drop_small_inners

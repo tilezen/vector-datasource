@@ -786,6 +786,11 @@ filters:
       kind: winter_sports
       tier: 4
   # port, ferry, container terminals
+  #
+  # if these are also water features, then we don't want to output a polygon
+  # for this. because we can't alter the geometry type at this stage, we handle
+  # this by setting a parameter that indicates we should drop the polygon at a
+  # later stage.
   - filter:
       landuse:
         - harbour
@@ -797,6 +802,14 @@ filters:
     output:
       <<: *output_properties
       kind: {col: landuse}
+      tz_drop_polygon:
+        case:
+          - when:
+              any:
+                - { waterway: true }
+                - { natural: [water, bay, strait, fjord, reef] }
+                - { landuse: [reservoir, basin] }
+            then: true
   # pier with mooring
   - filter:
       man_made: pier
