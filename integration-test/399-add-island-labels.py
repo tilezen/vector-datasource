@@ -11,6 +11,7 @@ class AddIslandLabels(FixtureTest):
                 u'source': u'naturalearthdata.com',
                 u'featurecla': u'Country',
                 u'scalerank': 1,
+                u'min_zoom': 0,
             }))
 
         self.assert_has_feature(
@@ -24,6 +25,7 @@ class AddIslandLabels(FixtureTest):
                 u'source': u'naturalearthdata.com',
                 u'featurecla': u'Land',
                 u'scalerank': 0,
+                u'min_zoom': 0,
             }))
 
         self.assert_has_feature(
@@ -37,11 +39,13 @@ class AddIslandLabels(FixtureTest):
                 u'source': u'naturalearthdata.com',
                 u'featurecla': u'Land',
                 u'scalerank': 0,
+                u'min_zoom': 0,
             }),
             dsl.way(2, dsl.tile_box(0, 0, 0), {
                 u'source': u'naturalearthdata.com',
                 u'featurecla': u'Land',
                 u'scalerank': 0,
+                u'min_zoom': 0,
             }),
         )
 

@@ -74,8 +74,20 @@ filters:
       kind: valley
     table: osm
 
+  # Natural Earth data should have a min_zoom column in the data, and we'll use
+  # that curated value to provide min_zoom.
   - filter:
-      meta.source: [ne, shp]
+      meta.source: ne
+    min_zoom: { col: min_zoom }
+    output:
+      <<: *output_properties
+      kind: earth
+
+  # OSMData data is just polygons with auto-generated IDs. It's not used at low
+  # zooms, but if we want consistency, we should try to work out an area-based
+  # correspondance with NE data above.
+  - filter:
+      meta.source: shp
     min_zoom: 0
     output:
       <<: *output_properties
