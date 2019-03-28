@@ -603,6 +603,19 @@ filters:
   # TIER 3
   ############################################################
   - filter:
+      any:
+        - military: airfield
+          # backfill for aerodrome:type=military, we call that "airfield"
+        - all:
+            aeroway: aerodrome
+            "aerodrome:type": military
+    min_zoom: *tier3_min_zoom
+    output:
+      <<: *output_properties
+      kind: airfield
+      kind_detail: military
+      tier: 3
+  - filter:
       aeroway: aerodrome
       not: { "aerodrome:type": military }
     min_zoom: *tier3_min_zoom
@@ -615,19 +628,6 @@ filters:
             then: { col: "aerodrome:type" }
           - when: { "aerodrome:type": "military/public" }
             then: military_public
-      tier: 3
-  - filter:
-      any:
-        - military: airfield
-          # backfill for aerodrome:type=military, we call that "airfield"
-        - all:
-            aeroway: aerodrome
-            "aerodrome:type": military
-    min_zoom: *tier3_min_zoom
-    output:
-      <<: *output_properties
-      kind: airfield
-      kind_detail: military
       tier: 3
   - filter: {military: naval_base}
     min_zoom: *tier3_min_zoom
