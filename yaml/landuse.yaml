@@ -802,7 +802,8 @@ filters:
     output:
       <<: *output_properties
       kind: {col: landuse}
-      tz_drop_polygon:
+      # mz = metazen :-)
+      mz_drop_polygon:
         case:
           - when:
               any:
