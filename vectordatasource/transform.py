@@ -2400,6 +2400,7 @@ def drop_features_where(ctx):
 
         local = properties.copy()
         local['properties'] = properties
+        local['geom_type'] = shape.geom_type
 
         if not eval(where, {}, local):
             new_features.append(feature)
