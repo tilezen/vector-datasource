@@ -1327,7 +1327,7 @@ One of `chain`, `gate`, `kissing_gate`, `lift_gate`, `stile`, `swing_gate`.
 
 #### Generator `kind_detail` values:
 
-The value of the OpenStreetMap `method` tag. Common values include `anaerobic_digestion`, `barrage`, `combustion`, `fission`, `gasification`, `photovoltaic`, `run-of-the-river`, `stream`, `thermal`, `water-pumped-storage`, `water-storage`, `wind_turbine`.
+The value of the OpenStreetMap `generator:source` tag or, if that tag is missing, an interpolation from the `generator:method` tag. Common values include `biofuel`, `biogas`, `biomass`, `coal`, `diesel`, `gas`, `geothermal`, `hydro`, `nuclear`, `oil`, `solar`, `waste`, `wind`.
 
 #### Mooring `kind_detail` values:
 

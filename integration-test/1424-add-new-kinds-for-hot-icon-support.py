@@ -544,7 +544,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 3674184625,
                 'kind': u'generator',
-                'kind_detail': u'photovoltaic',
+                'kind_detail': u'solar',
             })
 
     def test_wind_turbine_generator_node(self):
@@ -566,7 +566,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 3601278314,
                 'kind': u'generator',
-                'kind_detail': u'wind_turbine',
+                'kind_detail': u'wind',
             })
 
     def test_combustion_generator_node(self):
@@ -590,7 +590,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 3671190948,
                 'kind': u'generator',
-                'kind_detail': u'combustion',
+                'kind_detail': u'gas',
             })
 
     def test_runoftheriver_generator_node(self):
@@ -612,7 +612,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4728106977,
                 'kind': u'generator',
-                'kind_detail': u'run-of-the-river',
+                'kind_detail': u'hydro',
             })
 
     def test_waterstorage_generator_node(self):
@@ -639,7 +639,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 2363460494,
                 'kind': u'generator',
-                'kind_detail': u'water-storage',
+                'kind_detail': u'hydro',
             })
 
     def test_thermal_generator_node(self):
@@ -664,7 +664,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 5265052918,
                 'kind': u'generator',
-                'kind_detail': u'thermal',
+                'kind_detail': u'solar',
             })
 
     def test_anaerobic_digestion_generator_node(self):
@@ -686,7 +686,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 5691734305,
                 'kind': u'generator',
-                'kind_detail': u'anaerobic_digestion',
+                'kind_detail': u'biomass',
             })
 
     def test_fission_generator_node(self):
@@ -716,7 +716,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 33180844,
                 'kind': u'generator',
-                'kind_detail': u'fission',
+                'kind_detail': u'nuclear',
             })
 
     def test_gasification_generator_node(self):
@@ -745,7 +745,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 1695449375,
                 'kind': u'generator',
-                'kind_detail': u'gasification',
+                'kind_detail': u'diesel',
             })
 
     def test_dam_generator_node(self):
@@ -772,7 +772,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 5427396488,
                 'kind': u'generator',
-                'kind_detail': u'water-storage',
+                'kind_detail': u'hydro',
             })
 
     def test_waterpumpedstorage_generator_node(self):
@@ -795,7 +795,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 1567492845,
                 'kind': u'generator',
-                'kind_detail': u'water-pumped-storage',
+                'kind_detail': u'hydro',
             })
 
     def test_solar_photovoltaic_panel_generator_node(self):
@@ -818,7 +818,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4029169257,
                 'kind': u'generator',
-                'kind_detail': u'photovoltaic',
+                'kind_detail': u'solar',
             })
 
     def test_wind_generator_node(self):
@@ -845,7 +845,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 3556714052,
                 'kind': u'generator',
-                'kind_detail': u'wind_turbine',
+                'kind_detail': u'wind',
             })
 
     def test_stream_generator_node(self):
@@ -871,7 +871,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 4277423725,
                 'kind': u'generator',
-                'kind_detail': u'stream',
+                'kind_detail': u'tidal',
             })
 
     def test_barrage_generator_node(self):
@@ -899,7 +899,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 1321199509,
                 'kind': u'generator',
-                'kind_detail': u'barrage',
+                'kind_detail': u'tidal',
             })
 
     def test_solar_generator_way(self):
@@ -922,7 +922,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 542100951,
                 'kind': u'generator',
-                'kind_detail': u'photovoltaic',
+                'kind_detail': u'solar',
             })
 
     def test_photovoltaik_generator_way(self):
@@ -947,7 +947,7 @@ class KindsForHotIconSupportTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 538293962,
                 'kind': u'generator',
-                'kind_detail': u'photovoltaic',
+                'kind_detail': u'solar',
             })
 
     def test_money_transfer_node(self):

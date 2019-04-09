@@ -180,6 +180,7 @@ def node_test(args):
         node_id=args.node_id,
         node_tags=node_tags,
         expect=expect,
+        layer_name=args.layer_name,
     )
 
     output = _render_template('node_test', args)
