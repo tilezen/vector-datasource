@@ -927,27 +927,76 @@ filters:
         case:
           # whitelist common values
           - when:
-              'generator:method':
-                - anaerobic_digestion
-                - barrage
-                - combustion
-                - fission
-                - gasification
+              'generator:source':
+                - wind
+                - solar
+                - hydro
+                - oil
+                - gas
+                - coal
+                - biomass
+                - biogas
+                - diesel
+                - nuclear
+                - biofuel
+                - geothermal
+                - waste
+            then: {col: 'generator:source'}
+          - when:
+              'generator:source':
+                # remap photovoltaic -> solar, unless i'm missing something,
+                # it's just a more specific way of saying the same thing.
                 - photovoltaic
-                - run-of-the-river
-                - stream
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Dthermal
                 - thermal
+            then: solar
+          # backfill with previously supported values
+          - when:
+              'generator:method':
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Danaerobic_digestion
+                - anaerobic_digestion
+            then: biomass
+          - when:
+              'generator:method':
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Dbarrage
+                - barrage
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Dstream
+                - stream
+            then: tidal
+          # combustion - can't map; too generic!
+          - when:
+              'generator:method':
+                - fission
+            then: nuclear
+          - when:
+              'generator:method':
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Dgasification
+                - gasification
+            then: biomass # or waste, but biomass is the more common tag
+          - when:
+              'generator:method':
+                - photovoltaic
+            then: solar
+          - when:
+              'generator:method':
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Drun-of-the-river
+                - run-of-the-river
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Dwater-pumped-storage
                 - water-pumped-storage
+                # https://wiki.openstreetmap.org/wiki/Tag%3Agenerator%3Amethod%3Dwater-storage
                 - water-storage
+            then: hydro
+          - when:
+              'generator:method':
                 - wind_turbine
-            then: {col: 'generator:method'}
+            then: wind
           # fix up some common misspellings and alternative tag uses.
           - when: {'generator:method': dam}
-            then: water-storage
+            then: hydro
           - when: {'generator:method': [solar, solar_photovoltaic_panel, photovoltaik, solar_panel]}
-            then: photovoltaic
+            then: solar
           - when: {'generator:method': wind}
-            then: wind_turbine
+            then: wind
       tier: 4
   # golf_course
   - filter: {leisure: golf_course}
