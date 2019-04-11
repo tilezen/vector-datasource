@@ -22,6 +22,23 @@ KindKey = namedtuple('KindKey', 'layer kind kind_detail')
 KindInfo = namedtuple('KindInfo', 'min_zoom sort_rank')
 
 
+def _valid_values(filter_defn, col):
+    """
+    Get the valid values from the filter_defn for column named col.
+
+    Returns a list of the valid values.
+    """
+
+    value = filter_defn[col]
+    if isinstance(value, list):
+        return filter_defn[col]
+    elif isinstance(value, (str, unicode)):
+        return [value]
+    else:
+        raise ValueError("Don't know what to do with value of type "
+                         "%s in %r" % (type(value), value))
+
+
 # parses the values for a column out of a filter definition. this is used when
 # the output defines "kind: {col: some_column}", and we want to find out what
 # values "some_column" could have.
@@ -49,20 +66,20 @@ def parse_filter_for_col(col, item):
                              "'tags->' prefix: %r" % (col,))
 
     if col in filter_defn:
-        value = filter_defn[col]
-        if isinstance(value, list):
-            return filter_defn[col]
-        elif isinstance(value, (str, unicode)):
-            return [value]
-        else:
-            raise ValueError("Don't know what to do with value of type "
-                             "%s in %r" % (type(value), value))
-    else:
-        # complex case if we're not filtering on the column that we're using
-        # as the output kind... hopefully it doesn't happen very much?
-        raise ValueError("Don't know what to do with column %r where it "
-                         "doesn't appear in the filter %r" %
-                         (col, filter_defn))
+        return _valid_values(filter_defn, col)
+
+    # if the top key of the filter is "all", then we can use any of the
+    # sub-filters.
+    if filter_defn.keys() == ['all']:
+        for subfilter in filter_defn['all']:
+            if col in subfilter:
+                return _valid_values(subfilter, col)
+
+    # complex case if we're not filtering on the column that we're using
+    # as the output kind... hopefully it doesn't happen very much?
+    raise ValueError("Don't know what to do with column %r where it "
+                     "doesn't appear in the filter %r" %
+                     (col, filter_defn))
 
 
 # parse a "case" statement to get all the possible values. we use this
