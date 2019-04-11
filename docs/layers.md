@@ -2377,12 +2377,12 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 #### Water `kind` values:
 
 * `basin` - polygon
-* `bay` - point, intended for label placement only
+* `bay` - point, intended for label placement only. With `tile_kind_rank`, see below.
 * `canal` - line
 * `ditch` - line
 * `dock` - polygon
 * `drain` - line
-* `fjord` - point, intended for label placement only
+* `fjord` - point, intended for label placement only. With `tile_kind_rank`, see below.
 * `fountain` - polygon
 * `lake` - polygon
 * `ocean` - polygon, point is intended for label placement only
@@ -2392,11 +2392,13 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 * `riverbank` - polygon
 * `sea` - point, intended for label placement only
 * `stream` - line
-* `strait` - point, intended for label placement only
+* `strait` - point, intended for label placement only. With `tile_kind_rank`, see below.
 * `swimming_pool` - polygon
 * `water` - polygon
 
 Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
+
+The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_rank` property that starts from 1 and counts up as the feature gets smaller. Note that the ranking is done on a "metatile", which means that each tile (of size 256px, 512px or other) won't necessarily contain the full range from 1 to N of `kind_tile_rank`s.
 
 **Gotchas:**
 
