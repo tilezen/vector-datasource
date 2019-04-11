@@ -973,6 +973,14 @@ post_process:
         kind: [peak, volcano]
       rank_key: kind_tile_rank
       start_zoom: 9
+  - fn: vectordatasource.transform.rank_features
+    params:
+      source_layer: water
+      items_matching:
+        kind: [bay, strait, fjord]
+        label_placement: True
+      rank_key: kind_tile_rank
+      start_zoom: 8
   - fn: vectordatasource.transform.remove_duplicate_features
     params:
       source_layers: [pois, landuse, buildings]
@@ -1414,6 +1422,15 @@ post_process:
       end_zoom: 16
       items_matching: { kind: [peak, volcano] }
       max_items: 5
+  - fn: vectordatasource.transform.keep_n_features
+    params:
+      source_layer: water
+      start_zoom: 8
+      end_zoom: 12
+      items_matching:
+        kind: [bay, strait, fjord]
+        label_placement: True
+      max_items: 10
 
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
