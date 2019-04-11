@@ -1370,7 +1370,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `name`: From OpenStreetMap, but transformed to abbreviated names as detailed above.
 * `id`: From OpenStreetMap or Natural Earth. Dropped at low- and mid-zooms when features are merged. _See planned bug fix [#1002](https://github.com/tilezen/vector-datasource/issues/1002)._
 * `source`: `openstreetmap` or `naturalearthdata.com`
-* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way`.
+* `kind`: one of High Road's values for `highway`, `major_road`, `minor_road`, `rail`, `path`, `ferry`, `piste`, `aerialway`, `aeroway`, `racetrack`, `portage_way`, `construction`.
 * `kind_detail`: See kind detail list below, sourced from the OpenStreetMap values.
 * `landuse_kind`: See description above, values match values in the `landuse` layer.
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers. At zooms >= 15, the `sort_rank` is adjusted to realistically model bridge, tunnel, and layer ordering.
@@ -1447,6 +1447,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 * `aerialway`
 * `aeroway`
+* `construction` - Indicates that the road is under construction and may not be usable by some or all types of traffic.
 * `ferry`
 * `highway`
 * `major_road`

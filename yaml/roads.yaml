@@ -554,6 +554,55 @@ filters:
       kind_detail: raceway
   #############################################################
   #
+  # OSM construction
+  #
+  #############################################################
+  - filter:
+      all:
+        - highway: construction
+        - construction: [motorway, motorway_link, trunk, primary, secondary, tertiary, trunk_link, unclassified, residential, road]
+    min_zoom: 12
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      kind: construction
+      kind_detail: {col: construction}
+  - filter:
+      all:
+        - highway: construction
+        - construction: [primary_link, secondary_link, living_street, service, pedestrian, track, cycleway, bridleway]
+    min_zoom: 13
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      kind: construction
+      kind_detail: {col: construction}
+  - filter:
+      all:
+        - highway: construction
+        - construction: [tertiary_link, footway, steps]
+    min_zoom: 14
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      kind: construction
+      kind_detail: {col: construction}
+  - filter:
+      all:
+        - highway: construction
+        - construction: corridor
+    min_zoom: 16
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      kind: construction
+      kind_detail: {col: construction}
+  #############################################################
+  #
   # OSM aeroway
   #
   #############################################################
