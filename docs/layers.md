@@ -1470,7 +1470,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Rail** is added starting at zoom 11, with minor railroad `spur` added at zoom 12+ (based on "service" values), and further detail for `yard` and `crossover` and 13 and 14 respectively with all railroads shown by zoom 15. Features for rail tracks are included in this layer, whereas geometries and further information about rail lines or routes is available in the `transit` layer.
 
-Railway `kind_detail` values in this layer include: `rail`, `tram`, `light_rail`, `narrow_gauge`, `monorail`, `subway`, and `funicular`.
+Railway `kind_detail` values in this layer include: `abandoned`, `disused`, `funicular`, `light_rail`, `miniature`, `monorail`, `narrow_gauge`, `preserved`, `rail`, `razed`, `subway`, `tram`. Note that the `kind_detail` values `abandoned`, `disused`, `razed` may indicate features that no longer exist.
 
 Railway `service` values are:
 
