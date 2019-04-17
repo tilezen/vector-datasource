@@ -28,7 +28,7 @@ class OSMTest(FixtureTest):
                 'id': 26819236,
                 'kind': 'locality',
                 'kind_detail': 'city',
-                'wikidata': 'Q62',
+                'wikidata_id': 'Q62',
             })
 
     def test_poi(self):
@@ -50,7 +50,7 @@ class OSMTest(FixtureTest):
             z, x, y, 'pois', {
                 'id': 1901905716,
                 'kind': u'memorial',
-                'wikidata': u'Q20011487',
+                'wikidata_id': u'Q20011487',
             })
 
     def test_water(self):
@@ -72,7 +72,7 @@ class OSMTest(FixtureTest):
             z, x, y, 'water', {
                 'id': 305640005,
                 'kind': u'ocean',
-                'wikidata': u'Q98',
+                'wikidata_id': u'Q98',
             })
 
 
@@ -98,5 +98,5 @@ class WOFTest(FixtureTest):
             z, x, y, 'places', {
                 'id': 85865903,
                 'kind': 'neighbourhood',
-                'wikidata': 'Q7464',
+                'wikidata_id': 'Q7464',
             })

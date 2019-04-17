@@ -11,7 +11,7 @@ globals:
     label_placement: {col: label_placement}
     boundary: {col: boundary}
     tunnel: {col: tunnel}
-    wikidata: {col: wikidata}
+    wikidata_id: {col: wikidata}
   - &water_standard_properties_osm
       <<: *output_properties
       intermittent:
