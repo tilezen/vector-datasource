@@ -743,6 +743,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
 * `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
+* `wikidata`: when present, the [Wikidata](https://www.wikidata.org) ID corresponding to this feature.
 
 #### Place `kind` values:
 
@@ -827,6 +828,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `exit_to`: only for highway exits
 * `ref`: generally only for `aeroway_gate` and `station_entrance` features
 * `religion`: TODO
+* `wikidata`: when present, the [Wikidata](https://www.wikidata.org) ID corresponding to this feature.
 * `zoo`: TODO
 
 #### POI properties (only on `kind:station`):
@@ -2374,6 +2376,7 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 * `area`: in square meters (spherical Mercator, no real-world), `polygon` features only
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
 * `is_tunnel`: for `line` features only (`true` values only)
+* `wikidata`: when present, the [Wikidata](https://www.wikidata.org) ID corresponding to this feature.
 
 #### Water `kind` values:
 
