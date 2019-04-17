@@ -1,7 +1,7 @@
 {% extends 'ne.jinja2' %}
 {% block query %}
 -- polygons
-{{ ne_water_query(False, True, True, False, True, 'ne_10m_playas') }}
+{{ ne_water_query(False, True, True, False, True, 'ne_10m_playas', wikidata=True) }}
 UNION ALL
 -- boundaries
 {{ ne_water_query(True, True, True, True, True, 'ne_10m_playas') }}
