@@ -926,6 +926,29 @@ class MoreOSMFeaturesTest(FixtureTest):
                 'kind': u'plaque',
             })
 
+    def test_memorial_node(self):
+        # if a memorial _isn't_ a plaque, then it should stay as a memorial!
+        # this is the counter-example to test_plaque_node above, as previously
+        # there was a bug where the test for plaque was too general and
+        # accidentally re-classified all memorials as plaques.
+        import dsl
+
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'historic': u'memorial',
+                'name': u'A. Name Here',
+                'source': u'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 1,
+                'kind': 'memorial',
+            })
+
     def test_reef_way(self):
         import dsl
 

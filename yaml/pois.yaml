@@ -2246,7 +2246,9 @@ filters:
   # memorial plaques more specific than plain memorials
   - filter:
       any:
-        - {historic: memorial, memorial: plaque}
+        - all:
+            - historic: memorial
+            - memorial: plaque
         - historic: memorial_plaque
     min_zoom: 16
     output:
