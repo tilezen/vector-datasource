@@ -19,11 +19,10 @@ class RailwayTest(FixtureTest):
             }),
         )
 
-        self.assert_has_feature(
+        # should _not_ include razed rails
+        self.assert_no_matching_feature(
             z, x, y, 'roads', {
                 'id': 521306179,
-                'kind': u'rail',
-                'kind_detail': u'razed',
             })
 
     def test_abandoned_rail(self):
@@ -40,11 +39,10 @@ class RailwayTest(FixtureTest):
             }),
         )
 
-        self.assert_has_feature(
+        # should _not_ include abandoned rails
+        self.assert_no_matching_feature(
             z, x, y, 'roads', {
                 'id': 521306174,
-                'kind': u'rail',
-                'kind_detail': u'abandoned',
             })
 
     def test_disused_rail(self):
@@ -124,9 +122,6 @@ class RailwayTest(FixtureTest):
 
     def test_narrow_gauge(self):
         self._check('narrow_gauge', 'narrow_gauge')
-
-    def test_abandoned(self):
-        self._check('abandoned', 'abandoned')
 
     def test_disused(self):
         self._check('disused', 'disused')

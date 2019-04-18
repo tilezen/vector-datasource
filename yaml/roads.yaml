@@ -694,7 +694,7 @@ filters:
       kind: rail
       kind_detail: rail
   - filter:
-      railway: [abandoned, disused, funicular, light_rail, miniature, monorail, narrow_gauge, preserved, razed, subway, tram]
+      railway: [disused, funicular, light_rail, miniature, monorail, narrow_gauge, preserved, subway, tram]
     min_zoom: 15
     table: osm
     output:
