@@ -130,6 +130,7 @@ if __name__ == '__main__':
         fh.write("COPY public.wof_neighbourhood ("
                  "wof_id, placetype, name, hash, n_photos, area, min_zoom, "
                  "max_zoom, is_landuse_aoi, label_position, geometry, "
-                 "inception, cessation, is_visible, l10n_name) FROM stdin;\n")
+                 "inception, cessation, is_visible, l10n_name, wikidata) "
+                 "FROM stdin;\n")
         write_neighbourhood_data_to_file(fh, reader.wof_items)
         fh.write("\\.\n")

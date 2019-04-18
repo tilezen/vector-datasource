@@ -111,7 +111,7 @@ WHERE
 
 {% endmacro %}
 
-{% macro ne_water_query(boundary_geometry, label_geometry, name, boundary, has_area, table) %}
+{% macro ne_water_query(boundary_geometry, label_geometry, name, boundary, has_area, table, wikidata=False) %}
 
 SELECT
 
@@ -148,6 +148,9 @@ SELECT
 {% endif %}
 {% if has_area %}
     'area', way_area,
+{% endif %}
+{% if wikidata %}
+    'wikidata', wikidataid,
 {% endif %}
     'min_zoom', mz_water_min_zoom,
     'featurecla', featurecla

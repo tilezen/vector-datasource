@@ -2,7 +2,7 @@
 {% block query %}
 {{ ne_water_query(False, True, False, False, True, 'ne_50m_ocean') }}
 UNION ALL
-{{ ne_water_query(False, True, True, False, True, 'ne_50m_lakes') }}
+{{ ne_water_query(False, True, True, False, True, 'ne_50m_lakes', wikidata=True) }}
 UNION ALL
 {{ ne_water_query(False, False, False, True, False, 'ne_50m_coastline') }}
 UNION ALL

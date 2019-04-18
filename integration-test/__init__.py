@@ -741,6 +741,7 @@ class WOFSource(object):
                     'min_zoom': n.min_zoom,
                     'max_zoom': n.max_zoom,
                     'placetype': n.placetype,
+                    'wikidata': n.wikidata,
                 }
                 properties.update(n.l10n_names)
 

@@ -33,7 +33,8 @@ CREATE TABLE wof_neighbourhood (
   inception DATE NOT NULL DEFAULT '0001-01-01',
   cessation DATE NOT NULL DEFAULT '9999-12-31',
   is_visible BOOLEAN NOT NULL DEFAULT true,
-  l10n_name HSTORE
+  l10n_name HSTORE,
+  wikidata TEXT
 );
 
 CREATE INDEX wof_neighbourhood_label_position_index ON wof_neighbourhood USING GIST(label_position);

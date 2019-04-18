@@ -11,7 +11,8 @@ SELECT
       'mz_n_photos', n_photos,
       'area', area,
       'is_landuse_aoi', is_landuse_aoi,
-      'placetype', wof_np.placetype_string
+      'placetype', wof_np.placetype_string,
+      'wikidata', wikidata
     ) AS __properties__,
 
     jsonb_build_object(

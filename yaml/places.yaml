@@ -23,6 +23,7 @@ global:
       call:
         func: util.true_or_none
         args: [ { col: is_landuse_aoi } ]
+    wikidata_id: {col: wikidata}
 
   - &ne_places_min_zoom
     lookup:
