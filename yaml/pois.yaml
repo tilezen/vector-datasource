@@ -2439,6 +2439,12 @@ filters:
     output:
       <<: *output_properties
       kind: {col: tourism}
+  - filter: # prefer elevator over general subway_entrance
+      highway: elevator
+    min_zoom: 17
+    output:
+      <<: *output_properties
+      kind: elevator
   - filter: {railway: subway_entrance}
     min_zoom: 17
     output:
@@ -2772,12 +2778,6 @@ filters:
     output:
       <<: *output_properties
       kind: sanitary_dump_station
-
-  - filter: {highway: elevator}
-    min_zoom: 17
-    output:
-      <<: *output_properties
-      kind: elevator
 
   - filter: { historic: wayside_cross }
     min_zoom: 16
