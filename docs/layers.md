@@ -883,7 +883,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `administrative`
 * `adult_gaming_centre`
 * `advertising_agency`
-* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`.
+* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
 * `aeroway_gate`
 * `airfield` for military use.
 * `airport`
