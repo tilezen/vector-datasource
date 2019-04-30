@@ -11,7 +11,7 @@ upload: shapefiles
 
 shapefiles: shapefiles.tar.gz
 
-shapefiles.tar.gz: {{ tgt_shapefile_zips }} wof_snapshot.sql
+shapefiles.tar.gz: {{ tgt_shapefile_zips }} wof_snapshot.sql wikidata_snapshot.sql
 	tar czf shapefiles.tar.gz $^
 
 download: {{ src_shapefile_zips }}
@@ -53,10 +53,19 @@ download: {{ src_shapefile_zips }}
 
 {% endfor %}
 
+{% for query in queries %}
+{{ query.output_file }}:
+	curl -o $@ '{{ query.url }}'
+
+{% endfor %}
+
+wikidata_snapshot.sql: {{ query_output_files }}
+	python wikidata_merge.py --output $@ $^
+
 wof_snapshot.sql:
 	python wof_snapshot.py
 
 clean:
-	rm -rf shapefiles.tar.gz {{ tgt_shapefile_zips }} {{ tgt_shapefile_wildcards }} {{ src_shapefile_zips }} {{ src_shapefile_wildcards }}
+	rm -rf shapefiles.tar.gz {{ tgt_shapefile_zips }} {{ tgt_shapefile_wildcards }} {{ src_shapefile_zips }} {{ src_shapefile_wildcards }} wof_snapshot.sql {{ query_output_files }} wikidata_snapshot.sql
 
 .PHONY: all download upload shapefiles

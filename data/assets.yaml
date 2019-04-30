@@ -161,3 +161,20 @@ shapefiles:
   - name: ne_10m_admin_1_states_provinces
     url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip
     prj: 4326
+
+
+wikidata-queries:
+  - name: aerodrome_passenger_count
+    # NOTE: this selects the _largest_ number of passengers per year, rather than the _most recent_. however, i wasn't able
+    # to figure out how to make a working query for the most recent. various answers on StackOverflow to do with population
+    # don't seem to work for this data.
+    query: >-
+      SELECT ?item (MAX(?number) as ?passenger_count)
+      WHERE
+      {
+        ?item wdt:P31 wd:Q1248784 .
+        ?item p:P3872 ?statement .
+        ?statement ps:P3872 ?number .
+      }
+      group by ?item
+      order by ?item

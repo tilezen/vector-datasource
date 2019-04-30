@@ -22,6 +22,8 @@ data/*.qpj
 data/wof_neighbourhoods.pgdump
 data/*.README.html
 data/*.VERSION.txt
+data/*.json
+data/wikidata_snapshot.sql
 
 # python compiled bytecode and development files
 *.pyc
