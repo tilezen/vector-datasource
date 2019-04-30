@@ -1985,7 +1985,7 @@ filters:
       <<: *output_properties
       <<: *transit_properties
       kind: platform
-  - filter: {highway: platform}
+  - filter: {highway: [platform, bus_stop]}
     min_zoom: 18
     output:
       <<: *output_properties
@@ -2232,11 +2232,11 @@ filters:
       <<: *output_properties
       kind: drinking_water
   - filter:
-      highway: [bus_stop, street_lamp]
+      highway: street_lamp
     min_zoom: 18
     output:
       <<: *output_properties
-      kind: {col: highway}
+      kind: street_lamp
   - filter:
       highway: traffic_signals
     min_zoom: 18
