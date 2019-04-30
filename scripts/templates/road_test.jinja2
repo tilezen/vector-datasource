@@ -11,13 +11,13 @@
             # https://www.openstreetmap.org/way/{{way_id}}
             dsl.way({{way_id}}, dsl.tile_diagonal(z, x, y), {
         {%- for k, v in way_tags|dictsort %}
-                '{{k}}': u'{{v}}',
+                {{k|repr}}: {{v|repr}},
         {%- endfor %}
             }),
         {%- for rel in relations %}
             dsl.relation({{loop.index}}, {
         {%- for k, v in rel|dictsort %}
-                '{{k}}': u'{{v}}',
+                {{k|repr}}: {{v|repr}},
         {%- endfor %}
             }, ways=[{{way_id}}]),
         {%- endfor %}
