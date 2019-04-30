@@ -1,6 +1,7 @@
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 import yaml
+import urllib
 
 with open('assets.yaml') as fh:
     asset_cfg = yaml.load(fh)
@@ -24,6 +25,7 @@ tgt_shapefile_zips = []
 tgt_shapefile_shps = []
 tgt_shapefile_wildcards = []
 cfg_shapefiles = asset_cfg['shapefiles']
+cfg_wikidata_queries = asset_cfg['wikidata-queries']
 
 # track these separately, as the same URL/zipfile can contain several sets
 # of shapefiles.
@@ -96,6 +98,14 @@ for cfg_shapefile in cfg_shapefiles:
 
     shapefiles.append(shapefile)
 
+WIKIDATA_BASE_QUERY = 'https://query.wikidata.org/sparql'
+queries = []
+for cfg_query in cfg_wikidata_queries:
+    url = WIKIDATA_BASE_QUERY + '?' + urllib.urlencode(
+        dict(query=cfg_query['query'], format='json'))
+    fname = cfg_query['name'] + '.json'
+    queries.append(dict(url=url, output_file=fname))
+
 # turn the map into a list of dicts, makes it easier to handle in jinja2
 downloads = []
 for tgt, url in urls_to_download.iteritems():
@@ -106,6 +116,7 @@ tgt_shapefile_zips_str = ' '.join(tgt_shapefile_zips)
 tgt_shapefile_shps_str = ' '.join(tgt_shapefile_shps)
 tgt_shapefile_wildcards_str = ' '.join(tgt_shapefile_wildcards)
 src_shapefile_wildcards_str = ' '.join(src_shapefile_wildcards)
+query_output_files = ' '.join(q['output_file'] for q in queries)
 prepare_data_makefile = prepare_data_template.render(
     src_shapefile_zips=src_shapefile_zips_str,
     shapefiles=shapefiles,
@@ -118,6 +129,8 @@ prepare_data_makefile = prepare_data_template.render(
     bucket=bucket,
     datestamp=datestamp,
     downloads=downloads,
+    queries=queries,
+    query_output_files=query_output_files,
 )
 with open('Makefile-prepare-data', 'w') as fh:
     fh.write(prepare_data_makefile)
