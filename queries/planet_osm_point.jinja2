@@ -4,7 +4,7 @@ SELECT
   {% filter geometry %}way{% endfilter %} AS __geometry__,
 
   -- common properties across all layers
-  to_jsonb(tags) || jsonb_build_object(
+  to_jsonb(tags) || extra_wikidata_properties(tags->'wikidata') || jsonb_build_object(
     'source', 'openstreetmap.org'
   ) AS __properties__,
 

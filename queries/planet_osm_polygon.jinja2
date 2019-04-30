@@ -36,7 +36,7 @@ SELECT
   END AS __label__,
 
   -- common properties across all layers
-  to_jsonb(tags) || jsonb_build_object(
+  to_jsonb(tags) || extra_wikidata_properties(tags->'wikidata') || jsonb_build_object(
     'source', 'openstreetmap.org',
     'area', way_area
   ) AS __properties__,
