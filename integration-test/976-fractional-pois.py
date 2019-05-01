@@ -30,9 +30,10 @@ class FractionalPois(FixtureTest):
 
         self.assert_has_feature(
             9, 150, 192, 'roads',
-            {'min_zoom': 8, 'sort_rank': 381,
+            {'min_zoom': 8, 'sort_rank': 380,
              'source': 'openstreetmap.org',
              'kind': 'major_road',
+             'kind_detail': 'primary',
              'network': 'US:NJ:Hudson'})
 
     def test_train_route(self):
