@@ -230,7 +230,7 @@ filters:
     table: ne
     output:
       <<: *ne_properties
-      kind: highway
+      kind: major_road
       kind_detail: trunk
   - filter:
       scalerank: true
