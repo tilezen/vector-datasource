@@ -424,7 +424,7 @@ class RoadsTest(unittest.TestCase):
         props = {
             'featurecla': 'Road',
             'type': 'Road',
-            'scalerank': 2,
+            'min_zoom': 2,
         }
         meta = make_test_metadata()
         out_props = self.roads.fn(None, props, None, meta)
