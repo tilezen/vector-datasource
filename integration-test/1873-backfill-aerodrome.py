@@ -140,3 +140,39 @@ class AerodromeTest(FixtureTest):
                 'kind': 'aerodrome',
                 'kind_detail': 'international',
             })
+
+    def test_aci(self):
+        # ACI is a regional airport, carrying around 100,000 passengers a year.
+        # however, it has no tags on it to indicate it's more important than a
+        # flying club airfield. so we use the passenger count to backfill that.
+        import dsl
+
+        z, x, y = (15, 16182, 11154)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/384693131
+            dsl.way(384693131, dsl.box_area(z, x, y, 601403), {
+                'aeroway': 'aerodrome',
+                'alt_name': 'The Blaye',
+                'ele': '88',
+                'iata': 'ACI',
+                'icao': 'EGJA',
+                'is_in': 'Alderney,Channel Islands,UK',
+                'name': 'Alderney Airport',
+                'operator': 'States of Guernsey',
+                'ref': 'ACI',
+                'source': 'openstreetmap.org',
+                'start_date': '1935',
+                'type': 'civil',
+                'wikidata': 'Q2559952',
+                'wikipedia': 'en:Alderney Airport',
+                'passenger_count': '105458',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {
+                'id': 384693131,
+                'kind': 'aerodrome',
+                'kind_detail': 'regional',
+            })
