@@ -27,19 +27,19 @@ class NormalizeNeRoads(FixtureTest):
         # major highway
         self.assert_has_feature(
             7, 108, 61, 'roads',
-            {'id': int, 'kind': 'highway', 'kind_detail': 'trunk'})
+            {'id': int, 'kind': 'major_road', 'kind_detail': 'trunk'})
 
     def test_beltway(self):
         # beltway
         self.assert_has_feature(
             7, 30, 48, 'roads',
-            {'id': int, 'kind': 'highway', 'kind_detail': 'trunk'})
+            {'id': int, 'kind': 'major_road', 'kind_detail': 'trunk'})
 
     def test_bypass(self):
         # bypass
         self.assert_has_feature(
             7, 34, 50, 'roads',
-            {'id': int, 'kind': 'highway', 'kind_detail': 'trunk'})
+            {'id': int, 'kind': 'major_road', 'kind_detail': 'trunk'})
 
     def test_secondary_highway(self):
         # secondary highway
