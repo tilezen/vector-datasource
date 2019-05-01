@@ -430,7 +430,7 @@ class RoadsTest(unittest.TestCase):
         out_props = self.roads.fn(None, props, None, meta)
         self.assertEquals('major_road', out_props.get('kind'))
         self.assertEquals('secondary', out_props.get('kind_detail'))
-        self.assertEquals(5, out_props.get('min_zoom'))
+        self.assertEquals(3, out_props.get('min_zoom'))
 
 
 class TransitTest(unittest.TestCase):
