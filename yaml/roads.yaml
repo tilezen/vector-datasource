@@ -194,7 +194,7 @@ global:
       toll:
         case:
           - when:
-              { col: toll }: 1
+              toll: 1
             then: true
 
 # name isn't really synthetic, but we use it from both the NE and OSM
