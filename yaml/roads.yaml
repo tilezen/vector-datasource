@@ -270,8 +270,8 @@ filters:
   #############################################################
   - filter:
       highway: motorway
-    # min_zoom 8 ≤ any mz_calculate_path_major_route(), so skip
-    min_zoom: 8
+    # min_zoom 5 ≤ any mz_calculate_path_major_route(), so skip
+    min_zoom: 5
     table: osm
     output:
       <<: *osm_highway_properties
@@ -279,7 +279,17 @@ filters:
       kind: highway
       kind_detail: motorway
   - filter:
-      highway: [trunk, primary]
+      highway: trunk
+    # min_zoom 6 ≤ any mz_calculate_path_major_route(), so skip
+    min_zoom: 6
+    table: osm
+    output:
+      <<: *osm_highway_properties
+      <<: *osm_network
+      kind: major_road
+      kind_detail: {col: highway}
+  - filter:
+      highway: primary
     # min_zoom 8 ≤ any mz_calculate_path_major_route(), so skip
     min_zoom: 8
     table: osm
