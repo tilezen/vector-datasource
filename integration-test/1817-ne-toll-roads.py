@@ -10,7 +10,7 @@ class NEroadtoll(FixtureTest):
        z, x, y = (5, 5, 12)
 
        self.generate_fixtures(
-          # Natural Earth sample, 101 in California
+          # Natural Earth sample, fake 101 toll road in California
           dsl.way(1, dsl.tile_diagonal(z, x, y), {
               'scalerank': 4.0,
               'featurecla': 'Road',
