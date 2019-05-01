@@ -50,7 +50,7 @@ class OSMMinZoomTests(FixtureTest):
             # https://www.openstreetmap.org/way/16108247
             dsl.way(3, dsl.tile_diagonal(z, x, y), {
                 'source': 'openstreetmap.org',
-                'highway': 'trunk',
+                'highway': 'primary',
             }),
         )
 
