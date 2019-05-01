@@ -11,7 +11,7 @@ class OSMMinZoomTests(FixtureTest):
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/16108247
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
-                'source': 'openstreetmap.org', 
+                'source': 'openstreetmap.org',
                 'highway': 'motorway',
             }),
         )
@@ -19,7 +19,7 @@ class OSMMinZoomTests(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 1,
-                'min_zoom': 5, 
+                'min_zoom': 5,
             })
 
     def test_trunk_min_zoom(self):
@@ -30,7 +30,7 @@ class OSMMinZoomTests(FixtureTest):
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/16108247
             dsl.way(2, dsl.tile_diagonal(z, x, y), {
-                'source': 'openstreetmap.org', 
+                'source': 'openstreetmap.org',
                 'highway': 'trunk',
             }),
         )
@@ -38,7 +38,7 @@ class OSMMinZoomTests(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 2,
-                'min_zoom': 6, 
+                'min_zoom': 6,
             })
 
     def test_primary_min_zoom(self):
@@ -49,7 +49,7 @@ class OSMMinZoomTests(FixtureTest):
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/16108247
             dsl.way(3, dsl.tile_diagonal(z, x, y), {
-                'source': 'openstreetmap.org', 
+                'source': 'openstreetmap.org',
                 'highway': 'trunk',
             }),
         )
@@ -57,6 +57,5 @@ class OSMMinZoomTests(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 3,
-                'min_zoom': 8, 
+                'min_zoom': 8,
             })
-
