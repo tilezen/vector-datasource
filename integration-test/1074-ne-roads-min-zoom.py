@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-from shapely.wkt import loads as wkt_loads
 from . import FixtureTest
 
 
