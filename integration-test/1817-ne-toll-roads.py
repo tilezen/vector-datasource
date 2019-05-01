@@ -30,6 +30,5 @@ class NEroadtoll(FixtureTest):
             z, x, y, 'roads', {
                 'id': 1,
                 'kind': u'highway',
-                'min_zoom': 5.1,
                 'toll': True,
             })
