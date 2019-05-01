@@ -83,7 +83,7 @@ class FractionalPoisNe(FixtureTest):
             fixtures.append(
                 'file://integration-test/fixtures/' +
                 table +
-                '/976-fractional-pois2.shp')
+                '/976-fractional-pois.shp')
 
         self.load_fixtures(fixtures)
 
