@@ -103,6 +103,8 @@ PERFORM add_column_if_not_exists('planet_osm_polygon', 'mz_building_min_zoom', '
 PERFORM add_column_if_not_exists('ne_50m_urban_areas', 'mz_landuse_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_10m_urban_areas', 'mz_landuse_min_zoom', 'REAL');
 
+PERFORM add_column_if_not_exists('ne_10m_roads', 'mz_road_min_zoom', 'REAL');
+
 PERFORM add_column_if_not_exists('planet_osm_polygon', 'mz_label_placement', 'geometry(Geometry, 3857)');
 PERFORM add_column_if_not_exists('planet_osm_line', 'mz_label_placement', 'geometry(Geometry, 3857)');
 
