@@ -95,7 +95,7 @@ class CollisionRankTest(FixtureTest):
         self._check_rank(
             {'shop': 'chemist'},
             layer='pois', kind='chemist',
-            rank=1256)
+            rank=1257)
 
     def test_pois_cafe(self):
         self._check_rank(
