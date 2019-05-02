@@ -190,6 +190,12 @@ global:
               level: 'E'
             then: ['road', 'e-road', { col: name }]
         columns: [ sov_a3, continent, label, level ]
+      # tolls
+      toll:
+        case:
+          - when:
+              toll: 1
+            then: true
 
 # name isn't really synthetic, but we use it from both the NE and OSM
 # tables, so to avoid including it twice we fake it as synthetic.
