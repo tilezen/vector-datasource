@@ -8956,3 +8956,30 @@ def update_min_zoom(ctx):
 
     layer['features'] = new_features
     return layer
+
+
+def major_airport_detector(shape, props, fid, zoom):
+    if props.get('kind') == 'aerodrome':
+        passengers = props.get('passenger_count', 0)
+        kind_detail = props.get('kind_detail')
+
+        # if we didn't detect that the airport is international (probably
+        # missing tagging to indicate that), but it carries over a million
+        # passengers a year, then it's probably an airport in the same class
+        # as an international one.
+        #
+        # for example, TPE (Taipei) airport hasn't got any international
+        # tagging, but carries over 45 million passengers a year. however,
+        # CGH (Sao Paulo Congonhas) carries 21 million, but is actually a
+        # domestic airport -- however it's so large we'd probably want to
+        # display it at the same scale as an international airport.
+        if kind_detail != 'international' and passengers > 1000000:
+            props['kind_detail'] = 'international'
+
+        # likewise, if we didn't detect a kind detail, but the number of
+        # passengers suggests it's more than just a flying club airfield,
+        # then set a regional kind_detail.
+        elif kind_detail is None and passengers > 10000:
+            props['kind_detail'] = 'regional'
+
+    return shape, props, fid

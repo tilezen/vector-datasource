@@ -1094,3 +1094,20 @@ BEGIN
   RETURN val;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- get extra wikidata properties matched to an OSM feature on the wikidata ID
+CREATE OR REPLACE FUNCTION extra_wikidata_properties(wikidata_id text)
+RETURNS JSONB AS $$
+DECLARE
+  tags HSTORE DEFAULT NULL;
+BEGIN
+  IF wikidata_id IS NOT NULL THEN
+    SELECT w.tags INTO tags FROM wikidata w WHERE w.id = wikidata_id;
+  END IF;
+  IF tags IS NOT NULL THEN
+    RETURN to_jsonb(tags);
+  ELSE
+    RETURN '{}'::jsonb;
+  END IF;
+END;
+$$ LANGUAGE plpgsql STABLE;
