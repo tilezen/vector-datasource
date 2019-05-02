@@ -407,8 +407,11 @@ class RoadsTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.layer_data, cls.by_name = make_layer_data_props()
-        cls.roads = cls.by_name['roads']
+        _, props_by_name = make_layer_data_props()
+        _, min_zoom_by_name = make_layer_data_min_zoom()
+
+        cls.roads = props_by_name['roads']
+        cls.roads_min_zoom = min_zoom_by_name['roads']
 
     def test_osm(self):
         props = {
@@ -428,9 +431,13 @@ class RoadsTest(unittest.TestCase):
         }
         meta = make_test_metadata()
         out_props = self.roads.fn(None, props, None, meta)
+        min_zoom = self.roads_min_zoom.fn(None, props, None, meta)
         self.assertEquals('major_road', out_props.get('kind'))
         self.assertEquals('secondary', out_props.get('kind_detail'))
-        self.assertEquals(3, out_props.get('min_zoom'))
+        # NOTE: there is a 'min_zoom' in the out_props, but it gets
+        # overwritten with the result of the min_zoom function, which is what
+        # we test here.
+        self.assertEquals(5, min_zoom)
 
 
 class TransitTest(unittest.TestCase):
