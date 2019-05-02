@@ -284,9 +284,7 @@
 # for shields, kind_detail & etc
 - _reserved: {count: 50}
 - {$layer: 'pois', kind: 'camp_site'}
-- {$layer: 'pois', kind: 'chemist'}
 - {$layer: 'pois', kind: 'community_centre'}
-- {$layer: 'pois', kind: 'cosmetics'}
 - {$layer: 'pois', kind: 'danger_area'}
 - {$layer: 'pois', kind: 'department_store'}
 - {$layer: 'pois', kind: 'doityourself'}
@@ -299,20 +297,25 @@
 - {$layer: 'pois', kind: 'hotel'}
 - {$layer: 'pois', kind: 'marketplace'}
 - {$layer: 'pois', kind: 'motel'}
-- {$layer: 'pois', kind: 'music'}
-- {$layer: 'pois', kind: 'pet'}
-- {$layer: 'pois', kind: 'pharmacy'}
 # reserve for kind_details
 - _reserved: {count: 20}
 - {$layer: 'pois', kind: 'range'}
 - {$layer: 'pois', kind: 'school'}
-- {$layer: 'pois', kind: 'shoes'}
 - {$layer: 'pois', kind: 'ski'}
 - {$layer: 'pois', kind: 'supermarket'}
 - {$layer: 'pois', kind: 'theme_park'}
-- {$layer: 'pois', kind: 'toys'}
 - {$layer: 'pois', kind: 'variety_store'}
 - {$layer: 'pois', kind: 'water_park'}
+- {$layer: 'pois', kind: 'fast_food'}
+# reserve for kind_details
+- _reserved: {count: 100}
+- {$layer: 'pois', kind: 'chemist'}
+- {$layer: 'pois', kind: 'cosmetics'}
+- {$layer: 'pois', kind: 'music'}
+- {$layer: 'pois', kind: 'pet'}
+- {$layer: 'pois', kind: 'pharmacy'}
+- {$layer: 'pois', kind: 'shoes'}
+- {$layer: 'pois', kind: 'toys'}
 - {$layer: 'pois', kind: 'winery'}
 - {$layer: 'pois', kind: 'alcohol'}
 - {$layer: 'pois', kind: 'alpine_hut'}
@@ -450,9 +453,6 @@
 # reserve for kind_details
 - _reserved: {count: 100}
 - {$layer: 'pois', kind: 'cafe'}
-# reserve for kind_details
-- _reserved: {count: 100}
-- {$layer: 'pois', kind: 'fast_food'}
 # reserve for kind_details
 - _reserved: {count: 100}
 - {$layer: 'pois', kind: 'field_hospital'}
