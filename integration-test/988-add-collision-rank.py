@@ -79,17 +79,29 @@ class CollisionRankTest(FixtureTest):
             layer='water', kind='ocean',
             rank=301)
 
+    def test_pois_water_park(self):
+        self._check_rank(
+            {'leisure': 'water_park'},
+            layer='pois', kind='water_park',
+            rank=1155)
+
     def test_pois_fast_food(self):
         self._check_rank(
             {'amenity': 'fast_food'},
             layer='pois', kind='fast_food',
-            rank=1000)
+            rank=1156)
+
+    def test_pois_chemist(self):
+        self._check_rank(
+            {'shop': 'chemist'},
+            layer='pois', kind='chemist',
+            rank=1256)
 
     def test_pois_cafe(self):
         self._check_rank(
             {'amenity': 'cafe'},
             layer='pois', kind='cafe',
-            rank=3000)
+            rank=1894)
 
     def test_pois_doityourself(self):
         self._check_rank(
