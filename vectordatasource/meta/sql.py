@@ -217,7 +217,7 @@ def sql_type(expr):
        isinstance(expr.func, ast.Attribute) and \
        isinstance(expr.func.value, ast.Name) and \
        expr.func.value.id == 'props' and \
-       expr.args[0].s == 'scalerank':
+       expr.args[0].s in ('scalerank', 'min_zoom'):
         return float
     return str
 

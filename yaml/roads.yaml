@@ -155,10 +155,23 @@ global:
       ramp_bicycle: {col: "ramp:bicycle"}
       trail_visibility: {col: trail_visibility}
       sac_scale: {col: sac_scale}
+  - &ne_min_zoom
+      case:
+        - when:
+            min_zoom: 3.0
+          then: 5.0
+        - when:
+            min_zoom: 4.0
+          then: 5.1
+        - when:
+            min_zoom: 5.0
+          then: 5.2
+        - else:
+            clamp: { min: 6, max: 17, value: { col: min_zoom } }
   - &ne_properties
       <<: *output_properties
       ref: {col: name}
-      min_zoom: { max: [ 5, { col: scalerank } ] }
+      min_zoom: {col: min_zoom}
       mz_networks:
         case:
           - when:
@@ -210,59 +223,59 @@ filters:
   #############################################################
 
   - filter:
-      scalerank: true
+      min_zoom: true
       featurecla: Ferry
-    min_zoom: { col: scalerank }
+    min_zoom: { col: min_zoom }
     table: ne
     output:
       <<: *ne_properties
       kind: ferry
 
   - filter:
-      scalerank: true
+      min_zoom: true
       featurecla: Road
       expressway: 1
-    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
+    min_zoom: *ne_min_zoom
     table: ne
     output:
       <<: *ne_properties
       kind: highway
       kind_detail: motorway
   - filter:
-      scalerank: true
+      min_zoom: true
       featurecla: Road
       type: [Major Highway, Beltway, Bypass]
-    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
+    min_zoom: *ne_min_zoom
     table: ne
     output:
       <<: *ne_properties
       kind: major_road
       kind_detail: trunk
   - filter:
-      scalerank: true
+      min_zoom: true
       featurecla: Road
       type: Secondary Highway
-    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
+    min_zoom: *ne_min_zoom
     table: ne
     output:
       <<: *ne_properties
       kind: major_road
       kind_detail: primary
   - filter:
-      scalerank: true
+      min_zoom: true
       featurecla: Road
       type: Road
-    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
+    min_zoom: *ne_min_zoom
     table: ne
     output:
       <<: *ne_properties
       kind: major_road
       kind_detail: secondary
   - filter:
-      scalerank: true
+      min_zoom: true
       featurecla: Road
       type: [Track, Unknown]
-    min_zoom: { clamp: { min: 5, max: 17, value: { col: scalerank } } }
+    min_zoom: *ne_min_zoom
     table: ne
     output:
       <<: *ne_properties

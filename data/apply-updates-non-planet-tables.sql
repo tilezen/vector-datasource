@@ -139,6 +139,10 @@ UPDATE ne_10m_urban_areas
   SET mz_landuse_min_zoom = mz_calculate_min_zoom_landuse(ne_10m_urban_areas.*)
   WHERE mz_calculate_min_zoom_landuse(ne_10m_urban_areas.*) IS NOT NULL;
 
+UPDATE ne_10m_roads
+  SET mz_road_min_zoom = mz_calculate_min_zoom_roads(ne_10m_roads.*)
+  WHERE mz_calculate_min_zoom_roads(ne_10m_roads.*) IS NOT NULL;
+
 UPDATE water_polygons SET mz_label_placement = ST_PointOnSurface(the_geom);
 UPDATE land_polygons SET mz_label_placement = ST_PointOnSurface(the_geom);
 UPDATE ne_110m_ocean SET mz_label_placement = ST_PointOnSurface(the_geom);

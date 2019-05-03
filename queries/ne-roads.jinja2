@@ -16,7 +16,7 @@ SELECT
   NULL::jsonb AS __places_properties__,
 
   jsonb_build_object(
-      'min_zoom', scalerank,
+      'min_zoom', mz_road_min_zoom,
       'scalerank', scalerank,
       'featurecla', featurecla,
       'type', type,
@@ -38,6 +38,6 @@ FROM
 WHERE
 
   {{ bounds['line']|bbox_filter('the_geom', 3857) }}
-  AND scalerank <= {{ zoom }}
+  AND mz_road_min_zoom < {{ zoom + 1 }}
 
 {% endblock %}
