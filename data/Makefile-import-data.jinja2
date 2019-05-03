@@ -12,6 +12,8 @@ import-shapefiles.sh: {{ tgt_shapefile_shps }}
 {% for shapefile in shapefiles %}
 	@echo 'shp2pgsql -dID -s 3857 -g the_geom {{ shapefile['tgt_shp'] }} {{ shapefile['name'] }}' >> import-shapefiles.sh
 {% endfor %}
+	# wikidata snapshot already in SQL, so just pipe directly to psql
+	@echo 'cat wikidata_snapshot.sql' >> import-shapefiles.sh
 	@echo './import-shapefiles.sh | psql -d <database>'
 
 shapefiles: shapefiles.tar.gz
