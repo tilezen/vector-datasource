@@ -29,6 +29,6 @@ class NEroadtoll(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 1,
-                'kind': u'highway',
+                'kind': u'major_road',
                 'toll': True,
             })

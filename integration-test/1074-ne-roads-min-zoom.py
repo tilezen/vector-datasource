@@ -29,6 +29,6 @@ class NEroadminzoom(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads', {
                 'id': 1,
-                'kind': u'highway',
+                'kind': u'major_road',
                 'min_zoom': 5.1,
             })
