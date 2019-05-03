@@ -24,7 +24,8 @@ download: {{ src_shapefile_zips }}
 {% for shapefile in reproj_shapefiles %}
 {{ shapefile.src_shp }}: {{ shapefile.src_zip }}
 	unzip {% if shapefile.junk_dirs %}-j{% endif %} -o {{ shapefile.src_zip }} '{% if shapefile.junk_dirs %}*/{% endif %}{{ shapefile.src_wildcard }}'
-	touch --no-create {{ shapefile.src_shp }}
+	# touch -c means don't create the file if it doesn't already exist
+	touch -c {{ shapefile.src_shp }}
 	[ -f {{ shapefile.src_shp }} ]
 
 {{ shapefile.tgt_shp }}: {{ shapefile.src_shp }}
