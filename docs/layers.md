@@ -482,7 +482,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 
 #### Landuse `kind` values:
 
-* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`.
+* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
 * `airfield`
 * `allotments`
 * `amusement_ride`
