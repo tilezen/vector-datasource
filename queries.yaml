@@ -294,6 +294,7 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_2dp
       - vectordatasource.transform.remap_viewpoint_kinds
+      - vectordatasource.transform.unpack_viewpoint_claims
     area-inclusion-threshold: 1
   transit:
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
@@ -705,6 +706,12 @@ post_process:
 
   # turn admin polygons (countries, regions, etc...) into oriented boundaries with left/right names.
   - fn: vectordatasource.transform.admin_boundaries
+    params:
+      base_layer: boundaries
+      start_zoom: 8
+
+  # TODO: document OSM disputed boundary clipping procedure
+  - fn: vectordatasource.transform.apply_disputed_boundary_viewpoints
     params:
       base_layer: boundaries
       start_zoom: 8

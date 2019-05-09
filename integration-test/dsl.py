@@ -168,3 +168,38 @@ def box_area(z, x, y, area, include_boundary=False):
     )
 
     return transform(reproject_mercator_to_lnglat, mercator_shape)
+
+
+def fit_in_tile(z, x, y, shape):
+    """
+    Fit shape into the tile. Shape should be a Shapely geometry or WKT string
+    with coordinates between 0 and 1. This unit square is then remapped into
+    the tile z/x/y.
+    """
+
+    from ModestMaps.Core import Coordinate
+    from shapely.ops import transform
+    from shapely.wkt import loads as wkt_loads
+    from tilequeue.tile import coord_to_mercator_bounds
+    from tilequeue.tile import reproject_mercator_to_lnglat
+
+    bounds = coord_to_mercator_bounds(Coordinate(zoom=z, column=x, row=y))
+
+    if isinstance(shape, (str, unicode)):
+        shape = wkt_loads(shape)
+
+    # check shape fits within unit square, so we can transform it to fit
+    # within the tile.
+    assert shape.bounds[0] >= 0
+    assert shape.bounds[1] >= 0
+    assert shape.bounds[2] <= 1
+    assert shape.bounds[3] <= 1
+
+    def _transform(x, y, *unused_coords):
+        return (
+            x * (bounds[2] - bounds[0]) + bounds[0],
+            y * (bounds[3] - bounds[1]) + bounds[1],
+        )
+
+    merc_shape = transform(_transform, shape)
+    return transform(reproject_mercator_to_lnglat, merc_shape)

@@ -8906,6 +8906,132 @@ def remap_viewpoint_kinds(shape, props, fid, zoom):
     return (shape, props, fid)
 
 
+def _list_of_countries(value):
+    """
+    Parses a comma or semicolon delimited list of ISO 3166-1 alpha-2 codes,
+    discarding those which don't match our expected format.
+
+    Returns a list of lower-case, stripped country codes.
+    """
+
+    from re import match
+    from re import split
+
+    countries = []
+    candidates = split('[,;]', value)
+
+    for candidate in candidates:
+        # should have an ISO 3166-1 alpha-2 code, so should be 2 ASCII
+        # latin characters.
+        candidate = candidate.strip().lower()
+        if match('[a-z][a-z]', candidate):
+            countries.append(candidate)
+
+    return countries
+
+
+def unpack_viewpoint_claims(shape, props, fid, zoom):
+    """
+    Unpack OSM "claimed_by" list into viewpoint kinds.
+
+    For example; "claimed_by=AA,BB,CC" should become "kind:aa=country,
+    kind:bb=country, kind:cc=country" (or region, etc... as appropriate for
+    the main kind, which should be "unrecognized_TYPE".
+    """
+
+    prefix = 'unrecognized_'
+    kind = props.get('kind')
+    claimed_by = props.get('claimed_by')
+
+    if kind and kind.startswith(prefix) and claimed_by:
+        claimed_kind = kind[len(prefix):]
+
+        for country in _list_of_countries(claimed_by):
+            props['kind:' + country] = claimed_kind
+
+    return (shape, props, fid)
+
+
+def apply_disputed_boundary_viewpoints(ctx):
+    """
+    """
+
+    from shapely.geometry import CAP_STYLE
+    from shapely.geometry import JOIN_STYLE
+
+    params = _Params(ctx, 'apply_disputed_boundary_viewpoints')
+    layer_name = params.required('base_layer')
+    start_zoom = params.optional('start_zoom', typ=int, default=0)
+    end_zoom = params.optional('end_zoom', typ=int)
+
+    layer = _find_layer(ctx.feature_layers, layer_name)
+    zoom = ctx.nominal_zoom
+
+    if zoom < start_zoom or \
+       (end_zoom is not None and zoom >= end_zoom):
+        return None
+
+    # we buffer out the shape by a small amount so that we're more likely to
+    # get a clean cut against the boundary line. with lines intersecting
+    # against lines, we often see a sort of "dashed pattern" where numerical
+    # imprecision has meant two lines don't quite intersect.
+    #
+    # tolerance for zoom is the length of 1px at 256px per tile, so we can take
+    # a fraction of that to get sub-pixel alignment.
+    buffer_distance = 0.1 * tolerance_for_zoom(zoom)
+
+    # first, separate out the dispute mask geometries
+    masks = []
+    other_features = []
+    for shape, props, fid in layer['features']:
+        kind = props.get('kind')
+
+        if kind == 'mz_internal_dispute_mask':
+            disputed_by = props.get('disputed_by', '')
+            disputants = _list_of_countries(disputed_by)
+
+            if disputants:
+                # we use a flat cap to avoid straying too much into nearby
+                # lines and a mitred join to avoid creating extra geometry
+                # points to represent the curve, as this slows down
+                # intersection checks.
+                buffered_shape = shape.buffer(
+                    buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
+                masks.append((buffered_shape, disputants))
+
+        else:
+            other_features.append((shape, props, fid))
+
+    # quick escape if there are no masks (which should be the common case)
+    if not masks:
+        # update features to drop mask features, which we don't want in the
+        # tile output.
+        layer['features'] = other_features
+        return layer
+
+    new_features = []
+    for shape, props, fid in other_features:
+        for mask_shape, disputants in masks:
+            if shape.intersects(mask_shape):
+                cut_shape = shape.intersection(mask_shape)
+                cut_shape = _filter_geom_types(cut_shape, _LINE_DIMENSION)
+
+                shape = shape.difference(mask_shape)
+                shape = _filter_geom_types(shape, _LINE_DIMENSION)
+
+                if not cut_shape.is_empty:
+                    new_props = props.copy()
+                    for disputant in disputants:
+                        new_props['kind:' + disputant] = 'unrecognized_country'
+                    new_features.append((cut_shape, new_props, None))
+
+        if not shape.is_empty:
+            new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer
+
+
 def update_min_zoom(ctx):
     """
     Update the min zoom for features matching the Python fragment "where"
