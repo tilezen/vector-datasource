@@ -205,6 +205,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.normalize_operator_values
+      - vectordatasource.transform.major_airport_detector
       - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1

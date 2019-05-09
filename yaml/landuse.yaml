@@ -624,11 +624,18 @@ filters:
       kind: aerodrome
       kind_detail:
         case:
+          - when: { "international_flights": "yes" }
+            then: international
+          - when: { "aerodrome": international }
+            then: international
           - when: { "aerodrome:type": [public, private, airfield, international, regional, gliding] }
             then: { col: "aerodrome:type" }
           - when: { "aerodrome:type": "military/public" }
             then: military_public
+          - when: { "aerodrome": [public, private, airfield, regional, gliding] }
+            then: { col: "aerodrome" }
       tier: 3
+      passenger_count: {call: {func: util.safe_int, args: [{col: passenger_count}]}}
   - filter: {military: naval_base}
     min_zoom: *tier3_min_zoom
     output:
