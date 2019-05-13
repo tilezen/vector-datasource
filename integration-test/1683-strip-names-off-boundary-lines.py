@@ -34,6 +34,7 @@ class StripNamesOffBoundaryLinesTest(FixtureTest):
                     'boundary': 'administrative',
                     'admin_level': '2',
                     'name': left_name,
+                    'mz_boundary_from_polygon': True,  # need this for hack
                 }
             ),
             dsl.way(
@@ -47,6 +48,7 @@ class StripNamesOffBoundaryLinesTest(FixtureTest):
                     'boundary': 'administrative',
                     'admin_level': '2',
                     'name': right_name,
+                    'mz_boundary_from_polygon': True,  # need this for hack
                 }
             ),
         )

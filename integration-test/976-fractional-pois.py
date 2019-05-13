@@ -11,14 +11,47 @@ class FractionalPois(FixtureTest):
             {'id': 332223480, 'min_zoom': 15.31})
 
     def test_state_boundary(self):
-        self.load_fixtures([
-            'https://www.openstreetmap.org/relation/224951',
-            'https://www.openstreetmap.org/relation/61320',
-        ], clip=self.tile_bbox(9, 150, 192, padding=2))
+        import dsl
+
+        z, x, y, = 9, 150, 192
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/224951
+            dsl.way(-224951, dsl.tile_diagonal(z, x, y), {
+                'ISO3166-2': 'US-NJ',
+                'admin_level': '4',
+                'boundary': 'administrative',
+                'is_in:country_code': 'US',
+                'name': 'New Jersey',
+                'ref': 'NJ',
+                'ref:fips': '34',
+                'type': 'boundary',
+                'wikidata': 'Q1408',
+                'wikipedia': 'en:New Jersey',
+                'source': 'openstreetmap.org',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+            # https://www.openstreetmap.org/relation/61320
+            dsl.way(-61320, dsl.tile_diagonal(z, x, y), {
+                'ISO3166-2': 'US-NY',
+                'admin_level': '4',
+                'alt_name': 'New York State',
+                'boundary': 'administrative',
+                'is_in:country_code': 'US',
+                'name': 'New York',
+                'ref': 'NY',
+                'ref:fips': '36',
+                'type': 'boundary',
+                'wikidata': 'Q1384',
+                'wikipedia': 'en:New York (state)',
+                'source': 'openstreetmap.org',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+        )
 
         # NOTE: might not have an ID if it has been merged
         self.assert_has_feature(
-            9, 150, 192, 'boundaries',
+            z, x, y, 'boundaries',
             {'min_zoom': 8,
              'source': 'openstreetmap.org',
              'name': 'New Jersey - New York'})

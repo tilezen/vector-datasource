@@ -8,6 +8,7 @@ SAN_ANSELMO = {
     'name': 'San Anselmo',
     'official_name': 'Town of San Anselmo',
     'source': 'openstreetmap.org',
+    'mz_boundary_from_polygon': True,  # need this for hack
 }
 
 # https://www.openstreetmap.org/relation/112679
@@ -16,6 +17,7 @@ SAN_RAFAEL = {
     'admin_level': '8',
     'name': 'San Rafael',
     'source': 'openstreetmap.org',
+    'mz_boundary_from_polygon': True,  # need this for hack
 }
 
 

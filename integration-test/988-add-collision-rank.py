@@ -211,12 +211,14 @@ class CollisionRankTest(FixtureTest):
             'boundary': 'administrative',
             'admin_level': '2',
             'name': 'Country 1',
+            'mz_boundary_from_polygon': True,  # need this for hack
         }
         right_props = {
             'source': 'openstreetmap.org',
             'boundary': 'administrative',
             'admin_level': '2',
             'name': 'Country 2',
+            'mz_boundary_from_polygon': True,  # need this for hack
         }
 
         minx, miny, maxx, maxy = coord_to_bounds(
@@ -278,6 +280,7 @@ class CollisionRankTest(FixtureTest):
                 'name': 'Country 1',
                 'boundary': 'administrative',
                 'admin_level': '2',
+                'mz_boundary_from_polygon': True,  # need this for hack
             }),
         )
 

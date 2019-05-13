@@ -62,6 +62,7 @@ class BoundaryTest(FixtureTest):
                     'boundary': 'administrative',
                     'name': 'XX',
                     'source': 'openstreetmap.org',
+                    'mz_boundary_from_polygon': True,  # need this for hack
                 }),
             dsl.way(4, dsl.fit_in_tile(
                 z, x, y,
@@ -70,6 +71,7 @@ class BoundaryTest(FixtureTest):
                     'boundary': 'administrative',
                     'name': 'YY',
                     'source': 'openstreetmap.org',
+                    'mz_boundary_from_polygon': True,  # need this for hack
                 }),
             # this is just here to turn off maritime boundaries for everything
             # in this tile.
@@ -101,4 +103,51 @@ class BoundaryTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'kind': 'country',
                 'kind:xx': 'unrecognized_country',
+            })
+
+    def test_claim(self):
+        # test that a claim by countries BB & CC (and recognised by DD) is
+        # only kind:country for those countries. everyone else's view is
+        # kind: unrecognized_country.
+        #
+        # TODO: recognized_by not working yet.
+        import dsl
+
+        z, x, y = (8, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'claim',
+                'name': 'Extent of CC claim',
+                'claimed_by': 'CC',
+                'disputed_by': 'AA;DD',
+            }),
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'claim',
+                'name': 'Extent of BB claim',
+                'claimed_by': 'BB',
+                'disputed_by': 'AA',
+                'recognized_by': 'DD',
+            }),
+            dsl.way(3, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'name': 'Region Name',
+                'type': 'boundary',
+            }),
+            dsl.way(4, dsl.tile_diagonal(z, x, y), {
+                'dispute': 'yes',
+                'disputed_by': 'AA',
+                'name': 'BB claim',  # note: also CC claim?!
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_country',
+                'kind:bb': 'country',
+                'kind:cc': 'country',
+                # 'kind:dd': 'country',
             })

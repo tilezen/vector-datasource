@@ -154,24 +154,50 @@ class BoundariesTest(unittest.TestCase):
         cls.boundaries = cls.by_name['boundaries']
 
     def test_osm(self):
+        from shapely.geometry import Point
+        shape = Point(0, 0).buffer(1.0)
         props = {
             'boundary': 'administrative',
             'boundary:type': 'aboriginal_lands',
             'admin_level': '2',
         }
         meta = make_test_metadata()
-        out_props = self.boundaries.fn(None, props, None, meta)
+        out_props = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals('aboriginal_lands', out_props.get('kind'))
         self.assertEquals('2', out_props.get('kind_detail'))
 
     def test_ne(self):
+        from shapely.geometry import Point
+        shape = Point(0, 0).buffer(1.0)
         props = {
             'featurecla': 'Admin-1 region boundary',
         }
         meta = make_test_metadata()
-        out_props = self.boundaries.fn(None, props, None, meta)
+        out_props = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals('macroregion', out_props.get('kind'))
         self.assertEquals('3', out_props.get('kind_detail'))
+
+    def test_osm_linestring(self):
+        from shapely.geometry import LineString
+        shape = LineString([(0, 0), (1, 1)])
+        props = {
+            'boundary': 'administrative',
+            'boundary:type': 'aboriginal_lands',
+            'admin_level': '2',
+        }
+        meta = make_test_metadata()
+        out_props = self.boundaries.fn(shape, props, None, meta)
+
+        # without the hack, shouldn't match (i.e: as if it were from
+        # planet_osm_line)
+        self.assertIsNone(out_props)
+
+        # if we add the hack, it should now match (i.e: as if it were
+        # from planet_osm_polygon with the boundary/RHR query).
+        props['mz_boundary_from_polygon'] = True
+        out_props = self.boundaries.fn(shape, props, None, meta)
+        self.assertEquals('aboriginal_lands', out_props.get('kind'))
+        self.assertEquals('2', out_props.get('kind_detail'))
 
 
 class EarthTest(unittest.TestCase):
@@ -567,6 +593,7 @@ class BoundariesMinZoomTest(unittest.TestCase):
         props = {
             'boundary': 'administrative',
             'admin_level': '2',
+            'mz_boundary_from_polygon': True,  # need this for hack
         }
         meta = make_test_metadata()
         out_min_zoom = self.boundaries.fn(shape, props, None, meta)

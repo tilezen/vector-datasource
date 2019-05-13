@@ -1956,6 +1956,26 @@ def _orient(geom):
     return geom
 
 
+def _fix_disputed_left_right_kinds(props):
+    """
+    After merging left/right props, we might find that any kind:XX for disputed
+    borders are mixed up as kind:left:XX or kind:right:XX and we want to merge
+    them back together again.
+    """
+
+    keys = []
+    for k in props.keys():
+        if k.startswith('kind:left:') or k.startswith('kind:right:'):
+            keys.append(k)
+
+    for k in keys:
+        prefix = 'kind:left:' if k.startswith('kind:left:') else 'kind:right:'
+        new_key = 'kind:' + k[len(prefix):]
+
+        value = props.pop(k)
+        props[new_key] = value
+
+
 def admin_boundaries(ctx):
     """
     Given a layer with admin boundaries and inclusion polygons for
@@ -2077,6 +2097,7 @@ def admin_boundaries(ctx):
                         new_props = _merge_left_right_props(props, cut_props)
                         new_props['id'] = props['id']
                         _make_joined_name(new_props)
+                        _fix_disputed_left_right_kinds(new_props)
                         new_features.append((inside, new_props, fid))
 
                 if boundary.is_empty:

@@ -43,7 +43,8 @@ SELECT
 
   CASE WHEN mz_boundary_min_zoom IS NOT NULL
     THEN jsonb_build_object(
-      'min_zoom', mz_boundary_min_zoom
+      'min_zoom', mz_boundary_min_zoom,
+      'mz_boundary_from_polygon', TRUE
     )
   END AS __boundaries_properties__,
 

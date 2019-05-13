@@ -126,39 +126,132 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
 
 class BoundariesMinZoomAndNameOsm(FixtureTest):
     def test_region_boundary_zug_luzern_z8(self):
+        import dsl
+
+        z, x, y = 8, 133, 89
+
         # Switzerland region HAS NO name, OpenStreetMap
-        self.load_fixtures([
-            'http://www.openstreetmap.org/relation/1686447',
-            'http://www.openstreetmap.org/relation/1685677',
-        ], clip=self.tile_bbox(8, 133, 89))
+        self.generate_fixtures(
+            # http://www.openstreetmap.org/relation/1686447
+            dsl.way(-1686447, dsl.tile_diagonal(z+2, x*4, y*4), {
+                u'name': u'Zug',
+                u'admin_level': u'4',
+                u'wikipedia': u'de:Kanton Zug',
+                u'swisstopo:KANTONSNUM': u'9',
+                u'source': u'openstreetmap.org',
+                u'wikidata': u'Q11933',
+                u'boundary': u'administrative',
+                u'ISO3166-2': u'CH-ZG',
+                u'ref': u'ZG',
+                u'alt_name': u'Kanton Zug',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+            # http://www.openstreetmap.org/relation/1685677
+            dsl.way(-1685677, dsl.tile_diagonal(z+2, x*4, y*4), {
+                u'name': u'Luzern',
+                u'admin_level': u'4',
+                u'wikipedia': u'de:Kanton Luzern',
+                u'swisstopo:KANTONSNUM': u'3',
+                u'source': u'openstreetmap.org',
+                u'wikidata': u'Q12121',
+                u'alt_name': u'Kanton Luzern',
+                u'boundary': u'administrative',
+                u'ISO3166-2': u'CH-LU',
+                u'ref': u'LU',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+        )
 
         # test that the regional boundary is present at zoom 8, although it
         # should have had its name stripped off, since it's very short.
         self.assert_has_feature(
-            8, 133, 89, 'boundaries',
+            z, x, y, 'boundaries',
             {'kind': 'region', 'name': type(None)})
 
     def test_region_boundary_zug_luzern_z12(self):
+        import dsl
+
+        z, x, y = 12, 2144, 1438
+
         # Switzerland region HAS name, OpenStreetMap
         # do this at z12, as the boundary between Zug and Luzern is quite
         # short, and we want enough space to label.
-        self.load_fixtures([
-            'http://www.openstreetmap.org/relation/1686447',
-            'http://www.openstreetmap.org/relation/1685677',
-        ], clip=self.tile_bbox(12, 2144, 1438))
+        self.generate_fixtures(
+            # http://www.openstreetmap.org/relation/1686447
+            dsl.way(-1686447, dsl.tile_diagonal(z, x, y), {
+                u'name': u'Zug',
+                u'admin_level': u'4',
+                u'way_area': u'5.16033e+08',
+                u'wikipedia': u'de:Kanton Zug',
+                u'swisstopo:KANTONSNUM': u'9',
+                u'source': u'openstreetmap.org',
+                u'wikidata': u'Q11933',
+                u'boundary': u'administrative',
+                u'ISO3166-2': u'CH-ZG',
+                u'ref': u'ZG',
+                u'alt_name': u'Kanton Zug',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+            # http://www.openstreetmap.org/relation/1685677
+            dsl.way(-1685677, dsl.tile_diagonal(z, x, y), {
+                u'name': u'Luzern',
+                u'admin_level': u'4',
+                u'way_area': u'3.21768e+09',
+                u'wikipedia': u'de:Kanton Luzern',
+                u'swisstopo:KANTONSNUM': u'3',
+                u'source': u'openstreetmap.org',
+                u'wikidata': u'Q12121',
+                u'alt_name': u'Kanton Luzern',
+                u'boundary': u'administrative',
+                u'ISO3166-2': u'CH-LU',
+                u'ref': u'LU',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+        )
 
         # name should be present at zoom 12
         self.assert_has_feature(
-            12, 2144, 1438, 'boundaries',
+            z, x, y, 'boundaries',
             {'kind': 'region', 'name': 'Zug - Luzern'})
 
     def test_region_boundary_salzburg_tirol(self):
+        import dsl
+
+        z, x, y = 8, 136, 89
+
         # Austria region HAS name, OpenStreetMap
-        self.load_fixtures([
-            'http://www.openstreetmap.org/relation/52343',
-            'http://www.openstreetmap.org/relation/86539',
-        ], clip=self.tile_bbox(8, 136, 89))
+        self.generate_fixtures(
+            # http://www.openstreetmap.org/relation/52343
+            dsl.way(-52343, dsl.tile_diagonal(z, x, y), {
+                u'ISO3166-2': u'AT-7',
+                u'wikidata': u'Q153809',
+                u'source': u'openstreetmap.org',
+                u'ref:at:gkz': u'7',
+                u'wikipedia': u'de:Tirol (Bundesland)',
+                u'boundary': u'administrative',
+                u'website': u'http://www.tirol.gv.at',
+                u'admin_level': u'4',
+                u'population': u'707573',
+                u'name': u'Tirol',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+            # http://www.openstreetmap.org/relation/86539
+            dsl.way(-86539, dsl.tile_diagonal(z, x, y), {
+                u'ISO3166-2': u'AT-5',
+                u'wikidata': u'Q43325',
+                u'ref:at:gkz': u'5',
+                u'way_area': u'1.56144e+10',
+                u'wikipedia': u'de:Land Salzburg',
+                u'source': u'openstreetmap.org',
+                u'boundary': u'administrative',
+                u'website': u'http://www.salzburg.gv.at',
+                u'admin_level': u'4',
+                u'description': u'Land Salzburg',
+                u'name': u'Salzburg',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+        )
 
         self.assert_has_feature(
-            8, 136, 89, 'boundaries',
+            z, x, y, 'boundaries',
             {'kind': 'region', 'name': 'Salzburg - Tirol'})
