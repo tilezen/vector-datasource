@@ -12,7 +12,7 @@ class AerodromeTest(FixtureTest):
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/545819287
-            dsl.way(545819287, dsl.box_area(z, x, y, 12545795), {
+            dsl.way(545819287, dsl.tile_box(z, x, y), {
                 'aerodrome': 'international',
                 'aerodrome:type': 'public',
                 'aeroway': 'aerodrome',
@@ -24,6 +24,15 @@ class AerodromeTest(FixtureTest):
                 'source': 'openstreetmap.org',
                 'wikidata': 'Q8688',
                 'wikipedia': 'en:San Francisco International Airport',
+            }),
+            # https://www.openstreetmap.org/way/22567191
+            dsl.way(22567191, dsl.tile_diagonal(z, x, y), {
+                'aeroway': 'runway',
+                'length': '3618',
+                'ref': '10L/28R',
+                'surface': 'asphalt',
+                'width': '61',
+                'source': 'openstreetmap.org',
             }),
         )
 
@@ -40,4 +49,13 @@ class AerodromeTest(FixtureTest):
                 'id': 545819287,
                 'kind': 'aerodrome',
                 'kind_detail': 'international',
+            })
+
+        # runway inside polygon
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'id': 22567191,
+                'kind': 'aeroway',
+                'kind_detail': 'runway',
+                'aerodrome_kind_detail': 'international',
             })
