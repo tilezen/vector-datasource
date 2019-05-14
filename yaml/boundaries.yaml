@@ -114,11 +114,20 @@ filters:
 
   # OSM disputed boundaries
   #
-  # NOTE: these come _first_ so that they match in preference to regular
-  # country borders. (this assumes disputed_by is never set on a whole
-  # country boundary -- perhaps true?)
+  # we track two kinds of features from OSM for indicating disputes:
   #
-  # TODO: tagging notes
+  # 1. **claims**, which have `boundary=claim, claimed_by=*` tags. these
+  #    indicate borders which aren't generally recognized, but should appear
+  #    in the viewpoint of the `claimed_by=` value. additionally, extra
+  #    viewpoints which don't make a claim for themselves but still want the
+  #    claimant's view reflected in their own can be specified in a
+  #    `recognized_by=*` tag.
+  #
+  # 2. **disputes**, which have `dispute=yes` or `disputed=yes`, plus a list of
+  #    disputant viewpoints in the `disputed_by=*` tag. when a viewpoint is
+  #    listed in `disputed_by` then the boundary will have its `kind:xx` set to
+  #    `unrecognized_*` (where XX is the viewpoint / country code and * is the
+  #    kind of boundary it is).
   #
   - filter: {admin_level: '2', boundary: claim, claimed_by: true, geom_type: line}
     min_zoom: 8
