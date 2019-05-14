@@ -8974,12 +8974,75 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     return (shape, props, fid)
 
 
-def apply_disputed_boundary_viewpoints(ctx):
+class _DisputeMasks(object):
     """
     """
 
-    from shapely.geometry import CAP_STYLE
-    from shapely.geometry import JOIN_STYLE
+    def __init__(self, buffer_distance):
+        self.buffer_distance = buffer_distance
+        self.masks = []
+
+    def add(self, shape, props):
+        from shapely.geometry import CAP_STYLE
+        from shapely.geometry import JOIN_STYLE
+
+        disputed_by = props.get('disputed_by', '')
+        disputants = _list_of_countries(disputed_by)
+
+        if disputants:
+            # we use a flat cap to avoid straying too much into nearby lines
+            # and a mitred join to avoid creating extra geometry points to
+            # represent the curve, as this slows down intersection checks.
+            buffered_shape = shape.buffer(
+                self.buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
+            self.masks.append((buffered_shape, disputants))
+
+    def empty(self):
+        return not self.masks
+
+    def cut(self, shape, props, fid):
+        """
+        Cut the (shape, props, fid) feature against the masks to apply the
+        dispute to the boundary by setting 'kind:xx' to unrecognized.
+        """
+
+        updated_features = []
+
+        for mask_shape, disputants in self.masks:
+            if shape.intersects(mask_shape):
+                cut_shape = shape.intersection(mask_shape)
+                cut_shape = _filter_geom_types(cut_shape, _LINE_DIMENSION)
+
+                shape = shape.difference(mask_shape)
+                shape = _filter_geom_types(shape, _LINE_DIMENSION)
+
+                if not cut_shape.is_empty:
+                    new_props = props.copy()
+                    for disputant in disputants:
+                        new_props['kind:' + disputant] = 'unrecognized_country'
+                    updated_features.append((cut_shape, new_props, None))
+
+        if not shape.is_empty:
+            updated_features.append((shape, props, fid))
+
+        return updated_features
+
+
+# tuple of boundary kind values on which we should set alternate viewpoints
+# from disputed_by ways.
+_BOUNDARY_KINDS = ('country', 'region', 'county', 'locality',
+                   'aboriginal_lands')
+
+
+def apply_disputed_boundary_viewpoints(ctx):
+    """
+    Use the dispute features to apply viewpoints to the admin boundaries.
+
+    We take the 'mz_internal_dispute_mask' features and build a mask from them.
+    The mask is used to move the information from 'disputed_by' lists on the
+    mask features to 'kind:xx' overrides on the boundary features. The mask
+    features are discarded afterwards.
+    """
 
     params = _Params(ctx, 'apply_disputed_boundary_viewpoints')
     layer_name = params.required('base_layer')
@@ -9005,51 +9068,37 @@ def apply_disputed_boundary_viewpoints(ctx):
     buffer_distance = 0.1 * tolerance_for_zoom(zoom)
 
     # first, separate out the dispute mask geometries
-    masks = []
-    other_features = []
+    masks = _DisputeMasks(buffer_distance)
+
+    # all features which aren't masks, i.e: mostly claims and non-disputed
+    # boundary lines. (there might be some other features, but we'll ignore
+    # those for the purposes of naming.)
+    claims_and_boundaries = []
     for shape, props, fid in layer['features']:
         kind = props.get('kind')
 
         if kind == 'mz_internal_dispute_mask':
-            disputed_by = props.get('disputed_by', '')
-            disputants = _list_of_countries(disputed_by)
-
-            if disputants:
-                # we use a flat cap to avoid straying too much into nearby
-                # lines and a mitred join to avoid creating extra geometry
-                # points to represent the curve, as this slows down
-                # intersection checks.
-                buffered_shape = shape.buffer(
-                    buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
-                masks.append((buffered_shape, disputants))
+            masks.add(shape, props)
 
         else:
-            other_features.append((shape, props, fid))
+            claims_and_boundaries.append((shape, props, fid))
 
     # quick escape if there are no masks (which should be the common case)
-    if not masks:
+    if masks.empty():
         # update features to drop mask features, which we don't want in the
         # tile output.
-        layer['features'] = other_features
+        layer['features'] = claims_and_boundaries
         return layer
 
     new_features = []
-    for shape, props, fid in other_features:
-        for mask_shape, disputants in masks:
-            if shape.intersects(mask_shape):
-                cut_shape = shape.intersection(mask_shape)
-                cut_shape = _filter_geom_types(cut_shape, _LINE_DIMENSION)
-
-                shape = shape.difference(mask_shape)
-                shape = _filter_geom_types(shape, _LINE_DIMENSION)
-
-                if not cut_shape.is_empty:
-                    new_props = props.copy()
-                    for disputant in disputants:
-                        new_props['kind:' + disputant] = 'unrecognized_country'
-                    new_features.append((cut_shape, new_props, None))
-
-        if not shape.is_empty:
+    for shape, props, fid in claims_and_boundaries:
+        # cut boundary features against disputes and set the alternate
+        # viewpoint on any which intersect.
+        if props.get('kind') in _BOUNDARY_KINDS:
+            features = masks.cut(shape, props, fid)
+            new_features.extend(features)
+        else:
+            # pass through any features which aren't boundaries.
             new_features.append((shape, props, fid))
 
     layer['features'] = new_features
