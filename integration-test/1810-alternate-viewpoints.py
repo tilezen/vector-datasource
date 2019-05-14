@@ -42,6 +42,7 @@ class BoundaryTest(FixtureTest):
                     'claimed_by': 'XX',
                     'source': 'openstreetmap.org',
                     'type': 'boundary',
+                    'name': 'XX Claim',
                 }),
             # "b" ways give us linestring(s)
             dsl.way(2, dsl.fit_in_tile(
@@ -54,10 +55,11 @@ class BoundaryTest(FixtureTest):
                 }),
             # "b & c" ways + country relation give us a polygon => oriented
             # boundary curve. we get an oriented boundary curve for each
-            # country boundary.
+            # country boundary. (note: b & c together should be a closed ring).
             dsl.way(3, dsl.fit_in_tile(
                 z, x, y,
-                'LINESTRING(0.5 0.9, 0.9 0.9, 0.9 0.1, 0.1 0.1, 0.1 0.5)'), {
+                'LINESTRING(0.5 0.9, 0.9 0.9, 0.9 0.1, 0.1 0.1, 0.1 0.5, '
+                '0.5 0.5, 0.5 0.9)'), {
                     'admin_level': '2',
                     'boundary': 'administrative',
                     'name': 'XX',
@@ -66,7 +68,8 @@ class BoundaryTest(FixtureTest):
                 }),
             dsl.way(4, dsl.fit_in_tile(
                 z, x, y,
-                'LINESTRING(0.1 0.5, 0.1 0.1, 0.9 0.1, 0.9 0.9, 0.5 0.9)'), {
+                'LINESTRING(0.5 0.9, 0.9 0.9, 0.9 0.1, 0.1 0.1, 0.1 0.5, '
+                '0.5 0.5, 0.5 0.9)'), {
                     'admin_level': '2',
                     'boundary': 'administrative',
                     'name': 'YY',
@@ -89,6 +92,7 @@ class BoundaryTest(FixtureTest):
                 'kind': 'country',
                 'name:left': 'XX',
                 'name:right': 'YY',
+                'name': 'XX - YY',
             })
 
         # should get a section recognised only by XX
@@ -96,6 +100,7 @@ class BoundaryTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'kind': 'unrecognized_country',
                 'kind:xx': 'country',
+                'name': 'XX Claim',
             })
 
         # should get a section recognised _except_ by XX
@@ -103,6 +108,7 @@ class BoundaryTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'kind': 'country',
                 'kind:xx': 'unrecognized_country',
+                'name': 'XX - YY',
             })
 
     def test_claim(self):
