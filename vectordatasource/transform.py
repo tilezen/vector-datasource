@@ -8993,10 +8993,12 @@ def apply_disputed_boundary_viewpoints(ctx):
        (end_zoom is not None and zoom >= end_zoom):
         return None
 
-    # we buffer out the shape by a small amount so that we're more likely to
-    # get a clean cut against the boundary line. with lines intersecting
-    # against lines, we often see a sort of "dashed pattern" where numerical
-    # imprecision has meant two lines don't quite intersect.
+    # we tried intersecting lines against lines, but this often led to a sort
+    # of "dashed pattern" in the output where numerical imprecision meant two
+    # lines don't quite intersect.
+    #
+    # we solve this by buffering out the shape by a small amount so that we're
+    # more likely to get a clean cut against the boundary line.
     #
     # tolerance for zoom is the length of 1px at 256px per tile, so we can take
     # a fraction of that to get sub-pixel alignment.
