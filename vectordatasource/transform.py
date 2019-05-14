@@ -9070,36 +9070,37 @@ def apply_disputed_boundary_viewpoints(ctx):
     # first, separate out the dispute mask geometries
     masks = _DisputeMasks(buffer_distance)
 
-    # all features which aren't masks, i.e: mostly claims and non-disputed
-    # boundary lines. (there might be some other features, but we'll ignore
-    # those for the purposes of naming.)
-    claims_and_boundaries = []
+    # features that we're going to return
+    new_features = []
+
+    # boundaries, which we pull out separately to apply the disputes to
+    boundaries = []
+
     for shape, props, fid in layer['features']:
         kind = props.get('kind')
 
         if kind == 'mz_internal_dispute_mask':
             masks.add(shape, props)
 
+        elif kind in _BOUNDARY_KINDS:
+            boundaries.append((shape, props, fid))
+
         else:
-            claims_and_boundaries.append((shape, props, fid))
+            # pass through this feature - we just ignore it.
+            new_features.append((shape, props, fid))
 
     # quick escape if there are no masks (which should be the common case)
     if masks.empty():
-        # update features to drop mask features, which we don't want in the
-        # tile output.
-        layer['features'] = claims_and_boundaries
-        return layer
+        # keep the boundaries and other features we already passed through,
+        # but drop the masks - we don't want them in the output.
+        new_features.extend(boundaries)
 
-    new_features = []
-    for shape, props, fid in claims_and_boundaries:
-        # cut boundary features against disputes and set the alternate
-        # viewpoint on any which intersect.
-        if props.get('kind') in _BOUNDARY_KINDS:
+    else:
+        for shape, props, fid in boundaries:
+            # cut boundary features against disputes and set the alternate
+            # viewpoint on any which intersect.
             features = masks.cut(shape, props, fid)
             new_features.extend(features)
-        else:
-            # pass through any features which aren't boundaries.
-            new_features.append((shape, props, fid))
 
     layer['features'] = new_features
     return layer
