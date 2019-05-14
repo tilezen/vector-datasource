@@ -101,6 +101,10 @@ class BoundaryTest(FixtureTest):
                 'kind': 'unrecognized_country',
                 'kind:xx': 'country',
                 'name': 'XX Claim',
+
+                # we should have dropped the claimed_by/disputed_by tags
+                'claimed_by': type(None),
+                'disputed_by': type(None),
             })
 
         # should get a section recognised _except_ by XX

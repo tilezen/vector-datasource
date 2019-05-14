@@ -716,6 +716,21 @@ post_process:
       base_layer: boundaries
       start_zoom: 8
 
+  # drop the claimed_by, disputed_by (and any left/right versions) on any
+  # borders. these should have been projected into kind:xx viewpoints in the
+  # previous step.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: boundaries
+      start_zoom: 8
+      properties:
+        - claimed_by
+        - "claimed_by:left"
+        - "claimed_by:right"
+        - disputed_by
+        - "disputed_by:left"
+        - "disputed_by:right"
+
   # drop id/id:left/id:right on boundaries up to zoom 12 inclusive.
   # the left/right IDs tend to be unique as a pair, and so prevent merging.
   # the id itself will be dropped by merging if it's possible to merge, and
