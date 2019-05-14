@@ -8930,9 +8930,10 @@ def remap_viewpoint_kinds(shape, props, fid, zoom):
 def _list_of_countries(value):
     """
     Parses a comma or semicolon delimited list of ISO 3166-1 alpha-2 codes,
-    discarding those which don't match our expected format.
+    discarding those which don't match our expected format. We also allow a
+    special pseudo-country code "iso".
 
-    Returns a list of lower-case, stripped country codes.
+    Returns a list of lower-case, stripped country codes (plus "iso").
     """
 
     from re import match
@@ -8945,7 +8946,7 @@ def _list_of_countries(value):
         # should have an ISO 3166-1 alpha-2 code, so should be 2 ASCII
         # latin characters.
         candidate = candidate.strip().lower()
-        if match('[a-z][a-z]', candidate):
+        if candidate == 'iso' or match('[a-z][a-z]', candidate):
             countries.append(candidate)
 
     return countries
