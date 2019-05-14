@@ -188,6 +188,13 @@ class BoundariesTest(unittest.TestCase):
         meta = make_test_metadata()
         out_props = self.boundaries.fn(shape, props, None, meta)
 
+        # we get most admin boundaries from the planet_osm_polygons table, as
+        # the (linestring) boundaries of the country polygons. this means we
+        # need to distinguish between three cases: 1) linestrings from the
+        # lines table, 2) polygons from the polygons table, and 3) linestrings
+        # derived from polygons in the polygons table. we do this with a little
+        # hack, by setting mz_boundary_from_polygon on the derived linestrings.
+
         # without the hack, shouldn't match (i.e: as if it were from
         # planet_osm_line)
         self.assertIsNone(out_props)
