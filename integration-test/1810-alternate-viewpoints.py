@@ -157,3 +157,15 @@ class BoundaryTest(FixtureTest):
                 'kind:cc': 'country',
                 # 'kind:dd': 'country',
             })
+
+        # because AA disputes the whole boundary (way 4), all the boundaries
+        # should be unrecognized (either by default or kind:aa).
+        with self.features_in_tile_layer(z, x, y, 'boundaries') as features:
+            for feature in features:
+                # calculate fallback: prefer kind:aa if it exists, else fall
+                # back to kind.
+                props = feature['properties']
+                kind = props.get('kind')
+                kind_aa = props.get('kind:aa', kind)
+                self.assertTrue(kind_aa is not None)
+                self.assertTrue(kind_aa.startswith('unrecognized_'))
