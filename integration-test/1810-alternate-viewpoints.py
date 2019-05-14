@@ -169,3 +169,85 @@ class BoundaryTest(FixtureTest):
                 kind_aa = props.get('kind:aa', kind)
                 self.assertTrue(kind_aa is not None)
                 self.assertTrue(kind_aa.startswith('unrecognized_'))
+
+    def test_whole_claim(self):
+        # test that something where XA claims the whole boundary of XB works
+        # as expected - we get a boundary where XB is a country except in
+        # XA's viewpoint and a second boundary feature where the whole thing
+        # is just a boundary of XA in XA's viewpoint.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        #
+        #  +----------------+
+        #  |                |
+        #  |  aaaaaaaaaaa   |
+        #  |  a         a   |
+        #  |  a         a   |
+        #  |  a         a   |
+        #  |  a         a   |
+        #  |  aaaaaaaaaaa   |
+        #  |                |
+        #  +----------------+
+        #
+        # this is mapped in OSM using 3 different elements:
+        #
+        #  1. a country boundary relation for XB
+        #  2. the ways making up the country boundary relation are tagged
+        #     disputed=yes, disputed_by=XA
+        #  3. a claim relation with claimed_by=XA containing the same ways
+        #     as the country boundary relation.
+        #
+        linestring = 'LINESTRING(0.1 0.1, 0.1 0.9, 0.9 0.9, 0.9 0.1, 0.1 0.1)'
+
+        self.generate_fixtures(
+            # country boundary relation gives us a linestring boundary
+            # extracted from the country polygon.
+            dsl.way(1, dsl.fit_in_tile(z, x, y, linestring), {
+                'admin_level': '2',
+                'boundary': 'administrative',
+                'name': 'XB',
+                'source': 'openstreetmap.org',
+                'type': 'boundary',
+                'mz_boundary_from_polygon': True,
+            }),
+            # ways making up the country boundary tagged disputed
+            dsl.way(2, dsl.fit_in_tile(z, x, y, linestring), {
+                'disputed': 'yes',
+                'disputed_by': 'XA',
+                'source': 'openstreetmap.org',
+            }),
+            # claim relation
+            dsl.way(3, dsl.fit_in_tile(z, x, y, linestring), {
+                'admin_level': '2',
+                'boundary': 'claim',
+                'claimed_by': 'XA',
+                'name': "Extent of XA's claim",
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        saw_xa = False
+        saw_xb = False
+
+        with self.features_in_tile_layer(z, x, y, 'boundaries') as features:
+            for feature in features:
+                props = feature['properties']
+                kind = props.get('kind')
+
+                if kind == 'country':
+                    # generally accepted viewpoint, XA should dispute
+                    self.assertEqual(
+                        props.get('kind:xa'), 'unrecognized_country')
+                    self.assertEqual(props.get('name'), 'XB')
+                    saw_xb = True
+
+                elif kind == 'unrecognized_country':
+                    # XA's viewpoint, which should claim it as part of XA
+                    self.assertEqual(props.get('kind:xa'), 'country')
+                    self.assertEqual(props.get('name'), "Extent of XA's claim")
+                    saw_xa = True
+
+        self.assertTrue(saw_xa, "Expected to see XA's viewpoint boundary")
+        self.assertTrue(saw_xb, "Expected to see XB's country boundary")

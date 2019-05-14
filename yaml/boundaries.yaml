@@ -116,11 +116,11 @@ filters:
   #
   # we track two kinds of features from OSM for indicating disputes:
   #
-  # 1. **claims**, which have `boundary=claim, claimed_by=*` tags. these
-  #    indicate borders which aren't generally recognized, but should appear
-  #    in the viewpoint of the `claimed_by=` value. additionally, extra
-  #    viewpoints which don't make a claim for themselves but still want the
-  #    claimant's view reflected in their own can be specified in a
+  # 1. **claims**, which have `boundary=claim, claimed_by=*, admin_level=*`
+  #    tags. these indicate borders which aren't generally recognized, but
+  #    should appear in the viewpoint of the `claimed_by=` value. additionally,
+  #    extra viewpoints which don't make a claim for themselves but still want
+  #    the claimant's view reflected in their own can be specified in a
   #    `recognized_by=*` tag.
   #
   # 2. **disputes**, which have `dispute=yes` or `disputed=yes`, plus a list of
