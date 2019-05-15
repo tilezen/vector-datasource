@@ -9009,6 +9009,18 @@ class _DisputeMasks(object):
         updated_features = []
 
         for mask_shape, disputants in self.masks:
+            # we don't want to override a kind:xx if it has already been set
+            # (e.g: by a claim), so we filter out disputant viewpoints where
+            # a kind override has already been set.
+            #
+            # this is necessary for dealing with the case where a border is
+            # both claimed and disputed in the same viewpoint.
+            non_claim_disputants = []
+            for disputant in disputants:
+                key = 'kind:' + disputant
+                if key not in props:
+                    non_claim_disputants.append(disputant)
+
             if shape.intersects(mask_shape):
                 cut_shape = shape.intersection(mask_shape)
                 cut_shape = _filter_geom_types(cut_shape, _LINE_DIMENSION)
@@ -9018,7 +9030,7 @@ class _DisputeMasks(object):
 
                 if not cut_shape.is_empty:
                     new_props = props.copy()
-                    for disputant in disputants:
+                    for disputant in non_claim_disputants:
                         new_props['kind:' + disputant] = 'unrecognized_country'
                     updated_features.append((cut_shape, new_props, None))
 
@@ -9083,6 +9095,13 @@ def apply_disputed_boundary_viewpoints(ctx):
             masks.add(shape, props)
 
         elif kind in _BOUNDARY_KINDS:
+            boundaries.append((shape, props, fid))
+
+        # we want to apply disputes to already generally-unrecognised borders
+        # too, as this allows for multi-level fallback from one viewpoint
+        # possibly through several others before reaching the default.
+        elif (kind.startswith('unrecognized_') and
+              kind[len('unrecognized_'):] in _BOUNDARY_KINDS):
             boundaries.append((shape, props, fid))
 
         else:

@@ -156,9 +156,18 @@ class BoundaryTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
+                # generally unrecognised
                 'kind': 'unrecognized_country',
+                # but BB & CC both claim this as a border
                 'kind:bb': 'country',
                 'kind:cc': 'country',
+                # AA disputes that this border exists. NOTE: the kind:aa is
+                # added to the output even though it duplicates the kind. this
+                # is to help with multi-level fallback. see
+                # https://github.com/tilezen/vector-datasource/pull/1895#discussion_r283912502
+                'kind:aa': 'unrecognized_country',
+                # DD recognizes BB's claim, so should see this as a country.
+                # TODO: support for recognized_by
                 # 'kind:dd': 'country',
             })
 
