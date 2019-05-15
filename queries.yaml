@@ -295,6 +295,7 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_2dp
       - vectordatasource.transform.remap_viewpoint_kinds
+      - vectordatasource.transform.unpack_viewpoint_claims
     area-inclusion-threshold: 1
   transit:
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
@@ -709,6 +710,27 @@ post_process:
     params:
       base_layer: boundaries
       start_zoom: 8
+
+  # TODO: document OSM disputed boundary clipping procedure
+  - fn: vectordatasource.transform.apply_disputed_boundary_viewpoints
+    params:
+      base_layer: boundaries
+      start_zoom: 8
+
+  # drop the claimed_by, disputed_by (and any left/right versions) on any
+  # borders. these should have been projected into kind:xx viewpoints in the
+  # previous step.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: boundaries
+      start_zoom: 8
+      properties:
+        - claimed_by
+        - "claimed_by:left"
+        - "claimed_by:right"
+        - disputed_by
+        - "disputed_by:left"
+        - "disputed_by:right"
 
   # drop id/id:left/id:right on boundaries up to zoom 12 inclusive.
   # the left/right IDs tend to be unique as a pair, and so prevent merging.

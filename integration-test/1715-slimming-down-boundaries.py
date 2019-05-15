@@ -35,6 +35,7 @@ class BoundaryIdTest(FixtureTest):
                     'admin_level': '2',
                     'id': left_id,
                     'name': 'Left',
+                    'mz_boundary_from_polygon': True,  # need this for hack
                 }
             ),
             dsl.way(
@@ -49,6 +50,7 @@ class BoundaryIdTest(FixtureTest):
                     'admin_level': '2',
                     'id': right_id,
                     'name': 'Right',
+                    'mz_boundary_from_polygon': True,  # need this for hack
                 }
             ),
         )

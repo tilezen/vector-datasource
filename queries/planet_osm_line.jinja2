@@ -53,6 +53,12 @@ SELECT
     )
   END AS __roads_properties__,
 
+  CASE WHEN mz_boundary_min_zoom IS NOT NULL
+    THEN jsonb_build_object(
+      'min_zoom', mz_boundary_min_zoom
+    )
+  END AS __boundaries_properties__,
+
   CASE WHEN mz_transit_level IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_transit_level
@@ -77,6 +83,7 @@ FROM (
     {% if zoom < 8 %}NULL AS {% endif %}mz_earth_min_zoom,
     {% if zoom < 8 %}NULL AS {% endif %}mz_road_level,
     {% if zoom < 8 %}NULL AS {% endif %}mz_water_min_zoom,
+    {% if zoom < 8 %}NULL AS {% endif %}mz_boundary_min_zoom,
 
     tags
 
@@ -90,6 +97,7 @@ FROM (
      mz_landuse_min_zoom IS NOT NULL OR
      mz_road_level IS NOT NULL OR
      mz_transit_level IS NOT NULL OR
+     mz_boundary_min_zoom IS NOT NULL OR
      mz_water_min_zoom IS NOT NULL
      )
 {% elif zoom >= 8 %}
@@ -97,6 +105,7 @@ FROM (
      mz_landuse_min_zoom < {{ zoom + 1 }} OR
      mz_road_level < {{ zoom + 1 }} OR
      mz_transit_level < {{ zoom + 1 }} OR
+     mz_boundary_min_zoom < {{ zoom + 1 }} OR
      mz_water_min_zoom < {{ zoom + 1 }}
      )
 {% else %}

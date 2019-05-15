@@ -84,6 +84,23 @@ global:
     'kind:se': {col: fclass_se }
     'kind:bd': {col: fclass_bd }
 
+  # this is a hack to get around the fact that boundary features with the same
+  # tags exist in both the polygons and lines table. osm2pgsql makes geometries
+  # for boundary polygon relations, but there are also a lot of boundary way
+  # lines which match the same filters.
+  #
+  # this excludes them by looking for only polygons and then setting the
+  # mz_boundary_from_polygon flag when the geometry is converted back to a
+  # linestring. since that flag shouldn't exist in the original data, we exclude
+  # the features in the plant_osm_line table (except those we actually want -
+  # disputes and claims).
+  - &boundary_poly
+    any:
+      - geom_type: polygon
+      - all:
+          - geom_type: line
+          - mz_boundary_from_polygon: true
+
 filters:
 
   # kind pre-generated for buffered_land
@@ -95,16 +112,56 @@ filters:
       <<: *output_properties
       kind: {col: kind}
 
+  # OSM disputed boundaries
+  #
+  # we track two kinds of features from OSM for indicating disputes:
+  #
+  # 1. **claims**, which have `boundary=claim, claimed_by=*, admin_level=*`
+  #    tags. these indicate borders which aren't generally recognized, but
+  #    should appear in the viewpoint of the `claimed_by=` value. additionally,
+  #    extra viewpoints which don't make a claim for themselves but still want
+  #    the claimant's view reflected in their own can be specified in a
+  #    `recognized_by=*` tag.
+  #
+  # 2. **disputes**, which have `dispute=yes` or `disputed=yes`, plus a list of
+  #    disputant viewpoints in the `disputed_by=*` tag. when a viewpoint is
+  #    listed in `disputed_by` then the boundary will have its `kind:xx` set to
+  #    `unrecognized_*` (where XX is the viewpoint / country code and * is the
+  #    kind of boundary it is).
+  #
+  - filter: {admin_level: '2', boundary: claim, claimed_by: true, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: unrecognized_country
+      claimed_by: {col: claimed_by}
+    table: osm
+  - filter:
+      all:
+        - geom_type: line
+        - disputed_by: true
+        - any:
+            - dispute: 'yes'
+            - disputed: 'yes'
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: mz_internal_dispute_mask
+      disputed_by: {col: disputed_by}
+    table: osm
+
   # osm
   - filter:
-      any:
-        - all:
-            boundary: administrative
-            boundary:type: aboriginal_lands
-        - all:
-            boundary: protected_area
-            protect_class: '24'
-        - boundary: aboriginal_lands
+      all:
+        - *boundary_poly
+        - any:
+          - all:
+              boundary: administrative
+              boundary:type: aboriginal_lands
+          - all:
+              boundary: protected_area
+              protect_class: '24'
+          - boundary: aboriginal_lands
     min_zoom: 8
     output:
       <<: *output_properties
@@ -115,21 +172,21 @@ filters:
               admin_level: ['2', '4', '6', '8']
             then: { col: admin_level }
     table: osm
-  - filter: {admin_level: '2', boundary: administrative}
+  - filter: {admin_level: '2', boundary: administrative, <<: *boundary_poly}
     min_zoom: 8
     output:
       <<: *output_properties
       kind: country
       kind_detail: '2'
     table: osm
-  - filter: {admin_level: '4', boundary: administrative}
+  - filter: {admin_level: '4', boundary: administrative, <<: *boundary_poly}
     min_zoom: 8
     output:
       <<: *output_properties
       kind: region
       kind_detail: '4'
     table: osm
-  - filter: {admin_level: '6', boundary: administrative}
+  - filter: {admin_level: '6', boundary: administrative, <<: *boundary_poly}
     min_zoom: 10
     output:
       <<: *output_properties
@@ -140,7 +197,7 @@ filters:
   # name-dropping in queries.yaml - so that the two match and we don't get
   # names popping in and out. if the min_zoom is changed here, then it should
   # also be changed there (and vice-versa)!
-  - filter: {admin_level: '8', boundary: administrative}
+  - filter: {admin_level: '8', boundary: administrative, <<: *boundary_poly}
     min_zoom: 11
     output:
       <<: *output_properties

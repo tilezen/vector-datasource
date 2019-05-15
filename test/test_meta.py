@@ -154,24 +154,57 @@ class BoundariesTest(unittest.TestCase):
         cls.boundaries = cls.by_name['boundaries']
 
     def test_osm(self):
+        from shapely.geometry import Point
+        shape = Point(0, 0).buffer(1.0)
         props = {
             'boundary': 'administrative',
             'boundary:type': 'aboriginal_lands',
             'admin_level': '2',
         }
         meta = make_test_metadata()
-        out_props = self.boundaries.fn(None, props, None, meta)
+        out_props = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals('aboriginal_lands', out_props.get('kind'))
         self.assertEquals('2', out_props.get('kind_detail'))
 
     def test_ne(self):
+        from shapely.geometry import Point
+        shape = Point(0, 0).buffer(1.0)
         props = {
             'featurecla': 'Admin-1 region boundary',
         }
         meta = make_test_metadata()
-        out_props = self.boundaries.fn(None, props, None, meta)
+        out_props = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals('macroregion', out_props.get('kind'))
         self.assertEquals('3', out_props.get('kind_detail'))
+
+    def test_osm_linestring(self):
+        from shapely.geometry import LineString
+        shape = LineString([(0, 0), (1, 1)])
+        props = {
+            'boundary': 'administrative',
+            'boundary:type': 'aboriginal_lands',
+            'admin_level': '2',
+        }
+        meta = make_test_metadata()
+        out_props = self.boundaries.fn(shape, props, None, meta)
+
+        # we get most admin boundaries from the planet_osm_polygons table, as
+        # the (linestring) boundaries of the country polygons. this means we
+        # need to distinguish between three cases: 1) linestrings from the
+        # lines table, 2) polygons from the polygons table, and 3) linestrings
+        # derived from polygons in the polygons table. we do this with a little
+        # hack, by setting mz_boundary_from_polygon on the derived linestrings.
+
+        # without the hack, shouldn't match (i.e: as if it were from
+        # planet_osm_line)
+        self.assertIsNone(out_props)
+
+        # if we add the hack, it should now match (i.e: as if it were
+        # from planet_osm_polygon with the boundary/RHR query).
+        props['mz_boundary_from_polygon'] = True
+        out_props = self.boundaries.fn(shape, props, None, meta)
+        self.assertEquals('aboriginal_lands', out_props.get('kind'))
+        self.assertEquals('2', out_props.get('kind_detail'))
 
 
 class EarthTest(unittest.TestCase):
@@ -567,6 +600,7 @@ class BoundariesMinZoomTest(unittest.TestCase):
         props = {
             'boundary': 'administrative',
             'admin_level': '2',
+            'mz_boundary_from_polygon': True,  # need this for hack
         }
         meta = make_test_metadata()
         out_min_zoom = self.boundaries.fn(shape, props, None, meta)
