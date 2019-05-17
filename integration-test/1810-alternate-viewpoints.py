@@ -295,6 +295,9 @@ class PlaceTest(FixtureTest):
                 'region_capital:cn': type(True),
             })
 
+    # NOTE: this isn't a test, just a factoring-out of common code used by all
+    # the subsequent tests, which are testing variations of what happens when
+    # the default (featurecla) is different from an override (fclass_iso).
     def _check(self, default, dispute, expected):
         import dsl
 
