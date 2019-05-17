@@ -9202,3 +9202,50 @@ def major_airport_detector(shape, props, fid, zoom):
             props['kind_detail'] = 'regional'
 
     return shape, props, fid
+
+
+_NE_COUNTRY_CAPITALS = [
+    'Admin-0 region capital',
+    'Admin-0 capital alt',
+    'Admin-0 capital',
+]
+
+
+_NE_REGION_CAPITALS = [
+    'Admin-1 capital',
+    'Admin-1 region capital',
+]
+
+
+def capital_alternate_viewpoint(shape, props, fid, zoom):
+    """
+    Removes the fclass_* properties and replaces them with viewpoint overrides
+    for country_capital and region_capital.
+    """
+
+    fclass_prefix = 'fclass_'
+
+    default_country_capital = props.get('country_capital', False)
+    default_region_capital = props.get('region_capital', False)
+
+    for k in props.keys():
+        if k.startswith(fclass_prefix):
+            viewpoint = k[len(fclass_prefix):]
+            fclass = props.pop(k)
+
+            country_capital = fclass in _NE_COUNTRY_CAPITALS
+            region_capital = fclass in _NE_REGION_CAPITALS
+
+            if country_capital:
+                props['country_capital:' + viewpoint] = True
+
+            elif region_capital:
+                props['region_capital:' + viewpoint] = True
+
+            if default_country_capital and not country_capital:
+                props['country_capital:' + viewpoint] = False
+
+            elif default_region_capital and not region_capital:
+                props['region_capital:' + viewpoint] = False
+
+    return shape, props, fid

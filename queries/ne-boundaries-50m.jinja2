@@ -1,6 +1,8 @@
 {% extends 'ne.jinja2' %}
 {% block query %}
-{{ ne_boundaries_query(False, False, 'ne_50m_admin_0_boundary_lines_land') }}
+{{ ne_boundaries_query(False, True, 'ne_50m_admin_0_boundary_lines_land') }}
 UNION ALL
-{{ ne_boundaries_query(False, False, 'ne_50m_admin_1_states_provinces_lines') }}
+{{ ne_boundaries_query(False, True, 'ne_50m_admin_0_boundary_lines_disputed_areas') }}
+UNION ALL
+{{ ne_boundaries_query(False, True, 'ne_50m_admin_1_states_provinces_lines') }}
 {% endblock %}

@@ -39,6 +39,42 @@ global:
         - [ 9, 9 ]
       default: 10
 
+  - &ne_country_capital [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
+  - &ne_region_capital [Admin-1 capital, Admin-1 region capital]
+
+  - &alternate_fclass
+    fclass_iso: { col: fclass_iso }
+    fclass_us: { col: fclass_us }
+    fclass_fr: { col: fclass_fr }
+    fclass_ru: { col: fclass_ru }
+    fclass_es: { col: fclass_es }
+    fclass_cn: { col: fclass_cn }
+    fclass_tw: { col: fclass_tw }
+    fclass_in: { col: fclass_in }
+    fclass_np: { col: fclass_np }
+    fclass_pk: { col: fclass_pk }
+    fclass_de: { col: fclass_de }
+    fclass_gb: { col: fclass_gb }
+    fclass_br: { col: fclass_br }
+    fclass_il: { col: fclass_il }
+    fclass_ps: { col: fclass_ps }
+    fclass_sa: { col: fclass_sa }
+    fclass_eg: { col: fclass_eg }
+    fclass_ma: { col: fclass_ma }
+    fclass_pt: { col: fclass_pt }
+    fclass_ar: { col: fclass_ar }
+    fclass_jp: { col: fclass_jp }
+    fclass_ko: { col: fclass_ko }
+    fclass_vn: { col: fclass_vn }
+    fclass_tr: { col: fclass_tr }
+    fclass_id: { col: fclass_id }
+    fclass_pl: { col: fclass_pl }
+    fclass_gr: { col: fclass_gr }
+    fclass_it: { col: fclass_it }
+    fclass_nl: { col: fclass_nl }
+    fclass_se: { col: fclass_se }
+    fclass_bd: { col: fclass_bd }
+
 filters:
   - filter:
       meta.source: wof
@@ -156,19 +192,21 @@ filters:
 
   - filter:
       scalerank: true
-      featurecla: [Admin-0 region capital, Admin-0 capital alt, Admin-0 capital]
+      featurecla: *ne_country_capital
     min_zoom: *ne_places_min_zoom
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       country_capital: true
     table: ne
   - filter:
       scalerank: true
-      featurecla: [Admin-1 capital, Admin-1 region capital]
+      featurecla: *ne_region_capital
     min_zoom: *ne_places_min_zoom
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       region_capital: true
     table: ne
@@ -176,6 +214,7 @@ filters:
     min_zoom: *ne_places_min_zoom
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
     table: ne
 
