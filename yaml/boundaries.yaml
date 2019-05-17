@@ -53,36 +53,36 @@ global:
 
   - &ne_localized_kind_properties
     'kind:iso': {col: fclass_iso }
-    'kind:us': {col: fclass_us }
-    'kind:fr': {col: fclass_fr }
-    'kind:ru': {col: fclass_ru }
-    'kind:es': {col: fclass_es }
-    'kind:cn': {col: fclass_cn }
-    'kind:tw': {col: fclass_tw }
-    'kind:in': {col: fclass_in }
-    'kind:np': {col: fclass_np }
-    'kind:pk': {col: fclass_pk }
-    'kind:de': {col: fclass_de }
-    'kind:gb': {col: fclass_gb }
-    'kind:br': {col: fclass_br }
-    'kind:il': {col: fclass_il }
-    'kind:ps': {col: fclass_ps }
-    'kind:sa': {col: fclass_sa }
-    'kind:eg': {col: fclass_eg }
-    'kind:ma': {col: fclass_ma }
-    'kind:pt': {col: fclass_pt }
     'kind:ar': {col: fclass_ar }
+    'kind:bd': {col: fclass_bd }
+    'kind:br': {col: fclass_br }
+    'kind:cn': {col: fclass_cn }
+    'kind:de': {col: fclass_de }
+    'kind:eg': {col: fclass_eg }
+    'kind:es': {col: fclass_es }
+    'kind:fr': {col: fclass_fr }
+    'kind:gb': {col: fclass_gb }
+    'kind:gr': {col: fclass_gr }
+    'kind:id': {col: fclass_id }
+    'kind:il': {col: fclass_il }
+    'kind:in': {col: fclass_in }
+    'kind:it': {col: fclass_it }
     'kind:jp': {col: fclass_jp }
     'kind:ko': {col: fclass_ko }
-    'kind:vn': {col: fclass_vn }
-    'kind:tr': {col: fclass_tr }
-    'kind:id': {col: fclass_id }
-    'kind:pl': {col: fclass_pl }
-    'kind:gr': {col: fclass_gr }
-    'kind:it': {col: fclass_it }
+    'kind:ma': {col: fclass_ma }
     'kind:nl': {col: fclass_nl }
+    'kind:np': {col: fclass_np }
+    'kind:pk': {col: fclass_pk }
+    'kind:pl': {col: fclass_pl }
+    'kind:ps': {col: fclass_ps }
+    'kind:pt': {col: fclass_pt }
+    'kind:ru': {col: fclass_ru }
+    'kind:sa': {col: fclass_sa }
     'kind:se': {col: fclass_se }
-    'kind:bd': {col: fclass_bd }
+    'kind:tr': {col: fclass_tr }
+    'kind:tw': {col: fclass_tw }
+    'kind:us': {col: fclass_us }
+    'kind:vn': {col: fclass_vn }
 
   # this is a hack to get around the fact that boundary features with the same
   # tags exist in both the polygons and lines table. osm2pgsql makes geometries
