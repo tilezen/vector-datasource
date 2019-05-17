@@ -264,3 +264,133 @@ class BoundaryTest(FixtureTest):
 
         self.assertTrue(saw_xa, "Expected to see XA's viewpoint boundary")
         self.assertTrue(saw_xb, "Expected to see XB's country boundary")
+
+
+class PlaceTest(FixtureTest):
+
+    def test_disputed_capital(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        # a country capital which CN doesn't think is a country capital. this
+        # is just a test case, and any resemblance to real disputes, living or
+        # dead, is purely coincidental.
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'name': 'Foo',
+                'featurecla': 'Admin-0 capital',
+                'fclass_cn': 'Admin-1 capital',
+                'scalerank': 4,
+                'min_zoom': 4,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'kind': 'locality',
+                'country_capital': type(True),
+                'country_capital:cn': type(False),
+                'region_capital:cn': type(True),
+            })
+
+    # NOTE: this isn't a test, just a factoring-out of common code used by all
+    # the subsequent tests, which are testing variations of what happens when
+    # the default (featurecla) is different from an override (fclass_iso).
+    def _check(self, default, dispute, expected):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_centre_shape(z, x, y), {
+                'name': 'Foo',
+                'featurecla': default,
+                'fclass_iso': dispute,
+                'scalerank': 4,
+                'min_zoom': 4,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        expected['kind'] = 'locality'
+        self.assert_has_feature(z, x, y, 'places', expected)
+
+    def test_country_country(self):
+        # explicit override still comes out in the output
+        self._check(
+            'Admin-0 capital',
+            'Admin-0 capital',
+            {'country_capital:iso': type(True)}
+        )
+
+    def test_country_region(self):
+        # region override disables country_capital and adds region_capital.
+        self._check(
+            'Admin-0 capital',
+            'Admin-1 capital',
+            {
+                'country_capital:iso': type(False),
+                'region_capital:iso': type(True),
+            }
+        )
+
+    def test_country_none(self):
+        # override to none should just disable country_capital
+        self._check(
+            'Admin-0 capital',
+            'Populated place',
+            {'country_capital:iso': type(False)}
+        )
+
+    def test_region_country(self):
+        # override sets country_capital and disables region_capital
+        self._check(
+            'Admin-1 capital',
+            'Admin-0 capital',
+            {
+                'country_capital:iso': type(True),
+                'region_capital:iso': type(False),
+            }
+        )
+
+    def test_region_region(self):
+        # explicit override still comes out in the output
+        self._check(
+            'Admin-1 capital',
+            'Admin-1 capital',
+            {'region_capital:iso': type(True)}
+        )
+
+    def test_region_none(self):
+        # disables region_capital
+        self._check(
+            'Admin-1 capital',
+            'Populated place',
+            {'region_capital:iso': type(False)}
+        )
+
+    def test_none_country(self):
+        # sets country_capital
+        self._check(
+            'Populated place',
+            'Admin-0 capital',
+            {'country_capital:iso': type(True)}
+        )
+
+    def test_none_region(self):
+        # sets region_capital
+        self._check(
+            'Populated place',
+            'Admin-1 capital',
+            {'region_capital:iso': type(True)}
+        )
+
+    def test_none_none(self):
+        # does nothing?
+        self._check(
+            'Populated place',
+            'Populated place',
+            {}
+        )

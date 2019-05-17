@@ -13,6 +13,7 @@ LAYER_TABLES = {
         'ne_10m_admin_1_states_provinces_lines',
         'ne_110m_admin_0_boundary_lines_land',
         'ne_50m_admin_0_boundary_lines_land',
+        'ne_50m_admin_0_boundary_lines_disputed_areas',
         'ne_50m_admin_1_states_provinces_lines',
         'planet_osm_line',
         'planet_osm_polygon',

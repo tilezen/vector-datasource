@@ -23,6 +23,11 @@ SELECT
     'scalerank', scalerank,
     'min_zoom', mz_places_min_zoom,
     'wikidata', wikidataid
+  ) || jsonb_build_object(
+{#- need to have a separate call to jsonb_build_object for viewpoints because it doesn't support more than 100 parameters, and we're over that with the number of languages + number of viewpoints #}
+{%- for vpt in ne_viewpoints %}
+    'fclass_{{vpt}}', fclass_{{vpt}}{{ "," if not loop.last }}
+{%- endfor %}
   ) AS __places_properties__,
 
   NULL::jsonb AS __roads_properties__,
