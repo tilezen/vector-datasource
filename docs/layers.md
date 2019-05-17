@@ -740,7 +740,9 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 #### Place properties (common optional):
 
 * `country_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-0 capital`, `Admin-0 capital alt`, and `Admin-0 region capital`.
+* `country_capital:xx`: when present, either `true` or `false` to override the `country_capital` value for XX's viewpoint.
 * `region_capital`: a `true` value normalizes values between OpenStreetMap and Natural Earth for kinds of `Admin-1 capital` and `Admin-1 region capital`.
+* `region_capital:xx`: when present, either `true` or `false` to override the `region_capital` value for XX's viewpoint.
 * `max_zoom`: a suggested maximum zoom beyond which the place should not be visible. Currently neighbourhoods only, from Who's On First.
 * `is_landuse_aoi`: Currently neighbourhoods only, from Who's On First
 * `kind_detail`: the original value of the OSM `place` tag and Natural Earth `featurecla`, see below.
