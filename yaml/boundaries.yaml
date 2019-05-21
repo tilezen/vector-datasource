@@ -136,6 +136,20 @@ filters:
       kind: unrecognized_country
       claimed_by: {col: claimed_by}
     table: osm
+  - filter: {admin_level: '4', boundary: claim, claimed_by: true, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: unrecognized_region
+      claimed_by: {col: claimed_by}
+    table: osm
+  - filter: {admin_level: '6', boundary: claim, claimed_by: true, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: unrecognized_county
+      claimed_by: {col: claimed_by}
+    table: osm
   - filter:
       all:
         - geom_type: line

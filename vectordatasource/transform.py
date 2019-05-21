@@ -8976,6 +8976,12 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
 
 class _DisputeMasks(object):
     """
+    Creates a "mask" of polygons by buffering disputed border lines and
+    provides an interface through cut() to intersect other border lines and
+    apply kind:xx=unrecognized_* to them.
+
+    This allows us to handle disputed borders - we effectively clip them out
+    of the disputant's viewpoint by setting a property that will hide them.
     """
 
     def __init__(self, buffer_distance):
@@ -9008,6 +9014,14 @@ class _DisputeMasks(object):
 
         updated_features = []
 
+        # figure out what we want the boundary kind to be, if it's intersected
+        # with the dispute mask.
+        kind = props['kind']
+        if kind.startswith('unrecognized_'):
+            unrecognized = kind
+        else:
+            unrecognized = 'unrecognized_' + kind
+
         for mask_shape, disputants in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
@@ -9031,7 +9045,7 @@ class _DisputeMasks(object):
                 if not cut_shape.is_empty:
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
-                        new_props['kind:' + disputant] = 'unrecognized_country'
+                        new_props['kind:' + disputant] = unrecognized
                     updated_features.append((cut_shape, new_props, None))
 
         if not shape.is_empty:
