@@ -8959,17 +8959,26 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     For example; "claimed_by=AA,BB,CC" should become "kind:aa=country,
     kind:bb=country, kind:cc=country" (or region, etc... as appropriate for
     the main kind, which should be "unrecognized_TYPE".
+
+    Additionally, "recognized_by=XX,YY,ZZ" indicates that these viewpoints,
+    although they don't claim the territory, recognize the claim and should
+    see it in their viewpoint as a country/region/county.
     """
 
     prefix = 'unrecognized_'
     kind = props.get('kind')
     claimed_by = props.get('claimed_by')
+    recognized_by = props.get('recognized_by')
 
     if kind and kind.startswith(prefix) and claimed_by:
         claimed_kind = kind[len(prefix):]
 
         for country in _list_of_countries(claimed_by):
             props['kind:' + country] = claimed_kind
+
+        if recognized_by:
+            for viewpoint in _list_of_countries(recognized_by):
+                props['kind:' + viewpoint] = claimed_kind
 
     return (shape, props, fid)
 

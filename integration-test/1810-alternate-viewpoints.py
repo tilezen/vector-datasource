@@ -167,8 +167,7 @@ class CountryBoundaryTest(FixtureTest):
                 # https://github.com/tilezen/vector-datasource/pull/1895#discussion_r283912502
                 'kind:aa': 'unrecognized_country',
                 # DD recognizes BB's claim, so should see this as a country.
-                # TODO: support for recognized_by
-                # 'kind:dd': 'country',
+                'kind:dd': 'country',
             })
 
         # because AA disputes the whole boundary (way 4), all the boundaries
