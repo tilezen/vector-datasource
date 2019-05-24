@@ -137,6 +137,7 @@ filters:
     min_zoom: 8
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: {col: place}
     table: osm
@@ -144,6 +145,7 @@ filters:
     min_zoom: 9
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: {col: place}
     table: osm
@@ -151,6 +153,7 @@ filters:
     min_zoom: 11
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: village
     table: osm
@@ -158,6 +161,7 @@ filters:
     min_zoom: 12
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: village
     table: osm
@@ -165,6 +169,7 @@ filters:
     min_zoom: 12
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: hamlet
     table: osm
@@ -172,6 +177,7 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: {col: place}
     table: osm
@@ -179,6 +185,7 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: isolated_dwelling
     table: osm
@@ -186,6 +193,7 @@ filters:
     min_zoom: 13
     output:
       <<: *output_properties
+      <<: *alternate_fclass
       kind: locality
       kind_detail: farm
     table: osm
