@@ -1100,14 +1100,45 @@ CREATE OR REPLACE FUNCTION extra_wikidata_properties(wikidata_id text)
 RETURNS JSONB AS $$
 DECLARE
   tags HSTORE DEFAULT NULL;
+  ne_tags HSTORE DEFAULT NULL;
 BEGIN
   IF wikidata_id IS NOT NULL THEN
     SELECT w.tags INTO tags FROM wikidata w WHERE w.id = wikidata_id;
+    SELECT hstore(ARRAY[
+      'fclass_iso', ne_pp.fclass_iso,
+      'fclass_ar', ne_pp.fclass_ar,
+      'fclass_bd', ne_pp.fclass_bd,
+      'fclass_br', ne_pp.fclass_br,
+      'fclass_cn', ne_pp.fclass_cn,
+      'fclass_de', ne_pp.fclass_de,
+      'fclass_eg', ne_pp.fclass_eg,
+      'fclass_es', ne_pp.fclass_es,
+      'fclass_fr', ne_pp.fclass_fr,
+      'fclass_gb', ne_pp.fclass_gb,
+      'fclass_gr', ne_pp.fclass_gr,
+      'fclass_id', ne_pp.fclass_id,
+      'fclass_il', ne_pp.fclass_il,
+      'fclass_in', ne_pp.fclass_in,
+      'fclass_it', ne_pp.fclass_it,
+      'fclass_jp', ne_pp.fclass_jp,
+      'fclass_ko', ne_pp.fclass_ko,
+      'fclass_ma', ne_pp.fclass_ma,
+      'fclass_nl', ne_pp.fclass_nl,
+      'fclass_np', ne_pp.fclass_np,
+      'fclass_pk', ne_pp.fclass_pk,
+      'fclass_pl', ne_pp.fclass_pl,
+      'fclass_ps', ne_pp.fclass_ps,
+      'fclass_pt', ne_pp.fclass_pt,
+      'fclass_ru', ne_pp.fclass_ru,
+      'fclass_sa', ne_pp.fclass_sa,
+      'fclass_se', ne_pp.fclass_se,
+      'fclass_tr', ne_pp.fclass_tr,
+      'fclass_tw', ne_pp.fclass_tw,
+      'fclass_us', ne_pp.fclass_us,
+      'fclass_vn', ne_pp.fclass_vn
+    ]) INTO ne_tags FROM ne_10m_populated_places ne_pp
+    WHERE ne_pp.wikidataid = wikidata_id;
   END IF;
-  IF tags IS NOT NULL THEN
-    RETURN to_jsonb(tags);
-  ELSE
-    RETURN '{}'::jsonb;
-  END IF;
+  RETURN to_jsonb(coalesce(tags, ''::hstore) || coalesce(ne_tags, ''::hstore));
 END;
 $$ LANGUAGE plpgsql STABLE;

@@ -2,7 +2,7 @@
 from . import FixtureTest
 
 
-class BoundaryTest(FixtureTest):
+class CountryBoundaryTest(FixtureTest):
 
     def test_boundary(self):
         import dsl
@@ -167,8 +167,7 @@ class BoundaryTest(FixtureTest):
                 # https://github.com/tilezen/vector-datasource/pull/1895#discussion_r283912502
                 'kind:aa': 'unrecognized_country',
                 # DD recognizes BB's claim, so should see this as a country.
-                # TODO: support for recognized_by
-                # 'kind:dd': 'country',
+                'kind:dd': 'country',
             })
 
         # because AA disputes the whole boundary (way 4), all the boundaries
@@ -394,3 +393,147 @@ class PlaceTest(FixtureTest):
             'Populated place',
             {}
         )
+
+
+class RegionBoundary(FixtureTest):
+
+    def test_dispute(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            # way, tagged disputed
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '4',
+                'boundary': 'administrative',
+                'disputed': 'yes',
+                'disputed_by': 'XB',
+                'name': 'XA internal region border',
+                'source': 'openstreetmap.org',
+            }),
+            # way used in relations for region borders
+            #
+            # NOTE: we won't use this one, since we don't pay attention to
+            # admin_level=3, but i included it for completeness, so that the
+            # test more closely resembles the data it's based on.
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',  # 3?!? as always... data = mess
+                'border_type': 'province',
+                'boundary': 'administrative',
+                'is_in:country_code': 'XA',
+                'name': 'XA region 1',
+                'type': 'boundary',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+            # this one we do pay attention to, admin_level=4
+            dsl.way(3, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '4',
+                'boundary': 'administrative',
+                'name': 'XA region 2',
+                'place': 'District',
+                'type': 'boundary',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'region',
+                'kind:xb': 'unrecognized_region',
+                'name': 'XA region 2',
+            })
+
+    def test_claim(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            # XA's claim relation
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '4',
+                'boundary': 'claim',
+                'name': 'XA region claim',
+                'claimed_by': 'XA',
+                'disputed_by': 'XB',
+                'source': 'openstreetmap.org',
+            }),
+            # XA's claim _way_, disputed by XB
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'disputed': 'yes',
+                'disputed_by': 'XB',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_region',
+                'kind:xa': 'region',
+            })
+
+
+class CountyBoundary(FixtureTest):
+
+    def test_dispute(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            # way, tagged disputed
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '4',
+                'boundary': 'administrative',
+                'disputed': 'yes',
+                'disputed_by': 'XB',
+                'name': 'XA internal county border',
+                'source': 'openstreetmap.org',
+            }),
+            # line from relation / county polygon
+            dsl.way(3, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '6',
+                'boundary': 'administrative',
+                'name': 'XA county 2',
+                'place': 'District',
+                'type': 'boundary',
+                'mz_boundary_from_polygon': True,  # need this for hack
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'county',
+                'kind:xb': 'unrecognized_county',
+                'name': 'XA county 2',
+            })
+
+    def test_claim(self):
+        import dsl
+
+        z, x, y = 16, 0, 0
+
+        self.generate_fixtures(
+            # XA's claim relation
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '6',
+                'boundary': 'claim',
+                'name': 'XA county claim',
+                'claimed_by': 'XA',
+                'disputed_by': 'XB',
+                'source': 'openstreetmap.org',
+            }),
+            # XA's claim _way_, disputed by XB
+            dsl.way(2, dsl.tile_diagonal(z, x, y), {
+                'disputed': 'yes',
+                'disputed_by': 'XB',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_county',
+                'kind:xa': 'county',
+            })
