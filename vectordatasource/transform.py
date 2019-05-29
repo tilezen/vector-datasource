@@ -8956,11 +8956,11 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     """
     Unpack OSM "claimed_by" list into viewpoint kinds.
 
-    For example; "claimed_by=AA,BB,CC" should become "kind:aa=country,
+    For example; "claimed_by=AA;BB;CC" should become "kind:aa=country,
     kind:bb=country, kind:cc=country" (or region, etc... as appropriate for
     the main kind, which should be "unrecognized_TYPE".
 
-    Additionally, "recognized_by=XX,YY,ZZ" indicates that these viewpoints,
+    Additionally, "recognized_by=XX;YY;ZZ" indicates that these viewpoints,
     although they don't claim the territory, recognize the claim and should
     see it in their viewpoint as a country/region/county.
     """
