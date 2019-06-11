@@ -64,3 +64,22 @@ class UnitParsingTest(unittest.TestCase):
         # missing tags will be passed through as None, so we have to handle
         # that by returning None.
         self._assert_meters(None, None)
+
+    def test_finite(self):
+        # should return a finite number or None
+        self._assert_meters('NaN', None)
+        self._assert_meters('Inf', None)
+        self._assert_meters('-Inf', None)
+
+
+class ToFloatTest(unittest.TestCase):
+
+    def test_finite(self):
+        # to_float should return a finite number or None. technically, both
+        # Inf and NaN are valid values for floats, but they do strange things
+        # and may raise unexpected exceptions during arithmetic. in general,
+        # we do not expect to see valid uses of NaN or Inf in input data.
+        from vectordatasource.util import to_float
+        self.assertIsNone(to_float('NaN'))
+        self.assertIsNone(to_float('Inf'))
+        self.assertIsNone(to_float('-Inf'))
