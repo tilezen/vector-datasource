@@ -1,8 +1,14 @@
+from math import isinf
+from math import isnan
+
+
 def to_float(x):
     """
-    attempts to convert x to a floating point value,
-    first removing some common punctuation. returns
-    None if conversion failed.
+    Attempts to convert x to a floating point value, first removing some
+    common punctuation.
+
+    Returns None if conversion failed, or if the converted value is not
+    finite (i.e: NaN or Inf).
     """
 
     if x is None:
@@ -13,7 +19,18 @@ def to_float(x):
         x = x.replace(';', '.').replace(',', '.')
 
     try:
-        return float(x)
+        value = float(x)
+        # although NaN and Inf are, technically, valid floating point values,
+        # they're pretty unhelpful when we're expecting finite values. in
+        # addition, they can raise unexpected exceptions when being processed
+        # by stages in the pipeline which were written with finite valus in
+        # mind. we expect that if we encounter them in input data, that's
+        # probably a mistake, so we can treat them as missing / invalid.
+        if isnan(value) or isinf(value):
+            return None
+
+        return value
+
     except ValueError:
         return None
 
