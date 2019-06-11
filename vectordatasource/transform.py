@@ -8905,7 +8905,7 @@ _REMAP_VIEWPOINT_KIND = {
     'Lease limit': 'lease_limit',
     'Line of control (please verify)': 'line_of_control',
     'Overlay limit': 'overlay_limit',
-    'Unrecognized': 'unrecognized',
+    'Unrecognized': 'unrecognized_country',
     'Map unit boundary': 'map_unit',
     'Breakaway': 'disputed_breakaway',
     'Claim boundary': 'disputed_claim',

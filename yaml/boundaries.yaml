@@ -43,7 +43,7 @@ global:
         - [ 'lease_limit', 'Lease limit' ]
         - [ 'line_of_control', 'Line of control (please verify)' ]
         - [ 'overlay_limit', 'Overlay limit' ]
-        - [ 'unrecognized', 'Unrecognized' ]
+        - [ 'unrecognized_country', 'Unrecognized' ]
         - [ 'map_unit', 'Map unit boundary' ]
         - [ 'disputed_breakaway', 'Breakaway' ]
         - [ 'disputed_claim', 'Claim boundary' ]

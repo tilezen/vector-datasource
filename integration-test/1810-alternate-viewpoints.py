@@ -537,3 +537,51 @@ class CountyBoundary(FixtureTest):
                 'kind': 'unrecognized_county',
                 'kind:xa': 'county',
             })
+
+
+class NaturalEarth(FixtureTest):
+
+    def test_country_claim(self):
+        # test that a boundary tagged as generally unrecognized, but a country
+        # boundary in some viewpoint, gets output with the appropriate kind:XX
+        # viewpoint property.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Unrecognized',
+                'fclass_gb': 'International boundary (verify)',
+                'min_zoom': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_country',
+                'kind:gb': 'country',
+            })
+
+    def test_country_dispute(self):
+        # check that a boundary which is disputed and shouldn't be shown in
+        # some viewpoint is output with a kind:XX property reflecting that.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'International boundary (verify)',
+                'fclass_gb': 'Unrecognized',
+                'min_zoom': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'country',
+                'kind:gb': 'unrecognized_country',
+            })
