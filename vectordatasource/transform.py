@@ -8911,6 +8911,15 @@ _REMAP_VIEWPOINT_KIND = {
     'Claim boundary': 'disputed_claim',
     'Elusive frontier': 'disputed_elusive',
     'Reference line': 'disputed_reference_line',
+    'Admin-1 region boundary': 'macroregion',
+    'Admin-1 boundary': 'region',
+    'Admin-1 statistical boundary': 'region',
+    'Admin-1 statistical meta bounds': 'region',
+    '1st Order Admin Lines': 'region',
+    'Unrecognized Admin-1 region boundary': 'unrecognized_macroregion',
+    'Unrecognized Admin-1 boundary': 'unrecognized_region',
+    'Unrecognized Admin-1 statistical boundary': 'unrecognized_region',
+    'Unrecognized Admin-1 statistical meta bounds': 'unrecognized_region',
 }
 
 

@@ -246,10 +246,13 @@ filters:
       kind_detail: '2'
     table: ne
 
-  - filter: {featurecla: Admin-1 region boundary}
+  - filter:
+      featurecla:
+        - Admin-1 region boundary
     min_zoom: *ne_region_boundaries_min_zoom
     output:
       <<: *output_properties
+      <<: *ne_localized_kind_properties
       kind: macroregion
       kind_detail: '3'
     extra_columns: [scalerank]
@@ -264,6 +267,21 @@ filters:
     extra_columns: [scalerank]
     output:
       <<: *output_properties
+      <<: *ne_localized_kind_properties
       kind: region
+      kind_detail: '4'
+    table: ne
+  - filter:
+      featurecla:
+        - Unrecognized Admin-1 region boundary
+        - Unrecognized Admin-1 boundary
+        - Unrecognized Admin-1 statistical boundary
+        - Unrecognized Admin-1 statistical meta bounds
+    min_zoom: *ne_region_boundaries_min_zoom
+    extra_columns: [scalerank]
+    output:
+      <<: *output_properties
+      <<: *ne_localized_kind_properties
+      kind: unrecognized_region
       kind_detail: '4'
     table: ne
