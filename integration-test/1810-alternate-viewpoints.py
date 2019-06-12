@@ -674,3 +674,23 @@ class NaturalEarth(FixtureTest):
                 'kind': 'region',
                 'kind:gb': 'country',
             })
+
+    def test_unrecognized_macroregion(self):
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Admin-1 region boundary',
+                'fclass_gb': 'Unrecognized Admin-1 region boundary',
+                'scalerank': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'macroregion',
+                'kind:gb': 'unrecognized_macroregion',
+            })
