@@ -537,3 +537,160 @@ class CountyBoundary(FixtureTest):
                 'kind': 'unrecognized_county',
                 'kind:xa': 'county',
             })
+
+
+class NaturalEarth(FixtureTest):
+
+    def test_country_claim(self):
+        # test that a boundary tagged as generally unrecognized, but a country
+        # boundary in some viewpoint, gets output with the appropriate kind:XX
+        # viewpoint property.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Unrecognized',
+                'fclass_gb': 'International boundary (verify)',
+                'min_zoom': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_country',
+                'kind:gb': 'country',
+            })
+
+    def test_country_dispute(self):
+        # check that a boundary which is disputed and shouldn't be shown in
+        # some viewpoint is output with a kind:XX property reflecting that.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'International boundary (verify)',
+                'fclass_gb': 'Unrecognized',
+                'min_zoom': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'country',
+                'kind:gb': 'unrecognized_country',
+            })
+
+    def test_region_claim(self):
+        # test that a boundary tagged as generally unrecognized, but a region
+        # boundary in some viewpoint, gets output with the appropriate kind:XX
+        # viewpoint property.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Unrecognized Admin-1 boundary',
+                'fclass_gb': 'Admin-1 boundary',
+                'scalerank': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_region',
+                'kind:gb': 'region',
+            })
+
+    def test_region_dispute(self):
+        # check that a boundary which is disputed and shouldn't be shown in
+        # some viewpoint is output with a kind:XX property reflecting that.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Admin-1 boundary',
+                'fclass_gb': 'Unrecognized Admin-1 boundary',
+                'scalerank': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'region',
+                'kind:gb': 'unrecognized_region',
+            })
+
+    def test_country_view_region(self):
+        # check that viewpoint can have kind:XX = region on a kind = country,
+        # not just unrecognized.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'International boundary (verify)',
+                'fclass_gb': 'Admin-1 boundary',
+                'min_zoom': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'country',
+                'kind:gb': 'region',
+            })
+
+    def test_region_view_country(self):
+        # check that viewpoint can have kind:XX = country on a kind = region,
+        # not just unrecognized.
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Admin-1 boundary',
+                'fclass_gb': 'International boundary (verify)',
+                'min_zoom': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'region',
+                'kind:gb': 'country',
+            })
+
+    def test_unrecognized_macroregion(self):
+        import dsl
+
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Admin-1 region boundary',
+                'fclass_gb': 'Unrecognized Admin-1 region boundary',
+                'scalerank': 0,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'macroregion',
+                'kind:gb': 'unrecognized_macroregion',
+            })
