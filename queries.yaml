@@ -1598,6 +1598,22 @@ post_process:
       layer: admin_areas
       start_zoom: 0
 
+  # inject polygons from raster
+  - fn: vectordatasource.landcover.inject
+    params:
+      layer: landuse
+      url: https://snapzen.sc-jpl.com/tilezen/landcover/v1/512/all/{z}/{x}/{y}.png?api_key=abc123
+      kinds:
+        27: forest
+        146: wetland
+        184: shrubland
+        188: herbaceous
+        198: barren
+        203: developed
+        215: cultivated
+        230: glacier
+        232: desert
+
   - fn: vectordatasource.transform.simplify_and_clip
     params: {simplify_before: 16}
 
