@@ -1105,6 +1105,7 @@ BEGIN
   IF wikidata_id IS NOT NULL THEN
     SELECT w.tags INTO tags FROM wikidata w WHERE w.id = wikidata_id;
     SELECT hstore(ARRAY[
+      'featurecla', ne_pp.featurecla,
       'fclass_iso', ne_pp.fclass_iso,
       'fclass_ar', ne_pp.fclass_ar,
       'fclass_bd', ne_pp.fclass_bd,
