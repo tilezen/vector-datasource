@@ -8,9 +8,13 @@ global:
     admin_level: {col: admin_level}
     population: {col: population}
     country_capital:
-      call:
-        func: util.tag_str_to_bool
-        args: [ { col: capital } ]
+      case:
+        - when: {featurecla: *ne_country_capital}
+          then: true
+        - else:
+            call:
+              func: util.tag_str_to_bool
+              args: [ { col: capital } ]
     region_capital:
       case:
         - when: {featurecla: *ne_region_capital}
