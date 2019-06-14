@@ -17,18 +17,19 @@ class _UrlPattern(object):
             replace("{y}", str(coord.row))
 
 
-def _geotransform(topleft, bottomright, tile_size):
+def _geotransform(topleft, bottomright, width, height):
     ul_x, ul_y = coord_to_mercator_point(topleft)
     lr_x, lr_y = coord_to_mercator_point(bottomright.down().right())
     minx = min(ul_x, lr_x)
     miny = min(ul_y, lr_y)
     maxx = max(ul_x, lr_x)
     maxy = max(ul_y, lr_y)
-    return (minx, (maxx - minx) / tile_size, 0,
-            maxy, 0, (miny - maxy) / tile_size)
+    return (minx, (maxx - minx) / width, 0,
+            maxy, 0, (miny - maxy) / height)
 
 
-def _download_raster_png(bounds, zoom, url_pattern, output_file, cache=None):
+def _download_raster_png(bounds, zoom, url_pattern, output_file,
+                         median_filter_size=3, cache=None):
     """
     Download the tiles covering bounds at zoom level using the given URL
     pattern and store them in output_file (in PNG format), returning the
@@ -39,6 +40,7 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file, cache=None):
     from cachecontrol import CacheControl
     from cachecontrol.caches.file_cache import FileCache
     from PIL import Image
+    from PIL import ImageFilter
     from cStringIO import StringIO
 
     url = _UrlPattern(url_pattern)
@@ -50,20 +52,23 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file, cache=None):
 
     topleft = mercator_point_to_coord(zoom, bounds[0], bounds[3])
     bottomright = mercator_point_to_coord(zoom, bounds[2], bounds[1])
+
+    minx = int(topleft.column)
+    miny = int(topleft.row)
+    maxx = int(bottomright.column)
+    maxy = int(bottomright.row)
+
+    width = tile_size * (maxx - minx + 1)
+    height = tile_size * (maxy - miny + 1)
+
     if topleft == bottomright:
         response = session.get(url(topleft))
         assert response.status_code == 200
-        with open(output_file, 'w') as fh:
-            fh.write(response.content)
+        io = StringIO(response.content)
+        im = Image.open(io)
+        assert im.mode == 'P'
 
     else:
-        minx = int(topleft.column)
-        miny = int(topleft.row)
-        maxx = int(bottomright.column)
-        maxy = int(bottomright.row)
-
-        width = tile_size * (maxx - minx + 1)
-        height = tile_size * (maxy - miny + 1)
         im = Image.new('RGBA', (width, height))
 
         for x in xrange(minx, maxx + 1):
@@ -82,9 +87,10 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file, cache=None):
                 im.paste(tile, (dx * tile_size, dy * tile_size))
 
         im = im.quantize()
-        im.save(output_file)
 
-    return _geotransform(topleft, bottomright, tile_size)
+    im.save(output_file)
+
+    return _geotransform(topleft, bottomright, width, height)
 
 
 class _tempdir(object):
@@ -113,6 +119,7 @@ def inject(ctx):
     url_pattern = params.required('url')
     kinds_mapping = params.required('kinds', typ=dict)
     cache = params.optional('cache')
+    median_filter_size = params.optional('median-size', default=3, typ=int)
 
     layer = _find_layer(ctx.feature_layers, layer_name)
     features = layer['features']
@@ -121,13 +128,13 @@ def inject(ctx):
         output_png = path_join(tmp, 'landcover.png')
         geotransform = _download_raster_png(
             ctx.unpadded_bounds, ctx.nominal_zoom, url_pattern,
-            output_png, cache)
+            output_png, median_filter_size, cache)
 
         ds = gdal.Open(output_png)
         assert ds is not None
 
         srs = osr.SpatialReference()
-        srs.ImportFromEPSG(3785)
+        srs.ImportFromEPSG(3857)
         ds.SetProjection(srs.ExportToWkt())
         ds.SetGeoTransform(geotransform)
         band = ds.GetRasterBand(1)
@@ -153,7 +160,6 @@ def inject(ctx):
                 shape = wkb_loads(ogr_geom.ExportToWkb())
 
                 props = {'kind': 'landcover', 'kind_detail': kind_detail}
-                import pdb; pdb.set_trace()
                 features.append((shape, props, None))
 
         # otherwise GDAL won't free any resources!
