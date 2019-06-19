@@ -1603,6 +1603,7 @@ post_process:
     params:
       layer: landuse
       url: https://snapzen.sc-jpl.com/tilezen/landcover/v1/512/all/{z}/{x}/{y}.png?api_key=abc123
+      retries: 10
       kinds:
         27: forest
         146: wetland

@@ -75,21 +75,28 @@ def _neighbourhood(radius):
 
 
 def _get_tile(session, url_pattern, zoom, x, y, retries=3):
+    from time import sleep
+    from sys import stderr
+
     coord = Coordinate(zoom=zoom, column=x, row=y)
     url = url_pattern(coord)
 
     count = 0
     while count < retries:
+        print>>stderr, "GET: %r" % (url,)
         response = session.get(url)
         if response.status_code == 200:
             return response
+        print>>stderr, "FAILED [%d/%d], backing off for %d" % (count, retries, 2**count)
+        sleep(2 ** count)
         count += 1
+
     raise Exception("Failed to fetch tile %r: status = %r after %d retries" %
                     (url, response.status_code, count))
 
 
 def _download_raster_png(bounds, zoom, url_pattern, output_file,
-                         median_filter_size=3, cache=None):
+                         median_filter_size=3, cache=None, retries=3):
     """
     Download the tiles covering bounds at zoom level using the given URL
     pattern and store them in output_file (in PNG format), returning the
@@ -117,10 +124,10 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
     bottomright = mercator_point_to_coord(
         zoom, bounds[2] + margin, bounds[1] - margin)
 
-    minx = int(topleft.column)
-    miny = int(topleft.row)
-    maxx = int(bottomright.column)
-    maxy = int(bottomright.row)
+    minx = max(0, int(topleft.column))
+    miny = max(0, int(topleft.row))
+    maxx = min(int(bottomright.column), 2**zoom - 1)
+    maxy = min(int(bottomright.row), 2**zoom - 1)
 
     width = tile_size * (maxx - minx + 1)
     height = tile_size * (maxy - miny + 1)
@@ -129,7 +136,7 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
 
     for x in xrange(minx, maxx + 1):
         for y in xrange(miny, maxy + 1):
-            response = _get_tile(session, url, zoom, x, y, retries=3)
+            response = _get_tile(session, url, zoom, x, y, retries=retries)
 
             io = StringIO(response.content)
             tile = Image.open(io)
@@ -213,6 +220,7 @@ def inject(ctx):
     median_filter_size = params.optional('median-size', default=3, typ=int)
     clipping_layer_name = params.optional('clipping-layer', default='water')
     area_in_pixels = params.optional('area-in-pixels', typ=int)
+    retries = params.optional('retries', typ=int, default=3)
 
     # sensible default?
     if area_in_pixels is None:
@@ -231,7 +239,7 @@ def inject(ctx):
         output_png = path_join(tmp, 'landcover.png')
         geotransform = _download_raster_png(
             ctx.unpadded_bounds, ctx.nominal_zoom, url_pattern,
-            output_png, median_filter_size, cache)
+            output_png, median_filter_size, cache, retries)
 
         ds = gdal.Open(output_png)
         assert ds is not None
@@ -246,7 +254,7 @@ def inject(ctx):
         mem_ds = mem_drv.Create('', band.XSize, band.YSize, 1, gdal.GDT_Byte)
         mem_ds.SetProjection(srs.ExportToWkt())
         mem_ds.SetGeoTransform(geotransform)
-        dst_band = ds.GetRasterBand(1)
+        dst_band = mem_ds.GetRasterBand(1)
         gdal.SieveFilter(band, None, dst_band, area_in_pixels, 4)
 
         ogr_layername = 'layer'
@@ -279,10 +287,8 @@ def inject(ctx):
                     if not shape.is_valid:
                         shape = shape.buffer(0)
 
-                    if not shape.is_valid:
-                        import pdb; pdb.set_trace()
-                    assert shape.is_valid
-                    features.append((shape, props, None))
+                    if shape.is_valid:
+                        features.append((shape, props, None))
 
         # otherwise GDAL won't free any resources!
         ds = None
