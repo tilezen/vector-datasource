@@ -1602,6 +1602,7 @@ post_process:
   - fn: vectordatasource.landcover.inject
     params:
       layer: landuse
+      end_zoom: 13
       url: https://snapzen.sc-jpl.com/tilezen/landcover/v1/512/all/{z}/{x}/{y}.png?api_key=abc123
       retries: 10
       kinds:

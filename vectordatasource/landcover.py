@@ -233,6 +233,13 @@ def inject(ctx):
     clipping_layer_name = params.optional('clipping-layer', default='water')
     area_in_pixels = params.optional('area-in-pixels', typ=int)
     retries = params.optional('retries', typ=int, default=3)
+    start_zoom = params.optional('start_zoom', typ=int, default=0)
+    end_zoom = params.optional('end_zoom', typ=int)
+
+    zoom = ctx.nominal_zoom
+    if zoom < start_zoom or \
+       (end_zoom is not None and zoom >= end_zoom):
+        return None
 
     # sensible default?
     if area_in_pixels is None:
@@ -252,7 +259,7 @@ def inject(ctx):
     mem_drv = gdal.GetDriverByName('MEM')
 
     ds = _download_raster_png(
-        ctx.unpadded_bounds, ctx.nominal_zoom, url_pattern,
+        ctx.unpadded_bounds, zoom, url_pattern,
         mem_drv, srs, median_filter_size, cache, retries)
     assert ds is not None
     band = ds.GetRasterBand(1)
