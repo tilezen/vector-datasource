@@ -4,7 +4,6 @@ from tilequeue.tile import mercator_point_to_coord
 from tilequeue.tile import coord_to_mercator_point
 from tilequeue.tile import calc_meters_per_pixel_dim
 from ModestMaps.Core import Coordinate
-from os.path import join as path_join
 from collections import defaultdict
 
 
