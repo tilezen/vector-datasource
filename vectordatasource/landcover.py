@@ -95,12 +95,12 @@ def _get_tile(session, url_pattern, zoom, x, y, retries=3):
                     (url, response.status_code, count))
 
 
-def _download_raster_png(bounds, zoom, url_pattern, output_file,
+def _download_raster_png(bounds, zoom, url_pattern, mem_drv, srs,
                          median_filter_size=3, cache=None, retries=3):
     """
     Download the tiles covering bounds at zoom level using the given URL
-    pattern and store them in output_file (in PNG format), returning the
-    GDAL GeoTransform tuple to use for the image.
+    pattern and store them in a new raster created from mem_drv with the
+    coordinate system srs.
     """
 
     import requests
@@ -109,6 +109,7 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
     from PIL import Image
     from cStringIO import StringIO
     from tilequeue.tile import half_earth_circum
+    from osgeo import gdal
 
     url = _UrlPattern(url_pattern)
     tile_size = 256
@@ -161,10 +162,13 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
             dy = y - miny
             im.paste(tile, (dx * tile_size, dy * tile_size))
 
-    # TODO: configurable
-    water = (69, 128, 162, 255)
+    # drop down to just the red channel!
+    im = im.getchannel("R")
 
-    im2 = Image.new('RGBA', (width, height))
+    # TODO: configurable
+    water = 69
+
+    im2 = Image.new('L', (width, height))
     for x in xrange(median_filter_size, width - median_filter_size):
         for y in xrange(median_filter_size, height - median_filter_size):
             mid = im.getpixel((x, y))
@@ -199,22 +203,17 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
 
             im2.putpixel((x, y), mid)
 
-    im2 = im2.quantize()
-    im2.save(output_file)
+    ds = mem_drv.Create('', width, height, 1, gdal.GDT_Byte)
+    ds.SetProjection(srs.ExportToWkt())
+    ds.SetGeoTransform(_geotransform(topleft, bottomright, width, height))
 
-    return _geotransform(topleft, bottomright, width, height)
+    band = ds.GetRasterBand(1)
+    band.WriteRaster(
+        0, 0, width, height, im2.tobytes(),
+        buf_xsize=width, buf_ysize=height,
+        buf_type=gdal.GDT_Byte)
 
-
-class _tempdir(object):
-
-    def __enter__(self):
-        import tempfile
-        self.tempdir = tempfile.mkdtemp()
-        return self.tempdir
-
-    def __exit__(self, type, value, traceback):
-        import shutil
-        shutil.rmtree(self.tempdir)
+    return ds
 
 
 def inject(ctx):
@@ -249,64 +248,57 @@ def inject(ctx):
         if shape.geom_type in ('Polygon', 'MultiPolygon'):
             clipping_shapes.append(shape)
 
-    with _tempdir() as tmp:
-        output_png = path_join(tmp, 'landcover.png')
-        geotransform = _download_raster_png(
-            ctx.unpadded_bounds, ctx.nominal_zoom, url_pattern,
-            output_png, median_filter_size, cache, retries)
+    srs = osr.SpatialReference()
+    srs.ImportFromEPSG(3857)
+    mem_drv = gdal.GetDriverByName('MEM')
 
-        ds = gdal.Open(output_png)
-        assert ds is not None
+    ds = _download_raster_png(
+        ctx.unpadded_bounds, ctx.nominal_zoom, url_pattern,
+        mem_drv, srs, median_filter_size, cache, retries)
+    assert ds is not None
+    band = ds.GetRasterBand(1)
 
-        srs = osr.SpatialReference()
-        srs.ImportFromEPSG(3857)
-        ds.SetProjection(srs.ExportToWkt())
-        ds.SetGeoTransform(geotransform)
-        band = ds.GetRasterBand(1)
+    sieve_ds = mem_drv.Create('', band.XSize, band.YSize, 1, gdal.GDT_Byte)
+    sieve_ds.SetProjection(srs.ExportToWkt())
+    sieve_ds.SetGeoTransform(ds.GetGeoTransform())
+    dst_band = sieve_ds.GetRasterBand(1)
+    gdal.SieveFilter(band, None, dst_band, area_in_pixels, 4)
 
-        mem_drv = gdal.GetDriverByName('MEM')
-        mem_ds = mem_drv.Create('', band.XSize, band.YSize, 1, gdal.GDT_Byte)
-        mem_ds.SetProjection(srs.ExportToWkt())
-        mem_ds.SetGeoTransform(geotransform)
-        dst_band = mem_ds.GetRasterBand(1)
-        gdal.SieveFilter(band, None, dst_band, area_in_pixels, 4)
+    ogr_layername = 'layer'
+    drv = ogr.GetDriverByName('memory')
+    dst_ds = drv.CreateDataSource('')
+    ogr_layer = dst_ds.CreateLayer(
+        ogr_layername, geom_type=ogr.wkbPolygon, srs=srs)
+    field = ogr.FieldDefn('Red', ogr.OFTInteger)
+    ogr_layer.CreateField(field)
 
-        ogr_layername = 'layer'
-        drv = ogr.GetDriverByName('memory')
-        dst_ds = drv.CreateDataSource('')
-        ogr_layer = dst_ds.CreateLayer(
-            ogr_layername, geom_type=ogr.wkbPolygon, srs=srs)
-        field = ogr.FieldDefn('Red', ogr.OFTInteger)
-        ogr_layer.CreateField(field)
+    gdal.Polygonize(dst_band, None, ogr_layer, 0, [], None)
 
-        gdal.Polygonize(dst_band, None, ogr_layer, 0, [], None)
+    for feature in ogr_layer:
+        red = feature.GetField('Red')
+        kind_detail = kinds_mapping.get(red)
 
-        palette = band.GetColorTable()
-        for feature in ogr_layer:
-            colour_index = feature.GetField('Red')
-            red = palette.GetColorEntry(colour_index)[0]
-            kind_detail = kinds_mapping.get(red)
+        if kind_detail:
+            ogr_geom = feature.GetGeometryRef()
+            shape = wkb_loads(ogr_geom.ExportToWkb())
 
-            if kind_detail:
-                ogr_geom = feature.GetGeometryRef()
-                shape = wkb_loads(ogr_geom.ExportToWkb())
+            props = {'kind': 'landcover', 'kind_detail': kind_detail}
+            for clipping_shape in clipping_shapes:
+                shape = shape.difference(clipping_shape)
 
-                props = {'kind': 'landcover', 'kind_detail': kind_detail}
-                for clipping_shape in clipping_shapes:
-                    shape = shape.difference(clipping_shape)
+            if not shape.is_empty:
+                # try the old "make valid" trick, as some of the polygons
+                # coming from GDAL aren't valid (?!)
+                if not shape.is_valid:
+                    shape = shape.buffer(0)
 
-                if not shape.is_empty:
-                    # try the old "make valid" trick, as some of the polygons
-                    # coming from GDAL aren't valid (?!)
-                    if not shape.is_valid:
-                        shape = shape.buffer(0)
+                if shape.is_valid:
+                    features.append((shape, props, None))
 
-                    if shape.is_valid:
-                        features.append((shape, props, None))
-
-        # otherwise GDAL won't free any resources!
-        ds = None
-        dst_ds = None
-        mem_ds = None
+    # otherwise GDAL won't free any resources!
+    del ds
+    del dst_ds
+    del sieve_ds
+    del mem_drv
 
     return layer
