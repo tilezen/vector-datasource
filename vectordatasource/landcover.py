@@ -108,6 +108,7 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
     from cachecontrol.caches.file_cache import FileCache
     from PIL import Image
     from cStringIO import StringIO
+    from tilequeue.tile import half_earth_circum
 
     url = _UrlPattern(url_pattern)
     tile_size = 256
@@ -117,17 +118,30 @@ def _download_raster_png(bounds, zoom, url_pattern, output_file,
     if cache:
         session = CacheControl(session, cache=FileCache(cache))
 
+    def _clip(x):
+        if x < -half_earth_circum:
+            return -half_earth_circum
+        if x > half_earth_circum:
+            return half_earth_circum
+        return x
+
     meters_per_px = calc_meters_per_pixel_dim(zoom)
     margin = meters_per_px * median_filter_size
     topleft = mercator_point_to_coord(
-        zoom, bounds[0] - margin, bounds[3] + margin)
+        zoom, _clip(bounds[0] - margin), _clip(bounds[3] + margin))
     bottomright = mercator_point_to_coord(
-        zoom, bounds[2] + margin, bounds[1] - margin)
+        zoom, _clip(bounds[2] + margin), _clip(bounds[1] - margin))
 
-    minx = max(0, int(topleft.column))
-    miny = max(0, int(topleft.row))
-    maxx = min(int(bottomright.column), 2**zoom - 1)
-    maxy = min(int(bottomright.row), 2**zoom - 1)
+    minx = int(topleft.column)
+    miny = int(topleft.row)
+    maxx = int(bottomright.column)
+    maxy = int(bottomright.row)
+
+    coord_end = 1 << zoom
+    assert 0 <= minx < coord_end
+    assert 0 <= miny < coord_end
+    assert 0 <= maxx < coord_end
+    assert 0 <= maxy < coord_end
 
     width = tile_size * (maxx - minx + 1)
     height = tile_size * (maxy - miny + 1)
