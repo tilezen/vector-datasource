@@ -84,11 +84,9 @@ def _get_tile(session, url_pattern, zoom, x, y, retries=3):
 
     count = 0
     while count < retries:
-        print>>stderr, "GET: %r" % (url,)
         response = session.get(url)
         if response.status_code == 200:
             return response
-        print>>stderr, "FAILED [%d/%d], backing off for %d" % (count, retries, 2**count)
         sleep(2 ** count)
         count += 1
 
