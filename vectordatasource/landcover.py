@@ -1,5 +1,7 @@
 from vectordatasource.transform import _Params
 from vectordatasource.transform import _find_layer
+from vectordatasource.transform import _filter_geom_types
+from vectordatasource.transform import _POLYGON_DIMENSION
 from tilequeue.tile import mercator_point_to_coord
 from tilequeue.tile import coord_to_mercator_point
 from tilequeue.tile import calc_meters_per_pixel_dim
@@ -298,7 +300,12 @@ def inject(ctx):
                 if not shape.is_valid:
                     shape = shape.buffer(0)
 
-                if shape.is_valid:
+                # buffer might have made the shape empty, so we need to
+                # check again, and make sure we only have polygonal results
+                if shape.is_valid and not shape.is_empty:
+                    shape = _filter_geom_types(shape, _POLYGON_DIMENSION)
+
+                if shape.is_valid and not shape.is_empty:
                     features.append((shape, props, None))
 
     # otherwise GDAL won't free any resources!
