@@ -1,68 +1,61 @@
 v1.8.0
 ------
-* **Release date:** 2019-06-19.
+* **Release date:** 2019-06-26.
 * **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.4.0](https://github.com/tilezen/tilequeue/releases/tag/v2.4.0) and [rawr_tiles v1.1.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.1.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
 
   #### ENHANCEMENTS
 
-  * **boundaries**: Add more `kind:*` point-of-view (POV) from Natural Earth for low zooms for disputed lines. (Issue [#1840](https://github.com/tilezen/vector-datasource/issues/1840))
-     * To handle disagreements about the location of borders, the `kind` may be prefixed with `unrecognized_`, e.g: `unrecognized_country` (was `unrecognized` in v1.7), `unrecognized_macroregion`, `unrecognized_region`, `unrecognized_county` for some differing viewpoints (see `kind:xx` below).
-     * `kind:xx`: alternate `kind` according to the viewpoint `XX`. If you want to show features according to a particular viewpoint, then use `kind:xx` if it exists and fall back to `kind` if not. The range of values is the same as for `kind`. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`.
-  * **places**: Add more `kind:*` POV from Natural Earth for low zooms and places layer. (Issue [#1840](https://github.com/tilezen/vector-datasource/issues/1840))
-    * Adds support for alternate points of view in boundaries layer with `kind:*` properties (like `kind:iso`). Currently this is only for zooms 5, 6 and 7 from Natural Earth. We plan to add more lower zoom data from Natural Earth, and high-zoom data from OpenStreetMap in the next release. (Issue [#1552](https://github.com/tilezen/vector-datasource/issues/1552)) The following country and international organizations worldviews are supported:
-        * Argentina (`ar`), Bangladesh (`bd`), Brazil (`br`), China (`cn`), Egypt (`eg`), France (`fr`), Germany (`de`), Greece (`gr`), India (`in`), Indonesia (`id`), Israel (`il`), Italy (`it`), Japan (`jp`), Morocco (`ma`), Nepal (`np`), Netherlands (`nl`), Pakistan (`pk`), Palestine (`ps`), Poland (`pl`), Portugal (`pt`), Russia (`ru`), Saudi Arabia (`sa`), South Korea (`ko`), Spain (`es`), Sweden (`se`), Taiwan (`tw`), Turkey (`tr`), United Kingdom (`gb`), United States (`us`), Vietnam (`vn`), ISO (`iso`)
-    * `country_capital:xx`: when present, either `true` or `false` to override the `country_capital` value for XX's viewpoint. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`, same as for `kind:xx` on boundaries.
-    * `region_capital:xx`: when present, either `true` or `false` to override the `region_capital` value for XX's viewpoint. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`, same as for `kind:xx` on boundaries.
+  * **boundaries**: Add more `kind:*` point-of-view (POV) from Natural Earth for low zooms for disputed boundary lines, expanding on the v1.7 effort to also include `region` boundary disputes. (Issue [#1840](https://github.com/tilezen/vector-datasource/issues/1840))
+     * To handle disagreements about the location of borders, the `kind` may be prefixed with `unrecognized_`, e.g: `unrecognized_country` (was `unrecognized` in v1.7), `unrecognized_macroregion`, `unrecognized_region`, `unrecognized_county` for differing viewpoints (see `kind:xx` below).
+     * `kind:xx`: alternate `kind` according to the viewpoint of country code `xx`. If you want to show features according to a particular viewpoint, then use `kind:xx` if it exists and fall back to `kind` if not. The range of values is the same as for `kind`. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`.
   * **boundaries**: Add OSM alternate viewpoints for country, region, and counties boundaries. (Issue [#1810](https://github.com/tilezen/vector-datasource/issues/1810))
       * We track two kinds of features from OSM for indicating disputes:
           1. **claims**, which have `boundary=claim, claimed_by=*, admin_level=*` tags. These indicate borders which aren't generally recognized, but should appear in the viewpoint of the `claimed_by=` value. additionally, extra viewpoints which don't make a claim for themselves but still want the claimant's view reflected in their own can be specified in a `recognized_by=*` tag.
           2. **disputes** which have `dispute=yes` or `disputed=yes`, plus a list of disputant viewpoints in the `disputed_by=*` tag. when a viewpoint is listed in `disputed_by` then the boundary will have its `kind:xx` set to `unrecognized_*` (where XX is the viewpoint / country code and * is the kind of boundary it is).
-  * **places**: Set `country_capital` and `region_capital` booleans from Natural Earth on high-zoom OSM features, including POV. (Issue [#1810](https://github.com/tilezen/vector-datasource/issues/1810))
+  * **earth**: The former `OpenStreetMapData.com` source is now hosted by FOSSGIS at `osmdata.openstreetmap.de` and the source property has been updated. Issues ([#1855](https://github.com/tilezen/vector-datasource/issues/1855)) and ([#1859](https://github.com/tilezen/vector-datasource/issues/1859))
+  * **landuse**:  Add `kind_detail` for aerodrome enhancement and backfill `kind_detail` on `aerodromes` with values, `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`, and add optional `aerodrome_passenger_count` property indicating the number of passengers through the aerodrome per year sourced from Wikidata. (Issues [#1277](https://github.com/tilezen/vector-datasource/issues/1277) and [#1873](https://github.com/tilezen/vector-datasource/issues/1873))
+  * **places**: Backfill `country_capital` and `region_capital` booleans from Natural Earth on high-zoom OSM features, including point-of-view. (Issue [#1810](https://github.com/tilezen/vector-datasource/issues/1810))
+  * **places**: Add point-of-view (POV) to capitals from Natural Earth data to all zooms. (Issue [#1840](https://github.com/tilezen/vector-datasource/issues/1840))
+    * `country_capital:xx`: when present, either `true` or `false` to override the `country_capital` value for XX's viewpoint. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`, same as for `kind:xx` on boundaries.
+    * `region_capital:xx`: when present, either `true` or `false` to override the `region_capital` value for XX's viewpoint. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`, same as for `kind:xx` on boundaries.
   * **places**: Add `wikidata_id` [Wikidata](https://www.wikidata.org) ID concordance to features. (Issue [#858](https://github.com/tilezen/vector-datasource/issues/858))
-  * **pois**: Add wikidata id concordance to features. (Issue [#858](https://github.com/tilezen/vector-datasource/issues/858))
-    * `wikidata_id`: when present, the [Wikidata](https://www.wikidata.org) ID corresponding to this feature.
-  * **water**: Add `wikidata_id`  [Wikidata](https://www.wikidata.org) ID concordance to features. (Issue [#858](https://github.com/tilezen/vector-datasource/issues/858))
-  * **landuse**: Backfill `kind_detail` on `aerodromes` with values: `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`, and add optional `aerodrome_passenger_count`  giving the number of passengers through the aerodrome per year from Wikidata. (Issue [#1873](https://github.com/tilezen/vector-datasource/issues/1873))
-  * **pois**: Backfill `kind_detail` on `aerodromes` with values: `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`, and add optional `aerodrome_passenger_count`  giving the number of passengers through the aerodrome per year from Wikidata. (Issue [#1873](https://github.com/tilezen/vector-datasource/issues/1873))
-  * **roads**: Ensure runways get `kind_detail` polish by intersecting them with landuse `aerodrome` polygons using `overlap` function. (Issue [#1852](https://github.com/tilezen/vector-datasource/issues/1852))
-  * **water**: Update to new osmdata.com source. OpenStreetMapData.com is now hosted by FOSSGIS at osmdata.openstreetmap.de. Issues ([#1855](https://github.com/tilezen/vector-datasource/issues/1855)) and ([#1859](https://github.com/tilezen/vector-datasource/issues/1859))
-  * **earth**: Update to new osmdata.com source. OpenStreetMapData.com is now hosted by FOSSGIS at osmdata.openstreetmap.de. Issues ([#1855](https://github.com/tilezen/vector-datasource/issues/1855)) and ([#1859](https://github.com/tilezen/vector-datasource/issues/1859))
-  * **roads**: Missing miniature, possibly other railway types: `disused`, `miniature`, `preserved`. (Issue [#955](https://github.com/tilezen/vector-datasource/issues/955))
-  * **pois**: Distinguish military airfield from generic airfield layer-landuse layer-pois polish. (Issue [#1580](https://github.com/tilezen/vector-datasource/issues/1580))
-    `aerodrome` - with `kind_detail` in `public`, `private`, `military/public`, `airfield`, `international`, `regional`, `gliding`.
-  * **pois**:  Add kind_detail for aerodrome enhancement. (Issue [#1277](https://github.com/tilezen/vector-datasource/issues/1277))
-  * **landuse**:  Add kind_detail for aerodrome enhancement. (Issue [#1277](https://github.com/tilezen/vector-datasource/issues/1277))
+  * **pois**: Add optional [Wikidata](https://www.wikidata.org) `wikidata_id` concordances. (Issue [#858](https://github.com/tilezen/vector-datasource/issues/858))
+  * **pois**: Add `kind_detail` for aerodrome enhancement and backfill `kind_detail` on `aerodromes` with values, `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. (Issues [#1277](https://github.com/tilezen/vector-datasource/issues/1277) and [#1873](https://github.com/tilezen/vector-datasource/issues/1873))
+  * **pois**: Distinguish military `airfield` from generic `aerodrome`. (Issue [#1580](https://github.com/tilezen/vector-datasource/issues/1580))
+  * **roads**: Ensure runways get `kind_detail` polish by intersecting them with landuse `aerodrome` polygons using new `overlap` function. (Issue [#1852](https://github.com/tilezen/vector-datasource/issues/1852))
+  * **roads**: Add missing railway types of `disused`, `miniature`, `preserved`. (Issue [#955](https://github.com/tilezen/vector-datasource/issues/955))
+  * **water**: Add optional [Wikidata](https://www.wikidata.org) `wikidata_id` concordances. (Issue [#858](https://github.com/tilezen/vector-datasource/issues/858))
+  * **water**: The former `OpenStreetMapData.com` source is now hosted by FOSSGIS at `osmdata.openstreetmap.de` and the source property has been updated. Issues ([#1855](https://github.com/tilezen/vector-datasource/issues/1855)) and ([#1859](https://github.com/tilezen/vector-datasource/issues/1859))
 
   #### BUG FIXES
 
-  * **boundaries**: Rename `unrecognized` to `unrecognized_country` kind value as more than just country can be unrecognized in various points of view.
+  * **boundaries**: Rename `unrecognized` to `unrecognized_country` kind value to disambiguate POV on country, region, county, and other boundary types.
+  * **buildings**: Check that building height is in a sensible range by limiting tallest structures to 1000 meters. (Issue [#1850](https://github.com/tilezen/vector-datasource/issues/1850))
+  * **earth**: Add variable `min_zoom` to low zoom features from Natural Earth. (Issue [#1287](https://github.com/tilezen/vector-datasource/issues/1287))
+  * **places**: Update Who's On First dump to reflect new and deprecated neigbourhoods. Issues ([#1808](https://github.com/tilezen/vector-datasource/issues/1808)) and ([#1869](https://github.com/tilezen/vector-datasource/issues/1869))
+  * **pois**: Prefer `elevator` over `subway_entrance` when both are true. (Issue [#1876](https://github.com/tilezen/vector-datasource/issues/1876))
+  * **pois**: Prefer `memorial` over `plaque` when both are true. (Issue [#1872](https://github.com/tilezen/vector-datasource/issues/1872))
+  * **pois**: Prefer `bus_stop` over generic transit `platform`s. (Issue [#1874](https://github.com/tilezen/vector-datasource/issues/1874))
+  * **pois**: Improve the **collision_rank** of `fast_food` POIs by adjusting several other's rank. (Issue [#1875](https://github.com/tilezen/vector-datasource/issues/1875))
+  * **pois**: Correct generator `kind_detail` values by using a new OpenStreetMap property. (Issue [#1578](https://github.com/tilezen/vector-datasource/issues/1578)):
+     * The value of the OpenStreetMap `generator:source` tag or, if that tag is missing, an interpolation from the `generator:method` tag. Common values include `biofuel`, `biogas`, `biomass`, `coal`, `diesel`, `gas`, `geothermal`, `hydro`, `nuclear`, `oil`, `solar`, `waste`, `wind`.
+  * **pois**: Only set POI for `harbour`, `port`, `port_terminal`, `ferry_terminal`, `container_terminal` when they aren't also tagged as waterway, natural water,  or landuse reservoir, basin features. (Issue [#1590](https://github.com/tilezen/vector-datasource/issues/1590))
   * **roads**: Speed up road merging, for dense areas like Japan. (Issue [#1847](https://github.com/tilezen/vector-datasource/issues/1847))
   * **roads**: Drop all `name:*` variants in addition to basic `name` to promote more feature merging. (Issue [#1847](https://github.com/tilezen/vector-datasource/issues/1847))
-  * **pois**: Prefer `elevator` over `subway_entrance`. (Issue [#1876](https://github.com/tilezen/vector-datasource/issues/1876))
-  * **pois**: Fix `plaques` so some are `memorials`. (Issue [#1872](https://github.com/tilezen/vector-datasource/issues/1872))
-  * **pois**: Improve the **collision_rank** of `fast_food` POIs. (Issue [#1875](https://github.com/tilezen/vector-datasource/issues/1875))
-  * **roads**: Inconsistency between Natural Earth and OSM road classes. (Issue [#1280](https://github.com/tilezen/vector-datasource/issues/1280))
-  * **roads**: Adjust min_zoom of OSM highways and major roads to better match Natural Earth. (Issue [#1279](https://github.com/tilezen/vector-datasource/issues/1279))
-  * **roads**: Add low-zoom road toll property from Natural Earth. (Issue [#1817](https://github.com/tilezen/vector-datasource/issues/1817))
-  * **roads**: min_zooms at zoom 5 are mix of 3, 4 and 5 instead of just 5.x. (Issue [#1074](https://github.com/tilezen/vector-datasource/issues/1074))
-  * **pois**: Prefer `bus_stop` over generic transit `platform`s. (Issue [#1874](https://github.com/tilezen/vector-datasource/issues/1874))
+  * **roads**: Remap Natural Earth's "trunk" roads to kind `major_road` instead of `highway`. (Issue [#1280](https://github.com/tilezen/vector-datasource/issues/1280))
+  * **roads**: Adjust `min_zoom` of OpenStreetMap highways and major roads to better match Natural Earth's `min_zoom`s. (Issue [#1279](https://github.com/tilezen/vector-datasource/issues/1279))
+  * **roads**: `min_zooms` at zoom 5 are mix of 3, 4 and 5 instead of just 5.x. (Issue [#1074](https://github.com/tilezen/vector-datasource/issues/1074))
+  * **roads**: Add low-zoom `toll` property from Natural Earth to match earlier high-zoom data from OpenStreetMap. (Issue [#1817](https://github.com/tilezen/vector-datasource/issues/1817))
   * **roads**: Add new road `construction` kind with _kind_detail_ from the usual kind from zoom 12+. (Issue [#394](https://github.com/tilezen/vector-datasource/issues/394))
-      * kind_detail: motorway, motorway_link, trunk, primary, secondary, tertiary, trunk_link, unclassified, residential, road, primary_link, secondary_link, living_street, service, pedestrian, track, cycleway, bridleway, tertiary_link, footway, steps, corridor
-  * **pois**: Correct generator `kind_detail` values (new source), (Issue [#1578](https://github.com/tilezen/vector-datasource/issues/1578)):
-     * The value of the OpenStreetMap `generator:source` tag or, if that tag is missing, an interpolation from the `generator:method` tag. Common values include `biofuel`, `biogas`, `biomass`, `coal`, `diesel`, `gas`, `geothermal`, `hydro`, `nuclear`, `oil`, `solar`, `waste`, `wind`.
-  * **water**: Too many straight and bay labels visible at zoom 8 by limiting number of bays in the tile to the largest 10. (Issue [#1838](https://github.com/tilezen/vector-datasource/issues/1838))
+      * `kind_detail`: `motorway`, `motorway_link`, `trunk`, `primary`, `secondary`, `tertiary`, `trunk_link`, `unclassified`, `residential`, `road`, `primary_link`, `secondary_link`, `living_street`, `service`, `pedestrian`, `track`, `cycleway`, `bridleway`, `tertiary_link`, `footway`, `steps`, `corridor
+  * **water**: Reduce the marine water labels visible at zoom 8 by limiting number of bays in the tile to the largest 10. (Issue [#1838](https://github.com/tilezen/vector-datasource/issues/1838))
       * The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_rank` property that starts from 1 and counts up as the feature gets smaller. Note that the ranking is done on a "metatile", which means that each tile (of size 256px, 512px or other) won't necessarily contain the full range from 1 to N of `kind_tile_rank`s.
-  * **pois**: Only set POI for `harbour`, `port`, `port_terminal`, `ferry_terminal`, `container_terminal` when they aren't also tagged as waterway, natural water,  or landuse reservoir, basin features. (Issue [#1590](https://github.com/tilezen/vector-datasource/issues/1590))
-  * **earth**: Add variable `min_zoom` to low zoom features from Natural Earth. (Issue [#1287](https://github.com/tilezen/vector-datasource/issues/1287))
-  * **water**: Water boundary lines should indicate intermittent property (playas). (Issue [#1249](https://github.com/tilezen/vector-datasource/issues/1249))
-  * **places**: Don't include deprecated WOF neigbourhoods (stale dump). Issues ([#1808](https://github.com/tilezen/vector-datasource/issues/1808)) and ([#1869](https://github.com/tilezen/vector-datasource/issues/1869))
-  * **buildings**: Check that building height is in a sensible range by limiting `TALLEST_STRUCTURE_METERS`  to 1000 meters. (Issue [#1850](https://github.com/tilezen/vector-datasource/issues/1850))
-  * **buildings**: Preserve building layer min_zooms thru mid-zoom generalization. (Issue [#1849](https://github.com/tilezen/vector-datasource/issues/1849))
+  * **water**: Water boundary lines now indicate intermittent property (playas), matching their polygons. (Issue [#1249](https://github.com/tilezen/vector-datasource/issues/1249))
 
   #### DOCUMENTATION CHANGES
 
-  * Updated TileJSON for v1.8 schema changes.
-  * Updated Layers documentation for v1.8 schema changes.
+  * TODO Updated TileJSON for v1.8 schema changes.
+  * TODO Updated Layers documentation for v1.8 schema changes.
   * Resolve some dangling TODOs from v1.7.0 documentation release.
   * **traffic_incidents**: Add `road_closure` kind for road has been closed, e.g. due to police presence. Thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (Issue [#1857](https://github.com/tilezen/vector-datasource/issues/1857))
 
