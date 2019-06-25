@@ -740,6 +740,39 @@ class SimplifyAndClipTest(unittest.TestCase):
         out_shape, out_props, out_fid = feature_layer['features'][0]
         self.assertEquals('LineString', out_shape.type)
 
+    def test_filter_geom_types(self):
+        # filter_geom_types seems like it couldn't make a geometry invalid,
+        # since it just filters out some geometry types from a geometry
+        # collection. however, a GeometryCollection appears to be valid if
+        # each individual geometry is valid - whereas a MultiPolygon needs
+        # each polygon to be valid and _also_ no polygons to overlap or
+        # touch at non-vertices.
+        #
+        # this is testing that filter_geom_types checks and fixes overlapping
+        # geometry.
+        #
+        # >>> from shapely.geometry import GeometryCollection, box
+        # >>> a = box(0, 0, 2, 2)
+        # >>> b = box(1, 1, 3, 3)
+        # >>> GeometryCollection([a, b]).is_valid
+        # True
+        # >>> from shapely.geometry import MultiPolygon
+        # >>> MultiPolygon([a, b]).is_valid
+        # False
+
+        from shapely.geometry import GeometryCollection, box
+        from vectordatasource.transform import _filter_geom_types
+        from vectordatasource.transform import _POLYGON_DIMENSION
+
+        a = box(0, 0, 2, 2)
+        b = box(1, 1, 3, 3)
+
+        shape = GeometryCollection([a, b])
+        self.assertTrue(shape.is_valid)
+
+        filtered = _filter_geom_types(shape, _POLYGON_DIMENSION)
+        self.assertTrue(filtered.is_valid)
+
 
 class AdminBoundaryTest(unittest.TestCase):
 

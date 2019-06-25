@@ -860,6 +860,22 @@ def _filter_geom_types(shape, keep_dim):
                 coords.extend(p.coords)
             return MultiPoint(coords)
 
+        elif keep_dim == _POLYGON_DIMENSION:
+            # a GeometryCollection is valid if each individual part is, however
+            # a MultiPolygon is stricter and requires that each part is non-
+            # overlapping and touches others only at vertices. this means we
+            # might need to take another step to make the MultiPolygon valid.
+            mp = MultiPolygon(parts)
+            if not mp.is_valid:
+                mp = _make_valid_if_necessary(mp)
+
+            if mp is not None and mp.is_valid:
+                return mp
+
+            # what do we do here? we're expected to return a valid geometry,
+            # but we don't have one to return... so return an empty geometry?
+            return MultiPolygon()
+
         else:
             return constructor(parts)
 
