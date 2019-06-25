@@ -74,7 +74,6 @@ v1.8.0
   * Add a `where` clause for filtering features based on their properties, with `base_where` and `cutting_where` parameters.
   * Add pixel `tolerance` to polygon merging.
   * Add `split_threshold` with default of 15,000 features to line merging.
-  * Update database indexes
   * Update **Who's On First** import pipeline by generating WOF neigbourhoods into assets bundle (instead of stale database dump) via new `wof_snapshot` script
   * Add **Wikidata** queries to static assets via new `wikidata_merge` script. (Issue [#1878](https://github.com/tilezen/vector-datasource/issues/1878))
   * Switch to **Natural Earth** v5.0.0-pre5 pre-release data assets for boundaries and places themes to support point-of-view work.
