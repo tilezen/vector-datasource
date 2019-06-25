@@ -56,12 +56,12 @@ v1.8.0
 
   * TODO Updated TileJSON for v1.8 schema changes.
   * TODO Updated Layers documentation for v1.8 schema changes.
-  * Resolve some dangling TODOs from v1.7.0 documentation release.
-  * **traffic_incidents**: Add `road_closure` kind for road has been closed, e.g. due to police presence. Thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (Issue [#1857](https://github.com/tilezen/vector-datasource/issues/1857))
+  * Resolved some dangling TODOs from v1.7.0 documentation release.
+  * **traffic_incidents**: Add `road_closure` kind to indicate if a road has been closed, e.g. due to police presence. Thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (Issue [#1857](https://github.com/tilezen/vector-datasource/issues/1857))
 
   #### INTERNAL CHANGES
 
-  * Add `all_name_variants` to `drop_properties` function which tells it to treat `name` as if it's all `name:*` and variants. (Issue [#1847](https://github.com/tilezen/vector-datasource/issues/1847))
+  * Add `all_name_variants` param to `drop_properties` function which treats `name` as if it's all `name:*` and variants. (Issue [#1847](https://github.com/tilezen/vector-datasource/issues/1847))
   * Treat `NaN` and `Inf` as invalid to deal with bad OpenStreetMap import data. (Issue [#1903](https://github.com/tilezen/vector-datasource/issues/1903))
   * Switch Natural Earth zooms to use actual `min_zoom` instead of `scalerank`
   * Fix polygon merging failure related to GEOS/Shapely polygon merging routine `unary_union`. (Issue [#1848](https://github.com/tilezen/vector-datasource/issues/1848))
@@ -73,13 +73,14 @@ v1.8.0
   * Add `unpack_viewpoint_claims` transform
   * Add a `where` clause for filtering features based on their properties, with `base_where` and `cutting_where` parameters.
   * Add pixel `tolerance` to polygon merging.
-  * Add `split_threshold` with default of 15000 features to line merging.
-  * Update **Who's On First** import pipeline by generating WOF neigbourhoods into assets bundle (instead of state database dump) via new `wof_snapshot` script
+  * Add `split_threshold` with default of 15,000 features to line merging.
+  * Update database indexes
+  * Update **Who's On First** import pipeline by generating WOF neigbourhoods into assets bundle (instead of stale database dump) via new `wof_snapshot` script
   * Add **Wikidata** queries to static assets via new `wikidata_merge` script. (Issue [#1878](https://github.com/tilezen/vector-datasource/issues/1878))
-  * Switch to **Natural Earth** v5.0.0-pre5 pre-release data assets for some themes to support point-of-view work.
-  * Updates to database indexes
+  * Switch to **Natural Earth** v5.0.0-pre5 pre-release data assets for boundaries and places themes to support point-of-view work.
   * Upgrade **boto** to 2.49.0 (but add and peg urllib3 to 1.24.3 as they interact)
   * Add **tqdm** 4.31.1 requirement
+
 
 v1.7.0
 ------
