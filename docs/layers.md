@@ -149,7 +149,6 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `name`: A suggested label, formed from the left and right region names, if available. If the name appears to be too long to be rendered on the geometry at a particular zoom it may be omitted.
 * `id`: Identifier for the feature, only provided at zoom 13+.
 * `kind`: mapping of OpenStreetMap's `admin_level` int values to strings like `country` and `state`, plus `aboriginal_lands` boundary type, and also includes normalized Natural Earth values. To handle disagreements about the location of borders, the `kind` may be prefixed with `unrecognized_`, e.g: `unrecognized_country`, for some differing viewpoints (see `kind:xx` below).
-* `kind:xx`: alternate `kind` according to the viewpoint `XX`. If you want to show features according to a particular viewpoint, then use `kind:xx` if it exists and fall back to `kind` if not. The range of values is the same as for `kind`. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`.
 * `kind_detail`: mapping of OpenStreetMap's `admin_level` values. `2` for countries, `4` for regions, and `6`, `8` (zoom 10+)
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
@@ -157,6 +156,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 #### Boundaries properties (common optional):
 
+* `kind:xx`: alternate `kind` according to the viewpoint `XX`. If you want to show features according to a particular viewpoint, then use `kind:xx` if it exists and fall back to `kind` if not. The range of values is the same as for `kind`. Note that the viewpoints are either lower-case [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) codes or the pseudo-code `iso`.
 * `id:left`: For the relation on the left side of the boundary line. This is only provided at zoom 13+.
 * `id:right`: For the relation on the right side of the boundary line. This is only provided at zoom 13+.
 * `name:left`: See name section above, other variants like `old_name` also supported. _See planned bug fix in [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
