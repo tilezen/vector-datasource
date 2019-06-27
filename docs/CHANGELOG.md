@@ -54,8 +54,8 @@ v1.8.0
 
   #### DOCUMENTATION CHANGES
 
-  * TODO Updated TileJSON for v1.8 schema changes.
-  * TODO Updated Layers documentation for v1.8 schema changes.
+  * Updated TileJSON for v1.8 schema changes.
+  * Updated Layers documentation for v1.8 schema changes.
   * Resolved some dangling TODOs from v1.7.0 documentation release.
   * **traffic_incidents**: Add `road_closure` kind to indicate if a road has been closed, e.g. due to police presence. Thanks [@conor-ettinoffe-here](https://github.com/conor-ettinoffe-here)! (Issue [#1857](https://github.com/tilezen/vector-datasource/issues/1857))
 
