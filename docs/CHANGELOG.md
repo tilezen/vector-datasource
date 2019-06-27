@@ -1,6 +1,6 @@
 v1.8.0
 ------
-* **Release date:** 2019-06-26.
+* **Release date:** 2019-06-27.
 * **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.4.0](https://github.com/tilezen/tilequeue/releases/tag/v2.4.0) and [rawr_tiles v1.1.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.1.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
 
   #### ENHANCEMENTS
