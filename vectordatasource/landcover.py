@@ -291,6 +291,8 @@ def inject(ctx):
             props = {'kind': 'landcover', 'kind_detail': kind_detail}
             for clipping_shape in clipping_shapes:
                 shape = shape.difference(clipping_shape)
+                if not shape.is_valid:
+                    shape = shape.buffer(0)
 
             if not shape.is_empty:
                 # try the old "make valid" trick, as some of the polygons
