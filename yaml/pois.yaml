@@ -2206,6 +2206,7 @@ filters:
     output:
       <<: *output_properties
       kind: viewpoint
+      direction: {col: direction}
   - filter:
       tourism: information
       name: true
