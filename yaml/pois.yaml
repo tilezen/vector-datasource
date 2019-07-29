@@ -21,6 +21,7 @@ global:
     zoo: {col: zoo}
     exit_to: {col: exit_to}
     wikidata_id: {col: wikidata}
+    direction: {col: direction}
   - &transit_properties
     mz_transit_score: {col: mz_transit_score}
     mz_transit_root_relation_id: {col: mz_transit_root_relation_id}
@@ -2206,7 +2207,6 @@ filters:
     output:
       <<: *output_properties
       kind: viewpoint
-      direction: {col: direction}
   - filter:
       tourism: information
       name: true
