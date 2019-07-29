@@ -524,21 +524,6 @@ post_process:
       source_layer: water
       target_value_type: int
 
-  # drop all polygonal features that don't meet the minimum area
-  # threshold. this depends on the mz_min_pixels property to be set on
-  # features first
-  - fn: vectordatasource.transform.drop_features_mz_min_pixels
-    params:
-      property: mz_min_pixels
-      source_layers:
-        # all layers that have polygonal geometries
-        - boundaries
-        - buildings
-        - earth
-        - landuse
-        - transit
-        - water
-
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads

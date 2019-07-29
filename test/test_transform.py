@@ -205,62 +205,6 @@ class TagsPriorityI18nTest(unittest.TestCase):
         self.assertFalse('name:en_CT' in props)
 
 
-class DropFeaturesMinPixelsTest(unittest.TestCase):
-
-    def _make_feature_layers(self, pixel_threshold, shape):
-        props = dict(mz_min_pixels=pixel_threshold)
-        fid = None
-        feature = shape, props, fid
-        features = [feature]
-        feature_layers = [dict(name='layer-name', features=features)]
-        return feature_layers
-
-    def _call_fut(self, feature_layers, zoom):
-        from tilequeue.process import Context
-        from vectordatasource.transform import drop_features_mz_min_pixels
-        params = dict(property='mz_min_pixels', source_layers=('layer-name',))
-        ctx = Context(
-            feature_layers=feature_layers,
-            nominal_zoom=zoom,
-            params=params,
-            unpadded_bounds=None,
-            resources=None,
-            log=None,
-        )
-        result = drop_features_mz_min_pixels(ctx)
-        return result
-
-    def test_feature_drops(self):
-        import shapely.geometry
-        exterior_ring = [
-            (0, 0),
-            (0, 1),
-            (1, 1),
-            (0, 0),
-        ]
-        polygon = shapely.geometry.Polygon(exterior_ring)
-        feature_layers = self._make_feature_layers(1, polygon)
-        zoom = 1
-        self._call_fut(feature_layers, zoom)
-        features = feature_layers[0]['features']
-        self.assertEquals(0, len(features))
-
-    def test_feature_remains(self):
-        import shapely.geometry
-        exterior_ring = [
-            (0, 0),
-            (0, 1),
-            (1, 1),
-            (0, 0),
-        ]
-        polygon = shapely.geometry.Polygon(exterior_ring)
-        feature_layers = self._make_feature_layers(1, polygon)
-        zoom = 20
-        self._call_fut(feature_layers, zoom)
-        features = feature_layers[0]['features']
-        self.assertEquals(1, len(features))
-
-
 class LanduseSortKeysAreUniqueTest(unittest.TestCase):
 
     def _check_unique(self, csv_name):
