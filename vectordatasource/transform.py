@@ -118,6 +118,7 @@ def _to_float_meters(x):
 
     return None
 
+
 def _to_int_degrees(x):
     if x is None:
         return None
@@ -128,14 +129,14 @@ def _to_int_degrees(x):
 
     # trim whitespace to simplify further matching
     x = x.strip()
-    
+
     cardinals = { 
-        'north' : 0  , 'N' : 0  , 'NNE' : 22 , 'NE' : 45 , 'ENE' : 67 , 
-        'east'  : 90 , 'E' : 90 , 'ESE' : 112, 'SE' : 135, 'SSE' : 157, 
-        'south' : 180, 'S' : 180, 'SSW' : 202, 'SW' : 225, 'WSW' : 247, 
-        'west'  : 270, 'W' : 270, 'WNW' : 292, 'NW' : 315, 'NNW' : 337  
+        'north': 0  , 'N': 0  , 'NNE': 22 , 'NE': 45 , 'ENE': 67 ,
+        'east':  90 , 'E': 90 , 'ESE': 112, 'SE': 135, 'SSE': 157,
+        'south': 180, 'S': 180, 'SSW': 202, 'SW': 225, 'WSW': 247,
+        'west':  270, 'W': 270, 'WNW': 292, 'NW': 315, 'NNW': 337
     }
-    
+
     return cardinals[x]
 
 
