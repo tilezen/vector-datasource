@@ -1,0 +1,14 @@
+SELECT
+  osm_id AS __id__,
+
+  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
+
+  -- common properties across all layers
+  to_jsonb(tags) || jsonb_build_object(
+    'source', 'openstreetmap.org'
+  ) AS __properties__
+
+FROM planet_osm_line
+
+WHERE
+  {{ bounds['polygon']|bbox_filter('way', 3857) }}

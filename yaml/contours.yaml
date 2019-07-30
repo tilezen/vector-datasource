@@ -1,0 +1,14 @@
+global:
+
+  - &output_properties
+    id: {col: id}
+    kind: 'contour'
+
+filters:
+
+  - filter:
+      id: true
+    output:
+      <<: *output_properties
+    table: osm
+
