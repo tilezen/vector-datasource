@@ -125,7 +125,8 @@ def _to_int_degrees(x):
 
     as_int = safe_int(x)
     if as_int is not None:
-        return as_int
+        # always return within range of 0 to 360
+        return as_int % 360
 
     # trim whitespace to simplify further matching
     x = x.strip()
