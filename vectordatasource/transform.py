@@ -138,8 +138,11 @@ def _to_int_degrees(x):
         'west':  270, 'W': 270, 'WNW': 292, 'NW': 315, 'NNW': 337
     }
 
-    return cardinals[x]
+    # protect against bad cardinal notations
+    if x in cardinals:
+        return cardinals[x]
 
+    return None
 
 def _coalesce(properties, *property_names):
     for prop in property_names:
