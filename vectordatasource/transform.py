@@ -144,6 +144,7 @@ def _to_int_degrees(x):
 
     return None
 
+
 def _coalesce(properties, *property_names):
     for prop in property_names:
         val = properties.get(prop)
