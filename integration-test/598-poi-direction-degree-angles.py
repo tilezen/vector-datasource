@@ -22,6 +22,7 @@ class AddDirectionToPOIs(FixtureTest):
             z, x, y, 'pois', {
                 'id': 665689214,
                 'kind': u'viewpoint',
+                'name': u'Immigrant Point Overlook',
                 'direction': 315,
             })
 
