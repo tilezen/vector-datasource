@@ -275,6 +275,7 @@ layers:
       - vectordatasource.transform.make_representative_point
       - vectordatasource.transform.height_to_meters
       - vectordatasource.transform.pois_capacity_int
+      - vectordatasource.transform.pois_direction_int
       - vectordatasource.transform.major_airport_detector
       - vectordatasource.transform.elevation_to_meters
       - vectordatasource.transform.normalize_operator_values

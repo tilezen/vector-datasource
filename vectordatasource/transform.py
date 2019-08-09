@@ -26,6 +26,7 @@ from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
 from util import to_float
+from util import safe_int
 from zope.dottedname.resolve import resolve
 import csv
 import pycountry
@@ -116,6 +117,27 @@ def _to_float_meters(x):
             return as_float
 
     return None
+
+
+def _to_int_degrees(x):
+    if x is None:
+        return None
+
+    as_int = safe_int(x)
+    if as_int is not None:
+        return as_int
+
+    # trim whitespace to simplify further matching
+    x = x.strip()
+
+    cardinals = {
+        'north': 0,   'N': 0,   'NNE': 22,  'NE': 45,  'ENE': 67,
+        'east':  90,  'E': 90,  'ESE': 112, 'SE': 135, 'SSE': 157,
+        'south': 180, 'S': 180, 'SSW': 202, 'SW': 225, 'WSW': 247,
+        'west':  270, 'W': 270, 'WNW': 292, 'NW': 315, 'NNW': 337
+    }
+
+    return cardinals[x]
 
 
 def _coalesce(properties, *property_names):
@@ -423,6 +445,15 @@ def pois_capacity_int(shape, properties, fid, zoom):
     if capacity is not None:
         properties['capacity'] = int(capacity)
     return shape, properties, fid
+
+
+def pois_direction_int(shape, props, fid, zoom):
+    direction = props.get('direction')
+    if not direction:
+        return shape, props, fid
+
+    props['direction'] = _to_int_degrees(direction)
+    return shape, props, fid
 
 
 def water_tunnel(shape, properties, fid, zoom):
