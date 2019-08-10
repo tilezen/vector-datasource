@@ -112,7 +112,6 @@ class AddDirectionToPOIs(FixtureTest):
                 'direction': 350,
             })
 
-
     def test_direction_as_int_out_of_range_semicolon(self):
         import dsl
 
@@ -138,7 +137,6 @@ class AddDirectionToPOIs(FixtureTest):
                 'kind': u'viewpoint',
                 'direction': u'80;260',
             })
-
 
     def test_direction_as_int_out_of_range_dash(self):
         import dsl
