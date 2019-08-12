@@ -139,10 +139,7 @@ def _to_int_degrees(x):
     }
 
     # protect against bad cardinal notations
-    if x in cardinals:
-        return cardinals[x]
-
-    return None
+    return cardinals.get(x)
 
 
 def _coalesce(properties, *property_names):
