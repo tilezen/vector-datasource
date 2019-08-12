@@ -828,6 +828,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 * `kind_detail`: cuisine, sport
 * `attraction`: TODO
+* `direction`: generally only for `viewpoint` and other oriented features. Expressed as an integer in range of 0-359, where 0 is equal to north, using a clockwise rotation of the "main" direction.
 * `exit_to`: only for highway exits
 * `ref`: generally only for `aeroway_gate` and `station_entrance` features
 * `religion`: TODO
