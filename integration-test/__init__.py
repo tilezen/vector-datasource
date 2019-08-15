@@ -286,7 +286,7 @@ def parse_layer_dict(yaml_path, output_fn, fn_name_fn):
 class OSMDataObject(namedtuple("OSMDataObject", "typ fid")):
 
     def canonical_url(self):
-        return "http://www.openstreetmap.org/%s/%d" % (self.typ, self.fid)
+        return "https://www.openstreetmap.org/%s/%d" % (self.typ, self.fid)
 
 
 class OverpassObject(namedtuple("OverpassObject", "raw_query")):
@@ -294,7 +294,7 @@ class OverpassObject(namedtuple("OverpassObject", "raw_query")):
     def canonical_url(self):
         query = urllib.urlencode(dict(data=self.raw_query))
         url = urlparse.urlunparse((
-            'http', 'overpass-api.de', '/api/interpreter',
+            'https', 'overpass-api.de', '/api/interpreter',
             None, query, None))
         return url
 
