@@ -49,6 +49,9 @@ LAYER_TABLES = {
         'ne_10m_roads',
         'planet_osm_line',
     ],
+    'contours': [
+        'contours',
+    ],
     'transit': [
         'planet_osm_line',
         'planet_osm_polygon',

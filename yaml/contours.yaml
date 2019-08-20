@@ -1,14 +1,15 @@
 global:
-
   - &output_properties
-    id: {col: id}
-    kind: 'contour'
+    source: {col: source}
+    min_zoom: {col: min_zoom}
+    ele: {col: ele}
 
 filters:
-
   - filter:
-      id: true
+      geom_type: line
+    min_zoom: 11
+    table: vfp
     output:
       <<: *output_properties
-    table: osm
+      kind: contour
 

@@ -1,14 +1,30 @@
 SELECT
+
   osm_id AS __id__,
 
-  {% filter geometry %}{{ bounds['polygon']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
+  {% filter geometry %}{{ bounds['line']|bbox_intersection('way') }}{% endfilter %} AS __geometry__,
 
   -- common properties across all layers
-  to_jsonb(tags) || jsonb_build_object(
-    'source', 'openstreetmap.org'
-  ) AS __properties__
+  jsonb_build_object(
+    'source', 'viewfinderpanoramas.org',
+    'min_zoom', 11,
+    'ele', ele
+  ) AS __contours_properties__
 
-FROM planet_osm_line
+FROM (
 
-WHERE
-  {{ bounds['polygon']|bbox_filter('way', 3857) }}
+  SELECT
+
+    osm_id,
+    ele,
+    way
+
+  FROM 
+
+    contours
+
+  WHERE
+
+    {{ bounds['line']|bbox_filter('way', 3857) }}
+
+) p

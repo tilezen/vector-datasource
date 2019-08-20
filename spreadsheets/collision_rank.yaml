@@ -108,6 +108,9 @@
 - {$layer: 'water', kind: 'sea'}
 - {$layer: 'pois', kind: 'nature_reserve'}
 - {$layer: 'water', kind: 'lake'}
+# for contours
+- _reserved: {count: 10}
+- {$layer: 'contours', kind: 'contour'}
 # for shields & etc
 - _reserved: {count: 10}
 - {$layer: 'roads', kind: 'highway', kind_detail: 'motorway'}
