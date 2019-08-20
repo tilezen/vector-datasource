@@ -151,7 +151,7 @@ sources:
 
   contours:
     - template: contours.jinja2
-      start_zoom: 11
+      start_zoom: 12
 
 layers:
   water:
@@ -333,7 +333,7 @@ layers:
     area-inclusion-threshold: 1
   contours:
     geometry_types: [LineString, MultiLineString]
-    simplify_start: 999
+    simplify_start: 12
     tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
