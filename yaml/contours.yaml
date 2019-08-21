@@ -7,9 +7,9 @@ global:
 filters:
   - filter:
       geom_type: line
-    min_zoom: 11
+    min_zoom: 13
     table: vfp
     output:
       <<: *output_properties
-      kind: contour
+      kind: std
 

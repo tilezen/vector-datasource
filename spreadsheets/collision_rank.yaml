@@ -110,7 +110,7 @@
 - {$layer: 'water', kind: 'lake'}
 # for contours
 - _reserved: {count: 10}
-- {$layer: 'contours', kind: 'contour'}
+- {$layer: 'contours', kind: 'std'}
 # for shields & etc
 - _reserved: {count: 10}
 - {$layer: 'roads', kind: 'highway', kind_detail: 'motorway'}
