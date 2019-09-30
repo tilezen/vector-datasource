@@ -443,7 +443,7 @@ global:
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, playground, slipway, swimming_area ]
         - lock: yes
-        - man_made: [ adit, communications_tower, crane, mast, mineshaft, obelisk, observatory,
+        - man_made: [ adit, communications_tower, chimney, crane, mast, mineshaft, obelisk, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, watermill, windmill ]
         - military: bunker
@@ -2640,6 +2640,11 @@ filters:
                 - shiploader
                 - tower_crane
             then: {col: "crane:type"}
+  - filter: {man_made: chimney}
+    min_zoom: 14
+    output:
+      <<: *output_properties
+      kind: chimney
   - filter: {leisure: water_park}
     min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.34 ] } } }
     output:
