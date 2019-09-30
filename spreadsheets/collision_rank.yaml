@@ -965,6 +965,7 @@
 - {$layer: 'water', kind: 'fountain'}
 - {$layer: 'water', kind: 'ditch'}
 - {$layer: 'water', kind: 'drain'}
+- {$layer: 'water', kind: 'weir'}
 - {$layer: 'water', kind: 'swimming_pool'}
 - {$layer: 'landuse', kind: 'breakwater'}
 - {$layer: 'landuse', kind: 'cutline'}

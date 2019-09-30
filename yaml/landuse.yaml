@@ -1165,6 +1165,11 @@ filters:
     output:
       <<: *output_properties
       kind: {col: natural}
+  - filter: {natural: fell}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: fell
   - filter: {landuse: vineyard}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:
