@@ -2,7 +2,8 @@ global:
   - &output_properties
     source: {col: source}
     min_zoom: {col: min_zoom}
-    ele: {col: ele}
+    # Elevation of the contour in meters.
+    elevation: {col: ele}
 
 filters:
   - filter:
@@ -11,5 +12,5 @@ filters:
     table: vfp
     output:
       <<: *output_properties
-      kind: std
+      kind: contour
 

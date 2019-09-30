@@ -108,9 +108,6 @@
 - {$layer: 'water', kind: 'sea'}
 - {$layer: 'pois', kind: 'nature_reserve'}
 - {$layer: 'water', kind: 'lake'}
-# for contours
-- _reserved: {count: 10}
-- {$layer: 'contours', kind: 'std'}
 # for shields & etc
 - _reserved: {count: 10}
 - {$layer: 'roads', kind: 'highway', kind_detail: 'motorway'}
@@ -1023,5 +1020,8 @@
 - {$layer: 'pois', kind: 'waste_basket'}
 - {$layer: 'pois', kind: 'water_point'}
 - {$layer: 'pois', kind: 'watering_place'}
+# for contours
+- _reserved: {count: 10}
+- {$layer: 'contours', kind: 'contour'}
 # catch-all, assign lowest priority
 - { $layer: true }

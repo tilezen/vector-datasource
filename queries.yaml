@@ -9,7 +9,6 @@ all:
   - boundaries
   - transit
   - admin_areas
-  - contours
 
 sources:
 
