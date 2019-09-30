@@ -21,6 +21,7 @@ global:
     zoo: {col: zoo}
     barrier: {col: barrier}
     fence_type: {col: fence_type}
+    crop: {col: crop}
     min_zoom:
       case:
         - when: { meta.source: ne }
