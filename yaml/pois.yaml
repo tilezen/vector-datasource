@@ -1255,7 +1255,20 @@ filters:
         case:
           - when: {historic: [monument, memorial]}
             then: {col: historic}
-
+  - filter: {man_made: chimney}
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 14, 20 ]  # z14 if height >= 20m
+          - [ 15, 10 ]  # z15 if height >= 10m
+        default: 16
+    output:
+      <<: *output_properties
+      kind: chimney
+      tier: 5
+            
   ############################################################
   # TIER 6
   ############################################################
@@ -2640,11 +2653,6 @@ filters:
                 - shiploader
                 - tower_crane
             then: {col: "crane:type"}
-  - filter: {man_made: chimney}
-    min_zoom: 14
-    output:
-      <<: *output_properties
-      kind: chimney
   - filter: {leisure: water_park}
     min_zoom: { clamp: { min: 13, max: 15, value: { sum: [ { col: zoom }, 2.34 ] } } }
     output:
