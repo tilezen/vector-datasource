@@ -21,6 +21,7 @@ dam,*,223
 land,*,222
 wetland,*,220
 mud,*,219
+weir,*,218
 footway,*,126
 tower,*,125
 wilderness_hut,*,124
