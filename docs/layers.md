@@ -966,6 +966,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 * `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
 * `childcare`
 * `childrens_centre`
+* `chimney`
 * `chiropractor`
 * `cinema`
 * `clinic` with `kind_detail` property.
