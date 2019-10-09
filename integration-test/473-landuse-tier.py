@@ -106,4 +106,3 @@ class LanduseTier(FixtureTest):
             z, x, y, 'landuse',
             {'kind': 'fell', 'area': 'yes', 
              'name': 'Fulufjellet', 'wikidata': 'Q34852081'})
-
