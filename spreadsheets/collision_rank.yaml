@@ -599,6 +599,7 @@
 - {$layer: 'landuse', kind: 'natural_wood'}
 # reserve for kind_details
 - _reserved: {count: 10}
+- {$layer: 'landuse', kind: 'fell'}
 - {$layer: 'landuse', kind: 'grass'}
 - {$layer: 'landuse', kind: 'meadow'}
 - {$layer: 'landuse', kind: 'scrub'}
