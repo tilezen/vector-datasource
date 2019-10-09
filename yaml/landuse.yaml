@@ -894,7 +894,16 @@ filters:
   # dyke
   - filter:
       man_made: dyke
-    min_zoom: 13
+      geom_type: line
+    min_zoom: { max: [ 13, *tier4_min_zoom ] }
+    output:
+      <<: *output_properties
+      kind: dyke
+      tier: 4
+  - filter:
+      man_made: dyke
+      geom_type: polygon
+    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: dyke
