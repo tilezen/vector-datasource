@@ -104,5 +104,5 @@ class LanduseTier(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'landuse',
-            {'kind': 'fell', 'area': 'yes', 
+            {'kind': 'fell', 'area': 'yes',
              'name': 'Fulufjellet', 'wikidata': 'Q34852081'})
