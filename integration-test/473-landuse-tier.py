@@ -98,13 +98,12 @@ class LanduseTier(FixtureTest):
              'tier': 2, 'min_zoom': 8})
 
     def test_fell(self):
-        import dsl
-
         z, x, y = (16, 35072, 18481)
 
         self.load_fixtures(['https://www.openstreetmap.org/way/711062546'])
 
         self.assert_has_feature(
             z, x, y, 'landuse',
-            {'kind': 'fell', 'area': 'yes', 'name': 'Fulufjellet', 'wikidata': 'Q34852081'})
+            {'kind': 'fell', 'area': 'yes', 
+             'name': 'Fulufjellet', 'wikidata': 'Q34852081'})
 
