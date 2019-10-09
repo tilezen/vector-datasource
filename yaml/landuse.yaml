@@ -903,7 +903,7 @@ filters:
   - filter:
       man_made: dyke
       geom_type: polygon
-    min_zoom: { clamp: { max: 16, min: 11, value: { col: zoom } } }
+    min_zoom: { clamp: { max: 16, min: 13, value: { col: zoom } } }
     output:
       <<: *output_properties
       kind: dyke
