@@ -34,7 +34,7 @@ class FarmlandCropTest(FixtureTest):
             # https://www.openstreetmap.org/way/145660534
             dsl.way(145660534, dsl.tile_box(z, x, y), {
                 'landuse': u'farmland',
-                'crop': u'cana-de-açúcar'.encode('utf-8'),
+                'crop': u'cana-de-açúcar'.decode('utf-8'),
                 'source': u'openstreetmap.org',
             }),
         )
