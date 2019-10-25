@@ -22,7 +22,7 @@ class FarmlandCropTest(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 145660534,
                 'kind': 'farmland',
-                'crop': 'rice',
+                'kind_detail': 'rice',
             })
 
     def test_crop_remap_sugarcane(self):
@@ -43,7 +43,7 @@ class FarmlandCropTest(FixtureTest):
             z, x, y, 'landuse', {
                 'id': 145660534,
                 'kind': 'farmland',
-                'crop': 'sugarcane',
+                'kind_detail': 'sugarcane',
             })
 
 
