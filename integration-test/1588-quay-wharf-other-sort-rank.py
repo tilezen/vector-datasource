@@ -46,6 +46,7 @@ class FarmlandCropTest(FixtureTest):
                 'crop': 'sugarcane',
             })
 
+
 class LanduseSortRankTest(FixtureTest):
 
     def _check(self, tags, expected_kind, expected_sort_rank):
