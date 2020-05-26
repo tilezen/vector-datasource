@@ -2296,7 +2296,7 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
 * `is_hov_lane`: set to `true` when the linear is an HOV (High-Occupancy Vechicle) express lane
-* `network`: 2-character country code and optional region (eg. DE:Berlin) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
+* `network`: 2-character country code and optional region (eg. `DE:BS`) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
 
 ## Traffic Incidents
 
@@ -2352,7 +2352,7 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * `is_link`: set to true when the linear is a slip-road
 * `drives_on_left`: set to `true` when the country drives on the left (e.g. in the United Kingdom)
 * `is_hov_lane`: set to `true` when the linear is, or the incident affects, a HOV (High-Occupancy Vechicle) express lane
-* `network`: 2-character country code and optional region (eg. DE:Berlin) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
+* `network`: 2-character country code and optional region (eg. `DE:BS`) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
 
 ## Water
 
