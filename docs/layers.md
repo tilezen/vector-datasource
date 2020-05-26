@@ -2290,12 +2290,13 @@ If the roads layer features include `linear_ref_id`, then traffic flow layer fea
 
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
-* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
-* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind`: [kind of the road](#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
 * `is_hov_lane`: set to `true` when the linear is an HOV (High-Occupancy Vechicle) express lane
+* `network`: 2-character country code and optional region (eg. DE:Berlin) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
 
 ## Traffic Incidents
 
@@ -2344,14 +2345,14 @@ If the roads layer features include `linear_ref_id`, then traffic incidents laye
 
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
-* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
-* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind`: [kind of the road](#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
 * `drives_on_left`: set to `true` when the country drives on the left (e.g. in the United Kingdom)
 * `is_hov_lane`: set to `true` when the linear is, or the incident affects, a HOV (High-Occupancy Vechicle) express lane
-
+* `network`: 2-character country code and optional region (eg. DE:Berlin) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
 
 ## Water
 
