@@ -443,7 +443,7 @@ global:
         - landuse: quarry
         - leisure: [ dog_park, firepit, fishing, pitch, playground, slipway, swimming_area ]
         - lock: yes
-        - man_made: [ adit, communications_tower, crane, mast, mineshaft, obelisk, observatory,
+        - man_made: [ adit, communications_tower, chimney, crane, mast, mineshaft, obelisk, observatory,
             offshore_platform, petroleum_well, power_wind, telescope, water_tower,
             water_well, watermill, windmill ]
         - military: bunker
@@ -1255,7 +1255,20 @@ filters:
         case:
           - when: {historic: [monument, memorial]}
             then: {col: historic}
-
+  - filter: {man_made: chimney}
+    min_zoom:
+      lookup:
+        key: { call: { func: mz_to_float_meters, args: [ { col: height } ] } }
+        op: '>='
+        table:
+          - [ 14, 20 ]  # z14 if height >= 20m
+          - [ 15, 10 ]  # z15 if height >= 10m
+        default: 16
+    output:
+      <<: *output_properties
+      kind: chimney
+      tier: 5
+            
   ############################################################
   # TIER 6
   ############################################################
