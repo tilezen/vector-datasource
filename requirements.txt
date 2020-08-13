@@ -1,5 +1,4 @@
 AppDirs==1.4.3
-argparse==1.4.0
 ASTFormatter==0.6.4
 boto==2.49.0
 edtf==2.6.0
@@ -21,9 +20,7 @@ simplejson==3.12.0
 six==1.11.0
 StreetNames==0.1.5
 tqdm==4.31.1
-urllib3==1.24.3 ## REMOVE THIS AS SOON AS botocore ALLOWS >=1.25
-Werkzeug==0.12.2
-wsgiref==0.1.2
+Werkzeug==0.16.1
 git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
 git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles

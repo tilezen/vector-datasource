@@ -24,7 +24,7 @@ class DropPhysicalRailwaysFromTransit(FixtureTest):
         # that the rail routes have been merged.
         with self.features_in_tile_layer(7, 20, 48, 'transit') as transit:
             seen_properties = set()
-            railway_kinds = set(['train', 'subway', 'light_rail', 'tram'])
+            railway_kinds = {'train', 'subway', 'light_rail', 'tram'}
 
             for feature in transit:
                 if feature['properties'].get('kind') in railway_kinds:
