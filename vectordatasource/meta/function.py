@@ -1,4 +1,3 @@
-from itertools import zip
 import re
 
 
