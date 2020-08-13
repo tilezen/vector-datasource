@@ -4,14 +4,14 @@ from . import FixtureTest
 class DropPhysicalRailwaysFromTransit(FixtureTest):
 
     def test_drop_physical_railways(self):
-        import urllib
+        import urllib.parse
 
         bbox = "39,-124,41,-121"
         query = "("
         for route in ('train', 'subway', 'light_rail', 'tram'):
             query += "relation[type=route][route=" + route + "](" + bbox + ");"
         query += ");>;"
-        query = urllib.urlencode(dict(data=query))
+        query = urllib.parse.urlencode(dict(data=query))
 
         self.load_fixtures(
             ['http://overpass-api.de/api/interpreter?' + query])

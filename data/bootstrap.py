@@ -1,7 +1,7 @@
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
 import yaml
-import urllib
+import urllib.parse
 
 with open('assets.yaml') as fh:
     asset_cfg = yaml.load(fh)
@@ -101,7 +101,7 @@ for cfg_shapefile in cfg_shapefiles:
 WIKIDATA_BASE_QUERY = 'https://query.wikidata.org/sparql'
 queries = []
 for cfg_query in cfg_wikidata_queries:
-    url = WIKIDATA_BASE_QUERY + '?' + urllib.urlencode(
+    url = WIKIDATA_BASE_QUERY + '?' + urllib.parse.urlencode(
         dict(query=cfg_query['query'], format='json'))
     fname = cfg_query['name'] + '.json'
     queries.append(dict(url=url, output_file=fname))

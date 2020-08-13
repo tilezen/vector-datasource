@@ -40,7 +40,7 @@ import lxml.etree as ET
 import time
 from collections import defaultdict
 import subprocess
-import urllib
+import urllib.parse
 import shapefile
 from tilequeue import wof
 from itertools import izip_longest
@@ -292,7 +292,7 @@ class OSMDataObject(namedtuple("OSMDataObject", "typ fid")):
 class OverpassObject(namedtuple("OverpassObject", "raw_query")):
 
     def canonical_url(self):
-        query = urllib.urlencode(dict(data=self.raw_query))
+        query = urllib.parse.urlencode(dict(data=self.raw_query))
         url = urlparse.urlunparse((
             'https', 'overpass-api.de', '/api/interpreter',
             None, query, None))
