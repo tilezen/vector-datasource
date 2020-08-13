@@ -31,10 +31,9 @@ if __name__ == '__main__':
         row_fmt = "%(layer)12s %(kind)30s %(kind_detail)30s " \
                   "%(min_zoom)8s %(sort_rank)s"
 
-    print row_fmt % dict(layer="LAYER", kind="KIND", kind_detail="KIND_DETAIL",
-                         min_zoom="MIN_ZOOM", sort_rank="SORT_RANK")
+    print(row_fmt % dict(layer="LAYER", kind="KIND", kind_detail="KIND_DETAIL",
+                         min_zoom="MIN_ZOOM", sort_rank="SORT_RANK"))
     for k in sorted(all_kinds):
         v = all_kinds[k]
-        print row_fmt % \
-            dict(layer=k.layer, kind=k.kind, kind_detail=k.kind_detail,
-                 min_zoom=repr(v.min_zoom), sort_rank=repr(v.sort_rank))
+        print(row_fmt % dict(layer=k.layer, kind=k.kind, kind_detail=k.kind_detail,
+                             min_zoom=repr(v.min_zoom), sort_rank=repr(v.sort_rank)))

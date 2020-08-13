@@ -11,7 +11,7 @@ def count_matching(features, props):
         f_props = f['properties']
         match = True
 
-        for k, v in props.iteritems():
+        for k, v in props.items():
             got_v = f_props.get(k)
             if got_v != v:
                 match = False

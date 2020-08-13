@@ -647,7 +647,7 @@ def output_kind(yaml_datum):
 
 def output_min_zoom(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
-    assert not isinstance(min_zoom, (str, unicode)), \
+    assert not isinstance(min_zoom, str), \
         "Min zoom cannot be a string in %r." % yaml_datum
     return min_zoom
 
@@ -682,12 +682,12 @@ def main(argv=None):
         all_layer_data.append(layer_parse_result.layer_data)
 
     for import_ast in layer_parse_result.import_asts:
-        print formatter.format(import_ast, mode='exec')
+        print(formatter.format(import_ast, mode='exec'))
 
     for layer_data in all_layer_data:
         for layer_datum in layer_data:
             ast_fn = layer_datum.ast
-            print formatter.format(ast_fn, mode='exec')
+            print(formatter.format(ast_fn, mode='exec'))
 
 
 if __name__ == '__main__':

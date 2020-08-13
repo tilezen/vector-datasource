@@ -727,7 +727,7 @@ def _sorted_attributes(features, attrs, attribute):
     # extract the sorted list of attributes from the
     # grouped (attribute, order) pairs, ordering by
     # the order.
-    all_attrs = sorted(group.iteritems(),
+    all_attrs = sorted(group.items(),
                        key=lambda x: x[1], reverse=bool(reverse))
 
     # strip out the sort key in return
@@ -1474,7 +1474,7 @@ def _make_new_properties(props, props_instructions):
     """
     new_props = dict()
 
-    for k, v in props_instructions.iteritems():
+    for k, v in props_instructions.items():
         if v is True:
             # this works even when props[k] = None
             if k in props:
@@ -2072,7 +2072,7 @@ def admin_boundaries(ctx):
     # makes more sense to have Country-Country and
     # State-State boundaries (and labels) rather than the
     # (combinatoric) set of all different levels.
-    for kind, features in admin_features.iteritems():
+    for kind, features in admin_features.items():
         num_features = len(features)
         envelopes = [g[0].envelope for g in features]
 
@@ -2185,7 +2185,7 @@ def _delete_labels_longer_than(max_label_chars, props):
 
     to_delete = set()
 
-    for k, v in props.iteritems():
+    for k, v in props.items():
         if not k.startswith('name'):
             continue
 
@@ -2927,7 +2927,7 @@ def _match_props(props, items_matching):
     value from `props` must be any one of those values.
     """
 
-    for k, v in items_matching.iteritems():
+    for k, v in items_matching.items():
         prop_val = props.get(k)
         if isinstance(v, list):
             if prop_val not in v:
@@ -3114,7 +3114,7 @@ def numeric_min_filter(ctx):
     for shape, props, fid in layer['features']:
         keep = []
 
-        for prop, min_val in minima.iteritems():
+        for prop, min_val in minima.items():
             val = props.get(prop)
             keep.append(val >= min_val)
 
@@ -3670,7 +3670,7 @@ def _merge_features_by_property(
 
     new_features = []
     for frozen_props, (fid, p_id, orig_props, shapes) in \
-            features_by_property.iteritems():
+            features_by_property.items():
 
         if len(shapes) == 1:
             # restore original properties if we only have a single shape
@@ -3969,7 +3969,7 @@ def _merge_junctions_in_multilinestring(mls, angle_tolerance):
 
     seen = set()
     merged_geoms = []
-    for pt, ids in endpoints.iteritems():
+    for pt, ids in endpoints.items():
         # we can't merge unless we've got at least 2 lines!
         if len(ids) < 2:
             continue
@@ -4786,7 +4786,7 @@ class YAMLToDict(dict):
         import yaml
         data = yaml.load(fh)
         assert isinstance(data, dict)
-        for k, v in data.iteritems():
+        for k, v in data.items():
             self[k] = v
 
 
@@ -8709,7 +8709,7 @@ def backfill(ctx):
             if not eval(where, {}, local):
                 continue
 
-        for k, v in defaults.iteritems():
+        for k, v in defaults.items():
             if k not in props:
                 props[k] = v
 

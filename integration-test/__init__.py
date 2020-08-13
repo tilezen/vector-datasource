@@ -92,7 +92,7 @@ def make_acceptable_module_name(path):
 # This allows us to write some reasonably flexible rules.
 #
 def match_properties(actual, expected):
-    for exp_k, exp_v in expected.iteritems():
+    for exp_k, exp_v in expected.items():
         v = actual.get(exp_k, None)
 
         if not _match_item(v, exp_v):
@@ -154,7 +154,7 @@ def match_distance(actual, expected):
     distance = 0
     misses = dict()
 
-    for exp_k, exp_v in expected.iteritems():
+    for exp_k, exp_v in expected.items():
         v = actual.get(exp_k, None)
         # normalise unicode values
         if isinstance(v, unicode):
@@ -851,7 +851,7 @@ class FixtureDataSources(object):
 
         with tempdir() as tmp:
             geojson_files = []
-            for source, group in groups.iteritems():
+            for source, group in groups.items():
                 source_name = source.__class__.__name__
                 target_file = path_join(tmp, '%s.geojson' % (source_name,))
                 source.download(group, target_file, clip, simplify)
@@ -1581,9 +1581,9 @@ class OsmChange(object):
                 # enough to get an expected response
                 break
 
-            print "%d code returned instead of overpass response - request " \
-                "will be repeated after %d seconds" % \
-                (r.status_code, wait_time_in_s)
+            print("%d code returned instead of overpass response - request "
+                "will be repeated after %d seconds" %
+                (r.status_code, wait_time_in_s))
             time.sleep(wait_time_in_s)
 
         if r.status_code != 200:
@@ -1754,4 +1754,4 @@ if __name__ == '__main__':
 
     if isinstance(test_instance, CollectTilesInstance):
         for z, x, y in test_instance.tiles:
-            print "%d/%d/%d" % (z, x, y)
+            print("%d/%d/%d" % (z, x, y))

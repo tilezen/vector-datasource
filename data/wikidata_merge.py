@@ -26,8 +26,8 @@ def wikidata_merge(data, update):
     Updates wikidata records in `data` with new records in `update`.
     """
 
-    for wikidata_id, props in update.iteritems():
-        for k, v in props.iteritems():
+    for wikidata_id, props in update.items():
+        for k, v in props.items():
             data[wikidata_id][k] = v
 
 
@@ -50,10 +50,10 @@ COPY wikidata(id, tags) FROM stdin;
             s = '"%s"' % s
         return s
 
-    for wikidata_id, props in data.iteritems():
+    for wikidata_id, props in data.items():
         hstore = ','.join(
             "%s=>%s" % (esc(k), esc(v))
-            for k, v in props.iteritems())
+            for k, v in props.items())
         io.write("%s\t%s\n" % (wikidata_id, hstore))
 
     io.write("\\.\n")

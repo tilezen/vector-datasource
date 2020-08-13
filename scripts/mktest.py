@@ -155,7 +155,7 @@ def road_test(args):
     )
 
     output = _render_template('road_test', args)
-    print output.encode('utf-8')
+    print(output.encode('utf-8'))
 
 
 def node_test(args):
@@ -184,7 +184,7 @@ def node_test(args):
     )
 
     output = _render_template('node_test', args)
-    print output.encode('utf-8')
+    print(output.encode('utf-8'))
 
 
 def _shapefile_iterator(sf, field_names):
@@ -315,7 +315,7 @@ def naturalearth_test(args):
     )
 
     output = _render_template('naturalearth_test', args)
-    print output.encode('utf-8')
+    print(output.encode('utf-8'))
 
 
 def _overpass_api(query):
@@ -522,7 +522,7 @@ def _overpass_element(layer_name, query_fn, args):
     )
 
     output = _render_template('overpass_test', params)
-    print output.encode('utf-8')
+    print(output.encode('utf-8'))
 
 
 def overpass_test(args):

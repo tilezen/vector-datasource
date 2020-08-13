@@ -120,12 +120,12 @@ if __name__ == '__main__':
         count = item['count']
         download_size = item['size_compressed']
 
-        print "Downloading %r with %d entries" % (placetype, count)
+        print("Downloading %r with %d entries" % (placetype, count))
         with tmpdownload(WOF_BUNDLE_PREFIX + fname, download_size) as fname:
-            print "Parsing WOF data"
+            print("Parsing WOF data")
             reader.add_archive(fname, version, count)
 
-    print "Writing output SQL"
+    print("Writing output SQL")
     with open('wof_snapshot.sql', 'w') as fh:
         fh.write("COPY public.wof_neighbourhood ("
                  "wof_id, placetype, name, hash, n_photos, area, min_zoom, "

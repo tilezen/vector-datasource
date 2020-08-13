@@ -11,7 +11,7 @@ Feature = namedtuple('Feature', 'fid shape properties')
 # all - it'll leave other types alone).
 def _tags_to_utf8(tags):
     new_tags = {}
-    for k, v in tags.iteritems():
+    for k, v in tags.items():
         if isinstance(k, unicode):
             k = k.encode('utf-8')
         if isinstance(v, unicode):

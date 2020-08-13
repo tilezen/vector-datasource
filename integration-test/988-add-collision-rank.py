@@ -336,7 +336,7 @@ class ItemList(object):
         items = {}
 
         with self.test_instance.tile(self.z, self.x, self.y) as layers:
-            for layer_name, features in layers.iteritems():
+            for layer_name, features in layers.items():
                 for feature in features:
                     fid = feature['properties']['id']
                     rank = feature['properties']['collision_rank']

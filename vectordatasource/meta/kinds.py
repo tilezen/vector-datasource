@@ -525,7 +525,7 @@ def parse_all_kinds(yaml_path, sort_rank_path, include_kind_detail):
         for item in yaml_data['filters']:
             kinds = parse_item(layer_name, item, sort_rank,
                                include_kind_detail)
-            for k, v in kinds.iteritems():
+            for k, v in kinds.items():
                 prev_v = all_kinds.get(k)
                 if prev_v is not None:
                     v = merge_info(prev_v, v)

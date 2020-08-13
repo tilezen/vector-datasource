@@ -108,7 +108,7 @@ for cfg_query in cfg_wikidata_queries:
 
 # turn the map into a list of dicts, makes it easier to handle in jinja2
 downloads = []
-for tgt, url in urls_to_download.iteritems():
+for tgt, url in urls_to_download.items():
     downloads.append(dict(tgt=tgt, url=url))
 
 src_shapefile_zips_str = ' '.join(src_shapefile_zips)
