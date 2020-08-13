@@ -2,7 +2,7 @@ from vectordatasource.meta.python import parse_layers, output_kind, \
         output_min_zoom, LayerParseResult, FunctionData
 import sys
 import ast
-from cStringIO import StringIO
+from io import StringIO
 
 
 LAYER_TABLES = {

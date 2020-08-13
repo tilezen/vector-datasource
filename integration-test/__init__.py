@@ -1106,8 +1106,8 @@ class FixtureFeatureFetcher(object):
             bounds_merc = coord_to_mercator_bounds(coord)
             bounds_lnglat = coord_to_bounds(coord)
 
-            from cStringIO import StringIO
-            io = StringIO()
+            from io import BytesIO
+            io = BytesIO()
 
             from tilequeue.format import format_mvt
             extent = 4096

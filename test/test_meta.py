@@ -797,7 +797,7 @@ class GenerateSQLTest(unittest.TestCase):
 
     def test_generate_sql(self):
         from vectordatasource.meta.sql import write_sql
-        from cStringIO import StringIO
+        from io import StringIO
 
         io = StringIO()
         # this should throw if there's an error.
