@@ -19,6 +19,6 @@ Shapely==1.6.2.post1
 StreetNames==0.1.5
 tqdm==4.48.2
 Werkzeug==0.16.1
-git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
+git+https://github.com/tilezen/tilequeue@dees/py3#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
-git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles
+git+https://github.com/tilezen/raw_tiles@dees/py3#egg=raw_tiles
