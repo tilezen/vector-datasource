@@ -14,7 +14,7 @@ pyclipper==1.2.0
 pycountry==20.7.3
 python-dateutil==2.8.1
 PyYAML==5.3.1
-redis==2.10.6.2
+redis==3.5.3
 Shapely==1.6.2.post1
 StreetNames==0.1.5
 tqdm==4.48.2
