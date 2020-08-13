@@ -567,7 +567,7 @@ class FilterCompiler(object):
         mod = ast.Module([ast_fn])
         mod_with_linenos = ast.fix_missing_locations(mod)
         code = compile(mod_with_linenos, '<string>', 'exec')
-        exec code in self.scope
+        exec(code, self.scope)
         compiled_fn = self.scope[fn_name]
 
         return ast_fn, compiled_fn

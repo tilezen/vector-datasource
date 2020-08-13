@@ -786,7 +786,7 @@ class RoundTripRuleTest(unittest.TestCase):
         mod_with_linenos = ast.fix_missing_locations(mod)
         code = compile(mod_with_linenos, '<string>', 'exec')
         scope = {}
-        exec code in scope
+        exec(code, scope)
         fn = scope['fn_name_props']
 
         result = fn(shape, props, fid, meta)
