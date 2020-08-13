@@ -43,7 +43,7 @@ import subprocess
 import urllib.parse
 import shapefile
 from tilequeue import wof
-from itertools import izip_longest
+from itertools import zip_longest
 
 
 # the Overpass server is used to download data about OSM elements. the
@@ -314,7 +314,7 @@ class WOFDataObject(namedtuple("WOFDataObject", "wof_id")):
     def canonical_url(self):
         slashed = ""
         # get digits in groups of 3
-        for digits in izip_longest(*([iter(str(self.wof_id))]*3)):
+        for digits in zip_longest(*([iter(str(self.wof_id))]*3)):
             if slashed:
                 slashed += "/"
             for d in digits:
