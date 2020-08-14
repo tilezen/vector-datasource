@@ -543,7 +543,7 @@ class GeomTypeTransformer(ast.NodeTransformer):
             call = ast.Call(
                 ast.Name('ST_GeometryType', ast.Load()),
                 [ast.Name('shape', ast.Load())],
-                [], None, None)
+                [])
             left = ast.copy_location(call, left)
             renamer = GeomNameTransformer()
             cmps = map(renamer.visit, cmps)

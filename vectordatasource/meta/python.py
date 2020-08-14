@@ -77,14 +77,20 @@ def parse_clamp(ast_state, c):
     # clamp between min and max values, i.e:
     # max(min_val, min(max_val, value)).
     inner = ast.Call(
-        ast.Name('min', ast.Load()),
-        [max_val, value],
-        [], None, None)
+        func=ast.Name('min', ast.Load()),
+        args=[
+            ast.arg(max_val),
+            ast.arg(value),
+        ],
+        keywords=[])
 
     return ast.Call(
-        ast.Name('max', ast.Load()),
-        [min_val, inner],
-        [], None, None)
+        func=ast.Name('max', ast.Load()),
+        args=[
+            ast.arg(min_val),
+            ast.arg(inner),
+        ],
+        keywords=[])
 
 
 def parse_sum(ast_state, orig):
@@ -146,8 +152,9 @@ def parse_func(ast_state, name, m):
     args = [ast_value(ast_state, x) for x in m]
 
     return ast.Call(
-        ast.Name(name, ast.Load()),
-        args, [], None, None)
+        func=ast.Name(name, ast.Load()),
+        args=args,
+        keywords=[])
 
 
 def parse_mul(ast_state, orig):
@@ -239,12 +246,15 @@ def ast_column(ast_state, col):
             ast.Name('meta', ast.Load()), meta_prop, ast.Load())
     else:
         result = ast.Call(
-            ast.Attribute(
+            func=ast.Attribute(
                 ast.Name('props', ast.Load()),
                 'get',
                 ast.Load()),
-            [ast.Str(col)],
-            [], None, None)
+            args=[
+                ast.arg(ast.Str(col)),
+            ],
+            keywords=[],
+        )
     return result
 
 
@@ -460,8 +470,10 @@ def make_way_area_assignment():
             func=ast.Attribute(
                 value=ast.Name(id='util', ctx=ast.Load()),
                 attr='calculate_way_area', ctx=ast.Load()),
-            args=[ast.Name(id='shape', ctx=ast.Load())],
-            keywords=[], starargs=None, kwargs=None))
+            args=[
+                ast.arg(ast.Name(id='shape', ctx=ast.Load())),
+            ],
+            keywords=[]))
 
 
 def make_volume_assignment():
@@ -474,9 +486,10 @@ def make_volume_assignment():
                 value=ast.Name(id='util', ctx=ast.Load()),
                 attr='calculate_volume', ctx=ast.Load()),
             args=[
-                ast.Name(id='way_area', ctx=ast.Load()),
-                ast.Name(id='props', ctx=ast.Load())],
-            keywords=[], starargs=None, kwargs=None))
+                ast.arg(ast.Name(id='way_area', ctx=ast.Load())),
+                ast.arg(ast.Name(id='props', ctx=ast.Load())),
+            ],
+            keywords=[]))
 
 
 def make_zoom_assignment():
@@ -489,8 +502,9 @@ def make_zoom_assignment():
                 value=ast.Name(id='util', ctx=ast.Load()),
                 attr='calculate_1px_zoom', ctx=ast.Load()),
             args=[
-                ast.Name(id='way_area', ctx=ast.Load())],
-            keywords=[], starargs=None, kwargs=None))
+                ast.arg(ast.Name(id='way_area', ctx=ast.Load())),
+            ],
+            keywords=[]))
 
 
 def parse_layer_from_yaml(
@@ -567,7 +581,7 @@ class FilterCompiler(object):
 
         mod = ast.Module([ast_fn])
         mod_with_linenos = ast.fix_missing_locations(mod)
-        code = compile(mod_with_linenos, '<string>', 'exec')
+        code = compile(mod_with_linenos, filename='<string>', mode='exec')
         exec(code, self.scope)
         compiled_fn = self.scope[fn_name]
 
