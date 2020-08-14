@@ -24,7 +24,6 @@ from shapely.geometry import shape as make_shape
 import shapely.ops
 from shapely.geometry import mapping
 import hashlib
-import urlparse
 import requests
 from tilequeue.command import parse_layer_data
 from vectordatasource.meta import find_yaml_path
@@ -293,7 +292,7 @@ class OverpassObject(namedtuple("OverpassObject", "raw_query")):
 
     def canonical_url(self):
         query = urllib.parse.urlencode(dict(data=self.raw_query))
-        url = urlparse.urlunparse((
+        url = urllib.parse.urlunparse((
             'https', 'overpass-api.de', '/api/interpreter',
             None, query, None))
         return url
@@ -304,7 +303,7 @@ class FixtureShapeDataObject(
 
     def canonical_url(self):
         path = "/".join(["", "fixtures", self.table, self.name])
-        url = urlparse.urlunparse((
+        url = urllib.parse.urlunparse((
             'file', 'integration-tests', path, None, None, None))
         return url
 
@@ -604,7 +603,7 @@ class OverpassDataSource(object):
         assert url.path == '/api/interpreter', \
             "Overpass URL paths should be /api/interpreter, not %r" \
             % (url.path,)
-        url_query = urlparse.parse_qs(url.query)
+        url_query = urllib.parse.parse_qs(url.query)
         raw_query = "".join(url_query['data'])
         return OverpassObject(raw_query)
 
@@ -831,7 +830,7 @@ class FixtureDataSources(object):
         return None
 
     def parse(self, url):
-        p = urlparse.urlsplit(url)
+        p = urllib.parse.urlsplit(url)
         source = self._source_for(p)
         if source:
             return source.parse(p)
@@ -843,7 +842,7 @@ class FixtureDataSources(object):
         groups = defaultdict(list)
 
         for url in urls:
-            p = urlparse.urlsplit(url)
+            p = urllib.parse.urlsplit(url)
             source = self._source_for(p)
             if not source:
                 raise Exception("Unknown source for url %r", (url,))
