@@ -124,7 +124,7 @@ class PopulationRankTest(FixtureTest):
         last = self._rank_for_pop(None)
         self.assertGreater(last, 0)
 
-        for exp in xrange(30):
+        for exp in range(30):
             population = 1 << exp
             rank = self._rank_for_pop(population)
             self.assertLessEqual(rank, last)

@@ -32,7 +32,7 @@ def _valid_values(filter_defn, col):
     value = filter_defn[col]
     if isinstance(value, list):
         return filter_defn[col]
-    elif isinstance(value, (str, unicode)):
+    elif isinstance(value, str):
         return [value]
     else:
         raise ValueError("Don't know what to do with value of type "
@@ -123,7 +123,7 @@ def parse_case_for_kinds(case_stmt, item):
 
         assert isinstance(values, list)
         for value in values:
-            assert isinstance(value, (str, unicode, type(None)))
+            assert isinstance(value, (str, type(None)))
         all_kinds.extend(values)
 
     # if there's no else statement, then the fall-through default is None
@@ -404,7 +404,7 @@ FakeShape = namedtuple('FakeShape', 'type')
 
 
 def parse_col_values(col, item):
-    if isinstance(col, (str, unicode)):
+    if isinstance(col, str):
         all_kinds = [col]
 
     elif col is None:
@@ -412,7 +412,7 @@ def parse_col_values(col, item):
 
     elif isinstance(col, list):
         for c in col:
-            assert isinstance(c, (str, unicode))
+            assert isinstance(c, str)
 
         all_kinds = col
 
@@ -455,8 +455,8 @@ def parse_item(layer_name, item, sort_rank, include_kind_detail):
     values = {}
     for k in all_kinds:
         for kind_detail in kind_details:
-            assert isinstance(k, (str, unicode))
-            assert isinstance(kind_detail, (str, unicode, type(None)))
+            assert isinstance(k, str)
+            assert isinstance(kind_detail, (str, type(None)))
 
             # we need to fake up some of this data, so the sort ranks might
             # not be exactly correct...

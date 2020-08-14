@@ -97,18 +97,18 @@ def routes_using(way_id):
 
 
 def _make_ident(s):
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode('ascii', 'replace')
-    elif isinstance(s, (int, long, bool, float)):
+    elif isinstance(s, (int, bool, float)):
         s = repr(s)
-    return s.lower().translate(None, ':-')
+    return s.lower().translate(None, b':-')
 
 
 def _almost_repr(value):
     # we'd prefer not to have all the u'' stuff everywhere unless it's
     # necessary, so try to see if we can return a plain str, if the string
     # is all ASCII anyway.
-    if isinstance(value, unicode):
+    if isinstance(value, str):
         try:
             value = value.encode('ascii')
         except UnicodeEncodeError:

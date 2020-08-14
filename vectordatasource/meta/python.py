@@ -112,20 +112,21 @@ _KNOWN_OPS = {
 }
 
 
-def parse_lookup(ast_state, l):
-    assert isinstance(l, dict)
-    assert set(l.keys()) >= set(('key', 'op', 'table'))
+def parse_lookup(ast_state, lookup):
+    assert isinstance(lookup, dict)
+    assert set(lookup.keys()) >= {'key', 'op', 'table'}
 
-    key = ast_value(ast_state, l['key'])
+    key = ast_value(ast_state, lookup['key'])
 
     # only support >=, <= for now
-    assert l['op'] in _KNOWN_OPS, '%r is not one of %r known binary ' \
-        'operators' % (l['op'], _KNOWN_OPS.keys())
-    op = _KNOWN_OPS[l['op']]()
+    assert lookup['op'] in _KNOWN_OPS, \
+        '%r is not one of %r known binary operators' % \
+        (lookup['op'], _KNOWN_OPS.keys())
+    op = _KNOWN_OPS[lookup['op']]()
 
-    default = ast_value(ast_state, l.get('default'))
+    default = ast_value(ast_state, lookup.get('default'))
 
-    table = l['table']
+    table = lookup['table']
     assert isinstance(table, list)
 
     expr = default

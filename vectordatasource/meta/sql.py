@@ -262,7 +262,7 @@ def fn_name(node):
     elif isinstance(node, ast.Attribute):
         assert isinstance(node.value, ast.Name)
         return node.value.id + "." + fn_name(node.attr)
-    elif isinstance(node, (str, unicode)):
+    elif isinstance(node, str):
         return node
     else:
         raise RuntimeError("Don't know how to make a function name from %r"
@@ -441,11 +441,11 @@ class SQLExpression(ast.NodeVisitor):
 
         self.buf.write(" END)")
 
-    def visit_List(self, l):
+    def visit_List(self, lst):
         if self.in_json:
             self.buf.write("('[")
             first = True
-            for elt in l.elts:
+            for elt in lst.elts:
                 if first:
                     first = False
                 else:
@@ -456,7 +456,7 @@ class SQLExpression(ast.NodeVisitor):
         else:
             self.buf.write("ARRAY[")
             first = True
-            for elt in l.elts:
+            for elt in lst.elts:
                 if first:
                     first = False
                 else:

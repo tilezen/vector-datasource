@@ -48,7 +48,7 @@ class BuildingScaleRankTest(FixtureTest):
     def _setup_row(self, z, x, y, width, depth, n, height=5, extra_tags={},
                    landuse_kind=None):
         b = Buildings(z, x, y, landuse_kind=landuse_kind)
-        for i in xrange(0, n * width, width):
+        for i in range(0, n * width, width):
             b.add(i, 0, i + width, depth, height=height, extra_tags=extra_tags)
 
         self.generate_fixtures(*b.buildings)

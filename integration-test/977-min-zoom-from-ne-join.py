@@ -31,7 +31,7 @@ class MinZoomFromNETest(FixtureTest):
         from tilequeue.tile import deg2num
         # should show up in zooms within the range 2-6
 
-        for zoom in xrange(2, 6):
+        for zoom in range(2, 6):
             x, y = deg2num(self.lat, self.lon, zoom)
             self.assert_has_feature(
                 zoom, x, y, 'places', {
@@ -44,7 +44,7 @@ class MinZoomFromNETest(FixtureTest):
         from tilequeue.tile import deg2num
         # shouldn't be in the zoom 0 or zoom 1 tiles because min_zoom >= 1.5
 
-        for zoom in xrange(0, 1):
+        for zoom in range(0, 1):
             x, y = deg2num(self.lat, self.lon, zoom)
             self.assert_no_matching_feature(
                 zoom, x, y, 'places', {'id': 838090640})

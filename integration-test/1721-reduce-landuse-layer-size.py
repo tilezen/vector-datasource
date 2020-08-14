@@ -38,8 +38,8 @@ class LanduseMergingTest(FixtureTest):
         splits = 8
         swidth = 2 ** splits
 
-        for sx in xrange(splits):
-            for sy in xrange(splits):
+        for sx in range(splits):
+            for sy in range(splits):
                 minx = ox + w * (0.5 * float(1 << sx) / swidth)
                 maxx = ox + w * (float(1 << sx) / swidth)
                 miny = oy + h * (0.5 * float(1 << sy) / swidth)

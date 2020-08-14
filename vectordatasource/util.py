@@ -14,7 +14,7 @@ def to_float(x):
     if x is None:
         return None
 
-    if isinstance(x, (str, unicode)):
+    if isinstance(x, str):
         # normalize punctuation
         x = x.replace(';', '.').replace(',', '.')
 

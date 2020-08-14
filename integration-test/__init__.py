@@ -277,8 +277,8 @@ def parse_layer_dict(yaml_path, output_fn, fn_name_fn):
     layer_parse_result = parse_layers(yaml_path, output_fn, fn_name_fn)
 
     layers = {}
-    for l in layer_parse_result.layer_data:
-        layers[l.layer] = l.fn
+    for layer_data in layer_parse_result.layer_data:
+        layers[layer_data.layer] = layer_data.fn
 
     return layers
 
@@ -406,7 +406,7 @@ def dump_table(conn, typ, clip, simplify):
     for osm_id, geom, tags in cur:
         # this is usually because something (e.g: ST_Simplify) has turned the
         # geometry column to NULL.
-        if not isinstance(geom, (str, buffer)):
+        if not isinstance(geom, str):
             continue
 
         geom = json.loads(geom)
@@ -960,7 +960,7 @@ class FixtureEnvironment(object):
                         fh.write(r.text)
                     return geojson_file
 
-            except StandardError:
+            except Exception:
                 pass
 
         # second try - generate it from the URLs
@@ -1294,9 +1294,8 @@ class RunTestInstance(object):
             geojson_size = path_getsize(geojson_file)
             if geojson_size > (100 * 1024):
                 import sys
-                print>>sys.stderr, "WARNING: %s: GeoJSON fixture is " \
-                    "very large, %d bytes." \
-                    % (geojson_file, geojson_size)
+                print("WARNING: %s: GeoJSON fixture is very large, %d bytes."
+                      % (geojson_file, geojson_size), file=sys.stderr)
 
         rows, rels = _load_fixtures([geojson_file])
         feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
@@ -1582,8 +1581,8 @@ class OsmChange(object):
                 break
 
             print("%d code returned instead of overpass response - request "
-                "will be repeated after %d seconds" %
-                (r.status_code, wait_time_in_s))
+                  "will be repeated after %d seconds" %
+                  (r.status_code, wait_time_in_s))
             time.sleep(wait_time_in_s)
 
         if r.status_code != 200:
@@ -1664,7 +1663,7 @@ class DataDumper(object):
                     raise Exception("Unknown data object type: %r" % (obj,))
 
             except Exception:
-                print>>log, "FAIL: fetching OSM data for %r" % (obj,)
+                print("FAIL: fetching OSM data for %r" % (obj,), file=log)
                 raise
 
 

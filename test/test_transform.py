@@ -506,7 +506,7 @@ class DropMergedIdTest(unittest.TestCase):
             building = shape, props, id
             buildings.append(building)
 
-        def _drop_all_props((shape, props, fid)):
+        def _drop_all_props(thing):
             return None
 
         tolerance = 1.0e-4

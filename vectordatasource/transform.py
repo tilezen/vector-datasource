@@ -16,7 +16,6 @@ from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.polygon import orient
 from shapely.ops import linemerge
 from shapely.strtree import STRtree
-from sort import pois as sort_pois
 from StreetNames import short_street_name
 from sys import float_info
 from tilequeue.process import _make_valid_if_necessary
@@ -25,9 +24,10 @@ from tilequeue.tile import calc_meters_per_pixel_area
 from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
-from util import to_float
-from util import safe_int
 from zope.dottedname.resolve import resolve
+from .util import to_float
+from .util import safe_int
+from .sort import pois as sort_pois
 import csv
 import pycountry
 import re
@@ -331,23 +331,23 @@ def add_road_network_from_ncat(shape, properties, fid, zoom):
         tags = properties.get('tags', {})
         ncat = _make_unicode_or_none(tags.get('ncat'))
 
-        if ncat == u'국도':
+        if ncat == '국도':
             # national roads - gukdo
             properties['network'] = 'KR:national'
 
-        elif ncat == u'광역시도로':
+        elif ncat == '광역시도로':
             # metropolitan city roads - gwangyeoksido
             properties['network'] = 'KR:metropolitan'
 
-        elif ncat == u'특별시도':
+        elif ncat == '특별시도':
             # special city (Seoul) roads - teukbyeolsido
             properties['network'] = 'KR:metropolitan'
 
-        elif ncat == u'고속도로':
+        elif ncat == '고속도로':
             # expressways - gosokdoro
             properties['network'] = 'KR:expressway'
 
-        elif ncat == u'지방도':
+        elif ncat == '지방도':
             # local highways - jibangdo
             properties['network'] = 'KR:local'
 
@@ -2116,7 +2116,7 @@ def admin_boundaries(ctx):
                 if envelope.intersects(cut_envelope):
                     try:
                         inside, boundary = _intersect_cut(boundary, cut_shape)
-                    except (StandardError, shapely.errors.ShapelyError):
+                    except shapely.errors.ShapelyError:
                         # if the inside and remaining boundary can't be
                         # calculated, then we can't continue to intersect
                         # anything else with this shape. this means we might
@@ -2167,10 +2167,8 @@ def admin_boundaries(ctx):
 
 
 def _unicode_len(s):
-    if isinstance(s, str):
+    if isinstance(s, bytes):
         return len(s.decode('utf-8'))
-    elif isinstance(s, unicode):
-        return len(s)
     return None
 
 
@@ -2567,7 +2565,7 @@ def remove_zero_area(shape, properties, fid, zoom):
     # try to parse a string if the area has been sent as a
     # string. it should come through as a float, though,
     # since postgres treats it as a real.
-    if isinstance(area, (str, unicode)):
+    if isinstance(area, str):
         area = to_float(area)
 
     if area is not None:
@@ -3770,7 +3768,8 @@ def merge_building_features(ctx):
     # values which retain detail.
     tolerance = min(5, 0.4 * tolerance_for_zoom(zoom))
 
-    def _props_pre((shape, props, fid)):
+    def _props_pre(tup):
+        (shape, props, fid) = tup
         if exclusions:
             for prop in exclusions:
                 if prop in props:
@@ -3787,7 +3786,8 @@ def merge_building_features(ctx):
 
         return props
 
-    def _props_post((merged_shape, props, fid)):
+    def _props_post(tup):
+        (merged_shape, props, fid) = tup
         # add the area and volume back in
         area = int(merged_shape.area)
         props['area'] = area
@@ -3838,14 +3838,16 @@ def merge_polygon_features(ctx):
     else:
         tolerance = tfz
 
-    def _props_pre((shape, props, fid)):
+    def _props_pre(tup):
+        (shape, props, fid) = tup
         # drop area while merging, as we'll recalculate after.
         props.pop('area', None)
         if merge_min_zooms:
             props.pop('min_zoom', None)
         return props
 
-    def _props_post((merged_shape, props, fid)):
+    def _props_post(tup):
+        (merged_shape, props, fid) = tup
         # add the area back in
         area = int(merged_shape.area)
         props['area'] = area
@@ -3925,7 +3927,7 @@ def _junction_merge_candidates(ids, geoms, pt, angle_tolerance):
     # as they're within the tolerance angle of eachother.
     while len(angles) > 1:
         min_angle = None
-        for j in xrange(0, len(angles)):
+        for j in range(0, len(angles)):
             angle1, idx1 = angles[j]
             angle0, idx0 = angles[j-1]
 
@@ -4127,7 +4129,7 @@ def _first_positive_integer_not_in(s):
         return 1
 
     last = max(s)
-    for i in xrange(1, last):
+    for i in range(1, last):
         if i not in s:
             return i
     return last + 1
@@ -5555,7 +5557,7 @@ def _guess_network_gr(tags):
 
         # ignore provincial refs, they should be on reg_ref. see:
         # https://wiki.openstreetmap.org/wiki/WikiProject_Greece/Provincial_Road_Network
-        if part.startswith(u'ΕΠ'.encode('utf-8')):
+        if part.startswith('ΕΠ'.encode('utf-8')):
             continue
 
         network, ref = _normalize_gr_netref(None, part)
@@ -5598,10 +5600,10 @@ def _guess_network_jp(tags):
     name = tags.get('name:ja') or tags.get('name')
     network_from_name = None
     if name:
-        if isinstance(name, str):
-            name = unicode(name, 'utf-8')
-        if name.startswith(u'国道') and \
-           name.endswith(u'号'):
+        if isinstance(name, bytes):
+            name = name.decode('utf-8')
+        if name.startswith('国道') and \
+           name.endswith('号'):
             network_from_name = 'JP:national'
 
     networks = []
@@ -5627,24 +5629,24 @@ def _guess_network_kr(tags):
     # national road.
     name_ko = _make_unicode_or_none(tags.get('name:ko') or tags.get('name'))
     if name_ko and network_from_tags is None:
-        if name_ko.endswith(u'국도'):
+        if name_ko.endswith('국도'):
             # national roads - gukdo
             network_from_tags = 'KR:national'
 
-        elif name_ko.endswith(u'광역시도로'):
+        elif name_ko.endswith('광역시도로'):
             # metropolitan city roads - gwangyeoksido
             network_from_tags = 'KR:metropolitan'
 
-        elif name_ko.endswith(u'특별시도'):
+        elif name_ko.endswith('특별시도'):
             # special city (Seoul) roads - teukbyeolsido
             network_from_tags = 'KR:metropolitan'
 
-        elif (name_ko.endswith(u'고속도로') or
-              name_ko.endswith(u'고속도로지선')):
+        elif (name_ko.endswith('고속도로') or
+              name_ko.endswith('고속도로지선')):
             # expressways - gosokdoro (and expressway branches)
             network_from_tags = 'KR:expressway'
 
-        elif name_ko.endswith(u'지방도'):
+        elif name_ko.endswith('지방도'):
             # local highways - jibangdo
             network_from_tags = 'KR:local'
 
@@ -5726,10 +5728,10 @@ def _guess_network_vn(tags):
     if not network_from_tags:
         name = tags.get('name') or tags.get('name:vi')
         if name:
-            name = unicode(name, 'utf-8')
-            if name.startswith(u'Tỉnh lộ'):
+            name = name.decode('utf-8')
+            if name.startswith('Tỉnh lộ'):
                 network_from_tags = 'VN:provincial'
-            elif name.startswith(u'Quốc lộ'):
+            elif name.startswith('Quốc lộ'):
                 network_from_tags = 'VN:national'
 
     networks = []
@@ -6175,11 +6177,11 @@ def _sort_network_ru(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'RU:national' and ref:
-        if ref.startswith(u'М'):
+        if ref.startswith('М'):
             network_code = 0
-        elif ref.startswith(u'Р'):
+        elif ref.startswith('Р'):
             network_code = 1
-        elif ref.startswith(u'А'):
+        elif ref.startswith('А'):
             network_code = 2
         else:
             network_code = 9999
@@ -6332,7 +6334,7 @@ def _splitref(ref):
     if not ref:
         return None, ref
 
-    for i in xrange(0, len(ref)):
+    for i in range(0, len(ref)):
         if not ref[i].isalpha():
             return ref[0:i], ref[i:].strip()
 
@@ -6403,7 +6405,7 @@ def _normalize_br_netref(network, ref):
 
 
 def _normalize_ca_netref(network, ref):
-    if isinstance(network, (str, unicode)) and \
+    if isinstance(network, str) and \
        network.startswith('CA:NB') and \
        ref.isdigit():
         refnum = int(ref)
@@ -6651,7 +6653,7 @@ def _normalize_fr_netref(network, ref):
     # networks are broken down by department, e.g: FR:01:D-road, but we
     # only want to match on the D-road part, so throw away the department
     # number.
-    if isinstance(network, (str, unicode)):
+    if isinstance(network, str):
         m = _FR_DEPARTMENTAL_D_ROAD.match(network)
         if m:
             # see comment above. TODO: figure out how to not say this twice.
@@ -6721,14 +6723,14 @@ def _normalize_gr_netref(network, ref):
     # Latin characters E and O. it's the same below for capital alpha and A.
     # these are sometimes mixed up in the data, so we map them to the same
     # networks.
-    if prefix in (u'ΕΟ', u'EO'):
+    if prefix in ('ΕΟ', 'EO'):
         network = 'GR:national'
 
-    elif (prefix in (u'Α', u'A') and
+    elif (prefix in ('Α', 'A') and
           (network is None or network == 'GR:motorway')):
         network = 'GR:motorway'
         # keep A prefix for shield text
-        ref = u'Α' + ref
+        ref = 'Α' + ref
 
     elif network == 'e-road':
         ref = 'E' + ref
@@ -7131,32 +7133,29 @@ def _normalize_ru_netref(network, ref):
     if num:
         num = num.lstrip('-').split('-')[0]
 
-    if prefix in (u'М', 'M'):  # cyrillic M & latin M!
-        ref = u'М' + num
+    if prefix in ('М', 'M'):  # cyrillic M & latin M!
+        ref = 'М' + num
 
-    elif prefix in (u'Р', 'P'):
+    elif prefix in ('Р', 'P'):
         if network is None:
             network = 'RU:regional'
-        ref = u'Р' + num
+        ref = 'Р' + num
 
-    elif prefix in (u'А', 'A'):
+    elif prefix in ('А', 'A'):
         if network is None:
             network = 'RU:regional'
-        ref = u'А' + num
+        ref = 'А' + num
 
     elif prefix == 'E':
         network = 'e-road'
-        ref = u'E' + num
+        ref = 'E' + num
 
     elif prefix == 'AH':
         network = 'AsianHighway'
-        ref = u'AH' + num
+        ref = 'AH' + num
 
     else:
         ref = None
-
-    if isinstance(ref, unicode):
-        ref = ref.encode('utf-8')
 
     return network, ref
 
@@ -7165,7 +7164,7 @@ _TR_PROVINCIAL = re.compile('^[0-9]{2}-[0-9]{2}$')
 
 
 # NOTE: there's aslo an "NSC", which is under construction
-_SG_EXPRESSWAYS = set([
+_SG_EXPRESSWAYS = {
     'AYE',  # Ayer Rajah Expressway
     'BKE',  # Bukit Timah Expressway
     'CTE',  # Central Expressway
@@ -7176,7 +7175,7 @@ _SG_EXPRESSWAYS = set([
     'PIE',  # Pan Island Expressway
     'SLE',  # Seletar Expressway
     'TPE',  # Tampines Expressway
-])
+}
 
 
 def _normalize_sg_netref(network, ref):
@@ -7232,35 +7231,32 @@ def _normalize_ua_netref(network, ref):
         network = None
         ref = None
 
-    elif prefix in (u'М', 'M'):  # cyrillic M & latin M!
+    elif prefix in ('М', 'M'):  # cyrillic M & latin M!
         if network is None:
             network = 'UA:international'
-        ref = u'М' + num
+        ref = 'М' + num
 
-    elif prefix in (u'Н', 'H'):
+    elif prefix in ('Н', 'H'):
         if network is None:
             network = 'UA:national'
-        ref = u'Н' + num
+        ref = 'Н' + num
 
-    elif prefix in (u'Р', 'P'):
+    elif prefix in ('Р', 'P'):
         if network is None:
             network = 'UA:regional'
-        ref = u'Р' + num
+        ref = 'Р' + num
 
-    elif prefix in (u'Т', 'T'):
+    elif prefix in ('Т', 'T'):
         network = 'UA:territorial'
-        ref = u'Т' + num.replace('-', '')
+        ref = 'Т' + num.replace('-', '')
 
     elif prefix == 'E':
         network = 'e-road'
-        ref = u'E' + num
+        ref = 'E' + num
 
     else:
         ref = None
         network = None
-
-    if isinstance(ref, unicode):
-        ref = ref.encode('utf-8')
 
     return network, ref
 
@@ -7270,27 +7266,27 @@ def _normalize_vn_netref(network, ref):
     prefix, num = _splitref(ref)
 
     if num:
-        num = num.lstrip(u'.')
+        num = num.lstrip('.')
 
     if not num:
         network = None
         ref = None
 
-    elif prefix == u'CT' or network == 'VN:expressway':
+    elif prefix == 'CT' or network == 'VN:expressway':
         network = 'VN:expressway'
-        ref = u'CT' + num
+        ref = 'CT' + num
 
-    elif prefix == u'QL' or network == 'VN:national':
+    elif prefix == 'QL' or network == 'VN:national':
         network = 'VN:national'
-        ref = u'QL' + num
+        ref = 'QL' + num
 
-    elif prefix in (u'ĐT', u'DT'):
+    elif prefix in ('ĐT', 'DT'):
         network = 'VN:provincial'
-        ref = u'ĐT' + num
+        ref = 'ĐT' + num
 
-    elif prefix == u'TL' or network in ('VN:provincial', 'VN:TL'):
+    elif prefix == 'TL' or network in ('VN:provincial', 'VN:TL'):
         network = 'VN:provincial'
-        ref = u'TL' + num
+        ref = 'TL' + num
 
     elif ref:
         network = 'VN:road'
@@ -7299,8 +7295,6 @@ def _normalize_vn_netref(network, ref):
         network = None
         ref = None
 
-    if isinstance(ref, unicode):
-        ref = ref.encode('utf-8')
     return network, ref
 
 
@@ -7658,7 +7652,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     #  * if they begin with two letters and a dash, then make the letters upper
     #    case and replace the dash with a colon.
     #  * expand ;-delimited lists in refs
-    for i in xrange(0, len(mz_networks), 3):
+    for i in range(0, len(mz_networks), 3):
         t, n, r = mz_networks[i:i+3]
         if t == 'road' and n is not None:
             n = _fixup_network_country_code(n)
@@ -7683,7 +7677,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         # then use the network from the relation instead.
         if network is None:
             solo_networks_from_relations = []
-            for i in xrange(0, len(mz_networks), 3):
+            for i in range(0, len(mz_networks), 3):
                 t, n, r = mz_networks[i:i+3]
                 if t == 'road' and n and (r is None or r == ref):
                     solo_networks_from_relations.append((n, i))
@@ -7724,7 +7718,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
             # an entry in mz_networks with the same ref!
             if ref:
                 found = False
-                for i in xrange(0, len(mz_networks), 3):
+                for i in range(0, len(mz_networks), 3):
                     t, _, r = mz_networks[i:i+3]
                     if t == 'road' and r == ref:
                         found = True
@@ -7845,13 +7839,13 @@ _UA_TERRITORIAL_RE = re.compile(r'^(\w)-(\d+)-(\d+)$',
 
 
 def _make_unicode_or_none(ref):
-    if isinstance(ref, unicode):
+    if isinstance(ref, str):
         # no need to do anything, it's already okay
         return ref
 
-    elif isinstance(ref, str):
+    elif isinstance(ref, bytes):
         # it's UTF-8 encoded bytes, so make it a unicode
-        return unicode(ref, 'utf-8')
+        return ref.decode('utf-8')
 
     # dunno what this is?!!
     return None

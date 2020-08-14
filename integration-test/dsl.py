@@ -12,9 +12,9 @@ Feature = namedtuple('Feature', 'fid shape properties')
 def _tags_to_utf8(tags):
     new_tags = {}
     for k, v in tags.items():
-        if isinstance(k, unicode):
+        if isinstance(k, str):
             k = k.encode('utf-8')
-        if isinstance(v, unicode):
+        if isinstance(v, str):
             v = v.encode('utf-8')
         new_tags[k] = v
     return new_tags
@@ -24,14 +24,14 @@ def _tags_to_utf8(tags):
 # position is expected to be in (lon, lat) coordinates.
 def point(id, position, tags):
     x, y = reproject_lnglat_to_mercator(*position)
-    return Feature(id, Point(x, y), _tags_to_utf8(tags))
+    return Feature(id, Point(x, y), tags)
 
 
 # utility wrapper to generate a Feature from a lat/lon shape.
 def way(id, shape, tags):
     from shapely.ops import transform
     merc_shape = transform(reproject_lnglat_to_mercator, shape)
-    return Feature(id, merc_shape, _tags_to_utf8(tags))
+    return Feature(id, merc_shape, tags)
 
 
 # the fixture code expects "raw" relations as if they come straight from
@@ -185,7 +185,7 @@ def fit_in_tile(z, x, y, shape):
 
     bounds = coord_to_mercator_bounds(Coordinate(zoom=z, column=x, row=y))
 
-    if isinstance(shape, (str, unicode)):
+    if isinstance(shape, str):
         shape = wkt_loads(shape)
 
     # check shape fits within unit square, so we can transform it to fit
