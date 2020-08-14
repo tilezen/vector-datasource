@@ -105,10 +105,6 @@ def match_properties(actual, expected):
 # Applies the rules described in the comment for match_properties() to a single
 # element, recursing into lists to apply the same logic.
 def _match_item(v, exp_v):
-    # normalise unicode values
-    if isinstance(v, unicode):
-        v = v.encode('utf-8')
-
     if exp_v is None:
         # confusingly, a missing or None value (v) does _not_ match an expected
         # value of None! expecting None is interpreted as expecting _any_
@@ -123,9 +119,6 @@ def _match_item(v, exp_v):
 
     elif callable(exp_v):
         return exp_v(v)
-
-    elif isinstance(exp_v, unicode):
-        return v == exp_v.encode('utf-8')
 
     elif isinstance(v, list) and isinstance(exp_v, list):
         if len(v) != len(exp_v):
@@ -155,11 +148,6 @@ def match_distance(actual, expected):
 
     for exp_k, exp_v in expected.items():
         v = actual.get(exp_k, None)
-        # normalise unicode values
-        if isinstance(v, unicode):
-            v = v.encode('utf-8')
-        if isinstance(exp_v, unicode):
-            exp_v = exp_v.encode('utf-8')
 
         if exp_v is not None:
             if isinstance(exp_v, set):

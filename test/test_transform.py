@@ -526,9 +526,6 @@ class ShieldTextTransform(unittest.TestCase):
     def _assert_shield_text(self, network, ref, expected_shield_text):
         from vectordatasource.transform import extract_network_information
 
-        if isinstance(expected_shield_text, unicode):
-            expected_shield_text = expected_shield_text.encode('utf-8')
-
         shape, properties, fid = extract_network_information(
             None, dict(mz_networks=['road', network, ref]), None, 0)
         self.assertTrue('all_networks' in properties)

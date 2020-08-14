@@ -196,8 +196,8 @@ def _shapefile_iterator(sf, field_names):
         shape = make_shape(row.shape.__geo_interface__)
         props = defaultdict(lambda: None)
         for k, v in zip(field_names, row.record):
-            if isinstance(v, str):
-                v = unicode(v.rstrip(), 'utf-8')
+            if isinstance(v, bytes):
+                v = v.rstrip().decode('utf-8')
             if v:
                 props[k] = v
         yield shape, props, fid

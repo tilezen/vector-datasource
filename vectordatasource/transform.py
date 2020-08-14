@@ -7981,12 +7981,6 @@ def extract_network_information(shape, properties, fid, zoom):
                 if ref is not None:
                     ref = shield_text_fn(network_name, ref)
 
-                # we try to keep properties as utf-8 encoded str, but the
-                # shield text function may have turned them into unicode.
-                # this is a catch-all just to make absolutely sure.
-                if isinstance(ref, unicode):
-                    ref = ref.encode('utf-8')
-
                 shield_texts.append(ref)
 
             properties[all_networks] = network_names
