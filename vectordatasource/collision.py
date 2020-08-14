@@ -19,13 +19,13 @@ class CollisionRanker(object):
             if '_reserved' in case:
                 # reserved should be the only key, to avoid confusion with
                 # filter blocks.
-                assert case.keys() == ['_reserved']
+                assert case.keys() == {'_reserved'}
 
                 reserved = case['_reserved']
 
                 # we can reserve either a specific range of indices, or a
                 # count.
-                if reserved.keys() == ['count']:
+                if reserved.keys() == {'count'}:
                     # just increment the index to skip. we can't collide with
                     # anything, so there's no assertion to make.
                     index += reserved['count']

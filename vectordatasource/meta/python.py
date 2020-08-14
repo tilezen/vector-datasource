@@ -44,7 +44,7 @@ def parse_case(ast_state, orig):
 
     for case in reversed(c):
         assert isinstance(case, dict)
-        assert set(case.keys()) == set(['when', 'then'])
+        assert set(case.keys()) == {'when', 'then'}
         cond = create_rules_from_branch(case['when'])
         when = ast_value(ast_state, cond)
         then = ast_value(ast_state, case['then'])
@@ -54,7 +54,7 @@ def parse_case(ast_state, orig):
 
 
 def parse_call(ast_state, c):
-    assert set(c.keys()) == set(('args', 'func'))
+    assert c.keys() == {'args', 'func'}
     args = c['args']
     func = c['func']
     args_ast = [ast_value(ast_state, x) for x in args]
@@ -64,11 +64,11 @@ def parse_call(ast_state, c):
     while func_parts:
         attr = func_parts.pop(0)
         name = ast.Attribute(value=name, attr=attr, ctx=ast.Load())
-    return ast.Call(name, args_ast, [], None, None)
+    return ast.Call(func=name, args=args_ast, keywords=[])
 
 
 def parse_clamp(ast_state, c):
-    assert set(c.keys()) == set(('min', 'max', 'value'))
+    assert c.keys() == {'min', 'max', 'value'}
 
     min_val = ast_value(ast_state, c['min'])
     max_val = ast_value(ast_state, c['max'])
@@ -114,7 +114,7 @@ _KNOWN_OPS = {
 
 def parse_lookup(ast_state, lookup):
     assert isinstance(lookup, dict)
-    assert set(lookup.keys()) >= {'key', 'op', 'table'}
+    assert lookup.keys() >= {'key', 'op', 'table'}
 
     key = ast_value(ast_state, lookup['key'])
 
