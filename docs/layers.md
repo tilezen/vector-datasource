@@ -503,7 +503,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `camp_site`
 * `caravan_site`
 * `carousel`
-* `cemetery` with `kind_detail` and `denomination` properties. 
+* `cemetery` with `kind_detail` and `denomination` properties.
 * `cinema`
 * `city_wall`
 * `college`
@@ -537,7 +537,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `golf_course`
 * `grass`
 * `grassland`
-* `grave_yard` with `kind_detail` and `denomination` properties. 
+* `grave_yard` with `kind_detail` and `denomination` properties.
 * `groyne`
 * `guard_rail` line.
 * `hanami`
@@ -882,426 +882,428 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
-* `accountant`
-* `adit`
-* `administrative`
-* `adult_gaming_centre`
-* `advertising_agency`
-* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
-* `aeroway_gate`
-* `airfield` for military use.
-* `airport`
-* `alcohol`
-* `alpine_hut`
-* `ambulatory_care`
-* `amusement_ride`
-* `animal`
-* `aquarium`
-* `archaeological_site`
-* `architect`
-* `art`
-* `arts_centre` - A venue where arts are performed or exhibited.
-* `artwork`
-* `assisted_living`
-* `association`
-* `atm`
-* `attraction`
-* `atv`
-* `aviary`
-* `baby_hatch`
-* `bakery`
-* `bank`
-* `bar`
-* `battlefield`
-* `bbq`
-* `beach_resort`
-* `beach` - Where the land meets the sea gradually. With `kind_detail` property.
-* `beacon`
-* `beauty`
-* `bed_and_breakfast`
-* `bench`
-* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
-* `bicycle_parking`
-* `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
-* `bicycle_rental` - Bicycle rental shop.
-* `bicycle_repair_station`
-* `bicycle` - Bicycle sales shop, often with bike repair service.
-* `biergarten`
-* `block`
-* `blood_bank`
-* `boat_lift`
-* `boat_rental`
-* `boat_storage`
-* `boatyard` - a place for building, fixing, and storing boats.
-* `bollard`
-* `bookmaker`
-* `books`
-* `border_control`
-* `brewery`
-* `bunker` - A reinforced military building. With `kind_detail` property.
-* `bureau_de_change`
-* `bus_station`
-* `bus_stop`
-* `butcher`
-* `cafe`
-* `camera` - A shop selling cameras.
-* `camp_site`
-* `car_parts` - A shop selling car parts.
-* `car_rental` - A business which rents cars.
-* `car_repair`
-* `car_sharing`
-* `car_wash`
-* `car`
-* `caravan_site`
-* `care_home`
-* `carousel`
-* `carpenter`
-* `casino` - A venue for gambling.
-* `cattle_grid` barrier
-* `cave_entrance`
-* `cemetery` with `kind_detail` and `denomination` properties.
-* `chain` barrier
-* `chalet`
-* `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
-* `charity` - A shop selling items, often second-hand clothes, in order to raise money for charity.
-* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
-* `childcare`
-* `childrens_centre`
-* `chiropractor`
-* `cinema`
-* `clinic` with `kind_detail` property.
-* `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
-* `clothes`
-* `club`
-* `coffee`
-* `college`
-* `communications_tower`
-* `community_centre`
-* `company`
-* `computer`
-* `confectionery`
-* `consulting`
-* `container_terminal`
-* `convenience`
-* `copyshop` - A shop offering photocopying and printing services.
-* `cosmetics` - A specialty shop selling cosmetics.
-* `courthouse`
-* `craft` - A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
-* `crane` with `kind_detail` property.
-* `cross`
-* `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
-* `cycle_barrier` - Barrier for bicycles.
-* `dairy_kitchen`
-* `dam`
-* `danger_area` - e.g: military training zones, firing ranges.
-* `day_care`
-* `defibrillator`
-* `deli`
-* `dentist` with `kind_detail` property.
-* `department_store`
-* `dispensary`
-* `dive_centre`
-* `doctors` with `kind_detail` property.
-* `dog_park`
-* `doityourself`
-* `dressmaker`
-* `drinking_water`
-* `dry_cleaning`
-* `dune`
-* `educational_institution`
-* `egress`
-* `electrician`
-* `electronics`
-* `elevator` - An enclosure for vertical travel.
-* `embassy`
-* `emergency_phone`
-* `employment_agency`
-* `enclosure` - at a zoo
-* `estate_agent`
-* `farm`
-* `fashion`
-* `fast_food`
-* `ferry_terminal`
-* `field_hospital` with `kind_detail` property.
-* `financial`
-* `fire_hydrant`
-* `fire_station`
-* `firepit`
-* `fishing_area`
-* `fishing`
-* `fishmonger` - A shop selling fish and seafood.
-* `fitness_station`
-* `fitness`
-* `florist`
-* `food_bank`
-* `ford`
-* `forest`
-* `fort`
-* `foundation`
-* `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
-* `funeral_directors` - A venue offering funerary services.
-* `furniture`
-* `gallery` - An art gallery.
-* `gambling`
-* `garden_centre`
-* `garden`
-* `gardener`
-* `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
-* `gate` with `kind_detail` property.
-* `generator` - A building or structure which generates power. With `kind_detail` property.
-* `geyser`
-* `gift`
-* `golf_course`
-* `golf` - Shop selling golf equipment.
-* `government`
-* `grave_yard` with `kind_detail` and `denomination` properties. 
-* `greengrocer` - Shop selling fruits and vegetables.
-* `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
-* `group_home`
-* `guest_house`
-* `hairdresser`
-* `halt`
-* `hanami`
-* `handicraft`
-* `harbourmaster`
-* `hardware`
-* `hazard`
-* `health_centre`
-* `healthcare_alternative`
-* `healthcare_centre`
-* `healthcare_laboratory`
-* `healthcare` with `kind_detail` property.
-* `helipad`
-* `heliport`
-* `hifi`
-* `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
-* `horse_riding`
-* `hospice`
-* `hospital` with `kind_detail` property.
-* `hostel`
-* `hot_spring`
-* `hotel`
-* `hunting_stand`
-* `hunting`
-* `hvac`
-* `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
-* `industrial` - An industrial POI which didn't match a more specific kind.
-* `information`
-* `insurance`
-* `it`
-* `jewelry`
-* `karaoke_box`
-* `karaoke`
-* `kindergarten`
-* `landmark`
-* `laundry`
-* `lawyer`
-* `level_crossing`
-* `library`
-* `life_ring`
-* `lifeguard_tower`
-* `lighthouse`
-* `lock`
-* `lottery` - A shop selling lottery tickets.
-* `love_hotel`
-* `mall`
-* `marina`
-* `marketplace`
-* `mast`
-* `maze`
-* `memorial`
-* `metal_construction`
-* `midwife`
-* `military`
-* `mineshaft`
-* `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
-* `miniature_golf` - A venue for playing miniature golf.
-* `mobile_phone`
-* `money_transfer` - A business which specialises in transferring money between people, often internationally.
-* `monument`
-* `mooring` with `kind_detail` property.
-* `motel`
-* `motorcycle_parking`
-* `motorcycle`
-* `motorway_junction`
-* `museum`
-* `music`
-* `national_park`
-* `nature_reserve`
-* `naval_base`
-* `newsagent`
-* `newspaper`
-* `ngo`
-* `nightclub`
-* `notary`
-* `nursing_home` with `kind_detail` property.
-* `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
-* `observatory`
-* `occupational_therapist`
-* `office` - An office which didn't match a more specific kind.
-* `offshore_platform`
-* `optician`
-* `optometrist`
-* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
-* `outdoor`
-* `outreach`
-* `paediatrics`
-* `painter`
-* `park`
-* `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
-* `parking`
-* `peak` A mountain peak. See above for properties available on peaks and volcanos.
-* `perfumery`
-* `pet`
-* `petroleum_well`
-* `petting_zoo`
-* `pharmacy` with `kind_detail` property.
-* `phone`
-* `photo` - A shop offering photograph processing services, e.g: developing or mounting.
-* `photographer`
-* `photographic_laboratory`
-* `physician`
-* `physiotherapist`
-* `picnic_site`
-* `picnic_table`
-* `pitch` - With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
-* `place_of_worship`
-* `plant`
-* `plaque` - A memorial plaque.
-* `playground`
-* `plumber`
-* `podiatrist`
-* `police`
-* `political_party`
-* `port_terminal`
-* `post_box`
-* `post_office`
-* `pottery`
-* `power_pole`
-* `power_tower`
-* `power_wind`
-* `prison`
-* `protected_area`
-* `psychotherapist`
-* `pub`
-* `put_in_egress`
-* `put_in`
-* `pylon`
-* `quarry`
-* `quay` - if available, with `mooring` property.
-* `range` - e.g: military training zones where soldiers practice with their weapons
-* `ranger_station`
-* `rapid`
-* `recreation_ground`
-* `recreation_track`
-* `recycling`
-* `refugee_camp`
-* `rehabilitation`
-* `religion`
-* `research`
-* `residential_home`
-* `resort`
-* `rest_area`
-* `restaurant`
-* `rock`
-* `roller_coaster`
-* `saddle`
-* `sanitary_dump_station`
-* `sawmill`
-* `school`
-* `scuba_diving`
-* `service_area`
-* `shelter`
-* `ship_chandler`
-* `shipyard`
-* `shoemaker`
-* `shoes`
-* `shop` - A shop or store which didn't match a more specific kind.
-* `shower`
-* `sinkhole`
-* `ski_rental`
-* `ski_school`
-* `ski`
-* `slaughterhouse`
-* `slipway`
-* `snow_cannon`
-* `snowmobile`
-* `social_facility` with `kind_detail` property.
-* `soup_kitchen`
-* `speech_therapist`
-* `sports_centre`
-* `sports`
-* `spring`
-* `stadium`
-* `station` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
-* `stationery`
-* `stone`
-* `stonemason`
-* `street_lamp`
-* `studio` - A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
-* `substation`
-* `subway_entrance`
-* `summer_camp`
-* `summer_toboggan`
-* `supermarket`
-* `swimming_area`
-* `tailor`
-* `tax_advisor`
-* `taxi` for taxi stands.
-* `telecommunication`
-* `telephone`
-* `telescope`
-* `theatre`
-* `theme_park`
-* `therapist`
-* `tobacco`
-* `toilets` with `kind_detail` property.
-* `toll_booth`
-* `townhall`
-* `toys`
-* `trade`
-* `traffic_signals`
-* `trail_riding_station`
-* `trailhead`
-* `tram_stop`
-* `travel_agency`
-* `travel_agent`
-* `tree`
-* `turning_circle`
-* `turning_loop`
-* `tyres` - A shop selling car tyres or tires.
-* `university`
-* `variety_store`
-* `veterinary` with `kind_detail` property.
-* `viewpoint`
-* `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
-* `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
-* `waste_basket`
-* `waste_disposal`
-* `wastewater_plant`
-* `water_park`
-* `water_point`
-* `water_slide`
-* `water_tower`
-* `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
-* `water_works`
-* `waterfall`
-* `watering_place`
-* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
-* `waterway_fuel`
-* `wayside_cross`
-* `wetland` with `kind_detail` property.
-* `wharf` with mooring property.
-* `wilderness_hut`
-* `wildlife_park`
-* `windmill`
-* `wine`
-* `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
-* `winter_sports`
-* `wood`
-* `works`
-* `workshop`
-* `zoo`
+kind | icon | definition
+:--- | :---: | :-------
+`accountant` | ![accountant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/accountant.png) | foo
+`adit` | ![adit](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/adit.png) |
+`administrative` | ![administrative](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/administrative.png) |
+`adult_gaming_centre` | ![adult_gaming_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/adult_gaming_centre.png) |
+`advertising_agency` | ![advertising_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/advertising_agency.png) |
+`aerodrome` | ![aerodrome](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aerodrome.png) | with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
+`aeroway_gate` | ![aeroway_gate](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aeroway_gate.png) |
+`airfield` | ![airfield](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/airfield.png)| for military use.
+`airport` | ![airport](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/airport.png) |
+`alcohol` | ![alcohol](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/alcohol.png) |
+`alpine_hut` | ![alpine_hut](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/alpine_hut.png) |
+`ambulatory_care` | ![ambulatory_care](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ambulatory_care.png) |
+`amusement_ride` | ![amusement_ride](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/amusement_ride.png) |
+`animal` | ![animal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/animal.png) |
+`aquarium` | ![aquarium](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aquarium.png) |
+`archaeological_site` | ![archaeological_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/archaeological_site.png) |
+`architect` | ![architect](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/architect.png) |
+`art` | ![art](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/art.png) |
+`arts_centre` | ![arts_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/arts_centre.png) | A venue where arts are performed or exhibited.
+`artwork` | ![artwork](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/artwork.png) |
+`assisted_living` | ![assisted_living](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/assisted_living.png) |
+`association` | ![association](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/association.png) |
+`atm` | ![atm](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/atm.png) |
+`attraction` | ![attraction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/attraction.png) |
+`atv` | ![atv](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/atv.png) |
+`aviary` | ![aviary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aviary.png) |
+`baby_hatch` | ![baby_hatch](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/baby_hatch.png) |
+`bakery` | ![bakery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bakery.png) |
+`bank` | ![bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bank.png) |
+`bar` | ![bar](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bar.png) |
+`battlefield` | ![battlefield](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/battlefield.png) |
+`bbq` | ![bbq](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bbq.png) |
+`beach_resort` | ![beach_resort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beach_resort.png) |
+`beach` | ![beach](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beach.png) | Where the land meets the sea gradually. With `kind_detail` property.
+`beacon` | ![beacon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beacon.png) |
+`beauty` | ![beauty](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beauty.png) |
+`bed_and_breakfast` | ![bed_and_breakfast](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bed_and_breakfast.png) |
+`bench` | ![bench](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bench.png) |
+`bicycle_junction` | ![bicycle_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_junction.png) | Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
+`bicycle_parking` | ![bicycle_parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_parking.png) |
+`bicycle_rental_station` | ![bicycle_rental_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_rental_station.png) | Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
+`bicycle_rental` | ![bicycle_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_rental.png) | Bicycle rental shop.
+`bicycle_repair_station` | ![bicycle_repair_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_repair_station.png) |
+`bicycle` | ![bicycle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle.png) | Bicycle sales shop, often with bike repair service.
+`biergarten` | ![biergarten](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/biergarten.png) |
+`block` | ![block](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/block.png) |
+`blood_bank` | ![blood_bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/blood_bank.png) |
+`boat_lift` | ![boat_lift](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boat_lift.png) |
+`boat_rental` | ![boat_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boat_rental.png) |
+`boat_storage` | ![boat_storage](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boat_storage.png) |
+`boatyard` | ![boatyard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boatyard.png) | a place for building, fixing, and storing boats.
+`bollard` | ![bollard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bollard.png) |
+`bookmaker` | ![bookmaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bookmaker.png) |
+`books` | ![books](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/books.png) |
+`border_control` | ![border_control](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/border_control.png) |
+`brewery` | ![brewery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/brewery.png) |
+`bunker` | ![bunker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bunker.png) | A reinforced military building. With `kind_detail` property.
+`bureau_de_change` | ![bureau_de_change](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bureau_de_change.png) |
+`bus_station` | ![bus_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bus_station.png) |
+`bus_stop` | ![bus_stop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bus_stop.png) |
+`butcher` | ![butcher](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/butcher.png) |
+`cafe` | ![cafe](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cafe.png) |
+`camera` | ![camera](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/camera.png) | A shop selling cameras.
+`camp_site` | ![camp_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/camp_site.png) |
+`car_parts` | ![car_parts](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_parts.png) | A shop selling car parts.
+`car_rental` | ![car_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_rental.png) | A business which rents cars.
+`car_repair` | ![car_repair](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_repair.png) |
+`car_sharing` | ![car_sharing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_sharing.png) |
+`car_wash` | ![car_wash](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_wash.png) |
+`car` | ![car](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car.png) |
+`caravan_site` | ![caravan_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/caravan_site.png) |
+`care_home` | ![care_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/care_home.png) |
+`carousel` | ![carousel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/carousel.png) |
+`carpenter` | ![carpenter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/carpenter.png) |
+`casino` | ![casino](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/casino.png) | A venue for gambling.
+`cattle_grid` | ![cattle_grid](img/sprite/bubble-wrap-style/2x/cattle_grid.png) | barrier
+`cave_entrance` | ![cave_entrance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cave_entrance.png) |
+`cemetery` | ![cemetery](img/sprite/bubble-wrap-style/2x/cemetery.png) | with `kind_detail` and `denomination` properties.
+`chain` | ![chain](img/sprite/bubble-wrap-style/2x/chain.png) | barrier
+`chalet` | ![chalet](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/chalet.png) |
+`charging_station` | ![charging_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/charging_station.png) | May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
+`charity` | ![charity](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/charity.png) | A shop selling items, often second-hand clothes, in order to raise money for charity.
+`chemist` | ![chemist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/chemist.png) | A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
+`childcare` | ![childcare](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/childcare.png) |
+`childrens_centre` | ![childrens_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/childrens_centre.png) |
+`chiropractor` | ![chiropractor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/chiropractor.png) |
+`cinema` | ![cinema](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cinema.png) |
+`clinic` | ![clinic](img/sprite/bubble-wrap-style/2x/clinic.png) | with `kind_detail` property.
+`closed` | ![closed](https://github.com/tilezen/vector-datasource/issues/1026)._
+`clothes` | ![clothes](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/clothes.png) |
+`club` | ![club](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/club.png) |
+`coffee` | ![coffee](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/coffee.png) |
+`college` | ![college](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/college.png) |
+`communications_tower` | ![communications_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/communications_tower.png) |
+`community_centre` | ![community_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/community_centre.png) |
+`company` | ![company](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/company.png) |
+`computer` | ![computer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/computer.png) |
+`confectionery` | ![confectionery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/confectionery.png) |
+`consulting` | ![consulting](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/consulting.png) |
+`container_terminal` | ![container_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/container_terminal.png) |
+`convenience` | ![convenience](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/convenience.png) |
+`copyshop` | ![copyshop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/copyshop.png) | A shop offering photocopying and printing services.
+`cosmetics` | ![cosmetics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cosmetics.png) | A specialty shop selling cosmetics.
+`courthouse` | ![courthouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/courthouse.png) |
+`craft` | ![craft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/craft.png) | A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
+`crane` | ![crane](img/sprite/bubble-wrap-style/2x/crane.png) | with `kind_detail` property.
+`cross` | ![cross](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cross.png) |
+`customs` | ![customs](https://en.wikipedia.org/wiki/Customs_(tax)).
+`cycle_barrier` | ![cycle_barrier](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cycle_barrier.png) | Barrier for bicycles.
+`dairy_kitchen` | ![dairy_kitchen](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dairy_kitchen.png) |
+`dam` | ![dam](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dam.png) |
+`danger_area` | ![danger_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/danger_area.png) | e.g: military training zones, firing ranges.
+`day_care` | ![day_care](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/day_care.png) |
+`defibrillator` | ![defibrillator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/defibrillator.png) |
+`deli` | ![deli](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/deli.png) |
+`dentist` | ![dentist](img/sprite/bubble-wrap-style/2x/dentist.png) | with `kind_detail` property.
+`department_store` | ![department_store](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/department_store.png) |
+`dispensary` | ![dispensary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dispensary.png) |
+`dive_centre` | ![dive_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dive_centre.png) |
+`doctors` | ![doctors](img/sprite/bubble-wrap-style/2x/doctors.png) | with `kind_detail` property.
+`dog_park` | ![dog_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dog_park.png) |
+`doityourself` | ![doityourself](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/doityourself.png) |
+`dressmaker` | ![dressmaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dressmaker.png) |
+`drinking_water` | ![drinking_water](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/drinking_water.png) |
+`dry_cleaning` | ![dry_cleaning](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dry_cleaning.png) |
+`dune` | ![dune](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dune.png) |
+`educational_institution` | ![educational_institution](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/educational_institution.png) |
+`egress` | ![egress](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/egress.png) |
+`electrician` | ![electrician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/electrician.png) |
+`electronics` | ![electronics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/electronics.png) |
+`elevator` | ![elevator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/elevator.png) | An enclosure for vertical travel.
+`embassy` | ![embassy](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/embassy.png) |
+`emergency_phone` | ![emergency_phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/emergency_phone.png) |
+`employment_agency` | ![employment_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/employment_agency.png) |
+`enclosure` | ![enclosure](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/enclosure.png) | at a zoo
+`estate_agent` | ![estate_agent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/estate_agent.png) |
+`farm` | ![farm](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/farm.png) |
+`fashion` | ![fashion](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fashion.png) |
+`fast_food` | ![fast_food](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fast_food.png) |
+`ferry_terminal` | ![ferry_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ferry_terminal.png) |
+`field_hospital` | ![field_hospital](img/sprite/bubble-wrap-style/2x/field_hospital.png) | with `kind_detail` property.
+`financial` | ![financial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/financial.png) |
+`fire_hydrant` | ![fire_hydrant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fire_hydrant.png) |
+`fire_station` | ![fire_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fire_station.png) |
+`firepit` | ![firepit](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/firepit.png) |
+`fishing_area` | ![fishing_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fishing_area.png) |
+`fishing` | ![fishing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fishing.png) |
+`fishmonger` | ![fishmonger](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fishmonger.png) | A shop selling fish and seafood.
+`fitness_station` | ![fitness_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fitness_station.png) |
+`fitness` | ![fitness](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fitness.png) |
+`florist` | ![florist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/florist.png) |
+`food_bank` | ![food_bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/food_bank.png) |
+`ford` | ![ford](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ford.png) |
+`forest` | ![forest](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/forest.png) |
+`fort` | ![fort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fort.png) |
+`foundation` | ![foundation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/foundation.png) |
+`fuel` | ![fuel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fuel.png) | Fuel stations provide liquid gas (or diesel) for automotive use.
+`funeral_directors` | ![funeral_directors](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/funeral_directors.png) | A venue offering funerary services.
+`furniture` | ![furniture](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/furniture.png) |
+`gallery` | ![gallery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gallery.png) | An art gallery.
+`gambling` | ![gambling](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gambling.png) |
+`garden_centre` | ![garden_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/garden_centre.png) |
+`garden` | ![garden](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/garden.png) |
+`gardener` | ![gardener](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gardener.png) |
+`gas_canister` | ![gas_canister](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gas_canister.png) | Shop selling bottled gas for cooking. Some offer gas canister refills.
+`gate` | ![gate](img/sprite/bubble-wrap-style/2x/gate.png) | with `kind_detail` property.
+`generator` | ![generator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/generator.png) | A building or structure which generates power. With `kind_detail` property.
+`geyser` | ![geyser](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/geyser.png) |
+`gift` | ![gift](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gift.png) |
+`golf_course` | ![golf_course](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/golf_course.png) |
+`golf` | ![golf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/golf.png) | Shop selling golf equipment.
+`government` | ![government](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/government.png) |
+`grave_yard` | ![grave_yard](img/sprite/bubble-wrap-style/2x/grave_yard.png) | with `kind_detail` and `denomination` properties.
+`greengrocer` | ![greengrocer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/greengrocer.png) | Shop selling fruits and vegetables.
+`grocery` | ![grocery](https://en.wikipedia.org/wiki/Grocery_store).
+`group_home` | ![group_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/group_home.png) |
+`guest_house` | ![guest_house](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/guest_house.png) |
+`hairdresser` | ![hairdresser](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hairdresser.png) |
+`halt` | ![halt](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/halt.png) |
+`hanami` | ![hanami](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hanami.png) |
+`handicraft` | ![handicraft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/handicraft.png) |
+`harbourmaster` | ![harbourmaster](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/harbourmaster.png) |
+`hardware` | ![hardware](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hardware.png) |
+`hazard` | ![hazard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hazard.png) |
+`health_centre` | ![health_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/health_centre.png) |
+`healthcare_alternative` | ![healthcare_alternative](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/healthcare_alternative.png) |
+`healthcare_centre` | ![healthcare_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/healthcare_centre.png) |
+`healthcare_laboratory` | ![healthcare_laboratory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/healthcare_laboratory.png) |
+`healthcare` | ![healthcare](img/sprite/bubble-wrap-style/2x/healthcare.png) | with `kind_detail` property.
+`helipad` | ![helipad](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/helipad.png) |
+`heliport` | ![heliport](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/heliport.png) |
+`hifi` | ![hifi](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hifi.png) |
+`historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._ | |
+`horse_riding` | ![horse_riding](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/horse_riding.png) |
+`hospice` | ![hospice](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hospice.png) |
+`hospital` | ![hospital](img/sprite/bubble-wrap-style/2x/hospital.png) | with `kind_detail` property.
+`hostel` | ![hostel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hostel.png) |
+`hot_spring` | ![hot_spring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hot_spring.png) |
+`hotel` | ![hotel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hotel.png) |
+`hunting_stand` | ![hunting_stand](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hunting_stand.png) |
+`hunting` | ![hunting](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hunting.png) |
+`hvac` | ![hvac](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hvac.png) |
+`ice_cream` | ![ice_cream](https://github.com/tilezen/vector-datasource/issues/532)._
+`industrial` | ![industrial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/industrial.png) | An industrial POI which didn't match a more specific kind.
+`information` | ![information](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/information.png) |
+`insurance` | ![insurance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/insurance.png) |
+`it` | ![it](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/it.png) |
+`jewelry` | ![jewelry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/jewelry.png) |
+`karaoke_box` | ![karaoke_box](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/karaoke_box.png) |
+`karaoke` | ![karaoke](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/karaoke.png) |
+`kindergarten` | ![kindergarten](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/kindergarten.png) |
+`landmark` | ![landmark](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/landmark.png) |
+`laundry` | ![laundry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/laundry.png) |
+`lawyer` | ![lawyer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lawyer.png) |
+`level_crossing` | ![level_crossing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/level_crossing.png) |
+`library` | ![library](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/library.png) |
+`life_ring` | ![life_ring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/life_ring.png) |
+`lifeguard_tower` | ![lifeguard_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lifeguard_tower.png) |
+`lighthouse` | ![lighthouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lighthouse.png) |
+`lock` | ![lock](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lock.png) |
+`lottery` | ![lottery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lottery.png) | A shop selling lottery tickets.
+`love_hotel` | ![love_hotel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/love_hotel.png) |
+`mall` | ![mall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mall.png) |
+`marina` | ![marina](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/marina.png) |
+`marketplace` | ![marketplace](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/marketplace.png) |
+`mast` | ![mast](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mast.png) |
+`maze` | ![maze](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/maze.png) |
+`memorial` | ![memorial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/memorial.png) |
+`metal_construction` | ![metal_construction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/metal_construction.png) |
+`midwife` | ![midwife](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/midwife.png) |
+`military` | ![military](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/military.png) |
+`mineshaft` | ![mineshaft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mineshaft.png) |
+`mini_roundabout` | ![mini_roundabout](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mini_roundabout.png) | has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
+`miniature_golf` | ![miniature_golf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/miniature_golf.png) | A venue for playing miniature golf.
+`mobile_phone` | ![mobile_phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mobile_phone.png) |
+`money_transfer` | ![money_transfer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/money_transfer.png) | A business which specialises in transferring money between people, often internationally.
+`monument` | ![monument](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/monument.png) |
+`mooring` | ![mooring](img/sprite/bubble-wrap-style/2x/mooring.png) | with `kind_detail` property.
+`motel` | ![motel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motel.png) |
+`motorcycle_parking` | ![motorcycle_parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motorcycle_parking.png) |
+`motorcycle` | ![motorcycle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motorcycle.png) |
+`motorway_junction` | ![motorway_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motorway_junction.png) |
+`museum` | ![museum](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/museum.png) |
+`music` | ![music](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/music.png) |
+`national_park` | ![national_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/national_park.png) |
+`nature_reserve` | ![nature_reserve](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/nature_reserve.png) |
+`naval_base` | ![naval_base](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/naval_base.png) |
+`newsagent` | ![newsagent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/newsagent.png) |
+`newspaper` | ![newspaper](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/newspaper.png) |
+`ngo` | ![ngo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ngo.png) |
+`nightclub` | ![nightclub](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/nightclub.png) |
+`notary` | ![notary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/notary.png) |
+`nursing_home` | ![nursing_home](img/sprite/bubble-wrap-style/2x/nursing_home.png) | with `kind_detail` property.
+`obelisk` | ![obelisk](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/obelisk.png) | A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
+`observatory` | ![observatory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/observatory.png) |
+`occupational_therapist` | ![occupational_therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/occupational_therapist.png) |
+`office` | ![office](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/office.png) | An office which didn't match a more specific kind.
+`offshore_platform` | ![offshore_platform](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/offshore_platform.png) |
+`optician` | ![optician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/optician.png) |
+`optometrist` | ![optometrist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/optometrist.png) |
+`orchard` | ![orchard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/orchard.png) | An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
+`outdoor` | ![outdoor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/outdoor.png) |
+`outreach` | ![outreach](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/outreach.png) |
+`paediatrics` | ![paediatrics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/paediatrics.png) |
+`painter` | ![painter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/painter.png) |
+`park` | ![park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/park.png) |
+`parking_garage` | ![parking_garage](img/sprite/bubble-wrap-style/2x/parking_garage.png) | parking type is `multi-storey`, `underground`, or `rooftop`.
+`parking` | ![parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/parking.png) |
+`peak` | ![peak](img/sprite/bubble-wrap-style/2x/peak.png) | A mountain peak. See above for properties available on peaks and volcanos.
+`perfumery` | ![perfumery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/perfumery.png) |
+`pet` | ![pet](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pet.png) |
+`petroleum_well` | ![petroleum_well](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/petroleum_well.png) |
+`petting_zoo` | ![petting_zoo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/petting_zoo.png) |
+`pharmacy` | ![pharmacy](img/sprite/bubble-wrap-style/2x/pharmacy.png) | with `kind_detail` property.
+`phone` | ![phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/phone.png) |
+`photo` | ![photo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/photo.png) | A shop offering photograph processing services, e.g: developing or mounting.
+`photographer` | ![photographer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/photographer.png) |
+`photographic_laboratory` | ![photographic_laboratory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/photographic_laboratory.png) |
+`physician` | ![physician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/physician.png) |
+`physiotherapist` | ![physiotherapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/physiotherapist.png) |
+`picnic_site` | ![picnic_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/picnic_site.png) |
+`picnic_table` | ![picnic_table](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/picnic_table.png) |
+`pitch` | ![pitch](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pitch.png) | With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
+`place_of_worship` | ![place_of_worship](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/place_of_worship.png) |
+`plant` | ![plant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/plant.png) |
+`plaque` | ![plaque](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/plaque.png) | A memorial plaque.
+`playground` | ![playground](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/playground.png) |
+`plumber` | ![plumber](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/plumber.png) |
+`podiatrist` | ![podiatrist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/podiatrist.png) |
+`police` | ![police](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/police.png) |
+`political_party` | ![political_party](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/political_party.png) |
+`port_terminal` | ![port_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/port_terminal.png) |
+`post_box` | ![post_box](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/post_box.png) |
+`post_office` | ![post_office](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/post_office.png) |
+`pottery` | ![pottery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pottery.png) |
+`power_pole` | ![power_pole](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/power_pole.png) |
+`power_tower` | ![power_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/power_tower.png) |
+`power_wind` | ![power_wind](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/power_wind.png) |
+`prison` | ![prison](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/prison.png) |
+`protected_area` | ![protected_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/protected_area.png) |
+`psychotherapist` | ![psychotherapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/psychotherapist.png) |
+`pub` | ![pub](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pub.png) |
+`put_in_egress` | ![put_in_egress](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/put_in_egress.png) |
+`put_in` | ![put_in](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/put_in.png) |
+`pylon` | ![pylon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pylon.png) |
+`quarry` | ![quarry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/quarry.png) |
+`quay` | ![quay](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/quay.png) | if available, with `mooring` property.
+`range` | ![range](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/range.png) | e.g: military training zones where soldiers practice with their weapons
+`ranger_station` | ![ranger_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ranger_station.png) |
+`rapid` | ![rapid](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rapid.png) |
+`recreation_ground` | ![recreation_ground](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/recreation_ground.png) |
+`recreation_track` | ![recreation_track](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/recreation_track.png) |
+`recycling` | ![recycling](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/recycling.png) |
+`refugee_camp` | ![refugee_camp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/refugee_camp.png) |
+`rehabilitation` | ![rehabilitation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rehabilitation.png) |
+`religion` | ![religion](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/religion.png) |
+`research` | ![research](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/research.png) |
+`residential_home` | ![residential_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/residential_home.png) |
+`resort` | ![resort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/resort.png) |
+`rest_area` | ![rest_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rest_area.png) |
+`restaurant` | ![restaurant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/restaurant.png) |
+`rock` | ![rock](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rock.png) |
+`roller_coaster` | ![roller_coaster](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/roller_coaster.png) |
+`saddle` | ![saddle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/saddle.png) |
+`sanitary_dump_station` | ![sanitary_dump_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sanitary_dump_station.png) |
+`sawmill` | ![sawmill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sawmill.png) |
+`school` | ![school](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/school.png) |
+`scuba_diving` | ![scuba_diving](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/scuba_diving.png) |
+`service_area` | ![service_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/service_area.png) |
+`shelter` | ![shelter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shelter.png) |
+`ship_chandler` | ![ship_chandler](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ship_chandler.png) |
+`shipyard` | ![shipyard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shipyard.png) |
+`shoemaker` | ![shoemaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shoemaker.png) |
+`shoes` | ![shoes](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shoes.png) |
+`shop` | ![shop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shop.png) | A shop or store which didn't match a more specific kind.
+`shower` | ![shower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shower.png) |
+`sinkhole` | ![sinkhole](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sinkhole.png) |
+`ski_rental` | ![ski_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ski_rental.png) |
+`ski_school` | ![ski_school](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ski_school.png) |
+`ski` | ![ski](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ski.png) |
+`slaughterhouse` | ![slaughterhouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/slaughterhouse.png) |
+`slipway` | ![slipway](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/slipway.png) |
+`snow_cannon` | ![snow_cannon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/snow_cannon.png) |
+`snowmobile` | ![snowmobile](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/snowmobile.png) |
+`social_facility` | ![social_facility](img/sprite/bubble-wrap-style/2x/social_facility.png) | with `kind_detail` property.
+`soup_kitchen` | ![soup_kitchen](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/soup_kitchen.png) |
+`speech_therapist` | ![speech_therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/speech_therapist.png) |
+`sports_centre` | ![sports_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sports_centre.png) |
+`sports` | ![sports](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sports.png) |
+`spring` | ![spring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/spring.png) |
+`stadium` | ![stadium](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stadium.png) |
+`station` | ![station](https://github.com/tilezen/vector-datasource/issues/532)._
+`stationery` | ![stationery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stationery.png) |
+`stone` | ![stone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stone.png) |
+`stonemason` | ![stonemason](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stonemason.png) |
+`street_lamp` | ![street_lamp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/street_lamp.png) |
+`studio` | ![studio](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/studio.png) | A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
+`substation` | ![substation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/substation.png) |
+`subway_entrance` | ![subway_entrance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/subway_entrance.png) |
+`summer_camp` | ![summer_camp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/summer_camp.png) |
+`summer_toboggan` | ![summer_toboggan](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/summer_toboggan.png) |
+`supermarket` | ![supermarket](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/supermarket.png) |
+`swimming_area` | ![swimming_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/swimming_area.png) |
+`tailor` | ![tailor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tailor.png) |
+`tax_advisor` | ![tax_advisor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tax_advisor.png) |
+`taxi` | ![taxi](img/sprite/bubble-wrap-style/2x/taxi.png) | for taxi stands.
+`telecommunication` | ![telecommunication](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/telecommunication.png) |
+`telephone` | ![telephone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/telephone.png) |
+`telescope` | ![telescope](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/telescope.png) |
+`theatre` | ![theatre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/theatre.png) |
+`theme_park` | ![theme_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/theme_park.png) |
+`therapist` | ![therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/therapist.png) |
+`tobacco` | ![tobacco](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tobacco.png) |
+`toilets` | ![toilets](img/sprite/bubble-wrap-style/2x/toilets.png) | with `kind_detail` property.
+`toll_booth` | ![toll_booth](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/toll_booth.png) |
+`townhall` | ![townhall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/townhall.png) |
+`toys` | ![toys](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/toys.png) |
+`trade` | ![trade](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/trade.png) |
+`traffic_signals` | ![traffic_signals](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/traffic_signals.png) |
+`trail_riding_station` | ![trail_riding_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/trail_riding_station.png) |
+`trailhead` | ![trailhead](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/trailhead.png) |
+`tram_stop` | ![tram_stop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tram_stop.png) |
+`travel_agency` | ![travel_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/travel_agency.png) |
+`travel_agent` | ![travel_agent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/travel_agent.png) |
+`tree` | ![tree](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tree.png) |
+`turning_circle` | ![turning_circle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/turning_circle.png) |
+`turning_loop` | ![turning_loop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/turning_loop.png) |
+`tyres` | ![tyres](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tyres.png) | A shop selling car tyres or tires.
+`university` | ![university](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/university.png) |
+`variety_store` | ![variety_store](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/variety_store.png) |
+`veterinary` | ![veterinary](img/sprite/bubble-wrap-style/2x/veterinary.png) | with `kind_detail` property.
+`viewpoint` | ![viewpoint](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/viewpoint.png) |
+`volcano` | ![volcano](img/sprite/bubble-wrap-style/2x/volcano.png) | The peak of a volcano. See above for properties available on peaks and volcanos.
+`walking_junction` | ![walking_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/walking_junction.png) | Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
+`waste_basket` | ![waste_basket](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waste_basket.png) |
+`waste_disposal` | ![waste_disposal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waste_disposal.png) |
+`wastewater_plant` | ![wastewater_plant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wastewater_plant.png) |
+`water_park` | ![water_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_park.png) |
+`water_point` | ![water_point](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_point.png) |
+`water_slide` | ![water_slide](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_slide.png) |
+`water_tower` | ![water_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_tower.png) |
+`water_well` | ![water_well](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_well.png) | A location where water can be extracted from the ground. With `kind_detail` property.
+`water_works` | ![water_works](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_works.png) |
+`waterfall` | ![waterfall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waterfall.png) |
+`watering_place` | ![watering_place](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/watering_place.png) |
+`watermill` | ![watermill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/watermill.png) | A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
+`waterway_fuel` | ![waterway_fuel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waterway_fuel.png) |
+`wayside_cross` | ![wayside_cross](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wayside_cross.png) |
+`wetland` | ![wetland](img/sprite/bubble-wrap-style/2x/wetland.png) | with `kind_detail` property.
+`wharf` | ![wharf](img/sprite/bubble-wrap-style/2x/wharf.png) | with mooring property.
+`wilderness_hut` | ![wilderness_hut](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wilderness_hut.png) |
+`wildlife_park` | ![wildlife_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wildlife_park.png) |
+`windmill` | ![windmill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/windmill.png) |
+`wine` | ![wine](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wine.png) |
+`winery` | ![winery](https://github.com/tilezen/vector-datasource/issues/532)._
+`winter_sports` | ![winter_sports](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/winter_sports.png) |
+`wood` | ![wood](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wood.png) |
+`works` | ![works](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/works.png) |
+`workshop` | ![workshop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/workshop.png) |
+`zoo` | ![zoo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/zoo.png) | bar
 
 #### Beach `kind_detail` values:
 
