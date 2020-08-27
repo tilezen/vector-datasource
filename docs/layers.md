@@ -882,6 +882,8 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
+Icon sprite artwork from Mapzen's Bubble Wrap and Walkabout map styles ([docs](https://github.com/tangrams/cartography-docs/blob/master/icons.md)), when available.
+
 kind | icon | wikidata id | definition
 :--- | :---: | :--------- | :---------
 `accountant` | ![accountant](images/sprite/2x/accountant.png) | [Q326653](https://www.wikidata.org/wiki/Q326653) | An office responsible for preparing finances, billing, and payroll-type services.
