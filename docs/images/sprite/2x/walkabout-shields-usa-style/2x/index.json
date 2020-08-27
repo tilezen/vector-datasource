@@ -1,0 +1,1282 @@
+{
+  "US:ME-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:WY-4char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:NY-3char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "US:CA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "US:AK-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:PA-3char": {
+    "width": 56, 
+    "height": 44
+  }, 
+  "US:MD-3char": {
+    "width": 54, 
+    "height": 40
+  }, 
+  "US:US:Alternate-3char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "US:US-5char": {
+    "width": 82, 
+    "height": 50
+  }, 
+  "US:CT-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:AK-4char": {
+    "width": 62, 
+    "height": 40
+  }, 
+  "US:KY-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:FSH-4char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:NV-3char": {
+    "width": 48, 
+    "height": 46
+  }, 
+  "US:NJ-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:AL-4char": {
+    "width": 62, 
+    "height": 44
+  }, 
+  "US:OH-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:NE-2char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:FL-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:MA-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:CT-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:MN-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:NV-1char": {
+    "width": 36, 
+    "height": 46
+  }, 
+  "US:MD-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:FSR-5char": {
+    "width": 66, 
+    "height": 28
+  }, 
+  "US:I:Truck-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "US:OR-4char": {
+    "width": 62, 
+    "height": 44
+  }, 
+  "US:AZ-3char": {
+    "width": 50, 
+    "height": 40
+  }, 
+  "US:BLM-2char": {
+    "width": 60, 
+    "height": 32
+  }, 
+  "US:BIA-1char": {
+    "width": 34, 
+    "height": 44
+  }, 
+  "US:NC-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:NC-4char": {
+    "width": 74, 
+    "height": 44
+  }, 
+  "US:TX-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:NE-3char": {
+    "width": 50, 
+    "height": 40
+  }, 
+  "US:WY-3char": {
+    "width": 54, 
+    "height": 40
+  }, 
+  "US:NM-3char": {
+    "width": 60, 
+    "height": 46
+  }, 
+  "US:IN-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:I:Truck-3char": {
+    "width": 56, 
+    "height": 44
+  }, 
+  "US:IA-5char": {
+    "width": 74, 
+    "height": 40
+  }, 
+  "US:OR-3char": {
+    "width": 56, 
+    "height": 44
+  }, 
+  "US:DC-2char": {
+    "width": 38, 
+    "height": 54
+  }, 
+  "US:NY-5char": {
+    "width": 60, 
+    "height": 46
+  }, 
+  "US:AL-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:OK-4char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:NC-2char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "US:BLM-4char": {
+    "width": 78, 
+    "height": 32
+  }, 
+  "US:SC-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:GA-4char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:NJ-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:FSR-4char": {
+    "width": 56, 
+    "height": 28
+  }, 
+  "US:FSH-1char": {
+    "width": 38, 
+    "height": 40
+  }, 
+  "US:SD-3char": {
+    "width": 52, 
+    "height": 42
+  }, 
+  "US:SD-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:SD-4char": {
+    "width": 58, 
+    "height": 42
+  }, 
+  "US:DE-5char": {
+    "width": 74, 
+    "height": 40
+  }, 
+  "US:AK-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:KY-5char": {
+    "width": 74, 
+    "height": 40
+  }, 
+  "US:US:Alternate-5char": {
+    "width": 82, 
+    "height": 50
+  }, 
+  "US:MO-4char": {
+    "width": 66, 
+    "height": 42
+  }, 
+  "US:I:Truck-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:MN-5char": {
+    "width": 70, 
+    "height": 42
+  }, 
+  "US:BIA-2char": {
+    "width": 40, 
+    "height": 44
+  }, 
+  "US:SD-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:IA-4char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:WI-3char": {
+    "width": 50, 
+    "height": 42
+  }, 
+  "US:NJ-4char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:WV-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:PA-1char": {
+    "width": 36, 
+    "height": 44
+  }, 
+  "US:SC-2char": {
+    "width": 44, 
+    "height": 42
+  }, 
+  "US:MI-3char": {
+    "width": 62, 
+    "height": 44
+  }, 
+  "US:IL-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:WY-2char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "US:KS-5char": {
+    "width": 70, 
+    "height": 48
+  }, 
+  "US:MD-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:OH-3char": {
+    "width": 48, 
+    "height": 40
+  }, 
+  "US:CA-5char": {
+    "width": 62, 
+    "height": 44
+  }, 
+  "US:ID-4char": {
+    "width": 66, 
+    "height": 42
+  }, 
+  "US:NY-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "US:MD-4char": {
+    "width": 62, 
+    "height": 40
+  }, 
+  "US:US-4char": {
+    "width": 76, 
+    "height": 48
+  }, 
+  "US:I:Business-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "US:NE-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:GA-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:NE-4char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:FL-3char": {
+    "width": 54, 
+    "height": 40
+  }, 
+  "US:WA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:IN-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:US:Business-4char": {
+    "width": 76, 
+    "height": 48
+  }, 
+  "US:MI-5char": {
+    "width": 84, 
+    "height": 44
+  }, 
+  "US:BIA-3char": {
+    "width": 48, 
+    "height": 46
+  }, 
+  "US:MA-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:IL-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:OR-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "US:BIA-5char": {
+    "width": 64, 
+    "height": 46
+  }, 
+  "US:RI-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:I:Business-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "US:US:Business-5char": {
+    "width": 82, 
+    "height": 50
+  }, 
+  "US:AR-2char": {
+    "width": 44, 
+    "height": 40
+  }, 
+  "US:CO-2char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "US:DC-5char": {
+    "width": 60, 
+    "height": 52
+  }, 
+  "US:WA-5char": {
+    "width": 74, 
+    "height": 46
+  }, 
+  "US:FSR-2char": {
+    "width": 40, 
+    "height": 28
+  }, 
+  "US:I-3char": {
+    "width": 56, 
+    "height": 44
+  }, 
+  "US:CT-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:MA-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:TX-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:BLM-1char": {
+    "width": 52, 
+    "height": 32
+  }, 
+  "US:TX-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:I:Business-3char": {
+    "width": 56, 
+    "height": 44
+  }, 
+  "US:GA-5char": {
+    "width": 72, 
+    "height": 40
+  }, 
+  "US:MO-2char": {
+    "width": 50, 
+    "height": 42
+  }, 
+  "US:US-3char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "US:VA-3char": {
+    "width": 50, 
+    "height": 42
+  }, 
+  "US:OH-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:MD-5char": {
+    "width": 68, 
+    "height": 40
+  }, 
+  "US:IA-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:TN-2char": {
+    "width": 40, 
+    "height": 38
+  }, 
+  "US:US-1char": {
+    "width": 42, 
+    "height": 46
+  }, 
+  "US:IL-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:TX-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:MT-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:FL-4char": {
+    "width": 60, 
+    "height": 40
+  }, 
+  "US:MS-4char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:ND-2char": {
+    "width": 50, 
+    "height": 34
+  }, 
+  "US:BLM-3char": {
+    "width": 70, 
+    "height": 32
+  }, 
+  "US:RI-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:I:Business-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:MN-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:TN-1char": {
+    "width": 38, 
+    "height": 40
+  }, 
+  "US:SD-5char": {
+    "width": 66, 
+    "height": 42
+  }, 
+  "US:NJ-5char": {
+    "width": 74, 
+    "height": 40
+  }, 
+  "US:WV-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:MI-2char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "US:OR-2char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "US:AK-3char": {
+    "width": 54, 
+    "height": 40
+  }, 
+  "US:CA-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "US:OK-3char": {
+    "width": 54, 
+    "height": 40
+  }, 
+  "US:NJ-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:BLM-5char": {
+    "width": 84, 
+    "height": 32
+  }, 
+  "US:AZ-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:I-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "US:MT-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:MT-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:ND-3char": {
+    "width": 56, 
+    "height": 34
+  }, 
+  "US:DE-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:FSR-1char": {
+    "width": 40, 
+    "height": 28
+  }, 
+  "US:DC-1char": {
+    "width": 40, 
+    "height": 54
+  }, 
+  "US:NM-4char": {
+    "width": 66, 
+    "height": 48
+  }, 
+  "US:DE-4char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:US-2char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "US:I:Truck-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "US:RI-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:TN-5char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "US:GA-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:NV-4char": {
+    "width": 56, 
+    "height": 46
+  }, 
+  "US:WI-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:GA-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:ND-1char": {
+    "width": 44, 
+    "height": 34
+  }, 
+  "US:US:Truck-4char": {
+    "width": 76, 
+    "height": 48
+  }, 
+  "US:FSH-2char": {
+    "width": 44, 
+    "height": 40
+  }, 
+  "US:OH-2char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:IA-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:IL-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:US:Alternate-4char": {
+    "width": 76, 
+    "height": 48
+  }, 
+  "US:CT-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:CO-4char": {
+    "width": 62, 
+    "height": 42
+  }, 
+  "US:ME-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:NM-1char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "US:NE-5char": {
+    "width": 68, 
+    "height": 40
+  }, 
+  "US:IN-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:LA-3char": {
+    "width": 56, 
+    "height": 50
+  }, 
+  "US:US:Alternate-2char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "US:NC-3char": {
+    "width": 62, 
+    "height": 44
+  }, 
+  "US:US:Truck-1char": {
+    "width": 42, 
+    "height": 46
+  }, 
+  "county_shield-5char": {
+    "width": 80, 
+    "height": 36
+  }, 
+  "US:KS-2char": {
+    "width": 48, 
+    "height": 44
+  }, 
+  "US:ND-4char": {
+    "width": 62, 
+    "height": 34
+  }, 
+  "US:AL-1char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:AR-5char": {
+    "width": 70, 
+    "height": 40
+  }, 
+  "US:IA-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:OR-1char": {
+    "width": 46, 
+    "height": 44
+  }, 
+  "US:LA-1char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "US:CO-3char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "US:VT-4char": {
+    "width": 62, 
+    "height": 34
+  }, 
+  "US:WA-4char": {
+    "width": 66, 
+    "height": 46
+  }, 
+  "US:VT-3char": {
+    "width": 54, 
+    "height": 34
+  }, 
+  "US:TN-4char": {
+    "width": 54, 
+    "height": 38
+  }, 
+  "US:MA-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:HI-5char": {
+    "width": 70, 
+    "height": 46
+  }, 
+  "US:NH-5char": {
+    "width": 72, 
+    "height": 40
+  }, 
+  "US:CA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:ME-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:WA-1char": {
+    "width": 42, 
+    "height": 44
+  }, 
+  "US:US:Truck-3char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "US:MS-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:MT-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:ME-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:US:Business-3char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "US:I:Alternate-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "county_shield-2char": {
+    "width": 44, 
+    "height": 36
+  }, 
+  "US:RI-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:MS-5char": {
+    "width": 74, 
+    "height": 40
+  }, 
+  "US:MI-4char": {
+    "width": 74, 
+    "height": 44
+  }, 
+  "US:MO-3char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "US:ID-3char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "US:FSH-5char": {
+    "width": 68, 
+    "height": 40
+  }, 
+  "US:I:Alternate-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "US:VA-4char": {
+    "width": 58, 
+    "height": 42
+  }, 
+  "US:TX-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:NV-2char": {
+    "width": 40, 
+    "height": 46
+  }, 
+  "US:MA-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:UT-1char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "US:FSR-3char": {
+    "width": 48, 
+    "height": 28
+  }, 
+  "US:UT-2char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "US:KS-4char": {
+    "width": 64, 
+    "height": 46
+  }, 
+  "US:WV-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:AZ-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:I-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "US:WI-2char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:I:Alternate-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "US:HI-4char": {
+    "width": 62, 
+    "height": 46
+  }, 
+  "US:ID-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:WA-3char": {
+    "width": 56, 
+    "height": 46
+  }, 
+  "US:ID-2char": {
+    "width": 50, 
+    "height": 42
+  }, 
+  "US:US:Business-1char": {
+    "width": 42, 
+    "height": 46
+  }, 
+  "US:FL-2char": {
+    "width": 44, 
+    "height": 40
+  }, 
+  "US:KY-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:UT-5char": {
+    "width": 78, 
+    "height": 46
+  }, 
+  "US:FSH-3char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "US:I:Business-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "US:MS-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "county_shield-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "US:VT-2char": {
+    "width": 48, 
+    "height": 34
+  }, 
+  "county_shield-1char": {
+    "width": 36, 
+    "height": 36
+  }, 
+  "US:VA-5char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:UT-3char": {
+    "width": 62, 
+    "height": 44
+  }, 
+  "US:NY-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:NH-4char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "US:PA-5char": {
+    "width": 64, 
+    "height": 44
+  }, 
+  "US:BIA-4char": {
+    "width": 56, 
+    "height": 46
+  }, 
+  "US:SC-3char": {
+    "width": 50, 
+    "height": 40
+  }, 
+  "US:WY-5char": {
+    "width": 68, 
+    "height": 40
+  }, 
+  "US:US:Alternate-1char": {
+    "width": 42, 
+    "height": 46
+  }, 
+  "US:OK-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:WY-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:AL-3char": {
+    "width": 52, 
+    "height": 46
+  }, 
+  "US:AZ-2char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:AR-4char": {
+    "width": 62, 
+    "height": 40
+  }, 
+  "US:MN-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:KS-1char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:OH-1char": {
+    "width": 38, 
+    "height": 40
+  }, 
+  "US:MN-4char": {
+    "width": 62, 
+    "height": 40
+  }, 
+  "US:IL-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:IN-5char": {
+    "width": 66, 
+    "height": 38
+  }, 
+  "US:VT-5char": {
+    "width": 68, 
+    "height": 34
+  }, 
+  "US:NV-5char": {
+    "width": 64, 
+    "height": 46
+  }, 
+  "US:OK-1char": {
+    "width": 44, 
+    "height": 38
+  }, 
+  "US:NH-1char": {
+    "width": 44, 
+    "height": 40
+  }, 
+  "US:WV-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:ID-5char": {
+    "width": 74, 
+    "height": 42
+  }, 
+  "US:DC-4char": {
+    "width": 52, 
+    "height": 52
+  }, 
+  "US:MS-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:NM-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "US:KY-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:CT-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:FL-5char": {
+    "width": 66, 
+    "height": 40
+  }, 
+  "US:HI-3char": {
+    "width": 52, 
+    "height": 46
+  }, 
+  "US:AL-5char": {
+    "width": 68, 
+    "height": 44
+  }, 
+  "US:WI-4char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:WI-1char": {
+    "width": 40, 
+    "height": 40
+  }, 
+  "US:VA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "US:CO-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:NC-5char": {
+    "width": 84, 
+    "height": 44
+  }, 
+  "US:OK-5char": {
+    "width": 70, 
+    "height": 40
+  }, 
+  "US:PA-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "US:US:Business-2char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "US:KY-4char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:I-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "US:I:Alternate-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:HI-2char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "US:ME-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:SC-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:UT-4char": {
+    "width": 68, 
+    "height": 44
+  }, 
+  "US:AK-5char": {
+    "width": 68, 
+    "height": 42
+  }, 
+  "US:CA-3char": {
+    "width": 54, 
+    "height": 44
+  }, 
+  "county_shield-4char": {
+    "width": 68, 
+    "height": 36
+  }, 
+  "US:MI-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:DE-3char": {
+    "width": 56, 
+    "height": 40
+  }, 
+  "US:MT-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:NH-2char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "US:KS-3char": {
+    "width": 56, 
+    "height": 46
+  }, 
+  "US:PA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:US:Truck-5char": {
+    "width": 82, 
+    "height": 50
+  }, 
+  "US:LA-4char": {
+    "width": 68, 
+    "height": 50
+  }, 
+  "US:CO-5char": {
+    "width": 70, 
+    "height": 42
+  }, 
+  "US:TN-3char": {
+    "width": 48, 
+    "height": 38
+  }, 
+  "US:AR-3char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "US:SC-1char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:LA-2char": {
+    "width": 50, 
+    "height": 52
+  }, 
+  "US:MO-1char": {
+    "width": 40, 
+    "height": 42
+  }, 
+  "US:DE-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "US:NM-2char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "US:NH-3char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:VT-1char": {
+    "width": 46, 
+    "height": 34
+  }, 
+  "US:LA-5char": {
+    "width": 74, 
+    "height": 50
+  }, 
+  "US:AR-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "US:AZ-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "US:I-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "US:DC-3char": {
+    "width": 44, 
+    "height": 52
+  }, 
+  "US:I:Alternate-3char": {
+    "width": 56, 
+    "height": 44
+  }, 
+  "US:VA-2char": {
+    "width": 42, 
+    "height": 42
+  }, 
+  "US:I:Truck-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "US:HI-1char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "US:IN-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:WV-3char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "US:MO-5char": {
+    "width": 74, 
+    "height": 42
+  }, 
+  "US:US:Truck-2char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "US:ND-5char": {
+    "width": 74, 
+    "height": 34
+  }, 
+  "US:RI-2char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "US:NY-4char": {
+    "width": 58, 
+    "height": 44
+  }
+}

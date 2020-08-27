@@ -1,0 +1,5550 @@
+{
+  "PE:HU-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "ID:ID-1char": {
+    "width": 46, 
+    "height": 44
+  }, 
+  "ES:province-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PE:CA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "PE:LO-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "MX:COA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:NS-4char": {
+    "width": 52, 
+    "height": 50
+  }, 
+  "IT:SR-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "IT:SR-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:YUC-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:CU-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AU:M-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CN:expressway-3char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "IE:M-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PL:motorway-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MY:expressway-5char": {
+    "width": 64, 
+    "height": 38
+  }, 
+  "PE:LI-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "TR:highway-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "MX:MX-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "LU:RN-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "ES:AA2-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:LO-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PT:A-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "ES:AA2-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:LI-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:SK-5char": {
+    "width": 60, 
+    "height": 48
+  }, 
+  "BR:MA-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "CN:road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "AU:A-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "UA:international-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "LU:CR-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "LU:RN-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "UA:territorial-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "VN:PR-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "BR-5char": {
+    "width": 62, 
+    "height": 46
+  }, 
+  "MX:GUA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BR:MT-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "BR:RS-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "PE:LM-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "generic_shield-4char": {
+    "width": 78, 
+    "height": 36
+  }, 
+  "BR:PR-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "PE:MO-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:MS-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "IT:SS-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CN:road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:BC:primary-3char": {
+    "width": 64, 
+    "height": 50
+  }, 
+  "NZ:SH-2char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "BR:AL-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "BR:MA-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "PE:AN-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "RO:county-3char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "RO:motorway-2char": {
+    "width": 42, 
+    "height": 38
+  }, 
+  "DE:LS-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PT:motorway-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:PA-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "GR:I-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "AU:I3-1char2": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:I3-1char3": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:transcanada-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "BR:AL-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "CA:NB3-2char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "NL:S-road-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "GR:I-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ES:province-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:CA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:PI-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "DE:BS-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:NS-1char": {
+    "width": 38, 
+    "height": 50
+  }, 
+  "MX:JAL-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "DE:L-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:HU-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:CAM-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "RO:local-1char": {
+    "width": 38, 
+    "height": 40
+  }, 
+  "ES:province-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:AB:trunk-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "TR-roads-5char": {
+    "width": 64, 
+    "height": 38
+  }, 
+  "MX:SLP-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "KR:expressway-4char": {
+    "width": 60, 
+    "height": 46
+  }, 
+  "AU:B-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "e-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:TAB-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AT:A-road-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "CH:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:DF-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "BE:N-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "IQ:IQ-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PT:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "ZA:regional-3char": {
+    "width": 48, 
+    "height": 38
+  }, 
+  "SG:E-1char": {
+    "width": 42, 
+    "height": 38
+  }, 
+  "MX:MX-2char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "VN:expressway-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:AR-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TH:motorway-5char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "PE:TA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "GB:A-road-white-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:JU-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "SE:A-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:AP-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "TH:motorway-1char": {
+    "width": 40, 
+    "height": 42
+  }, 
+  "AU:T-drive-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "MX:PUE-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AT:S-road-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "AU:I3-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "ES:autonoma-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:LM-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:SK:primary-2char": {
+    "width": 40, 
+    "height": 48
+  }, 
+  "RO:local-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "BR:SP-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "GB:A-road-green-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "DE:BAB-3char": {
+    "width": 58, 
+    "height": 38
+  }, 
+  "PE:JU-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:CL-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "PE:IC-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:MB-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IT:SP-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "SG:E-5char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "PE:UC-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PL:regional-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AU:I3-3char2": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AU:I3-3char3": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "PE:SM-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TR:motorway-2char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "PT:secondary-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CA:SK:primary-3char": {
+    "width": 46, 
+    "height": 48
+  }, 
+  "IT:SP-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "GB:A-road-green-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CL-5char": {
+    "width": 66, 
+    "height": 46
+  }, 
+  "BR:TO-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "DE:DE-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:NS-2char": {
+    "width": 40, 
+    "height": 50
+  }, 
+  "ES:A-road-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "MX:MIC-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "GR:GR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BE:N-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "NL:A-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:ROO-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "BR:ES-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "TR:highway-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "PE:TA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:AM-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PE:CL-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TR:motorway-3char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:TAB-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PE:AN-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BE:A-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "BE:A-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "DK:national-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "PE:AY-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:NS:T-2char": {
+    "width": 52, 
+    "height": 46
+  }, 
+  "ZA:national-1char": {
+    "width": 46, 
+    "height": 44
+  }, 
+  "CN:expressway:regional-2char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:TAM-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:MA-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "BR:GO-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "DK:D-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AU:Metro-road-5char": {
+    "width": 64, 
+    "height": 48
+  }, 
+  "GR:motorway-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "PE:IC-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "UA:regional-yellow-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CA:NS-5char": {
+    "width": 60, 
+    "height": 50
+  }, 
+  "PT:national-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "NO:fylkesvei-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "LU:M-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CA:NB2-5char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "NL:N-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PL:regional-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CA:SK-1char": {
+    "width": 38, 
+    "height": 48
+  }, 
+  "IT:B-road-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "MX:HID-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "JP:national-1char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "CA:NB-5char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "CH:national-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "AU:I2-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "DE:BAB-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "SG:expressway-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:VER-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:RJ-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "CA:YT-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:LO-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "NL:N-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AR:national-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IE:M-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "BR:PA-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "PE:IC-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:AC-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "MX:MOR-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:AP-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "GB:A-road-white-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AT:A-road-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "CA:ON:primary-2char": {
+    "width": 40, 
+    "height": 50
+  }, 
+  "MX:CHH-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "FR:A-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CH:national-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CA:I2-5char": {
+    "width": 80, 
+    "height": 50
+  }, 
+  "TH:road-4char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "VN:national-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AT:S-road-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CA:QC:A-4char": {
+    "width": 52, 
+    "height": 50
+  }, 
+  "CA:I2-4char": {
+    "width": 74, 
+    "height": 50
+  }, 
+  "TR:highway-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "PE:JU-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "FR:D-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "GB:A-road-green-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "KR:national-4char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "BR-1-char2": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "PE:AN-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:TLA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "ES:A-road-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "BR:AP-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "HU:national-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "BE:I-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "GR:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "DE:BAB-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "NO:fylkesvei-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "GR:I-2char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:SE-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "NL:S-road-1char": {
+    "width": 42, 
+    "height": 40
+  }, 
+  "CL:panamerican-2char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "CZ:regional-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "IE:N-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "PL:regional-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PE:SM-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BR:MS-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "CN:road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "FI:FS-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:MA-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "ZA:provincial-3char": {
+    "width": 58, 
+    "height": 50
+  }, 
+  "CA:BC-1char": {
+    "width": 42, 
+    "height": 50
+  }, 
+  "BR:PR-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "DE:BS-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "IT:B-road-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "DE:BS-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "BR:RO-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "ZA:provincial-2char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "PE:UC-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:MG-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "AT:A-road-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "MX:COA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:MEX-4char": {
+    "width": 62, 
+    "height": 50
+  }, 
+  "PE:MD-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PE:CA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "IT:B-road-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "PE:TU-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:PA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "GR:national-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "SK:LR-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "BR:AP-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "ZA:national-2char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "PT:primary-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "VN:expressway-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "VN:expressway-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "UA:national-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "NL:S-road-2char": {
+    "width": 44, 
+    "height": 40
+  }, 
+  "e-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PT:primary-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "BR:PI-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "AT:S-road-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "SA:national-3char": {
+    "width": 58, 
+    "height": 48
+  }, 
+  "MX:TLA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "DK:national-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "AU:I3-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "UA:regional-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "IT:SR-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "MX:YUC-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "UA:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "DK:D-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AM:AM-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "NO:fylkesvei-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:CMX-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CL:panamerican-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "MX:CHH-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR-3char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "RO:motorway-3char": {
+    "width": 48, 
+    "height": 38
+  }, 
+  "MX:NAY-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IT:A-road-1char": {
+    "width": 38, 
+    "height": 46
+  }, 
+  "MX:CHP-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "ID:national-1char": {
+    "width": 46, 
+    "height": 44
+  }, 
+  "BR:PE-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "IE:N-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "KR:local-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "IT:RA-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:MO-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "TH:motorway-toll-3char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "CL:panamerican-3char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PT:regional-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "IT:A-road-3char": {
+    "width": 48, 
+    "height": 46
+  }, 
+  "SA-1char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "CA:AB-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PL:expressway-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "DK:D-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:TLA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CA:YT-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "KR:expressway-1char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "BR:GO-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "AU:I2-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:AM-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:ZAC-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "SE:A-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "ES:N-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:PI-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "PE:AP-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TR-roads-3char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:MOR-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "PE:HV-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ES:N-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "IQ:IQ-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "NO:fylkesvei-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "FR:N-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CN:expressway:regional-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CN:expressway:regional-3char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "DK:national-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "ID:ID-4char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "KR:national-1char": {
+    "width": 46, 
+    "height": 38
+  }, 
+  "ES:A-road-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "UK:G-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:SIN-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "UA:national-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "PT:IC-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "LU:CR-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "SA:national-2char": {
+    "width": 52, 
+    "height": 48
+  }, 
+  "BR:PB-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "CZ:national-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "DK:national-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:BCS-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:SC-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "MX:COL-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:YT-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:NLE-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "JP:national-5char": {
+    "width": 66, 
+    "height": 48
+  }, 
+  "RU:national-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:SH-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CA:SK-2char": {
+    "width": 40, 
+    "height": 48
+  }, 
+  "CN-roads-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:ROO-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:NAY-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:QC:R-3char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "CZ:national-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "ru:national-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "PE:LA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:GUA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:TO-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "PE:HU-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:BC-5char": {
+    "width": 72, 
+    "height": 50
+  }, 
+  "PE:PE-4char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "PE:PA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:NAY-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:CHP-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:SK:primary-1char": {
+    "width": 38, 
+    "height": 48
+  }, 
+  "BE:N-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "SE:A-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "GB:M-road-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "UA:international-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "ES:AA2-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "LU:M-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "BR:MS-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "BR:CE-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "BR:SP-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "MX:SON-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AU:S-route-3char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "SE:A-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "UA:regional-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CH:national-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "HU:national-1char": {
+    "width": 38, 
+    "height": 40
+  }, 
+  "BR:ES-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "UA:national-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "CA:AB:trunk-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "VN:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "UA:national-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "IE:N-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:AN-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "UA:territorial-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:SIN-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:CE-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "IN:NH-2char": {
+    "width": 38, 
+    "height": 50
+  }, 
+  "PT:IC-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "FI:FI-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:CA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IT:RA-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PL:regional-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:SK-4char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "UK:G-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "ZA:provincial-5char": {
+    "width": 78, 
+    "height": 50
+  }, 
+  "BR:RN-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "IT:RA-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "AU:N-highway-3char": {
+    "width": 44, 
+    "height": 42
+  }, 
+  "MX:OAX-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "JP:prefectural-3char": {
+    "width": 54, 
+    "height": 44
+  }, 
+  "SA-4char": {
+    "width": 64, 
+    "height": 48
+  }, 
+  "BR:SP-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "FI:FS-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "FI:RR-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:BC-2char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "DE:DE-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "VN:national-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AU:N-highway-2char": {
+    "width": 36, 
+    "height": 42
+  }, 
+  "MX:SLP-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AR:national-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "SE:A-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "FI:FI-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "SG:E-4char": {
+    "width": 56, 
+    "height": 38
+  }, 
+  "PE:AP-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IT:SR-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CA:BC-4char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "VN:VN-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "FR:D-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:NS:R-4char": {
+    "width": 56, 
+    "height": 38
+  }, 
+  "NL:N-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PT:regional-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PT:primary-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:JAL-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:YUC-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IT:SR-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "BR:TO-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "IT:SS-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "SG:E-2char": {
+    "width": 48, 
+    "height": 38
+  }, 
+  "TH-1char": {
+    "width": 40, 
+    "height": 42
+  }, 
+  "AU:A-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "RO:county-1char": {
+    "width": 38, 
+    "height": 40
+  }, 
+  "IQ:IQ-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "SA:SA-5char": {
+    "width": 74, 
+    "height": 48
+  }, 
+  "KR:local-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "RO:national-2char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "CA:NS:R-1char": {
+    "width": 36, 
+    "height": 38
+  }, 
+  "IT:SP-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "UA:international-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:CHH-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "ES:AA2-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AM:AM-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "DK:D-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:BCN-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "FR:D-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "DE:L-3char2": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:TA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:PB-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "LU:RN-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "SK:LR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "ZA:regional-4char": {
+    "width": 56, 
+    "height": 38
+  }, 
+  "MX:CMX-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:PB-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "MX:MOR-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IT:A-road-4char": {
+    "width": 54, 
+    "height": 46
+  }, 
+  "PT:motorway-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "NL:A-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "BR:SE-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "IT:SS-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "PT:motorway-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BD:NH-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "AU:T-drive-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "RU:national-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "MX:SH-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:C-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "GB:M-road-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "GR:GR-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "MY:expressway-2char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "IQ:IQ-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "LU:M-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "ES:N-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "UA:regional-yellow-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "SG:expressway-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "ID:national-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "AU:S-route-2char": {
+    "width": 46, 
+    "height": 48
+  }, 
+  "BR:GO-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CA:ON:primary-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "MX:SLP-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:RN-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "SK:LR-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "DK:national-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "IN:SH-2char": {
+    "width": 38, 
+    "height": 50
+  }, 
+  "generic_shield-3char": {
+    "width": 68, 
+    "height": 36
+  }, 
+  "PL:motorway-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:MB:PTH-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "PE:PA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:PA-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CA:NS:T-4char": {
+    "width": 76, 
+    "height": 48
+  }, 
+  "AU:I2-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:NB2-2char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "PE:AR-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IN:NH-4char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "CL:national-3char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "TR-roads-2char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "JP:expressway-1char": {
+    "width": 40, 
+    "height": 46
+  }, 
+  "BR:AM-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "IN:SH-3char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "AU:B-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:JU-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:NT-4char": {
+    "width": 52, 
+    "height": 50
+  }, 
+  "CA:MB:PTH-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:TA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:SON-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:M-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PE:CU-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:NB2-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "MX:CHP-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "FR:D-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PT:regional-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "TH:road-3char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "TH:motorway-toll-2char": {
+    "width": 44, 
+    "height": 42
+  }, 
+  "PE:PE-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:QC:A-3char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "CN-roads-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:QC:A-1char": {
+    "width": 34, 
+    "height": 50
+  }, 
+  "JP:expressway-4char": {
+    "width": 52, 
+    "height": 46
+  }, 
+  "MX:CMX-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:QC-2char": {
+    "width": 42, 
+    "height": 50
+  }, 
+  "MX:TAB-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:AB:primary-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "UA:territorial-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:BA-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "CA:BC:trunk-3char": {
+    "width": 64, 
+    "height": 50
+  }, 
+  "FI:FI-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:JAL-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TH:TH-2char": {
+    "width": 48, 
+    "height": 44
+  }, 
+  "CA:ON:primary-4char": {
+    "width": 58, 
+    "height": 50
+  }, 
+  "MX:BCS-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "IE:R-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "NO:riksvei-4char": {
+    "width": 56, 
+    "height": 38
+  }, 
+  "ES:autonoma-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CZ:national-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CL:regional-4char": {
+    "width": 60, 
+    "height": 46
+  }, 
+  "VN:PR-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AU:I3-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "LU:M-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "AU:N-route-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:AB:primary-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ES:IU-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ru:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "RO:national-4char": {
+    "width": 60, 
+    "height": 46
+  }, 
+  "MX:GUA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:COL-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CA:NB3-5char": {
+    "width": 68, 
+    "height": 48
+  }, 
+  "CL-3char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "BR:ES-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "BR:AC-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "ZA:regional-1char": {
+    "width": 36, 
+    "height": 38
+  }, 
+  "MX:MIC-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "jp:prefectural-1char": {
+    "width": 48, 
+    "height": 44
+  }, 
+  "FR:A-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "TR:motorway-5char": {
+    "width": 64, 
+    "height": 38
+  }, 
+  "VN:VN-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "IN:NH-5char": {
+    "width": 62, 
+    "height": 50
+  }, 
+  "PE:MD-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "AU:B-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "GR:national-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "PE:AY-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:SK:primary-4char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "MX:AGU-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AR:provincial-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "IQ-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:SH-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IT:RA-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AU:B-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AT:L-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AU:Metro-road-1char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "BR:BA-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "IE:R-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "AU:N-highway-5char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "MX:MX-1char": {
+    "width": 36, 
+    "height": 50
+  }, 
+  "MX:OAX-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:CE-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "MX:SON-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "FR:D-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "NO:fylkesvei-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "BR:ES-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "CA:PEI-5char": {
+    "width": 60, 
+    "height": 50
+  }, 
+  "CA:transcanada-2char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "PE:SM-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "DE:LS-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PL:national-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "jp:prefectural-2char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BR:AC-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "DE:BS-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "MY:expressway-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "UA:international-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:RO-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "GB:M-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "TH-2char": {
+    "width": 48, 
+    "height": 44
+  }, 
+  "PE:CA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "BR:MG-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "PE:PU-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "FI:FI-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AU:Metro-road-2char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "BR:BA-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "AT:L-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "IE:M-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "CA:NT-5char": {
+    "width": 60, 
+    "height": 50
+  }, 
+  "CL-4char": {
+    "width": 58, 
+    "height": 46
+  }, 
+  "KR:local-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "RO:national-5char": {
+    "width": 66, 
+    "height": 46
+  }, 
+  "TH:motorway-3char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "MX:COL-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "ZA:metropolitan-1char": {
+    "width": 36, 
+    "height": 54
+  }, 
+  "MX:CAM-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:UC-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "PL:expressway-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "IN:SH-1char": {
+    "width": 34, 
+    "height": 50
+  }, 
+  "MX:PUE-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CL-2char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "BR:PB-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "generic_shield-1char": {
+    "width": 38, 
+    "height": 36
+  }, 
+  "BR:RS-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "MX:COL-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PT:motorway-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "SK:LR-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "BR:DF-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "MX:QUE-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PT:A-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "SA:SA-3char": {
+    "width": 58, 
+    "height": 48
+  }, 
+  "NO:riksvei-5char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "JP:national-4char": {
+    "width": 58, 
+    "height": 48
+  }, 
+  "CZ:regional-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "IQ-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PT:secondary-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:AGU-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CL:national-4char": {
+    "width": 58, 
+    "height": 46
+  }, 
+  "NL:N-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "FR:N-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:AM-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "FI:FS-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:NT-1char": {
+    "width": 36, 
+    "height": 50
+  }, 
+  "BR:RJ-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "MX:AGU-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "AU:M-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BD:NH-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "RU:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:RS-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "MX:NLE-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "RO:local-3char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "MX:OAX-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TR:motorway-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "PE:LM-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "PL:national-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "ID:motorway-2char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PL:national-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "DE:BS-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "UA:regional-yellow-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "FR:A-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "NO:riksvei-1char": {
+    "width": 36, 
+    "height": 38
+  }, 
+  "AT:A-road-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:AC-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "BR:RO-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "GR:GR-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "PE:AM-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:NS:R-5char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "VN:PR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:ZAC-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:RN-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "FI:LR-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "jp:prefectural-4char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "CA:PEI-3char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "BE:A-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "ru:national-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "MX:ROO-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "TH-4char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "MX:AGU-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "GR:GR-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "BR:SE-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "IN:NH-1char": {
+    "width": 34, 
+    "height": 50
+  }, 
+  "MX:DUR-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "DE:DE-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "KR:national-2char": {
+    "width": 50, 
+    "height": 38
+  }, 
+  "CN:expressway-2char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "BR:PR-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "VN:expressway-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CA:QC:R-5char": {
+    "width": 60, 
+    "height": 50
+  }, 
+  "PE:LA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:AB:primary-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "AU:I3-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IE:M-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "IN:SH-4char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "MY:expressway-3char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR-3char2": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "TH:TH-5char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "BR:PE-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "generic_shield-5char": {
+    "width": 90, 
+    "height": 36
+  }, 
+  "PE:PA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "NZ:SH-3char": {
+    "width": 48, 
+    "height": 46
+  }, 
+  "MX:QUE-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:MS-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "GR:motorway-3char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PL:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "GB:A-road-green-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "GR:GR-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "BR:BR-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "BR:Trans-Amazonian-1char": {
+    "width": 36, 
+    "height": 50
+  }, 
+  "RO:county-2char": {
+    "width": 46, 
+    "height": 40
+  }, 
+  "BR:MG-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CA:SK-3char": {
+    "width": 46, 
+    "height": 48
+  }, 
+  "CA:AB-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:HID-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:CMX-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PE:LA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:BC:primary-4char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "CA:MB-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BE:I-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "SG:E-3char": {
+    "width": 52, 
+    "height": 38
+  }, 
+  "MX:PUE-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:SH-3char2": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:COA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:BC:primary-5char": {
+    "width": 72, 
+    "height": 50
+  }, 
+  "PE:AP-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:RR-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "PE:AR-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:RR-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "MX:TAM-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CZ:regional-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "MX:MEX-1char": {
+    "width": 36, 
+    "height": 50
+  }, 
+  "PE:LM-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "RO:national-1char": {
+    "width": 42, 
+    "height": 46
+  }, 
+  "NL:S-road-3char": {
+    "width": 50, 
+    "height": 42
+  }, 
+  "IT:SS-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "TR:highway-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "NL:A-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AU:A-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ID:motorway-4char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "FI:FS-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "SA:national-1char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "PT:secondary-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:MO-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "DE:L-1char2": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "CA:BC:primary-1char": {
+    "width": 42, 
+    "height": 50
+  }, 
+  "IT:SR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:LO-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CZ:regional-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "MX:YUC-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:CU-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "ZA:national-5char": {
+    "width": 74, 
+    "height": 44
+  }, 
+  "AU:M-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:TLA-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ID:national-2char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CA:AB-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:SLP-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "MX:MOR-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BR:MT-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "CA:NB2-1char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "MX:GUA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "MX:GRO-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "DE:BS-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:MO-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:RJ-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "IT:SP-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "VN:PR-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "GR:I-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "GB:A-road-white-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "KR:expressway-3char": {
+    "width": 54, 
+    "height": 46
+  }, 
+  "MX:VER-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "GB:M-road-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "TR-roads-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "IT:A-road-2char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "PE:TU-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IT:B-road-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:TAM-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:PUE-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "VN:expressway-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "UA:regional-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "CA:PEI-1char": {
+    "width": 38, 
+    "height": 50
+  }, 
+  "BE:N-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "SA-2char": {
+    "width": 52, 
+    "height": 48
+  }, 
+  "MX:VER-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "PL:motorway-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:PE-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PE:MD-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "NO:RR-5char": {
+    "width": 68, 
+    "height": 36
+  }, 
+  "NL:A-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "GR:national-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "ES:A-road-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CL:regional-1char": {
+    "width": 40, 
+    "height": 46
+  }, 
+  "HU:national-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "ES:N-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "FR:A-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "NL:A-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BD:NH-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "TH:road-2char": {
+    "width": 48, 
+    "height": 44
+  }, 
+  "CA:ON-4char": {
+    "width": 58, 
+    "height": 50
+  }, 
+  "CA:NB-2char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "ES:AA2-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "KR:expressway-2char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "GB:M-road-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "GB:A-road-white-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PT:secondary-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:MB:PTH-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:CE-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "AT:S-road-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "BR:PE-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "PE:SM-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:RN-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "ru:national-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:NLE-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:SH-2char2": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:DF-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "ES:A-road-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "MX:GUA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "FI:RR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "CN:road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:SH-4char2": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "FR:N-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "DE:DE-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:PEI-2char": {
+    "width": 40, 
+    "height": 50
+  }, 
+  "jp:prefectural-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "BR:Trans-Amazonian-3char": {
+    "width": 46, 
+    "height": 48
+  }, 
+  "AT:S-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:AY-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:MIC-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "NO:RR-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "MX:CHP-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "FI:LR-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "GR:GR-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "FI:LR-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "MX:OAX-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "BR:MG-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "MX:TAM-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CN:expressway:regional-4char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "PE:MD-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "JP:expressway-3char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "CN:expressway-5char": {
+    "width": 78, 
+    "height": 40
+  }, 
+  "GR:national-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "CZ:regional-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AU:N-route-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:SP-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "AT:A-road-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "SK:LR-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "TH:road-5char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "MX:MEX-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "MX:CHH-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:SH-5char2": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:PR-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "DK:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "JP:expressway-2char": {
+    "width": 42, 
+    "height": 46
+  }, 
+  "MX:CMX-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:TAB-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "TH:road-1char": {
+    "width": 40, 
+    "height": 42
+  }, 
+  "NO:RR-1char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "ES:IU-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:AY-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "SA-3char": {
+    "width": 58, 
+    "height": 48
+  }, 
+  "CA:NS:R-3char": {
+    "width": 48, 
+    "height": 38
+  }, 
+  "PT:IC-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:SH-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "UA:territorial-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "ES:autonoma-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:AB:trunk-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ID:ID-3char": {
+    "width": 54, 
+    "height": 44
+  }, 
+  "CL:national-5char": {
+    "width": 66, 
+    "height": 46
+  }, 
+  "CL:regional-2char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "VN:VN-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "HU:national-3char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "PE:IC-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "UA:regional-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "IE:R-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:NS-3char": {
+    "width": 48, 
+    "height": 50
+  }, 
+  "CA:QC:A-2char": {
+    "width": 42, 
+    "height": 50
+  }, 
+  "SA-5char": {
+    "width": 74, 
+    "height": 48
+  }, 
+  "CA:QC:R-1char": {
+    "width": 34, 
+    "height": 50
+  }, 
+  "CA:BC:primary-2char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "BE:I-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:QUE-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:TU-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "BR:Trans-Amazonian-2char": {
+    "width": 38, 
+    "height": 48
+  }, 
+  "ES:IU-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:BC:trunk-4char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "JP:prefectural-2char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BR:PR-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "DE:BAB-4char": {
+    "width": 60, 
+    "height": 38
+  }, 
+  "PE:CL-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:TU-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "ID:ID-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "PE:PE-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "DE:L-2char2": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "UA:regional-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "FR:N-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "ID:motorway-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "AR:national-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PL:expressway-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:PUE-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "GR:national-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "PE:MD-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IQ-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "BR:RS-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "MX:MEX-2char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "MX:COA-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PL:regional-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:TA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "FI:LR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AR:provincial-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:ROO-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:QC:R-4char": {
+    "width": 52, 
+    "height": 50
+  }, 
+  "FR:D-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:PU-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR-5char2": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PT:IC-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "BR:MA-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "CN:road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR-2char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "AR:provincial-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:TU-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CZ:regional-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "KR:national-3char": {
+    "width": 58, 
+    "height": 38
+  }, 
+  "PE:AN-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "ID:motorway-1char": {
+    "width": 46, 
+    "height": 44
+  }, 
+  "PE:LI-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "DE:LS-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:PI-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:LM-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:JAL-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "FI:RR-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "TH:motorway-4char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "AM:AM-5char": {
+    "width": 70, 
+    "height": 48
+  }, 
+  "CA:transcanada-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "BR:RO-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "CL:regional-5char": {
+    "width": 66, 
+    "height": 46
+  }, 
+  "BR:SC-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "UA:territorial-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CH:motorway-5char": {
+    "width": 64, 
+    "height": 38
+  }, 
+  "PL:regional-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CN-roads-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "CA:QC:A-5char": {
+    "width": 60, 
+    "height": 50
+  }, 
+  "IE:N-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:BCN-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "NZ:SR-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "IE:R-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PE:UC-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CH:motorway-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:AP-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "PT:national-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "e-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PL:expressway-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "UA:territorial-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:BC:trunk-5char": {
+    "width": 72, 
+    "height": 50
+  }, 
+  "VN:national-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "LU:CR-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PT:A-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "BE:A-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ZA:regional-2char": {
+    "width": 42, 
+    "height": 38
+  }, 
+  "ZA:metropolitan-2char": {
+    "width": 38, 
+    "height": 50
+  }, 
+  "BR:PI-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "LU:M-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:BCN-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "IT:SS-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "CN-roads-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "ZA:provincial-4char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "CA:NB2-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CL:national-2char": {
+    "width": 46, 
+    "height": 46
+  }, 
+  "BR:AC-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "AU:C-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:AP-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PE:PE-2char": {
+    "width": 42, 
+    "height": 44
+  }, 
+  "KR:local-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:ON-5char": {
+    "width": 64, 
+    "height": 50
+  }, 
+  "PT:A-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:VER-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PE:HU-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:SH-1char2": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PT:secondary-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:IC-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "AU:I3-5char2": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "AU:I3-5char3": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "ES:province-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:TLA-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "ID:national-3char": {
+    "width": 54, 
+    "height": 44
+  }, 
+  "BR:PA-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "AU:C-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "AM:AM-2char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "BR:RO-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "RO:motorway-1char": {
+    "width": 36, 
+    "height": 38
+  }, 
+  "PT:primary-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:SLP-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "DE:L-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "ES:A-road-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "AR:provincial-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CA:QC-1char": {
+    "width": 34, 
+    "height": 50
+  }, 
+  "NZ:SR-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "AU:I2-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:OAX-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "BR:SC-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PL:expressway-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:PE-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "MX:DUR-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "FR:D-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "DE:DE-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "DE:DE-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "BR:GO-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "BR:SC-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "UA:regional-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "AU:I3-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:T-drive-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "LU:RN-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "IE:M-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "TH-3char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "DK:D-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "TR:motorway-4char": {
+    "width": 60, 
+    "height": 38
+  }, 
+  "MX:TAM-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:NB3-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "AU:A-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "AU:B-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BD:NH-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:TO-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "AU:Metro-road-4char": {
+    "width": 56, 
+    "height": 48
+  }, 
+  "PE:HV-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:AB:primary-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PL:motorway-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ru:national-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "AU:T-drive-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "BR:BR-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "NZ:SR-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:I3-4char3": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "AU:I3-4char2": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "RO:county-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "DE:BAB-2char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "ru:national-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "PE:AR-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "FI:RR-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:AL-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "MX:QUE-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "KR:local-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:AL-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "SG:expressway-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "MX:MIC-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CA:YT-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:GRO-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:MIC-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "TH:TH-4char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "BR-2char2": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "ZA:metropolitan-5char": {
+    "width": 60, 
+    "height": 52
+  }, 
+  "FR:N-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:MB-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CN-roads-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PE:HV-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:ON-1char": {
+    "width": 36, 
+    "height": 50
+  }, 
+  "MX:NAY-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:NS:R-2char": {
+    "width": 42, 
+    "height": 38
+  }, 
+  "MX:GRO-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:PI-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "JP:national-3char": {
+    "width": 52, 
+    "height": 48
+  }, 
+  "GB:A-road-white-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AU:S-route-5char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "AT:L-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "RO:local-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "CA:YT-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "BR:ES-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "NZ:SH-4char": {
+    "width": 56, 
+    "height": 48
+  }, 
+  "BR:AM-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CA:QC:R-2char": {
+    "width": 42, 
+    "height": 50
+  }, 
+  "CA:MB-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CA:AB-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:I3-2char3": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "AU:I3-2char2": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "VN:expressway-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "FR:D-road-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:NAY-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "VN:VN-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "SE:A-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "MX:BCS-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:MX-4char": {
+    "width": 62, 
+    "height": 50
+  }, 
+  "BR:RR-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PE:LI-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:BCN-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "e-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:MX-5char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "FR:D-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "PT:A-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "SA:SA-4char": {
+    "width": 64, 
+    "height": 48
+  }, 
+  "GR:national-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "CH:national-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "AR:national-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "UA:regional-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "PE:AP-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "e-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AU:N-route-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "AU:Metro-road-3char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "ID:national-4char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "SE:A-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:SP-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "AU:S-route-4char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "PE:PE-5char": {
+    "width": 68, 
+    "height": 44
+  }, 
+  "CA:MB:PTH-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ZA:provincial-1char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "SG:expressway-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "DE:L-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:CU-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "FI:RR-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "UA:territorial-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "IQ-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR-1char": {
+    "width": 38, 
+    "height": 48
+  }, 
+  "FR:A-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CL:national-1char": {
+    "width": 40, 
+    "height": 46
+  }, 
+  "PE:PI-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "FI:LR-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "HU:national-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "BR:SC-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "TR:highway-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "PE:PU-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "IT:RA-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "PT:primary-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "RO:motorway-4char": {
+    "width": 56, 
+    "height": 38
+  }, 
+  "PE:HU-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "BR:TO-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "CA:I2-1char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "NZ:SH-5char": {
+    "width": 62, 
+    "height": 46
+  }, 
+  "DE:L-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CZ:national-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "UA:national-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "ES:IU-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:MT-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "CN:expressway:regional-5char": {
+    "width": 70, 
+    "height": 36
+  }, 
+  "PL:motorway-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "KR:national-5char": {
+    "width": 68, 
+    "height": 38
+  }, 
+  "BR-4char": {
+    "width": 58, 
+    "height": 46
+  }, 
+  "PE:JU-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "SG:expressway-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ID:ID-2char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:HV-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:SON-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "MX:COA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "RU:national-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:RN-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "AU:N-highway-4char": {
+    "width": 52, 
+    "height": 42
+  }, 
+  "IT:A-road-5char": {
+    "width": 62, 
+    "height": 46
+  }, 
+  "BR:DF-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "IQ-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "UA:national-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "BR:SE-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "NO:RR-2char": {
+    "width": 50, 
+    "height": 36
+  }, 
+  "DE:L-5char2": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "PE:SM-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:MG-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "BD:NH-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:MB:PTH-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BE:I-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CL-1char": {
+    "width": 40, 
+    "height": 46
+  }, 
+  "CA:NB3-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "MX:BCN-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "BR:RJ-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "IT:B-road-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "AT:S-road-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "ES:A-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:BCS-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "VN:national-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "TH:TH-1char": {
+    "width": 40, 
+    "height": 42
+  }, 
+  "IE:R-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "RU:national-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "RU:national-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CZ:regional-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "MX:NLE-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "ES:N-road-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:JAL-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR-4char2": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CA:MB-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "DE:LS-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:transcanada-5char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "CA:NB-1char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "PE:CL-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "PE:PA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "AU:T-drive-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "AU:C-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "RO:motorway-5char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "MX:ZAC-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:SE-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "PE:AM-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:SK:primary-5char": {
+    "width": 60, 
+    "height": 48
+  }, 
+  "BR:RJ-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "IT:SP-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "ZA:regional-5char": {
+    "width": 62, 
+    "height": 38
+  }, 
+  "SK:LR-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "CA:NB-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "PT:motorway-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "BR:Trans-Amazonian-4char": {
+    "width": 52, 
+    "height": 48
+  }, 
+  "MX:CAM-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ES:autonoma-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "IQ:IQ-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:NT-2char": {
+    "width": 38, 
+    "height": 50
+  }, 
+  "CA:QC-5char": {
+    "width": 60, 
+    "height": 50
+  }, 
+  "ru:national-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "AU:N-route-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CN:expressway-4char": {
+    "width": 72, 
+    "height": 40
+  }, 
+  "AT:L-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "UA:regional-yellow-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "UK:G-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:NS:T-3char": {
+    "width": 66, 
+    "height": 48
+  }, 
+  "CL:panamerican-4char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "DE:L-4char2": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MX:VER-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:CHP-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "PE:PI-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:QC-4char": {
+    "width": 52, 
+    "height": 50
+  }, 
+  "NO:riksvei-2char": {
+    "width": 42, 
+    "height": 38
+  }, 
+  "PT:regional-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "TH:motorway-toll-5char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "NL:S-road-5char": {
+    "width": 64, 
+    "height": 40
+  }, 
+  "ZA:national-3char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "NO:RR-3char": {
+    "width": 56, 
+    "height": 36
+  }, 
+  "PE:LO-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "BR:AM-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "BR:RR-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "CA:NT-3char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "JP:national-2char": {
+    "width": 48, 
+    "height": 48
+  }, 
+  "MX:CHH-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "CA:AB:trunk-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:LA-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "ES:province-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AU:M-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:CU-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "NL:N-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AU:N-route-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "AU:I2-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CA:BC:trunk-1char": {
+    "width": 42, 
+    "height": 50
+  }, 
+  "MX:HID-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "CZ:national-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CA:NS:T-5char": {
+    "width": 80, 
+    "height": 48
+  }, 
+  "MX:SH-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "CA:ON-2char": {
+    "width": 40, 
+    "height": 50
+  }, 
+  "JP:prefectural-5char": {
+    "width": 66, 
+    "height": 44
+  }, 
+  "generic_shield-2char": {
+    "width": 50, 
+    "height": 36
+  }, 
+  "MX:YUC-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "IT:SR-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "BR:DF-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "TH:motorway-toll-4char": {
+    "width": 54, 
+    "height": 42
+  }, 
+  "PT:regional-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ZA:metropolitan-3char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "DK:national-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "NO:riksvei-3char": {
+    "width": 48, 
+    "height": 38
+  }, 
+  "TR:highway-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "MX:GRO-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "VN:PR-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CA:ON:primary-1char": {
+    "width": 36, 
+    "height": 50
+  }, 
+  "MX:MOR-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:SIN-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "FI:LR-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "jp:prefectural-3char": {
+    "width": 54, 
+    "height": 44
+  }, 
+  "BR:Trans-Amazonian-5char": {
+    "width": 60, 
+    "height": 48
+  }, 
+  "PE:LA-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:BR-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "CA:I2-3char": {
+    "width": 64, 
+    "height": 50
+  }, 
+  "CA:NS:T-1char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "CA:PEI-4char": {
+    "width": 52, 
+    "height": 50
+  }, 
+  "KR:expressway-5char": {
+    "width": 68, 
+    "height": 46
+  }, 
+  "UK:G-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "FI:LR-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "CA:AB-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "IE:N-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "TH:TH-3char": {
+    "width": 46, 
+    "height": 42
+  }, 
+  "AR:provincial-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "CA:BC:trunk-2char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "CL:regional-3char": {
+    "width": 50, 
+    "height": 46
+  }, 
+  "AU:N-highway-1char": {
+    "width": 36, 
+    "height": 42
+  }, 
+  "FI:FS-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "BR:MT-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "BR:CE-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "PE:AM-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:ZAC-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "MX:MEX-5char": {
+    "width": 70, 
+    "height": 50
+  }, 
+  "GR:motorway-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "CA:ON:primary-5char": {
+    "width": 64, 
+    "height": 50
+  }, 
+  "CA:NB-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "AR:national-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "GB:M-road-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "CA:transcanada-3char": {
+    "width": 56, 
+    "height": 48
+  }, 
+  "IN:NH-3char": {
+    "width": 46, 
+    "height": 50
+  }, 
+  "DE:LS-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "FR:D-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:DUR-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "SA:SA-2char": {
+    "width": 52, 
+    "height": 48
+  }, 
+  "VN:VN-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "BR:GO-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "UA:international-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "PL:regional-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "AT:L-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "CH:motorway-2char": {
+    "width": 44, 
+    "height": 38
+  }, 
+  "PE:HV-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "UA:international-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "IT:B-road-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "FI:FI-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "ZA:metropolitan-4char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "BR:BA-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "MX:GRO-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "MX:CAM-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "NZ:SR-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "GB:A-road-green-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "CA:I2-2char": {
+    "width": 56, 
+    "height": 50
+  }, 
+  "UA:regional-yellow-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "RU:national-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "RO:local-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "BE:I-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "MX:CAM-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:RR-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "PT:IC-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "DE:L-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:BR-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "UA:regional-yellow-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "LU:M-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "CN:expressway-1char": {
+    "width": 52, 
+    "height": 40
+  }, 
+  "TH:motorway-toll-1char": {
+    "width": 40, 
+    "height": 42
+  }, 
+  "JP:expressway-5char": {
+    "width": 60, 
+    "height": 46
+  }, 
+  "MX:BCS-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "ID:motorway-3char": {
+    "width": 54, 
+    "height": 44
+  }, 
+  "PE:AY-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "DE:BS-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "SA:national-4char": {
+    "width": 64, 
+    "height": 48
+  }, 
+  "LU:CR-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "IT:SS-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "FI:FS-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BE:N-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "BR:PI-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "RO:national-3char": {
+    "width": 52, 
+    "height": 46
+  }, 
+  "LU:M-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "CA:BC-3char": {
+    "width": 64, 
+    "height": 50
+  }, 
+  "AM:AM-1char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "MX:HID-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "BR:PA-1char": {
+    "width": 42, 
+    "height": 48
+  }, 
+  "PE:PU-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "MX:SON-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "MX:COL-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "GR:motorway-1char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CL:panamerican-1char": {
+    "width": 42, 
+    "height": 44
+  }, 
+  "TH-5char": {
+    "width": 60, 
+    "height": 42
+  }, 
+  "LU:CR-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "ES:IU-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "ES:autonoma-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "AU:S-route-1char": {
+    "width": 40, 
+    "height": 48
+  }, 
+  "BR:RS-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "GR:I-3char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "VN:expressway-6char": {
+    "width": 76, 
+    "height": 36
+  }, 
+  "MX:DUR-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "CA:AB:trunk-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "MX:ROO-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "ZA:national-4char": {
+    "width": 64, 
+    "height": 44
+  }, 
+  "UA:regional-yellow-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "BR:PB-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "MX:DUR-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "FI:FS-5char": {
+    "width": 64, 
+    "height": 36
+  }, 
+  "MX:AGU-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "TR:highway-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "CH:motorway-3char": {
+    "width": 50, 
+    "height": 36
+  }, 
+  "MX:QUE-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "LU:RN-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:NB3-1char": {
+    "width": 44, 
+    "height": 48
+  }, 
+  "PE:LI-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "JP:prefectural-4char": {
+    "width": 58, 
+    "height": 44
+  }, 
+  "PT:national-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "BR:BR-3char": {
+    "width": 54, 
+    "height": 48
+  }, 
+  "NZ:SR-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "AU:A-road-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "DE:DE-7char": {
+    "width": 82, 
+    "height": 36
+  }, 
+  "AT:A-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "CA:QC-3char": {
+    "width": 50, 
+    "height": 50
+  }, 
+  "BR:MS-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "IT:SP-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "UA:international-5char": {
+    "width": 66, 
+    "height": 36
+  }, 
+  "CH:motorway-1char": {
+    "width": 42, 
+    "height": 38
+  }, 
+  "SA:national-5char": {
+    "width": 74, 
+    "height": 48
+  }, 
+  "PL:national-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "BR:MT-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "SK:LR-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "IT:SS-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BE:A-road-2char": {
+    "width": 46, 
+    "height": 36
+  }, 
+  "CA:AB:primary-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "PT:national-3char": {
+    "width": 52, 
+    "height": 36
+  }, 
+  "PE:MO-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "JP:prefectural-1char": {
+    "width": 48, 
+    "height": 44
+  }, 
+  "BR:AL-2char": {
+    "width": 50, 
+    "height": 48
+  }, 
+  "MX:SIN-3char": {
+    "width": 50, 
+    "height": 44
+  }, 
+  "MX:TAB-5char": {
+    "width": 60, 
+    "height": 44
+  }, 
+  "IN:SH-5char": {
+    "width": 62, 
+    "height": 50
+  }, 
+  "MX:SIN-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "UK:G-4char": {
+    "width": 58, 
+    "height": 36
+  }, 
+  "MY:expressway-4char": {
+    "width": 60, 
+    "height": 38
+  }, 
+  "AT:S-road-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "PE:UC-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "PE:PU-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "RO:county-4char": {
+    "width": 58, 
+    "height": 40
+  }, 
+  "IT:SP-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "GR:motorway-2char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:PI-5char": {
+    "width": 72, 
+    "height": 48
+  }, 
+  "PE:AR-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "CA:ON-3char": {
+    "width": 54, 
+    "height": 50
+  }, 
+  "MX:NLE-1char": {
+    "width": 38, 
+    "height": 44
+  }, 
+  "TR-roads-4char": {
+    "width": 60, 
+    "height": 38
+  }, 
+  "MX:HID-4char": {
+    "width": 52, 
+    "height": 44
+  }, 
+  "IT:B-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "GB:M-road-3char": {
+    "width": 54, 
+    "height": 36
+  }, 
+  "BR:BA-4char": {
+    "width": 62, 
+    "height": 48
+  }, 
+  "NZ:SH-1char": {
+    "width": 44, 
+    "height": 46
+  }, 
+  "AT:A-road-2char": {
+    "width": 48, 
+    "height": 36
+  }, 
+  "TH:motorway-2char": {
+    "width": 44, 
+    "height": 42
+  }, 
+  "GR:GR-4char": {
+    "width": 60, 
+    "height": 36
+  }, 
+  "AU:C-road-1char": {
+    "width": 42, 
+    "height": 36
+  }, 
+  "MX:ZAC-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PE:AM-2char": {
+    "width": 44, 
+    "height": 44
+  }, 
+  "PE:CL-2char": {
+    "width": 44, 
+    "height": 44
+  }
+}
