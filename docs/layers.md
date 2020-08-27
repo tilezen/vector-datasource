@@ -882,429 +882,417 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
-kind | icon | definition
-:--- | :---: | :-------
-`accountant` | ![accountant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/accountant.png) | foo
-`adit` | ![adit](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/adit.png) |
-`administrative` | ![administrative](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/administrative.png) |
-`adult_gaming_centre` | ![adult_gaming_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/adult_gaming_centre.png) |
-`advertising_agency` | ![advertising_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/advertising_agency.png) |
-`aerodrome` | ![aerodrome](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aerodrome.png) | with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
-`aeroway_gate` | ![aeroway_gate](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aeroway_gate.png) |
-`airfield` | ![airfield](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/airfield.png)| for military use.
-`airport` | ![airport](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/airport.png) |
-`alcohol` | ![alcohol](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/alcohol.png) |
-`alpine_hut` | ![alpine_hut](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/alpine_hut.png) |
-`ambulatory_care` | ![ambulatory_care](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ambulatory_care.png) |
-`amusement_ride` | ![amusement_ride](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/amusement_ride.png) |
-`animal` | ![animal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/animal.png) |
-`aquarium` | ![aquarium](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aquarium.png) |
-`archaeological_site` | ![archaeological_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/archaeological_site.png) |
-`architect` | ![architect](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/architect.png) |
-`art` | ![art](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/art.png) |
-`arts_centre` | ![arts_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/arts_centre.png) | A venue where arts are performed or exhibited.
-`artwork` | ![artwork](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/artwork.png) |
-`assisted_living` | ![assisted_living](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/assisted_living.png) |
-`association` | ![association](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/association.png) |
-`atm` | ![atm](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/atm.png) |
-`attraction` | ![attraction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/attraction.png) |
-`atv` | ![atv](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/atv.png) |
-`aviary` | ![aviary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/aviary.png) |
-`baby_hatch` | ![baby_hatch](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/baby_hatch.png) |
-`bakery` | ![bakery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bakery.png) |
-`bank` | ![bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bank.png) |
-`bar` | ![bar](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bar.png) |
-`battlefield` | ![battlefield](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/battlefield.png) |
-`bbq` | ![bbq](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bbq.png) |
-`beach_resort` | ![beach_resort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beach_resort.png) |
-`beach` | ![beach](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beach.png) | Where the land meets the sea gradually. With `kind_detail` property.
-`beacon` | ![beacon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beacon.png) |
-`beauty` | ![beauty](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/beauty.png) |
-`bed_and_breakfast` | ![bed_and_breakfast](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bed_and_breakfast.png) |
-`bench` | ![bench](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bench.png) |
-`bicycle_junction` | ![bicycle_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_junction.png) | Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
-`bicycle_parking` | ![bicycle_parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_parking.png) |
-`bicycle_rental_station` | ![bicycle_rental_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_rental_station.png) | Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
-`bicycle_rental` | ![bicycle_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_rental.png) | Bicycle rental shop.
-`bicycle_repair_station` | ![bicycle_repair_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle_repair_station.png) |
-`bicycle` | ![bicycle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bicycle.png) | Bicycle sales shop, often with bike repair service.
-`biergarten` | ![biergarten](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/biergarten.png) |
-`block` | ![block](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/block.png) |
-`blood_bank` | ![blood_bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/blood_bank.png) |
-`boat_lift` | ![boat_lift](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boat_lift.png) |
-`boat_rental` | ![boat_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boat_rental.png) |
-`boat_storage` | ![boat_storage](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boat_storage.png) |
-`boatyard` | ![boatyard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/boatyard.png) | a place for building, fixing, and storing boats.
-`bollard` | ![bollard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bollard.png) |
-`bookmaker` | ![bookmaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bookmaker.png) |
-`books` | ![books](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/books.png) |
-`border_control` | ![border_control](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/border_control.png) |
-`brewery` | ![brewery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/brewery.png) |
-`bunker` | ![bunker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bunker.png) | A reinforced military building. With `kind_detail` property.
-`bureau_de_change` | ![bureau_de_change](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bureau_de_change.png) |
-`bus_station` | ![bus_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bus_station.png) |
-`bus_stop` | ![bus_stop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/bus_stop.png) |
-`butcher` | ![butcher](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/butcher.png) |
-`cafe` | ![cafe](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cafe.png) |
-`camera` | ![camera](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/camera.png) | A shop selling cameras.
-`camp_site` | ![camp_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/camp_site.png) |
-`car_parts` | ![car_parts](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_parts.png) | A shop selling car parts.
-`car_rental` | ![car_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_rental.png) | A business which rents cars.
-`car_repair` | ![car_repair](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_repair.png) |
-`car_sharing` | ![car_sharing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_sharing.png) |
-`car_wash` | ![car_wash](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car_wash.png) |
-`car` | ![car](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/car.png) |
-`caravan_site` | ![caravan_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/caravan_site.png) |
-`care_home` | ![care_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/care_home.png) |
-`carousel` | ![carousel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/carousel.png) |
-`carpenter` | ![carpenter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/carpenter.png) |
-`casino` | ![casino](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/casino.png) | A venue for gambling.
-`cattle_grid` | ![cattle_grid](img/sprite/bubble-wrap-style/2x/cattle_grid.png) | barrier
-`cave_entrance` | ![cave_entrance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cave_entrance.png) |
-`cemetery` | ![cemetery](img/sprite/bubble-wrap-style/2x/cemetery.png) | with `kind_detail` and `denomination` properties.
-`chain` | ![chain](img/sprite/bubble-wrap-style/2x/chain.png) | barrier
-`chalet` | ![chalet](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/chalet.png) |
-`charging_station` | ![charging_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/charging_station.png) | May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
-`charity` | ![charity](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/charity.png) | A shop selling items, often second-hand clothes, in order to raise money for charity.
-`chemist` | ![chemist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/chemist.png) | A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
-`childcare` | ![childcare](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/childcare.png) |
-`childrens_centre` | ![childrens_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/childrens_centre.png) |
-`chiropractor` | ![chiropractor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/chiropractor.png) |
-`cinema` | ![cinema](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cinema.png) |
-`clinic` | ![clinic](img/sprite/bubble-wrap-style/2x/clinic.png) | with `kind_detail` property.
-`closed` | ![closed](https://github.com/tilezen/vector-datasource/issues/1026)._
-`clothes` | ![clothes](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/clothes.png) |
-`club` | ![club](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/club.png) |
-`coffee` | ![coffee](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/coffee.png) |
-`college` | ![college](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/college.png) |
-`communications_tower` | ![communications_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/communications_tower.png) |
-`community_centre` | ![community_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/community_centre.png) |
-`company` | ![company](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/company.png) |
-`computer` | ![computer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/computer.png) |
-`confectionery` | ![confectionery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/confectionery.png) |
-`consulting` | ![consulting](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/consulting.png) |
-`container_terminal` | ![container_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/container_terminal.png) |
-`convenience` | ![convenience](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/convenience.png) |
-`copyshop` | ![copyshop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/copyshop.png) | A shop offering photocopying and printing services.
-`cosmetics` | ![cosmetics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cosmetics.png) | A specialty shop selling cosmetics.
-`courthouse` | ![courthouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/courthouse.png) |
-`craft` | ![craft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/craft.png) | A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
-`crane` | ![crane](img/sprite/bubble-wrap-style/2x/crane.png) | with `kind_detail` property.
-`cross` | ![cross](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cross.png) |
-`customs` | ![customs](https://en.wikipedia.org/wiki/Customs_(tax)).
-`cycle_barrier` | ![cycle_barrier](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/cycle_barrier.png) | Barrier for bicycles.
-`dairy_kitchen` | ![dairy_kitchen](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dairy_kitchen.png) |
-`dam` | ![dam](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dam.png) |
-`danger_area` | ![danger_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/danger_area.png) | e.g: military training zones, firing ranges.
-`day_care` | ![day_care](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/day_care.png) |
-`defibrillator` | ![defibrillator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/defibrillator.png) |
-`deli` | ![deli](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/deli.png) |
-`dentist` | ![dentist](img/sprite/bubble-wrap-style/2x/dentist.png) | with `kind_detail` property.
-`department_store` | ![department_store](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/department_store.png) |
-`dispensary` | ![dispensary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dispensary.png) |
-`dive_centre` | ![dive_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dive_centre.png) |
-`doctors` | ![doctors](img/sprite/bubble-wrap-style/2x/doctors.png) | with `kind_detail` property.
-`dog_park` | ![dog_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dog_park.png) |
-`doityourself` | ![doityourself](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/doityourself.png) |
-`dressmaker` | ![dressmaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dressmaker.png) |
-`drinking_water` | ![drinking_water](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/drinking_water.png) |
-`dry_cleaning` | ![dry_cleaning](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dry_cleaning.png) |
-`dune` | ![dune](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/dune.png) |
-`educational_institution` | ![educational_institution](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/educational_institution.png) |
-`egress` | ![egress](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/egress.png) |
-`electrician` | ![electrician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/electrician.png) |
-`electronics` | ![electronics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/electronics.png) |
-`elevator` | ![elevator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/elevator.png) | An enclosure for vertical travel.
-`embassy` | ![embassy](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/embassy.png) |
-`emergency_phone` | ![emergency_phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/emergency_phone.png) |
-`employment_agency` | ![employment_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/employment_agency.png) |
-`enclosure` | ![enclosure](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/enclosure.png) | at a zoo
-`estate_agent` | ![estate_agent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/estate_agent.png) |
-`farm` | ![farm](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/farm.png) |
-`fashion` | ![fashion](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fashion.png) |
-`fast_food` | ![fast_food](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fast_food.png) |
-`ferry_terminal` | ![ferry_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ferry_terminal.png) |
-`field_hospital` | ![field_hospital](img/sprite/bubble-wrap-style/2x/field_hospital.png) | with `kind_detail` property.
-`financial` | ![financial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/financial.png) |
-`fire_hydrant` | ![fire_hydrant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fire_hydrant.png) |
-`fire_station` | ![fire_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fire_station.png) |
-`firepit` | ![firepit](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/firepit.png) |
-`fishing_area` | ![fishing_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fishing_area.png) |
-`fishing` | ![fishing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fishing.png) |
-`fishmonger` | ![fishmonger](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fishmonger.png) | A shop selling fish and seafood.
-`fitness_station` | ![fitness_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fitness_station.png) |
-`fitness` | ![fitness](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fitness.png) |
-`florist` | ![florist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/florist.png) |
-`food_bank` | ![food_bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/food_bank.png) |
-`ford` | ![ford](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ford.png) |
-`forest` | ![forest](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/forest.png) |
-`fort` | ![fort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fort.png) |
-`foundation` | ![foundation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/foundation.png) |
-`fuel` | ![fuel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/fuel.png) | Fuel stations provide liquid gas (or diesel) for automotive use.
-`funeral_directors` | ![funeral_directors](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/funeral_directors.png) | A venue offering funerary services.
-`furniture` | ![furniture](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/furniture.png) |
-`gallery` | ![gallery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gallery.png) | An art gallery.
-`gambling` | ![gambling](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gambling.png) |
-`garden_centre` | ![garden_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/garden_centre.png) |
-`garden` | ![garden](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/garden.png) |
-`gardener` | ![gardener](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gardener.png) |
-`gas_canister` | ![gas_canister](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gas_canister.png) | Shop selling bottled gas for cooking. Some offer gas canister refills.
-`gate` | ![gate](img/sprite/bubble-wrap-style/2x/gate.png) | with `kind_detail` property.
-`generator` | ![generator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/generator.png) | A building or structure which generates power. With `kind_detail` property.
-`geyser` | ![geyser](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/geyser.png) |
-`gift` | ![gift](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/gift.png) |
-`golf_course` | ![golf_course](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/golf_course.png) |
-`golf` | ![golf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/golf.png) | Shop selling golf equipment.
-`government` | ![government](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/government.png) |
-`grave_yard` | ![grave_yard](img/sprite/bubble-wrap-style/2x/grave_yard.png) | with `kind_detail` and `denomination` properties.
-`greengrocer` | ![greengrocer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/greengrocer.png) | Shop selling fruits and vegetables.
-`grocery` | ![grocery](https://en.wikipedia.org/wiki/Grocery_store).
-`group_home` | ![group_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/group_home.png) |
-`guest_house` | ![guest_house](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/guest_house.png) |
-`hairdresser` | ![hairdresser](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hairdresser.png) |
-`halt` | ![halt](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/halt.png) |
-`hanami` | ![hanami](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hanami.png) |
-`handicraft` | ![handicraft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/handicraft.png) |
-`harbourmaster` | ![harbourmaster](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/harbourmaster.png) |
-`hardware` | ![hardware](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hardware.png) |
-`hazard` | ![hazard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hazard.png) |
-`health_centre` | ![health_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/health_centre.png) |
-`healthcare_alternative` | ![healthcare_alternative](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/healthcare_alternative.png) |
-`healthcare_centre` | ![healthcare_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/healthcare_centre.png) |
-`healthcare_laboratory` | ![healthcare_laboratory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/healthcare_laboratory.png) |
-`healthcare` | ![healthcare](img/sprite/bubble-wrap-style/2x/healthcare.png) | with `kind_detail` property.
-`helipad` | ![helipad](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/helipad.png) |
-`heliport` | ![heliport](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/heliport.png) |
-`hifi` | ![hifi](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hifi.png) |
-`historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._ | |
-`horse_riding` | ![horse_riding](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/horse_riding.png) |
-`hospice` | ![hospice](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hospice.png) |
-`hospital` | ![hospital](img/sprite/bubble-wrap-style/2x/hospital.png) | with `kind_detail` property.
-`hostel` | ![hostel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hostel.png) |
-`hot_spring` | ![hot_spring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hot_spring.png) |
-`hotel` | ![hotel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hotel.png) |
-`hunting_stand` | ![hunting_stand](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hunting_stand.png) |
-`hunting` | ![hunting](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hunting.png) |
-`hvac` | ![hvac](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/hvac.png) |
-`ice_cream` | ![ice_cream](https://github.com/tilezen/vector-datasource/issues/532)._
-`industrial` | ![industrial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/industrial.png) | An industrial POI which didn't match a more specific kind.
-`information` | ![information](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/information.png) |
-`insurance` | ![insurance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/insurance.png) |
-`it` | ![it](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/it.png) |
-`jewelry` | ![jewelry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/jewelry.png) |
-`karaoke_box` | ![karaoke_box](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/karaoke_box.png) |
-`karaoke` | ![karaoke](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/karaoke.png) |
-`kindergarten` | ![kindergarten](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/kindergarten.png) |
-`landmark` | ![landmark](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/landmark.png) |
-`laundry` | ![laundry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/laundry.png) |
-`lawyer` | ![lawyer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lawyer.png) |
-`level_crossing` | ![level_crossing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/level_crossing.png) |
-`library` | ![library](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/library.png) |
-`life_ring` | ![life_ring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/life_ring.png) |
-`lifeguard_tower` | ![lifeguard_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lifeguard_tower.png) |
-`lighthouse` | ![lighthouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lighthouse.png) |
-`lock` | ![lock](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lock.png) |
-`lottery` | ![lottery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/lottery.png) | A shop selling lottery tickets.
-`love_hotel` | ![love_hotel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/love_hotel.png) |
-`mall` | ![mall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mall.png) |
-`marina` | ![marina](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/marina.png) |
-`marketplace` | ![marketplace](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/marketplace.png) |
-`mast` | ![mast](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mast.png) |
-`maze` | ![maze](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/maze.png) |
-`memorial` | ![memorial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/memorial.png) |
-`metal_construction` | ![metal_construction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/metal_construction.png) |
-`midwife` | ![midwife](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/midwife.png) |
-`military` | ![military](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/military.png) |
-`mineshaft` | ![mineshaft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mineshaft.png) |
-`mini_roundabout` | ![mini_roundabout](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mini_roundabout.png) | has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
-`miniature_golf` | ![miniature_golf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/miniature_golf.png) | A venue for playing miniature golf.
-`mobile_phone` | ![mobile_phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/mobile_phone.png) |
-`money_transfer` | ![money_transfer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/money_transfer.png) | A business which specialises in transferring money between people, often internationally.
-`monument` | ![monument](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/monument.png) |
-`mooring` | ![mooring](img/sprite/bubble-wrap-style/2x/mooring.png) | with `kind_detail` property.
-`motel` | ![motel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motel.png) |
-`motorcycle_parking` | ![motorcycle_parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motorcycle_parking.png) |
-`motorcycle` | ![motorcycle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motorcycle.png) |
-`motorway_junction` | ![motorway_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/motorway_junction.png) |
-`museum` | ![museum](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/museum.png) |
-`music` | ![music](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/music.png) |
-`national_park` | ![national_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/national_park.png) |
-`nature_reserve` | ![nature_reserve](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/nature_reserve.png) |
-`naval_base` | ![naval_base](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/naval_base.png) |
-`newsagent` | ![newsagent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/newsagent.png) |
-`newspaper` | ![newspaper](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/newspaper.png) |
-`ngo` | ![ngo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ngo.png) |
-`nightclub` | ![nightclub](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/nightclub.png) |
-`notary` | ![notary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/notary.png) |
-`nursing_home` | ![nursing_home](img/sprite/bubble-wrap-style/2x/nursing_home.png) | with `kind_detail` property.
-`obelisk` | ![obelisk](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/obelisk.png) | A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
-`observatory` | ![observatory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/observatory.png) |
-`occupational_therapist` | ![occupational_therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/occupational_therapist.png) |
-`office` | ![office](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/office.png) | An office which didn't match a more specific kind.
-`offshore_platform` | ![offshore_platform](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/offshore_platform.png) |
-`optician` | ![optician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/optician.png) |
-`optometrist` | ![optometrist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/optometrist.png) |
-`orchard` | ![orchard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/orchard.png) | An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
-`outdoor` | ![outdoor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/outdoor.png) |
-`outreach` | ![outreach](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/outreach.png) |
-`paediatrics` | ![paediatrics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/paediatrics.png) |
-`painter` | ![painter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/painter.png) |
-`park` | ![park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/park.png) |
-`parking_garage` | ![parking_garage](img/sprite/bubble-wrap-style/2x/parking_garage.png) | parking type is `multi-storey`, `underground`, or `rooftop`.
-`parking` | ![parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/parking.png) |
-`peak` | ![peak](img/sprite/bubble-wrap-style/2x/peak.png) | A mountain peak. See above for properties available on peaks and volcanos.
-`perfumery` | ![perfumery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/perfumery.png) |
-`pet` | ![pet](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pet.png) |
-`petroleum_well` | ![petroleum_well](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/petroleum_well.png) |
-`petting_zoo` | ![petting_zoo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/petting_zoo.png) |
-`pharmacy` | ![pharmacy](img/sprite/bubble-wrap-style/2x/pharmacy.png) | with `kind_detail` property.
-`phone` | ![phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/phone.png) |
-`photo` | ![photo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/photo.png) | A shop offering photograph processing services, e.g: developing or mounting.
-`photographer` | ![photographer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/photographer.png) |
-`photographic_laboratory` | ![photographic_laboratory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/photographic_laboratory.png) |
-`physician` | ![physician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/physician.png) |
-`physiotherapist` | ![physiotherapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/physiotherapist.png) |
-`picnic_site` | ![picnic_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/picnic_site.png) |
-`picnic_table` | ![picnic_table](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/picnic_table.png) |
-`pitch` | ![pitch](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pitch.png) | With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
-`place_of_worship` | ![place_of_worship](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/place_of_worship.png) |
-`plant` | ![plant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/plant.png) |
-`plaque` | ![plaque](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/plaque.png) | A memorial plaque.
-`playground` | ![playground](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/playground.png) |
-`plumber` | ![plumber](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/plumber.png) |
-`podiatrist` | ![podiatrist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/podiatrist.png) |
-`police` | ![police](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/police.png) |
-`political_party` | ![political_party](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/political_party.png) |
-`port_terminal` | ![port_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/port_terminal.png) |
-`post_box` | ![post_box](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/post_box.png) |
-`post_office` | ![post_office](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/post_office.png) |
-`pottery` | ![pottery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pottery.png) |
-`power_pole` | ![power_pole](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/power_pole.png) |
-`power_tower` | ![power_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/power_tower.png) |
-`power_wind` | ![power_wind](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/power_wind.png) |
-`prison` | ![prison](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/prison.png) |
-`protected_area` | ![protected_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/protected_area.png) |
-`psychotherapist` | ![psychotherapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/psychotherapist.png) |
-`pub` | ![pub](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pub.png) |
-`put_in_egress` | ![put_in_egress](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/put_in_egress.png) |
-`put_in` | ![put_in](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/put_in.png) |
-`pylon` | ![pylon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/pylon.png) |
-`quarry` | ![quarry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/quarry.png) |
-`quay` | ![quay](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/quay.png) | if available, with `mooring` property.
-`range` | ![range](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/range.png) | e.g: military training zones where soldiers practice with their weapons
-`ranger_station` | ![ranger_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ranger_station.png) |
-`rapid` | ![rapid](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rapid.png) |
-`recreation_ground` | ![recreation_ground](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/recreation_ground.png) |
-`recreation_track` | ![recreation_track](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/recreation_track.png) |
-`recycling` | ![recycling](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/recycling.png) |
-`refugee_camp` | ![refugee_camp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/refugee_camp.png) |
-`rehabilitation` | ![rehabilitation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rehabilitation.png) |
-`religion` | ![religion](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/religion.png) |
-`research` | ![research](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/research.png) |
-`residential_home` | ![residential_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/residential_home.png) |
-`resort` | ![resort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/resort.png) |
-`rest_area` | ![rest_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rest_area.png) |
-`restaurant` | ![restaurant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/restaurant.png) |
-`rock` | ![rock](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/rock.png) |
-`roller_coaster` | ![roller_coaster](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/roller_coaster.png) |
-`saddle` | ![saddle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/saddle.png) |
-`sanitary_dump_station` | ![sanitary_dump_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sanitary_dump_station.png) |
-`sawmill` | ![sawmill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sawmill.png) |
-`school` | ![school](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/school.png) |
-`scuba_diving` | ![scuba_diving](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/scuba_diving.png) |
-`service_area` | ![service_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/service_area.png) |
-`shelter` | ![shelter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shelter.png) |
-`ship_chandler` | ![ship_chandler](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ship_chandler.png) |
-`shipyard` | ![shipyard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shipyard.png) |
-`shoemaker` | ![shoemaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shoemaker.png) |
-`shoes` | ![shoes](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shoes.png) |
-`shop` | ![shop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shop.png) | A shop or store which didn't match a more specific kind.
-`shower` | ![shower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/shower.png) |
-`sinkhole` | ![sinkhole](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sinkhole.png) |
-`ski_rental` | ![ski_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ski_rental.png) |
-`ski_school` | ![ski_school](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ski_school.png) |
-`ski` | ![ski](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/ski.png) |
-`slaughterhouse` | ![slaughterhouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/slaughterhouse.png) |
-`slipway` | ![slipway](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/slipway.png) |
-`snow_cannon` | ![snow_cannon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/snow_cannon.png) |
-`snowmobile` | ![snowmobile](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/snowmobile.png) |
-`social_facility` | ![social_facility](img/sprite/bubble-wrap-style/2x/social_facility.png) | with `kind_detail` property.
-`soup_kitchen` | ![soup_kitchen](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/soup_kitchen.png) |
-`speech_therapist` | ![speech_therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/speech_therapist.png) |
-`sports_centre` | ![sports_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sports_centre.png) |
-`sports` | ![sports](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/sports.png) |
-`spring` | ![spring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/spring.png) |
-`stadium` | ![stadium](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stadium.png) |
-`station` | ![station](https://github.com/tilezen/vector-datasource/issues/532)._
-`stationery` | ![stationery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stationery.png) |
-`stone` | ![stone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stone.png) |
-`stonemason` | ![stonemason](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/stonemason.png) |
-`street_lamp` | ![street_lamp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/street_lamp.png) |
-`studio` | ![studio](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/studio.png) | A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
-`substation` | ![substation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/substation.png) |
-`subway_entrance` | ![subway_entrance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/subway_entrance.png) |
-`summer_camp` | ![summer_camp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/summer_camp.png) |
-`summer_toboggan` | ![summer_toboggan](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/summer_toboggan.png) |
-`supermarket` | ![supermarket](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/supermarket.png) |
-`swimming_area` | ![swimming_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/swimming_area.png) |
-`tailor` | ![tailor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tailor.png) |
-`tax_advisor` | ![tax_advisor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tax_advisor.png) |
-`taxi` | ![taxi](img/sprite/bubble-wrap-style/2x/taxi.png) | for taxi stands.
-`telecommunication` | ![telecommunication](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/telecommunication.png) |
-`telephone` | ![telephone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/telephone.png) |
-`telescope` | ![telescope](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/telescope.png) |
-`theatre` | ![theatre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/theatre.png) |
-`theme_park` | ![theme_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/theme_park.png) |
-`therapist` | ![therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/therapist.png) |
-`tobacco` | ![tobacco](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tobacco.png) |
-`toilets` | ![toilets](img/sprite/bubble-wrap-style/2x/toilets.png) | with `kind_detail` property.
-`toll_booth` | ![toll_booth](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/toll_booth.png) |
-`townhall` | ![townhall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/townhall.png) |
-`toys` | ![toys](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/toys.png) |
-`trade` | ![trade](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/trade.png) |
-`traffic_signals` | ![traffic_signals](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/traffic_signals.png) |
-`trail_riding_station` | ![trail_riding_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/trail_riding_station.png) |
-`trailhead` | ![trailhead](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/trailhead.png) |
-`tram_stop` | ![tram_stop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tram_stop.png) |
-`travel_agency` | ![travel_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/travel_agency.png) |
-`travel_agent` | ![travel_agent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/travel_agent.png) |
-`tree` | ![tree](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tree.png) |
-`turning_circle` | ![turning_circle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/turning_circle.png) |
-`turning_loop` | ![turning_loop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/turning_loop.png) |
-`tyres` | ![tyres](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/tyres.png) | A shop selling car tyres or tires.
-`university` | ![university](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/university.png) |
-`variety_store` | ![variety_store](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/variety_store.png) |
-`veterinary` | ![veterinary](img/sprite/bubble-wrap-style/2x/veterinary.png) | with `kind_detail` property.
-`viewpoint` | ![viewpoint](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/viewpoint.png) |
-`volcano` | ![volcano](img/sprite/bubble-wrap-style/2x/volcano.png) | The peak of a volcano. See above for properties available on peaks and volcanos.
-`walking_junction` | ![walking_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/walking_junction.png) | Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
-`waste_basket` | ![waste_basket](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waste_basket.png) |
-`waste_disposal` | ![waste_disposal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waste_disposal.png) |
-`wastewater_plant` | ![wastewater_plant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wastewater_plant.png) |
-`water_park` | ![water_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_park.png) |
-`water_point` | ![water_point](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_point.png) |
-`water_slide` | ![water_slide](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_slide.png) |
-`water_tower` | ![water_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_tower.png) |
-`water_well` | ![water_well](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_well.png) | A location where water can be extracted from the ground. With `kind_detail` property.
-`water_works` | ![water_works](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/water_works.png) |
-`waterfall` | ![waterfall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waterfall.png) |
-`watering_place` | ![watering_place](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/watering_place.png) |
-`watermill` | ![watermill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/watermill.png) | A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
-`waterway_fuel` | ![waterway_fuel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/waterway_fuel.png) |
-`wayside_cross` | ![wayside_cross](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wayside_cross.png) |
-`wetland` | ![wetland](img/sprite/bubble-wrap-style/2x/wetland.png) | with `kind_detail` property.
-`wharf` | ![wharf](img/sprite/bubble-wrap-style/2x/wharf.png) | with mooring property.
-`wilderness_hut` | ![wilderness_hut](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wilderness_hut.png) |
-`wildlife_park` | ![wildlife_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wildlife_park.png) |
-`windmill` | ![windmill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/windmill.png) |
-`wine` | ![wine](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wine.png) |
-`winery` | ![winery](https://github.com/tilezen/vector-datasource/issues/532)._
-`winter_sports` | ![winter_sports](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/winter_sports.png) |
-`wood` | ![wood](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/wood.png) |
-`works` | ![works](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/works.png) |
-`workshop` | ![workshop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/workshop.png) |
-`zoo` | ![zoo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/2x/zoo.png) | bar
-
+kind | icon | wikidata id | definition
+:--- | :---: | :--------- | :---------
+`accountant` | ![accountant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/accountant.png) | Q326653 | An office responsible for preparing finances, billing, and payroll-type services.
+`adit` | ![adit](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/adit.png) | Q58917 | A man-made, horizontal entrance shaft to an underground mine.
+`administrative` | ![administrative](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/administrative.png) | Q304157 | An office for government agencies and other support staff. It's better to use the government category instead.
+`adult_gaming_centre` | ![adult_gaming_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/adult_gaming_centre.png) | Q47521258 | A place of leisure for adults with gaming machines, often with monetary payouts.
+`advertising_agency` | ![advertising_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/advertising_agency.png) | Q216931 | An office that creates advertisements and/or placing them in third-party media publications.
+`aerodrome` | ![aerodrome](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/aerodrome.png) | Q62447 | An aeroway landuse area containing all runways, taxiways, passenger terminals, and other facilities for aircraft flight operations, for civilian and commercial airport use. With `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
+`aeroway_gate` | ![aeroway_gate](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/aeroway_gate.png) |  | An access door at an airport terminal used to board and disembark flights.
+`airfield` | ![airfield](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/airfield.png) |  | A military airport.
+`airport` | ![airport](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/airport.png) | Q1248784 | An aeroway landuse area containing all runways, taxiways, passenger terminals, and other facilities for aircraft flight operations, for civilian and commercial use.
+`alcohol` | ![alcohol](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/alcohol.png) | Q156 | A shop selling and sometimes producing beer, liquor, and other beverages.
+`alpine_hut` | ![alpine_hut](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/alpine_hut.png) | Q182676 | A tourist building located in the mountains, often offering lodging and refreshment.
+`ambulatory_care` | ![ambulatory_care](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ambulatory_care.png) |  | A social facility that acts as a hub for outpatient care and administrative office for home nurses or streetworkers.
+`amusement_ride` | ![amusement_ride](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/amusement_ride.png) | Q64514817 | An attraction or other structure at a fair, theme park, or carnival that people can ride.
+`animal` | ![animal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/animal.png) | Q729 | An attraction featuring animals at zoos and other tourist spots.
+`aquarium` | ![aquarium](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/aquarium.png) | Q45782 | A tourism attraction featuring fish or other water-dwelling species.
+`archaeological_site` | ![archaeological_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/archaeological_site.png) | Q839954 | A historic place preserving ancient man-made buildings and artifacts, sometimes with an excavation.
+`architect` | ![architect](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/architect.png) | Q42973 | An office that plans and designs buildings, and oversees their construction.
+`art` | ![art](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/art.png) | Q735 | A shop selling artwork that is appreciated for its beauty or emotional power.
+`arts_centre` | ![arts_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/arts_centre.png) |  | An amenity where arts are performed or exhibited.
+`artwork` | ![artwork](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/artwork.png) | Q838948 | A tourism spot with art installations like statues or paintings.
+`association` | ![association](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/association.png) | Q2864132 | An office for a group of people organized around a common purpose.
+`atm` | ![atm](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/atm.png) | Q299037 | An amenity that provides access to financial transactions like a cash machine
+`attraction` | ![attraction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/attraction.png) | Q744128 | A tourism feature, object, or area that attracts people.
+`atv` | ![atv](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/atv.png) |  | A shop selling all terrain vehicles.
+`aviary` | ![aviary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/aviary.png) | Q1363025 | A large enclosure that confines birds but allows human access, commonly at a zoo.
+`baby_hatch` | ![baby_hatch](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/baby_hatch.png) |  | An amenity where parents can leave their baby anonymously in a safe place (or “safe haven”) for foster care.
+`bakery` | ![bakery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bakery.png) | Q274393 | A shop selling baked goods, often made at that location.
+`bank` | ![bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bank.png) | Q22687 | An amenity otherwise known as a financial institution.
+`bar` | ![bar](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bar.png) | Q187456 | An amenity serving alcoholic beverages for consumption on the premises, sometimes also selling food.
+`battlefield` | ![battlefield](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/battlefield.png) | Q4895508 | A historic location of a battle, often managed as a local or national park.
+`bbq` | ![bbq](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bbq.png) |  | A food service amenity selling bbq meat, either sit down or take out.
+`beach` | ![beach](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/beach.png) | Q40080 | A natural area at the edge of the sea, lake or other body of water offering a sandy or stony surface for recreation. With `kind_detail` property.
+`beach_resort` | ![beach_resort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/beach_resort.png) | Q1021711 | A leisure resort community or hotel located on the coast.
+`beacon` | ![beacon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/beacon.png) | Q17484395 | A man-made structure built to send signals that are visible from long distance, on land or water.
+`beauty` | ![beauty](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/beauty.png) | Q7242 | A shop focusing on cosmetic treatments for aesthetic value.
+`bed_and_breakfast` | ![bed_and_breakfast](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bed_and_breakfast.png) | Q367914 | A tourism establishment for lodging that includes breakfast, often in a residential area.
+`bench` | ![bench](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bench.png) | Q622346 | An amenity used to sit down and rest, often able to accommodate multiple people, sometimes with a nice view.
+`bicycle` | ![bicycle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bicycle.png) | Q11442 | A shop selling bicycles and other pedal-driven two-wheel vehicles, sometimes with a repair service.
+`bicycle_junction` | ![bicycle_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bicycle_junction.png) |  | A place where two bike paths intersect along an international, national, regional, or local trail network. Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
+`bicycle_parking` | ![bicycle_parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bicycle_parking.png) | Q16243822 | A parking amenity for bicycles, sometimes named.
+`bicycle_rental` | ![bicycle_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bicycle_rental.png) | Q10611118 | An amenity in a shop or at a kiosk for the rental of, pick up, or drop off a bicycle.
+`bicycle_rental_station` | ![bicycle_rental_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bicycle_rental_station.png) |  | An amenity on the street for free or low cost rental of, pick up, or drop off a bicycle, part of a public bike scheme. Often requires a membership or day-pass.
+`bicycle_repair_station` | ![bicycle_repair_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bicycle_repair_station.png) |  | An amenity or kiosk with tools necessary to perform basic bike repairs and maintenance, often along bike paths or roads.
+`biergarten` | ![biergarten](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/biergarten.png) | Q857909 | An outdoor amenity in which beer, other drinks, and local food are served.
+`block` | ![block](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/block.png) | Q6536648 | A large barrier used to control vehicular traffic, often an immobile block of stone or concrete that was placed by heavy machinery.
+`blood_bank` | ![blood_bank](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/blood_bank.png) |  | A health care facility for blood donation or storage.
+`boat_lift` | ![boat_lift](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/boat_lift.png) |  | A waterway adjacent structure for lowering or raising a boat out of the water.
+`boat_rental` | ![boat_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/boat_rental.png) | Q17020200 | A shop or kiosk, usually attended, where you can pick up and drop off rental watercraft, similar to a lock.
+`boat_storage` | ![boat_storage](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/boat_storage.png) |  | An amenity to store watercraft, often on land.
+`boatyard` | ![boatyard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/boatyard.png) |  | A waterway adjacent area for building, fixing, and storing boats.
+`bollard` | ![bollard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bollard.png) | Q1148389 | A barrier used to control vehicular traffic, often a short vertical post made out of metal or concrete.
+`bookmaker` | ![bookmaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bookmaker.png) | Q664702 | A shop or person that takes bets on sporting events.
+`books` | ![books](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/books.png) | Q571 | A shop selling or dealing in written materials and sometimes images.
+`border_control` | ![border_control](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/border_control.png) | Q218719 | A barrier or checkpoint that controls movement of people and objects at borders.
+`brewery` | ![brewery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/brewery.png) | Q131734 | A craft place that makes and sells beer.
+`bunker` | ![bunker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bunker.png) |  | A military building that is reinforced and sometimes underground. With `kind_detail` property.
+`bureau_de_change` | ![bureau_de_change](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bureau_de_change.png) | Q2002539 | An amenity where people can exchange one currency for another.
+`bus_station` | ![bus_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bus_station.png) | Q494829 | An amenity, larger than a bus stop, where city or intercity buses stop to pick up and drop off passengers.
+`bus_stop` | ![bus_stop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/bus_stop.png) | Q953806 | A highway pole, shelter, or other designated place where buses stop for passengers that isn't a fully developed platform.
+`butcher` | ![butcher](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/butcher.png) | Q329737 | A shop selling poultry, meat, and sometimes fish.
+`cafe` | ![cafe](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cafe.png) | Q30022 | An amenity serving coffee, tea, and light cuisine.
+`camera` | ![camera](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/camera.png) | Q15328 | A shop selling cameras and other optical devices used for recording or transmitting photographic images or videos.
+`camp_site` | ![camp_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/camp_site.png) | Q832778 | A tourist site used for overnight stay in the outdoors, often developed and sometimes with a sanitary dump station.
+`car` | ![car](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/car.png) | Q786803 | A shop selling, buying, and trading motorized passenger vehicles, aka an automotive car dealership.
+`car_parts` | ![car_parts](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/car_parts.png) |  | A shop selling car parts.
+`car_rental` | ![car_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/car_rental.png) | Q291240 | An amenity or business that rents automobiles for short periods of time, often in a building and lot and near an airport.
+`car_repair` | ![car_repair](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/car_repair.png) | Q16846061 | A shop that conducts maintenance on motor vehicles.
+`car_sharing` | ![car_sharing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/car_sharing.png) | Q847201 | An amenity specializing in car rental, usually on the street, sometimes with a name.
+`car_wash` | ![car_wash](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/car_wash.png) | Q1139861 | An amenity for cleaning the exterior and sometimes the interior of a motor vehicle.
+`caravan_site` | ![caravan_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/caravan_site.png) | Q5643618 | A tourism site for parking for an overnight stay in a motorhome, RV, or caravan, often with a sanitary dump station.
+`carousel` | ![carousel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/carousel.png) | Q208322 | An attraction or other amusement that rotates riders on a circular platform, sometimes with seats that move up and down.
+`carpenter` | ![carpenter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/carpenter.png) | Q203605 | A craftsperson with a skilled trade related to wood construction and repair.
+`casino` | ![casino](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/casino.png) | Q133215 | An amenity which houses and accommodates certain types of gambling activities.
+`cattle_grid` | ![cattle_grid](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cattle_grid.png) |  | A barrier to prevent cattle and other animals crossing a road, usually connecting with a fence.
+`cave_entrance` | ![cave_entrance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cave_entrance.png) |  | A natural amenity where one enters an underground cave.
+`cemetery` | ![cemetery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cemetery.png) | Q39614 | A landuse area where people are buried but not next to a place of worship, though often for certain religious denominations indicated with a kind_detail and denomination properties.
+`chalet` | ![chalet](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/chalet.png) | Q136689 | A tourist building or house, common to the Alps in Europe, but also found worldwide.
+`charging_station` | ![charging_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/charging_station.png) | Q2140665 | An amenity infrastructure that supplies electric energy for the recharging of electric vehicles including cars, trucks, scooters, and bicycles. May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false.
+`charity` | ![charity](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/charity.png) | Q445832 | A shop selling items, often second-hand clothes, in order to raise money to fundraise for a charitable foundation or organization.
+`chemist` | ![chemist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/chemist.png) | Q13107184 | A shop selling household chemicals including soaps, toothpaste, and cosmetics.
+`childcare` | ![childcare](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/childcare.png) | Q1455871 | An amenity providing day-care, babysitting, or otherwise looking after children.
+`chiropractor` | ![chiropractor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/chiropractor.png) |  | A healthcare office providing diagnosis and treatment of misaligned joints.
+`cinema` | ![cinema](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cinema.png) | Q567053 | An amenity that shows movies and films, aka movie theater, cineplex or multiplex.
+`clinic` | ![clinic](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/clinic.png) | Q1774898 | An amenity for outpatient health care. With kind_detail property.
+`closed` | ![closed](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/closed.png) |  | A recently closed place. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
+`clothes` | ![clothes](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/clothes.png) | Q2090555 | A shop selling clothes and other body coverings.
+`club` | ![club](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/club.png) | Q182949 | A place of leisure where food and drinks are often served, often with restricted access.
+`coffee` | ![coffee](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/coffee.png) | Q8486 | A shop specializing in brewed beverages prepared from roasted coffee beans, often with sit down seating and sometimes selling food.
+`college` | ![college](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/college.png) | Q189004 | An amenity for higher education and learning, stand alone or part of a university.
+`common` | ![common](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/common.png) | Q9828451 | A leisure or protected open area used by people to congregate.
+`communications_tower` | ![communications_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/communications_tower.png) | Q1068623 | A man-made structure that is tall and supports large radio and TV broadcast antennas.
+`community_centre` | ![community_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/community_centre.png) | Q77115 | An amenity where members of a community gather for group activities, social support, and public information.
+`company` | ![company](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/company.png) | Q783794 | An office of a private company that doesn't match a more specific category.
+`computer` | ![computer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/computer.png) | Q43182520 | A shop selling computers, computer related equipment, and other electronic devices.
+`confectionery` | ![confectionery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/confectionery.png) | Q5159627 | A craft that focuses on creating items of sweet food.
+`consulting` | ![consulting](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/consulting.png) | Q15978655 | An office for professionals who provides advice in their specific field of expertise.
+`container_terminal` | ![container_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/container_terminal.png) |  | A landuse area where containers are stored and loaded onto or off ships, often with cranes.
+`convenience` | ![convenience](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/convenience.png) | Q7361709 | A shop selling convenience items including food, beverage, and other small household items.
+`copyshop` | ![copyshop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/copyshop.png) | Q1131628 | A shop that offers photocopying, printing, or design services.
+`cosmetics` | ![cosmetics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cosmetics.png) | Q47508166 | A shop selling products to enhance the body's appearance.
+`courthouse` | ![courthouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/courthouse.png) | Q1137809 | A building where legal cases are adjudicated by judges and lawyers.
+`craft` | ![craft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/craft.png) | Q2207288 | A fallback for pastime or profession that requires particular skills and knowledge of skilled work, when no other category applies.
+`crane` | ![crane](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/crane.png) |  | A man-made structure that is permanent built to move items from one place to another, usually outdoors at a dock. With kind_detail property.
+`cross` | ![cross](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cross.png) | Q361665 | A man-made navigational aid marking the summit of a mountain peak that does not have religious context.
+`customs` | ![customs](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/customs.png) | Q182290 | A border station responsible for collecting customs duties and for controlling the flow of goods.
+`cycle_barrier` | ![cycle_barrier](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/cycle_barrier.png) |  | A barrier at the entrance to a bicycle path designed to discourage motor vehicle access by cars or motorcycles.
+`dam` | ![dam](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dam.png) | Q12323 | A waterway barrier that holds back and raises the water level.
+`danger_area` | ![danger_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/danger_area.png) |  | A military training zone like a firing range that uses live amunition.
+`defibrillator` | ![defibrillator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/defibrillator.png) |  | An emergency first-aid device that can restart the heart during cardiac arrest.
+`deli` | ![deli](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/deli.png) | Q406177 | A shop selling cold cuts of meats, sandwiches, and other foods.
+`dentist` | ![dentist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dentist.png) | Q27349 | A healthcare amenity specializing in teeth and gums. With kind_detail property.
+`department_store` | ![department_store](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/department_store.png) | Q216107 | A large retail shop offering a wide range of consumer goods.
+`dispensary` | ![dispensary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dispensary.png) |  | A shop selling cannabis and related products that is legally permitted.
+`dive_centre` | ![dive_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dive_centre.png) | Q3664857 | A recreation amenity for diver training, equipment, and dive outings.
+`doctors` | ![doctors](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/doctors.png) | Q1233862 | An amenity offering in-person checkups and other medical services. With kind_detail property.
+`dog_park` | ![dog_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dog_park.png) | Q38516 | A leisure area for dog-owners to exercise their dogs, typically a fenced outdoor space.
+`doityourself` | ![doityourself](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/doityourself.png) |  | A shop selling home improvement items that is larger than a hardware store and has a wider range of products.
+`dressmaker` | ![dressmaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dressmaker.png) | Q2034021 | A craftsperson making custom clothing for men and women.
+`drinking_water` | ![drinking_water](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/drinking_water.png) | Q7892 | An amenity offering safe potable water for household consumption.
+`dry_cleaning` | ![dry_cleaning](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dry_cleaning.png) | Q878156 | A shop that cleans clothing and fabrics.
+`dune` | ![dune](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/dune.png) | Q25391 | A natural landform consisting of a hill of sand.
+`educational_institution` | ![educational_institution](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/educational_institution.png) | Q2385804 | An office or institution that provides educational instruction that isn't a primary school, college, or university.
+`egress` | ![egress](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/egress.png) | Q5348260 | A whitewater recreation location for pulling your boat out of the water.
+`electrician` | ![electrician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/electrician.png) | Q165029 | A craftsperson specializing in wiring of buildings or electrical equipment.
+`electronics` | ![electronics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/electronics.png) | Q43156817 | A shop selling TVs, computers, and other electronics.
+`elevator` | ![elevator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/elevator.png) |  | An pedestrian enclosure for vertical travel from one elevation to another, sometimes providing access into a public transit station.
+`embassy` | ![embassy](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/embassy.png) | Q213283 | An diplomatic amenity that eases relations between nations and provides services for traveling citizens.
+`emergency_phone` | ![emergency_phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/emergency_phone.png) | Q1613929 | An amenity with a telephone to call for emergency service help, often along a highway, beach, or university campus.
+`employment_agency` | ![employment_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/employment_agency.png) | Q261362 | An office that helps with job placement.
+`enclosure` | ![enclosure](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/enclosure.png) | Q792164 | A fenced off area in a zoo for animals to roam.
+`estate_agent` | ![estate_agent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/estate_agent.png) | Q16148831 | An office assisting with the selling or purchasing of property and other real estate.
+`farm` | ![farm](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/farm.png) | Q131596 | An area of land used for farming or other agriculture, including buildings.
+`fashion` | ![fashion](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fashion.png) | Q12684 | A shop selling popular styles of clothing, jewelry, and other accessories.
+`fast_food` | ![fast_food](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fast_food.png) | Q81799 | An amenity selling hamburgers and other quick to make foods, often with a drive thru for ordering and pickup.
+`ferry_terminal` | ![ferry_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ferry_terminal.png) | Q66724450 | An amenity where passengers can purchase tickets for and board a ferry, including the building, surrounding plaza and piers.
+`field_hospital` | ![field_hospital](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/field_hospital.png) |  | A health facility set up near a combat zone as a temporary hospital to care for the wounded. With kind_detail property.
+`financial` | ![financial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/financial.png) | Q43015 | An office offering investment advice and other financial services.
+`fire_hydrant` | ![fire_hydrant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fire_hydrant.png) |  | An emergency water tap along the street that provides fire fighters water from local water pipe network.
+`fire_station` | ![fire_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fire_station.png) | Q1195942 | An amenity housing fire trucks, often with living quarters for firefighters.
+`firepit` | ![firepit](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/firepit.png) | Q187317 | A leisure area used to contain fires, often during social gatherings or events.
+`fishing` | ![fishing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fishing.png) | Q47516535 | A shop selling fishing poles, flies, bait, boats, and other fishing supplies.
+`fishing_area` | ![fishing_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fishing_area.png) | Q55468590 | A leisure area for catching fish along a waterway.
+`fishmonger` | ![fishmonger](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fishmonger.png) | Q550594 | A shop selling raw fish and other seafood.
+`fitness` | ![fitness](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fitness.png) | Q523402 | An amenity like a gym, exercise room, or other fitness area.
+`fitness_station` | ![fitness_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fitness_station.png) |  | A leisure area, often outside that contains a variety of exercise equipment.
+`florist` | ![florist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/florist.png) | Q637125 | A shop selling cut flowers and other decorative plants.
+`ford` | ![ford](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ford.png) |  | A short section of road that passes thru a shallow waterway without a bridge.
+`forest` | ![forest](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/forest.png) | Q4421 | A protected landuse where trees cover a large area, often designated and named as a forest and managed by a group (like the US National Forest Service).
+`fort` | ![fort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fort.png) | Q57821 | A historical building typically designed for defense in warfare, sometimes found on military bases.
+`foundation` | ![foundation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/foundation.png) | Q227744 | An office for non-governmental organizations that supports other social welfare organizations, often with an endowment.
+`fuel` | ![fuel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/fuel.png) | Q205495 | A amenity selling gas or diesel for automotive use, sometimes the gas station includes a small shop selling fast food and other convenience items, or offers car repairs.
+`funeral_directors` | ![funeral_directors](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/funeral_directors.png) | Q316490 | An amenity offering or selling funeral rite services.
+`furniture` | ![furniture](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/furniture.png) | Q47516358 | A shop selling tables, chairs, sofas and other household furniture.
+`gallery` | ![gallery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/gallery.png) | Q4039221 | A tourism shop displaying artwork, often paintings or sculptures for sale.
+`gambling` | ![gambling](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/gambling.png) | Q11416 | An amenity where one can wager money on a game or sporting event.
+`garden` | ![garden](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/garden.png) | Q1107656 | A leisure area for the display, cultivation, and enjoyment of plants (but not allotments in a community garden).
+`garden_centre` | ![garden_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/garden_centre.png) | Q260569 | A shop selling plants and related products for the home garden
+`gardener` | ![gardener](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/gardener.png) | Q758780 | A craftsperson who tends to plants in gardens, open spaces, or offices.
+`gas_canister` | ![gas_canister](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/gas_canister.png) | Q774332 | A shop selling cylindrical containers for storing pressurized gas used for fuel or heat, sometimes offering refills.
+`gate` | ![gate](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/gate.png) | Q53060 | A barrier that swings open to allow access thru a fence, wall, or other structure. With kind_detail property.
+`generator` | ![generator](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/generator.png) | Q227907 | A power source that derives energy from wind, solar, hydro, oil, or another source. With `kind_detail` property.
+`geyser` | ![geyser](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/geyser.png) | Q83471 | A natural hot spring that occasionally ejects hot water and steam.
+`gift` | ![gift](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/gift.png) | Q5560006 | A shop selling arts, crafts, and souvenirs appropriate for small gifts.
+`golf_course` | ![golf_course](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/golf_course.png) | Q1048525 | A leisure area containing a series of holes, greens, and other outdoor space designed for the game of golf.
+`golf` | ![golf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/golf.png) |  | A shop selling equipment for the game of golf.
+`government` | ![government](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/government.png) | Q16831714 | An office offering public services and administrative functions for government officials and staff.
+`grave_yard` | ![grave_yard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/grave_yard.png) | Q39614 | An amenity where people or animals are buried and is located next to a place of worship. With kind_detail and denomination properties.
+`greengrocer` | ![greengrocer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/greengrocer.png) | Q145658 | A shop specializing in fruits and vegetables, usually a smaller corner store.
+`grocery` | ![grocery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/grocery.png) | Q1295201 | A shop selling fruits, vegetables, packaged food and other household supplies, usually a medium sized store smaller than a `supermarket`.
+`guest_house` | ![guest_house](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/guest_house.png) | Q2460422 | A tourism amenity offering temporary overnight lodging.
+`hairdresser` | ![hairdresser](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hairdresser.png) | Q55187 | A shop that cuts and styles hair.
+`halt` | ![halt](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/halt.png) |  | A railway stop that is smaller than a station where trains only stop for passengers on request, often without a platform.
+`hanami` | ![hanami](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hanami.png) | Q210150 | A tourism site where one can enjoy the transient beauty of flowers, common in Japan and found worldwide.
+`handicraft` | ![handicraft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/handicraft.png) | Q877729 | A craft shop that makes utilitarian or decorative objects by hand, sometimes using simple tools.
+`harbourmaster` | ![harbourmaster](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/harbourmaster.png) |  | An amenity where the harbor master has their office.
+`hardware` | ![hardware](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hardware.png) | Q294550 | A shop selling tools, lumber, and other construction material.
+`hazard` | ![hazard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hazard.png) | Q1132455 | A whitewater location that poses a potential threat to life, health, property, or environment.
+`health_centre` | ![health_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/health_centre.png) | Q569500 | A clinic or other facility staffed by a group of general practitioners and nurses providing healthcare services.
+`healthcare_alternative` | ![healthcare_alternative](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/healthcare_alternative.png) |  | A health care office for someone practicing non-traditional medicine like acupuncture, aromatherapy, herbalism, or reiki.
+`healthcare_centre` | ![healthcare_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/healthcare_centre.png) |  | A health care building that is either a clinic or hospital, common in India and elsewhere.
+`healthcare_laboratory` | ![healthcare_laboratory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/healthcare_laboratory.png) | Q483242 | A facility that conducts medical analysis or diagnostics.
+`helipad` | ![helipad](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/helipad.png) | Q534159 | An aeroway with a dedicated landing area or platform for helicopters.
+`heliport` | ![heliport](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/heliport.png) | Q502074 | An airport designed for civilian or commercial helicopter use.
+`hifi` | ![hifi](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hifi.png) | Q26674 | A shop selling high-quality audio equipment to listen to recorded sounds.
+`historical` | ![historical](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/historical.png) |  | A former site of a venue. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
+`horse_riding` | ![horse_riding](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/horse_riding.png) |  | A leisure area for equestrians to ride horses, often with stables and an arena.
+`hospice` | ![hospice](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hospice.png) |  | An amenity that provides end-of-life care prioritizing comfort and quality of life.
+`hospital` | ![hospital](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hospital.png) | Q16917 | An amenity offering general and specialized healthcare, often in a large building. With kind_detail property.
+`hostel` | ![hostel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hostel.png) | Q654772 | A tourism amenity offering cheap, sociable accommodation, sometimes with meals and popular with students.
+`hot_spring` | ![hot_spring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hot_spring.png) | Q177380 | A natural spring produced by the emergence of geothermally heated groundwater.
+`hotel` | ![hotel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hotel.png) | Q27686 | A tourism amenity that provides overnight lodging, often in a large building and sometimes with breakfast service.
+`hunting` | ![hunting](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hunting.png) | Q36963 | A shop selling guns, ammo, camo and guide services to find, pursue, catch and kill wild animals.
+`hunting_stand` | ![hunting_stand](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hunting_stand.png) | Q1279822 | An amenity for hunters to gain an elevated view of their pray on an open or enclosed platform.
+`hvac` | ![hvac](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/hvac.png) | Q1798773 | A craftsperson specializing in heating, ventilation, and air conditioning.
+`ice_cream` | ![ice_cream](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ice_cream.png) | Q13233 | An amenity or shop selling frozen desserts and sweets._See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+`industrial` | ![industrial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/industrial.png) | Q404367 | Factories, warehouses, or other industrial building that specialize in the manufacturing or raw goods or materials.
+`information` | ![information](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/information.png) | Q11028 | A tourism information station or kiosk that provides basic orientation services.
+`insurance` | ![insurance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/insurance.png) | Q43183 | An office selling products that limit risk of property and other losses.
+`it` | ![it](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/it.png) | Q11661 | An office specializing in technologies and services that let people access and send information electronically
+`jewelry` | ![jewelry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/jewelry.png) | Q161439 | A shop selling necklaces, rings, and other forms of personal adornment.
+`karaoke` | ![karaoke](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/karaoke.png) | Q229345 | An entertainment amenity that allows singing to recorded music.
+`karaoke_box` | ![karaoke_box](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/karaoke_box.png) | Q910635 | An entertainment amenity with multiple rooms for singing and dancing, each with karaoke equipment, sometimes offering food or beverages.
+`kindergarten` | ![kindergarten](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/kindergarten.png) | Q126807 | An amenity offering preschool education for young children.
+`landmark` | ![landmark](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/landmark.png) | Q4895393 | A natural or artificial feature used for navigation, sometimes a tourist attraction of historic significance.
+`laundry` | ![laundry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/laundry.png) | Q852100 | A shop with pay-per-load washing machines.
+`lawyer` | ![lawyer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/lawyer.png) | Q40348 | An office for legal professionals who represent clients in matters before a judge or other magistrate.
+`level_crossing` | ![level_crossing](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/level_crossing.png) |  | A railroad crossing where tracks go across an automotive road.
+`library` | ![library](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/library.png) | Q7075 | An amenity that collects and loans out books and recordings, usually in a large public building.
+`life_ring` | ![life_ring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/life_ring.png) | Q587334 | An amenity designed to be thrown to a person in water, to prevent drowning.
+`lifeguard_tower` | ![lifeguard_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/lifeguard_tower.png) | Q6545380 | An emergency amenity at a beach or swimming pool staffed to prevent drownings and other dangers.
+`lift_gate` | ![lift_gate](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/lift_gate.png) | Q216762 | A barrier that swings upward to control vehicular access along a road.
+`lighthouse` | ![lighthouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/lighthouse.png) | Q39715 | A man-made structure that emits light to aid navigation at night, sometimes also a tourist attraction.
+`lock` | ![lock](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/lock.png) | Q366453 | A waterway feature that is man-made to raise and lower boats between different water elevations along a river or canal.
+`lottery` | ![lottery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/lottery.png) | Q189409 | A shop selling lottery tickets and other drawings of lots for prizes, related to gambling.
+`love_hotel` | ![love_hotel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/love_hotel.png) |  | An amenity similar to a hotel but adult themed allowing guests privacy for sexual activities.
+`mall` | ![mall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/mall.png) | Q437425 | A large building that contains many individual shops, stores, businesses, and food establishments.
+`marina` | ![marina](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/marina.png) | Q721207 | A leisure area offering slip rentals to park boats and other water vehicles, sometimes with a sanitary dump station or fuel station.
+`marketplace` | ![marketplace](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/marketplace.png) | Q330284 | An amenity for a public marketplace where food, goods, and services are traded daily or weekly, sometimes in a market hall. Sometimes called a farmers market or a night market.
+`mast` | ![mast](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/mast.png) | Q1068623 | A man-made post or other vertical structure built to hold antennas, of short to medium height sometimes with ground support wires.
+`maze` | ![maze](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/maze.png) | Q606777 | An attraction that is man-made out of rocks or plants formed into complex branching passageways.
+`memorial` | ![memorial](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/memorial.png) | Q5003624 | An object or area built to remind people of a historic person or event.
+`metal_construction` | ![metal_construction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/metal_construction.png) | Q1924856 | A craftsperson specializes in working with metals for construction.
+`midwife` | ![midwife](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/midwife.png) | Q185196 | A healthcare professional who helps with childbirth and provides related obstetrics services
+`military` | ![military](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/military.png) | Q8473 | A landuse area established to prepare and provision soldiers for war or other operations.
+`mineshaft` | ![mineshaft](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/mineshaft.png) | Q87003562 | A man-made vertical hole into the ground to extract minerals.
+`mini_roundabout` | ![mini_roundabout](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/mini_roundabout.png) |  | A highway road junction where the traffic goes around a painted circle and has right of way . With optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
+`miniature_golf` | ![miniature_golf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/miniature_golf.png) | Q754796 | A leisure area for playing a novelty version of golf focusing on putting the ball in and around amusements.
+`mobile_phone` | ![mobile_phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/mobile_phone.png) | Q17517 | A shop selling portable electronic devices that make telephone calls on a cellular network.
+`money_transfer` | ![money_transfer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/money_transfer.png) | Q21130860 | An amenity facilitating monetary transactions, often for guest workers sending remittances to their home country.
+`monument` | ![monument](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/monument.png) | Q4989906 | A historic structure commemorating a person or important event.
+`mooring` | ![mooring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/mooring.png) |  | A waterway feature for boats to tie up or otherwise park. With kind_detail property indicating commercial, cruise, customers, declaration, ferry, guest, pile, waiting, yacht, yachts.
+`motel` | ![motel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/motel.png) | Q216212 | A tourism amenity that provides lodging where all rooms face directly onto a car park, or low-cost motor hotel.
+`motorcycle` | ![motorcycle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/motorcycle.png) | Q47516542 | A shop selling two, three, and four wheeled motor vehicles.
+`motorcycle_parking` | ![motorcycle_parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/motorcycle_parking.png) |  | An amenity used to store motorcycles while not in use, often with a degree of security to prevent theft.
+`motorway_junction` | ![motorway_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/motorway_junction.png) |  | An exit from a highway, motorway, or other major road, often named or numbered.
+`museum` | ![museum](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/museum.png) | Q33506 | A tourism amenity or institution showcasing artifacts and other objects of scientific, artistic, cultural, historical, or other importance.
+`music` | ![music](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/music.png) | Q3868546 | A shop selling recordings of vocal, instrumental, and other sounds.
+`national_park` | ![national_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/national_park.png) | Q46169 | A park of national or international significance that conserves plants, animals, or natural wonders.
+`nature_reserve` | ![nature_reserve](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/nature_reserve.png) | Q179049 | A leisure area that provides protection for plants, animals, or natural wonders.
+`naval_base` | ![naval_base](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/naval_base.png) |  | A military base in and next to the water where warships are docked and provisioned.
+`newsagent` | ![newsagent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/newsagent.png) | Q1528905 | A shop or kiosk selling newspapers and magazines.
+`newspaper` | ![newspaper](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/newspaper.png) | Q11032 | An office that publishes news reports, general articles, features, editorials, and advertising.
+`ngo` | ![ngo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ngo.png) | Q79913 | An office for a non-governmental organization often focused on social welfare.
+`nightclub` | ![nightclub](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/nightclub.png) | Q622425 | An entertainment amenity which usually operates late into the night, sometimes sells food and beverages.
+`notary` | ![notary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/notary.png) | Q189010 | An office with licensed staff who witness signatures on legal documents.
+`nursing_home` | ![nursing_home](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/nursing_home.png) | Q837142 | A health care amenity focused on residential care, typically for elderly adults. With kind_detail property.
+`obelisk` | ![obelisk](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/obelisk.png) |  | A man-made structure that is tall, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
+`observatory` | ![observatory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/observatory.png) | Q62832 | A man-made structure used for observing terrestrial or celestial events.
+`occupational_therapist` | ![occupational_therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/occupational_therapist.png) |  | A health care office for doctors who help patients recover thru everyday activities.
+`office` | ![office](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/office.png) | Q12823105 | A generic office where people perform their job-related duties, when a more specific category is not available.
+`offshore_platform` | ![offshore_platform](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/offshore_platform.png) | Q689880 | A larger man-made offshore structure, often for oil drilling and related activities.
+`optician` | ![optician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/optician.png) | Q1996635 | A shop selling functional and designer eyeglasses and contact lenses.
+`optometrist` | ![optometrist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/optometrist.png) |  | A health care office for people with vision impairment or other eye issues, often selling glasses.
+`outdoor` | ![outdoor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/outdoor.png) | Q2041907 | A shop selling equipment to be used for camping, hiking, bicycling, and other outdoor activities.
+`paediatrics` | ![paediatrics](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/paediatrics.png) |  | A health care office for doctors specializing in medicine for children.
+`painter` | ![painter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/painter.png) | Q11629 | A craftsperson specializing in painting indoor or outdoor building spaces.
+`park` | ![park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/park.png) | Q22698 | A landuse, leisure, recreation, or other area often of outstanding natural beauty that is managed by a regional or local authority.
+`parking` | ![parking](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/parking.png) | Q267917 | An amenity for storing unattended cars, trucks, and other motor vehicles, usually a surface lot with multiple spaces.
+`parking_garage` | ![parking_garage](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/parking_garage.png) |  | An amenity for storing unattended cars, trucks, and other motor vehicles, usually a multi-story, underground, or rooftop lot.
+`peak` | ![peak](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/peak.png) | Q1039790 | A natural feature at the top of a mountain or hill, often with an elevation (in meters).
+`perfumery` | ![perfumery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/perfumery.png) | Q131746 | A shop selling perfumes and other pleasant scents.
+`pet` | ![pet](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/pet.png) | Q39201 | A shop selling dogs, cats, birds, and other animals and their food, toys, and other products.
+`petroleum_well` | ![petroleum_well](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/petroleum_well.png) | Q587682 | A man-made boring designed to bring petroleum oil to the ground's surface for collection and later processing into fuel.
+`petting_zoo` | ![petting_zoo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/petting_zoo.png) | Q459886 | A small zoo for children with friendly animals that can be touched.
+`pharmacy` | ![pharmacy](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/pharmacy.png) | Q614304 | An amenity selling medication and other drugs for health care, sometimes selling other household products or consultations. With kind_detail property.
+`phone` | ![phone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/phone.png) | Q11035 | An amenity with a telephone to call for emergency service help, often along a highway, beach, or university campus. Instead it's better to use the emergency_phone category.
+`photo` | ![photo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/photo.png) | Q125191 | A shop that prints photos and sells photography-related products, sometimes also selling cameras.
+`photographer` | ![photographer](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/photographer.png) | Q33231 | A craftsperson specializing in taking and editing photographs.
+`photographic_laboratory` | ![photographic_laboratory](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/photographic_laboratory.png) | Q172839 | A craft specializing in the processing of visible images and sometimes video.
+`physician` | ![physician](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/physician.png) | Q39631 | An office with professionals who practice medicine.
+`physiotherapist` | ![physiotherapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/physiotherapist.png) |  | A health care office for a physical therapists specializing in massage, exercise, and other treatments.
+`picnic_site` | ![picnic_site](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/picnic_site.png) | Q47520603 | A tourism area used for outdoor seating or leisure activity, often with benches, tables, or barbecue pits.
+`picnic_table` | ![picnic_table](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/picnic_table.png) | Q2466395 | An amenity for eating outdoor meals at a table with attached benches.
+`pitch` | ![pitch](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/pitch.png) | Q340394 | A leisure field used for sports, sometimes named. The `kind_detail` optionally describes the sport, common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
+`place_of_worship` | ![place_of_worship](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/place_of_worship.png) | Q1370598 | An amenity for worshipping in a building consecrated as a church, mosque, synagogue, temple, or other sacred space.
+`plant` | ![plant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/plant.png) | Q159719 | A power station generating electrical energy from coal, natural gas, solar, hydro, nuclear, or other sources.
+`plaque` | ![plaque](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/plaque.png) |  | A memorial plaque commemorating a person or event.
+`platform` | ![platform](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/platform.png) | Q224617 | A place to wait for public transportation with developed infrastructure, often along a railway, highway, or bus line.
+`playground` | ![playground](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/playground.png) | Q11875349 | A leisure area designed for children to play on swings, bars, climbing structures, or sandbox, sometimes named.
+`plumber` | ![plumber](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/plumber.png) | Q252924 | A craftsperson specialized in the installation and repair of water and sewage pipes.
+`podiatrist` | ![podiatrist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/podiatrist.png) |  | A health care office for a doctors specializing in feet.
+`police` | ![police](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/police.png) | Q35535 | An amenity housing a local police force empowered by the government to enforce the law, sometimes with a small jail.
+`political_party` | ![political_party](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/political_party.png) | Q7278 | An office of an organized group seeking to influence government policy and actions.
+`port_terminal` | ![port_terminal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/port_terminal.png) |  | A landuse area part of a port for containers or other bulk cargo.
+`post_box` | ![post_box](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/post_box.png) | Q49844 | An amenity for dropping off outbound mail, usually a bin on the public sidewalk, and collected daily or weekly for delivery by an organized postal system.
+`post_office` | ![post_office](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/post_office.png) | Q35054 | An amenity for sending and receiving letters, packages, and other mail, part of an organized postal system.
+`pottery` | ![pottery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/pottery.png) | Q11642 | A craftsperson making household objects and artwork out of clay.
+`power_pole` | ![power_pole](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/power_pole.png) | Q1144084 | A post used by public utilities to support overhead wires and related equipment.
+`power_tower` | ![power_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/power_tower.png) | Q7236649 | A man-made tower for carrying high voltage electricity lines, often constructed from steel latticework or solid pylons.
+`power_wind` | ![power_wind](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/power_wind.png) |  | A man-made structure built to turn wind into electricity and supply it to power grid, larger than a windmill.
+`prison` | ![prison](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/prison.png) | Q40357 | An amenity that physically confines people as punishment for breaking laws and usually deprives them of a range of personal freedoms.
+`protected_area` | ![protected_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/protected_area.png) | Q473972 | A protected landuse or landscape recognised natural, ecological or cultural value managed by a public agency (like US Bureau of Land Management), can be an overlay of a park or forest.
+`psychotherapist` | ![psychotherapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/psychotherapist.png) |  | A health care office for doctors who treat mental disorders and psychological issues.
+`pub` | ![pub](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/pub.png) | Q212198 | An amenity selling beer, similar to a bar, sometimes also selling food.
+`put_in` | ![put_in](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/put_in.png) |  | A whitewater recreation location for putting your boat into the water.
+`put_in_egress` | ![put_in_egress](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/put_in_egress.png) |  | A waterwater recreation location suitable both for putting your boat in the water and pulling it out.
+`pylon` | ![pylon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/pylon.png) |  | An aerialway pole that supports the cable on a ski lift or other aerial tram.
+`quarry` | ![quarry](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/quarry.png) | Q188040 | A landuse area where stone, rock, construction aggregate, or similar material is excavated from the ground.
+`quay` | ![quay](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/quay.png) |  | A man-made area for mooring a boat along the shore, sometimes named. If available, with `mooring` property.
+`range` | ![range](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/range.png) |  | A military training zone where soldiers practice with their weapons
+`ranger_station` | ![ranger_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ranger_station.png) | Q36728566 | An amenity building at a park where rangers interact with tourists and other park visitors, sometimes with public toilets and interpretive exhibits.
+`rapid` | ![rapid](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/rapid.png) | Q695793 | A whitewater section of a river where the water's velocity and turbulence due to a change in riverbed elevation.
+`recreation_ground` | ![recreation_ground](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/recreation_ground.png) | Q22698 | A landuse dedicated to recreation, typically open to the public and generally characterized by natural, historic, or landscape features.
+`recreation_track` | ![recreation_track](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/recreation_track.png) | Q1004435 | A leisure path used for hiking, walking, running, or other physical activity outdoors.
+`recycling` | ![recycling](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/recycling.png) | Q132580 | A bin, kiosk, or station amenity that accepts used materials for processing into new products to reduce waste.
+`rehabilitation` | ![rehabilitation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/rehabilitation.png) |  | A health care facility for medical rehabilitation, including drugs rehabilitation and psychiatric wards.
+`religion` | ![religion](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/religion.png) | Q9174 | An office associated with a place of worship for administrative staff.
+`research` | ![research](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/research.png) | Q42240 | An office focusing on the systematic study undertaken to increase knowledge.
+`resort` | ![resort](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/resort.png) | Q875157 | A tourism amenity with a hotel, pool, spa, bar, restaurant, and other vacationer delights, not along a beach.
+`rest_area` | ![rest_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/rest_area.png) | Q786014 | A highway amenity with bathroom toilets and picnic area, sometimes with vending machines.
+`restaurant` | ![restaurant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/restaurant.png) | Q11707 | An amenity with indoor seating that prepares and serves food for on-premise dining.
+`rock` | ![rock](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/rock.png) | Q280874 | A natural rock that is not freestanding but has a notable size, shape, or other characteristic.
+`roller_coaster` | ![roller_coaster](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/roller_coaster.png) | Q204832 | An attraction at an amusement or theme park that provides thrills on a fixed track with sharp turns and drops.
+`saddle` | ![saddle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/saddle.png) | Q10862618 | A natural feature that represents the lowest point along a ridge or between two mountain peaks.
+`sanitary_dump_station` | ![sanitary_dump_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/sanitary_dump_station.png) |  | An amenity for depositing human waste from a toilet holding tank, often at a campground or caravan site.
+`sawmill` | ![sawmill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/sawmill.png) | Q505213 | A craft building where logs are cut into timber, sometimes with a public yard selling construction lumber.
+`school` | ![school](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/school.png) | Q3914 | An educational amenity with classrooms for group instruction of students by teachers.
+`scuba_diving` | ![scuba_diving](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/scuba_diving.png) | Q47516552 | A shop selling gear used for underwater diving and related activities.
+`service_area` | ![service_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/service_area.png) | Q19929305 | A highway amenity with bathroom toilets, fuel station to fill up gas, and fast food restaurants
+`shelter` | ![shelter](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/shelter.png) | Q2800597 | An amenity providing temporary protection from harm, typically bad weather in a park or natural area.
+`ship_chandler` | ![ship_chandler](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ship_chandler.png) |  | A shop selling supplies and equipment for maintaining ships.
+`shipyard` | ![shipyard](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/shipyard.png) |  | An industrial landuse area for building ships.
+`shoemaker` | ![shoemaker](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/shoemaker.png) | Q6408486 | A craftsperson specializing in the making and sale of custom footwear.
+`shoes` | ![shoes](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/shoes.png) | Q22676 | A shop selling manufactured footwear.
+`shop` | ![shop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/shop.png) | Q736272 | A shop selling services or products, when there is not another more specific category.
+`shower` | ![shower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/shower.png) | Q7863 | An amenity for bathing under a spray of water, often at a beach or camp site.
+`sinkhole` | ![sinkhole](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/sinkhole.png) | Q188734 | A natural depression or hole in the ground caused by some form of collapse.
+`ski` | ![ski](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ski.png) | Q172226 | A shop selling supplies for winter sports like skiing, snowboarding, or snowshoeing.
+`ski_rental` | ![ski_rental](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ski_rental.png) | Q1406663 | A shop or other amenity that rents skis for the day or season, often associated with a ski resort.
+`ski_school` | ![ski_school](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/ski_school.png) | Q2292514 | An educational amenity offering ski instruction, typically at a ski resort.
+`slaughterhouse` | ![slaughterhouse](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/slaughterhouse.png) |  | An industrial facility for killing animals and cutting them into pieces of meat.
+`slipway` | ![slipway](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/slipway.png) | Q361945 | A leisure area on the shore where ships or boats can be moved to and from the water, sometimes called a boat ramp, boat landing, or boat launch.
+`snow_cannon` | ![snow_cannon](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/snow_cannon.png) | Q720493 | A man-made feature often found at a ski resort for blowing artificial snow onto a slope.
+`snowmobile` | ![snowmobile](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/snowmobile.png) |  | A shop selling snowmobiles.
+`social_facility` | ![social_facility](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/social_facility.png) |  | An amenity where people gather for social services like a drug clinic, workshop for the physically disabled, or homeless shelter. With kind_detail property.
+`speech_therapist` | ![speech_therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/speech_therapist.png) |  | A health care office for people with speach impairment or vocal issues.
+`sports` | ![sports](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/sports.png) |  | A shop selling clothing, balls, and other merchandise used for competitive physical activity.
+`sports_centre` | ![sports_centre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/sports_centre.png) | Q30313989 | A leisure area or fitness facility for active sports like football, baseball, and basketball, sometimes includes a gym, playground, or swimming pool.
+`spring` | ![spring](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/spring.png) | Q19304 | A natural feature where water flows from an aquifer to the ground's surface.
+`stadium` | ![stadium](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/stadium.png) | Q483110 | A leisure area or large building for outdoor sports, concerts, or other events, sometimes with a retractable roof.
+`station` | ![station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/station.png) |  | A railway station, also used for light rail and subway, where customers access the train. _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+`stationery` | ![stationery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/stationery.png) | Q875696 | A shop selling paper, pens, and other office and art supplies.
+`stone` | ![stone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/stone.png) | Q8063 | A natural rock that is freestanding and of large size or other notable characteristic.
+`stonemason` | ![stonemason](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/stonemason.png) | Q19794820 | A craftsperson who creates buildings, structures, and sculpture using stone from the earth.
+`street_lamp` | ![street_lamp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/street_lamp.png) |  | A highway adjacent pole with one or more lights that illuminates the street.
+`stop_area` | ![stop_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/stop_area.png) |  | A grouping of bus or rail stops and platforms at a transit station.
+`studio` | ![studio](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/studio.png) | Q746628 | An amenity where professional artists creates audio, cinema, photography, radio, TV, video, or other works. When known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
+`substation` | ![substation](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/substation.png) |  | A power substation that controls the flow of electricity in a power network with transformers, switchgear or compensators.
+`subway_entrance` | ![subway_entrance](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/subway_entrance.png) |  | A railway or subway entrance where people enter or exit a train station
+`summer_camp` | ![summer_camp](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/summer_camp.png) | Q876852 | A leisure program for children or teenagers conducted during the summer months, at a facility built solely for that purpose.
+`summer_toboggan` | ![summer_toboggan](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/summer_toboggan.png) | Q1477533 | An attraction found in alpine areas with a long slide to chute down on a wheeled toboggan, built by ski resorts to attract summer visitors.
+`supermarket` | ![supermarket](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/supermarket.png) | Q180846 | A shop selling groceries in a large 'big box' building, including fruits, vegetables, packaged foods, and other household products.
+`swimming_area` | ![swimming_area](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/swimming_area.png) | Q47524436 | A leisure area used to swim, typically outdoor and around a body of water.
+`tailor` | ![tailor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/tailor.png) | Q242468 | A craftsperson who makes, repairs, or alters clothing, typically men's clothing.
+`tax_advisor` | ![tax_advisor](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/tax_advisor.png) | Q688576 | An office with financial experts specially trained in tax law.
+`taxi` | ![taxi](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/taxi.png) | Q82650 | An amenity or stand offering vehicles for hire with a driver.
+`telecommunication` | ![telecommunication](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/telecommunication.png) | Q418 | An office for staff of a company specialized in the electronic transmission of information between locations.
+`telephone` | ![telephone](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/telephone.png) | Q11035 | A amenity for making phone calls, usually at a streetside stand or box.
+`telescope` | ![telescope](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/telescope.png) | Q4213 | A man-made structure built to observe remote celestial objects, often at an observatory.
+`theatre` | ![theatre](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/theatre.png) | Q11635 | An amenity focused on the collaborative form of performing and fine arts.
+`theme_park` | ![theme_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/theme_park.png) | Q194195 | A tourism amenity with rides and attractions.
+`therapist` | ![therapist](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/therapist.png) | Q179661 | A medical office focused on remediation of health problems, usually following a diagnosis.
+`tobacco` | ![tobacco](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/tobacco.png) | Q1566 | A shop selling cigarettes, cigars, and other tobacco products containing nicotine.
+`toilets` | ![toilets](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/toilets.png) | Q7857 | An amenity for public sanitation like a flush toilet or pit latrine. With kind_detail property.
+`toll_booth` | ![toll_booth](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/toll_booth.png) | Q7814355 | A barrier for collecting tolls or fees to access roads, sometimes staffed.
+`townhall` | ![townhall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/townhall.png) | Q7830117 | An amenity used for the administration of local government that also hosts public meetings.
+`toys` | ![toys](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/toys.png) | Q11422 | A shop selling amusements for children and toddlers.
+`trade` | ![trade](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/trade.png) | Q601401 | A speciality shop selling construction materials, craft and industrial supplies, often open to the general public.
+`traffic_signals` | ![traffic_signals](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/traffic_signals.png) |  | A highway fixture at a road intersection or pedestrian crossing to control traffic flow. Sometimes called traffic lights, traffic lamps, signal lights and stop lights.
+`trail_riding_station` | ![trail_riding_station](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/trail_riding_station.png) |  | A tourism amenity providing temporary accommodation for horses and their riders.
+`trailhead` | ![trailhead](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/trailhead.png) | Q7832815 | A pedestrian highway feature indicating where a trail begins, often with a signpost.
+`tram_stop` | ![tram_stop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/tram_stop.png) |  | A railway stop for trams where passengers board and alight, often without a platform.
+`travel_agency` | ![travel_agency](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/travel_agency.png) | Q217107 | A shop that provides tourism-related services to the public to reserve flights, hotels, and book events.
+`travel_agent` | ![travel_agent](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/travel_agent.png) | Q217107 | An office that provides tourism-related services to the public for booking flights, hotels, and events.
+`tree` | ![tree](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/tree.png) | Q10884 | A natural, perennial woody plant, usually with a single trunk or stem.
+`turning_circle` | ![turning_circle](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/turning_circle.png) |  | A highway "cul-de-sac" at the end of a road that is wide enough for vehicles to turn around.
+`turning_loop` | ![turning_loop](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/turning_loop.png) |  | A highway "cul-de-sac" at the end of a road that is wide enough for vehicles to turn around non-traversable island.
+`tyres` | ![tyres](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/tyres.png) | Q169545 | A shop selling automotive tires for cars and trucks.
+`university` | ![university](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/university.png) | Q3918 | An amenity for higher education and studies.
+`variety_store` | ![variety_store](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/variety_store.png) | Q2301114 | A shop selling a wide range of inexpensive household goods.
+`veterinary` | ![veterinary](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/veterinary.png) | Q170201 | An amenity offering animal welfare and medical services. With kind_detail property.
+`viewpoint` | ![viewpoint](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/viewpoint.png) | Q17000190 | A tourism attraction with an elevated or unique perspective, often offering a nice view.
+`volcano` | ![volcano](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/volcano.png) | Q8072 | A natural mountain with a vent or fissure that occasionally disperses lava, rock fragments, or toxic gases, with optional elevation (in meters).
+`walking_junction` | ![walking_junction](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/walking_junction.png) |  | A place where two walking paths intersect along an international, national, regional, or local trail network. Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
+`waste_basket` | ![waste_basket](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/waste_basket.png) | Q216530 | An amenity for depositing trash, usually in small bins along the street. Sometimes called a rubbish bin, litter bin, trash can, or garbage can.
+`waste_disposal` | ![waste_disposal](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/waste_disposal.png) | Q180388 | An amenity for collecting solid household or industrial trash, usually in medium and large waste bins behind buildings.
+`wastewater_plant` | ![wastewater_plant](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wastewater_plant.png) | Q1058719 | A man-made facility that collects sewage and other dirty water and cleans it for release back into the environment.
+`water_park` | ![water_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/water_park.png) | Q740326 | A leisure amenity with water slides, pools, and other play areas.
+`water_point` | ![water_point](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/water_point.png) |  | An amenity supplying larger amounts of drinking water for filling holding tanks of caravans, RVs and boats. Often found at camp sites, caravan sites, and marinas.
+`water_slide` | ![water_slide](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/water_slide.png) | Q1163166 | An attraction for sliding down an open or closed tub with running water, often at a water park.
+`water_tower` | ![water_tower](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/water_tower.png) | Q274153 | A man-man structure that supports an elevated water tank part of a local water pipe network.
+`water_well` | ![water_well](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/water_well.png) | Q43483 | A man-made excavation or pump to access groundwater, often for drinking water and sometimes powered. With `kind_detail` property.
+`water_works` | ![water_works](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/water_works.png) | Q7974580 | A man-made facility that cleans water for human consumption and distribution via local water pipe networks.
+`waterfall` | ![waterfall](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/waterfall.png) | Q34038 | A natural waterway feature that flows over an abrupt vertical drop, sometimes with a height (in meters).
+`watering_place` | ![watering_place](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/watering_place.png) | Q7974154 | An amenity where animals can drink water, either natural or man-made.
+`watermill` | ![watermill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/watermill.png) |  | A man-made structure harnessing water power to do mechanical work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
+`waterway_fuel` | ![waterway_fuel](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/waterway_fuel.png) |  | A waterway amenity selling fuel for boats.
+`wayside_cross` | ![wayside_cross](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wayside_cross.png) |  | A historic structure shaped like a cross with religious significance.
+`wetland` | ![wetland](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wetland.png) |  | A natural area of shallow standing water with plants and frequented by fish and birds. With kind_detail property.
+`wharf` | ![wharf](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wharf.png) |  | A man-made area for mooring a boat built out from the shore into the water, sometimes named. If available, with `mooring` property.
+`wilderness_hut` | ![wilderness_hut](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wilderness_hut.png) | Q17087359 | A tourist shelter or hut for temporary accommodation, typically in a natural setting or outside built-up areas.
+`wildlife_park` | ![wildlife_park](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wildlife_park.png) | Q642682 | A zoo with larger outdoor enclosures, often that allow animals to roam in a simulated natural environment that also allows visitors to drive-thru.
+`windmill` | ![windmill](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/windmill.png) | Q38720 | A man-made machine that converts the energy of wind into rotational energy.
+`wine` | ![wine](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wine.png) | Q282 | A shop selling alcoholic drinks typically made from grapes.
+`winery` | ![winery](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/winery.png) | Q156362 | A craft facility that turns grapes into wine, often with a public tasting room. _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+`winter_sports` | ![winter_sports](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/winter_sports.png) | Q204686 | A landuse area for snow and ice sports like skiing, skating, snowboarding, and snowshoeing.
+`wood` | ![wood](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/wood.png) | Q287 | A landuse area covered by trees, usually smaller than a forest.
+`works` | ![works](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/works.png) | Q420817 | A man-made industrial production plant or factory that produces manufactured goods.
+`zoo` | ![zoo](https://raw.githubusercontent.com/tangrams/cartography-docs/master/img/sprite/bubble-wrap-style/X2/zoo.png) | Q43501 | A tourist attraction with wild animals kept for study, conservation, educational and/or commercial exhibition.
 #### Beach `kind_detail` values:
 
 The value of the OpenStreetMap `surface` tag. Common values include `grass`, ` gravel`, ` pebbles`, ` pebblestone`, ` rocky`, and ` sand`.
