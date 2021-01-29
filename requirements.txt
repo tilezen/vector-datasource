@@ -6,7 +6,7 @@ edtf==2.6.0
 future==0.16.0
 gunicorn==19.9.0
 hiredis==0.2.0
-lxml==4.1.1
+lxml==4.6.2
 mapbox-vector-tile==1.2.0
 ModestMaps==1.4.7
 protobuf==3.4.0
@@ -24,7 +24,7 @@ StreetNames==0.1.5
 tqdm==4.31.1
 urllib3==1.25.11
 webcolors<=1.11 ## Last version to support py2
-Werkzeug==0.15.3
+Werkzeug<=0.16.1
 wsgiref==0.1.2
 git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
