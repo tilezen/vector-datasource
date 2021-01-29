@@ -307,6 +307,10 @@ DECLARE
   -- station node, way or relation passed as input.
   seed_relations bigint[];
 
+  -- the geometry of the passed in OSM object, used to limit the
+  -- station_and_stops query
+  origin_point geometry;
+
   -- IDs of nodes which are tagged as stations or stops and are
   -- members of the stop area relations. these will contain the
   -- original `station_node_id`, but probably many others as well.
@@ -422,6 +426,13 @@ BEGIN
           NOT cycle
     ) SELECT id FROM downward_search WHERE NOT cycle);
 
+  -- get the geometry for the passed-in OSM object. we'll use this to
+  -- limit the stations and stops collected in the next step
+  origin_point := COALESCE(
+    (SELECT way FROM planet_osm_point WHERE osm_id = station_point_osm_id),
+    (SELECT ST_PointOnSurface(way) FROM planet_osm_polygon WHERE osm_id = station_polygon_osm_id)
+  );
+
   -- collect all the interesting nodes - this includes the station node (if
   -- any) and any nodes which are members of found relations which have
   -- public transport tags indicating that they're stations or stops.
@@ -435,7 +446,8 @@ BEGIN
     ON n.id = p.osm_id
     WHERE
       (p.tags->'railway' IN ('station', 'stop', 'tram_stop') OR
-       p.tags->'public_transport' IN ('stop', 'stop_position', 'tram_stop'))
+       p.tags->'public_transport' IN ('stop', 'stop_position', 'tram_stop')) AND
+      ST_DWithin(p.way, origin_point, 1000)
     -- re-include the station node, if there was one.
     UNION
     SELECT station_point_osm_id AS id

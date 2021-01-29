@@ -441,11 +441,11 @@ class SQLExpression(ast.NodeVisitor):
 
         self.buf.write(" END)")
 
-    def visit_List(self, l):
+    def visit_List(self, the_list):
         if self.in_json:
             self.buf.write("('[")
             first = True
-            for elt in l.elts:
+            for elt in the_list.elts:
                 if first:
                     first = False
                 else:
@@ -456,7 +456,7 @@ class SQLExpression(ast.NodeVisitor):
         else:
             self.buf.write("ARRAY[")
             first = True
-            for elt in l.elts:
+            for elt in the_list.elts:
                 if first:
                     first = False
                 else:
