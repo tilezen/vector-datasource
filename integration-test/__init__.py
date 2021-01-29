@@ -277,8 +277,8 @@ def parse_layer_dict(yaml_path, output_fn, fn_name_fn):
     layer_parse_result = parse_layers(yaml_path, output_fn, fn_name_fn)
 
     layers = {}
-    for l in layer_parse_result.layer_data:
-        layers[l.layer] = l.fn
+    for layer_data in layer_parse_result.layer_data:
+        layers[layer_data.layer] = layer_data.fn
 
     return layers
 
