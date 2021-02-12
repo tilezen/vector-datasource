@@ -373,6 +373,7 @@ post_process:
         scree: barren
         shingle: barren
         stone: barren
+        fell: barren
 
         # desert
         bare_rock: desert

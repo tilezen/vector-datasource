@@ -34,14 +34,17 @@ class NaturalLanduseSortKeyTest(FixtureTest):
     def test_natural_park(self):
         self._check({'natural': 'park'}, 'natural_park', 32)
 
+    def test_fell(self):
+        self._check({'landuse': 'fell'}, 'fell', 35)
+
     def test_grass(self):
-        self._check({'landuse': 'grass'}, 'grass', 35)
+        self._check({'landuse': 'grass'}, 'grass', 36)
 
     def test_meadow(self):
-        self._check({'landuse': 'meadow'}, 'meadow', 36)
+        self._check({'landuse': 'meadow'}, 'meadow', 37)
 
     def test_scrub(self):
-        self._check({'natural': 'scrub'}, 'scrub', 37)
+        self._check({'natural': 'scrub'}, 'scrub', 38)
 
     def test_wetland(self):
         self._check({'natural': 'wetland'}, 'wetland', 220)

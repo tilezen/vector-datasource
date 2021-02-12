@@ -96,3 +96,13 @@ class LanduseTier(FixtureTest):
             9, 142, 196, 'pois',
             {'kind': 'forest', 'id': 34416231,
              'tier': 2, 'min_zoom': 8})
+
+    def test_fell(self):
+        z, x, y = (16, 35072, 18481)
+
+        self.load_fixtures(['https://www.openstreetmap.org/way/711062546'])
+
+        self.assert_has_feature(
+            z, x, y, 'landuse',
+            {'kind': 'fell', 'area': 'yes',
+             'name': 'Fulufjellet', 'wikidata': 'Q34852081'})
