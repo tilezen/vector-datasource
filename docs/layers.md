@@ -1517,7 +1517,7 @@ For `hgv_restriction` property indicates general truck heavy goods vehicle truck
 
 #### Road Transportation `hgv_time_restrictions` Values
 Time restriction is a semicolon-delimited array of date and time restrictions,
-where date and time of a restriction are delimited with a pipe `|` character. For example,
+where date and time of a restriction are delimited with a pipe `|` character. Note, that restrictions use English names for days and months. For example,
 the restriction "Monday, Tuesday, Friday from 7 to 20; Saturday, Sunday from
 dusk to dawn" is given as follows:
 
@@ -1527,14 +1527,14 @@ days_of_week Mon,Tue,Fri|start_time25200end_time72000;days_of_week Sat,Sun|dusk_
 
 * `days_of_week` - array of weekdays, for example, `days_of_week Mon,Tue,Fri`
 * `date_range` - start and end dates as unix timestamps, for example, `date_range 1546344000 1577880000`
-* `days_of_month` - range of days of month, for example, `days_of_month 1-10`
-* `day_week_month` - range of days of week of month, for example, `day_week_month Mon1-Sat3`
-* `day_week_year` - range of days of week of year, for example, `day_week_year Wed12-Fri36`
-* `week_of_month` - range of weeks of month, for example, `week_of_month 1-4`
-* `month_of_year` - range of months of year, for example, `month_of_year Jan-Jul`
-* `day_month_year` - range of days of months of year, for example, `day_month_year Jan1-Jul31`
-* `day_week_month_year` - range of days of weeks of months of year, for example, `day_week_month_year JulSun1-DecMon1`
-* `externally_specified` - externally specified string value, for example, `externally_specified <string-value>`
+* `days_of_month` - range of days of month, for example, from 1st until 31st day `days_of_month 1-31`
+* `day_week_month` - range of days of the week of the month, for example, from Monday of the first week until Saturday of the third week - `day_week_month Mon1-Sat3`
+* `day_week_year` - range of days of the week of the year, for example, from Friday of 12th week until Friday of 36th week - `day_week_year Wed12-Fri36`
+* `week_of_month` - range of weeks of the month, for example, from 1st until 4th week of month `week_of_month 1-4`
+* `month_of_year` - range of months of the year, for example, `month_of_year Jan-Jul`
+* `day_month_year` - range of days of months of the year, for example, `day_month_year Jan1-Jul31`
+* `day_week_month_year` - range of days of weeks of months of the year, for example, from 1st Sunday of July until 1 Monday of December `day_week_month_year JulSun1-DecMon1`
+* `externally_specified` - externally specified string value as a raw text, for example, `externally_specified <string-value>`
 * `dusk_to_dawn` - during nighttime
 * `dawn_to_dusk` - during daytime
 * `start_time` - seconds since midnight when the restriction starts, for example,
