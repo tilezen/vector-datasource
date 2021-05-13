@@ -10,6 +10,7 @@ globals:
     mz_label_placement: {col: mz_label_placement}
     label_placement: {col: label_placement}
     boundary: {col: boundary}
+    layer : {col: layer}
     tunnel: {col: tunnel}
     wikidata_id: {col: wikidata}
   - &water_standard_properties_osm
