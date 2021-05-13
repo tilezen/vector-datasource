@@ -25,26 +25,70 @@ class UndergroundWaterTest(FixtureTest):
             {"kind": "riverbank", "id": 236735251,
              "name": "Voûte Richard Lenoir", "is_tunnel": True, "sort_rank": 9})
 
-    # def test_water_level_2(self):
-    #     self.generate_fixtures(dsl.way(259492789, wkt_loads('LINESTRING (-74.16702601822249 40.73275266220829, -74.16711180733211 40.73254919807029)'), {u'tunnel': u'yes', u'tiger:name_base': u'McCarter', u'hgv:state_network': u'yes', u'name': u'McCarter Highway', u'tiger:cfcc': u'A35', u'tiger:name_base_1': u'State Route 21', u'hgv': u'designated', u'tiger:zip_left': u'07104', u'tiger:zip_right': u'07104', u'lanes': u'4', u'source': u'openstreetmap.org', u'tiger:county': u'Essex, NJ', u'tiger:name_type': u'Hwy', u'NHS': u'yes', u'ref': u'NJ 21', u'NJDOT_SRI': u'00000021', u'HFCS': u'Urban Principal Arterial', u'source:hgv:state_network': u'NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf', u'highway': u'trunk'}))  # noqa
-    #
-    #     self.assert_has_feature(
-    #         16, 33199, 22547, "water",
-    #         {"kind": "riverbank", "id": 259492789,
-    #          "name": "McCarter Hwy.", "is_tunnel": True, "sort_rank": 8})
-    #
-    # def test_pedestrian(self):
-    #     self.generate_fixtures(dsl.way(259492789, wkt_loads('LINESTRING (-74.16702601822249 40.73275266220829, -74.16711180733211 40.73254919807029)'), {u'tunnel': u'yes', u'tiger:name_base': u'McCarter', u'hgv:state_network': u'yes', u'name': u'McCarter Highway', u'tiger:cfcc': u'A35', u'tiger:name_base_1': u'State Route 21', u'hgv': u'designated', u'tiger:zip_left': u'07104', u'tiger:zip_right': u'07104', u'lanes': u'4', u'source': u'openstreetmap.org', u'tiger:county': u'Essex, NJ', u'tiger:name_type': u'Hwy', u'NHS': u'yes', u'ref': u'NJ 21', u'NJDOT_SRI': u'00000021', u'HFCS': u'Urban Principal Arterial', u'source:hgv:state_network': u'NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf', u'highway': u'trunk'}))  # noqa
-    #
-    #     self.assert_has_feature(
-    #         16, 33199, 22546, "landuse",
-    #         {"kind": "pedestrian", "id": -1602299,
-    #          "name": "Esplanade Roger Joseph Boscovich", "sort_rank": 110})
-    #
-    # def test_garden(self):
-    #     self.generate_fixtures(dsl.way(259492789, wkt_loads('LINESTRING (-74.16702601822249 40.73275266220829, -74.16711180733211 40.73254919807029)'), {u'tunnel': u'yes', u'tiger:name_base': u'McCarter', u'hgv:state_network': u'yes', u'name': u'McCarter Highway', u'tiger:cfcc': u'A35', u'tiger:name_base_1': u'State Route 21', u'hgv': u'designated', u'tiger:zip_left': u'07104', u'tiger:zip_right': u'07104', u'lanes': u'4', u'source': u'openstreetmap.org', u'tiger:county': u'Essex, NJ', u'tiger:name_type': u'Hwy', u'NHS': u'yes', u'ref': u'NJ 21', u'NJDOT_SRI': u'00000021', u'HFCS': u'Urban Principal Arterial', u'source:hgv:state_network': u'NJDOT http://www.state.nj.us/transportation/about/rules/pdf/chapter32truckaccess.pdf', u'highway': u'trunk'}))  # noqa
-    #
-    #     self.assert_has_feature(
-    #         16, 33199, 22546, "landuse",
-    #         {"kind": "garden", "id": -1602306,
-    #          "sort_rank": 112})
+    def test_water_level_2(self):
+        z, x, y = (16, 33504, 22442)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/94321616
+            dsl.way(94321616, dsl.tile_diagonal(z, x, y), {
+                'layer': '-2',
+                'source': 'openstreetmap.org',
+                'tunnel': 'yes',
+                'waterway': 'riverbank',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'water', {
+                'id': 94321616,
+                "kind": "riverbank", "is_tunnel": True, "sort_rank": 8})
+
+    def test_pedestrian(self):
+        z, x, y = (16, 33199, 22546)
+
+        # self.generate_fixtures(
+        #     # https://www.openstreetmap.org/way/4040012
+        #     dsl.way(4040012, dsl.tile_diagonal(z, x, y), {
+        #         'highway': 'residential',
+        #         'lit': 'yes',
+        #         'name': 'Esplanade Roger Joseph Boscovich',
+        #         'oneway': 'yes',
+        #         'sidewalk': 'both',
+        #         'source': 'openstreetmap.org',
+        #         'surface': 'asphalt',
+        #     }),
+        # )
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/115027193
+            dsl.way(115027193, dsl.tile_diagonal(z, x, y), {
+                'area': 'yes',
+                'bicycle': 'no',
+                'highway': 'pedestrian',
+                'lit': 'yes',
+                'noname': 'yes',
+                'source': 'openstreetmap.org',
+                'surface': 'asphalt',
+            }),
+        )
+
+        self.assert_has_feature(
+                    z, x, y, "roads",
+                    {"kind": "path", "id": 115027193,
+                     "sort_rank": 354})
+
+    def test_garden(self):
+        z, x, y = (16, 33199, 22546)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/115027177
+            dsl.way(115027177, dsl.tile_diagonal(z, x, y), {
+                'leisure': 'garden',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+                z, x, y, "landuse",
+                {"kind": "garden", "id": 115027177,
+                 "sort_rank": 112})
