@@ -46,36 +46,28 @@ class UndergroundWaterTest(FixtureTest):
     def test_pedestrian(self):
         z, x, y = (16, 33199, 22546)
 
-        # self.generate_fixtures(
-        #     # https://www.openstreetmap.org/way/4040012
-        #     dsl.way(4040012, dsl.tile_diagonal(z, x, y), {
-        #         'highway': 'residential',
-        #         'lit': 'yes',
-        #         'name': 'Esplanade Roger Joseph Boscovich',
-        #         'oneway': 'yes',
-        #         'sidewalk': 'both',
-        #         'source': 'openstreetmap.org',
-        #         'surface': 'asphalt',
-        #     }),
-        # )
-
         self.generate_fixtures(
-            # https://www.openstreetmap.org/way/115027193
-            dsl.way(115027193, dsl.tile_diagonal(z, x, y), {
+            # https://www.openstreetmap.org/way/115027186
+            dsl.way(115027186, dsl.tile_box(z, x, y), {
+                'highway': 'pedestrian',
+                'source': 'openstreetmap.org',
+                'area': 'yes',
+                'type': 'polygon',
+            }),
+            dsl.relation(1602299, {
                 'area': 'yes',
                 'bicycle': 'no',
                 'highway': 'pedestrian',
-                'lit': 'yes',
-                'noname': 'yes',
-                'source': 'openstreetmap.org',
-                'surface': 'asphalt',
-            }),
+                'source' : 'openstreetmap.org',
+                'name': 'Esplanade Roger Joseph Boscovich',
+                'type': 'polygon',
+            }, ways=[115027186])
         )
 
         self.assert_has_feature(
-                    z, x, y, "roads",
-                    {"kind": "path", "id": 115027193,
-                     "sort_rank": 354})
+                    z, x, y, "landuse",
+                    {"kind": "pedestrian", "id": 115027186,
+                     "sort_rank": 110})
 
     def test_garden(self):
         z, x, y = (16, 33199, 22546)
