@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-from shapely.wkt import loads as wkt_loads
 import dsl
 from . import FixtureTest
 
@@ -10,7 +9,7 @@ class UndergroundWaterTest(FixtureTest):
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/236735251
-            dsl.way(236735251, dsl.tile_diagonal(z, x, y), {
+            dsl.way(236735251, dsl.tile_box(z, x, y), {
                 'layer': '-1',
                 'name': u'Vo\xfbte Richard Lenoir',
                 'source': 'openstreetmap.org',
@@ -19,7 +18,6 @@ class UndergroundWaterTest(FixtureTest):
             }),
         )
 
-        # tunnels at level = 0
         self.assert_has_feature(
             16, 33199, 22547, "water",
             {"kind": "riverbank", "id": 236735251,
@@ -30,7 +28,7 @@ class UndergroundWaterTest(FixtureTest):
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/94321616
-            dsl.way(94321616, dsl.tile_diagonal(z, x, y), {
+            dsl.way(94321616, dsl.tile_box(z, x, y), {
                 'layer': '-2',
                 'source': 'openstreetmap.org',
                 'tunnel': 'yes',
@@ -74,7 +72,7 @@ class UndergroundWaterTest(FixtureTest):
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/115027177
-            dsl.way(115027177, dsl.tile_diagonal(z, x, y), {
+            dsl.way(115027177, dsl.tile_box(z, x, y), {
                 'leisure': 'garden',
                 'source': 'openstreetmap.org',
             }),
