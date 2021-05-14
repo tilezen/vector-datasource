@@ -21,7 +21,8 @@ class UndergroundWaterTest(FixtureTest):
         self.assert_has_feature(
             16, 33199, 22547, "water",
             {"kind": "riverbank", "id": 236735251,
-             "name": "Voûte Richard Lenoir", "is_tunnel": True, "sort_rank": 9})
+             "name": "Voûte Richard Lenoir", "is_tunnel": True,
+             "sort_rank": 9})
 
     def test_water_level_2(self):
         z, x, y = (16, 33504, 22442)
@@ -56,7 +57,7 @@ class UndergroundWaterTest(FixtureTest):
                 'area': 'yes',
                 'bicycle': 'no',
                 'highway': 'pedestrian',
-                'source' : 'openstreetmap.org',
+                'source': 'openstreetmap.org',
                 'name': 'Esplanade Roger Joseph Boscovich',
                 'type': 'polygon',
             }, ways=[115027186])
