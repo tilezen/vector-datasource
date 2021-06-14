@@ -1056,6 +1056,8 @@ class FixtureFeatureFetcher(object):
         feature_layers = convert_source_data_to_feature_layers(
             source_rows, self.fixture_env.layer_data, unpadded_bounds,
             nominal_zoom)
+        print 'feature_layers'
+        print feature_layers
         return process_coord_no_format(
             feature_layers, nominal_zoom, unpadded_bounds,
             self.fixture_env.post_process_data,
@@ -1315,6 +1317,7 @@ class RunTestInstance(object):
             elif isinstance(o, dict):
                 rels.append(o)
 
+        print "did you come here ?"
         feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
         self.assertions = Assertions(feature_fetcher, self.test)
 
