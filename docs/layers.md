@@ -1535,7 +1535,7 @@ days_of_week Mon,Tue,Fri|start_time25200end_time72000;days_of_week Sat,Sun|dusk_
 * `month_of_year` - range of months of the year, for example, `month_of_year Jan-Jul`
 * `day_month_year` - range of days of months of the year, for example, `day_month_year Jan1-Jul31`
 * `day_week_month_year` - range of days of weeks of months of the year, for example, from 1st Sunday of July until 1 Monday of December `day_week_month_year JulSun1-DecMon1`
-* `externally_specified` - externally specified string value as a raw text, for example, `externally_specified <string-value>`
+* `externally_specified` - externally specified string value as a raw text, for example for the holiday season, `externally_specified Easter`
 * `dusk_to_dawn` - during nighttime
 * `dawn_to_dusk` - during daytime
 * `start_time` - seconds since midnight when the restriction starts, for example,
