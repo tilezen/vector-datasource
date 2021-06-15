@@ -1315,7 +1315,6 @@ class RunTestInstance(object):
             elif isinstance(o, dict):
                 rels.append(o)
 
-        print "did you come here ?"
         feature_fetcher = FixtureFeatureFetcher(rows, rels, self.env)
         self.assertions = Assertions(feature_fetcher, self.test)
 
