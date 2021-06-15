@@ -28,6 +28,7 @@ from tilequeue.transform import calculate_padded_bounds
 from util import to_float
 from util import safe_int
 from zope.dottedname.resolve import resolve
+import hanzidentifier
 import csv
 import pycountry
 import re
@@ -579,10 +580,11 @@ osm_l10n_lookup = set([
     'zh-yue',
 ])
 
+# key is the name in OSM source value is the Tilezen internal name
 osm_zh_variants_lookup = {
-    'zh': ('zh', 1),
-    'zh-Hans': ('zh', 0),  # Simplified Chinese
-    'zh-Hant': ('zht', 0),  # Traditional Chinese
+    'zh': 'zh-default',  # Simplified Chinese presumably
+    'zh-Hans': 'zh',     # Simplified Chinese
+    'zh-Hant': 'zht',    # Traditional Chinese
 }
 
 
@@ -591,8 +593,8 @@ def _convert_osm_l10n_name(x):
         return LangResult(code=x, priority=0)
 
     if x in osm_zh_variants_lookup:
-        return LangResult(code=osm_zh_variants_lookup[x][0],
-                          priority=osm_zh_variants_lookup[x][1])
+        return LangResult(code=osm_zh_variants_lookup[x],
+                          priority=0)
 
     if '_' not in x:
         lang_code_candidate = x
@@ -619,6 +621,38 @@ def _convert_osm_l10n_name(x):
         result = lang_code_result
 
     return LangResult(code=result, priority=priority)
+
+
+def post_process_osm_zh(properties):
+    """ First check whether name:zh (Simplified) and name:zht(Traditional)
+    are set already, if not we use the name:zh-default to backfill them.
+    During the backfill, if there is no Simplified Chinese, Traditional
+    Chinese will be used to further backfill, and vice versa """
+    if 'name:zh' in properties and 'name:zht' in properties:
+        return
+
+    zh_Hans_fallback = properties['name:zh'] if 'name:zh' in properties else u''
+    zh_Hant_fallback = properties['name:zht'] if 'name:zht' in properties else u''
+
+    if 'name:zh-default' in properties:
+        names = properties['name:zh-default'].split('/')
+        for name in names:
+            if hanzidentifier.is_simplified(name) and len(zh_Hans_fallback) == 0:
+                zh_Hans_fallback = name
+            if hanzidentifier.is_traditional(name) and len(zh_Hant_fallback) == 0:
+                zh_Hant_fallback = name
+
+    if 'name:zh' not in properties:
+        if len(zh_Hans_fallback) != 0:
+            properties['name:zh'] = zh_Hans_fallback
+        elif zh_Hant_fallback != '':
+            properties['name:zh'] = zh_Hant_fallback
+
+    if 'name:zht' not in properties:
+        if len(zh_Hant_fallback) != 0:
+            properties['name:zht'] = zh_Hant_fallback
+        elif zh_Hans_fallback:
+            properties['name:zht'] = zh_Hans_fallback
 
 
 def tags_name_i18n(shape, properties, fid, zoom):
@@ -680,6 +714,9 @@ def tags_name_i18n(shape, properties, fid, zoom):
 
     for lang_key, (lang, v) in langs.items():
         properties[lang_key] = v
+
+    if is_osm:
+        post_process_osm_zh(properties)
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)

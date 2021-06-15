@@ -126,29 +126,38 @@ class TagsNameI18nTest(unittest.TestCase):
 
     def test_osm_zh(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
-                                           [('zh', '旧金山')])
-        self.assertTrue('name:zh' in props)
-        self.assertEquals('旧金山', props['name:zh'])
+                                           [(u'zh', u'旧金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh'])
+        self.assertEquals(u'旧金山', props[u'name:zht'])
 
     def test_osm_zh_hans(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
-                                           [('zh-Hans', '旧金山')])
-        self.assertTrue('name:zh' in props)
-        self.assertEquals('旧金山', props['name:zh'])
+                                           [(u'zh-Hans', u'旧金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh'])
+        self.assertEquals(u'旧金山', props[u'name:zht'])
 
     def test_osm_zh_hant(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
-                                           [('zh-Hant', '舊金山')])
-        self.assertTrue('name:zht' in props)
-        self.assertEquals('舊金山', props['name:zht'])
+                                           [(u'zh-Hant', u'舊金山')])
+        self.assertEquals(u'舊金山', props[u'name:zh'])
+        self.assertEquals(u'舊金山', props[u'name:zht'])
 
-    def test_osm_zh_hans_and_fallback(self):
+    def test_osm_zh_hans_and_fallback1(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hans', u'旧金山'),
+                                            (u'zh', u'旧金山/三藩市/舊金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh'])
+        self.assertEquals(u'三藩市', props[u'name:zht'])
+
+    def test_osm_zh_hans_and_fallback2(self):
         """ Test the case when both `name:zh` and `name:Hans` are present """
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh-Hans', '旧金山'),
+                                            ('zh-Hant', '舊金山'),
                                             ('zh', '旧金山/三藩市/舊金山')])
-        self.assertTrue('name:zh' in props)
         self.assertEquals('旧金山', props['name:zh'])
+        self.assertEquals('舊金山', props['name:zht'])
 
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
