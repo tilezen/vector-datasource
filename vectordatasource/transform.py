@@ -576,18 +576,27 @@ def _normalize_country_code(x):
 
 osm_l10n_lookup = set([
     'zh-min-nan',
-    'zh-yue'
+    'zh-yue',
 ])
+
+osm_zh_variants_lookup = {
+    'zh': ('zh', 1),
+    'zh-Hans': ('zh', 0),  # Simplified Chinese
+    'zh-Hant': ('zht', 0),  # Traditional Chinese
+}
 
 
 def _convert_osm_l10n_name(x):
     if x in osm_l10n_lookup:
         return LangResult(code=x, priority=0)
 
+    if x in osm_zh_variants_lookup:
+        return LangResult(code=osm_zh_variants_lookup[x][0],
+                          priority=osm_zh_variants_lookup[x][1])
+
     if '_' not in x:
         lang_code_candidate = x
         country_candidate = None
-
     else:
         fields_by_underscore = x.split('_', 1)
         lang_code_candidate, country_candidate = fields_by_underscore
