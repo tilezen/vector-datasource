@@ -129,18 +129,22 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [(u'zh', u'旧金山')])
         self.assertEquals(u'旧金山', props[u'name:zh'])
         self.assertEquals(u'旧金山', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hans(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [(u'zh-Hans', u'旧金山')])
         self.assertEquals(u'旧金山', props[u'name:zh'])
         self.assertEquals(u'旧金山', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hant(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [(u'zh-Hant', u'舊金山')])
         self.assertEquals(u'舊金山', props[u'name:zh'])
         self.assertEquals(u'舊金山', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
 
     def test_osm_zh_hans_and_fallback1(self):
         """ Test the case when both `name:zh` and `name:Hans` are present """
@@ -149,6 +153,7 @@ class TagsNameI18nTest(unittest.TestCase):
                                             (u'zh', u'旧金山/三藩市/舊金山')])
         self.assertEquals(u'旧金山', props[u'name:zh'])
         self.assertEquals(u'三藩市', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hans_and_fallback2(self):
         """ Test the case when both `name:zh` and `name:Hans` are present """
@@ -158,14 +163,16 @@ class TagsNameI18nTest(unittest.TestCase):
                                             ('zh', '旧金山/三藩市/舊金山')])
         self.assertEquals('旧金山', props['name:zh'])
         self.assertEquals('舊金山', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
 
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('en', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
-        self.assertTrue('name:zh' not in props)
-        self.assertTrue('name:zht' not in props)
+        self.assertTrue(u'name:zh' not in props)
+        self.assertTrue(u'name:zht' not in props)
+        self.assertFalse(u'name:zh-default' in props)
 
     def test_wof_source(self):
         shape, props, fid = self._call_fut('whosonfirst.org',

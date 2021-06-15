@@ -627,8 +627,13 @@ def post_process_osm_zh(properties):
     """ First check whether name:zh (Simplified) and name:zht(Traditional)
     are set already, if not we use the name:zh-default to backfill them.
     During the backfill, if there is no Simplified Chinese, Traditional
-    Chinese will be used to further backfill, and vice versa """
+    Chinese will be used to further backfill, and vice versa
+    It also deletes the intermediate property `zh-default`
+    """
+
     if 'name:zh' in properties and 'name:zht' in properties:
+        if 'name:zh-default' in properties:
+            del properties['name:zh-default']
         return
 
     zh_Hans_fallback = properties['name:zh'] if 'name:zh' in \
@@ -657,6 +662,9 @@ def post_process_osm_zh(properties):
             properties['name:zht'] = zh_Hant_fallback
         elif len(zh_Hans_fallback) != 0:
             properties['name:zht'] = zh_Hans_fallback
+
+    if 'name:zh-default' in properties:
+        del properties['name:zh-default']
 
 
 def tags_name_i18n(shape, properties, fid, zoom):
