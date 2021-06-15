@@ -645,13 +645,13 @@ def post_process_osm_zh(properties):
     if 'name:zh' not in properties:
         if len(zh_Hans_fallback) != 0:
             properties['name:zh'] = zh_Hans_fallback
-        elif zh_Hant_fallback != '':
+        elif len(zh_Hant_fallback) != 0:
             properties['name:zh'] = zh_Hant_fallback
 
     if 'name:zht' not in properties:
         if len(zh_Hant_fallback) != 0:
             properties['name:zht'] = zh_Hant_fallback
-        elif zh_Hans_fallback:
+        elif len(zh_Hans_fallback) != 0:
             properties['name:zht'] = zh_Hans_fallback
 
 

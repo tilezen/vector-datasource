@@ -164,6 +164,9 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [('en', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
+        self.assertTrue('name:zh' not in props)
+        self.assertTrue('name:zht' not in props)
+
 
     def test_wof_source(self):
         shape, props, fid = self._call_fut('whosonfirst.org',
