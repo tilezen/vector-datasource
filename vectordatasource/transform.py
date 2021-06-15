@@ -631,15 +631,19 @@ def post_process_osm_zh(properties):
     if 'name:zh' in properties and 'name:zht' in properties:
         return
 
-    zh_Hans_fallback = properties['name:zh'] if 'name:zh' in properties else u''
-    zh_Hant_fallback = properties['name:zht'] if 'name:zht' in properties else u''
+    zh_Hans_fallback = properties['name:zh'] if 'name:zh' in \
+                                                properties else u''
+    zh_Hant_fallback = properties['name:zht'] if 'name:zht' in \
+                                                 properties else u''
 
     if 'name:zh-default' in properties:
         names = properties['name:zh-default'].split('/')
         for name in names:
-            if hanzidentifier.is_simplified(name) and len(zh_Hans_fallback) == 0:
+            if hanzidentifier.is_simplified(name) and \
+                    len(zh_Hans_fallback) == 0:
                 zh_Hans_fallback = name
-            if hanzidentifier.is_traditional(name) and len(zh_Hant_fallback) == 0:
+            if hanzidentifier.is_traditional(name) and \
+                    len(zh_Hant_fallback) == 0:
                 zh_Hant_fallback = name
 
     if 'name:zh' not in properties:
