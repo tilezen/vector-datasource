@@ -73,7 +73,7 @@ We first try to use OSM tag `name:zh-Hans` to populate `name:zh` and OSM tag `na
 
 ###### WhosOnFirst
 
-We use properties several properties to populate Simplified Chinese and Traditional Chinese with the following priority (first priority is at the top):
+We use several properties to populate Simplified Chinese and Traditional Chinese with the following priority (first priority is at the top):
 
 Simplified Chinese
 * `name:zho_cn_x_preferred`
