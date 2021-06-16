@@ -145,7 +145,6 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals(u'舊金山', props[u'name:zht'])
         self.assertFalse(u'name:zh-default' in props)
 
-
     def test_osm_zh_hans_and_fallback1(self):
         """ Test the case when both `name:zh` and `name:Hans` are present """
         shape, props, fid = self._call_fut('openstreetmap.org',
@@ -180,10 +179,41 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
 
+    def test_wof_zh_all(self):
+        """ All variants data are available """
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [(u'zho_cn_x_preferred', u'旧金山'),
+                                            (u'zho_tw_x_preferred', u'舊金山'),
+                                            (u'zho_x_preferred', u'旧金山'),
+                                            (u'zho_x_variant', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh'])
+        self.assertEquals(u'舊金山', props['name:zht'])
+
+    def test_wof_zh_non_primary(self):
+        """ Non primary data are available """
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [(u'wuu_x_preferred', u'旧金山'),
+                                            (u'zho_x_variant', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh'])
+        self.assertEquals(u'舊金山', props['name:zht'])
+
+    def test_wof_zh_primary_override(self):
+        """ Both primary and secondary data are available """
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [(u'zho_cn_x_preferred', u'旧金山'),
+                                            (u'zho_x_preferred', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh'])
+        self.assertEquals(u'旧金山', props['name:zht'])  # backfilled
+
     def test_short_name(self):
         shape, props, fid = self._call_fut(
             'openstreetmap.org', [('short', 'foo')])
         self.assertTrue('name:short' in props)
+        self.assertFalse('name:zh' in props)
+        self.assertFalse('name:zht' in props)
         self.assertEquals('foo', props['name:short'])
 
 
