@@ -107,13 +107,15 @@ class L10nWofTransformTest(unittest.TestCase):
 
 class TagsNameI18nTest(unittest.TestCase):
 
-    def _call_fut(self, source, name_key, name_val):
+    def _call_fut(self, source, name_tuples):
+        # (str, List[Tuple[str, str]]) -> None
+        # tuple[0] is key tuple[1] is value
         from vectordatasource.transform import tags_name_i18n
         shape = fid = zoom = None
-        name = 'name:%s' % name_key
-        tags = {
-            name: name_val,
-        }
+        tags = {}
+        for nt in name_tuples:
+            name = 'name:%s' % nt[0]
+            tags[name] = nt[1]
         props = dict(
             source=source,
             tags=tags,
@@ -122,20 +124,65 @@ class TagsNameI18nTest(unittest.TestCase):
         result = tags_name_i18n(shape, props, fid, zoom)
         return result
 
+    def test_osm_zh(self):
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh', u'旧金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh'])
+        self.assertEquals(u'旧金山', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hans(self):
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hans', u'旧金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh'])
+        self.assertEquals(u'旧金山', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hant(self):
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hant', u'舊金山')])
+        self.assertEquals(u'舊金山', props[u'name:zh'])
+        self.assertEquals(u'舊金山', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
+
+    def test_osm_zh_hans_and_fallback1(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hans', u'旧金山'),
+                                            (u'zh', u'旧金山/三藩市/舊金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh'])
+        self.assertEquals(u'三藩市', props[u'name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hans_and_fallback2(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', '旧金山'),
+                                            ('zh-Hant', '舊金山'),
+                                            ('zh', '旧金山/三藩市/舊金山')])
+        self.assertEquals('旧金山', props['name:zh'])
+        self.assertEquals('舊金山', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
+
     def test_osm_source(self):
-        shape, props, fid = self._call_fut('openstreetmap.org', 'en', 'foo')
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('en', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
+        self.assertTrue(u'name:zh' not in props)
+        self.assertTrue(u'name:zht' not in props)
+        self.assertFalse(u'name:zh-default' in props)
 
     def test_wof_source(self):
         shape, props, fid = self._call_fut('whosonfirst.org',
-                                           'eng_x', 'foo')
+                                           [('eng_x', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
 
     def test_short_name(self):
         shape, props, fid = self._call_fut(
-            'openstreetmap.org', 'short', 'foo')
+            'openstreetmap.org', [('short', 'foo')])
         self.assertTrue('name:short' in props)
         self.assertEquals('foo', props['name:short'])
 

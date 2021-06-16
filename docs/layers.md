@@ -52,6 +52,25 @@ For features in the `boundaries` layer, there are two additional variants `name:
 * `name:left:*` _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `name:right:*` _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 
+##### Chinese name localization
+
+We populate two fields for Chinese variants:
+
+* `name:zh`: Simplified Chinese
+* `name:zht`: Traditional Chinese
+
+Both `name:zh` and `name:zht` properties are best-effort. It means `name:zh` can sometimes contain Traditional Chinese and `name:zht` can sometimes contain Simplified Chinese. And we don't auto-translate Traditional Chinese to Simplified Chinese or vice versa.
+
+###### OSM
+
+We use three fields `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to populate two properties:
+
+* `name:zh`: Simplified Chinese
+* `name:zht`: Traditional Chinese
+
+We first try to use OSM tag `name:zh-Hans` to populate `name:zh` and OSM tag `name:zh-Hant` to populate `name:zht`, but if they are not available we parse OSM tag `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh` or Simplified Chinese can be used to backfill `name:zht`.
+
+
 #### Geometry types
 
 Individual Tilezen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.

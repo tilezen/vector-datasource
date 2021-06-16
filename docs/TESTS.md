@@ -1,5 +1,14 @@
 # Tilezen Vector Tile Tests
 
+## Setup
+
+In your virtual environment of this repo run the following commands to install dependencies
+
+```
+pip install -U -r requirements.txt
+python setup.py develop
+```
+
 ## Code / Unit Tests
 
 The `vector-datasource` project comes with some unit tests for the code in the `vectordatasource/` directory. These can be run with the command:
