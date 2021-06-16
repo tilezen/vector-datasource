@@ -58,4 +58,6 @@ class ChineseNameTest(FixtureTest):
              'name:zh': u'旧金山',
              'name:zht': u'舊金山'})
 
-        self.assert_no_matching_feature(16, 10482, 25330, 'places', {'name:zh-default': u'旧金山/三藩市/舊金山'})
+        self.assert_no_matching_feature(
+            16, 10482, 25330, 'places',
+            {'name:zh-default': u'旧金山/三藩市/舊金山'})
