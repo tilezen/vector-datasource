@@ -54,6 +54,11 @@ For features in the `boundaries` layer, there are two additional variants `name:
 
 ##### Chinese name localization
 
+We populate two fields for Chinese variants:
+
+* `name:zh`: Simplified Chinese
+* `name:zht`: Traditional Chinese
+
 Both `name:zh` and `name:zht` properties are best-effort. It means `name:zh` can sometimes contain Traditional Chinese and `name:zht` can sometimes contain Simplified Chinese. And we don't auto-translate Traditional Chinese to Simplified Chinese or vice versa.
 
 ###### OSM
