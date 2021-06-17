@@ -521,7 +521,22 @@ def _alpha_2_code_of(lang):
 LangResult = namedtuple('LangResult', ['code', 'priority'])
 
 
+# key is the name in WOF source; value is the Tilezen internal name and its
+# priority
+wof_zh_variants_lookup = {
+    'zho_cn_x_preferred': ('zh', 0),  # Simplified Chinese
+    'zho_x_preferred': ('zh', 1),  # Simplified Chinese
+    'wuu_x_preferred': ('zh', 2),  # Simplified Chinese
+    'zho_tw_x_preferred': ('zht', 0),  # Traditional Chinese
+    'zho_x_variant': ('zht', 1),  # Traditional Chinese
+}
+
+
 def _convert_wof_l10n_name(x):
+    if x in wof_zh_variants_lookup:
+        return LangResult(code=wof_zh_variants_lookup[x][0],
+                          priority=wof_zh_variants_lookup[x][1])
+
     lang_str_iso_639_3 = x[:3]
     if len(lang_str_iso_639_3) != 3:
         return None
@@ -580,7 +595,7 @@ osm_l10n_lookup = set([
     'zh-yue',
 ])
 
-# key is the name in OSM source value is the Tilezen internal name
+# key is the name in OSM source; value is the Tilezen internal name
 osm_zh_variants_lookup = {
     'zh': 'zh-default',  # Simplified Chinese presumably
     'zh-Hans': 'zh',     # Simplified Chinese
@@ -621,6 +636,16 @@ def _convert_osm_l10n_name(x):
         result = lang_code_result
 
     return LangResult(code=result, priority=priority)
+
+
+def post_process_wof_zh(properties):
+    """ If there is no Simplified Chinese, Traditional
+    Chinese will be used to further backfill, and vice versa """
+    if 'name:zh' not in properties and 'name:zht' in properties:
+        properties['name:zh'] = properties['name:zht']
+
+    if 'name:zht' not in properties and 'name:zh' in properties:
+        properties['name:zht'] = properties['name:zh']
 
 
 def post_process_osm_zh(properties):
@@ -729,6 +754,9 @@ def tags_name_i18n(shape, properties, fid, zoom):
 
     if is_osm:
         post_process_osm_zh(properties)
+
+    if is_wof:
+        post_process_wof_zh(properties)
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)
