@@ -1659,7 +1659,7 @@ Network value include:
 * `CA:NT`
 * `CA:ON:primary`
 * `CA:ON:secondary`
-* `CA:PEI`
+* `CA:PE`
 * `CA:QC:A`
 * `CA:QC:R`
 * `CA:SK:primary`
