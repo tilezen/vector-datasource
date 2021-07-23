@@ -164,6 +164,30 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals('舊金山', props['name:zht'])
         self.assertFalse('name:zh-default' in props)
 
+    def test_osm_zh_debug1(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', u'巴布亚新几内亚'),
+                                            ('zh-Hant', u'巴布亞紐幾內亞 / 巴布亞新畿內亞'),
+                                            ('zh-Hant-tw', u'巴布亞紐幾內亞'),
+                                            ('zh-Hans', u'巴布亚新几内亚'),
+                                            ('yue', u'巴布亞新畿內亞'),
+                                            ('zh', u'巴布亚新几内亚 / 巴布亞紐幾內亞 / 巴布亞新畿內亞')])
+        self.assertEquals(u'巴布亚新几内亚', props['name:zh'])
+        self.assertEquals(u'巴布亞紐幾內亞 / 巴布亞新畿內亞', props['name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_debug2(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('yue', u'美利堅合眾國'),
+                                            ('zh-Hans', u'美利坚合众国'),
+                                            ('zh-Hant', u'美利堅合眾國'),
+                                            ('zh', u'美利坚合众国/美利堅合眾國')])
+        self.assertEquals(u'美利坚合众国', props['name:zh'])
+        self.assertEquals(u'美利堅合眾國', props['name:zht'])
+        self.assertFalse(u'name:zh-default' in props)
+
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('en', 'foo')])
