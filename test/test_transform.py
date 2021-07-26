@@ -164,6 +164,17 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals('舊金山', props['name:zht'])
         self.assertFalse('name:zh-default' in props)
 
+    def test_osm_zh_reject(self):
+        """ Test the case when both `name:zh-Hant` and `name:zh_pinyin`
+        are present and we don't use zh_pinyin
+        """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh', '美國'),
+                                            ('zh_pinyin', 'Měiguó')])
+        self.assertEquals('旧金山', props['name:zh'])
+        self.assertEquals('舊金山', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
+
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('en', 'foo')])
