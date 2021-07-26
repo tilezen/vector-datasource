@@ -164,16 +164,53 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals('舊金山', props['name:zht'])
         self.assertFalse('name:zh-default' in props)
 
+    def test_osm_zh_hans_and_fallback3(self):
+        """ Test the case when both `name:zh-Hans`, `name:zh-yue` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', '旧金山'),
+                                            ('zh-yue', '三藩市'),
+                                            ('zh', '舊金山')])
+        self.assertEquals('旧金山', props['name:zh'])
+        self.assertEquals('三藩市', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
+
     def test_osm_zh_reject(self):
         """ Test the case when both `name:zh-Hant` and `name:zh_pinyin`
         are present and we don't use zh_pinyin
         """
         shape, props, fid = self._call_fut('openstreetmap.org',
-                                           [('zh', '美國'),
+                                           [('zh', '美国'),
+                                            ('zh_pinyin', 'Měiguó')])
+        self.assertEquals('美国', props['name:zh'])
+        self.assertEquals('美国', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hant', '美國'),
                                             ('zh_pinyin', 'Měiguó')])
         self.assertEquals('美國', props['name:zh'])
         self.assertEquals('美國', props['name:zht'])
         self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hant', '美國'),
+                                            ('zh_random', 'Měiguó')])
+        self.assertEquals('美國', props['name:zh'])
+        self.assertEquals('美國', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hant', '美國'),
+                                            ('zh-random', 'Měiguó')])
+        self.assertEquals('美國', props['name:zh'])
+        self.assertEquals('美國', props['name:zht'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-pinyin', 'Měiguó')])
+        self.assertFalse('name:zh-default' in props)
+        self.assertFalse('name:zh' in props)
+        self.assertFalse('name:zht' in props)
 
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
