@@ -594,6 +594,7 @@ osm_l10n_lookup = set([
     'zh-min-nan',
 ])
 
+
 # key is the name in OSM source; value is a tuple of Tilezen internal name and its priority value
 osm_zh_variants_lookup = {
     'zh-Hans': ('zh', 0),  # Simplified Chinese
