@@ -592,14 +592,18 @@ def _normalize_country_code(x):
 
 osm_l10n_lookup = set([
     'zh-min-nan',
-    'zh-yue',
 ])
 
 # key is the name in OSM source; value is the Tilezen internal name
 osm_zh_variants_lookup = {
-    'zh': 'zh-default',  # Simplified Chinese presumably
-    'zh-Hans': 'zh',     # Simplified Chinese
-    'zh-Hant': 'zht',    # Traditional Chinese
+    'zh-Hans': ('zh', 0),  # Simplified Chinese
+    'zh-SG': ('zh', 1),  # Simplified Chinese
+    'zh': ('zh-default', 0),  # Simplified Chinese presumably, can contain Traditional Chinese  # noqa
+    'zh-Hant': ('zht', 0),    # Traditional Chinese
+    'zh-Hant-tw': ('zht', 1),  # Traditional Chinese
+    'zh-Hant-hk': ('zht', 2),  # Traditional Chinese
+    'zh-yue': ('zht', 3),  # Traditional Chinese
+    'zh-HK': ('zht', 4),  # Traditional Chinese
 }
 
 
@@ -610,6 +614,11 @@ def _convert_osm_l10n_name(x):
     if x in osm_zh_variants_lookup:
         return LangResult(code=osm_zh_variants_lookup[x],
                           priority=0)
+
+    # all accepted Chinese variants should be handled in the shortcuts already
+    # so won't accept other tags that starts with `zh` any more
+    if x.startswith('zh'):
+        return None
 
     if '_' not in x:
         lang_code_candidate = x
