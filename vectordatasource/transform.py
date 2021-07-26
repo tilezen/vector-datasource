@@ -612,8 +612,8 @@ def _convert_osm_l10n_name(x):
         return LangResult(code=x, priority=0)
 
     if x in osm_zh_variants_lookup:
-        return LangResult(code=osm_zh_variants_lookup[x],
-                          priority=0)
+        return LangResult(code=osm_zh_variants_lookup[x][0],
+                          priority=osm_zh_variants_lookup[x][1])
 
     # all accepted Chinese variants should be handled in the shortcuts already
     # so won't accept other tags that starts with `zh` any more
@@ -684,6 +684,12 @@ def post_process_osm_zh(properties):
             if hanzidentifier.is_traditional(name) and \
                     len(zh_Hant_fallback) == 0:
                 zh_Hant_fallback = name
+        # hanzidentifier cannot deem it either way
+        if len(names) != 0:
+            if len(zh_Hans_fallback) == 0:
+                zh_Hans_fallback = names[0]
+            if len(zh_Hant_fallback) == 0:
+                zh_Hant_fallback = names[0]
 
     if 'name:zh' not in properties:
         if len(zh_Hans_fallback) != 0:

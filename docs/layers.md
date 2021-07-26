@@ -68,7 +68,7 @@ We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to popul
 * `name:zh`: Simplified Chinese
 * `name:zht`: Traditional Chinese
 
-We first try to use OSM tag `name:zh-Hans` to populate `name:zh` and OSM tag `name:zh-Hant` to populate `name:zht`, but if they are not available we parse OSM tag `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh` or Simplified Chinese can be used to backfill `name:zht`.
+We first try to use OSM tag `name:zh-Hans` to populate `name:zh` and OSM tag `name:zh-Hant` to populate `name:zht`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh` or Simplified Chinese can be used to backfill `name:zht`.
 
 
 ###### WhosOnFirst
