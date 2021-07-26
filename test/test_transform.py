@@ -175,8 +175,8 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertFalse('name:zh-default' in props)
 
     def test_osm_zh_reject(self):
-        """ Test the case when both `name:zh-Hant` and `name:zh_pinyin`
-        are present and we don't use zh_pinyin
+        """ Test the case when some not-interested `zh` tags such as
+        `name:zh_pinyin` are present and we don't use them
         """
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh', '美国'),
