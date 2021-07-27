@@ -83,8 +83,6 @@ class L10nOsmTransformTest(unittest.TestCase):
     def test_osm_convert_lookup(self):
         zh_min_nan = self._call_fut('zh-min-nan')
         self.assertEquals(zh_min_nan, 'zh-min-nan')
-        zh_min_nan = self._call_fut('zh-yue')
-        self.assertEquals(zh_min_nan, 'zh-yue')
 
 
 class L10nWofTransformTest(unittest.TestCase):
