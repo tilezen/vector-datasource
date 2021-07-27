@@ -4,6 +4,12 @@ from shapely.wkt import loads as wkt_loads
 from . import FixtureTest
 
 
+def _tile_centre(z, x, y):
+    from tilequeue.tile import num2deg
+    lat, lon = num2deg(x + 0.5, y + 0.5, z)
+    return (lon, lat)
+
+
 class ChineseNameTest(FixtureTest):
     def test_san_francisco_osm(self):
         # San Francisco (osm city)
@@ -61,6 +67,31 @@ class ChineseNameTest(FixtureTest):
         self.assert_no_matching_feature(
             16, 10482, 25330, 'places',
             {'name:zh-default': u'旧金山/三藩市/舊金山'})
+
+    def test_united_states_osm(self):
+        # United States of America (osm city)
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.point(424317935, _tile_centre(z, x, y), {
+                u'source': u'openstreetmap.org',
+                u'name:zh': u'美國',
+                u'name:yue': u'即美利堅合眾國',
+                u'name:zh_pinyin': u'Měiguó',
+            }),
+            dsl.relation(148838, nodes=[148838])
+        )
+
+        self.assert_has_feature(
+            16, 0, 0, 'places',
+            {'id': 424317935,
+             'source': "openstreetmap.org",
+             'name:zh': u'美國',
+             'name:zht': u'美國'})
+
+        self.assert_no_matching_feature(
+            16, 0, 0, 'places',
+            {'name:zh-default': u'美國'})
 
     def test_hollywood_wof(self):
         # Hollywood (wof neighbourhood)
