@@ -131,7 +131,7 @@ class TagsNameI18nTest(unittest.TestCase):
 
     def test_osm_zh_hans(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
-                                           [(u'zh-Hans', u'旧金山')])
+                                           [(u'zh-Hans', u'旧金山/三藩市')])
         self.assertEquals(u'旧金山', props[u'name:zh'])
         self.assertEquals(u'旧金山', props[u'name:zht'])
         self.assertFalse(u'name:zh-default' in props)
