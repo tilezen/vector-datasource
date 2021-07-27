@@ -708,7 +708,7 @@ def post_process_osm_zh(properties):
         elif len(zh_Hans_fallback) != 0:
             properties['name:zht'] = zh_Hans_fallback
 
-    # only select one of the options if the field is seprated by "/"
+    # only select one of the options if the field is separated by "/"
     # for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
     # one 旧金山市县 will be preserved
     properties['name:zh'] = properties['name:zh'].split('/')[0].strip()
