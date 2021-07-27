@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 import dsl
 from shapely.wkt import loads as wkt_loads
+from tilequeue.tile import deg2num
 from . import FixtureTest
 
 
@@ -11,6 +12,143 @@ def _tile_centre(z, x, y):
 
 
 class ChineseNameTest(FixtureTest):
+
+    def test_united_states(self):
+        # The low zoom test is borrowed from 977-low-zoom-from-ne-join
+        lon, lat = (-100.4458825, 39.7837304)
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/424317935
+            dsl.point(424317935, (lon, lat), {
+                u"alt_name": u"USA;US;The States;United States",
+                u"alt_name:lfn": u"SUA",
+                u"alt_name:sr": u"САД;Сједињене Државе",
+                u"alt_name:vi": u"Hoa Kì;Mĩ;Hợp chúng quốc Hoa Kì",
+                u"capital_city": u"Washington DC",
+                u"country_code_fips": u"US",
+                u"country_code_iso3166_1_alpha_2": u"US",
+                u"int_name": u"United States of America",
+                u"name": u"United States of America",
+                u"name:ab": u"Америка Еиду Аштатқәа",
+                u"name:rn": u"Leta Zunze Ubumwe za Amerika",
+                u"name:ro": u"Statele Unite ale Americii",
+                u"name:roa-tara": u"Statère Aunìte d'Americhe",
+                u"name:ru": u"Соединённые Штаты Америки",
+                u"name:rue": u"Споєны Штаты Америцькы",
+                u"name:rw": u"Leta Zunze Ubumwe z’Amerika",
+                u"name:sa": u"संयुक्तानि राज्यानि",
+                u"name:sah": u"Америка Холбоһуктаах Штаттара",
+                u"name:sc": u"Istados Unidos de America",
+                u"name:scn": u"Stati Uniti",
+                u"name:sco": u"Unitit States o Americae",
+                u"name:sd": u"آمريڪا",
+                u"name:se": u"Amerihká ovttastuvvan stáhtat",
+                u"name:sg": u"ÂLeaa-Ôko tî Amerika",
+                u"name:sh": u"Sjedinjene Američke Države",
+                u"name:si": u"අ'මෙරිකා‍වේ එක්සත් රාජ්‍යයන",
+                u"name:sk": u"Spojené štáty americké",
+                u"name:sl": u"Združene države Amerike",
+                u"name:sm": u"Iunaite Sitete o Amerika",
+                u"name:smn": u"Amerik ovtâstumstaatah",
+                u"name:sms": u"Ameriikk õhttõõvvâmvääʹld",
+                u"name:sn": u"Amerika",
+                u"name:so": u"Maraykanka",
+                u"name:sq": u"Shtetet e Bashkuara të Amerikës",
+                u"name:sr": u"Сједињене Америчке Државе",
+                u"name:srn": u"Kondre Makandrameki",
+                u"name:ss": u"IMelika",
+                u"name:stq": u"Fereende Stoaten fon Amerikoa",
+                u"name:su": u"Amérika Sarikat",
+                u"name:sv": u"Förenta staterna",
+                u"name:sw": u"Muungano wa Madola ya Amerika",
+                u"name:szl": u"Zjednoczůne Sztaty Ameriki",
+                u"name:ta": u"அமெரிக்க ஐக்கிய நாடு",
+                u"name:te": u"అమెరికా సంయుక్త రాష్ట్రాలు",
+                u"name:tet": u"Estadu Naklibur Sira Amérika Nian",
+                u"name:tg": u"Штатҳои Муттаҳидаи Америка",
+                u"name:th": u"สหรัฐอเมริกา",
+                u"name:ti": u"አሜሪካ",
+                u"name:tk": u"Amerikanyň Birleşen Ştatlary",
+                u"name:tl": u"Estados Unidos ng Amerika",
+                u"name:tn": u"USA",
+                u"name:to": u"Puleʻanga Fakataha 'o 'Amelika",
+                u"name:tok": u"ma Mewika",
+                u"name:tpi": u"Yunaitet Stet bilong Amerika",
+                u"name:tr": u"Amerika Birleşik Devletleri",
+                u"name:ts": u"United States",
+                u"name:tt": u"Америка Кушма Штатлары",
+                u"name:tw": u"USA",
+                u"name:ty": u"Fenua Marite",
+                u"name:tzl": u"Estats Viensiçeschti d'America",
+                u"name:udm": u"Америкалэн Огазеяськем Штатъёсыз",
+                u"name:ug": u"ئامېرىكا قوشما شتاتلىرى",
+                u"name:uk": u"Сполучені Штати Америки",
+                u"name:ur": u"ریاستہائے متحدہ امریکہ",
+                u"name:uz": u"Amerika Qoʻshma Shtatlari",
+                u"name:vec": u"Stati Unìi de la Mèrica",
+                u"name:vep": u"Amerikan Ühtenzoittud Valdkundad",
+                u"name:vi": u"Hoa Kỳ",
+                u"name:vls": u"Verênigde Stoaten van Amerika",
+                u"name:vo": u"Lamerikän",
+                u"name:wa": u"Estats Unis d' Amerike",
+                u"name:war": u"Estados Unidos",
+                u"name:wo": u"Diwaan-yu-Bennoo yu Aamerig",
+                u"name:wuu": u"美利坚合众国",
+                u"name:xal": u"Америкин Ниицәтә Орн Нутгуд",
+                u"name:xh": u"IYunayithedi Steyitsi",
+                u"name:xmf": u"ამერიკაშ აკოართაფილი შტატეფი",
+                u"name:yi": u"פאראייניקטע שטאטן פון אמעריקע",
+                u"name:yo": u"Orílẹ́ède Orilẹede Amerika",
+                u"name:yue": u"即美利堅合眾國",
+                u"name:za": u"Meijgoz",
+                u"name:zea": u"Vereênigde Staeten",
+                u"name:zh": u"美國",
+                u"name:zh_pinyin": u"Měiguó",
+                u"name:zu": u"i-United States",
+                u"not:official_name:vi": u"Hợp chủng quốc Hoa Kỳ",
+                u"official_name": u"United States of America",
+                u"official_name:en": u"United States of America",
+                u"official_name:eo": u"Unuiĝintaj Ŝtatoj de Ameriko",
+                u"official_name:fr": u"États-Unis d'Amérique",
+                u"official_name:pl": u"Stany Zjednoczone Ameryki",
+                u"official_name:pt": u"Estados Unidos da América",
+                u"official_name:sv": u"Amerikas förenta stater",
+                u"official_name:vi": u"Hợp chúng quốc Hoa Kỳ",
+                u"official_name:vo": u"Tats-Pebalöl Nolüda-Meropa",
+                u"old_name:vi": u"Mỹ Lợi Kiên;Ma Ly Căn;Nhã Di Lý",
+                u"place": u"country",
+                u"population": u"324720797",
+                u"short_name": u"USA",
+                u"short_name:en": u"USA",
+                u"short_name:es": u"EE.UU.",
+                u"short_name:vi": u"Mỹ",
+                u"source": u"openstreetmap.org",
+                u"sqkm": u"9826675",
+                u"wikidata": u"Q30",
+                u"wikipedia": u"en:United States",
+                '__ne_min_zoom': 1.7,
+                '__ne_max_zoom': 6.7,
+            }),
+        )
+        # should show up in zooms within the range 2-6
+        for zoom in xrange(2, 6):
+            x, y = deg2num(lat, lon, zoom)
+            self.assert_has_feature(
+                zoom, x, y, 'places', {
+                    'id': 424317935,
+                    'kind': 'country',
+                    'name': 'United States of America',
+                    'min_zoom': 2.0,
+                    'max_zoom': 6.7,
+                    'name:zh': u'美國',
+                    'name:zht': u'美國'
+                })
+            self.assert_no_matching_feature(
+                         zoom, x, y, 'places',
+                         {'name:zh': u'Měiguó',
+                          'name:zht': u'Měiguó',
+                          'name:zh-default': u'Měiguó',
+                          })
+
     def test_san_francisco_osm(self):
         # San Francisco (osm city)
         self.generate_fixtures(dsl.way(26819236, wkt_loads(
@@ -68,8 +206,6 @@ class ChineseNameTest(FixtureTest):
             16, 10482, 25330, 'places',
             {'name:zh-default': u'旧金山/三藩市/舊金山'})
 
-    def test_united_states_osm(self):
-        # United States of America
         self.generate_fixtures(dsl.way(26819236, wkt_loads(
             'POINT (-122.419236226182 37.77928077351228)'), {
                 u"alt_name": u"USA;US;The States;United States",
@@ -191,6 +327,10 @@ class ChineseNameTest(FixtureTest):
         self.assert_no_matching_feature(
             16, 10482, 25330, 'places',
             {'name:zh-default': u'美國'})
+
+        self.assert_no_matching_feature(
+            16, 10482, 25330, 'places',
+            {'name:zh': u'Měiguó'})
 
     def test_hollywood_wof(self):
         # Hollywood (wof neighbourhood)
