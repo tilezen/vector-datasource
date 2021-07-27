@@ -666,6 +666,10 @@ def post_process_osm_zh(properties):
     It also deletes the intermediate property `zh-default`
     """
 
+    if 'name:zh' not in properties and 'name:zht' not in properties and \
+            'name:zh-default' not in properties:
+        return
+
     if 'name:zh' in properties and 'name:zht' in properties:
         if 'name:zh-default' in properties:
             del properties['name:zh-default']
@@ -707,8 +711,8 @@ def post_process_osm_zh(properties):
     # only select one of the options if the field is seprated by "/"
     # for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
     # one 旧金山市县 will be preserved
-    properties['name:zh'] = properties['name:zh'].split()[0].strip()
-    properties['name:zht'] = properties['name:zht'].split()[0].strip()
+    properties['name:zh'] = properties['name:zh'].split('/')[0].strip()
+    properties['name:zht'] = properties['name:zht'].split('/')[0].strip()
 
     if 'name:zh-default' in properties:
         del properties['name:zh-default']
