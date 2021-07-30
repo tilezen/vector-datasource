@@ -54,21 +54,21 @@ For features in the `boundaries` layer, there are two additional variants `name:
 
 ##### Chinese name localization
 
-We populate two fields for Chinese variants:
+We populate two fields for Chinese variants based on [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924) codes::
 
-* `name:zh-hans`: Simplified Chinese
-* `name:zh-hant`: Traditional Chinese
+* `name:zh-Hans`: Simplified Chinese
+* `name:zh-Hant`: Traditional Chinese
 
-Both `name:zh-hans` and `name:zh-hant` properties are best-effort. It means `name:zh-hans` can sometimes contain Traditional Chinese and `name:zh-hant` can sometimes contain Simplified Chinese. And we don't auto-translate Traditional Chinese to Simplified Chinese or vice versa.
+Both `name:zh-Hans` and `name:zh-Hant` properties are best-effort. It means `name:zh-Hans` can sometimes contain Traditional Chinese and `name:zh-Hant` can sometimes contain Simplified Chinese. And we don't auto-translate Traditional Chinese to Simplified Chinese or vice versa.
 
 ###### OSM
 
 We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to populate the two properties:
 
-* `name:zh-hans`: Simplified Chinese
-* `name:zh-hant`: Traditional Chinese
+* `name:zh-Hans`: Simplified Chinese
+* `name:zh-Hant`: Traditional Chinese
 
-We first try to use OSM tag `name:zh-Hans` to populate `name:zh-hans` and OSM tag `name:zh-Hant` to populate `name:zh-hant`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh-hans` or Simplified Chinese can be used to backfill `name:zh-hant`.
+We first try to use OSM tag `name:zh-Hans` to populate `name:zh-Hans` and OSM tag `name:zh-Hant` to populate `name:zh-Hant`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-hant`.
 
 
 ###### WhosOnFirst
@@ -84,7 +84,7 @@ Traditional Chinese
 * `name:zho_tw_x_preferred`
 * `name:zho_x_variant`
 
-If either variant is missing, we will use the other variant to backfill, i.e. Traditional Chinese can be used to backfill `name:zh-hans` or Simplified Chinese can be used to backfill `name:zh-hant`.
+If either variant is missing, we will use the other variant to backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-Hant`.
 
 
 ###### NaturalEarth
@@ -97,7 +97,7 @@ Simplified Chinese
 Traditional Chinese
 * `name_zht`
 
-If either variant is missing, we will use the other variant to backfill, i.e. Traditional Chinese can be used to backfill `name:zh-hans` or Simplified Chinese can be used to backfill `name:zh-hant`.
+If either variant is missing, we will use the other variant to backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-Hant`.
 
 
 #### Geometry types

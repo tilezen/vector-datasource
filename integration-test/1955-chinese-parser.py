@@ -117,20 +117,23 @@ class ChineseNameTest(FixtureTest):
                 u"name_he": u"סן פרנסיסקו",
                 u"name_uk": u"Cан-франциско",
                 u"name_ur": u"سان فرانسسکو",
-                u"name_zht": u"舊金山"
+                u"name_zht": u"舊金山",
+                u"source": u"naturalearthdata.com",
             })
         )
 
-        # the min_zoom is 2.7 so it should appear at zoom 3
-        zoom = 3
-        x, y = deg2num(lat, lon, zoom)
-        self.assert_has_feature(
-            zoom, x, y, 'places', {
-                'id': 26819236,
-                'name': 'San Francisco',
-                'name:zh-hans': u'旧金山',
-                'name:zh-hant': u'舊金山'
-            })
+        # the min_zoom is 2.7 so it should appear at zoom 3 to zoom 7
+        for zoom in xrange(3, 8):
+            x, y = deg2num(lat, lon, zoom)
+            self.assert_has_feature(
+                zoom, x, y, 'places', {
+                    'id': 26819236,
+                    'kind': 'locality',
+                    'name': 'San Francisco',
+                    'name:zh-Hans': u'旧金山',
+                    'name:zh-Hant': u'舊金山',
+                    'source': u'naturalearthdata.com',
+                })
 
     def test_united_states(self):
         # The low zoom test is borrowed from 977-low-zoom-from-ne-join
@@ -258,8 +261,8 @@ class ChineseNameTest(FixtureTest):
                     'name': 'United States of America',
                     'min_zoom': 2.0,
                     'max_zoom': 6.7,
-                    'name:zh-hans': u'美國',
-                    'name:zh-hant': u'美國'
+                    'name:zh-Hans': u'美國',
+                    'name:zh-Hant': u'美國'
                 })
             self.assert_no_matching_feature(
                          zoom, x, y, 'places',
@@ -318,8 +321,8 @@ class ChineseNameTest(FixtureTest):
             {'id': 26819236, 'kind': 'locality', 'kind_detail': 'city',
              'source': "openstreetmap.org",
              'name': 'San Francisco',
-             'name:zh-hans': u'旧金山',
-             'name:zh-hant': u'舊金山'})
+             'name:zh-Hans': u'旧金山',
+             'name:zh-Hant': u'舊金山'})
 
         self.assert_no_matching_feature(
             16, 10482, 25330, 'places',
@@ -456,5 +459,5 @@ class ChineseNameTest(FixtureTest):
             {'id': 85826037, 'kind': 'neighbourhood',
              'source': "whosonfirst.org",
              'name': 'Hollywood',
-             'name:zh-hans': u'好莱坞',
-             'name:zh-hant': u'好萊塢'})
+             'name:zh-Hans': u'好莱坞',
+             'name:zh-Hant': u'好萊塢'})
