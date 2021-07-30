@@ -39,7 +39,8 @@ class WofL10nName(FixtureTest):
             {'id': 26819236, 'kind': 'locality', 'kind_detail': 'city',
              'source': "openstreetmap.org",
              'name': 'San Francisco',
-             'name:zh': None})
+             'name:zh-Hans': None,
+             'name:zh': None})  # for backward compatible we still populate name:zh field
 
     def test_londonderry(self):
         # Node: Londonderry/Derry (267762522)
@@ -60,6 +61,12 @@ class WofL10nName(FixtureTest):
             16, 39180, 26661, 'places',
             {'id': 29090735,
              'name:zh-min-nan': None,
-             'name:zh': None,
+             'name:zh-Hans': u'\u8036\u8def\u6492\u51b7',
+             'name:zh': u'\u8036\u8def\u6492\u51b7',  # for backward compatible we still populate name:zh field
+             })
+
+        self.assert_no_matching_feature(
+            16, 39180, 39180, 'places',
+            {'id': 29090735,
              'name:zh-yue': None,
              })
