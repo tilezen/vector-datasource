@@ -607,7 +607,8 @@ osm_l10n_lookup = set([
 ])
 
 
-# key is the name in OSM source; value is a tuple of Tilezen internal name and its priority value
+# key is the name in OSM source; value is a tuple of Tilezen internal name
+# and its priority value
 osm_zh_variants_lookup = {
     'zh-Hans': ('zh-Hans', 0),  # Simplified Chinese
     'zh-SG': ('zh-Hans', 1),  # Simplified Chinese
@@ -670,6 +671,18 @@ def post_process_ne_wof_zh(properties):
         properties['name:zh-Hant'] = properties['name:zh-Hans']
 
 
+def clean_zh(properties):
+    """ only select one of the options if the field is separated by "/"
+    for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
+    one 旧金山市县 will be preserved
+    also some data source may have leading backslash char or whitespace,
+    need to remove those too """
+    if 'name:zh-Hans' in properties:
+        properties['name:zh-Hans'] = properties['name:zh-Hans'].split('/')[0].strip().strip('\\')
+    if 'name:zh-Hant' in properties:
+        properties['name:zh-Hant'] = properties['name:zh-Hant'].split('/')[0].strip().strip('\\')
+
+
 def post_process_osm_zh(properties):
     """ First check whether name:zh (Simplified) and name:zht(Traditional)
     are set already, if not we use the name:zh-default to backfill them.
@@ -719,12 +732,6 @@ def post_process_osm_zh(properties):
             properties['name:zh-Hant'] = zh_Hant_fallback
         elif len(zh_Hans_fallback) != 0:
             properties['name:zh-Hant'] = zh_Hans_fallback
-
-    # only select one of the options if the field is separated by "/"
-    # for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
-    # one 旧金山市县 will be preserved
-    properties['name:zh-Hans'] = properties['name:zh-Hans'].split('/')[0].strip()
-    properties['name:zh-Hant'] = properties['name:zh-Hant'].split('/')[0].strip()
 
     if 'name:zh-default' in properties:
         del properties['name:zh-default']
@@ -795,6 +802,8 @@ def tags_name_i18n(shape, properties, fid, zoom):
 
     if is_wof or is_ne:
         post_process_ne_wof_zh(properties)
+
+    clean_zh(properties)
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)

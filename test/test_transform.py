@@ -172,6 +172,27 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals('三藩市', props['name:zh-Hant'])
         self.assertFalse('name:zh-default' in props)
 
+    def test_zh_clean(self):
+        """ Test the case when there are leading whitespace or blackslash """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', u' \\旧金山 / 三藩市')])
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [('zho_cn_x_preferred',
+                                             u'\\旧金山')])
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zh', u'  旧金山')])
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
     def test_osm_zh_reject(self):
         """ Test the case when some not-interested `zh` tags such as
         `name:zh_pinyin` are present and we don't use them
