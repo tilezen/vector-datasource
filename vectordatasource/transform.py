@@ -671,16 +671,24 @@ def post_process_ne_wof_zh(properties):
         properties['name:zh-Hant'] = properties['name:zh-Hans']
 
 
-def clean_zh(properties):
+def clean_backfill_zh(properties):
     """ only select one of the options if the field is separated by "/"
     for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
     one 旧金山市县 will be preserved
     also some data source may have leading backslash char or whitespace,
-    need to remove those too """
+    need to remove those too.
+
+    Also for backward compatibility, we also populate name:zh field
+    """
     if 'name:zh-Hans' in properties:
         properties['name:zh-Hans'] = properties['name:zh-Hans'].split('/')[0].strip().strip('\\')
     if 'name:zh-Hant' in properties:
         properties['name:zh-Hant'] = properties['name:zh-Hant'].split('/')[0].strip().strip('\\')
+
+    if 'name:zh-Hans' in properties:
+        properties['name:zh'] = properties['name:zh-Hans']
+    elif 'name:zh-Hant' in properties:
+        properties['name:zh'] = properties['name:zh-Hant']
 
 
 def post_process_osm_zh(properties):
@@ -803,7 +811,7 @@ def tags_name_i18n(shape, properties, fid, zoom):
     if is_wof or is_ne:
         post_process_ne_wof_zh(properties)
 
-    clean_zh(properties)
+    clean_backfill_zh(properties)
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)

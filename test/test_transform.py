@@ -178,6 +178,7 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [('zh-Hans', u' \\旧金山 / 三藩市')])
         self.assertEquals(u'旧金山', props['name:zh-Hans'])
         self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertEquals(u'旧金山', props['name:zh'])  # for backward compatible we still populate name:zh field
         self.assertFalse('name:zh-default' in props)
 
         shape, props, fid = self._call_fut('whosonfirst.org',
@@ -185,6 +186,7 @@ class TagsNameI18nTest(unittest.TestCase):
                                              u'\\旧金山')])
         self.assertEquals(u'旧金山', props['name:zh-Hans'])
         self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertEquals(u'旧金山', props['name:zh'])  # for backward compatible we still populate name:zh field
         self.assertFalse('name:zh-default' in props)
 
         shape, props, fid = self._call_fut('naturalearthdata.com',

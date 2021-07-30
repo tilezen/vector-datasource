@@ -129,6 +129,7 @@ class ChineseNameTest(FixtureTest):
                 'kind': 'locality',
                 'name': 'San Francisco',
                 'name:zh-Hans': u'旧金山',
+                'name:zh': u'旧金山', # for backward compatible we still populate name:zh field
                 'name:zh-Hant': u'舊金山',
                 'source': u'naturalearthdata.com',
             })
@@ -260,6 +261,7 @@ class ChineseNameTest(FixtureTest):
                     'min_zoom': 2.0,
                     'max_zoom': 6.7,
                     'name:zh-Hans': u'美國',
+                    'name:zh': u'美國', # for backward compatible we still populate name:zh field
                     'name:zh-Hant': u'美國'
                 })
             self.assert_no_matching_feature(
@@ -320,6 +322,7 @@ class ChineseNameTest(FixtureTest):
              'source': "openstreetmap.org",
              'name': 'San Francisco',
              'name:zh-Hans': u'旧金山',
+             'name:zh': u'旧金山', # for backward compatible we still populate name:zh field
              'name:zh-Hant': u'舊金山'})
 
         self.assert_no_matching_feature(
@@ -458,4 +461,5 @@ class ChineseNameTest(FixtureTest):
              'source': "whosonfirst.org",
              'name': 'Hollywood',
              'name:zh-Hans': u'好莱坞',
+             'name:zh': u'好莱坞', # for backward compatible we still populate name:zh field
              'name:zh-Hant': u'好萊塢'})

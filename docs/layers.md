@@ -61,6 +61,8 @@ We populate two fields for Chinese variants based on [ISO 15924](https://en.wiki
 
 Both `name:zh-Hans` and `name:zh-Hant` properties are best-effort. It means `name:zh-Hans` can sometimes contain Traditional Chinese and `name:zh-Hant` can sometimes contain Simplified Chinese. And we don't auto-translate Traditional Chinese to Simplified Chinese or vice versa.
 
+The `name:zh` field is now deprecated. But for backward-compatibility we also populate it, and this field is Simplified Chinese most time but can also be Traditional Chinese. Don't rely on this field.
+
 ###### OSM
 
 We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to populate the two properties:
