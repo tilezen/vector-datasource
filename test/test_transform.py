@@ -263,7 +263,7 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals(u'旧金山', props['name:zh-hans'])
         self.assertEquals(u'舊金山', props['name:zh-hant'])
 
-    def test_ne_zh_override(self):
+    def test_ne_zh_fallback(self):
         """ Either Simplified or Traditional Chinese variant is available  """
         shape, props, fid = self._call_fut('naturalearthdata.com',
                                            [(u'zh', u'旧金山'),
