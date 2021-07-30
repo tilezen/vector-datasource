@@ -688,9 +688,9 @@ def post_process_osm_zh(properties):
         return
 
     zh_Hans_fallback = properties['name:zh-Hans'] if 'name:zh-Hans' in \
-                                                properties else u''
+                                                     properties else u''
     zh_Hant_fallback = properties['name:zh-Hant'] if 'name:zh-Hant' in \
-                                                 properties else u''
+                                                     properties else u''
 
     if 'name:zh-default' in properties:
         names = properties['name:zh-default'].split('/')

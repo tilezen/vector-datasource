@@ -122,18 +122,16 @@ class ChineseNameTest(FixtureTest):
             })
         )
 
-        # the min_zoom is 2.7 so it should appear at zoom 3 to zoom 7
-        for zoom in xrange(3, 8):
-            x, y = deg2num(lat, lon, zoom)
-            self.assert_has_feature(
-                zoom, x, y, 'places', {
-                    'id': 26819236,
-                    'kind': 'locality',
-                    'name': 'San Francisco',
-                    'name:zh-Hans': u'旧金山',
-                    'name:zh-Hant': u'舊金山',
-                    'source': u'naturalearthdata.com',
-                })
+        x, y = deg2num(lat, lon, 3)
+        self.assert_has_feature(
+            3, x, y, 'places', {
+                'id': 26819236,
+                'kind': 'locality',
+                'name': 'San Francisco',
+                'name:zh-Hans': u'旧金山',
+                'name:zh-Hant': u'舊金山',
+                'source': u'naturalearthdata.com',
+            })
 
     def test_united_states(self):
         # The low zoom test is borrowed from 977-low-zoom-from-ne-join
