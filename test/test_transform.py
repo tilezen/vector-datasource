@@ -112,7 +112,7 @@ class TagsNameI18nTest(unittest.TestCase):
         shape = fid = zoom = None
         tags = {}
         for nt in name_tuples:
-            name = 'name:%s' % nt[0]
+            name = 'name:%s' % nt[0] if source != 'naturalearthdata.com' else 'name_%s' % nt[0]
             tags[name] = nt[1]
         props = dict(
             source=source,
@@ -125,22 +125,22 @@ class TagsNameI18nTest(unittest.TestCase):
     def test_osm_zh(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [(u'zh', u'旧金山')])
-        self.assertEquals(u'旧金山', props[u'name:zh'])
-        self.assertEquals(u'旧金山', props[u'name:zht'])
+        self.assertEquals(u'旧金山', props[u'name:zh-hans'])
+        self.assertEquals(u'旧金山', props[u'name:zh-hant'])
         self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hans(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [(u'zh-Hans', u'旧金山/三藩市')])
-        self.assertEquals(u'旧金山', props[u'name:zh'])
-        self.assertEquals(u'旧金山', props[u'name:zht'])
+        self.assertEquals(u'旧金山', props[u'name:zh-hans'])
+        self.assertEquals(u'旧金山', props[u'name:zh-hant'])
         self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hant(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [(u'zh-Hant', u'舊金山')])
-        self.assertEquals(u'舊金山', props[u'name:zh'])
-        self.assertEquals(u'舊金山', props[u'name:zht'])
+        self.assertEquals(u'舊金山', props[u'name:zh-hans'])
+        self.assertEquals(u'舊金山', props[u'name:zh-hant'])
         self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hans_and_fallback1(self):
@@ -148,8 +148,8 @@ class TagsNameI18nTest(unittest.TestCase):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [(u'zh-Hans', u'旧金山'),
                                             (u'zh', u'旧金山/三藩市/舊金山')])
-        self.assertEquals(u'旧金山', props[u'name:zh'])
-        self.assertEquals(u'三藩市', props[u'name:zht'])
+        self.assertEquals(u'旧金山', props[u'name:zh-hans'])
+        self.assertEquals(u'三藩市', props[u'name:zh-hant'])
         self.assertFalse(u'name:zh-default' in props)
 
     def test_osm_zh_hans_and_fallback2(self):
@@ -158,8 +158,8 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [('zh-Hans', '旧金山'),
                                             ('zh-Hant', '舊金山'),
                                             ('zh', '旧金山/三藩市/舊金山')])
-        self.assertEquals('旧金山', props['name:zh'])
-        self.assertEquals('舊金山', props['name:zht'])
+        self.assertEquals('旧金山', props['name:zh-hans'])
+        self.assertEquals('舊金山', props['name:zh-hant'])
         self.assertFalse('name:zh-default' in props)
 
     def test_osm_zh_hans_and_fallback3(self):
@@ -168,8 +168,8 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [('zh-Hans', '旧金山'),
                                             ('zh-yue', '三藩市'),
                                             ('zh', '舊金山')])
-        self.assertEquals('旧金山', props['name:zh'])
-        self.assertEquals('三藩市', props['name:zht'])
+        self.assertEquals('旧金山', props['name:zh-hans'])
+        self.assertEquals('三藩市', props['name:zh-hant'])
         self.assertFalse('name:zh-default' in props)
 
     def test_osm_zh_reject(self):
@@ -179,44 +179,44 @@ class TagsNameI18nTest(unittest.TestCase):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh', '美国'),
                                             ('zh_pinyin', 'Měiguó')])
-        self.assertEquals('美国', props['name:zh'])
-        self.assertEquals('美国', props['name:zht'])
+        self.assertEquals('美国', props['name:zh-hans'])
+        self.assertEquals('美国', props['name:zh-hant'])
         self.assertFalse('name:zh-default' in props)
 
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh-Hant', '美國'),
                                             ('zh_pinyin', 'Měiguó')])
-        self.assertEquals('美國', props['name:zh'])
-        self.assertEquals('美國', props['name:zht'])
+        self.assertEquals('美國', props['name:zh-hans'])
+        self.assertEquals('美國', props['name:zh-hant'])
         self.assertFalse('name:zh-default' in props)
 
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh-Hant', '美國'),
                                             ('zh_random', 'Měiguó')])
-        self.assertEquals('美國', props['name:zh'])
-        self.assertEquals('美國', props['name:zht'])
+        self.assertEquals('美國', props['name:zh-hans'])
+        self.assertEquals('美國', props['name:zh-hant'])
         self.assertFalse('name:zh-default' in props)
 
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh-Hant', '美國'),
                                             ('zh-random', 'Měiguó')])
-        self.assertEquals('美國', props['name:zh'])
-        self.assertEquals('美國', props['name:zht'])
+        self.assertEquals('美國', props['name:zh-hans'])
+        self.assertEquals('美國', props['name:zh-hant'])
         self.assertFalse('name:zh-default' in props)
 
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('zh-pinyin', 'Měiguó')])
         self.assertFalse('name:zh-default' in props)
-        self.assertFalse('name:zh' in props)
-        self.assertFalse('name:zht' in props)
+        self.assertFalse('name:zh-hans' in props)
+        self.assertFalse('name:zh-hant' in props)
 
     def test_osm_source(self):
         shape, props, fid = self._call_fut('openstreetmap.org',
                                            [('en', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
-        self.assertTrue(u'name:zh' not in props)
-        self.assertTrue(u'name:zht' not in props)
+        self.assertTrue(u'name:zh-hans' not in props)
+        self.assertTrue(u'name:zh-hant' not in props)
         self.assertFalse(u'name:zh-default' in props)
 
     def test_wof_source(self):
@@ -233,8 +233,8 @@ class TagsNameI18nTest(unittest.TestCase):
                                             (u'zho_x_preferred', u'旧金山'),
                                             (u'zho_x_variant', u'舊金山'),
                                             ],)
-        self.assertEquals(u'旧金山', props['name:zh'])
-        self.assertEquals(u'舊金山', props['name:zht'])
+        self.assertEquals(u'旧金山', props['name:zh-hans'])
+        self.assertEquals(u'舊金山', props['name:zh-hant'])
 
     def test_wof_zh_non_primary(self):
         """ Non primary data are available """
@@ -242,8 +242,8 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [(u'wuu_x_preferred', u'旧金山'),
                                             (u'zho_x_variant', u'舊金山'),
                                             ],)
-        self.assertEquals(u'旧金山', props['name:zh'])
-        self.assertEquals(u'舊金山', props['name:zht'])
+        self.assertEquals(u'旧金山', props['name:zh-hans'])
+        self.assertEquals(u'舊金山', props['name:zh-hant'])
 
     def test_wof_zh_primary_override(self):
         """ Both primary and secondary data are available """
@@ -251,8 +251,31 @@ class TagsNameI18nTest(unittest.TestCase):
                                            [(u'zho_cn_x_preferred', u'旧金山'),
                                             (u'zho_x_preferred', u'舊金山'),
                                             ],)
-        self.assertEquals(u'旧金山', props['name:zh'])
-        self.assertEquals(u'旧金山', props['name:zht'])  # backfilled
+        self.assertEquals(u'旧金山', props['name:zh-hans'])
+        self.assertEquals(u'旧金山', props['name:zh-hant'])  # backfilled
+
+    def test_ne_zh(self):
+        """ All variants data are available """
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zh', u'旧金山'),
+                                            (u'zht', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-hans'])
+        self.assertEquals(u'舊金山', props['name:zh-hant'])
+
+    def test_ne_zh_override(self):
+        """ Either Simplified or Traditional Chinese variant is available  """
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zh', u'旧金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-hans'])
+        self.assertEquals(u'旧金山', props['name:zh-hant'])
+
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zht', u'舊金山'),
+                                            ], )
+        self.assertEquals(u'舊金山', props['name:zh-hans'])
+        self.assertEquals(u'舊金山', props['name:zh-hant'])
 
     def test_short_name(self):
         shape, props, fid = self._call_fut(

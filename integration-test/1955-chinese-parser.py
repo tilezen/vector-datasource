@@ -13,6 +13,125 @@ def _tile_centre(z, x, y):
 
 class ChineseNameTest(FixtureTest):
 
+    def test_ne_san_francisco(self):
+        lon, lat = (-122.417169, 37.769196)
+        self.generate_fixtures(
+            dsl.way(26819236, wkt_loads(
+             'POINT (-122.417169 37.769196)'), {
+                "scalerank": 1,
+                "natscale": 300,
+                "labelrank": 1,
+                "featurecla": u"Populated place",
+                "name": u"San Francisco",
+                "namepar": u"",
+                "namealt": u"San Francisco-Oakland",
+                "nameascii": u"San Francisco",
+                "adm0cap": 0,
+                "worldcity": 1,
+                "megacity": 1,
+                "sov0name": u"United States",
+                "sov_a3": u"USA",
+                "adm0name": u"United States of America",
+                "adm0_a3": u"USA",
+                "adm1name": u"California",
+                "iso_a2": u"US",
+                "latitude": 37.769196,
+                "longitude": -122.417169,
+                "pop_max": 3450000,
+                "pop_min": 732072,
+                "pop_other": 27400,
+                "rank_max": 12,
+                "rank_min": 11,
+                "meganame": u"San Francisco-Oakland",
+                "ls_name": u"San Francisco1",
+                "max_pop10": 988636,
+                "max_pop20": 1130999,
+                "max_pop50": 1371285,
+                "max_pop300": 4561697,
+                "max_pop310": 4561697,
+                "max_natsca": 300,
+                "min_areakm": 218,
+                "max_areakm": 1748,
+                "min_areami": 84,
+                "max_areami": 675,
+                "min_perkm": 126,
+                "max_perkm": 755,
+                "min_permi": 78,
+                "max_permi": 469,
+                "min_bbxmin": -122.516667,
+                "max_bbxmin": -122.516667,
+                "min_bbxmax": -122.358333,
+                "max_bbxmax": -121.733333,
+                "min_bbymin": 37.191667,
+                "max_bbymin": 37.575,
+                "min_bbymax": 37.816667,
+                "max_bbymax": 38.041667,
+                "mean_bbxc": -122.301354,
+                "mean_bbyc": 37.622288,
+                "timezone": u"America\/Los_Angeles",
+                "un_fid": 570,
+                "pop1950": 1855,
+                "pop1955": 2021,
+                "pop1960": 2200,
+                "pop1965": 2361,
+                "pop1970": 2529,
+                "pop1975": 2590,
+                "pop1980": 2656,
+                "pop1985": 2805,
+                "pop1990": 2961,
+                "pop1995": 3095,
+                "pop2000": 3236,
+                "pop2005": 3387,
+                "pop2010": 3450,
+                "pop2015": 3544,
+                "pop2020": 3684,
+                "pop2025": 3803,
+                "pop2050": 3898,
+                "min_zoom": 2.7,
+                "wikidataid": u"Q62",
+                "wof_id": 85922583,
+                "capalt": 0,
+                "name_en": u"San Francisco",
+                "name_de": u"San Francisco",
+                "name_es": u"San Francisco",
+                "name_fr": u"San Francisco",
+                "name_pt": u"São Francisco",
+                "name_ru": u"Cан-франциско",
+                "name_zh": u"旧金山",
+                "name_ar": u"سان فرانسيسكو",
+                "name_bn": u"সান ফ্রান্সিস্কো",
+                "name_el": u"σαν φρανσίσκο",
+                "name_hi": u"सैन फ्रांसिस्को",
+                "name_hu": u"San Francisco",
+                "name_id": u"San Francisco",
+                "name_it": u"San Francisco",
+                "name_ja": u"サンフランシスコ",
+                "name_ko": u"샌프란시스코",
+                "name_nl": u"San Francisco",
+                "name_pl": u"San Francisco",
+                "name_sv": u"San Francisco",
+                "name_tr": u"San Francisco",
+                "name_vi": u"San Francisco",
+                "ne_id": 1159151479,
+                "name_fa": u"سان فرانسیسکو",
+                "name_he": u"סן פרנסיסקו",
+                "name_uk": u"Cан-франциско",
+                "name_ur": u"سان فرانسسکو",
+                "name_zht": u"舊金山"
+            })
+        )
+
+        # the min_zoom is 2.7 so it should appear at zoom 3
+        zoom = 3
+        x, y = deg2num(lat, lon, zoom)
+        self.assert_has_feature(
+            zoom, x, y, 'places', {
+                'id': 26819236,
+                'name': 'San Francisco',
+                'name:zh-hans': u'旧金山',
+                'name:zh-hant': u'舊金山'
+            })
+
     def test_united_states(self):
         # The low zoom test is borrowed from 977-low-zoom-from-ne-join
         lon, lat = (-100.4458825, 39.7837304)
@@ -139,8 +258,8 @@ class ChineseNameTest(FixtureTest):
                     'name': 'United States of America',
                     'min_zoom': 2.0,
                     'max_zoom': 6.7,
-                    'name:zh': u'美國',
-                    'name:zht': u'美國'
+                    'name:zh-hans': u'美國',
+                    'name:zh-hant': u'美國'
                 })
             self.assert_no_matching_feature(
                          zoom, x, y, 'places',
@@ -199,8 +318,8 @@ class ChineseNameTest(FixtureTest):
             {'id': 26819236, 'kind': 'locality', 'kind_detail': 'city',
              'source': "openstreetmap.org",
              'name': 'San Francisco',
-             'name:zh': u'旧金山',
-             'name:zht': u'舊金山'})
+             'name:zh-hans': u'旧金山',
+             'name:zh-hant': u'舊金山'})
 
         self.assert_no_matching_feature(
             16, 10482, 25330, 'places',
@@ -337,5 +456,5 @@ class ChineseNameTest(FixtureTest):
             {'id': 85826037, 'kind': 'neighbourhood',
              'source': "whosonfirst.org",
              'name': 'Hollywood',
-             'name:zh': u'好莱坞',
-             'name:zht': u'好萊塢'})
+             'name:zh-hans': u'好莱坞',
+             'name:zh-hant': u'好萊塢'})

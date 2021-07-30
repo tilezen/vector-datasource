@@ -524,11 +524,11 @@ LangResult = namedtuple('LangResult', ['code', 'priority'])
 # key is the name in WOF source; value is the Tilezen internal name and its
 # priority
 wof_zh_variants_lookup = {
-    'zho_cn_x_preferred': ('zh', 0),  # Simplified Chinese
-    'zho_x_preferred': ('zh', 1),  # Simplified Chinese
-    'wuu_x_preferred': ('zh', 2),  # Simplified Chinese
-    'zho_tw_x_preferred': ('zht', 0),  # Traditional Chinese
-    'zho_x_variant': ('zht', 1),  # Traditional Chinese
+    'zho_cn_x_preferred': ('zh-hans', 0),  # Simplified Chinese
+    'zho_x_preferred': ('zh-hans', 1),  # Simplified Chinese
+    'wuu_x_preferred': ('zh-hans', 2),  # Simplified Chinese
+    'zho_tw_x_preferred': ('zh-hant', 0),  # Traditional Chinese
+    'zho_x_variant': ('zh-hant', 1),  # Traditional Chinese
 }
 
 
@@ -547,7 +547,19 @@ def _convert_wof_l10n_name(x):
     return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
+# key is the name in NE source; value is a tuple of Tilezen internal
+# name and its priority value
+ne_zh_variants_lookup = {
+    'zh': ('zh-hans', 0),  # Simplified Chinese
+    'zht': ('zh-hant', 0),  # Traditional Chinese
+}
+
+
 def _convert_ne_l10n_name(x):
+    if x in ne_zh_variants_lookup:
+        return LangResult(code=ne_zh_variants_lookup[x][0],
+                          priority=ne_zh_variants_lookup[x][1])
+
     if len(x) != 2:
         return None
     try:
@@ -597,14 +609,14 @@ osm_l10n_lookup = set([
 
 # key is the name in OSM source; value is a tuple of Tilezen internal name and its priority value
 osm_zh_variants_lookup = {
-    'zh-Hans': ('zh', 0),  # Simplified Chinese
-    'zh-SG': ('zh', 1),  # Simplified Chinese
+    'zh-Hans': ('zh-hans', 0),  # Simplified Chinese
+    'zh-SG': ('zh-hans', 1),  # Simplified Chinese
     'zh': ('zh-default', 0),  # Simplified Chinese presumably, can contain Traditional Chinese  # noqa
-    'zh-Hant': ('zht', 0),    # Traditional Chinese
-    'zh-Hant-tw': ('zht', 1),  # Traditional Chinese
-    'zh-Hant-hk': ('zht', 2),  # Traditional Chinese
-    'zh-yue': ('zht', 3),  # Traditional Chinese
-    'zh-HK': ('zht', 4),  # Traditional Chinese
+    'zh-Hant': ('zh-hant', 0),    # Traditional Chinese
+    'zh-Hant-tw': ('zh-hant', 1),  # Traditional Chinese
+    'zh-Hant-hk': ('zh-hant', 2),  # Traditional Chinese
+    'zh-yue': ('zh-hant', 3),  # Traditional Chinese
+    'zh-HK': ('zh-hant', 4),  # Traditional Chinese
 }
 
 
@@ -648,14 +660,14 @@ def _convert_osm_l10n_name(x):
     return LangResult(code=result, priority=priority)
 
 
-def post_process_wof_zh(properties):
+def post_process_ne_wof_zh(properties):
     """ If there is no Simplified Chinese, Traditional
     Chinese will be used to further backfill, and vice versa """
-    if 'name:zh' not in properties and 'name:zht' in properties:
-        properties['name:zh'] = properties['name:zht']
+    if 'name:zh-hans' not in properties and 'name:zh-hant' in properties:
+        properties['name:zh-hans'] = properties['name:zh-hant']
 
-    if 'name:zht' not in properties and 'name:zh' in properties:
-        properties['name:zht'] = properties['name:zh']
+    if 'name:zh-hant' not in properties and 'name:zh-hans' in properties:
+        properties['name:zh-hant'] = properties['name:zh-hans']
 
 
 def post_process_osm_zh(properties):
@@ -666,18 +678,18 @@ def post_process_osm_zh(properties):
     It also deletes the intermediate property `zh-default`
     """
 
-    if 'name:zh' not in properties and 'name:zht' not in properties and \
+    if 'name:zh-hans' not in properties and 'name:zh-hant' not in properties and \
             'name:zh-default' not in properties:
         return
 
-    if 'name:zh' in properties and 'name:zht' in properties:
+    if 'name:zh-hans' in properties and 'name:zh-hant' in properties:
         if 'name:zh-default' in properties:
             del properties['name:zh-default']
         return
 
-    zh_Hans_fallback = properties['name:zh'] if 'name:zh' in \
+    zh_Hans_fallback = properties['name:zh-hans'] if 'name:zh-hans' in \
                                                 properties else u''
-    zh_Hant_fallback = properties['name:zht'] if 'name:zht' in \
+    zh_Hant_fallback = properties['name:zh-hant'] if 'name:zh-hant' in \
                                                  properties else u''
 
     if 'name:zh-default' in properties:
@@ -696,23 +708,23 @@ def post_process_osm_zh(properties):
             if len(zh_Hant_fallback) == 0:
                 zh_Hant_fallback = names[0]
 
-    if 'name:zh' not in properties:
+    if 'name:zh-hans' not in properties:
         if len(zh_Hans_fallback) != 0:
-            properties['name:zh'] = zh_Hans_fallback
+            properties['name:zh-hans'] = zh_Hans_fallback
         elif len(zh_Hant_fallback) != 0:
-            properties['name:zh'] = zh_Hant_fallback
+            properties['name:zh-hans'] = zh_Hant_fallback
 
-    if 'name:zht' not in properties:
+    if 'name:zh-hant' not in properties:
         if len(zh_Hant_fallback) != 0:
-            properties['name:zht'] = zh_Hant_fallback
+            properties['name:zh-hant'] = zh_Hant_fallback
         elif len(zh_Hans_fallback) != 0:
-            properties['name:zht'] = zh_Hans_fallback
+            properties['name:zh-hant'] = zh_Hans_fallback
 
     # only select one of the options if the field is separated by "/"
     # for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
     # one 旧金山市县 will be preserved
-    properties['name:zh'] = properties['name:zh'].split('/')[0].strip()
-    properties['name:zht'] = properties['name:zht'].split('/')[0].strip()
+    properties['name:zh-hans'] = properties['name:zh-hans'].split('/')[0].strip()
+    properties['name:zh-hant'] = properties['name:zh-hant'].split('/')[0].strip()
 
     if 'name:zh-default' in properties:
         del properties['name:zh-default']
@@ -781,8 +793,8 @@ def tags_name_i18n(shape, properties, fid, zoom):
     if is_osm:
         post_process_osm_zh(properties)
 
-    if is_wof:
-        post_process_wof_zh(properties)
+    if is_wof or is_ne:
+        post_process_ne_wof_zh(properties)
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)
