@@ -304,15 +304,13 @@ class TagsNameI18nTest(unittest.TestCase):
         """ Test Chinese field are empty or None """
         for v in [None, u'', u' ', u'\t', u'\n']:
             _, props, _ = self._call_fut('naturalearthdata.com',
-                                               [(u'zh', v),
-                                                ], )
+                                               [(u'zh', v)], )
             self.assertFalse(u'name:zh-Hans' in props)
             self.assertFalse(u'name:zh-Hant' in props)
             self.assertFalse(u'name:zh' in props)
 
             _, props, _ = self._call_fut('naturalearthdata.com',
-                                               [(u'zht', v),
-                                                ], )
+                                               [(u'zht', v)], )
             self.assertFalse(u'name:zh-Hans' in props)
             self.assertFalse(u'name:zh-Hant' in props)
             self.assertFalse(u'name:zh' in props)

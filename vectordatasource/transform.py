@@ -550,7 +550,6 @@ def _convert_wof_l10n_name(x):
     lang_code = _alpha_2_code_of(lang)
     if lang_code == zh_alpha_2_lang_code:
         return None
-    
     return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
