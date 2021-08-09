@@ -63,6 +63,8 @@ Both `name:zh-Hans` and `name:zh-Hant` properties are best-effort. It means `nam
 
 The `name:zh` field is now deprecated. But for backward-compatibility we also populate it, and this field is Simplified Chinese most time but can also be Traditional Chinese. Don't rely on this field.
 
+If the program cannot find any Chinese properties in the predefined list of each provider(see below), none of `name:zh`, `name:zh-Hans` or `name:zh-Hant` will be populated.
+
 ###### OSM
 
 We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to populate the two properties:
