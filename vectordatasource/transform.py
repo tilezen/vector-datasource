@@ -521,6 +521,8 @@ def _alpha_2_code_of(lang):
 LangResult = namedtuple('LangResult', ['code', 'priority'])
 
 
+zh_alpha_2_lang_code = 'zh'
+
 # key is the name in WOF source; value is the Tilezen internal name and its
 # priority
 wof_zh_variants_lookup = {
@@ -544,6 +546,11 @@ def _convert_wof_l10n_name(x):
         lang = pycountry.languages.get(alpha_3=lang_str_iso_639_3)
     except KeyError:
         return None
+
+    lang_code = _alpha_2_code_of(lang)
+    if lang_code == zh_alpha_2_lang_code:
+        return None
+    
     return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
@@ -566,7 +573,12 @@ def _convert_ne_l10n_name(x):
         lang = pycountry.languages.get(alpha_2=x)
     except KeyError:
         return None
-    return LangResult(code=_alpha_2_code_of(lang), priority=0)
+
+    lang_code = _alpha_2_code_of(lang)
+    if lang_code == zh_alpha_2_lang_code:
+        return None
+
+    return LangResult(code=lang_code, priority=0)
 
 
 def _normalize_osm_lang_code(x):
@@ -658,6 +670,9 @@ def _convert_osm_l10n_name(x):
     else:
         result = lang_code_result
 
+    if result == zh_alpha_2_lang_code:
+        return None
+
     return LangResult(code=result, priority=priority)
 
 
@@ -679,16 +694,35 @@ def clean_backfill_zh(properties):
     need to remove those too.
 
     Also for backward compatibility, we also populate name:zh field
+
+    Finally, if any of the 'name:zh-Hans', 'name:zh-Hant' or 'name:zh' field
+    is empty or is whitespace string, we remove it.
     """
-    if 'name:zh-Hans' in properties:
+    if properties.get('name:zh-Hans'):
         properties['name:zh-Hans'] = properties['name:zh-Hans'].split('/')[0].strip().strip('\\')
-    if 'name:zh-Hant' in properties:
+    if properties.get('name:zh-Hant'):
         properties['name:zh-Hant'] = properties['name:zh-Hant'].split('/')[0].strip().strip('\\')
 
-    if 'name:zh-Hans' in properties:
+    if properties.get('name:zh-Hans'):
         properties['name:zh'] = properties['name:zh-Hans']
-    elif 'name:zh-Hant' in properties:
+    elif properties.get('name:zh-Hant'):
         properties['name:zh'] = properties['name:zh-Hant']
+
+    # if the field is empty/whitespace string we don't include the properties
+    if 'name:zh-Hans' in properties and \
+            (properties['name:zh-Hans'] is None or
+             not properties['name:zh-Hans'].strip()):
+        del properties['name:zh-Hans']
+
+    if 'name:zh-Hant' in properties and \
+            (properties['name:zh-Hant'] is None or
+             not properties['name:zh-Hant'].strip()):
+        del properties['name:zh-Hant']
+
+    if 'name:zh' in properties and \
+            (properties['name:zh'] is None or
+             not properties['name:zh'].strip()):
+        del properties['name:zh']
 
 
 def post_process_osm_zh(properties):
@@ -697,6 +731,8 @@ def post_process_osm_zh(properties):
     During the backfill, if there is no Simplified Chinese, Traditional
     Chinese will be used to further backfill, and vice versa
     It also deletes the intermediate property `zh-default`
+    Before the function returns, 'name:zh-Hant' or 'name:zh-Hans' may
+    contain an empty string or whitespaces string.
     """
 
     if 'name:zh-Hans' not in properties and 'name:zh-Hant' not in properties and \
@@ -713,7 +749,7 @@ def post_process_osm_zh(properties):
     zh_Hant_fallback = properties['name:zh-Hant'] if 'name:zh-Hant' in \
                                                      properties else u''
 
-    if 'name:zh-default' in properties:
+    if properties.get('name:zh-default'):
         names = properties['name:zh-default'].split('/')
         for name in names:
             if hanzidentifier.is_simplified(name) and \
@@ -729,16 +765,16 @@ def post_process_osm_zh(properties):
             if len(zh_Hant_fallback) == 0:
                 zh_Hant_fallback = names[0]
 
-    if 'name:zh-Hans' not in properties:
-        if len(zh_Hans_fallback) != 0:
+    if not properties.get('name:zh-Hans'):
+        if zh_Hans_fallback is not None and len(zh_Hans_fallback) != 0:
             properties['name:zh-Hans'] = zh_Hans_fallback
-        elif len(zh_Hant_fallback) != 0:
+        elif zh_Hant_fallback is not None and len(zh_Hant_fallback) != 0:
             properties['name:zh-Hans'] = zh_Hant_fallback
 
-    if 'name:zh-Hant' not in properties:
-        if len(zh_Hant_fallback) != 0:
+    if not properties.get('name:zh-Hant'):
+        if zh_Hant_fallback is not None and len(zh_Hant_fallback) != 0:
             properties['name:zh-Hant'] = zh_Hant_fallback
-        elif len(zh_Hans_fallback) != 0:
+        elif zh_Hans_fallback is not None and len(zh_Hans_fallback) != 0:
             properties['name:zh-Hant'] = zh_Hans_fallback
 
     if 'name:zh-default' in properties:
