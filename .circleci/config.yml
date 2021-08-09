@@ -53,7 +53,7 @@ jobs:
           name: Check PEP8 compliance
           command: |
             . ~/env/bin/activate
-            find . -not -path '*/.eggs/*' -not -path '*/data/*' -name '*.py' | xargs flake8
+            find . -not -path '*/.eggs/*' -not -path '*/data/*' -not -path '*/venv/*' -name '*.py' | xargs flake8
       - run:
           name: Unit tests
           command: |

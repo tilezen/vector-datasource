@@ -300,12 +300,98 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals(u'舊金山', props['name:zh-Hans'])
         self.assertEquals(u'舊金山', props['name:zh-Hant'])
 
+    def test_zh_empty_none(self):
+        """ Test Chinese field are empty or None """
+        for v in [None, u'', u' ', u'\t', u'\n']:
+            _, props, _ = self._call_fut('naturalearthdata.com',
+                                               [(u'zh', v)], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('naturalearthdata.com',
+                                               [(u'zht', v)], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('whosonfirst.org',
+                                               [(u'zho_x_preferred', v),
+                                                ], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('whosonfirst.org',
+                                               [(u'zho_cn_x_preferred', v),
+                                                ], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('openstreetmap.org',
+                                               [('zh-Hant', v)])
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('openstreetmap.org',
+                                         [('zh-Hans', v)])
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('openstreetmap.org',
+                                         [('zh', v)])
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+    def test_no_zh_filed(self):
+        """ Test the source doesn't have zh field at all """
+
+        _, props, _ = self._call_fut('naturalearthdata.com', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('naturalearthdata.com', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('whosonfirst.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('whosonfirst.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('openstreetmap.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('openstreetmap.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('openstreetmap.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
     def test_short_name(self):
         shape, props, fid = self._call_fut(
             'openstreetmap.org', [('short', 'foo')])
         self.assertTrue('name:short' in props)
         self.assertFalse('name:zh' in props)
-        self.assertFalse('name:zht' in props)
+        self.assertFalse('name:zh-Hans' in props)
+        self.assertFalse('name:zh-Hant' in props)
         self.assertEquals('foo', props['name:short'])
 
 
