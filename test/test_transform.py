@@ -302,7 +302,7 @@ class TagsNameI18nTest(unittest.TestCase):
 
     def test_zh_empty_none(self):
         """ Test Chinese field are empty or None """
-        for v in [None, u'', u' ', u'/t']:
+        for v in [None, u'', u' ', u'\t', u'\n']:
             _, props, _ = self._call_fut('naturalearthdata.com',
                                                [(u'zh', v),
                                                 ], )
