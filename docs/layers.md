@@ -63,14 +63,20 @@ Both `name:zh-Hans` and `name:zh-Hant` properties are best-effort. It means `nam
 
 The `name:zh` field is now deprecated. But for backward-compatibility we also populate it, and this field is Simplified Chinese most time but can also be Traditional Chinese. Don't rely on this field.
 
-If the program cannot find any Chinese properties in the predefined list of each provider(see below), none of `name:zh`, `name:zh-Hans` or `name:zh-Hant` will be populated.
+If Tilezen cannot find any Chinese properties in the predefined list of each provider (see below), none of `name:zh`, `name:zh-Hans` or `name:zh-Hant` will be populated.
 
 ###### OSM
 
 We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to populate the two properties:
 
 * `name:zh-Hans`: Simplified Chinese
+* `name:zh-SG`: Simplified Chinese
+* `name:zh`: Simplified/Traditional Chinese
 * `name:zh-Hant`: Traditional Chinese
+* `name:zh-Hant-tw`: Traditional Chinese
+* `name:zh-Hant-hk`: Traditional Chinese
+* `name:zh-yue`: Traditional Chinese
+* `name:zh-HK`: Traditional Chinese
 
 We first try to use OSM tag `name:zh-Hans` to populate `name:zh-Hans` and OSM tag `name:zh-Hant` to populate `name:zh-Hant`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-hant`.
 
