@@ -765,15 +765,15 @@ def post_process_osm_zh(properties):
                 zh_Hant_fallback = names[0]
 
     if not properties.get('name:zh-Hans'):
-        if zh_Hans_fallback is not None and len(zh_Hans_fallback) != 0:
+        if zh_Hans_fallback:
             properties['name:zh-Hans'] = zh_Hans_fallback
-        elif zh_Hant_fallback is not None and len(zh_Hant_fallback) != 0:
+        elif zh_Hant_fallback:
             properties['name:zh-Hans'] = zh_Hant_fallback
 
     if not properties.get('name:zh-Hant'):
-        if zh_Hant_fallback is not None and len(zh_Hant_fallback) != 0:
+        if zh_Hant_fallback:
             properties['name:zh-Hant'] = zh_Hant_fallback
-        elif zh_Hans_fallback is not None and len(zh_Hans_fallback) != 0:
+        elif zh_Hans_fallback:
             properties['name:zh-Hant'] = zh_Hans_fallback
 
     if 'name:zh-default' in properties:
