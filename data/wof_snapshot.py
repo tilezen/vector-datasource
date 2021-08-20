@@ -11,7 +11,9 @@ import tarfile
 import requests
 from tqdm import tqdm
 
-
+"""
+expects input to look like "123456.geojson"
+"""
 def _parse_wof_id(s):
     wof_id, ext = splitext(basename(s))
     assert ext == '.geojson'
@@ -46,7 +48,7 @@ class WOFArchiveReader(object):
         with tqdm(total=count) as pbar:
             with tarfile.open(archive) as tar:
                 for info in tar:
-                    if info.isfile() and info.name.endswith('.geojson'):
+                    if info.isfile() and info.name.endswith('.geojson') and "-" not in basename(info.name):
                         self._parse_file(
                             info.name, tar.extractfile(info).read(), file_hash)
                         pbar.update(1)
@@ -100,8 +102,8 @@ class tmpdownload(object):
         shutil.rmtree(self.tempdir)
 
 
-WOF_INVENTORY = 'https://dist.whosonfirst.org/bundles/inventory.json'
-WOF_BUNDLE_PREFIX = 'https://dist.whosonfirst.org/bundles/'
+WOF_INVENTORY = 'https://data.geocode.earth/wof/dist/legacy/inventory.json'
+WOF_BUNDLE_PREFIX = 'https://data.geocode.earth/wof/dist/legacy/'
 
 
 if __name__ == '__main__':
@@ -117,13 +119,13 @@ if __name__ == '__main__':
         item = matching[0]
 
         version = item['last_updated']
-        count = item['count']
         download_size = item['size_compressed']
 
-        print "Downloading %r with %d entries" % (placetype, count)
+        print "Downloading %r" % (placetype)
         with tmpdownload(WOF_BUNDLE_PREFIX + fname, download_size) as fname:
             print "Parsing WOF data"
-            reader.add_archive(fname, version, count)
+            # 20210820: geocode.earth inventory files don't offer count, so count hardcoded to 1
+            reader.add_archive(fname, version, 1)
 
     print "Writing output SQL"
     with open('wof_snapshot.sql', 'w') as fh:
