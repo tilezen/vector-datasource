@@ -1,5 +1,5 @@
-import fiona
 import shapely.geometry
+import fiona
 import sys
 
 shapefile_source = sys.argv[1]
@@ -31,7 +31,7 @@ def tile(geometry, chunk_dim_meters=chunk_dim_meters):
     return tiled_polys
 
 
-with fiona.drivers():
+with fiona.Env():
 
     with fiona.open(shapefile_source) as source:
 
