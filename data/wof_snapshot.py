@@ -12,7 +12,7 @@ import requests
 from tqdm import tqdm
 
 """
-expects s to look like "123456.geojson"
+expects input to look like "123456.geojson"
 """
 def _parse_wof_id(s):
     wof_id, ext = splitext(basename(s))
@@ -124,6 +124,7 @@ if __name__ == '__main__':
         print "Downloading %r" % (placetype)
         with tmpdownload(WOF_BUNDLE_PREFIX + fname, download_size) as fname:
             print "Parsing WOF data"
+            # 20210820: geocode.earth inventory files don't offer count, so count hardcoded to 1
             reader.add_archive(fname, version, 1)
 
     print "Writing output SQL"
