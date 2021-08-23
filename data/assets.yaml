@@ -118,7 +118,7 @@ shapefiles:
 
   - name: ne_10m_populated_places
     shapefile-name: ne_10m_populated_places.shp
-    url: &ne_pre_release_url https://github.com/nvkelso/natural-earth-vector/files/6845759/v5.0.0-pre8-boundaries-pov-chinese.zip
+    url: &ne_pre_release_url https://github.com/nvkelso/natural-earth-vector/files/7035254/v5.0.0-pre9-boundaries-pov-chinese-pops.zip
     prj: 4326
     junk_dirs: yes
 
