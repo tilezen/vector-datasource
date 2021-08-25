@@ -55,7 +55,7 @@ for tbl in polygon line point; do
         breaks[$pct]=`psql -t -c "select (histogram_bounds::text::bigint[])[$pct] from pg_stats where tablename='planet_osm_${tbl}' and attname='osm_id'" $PSQLOPTS $@`
     done
 
-    # try to parallelise across 4 processors.
+    # try to parallelise across 8 processors.
     if [ -n "${breaks[12]}" ] && [ -n "${breaks[25]}" ] && [ -n "${breaks[37]}" ] && [ -n "${breaks[50]}" ] && [ -n "${breaks[62]}" ] && [ -n "${breaks[75]}" ] && [ -n "${breaks[87]}" ]; then
         sed "s/{{SHARDING}}/osm_id < ${breaks[12]}/" "${sql_script}" | psql $PSQLOPTS $@ &
         sed "s/{{SHARDING}}/osm_id >= ${breaks[12]} AND osm_id < ${breaks[25]}/" "${sql_script}" | psql $PSQLOPTS $@ &
