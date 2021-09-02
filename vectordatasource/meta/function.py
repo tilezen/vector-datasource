@@ -407,12 +407,23 @@ def tz_estimate_parking_capacity(capacity, parking, levels, way_area):
     try:
         # if the tags tell us what capacity is, then we should respect that.
         capacity = int(capacity)
+
+        # don't allow abnormally large capacity values
+        # (West Edmonton mall has 20k spaces)
+        if capacity > 99999:
+            return None
+
         return capacity
 
     except (ValueError, TypeError):
         # sometimes people don't put integers in the capacity, which is kind of
         # annoying. it means we just have to fall back to estimating.
         pass
+
+    # don't try to do this if way_area is abnormally large
+    # (Epcot's parking lot is 647k m^2)
+    if way_area > 700000:
+        return None
 
     # estimate capacity based on way area fitting. looks like roughly 46 square
     # mercator meters per space?
@@ -430,6 +441,10 @@ def tz_estimate_parking_capacity(capacity, parking, levels, way_area):
         else:
             # mainly surface, but also other types such as "underground"
             levels = 1
+
+    # don't allow abnormally large levels values
+    if levels > 99:
+        return None
 
     capacity = spaces_per_level * levels
 
