@@ -24,11 +24,11 @@ class BigParkingLotsTest(FixtureTest):
             })
         )
 
-        x, y = deg2num(lat, lon, 15)
+        x, y = deg2num(lat, lon, 16)
         self.assert_has_feature(
-            15, x, y, 'pois', {
+            16, x, y, 'pois', {
                 'id': 8712714905,
-                'kin': 'parking',
+                'kind': 'parking',
                 'min_zoom': 18,
                 'source': u'openstreetmap.org',
             })
