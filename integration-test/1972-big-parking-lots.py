@@ -25,8 +25,10 @@ class BigParkingLotsTest(FixtureTest):
         )
 
         x, y = deg2num(lat, lon, 15)
-        self.assert_no_matching_feature(
-            15, x, y, 'places', {
+        self.assert_has_feature(
+            15, x, y, 'pois', {
                 'id': 8712714905,
+                'kin': 'parking',
+                'min_zoom': 18,
                 'source': u'openstreetmap.org',
             })
