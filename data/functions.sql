@@ -1072,19 +1072,19 @@ DECLARE
   spaces_per_level INTEGER;
 BEGIN
   -- if the capacity is set to something between 0 and 99999, then use that.
-  IF capacity ~ '^[0-9]{1,5}+$' THEN
+  IF capacity ~ '^[0-9]{1,5}$' THEN
     RETURN capacity::integer;
   END IF;
   -- don't try to do this if way_area is abnormally large.
   -- (Epcot's parking lot is 647k m^2)
-  IF way_area > 700000 THEN
+  IF way_area > 2000000 THEN
     RETURN NULL;
   END IF;
   -- otherwise, try to use the information we have to guess the capacity
   spaces_per_level := (way_area / 46.0)::integer;
   levels_int := CASE
     -- limit levels to an integer between 0 and 99
-    WHEN levels ~ '^[0-9]{1,3}$' THEN levels::integer
+    WHEN levels ~ '^[0-9]{1,2}$' THEN levels::integer
     WHEN parking = 'multi-storey' THEN 2
     ELSE 1
   END;
