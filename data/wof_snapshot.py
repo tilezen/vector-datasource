@@ -2,18 +2,15 @@ from os.path import basename
 from os.path import splitext
 from os.path import join as path_join
 
-import bz2
 from tilequeue.wof import Neighbourhood
 from tilequeue.wof import NeighbourhoodFailure
 from tilequeue.wof import NeighbourhoodMeta
 from tilequeue.wof import create_neighbourhood_from_json
 from tilequeue.wof import write_neighbourhood_data_to_file
 import json
-import tarfile
 import requests
 from tqdm import tqdm
 
-NEIGHBORHOOD_PLACE_TYPES = ('neighbourhood', 'macrohood', 'microhood', 'borough')
 
 """
 expects input to look like "123456.geojson"
