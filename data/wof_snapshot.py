@@ -2,6 +2,7 @@ from os.path import basename
 from os.path import splitext
 from os.path import join as path_join
 
+import bz2
 from tilequeue.wof import Neighbourhood
 from tilequeue.wof import NeighbourhoodFailure
 from tilequeue.wof import NeighbourhoodMeta
@@ -38,6 +39,7 @@ def _parse_neighbourhood_from_json(json_str):
     hood = create_neighbourhood_from_json(j, meta)
     return hood
 
+
 class WOFArchiveReader(object):
     """
     Collects WOF parsed data items (mostly neighbourhoods) from a series of
@@ -46,26 +48,6 @@ class WOFArchiveReader(object):
 
     def __init__(self):
         self.wof_items = []
-
-    def add_archive(self, archive, file_hash, count):
-        """
-        Adds the GeoJSON files in the tar.gz archive to the list of wof_items.
-
-        Displays a progress bar, with count being the expected number of items
-        in the tar.gz.
-        """
-
-        with tqdm(total=count) as pbar:
-            with tarfile.open(archive) as tar:
-                for info in tar:
-                    if info.isfile() and info.name.endswith('.geojson') and "-" not in basename(info.name):
-                        self._parse_file(
-                            info.name, tar.extractfile(info).read(), file_hash)
-                        pbar.update(1)
-
-    def _parse_file(self, file_name, data, file_hash):
-        n_or_fail = _parse_neighbourhood(file_name, data, placetype, file_hash)
-        self.handle_neighborhood_or_fail(n_or_fail)
 
     def handle_neighborhood_or_fail(self, n_or_fail):
         if isinstance(n_or_fail, Neighbourhood):
@@ -80,12 +62,12 @@ class WOFArchiveReader(object):
         else:
             raise ValueError("Unexpected %r" % (n_or_fail,))
 
-    def add_sqlite_file(self, file, file_hash):
-        with tqdm(total=1) as pbar:
+    def add_sqlite_file(self, sqlite_filename, file_hash):
+        with tqdm(desc="Grabbing rows from sqlite file %s" % sqlite_filename, unit="Rows", unit_scale=True) as pbar:
             import sqlite3
             from _sqlite3 import Error
             try:
-                conn = sqlite3.connect(file)
+                conn = sqlite3.connect(sqlite_filename)
                 pbar.update(1)
             except Error as e:
                 print(e)
@@ -94,7 +76,7 @@ class WOFArchiveReader(object):
             pbar.update(1)
             cursor.execute("select body from geojson where geojson.id in (select  id from spr where placetype IN ('neighbourhood', 'borough','macrohood', 'microhood')) and geojson.is_alt=0")
             pbar.update(1)
-            #cursor.execute("select  id from names where placetype IN ('neighbourhood', 'borough','macrohood', 'microhood') limit 100")
+
             rows = cursor.fetchall()
             pbar.update(1)
 
@@ -103,13 +85,14 @@ class WOFArchiveReader(object):
                 self.handle_neighborhood_or_fail(n_or_fail)
                 pbar.update(1)
 
+
 class tmpdownload(object):
     """
     Downloads a file to a temporary location and yields its absolute path. Once
     the scope exits, deletes the temporary file.
     """
 
-    def __init__(self, url, expected_size):
+    def __init__(self, url):
         import tempfile
         self.tempdir = tempfile.mkdtemp()
 
@@ -120,7 +103,7 @@ class tmpdownload(object):
         with requests.get(url, stream=True) as response:
             response.raise_for_status()
 
-            with tqdm(total=expected_size) as pbar:
+            with tqdm(desc="Downloading %s" % url, unit="bytes", unit_scale=True) as pbar:
                 with open(abs_fname, 'wb') as fh:
                     for chunk in response.iter_content(chunk_size=16384):
                         if chunk:
@@ -137,33 +120,37 @@ class tmpdownload(object):
         shutil.rmtree(self.tempdir)
 
 
-WOF_INVENTORY = 'https://data.geocode.earth/wof/dist/legacy/inventory.json'
-WOF_BUNDLE_PREFIX = 'https://data.geocode.earth/wof/dist/legacy/'
+class TmpBz2Decompress(object):
+    def __init__(self, filename):
+        import bz2
+        suffix_length = len(".bz2")
+        input_filename = filename[:filename.rfind("/")+1]
+        output_filename = filename[:-suffix_length]
+        with tqdm(desc="Decompressing " % input_filename, unit="bytes", unit_scale=True) as pbar:
+            with open(output_filename, 'w') as outfile:
+                with bz2.BZ2File(filename, 'r') as bzfile:
+                    for chunk in bzfile:
+                        outfile.write(chunk)
+                        pbar.update(len(chunk))
+
+        self.abs_fname = output_filename
+
+    def __enter__(self):
+        return self.abs_fname
+
+    def __exit__(self, type, value, traceback):
+        import os
+        os.remove(self.abs_fname)
+
 
 WOF_SQLITE = "https://data.geocode.earth/wof/dist/sqlite/whosonfirst-data-admin-latest.db.bz2"
 
 if __name__ == '__main__':
-    # inventory = requests.get(WOF_INVENTORY).json()
     reader = WOFArchiveReader()
 
-    # for placetype in NEIGHBORHOOD_PLACE_TYPES:
-    #     fname = 'whosonfirst-data-%s-latest.tar.bz2' % (placetype,)
-    #
-    #     matching = [item for item in inventory
-    #                 if item['name_compressed'] == fname]
-    #     assert len(matching) == 1
-    #     item = matching[0]
-    #
-    #     version = item['last_updated']
-    #     download_size = item['size_compressed']
-    #
-    #     print "Downloading %r - last updated %s - %d" % (placetype, version, download_size)
-    #     with tmpdownload(WOF_BUNDLE_PREFIX + fname, download_size) as fname:
-    #         print "Parsing WOF data"
-    #         # 20210820: geocode.earth inventory files don't offer count, so count hardcoded to 1
-    #         reader.add_archive(fname, version, 1)
-
-    reader.add_sqlite_file("/Users/tgrigsby/Snapchat/Dev/go/src/github.sc-corp.net/Snapchat/vector-datasource/data/whosonfirst-data-admin-latest.db", "123")
+    with tmpdownload(WOF_SQLITE) as fname:
+         with TmpBz2Decompress(fname) as decompressed:
+            reader.add_sqlite_file(decompressed, "latest")
 
     print "Writing output SQL"
     with open('wof_snapshot.sql', 'w') as fh:
