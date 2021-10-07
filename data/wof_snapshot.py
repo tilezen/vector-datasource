@@ -71,13 +71,20 @@ class WOFArchiveReader(object):
 
             cursor = conn.cursor()
             pbar.update(1)
-            cursor.execute("select body from geojson where geojson.id in (select  id from spr where placetype IN ('neighbourhood', 'borough','macrohood', 'microhood')) and geojson.is_alt=0")
+            query = """
+                    select geojson.body from geojson where geojson.id in (
+                    select spr.id from spr
+                    where spr.placetype IN ('neighbourhood', 'borough','macrohood', 'microhood')
+                    AND spr.id != 1
+                    AND spr.is_deprecated = 0
+                    AND spr.is_superseded = 0
+                    AND spr.is_current != 0
+                    ) AND geojson.is_alt = 0
+                    """
+            cursor.execute(query)
             pbar.update(1)
 
-            rows = cursor.fetchall()
-            pbar.update(1)
-
-            for row in rows:
+            for row in cursor:
                 n_or_fail = _parse_neighbourhood_from_json(row[0])
                 self.handle_neighborhood_or_fail(n_or_fail)
                 pbar.update(1)
@@ -123,7 +130,7 @@ class TmpBz2Decompress(object):
         suffix_length = len(".bz2")
         input_filename = filename[:filename.rfind("/")+1]
         output_filename = filename[:-suffix_length]
-        with tqdm(desc="Decompressing " % input_filename, unit="bytes", unit_scale=True) as pbar:
+        with tqdm(desc="Decompressing %s" % input_filename, unit="bytes", unit_scale=True) as pbar:
             with open(output_filename, 'w') as outfile:
                 with bz2.BZ2File(filename, 'r') as bzfile:
                     for chunk in bzfile:
@@ -146,7 +153,7 @@ if __name__ == '__main__':
     reader = WOFArchiveReader()
 
     with tmpdownload(WOF_SQLITE) as fname:
-         with TmpBz2Decompress(fname) as decompressed:
+        with TmpBz2Decompress(fname) as decompressed:
             reader.add_sqlite_file(decompressed, "latest")
 
     print "Writing output SQL"
