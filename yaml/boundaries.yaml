@@ -234,11 +234,24 @@ filters:
         - 'Overlay limit'
         - 'Unrecognized'
         - 'Map unit boundary'
+    min_zoom: { col: min_zoom }
+    output:
+      <<: *output_properties
+      <<: *ne_localized_kind_properties
+      kind: *ne_country_boundaries_kind
+      kind_detail: '2'
+    table: ne
+
+  # ne for disputed kind:xx POV we want to always include
+  # the disputed lines early so when that POV enables them
+  # and the data is available in tiles
+  - filter:
+      featurecla:
         - 'Breakaway'
         - 'Claim boundary'
         - 'Elusive frontier'
         - 'Reference line'
-    min_zoom: { col: min_zoom }
+    min_zoom: 1
     output:
       <<: *output_properties
       <<: *ne_localized_kind_properties
