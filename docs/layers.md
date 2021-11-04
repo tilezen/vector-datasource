@@ -67,7 +67,7 @@ If Tilezen cannot find any Chinese properties in the predefined list of each pro
 
 ###### OSM
 
-We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to populate the two properties:
+We use several tags from OSM to populate the two properties:
 
 * `name:zh-Hans`: Simplified Chinese
 * `name:zh-SG`: Simplified Chinese
@@ -78,7 +78,7 @@ We use three tags `name:zh`, `name:zh-Hans` and `name:zh-Hant` from OSM to popul
 * `name:zh-yue`: Traditional Chinese
 * `name:zh-HK`: Traditional Chinese
 
-We first try to use OSM tag `name:zh-Hans` to populate `name:zh-Hans` and OSM tag `name:zh-Hant` to populate `name:zh-Hant`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-hant`.
+We first try to use OSM tag `name:zh-Hans` to populate `name:zh-Hans` and OSM tag `name:zh-Hant` to populate `name:zh-Hant`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `name:zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `name:zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-Hant`.
 
 
 ###### WhosOnFirst
@@ -120,7 +120,7 @@ A tile geometry can be one of three types:
 * LineString, MultiLineString
 * Polygon, MultiPolygon
 
-In Tangram, Mapzen's GL graphics library, the keyword `$geometry` matches the feature's geometry type, for cases when a FeatureCollection includes more than one type of kind of geometry. Valid geometry types are:
+In Tangram, Mapzen's GL graphics library, the keyword `$geometry` matches the feature's geometry type, for cases when a FeatureCollection includes more than one type of geometry. Valid geometry types are:
 
 * `point`: matches Point, MultiPoint
 * `line`: matches LineString, MultiLineString
@@ -210,7 +210,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `kind_detail`: mapping of OpenStreetMap's `admin_level` values. `2` for countries, `4` for regions, and `6`, `8` (zoom 10+)
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
-* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap, a float.
+* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on `scalerank` and `min_zoom` value from Natural Earth, and invented for OpenStreetMap, a float.
 
 #### Boundaries properties (common optional):
 
@@ -231,6 +231,10 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `country`
 * `county`
 * `disputed`
+* `disputed_breakaway`
+* `disputed_claim`
+* `disputed_elusive`
+* `disputed_reference_line`
 * `indefinite`
 * `indeterminate`
 * `lease_limit`
