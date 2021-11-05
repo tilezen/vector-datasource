@@ -606,15 +606,22 @@ class BoundariesMinZoomTest(unittest.TestCase):
         out_min_zoom = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals(8, out_min_zoom)
 
-    def test_feature_disputed(self):
+    # ne for disputed kind:xx POV we want to always include
+    # the disputed lines early so when that POV enables them
+    # and the data is available in tiles
+    def test_feature_pov(self):
         import shapely.geometry
         shape = shapely.geometry.LineString([(0, 0), (1, 1), (1, 0)])
-        props = {
-            'featurecla': 'Disputed (please verify)',
-        }
+        props = [
+            {'featurecla': 'Breakaway'},
+            {'featurecla': 'Claim boundary'},
+            {'featurecla': 'Elusive frontier'},
+            {'featurecla': 'Reference line'},
+        ]
         meta = make_test_metadata()
-        out_min_zoom = self.boundaries.fn(shape, props, None, meta)
-        self.assertEquals(1, out_min_zoom)
+        for prop in props:
+            out_min_zoom = self.boundaries.fn(shape, prop, None, meta)
+            self.assertEquals(1, out_min_zoom)
 
 
 class BuildingsMinZoomTest(unittest.TestCase):

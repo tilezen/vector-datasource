@@ -70,6 +70,25 @@ def tile_diagonal(z, x, y):
     return shape
 
 
+def tile_diagonal_dexter(z, x, y):
+    """
+    Returns a Shapely LineString which goes from the upper left of the tile
+    to the lower right.
+    """
+
+    from tilequeue.tile import coord_to_bounds
+    from shapely.geometry import LineString
+    from ModestMaps.Core import Coordinate
+
+    bounds = coord_to_bounds(Coordinate(zoom=z, column=x, row=y))
+    shape = LineString([
+        [bounds[0], bounds[3]],
+        [bounds[2], bounds[1]],
+    ])
+
+    return shape
+
+
 def tile_box(z, x, y):
     """
     Returns a Shapely Polygon which covers the tile.
