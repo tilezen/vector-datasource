@@ -12,15 +12,15 @@ class NaturalEarth(FixtureTest):
             dsl.way(1, dsl.tile_diagonal_dexter(z, x, y), {
                 'featurecla': 'Claim boundary',
                 'fclass_cn': 'International boundary (verify)',
-                'min_zoom': 5,
+                'min_zoom': 5,  # min_zoom is set to 5 in the source data
                 'scalerank': 5,
                 'source': 'naturalearthdata.com',
             }),
         )
-        for zoom in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]:
+        for zoom in range(1, 17):
             self.assert_has_feature(
                 zoom, x, y, 'boundaries', {
                     'kind': 'disputed_claim',
                     'kind:cn': 'country',
-                    'min_zoom': 1,  # we change the min_zoom in boundaries.yaml to 1 so we assert here  # noqa
+                    'min_zoom': 1,  # we change the min_zoom override in boundaries.yaml to 1 so we assert here  # noqa
                 })
