@@ -1,5 +1,5 @@
 bucket: nextzen-tile-assets
-datestamp: 20211006
+datestamp: 20211108
 
 shapefiles:
 
@@ -176,6 +176,12 @@ shapefiles:
 
   - name: ne_10m_admin_0_boundary_lines_disputed_areas
     shapefile-name: ne_10m_admin_0_boundary_lines_disputed_areas.shp
+    url: *ne_pre_release_url
+    prj: 4326
+    junk_dirs: yes
+
+  - name: ne_10m_admin_0_boundary_lines_disputed_areas_chn
+    shapefile-name: ne_10m_admin_0_boundary_lines_disputed_areas_chn.shp
     url: *ne_pre_release_url
     prj: 4326
     junk_dirs: yes
