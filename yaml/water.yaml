@@ -45,6 +45,12 @@ globals:
       - else: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
 
 filters:
+  # to not show covered water in the water layer. This filter has to be placed before filter: {natural: water}
+  - filter:
+      covered: yes
+    min_zoom: null
+    output:
+      kind: null
   - filter: {waterway: riverbank}
     min_zoom: *water_polygon_min_zoom
     output:
@@ -152,11 +158,6 @@ filters:
           - when: { reef: [coral, rock, sand] }
             then: { col: reef }
     table: osm
-  - filter:
-      - covered: yes
-    min_zoom: null
-    output:
-      kind: null
 
   #
   # NE features
