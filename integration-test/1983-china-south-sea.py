@@ -16,7 +16,7 @@ class NaturalEarth(FixtureTest):
                 'scalerank': 7,
                 'fclass_cn': 'International boundary (verify)',
                 'fclass_us': 'Unrecognized',
-                'min_zoom': 7.0,  # min_zoom is set to 5 in the source data
+                'min_zoom': 7.0,  # min_zoom is set to 7 according to the source data  # noqa
                 'source': 'naturalearthdata.com',
             }),
         )
