@@ -16,7 +16,7 @@ class NaturalEarth(FixtureTest):
                 'scalerank': 5,
                 'fclass_cn': 'International boundary (verify)',
                 'fclass_us': 'Unrecognized',
-                'min_zoom': 5.0,  # min_zoom is set to 5 according to the source data  # noqa
+                'min_zoom': 5.0,  # min_zoom is set to 5 according to the source data # noqa
                 'source': 'naturalearthdata.com',
             }),
         )
@@ -26,7 +26,5 @@ class NaturalEarth(FixtureTest):
                     'kind': 'unrecognized_country',
                     'kind:cn': 'country',
                     'kind:us': 'unrecognized_country',
-                    'min_zoom': 1,
-                    # we change the min_zoom override in boundaries.yaml to
-                    # 1 so we assert here  # noqa
+                    'min_zoom': 1, # we change the min_zoom override in boundaries.yaml to 1 so we assert here # noqa
                 })
