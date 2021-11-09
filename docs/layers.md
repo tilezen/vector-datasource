@@ -247,7 +247,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `unrecognized_country`
 * `unrecognized_region`
 
-### Viewpoints for disputed boundaries
+### Viewpoints for Disputed Boundaries
 
 When there is a **boundary dispute** between two countries, the default boundary between them is generally shown according to the _de facto_ status marking where one country's on the ground administration ends and another's begins. The boundary line itself is marked `disputed`, and the extend of the other country's claim is tagged with one of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, and `disputed_reference_line`.
 
