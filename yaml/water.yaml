@@ -152,6 +152,11 @@ filters:
           - when: { reef: [coral, rock, sand] }
             then: { col: reef }
     table: osm
+  - filter:
+      - covered: yes
+    min_zoom: null
+    output:
+      kind: null
 
   #
   # NE features
