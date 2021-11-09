@@ -7,7 +7,6 @@ class NaturalEarth(FixtureTest):
         import dsl
 
         z, x, y = 1, 0, 0
-
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal_dexter(z, x, y), {
                 'featurecla': 'Unrecognized',
