@@ -27,6 +27,14 @@ UPDATE ne_10m_admin_0_boundary_lines_disputed_areas
   WHERE NOT ST_IsValid(the_geom);
 DELETE FROM ne_10m_admin_0_boundary_lines_disputed_areas WHERE NOT ST_IsValid(the_geom);
 
+UPDATE ne_10m_admin_0_boundary_lines_maritime_indicator_chn
+  SET
+    the_geom = (CASE WHEN GeometryType(ST_MakeValid(the_geom)) = 'MULTILINESTRING'
+                          THEN ST_MakeValid(the_geom)
+                     ELSE the_geom END)
+  WHERE NOT ST_IsValid(the_geom);
+DELETE FROM ne_10m_admin_0_boundary_lines_maritime_indicator_chn WHERE NOT ST_IsValid(the_geom);
+
 UPDATE ne_50m_admin_0_boundary_lines_disputed_areas
   SET
     the_geom = (CASE WHEN GeometryType(ST_MakeValid(the_geom)) = 'MULTILINESTRING'
@@ -34,6 +42,14 @@ UPDATE ne_50m_admin_0_boundary_lines_disputed_areas
                      ELSE the_geom END)
   WHERE NOT ST_IsValid(the_geom);
 DELETE FROM ne_50m_admin_0_boundary_lines_disputed_areas WHERE NOT ST_IsValid(the_geom);
+
+UPDATE ne_50m_admin_0_boundary_lines_maritime_indicator_chn
+  SET
+    the_geom = (CASE WHEN GeometryType(ST_MakeValid(the_geom)) = 'MULTILINESTRING'
+                          THEN ST_MakeValid(the_geom)
+                     ELSE the_geom END)
+  WHERE NOT ST_IsValid(the_geom);
+DELETE FROM ne_50m_admin_0_boundary_lines_maritime_indicator_chn WHERE NOT ST_IsValid(the_geom);
 
 UPDATE ne_10m_admin_1_states_provinces_lines
   SET
@@ -119,6 +135,10 @@ UPDATE ne_50m_admin_0_boundary_lines_disputed_areas
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_50m_admin_0_boundary_lines_disputed_areas.*)
   WHERE mz_calculate_min_zoom_boundaries(ne_50m_admin_0_boundary_lines_disputed_areas.*) IS NOT NULL;
 
+UPDATE ne_50m_admin_0_boundary_lines_maritime_indicator_chn
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_50m_admin_0_boundary_lines_maritime_indicator_chn.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_50m_admin_0_boundary_lines_maritime_indicator_chn.*) IS NOT NULL;
+
 UPDATE ne_50m_admin_1_states_provinces_lines
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_50m_admin_1_states_provinces_lines.*)
   WHERE mz_calculate_min_zoom_boundaries(ne_50m_admin_1_states_provinces_lines.*) IS NOT NULL;
@@ -134,6 +154,10 @@ UPDATE ne_10m_admin_0_boundary_lines_map_units
 UPDATE ne_10m_admin_0_boundary_lines_disputed_areas
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_disputed_areas.*)
   WHERE mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_disputed_areas.*) IS NOT NULL;
+
+UPDATE ne_10m_admin_0_boundary_lines_maritime_indicator_chn
+  SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_maritime_indicator_chn.*)
+  WHERE mz_calculate_min_zoom_boundaries(ne_10m_admin_0_boundary_lines_maritime_indicator_chn.*) IS NOT NULL;
 
 UPDATE ne_10m_admin_1_states_provinces_lines
   SET mz_boundary_min_zoom = mz_calculate_min_zoom_boundaries(ne_10m_admin_1_states_provinces_lines.*)

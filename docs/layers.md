@@ -244,6 +244,16 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `map_unit`
 * `overlay_limit`
 * `region`
+* `unrecognized_country`
+* `unrecognized_region`
+
+### Viewpoints for Disputed Boundaries
+
+When there is a **boundary dispute** between two countries, the default boundary between them is generally shown according to the _de facto_ status marking where one country's on the ground administration ends and another's begins. The boundary line itself is marked `disputed`, and the extend of the other country's claim is tagged with one of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, and `disputed_reference_line`.
+
+Audiences in different countries may have different expectations and legal requirements so Tilezen optionally supports _de jure_ boundary viewpoints with `kind:xx` properties, where `xx` is a lower-cased [ISO 3166-1 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) with support for `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `us`, `vn`. Use these properties to "turn off" `unrecognized_country` and `unrecognized_region` boundary lines, and restyle the claims as `country` and `region`. The range of values is the same as for `kind`, and should be used in conjunction with `kind` as `kind:xx` in a coalesce as it's only included when that country's viewpoint is different than the default. These should be paired with **places** layer viewpoint support for country and region capitals.
+
+Some disputed boundaries, like the  [China 9-dashed line](https://en.wikipedia.org/wiki/Nine-dash_line), are marked `unrecognized_country` by default and are only available in a specific `kind:xx` viewpoint (in this case `kind:cn` and `kind:tw`).
 
 ## Buildings and Addresses
 

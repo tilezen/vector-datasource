@@ -24,7 +24,7 @@ echo "Generating functions from YAML..."
 
 # store SQL in a temporary file, so make a temporary directory for it.
 tmpdir=$(mktemp -d "${TMPDIR:-/tmp/}$(basename 0).XXXXXXXXXXXX")
-sqlfile="${tmpdir}/generated-fuctions.sql"
+sqlfile="${tmpdir}/generated-functions.sql"
 trap "{ rm -rf $tmpdir; }" EXIT
 
 # the reason for doing it this way is that the failure of `python sql.py`
