@@ -10,7 +10,7 @@ class NaturalEarth(FixtureTest):
 
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal_dexter(z, x, y), {
-                'featurecla': 'Claim boundary',
+                'featurecla': 'Unrecognized',
                 'name': 'Chinese claim',
                 'adm0_usa': -1,
                 'scalerank': 7,
@@ -23,7 +23,7 @@ class NaturalEarth(FixtureTest):
         for zoom in range(1, 17):
             self.assert_has_feature(
                 zoom, x, y, 'boundaries', {
-                    'kind': 'disputed_claim',
+                    'kind': 'unrecognized_country',
                     'kind:cn': 'country',
                     'kind:us': 'unrecognized_country',
                     'min_zoom': 1,
