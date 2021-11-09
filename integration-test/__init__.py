@@ -1142,7 +1142,6 @@ class Assertions(object):
 
     def assert_has_feature(self, z, x, y, layer, properties):
         with self.ff.features_in_tile_layer(z, x, y, layer) as features:
-            print(features)
             num_features, num_matching = count_matching(
                 features, properties)
 
