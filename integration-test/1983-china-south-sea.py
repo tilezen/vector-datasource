@@ -13,10 +13,10 @@ class NaturalEarth(FixtureTest):
                 'featurecla': 'Unrecognized',
                 'name': 'Chinese claim',
                 'adm0_usa': -1,
-                'scalerank': 7,
+                'scalerank': 5,
                 'fclass_cn': 'International boundary (verify)',
                 'fclass_us': 'Unrecognized',
-                'min_zoom': 7.0,  # min_zoom is set to 7 according to the source data  # noqa
+                'min_zoom': 5.0,  # min_zoom is set to 5 according to the source data  # noqa
                 'source': 'naturalearthdata.com',
             }),
         )
