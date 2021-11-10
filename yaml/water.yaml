@@ -47,7 +47,7 @@ globals:
 filters:
   # Not show covered water in the water layer. This filter has to be placed before filter: {natural: water}
   - filter:
-      covered: yes
+      covered: "yes"
     min_zoom: null
     output:
       kind: null
