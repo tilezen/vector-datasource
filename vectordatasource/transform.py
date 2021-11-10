@@ -8220,7 +8220,8 @@ def _choose_most_important_network(properties, prefix, importance_fn):
             # expose first network as network/shield_text
             network, ref = tuples[0]
             properties[prefix + 'network'] = network
-            properties[prefix + 'shield_text'] = ref
+            properties[prefix + 'shield_text'] = str(ref)
+            properties[prefix + 'shield_text_length'] = len(ref)
 
             # replace properties with sorted versions of themselves
             properties[all_networks] = [n[0] for n in tuples]
