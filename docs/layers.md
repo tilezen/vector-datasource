@@ -1502,6 +1502,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
 * `hgv_time_restrictions` - optional property specifying when heavy goods vehicle truck access is restricted. See the `hgv_time_restrictions` values list below.
 * `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
+* `hgv_restriction_shield_text_length`: optional.  Returns length of `hgv_restriction_shield_text` as a string.  Missing if `hgv_restriction_field_text` is !(0 < length < 7) or field doesn't exist 
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
