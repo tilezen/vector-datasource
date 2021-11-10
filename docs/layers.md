@@ -2463,6 +2463,8 @@ Also includes water `line` geometries for river and stream centerlines and "labe
 
 Tilezen calculates the composite exterior edge for overlapping water polygons and marks the resulting line `boundary=true`. Set to `true` when present on `line` geometry, or from Natural Earth line source.
 
+Also Covered water is not included.
+
 #### Water properties (common):
 
 * `name`: including localized name variants
