@@ -92,7 +92,6 @@ class HgvRoadPropertiesTest(FixtureTest):
             expect['hgv_restriction'] = restriction
         if shield_text:
             expect['hgv_restriction_shield_text'] = shield_text
-            expect['hgv_restriction_shield_text_length'] = str(len(shield_text))
 
         self.assert_has_feature(z, x, y, 'roads', expect)
 
