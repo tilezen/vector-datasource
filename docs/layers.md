@@ -1450,6 +1450,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively. Note that networks may include "modifier" information, for example `US:I:Business` for a business route or `US:I:Truck` for a truck route. The whitelist of "modifier" values is; `Alternate`, `Business`, `Bypass`, `Connector`, `Historic`, `Scenic`, `Spur`, `Toll` and `Truck`.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`. Whitepsace, punctuation, and prefixes are generally stripped.
+* `shield_text_length`: The length of the `shield_text` field as a string.  E.g. if `shield_text` is `'12345'`, `shield_text_length` would be `'5'`. Missing if `shield_text` is !(0 < length < 7) or field doesn't exist
 
 #### Road properties (common optional):
 
@@ -1475,12 +1476,15 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_walking_networks` and `all_walking_shield_texts`: All of the walking networks of which this road is a part, and each corresponding shield text. See `walking_network` and `walking_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `walking_network`: e.g: `nwn` for a "National Walking Network". Other common values include `iwn` for international, `rwn` for regional and `lwn` for local walking networks.
 * `walking_shield_text`: Contains text intended to be displayed on a shield related to the walking network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `walking_shield_text_length`: The length of the `walking_shield_text` field as a string.  E.g. if `walking_shield_text` is `'12345'`, `walking_shield_text_length` would be `'5'`.  Missing if `walking_shield_text` is !(0 < length < 7) or field doesn't exist
 * `all_bicycle_networks` and `all_bicycle_shield_texts`: All of the bicycle networks of which this road is a part, and each corresponding shield text. See `bicycle_network` and `bicycle_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
 * `bicycle_shield_text`: Contains text intended to be displayed on a shield related to the bicycle network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `bicycle_shield_text_length`: The length of the `bicycle_shield_text` field as a string.  E.g. if `bicycle_shield_text` is `'12345'`, `bicycle_shield_text_length` would be `'5'`.  Missing if `bicycle_shield_text` is !(0 < length < 7) or field doesn't exist
 * `all_bus_networks` and `all_bus_shield_texts`: All of the bus and trolley-bus routes of which this road is a part, and each corresponding shield text. See `bus_network` and `bus_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bus_network`: Note that this is often not present for bus routes / networks. This may be replaced with `operator` in the future, see [issue 1194](https://github.com/tilezen/vector-datasource/issues/1194).
 * `bus_shield_text`: Contains text intended to be displayed on a shield related to the bus or trolley-bus network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `bus_shield_text_length`: The length of the `bus_shield_text` field as a string.  E.g. if `bus_shield_text` is `'12345'`, `bus_shield_text_length` would be `'5'`. Missing if `bus_shield_text` is !(0 < length < 7) or field doesn't exist
 * `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`. `cobblestone:flattened`, `concrete:plates` and `concrete:lanes` values are transformed to `cobblestone_flattened`, `concrete_plates` and `concrete_lanes` respectively. These values are simplified at lower zooms, see the section "Roads surface values simplification" for more details.
 
 #### Road properties (optional):
@@ -1498,6 +1502,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
 * `hgv_time_restrictions` - optional property specifying when heavy goods vehicle truck access is restricted. See the `hgv_time_restrictions` values list below.
 * `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
+* `hgv_restriction_shield_text_length`: optional.  Returns length of `hgv_restriction_shield_text` as a string.  Missing if `hgv_restriction_shield_text` is !(0 < length < 7) or field doesn't exist
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
