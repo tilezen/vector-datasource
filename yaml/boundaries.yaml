@@ -232,7 +232,6 @@ filters:
         - 'Lease limit'
         - 'Line of control (please verify)'
         - 'Overlay limit'
-        - 'Unrecognized'
         - 'Map unit boundary'
     min_zoom: { col: min_zoom }
     output:
@@ -251,6 +250,7 @@ filters:
         - 'Claim boundary'
         - 'Elusive frontier'
         - 'Reference line'
+        - 'Unrecognized'
     min_zoom: 1
     output:
       <<: *output_properties
