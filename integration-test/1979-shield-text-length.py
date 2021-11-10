@@ -181,3 +181,20 @@ class ShieldTextLengthTest(FixtureTest):
                 'walking_shield_text': 'PCT',
                 'walking_shield_text_length': '3',
             })
+
+    def test_hgv_shield_text_length(self):
+        z, x, y = (16, 0, 0)
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y),
+                    {'highway': 'unclassified',
+                     'source': 'openstreetmap.org',
+                     'maxweight': 1.5}))
+
+        self.assert_has_feature(
+            z, x, y, 'roads', {
+                'kind': 'minor_road',
+                'kind_detail': 'unclassified',
+                'hgv_restriction': 'weight',
+                'hgv_restriction_shield_text': '1.5t',
+                'hgv_restriction_shield_text_length': '4'})

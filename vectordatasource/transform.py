@@ -8995,6 +8995,8 @@ def add_vehicle_restrictions(shape, props, fid, zoom):
         props['hgv_restriction'] = hgv_restriction
     if hgv_restriction_shield_text:
         props['hgv_restriction_shield_text'] = hgv_restriction_shield_text
+        if 0 < len(hgv_restriction_shield_text) < 7:
+            props['hgv_restriction_shield_text_length'] = str(len(hgv_restriction_shield_text))
 
     return shape, props, fid
 
