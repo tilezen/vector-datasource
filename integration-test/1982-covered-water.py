@@ -21,4 +21,4 @@ class CoveredWaterOSMTest(FixtureTest):
 
         self.assert_no_matching_feature(
             16, 33199, 22547, 'water',
-            {"id": 236735251})
+            {"id": 28575415})
