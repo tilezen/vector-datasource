@@ -157,7 +157,7 @@ filters:
       kind: locality
       kind_detail: {col: place}
     table: osm
-  - filter: {name: true, place: [city]}
+  - filter: {name: true, place: city}
     min_zoom: 9.5
     output:
       <<: *output_properties
@@ -166,7 +166,7 @@ filters:
       kind_detail: city
       population: 10000
     table: osm
-  - filter: {name: true, place: [town]}
+  - filter: {name: true, place: town}
     min_zoom: 10
     output:
       <<: *output_properties
