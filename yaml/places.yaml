@@ -192,6 +192,14 @@ filters:
       kind_detail: village
       population: 2000
     table: osm
+  - filter: {name: true, population: true, place: locality}
+      min_zoom: 12
+      output:
+        <<: *output_properties
+        <<: *alternate_fclass
+        kind: locality
+        kind_detail: locality
+      table: osm
   - filter: {name: true, population: true, place: hamlet}
     min_zoom: 12
     output:
@@ -218,7 +226,7 @@ filters:
       kind_detail: hamlet
       population: 200
     table: osm
-  - filter: {name: true, place: isolated_dwelling}
+  - filter: {name: true, population: true, place: isolated_dwelling}
     min_zoom: 13
     output:
       <<: *output_properties
@@ -226,14 +234,33 @@ filters:
       kind: locality
       kind_detail: isolated_dwelling
     table: osm
+  - filter: { name: true, population: true, place: farm }
+      min_zoom: 13
+      output:
+        <<: *output_properties
+        <<: *alternate_fclass
+        kind: locality
+        kind_detail: farm
+      table: osm
+  - filter: { name: true, place: isolated_dwelling }
+      min_zoom: 14
+      output:
+        <<: *output_properties
+        <<: *alternate_fclass
+        kind: locality
+        kind_detail: isolated_dwelling
+        population: 100
+      table: osm
   - filter: {name: true, place: farm}
-    min_zoom: 13
+    min_zoom: 14
     output:
       <<: *output_properties
       <<: *alternate_fclass
       kind: locality
       kind_detail: farm
+      population: 50
     table: osm
+
 
   - filter:
       scalerank: true
