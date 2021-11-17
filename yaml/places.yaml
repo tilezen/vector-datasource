@@ -141,7 +141,7 @@ filters:
       __ne_min_zoom: {col: __ne_min_zoom}
       __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
-  - filter: {name: true, population: true, place: [city,town]}
+  - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
     output:
       <<: *output_properties
