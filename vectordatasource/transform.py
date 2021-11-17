@@ -3140,6 +3140,7 @@ def keep_n_features_gridded(ctx):
     items_matching = ctx.params.get('items_matching')
     max_items = ctx.params.get('max_items')
     grid_size = ctx.params.get('grid_size')
+    sorting_keys = ctx.params.get('sorting_keys')
 
     # leaving items_matching, grid_size, or max_items as None (or zero)
     # would mean that this filter would do nothing, so assume
@@ -3147,6 +3148,8 @@ def keep_n_features_gridded(ctx):
     assert items_matching, 'keep_n_features_gridded: missing or empty item match dict'
     assert max_items, 'keep_n_features_gridded: missing or zero max number of items'
     assert grid_size, 'keep_n_features_gridded: missing or zero grid size'
+    assert sorting_keys, 'keep_n_features_gridded: missing sorting keys'
+    assert isinstance(sorting_keys, list), 'keep_n_features_gridded: sorting keys should be a list'
 
     if zoom < start_zoom:
         return None
@@ -3167,7 +3170,7 @@ def keep_n_features_gridded(ctx):
     bucket_height = (maxy - miny) / grid_size
 
     # Sort the features into buckets
-    buckets = dict()
+    buckets = defaultdict(list)
     new_features = []
     for shape, props, fid in layer['features']:
         # Pass non-point shapes through untouched
@@ -3185,20 +3188,12 @@ def keep_n_features_gridded(ctx):
         bucket_y = int((shape.y - miny) / bucket_height)
         bucket_id = (bucket_x, bucket_y)
 
-        existing_feature = buckets.get(bucket_id)
-        if existing_feature:
-            # Is the current feature better than the one that's already in the bucket?
-            existing_props = existing_feature[1]
-            # TODO How do we decide the winner?
-            if props.min_zoom < existing_props.min_zoom:
-                buckets[bucket_id] = (shape, props, fid)
-        else:
-            # Nothing in the bucket, so keep this one
-            buckets[bucket_id] = (shape, props, fid)
+        buckets[bucket_id].append((shape, props, fid))
 
-    # Copy the features that survived to new_features
-    for shape, props, fid in buckets.values():
-        new_features.append((shape, props, fid))
+    # Sort the features in each bucket and pick the top items to include in the output
+    for features_in_bucket in buckets.values():
+        sorted_features = sorted(features_in_bucket, key=lambda i: tuple(i.get(k) for k in sorting_keys))
+        new_features.extend(sorted_features[:max_items])
 
     layer['features'] = new_features
     return layer
