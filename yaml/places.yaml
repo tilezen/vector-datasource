@@ -141,7 +141,7 @@ filters:
       __ne_min_zoom: {col: __ne_min_zoom}
       __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
-  - filter: {name: true, population: true, place: city}
+  - filter: {name: true, population: true, place: [city,town]}
     min_zoom: 8
     output:
       <<: *output_properties
@@ -158,16 +158,8 @@ filters:
       kind_detail: city
       population: 10000
     table: osm
-  - filter: {name: true, population: true, place: town}
-    min_zoom: 10
-    output:
-      <<: *output_properties
-      <<: *alternate_fclass
-      kind: locality
-      kind_detail: {col: place}
-    table: osm
   - filter: {name: true, place: town}
-    min_zoom: 11
+    min_zoom: 10
     output:
       <<: *output_properties
       <<: *alternate_fclass
