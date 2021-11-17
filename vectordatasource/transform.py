@@ -1,31 +1,23 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
 
-import csv
-import re
 from collections import defaultdict, namedtuple
-from numbers import Number
-
-import hanzidentifier
-import kdtree
-import pycountry
-import shapely.errors
-import shapely.ops
-import shapely.wkb
-from StreetNames import short_street_name
 from math import ceil
-from shapely.geometry import LineString
+from numbers import Number
+from shapely.geometry.collection import GeometryCollection
+from shapely.geometry import box as Box
 from shapely.geometry import LinearRing
+from shapely.geometry import LineString
 from shapely.geometry import Point
 from shapely.geometry import Polygon
-from shapely.geometry import box as Box
-from shapely.geometry.collection import GeometryCollection
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.polygon import orient
 from shapely.ops import linemerge
 from shapely.strtree import STRtree
+from sort import pois as sort_pois
+from StreetNames import short_street_name
 from sys import float_info
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
@@ -33,11 +25,17 @@ from tilequeue.tile import calc_meters_per_pixel_area
 from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
-from zope.dottedname.resolve import resolve
-
-from sort import pois as sort_pois
-from util import safe_int
 from util import to_float
+from util import safe_int
+from zope.dottedname.resolve import resolve
+import hanzidentifier
+import csv
+import pycountry
+import re
+import shapely.errors
+import shapely.wkb
+import shapely.ops
+import kdtree
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
 number_pattern = re.compile('([+-]?[0-9.]+)')
