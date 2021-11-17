@@ -1,23 +1,31 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
 
+import csv
+import re
 from collections import defaultdict, namedtuple
-from math import ceil
 from numbers import Number
-from shapely.geometry.collection import GeometryCollection
-from shapely.geometry import box as Box
-from shapely.geometry import LinearRing
+
+import hanzidentifier
+import kdtree
+import pycountry
+import shapely.errors
+import shapely.ops
+import shapely.wkb
+from StreetNames import short_street_name
+from math import ceil
 from shapely.geometry import LineString
+from shapely.geometry import LinearRing
 from shapely.geometry import Point
 from shapely.geometry import Polygon
+from shapely.geometry import box as Box
+from shapely.geometry.collection import GeometryCollection
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multipolygon import MultiPolygon
 from shapely.geometry.polygon import orient
 from shapely.ops import linemerge
 from shapely.strtree import STRtree
-from sort import pois as sort_pois
-from StreetNames import short_street_name
 from sys import float_info
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
@@ -25,18 +33,11 @@ from tilequeue.tile import calc_meters_per_pixel_area
 from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
-from util import to_float
-from util import safe_int
 from zope.dottedname.resolve import resolve
-import hanzidentifier
-import csv
-import pycountry
-import re
-import shapely.errors
-import shapely.wkb
-import shapely.ops
-import kdtree
 
+from sort import pois as sort_pois
+from util import safe_int
+from util import to_float
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
 number_pattern = re.compile('([+-]?[0-9.]+)')
@@ -3112,6 +3113,94 @@ def _match_props(props, items_matching):
             return False
 
     return True
+
+
+def keep_n_features_gridded(ctx):
+    """
+    Distribute the features matching _all_ the key-value
+    pairs in `items_matching` into a grid, then keep the
+    first `max_items` features in each grid cell.
+
+    The grid is created by dividing the width and height
+    of the tile into `grid_size` buckets (so you end up
+    with grid_size*grid_size buckets total).
+
+    NOTE: This only works with point features and will
+    pass through non-point features untouched.
+
+    This is useful for removing less-important features
+    in areas that are geographically dense.
+    """
+
+    feature_layers = ctx.feature_layers
+    zoom = ctx.nominal_zoom
+    source_layer = ctx.params.get('source_layer')
+    assert source_layer, 'keep_n_features_gridded: missing source layer'
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    items_matching = ctx.params.get('items_matching')
+    max_items = ctx.params.get('max_items')
+    grid_size = ctx.params.get('grid_size')
+
+    # leaving items_matching, grid_size, or max_items as None (or zero)
+    # would mean that this filter would do nothing, so assume
+    # that this is really a configuration error.
+    assert items_matching, 'keep_n_features_gridded: missing or empty item match dict'
+    assert max_items, 'keep_n_features_gridded: missing or zero max number of items'
+    assert grid_size, 'keep_n_features_gridded: missing or zero grid size'
+
+    if zoom < start_zoom:
+        return None
+
+    # we probably don't want to do this at higher zooms (e.g: 17 &
+    # 18), even if there are a bunch of features in the tile, as
+    # we use the high-zoom tiles for overzooming to 20+, and we'd
+    # eventually expect to see _everything_.
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    minx, miny, maxx, maxy = ctx.unpadded_bounds
+    bucket_width = (maxx - minx) / grid_size
+    bucket_height = (maxy - miny) / grid_size
+
+    # Sort the features into buckets
+    buckets = dict()
+    new_features = []
+    for shape, props, fid in layer['features']:
+        # Pass non-point shapes through untouched
+        if shape.geom_type != 'Point':
+            new_features.append((shape, props, fid))
+
+        # TODO This will filter out stuff that doesn't match. Do we want it to pass thru untouched instead?
+        if not _match_props(props, items_matching):
+            continue
+
+        # Calculate the bucket to put this feature in
+        bucket_x = int((shape.x - minx) / bucket_width)
+        bucket_y = int((shape.y - miny) / bucket_height)
+        bucket_id = (bucket_x, bucket_y)
+
+        existing_feature = buckets.get(bucket_id)
+        if existing_feature:
+            # Is the current feature better than the one that's already in the bucket?
+            existing_props = existing_feature[1]
+            # TODO How do we decide the winner?
+            if props.min_zoom < existing_props.min_zoom:
+                buckets[bucket_id] = (shape, props, fid)
+        else:
+            # Nothing in the bucket, so keep this one
+            buckets[bucket_id] = (shape, props, fid)
+
+    # Copy the features that survived to new_features
+    for shape, props, fid in buckets.values():
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer
 
 
 def keep_n_features(ctx):
