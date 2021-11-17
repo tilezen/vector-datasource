@@ -1093,12 +1093,20 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 14
       properties:
         - bus_network
       where: >-
-        (kind == 'highway' and zoom <  7) or
-        (kind == 'major_road' and zoom < 9) or
+        (kind == 'highway' and zoom <  7) or        
+        (kind_detail == 'trunk' and zoom <  9) or
+        (kind_detail == 'primary' and zoom <  11) or
+        (kind_detail == 'secondary' and zoom <  12) or
+        (kind_detail == 'tertiary' and zoom <  13) or
+        (kind_detail == 'motorway_link' and zoom <  13) or
+        (kind_detail == 'trunk_link' and zoom <  13) or
+        (kind_detail == 'primary_link' and zoom <  14) or
+        (kind_detail == 'secondary_link' and zoom <  14) or
+        (kind_detail == 'tertiary_link' and zoom <  14) or
         (kind == 'minor_road' and zoom < 14) or
 
 - fn: vectordatasource.transform.drop_properties
