@@ -37,6 +37,7 @@ import shapely.wkb
 import shapely.ops
 import kdtree
 
+
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
 number_pattern = re.compile('([+-]?[0-9.]+)')
 # pattern to detect numbers with units.
