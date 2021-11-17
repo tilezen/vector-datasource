@@ -141,7 +141,7 @@ filters:
       __ne_min_zoom: {col: __ne_min_zoom}
       __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
-  - filter: {name: true, population: true, place: [city, town]}
+  - filter: {name: true, population: true, place: city}
     min_zoom: 8
     output:
       <<: *output_properties
@@ -149,7 +149,7 @@ filters:
       kind: locality
       kind_detail: {col: place}
     table: osm
-  - filter: {name: true, population: true, place: [city, town]}
+  - filter: {name: true, population: true, place: town}
     min_zoom: 9
     output:
       <<: *output_properties
@@ -158,7 +158,7 @@ filters:
       kind_detail: {col: place}
     table: osm
   - filter: {name: true, place: city}
-    min_zoom: 9.5
+    min_zoom: 9
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -193,13 +193,13 @@ filters:
       population: 2000
     table: osm
   - filter: {name: true, population: true, place: locality}
-      min_zoom: 12
-      output:
-        <<: *output_properties
-        <<: *alternate_fclass
-        kind: locality
-        kind_detail: locality
-      table: osm
+    min_zoom: 12
+    output:
+      <<: *output_properties
+      <<: *alternate_fclass
+      kind: locality
+      kind_detail: locality
+    table: osm
   - filter: {name: true, population: true, place: hamlet}
     min_zoom: 12
     output:
@@ -235,22 +235,22 @@ filters:
       kind_detail: isolated_dwelling
     table: osm
   - filter: { name: true, population: true, place: farm }
-      min_zoom: 13
-      output:
-        <<: *output_properties
-        <<: *alternate_fclass
-        kind: locality
-        kind_detail: farm
-      table: osm
+    min_zoom: 13
+    output:
+      <<: *output_properties
+      <<: *alternate_fclass
+      kind: locality
+      kind_detail: farm
+    table: osm
   - filter: { name: true, place: isolated_dwelling }
-      min_zoom: 14
-      output:
-        <<: *output_properties
-        <<: *alternate_fclass
-        kind: locality
-        kind_detail: isolated_dwelling
-        population: 100
-      table: osm
+    min_zoom: 14
+    output:
+      <<: *output_properties
+      <<: *alternate_fclass
+      kind: locality
+      kind_detail: isolated_dwelling
+      population: 100
+    table: osm
   - filter: {name: true, place: farm}
     min_zoom: 14
     output:
