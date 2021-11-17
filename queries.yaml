@@ -759,7 +759,7 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 8
-      end_zoom: 11
+      end_zoom: 12
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
       # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
       # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
@@ -1014,7 +1014,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       properties:
         - bicycle
         - colour
@@ -1080,7 +1080,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       # this means remove all the names if "name" is one of the properties
       # we're dropping. in other words, allows us to use "name" as a short-
       # hand for name:XX, official_name, old_name, etc... without having to
@@ -1182,6 +1182,18 @@ post_process:
         sand: unpaved
         woodchips: unpaved
 
+ # drop these "detail" tags to get better merging at zoom < 14
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties:
+        - surface
+      where: >-
+        kind == 'minor_road' or 
+        (kind == 'path' and zoom < 13)
+
   # drop to get better merging at mid zooms.
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1233,12 +1245,12 @@ post_process:
         - private
 
   # this is a patch because we still want to drop name, network from major_road
-  # features between zoom 7 and 10
+  # features between zoom 7 and 11
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 11
+      end_zoom: 12
       # short-hand for "name" property in the list below means all name-like
       # properties.
       all_name_variants: true
@@ -1249,12 +1261,12 @@ post_process:
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways
-  # when zoom < 11.
+  # when zoom < 12.
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 11
+      end_zoom: 12
       where: >-
         kind == 'highway'
   # drop name, ref and the multi-shield properties, but keep single-shield
@@ -1283,7 +1295,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - all_walking_networks
         - all_walking_shield_texts
@@ -1339,14 +1351,14 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
-  # drop RCN network & shield text below zoom 11, and shield text at one more
+  # drop RCN network & shield text below zoom 12, and shield text at one more
   # zoom.
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522771
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - bicycle_network
         - bicycle_shield_text
@@ -1356,7 +1368,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       properties:
         - bicycle_shield_text
       where: >-
