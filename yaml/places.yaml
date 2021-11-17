@@ -149,14 +149,6 @@ filters:
       kind: locality
       kind_detail: {col: place}
     table: osm
-  - filter: {name: true, population: true, place: town}
-    min_zoom: 9
-    output:
-      <<: *output_properties
-      <<: *alternate_fclass
-      kind: locality
-      kind_detail: {col: place}
-    table: osm
   - filter: {name: true, place: city}
     min_zoom: 9
     output:
@@ -166,8 +158,16 @@ filters:
       kind_detail: city
       population: 10000
     table: osm
-  - filter: {name: true, place: town}
+  - filter: {name: true, population: true, place: town}
     min_zoom: 10
+    output:
+      <<: *output_properties
+      <<: *alternate_fclass
+      kind: locality
+      kind_detail: {col: place}
+    table: osm
+  - filter: {name: true, place: town}
+    min_zoom: 11
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -176,7 +176,7 @@ filters:
       population: 5000
     table: osm
   - filter: {name: true, population: true, place: village}
-    min_zoom: 11
+    min_zoom: 12
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -184,7 +184,7 @@ filters:
       kind_detail: village
     table: osm
   - filter: {name: true, place: village}
-    min_zoom: 12
+    min_zoom: 13
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -193,23 +193,15 @@ filters:
       population: 2000
     table: osm
   - filter: {name: true, population: true, place: locality}
-    min_zoom: 12
+    min_zoom: 13
     output:
       <<: *output_properties
       <<: *alternate_fclass
       kind: locality
       kind_detail: locality
     table: osm
-  - filter: {name: true, population: true, place: hamlet}
-    min_zoom: 12
-    output:
-      <<: *output_properties
-      <<: *alternate_fclass
-      kind: locality
-      kind_detail: hamlet
-    table: osm
   - filter: {name: true, place: locality}
-    min_zoom: 13
+    min_zoom: 14
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -217,8 +209,16 @@ filters:
       kind_detail: locality
       population: 1000
     table: osm
+  - filter: {name: true, population: true, place: hamlet}
+    min_zoom: 14
+    output:
+      <<: *output_properties
+      <<: *alternate_fclass
+      kind: locality
+      kind_detail: hamlet
+    table: osm
   - filter: {name: true, place: hamlet}
-    min_zoom: 13
+    min_zoom: 15
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -227,23 +227,15 @@ filters:
       population: 200
     table: osm
   - filter: {name: true, population: true, place: isolated_dwelling}
-    min_zoom: 13
+    min_zoom: 15
     output:
       <<: *output_properties
       <<: *alternate_fclass
       kind: locality
       kind_detail: isolated_dwelling
     table: osm
-  - filter: { name: true, population: true, place: farm }
-    min_zoom: 13
-    output:
-      <<: *output_properties
-      <<: *alternate_fclass
-      kind: locality
-      kind_detail: farm
-    table: osm
   - filter: { name: true, place: isolated_dwelling }
-    min_zoom: 14
+    min_zoom: 15.5
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -251,8 +243,16 @@ filters:
       kind_detail: isolated_dwelling
       population: 100
     table: osm
+  - filter: { name: true, population: true, place: farm }
+    min_zoom: 15
+    output:
+      <<: *output_properties
+      <<: *alternate_fclass
+      kind: locality
+      kind_detail: farm
+    table: osm
   - filter: {name: true, place: farm}
-    min_zoom: 14
+    min_zoom: 15.5
     output:
       <<: *output_properties
       <<: *alternate_fclass
