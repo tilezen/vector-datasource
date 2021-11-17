@@ -76,24 +76,41 @@ class ShieldTextLengthTest(FixtureTest):
         # make sure text length is encoded as a string
         self.assert_no_matching_feature(z, x, y, 'roads', {'id': 417097119, 'shield_text_length': 2})
 
+    def test_missing_ref_does_not_report_length_or_text(self):
+        rel_bus_missing = rel23Bus.copy()
+        del rel_bus_missing['ref']
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/417097119
+            dsl.way(417097119, dsl.tile_diagonal(z, x, y), way35),
+            dsl.relation(3002741, rel_bus_missing, ways=[417097119])
+        )
+
+        self.assert_no_matching_feature(
+            z, x, y, 'roads', {
+                'id': 417097119,
+                'bus_shield_text': 'None',
+                'bus_shield_text_length': '4'
+            })
+
     # empty strings and route refs over 6 chars in length don't report length
     def test_lengths_over_6_or_empty_are_not_reported(self):
 
         rel123456 = rel35.copy()
         rel123456['ref'] = '123456'
 
-        relCycleTooLong = rel50Cycle.copy()
-        relCycleTooLong['ref'] = '1234567'
+        rel_cycle_too_long = rel50Cycle.copy()
+        rel_cycle_too_long['ref'] = '1234567'
 
-        relBusEmpty = rel23Bus.copy()
-        relBusEmpty['ref'] = ''
+        rel_bus_empty = rel23Bus.copy()
+        rel_bus_empty['ref'] = ''
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/417097119
             dsl.way(417097119, dsl.tile_diagonal(z, x, y), way35),
             dsl.relation(1976278, rel123456, ways=[417097119]),
-            dsl.relation(32312, relCycleTooLong, ways=[417097119]),
-            dsl.relation(3002741, relBusEmpty, ways=[417097119])
+            dsl.relation(32312, rel_cycle_too_long, ways=[417097119]),
+            dsl.relation(3002741, rel_bus_empty, ways=[417097119])
         )
 
         self.assert_has_feature(

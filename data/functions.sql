@@ -683,9 +683,9 @@ BEGIN
         MIN(
             CASE WHEN hstore(tags)->'network' IN ('icn', 'ncn') THEN 8
                  WHEN hstore(tags)->'network' IN ('iwn', 'nwn') THEN 9
-                 WHEN hstore(tags)->'network' IN ('rcn') THEN 10
+                 WHEN hstore(tags)->'network' IN ('rcn') THEN 11
                  WHEN hstore(tags)->'network' IN ('rwn') THEN 11
-                 WHEN hstore(tags)->'network' IN ('lcn') THEN 11
+                 WHEN hstore(tags)->'network' IN ('lcn') THEN 12
                  WHEN hstore(tags)->'network' IN ('lwn') THEN 12
             ELSE NULL
             END
