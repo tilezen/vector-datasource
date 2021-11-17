@@ -3178,7 +3178,9 @@ def keep_n_features_gridded(ctx):
         if not _match_props(props, items_matching):
             continue
 
-        # Calculate the bucket to put this feature in
+        # Calculate the bucket to put this feature in.
+        # Note that this purposefully allows for buckets outside the unpadded bounds
+        # so we can bucketize the padding area, too.
         bucket_x = int((shape.x - minx) / bucket_width)
         bucket_y = int((shape.y - miny) / bucket_height)
         bucket_id = (bucket_x, bucket_y)
