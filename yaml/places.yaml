@@ -202,7 +202,7 @@ filters:
       population: 1000
     table: osm
   - filter: {name: true, population: true, place: hamlet}
-    min_zoom: 14
+    min_zoom: 13
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -210,7 +210,7 @@ filters:
       kind_detail: hamlet
     table: osm
   - filter: {name: true, place: hamlet}
-    min_zoom: 15
+    min_zoom: 14
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -219,7 +219,7 @@ filters:
       population: 200
     table: osm
   - filter: {name: true, population: true, place: isolated_dwelling}
-    min_zoom: 15
+    min_zoom: 14
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -227,7 +227,7 @@ filters:
       kind_detail: isolated_dwelling
     table: osm
   - filter: { name: true, place: isolated_dwelling }
-    min_zoom: 15.5
+    min_zoom: 15
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -236,7 +236,7 @@ filters:
       population: 100
     table: osm
   - filter: { name: true, population: true, place: farm }
-    min_zoom: 15
+    min_zoom: 14
     output:
       <<: *output_properties
       <<: *alternate_fclass
@@ -244,7 +244,7 @@ filters:
       kind_detail: farm
     table: osm
   - filter: {name: true, place: farm}
-    min_zoom: 15.5
+    min_zoom: 15
     output:
       <<: *output_properties
       <<: *alternate_fclass
