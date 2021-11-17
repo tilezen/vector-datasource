@@ -253,7 +253,6 @@ filters:
       population: 50
     table: osm
 
-
   - filter:
       scalerank: true
       featurecla: *ne_country_capital
