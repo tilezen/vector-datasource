@@ -49,7 +49,7 @@ class EstimatePopulationsTest(FixtureTest):
             'source:population': u'INSEE 2013',
             'wikidata': u'Q237333',
         })
-        self.validate_est_population(town, (z, x, y), 10, 11, 5000)
+        self.validate_est_population(town, (z, x, y), 8, 10, 5000)
 
     def test_locality(self):
         z, x, y = (14, 8296, 5638)
@@ -75,7 +75,7 @@ class EstimatePopulationsTest(FixtureTest):
         hamlet = dsl.point(534228360, (1.967011, 48.6425931),
                            {'name': u'Les Bordes', 'place': u'hamlet', 'population': u'816',
                             'source': u'openstreetmap.org', })
-        self.validate_est_population(hamlet, (z, x, y), 14, 15, 200)
+        self.validate_est_population(hamlet, (z, x, y), 13, 14, 200)
 
     def test_isolated_dwelling(self):
         z, x, y = (16, 33142, 22608)
@@ -83,7 +83,7 @@ class EstimatePopulationsTest(FixtureTest):
         dwelling = dsl.point(5111001636, (2.0597882, 48.6321613),
                              {'name': u'La Maison Grise', 'place': u'isolated_dwelling', 'population': u'220',
                               'source': u'openstreetmap.org', })
-        self.validate_est_population(dwelling, (z, x, y), 15, 15.5, 100)
+        self.validate_est_population(dwelling, (z, x, y), 14, 15, 100)
 
     def test_farm(self):
         z, x, y = (16, 33137, 22614)
@@ -91,4 +91,4 @@ class EstimatePopulationsTest(FixtureTest):
         farm = dsl.point(5922383856, (2.0303734, 48.6082567),
                          {'contact:website': u'https://www.fermedesclos.com/', 'name': u'Ferme des Clos',
                           'place': u'farm', 'population': u'91', 'source': u'openstreetmap.org', })
-        self.validate_est_population(farm, (z, x, y), 15, 15.5, 50)
+        self.validate_est_population(farm, (z, x, y), 14, 15, 50)
