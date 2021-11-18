@@ -813,7 +813,7 @@ post_process:
         (kind == 'stream' and zoom <  14) or
         (kind == 'ditch' and zoom <  15) or
         (kind == 'drain' and zoom <  15) or
-        (is_tunnel == true and zoom <  16)
+        (properties.get('is_tunnel') is True and zoom <  16)
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
