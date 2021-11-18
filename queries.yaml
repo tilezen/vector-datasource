@@ -843,6 +843,9 @@ post_process:
       # table.
       min_zoom: >-
         [min_zoom for min_zoom, area_threshold in [
+            (1, 1000000000000),
+            (2,  500000000000),
+            (3,  250000000000),
             (4,  120000000000),
             (5,   80000000000),
             (6,   40000000000),
@@ -858,7 +861,8 @@ post_process:
             (16,         None),
         ] if area >= area_threshold][0]
       where: >-
-        kind == 'lake' and label_placement
+        kind == 'lake' and
+        properties.get('label_placement') is True
 
   # now that we have the label points
   # drop most water properties at lower zooms
