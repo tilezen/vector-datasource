@@ -861,8 +861,7 @@ post_process:
             (16,         None),
         ] if area >= area_threshold][0]
       where: >-
-        kind == 'lake' and
-        properties.get('label_placement') is True
+        kind in ['lake','bay','water'] and label_placement
 
   # now that we have the label points
   # drop most water properties at lower zooms
