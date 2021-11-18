@@ -868,13 +868,7 @@ post_process:
       source_layer: water
       start_zoom: 8
       end_zoom: 15
-      # this means remove all the names if "name" is one of the properties
-      # we're dropping. in other words, allows us to use "name" as a short-
-      # hand for name:XX, official_name, old_name, etc... without having to
-      # spell all of them out at length.
-      all_name_variants: true
       properties:
-        - name
         - id
         - area
         - layer
