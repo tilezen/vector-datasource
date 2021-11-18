@@ -1118,7 +1118,7 @@ post_process:
         (kind == 'major_road' and zoom < 13) or
         (kind == 'minor_road' and zoom < 15) or
 
-- fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
@@ -1141,7 +1141,7 @@ post_process:
         (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
-- fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
@@ -1172,7 +1172,7 @@ post_process:
         (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
- - fn: vectordatasource.transform.drop_properties
+  - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
