@@ -878,9 +878,7 @@ post_process:
         - id
         - area
         - layer
-        - tunnel
         - wikidata_id
-        - intermittent
         - kind_tile_rank
         - label_placement
       where: >-
