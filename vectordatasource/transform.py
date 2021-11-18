@@ -3189,7 +3189,7 @@ def keep_n_features_gridded(ctx):
 
     # Sort the features in each bucket and pick the top items to include in the output
     for features_in_bucket in buckets.values():
-        sorted_features = sorted(features_in_bucket, key=lambda i: tuple(i.get(k) for k in sorting_keys))
+        sorted_features = sorted(features_in_bucket, key=lambda i: tuple(i[1].get(k) for k in sorting_keys), reverse=True)
         new_features.extend(sorted_features[:max_items])
 
     layer['features'] = new_features

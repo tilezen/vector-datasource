@@ -395,6 +395,157 @@ class TagsNameI18nTest(unittest.TestCase):
         self.assertEquals('foo', props['name:short'])
 
 
+class KeepNGriddedTest(unittest.TestCase):
+    longMessage=True
+
+    def test_not_points(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Polygon(
+            [(1, 1), (2, 2), (1, 2), (1, 1)])
+        test_shape_2 = shapely.geometry.Polygon(
+            [(10, 10), (20, 20), (10, 20), (10, 10)])
+        features = [
+            (test_shape_1, {"foo": "bar"}, "test_shape_1"),
+            (test_shape_2, {"foo": "bar"}, "test_shape_2"),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer="test_layer",
+                items_matching=dict(foo="bar"),
+                max_items=1,
+                grid_size=2,
+                sorting_keys=["foo"],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEquals(features, output_features, "Non-point features should pass through without modification")
+
+    def test_points_keep_1(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.1, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.1, 1.0))
+        features = [
+            (test_shape_1, {"foo": "bar"}, "test_shape_1"),
+            (test_shape_2, {"foo": "bar"}, "test_shape_2"),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer="test_layer",
+                items_matching=dict(foo="bar"),
+                max_items=1,
+                grid_size=2,
+                sorting_keys=["foo"],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(1, len(output_features), "Should consolidate to a single point in the bucket")
+        self.assertEqual("test_shape_1", output_features[0][2], "All values equal, should pick first one")
+
+    def test_points_keep_1_multisort_missing_sort_key(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.1, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.1, 1.0))
+        features = [
+            (test_shape_2, {"foo": "bar", "min_zoom": 12.0, "population": 20000}, "test_shape_2"),
+            (test_shape_1, {"foo": "bar", "population": 10000}, "test_shape_1"),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer="test_layer",
+                items_matching=dict(foo="bar"),
+                max_items=1,
+                grid_size=2,
+                sorting_keys=["min_zoom", "population"],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(1, len(output_features),
+                         "Should consolidate to a single point in the bucket")
+        self.assertEqual("test_shape_2", output_features[0][2],
+                         "Should pick the shape with higher population when one sort key is missing")
+
+    def test_points_keep_1_multisort_second(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.1, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.1, 1.0))
+        features = [
+            (test_shape_2, {"foo": "bar", "min_zoom": 12.0, "population": 20000}, "test_shape_2"),
+            (test_shape_1, {"foo": "bar", "min_zoom": 12.0, "population": 10000}, "test_shape_1"),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer="test_layer",
+                items_matching=dict(foo="bar"),
+                max_items=1,
+                grid_size=2,
+                sorting_keys=["min_zoom", "population"],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(1, len(output_features), "Should consolidate to a single point in the bucket")
+        self.assertEqual("test_shape_2", output_features[0][2], "Should pick the shape with higher population")
+
+
 class TagsPriorityI18nTest(unittest.TestCase):
 
     def _call_fut(self, source, kvs):
