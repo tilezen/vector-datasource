@@ -720,7 +720,7 @@ post_process:
         - "disputed_by:left"
         - "disputed_by:right"
 
-  # drop id/id:left/id:right on boundaries up to zoom 12 inclusive.
+  # drop id/id:left/id:right on boundaries up to zoom 13 inclusive.
   # the left/right IDs tend to be unique as a pair, and so prevent merging.
   # the id itself will be dropped by merging if it's possible to merge, and
   # at mid and low zooms is of dubious usefulness.
@@ -728,23 +728,24 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 0
-      end_zoom: 13
+      end_zoom: 14
       properties:
         - id
         - "id:left"
         - "id:right"
 
-  # drop any name on locality boundaries at zooms 11 and 12 (min two zooms).
+  # drop any name on locality boundaries at zooms 11 and 13 (min two zooms).
   #
-  # NOTE: the start_zoom of 11 here comes in because this is the first zoom
-  # at which we show locality boundaries. if that changes (in boundaries.yaml)
+  # NOTE: the start_zoom of 10 here comes in because this is the first zoom
+  # at which we show county boundaries. if that changes (in boundaries.yaml)
   # then it needs to change here, and vice-versa!
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: boundaries
-      start_zoom: 11
-      end_zoom: 13
+      start_zoom: 10
+      end_zoom: 14
       where: >-
+        kind == 'county' or
         kind == 'locality'
 
   # try to merge boundaries into as long segments as possible.
@@ -759,7 +760,7 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 8
-      end_zoom: 12
+      end_zoom: 15
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
       # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
       # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
