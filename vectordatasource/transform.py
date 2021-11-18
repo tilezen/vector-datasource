@@ -3174,11 +3174,8 @@ def keep_n_features_gridded(ctx):
     new_features = []
     for shape, props, fid in layer['features']:
         # Pass non-point shapes through untouched
-        if shape.geom_type != 'Point':
+        if shape.type != 'Point' or not _match_props(props, items_matching):
             new_features.append((shape, props, fid))
-
-        # TODO This will filter out stuff that doesn't match. Do we want it to pass thru untouched instead?
-        if not _match_props(props, items_matching):
             continue
 
         # Calculate the bucket to put this feature in.
