@@ -3,14 +3,6 @@ from unittest import TestCase
 
 class YamlRulesTest(TestCase):
 
-    def test_merge_key(self):
-        from vectordatasource.transform import YAMLToDict
-        with open("sample_1.yaml", "r") as sample_1:
-            with open("sample_2.yaml", "r") as sample_2:
-                d1 = YAMLToDict(sample_1)
-                d2 = YAMLToDict(sample_2)
-                print("hi")
-
     def test_all_kinds(self):
         """
         Test that we've enumerated all the possible values for kind and
