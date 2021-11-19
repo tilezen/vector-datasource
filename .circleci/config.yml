@@ -6,6 +6,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Combine precommit config and python versions for caching
+          command: |
+            cat .pre-commit-config.yaml > pre-commit-deps.txt
+            python -VV >> pre-commit-deps.txt
+#      - restore_cache:
+#          keys:
+#            - v1-pc-cache-{{ checksum "pre-commit-cache-key.txt" }}
+      - run:
           name: Update packages
           command: sudo apt-get update
       - run:
@@ -23,7 +31,9 @@ jobs:
             sudo service postgresql start
             sudo sudo -u postgres createuser -s circleci
       - restore_cache:
-          key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          keys:
+          - v1-pc-cache-{{ checksum "pre-commit-cache-key.txt" }}
+          - python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
           name: Install Pip dependencies
           command: |
@@ -35,6 +45,10 @@ jobs:
           key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
             - "~/env"
+      - save_cache:
+          key: v1-pc-cache-{{ checksum "pre-commit-cache-key.txt" }}
+          paths:
+            - ~/.cache/pre-commit
       - run:
           name: Check Code Style using pre-commit
           command: |
