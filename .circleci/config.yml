@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Install pre-commit
-          command: pip install pre-commit
+          command: sudo pip install pre-commit
       - run:
           name: pre-commit checks
           command: pre-commit run --all-files
