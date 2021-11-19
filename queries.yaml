@@ -1628,6 +1628,24 @@ post_process:
       start_zoom: 4
       end_zoom: 13
 
+  # drop properties on landuse areas at mid and low zooms. it blocks merging
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: landuse
+      start_zoom: 4
+      end_zoom: 14
+      properties:
+        - passenger_count
+        - natural
+        - operator
+        - sport
+        - religion
+        - surface
+        - attraction
+        - zoo
+        - barrier
+        - fence_type
+
   # drop small inners before merge, as not having to consider these can speed up
   # the buffer & clipping algorithms.
   - fn: vectordatasource.transform.drop_small_inners
