@@ -794,6 +794,29 @@ post_process:
       where: >-
         kind == 'lake'
 
+  # remove names per kind for a given zoom
+  # before generating any label placements
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 16
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+      where: >-
+        (kind == 'sea' and zoom < 4) or
+        (kind == 'lake' and zoom < 5) or
+        (kind == 'river' and zoom <  12) or
+        (kind == 'canal' and zoom <  13) or
+        (kind == 'dam' and zoom <  14) or
+        (kind == 'stream' and zoom <  14) or
+        (kind == 'ditch' and zoom <  15) or
+        (kind == 'drain' and zoom <  15) or
+        (properties.get('is_tunnel') is True and zoom <  16)
+
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:
@@ -822,22 +845,58 @@ post_process:
       # table.
       min_zoom: >-
         [min_zoom for min_zoom, area_threshold in [
-            (4,  40000000000),
-            (5,  10000000000),
-            (6,   5000000000),
-            (7,    400000000),
-            (8,    200000000),
-            (9,    100000000),
-            (10,    10000000),
-            (11,     4000000),
-            (12,      750000),
-            (13,      100000),
-            (14,       50000),
-            (15,       10000),
-            (16,        None),
+            (1, 1000000000000),
+            (2,  500000000000),
+            (3,  250000000000),
+            (4,  120000000000),
+            (5,   80000000000),
+            (6,   40000000000),
+            (7,   10000000000),
+            (8,     500000000),
+            (9,     200000000),
+            (10,     40000000),
+            (11,      8000000),
+            (12,      1000000),
+            (13,       500000),
+            (14,        50000),
+            (15,        10000),
+            (16,         None),
         ] if area >= area_threshold][0]
       where: >-
-        kind == 'lake' and label_placement
+        kind in ['lake','bay','water','riverbank','reservoir'] and label_placement
+
+  # now that we have the label points
+  # drop most water properties at lower zooms
+  # this is for lines and polygons
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 8
+      end_zoom: 15
+      properties:
+        - id
+        - area
+        - layer
+        - wikidata_id
+        - kind_tile_rank
+        - label_placement
+      where: >-
+        geom_type in ('LineString', 'MultiLineString', 'Polygon', 'MultiPolygon')
+
+  # now that we have the label points
+  # drop water names at lower zooms for polys only
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 8
+      end_zoom: 15
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+      where: >-
+        geom_type in ('Polygon', 'MultiPolygon')
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
