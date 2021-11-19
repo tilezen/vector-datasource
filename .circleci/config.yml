@@ -48,7 +48,7 @@ jobs:
       - save_cache:
           key: v1-pc-cache-{{ checksum "pre-commit-cache-key.txt" }}
           paths:
-            - ~/.cache/pre-commit
+            - "~/env"
       - run:
           name: Check Code Style using pre-commit
           command: |
