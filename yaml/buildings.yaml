@@ -76,64 +76,56 @@ filters:
       - <<: *z13_area_volume
     min_zoom: 13
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       - <<: *is_building
       - <<: *z14_area_volume
     min_zoom: 14
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       - <<: *is_building
       - <<: *z15_area_volume
     min_zoom: 15
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       - <<: *is_building
       - <<: *z16_area_volume
     min_zoom: 16
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       <<: *is_building
     min_zoom: 17
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   # building part
   - filter:
       - <<: *is_building_part
       - <<: *z15_area_volume
     min_zoom: 15
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_part_kind_detail]
       kind: building_part
-      <<: *building_part_kind_detail
   - filter:
       - <<: *is_building_part
       - <<: *z16_area_volume
     min_zoom: 16
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_part_kind_detail]
       kind: building_part
-      <<: *building_part_kind_detail
   - filter:
       <<: *is_building_part
     min_zoom: 17
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_part_kind_detail]
       kind: building_part
-      <<: *building_part_kind_detail
   # address points
   - filter:
       "addr:housenumber": true
