@@ -10,10 +10,6 @@ jobs:
             cp .pre-commit-config.yaml pre-commit-cache-key.txt
             python --version --version >> pre-commit-cache-key.txt
       - run:
-          name: Check Code Style using pre-commit
-          command:
-            pre-commit run --show-diff-on-failure --all-files
-      - run:
           name: Update packages
           command: sudo apt-get update
       - run:
