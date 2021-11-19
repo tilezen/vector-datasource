@@ -1101,7 +1101,7 @@ post_process:
       where: >-
         (kind == 'highway' and zoom < 13) or
         (kind == 'major_road' and zoom < 14) or
-        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'minor_road' and zoom < 15)
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1116,7 +1116,7 @@ post_process:
       where: >-
         (kind == 'highway' and zoom < 12) or
         (kind == 'major_road' and zoom < 13) or
-        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'minor_road' and zoom < 15)
 
   - fn: vectordatasource.transform.drop_properties
     params:
