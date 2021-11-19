@@ -6,7 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Combine precommit config and python versions for caching
           command: |
             cp .pre-commit-config.yaml pre-commit-cache-key.txt
             python --version --version >> pre-commit-cache-key.txt
