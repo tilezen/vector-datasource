@@ -1014,7 +1014,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       properties:
         - bicycle
         - colour
@@ -1029,17 +1029,8 @@ post_process:
         - symbol
         - tracktype
         - type           # NVK (2017425): this is a suspicious tag
+
   # drop certain road properties at lower zooms
-  - fn: vectordatasource.transform.drop_properties
-    params:
-      source_layer: roads
-      start_zoom: 0
-      end_zoom: 14
-      properties:
-        - all_walking_networks
-        - all_walking_shield_texts
-        - all_bus_networks
-        - all_bus_shield_texts
   # drop all_bicycle_* until the max zoom:
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522176
   - fn: vectordatasource.transform.drop_properties
@@ -1048,8 +1039,13 @@ post_process:
       start_zoom: 0
       end_zoom: 16
       properties:
+        - all_walking_networks
+        - all_walking_shield_texts
         - all_bicycle_networks
         - all_bicycle_shield_texts
+        - all_bus_networks
+        - all_bus_shield_texts
+
   # drop certain road properties at lower zooms
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1074,13 +1070,14 @@ post_process:
         - sidewalk_right
         - sport
         - trail_visibility
+        
   # drop name and other properties on early paths to
   # allow more line merging (use walking network for labeling)
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       # this means remove all the names if "name" is one of the properties
       # we're dropping. in other words, allows us to use "name" as a short-
       # hand for name:XX, official_name, old_name, etc... without having to
@@ -1091,6 +1088,59 @@ post_process:
         - ref
       where: >-
         kind == 'path'
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - bus_network
+        - walking_network
+        - bicycle_network
+      where: >-
+        (kind == 'highway' and zoom < 13) or
+        (kind == 'major_road' and zoom < 14) or
+        (kind == 'minor_road' and zoom < 15) or
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - bus_shield_text
+        - bicycle_shield_text
+        - walking_shield_text
+        - hgv_restriction_shield_text
+      where: >-
+        (kind == 'highway' and zoom < 12) or
+        (kind == 'major_road' and zoom < 13) or
+        (kind == 'minor_road' and zoom < 15) or
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - network
+        - shield_text
+      where: >-
+        (kind_detail == 'motorway' and zoom <  7) or
+        (kind_detail == 'trunk' and zoom <  9) or
+        (kind_detail == 'primary' and zoom <  11) or
+        (kind_detail == 'secondary' and zoom <  12) or
+        (kind_detail == 'tertiary' and zoom <  13) or
+        (kind_detail == 'motorway_link' and zoom <  13) or
+        (kind_detail == 'trunk_link' and zoom <  13) or
+        (kind_detail == 'primary_link' and zoom <  14) or
+        (kind_detail == 'secondary_link' and zoom <  14) or
+        (kind_detail == 'tertiary_link' and zoom <  14) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'rail' and zoom < 15)
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -1102,16 +1152,46 @@ post_process:
       properties:
         - name
         - ref
-        - network
-        - shield_text
         - all_networks
         - all_shield_texts
-        - bus_network
-        - bus_shield_text
+        - service
+        - access
+        - osm_relation
       where: >-
-        (kind == 'rail' and zoom < 15) or
-        (kind == 'minor_road' and zoom < 14) or
-        (kind == 'major_road' and zoom <  7)
+        (kind == 'highway' and zoom <  11) or    
+        (kind_detail == 'trunk' and zoom <  12) or
+        (kind_detail == 'primary' and zoom <  13) or
+        (kind_detail == 'secondary' and zoom <  14) or
+        (kind_detail == 'tertiary' and zoom <  14) or
+        (kind_detail == 'motorway_link' and zoom <  14) or
+        (kind_detail == 'trunk_link' and zoom <  14) or
+        (kind_detail == 'primary_link' and zoom <  15) or
+        (kind_detail == 'secondary_link' and zoom <  15) or
+        (kind_detail == 'tertiary_link' and zoom <  15) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'rail' and zoom < 15)
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - service
+        - surface
+        - cycleway
+        - cycleway_right
+        - cycleway_left
+        - hgv
+        - operator
+      where: >-
+        (kind == 'highway' and zoom <  12) or
+        (kind == 'major_road' and zoom <  13) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'rail' and zoom < 15)
+
   # drop these "detail" tags to get better merging at zoom < 16
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1182,6 +1262,18 @@ post_process:
         sand: unpaved
         woodchips: unpaved
 
+ # drop these "detail" tags to get better merging at zoom < 14
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties:
+        - surface
+      where: >-
+        kind == 'minor_road' or 
+        (kind == 'path' and zoom < 13)
+
   # drop to get better merging at mid zooms.
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1233,12 +1325,12 @@ post_process:
         - private
 
   # this is a patch because we still want to drop name, network from major_road
-  # features between zoom 7 and 10
+  # features between zoom 7 and 11
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 11
+      end_zoom: 12
       # short-hand for "name" property in the list below means all name-like
       # properties.
       all_name_variants: true
@@ -1249,12 +1341,12 @@ post_process:
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways
-  # when zoom < 11.
+  # when zoom < 12.
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 11
+      end_zoom: 12
       where: >-
         kind == 'highway'
   # drop name, ref and the multi-shield properties, but keep single-shield
@@ -1283,7 +1375,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - all_walking_networks
         - all_walking_shield_texts
@@ -1339,28 +1431,24 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
-  # drop RCN network & shield text below zoom 11, and shield text at one more
+  # drop RCN network & shield text below zoom 13, and shield text at one more
   # zoom.
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522771
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 13
       properties:
         - bicycle_network
         - bicycle_shield_text
-      where: >-
-        bicycle_network == 'rcn'
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 14
       properties:
         - bicycle_shield_text
-      where: >-
-        bicycle_network == 'rcn'
   # drop LCN network & shield text below zoom 14 and shield text only at
   # one more zoom level. (should be present at zoom 15).
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236523895
@@ -1368,7 +1456,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties:
         - bicycle_network
         - bicycle_shield_text
@@ -1608,6 +1696,27 @@ post_process:
         - landuse_kind
       where: >-
         landuse_kind in ('residential', 'industrial')
+        
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 14
+      properties:
+        - landuse_kind
+      where: >-
+        (kind_detail == 'trunk' and zoom < 11) or
+        (kind_detail == 'primary' and zoom < 12) or
+        (kind_detail == 'secondary' and zoom < 13) or
+        (kind_detail == 'tertiary' and zoom < 13) or
+        (kind_detail == 'motorway_link' and zoom < 14) or
+        (kind_detail == 'trunk_link' and zoom < 14) or
+        (kind_detail == 'primary_link' and zoom < 15) or
+        (kind_detail == 'secondary_link' and zoom < 15) or
+        (kind_detail == 'tertiary_link' and zoom < 15) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'rail' and zoom < 14)
 
   # drop osm_relation tag, used to indicate that shapes came from OSM relations.
   # however, it interferes with merging.
