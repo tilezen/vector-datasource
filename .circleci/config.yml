@@ -6,6 +6,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install pre-commit
+          command: pip install pre-commit
+      - run:
+          name: pre-commit checks
+          command: pre-commit run --all-files
+      - run:
           name: Update packages
           command: sudo apt-get update
       - run:
