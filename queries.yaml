@@ -1110,9 +1110,13 @@ post_process:
       end_zoom: 15
       properties:
         - bus_shield_text
+        - bus_shield_text_length
         - bicycle_shield_text
+        - bicycle_shield_text_length
         - walking_shield_text
+        - walking_shield_text_length
         - hgv_restriction_shield_text
+        - hgv_restriction_shield_text_length
       where: >-
         (kind == 'highway' and zoom < 12) or
         (kind == 'major_road' and zoom < 13) or
@@ -1126,6 +1130,7 @@ post_process:
       properties:
         - network
         - shield_text
+        - shield_text_length
       where: >-
         (kind_detail == 'motorway' and zoom <  7) or
         (kind_detail == 'trunk' and zoom <  9) or
@@ -1170,7 +1175,8 @@ post_process:
         (kind_detail == 'tertiary_link' and zoom <  15) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
-        (kind == 'rail' and zoom < 15)
+        (kind == 'rail' and zoom < 15) or
+        (kind == 'ferry' and zoom < 15)
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1366,8 +1372,10 @@ post_process:
         - all_shield_texts
         - walking_network
         - walking_shield_text
+        - walking_shield_text_length
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         kind == 'highway'
   # drop non-road shield stuff a good deal earlier.
@@ -1381,6 +1389,7 @@ post_process:
         - all_walking_shield_texts
         - bus_network
         - bus_shield_text
+        - bus_shield_text_length
         - all_bus_networks
         - all_bus_shield_texts
       where: >-
@@ -1431,6 +1440,7 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
+        - walking_shield_text_length
   # drop RCN network & shield text below zoom 13, and shield text at one more
   # zoom.
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522771
@@ -1442,6 +1452,7 @@ post_process:
       properties:
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -1449,6 +1460,7 @@ post_process:
       end_zoom: 14
       properties:
         - bicycle_shield_text
+        - bicycle_shield_text_length
   # drop LCN network & shield text below zoom 14 and shield text only at
   # one more zoom level. (should be present at zoom 15).
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236523895
@@ -1460,6 +1472,7 @@ post_process:
       properties:
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         bicycle_network == 'lcn'
   - fn: vectordatasource.transform.drop_properties
@@ -1469,6 +1482,7 @@ post_process:
       end_zoom: 15
       properties:
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         bicycle_network == 'lcn'
   # drop any bicycle network & shield text on tracks below zoom 13.
@@ -1481,6 +1495,7 @@ post_process:
       properties:
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         kind == 'path' and kind_detail == 'track'
   - fn: vectordatasource.transform.update_parenthetical_properties
