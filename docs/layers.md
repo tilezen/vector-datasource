@@ -89,7 +89,7 @@ Simplified Chinese
 * `name:zho_cn_x_preferred`
 * `name:zho_x_preferred`
 * `name:wuu_x_preferred`
-  
+
 Traditional Chinese
 * `name:zho_tw_x_preferred`
 * `name:zho_x_variant`
@@ -1594,7 +1594,7 @@ For `hgv_restriction` property indicates general truck heavy goods vehicle truck
 
 #### Road Transportation `hgv_time_restrictions` Values
 Time restriction is a semicolon-delimited array of date and time restrictions,
-where date and time of a restriction are delimited with a pipe `|` character. 
+where date and time of a restriction are delimited with a pipe `|` character.
 Note, that restrictions use English names for days and months. For example,
 the restriction "Monday, Tuesday, Friday from 7 to 20; Saturday, Sunday from
 dusk to dawn" is given as follows:

@@ -133,7 +133,7 @@ We'll cover the following topics in the next sections:
 
 ### 1. Install prerequisite tool [pre-commit package manager](https://pre-commit.com) on your machine
 
-Since the repo right now uses python2.7, you need to install pre-commit using python2.7. 
+Since the repo right now uses python2.7, you need to install pre-commit using python2.7.
 
 Then enable it by doing `pre-commit install`.
 
