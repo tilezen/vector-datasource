@@ -1,7 +1,14 @@
 default_language_version:
-    python: python
+    python: python2.7
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.5.0
     hooks:
+      - id: check-docstring-first
       - id: check-yaml
+      - id: debug-statements
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace

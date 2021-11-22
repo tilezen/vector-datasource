@@ -12,10 +12,10 @@ import requests
 from tqdm import tqdm
 
 
-"""
-expects input to look like "123456.geojson"
-"""
 def _parse_wof_id(s):
+    """
+        expects input to look like "123456.geojson"
+    """
     wof_id, ext = splitext(basename(s))
     assert ext == '.geojson'
     return int(wof_id)
