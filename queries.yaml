@@ -152,7 +152,7 @@ layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 8
+    simplify_start: 0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -168,7 +168,7 @@ layers:
   earth:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 8
+    simplify_start: 0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -192,7 +192,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
@@ -208,12 +208,12 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.normalize_operator_values
       - vectordatasource.transform.major_airport_detector
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
     geometry_types: [LineString, MultiLineString]
-    simplify_start: 8
+    simplify_start: 4
     tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -233,7 +233,7 @@ layers:
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
@@ -255,7 +255,7 @@ layers:
       - vectordatasource.transform.normalize_tourism_kind
       - vectordatasource.transform.building_trim_properties
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
@@ -280,7 +280,7 @@ layers:
       - vectordatasource.transform.major_airport_detector
       - vectordatasource.transform.elevation_to_meters
       - vectordatasource.transform.normalize_operator_values
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
@@ -296,12 +296,14 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
       - vectordatasource.transform.remap_viewpoint_kinds
       - vectordatasource.transform.unpack_viewpoint_claims
     area-inclusion-threshold: 1
   transit:
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
+    simplify_start: 5
+    tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -312,7 +314,7 @@ layers:
       - vectordatasource.transform.route_name
       - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
   admin_areas:
