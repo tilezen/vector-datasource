@@ -4,13 +4,36 @@ from . import FixtureTest
 class EarlyPath(FixtureTest):
     def test_pacific_crest_trail(self):
         # highway=path, with route national (Pacific Crest Trail)
-        self.load_fixtures(
-            ['https://www.openstreetmap.org/way/236361475',
-             'https://www.openstreetmap.org/relation/1225378'],
-            clip=self.tile_bbox(11, 345, 790))
+        import dsl
+
+        z, x, y = (14, 2616, 6328)
+
+        self.generate_fixtures(
+            dsl.way(236361475, dsl.tile_diagonal(z, x, y), {
+                'source': 'openstreetmap.org',
+                'highway': 'path',
+                'foot': 'yes',
+                'bicycle': 'no',
+                'ref': 'PCT',
+                'alt_name': 'Pacific Crest National Scenic Trail',
+                'horse': 'yes',
+                'motorcar': 'name',
+                'name': 'Pacific Crest Trail',
+                'network': 'nwn',
+                'ref': 'PCT Section H'
+            }),
+            dsl.relation(1225378, {
+                'source': 'openstreetmap.org',
+                'type': 'route',
+                'route': 'hiking',
+                'network': 'nwn',
+                'ref': 'PCT',
+                'name': 'Pacific Crest Trail',
+            }, ways=[236361475]),
+        )
 
         self.assert_has_feature(
-            11, 345, 790, 'roads',
+            z, x, y, 'roads',
             {'walking_network': 'nwn',
              'walking_shield_text': 'PCT'})
 

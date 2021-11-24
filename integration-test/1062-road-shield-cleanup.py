@@ -30,6 +30,38 @@ class RoadShieldCleanup(FixtureTest):
             expected_shield_text='A52')
 
     def test_M1(self):
-        self._check_network_relation(
-            way_id=3109799, rel_id=2332838, tile=(16, 32531, 21377),
-            expected_shield_text='M1')
+        import dsl
+        from shapely.wkt import loads as wkt_loads
+        z, x, y = 16, 32531, 21377
+        self.generate_fixtures(
+             dsl.way(3109799, dsl.tile_diagonal(z, x, y), {
+                "source": 'openstreetmap.org',
+                "lanes": "3",
+                "maxspeed:type": "UK:motorway",
+                "highways_england:area": "7",
+                "wikipedia": "en:M1 motorway",
+                "operator": "Highways England",
+                "ref": "M1",
+                "proposed:active_traffic_management": "yes",
+                "oneway": "yes",
+                "carriageway_ref": "A",
+                "highway": "motorway",
+                "int_ref": "E 13",
+                "lit": "yes",
+                "maxspeed": "70 mph"
+             }),
+            dsl.relation(2332838, {
+                "wikipedia": "en:European route E13",
+                "wikidata": "Q1247738",
+                "type": "route",
+                "route": "road",
+                "ref": "E 13",
+                "network": "e-road",
+                "e-road:class": "A-intermediate",
+                "description:fr": "E 13 Doncaster - Londres"
+            }, ways=[35568189]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads',
+            {'id': 3109799, 'shield_text': 'M1'})
