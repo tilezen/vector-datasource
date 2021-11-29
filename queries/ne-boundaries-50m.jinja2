@@ -4,5 +4,7 @@
 UNION ALL
 {{ ne_boundaries_query(False, True, 'ne_50m_admin_0_boundary_lines_disputed_areas') }}
 UNION ALL
+{{ ne_boundaries_query(False, True, 'ne_50m_admin_0_boundary_lines_maritime_indicator_chn') }}
+UNION ALL
 {{ ne_boundaries_query(False, True, 'ne_50m_admin_1_states_provinces_lines') }}
 {% endblock %}

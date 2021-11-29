@@ -89,7 +89,7 @@ Simplified Chinese
 * `name:zho_cn_x_preferred`
 * `name:zho_x_preferred`
 * `name:wuu_x_preferred`
-  
+
 Traditional Chinese
 * `name:zho_tw_x_preferred`
 * `name:zho_x_variant`
@@ -244,6 +244,16 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `map_unit`
 * `overlay_limit`
 * `region`
+* `unrecognized_country`
+* `unrecognized_region`
+
+### Viewpoints for Disputed Boundaries
+
+When there is a **boundary dispute** between two countries, the default boundary between them is generally shown according to the _de facto_ status marking where one country's on the ground administration ends and another's begins. The boundary line itself is marked `disputed`, and the extend of the other country's claim is tagged with one of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, and `disputed_reference_line`.
+
+Audiences in different countries may have different expectations and legal requirements so Tilezen optionally supports _de jure_ boundary viewpoints with `kind:xx` properties, where `xx` is a lower-cased [ISO 3166-1 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) with support for `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `us`, `vn`. Use these properties to "turn off" `unrecognized_country` and `unrecognized_region` boundary lines, and restyle the claims as `country` and `region`. The range of values is the same as for `kind`, and should be used in conjunction with `kind` as `kind:xx` in a coalesce as it's only included when that country's viewpoint is different than the default. These should be paired with **places** layer viewpoint support for country and region capitals.
+
+Some disputed boundaries, like the  [China 9-dashed line](https://en.wikipedia.org/wiki/Nine-dash_line), are marked `unrecognized_country` by default and are only available in a specific `kind:xx` viewpoint (in this case `kind:cn` and `kind:tw`).
 
 ## Buildings and Addresses
 
@@ -1440,6 +1450,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively. Note that networks may include "modifier" information, for example `US:I:Business` for a business route or `US:I:Truck` for a truck route. The whitelist of "modifier" values is; `Alternate`, `Business`, `Bypass`, `Connector`, `Historic`, `Scenic`, `Spur`, `Toll` and `Truck`.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`. Whitepsace, punctuation, and prefixes are generally stripped.
+* `shield_text_length`: The length of the `shield_text` field as a string.  E.g. if `shield_text` is `'12345'`, `shield_text_length` would be `'5'`. Missing if `shield_text` is !(0 < length < 7) or field doesn't exist
 
 #### Road properties (common optional):
 
@@ -1465,12 +1476,15 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_walking_networks` and `all_walking_shield_texts`: All of the walking networks of which this road is a part, and each corresponding shield text. See `walking_network` and `walking_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `walking_network`: e.g: `nwn` for a "National Walking Network". Other common values include `iwn` for international, `rwn` for regional and `lwn` for local walking networks.
 * `walking_shield_text`: Contains text intended to be displayed on a shield related to the walking network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `walking_shield_text_length`: The length of the `walking_shield_text` field as a string.  E.g. if `walking_shield_text` is `'12345'`, `walking_shield_text_length` would be `'5'`.  Missing if `walking_shield_text` is !(0 < length < 7) or field doesn't exist
 * `all_bicycle_networks` and `all_bicycle_shield_texts`: All of the bicycle networks of which this road is a part, and each corresponding shield text. See `bicycle_network` and `bicycle_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
 * `bicycle_shield_text`: Contains text intended to be displayed on a shield related to the bicycle network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `bicycle_shield_text_length`: The length of the `bicycle_shield_text` field as a string.  E.g. if `bicycle_shield_text` is `'12345'`, `bicycle_shield_text_length` would be `'5'`.  Missing if `bicycle_shield_text` is !(0 < length < 7) or field doesn't exist
 * `all_bus_networks` and `all_bus_shield_texts`: All of the bus and trolley-bus routes of which this road is a part, and each corresponding shield text. See `bus_network` and `bus_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bus_network`: Note that this is often not present for bus routes / networks. This may be replaced with `operator` in the future, see [issue 1194](https://github.com/tilezen/vector-datasource/issues/1194).
 * `bus_shield_text`: Contains text intended to be displayed on a shield related to the bus or trolley-bus network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `bus_shield_text_length`: The length of the `bus_shield_text` field as a string.  E.g. if `bus_shield_text` is `'12345'`, `bus_shield_text_length` would be `'5'`. Missing if `bus_shield_text` is !(0 < length < 7) or field doesn't exist
 * `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`. `cobblestone:flattened`, `concrete:plates` and `concrete:lanes` values are transformed to `cobblestone_flattened`, `concrete_plates` and `concrete_lanes` respectively. These values are simplified at lower zooms, see the section "Roads surface values simplification" for more details.
 
 #### Road properties (optional):
@@ -1488,6 +1502,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
 * `hgv_time_restrictions` - optional property specifying when heavy goods vehicle truck access is restricted. See the `hgv_time_restrictions` values list below.
 * `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
+* `hgv_restriction_shield_text_length`: optional.  Returns length of `hgv_restriction_shield_text` as a string.  Missing if `hgv_restriction_shield_text` is !(0 < length < 7) or field doesn't exist
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1579,7 +1594,7 @@ For `hgv_restriction` property indicates general truck heavy goods vehicle truck
 
 #### Road Transportation `hgv_time_restrictions` Values
 Time restriction is a semicolon-delimited array of date and time restrictions,
-where date and time of a restriction are delimited with a pipe `|` character. 
+where date and time of a restriction are delimited with a pipe `|` character.
 Note, that restrictions use English names for days and months. For example,
 the restriction "Monday, Tuesday, Friday from 7 to 20; Saturday, Sunday from
 dusk to dawn" is given as follows:
@@ -2447,7 +2462,7 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * Layer name: `water`
 * Geometry types: `point`, `line`, and `polygon`
 
-Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
+Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+. Covered water is not included.
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 

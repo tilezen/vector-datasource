@@ -8220,7 +8220,11 @@ def _choose_most_important_network(properties, prefix, importance_fn):
             # expose first network as network/shield_text
             network, ref = tuples[0]
             properties[prefix + 'network'] = network
-            properties[prefix + 'shield_text'] = ref
+
+            if ref is not None:
+                properties[prefix + 'shield_text'] = ref
+                if 0 < len(ref) <= 7:
+                    properties[prefix + 'shield_text_length'] = str(len(ref))
 
             # replace properties with sorted versions of themselves
             properties[all_networks] = [n[0] for n in tuples]
@@ -8993,6 +8997,8 @@ def add_vehicle_restrictions(shape, props, fid, zoom):
         props['hgv_restriction'] = hgv_restriction
     if hgv_restriction_shield_text:
         props['hgv_restriction_shield_text'] = hgv_restriction_shield_text
+        if 0 < len(hgv_restriction_shield_text) < 7:
+            props['hgv_restriction_shield_text_length'] = str(len(hgv_restriction_shield_text))
 
     return shape, props, fid
 
