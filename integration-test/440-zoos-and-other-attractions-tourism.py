@@ -9,8 +9,8 @@ class ZoosAndOtherAttractionsTourism(FixtureTest):
         self._run_test(13, 2240, 3421, -1228099, 'theme_park')
         # Busch Gardens Williamsburg
         self._run_test(13, 2351, 3181, 362327591, 'theme_park')
-        # High Hampton Resort
-        self._run_test(14, 4410, 6484, -12775348, 'resort')
+        # Disneyland Resort
+        self._run_test(14, 2825, 6555, -4795362, 'resort')
         # Aquarium of the Pacific
         self._run_test(14, 2812, 6557, 200068201, 'aquarium')
 

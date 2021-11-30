@@ -127,7 +127,7 @@ class BusRouteRefs(FixtureTest):
         # data-dependent. for the purposes of the test, we only care that
         # there _is_ one.
         self.generate_fixtures(
-            dsl.way(225516711, wkt_loads('LineString (-122.44117830000000424 37.79163929999999993, -122.44752560000000585 37.79082819999999998)'), {
+            dsl.way(225516711, dsl.tile_diagonal(12, 654, 1583), {
                 'source': 'openstreetmap.org',
                 'highway': 'residential',
                 'name': 'Jackson Street',

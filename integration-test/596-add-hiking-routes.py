@@ -45,7 +45,7 @@ class AddHikingRoutes(FixtureTest):
                 'highway': 'residential',
                 'name': 'Baker River Road'
             }),
-            dsl.relation(5260896, {
+            dsl.relation(3718820, {
                 'source': 'openstreetmap.org',
                 'type': 'route',
                 'route': 'hiking',
@@ -54,7 +54,7 @@ class AddHikingRoutes(FixtureTest):
                 'name': 'Pacific Northwest Trail 03 Washington',
                 'wikidata': 'Q3360192',
                 'symbol': 'totem on yellow background'
-            }, ways=[3718820]),
+            }, ways=[5260896]),
         )
 
         self.assert_has_feature(
@@ -125,7 +125,7 @@ class AddHikingRoutes(FixtureTest):
         # (nwn)
         # should be visible at z11
         self.generate_fixtures(
-            dsl.way(16000421, wkt_loads('LineString (-93.68584719999999777 41.74244529999999997, -93.6859489999999937 41.74249919999999747, -93.68607550000000117 41.74251509999999854, -93.68619499999999789 41.74251499999999737, -93.68646250000000464 41.74245650000000296, -93.68669930000000079 41.74234510000000142, -93.68697509999999795 41.7422196999999997, -93.6872615000000053 41.74211700000000036, -93.68774890000000255 41.7419809000000015)'), {
+            dsl.way(16000421, dsl.tile_diagonal(11, 491, 762), {
                 'source': 'openstreetmap.org',
                 'highway': 'service',
                 'oneway': 'yes',
