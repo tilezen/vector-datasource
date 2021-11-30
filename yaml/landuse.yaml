@@ -912,7 +912,7 @@ filters:
       kind: theme_park
       tier: 5
   # resort
-  - filter: {tourism: resort}
+  - filter: {leisure: resort}
     min_zoom: *tier5_min_zoom
     output:
       <<: *output_properties
