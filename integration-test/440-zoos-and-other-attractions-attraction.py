@@ -7,10 +7,10 @@ class ZoosAndOtherAttractionsAttraction(FixtureTest):
         self._run_test(16, 21228, 23551, 342984911, 'animal')
         # Fun Mountain Water Park
         self._run_test(16, 15113, 22273, 243814268, 'water_slide')
-        # Intimidator 305
-        self._run_test(16, 18670, 25316, 235398095, 'roller_coaster')
+        # Woodstock Express
+        self._run_test(16, 18670, 25315, 235396958, 'roller_coaster')
         # Carousel
-        self._run_test(16, 18669, 25316, 235037260, 'carousel')
+        self._run_test(16, 10555, 25516, 34300914, 'carousel')
         # White Water Canyon
         self._run_test(16, 18668, 25316, 235398104, 'amusement_ride')
         # Lawyers Farm Corn Maze

@@ -7,7 +7,7 @@ class FeaturesTest(FixtureTest):
             'http://www.openstreetmap.org/node/2893904480',
             '16/19299/24631', {'kind': 'bakery'})
         self._run_test(
-            'http://www.openstreetmap.org/node/886395953',
+            'http://www.openstreetmap.org/node/886392347',
             '16/19297/24636', {'kind': 'books'})
         self._run_test(
             'http://www.openstreetmap.org/node/2709493928',

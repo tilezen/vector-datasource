@@ -1211,7 +1211,7 @@ filters:
       kind: {col: attraction}
       tier: 5
   # resort
-  - filter: {tourism: resort}
+  - filter: {leisure: resort}
     min_zoom: { min: [ { max: [ 14, { sum: [ { col: zoom }, 5.32 ] }, *tier5_min_zoom ] }, 17 ] }
     output:
       <<: *output_properties

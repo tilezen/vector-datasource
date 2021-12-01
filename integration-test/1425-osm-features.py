@@ -8,8 +8,8 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2178336349',
             '16/19299/24638', {'kind': 'art'})
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/2821335218',
-            '16/19295/24639', {'kind': 'beauty'})
+            'http://www.openstreetmap.org/node/5934969258',
+            '16/19296/24638', {'kind': 'beauty'})
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4995839495',
             '16/19307/24631', {'kind': 'coffee'})
@@ -20,8 +20,8 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/2328279410',
             '16/19296/24633', {'kind': 'furniture'})
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/2898340720',
-            '16/19313/24633', {'kind': 'hifi'})
+            'http://www.openstreetmap.org/node/2776271739',
+            '16/19305/24635', {'kind': 'hifi'})
         self._run_poi_test(
             'http://www.openstreetmap.org/node/1581176007',
             '16/19301/24632', {'kind': 'newsagent'})
@@ -29,14 +29,14 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/4913377716',
             '16/19298/24629', {'kind': 'perfumery'})
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/1853451180',
-            '16/19296/24633', {'kind': 'shoes'})
+            'http://www.openstreetmap.org/node/3579507084',
+            '16/19295/24633', {'kind': 'shoes'})
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/3676902925',
-            '16/19299/24635', {'kind': 'stationery'})
+            'http://www.openstreetmap.org/node/5101131722',
+            '16/19295/24640', {'kind': 'stationery'})
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/3116856932',
-            '16/19304/24626', {'kind': 'tobacco'})
+            'http://www.openstreetmap.org/node/6262432208',
+            '16/19295/24641', {'kind': 'tobacco'})
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4553346149',
             '16/19298/24632', {'kind': 'travel_agency'})
@@ -60,8 +60,8 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/node/3656027075',
             '16/19337/24632', {'kind': 'charging_station'})
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/3220603991',
-            '16/33575/21727',
+            'http://www.openstreetmap.org/node/4991752549',
+            '16/33891/21798',
             {'kind': 'charging_station', 'scooter': True, 'car': False})
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4882913388',
@@ -73,8 +73,8 @@ class FeatureTests(FixtureTest):
             '16/19179/24481', {'kind': 'hunting_stand'})
 
         self._run_poi_test(
-            'http://www.openstreetmap.org/node/4042835711',
-            '16/19298/24638', {'kind': 'marketplace'})
+            'http://www.openstreetmap.org/node/6791112645',
+            '16/19297/24638', {'kind': 'marketplace'})
 
         self._run_poi_test(
             'http://www.openstreetmap.org/node/841558023',
