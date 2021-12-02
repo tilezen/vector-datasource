@@ -3187,9 +3187,28 @@ def keep_n_features_gridded(ctx):
 
         buckets[bucket_id].append((shape, props, fid))
 
+    def sorting_values_for_feature(f):
+        _, props, _ = f
+
+        values = []
+        for k in sorting_keys:
+            v = props.get(k['sort_key'])
+
+            if v is None:
+                values.append(v)
+                continue
+
+            if k.get('reverse'):
+                v *= -1
+                if v == '':
+                    raise ValueError("Cannot reverse string value %s" % props.get(k['sort_key']))
+
+            values.append(v)
+        return values
+
     # Sort the features in each bucket and pick the top items to include in the output
     for features_in_bucket in buckets.values():
-        sorted_features = sorted(features_in_bucket, key=lambda i: tuple(i[1].get(k) for k in sorting_keys), reverse=True)
+        sorted_features = sorted(features_in_bucket, key=sorting_values_for_feature)
         new_features.extend(sorted_features[:max_items])
 
     layer['features'] = new_features
