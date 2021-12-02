@@ -131,7 +131,13 @@ We'll cover the following topics in the next sections:
 - [Push your local branch to the server](CONTRIBUTING.md#9-push-your-local-branch-to-the-server)
 - [Submit a Pull Request (PR)](CONTRIBUTING.md#10-submit-a-pull-request-pr)
 
-### 1. Choose an issue to work on
+### 1. Install prerequisite tool [pre-commit package manager](https://pre-commit.com) on your machine
+
+Since the repo right now uses python2.7, you need to install pre-commit using python2.7.
+
+Then enable it by doing `pre-commit install`.
+
+### 2. Choose an issue to work on
 
 We have a backlog of issues, but they are also grouped into milestones and tracked with [Waffle board](https://waffle.io/tilezen/vector-datasource).
 
@@ -139,7 +145,7 @@ When picking an issue from the Ready column for the active milestone, self assig
 
 If you propose to work on an issue in the Backlog but what to confirm some details add a comment to the issue or ask about it in Slack.
 
-### 2. Create a new branch
+### 3. Create a new branch
 
 Ensure you're on the master branch to establish a clean history:
 
@@ -173,7 +179,7 @@ NOTE: Your first push for a branch might require additional details:
 git push --set-upstream origin olga/875-camp-ground-zoom
 ```
 
-### 3. Create a new test
+### 4. Create a new test
 
 Create a new test for the issue in `integration-test` dir. Sometimes it's helpful to look thru the existing tests to find one that is a close match to the pattern and start there.
 
@@ -494,7 +500,8 @@ For each, commit using a specific commit message. The first should use the "Conn
 git commit -m 'Connects to #875 to add camp_site polygons' filename
 ```
 
-_NOTE: Subsequent commit messages can be more generic._
+_NOTE: Subsequent commit messages can be more generic. Also, pre-commit hooks check the code styles at this point by default, many linters should auto fix the issues they identified so you would just git commit again and those errors would be gone, however certain linters require your manual effort to fix them. If you don't fix them your pull request will fail the style check later._
+
 
 Make sure you have a clean merge by pulling down the latest master by checking out master:
 

@@ -19,7 +19,7 @@ class GateMinZoom(FixtureTest):
         # Gate on minor road
         self.load_fixtures([
             'http://www.openstreetmap.org/node/2591034891',
-            'http://www.openstreetmap.org/way/11621900',
+            'http://www.openstreetmap.org/way/784680412',
         ])
 
         self.assert_has_feature(

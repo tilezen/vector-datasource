@@ -25,7 +25,7 @@ class MarshTest(FixtureTest):
                 'id': 35559154,
                 'kind': 'wetland',
                 'kind_detail': 'marsh',
-                'min_zoom': 14,
+                'min_zoom': 13,
                 'name': type(None),
             })
 

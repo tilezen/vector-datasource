@@ -11,7 +11,7 @@ class LanduseKindBuildings(FixtureTest):
             'https://www.openstreetmap.org/relation/6168071',
 
             # the aerodrome landuse polygon
-            'https://www.openstreetmap.org/way/131190417',
+            'https://www.openstreetmap.org/way/649268639',
         ])
 
         # the tile which contains Terminal 2 should set the landuse_kind
@@ -36,7 +36,7 @@ class LanduseKindBuildings(FixtureTest):
             'https://www.openstreetmap.org/relation/6168075',
 
             # the aerodrome landuse polygon
-            'https://www.openstreetmap.org/way/131190417',
+            'https://www.openstreetmap.org/way/649268639',
         ])
 
         for x in (11209, 11210):

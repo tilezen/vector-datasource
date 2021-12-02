@@ -11,7 +11,6 @@ global:
       call:
         func: util.safe_int
         args: [ { col: area } ]
-    source: {col: source}
     protect_class: {col: protect_class}
     operator: {col: operator}
     religion: {col: religion}
@@ -914,14 +913,13 @@ filters:
           - [ 15,    2000 ]
         default: 16
     output:
-      <<: *output_properties
+      <<: [*output_properties, *religion_kind_detail]
       kind:
         case:
           - when: { landuse: cemetery }
             then: cemetery
           - else: grave_yard
       tier: 4
-      <<: *religion_kind_detail
       denomination: { col: denomination }
   # commercial - no POI
   # cutline - no POI
@@ -1026,16 +1024,14 @@ filters:
   - filter: { 'health_facility:type': field_hospital }
     min_zoom: 15
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: field_hospital
-      <<: *health_facility_type_kind_detail
   # hospital
   - filter: {amenity: hospital}
     min_zoom: { min: [ { max: [ { sum: [ { col: zoom }, 3.32 ] }, *tier4_min_zoom ] }, 14 ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: hospital
-      <<: *health_facility_type_kind_detail
       tier: 4
   # industrial - no POI
   # pier - no POI
@@ -1215,7 +1211,7 @@ filters:
       kind: {col: attraction}
       tier: 5
   # resort
-  - filter: {tourism: resort}
+  - filter: {leisure: resort}
     min_zoom: { min: [ { max: [ 14, { sum: [ { col: zoom }, 5.32 ] }, *tier5_min_zoom ] }, 17 ] }
     output:
       <<: *output_properties
@@ -1296,9 +1292,8 @@ filters:
     # already clamped below area min
     min_zoom: 16
     output:
-      <<: *output_properties
+      <<: [*output_properties, *sport_kind_detail]
       kind: pitch
-      <<: *sport_kind_detail
       tier: 6
   # pitch - only show no-name pitches for some smaller set of sports, and at a
   # higher zoom.
@@ -1307,9 +1302,8 @@ filters:
     # already clamped below area min
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *sport_kind_detail]
       kind: pitch
-      <<: *sport_kind_detail
       tier: 6
   # place_of_worship
   - filter: {amenity: place_of_worship}
@@ -1421,8 +1415,7 @@ filters:
         all: {historic: 'no'}
     min_zoom: 10
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: station
       state: {col: state}
   - filter: {natural: spring}
@@ -1470,9 +1463,8 @@ filters:
       amenity: [biergarten, pub, bar, nightclub, restaurant, fast_food, cafe]
     min_zoom: { clamp: { min: 15, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *cuisine_kind_detail]
       kind: {col: amenity}
-      <<: *cuisine_kind_detail
   - filter:
       shop: [coffee, deli]
     min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 2.5 ] } } }
@@ -1483,9 +1475,8 @@ filters:
       amenity: [pharmacy, veterinary]
     min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 3.3 ] } } }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: {col: amenity}
-      <<: *health_facility_type_kind_detail
   - filter:
       craft: [brewery, carpenter, confectionery, dressmaker, electrician, gardener,
         handicraft, hvac, metal_construction, painter, photographer, photographic_laboratory,
@@ -1508,9 +1499,8 @@ filters:
   - filter: {amenity: nursing_home}
     min_zoom: { clamp: { min: 15, max: 16, value: { sum: [ { col: zoom }, 1.25 ] } } }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: nursing_home
-      <<: *health_facility_type_kind_detail
   - filter: {shop: music}
     min_zoom: { clamp: { min: 13, max: 17, value: { sum: [ { col: zoom }, 1.27 ] } } }
     output:
@@ -1732,53 +1722,45 @@ filters:
   - filter: { 'health_facility:type': health_centre }
     min_zoom: 15
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: health_centre
-      <<: *health_facility_type_kind_detail
   - filter: { 'health_facility:type': dispensary }
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: dispensary
-      <<: *health_facility_type_kind_detail
   - filter:
       social_facility: ambulatory_care
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: ambulatory_care
-      <<: *health_facility_type_kind_detail
   - filter:
       amenity: [clinic, dentist, doctors, social_facility]
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: {col: amenity}
-      <<: *health_facility_type_kind_detail
   - filter: {healthcare: [chiropractor, hospice, midwife, occupational_therapist, optometrist, paediatrics, physiotherapist, podiatrist, psychotherapist, rehabilitation, speech_therapist]}
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: {col: healthcare}
-      <<: *health_facility_type_kind_detail
   - filter: {healthcare: alternative}
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: healthcare_alternative
-      <<: *health_facility_type_kind_detail
   - filter: {healthcare: centre}
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: healthcare_centre
-      <<: *health_facility_type_kind_detail
   - filter: {healthcare: laboratory}
     min_zoom: 17
     output:
-      <<: *output_properties
+      <<: [*output_properties, *health_facility_type_kind_detail]
       kind: healthcare_laboratory
-      <<: *health_facility_type_kind_detail
   - filter: {healthcare: [blood_donation, blood_bank]}
     min_zoom: 17
     output:
@@ -1958,8 +1940,7 @@ filters:
   - filter: {aerialway: station}
     min_zoom: 13
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: station
       state: {col: state}
   # also count a public_transport=station as a station, if it has railway-ish
@@ -1972,8 +1953,7 @@ filters:
         railway: true
     min_zoom: 10
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: station
   - filter:
       railway: [halt, stop, tram_stop]
@@ -1984,56 +1964,47 @@ filters:
         all: {historic: 'no'}
     min_zoom: 16
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: {col: railway}
   - filter: {railway: platform}
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: platform
   - filter: {highway: [platform, bus_stop]}
     min_zoom: 18
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: bus_stop
   - filter: {public_transport: platform, rail: 'yes'}
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: platform
   - filter: {public_transport: platform, light_rail: 'yes'}
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: platform
   - filter: {public_transport: platform, bus: 'yes'}
     min_zoom: 18
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: bus_stop
   - filter: {public_transport: platform}
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: platform
   - filter: {public_transport: stop_area}
     min_zoom: 15
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: stop_area
   - filter: {site: stop_area}
     min_zoom: 15
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: stop_area
   - filter: {tourism: alpine_hut}
     min_zoom: 13
@@ -2330,23 +2301,20 @@ filters:
       amenity: motorcycle_parking
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *cycle_parking_properties
+      <<: [*output_properties, *cycle_parking_properties]
       kind: motorcycle_parking
   - filter:
       amenity: bicycle_parking
       name: true
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *cycle_parking_properties
+      <<: [*output_properties, *cycle_parking_properties]
       kind: bicycle_parking
   - filter:
       amenity: bicycle_parking
     min_zoom: 19
     output:
-      <<: *output_properties
-      <<: *cycle_parking_properties
+      <<: [*output_properties, *cycle_parking_properties]
       kind: {col: amenity}
   - filter:
       amenity: [charging_station]
@@ -2449,8 +2417,7 @@ filters:
   - filter: {railway: subway_entrance}
     min_zoom: 17
     output:
-      <<: *output_properties
-      <<: *transit_properties
+      <<: [*output_properties, *transit_properties]
       kind: subway_entrance
   - filter:
       amenity: [bench, waste_basket]
