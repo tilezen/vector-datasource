@@ -56,6 +56,7 @@ jobs:
           command: |
             . ~/env/bin/activate
             python integration-test/__init__.py --download-only
+# This section is commented out because now flake8 is part of an earlier step - `Check Code Style using pre-commit`. See https://github.com/tilezen/vector-datasource/pull/2027/
 #      - run:
 #          name: Install flake8
 #          command: |
