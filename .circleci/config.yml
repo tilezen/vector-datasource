@@ -56,16 +56,16 @@ jobs:
           command: |
             . ~/env/bin/activate
             python integration-test/__init__.py --download-only
-      - run:
-          name: Install flake8
-          command: |
-            . ~/env/bin/activate
-            pip install -U flake8
-      - run:
-          name: Check PEP8 compliance
-          command: |
-            . ~/env/bin/activate
-            find . -not -path '*/.eggs/*' -not -path '*/data/*' -not -path '*/venv/*' -name '*.py' | xargs flake8
+#      - run:
+#          name: Install flake8
+#          command: |
+#            . ~/env/bin/activate
+#            pip install -U flake8
+#      - run:
+#          name: Check PEP8 compliance
+#          command: |
+#            . ~/env/bin/activate
+#            find . -not -path '*/.eggs/*' -not -path '*/data/*' -not -path '*/venv/*' -name '*.py' | xargs flake8
       - run:
           name: Unit tests
           command: |
