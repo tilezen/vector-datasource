@@ -22,5 +22,5 @@ class NaturalEarth(FixtureTest):
                 zoom, x, y, 'boundaries', {
                     'kind': 'disputed_claim',
                     'kind:cn': 'country',
-                    'min_zoom': 1,  # we change the min_zoom override in boundaries.yaml to 1 so we assert here  # noqa
+                    'min_zoom': 1,  # we change the min_zoom override in boundaries.yaml to 1 so we assert here
                 })

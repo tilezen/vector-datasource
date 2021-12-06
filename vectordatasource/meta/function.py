@@ -1,5 +1,5 @@
-from itertools import izip
 import re
+from itertools import izip
 
 
 def mz_building_kind_detail(val):

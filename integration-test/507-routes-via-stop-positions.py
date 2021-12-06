@@ -1,5 +1,6 @@
-from . import FixtureTest
 from shapely.wkt import loads as wkt_loads
+
+from . import FixtureTest
 
 
 class RoutesViaStopPositions(FixtureTest):

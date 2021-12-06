@@ -1,6 +1,7 @@
-from collections import namedtuple
-import webcolors
 import re
+from collections import namedtuple
+
+import webcolors
 
 
 # a type to hold an RGB colour, expect RGB integers between 0-255

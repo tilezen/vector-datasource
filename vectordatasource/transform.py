@@ -1,15 +1,25 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
-
-from collections import defaultdict, namedtuple
+import csv
+import re
+from collections import defaultdict
+from collections import namedtuple
 from math import ceil
 from numbers import Number
-from shapely.geometry.collection import GeometryCollection
+from sys import float_info
+
+import hanzidentifier
+import kdtree
+import pycountry
+import shapely.errors
+import shapely.ops
+import shapely.wkb
 from shapely.geometry import box as Box
 from shapely.geometry import LinearRing
 from shapely.geometry import LineString
 from shapely.geometry import Point
 from shapely.geometry import Polygon
+from shapely.geometry.collection import GeometryCollection
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multipolygon import MultiPolygon
@@ -18,24 +28,15 @@ from shapely.ops import linemerge
 from shapely.strtree import STRtree
 from sort import pois as sort_pois
 from StreetNames import short_street_name
-from sys import float_info
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
 from tilequeue.tile import calc_meters_per_pixel_area
 from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
-from util import to_float
 from util import safe_int
+from util import to_float
 from zope.dottedname.resolve import resolve
-import hanzidentifier
-import csv
-import pycountry
-import re
-import shapely.errors
-import shapely.wkb
-import shapely.ops
-import kdtree
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
@@ -623,7 +624,7 @@ osm_l10n_lookup = set([
 osm_zh_variants_lookup = {
     'zh-Hans': ('zh-Hans', 0),  # Simplified Chinese
     'zh-SG': ('zh-Hans', 1),  # Simplified Chinese
-    'zh': ('zh-default', 0),  # Simplified Chinese presumably, can contain Traditional Chinese  # noqa
+    'zh': ('zh-default', 0),  # Simplified Chinese presumably, can contain Traditional Chinese
     'zh-Hant': ('zh-Hant', 0),    # Traditional Chinese
     'zh-Hant-tw': ('zh-Hant', 1),  # Traditional Chinese
     'zh-Hant-hk': ('zh-Hant', 2),  # Traditional Chinese
@@ -2039,7 +2040,7 @@ def _make_joined_name(props):
     >>> _make_joined_name(x)
     >>> x
     {'name:right': 'Right', 'name': 'Already Exists', 'name:left': 'Left'}
-    """  # noqa
+    """
 
     # don't overwrite an existing name
     if 'name' in props:
@@ -4578,7 +4579,7 @@ def normalize_tourism_kind(shape, properties, fid, zoom):
     main kind.
 
     See https://github.com/mapzen/vector-datasource/issues/440 for more details.
-    """  # noqa
+    """
 
     zoo = properties.pop('zoo', None)
     if zoo is not None:

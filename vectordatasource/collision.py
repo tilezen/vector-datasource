@@ -1,5 +1,5 @@
-from vectordatasource.meta.python import FilterCompiler
 from vectordatasource.meta.python import create_matcher
+from vectordatasource.meta.python import FilterCompiler
 
 
 class CollisionRanker(object):

@@ -1,5 +1,6 @@
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
 
 class ShieldTextRef(FixtureTest):
 

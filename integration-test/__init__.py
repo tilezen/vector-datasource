@@ -1,49 +1,52 @@
-import unittest
-from os.path import dirname
-from os import listdir
-from os.path import join as path_join
-from os.path import getsize as path_getsize
 import fnmatch
-from importlib import import_module
+import hashlib
+import json
+import re
+import subprocess
+import time
+import unittest
+import urllib
+import urlparse
+from collections import defaultdict
 from collections import namedtuple
-from vectordatasource.meta.python import parse_layers
-from vectordatasource.meta.python import output_kind
-from vectordatasource.meta.python import make_function_name_props
-from vectordatasource.meta.python import output_min_zoom
-from vectordatasource.meta.python import make_function_name_min_zoom
-from tilequeue.query import make_fixture_data_fetcher
-from tilequeue.query.common import LayerInfo
+from contextlib import contextmanager
+from importlib import import_module
+from itertools import izip_longest
+from os import environ
+from os import getpid
+from os import listdir
+from os import makedirs
+from os.path import abspath
+from os.path import dirname
+from os.path import exists as path_exists
+from os.path import getsize as path_getsize
+from os.path import join as path_join
+
+import lxml.etree as ET
+import requests
+import shapefile
+import shapely.ops
 from ModestMaps.Core import Coordinate
-from tilequeue.tile import coord_to_mercator_bounds
-from tilequeue.tile import coord_to_bounds
+from shapely.geometry import mapping
+from shapely.geometry import shape as make_shape
+from tilequeue import wof
+from tilequeue.command import parse_layer_data
 from tilequeue.process import convert_source_data_to_feature_layers
 from tilequeue.process import process_coord_no_format
+from tilequeue.query import make_fixture_data_fetcher
+from tilequeue.query.common import LayerInfo
+from tilequeue.tile import coord_to_bounds
+from tilequeue.tile import coord_to_mercator_bounds
 from tilequeue.tile import reproject_lnglat_to_mercator
 from tilequeue.tile import reproject_mercator_to_lnglat
-from shapely.geometry import shape as make_shape
-import shapely.ops
-from shapely.geometry import mapping
-import hashlib
-import urlparse
-import requests
-from tilequeue.command import parse_layer_data
+
 from vectordatasource.meta import find_yaml_path
-import json
-from os import environ, makedirs
-from os.path import abspath
-from os.path import exists as path_exists
-from os import getpid
+from vectordatasource.meta.python import make_function_name_min_zoom
+from vectordatasource.meta.python import make_function_name_props
+from vectordatasource.meta.python import output_kind
+from vectordatasource.meta.python import output_min_zoom
+from vectordatasource.meta.python import parse_layers
 from yaml import load as load_yaml
-from contextlib import contextmanager
-import re
-import lxml.etree as ET
-import time
-from collections import defaultdict
-import subprocess
-import urllib
-import shapefile
-from tilequeue import wof
-from itertools import izip_longest
 
 
 # the Overpass server is used to download data about OSM elements. the

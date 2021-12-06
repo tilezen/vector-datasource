@@ -1,9 +1,10 @@
-import requests
+import os
 import xml.etree.ElementTree as ET
+from contextlib import contextmanager
+
+import requests
 import tilequeue.tile as tile
 from ModestMaps.Core import Coordinate
-import os
-from contextlib import contextmanager
 
 
 def node(node_id, zoom=16):

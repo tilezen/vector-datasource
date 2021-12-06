@@ -1,4 +1,5 @@
 from collections import namedtuple
+
 from shapely.geometry import Point
 from tilequeue.tile import reproject_lnglat_to_mercator
 

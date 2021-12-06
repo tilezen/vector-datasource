@@ -1,12 +1,14 @@
-from collections import namedtuple
-from numbers import Number
-from vectordatasource import util
-from vectordatasource.meta import function
 import ast
-import astformatter
 import os.path
 import sys
+from collections import namedtuple
+from numbers import Number
+
+import astformatter
+
 import yaml
+from vectordatasource import util
+from vectordatasource.meta import function
 
 
 # this captures the end result of processing a layer's yaml
