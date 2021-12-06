@@ -63,7 +63,6 @@ class BusRouteRefs(FixtureTest):
             }, ways=[417097119]),
         )
 
-
         self.assert_has_feature(
             16, 10469, 25340, 'roads',
             {'id': 417097119,

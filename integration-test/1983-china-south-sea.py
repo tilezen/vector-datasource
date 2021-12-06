@@ -25,5 +25,5 @@ class NaturalEarth(FixtureTest):
                     'kind': 'unrecognized_country',
                     'kind:cn': 'country',
                     'kind:us': 'unrecognized_country',
-                    'min_zoom': 1, # we change the min_zoom override in boundaries.yaml to 1 so we assert here
+                    'min_zoom': 1,  # we change the min_zoom override in boundaries.yaml to 1 so we assert here
                 })

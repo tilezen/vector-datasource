@@ -11,7 +11,8 @@ from . import FixtureTest
 class DuplicateFootway(FixtureTest):
 
     def test_pedestrian(self):
-        self.generate_fixtures(dsl.way(128534087, wkt_loads('LINESTRING (-122.420156819685 37.77915886514469, -122.420667601755 37.77909389933378)'), {u'source': u'openstreetmap.org', u'highway': u'pedestrian'}))
+        self.generate_fixtures(dsl.way(128534087, wkt_loads(
+            'LINESTRING (-122.420156819685 37.77915886514469, -122.420667601755 37.77909389933378)'), {u'source': u'openstreetmap.org', u'highway': u'pedestrian'}))
 
         self.assert_has_feature(
             16, 10482, 25330, 'roads',
@@ -22,7 +23,8 @@ class DuplicateFootway(FixtureTest):
             {'id': 128534087})
 
     def test_footway(self):
-        self.generate_fixtures(dsl.way(367756094, wkt_loads('LINESTRING (-122.511661460313 37.7742249220812, -122.511574772888 37.7742313125844, -122.511478563322 37.7742386971651)'), {u'source': u'openstreetmap.org', u'highway': u'footway'}))
+        self.generate_fixtures(dsl.way(367756094, wkt_loads(
+            'LINESTRING (-122.511661460313 37.7742249220812, -122.511574772888 37.7742313125844, -122.511478563322 37.7742386971651)'), {u'source': u'openstreetmap.org', u'highway': u'footway'}))
 
         self.assert_has_feature(
             16, 10465, 25331, 'roads',

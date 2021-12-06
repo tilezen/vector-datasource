@@ -136,11 +136,11 @@ class BrazilShieldTest(FixtureTest):
         )
 
         self.assert_has_feature(
-             z, x, y, 'roads', {
-                 'id': 28958366,
-                 'shield_text': '010',
-                 'network': 'BR:AM',
-             })
+            z, x, y, 'roads', {
+                'id': 28958366,
+                'shield_text': '010',
+                'network': 'BR:AM',
+            })
 
     def test_ba(self):
         import dsl

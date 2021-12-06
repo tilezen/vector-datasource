@@ -892,7 +892,7 @@ class FixtureEnvironment(object):
         with open(config_file) as query_cfg_fp:
             query_cfg = load_yaml(query_cfg_fp)
         all_layer_data, layer_data, post_process_data = parse_layer_data(
-                query_cfg, buffer_cfg, dirname(config_file))
+            query_cfg, buffer_cfg, dirname(config_file))
 
         yaml_path = find_yaml_path()
         layer_props = parse_layer_dict(

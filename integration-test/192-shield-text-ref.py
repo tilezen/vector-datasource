@@ -2,6 +2,7 @@ import dsl
 
 from . import FixtureTest
 
+
 class ShieldTextRef(FixtureTest):
 
     def test_james_lick_freeway(self):
@@ -16,7 +17,7 @@ class ShieldTextRef(FixtureTest):
             # http://www.openstreetmap.org/way/27183379
             dsl.way(27183379, dsl.tile_diagonal(z, x, y), {
                 'NHS': 'STRAHNET', 'bicycle': 'no', 'hgv': 'designated',
-                'hgv:national_network': 'yes','highway': 'motorway',
+                'hgv:national_network': 'yes', 'highway': 'motorway',
                 'lanes': '4', 'maxspeed': '50 mph', 'name': 'James Lick Freeway',
                 'name:etymology:wikidata': 'Q629500', 'oneway': 'yes',
                 'ref': 'US 101',
@@ -25,10 +26,10 @@ class ShieldTextRef(FixtureTest):
             }),
             # http://www.openstreetmap.org/relation/108619
             dsl.relation(108619, {
-                'NHS': 'STRAHNET','direction': 'north','from': 'Los Angeles',
-                'is_in:state': 'CA','name': 'US 101 (CA northbound, south of Hopland)',
-                'network': 'US:US','ref': '101','route': 'road',
-                'to': 'Hopland','type': 'route','wikidata': 'Q400444',
+                'NHS': 'STRAHNET', 'direction': 'north', 'from': 'Los Angeles',
+                'is_in:state': 'CA', 'name': 'US 101 (CA northbound, south of Hopland)',
+                'network': 'US:US', 'ref': '101', 'route': 'road',
+                'to': 'Hopland', 'type': 'route', 'wikidata': 'Q400444',
                 'wikipedia': 'en:U.S. Route 101 in California', 'source': 'openstreetmap.org'
             }, ways=[27183379]),
         )

@@ -302,7 +302,7 @@ class UnifyBuildingPart(FixtureTest):
                 "note": "This relation can be used for Underground/National Rail interchange detection.",
                 "site": "stop_area",
                 "type": "site"
-            }, relations=[238792,238793]),
+            }, relations=[238792, 238793]),
             dsl.relation(238792, {
                 "wikipedia": "en:London Waterloo station",
                 "type": "site",
@@ -311,7 +311,7 @@ class UnifyBuildingPart(FixtureTest):
                 "railway": "station",
                 "site": "railway_station",
                 "wikidata": "Q795691"
-            }, nodes=[3638795617,3638795618]),
+            }, nodes=[3638795617, 3638795618]),
             dsl.relation(238793, {
                 "railway": "station",
                 "name": "Waterloo (tube station)",
@@ -321,7 +321,7 @@ class UnifyBuildingPart(FixtureTest):
                 "public_transport": "stop_area",
                 "type": "public_transport",
                 "wikidata": "Q13141057"
-            }, nodes=[3638795617,3638795618]),
+            }, nodes=[3638795617, 3638795618]),
         )
 
         self.assert_has_feature(

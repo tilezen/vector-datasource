@@ -18,7 +18,7 @@ class ChineseNameTest(FixtureTest):
         lon, lat = (-122.417169, 37.769196)
         self.generate_fixtures(
             dsl.way(26819236, wkt_loads(
-             'POINT (-122.417169 37.769196)'), {
+                'POINT (-122.417169 37.769196)'), {
                 u"scalerank": 1,
                 u"natscale": 300,
                 u"labelrank": 1,
@@ -130,7 +130,7 @@ class ChineseNameTest(FixtureTest):
                 'kind': 'locality',
                 'name': 'San Francisco',
                 'name:zh-Hans': u'旧金山',
-                'name:zh': u'旧金山', # for backward compatible we still populate name:zh field
+                'name:zh': u'旧金山',  # for backward compatible we still populate name:zh field
                 'name:zh-Hant': u'舊金山',
                 'source': u'naturalearthdata.com',
             })
@@ -140,7 +140,7 @@ class ChineseNameTest(FixtureTest):
         lon, lat = (-122.417169, 37.769196)
         self.generate_fixtures(
             dsl.way(26819236, wkt_loads(
-             'POINT (-122.417169 37.769196)'), {
+                'POINT (-122.417169 37.769196)'), {
                 u"scalerank": 1,
                 u"natscale": 300,
                 u"labelrank": 1,
@@ -405,16 +405,15 @@ class ChineseNameTest(FixtureTest):
                     'min_zoom': 2.0,
                     'max_zoom': 6.7,
                     'name:zh-Hans': u'美國',
-                    'name:zh': u'美國', # for backward compatible we still populate name:zh field
+                    'name:zh': u'美國',  # for backward compatible we still populate name:zh field
                     'name:zh-Hant': u'美國'
                 })
             self.assert_no_matching_feature(
-                         zoom, x, y, 'places',
-                         {'name:zh-Hans': u'Měiguó',
-                          'name:zh-Hant': u'Měiguó',
-                          'name:zh-default': u'Měiguó',
-                          })
-
+                zoom, x, y, 'places',
+                {'name:zh-Hans': u'Měiguó',
+                 'name:zh-Hant': u'Měiguó',
+                 'name:zh-default': u'Měiguó',
+                 })
 
     def test_united_states_no_zh(self):
         """ Test the case when no zh fields in the source """
@@ -544,64 +543,64 @@ class ChineseNameTest(FixtureTest):
                 })
             for v in [None, u'', u' ', u'美國', u'美国', u'Měiguó']:
                 self.assert_no_matching_feature(
-                             zoom, x, y, 'places',
-                             {'name:zh': v,
-                              })
-                self.assert_no_matching_feature(
                     zoom, x, y, 'places',
-                    {
-                     'name:zht': v,
+                    {'name:zh': v,
                      })
                 self.assert_no_matching_feature(
                     zoom, x, y, 'places',
                     {
-                     'name:zh-default': v,
-                     })
+                        'name:zht': v,
+                    })
+                self.assert_no_matching_feature(
+                    zoom, x, y, 'places',
+                    {
+                        'name:zh-default': v,
+                    })
 
     def test_san_francisco_osm(self):
         # San Francisco (osm city)
         self.generate_fixtures(dsl.way(26819236, wkt_loads(
             'POINT (-122.419236226182 37.77928077351228)'),
-                                       {u'name:pt': u'S\xe3o Francisco',
-                                        u'name:ko':
-                                            u'\uc0cc\ud504\ub780\uc2dc\uc2a4\ucf54',
-                                        u'name:kn':
-                                            u'\u0cb8\u0cbe\u0ca8\u0ccd '
-                                            u'\u0cab\u0ccd\u0cb0\u0cbe\u0ca8\u0ccd\u0cb8\u0cbf\u0cb8\u0ccd\u0c95\u0cca',
-                                        u'rank': u'10',
-                                        u'wikidata': u'Q62',
-                                        u'name:ru':
-                                            u'\u0421\u0430\u043d-\u0424\u0440\u0430\u043d\u0446\u0438\u0441\u043a\u043e',
-                                        u'name:ta':
-                                            u'\u0bb8\u0bbe\u0ba9\u0bcd '
-                                            u'\u0baa\u0bcd\xb2\u0bb0\u0bbe\u0ba9\u0bcd\u0bb8\u0bbf\u0bb8\u0bcd\u0b95\u0bca',
-                                        u'name:fa': u'\u0633\u0627\u0646 '
-                                                    u'\u0641\u0631\u0627\u0646\u0633\u06cc\u0633\u06a9\u0648',
-                                        u'is_in:country': u'United States',
-                                        u'wikipedia': u'en:San Francisco',
-                                        u'name:de': u'San Francisco',
-                                        u'source': u'openstreetmap.org',
-                                        u'name:zh': u'旧金山/三藩市/舊金山',
-                                        u'name:zh-Hans': u'旧金山',
-                                        u'name:zh-Hant': u'舊金山',
-                                        u'name:zh-Hant-hk': u'三藩市',
-                                        u'name:zh-Hant-tw': u'舊金山',
-                                        u'name:ja':
-                                            u'\u30b5\u30f3\u30d5\u30e9\u30f3\u30b7\u30b9\u30b3',
-                                        u'short_name': u'SF',
-                                        u'name:hi': u'\u0938\u0948\u0928 '
-                                                    u'\u092b\u094d\u0930\u093e\u0902\u0938\u093f\u0938\u094d\u0915\u094b',
-                                        u'is_in:country_code': u'US',
-                                        u'census:population': u'2010',
-                                        u'population': u'864816',
-                                        u'fixme': u'When zooming out, '
-                                                  u'Oakland (a nearby city) '
-                                                  u'label covers over the '
-                                                  u'San Francisco label',
-                                        u'name': u'San Francisco',
-                                        u'place': u'city',
-                                        u'is_in:continent': u'North America',
-                                        u'name:eu': u'San Francisco'}))
+            {u'name:pt': u'S\xe3o Francisco',
+             u'name:ko':
+             u'\uc0cc\ud504\ub780\uc2dc\uc2a4\ucf54',
+             u'name:kn':
+             u'\u0cb8\u0cbe\u0ca8\u0ccd '
+             u'\u0cab\u0ccd\u0cb0\u0cbe\u0ca8\u0ccd\u0cb8\u0cbf\u0cb8\u0ccd\u0c95\u0cca',
+             u'rank': u'10',
+             u'wikidata': u'Q62',
+             u'name:ru':
+             u'\u0421\u0430\u043d-\u0424\u0440\u0430\u043d\u0446\u0438\u0441\u043a\u043e',
+             u'name:ta':
+             u'\u0bb8\u0bbe\u0ba9\u0bcd '
+             u'\u0baa\u0bcd\xb2\u0bb0\u0bbe\u0ba9\u0bcd\u0bb8\u0bbf\u0bb8\u0bcd\u0b95\u0bca',
+             u'name:fa': u'\u0633\u0627\u0646 '
+             u'\u0641\u0631\u0627\u0646\u0633\u06cc\u0633\u06a9\u0648',
+             u'is_in:country': u'United States',
+             u'wikipedia': u'en:San Francisco',
+             u'name:de': u'San Francisco',
+             u'source': u'openstreetmap.org',
+             u'name:zh': u'旧金山/三藩市/舊金山',
+             u'name:zh-Hans': u'旧金山',
+             u'name:zh-Hant': u'舊金山',
+             u'name:zh-Hant-hk': u'三藩市',
+             u'name:zh-Hant-tw': u'舊金山',
+             u'name:ja':
+             u'\u30b5\u30f3\u30d5\u30e9\u30f3\u30b7\u30b9\u30b3',
+             u'short_name': u'SF',
+             u'name:hi': u'\u0938\u0948\u0928 '
+             u'\u092b\u094d\u0930\u093e\u0902\u0938\u093f\u0938\u094d\u0915\u094b',
+             u'is_in:country_code': u'US',
+             u'census:population': u'2010',
+             u'population': u'864816',
+             u'fixme': u'When zooming out, '
+             u'Oakland (a nearby city) '
+             u'label covers over the '
+             u'San Francisco label',
+             u'name': u'San Francisco',
+             u'place': u'city',
+             u'is_in:continent': u'North America',
+             u'name:eu': u'San Francisco'}))
 
         self.assert_has_feature(
             16, 10482, 25330, 'places',
@@ -609,7 +608,7 @@ class ChineseNameTest(FixtureTest):
              'source': "openstreetmap.org",
              'name': 'San Francisco',
              'name:zh-Hans': u'旧金山',
-             'name:zh': u'旧金山', # for backward compatible we still populate name:zh field
+             'name:zh': u'旧金山',  # for backward compatible we still populate name:zh field
              'name:zh-Hant': u'舊金山'})
 
         self.assert_no_matching_feature(
@@ -621,41 +620,41 @@ class ChineseNameTest(FixtureTest):
         # San Francisco (osm city)
         self.generate_fixtures(dsl.way(26819236, wkt_loads(
             'POINT (-122.419236226182 37.77928077351228)'),
-                                       {u'name:pt': u'S\xe3o Francisco',
-                                        u'name:ko':
-                                            u'\uc0cc\ud504\ub780\uc2dc\uc2a4\ucf54',
-                                        u'name:kn':
-                                            u'\u0cb8\u0cbe\u0ca8\u0ccd '
-                                            u'\u0cab\u0ccd\u0cb0\u0cbe\u0ca8\u0ccd\u0cb8\u0cbf\u0cb8\u0ccd\u0c95\u0cca',
-                                        u'rank': u'10',
-                                        u'wikidata': u'Q62',
-                                        u'name:ru':
-                                            u'\u0421\u0430\u043d-\u0424\u0440\u0430\u043d\u0446\u0438\u0441\u043a\u043e',
-                                        u'name:ta':
-                                            u'\u0bb8\u0bbe\u0ba9\u0bcd '
-                                            u'\u0baa\u0bcd\xb2\u0bb0\u0bbe\u0ba9\u0bcd\u0bb8\u0bbf\u0bb8\u0bcd\u0b95\u0bca',
-                                        u'name:fa': u'\u0633\u0627\u0646 '
-                                                    u'\u0641\u0631\u0627\u0646\u0633\u06cc\u0633\u06a9\u0648',
-                                        u'is_in:country': u'United States',
-                                        u'wikipedia': u'en:San Francisco',
-                                        u'name:de': u'San Francisco',
-                                        u'source': u'openstreetmap.org',
-                                        u'name:ja':
-                                            u'\u30b5\u30f3\u30d5\u30e9\u30f3\u30b7\u30b9\u30b3',
-                                        u'short_name': u'SF',
-                                        u'name:hi': u'\u0938\u0948\u0928 '
-                                                    u'\u092b\u094d\u0930\u093e\u0902\u0938\u093f\u0938\u094d\u0915\u094b',
-                                        u'is_in:country_code': u'US',
-                                        u'census:population': u'2010',
-                                        u'population': u'864816',
-                                        u'fixme': u'When zooming out, '
-                                                  u'Oakland (a nearby city) '
-                                                  u'label covers over the '
-                                                  u'San Francisco label',
-                                        u'name': u'San Francisco',
-                                        u'place': u'city',
-                                        u'is_in:continent': u'North America',
-                                        u'name:eu': u'San Francisco'}))
+            {u'name:pt': u'S\xe3o Francisco',
+             u'name:ko':
+             u'\uc0cc\ud504\ub780\uc2dc\uc2a4\ucf54',
+             u'name:kn':
+             u'\u0cb8\u0cbe\u0ca8\u0ccd '
+             u'\u0cab\u0ccd\u0cb0\u0cbe\u0ca8\u0ccd\u0cb8\u0cbf\u0cb8\u0ccd\u0c95\u0cca',
+             u'rank': u'10',
+             u'wikidata': u'Q62',
+             u'name:ru':
+             u'\u0421\u0430\u043d-\u0424\u0440\u0430\u043d\u0446\u0438\u0441\u043a\u043e',
+             u'name:ta':
+             u'\u0bb8\u0bbe\u0ba9\u0bcd '
+             u'\u0baa\u0bcd\xb2\u0bb0\u0bbe\u0ba9\u0bcd\u0bb8\u0bbf\u0bb8\u0bcd\u0b95\u0bca',
+             u'name:fa': u'\u0633\u0627\u0646 '
+             u'\u0641\u0631\u0627\u0646\u0633\u06cc\u0633\u06a9\u0648',
+             u'is_in:country': u'United States',
+             u'wikipedia': u'en:San Francisco',
+             u'name:de': u'San Francisco',
+             u'source': u'openstreetmap.org',
+             u'name:ja':
+             u'\u30b5\u30f3\u30d5\u30e9\u30f3\u30b7\u30b9\u30b3',
+             u'short_name': u'SF',
+             u'name:hi': u'\u0938\u0948\u0928 '
+             u'\u092b\u094d\u0930\u093e\u0902\u0938\u093f\u0938\u094d\u0915\u094b',
+             u'is_in:country_code': u'US',
+             u'census:population': u'2010',
+             u'population': u'864816',
+             u'fixme': u'When zooming out, '
+             u'Oakland (a nearby city) '
+             u'label covers over the '
+             u'San Francisco label',
+             u'name': u'San Francisco',
+             u'place': u'city',
+             u'is_in:continent': u'North America',
+             u'name:eu': u'San Francisco'}))
 
         self.assert_has_feature(
             16, 10482, 25330, 'places',
@@ -668,18 +667,18 @@ class ChineseNameTest(FixtureTest):
             self.assert_no_matching_feature(
                 16, 10482, 25330, 'places',
                 {
-                 'name:zh': v,
-                 })
+                    'name:zh': v,
+                })
             self.assert_no_matching_feature(
                 16, 10482, 25330, 'places',
                 {
-                 'name:zh-Hans': v,
-                 })
+                    'name:zh-Hans': v,
+                })
             self.assert_no_matching_feature(
                 16, 10482, 25330, 'places',
                 {
-                 'name:zh-Hant': v,
-                 })
+                    'name:zh-Hant': v,
+                })
             self.assert_no_matching_feature(
                 16, 10482, 25330, 'places',
                 {'name:zh-default': v,
@@ -817,7 +816,7 @@ class ChineseNameTest(FixtureTest):
              'source': "whosonfirst.org",
              'name': 'Hollywood',
              'name:zh-Hans': u'好莱坞',
-             'name:zh': u'好莱坞', # for backward compatible we still populate name:zh field
+             'name:zh': u'好莱坞',  # for backward compatible we still populate name:zh field
              'name:zh-Hant': u'好萊塢'})
 
     def test_hollywood_wof_no_zh(self):

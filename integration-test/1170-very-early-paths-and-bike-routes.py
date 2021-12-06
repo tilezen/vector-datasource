@@ -7,10 +7,10 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
     def test_path_with_international_route(self):
         # highway=path, with route inter-national
         # GR5-Grand Traverse de Jura between France and Switzerland
-#         self.load_fixtures([
-#             'https://www.openstreetmap.org/way/285975282',
-#             'https://www.openstreetmap.org/relation/6009161',
-#         ], clip=self.tile_bbox(9, 265, 179))
+        #         self.load_fixtures([
+        #             'https://www.openstreetmap.org/way/285975282',
+        #             'https://www.openstreetmap.org/relation/6009161',
+        #         ], clip=self.tile_bbox(9, 265, 179))
         import dsl
         from shapely.wkt import loads as wkt_loads
         self.generate_fixtures(
@@ -32,17 +32,16 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             }, ways=[285975282]),
         )
 
-
         self.assert_has_feature(
             9, 265, 179, 'roads',
             {'kind': 'path', 'walking_network': 'iwn'})
 
     def test_path_with_national_route(self):
         # highway=path, with route national (Pacific Crest Trail) at zoom 9
-#         self.load_fixtures([
-#             'https://www.openstreetmap.org/way/236361475',
-#             'https://www.openstreetmap.org/relation/1225378',
-#         ], clip=self.tile_bbox(9, 86, 197))
+        #         self.load_fixtures([
+        #             'https://www.openstreetmap.org/way/236361475',
+        #             'https://www.openstreetmap.org/relation/1225378',
+        #         ], clip=self.tile_bbox(9, 86, 197))
 
         import dsl
         self.generate_fixtures(
@@ -136,23 +135,23 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
     def test_cycleway_with_international_route(self):
         # Way: North Sea Cycle Route - part Netherlands (1977662)
         # A really long highway=cycleway
-#         self.load_fixtures([
-#             'https://www.openstreetmap.org/way/35568189',
-#             'https://www.openstreetmap.org/relation/1977662',
-#             'https://www.openstreetmap.org/relation/1975739',
-#             'https://www.openstreetmap.org/relation/5294',
-#             'https://www.openstreetmap.org/relation/537418',
-#         ], clip=self.tile_bbox(8, 131, 83))
+        #         self.load_fixtures([
+        #             'https://www.openstreetmap.org/way/35568189',
+        #             'https://www.openstreetmap.org/relation/1977662',
+        #             'https://www.openstreetmap.org/relation/1975739',
+        #             'https://www.openstreetmap.org/relation/5294',
+        #             'https://www.openstreetmap.org/relation/537418',
+        #         ], clip=self.tile_bbox(8, 131, 83))
         import dsl
         from shapely.wkt import loads as wkt_loads
         self.generate_fixtures(
-             dsl.way(35568189, dsl.tile_diagonal(13, 4211, 2670), {
+            dsl.way(35568189, dsl.tile_diagonal(13, 4211, 2670), {
                 'source': 'openstreetmap.org',
                 'bicycle': 'designated',
                 'foot': 'designated',
                 'highway': 'cycleway',
                 'surface': 'asphalt'
-             }),
+            }),
             dsl.relation(1977662, {
                 'source': 'openstreetmap.org',
                 'type': 'route',

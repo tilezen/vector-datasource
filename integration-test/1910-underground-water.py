@@ -65,8 +65,8 @@ class UndergroundWaterTest(FixtureTest):
         )
 
         self.assert_has_feature(
-                    z, x, y, "landuse",
-                    {"kind": "pedestrian", "id": 115027186,
+            z, x, y, "landuse",
+            {"kind": "pedestrian", "id": 115027186,
                      "sort_rank": 110})
 
     def test_garden(self):
@@ -81,6 +81,6 @@ class UndergroundWaterTest(FixtureTest):
         )
 
         self.assert_has_feature(
-                z, x, y, "landuse",
-                {"kind": "garden", "id": 115027177,
-                 "sort_rank": 112})
+            z, x, y, "landuse",
+            {"kind": "garden", "id": 115027177,
+             "sort_rank": 112})

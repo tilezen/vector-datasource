@@ -34,7 +34,7 @@ class RoadShieldCleanup(FixtureTest):
         from shapely.wkt import loads as wkt_loads
         z, x, y = 16, 32531, 21377
         self.generate_fixtures(
-             dsl.way(3109799, dsl.tile_diagonal(z, x, y), {
+            dsl.way(3109799, dsl.tile_diagonal(z, x, y), {
                 "source": 'openstreetmap.org',
                 "lanes": "3",
                 "maxspeed:type": "UK:motorway",
@@ -49,7 +49,7 @@ class RoadShieldCleanup(FixtureTest):
                 "int_ref": "E 13",
                 "lit": "yes",
                 "maxspeed": "70 mph"
-             }),
+            }),
             dsl.relation(2332838, {
                 "wikipedia": "en:European route E13",
                 "wikidata": "Q1247738",

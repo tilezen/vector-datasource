@@ -36,14 +36,14 @@ config = {
         }
     },
     'yaml': {
-      'type': 'parse',
-      'parse': {
-        'path': './yaml',
-      },
-      'callable': {
-        'dotted-name': 'vectordatasource.meta.python.make_function_mapping',
-        'args': ['vectordatasource.gen'],
-      },
+        'type': 'parse',
+        'parse': {
+            'path': './yaml',
+        },
+        'callable': {
+            'dotted-name': 'vectordatasource.meta.python.make_function_mapping',
+            'args': ['vectordatasource.gen'],
+        },
     },
 }
 

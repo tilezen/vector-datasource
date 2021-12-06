@@ -30,7 +30,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '4.51',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520086815
             dsl.way(520086815, wkt_loads(
                 'POLYGON(('
@@ -53,7 +53,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '6.03',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520086785
             dsl.way(520086785, wkt_loads(
                 'POLYGON((-46.7069457471370697 -23.55248429489859063,'
@@ -76,7 +76,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.31',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520086778
             dsl.way(520086778, wkt_loads(
                 'POLYGON((-46.70694842934608459 -23.5521093325406099,'
@@ -100,7 +100,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '6.09',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520087792
             dsl.way(520087792, wkt_loads(
                 'POLYGON((-46.70773833990097046 -23.55201098158111961,'
@@ -119,7 +119,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.46',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091545
             dsl.way(520091545, wkt_loads(
                 'POLYGON((-46.70750364661216736 -23.55166429386198956,'
@@ -136,7 +136,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.76',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090963
             dsl.way(520090963, wkt_loads(
                 'POLYGON((-46.70716434717178345 -23.55230111669996518,'
@@ -160,7 +160,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.39',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091551
             dsl.way(520091551, wkt_loads(
                 'POLYGON((-46.70706376433372498 -23.55200729341869703,'
@@ -175,7 +175,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '6.37',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091549
             dsl.way(520091549, wkt_loads(
                 'POLYGON((-46.70718446373939514 -23.55193967708946445,'
@@ -190,7 +190,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '6.86',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520087793
             dsl.way(520087793, wkt_loads(
                 'POLYGON((-46.7076323926448822 -23.55182042638769246,'
@@ -203,7 +203,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.5',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091311
             dsl.way(520091311, wkt_loads(
                 'POLYGON((-46.70752778649330139 -23.5520847448076438,'
@@ -216,7 +216,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '4.01',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520086782
             dsl.way(520086782, wkt_loads(
                 'POLYGON((-46.70685455203056335 -23.55220522465526756,'
@@ -229,7 +229,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.2',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090964
             dsl.way(520090964, wkt_loads(
                 'POLYGON((-46.70733600854873657 -23.55231463993141006,'
@@ -244,7 +244,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '6.26',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090966
             dsl.way(520090966, wkt_loads(
                 'POLYGON((-46.70744463801383972 -23.5522003071126278,'
@@ -255,7 +255,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '6.69',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520086834
             dsl.way(520086834, wkt_loads(
                 'POLYGON((-46.70675396919250488 -23.5522839053124784,'
@@ -270,7 +270,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.42',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091546
             dsl.way(520091546, wkt_loads(
                 'POLYGON((-46.70727163553237915 -23.55183272027947794,'
@@ -283,7 +283,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.78',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090962
             dsl.way(520090962, wkt_loads(
                 'POLYGON((-46.70705705881118774 -23.5523908617553559,'
@@ -294,7 +294,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.48',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091543
             dsl.way(520091543, wkt_loads(
                 'POLYGON((-46.70746207237243652 -23.55190156605220864,'
@@ -307,7 +307,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.52',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091312
             dsl.way(520091312, wkt_loads(
                 'POLYGON((-46.70749157667160034 -23.5520269636170525,'
@@ -323,7 +323,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.67',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091309
             dsl.way(520091309, wkt_loads(
                 'POLYGON((-46.70738160610198975 -23.55211916763251168,'
@@ -339,7 +339,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.02',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520085168
             dsl.way(520085168, wkt_loads(
                 'POLYGON((-46.70696988701820374 -23.55255805785949974,'
@@ -349,7 +349,7 @@ class BuildingMergingTest(FixtureTest):
                 '-46.70696988701820374 -23.55255805785949974))'), {
                     'building': 'yes',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091544
             dsl.way(520091544, wkt_loads(
                 'POLYGON((-46.70742988586425781 -23.5518376378358596,'
@@ -362,7 +362,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '5.9',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090961
             dsl.way(520090961, wkt_loads(
                 'POLYGON((-46.70703426003456116 -23.55236750345916619,'
@@ -373,7 +373,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.106',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520086812
             dsl.way(520086812, wkt_loads(
                 'POLYGON((-46.70688539743423462 -23.55242159634927646,'
@@ -386,7 +386,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.111',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090965
             dsl.way(520090965, wkt_loads(
                 'POLYGON((-46.70722737908363342 -23.55224825314552106,'
@@ -400,7 +400,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.73',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520091548
             dsl.way(520091548, wkt_loads(
                 'POLYGON((-46.70735880732536316 -23.55203556932788445,'
@@ -411,7 +411,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '4.14',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520087097
             dsl.way(520087097, wkt_loads(
                 'POLYGON((-46.7068210244178772 -23.55250027687696956,'
@@ -422,7 +422,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.001',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520085150
             dsl.way(520085150, wkt_loads(
                 'POLYGON((-46.70728504657745361 -23.55224948253075468,'
@@ -438,7 +438,7 @@ class BuildingMergingTest(FixtureTest):
                 '-46.70728504657745361 -23.55224948253075468))'), {
                     'building': 'yes',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520085140
             dsl.way(520085140, wkt_loads(
                 'POLYGON((-46.70739367604255676 -23.55214621413145437,'
@@ -448,7 +448,7 @@ class BuildingMergingTest(FixtureTest):
                 '-46.70739367604255676 -23.55214621413145437))'), {
                     'building': 'yes',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520090960
             dsl.way(520090960, wkt_loads(
                 'POLYGON((-46.70714020729064941 -23.55223595929260227,'
@@ -459,7 +459,7 @@ class BuildingMergingTest(FixtureTest):
                     'building': 'yes',
                     'height': '3.07',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520085149
             dsl.way(520085149, wkt_loads(
                 'POLYGON((-46.70722737908363342 -23.55217817816847514,'
@@ -473,7 +473,7 @@ class BuildingMergingTest(FixtureTest):
                 '-46.70722737908363342 -23.55217817816847514))'), {
                     'building': 'yes',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # https://www.openstreetmap.org/way/520085148
             dsl.way(520085148, wkt_loads(
                 'POLYGON((-46.70734807848930359 -23.55209212112799833,'
@@ -485,8 +485,8 @@ class BuildingMergingTest(FixtureTest):
                 '-46.70734807848930359 -23.55209212112799833))'), {
                     'building': 'yes',
                     'source': 'openstreetmap.org',
-                }),
-            )
+            }),
+        )
 
         with self.features_in_tile_layer(z, x, y, 'buildings') as features:
             # have to use assertTrue here rather than the more natural
