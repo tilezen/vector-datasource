@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
 
 
 class MediumSizedParks(FixtureTest):

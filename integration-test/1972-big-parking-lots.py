@@ -2,6 +2,7 @@
 import dsl
 from shapely.wkt import loads as wkt_loads
 from tilequeue.tile import deg2num
+
 from . import FixtureTest
 
 

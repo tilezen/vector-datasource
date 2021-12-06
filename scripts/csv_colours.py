@@ -1,9 +1,10 @@
+import csv
+import sys
+from optparse import OptionParser
+
+import yaml
 from vectordatasource.colour import parse_colour
 from vectordatasource.transform import Palette
-from optparse import OptionParser
-import sys
-import csv
-import yaml
 
 
 def to_hex(colour):

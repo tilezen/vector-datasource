@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
 
 class CycleRoute(FixtureTest):
     def test_embarcadero(self):

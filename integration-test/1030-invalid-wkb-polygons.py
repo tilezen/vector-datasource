@@ -1,5 +1,6 @@
-from . import FixtureTest
 from mapbox_vector_tile.decoder import POLYGON
+
+from . import FixtureTest
 
 
 def area_of_ring(ring):

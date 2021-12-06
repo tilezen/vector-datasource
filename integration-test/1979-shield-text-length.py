@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import dsl
+
 from . import FixtureTest
 
 z, x, y = (16, 10470, 25340)

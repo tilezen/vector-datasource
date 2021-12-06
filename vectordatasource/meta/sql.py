@@ -1,8 +1,12 @@
-from vectordatasource.meta.python import parse_layers, output_kind, \
-        output_min_zoom, LayerParseResult, FunctionData
-import sys
 import ast
+import sys
 from cStringIO import StringIO
+
+from vectordatasource.meta.python import FunctionData
+from vectordatasource.meta.python import LayerParseResult
+from vectordatasource.meta.python import output_kind
+from vectordatasource.meta.python import output_min_zoom
+from vectordatasource.meta.python import parse_layers
 
 
 LAYER_TABLES = {

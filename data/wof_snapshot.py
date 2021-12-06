@@ -1,14 +1,14 @@
+import json
 from os.path import basename
-from os.path import splitext
 from os.path import join as path_join
+from os.path import splitext
 
+import requests
+from tilequeue.wof import create_neighbourhood_from_json
 from tilequeue.wof import Neighbourhood
 from tilequeue.wof import NeighbourhoodFailure
 from tilequeue.wof import NeighbourhoodMeta
-from tilequeue.wof import create_neighbourhood_from_json
 from tilequeue.wof import write_neighbourhood_data_to_file
-import json
-import requests
 from tqdm import tqdm
 
 
@@ -27,6 +27,7 @@ def _parse_neighbourhood(file_name, data, placetype, file_hash):
     json_data = json.loads(data)
     n = create_neighbourhood_from_json(json_data, meta)
     return n
+
 
 def _parse_neighbourhood_from_json(json_str):
     j = json.loads(json_str)

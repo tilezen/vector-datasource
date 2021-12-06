@@ -1,8 +1,9 @@
-from werkzeug.serving import make_server
-from werkzeug.debug import DebuggedApplication
-from tileserver import create_tileserver_from_config
 import os
 import sys
+
+from tileserver import create_tileserver_from_config
+from werkzeug.debug import DebuggedApplication
+from werkzeug.serving import make_server
 
 # command line arguments:
 #   1. the database name

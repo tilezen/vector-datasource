@@ -1,5 +1,6 @@
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
 
 class BayWater(FixtureTest):
     def test_san_pablo_bay(self):
