@@ -1071,7 +1071,7 @@ post_process:
         - sidewalk_right
         - sport
         - trail_visibility
-        
+
   # drop name and other properties on early paths to
   # allow more line merging (use walking network for labeling)
   - fn: vectordatasource.transform.drop_properties
@@ -1164,7 +1164,7 @@ post_process:
         - access
         - osm_relation
       where: >-
-        (kind == 'highway' and zoom <  11) or    
+        (kind == 'highway' and zoom <  11) or
         (kind_detail == 'trunk' and zoom <  12) or
         (kind_detail == 'primary' and zoom <  13) or
         (kind_detail == 'secondary' and zoom <  14) or
@@ -1278,7 +1278,7 @@ post_process:
       properties:
         - surface
       where: >-
-        kind == 'minor_road' or 
+        kind == 'minor_road' or
         (kind == 'path' and zoom < 13)
 
   # drop to get better merging at mid zooms.
@@ -1712,7 +1712,7 @@ post_process:
         - landuse_kind
       where: >-
         landuse_kind in ('residential', 'industrial')
-        
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
