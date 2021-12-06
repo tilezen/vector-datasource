@@ -1,6 +1,7 @@
-from . import FixtureTest
 import dsl
 from shapely.wkt import loads as wkt_loads
+
+from . import FixtureTest
 
 
 class BusRouteRefs(FixtureTest):
@@ -61,7 +62,6 @@ class BusRouteRefs(FixtureTest):
                 'type': 'route'
             }, ways=[417097119]),
         )
-
 
         self.assert_has_feature(
             16, 10469, 25340, 'roads',

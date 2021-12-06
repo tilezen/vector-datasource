@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import dsl
+
 from . import FixtureTest
 
 
@@ -21,4 +22,4 @@ class CoveredWaterOSMTest(FixtureTest):
 
         self.assert_no_matching_feature(
             16, 33199, 22547, 'water',
-            {"id": 28575415})
+            {'id': 28575415})

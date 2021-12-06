@@ -1,7 +1,9 @@
+import urllib
+
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
+
 import yaml
-import urllib
 
 with open('assets.yaml') as fh:
     asset_cfg = yaml.load(fh)

@@ -137,7 +137,7 @@ class MergeJunctionTest(FixtureTest):
 
         with self.features_in_tile_layer(z, x, y, 'roads') as features:
             self.assertTrue(len(features) == 2,
-                            "expected 2 features, got %d" % (len(features),))
+                            'expected 2 features, got %d' % (len(features),))
 
             expected_coords = ApproxCoordSet([
                 (midl * scale, maxy * scale),
@@ -157,20 +157,20 @@ class MergeJunctionTest(FixtureTest):
                     self.assertTrue(shape.geom_type == 'MultiLineString')
                     self.assertTrue(
                         len(shape.geoms) == 2,
-                        "expected 2 geometries in the MultiLineString, but "
-                        "there are %d" % (len(shape.geoms),))
+                        'expected 2 geometries in the MultiLineString, but '
+                        'there are %d' % (len(shape.geoms),))
 
                     for line_i in (0, 1):
                         # each line should consist of only two points
                         line = shape.geoms[line_i]
                         self.assertTrue(
                             len(line.coords) == 2,
-                            "expected 2 points, but line has %d" %
+                            'expected 2 points, but line has %d' %
                             (len(line.coords),))
 
                         for coord_i in (0, 1):
                             coord = line.coords[coord_i]
                             self.assertTrue(
                                 expected_coords.check_and_remove(coord),
-                                "%r not in expected set %r" %
+                                '%r not in expected set %r' %
                                 (coord, expected_coords.coords))

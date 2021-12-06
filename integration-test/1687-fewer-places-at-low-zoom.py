@@ -11,14 +11,14 @@ class LowZoomPlacesTest(FixtureTest):
 
         self.generate_fixtures(
             dsl.way(607976629, dsl.tile_centre_shape(z, x, y), {
-                "min_zoom": 1,
-                "__ne_max_zoom": 10,
-                "__ne_min_zoom": 3,
-                "area": 0,
-                "place": "country",
-                "name": "Guam",
-                "population": 185427,
-                "source": "openstreetmap.org",
+                'min_zoom': 1,
+                '__ne_max_zoom': 10,
+                '__ne_min_zoom': 3,
+                'area': 0,
+                'place': 'country',
+                'name': 'Guam',
+                'population': 185427,
+                'source': 'openstreetmap.org',
             }),
         )
 

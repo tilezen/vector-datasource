@@ -1,9 +1,10 @@
-import requests
+import os
 import xml.etree.ElementTree as ET
+from contextlib import contextmanager
+
+import requests
 import tilequeue.tile as tile
 from ModestMaps.Core import Coordinate
-import os
-from contextlib import contextmanager
 
 
 def node(node_id, zoom=16):
@@ -231,9 +232,9 @@ def _ne_features_from_zip(zipfile):
                 dbffile = name
 
         if not shpfile:
-            raise RuntimeError("Shapefile not found in %r" % (zipfile,))
+            raise RuntimeError('Shapefile not found in %r' % (zipfile,))
         if not dbffile:
-            raise RuntimeError("DBF file not found in %r" % (zipfile,))
+            raise RuntimeError('DBF file not found in %r' % (zipfile,))
 
         with tempdir() as tmp:
             # need to extract these to a temp dir because the shapefile
@@ -242,8 +243,8 @@ def _ne_features_from_zip(zipfile):
             tmp_shpfile = z.extract(shpfile, tmp)
             tmp_dbffile = z.extract(dbffile, tmp)
 
-            with open(tmp_shpfile, "rb") as shp:
-                with open(tmp_dbffile, "rb") as dbf:
+            with open(tmp_shpfile, 'rb') as shp:
+                with open(tmp_dbffile, 'rb') as dbf:
                     sf = shapefile.Reader(shp=shp, dbf=dbf)
                     field_names = [f[0].lower() for f in sf.fields[1:]]
 
@@ -265,7 +266,7 @@ def naturalearth_test(args):
                 break
 
     if not feature:
-        raise RuntimeError("Unable to find item in NE zip %r matching %r"
+        raise RuntimeError('Unable to find item in NE zip %r matching %r'
                            % (args.zip, args.where))
 
     expect = json.loads(args.expect) if args.expect else None
@@ -327,7 +328,7 @@ def _overpass_api(query):
     r = requests.get(overpass_api, params=dict(data=data))
 
     response = json.loads(r.text)
-    return response["elements"]
+    return response['elements']
 
 
 def _overpass_fetch(element_type, bbox, query):
@@ -368,7 +369,7 @@ def _overpass_find(element_type, query):
         factor = factor * 2.0
 
     else:
-        raise RuntimeError("Nothing matching %r found!" % (query,))
+        raise RuntimeError('Nothing matching %r found!' % (query,))
 
     return elements[0]
 
@@ -388,7 +389,7 @@ class _OverpassNode(object):
 
     def geom_fn_arg(self):
         lat, lon = self.position
-        return "(%f, %f)" % (lon, lat)
+        return '(%f, %f)' % (lon, lat)
 
 
 class _OverpassWay(object):

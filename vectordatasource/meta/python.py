@@ -1,12 +1,14 @@
-from collections import namedtuple
-from numbers import Number
-from vectordatasource import util
-from vectordatasource.meta import function
 import ast
-import astformatter
 import os.path
 import sys
+from collections import namedtuple
+from numbers import Number
+
+import astformatter
+
 import yaml
+from vectordatasource import util
+from vectordatasource.meta import function
 
 
 # this captures the end result of processing a layer's yaml
@@ -648,7 +650,7 @@ def output_kind(yaml_datum):
 def output_min_zoom(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
     assert not isinstance(min_zoom, (str, unicode)), \
-        "Min zoom cannot be a string in %r." % yaml_datum
+        'Min zoom cannot be a string in %r.' % yaml_datum
     return min_zoom
 
 

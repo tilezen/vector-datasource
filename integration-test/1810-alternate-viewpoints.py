@@ -43,7 +43,7 @@ class CountryBoundaryTest(FixtureTest):
                     'source': 'openstreetmap.org',
                     'type': 'boundary',
                     'name': 'XX Claim',
-                }),
+            }),
             # "b" ways give us linestring(s)
             dsl.way(2, dsl.fit_in_tile(
                 z, x, y, 'LINESTRING(0.1 0.5, 0.5 0.5, 0.5 0.9)'), {
@@ -52,7 +52,7 @@ class CountryBoundaryTest(FixtureTest):
                     'disputed': 'yes',
                     'disputed_by': 'XX',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # "b & c" ways + country relation give us a polygon => oriented
             # boundary curve. we get an oriented boundary curve for each
             # country boundary. (note: b & c together should be a closed ring).
@@ -65,7 +65,7 @@ class CountryBoundaryTest(FixtureTest):
                     'name': 'XX',
                     'source': 'openstreetmap.org',
                     'mz_boundary_from_polygon': True,  # need this for hack
-                }),
+            }),
             dsl.way(4, dsl.fit_in_tile(
                 z, x, y,
                 'LINESTRING(0.5 0.9, 0.9 0.9, 0.9 0.1, 0.1 0.1, 0.1 0.5, '
@@ -75,7 +75,7 @@ class CountryBoundaryTest(FixtureTest):
                     'name': 'YY',
                     'source': 'openstreetmap.org',
                     'mz_boundary_from_polygon': True,  # need this for hack
-                }),
+            }),
             # this is just here to turn off maritime boundaries for everything
             # in this tile.
             dsl.way(5, dsl.tile_box(z, x, y), {
@@ -559,7 +559,7 @@ class NaturalEarth(FixtureTest):
                 zoom, x, y, 'boundaries', {
                     'kind': 'disputed_claim',
                     'kind:cn': 'country',
-                    'min_zoom': 1, # we change the min_zoom override in boundaries.yaml to 1 so we assert here  # noqa
+                    'min_zoom': 1,  # we change the min_zoom override in boundaries.yaml to 1 so we assert here
                 })
 
     def test_country_claim(self):

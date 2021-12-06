@@ -1,5 +1,7 @@
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
+
 
 class EarlyFootway(FixtureTest):
 
@@ -87,13 +89,13 @@ class EarlyFootway(FixtureTest):
     def test_footway_with_name(self):
         # highway=footway, with name (Coastal Trail, Marin)
         self.generate_fixtures(
-             dsl.way(24526324, dsl.tile_diagonal(13, 1308, 3164), {
-                 'access': 'yes', 'bicycle': 'no', 'horse': 'no',
-                 'foot': 'yes', 'highway': 'footway', 'motor_vehicle': 'no',
-                 'name': 'Slacker Trail', 'operator': 'South California Trails',
-                 'sidewalk': 'no', 'surface': 'dirt', 'source': 'openstreetmap.org'
-             }),
-         )
+            dsl.way(24526324, dsl.tile_diagonal(13, 1308, 3164), {
+                'access': 'yes', 'bicycle': 'no', 'horse': 'no',
+                'foot': 'yes', 'highway': 'footway', 'motor_vehicle': 'no',
+                'name': 'Slacker Trail', 'operator': 'South California Trails',
+                'sidewalk': 'no', 'surface': 'dirt', 'source': 'openstreetmap.org'
+            }),
+        )
 
         self.assert_has_feature(
             13, 1308, 3164, 'roads',
@@ -101,18 +103,17 @@ class EarlyFootway(FixtureTest):
 
         # highway=footway, with name (Coastal Trail, SF)
         self.generate_fixtures(
-             # https://www.openstreetmap.org/way/24526324
-             dsl.way(24526324, dsl.tile_diagonal(13, 1308, 3164), {
-                 'bicycle': 'yes', 'dog': 'yes', 'highway': 'footway',
-                 'name': 'Coastal Trail', 'surface': 'unpaved',
-                 'source': 'openstreetmap.org'
-             }),
-         )
+            # https://www.openstreetmap.org/way/24526324
+            dsl.way(24526324, dsl.tile_diagonal(13, 1308, 3164), {
+                'bicycle': 'yes', 'dog': 'yes', 'highway': 'footway',
+                'name': 'Coastal Trail', 'surface': 'unpaved',
+                'source': 'openstreetmap.org'
+            }),
+        )
 
         self.assert_has_feature(
             13, 1308, 3164, 'roads',
             {'kind_detail': 'footway'})
-
 
         # highway=footway, with name (Lovers Lane, SF)
         self._run_test([

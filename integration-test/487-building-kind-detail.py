@@ -41,7 +41,7 @@ class BuildingKindDetail(FixtureTest):
                 'name': 'Costco', 'addr:city': 'San Francisco',
                 'addr:housenumber': '450', 'addr:postcode': '94103',
                 'addr:state': 'CA', 'addr:street': '10th Street', 'building': 'yes',
-                'shop': 'supermarket', 'wheelchair': 'yes','source': 'openstreetmap.org'
+                'shop': 'supermarket', 'wheelchair': 'yes', 'source': 'openstreetmap.org'
             })
         )
 

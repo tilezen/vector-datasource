@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
-from shapely.wkt import loads as wkt_loads
 import dsl
+from shapely.wkt import loads as wkt_loads
+
 from . import FixtureTest
 
 
@@ -64,8 +65,8 @@ class MissingLocalizedNames(FixtureTest):
         )
 
         self.assert_has_feature(
-            15, 9643, 12327, "boundaries",
-            {"kind": "region", "name": "New Jersey - New York",
-             "name:right": "New York", "name:left": "New Jersey",
-             "name:right:es": "Nueva York", "name:left:es": "Nueva Jersey",
-             "name:right:lv": u"Ņujorka", "name:left:lv": u"Ņūdžersija"})
+            15, 9643, 12327, 'boundaries',
+            {'kind': 'region', 'name': 'New Jersey - New York',
+             'name:right': 'New York', 'name:left': 'New Jersey',
+             'name:right:es': 'Nueva York', 'name:left:es': 'Nueva Jersey',
+             'name:right:lv': u'Ņujorka', 'name:left:lv': u'Ņūdžersija'})

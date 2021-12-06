@@ -14,12 +14,12 @@ class NormalizeBoundariesKind(FixtureTest):
 
         self.generate_fixtures(
             dsl.way(-6214773, dsl.tile_diagonal(z, x, y), {
-                "name": "Hoopa Valley Tribe",
-                "url": "http://hoopa-nsn.gov",
-                "source": "openstreetmap.org",
-                "boundary": "protected_area",
-                "population": "2633",
-                "protect_class": "24",
+                'name': 'Hoopa Valley Tribe',
+                'url': 'http://hoopa-nsn.gov',
+                'source': 'openstreetmap.org',
+                'boundary': 'protected_area',
+                'population': '2633',
+                'protect_class': '24',
                 'mz_boundary_from_polygon': True,  # need this for hack
             }),
         )
@@ -59,12 +59,12 @@ class NormalizeBoundariesKind(FixtureTest):
 
         self.generate_fixtures(
             dsl.way(-6791772, dsl.tile_diagonal(z, x, y), {
-                "attribution": "GeoBase",
-                "name": "Upper Sumas 6",
-                "source": "openstreetmap.org",
-                "name:fr": "Upper Sumas No 6",
-                "boundary": "protected_area",
-                "protect_class": "24",
+                'attribution': 'GeoBase',
+                'name': 'Upper Sumas 6',
+                'source': 'openstreetmap.org',
+                'name:fr': 'Upper Sumas No 6',
+                'boundary': 'protected_area',
+                'protect_class': '24',
                 'mz_boundary_from_polygon': True,  # need this for hack
             }),
         )

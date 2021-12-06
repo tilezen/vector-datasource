@@ -2,6 +2,7 @@
 import dsl
 from shapely.wkt import loads as wkt_loads
 from tilequeue.tile import deg2num
+
 from . import FixtureTest
 
 
@@ -17,10 +18,10 @@ class BigParkingLotsTest(FixtureTest):
         lon, lat = (8.9140471, 48.8352716)
         self.generate_fixtures(
             dsl.point(8712714905, (lon, lat), {
-                u"amenity": u"parking",
-                u"capacity": u"6472217472217",
-                u"parking": u"surface",
-                u"source": u"openstreetmap.org",
+                u'amenity': u'parking',
+                u'capacity': u'6472217472217',
+                u'parking': u'surface',
+                u'source': u'openstreetmap.org',
             })
         )
 

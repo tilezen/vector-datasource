@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import dsl
+
 from . import FixtureTest
 
 
@@ -19,10 +20,10 @@ class UndergroundWaterTest(FixtureTest):
         )
 
         self.assert_has_feature(
-            16, 33199, 22547, "water",
-            {"kind": "riverbank", "id": 236735251,
-             "name": "Voûte Richard Lenoir", "is_tunnel": True,
-             "sort_rank": 9})
+            16, 33199, 22547, 'water',
+            {'kind': 'riverbank', 'id': 236735251,
+             'name': 'Voûte Richard Lenoir', 'is_tunnel': True,
+             'sort_rank': 9})
 
     def test_water_level_2(self):
         z, x, y = (16, 33504, 22442)
@@ -40,7 +41,7 @@ class UndergroundWaterTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'water', {
                 'id': 94321616,
-                "kind": "riverbank", "is_tunnel": True, "sort_rank": 8})
+                'kind': 'riverbank', 'is_tunnel': True, 'sort_rank': 8})
 
     def test_pedestrian(self):
         z, x, y = (16, 33199, 22546)
@@ -64,9 +65,9 @@ class UndergroundWaterTest(FixtureTest):
         )
 
         self.assert_has_feature(
-                    z, x, y, "landuse",
-                    {"kind": "pedestrian", "id": 115027186,
-                     "sort_rank": 110})
+            z, x, y, 'landuse',
+            {'kind': 'pedestrian', 'id': 115027186,
+                     'sort_rank': 110})
 
     def test_garden(self):
         z, x, y = (16, 33199, 22546)
@@ -80,6 +81,6 @@ class UndergroundWaterTest(FixtureTest):
         )
 
         self.assert_has_feature(
-                z, x, y, "landuse",
-                {"kind": "garden", "id": 115027177,
-                 "sort_rank": 112})
+            z, x, y, 'landuse',
+            {'kind': 'garden', 'id': 115027177,
+             'sort_rank': 112})

@@ -1,4 +1,5 @@
 import dsl
+
 from . import FixtureTest
 
 
@@ -64,8 +65,8 @@ class EstimatePopulationsTest(FixtureTest):
         z, x, y = (13, 4141, 2827)
         # https://www.openstreetmap.org/node/602470737
         village = dsl.point(602470737, (1.9878964, 48.5872266),
-                          {'addr:postcode': u'78730', 'name': u'Rochefort-en-Yvelines', 'place': u'village',
-                           'population': u'956', 'source': u'openstreetmap.org', })
+                            {'addr:postcode': u'78730', 'name': u'Rochefort-en-Yvelines', 'place': u'village',
+                             'population': u'956', 'source': u'openstreetmap.org', })
 
         self.validate_est_population(village, (z, x, y), 12, 13, 2000)
 

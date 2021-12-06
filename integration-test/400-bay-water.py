@@ -1,5 +1,7 @@
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
+
 
 class BayWater(FixtureTest):
     def test_san_pablo_bay(self):
@@ -7,12 +9,12 @@ class BayWater(FixtureTest):
         z, x, y = (14, 2623, 6318)
 
         self.generate_fixtures(
-             # https://www.openstreetmap.org/way/43950409
-             dsl.way(43950409, dsl.tile_box(z, x, y), {
-                 'name': 'San Pablo Bay', 'natural': 'bay',
-                 'area': 'yes',
-             }),
-         )
+            # https://www.openstreetmap.org/way/43950409
+            dsl.way(43950409, dsl.tile_box(z, x, y), {
+                'name': 'San Pablo Bay', 'natural': 'bay',
+                'area': 'yes',
+            }),
+        )
 
         self.assert_has_feature(
             z, x, y, 'water',

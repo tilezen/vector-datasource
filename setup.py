@@ -1,4 +1,5 @@
 import os.path
+
 from setuptools import find_packages
 from setuptools import setup
 
@@ -8,7 +9,7 @@ with open(version_path) as fh:
 
 setup(name='vector-datasource',
       version=version,
-      description="",
+      description='',
       long_description="""\
 """,
       classifiers=[],

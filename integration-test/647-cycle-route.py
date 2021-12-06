@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
+
 
 class CycleRoute(FixtureTest):
     def test_embarcadero(self):
@@ -44,7 +46,7 @@ class CycleRoute(FixtureTest):
     def test_198th_street(self):
         # Way: 198th Street (138388021)
         self.generate_fixtures(
-             dsl.way(138388021, dsl.tile_diagonal(16, 10435, 22457), {
+            dsl.way(138388021, dsl.tile_diagonal(16, 10435, 22457), {
                 'source': 'openstreetmap.org',
                 'cycleway': 'shared_lane',
                 'highway': 'tertiary',
@@ -52,8 +54,8 @@ class CycleRoute(FixtureTest):
                 'lanes': '2',
                 'icn_ref': 'Telegraph Trail',
                 'name': '198th Street'
-             }),
-         )
+            }),
+        )
         self.assert_has_feature(
             16, 10435, 22457, 'roads',
             {'id': 138388021, 'kind': 'major_road', 'bicycle_network': 'icn',
@@ -69,15 +71,15 @@ class CycleRoute(FixtureTest):
 
     def test_path_ncn(self):
         self.generate_fixtures(
-             dsl.way(315261543, dsl.tile_diagonal(16, 32209, 22024), {
+            dsl.way(315261543, dsl.tile_diagonal(16, 32209, 22024), {
                 'source': 'openstreetmap.org',
                 'foot': 'yes',
                 'highway': 'cycleway',
                 'ncn': 'yes',
                 'ncn_ref': '2',
                 'surface': 'paved'
-             }),
-         )
+            }),
+        )
         self.assert_has_feature(
             16, 32209, 22024, 'roads',
             {'id': 315261543, 'kind': 'path', 'bicycle_network': 'ncn'})
@@ -101,7 +103,7 @@ class CycleRoute(FixtureTest):
     def test_11th_street(self):
         # Way: 11th Street (27029204)
         self.generate_fixtures(
-             dsl.way(27029204, dsl.tile_diagonal(16, 10483, 25332), {
+            dsl.way(27029204, dsl.tile_diagonal(16, 10483, 25332), {
                 'source': 'openstreetmap.org',
                 'cycleway': 'lane',
                 'highway': 'tertiary',
@@ -114,8 +116,8 @@ class CycleRoute(FixtureTest):
                 'tiger:name_type': 'St',
                 'tiger:reviewed': 'no',
                 'trolley_wire': 'yes'
-             }),
-         )
+            }),
+        )
 
         self.assert_has_feature(
             16, 10483, 25332, 'roads',
@@ -234,21 +236,21 @@ class CycleRoute(FixtureTest):
     def test_also_bicycle_related(self):
         # Way: 428306786
         self.generate_fixtures(
-             dsl.way(428306786, dsl.tile_diagonal(16, 18649, 25417), {
-            'source': 'openstreetmap.org',
-            'bicycle': 'designated',
-            'foot': 'no',
-            'highway': 'path',
-            'horse': 'no',
-            'mtb:scale': '0',
-            'mtb:scale:imba': '1',
-            'name': 'Gateway 1',
-            'oneway': 'yes',
-            'surface': 'ground',
-            'trail_visibility': 'excellent',
-            'width': '0'
-             }),
-         )
+            dsl.way(428306786, dsl.tile_diagonal(16, 18649, 25417), {
+                'source': 'openstreetmap.org',
+                'bicycle': 'designated',
+                'foot': 'no',
+                'highway': 'path',
+                'horse': 'no',
+                'mtb:scale': '0',
+                'mtb:scale:imba': '1',
+                'name': 'Gateway 1',
+                'oneway': 'yes',
+                'surface': 'ground',
+                'trail_visibility': 'excellent',
+                'width': '0'
+            }),
+        )
         self.assert_has_feature(
             16, 18649, 25417, 'roads',
             {'id': 428306786, 'is_bicycle_related': True})

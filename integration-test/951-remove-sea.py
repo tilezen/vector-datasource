@@ -11,12 +11,12 @@ class RemoveSea(FixtureTest):
         self.generate_fixtures(
             # http://www.openstreetmap.org/relation/4594226
             dsl.way(-4594226, dsl.box_area(z, x, y, 333248147246), {
-                "name": "\u0391\u03B9\u03B3\u03B1\u03AF\u03BF\u03BD \u03A0\u03AD\u03BB\u03B1\u03B3\u03BF\u03C2 / Ege Denizi",
-                "name:el": "\u0391\u03B9\u03B3\u03B1\u03AF\u03BF \u03A0\u03AD\u03BB\u03B1\u03B3\u03BF\u03C2",
-                "name:en": "Aegean Sea",
-                "name:tr": "Ege Denizi",
-                "place": "sea",
-                "wikidata": "Q34575"
+                'name': '\u0391\u03B9\u03B3\u03B1\u03AF\u03BF\u03BD \u03A0\u03AD\u03BB\u03B1\u03B3\u03BF\u03C2 / Ege Denizi',
+                'name:el': '\u0391\u03B9\u03B3\u03B1\u03AF\u03BF \u03A0\u03AD\u03BB\u03B1\u03B3\u03BF\u03C2',
+                'name:en': 'Aegean Sea',
+                'name:tr': 'Ege Denizi',
+                'place': 'sea',
+                'wikidata': 'Q34575'
             }),
         )
 

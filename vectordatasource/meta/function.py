@@ -1,5 +1,5 @@
-from itertools import izip
 import re
+from itertools import izip
 
 
 def mz_building_kind_detail(val):
@@ -187,29 +187,29 @@ def mz_building_part_kind_detail(val):
     if val in ('yes', 'part', 'church:part', 'default'):
         return None
     if val in (
-                'arch',
-                'balcony',
-                'base',
-                'column',
-                'door',
-                'elevator',
-                'entrance',
-                'floor',
-                'hall',
-                'main',
-                'passageway',
-                'pillar',
-                'porch',
-                'ramp',
-                'roof',
-                'room',
-                'steps',
-                'stilobate',
-                'tier',
-                'tower',
-                'verticalpassage',
-                'wall',
-                'window'):
+        'arch',
+        'balcony',
+        'base',
+        'column',
+        'door',
+        'elevator',
+        'entrance',
+        'floor',
+        'hall',
+        'main',
+        'passageway',
+        'pillar',
+        'porch',
+        'ramp',
+        'roof',
+        'room',
+        'steps',
+        'stilobate',
+        'tier',
+        'tower',
+        'verticalpassage',
+        'wall',
+            'window'):
         return val
     if val in ('corridor', 'Corridor', 'vertical', 'verticalpassage'):
         return 'verticalpassage'
@@ -227,7 +227,7 @@ def mz_building_part_kind_detail(val):
 
 
 def mz_is_path_major_route_relation(tags):
-    "Return True if the relation tags represent a major route relation."
+    'Return True if the relation tags represent a major route relation.'
 
     return (tags.get('type') == 'route' and
             tags.get('route') in ('hiking', 'foot', 'bicycle') and

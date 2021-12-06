@@ -7,31 +7,30 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
     def test_path_with_international_route(self):
         # highway=path, with route inter-national
         # GR5-Grand Traverse de Jura between France and Switzerland
-#         self.load_fixtures([
-#             'https://www.openstreetmap.org/way/285975282',
-#             'https://www.openstreetmap.org/relation/6009161',
-#         ], clip=self.tile_bbox(9, 265, 179))
+        #         self.load_fixtures([
+        #             'https://www.openstreetmap.org/way/285975282',
+        #             'https://www.openstreetmap.org/relation/6009161',
+        #         ], clip=self.tile_bbox(9, 265, 179))
         import dsl
         from shapely.wkt import loads as wkt_loads
         self.generate_fixtures(
             dsl.way(285975282, dsl.tile_diagonal(15, 17003, 11507), {
-                "highway": "footway",
-                "name": "GR5-Grand Traverse de Jura",
-                "source": "openstreetmap.org"
+                'highway': 'footway',
+                'name': 'GR5-Grand Traverse de Jura',
+                'source': 'openstreetmap.org'
             }),
             dsl.relation(6009161, {
-                "name": "European long distance path E2 - Jura",
-                "name:fr": "Chemin de randonnée Européen E2 - Jura",
-                "name:nl": "Europese wandelroute E2, Jura",
-                "network": "iwn",
-                "operator": "European Ramblers Association",
-                "ref": "E2",
-                "route": "foot",
-                "type": "route",
-                "source": "openstreetmap.org"
+                'name': 'European long distance path E2 - Jura',
+                'name:fr': 'Chemin de randonnée Européen E2 - Jura',
+                'name:nl': 'Europese wandelroute E2, Jura',
+                'network': 'iwn',
+                'operator': 'European Ramblers Association',
+                'ref': 'E2',
+                'route': 'foot',
+                'type': 'route',
+                'source': 'openstreetmap.org'
             }, ways=[285975282]),
         )
-
 
         self.assert_has_feature(
             9, 265, 179, 'roads',
@@ -39,36 +38,36 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
 
     def test_path_with_national_route(self):
         # highway=path, with route national (Pacific Crest Trail) at zoom 9
-#         self.load_fixtures([
-#             'https://www.openstreetmap.org/way/236361475',
-#             'https://www.openstreetmap.org/relation/1225378',
-#         ], clip=self.tile_bbox(9, 86, 197))
+        #         self.load_fixtures([
+        #             'https://www.openstreetmap.org/way/236361475',
+        #             'https://www.openstreetmap.org/relation/1225378',
+        #         ], clip=self.tile_bbox(9, 86, 197))
 
         import dsl
         self.generate_fixtures(
             dsl.way(236361475, dsl.tile_diagonal(9, 86, 197), {
-                "ref": "PCT Section H",
-                "source": "GPS",
-                "motorcar": "no",
-                "motorcycle": "no",
-                "foot": "designated",
-                "name": "Pacific Crest Trail",
-                "alt_name": "Pacific Crest National Scenic Trail",
-                "bicycle": "no",
-                "highway": "path",
-                "horse": "yes",
-                "network": "nwn",
-                "source": "openstreetmap.org"
+                'ref': 'PCT Section H',
+                'source': 'GPS',
+                'motorcar': 'no',
+                'motorcycle': 'no',
+                'foot': 'designated',
+                'name': 'Pacific Crest Trail',
+                'alt_name': 'Pacific Crest National Scenic Trail',
+                'bicycle': 'no',
+                'highway': 'path',
+                'horse': 'yes',
+                'network': 'nwn',
+                'source': 'openstreetmap.org'
             }),
             dsl.relation(1225378, {
-                "name": "Pacific Crest Trail",
-                "network": "nwn",
-                "ref": "PCT",
-                "route": "hiking",
-                "type": "route",
-                "wikidata": "Q2003736",
-                "wikipedia": "en:Pacific Crest Trail",
-                "source": "openstreetmap.org"
+                'name': 'Pacific Crest Trail',
+                'network': 'nwn',
+                'ref': 'PCT',
+                'route': 'hiking',
+                'type': 'route',
+                'wikidata': 'Q2003736',
+                'wikipedia': 'en:Pacific Crest Trail',
+                'source': 'openstreetmap.org'
             }, ways=[236361475]),
         )
 
@@ -136,23 +135,23 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
     def test_cycleway_with_international_route(self):
         # Way: North Sea Cycle Route - part Netherlands (1977662)
         # A really long highway=cycleway
-#         self.load_fixtures([
-#             'https://www.openstreetmap.org/way/35568189',
-#             'https://www.openstreetmap.org/relation/1977662',
-#             'https://www.openstreetmap.org/relation/1975739',
-#             'https://www.openstreetmap.org/relation/5294',
-#             'https://www.openstreetmap.org/relation/537418',
-#         ], clip=self.tile_bbox(8, 131, 83))
+        #         self.load_fixtures([
+        #             'https://www.openstreetmap.org/way/35568189',
+        #             'https://www.openstreetmap.org/relation/1977662',
+        #             'https://www.openstreetmap.org/relation/1975739',
+        #             'https://www.openstreetmap.org/relation/5294',
+        #             'https://www.openstreetmap.org/relation/537418',
+        #         ], clip=self.tile_bbox(8, 131, 83))
         import dsl
         from shapely.wkt import loads as wkt_loads
         self.generate_fixtures(
-             dsl.way(35568189, dsl.tile_diagonal(13, 4211, 2670), {
+            dsl.way(35568189, dsl.tile_diagonal(13, 4211, 2670), {
                 'source': 'openstreetmap.org',
                 'bicycle': 'designated',
                 'foot': 'designated',
                 'highway': 'cycleway',
                 'surface': 'asphalt'
-             }),
+            }),
             dsl.relation(1977662, {
                 'source': 'openstreetmap.org',
                 'type': 'route',

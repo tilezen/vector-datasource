@@ -5,7 +5,7 @@ class InclusivePois(FixtureTest):
 
     def test_healthcare_midwife(self):
         import dsl
-        z, x ,y = 16, 10500, 22491
+        z, x, y = 16, 10500, 22491
         self.generate_fixtures(
             dsl.point(3761053357, dsl.tile_centre(z, x, y), {
                 'addr:unit': '304',

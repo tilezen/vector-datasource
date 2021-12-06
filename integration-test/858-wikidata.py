@@ -85,12 +85,12 @@ class WOFTest(FixtureTest):
 
         self.generate_fixtures(
             dsl.point(85865903, (-122.414102, 37.785926), {
-                "max_zoom": 18.0,
-                "min_zoom": 15.0,
-                "name": "Tenderloin",
-                "placetype": "neighbourhood",
-                "source": "whosonfirst.org",
-                "wikidata": "Q7464",
+                'max_zoom': 18.0,
+                'min_zoom': 15.0,
+                'name': 'Tenderloin',
+                'placetype': 'neighbourhood',
+                'source': 'whosonfirst.org',
+                'wikidata': 'Q7464',
             }),
         )
 

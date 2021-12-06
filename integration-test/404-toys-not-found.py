@@ -1,5 +1,6 @@
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
 
 
 class ToysNotFound(FixtureTest):
@@ -10,11 +11,11 @@ class ToysNotFound(FixtureTest):
 
         self.generate_fixtures(
             dsl.point(215472849, dsl.tile_centre(z, x, y),
-                 {'phone': '+1 415 759 TOYS', 'height': '7', 'building': 'retail',
-                  'name': 'Ambassador Toys', 'opening_hours': 'Mo-Su 10:00-19:00',
-                  'shop': 'toys', 'addr:city': 'San Francisco', 'addr:country': 'US',
-                  'addr:housenumber': '186', 'addr:postcode': '94127', 'addr:state': 'CA',
-                  'addr:street': 'West Portal Avenue'}))
+                      {'phone': '+1 415 759 TOYS', 'height': '7', 'building': 'retail',
+                       'name': 'Ambassador Toys', 'opening_hours': 'Mo-Su 10:00-19:00',
+                       'shop': 'toys', 'addr:city': 'San Francisco', 'addr:country': 'US',
+                       'addr:housenumber': '186', 'addr:postcode': '94127', 'addr:state': 'CA',
+                       'addr:street': 'West Portal Avenue'}))
 
         self.assert_has_feature(
             z, x, y, 'pois',
@@ -34,7 +35,7 @@ class ToysNotFound(FixtureTest):
 
         self.generate_fixtures(
             dsl.point(3396659022, dsl.tile_centre(z, x, y),
-                 {'name': 'Disney Store', 'shop': 'toys'}))
+                      {'name': 'Disney Store', 'shop': 'toys'}))
 
         self.assert_has_feature(
             z, x, y, 'pois',
@@ -46,7 +47,7 @@ class ToysNotFound(FixtureTest):
 
         self.generate_fixtures(
             dsl.point(2286100659, dsl.tile_centre(z, x, y),
-                 {'name': 'Michaels Arts and Crafts', 'shop': 'toys'}))
+                      {'name': 'Michaels Arts and Crafts', 'shop': 'toys'}))
 
         self.assert_has_feature(
             z, x, y, 'pois',
@@ -58,9 +59,9 @@ class ToysNotFound(FixtureTest):
 
         self.generate_fixtures(
             dsl.point(2286100659, dsl.tile_centre(z, x, y),
-                 {'wheelchair': 'yes','name': 'Eudemonia', 'shop': 'toys',
-                  'website': 'http://www.eudemonia.com/', 'addr:city': 'Berkeley',
-                  'addr:housenumber': '2154', 'addr:street': 'University Avenue'}))
+                      {'wheelchair': 'yes', 'name': 'Eudemonia', 'shop': 'toys',
+                       'website': 'http://www.eudemonia.com/', 'addr:city': 'Berkeley',
+                       'addr:housenumber': '2154', 'addr:street': 'University Avenue'}))
 
         self.assert_has_feature(
             z, x, y, 'pois',

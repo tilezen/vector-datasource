@@ -1,6 +1,7 @@
-import shapely.geometry
-import fiona
 import sys
+
+import fiona
+import shapely.geometry
 
 shapefile_source = sys.argv[1]
 shapefile_sink = sys.argv[2]

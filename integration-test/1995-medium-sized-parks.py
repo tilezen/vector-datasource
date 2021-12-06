@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
-from . import FixtureTest
 import dsl
+
+from . import FixtureTest
 
 
 class MediumSizedParks(FixtureTest):
@@ -68,8 +69,8 @@ class MediumSizedParks(FixtureTest):
         )
 
         self.assert_has_feature(
-                z, x, y, 'landuse', {
-                    'id': 22727025,
-                    'kind': 'park',
-                    'min_zoom': 14
-                })
+            z, x, y, 'landuse', {
+                'id': 22727025,
+                'kind': 'park',
+                'min_zoom': 14
+            })
