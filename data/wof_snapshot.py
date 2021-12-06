@@ -33,7 +33,7 @@ def _parse_neighbourhood_from_json(json_str):
     j = json.loads(json_str)
     wof_id = j['id']
     placetype = j['properties']['wof:placetype']
-    meta = NeighbourhoodMeta(wof_id, placetype, None, "123", None)
+    meta = NeighbourhoodMeta(wof_id, placetype, None, '123', None)
     hood = create_neighbourhood_from_json(j, meta)
     return hood
 
@@ -54,14 +54,14 @@ class WOFArchiveReader(object):
             if n_or_fail.skipped or n_or_fail.funky or n_or_fail.superseded:
                 pass
             else:
-                raise ValueError("Failed to parse neighbourhood: %s "
-                                 "(because: %s)"
+                raise ValueError('Failed to parse neighbourhood: %s '
+                                 '(because: %s)'
                                  % (n_or_fail.message, n_or_fail.reason))
         else:
-            raise ValueError("Unexpected %r" % (n_or_fail,))
+            raise ValueError('Unexpected %r' % (n_or_fail,))
 
     def add_sqlite_file(self, sqlite_filename, file_hash):
-        with tqdm(desc="Grabbing rows from sqlite file %s" % sqlite_filename, unit="Rows", unit_scale=True) as pbar:
+        with tqdm(desc='Grabbing rows from sqlite file %s' % sqlite_filename, unit='Rows', unit_scale=True) as pbar:
             import sqlite3
             from _sqlite3 import Error
             try:
@@ -108,7 +108,7 @@ class tmpdownload(object):
         with requests.get(url, stream=True) as response:
             response.raise_for_status()
 
-            with tqdm(desc="Downloading %s" % url, unit="bytes", unit_scale=True) as pbar:
+            with tqdm(desc='Downloading %s' % url, unit='bytes', unit_scale=True) as pbar:
                 with open(abs_fname, 'wb') as fh:
                     for chunk in response.iter_content(chunk_size=16384):
                         if chunk:
@@ -128,10 +128,10 @@ class tmpdownload(object):
 class TmpBz2Decompress(object):
     def __init__(self, filename):
         import bz2
-        suffix_length = len(".bz2")
-        input_filename = filename[:filename.rfind("/")+1]
+        suffix_length = len('.bz2')
+        input_filename = filename[:filename.rfind('/')+1]
         output_filename = filename[:-suffix_length]
-        with tqdm(desc="Decompressing %s" % input_filename, unit="bytes", unit_scale=True) as pbar:
+        with tqdm(desc='Decompressing %s' % input_filename, unit='bytes', unit_scale=True) as pbar:
             with open(output_filename, 'w') as outfile:
                 with bz2.BZ2File(filename, 'r') as bzfile:
                     for chunk in bzfile:
@@ -148,21 +148,21 @@ class TmpBz2Decompress(object):
         os.remove(self.abs_fname)
 
 
-WOF_SQLITE = "https://data.geocode.earth/wof/dist/sqlite/whosonfirst-data-admin-latest.db.bz2"
+WOF_SQLITE = 'https://data.geocode.earth/wof/dist/sqlite/whosonfirst-data-admin-latest.db.bz2'
 
 if __name__ == '__main__':
     reader = WOFArchiveReader()
 
     with tmpdownload(WOF_SQLITE) as fname:
         with TmpBz2Decompress(fname) as decompressed:
-            reader.add_sqlite_file(decompressed, "latest")
+            reader.add_sqlite_file(decompressed, 'latest')
 
-    print "Writing output SQL"
+    print 'Writing output SQL'
     with open('wof_snapshot.sql', 'w') as fh:
-        fh.write("COPY public.wof_neighbourhood ("
-                 "wof_id, placetype, name, hash, n_photos, area, min_zoom, "
-                 "max_zoom, is_landuse_aoi, label_position, geometry, "
-                 "inception, cessation, is_visible, l10n_name, wikidata) "
-                 "FROM stdin;\n")
+        fh.write('COPY public.wof_neighbourhood ('
+                 'wof_id, placetype, name, hash, n_photos, area, min_zoom, '
+                 'max_zoom, is_landuse_aoi, label_position, geometry, '
+                 'inception, cessation, is_visible, l10n_name, wikidata) '
+                 'FROM stdin;\n')
         write_neighbourhood_data_to_file(fh, reader.wof_items)
-        fh.write("\\.\n")
+        fh.write('\\.\n')

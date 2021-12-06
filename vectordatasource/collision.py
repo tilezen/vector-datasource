@@ -35,9 +35,9 @@ class CollisionRanker(object):
                     to_index = reserved['to']
 
                     # check that we've not used this index already.
-                    assert index <= from_index, "Unable to satisfy reserved " \
-                        "block: already at index %d, and wanted to reserve " \
-                        "from %d." % (index, from_index)
+                    assert index <= from_index, 'Unable to satisfy reserved ' \
+                        'block: already at index %d, and wanted to reserve ' \
+                        'from %d.' % (index, from_index)
 
                     # start counting again past the "to" reserved index.
                     index = to_index + 1

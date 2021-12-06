@@ -133,13 +133,13 @@ class ShieldTextLengthTest(FixtureTest):
             # https://www.openstreetmap.org/way/417097119
             dsl.way(417097119, dsl.tile_diagonal(z, x, y), way35),
             dsl.relation(1976278, {
-                "name": "Pacific Crest Trail",
-                "network": "nwn",
-                "ref": "PCT",
-                "route": "hiking",
-                "type": "route",
-                "wikidata": "Q2003736",
-                "wikipedia": "en:Pacific Crest Trail",
+                'name': 'Pacific Crest Trail',
+                'network': 'nwn',
+                'ref': 'PCT',
+                'route': 'hiking',
+                'type': 'route',
+                'wikidata': 'Q2003736',
+                'wikipedia': 'en:Pacific Crest Trail',
             }, ways=[417097119]),
         )
 

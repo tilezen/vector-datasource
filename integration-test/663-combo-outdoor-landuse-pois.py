@@ -227,7 +227,7 @@ class ComboOutdoorLandusePois(FixtureTest):
 
         self.assert_has_feature(
             12, 683, 1580, 'landuse',
-            {'kind': 'dam', "sort_rank": 265})
+            {'kind': 'dam', 'sort_rank': 265})
 
     def test_dog_park_node(self):
         # Indian Lake Dog Exercise Area, near Madison, WI

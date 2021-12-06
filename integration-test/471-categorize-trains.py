@@ -13,20 +13,20 @@ class CategorizeTrains(FixtureTest):
         self.generate_fixtures(
             # https://www.openstreetmap.org/relation/2812900
             dsl.way(2812900, dsl.tile_diagonal(z, x, y), {
-                "FIXME": "Underlying infrastructure \"Seattle Subdivision\"" \
-                "needs some fixing",
-                "colour": "#191970",
-                "from": "Los Angeles",
-                "name": "Coast Starlight",
-                "network": "Amtrak",
-                "operator": "Amtrak",
-                "public_transport:version": "1",
-                "ref": "11-14",
-                "route": "train",
-                "service": "long_distance",
-                "to": "Seattle",
-                "type": "route",
-                "via": "Portland"
+                'FIXME': "Underlying infrastructure \"Seattle Subdivision\"" \
+                'needs some fixing',
+                'colour': '#191970',
+                'from': 'Los Angeles',
+                'name': 'Coast Starlight',
+                'network': 'Amtrak',
+                'operator': 'Amtrak',
+                'public_transport:version': '1',
+                'ref': '11-14',
+                'route': 'train',
+                'service': 'long_distance',
+                'to': 'Seattle',
+                'type': 'route',
+                'via': 'Portland'
             }),
         )
 

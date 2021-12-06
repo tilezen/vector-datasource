@@ -30,8 +30,8 @@ class SortKeyBoundary(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, "boundaries",
-            {"kind": "country", "sort_rank": 262})
+            z, x, y, 'boundaries',
+            {'kind': 'country', 'sort_rank': 262})
 
     def test_nevada_california_boundary(self):
         import dsl
@@ -72,8 +72,8 @@ class SortKeyBoundary(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, "boundaries",
-            {"kind": "region", "sort_rank": 256})
+            z, x, y, 'boundaries',
+            {'kind': 'region', 'sort_rank': 256})
 
     def test_mendocino_humboldt_county_boundary(self):
         import dsl
@@ -120,8 +120,8 @@ class SortKeyBoundary(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, "boundaries",
-            {"kind": "county", "sort_rank": 254})
+            z, x, y, 'boundaries',
+            {'kind': 'county', 'sort_rank': 254})
 
     def test_san_francisco_daly_city_locality_boundary(self):
         import dsl
@@ -200,5 +200,5 @@ class SortKeyBoundary(FixtureTest):
         )
 
         self.assert_has_feature(
-            z, x, y, "boundaries",
-            {"kind": "locality", "sort_rank": 252})
+            z, x, y, 'boundaries',
+            {'kind': 'locality', 'sort_rank': 252})

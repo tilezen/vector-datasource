@@ -12,9 +12,9 @@ class RoadSortKeysLayers(FixtureTest):
                                u'tiger:name_base': u'South Sacramento', u'tiger:name_type': u'Fwy', u'source': u'openstreetmap.org', u'oneway': u'yes', u'bicycle': u'no', u'source:hgv:national_network': u'Title%2023:%20Highways%20Part%20658%20http://ecfr.gpoaccess.gov/cgi/t/text/text-idx?c=ecfr&rgn=div5&view=text&node=23:1.0.1.7.33&idno=23', u'ref': u'CA 51', u'tiger:county': u'Sacramento, CA', u'highway': u'motorway'}))
 
         self.assert_has_feature(
-            16, 10654, 25150, "roads",
-            {"kind": "highway", "kind_detail": "motorway", "is_bridge": True,
-             "id": 48474682, "sort_rank": 447})
+            16, 10654, 25150, 'roads',
+            {'kind': 'highway', 'kind_detail': 'motorway', 'is_bridge': True,
+             'id': 48474682, 'sort_rank': 447})
 
     def test_layer_4(self):
         # layer 4
@@ -22,9 +22,9 @@ class RoadSortKeysLayers(FixtureTest):
                                u'bridge': u'yes', u'horse': u'no', u'tiger:name_base': u'I-280', u'lanes': u'2', u'name': u'Southern Embarcadero Freeway', u'tiger:cfcc': u'A15', u'hgv': u'designated', u'layer': u'4', u'source': u'openstreetmap.org', u'tiger:county': u'San Francisco, CA', u'oneway': u'yes', u'foot': u'no', u'bicycle': u'no', u'sidewalk': u'none', u'ref': u'I 280', u'highway': u'motorway'}))
 
         self.assert_has_feature(
-            16, 10483, 25340, "roads",
-            {"kind": "highway", "kind_detail": "motorway", "is_bridge": True,
-             "id": 8918870, "sort_rank": 446})
+            16, 10483, 25340, 'roads',
+            {'kind': 'highway', 'kind_detail': 'motorway', 'is_bridge': True,
+             'id': 8918870, 'sort_rank': 446})
 
     def test_layer_3(self):
         # layer 3
@@ -32,9 +32,9 @@ class RoadSortKeysLayers(FixtureTest):
                                u'bridge': u'yes', u'layer': u'3', u'lanes': u'1', u'tiger:cfcc': u'A63', u'source': u'openstreetmap.org', u'tiger:county': u'San Francisco, CA', u'oneway': u'yes', u'highway': u'motorway_link'}))
 
         self.assert_has_feature(
-            16, 10479, 25341, "roads",
-            {"kind": "highway", "kind_detail": "motorway_link",
-             "is_bridge": True, "id": 29394019, "sort_rank": 445})
+            16, 10479, 25341, 'roads',
+            {'kind': 'highway', 'kind_detail': 'motorway_link',
+             'is_bridge': True, 'id': 29394019, 'sort_rank': 445})
 
     def test_layer_2(self):
         # layer 2
@@ -42,9 +42,9 @@ class RoadSortKeysLayers(FixtureTest):
                                u'bridge': u'yes', u'horse': u'no', u'maxspeed': u'65 mph', u'lanes': u'4', u'name': u'Junipero Serra Freeway', u'hgv': u'designated', u'layer': u'2', u'maxspeed:trailer': u'55 mph', u'source': u'openstreetmap.org', u'maxspeed:hgv': u'55 mph', u'oneway': u'yes', u'foot': u'no', u'bicycle': u'no', u'sidewalk': u'none', u'ref': u'I 280', u'highway': u'motorway'}))
 
         self.assert_has_feature(
-            16, 10480, 25365, "roads",
-            {"kind": "highway", "kind_detail": "motorway", "is_bridge": True,
-             "id": 27651523, "sort_rank": 444})
+            16, 10480, 25365, 'roads',
+            {'kind': 'highway', 'kind_detail': 'motorway', 'is_bridge': True,
+             'id': 27651523, 'sort_rank': 444})
 
     def test_layer_1(self):
         # layer 1
@@ -52,9 +52,9 @@ class RoadSortKeysLayers(FixtureTest):
                                u'note:lanes': u'center lanes are reversible, so number may be different', u'hgv': u'designated', u'source:hgv:state_network': u'Caltrans http://www.dot.ca.gov/hq/traffops/trucks/truckmap/', u'oneway': u'yes', u'lit': u'yes', u'source': u'openstreetmap.org', u'tiger:county': u'San Francisco, CA', u'alt_name': u'Doyle Drive', u'NHS': u'STRAHNET', u'toll': u'no', u'bicycle': u'no', u'hgv:state_network': u'yes', u'ref': u'US 101;CA 1', u'highway': u'motorway'}))
 
         self.assert_has_feature(
-            16, 10472, 25323, "roads",
-            {"kind": "highway", "kind_detail": "motorway", "is_bridge": True,
-             "id": 28412298, "sort_rank": 443})
+            16, 10472, 25323, 'roads',
+            {'kind': 'highway', 'kind_detail': 'motorway', 'is_bridge': True,
+             'id': 28412298, 'sort_rank': 443})
 
     def test_layer_minus_1(self):
         # layer -1
@@ -62,9 +62,9 @@ class RoadSortKeysLayers(FixtureTest):
                                u'layer': u'-1', u'maxspeed': u'15 mph', u'tiger:cfcc': u'A41', u'lcn_ref': u'95', u'tunnel': u'yes', u'maxheight': u'3.61', u'source': u'openstreetmap.org', u'tiger:county': u'San Francisco, CA', u'highway': u'service'}))
 
         self.assert_has_feature(
-            16, 10472, 25323, "roads",
-            {"kind": "minor_road", "kind_detail": "service", "is_tunnel": True,
-             "id": 43685501, "sort_rank": 304})
+            16, 10472, 25323, 'roads',
+            {'kind': 'minor_road', 'kind_detail': 'service', 'is_tunnel': True,
+             'id': 43685501, 'sort_rank': 304})
 
     def test_layer_minus_2(self):
         # layer -2
@@ -72,6 +72,6 @@ class RoadSortKeysLayers(FixtureTest):
                                u'tiger:name_base_1': u'Bay', u'tunnel': u'yes', u'tiger:name_type_1': u'Brg', u'maxheight': u'14\'0"', u'source': u'openstreetmap.org', u'hgv': u'designated', u'oneway': u'yes', u'bicycle': u'no', u'ref': u'I 80', u'tiger:county': u'San Francisco, CA', u'highway': u'motorway'}))
 
         self.assert_has_feature(
-            16, 10491, 25323, "roads",
-            {"kind": "highway", "kind_detail": "motorway", "is_tunnel": True,
-             "id": 50691047, "sort_rank": 303})
+            16, 10491, 25323, 'roads',
+            {'kind': 'highway', 'kind_detail': 'motorway', 'is_tunnel': True,
+             'id': 50691047, 'sort_rank': 303})

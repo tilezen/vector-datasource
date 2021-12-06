@@ -9,7 +9,7 @@ with open(version_path) as fh:
 
 setup(name='vector-datasource',
       version=version,
-      description="",
+      description='',
       long_description="""\
 """,
       classifiers=[],

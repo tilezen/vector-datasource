@@ -104,7 +104,7 @@ class CollisionRankTest(TestCase):
         z, x, y = (16, 0, 0)
 
         ranker = CollisionRanker([
-            {"$layer": "foo"},
+            {'$layer': 'foo'},
         ])
 
         shape = Point(*num2deg(x + 0.5, y + 0.5, z))

@@ -22,9 +22,9 @@ class DuplicatePoints(FixtureTest):
 
         # have to reorder the bounds from conventional order to the unusual
         # scheme that overpass expects (south,west,north,east).
-        bbox = "%f,%f,%f,%f" % (bounds[1], bounds[0], bounds[3], bounds[2])
-        overpass = "http://overpass-api.de/api/interpreter?data="
-        query = "way(" + bbox + ")[highway]%3B>%3B"
+        bbox = '%f,%f,%f,%f' % (bounds[1], bounds[0], bounds[3], bounds[2])
+        overpass = 'http://overpass-api.de/api/interpreter?data='
+        query = 'way(' + bbox + ')[highway]%3B>%3B'
 
         self.load_fixtures([overpass + query])
 
@@ -44,4 +44,4 @@ class DuplicatePoints(FixtureTest):
                     num_tested += 1
 
         self.assertTrue(num_tested != 0,
-                        "Expected at least one testable feature.")
+                        'Expected at least one testable feature.')

@@ -36,7 +36,7 @@ def _valid_values(filter_defn, col):
         return [value]
     else:
         raise ValueError("Don't know what to do with value of type "
-                         "%s in %r" % (type(value), value))
+                         '%s in %r' % (type(value), value))
 
 
 # parses the values for a column out of a filter definition. this is used when
@@ -62,7 +62,7 @@ def parse_filter_for_col(col, item):
     filter_defn = item['filter']
 
     if col.startswith('tags->'):
-        raise AssertionError("Output kind column starts with deprecated "
+        raise AssertionError('Output kind column starts with deprecated '
                              "'tags->' prefix: %r" % (col,))
 
     if col in filter_defn:
@@ -229,11 +229,11 @@ def parse_start_zoom(expr):
             start_zoom = KNOWN_FUNCS.get(func)
 
         else:
-            raise AssertionError("Unknown min zoom expression %r in %r"
+            raise AssertionError('Unknown min zoom expression %r in %r'
                                  % (expr.keys(), expr))
 
     else:
-        raise AssertionError("Unknown min zoom expression type %s in %r"
+        raise AssertionError('Unknown min zoom expression type %s in %r'
                              % (type(expr), expr))
 
     return start_zoom

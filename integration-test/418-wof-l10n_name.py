@@ -14,7 +14,7 @@ class WofL10nName(FixtureTest):
         self.assert_has_feature(
             16, 11227, 26157, 'places',
             {'id': 85826037, 'kind': 'neighbourhood',
-             'source': "whosonfirst.org",
+             'source': 'whosonfirst.org',
              'name': 'Hollywood',
              'name:ko': '\xed\x97\x90\xeb\xa6\xac\xec\x9a\xb0\xeb\x93\x9c'})
 
@@ -26,7 +26,7 @@ class WofL10nName(FixtureTest):
         self.assert_has_feature(
             16, 14893, 29234, 'places',
             {'id': 85882641, 'kind': 'neighbourhood',
-             'source': "whosonfirst.org",
+             'source': 'whosonfirst.org',
              'name': 'San Francisco',
              'name:es': 'San Francisco'})
 
@@ -41,7 +41,7 @@ class WofL10nName(FixtureTest):
         self.assert_has_feature(
             16, 10482, 25330, 'places',
             {'id': 26819236, 'kind': 'locality', 'kind_detail': 'city',
-             'source': "openstreetmap.org",
+             'source': 'openstreetmap.org',
              'name': 'San Francisco',
              'name:zh-Hans': None,
              'name:zh': None})  # for backward compatible we still populate name:zh field

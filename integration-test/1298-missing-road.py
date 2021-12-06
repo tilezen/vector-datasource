@@ -9,9 +9,9 @@ class MissingRoad(FixtureTest):
             clip=self.tile_bbox(12, 1192, 1539))
 
         self.assert_has_feature(
-            12, 1192, 1539, "roads",
-            {"kind": "major_road",
-             "shield_text": "611",
-             "ref": "PA 611",
-             "all_shield_texts": ["611"],
+            12, 1192, 1539, 'roads',
+            {'kind': 'major_road',
+             'shield_text': '611',
+             'ref': 'PA 611',
+             'all_shield_texts': ['611'],
              })

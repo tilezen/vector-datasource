@@ -53,9 +53,9 @@ tile_server.propagate_errors = True
 application = DebuggedApplication(tile_server, True)
 
 http_server = make_server('localhost', 0, application, threaded=False)
-with open(sys.argv[3] + ".tmp", 'w') as fh:
-    print>>fh, "%d" % http_server.server_port
+with open(sys.argv[3] + '.tmp', 'w') as fh:
+    print>>fh, '%d' % http_server.server_port
 # move into place atomically
-os.rename(sys.argv[3] + ".tmp", sys.argv[3])
+os.rename(sys.argv[3] + '.tmp', sys.argv[3])
 
 http_server.serve_forever()

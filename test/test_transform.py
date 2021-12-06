@@ -474,8 +474,8 @@ class LanduseSortKeysAreUniqueTest(unittest.TestCase):
             seen = set()
             for row in rows[1:]:
                 sort_key = int(row[-1])
-                self.assertFalse(sort_key in seen, "Duplicate sort_key "
-                                 "value: %d" % (sort_key,))
+                self.assertFalse(sort_key in seen, 'Duplicate sort_key '
+                                 'value: %d' % (sort_key,))
                 seen.add(sort_key)
 
     def test_landuse(self):
@@ -792,65 +792,65 @@ class ShieldTextTransform(unittest.TestCase):
                           properties['all_shield_texts'])
 
     def test_just_a_number(self):
-        self._assert_shield_text("whatever", "101", "101")
+        self._assert_shield_text('whatever', '101', '101')
 
     def test_a_road(self):
         # based on http://www.openstreetmap.org/relation/2592
-        self._assert_shield_text("BAB", "A 66", "A66")
+        self._assert_shield_text('BAB', 'A 66', 'A66')
 
         # based on http://www.openstreetmap.org/relation/446270
-        self._assert_shield_text("FR:A-road", "A 66", "A66")
+        self._assert_shield_text('FR:A-road', 'A 66', 'A66')
 
     def test_sr70var1(self):
         # based on http://www.openstreetmap.org/relation/449595
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("IT:Toscana", "SR70var1", "70var1")
+        self._assert_shield_text('IT:Toscana', 'SR70var1', '70var1')
 
     def test_cth_j(self):
         # based on http://www.openstreetmap.org/relation/4010101
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:WI:CTH", "CTH J", "J")
+        self._assert_shield_text('US:WI:CTH', 'CTH J', 'J')
 
     def test_purple_belt(self):
         # based on http://www.openstreetmap.org/relation/544634
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:PA:Belt", "Purple Belt", "Purple Belt")
+        self._assert_shield_text('US:PA:Belt', 'Purple Belt', 'Purple Belt')
 
     def test_t_02_16(self):
         # based on http://www.openstreetmap.org/relation/1296750
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("ua:territorial", u"Т-02-16", u"Т0216")
+        self._assert_shield_text('ua:territorial', u'Т-02-16', u'Т0216')
 
     def test_fi_pi_li(self):
         # based on http://www.openstreetmap.org/relation/1587534
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("IT:B-road", "FI-PI-LI", "FI-PI-LI")
+        self._assert_shield_text('IT:B-road', 'FI-PI-LI', 'FI-PI-LI')
 
     def test_cr_315a(self):
         # based on http://www.openstreetmap.org/relation/2564219
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:TX:Guadalupe", "CR 315A", "315A")
+        self._assert_shield_text('US:TX:Guadalupe', 'CR 315A', '315A')
 
     def test_eo1a(self):
         # based on http://www.openstreetmap.org/relation/5641878
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("GR:national", u"ΕΟ1α", u"ΕΟ1α")
+        self._assert_shield_text('GR:national', u'ΕΟ1α', u'ΕΟ1α')
 
     def test_i5_truck(self):
         # based on http://www.openstreetmap.org/relation/146933
         # see https://github.com/tilezen/vector-datasource/issues/192
         # note: original example was SD 37 Truck, but that wasn't in the 'ref',
         # so changed to this example.
-        self._assert_shield_text("US:I", "5 Truck", "5")
+        self._assert_shield_text('US:I', '5 Truck', '5')
 
     def test_cth_pv(self):
         # based on http://www.openstreetmap.org/relation/5179634
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:WI:Washington", "CTH PV", "PV")
+        self._assert_shield_text('US:WI:Washington', 'CTH PV', 'PV')
 
     def test_null(self):
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("something", None, None)
+        self._assert_shield_text('something', None, None)
 
     def test_ne(self):
         self._assert_shield_text('NZ:SH', 'SH16', '16')
@@ -961,12 +961,12 @@ class AdminBoundaryTest(unittest.TestCase):
         # geometry class will cause Shapely to throw AttributeError whenever
         # it's used in a geometric operation, as it doesn't have the _geom
         # attribute used to store a pointer to GEOS' native object.
-        class FakeGeom(namedtuple("FakeGeom", "geom_type envelope")):
+        class FakeGeom(namedtuple('FakeGeom', 'geom_type envelope')):
             def difference(self, other_shape):
                 from shapely.geometry import GeometryCollection
                 return GeometryCollection([])
 
-        fake_geom = FakeGeom("LineString", box(*bounds))
+        fake_geom = FakeGeom('LineString', box(*bounds))
 
         feature_layers = [dict(
             layer_datum=dict(
@@ -1003,16 +1003,16 @@ class RoadNetworkFixTest(unittest.TestCase):
 
     def test_normalize_br_netref(self):
         from vectordatasource.transform import _normalize_br_netref
-        net, ref = _normalize_br_netref(None, "SP-1")
-        self.assertEqual("BR:SP", net)
-        self.assertEqual("SP-1", ref)
+        net, ref = _normalize_br_netref(None, 'SP-1')
+        self.assertEqual('BR:SP', net)
+        self.assertEqual('SP-1', ref)
 
     def test_guess_network_br(self):
         from vectordatasource.transform import _guess_network_br
         # should be empty for a missing ref
         self.assertEqual([], _guess_network_br({}))
         # should be empty for a blank ref
-        self.assertEqual([], _guess_network_br(dict(ref="")))
+        self.assertEqual([], _guess_network_br(dict(ref='')))
 
 
 # utility method to sort linestrings canonically, so that they can

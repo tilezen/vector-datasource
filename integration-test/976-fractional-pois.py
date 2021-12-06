@@ -80,24 +80,24 @@ class FractionalPois(FixtureTest):
 
         self.generate_fixtures(
             dsl.way(1359387, dsl.tile_diagonal(z, x, y), {
-                "website": "http://www.amtrak.com",
-                "passenger": "national",
-                "via": "New York Penn Station",
-                "from": "Washington, DC",
-                "name": "Vermonter",
-                "service": "long_distance",
-                "to": "Saint Albans, Vermont",
-                "route": "train",
-                "wikipedia": "en:Vermonter (train)",
-                "route_name": "Vermonter",
-                "route_pref_color": "0",
-                "public_transport:version": "1",
-                "wikidata": "Q1412872",
-                "source": "openstreetmap.org",
-                "operator": "Amtrak",
-                "ref": "54-57",
-                "colour": "#005480",
-                "network": "Amtrak"
+                'website': 'http://www.amtrak.com',
+                'passenger': 'national',
+                'via': 'New York Penn Station',
+                'from': 'Washington, DC',
+                'name': 'Vermonter',
+                'service': 'long_distance',
+                'to': 'Saint Albans, Vermont',
+                'route': 'train',
+                'wikipedia': 'en:Vermonter (train)',
+                'route_name': 'Vermonter',
+                'route_pref_color': '0',
+                'public_transport:version': '1',
+                'wikidata': 'Q1412872',
+                'source': 'openstreetmap.org',
+                'operator': 'Amtrak',
+                'ref': '54-57',
+                'colour': '#005480',
+                'network': 'Amtrak'
             }),
         )
 

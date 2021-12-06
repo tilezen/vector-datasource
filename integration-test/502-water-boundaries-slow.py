@@ -47,17 +47,17 @@ class WaterBoundariesSlow(FixtureTest):
                             (-49.4219970703125, -4.65603655397672),
                         ]),
                     ]), {
-                        "natural": "water",
-                        "name": u"Reservat\u00f3rio da Usina "
-                        u"Hidrel\u00e9trica de Tucuru\u00ed",
-                        "short_name": u"Reservat\u00f3rio UHE de Tucuru\u00ed",
-                        "way_area": "2.71214e+09",
-                        "wikipedia": u"pt:Usina Hidrel\u00e9trica de "
-                        u"Tucuru\u00ed",
-                        "name:de": u"Tucuru\u00ed-Stausee",
-                        "water": "reservoir",
-                        "source": "openstreetmap.org",
-                        "wikidata": "Q1475210",
+                        'natural': 'water',
+                        'name': u'Reservat\u00f3rio da Usina '
+                        u'Hidrel\u00e9trica de Tucuru\u00ed',
+                        'short_name': u'Reservat\u00f3rio UHE de Tucuru\u00ed',
+                        'way_area': '2.71214e+09',
+                        'wikipedia': u'pt:Usina Hidrel\u00e9trica de '
+                        u'Tucuru\u00ed',
+                        'name:de': u'Tucuru\u00ed-Stausee',
+                        'water': 'reservoir',
+                        'source': 'openstreetmap.org',
+                        'wikidata': 'Q1475210',
                     }),
             dsl.way(-1363854,
                     MultiPolygon([
@@ -78,9 +78,9 @@ class WaterBoundariesSlow(FixtureTest):
                             (-49.4110107421875, -4.656996327123991),
                         ])
                     ]), {
-                        "source": "openstreetmap.org",
-                        "waterway": "riverbank",
-                        "way_area": 7.12568e+08,
+                        'source': 'openstreetmap.org',
+                        'waterway': 'riverbank',
+                        'way_area': 7.12568e+08,
                     })
         )
 

@@ -227,7 +227,7 @@ def mz_building_part_kind_detail(val):
 
 
 def mz_is_path_major_route_relation(tags):
-    "Return True if the relation tags represent a major route relation."
+    'Return True if the relation tags represent a major route relation.'
 
     return (tags.get('type') == 'route' and
             tags.get('route') in ('hiking', 'foot', 'bicycle') and

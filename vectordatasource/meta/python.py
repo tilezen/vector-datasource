@@ -650,7 +650,7 @@ def output_kind(yaml_datum):
 def output_min_zoom(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
     assert not isinstance(min_zoom, (str, unicode)), \
-        "Min zoom cannot be a string in %r." % yaml_datum
+        'Min zoom cannot be a string in %r.' % yaml_datum
     return min_zoom
 
 

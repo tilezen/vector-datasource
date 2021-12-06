@@ -15,20 +15,20 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
         from shapely.wkt import loads as wkt_loads
         self.generate_fixtures(
             dsl.way(285975282, dsl.tile_diagonal(15, 17003, 11507), {
-                "highway": "footway",
-                "name": "GR5-Grand Traverse de Jura",
-                "source": "openstreetmap.org"
+                'highway': 'footway',
+                'name': 'GR5-Grand Traverse de Jura',
+                'source': 'openstreetmap.org'
             }),
             dsl.relation(6009161, {
-                "name": "European long distance path E2 - Jura",
-                "name:fr": "Chemin de randonnée Européen E2 - Jura",
-                "name:nl": "Europese wandelroute E2, Jura",
-                "network": "iwn",
-                "operator": "European Ramblers Association",
-                "ref": "E2",
-                "route": "foot",
-                "type": "route",
-                "source": "openstreetmap.org"
+                'name': 'European long distance path E2 - Jura',
+                'name:fr': 'Chemin de randonnée Européen E2 - Jura',
+                'name:nl': 'Europese wandelroute E2, Jura',
+                'network': 'iwn',
+                'operator': 'European Ramblers Association',
+                'ref': 'E2',
+                'route': 'foot',
+                'type': 'route',
+                'source': 'openstreetmap.org'
             }, ways=[285975282]),
         )
 
@@ -46,28 +46,28 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
         import dsl
         self.generate_fixtures(
             dsl.way(236361475, dsl.tile_diagonal(9, 86, 197), {
-                "ref": "PCT Section H",
-                "source": "GPS",
-                "motorcar": "no",
-                "motorcycle": "no",
-                "foot": "designated",
-                "name": "Pacific Crest Trail",
-                "alt_name": "Pacific Crest National Scenic Trail",
-                "bicycle": "no",
-                "highway": "path",
-                "horse": "yes",
-                "network": "nwn",
-                "source": "openstreetmap.org"
+                'ref': 'PCT Section H',
+                'source': 'GPS',
+                'motorcar': 'no',
+                'motorcycle': 'no',
+                'foot': 'designated',
+                'name': 'Pacific Crest Trail',
+                'alt_name': 'Pacific Crest National Scenic Trail',
+                'bicycle': 'no',
+                'highway': 'path',
+                'horse': 'yes',
+                'network': 'nwn',
+                'source': 'openstreetmap.org'
             }),
             dsl.relation(1225378, {
-                "name": "Pacific Crest Trail",
-                "network": "nwn",
-                "ref": "PCT",
-                "route": "hiking",
-                "type": "route",
-                "wikidata": "Q2003736",
-                "wikipedia": "en:Pacific Crest Trail",
-                "source": "openstreetmap.org"
+                'name': 'Pacific Crest Trail',
+                'network': 'nwn',
+                'ref': 'PCT',
+                'route': 'hiking',
+                'type': 'route',
+                'wikidata': 'Q2003736',
+                'wikipedia': 'en:Pacific Crest Trail',
+                'source': 'openstreetmap.org'
             }, ways=[236361475]),
         )
 

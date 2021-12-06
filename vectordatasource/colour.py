@@ -28,7 +28,7 @@ def parse_colour(colour):
 
     # normalise the string
     colour = colour.lower()
-    colour = colour.replace(" ", "")
+    colour = colour.replace(' ', '')
 
     if HEX6.match(colour) or HEX3.match(colour):
         rgb = webcolors.hex_to_rgb(colour)
