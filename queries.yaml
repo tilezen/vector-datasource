@@ -1240,6 +1240,7 @@ post_process:
         (kind == 'major_road' and zoom <  13) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 15) or
         (kind == 'rail' and zoom < 15)
 
   # drop these "detail" tags to get better merging at zoom < 16
