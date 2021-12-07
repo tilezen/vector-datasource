@@ -1778,6 +1778,7 @@ post_process:
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'aeroway' and zoom < 13) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 14)
 
   # drop osm_relation tag, used to indicate that shapes came from OSM relations.
