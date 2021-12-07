@@ -1888,6 +1888,38 @@ post_process:
       # need to be a large tolerance.
       simplify_tolerance: 1.0
 
+  # drop labels on roads which are too short to render.
+  - fn: vectordatasource.transform.drop_names_on_short_boundaries
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
+      # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
+      # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
+      # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
+      pixels_per_letter: 11
+
+  # since we drop names in the previous step, we would like merge it again
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
+      # setting the following will try to merge linestrings across junctions
+      # (i.e: more than 2 roads meeting at a point) where the angle between
+      # roads at that point is less than 5 degrees.
+      merge_junctions: true
+      merge_junction_angle: 5.0
+      # setting the following will cause lines, or parts of multi-lines,
+      # shorter than 0.1px at nominal zoom to be dropped.
+      drop_short_segments: true
+      drop_length_pixels: 0.1
+      # integrated simplification step tolerance. NOTE: simplification is only
+      # performed if junction merging is set to true! the idea is to simplify
+      # away points at junctions where the road is straight, so it shouldn't
+      # need to be a large tolerance.
+      simplify_tolerance: 1.0
+
   # we do want to merge at 15, but we don't want to merge junctions becase that
   # might merge across oneway information, which doesn't get dropped until
   # zoom < 15.
