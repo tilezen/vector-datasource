@@ -3120,9 +3120,10 @@ def keep_n_features_gridded(ctx):
     pairs in `items_matching` into a grid, then keep the
     first `max_items` features in each grid cell.
 
-    The grid is created by dividing the width and height
-    of the tile into `grid_size` buckets (so you end up
-    with grid_size*grid_size buckets total).
+    The grid is created by dividing the tile into buckets.
+    You can specify the `grid_width` and `grid_height` to
+    get grid_width*grid_height buckets or just `grid_width`
+    to get grid_width*grid_width buckets.
 
     NOTE: This only works with point features and will
     pass through non-point features untouched.
@@ -3139,7 +3140,9 @@ def keep_n_features_gridded(ctx):
     end_zoom = ctx.params.get('end_zoom')
     items_matching = ctx.params.get('items_matching')
     max_items = ctx.params.get('max_items')
-    grid_size = ctx.params.get('grid_size')
+    grid_width = ctx.params.get('grid_width')
+    # if grid_height is not specified, use grid_width for grid_height
+    grid_height = ctx.params.get('grid_height') or grid_width
     sorting_keys = ctx.params.get('sorting_keys')
 
     # leaving items_matching, grid_size, or max_items as None (or zero)
@@ -3147,7 +3150,7 @@ def keep_n_features_gridded(ctx):
     # that this is really a configuration error.
     assert items_matching, 'keep_n_features_gridded: missing or empty item match dict'
     assert max_items, 'keep_n_features_gridded: missing or zero max number of items'
-    assert grid_size, 'keep_n_features_gridded: missing or zero grid size'
+    assert grid_width, 'keep_n_features_gridded: missing or zero grid width'
     assert sorting_keys, 'keep_n_features_gridded: missing sorting keys'
     assert isinstance(sorting_keys, list), 'keep_n_features_gridded: sorting keys should be a list'
 
@@ -3166,8 +3169,8 @@ def keep_n_features_gridded(ctx):
         return None
 
     minx, miny, maxx, maxy = ctx.unpadded_bounds
-    bucket_width = (maxx - minx) / grid_size
-    bucket_height = (maxy - miny) / grid_size
+    bucket_width = (maxx - minx) / grid_width
+    bucket_height = (maxy - miny) / grid_height
 
     # Sort the features into buckets
     buckets = defaultdict(list)
