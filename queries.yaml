@@ -1186,6 +1186,7 @@ post_process:
         (kind_detail == 'tertiary_link' and zoom <  14) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
   - fn: vectordatasource.transform.drop_properties
@@ -1216,6 +1217,7 @@ post_process:
         (kind_detail == 'secondary_link' and zoom <  15) or
         (kind_detail == 'tertiary_link' and zoom <  15) or
         (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 14) or
         (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15) or
         (kind == 'ferry' and zoom < 15)
@@ -1320,6 +1322,7 @@ post_process:
         - surface
       where: >-
         kind == 'minor_road' or
+        (kind == 'aeroway' and zoom < 12) or
         (kind == 'path' and zoom < 13)
 
   # drop to get better merging at mid zooms.
@@ -1772,6 +1775,7 @@ post_process:
         (kind_detail == 'secondary_link' and zoom < 15) or
         (kind_detail == 'tertiary_link' and zoom < 15) or
         (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 13) or
         (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 14)
 
