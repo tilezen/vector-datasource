@@ -779,7 +779,7 @@ post_process:
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: boundaries
-      start_zoom: 8
+      start_zoom: 0
       end_zoom: 15
 
   # no lake labels at zoom 0-3:
