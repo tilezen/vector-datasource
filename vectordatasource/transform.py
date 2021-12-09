@@ -2557,6 +2557,7 @@ def generate_address_points(ctx):
         # address points.
         label_properties = dict(
             addr_housenumber=addr_housenumber,
+            min_zoom=17,
             kind='address')
 
         source = properties.get('source')
