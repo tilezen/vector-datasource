@@ -1881,7 +1881,7 @@ post_process:
       # setting the following will cause lines, or parts of multi-lines,
       # shorter than 0.1px at nominal zoom to be dropped.
       drop_short_segments: true
-      drop_length_pixels: 0.1
+      drop_length_pixels: 1.0
       # integrated simplification step tolerance. NOTE: simplification is only
       # performed if junction merging is set to true! the idea is to simplify
       # away points at junctions where the road is straight, so it shouldn't
@@ -1899,7 +1899,7 @@ post_process:
       # setting the following will cause lines, or parts of multi-lines,
       # shorter than 0.1px at nominal zoom to be dropped.
       drop_short_segments: true
-      drop_length_pixels: 0.1
+      drop_length_pixels: 1.0
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!
