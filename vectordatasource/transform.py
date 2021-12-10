@@ -3115,6 +3115,113 @@ def _match_props(props, items_matching):
     return True
 
 
+def keep_n_features_gridded(ctx):
+    """
+    Distribute the features matching _all_ the key-value
+    pairs in `items_matching` into a grid, then keep the
+    first `max_items` features in each grid cell.
+
+    The grid is created by dividing the tile into buckets.
+    You can specify the `grid_width` and `grid_height` to
+    get grid_width*grid_height buckets or just `grid_width`
+    to get grid_width*grid_width buckets.
+
+    This may impact "256" and "512" sized tiles differently,
+    so it might be worth checking both sizes.
+
+    NOTE: This only works with point features and will
+    pass through non-point features untouched.
+
+    This is useful for removing less-important features
+    in areas that are geographically dense.
+    """
+
+    feature_layers = ctx.feature_layers
+    zoom = ctx.nominal_zoom
+    source_layer = ctx.params.get('source_layer')
+    assert source_layer, 'keep_n_features_gridded: missing source layer'
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    items_matching = ctx.params.get('items_matching')
+    max_items = ctx.params.get('max_items')
+    grid_width = ctx.params.get('grid_width')
+    # if grid_height is not specified, use grid_width for grid_height
+    grid_height = ctx.params.get('grid_height') or grid_width
+    sorting_keys = ctx.params.get('sorting_keys')
+
+    # leaving items_matching, grid_size, or max_items as None (or zero)
+    # would mean that this filter would do nothing, so assume
+    # that this is really a configuration error.
+    assert items_matching, 'keep_n_features_gridded: missing or empty item match dict'
+    assert max_items, 'keep_n_features_gridded: missing or zero max number of items'
+    assert grid_width, 'keep_n_features_gridded: missing or zero grid width'
+    assert sorting_keys, 'keep_n_features_gridded: missing sorting keys'
+    assert isinstance(sorting_keys, list), 'keep_n_features_gridded: sorting keys should be a list'
+
+    if zoom < start_zoom:
+        return None
+
+    # we probably don't want to do this at higher zooms (e.g: 17 &
+    # 18), even if there are a bunch of features in the tile, as
+    # we use the high-zoom tiles for overzooming to 20+, and we'd
+    # eventually expect to see _everything_.
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(feature_layers, source_layer)
+    if layer is None:
+        return None
+
+    minx, miny, maxx, maxy = ctx.unpadded_bounds
+    bucket_width = (maxx - minx) / grid_width
+    bucket_height = (maxy - miny) / grid_height
+
+    # Sort the features into buckets
+    buckets = defaultdict(list)
+    new_features = []
+    for shape, props, fid in layer['features']:
+        # Pass non-point shapes through untouched
+        if shape.type != 'Point' or not _match_props(props, items_matching):
+            new_features.append((shape, props, fid))
+            continue
+
+        # Calculate the bucket to put this feature in.
+        # Note that this purposefully allows for buckets outside the unpadded bounds
+        # so we can bucketize the padding area, too.
+        bucket_x = int((shape.x - minx) / bucket_width)
+        bucket_y = int((shape.y - miny) / bucket_height)
+        bucket_id = (bucket_x, bucket_y)
+
+        buckets[bucket_id].append((shape, props, fid))
+
+    def sorting_values_for_feature(f):
+        _, props, _ = f
+
+        values = []
+        for k in sorting_keys:
+            v = props.get(k['sort_key'])
+
+            if v is None:
+                values.append(v)
+                continue
+
+            if k.get('reverse'):
+                v *= -1
+                if v == '':
+                    raise ValueError("Cannot reverse string value %s" % props.get(k['sort_key']))
+
+            values.append(v)
+        return values
+
+    # Sort the features in each bucket and pick the top items to include in the output
+    for features_in_bucket in buckets.values():
+        sorted_features = sorted(features_in_bucket, key=sorting_values_for_feature)
+        new_features.extend(sorted_features[:max_items])
+
+    layer['features'] = new_features
+    return layer
+
+
 def keep_n_features(ctx):
     """
     Keep only the first N features matching `items_matching`
