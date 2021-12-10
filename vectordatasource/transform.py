@@ -3125,6 +3125,9 @@ def keep_n_features_gridded(ctx):
     get grid_width*grid_height buckets or just `grid_width`
     to get grid_width*grid_width buckets.
 
+    This may impact "256" and "512" sized tiles differently,
+    so it might be worth checking both sizes.
+
     NOTE: This only works with point features and will
     pass through non-point features untouched.
 
