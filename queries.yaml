@@ -1897,7 +1897,7 @@ post_process:
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
       # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
       # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
-      pixels_per_letter: 8
+      pixels_per_letter: 11
 
   # since we drop names in the previous step, we would like merge it again
   - fn: vectordatasource.transform.merge_line_features
