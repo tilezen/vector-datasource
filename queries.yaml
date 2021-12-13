@@ -286,7 +286,7 @@ layers:
   boundaries:
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 8
+    simplify_start: 0
     tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
