@@ -18,10 +18,11 @@ class AddHikingRoutes(FixtureTest):
     def test_steps(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/25292070'])
 
+        # we don't assert name feature because name has been dropped in
+        # https://github.com/tilezen/vector-datasource/pull/2031
         self.assert_has_feature(
             14, 2620, 6334, 'roads',
-            {'kind': 'path', 'kind_detail': 'steps',
-             'name': 'Esmeralda Ave.'})
+            {'kind': 'path', 'kind_detail': 'steps'})
 
     def test_footway(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/346093021'])
