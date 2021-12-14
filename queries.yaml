@@ -1186,6 +1186,7 @@ post_process:
         (kind_detail == 'tertiary_link' and zoom <  14) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
   - fn: vectordatasource.transform.drop_properties
@@ -1216,6 +1217,7 @@ post_process:
         (kind_detail == 'secondary_link' and zoom <  15) or
         (kind_detail == 'tertiary_link' and zoom <  15) or
         (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 14) or
         (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15) or
         (kind == 'ferry' and zoom < 15)
@@ -1238,6 +1240,7 @@ post_process:
         (kind == 'major_road' and zoom <  13) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 15) or
         (kind == 'rail' and zoom < 15)
 
   # drop these "detail" tags to get better merging at zoom < 16
@@ -1320,6 +1323,7 @@ post_process:
         - surface
       where: >-
         kind == 'minor_road' or
+        (kind == 'aeroway' and zoom < 12) or
         (kind == 'path' and zoom < 13)
 
   # drop to get better merging at mid zooms.
@@ -1772,7 +1776,9 @@ post_process:
         (kind_detail == 'secondary_link' and zoom < 15) or
         (kind_detail == 'tertiary_link' and zoom < 15) or
         (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 13) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 14)
 
   # drop osm_relation tag, used to indicate that shapes came from OSM relations.
@@ -1873,9 +1879,9 @@ post_process:
       merge_junctions: true
       merge_junction_angle: 5.0
       # setting the following will cause lines, or parts of multi-lines,
-      # shorter than 0.1px at nominal zoom to be dropped.
+      # shorter than 1px at nominal zoom to be dropped.
       drop_short_segments: true
-      drop_length_pixels: 0.1
+      drop_length_pixels: 1.0
       # integrated simplification step tolerance. NOTE: simplification is only
       # performed if junction merging is set to true! the idea is to simplify
       # away points at junctions where the road is straight, so it shouldn't
@@ -1891,9 +1897,9 @@ post_process:
       start_zoom: 15
       end_zoom: 16
       # setting the following will cause lines, or parts of multi-lines,
-      # shorter than 0.1px at nominal zoom to be dropped.
+      # shorter than 1px at nominal zoom to be dropped.
       drop_short_segments: true
-      drop_length_pixels: 0.1
+      drop_length_pixels: 1.0
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!
