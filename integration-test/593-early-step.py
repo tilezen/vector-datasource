@@ -31,7 +31,8 @@ class EarlyStep(FixtureTest):
             {'kind': 'path', 'kind_detail': 'steps',
              'name': 'Esmeralda Ave.'})
 
+        # we don't assert name feature because name has been dropped in
+        # https://github.com/tilezen/vector-datasource/pull/2031
         self.assert_has_feature(
             14, 2620, 6334, 'roads',
-            {'kind': 'path', 'kind_detail': 'steps',
-             'name': 'Esmeralda Ave.'})
+            {'kind': 'path', 'kind_detail': 'steps'})
