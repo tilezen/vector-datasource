@@ -27,7 +27,7 @@ class WaterLinesMergeTest(FixtureTest):
                 'name': 'foo',
                 'kind': 'river',
                 'label_placement': type(None),
-            }, 1)
+            }, 0)
 
         with self.features_in_tile_layer(z, x, y, 'water') as features:
             for f in features:
@@ -66,7 +66,7 @@ class WaterLinesMergeTest(FixtureTest):
                 'name': 'foo',
                 'kind': 'river',
                 'label_placement': type(None),
-            }, 1)
+            }, 0)
 
         with self.features_in_tile_layer(z, x, y, 'water') as features:
             for f in features:
@@ -106,11 +106,11 @@ class WaterLinesMergeTest(FixtureTest):
             z, x, y, 'water', {
                 'kind': 'river',
                 'label_placement': type(None),
-            }, 2)
+            }, 1)
 
         with self.features_in_tile_layer(z, x, y, 'water') as features:
             for f in features:
                 if 'label_placement' in f['properties']:
                     continue
-                assert f['geometry']['type'] == 'LineString'
+                assert f['geometry']['type'] == 'MultiLineString'
                 assert len(f['geometry']['coordinates']) == 2
