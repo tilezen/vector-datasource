@@ -6,6 +6,7 @@ shapefiles:
   # each entry supports the keys:
   #   - name: (required) this will be the postgresql table name
   #   - url: (required) where to fetch the data
+  #   - shapefile-name: name of shapefile inside zip, (defaults to basename of zipfile+'.shp')
   #   - prj: source projection (defaults to 4326)
   #   - tile: whether to tile the data source before importing
   #   - junk_dirs: yes/no. yes if the shapefile is found outside the root of the zip file. (default no)
