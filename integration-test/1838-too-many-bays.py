@@ -33,9 +33,9 @@ class BayTest(FixtureTest):
         )
 
         with self.features_in_tile_layer(z, x, y, 'water') as features:
-            # should only have top 2 features
-            self.assertEqual(2, len(features))
+            # should only have top 10 features
+            self.assertEqual(10, len(features))
 
             # check that they're in order
             ranks = [f['properties']['kind_tile_rank'] for f in features]
-            self.assertEqual(range(1, 3), ranks)
+            self.assertEqual(range(1, 11), ranks)
