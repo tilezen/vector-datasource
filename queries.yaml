@@ -806,6 +806,7 @@ post_process:
       all_name_variants: true
       properties:
         - name
+        - old_name
       where: >-
         (kind == 'sea' and zoom < 4) or
         (kind == 'bay' and zoom < 5) or
