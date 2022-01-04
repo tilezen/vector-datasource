@@ -25,7 +25,7 @@ class KeepNGriddedPlaces(FixtureTest):
         # We should thin out most of the data at zoom 8
         self.assert_n_matching_features(
             8, 227, 100, 'places',
-            {'kind': 'locality'}, 134)
+            {'kind': 'locality'}, 34)
 
         # Zoom 11 should have Tokyo
         self.assert_has_feature(
