@@ -2557,6 +2557,7 @@ def generate_address_points(ctx):
         # address points.
         label_properties = dict(
             addr_housenumber=addr_housenumber,
+            min_zoom=17,
             kind='address')
 
         source = properties.get('source')
@@ -3208,7 +3209,7 @@ def keep_n_features_gridded(ctx):
             if k.get('reverse'):
                 v *= -1
                 if v == '':
-                    raise ValueError("Cannot reverse string value %s" % props.get(k['sort_key']))
+                    raise ValueError('Cannot reverse string value %s' % props.get(k['sort_key']))
 
             values.append(v)
         return values

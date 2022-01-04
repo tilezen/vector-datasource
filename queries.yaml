@@ -794,6 +794,41 @@ post_process:
       where: >-
         kind == 'lake'
 
+  # remove names per kind for a given zoom
+  # before generating any label placements
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 16
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
+      where: >-
+        (kind == 'sea' and zoom < 4) or
+        (kind == 'bay' and zoom < 5) or
+        (kind == 'fjord' and zoom < 5) or
+        (kind == 'strait' and zoom < 5) or
+        (kind == 'lake' and zoom < 5) or
+        (kind == 'playa' and zoom < 6) or
+        (kind == 'reef' and zoom < 6) or
+        (kind == 'river' and zoom <  12) or
+        (kind == 'riverbank' and zoom <  12) or
+        (kind == 'water' and zoom <  12) or
+        (kind == 'canal' and zoom <  13) or
+        (kind == 'basin' and zoom <  13) or
+        (kind == 'dock' and zoom <  13) or
+        (kind == 'dam' and zoom <  14) or
+        (kind == 'stream' and zoom <  14) or
+        (kind == 'ditch' and zoom <  15) or
+        (kind == 'drain' and zoom <  15) or
+        (kind == 'swimming_pool' and zoom <  15) or
+        (kind == 'fountain' and zoom <  15) or
+        (properties is not None and properties.get('is_tunnel') is True)
+
   - fn: vectordatasource.transform.handle_label_placement
     params:
       layers:
@@ -822,22 +857,58 @@ post_process:
       # table.
       min_zoom: >-
         [min_zoom for min_zoom, area_threshold in [
-            (4,  40000000000),
-            (5,  10000000000),
-            (6,   5000000000),
-            (7,    400000000),
-            (8,    200000000),
-            (9,    100000000),
-            (10,    10000000),
-            (11,     4000000),
-            (12,      750000),
-            (13,      100000),
-            (14,       50000),
-            (15,       10000),
-            (16,        None),
+            (1, 1000000000000),
+            (2,  500000000000),
+            (3,  250000000000),
+            (4,  120000000000),
+            (5,   80000000000),
+            (6,   40000000000),
+            (7,   10000000000),
+            (8,     500000000),
+            (9,     200000000),
+            (10,     40000000),
+            (11,      8000000),
+            (12,      1000000),
+            (13,       500000),
+            (14,        50000),
+            (15,        10000),
+            (16,         None),
         ] if area >= area_threshold][0]
       where: >-
-        kind == 'lake' and label_placement
+        (properties is not None and properties.get('label_placement') is True)
+
+  # now that we have the label points
+  # drop most water properties at lower zooms
+  # this is for lines and polygons
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 15
+      geom_types: [LineString, MultiLineString, Polygon, MultiPolygon]
+      properties:
+        - id
+        - area
+        - boundary
+        - layer
+        - wikidata_id
+        - osm_relation
+        - kind_tile_rank
+
+  # now that we have the label points
+  # drop water names at lower zooms for polys only
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 15
+      geom_types: [Polygon, MultiPolygon]
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
@@ -1186,6 +1257,7 @@ post_process:
         (kind_detail == 'tertiary_link' and zoom <  14) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
   - fn: vectordatasource.transform.drop_properties
@@ -1216,6 +1288,7 @@ post_process:
         (kind_detail == 'secondary_link' and zoom <  15) or
         (kind_detail == 'tertiary_link' and zoom <  15) or
         (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 14) or
         (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15) or
         (kind == 'ferry' and zoom < 15)
@@ -1238,6 +1311,7 @@ post_process:
         (kind == 'major_road' and zoom <  13) or
         (kind == 'minor_road' and zoom < 15) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 15) or
         (kind == 'rail' and zoom < 15)
 
   # drop these "detail" tags to get better merging at zoom < 16
@@ -1320,6 +1394,7 @@ post_process:
         - surface
       where: >-
         kind == 'minor_road' or
+        (kind == 'aeroway' and zoom < 12) or
         (kind == 'path' and zoom < 13)
 
   # drop to get better merging at mid zooms.
@@ -1772,7 +1847,9 @@ post_process:
         (kind_detail == 'secondary_link' and zoom < 15) or
         (kind_detail == 'tertiary_link' and zoom < 15) or
         (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 13) or
         (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 14)
 
   # drop osm_relation tag, used to indicate that shapes came from OSM relations.
@@ -1873,6 +1950,38 @@ post_process:
       merge_junctions: true
       merge_junction_angle: 5.0
       # setting the following will cause lines, or parts of multi-lines,
+      # shorter than 1px at nominal zoom to be dropped.
+      drop_short_segments: true
+      drop_length_pixels: 1.0
+      # integrated simplification step tolerance. NOTE: simplification is only
+      # performed if junction merging is set to true! the idea is to simplify
+      # away points at junctions where the road is straight, so it shouldn't
+      # need to be a large tolerance.
+      simplify_tolerance: 1.0
+
+  # drop labels on roads which are too short to render.
+  - fn: vectordatasource.transform.drop_names_on_short_boundaries
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
+      # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
+      # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
+      # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
+      pixels_per_letter: 11
+
+  # since we drop names in the previous step, we would like merge it again
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 15
+      # setting the following will try to merge linestrings across junctions
+      # (i.e: more than 2 roads meeting at a point) where the angle between
+      # roads at that point is less than 5 degrees.
+      merge_junctions: true
+      merge_junction_angle: 5.0
+      # setting the following will cause lines, or parts of multi-lines,
       # shorter than 0.1px at nominal zoom to be dropped.
       drop_short_segments: true
       drop_length_pixels: 0.1
@@ -1891,9 +2000,9 @@ post_process:
       start_zoom: 15
       end_zoom: 16
       # setting the following will cause lines, or parts of multi-lines,
-      # shorter than 0.1px at nominal zoom to be dropped.
+      # shorter than 1px at nominal zoom to be dropped.
       drop_short_segments: true
-      drop_length_pixels: 0.1
+      drop_length_pixels: 1.0
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!

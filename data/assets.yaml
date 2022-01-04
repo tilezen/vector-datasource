@@ -1,13 +1,37 @@
 bucket: nextzen-tile-assets
-datestamp: 20211109
+datestamp: 20211216
 
 shapefiles:
 
-  # each entry suppors the keys:
+  # each entry supports the keys:
   #   - name: (required) this will be the postgresql table name
   #   - url: (required) where to fetch the data
+  #   - shapefile-name: name of shapefile inside zip, (defaults to basename of zipfile+'.shp')
   #   - prj: source projection (defaults to 4326)
   #   - tile: whether to tile the data source before importing
+  #   - junk_dirs: yes/no. yes if the shapefile is found outside the root of the zip file. (default no)
+
+  # TESTING PRE RELEASE NATURAL EARTH DATA
+  #
+  # Instead of restating the download link, use YAML named anchor syntax to declare the
+  # url with &ne_pre_release_url and reference it with *ne_pre_release_url
+  #
+  # When multiple shapefiles are in a single ZIP, you may need to include `junk_dirs: yes`
+  #
+  # For example:
+  #
+  # - name: ne_110m_lakes
+  #   shapefile-name: ne_110m_lakes.shp
+  #   url: &ne_pre_release_url http://naturalearth.s3.amazonaws.com/beta/v5.0.0-pre10-boundaries-pov-chinese-pops-hydro-admin-2021-11-08.zip
+  #   prj: 4326
+  #   junk_dirs: yes
+  #
+  # - name: ne_110m_admin_0_boundary_lines_land
+  #   shapefile-name: ne_110m_admin_0_boundary_lines_land.shp
+  #   url: *ne_pre_release_url
+  #   prj: 4326
+  #   junk_dirs: yes
+  #
 
   - name: water_polygons
     url: https://osmdata.openstreetmap.de/download/water-polygons-split-3857.zip
@@ -29,241 +53,100 @@ shapefiles:
 
   - name: admin_areas
     url: http://s3.amazonaws.com/tilezen-assets/curated/admin_areas_20180409.zip
-    prj: 4326
-    shapefile-name: admin_areas_20180409.shp
-
-  # TEMPORARY DISABLE TO PULL IN v5-PRE4 DATA
-  #
-  # - name: ne_110m_lakes
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
-  #   prj: 4326
-  #
-  # - name: ne_50m_lakes
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_lakes.zip
-  #   prj: 4326
-  #
-  # - name: ne_10m_lakes
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes.zip
-  #   prj: 4326
 
   - name: ne_110m_lakes
-    shapefile-name: ne_110m_lakes.shp
-    url: &ne_pre_release_url http://naturalearth.s3.amazonaws.com/beta/v5.0.0-pre10-boundaries-pov-chinese-pops-hydro-admin-2021-11-08.zip
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
 
   - name: ne_50m_lakes
-    shapefile-name: ne_50m_lakes.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_lakes.zip
 
   - name: ne_10m_lakes
-    shapefile-name: ne_10m_lakes.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes.zip
 
   - name: ne_110m_ocean
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_ocean.zip
-    prj: 4326
 
   - name: ne_50m_ocean
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_ocean.zip
-    prj: 4326
 
   - name: ne_10m_ocean
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_ocean.zip
-    prj: 4326
-
-  # TEMPORARY DISABLE TO PULL IN v5-PRE4 DATA
-  #
-  # - name: ne_50m_playas
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_playas.zip
-  #   prj: 4326
-  #
-  # - name: ne_10m_playas
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_playas.zip
-  #   prj: 4326
 
   - name: ne_50m_playas
-    shapefile-name: ne_50m_playas.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_playas.zip
 
   - name: ne_10m_playas
-    shapefile-name: ne_10m_playas.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_playas.zip
 
   - name: ne_50m_urban_areas
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_urban_areas.zip
-    prj: 4326
 
   - name: ne_10m_urban_areas
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_urban_areas.zip
-    prj: 4326
 
   - name: ne_110m_land
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_land.zip
-    prj: 4326
 
   - name: ne_50m_land
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_land.zip
-    prj: 4326
 
   - name: ne_10m_land
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_land.zip
-    prj: 4326
     tile: true
 
-  # TEMPORARY DISABLE TO PULL IN v5-PRE4 DATA
-  #
-  # - name: ne_10m_populated_places
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places.zip
-  #   prj: 4326
-  #
-  # - name: ne_110m_admin_0_boundary_lines_land
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
-  #   prj: 4326
-  #
-  # - name: ne_50m_admin_0_boundary_lines_land
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip
-  #   prj: 4326
-  #
-  #- name: ne_10m_admin_0_boundary_lines_land
-  #  url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
-  #  prj: 4326
-  #
-  #- name: ne_10m_admin_0_boundary_lines_map_units
-  #  url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip
-  #  prj: 4326
-  #
-  # - name: ne_50m_admin_1_states_provinces_lines
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
-  #   prj: 4326
-  #   shapefile-name: ne_50m_admin_1_states_provinces_lines.shp
-
-  # - name: ne_10m_admin_1_states_provinces_lines
-  #   url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
-  #   prj: 4326
-
   - name: ne_10m_populated_places
-    shapefile-name: ne_10m_populated_places.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places.zip
 
   - name: ne_110m_admin_0_boundary_lines_land
-    shapefile-name: ne_110m_admin_0_boundary_lines_land.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
 
   - name: ne_50m_admin_0_boundary_lines_land
-    shapefile-name: ne_50m_admin_0_boundary_lines_land.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
-
-  - name: ne_50m_admin_0_boundary_lines_disputed_areas
-    shapefile-name: ne_50m_admin_0_boundary_lines_disputed_areas.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
-
-  - name: ne_50m_admin_0_boundary_lines_maritime_indicator_chn
-    shapefile-name: ne_50m_admin_0_boundary_lines_maritime_indicator_chn.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
-
-  - name: ne_10m_admin_0_boundary_lines_disputed_areas
-    shapefile-name: ne_10m_admin_0_boundary_lines_disputed_areas.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
-
-  - name: ne_10m_admin_0_boundary_lines_maritime_indicator_chn
-    shapefile-name: ne_10m_admin_0_boundary_lines_maritime_indicator_chn.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip
 
   - name: ne_10m_admin_0_boundary_lines_land
-    shapefile-name: ne_10m_admin_0_boundary_lines_land.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
 
   - name: ne_10m_admin_0_boundary_lines_map_units
-    shapefile-name: ne_10m_admin_0_boundary_lines_map_units.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip
 
   - name: ne_50m_admin_1_states_provinces_lines
-    shapefile-name: ne_50m_admin_1_states_provinces_lines.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
 
   - name: ne_10m_admin_1_states_provinces_lines
-    shapefile-name: ne_10m_admin_1_states_provinces_lines.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
+
+  - name: ne_50m_admin_0_boundary_lines_disputed_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_disputed_areas.zip
+
+  - name: ne_50m_admin_0_boundary_lines_maritime_indicator_chn
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_maritime_indicator_chn.zip
+
+  - name: ne_10m_admin_0_boundary_lines_disputed_areas
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_disputed_areas.zip
+
+  - name: ne_10m_admin_0_boundary_lines_maritime_indicator_chn
+    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_maritime_indicator_chn.zip
 
   - name: ne_10m_roads
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_roads.zip
-    prj: 4326
 
   - name: ne_110m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_coastline.zip
-    prj: 4326
 
   - name: ne_50m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_coastline.zip
-    prj: 43267
 
   - name: ne_10m_coastline
     url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
-    prj: 43267
-
-  # TEMPORARY DISABLE TO PULL IN v5-PRE4 DATA
-  #
-  # - name: ne_10m_admin_0_countries
-  #   url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
-  #   prj: 4326
-  #
-  # - name: ne_10m_admin_0_map_units
-  #   url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_map_units.zip
-  #   prj: 4326
-  #
-  # - name: ne_10m_admin_1_states_provinces
-  #   url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip
-  #   prj: 4326
 
   - name: ne_10m_admin_0_countries
-    shapefile-name: ne_10m_admin_0_countries.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
 
   - name: ne_10m_admin_0_map_units
-    shapefile-name: ne_10m_admin_0_map_units.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_map_units.zip
 
   - name: ne_10m_admin_1_states_provinces
-    shapefile-name: ne_10m_admin_1_states_provinces.shp
-    url: *ne_pre_release_url
-    prj: 4326
-    junk_dirs: yes
-
+    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip
 
 wikidata-queries:
   - name: aerodrome_passenger_count

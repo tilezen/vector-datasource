@@ -43,7 +43,6 @@ class WaterLayerTooBigTest(FixtureTest):
             self.assert_has_feature(
                 zoom, coord, coord, 'water', {
                     'kind': 'water',
-                    'name': 'Foo',
                 })
 
             # smaller shape should drop it

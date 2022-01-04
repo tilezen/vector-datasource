@@ -25,9 +25,15 @@ globals:
       key: { col: way_area }
       op: '>='
       table:
-        # OSM data starts at z8, but we should include some stuff at z7 so that
+        # OSM data starts at z8, but we should include some stuff at earlier so
         # the transition doesn't have a gap in it.
-        - [ 7,   160000000 ]
+        - [ 1, 20000000000 ]
+        - [ 2, 10000000000 ]
+        - [ 3,  5000000000 ]
+        - [ 4,  2000000000 ]
+        - [ 5,   500000000 ]
+        - [ 6,   200000000 ]
+        - [ 7,    50000000 ]
         - [ 8,    20000000 ]
         - [ 9,     5000000 ]
         - [ 10,    1000000 ]
