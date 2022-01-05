@@ -1052,7 +1052,7 @@ post_process:
       end_zoom: 9
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 24
+      grid_width: 12
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
@@ -1065,7 +1065,7 @@ post_process:
       end_zoom: 11
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 48
+      grid_width: 24
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
@@ -1078,7 +1078,7 @@ post_process:
       end_zoom: 13
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 96
+      grid_width: 48
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
