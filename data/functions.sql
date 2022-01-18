@@ -1021,12 +1021,20 @@ BEGIN
       WHERE mu.wikidataid = wikidata_id;
   END IF;
 
-  -- finally, try states and provinces
+  -- try states and provinces
   IF NOT FOUND THEN
     SELECT
       min_label, max_label INTO min_zoom, max_zoom
       FROM ne_10m_admin_1_states_provinces sp
       WHERE sp.wikidataid = wikidata_id;
+  END IF;
+
+  -- finally, try localities
+  IF NOT FOUND THEN
+    SELECT
+      rank_min, rank_max INTO min_zoom, max_zoom
+      FROM ne_10m_populated_places pp
+      WHERE pp.wikidataid = wikidata_id
   END IF;
 
   -- return an empty JSONB rather than null, so that it can be safely
