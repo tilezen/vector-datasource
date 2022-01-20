@@ -86,11 +86,15 @@ filters:
       kind_detail:
         case:
           # existing Tilezen kinds
-          - when: { water: [basin, canal, ditch, drain, lake, reservoir, river, stream] }
+          - when: { water: [basin, canal, ditch, drain, lake, river, stream] }
             then: { col: water }
           # other common OSM water values that we'd expect to map to Tilezen lake value
-          - when: { water: [oxbow, pond, lagoon, wastewater] }
+          - when: { water: [lagoon, oxbow, pond, reservoir, wastewater] }
             then: { lake }
+      reservoir:
+        case:
+          - when: { water: [reservoir] }
+            then: true
     table: osm
   - filter: {natural: bay}
     min_zoom: *water_standard_min_zoom
