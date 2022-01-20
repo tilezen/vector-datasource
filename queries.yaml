@@ -813,11 +813,11 @@ post_process:
         (kind == 'fjord' and zoom < 5) or
         (kind == 'strait' and zoom < 5) or
         (kind == 'lake' and zoom < 5) or
+        (kind == 'water' and zoom <  5) or
         (kind == 'playa' and zoom < 6) or
         (kind == 'reef' and zoom < 6) or
         (kind == 'river' and zoom <  12) or
         (kind == 'riverbank' and zoom <  12) or
-        (kind == 'water' and zoom <  12) or
         (kind == 'canal' and zoom <  13) or
         (kind == 'basin' and zoom <  13) or
         (kind == 'dock' and zoom <  13) or
