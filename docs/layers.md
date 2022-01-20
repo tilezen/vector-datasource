@@ -2524,6 +2524,6 @@ The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_
 
 **Gotchas:**
 
-* `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
+* `lake` features with `alkaline: true` and `playa` features are sourced from Natural Earth at low zooms and are sparesly populated at high zooms from OpenStreetMap. Zooming in, your feature may disappear (when there is no equivalent in OpenStreetMap), or the feature may still exist as a water or lake polygon but without the alkaline indicator. Beware the desert around Great Salt Lake in Utah!
 * `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984). However, kind_detail value is available._
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from osmdata.openstreetmap.de.
