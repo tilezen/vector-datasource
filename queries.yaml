@@ -819,6 +819,7 @@ post_process:
         (kind == 'river' and zoom <  12) or
         (kind_detail == 'river' and zoom <  12) or
         (kind == 'riverbank' and zoom <  12) or
+        (kind == 'water' and kind_detail is None and zoom <  12) or
         (kind == 'canal' and zoom <  13) or
         (kind_detail == 'canal' and zoom <  13) or
         (kind == 'basin' and zoom <  13) or
@@ -831,7 +832,6 @@ post_process:
         (kind_detail == 'ditch' and zoom <  15) or
         (kind == 'drain' and zoom <  15) or
         (kind_detail == 'drain' and zoom <  15) or
-        (kind == 'water' and kind_detail is None and zoom <  15) or
         (kind == 'swimming_pool' and zoom <  15) or
         (kind == 'fountain' and zoom <  15) or
         (properties is not None and properties.get('is_tunnel') is True)
