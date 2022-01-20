@@ -2508,7 +2508,7 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 
 #### Water `kind_detail` values:
 
-When ``water` polygons are sourced from OpenStreetMap, we add `kind_detail` values in an allowlist.
+When `water` polygons are sourced from OpenStreetMap, we add `kind_detail` values in an allowlist.
 
 * `basin`
 * `canal`
