@@ -95,6 +95,10 @@ filters:
         case:
           - when: { water: [reservoir] }
             then: true
+      alkaline:
+        case:
+          - when: { water: [lagoon, salt, salt_pool] }
+            then: true
     table: osm
   - filter: {natural: bay}
     min_zoom: *water_standard_min_zoom
