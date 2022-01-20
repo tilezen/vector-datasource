@@ -807,24 +807,32 @@ post_process:
       properties:
         - name
         - old_name
-      where: >-
+      where: >-          
         (kind == 'sea' and zoom < 4) or
         (kind == 'bay' and zoom < 5) or
         (kind == 'fjord' and zoom < 5) or
         (kind == 'strait' and zoom < 5) or
         (kind == 'lake' and zoom < 5) or
-        (kind == 'water' and zoom <  5) or
+        (kind_detail == 'lake' and zoom < 5) or
+        (kind_detail == 'reservoir' and zoom < 5) or
         (kind == 'playa' and zoom < 6) or
         (kind == 'reef' and zoom < 6) or
         (kind == 'river' and zoom <  12) or
+        (kind_detail == 'river' and zoom <  12) or
         (kind == 'riverbank' and zoom <  12) or
         (kind == 'canal' and zoom <  13) or
+        (kind_detail == 'canal' and zoom <  13) or
         (kind == 'basin' and zoom <  13) or
+        (kind_detail == 'basin' and zoom <  13) or
         (kind == 'dock' and zoom <  13) or
         (kind == 'dam' and zoom <  14) or
         (kind == 'stream' and zoom <  14) or
+        (kind_detail == 'stream' and zoom <  14) or
         (kind == 'ditch' and zoom <  15) or
+        (kind_detail == 'ditch' and zoom <  15) or
         (kind == 'drain' and zoom <  15) or
+        (kind_detail == 'drain' and zoom <  15) or
+        (kind == 'water' and kind_detail is None and zoom <  15) or
         (kind == 'swimming_pool' and zoom <  15) or
         (kind == 'fountain' and zoom <  15) or
         (properties is not None and properties.get('is_tunnel') is True)
