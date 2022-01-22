@@ -2,21 +2,25 @@ local srid = 3857
 local keep_coastlines = false
 local prefix = 'planet_osm'
 local multi_geometry = false
-local hstore = true
-local hstore_all = false
+local hstore = false
+local hstore_all = true
 local hstore_match_only = false
 local hstore_column = nil
 local enable_legacy_route_processing = false
+
 -- ---------------------------------------------------------------------------
+
 if hstore and hstore_all then
     error("hstore and hstore_all can't be both true")
 end
+
 -- Used for splitting up long linestrings
 if srid == 4326 then
     max_length = 1
 else
     max_length = 100000
 end
+
 -- Ways with any of the following keys will be treated as polygon
 local polygon_keys = {
     'aeroway',
@@ -46,6 +50,7 @@ local polygon_keys = {
     'abandoned:power',
     'area:highway'
 }
+
 -- Objects without any of the following keys will be deleted
 local generic_keys = {
     'access',
@@ -122,6 +127,7 @@ local generic_keys = {
     'abandoned:power',
     'area:highway'
 }
+
 -- The following keys will be deleted
 local delete_keys = {
     'attribution',
@@ -139,19 +145,26 @@ local delete_keys = {
     'way_area',
     'z_order',
 }
+
 local point_columns = {
 }
+
 local non_point_columns = {
 }
+
 function gen_columns(text_columns, with_hstore, area, geometry_type)
     columns = {}
+
     local add_column = function (name, type)
         columns[#columns + 1] = { column = name, type = type }
     end
+
     for _, c in ipairs(text_columns) do
         add_column(c, 'text')
     end
+
     add_column('z_order', 'int')
+
     if area ~= nil then
         if area then
             add_column('way_area', 'area')
@@ -159,37 +172,47 @@ function gen_columns(text_columns, with_hstore, area, geometry_type)
             add_column('way_area', 'real')
         end
     end
+
     if hstore_column then
         add_column(hstore_column, 'hstore')
     end
+
     if with_hstore then
         add_column('tags', 'hstore')
     end
+
     add_column('way', geometry_type)
     columns[#columns].projection = srid
+
     return columns
 end
+
 local tables = {}
+
 tables.point = osm2pgsql.define_table{
     name = prefix .. '_point',
     ids = { type = 'node', id_column = 'osm_id' },
     columns = gen_columns(point_columns, hstore or hstore_all, nil, 'point')
 }
+
 tables.line = osm2pgsql.define_table{
     name = prefix .. '_line',
     ids = { type = 'way', id_column = 'osm_id' },
     columns = gen_columns(non_point_columns, hstore or hstore_all, false, 'linestring')
 }
+
 tables.polygon = osm2pgsql.define_table{
     name = prefix .. '_polygon',
     ids = { type = 'area', id_column = 'osm_id' },
     columns = gen_columns(non_point_columns, hstore or hstore_all, true, 'geometry')
 }
+
 tables.roads = osm2pgsql.define_table{
     name = prefix .. '_roads',
     ids = { type = 'way', id_column = 'osm_id' },
     columns = gen_columns(non_point_columns, hstore or hstore_all, false, 'linestring')
 }
+
 local z_order_lookup = {
     proposed = {1, false},
     construction = {2, false},
@@ -200,11 +223,13 @@ local z_order_lookup = {
     path = {10, false},
     track = {11, false},
     service = {15, false},
+
     tertiary_link = {24, false},
     secondary_link = {25, true},
     primary_link = {27, true},
     trunk_link = {28, true},
     motorway_link = {29, true},
+
     raceway = {30, false},
     pedestrian = {31, false},
     living_street = {32, false},
@@ -217,33 +242,42 @@ local z_order_lookup = {
     trunk = {38, true},
     motorway = {39, true}
 }
+
 function as_bool(value)
     return value == 'yes' or value == 'true' or value == '1'
 end
+
 function get_z_order(tags)
     local z_order = 100 * math.floor(tonumber(tags.layer or '0') or 0)
     local roads = false
+
     local highway = tags['highway']
     if highway then
         local r = z_order_lookup[highway] or {0, false}
         z_order = z_order + r[1]
         roads = r[2]
     end
+
     if tags.railway then
         z_order = z_order + 35
         roads = true
     end
+
     if tags.boundary and tags.boundary == 'administrative' then
         roads = true
     end
+
     if as_bool(tags.bridge) then
         z_order = z_order + 100
     end
+
     if as_bool(tags.tunnel) then
         z_order = z_order - 100
     end
+
     return z_order, roads
 end
+
 function make_check_in_list_func(list)
     local h = {}
     for _, k in ipairs(list) do
@@ -258,33 +292,41 @@ function make_check_in_list_func(list)
         return false
     end
 end
+
 local is_polygon = make_check_in_list_func(polygon_keys)
 local clean_tags = osm2pgsql.make_clean_tags_func(delete_keys)
+
 function make_column_hash(columns)
     local h = {}
+
     for _, k in ipairs(columns) do
         h[k] = true
     end
+
     return h
 end
+
 function make_get_output(columns, hstore_all)
     local h = make_column_hash(columns)
     if hstore_all then
         return function(tags)
             local output = {}
             local hstore_entries = {}
+
             for k, _ in pairs(tags) do
                 if h[k] then
                     output[k] = tags[k]
                 end
                 hstore_entries[k] = tags[k]
             end
+
             return output, hstore_entries
         end
     else
         return function(tags)
             local output = {}
             local hstore_entries = {}
+
             for k, _ in pairs(tags) do
                 if h[k] then
                     output[k] = tags[k]
@@ -292,13 +334,17 @@ function make_get_output(columns, hstore_all)
                     hstore_entries[k] = tags[k]
                 end
             end
+
             return output, hstore_entries
         end
     end
 end
+
 local has_generic_tag = make_check_in_list_func(generic_keys)
+
 local get_point_output = make_get_output(point_columns, hstore_all)
 local get_non_point_output = make_get_output(non_point_columns, hstore_all)
+
 function get_hstore_column(tags)
     local len = #hstore_column
     local h = {}
@@ -307,15 +353,18 @@ function get_hstore_column(tags)
             h[k:sub(len + 1)] = v
         end
     end
+
     if next(h) then
         return h
     end
     return nil
 end
+
 function osm2pgsql.process_node(object)
     if clean_tags(object.tags) then
         return
     end
+
     local output
     local output_hstore = {}
     if hstore or hstore_all then
@@ -332,16 +381,21 @@ function osm2pgsql.process_node(object)
             return
         end
     end
+
     output.tags = output_hstore
+
     if hstore_column then
         output[hstore_column] = get_hstore_column(object.tags)
     end
+
     tables.point:add_row(output)
 end
+
 function osm2pgsql.process_way(object)
     if clean_tags(object.tags) then
         return
     end
+
     local add_area = false
     if object.tags.natural == 'coastline' then
         add_area = true
@@ -349,6 +403,7 @@ function osm2pgsql.process_way(object)
             object.tags.natural = nil
         end
     end
+
     local output
     local output_hstore = {}
     if hstore or hstore_all then
@@ -368,6 +423,7 @@ function osm2pgsql.process_way(object)
             return
         end
     end
+
     local polygon
     local area_tag = object.tags.area
     if area_tag == 'yes' or area_tag == '1' or area_tag == 'true' then
@@ -377,16 +433,21 @@ function osm2pgsql.process_way(object)
     else
         polygon = is_polygon(object.tags)
     end
+
     if add_area then
         output.area = 'yes'
         polygon = true
     end
+
     local z_order, roads = get_z_order(object.tags)
     output.z_order = z_order
+
     output.tags = output_hstore
+
     if hstore_column then
         output[hstore_column] = get_hstore_column(object.tags)
     end
+
     if polygon and object.is_closed then
         output.way = { create = 'area' }
         tables.polygon:add_row(output)
@@ -398,15 +459,18 @@ function osm2pgsql.process_way(object)
         end
     end
 end
+
 function osm2pgsql.process_relation(object)
     if clean_tags(object.tags) then
         return
     end
+
     local type = object.tags.type
     if (type ~= 'route') and (type ~= 'multipolygon') and (type ~= 'boundary') and (type ~= 'linestring') then
         return
     end
     object.tags.type = nil
+
     local output
     local output_hstore = {}
     if hstore or hstore_all then
@@ -423,17 +487,21 @@ function osm2pgsql.process_relation(object)
             return
         end
     end
+
     if not next(output) and not next(output_hstore) then
         return
     end
+
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
         if not object.tags.route_name then
             output_hstore.route_name = object.tags.name
         end
+
         local state = object.tags.state
         if state ~= 'alternate' and state ~= 'connection' then
             state = 'yes'
         end
+
         local network = object.tags.network
         if network == 'lcn' then
             output_hstore.lcn = output_hstore.lcn or state
@@ -454,6 +522,7 @@ function osm2pgsql.process_relation(object)
             output_hstore.nwn = output_hstore.nwn or state
             output_hstore.nwn_ref = output_hstore.nwn_ref or object.tags.ref
         end
+
         local pc = object.tags.preferred_color
         if pc == '0' or pc == '1' or pc == '2' or pc == '3' or pc == '4' then
             output_hstore.route_pref_color = pc
@@ -461,6 +530,7 @@ function osm2pgsql.process_relation(object)
             output_hstore.route_pref_color = '0'
         end
     end
+
     local make_boundary = false
     local make_polygon = false
     if type == 'boundary' then
@@ -470,12 +540,16 @@ function osm2pgsql.process_relation(object)
     elseif type == 'multipolygon' then
         make_polygon = true
     end
+
     local z_order, roads = get_z_order(object.tags)
     output.z_order = z_order
+
     output.tags = output_hstore
+
     if hstore_column then
         output[hstore_column] = get_hstore_column(object.tags)
     end
+
     if not make_polygon then
         output.way = { create = 'line', split_at = max_length }
         tables.line:add_row(output)
@@ -483,6 +557,7 @@ function osm2pgsql.process_relation(object)
             tables.roads:add_row(output)
         end
     end
+
     if make_boundary or make_polygon then
         output.way = { create = 'area' }
         if not multi_geometry then
