@@ -165,6 +165,7 @@ filters:
       <<: *output_properties
       kind: mz_internal_dispute_mask
       disputed_by: {col: disputed_by}
+      dispute: 'yes'
     table: osm
 
   # osm
