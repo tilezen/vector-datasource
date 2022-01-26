@@ -1050,6 +1050,36 @@ BEGIN
 END
 $$ LANGUAGE plpgsql STABLE;
 
+
+-- returns a JSONB object containing __ne_pop_min and __ne_pop_max
+CREATE OR REPLACE FUNCTION tz_get_ne_min_max_pop(wikidata_id TEXT)
+RETURNS JSONB AS $$
+DECLARE
+  pop_min REAL;
+  pop_max REAL;
+BEGIN
+  IF wikidata_id IS NULL THEN
+    RETURN '{}'::jsonb;
+  END IF;
+
+  SELECT
+    pop_min, pop_max INTO pop_min, pop_max
+    FROM ne_10m_populated_places pp
+    WHERE pp.wikidataid = wikidata_id;
+
+  -- return an empty JSONB rather than null, so that it can be safely
+  -- concatenated with whatever other JSONB rather than needing a check for
+  -- null.
+  IF NOT FOUND THEN
+    RETURN '{}'::jsonb;
+  END IF;
+  RETURN jsonb_build_object(
+    '__ne_pop_min', pop_min,
+    '__ne_pop_max', pop_max
+  );
+END
+$$ LANGUAGE plpgsql STABLE;
+
 -- return the min zoom for a node that looks like a service area.
 CREATE OR REPLACE FUNCTION tz_looks_like_service_area(name TEXT)
 RETURNS INTEGER AS $$
