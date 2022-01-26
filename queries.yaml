@@ -1052,7 +1052,7 @@ post_process:
       end_zoom: 9
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 24
+      grid_width: 52181.0113
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
@@ -1062,10 +1062,23 @@ post_process:
     params:
       source_layer: places
       start_zoom: 9
+      end_zoom: 10
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width: 26090.5056
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 10
       end_zoom: 11
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 24
+      grid_width: 13045.2528
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
@@ -1075,10 +1088,23 @@ post_process:
     params:
       source_layer: places
       start_zoom: 11
+      end_zoom: 12
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width: 6522.1264
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 12
       end_zoom: 13
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 48
+      grid_width: 3261.0632
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
