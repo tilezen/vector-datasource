@@ -33,6 +33,15 @@ class OSMNEJoinTest(FixtureTest):
                 'population': 864816,
                 'population_rank': 15
             })
+        # __ne_pop_max shouldn't appear in the final result
+        self.assert_no_matching_feature(
+            z, x, y, 'places', {
+                'id': 26819236,
+                'kind': 'locality',
+                'kind_detail': 'city',
+                'wikidata_id': 'Q62',
+                '__ne_pop_max': 20000000,
+            })
 
     def test_ne_pop_min_override_estimate(self):
         z, x, y = (16, 10482, 25330)
@@ -64,6 +73,16 @@ class OSMNEJoinTest(FixtureTest):
                 'population_rank': 16
             })
 
+        # __ne_pop_min shouldn't appear in the final result
+        self.assert_no_matching_feature(
+            z, x, y, 'places', {
+                'id': 26819236,
+                'kind': 'locality',
+                'kind_detail': 'city',
+                'wikidata_id': 'Q62',
+                '__ne_pop_min': 50000000,
+            })
+
     def test_ne_pop_max_override_estimate_pop_rank(self):
         z, x, y = (16, 10482, 25330)
         self.generate_fixtures(
@@ -91,6 +110,15 @@ class OSMNEJoinTest(FixtureTest):
                 'wikidata_id': 'Q62',
                 'population': 10000,
                 'population_rank': 15
+            })
+        # __ne_pop_max shouldn't appear in the final result
+        self.assert_no_matching_feature(
+            z, x, y, 'places', {
+                'id': 26819236,
+                'kind': 'locality',
+                'kind_detail': 'city',
+                'wikidata_id': 'Q62',
+                '__ne_pop_max': 20000000,
             })
 
     # test that the min_zoom is overridden by __ne_min_zoom
@@ -120,4 +148,14 @@ class OSMNEJoinTest(FixtureTest):
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
                 'min_zoom': 10,
+            })
+
+        # __ne_min_zoom shouldn't appear in the final result
+        self.assert_no_matching_feature(
+            z, x, y, 'places', {
+                'id': 26819236,
+                'kind': 'locality',
+                'kind_detail': 'city',
+                'wikidata_id': 'Q62',
+                '__ne_min_zoom': 10,
             })

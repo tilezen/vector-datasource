@@ -8828,6 +8828,23 @@ def min_zoom_filter(ctx):
 
 
 def tags_set_ne_pop_min_max_default(ctx):
+    """
+    The data may potentially a join result of OSM and NE so there are different
+    scenarios when we populate the population and population_rank fields.
+
+    population:
+    (1) if the data has population from OSM use it as is
+    (2) if the data has no population from OSM, use __ne_pop_min to back-fill
+    (3) if the data has no population from OSM and no __ne_pop_min from NE
+    either(no OSM<>NE join or NE just don't have non-nil __ne_pop_min value),
+    then use the estimate value to back-fill based its kind_detail
+
+    population_rank:
+    (1) if the data has __ne_pop_max, use it to calculate population_rank
+    (2) if the data doesn't have __ne_pop_max(no OSM<>NE join or NE just don't
+    have non-nil __ne_pop_max value) use the population value determined by the
+    above procedure to calculate it.
+    """
     params = _Params(ctx, 'tags_set_ne_pop_min_max')
     layer_name = params.required('layer')
     layer = _find_layer(ctx.feature_layers, layer_name)
@@ -8836,16 +8853,14 @@ def tags_set_ne_pop_min_max_default(ctx):
         __ne_pop_min = props.pop('__ne_pop_min', None)
         __ne_pop_max = props.pop('__ne_pop_max', None)
 
-        print('peiti!!!!!!!!!!!!!!!!')
-        print(type(__ne_pop_min))
-        print(type(__ne_pop_max))
-
         population = props.get('population')
+
         if population is None:
             population = __ne_pop_min
         if population is None:
             kind = props.get('kind')
             kind_detail = props.get('kind_detail')
+            # the following are estimate population for each kind_detail
             if kind == 'locality':
                 if kind_detail == 'city':
                     population = 10000
