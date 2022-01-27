@@ -1052,7 +1052,7 @@ $$ LANGUAGE plpgsql STABLE;
 
 
 -- returns a JSONB object containing __ne_pop_min and __ne_pop_max
-CREATE OR REPLACE FUNCTION tz_get_ne_min_max_pop(wikidata_id TEXT)
+CREATE OR REPLACE FUNCTION tz_get_ne_pop_min_max(wikidata_id TEXT)
 RETURNS JSONB AS $$
 DECLARE
   pop_min REAL;

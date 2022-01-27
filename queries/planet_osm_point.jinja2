@@ -8,6 +8,7 @@ SELECT
     'source', 'openstreetmap.org'
   ) AS __properties__,
 
+  {# The `CASE WHEN mz_xxx_min_zoom IS NOT NULL` here is used to indicate whether the current row is from a particular layer #}
   CASE WHEN mz_building_min_zoom IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_building_min_zoom,
@@ -27,6 +28,8 @@ SELECT
       'min_zoom', mz_places_min_zoom
     ) ||
       tz_get_ne_min_max_zoom(tags->'wikidata')
+      ||
+      tz_get_ne_pop_min_max(tags->'wikidata')
   END AS __places_properties__,
 
   CASE WHEN mz_poi_min_zoom IS NOT NULL

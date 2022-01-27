@@ -1,7 +1,6 @@
 global:
   - &ne_country_capital [Admin-0 capital, Admin-0 capital alt, Admin-0 region capital]
   - &ne_region_capital [Admin-1 capital, Admin-1 region capital]
-
   - &output_properties
     name: {col: name}
     source: {col: source}
@@ -135,18 +134,18 @@ filters:
     # which doesn't match an NE curated one.
     min_zoom: 3
     output:
-      <<: *output_properties
+      <<: [*output_properties, *ne_zooms]
       kind: region
       kind_detail: province
-      __ne_min_zoom: {col: __ne_min_zoom}
-      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
-  - filter: {name: true, population: true, place: [city, town]}
+  - filter: {name: true, place: [city, town]}
     min_zoom: 8
     output:
       <<: [*output_properties, *alternate_fclass, *ne_zooms]
       kind: locality
       kind_detail: {col: place}
+      __ne_pop_min: { col: __ne_pop_min } # pop_min(population min) from NaturalEarth
+      __ne_pop_max: { col: __ne_pop_max } # pop_max(population max) from NaturalEarth
     table: osm
   - filter: {name: true, place: city}
     min_zoom: 9
