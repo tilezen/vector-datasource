@@ -18,7 +18,7 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
-                '__ne_pop_max': u'1000000000'
+                '__ne_pop_max': u'20000000'
             }),
         )
 
@@ -31,7 +31,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
                 'population': 864816,
-                'population_rank': 18
+                'population_rank': 15
             })
 
     def test_ne_pop_min_override_estimate(self):
@@ -76,7 +76,7 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
-                '__ne_pop_max': u'1000000000'
+                '__ne_pop_max': u'20000000'
             }),
         )
 
@@ -90,7 +90,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
                 'population': 10000,
-                'population_rank': 18
+                'population_rank': 15
             })
 
     # test that the min_zoom is overridden by __ne_min_zoom

@@ -411,6 +411,11 @@ def place_population_int(shape, properties, fid, zoom):
 
 
 def _calculate_population_rank(population):
+    population = to_float(population)
+    if population is None:
+        population = 0
+    else:
+        population = int(population)
     pop_breaks = [
         1000000000,
         100000000,
@@ -8830,6 +8835,11 @@ def tags_set_ne_pop_min_max_default(ctx):
     for _, props, _ in layer['features']:
         __ne_pop_min = props.pop('__ne_pop_min', None)
         __ne_pop_max = props.pop('__ne_pop_max', None)
+
+        print('peiti!!!!!!!!!!!!!!!!')
+        print(type(__ne_pop_min))
+        print(type(__ne_pop_max))
+
         population = props.get('population')
         if population is None:
             population = __ne_pop_min
