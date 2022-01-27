@@ -94,8 +94,8 @@ class PopulationRankTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'places', {
-                'population': type(None),
-                'population_rank': 0,
+                'population': 10000,  # from hardcode estimate for city
+                'population_rank': 6,
             })
 
     def _rank_for_pop(self, population, capital=None):
