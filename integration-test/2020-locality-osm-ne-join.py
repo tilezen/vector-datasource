@@ -78,16 +78,18 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
+                '__ne_min_zoom': 10,
             }),
         )
 
         # without __ne_min_zoom, the min_zoom should be 8 which is from the
-        # yaml/places.yaml file
+        # https://github.com/tilezen/vector-datasource/blob/80799e74e0283a96b520c6fea8fa00455095e09b/yaml/places.yaml#L145
+        # but with __ne_min_zoom override, it is 10
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 26819236,
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                'min_zoom': 8,
+                'min_zoom': 10,
             })
