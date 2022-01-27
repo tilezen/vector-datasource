@@ -407,29 +407,10 @@ def place_population_int(shape, properties, fid, zoom):
     population = to_float(population_str)
     if population is not None:
         properties['population'] = int(population)
-    else:
-        # when there is a join of NE and OSM data, we use NE population to
-        # back-fill OSM population if OSM population is empty
-        ne_pop_min_str = properties.get('__ne_pop_min')
-        ne_pop_min_float = to_float(ne_pop_min_str)
-        if ne_pop_min_float is not None:
-            properties['population'] = int(ne_pop_min_float)
     return shape, properties, fid
 
 
-def population_rank(shape, properties, fid, zoom):
-    # note the value of properties.get('population') might be from NE
-    # because of the back-fill logic in a previous step `place_population_int`
-    population = properties.get('population')
-    # when there is a join of NE and OSM data, we prefer to use the NE pop_max
-    # value to calculate the population_rank, thus overriding here
-
-    ne_pop_max_str = properties.get('__ne_pop_max')
-
-    ne_pop_max_float = to_float(ne_pop_max_str)
-    if ne_pop_max_float is not None:
-        population = int(ne_pop_max_float)
-
+def _calculate_population_rank(population):
     pop_breaks = [
         1000000000,
         100000000,
@@ -456,8 +437,12 @@ def population_rank(shape, properties, fid, zoom):
             break
     else:
         rank = 0
+    return rank
 
-    properties['population_rank'] = rank
+
+def population_rank(shape, properties, fid, zoom):
+    population = properties.get('population')
+    properties['population_rank'] = _calculate_population_rank(population)
     return (shape, properties, fid)
 
 
@@ -8837,14 +8822,45 @@ def min_zoom_filter(ctx):
     return None
 
 
-# def tags_set_ne_pop_min_max(ctx):
-#     params = _Params(ctx, 'tags_set_ne_pop_min_max')
-#     layer_name = params.required('layer')
-#     layer = _find_layer(ctx.feature_layers, layer_name)
-#
-#     for _, props, _ in layer['features']:
-#         __ne_pop_min = props.pop('__ne_pop_min', None)
-#
+def tags_set_ne_pop_min_max_default(ctx):
+    params = _Params(ctx, 'tags_set_ne_pop_min_max')
+    layer_name = params.required('layer')
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    for _, props, _ in layer['features']:
+        __ne_pop_min = props.pop('__ne_pop_min', None)
+        __ne_pop_max = props.pop('__ne_pop_max', None)
+        population = props.get('population')
+        if population is None:
+            population = __ne_pop_min
+        if population is None:
+            kind = props.get('kind')
+            kind_detail = props.get('kind_detail')
+            if kind == 'locality':
+                if kind_detail == 'city':
+                    population = 10000
+                elif kind_detail == 'town':
+                    population = 5000
+                elif kind_detail == 'village':
+                    population = 2000
+                elif kind_detail == 'locality':
+                    population = 1000
+                elif kind_detail == 'hamlet':
+                    population = 200
+                elif kind_detail == 'isolated_dwelling':
+                    population = 100
+                elif kind_detail == 'farm':
+                    population = 50
+
+        population = to_float(population)
+        if population is not None:
+            props['population'] = int(population)
+        if __ne_pop_max is not None:
+            props['population_rank'] = _calculate_population_rank(__ne_pop_max)
+        elif population is not None:
+            props['population_rank'] = \
+                _calculate_population_rank(props['population'])
+
 
 def tags_set_ne_min_max_zoom(ctx):
     """

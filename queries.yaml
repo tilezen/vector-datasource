@@ -680,6 +680,10 @@ post_process:
     params:
       layer: places
 
+  - fn: vectordatasource.transform.tags_set_ne_pop_min_max_default
+    params:
+      layer: places
+
   # after we have the NE min zoom, drop features which we won't be displaying
   # at this zoom.
   - fn: vectordatasource.transform.min_zoom_filter

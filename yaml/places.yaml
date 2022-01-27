@@ -86,6 +86,10 @@ global:
     __ne_min_zoom: { col: __ne_min_zoom }
     __ne_max_zoom: { col: __ne_max_zoom }
 
+  - &ne_pops
+    __ne_pop_min: {col: __ne_pop_min}
+    __ne_pop_max: {col: __ne_pop_max}
+
 filters:
   - filter:
       meta.source: wof
@@ -138,105 +142,103 @@ filters:
       kind: region
       kind_detail: province
     table: osm
-  - filter: {name: true, place: [city, town]}
+  - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: {col: place}
-      __ne_pop_min: { col: __ne_pop_min } # pop_min(population min) from NaturalEarth
-      __ne_pop_max: { col: __ne_pop_max } # pop_max(population max) from NaturalEarth
     table: osm
   - filter: {name: true, place: city}
     min_zoom: 9
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: city
-      population: 10000
+      #population: 10000 # default population backfill
     table: osm
   - filter: {name: true, place: town}
     min_zoom: 10
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: town
-      population: 5000
+      #population: 5000 # default population backfill
     table: osm
   - filter: {name: true, population: true, place: village}
     min_zoom: 12
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: village
     table: osm
   - filter: {name: true, place: village}
     min_zoom: 13
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: village
-      population: 2000
+      #population: 2000 # default population backfill
     table: osm
   - filter: {name: true, population: true, place: locality}
     min_zoom: 13
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: locality
     table: osm
   - filter: {name: true, place: locality}
     min_zoom: 14
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: locality
-      population: 1000
+      #population: 1000 # default population backfill
     table: osm
   - filter: {name: true, population: true, place: hamlet}
     min_zoom: 13
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: hamlet
     table: osm
   - filter: {name: true, place: hamlet}
     min_zoom: 14
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: hamlet
-      population: 200
+      #population: 200 # default population backfill
     table: osm
   - filter: {name: true, population: true, place: isolated_dwelling}
     min_zoom: 14
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: isolated_dwelling
     table: osm
   - filter: { name: true, place: isolated_dwelling }
     min_zoom: 15
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: isolated_dwelling
-      population: 100
+      #population: 100 # default population backfill
     table: osm
   - filter: { name: true, population: true, place: farm }
     min_zoom: 14
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: farm
     table: osm
   - filter: {name: true, place: farm}
     min_zoom: 15
     output:
-      <<: [*output_properties, *alternate_fclass, *ne_zooms]
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: farm
-      population: 50
+      #population: 50 # default population backfill
     table: osm
 
   - filter:
