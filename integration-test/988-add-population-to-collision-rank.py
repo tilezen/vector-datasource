@@ -121,10 +121,10 @@ class PopulationRankTest(FixtureTest):
             return features[0]['properties'].get('collision_rank')
 
     def test_collision_rank_decreasing(self):
-        last = self._rank_for_pop(None)
+        last = self._rank_for_pop(1 << 0)
         self.assertGreater(last, 0)
 
-        for exp in xrange(30):
+        for exp in xrange(1, 30):
             population = 1 << exp
             rank = self._rank_for_pop(population)
             self.assertLessEqual(rank, last)
