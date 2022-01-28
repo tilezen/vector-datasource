@@ -90,7 +90,7 @@ class WaterKinds(FixtureTest):
                 'kind_detail': 'ditch'
             })
 
-    def test_name_drop(self):
+    def test_name_not_drop(self):
         import dsl
 
         for z in range(6, 13):
