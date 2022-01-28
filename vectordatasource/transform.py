@@ -3122,13 +3122,10 @@ def keep_n_features_gridded(ctx):
     pairs in `items_matching` into a grid, then keep the
     first `max_items` features in each grid cell.
 
-    The grid is created by dividing the tile into buckets.
-    You can specify the `grid_width` and `grid_height` to
-    get grid_width*grid_height buckets or just `grid_width`
-    to get grid_width*grid_width buckets.
-
-    This may impact "256" and "512" sized tiles differently,
-    so it might be worth checking both sizes.
+    The grid is created by dividing the bounds into cells.
+    The `grid_width_meters` and `grid_height_meters` params
+    specify the width and height (in mercator meters) of
+    each grid cell.
 
     NOTE: This only works with point features and will
     pass through non-point features untouched.
@@ -3145,9 +3142,10 @@ def keep_n_features_gridded(ctx):
     end_zoom = ctx.params.get('end_zoom')
     items_matching = ctx.params.get('items_matching')
     max_items = ctx.params.get('max_items')
-    grid_width = ctx.params.get('grid_width')
-    # if grid_height is not specified, use grid_width for grid_height
-    grid_height = ctx.params.get('grid_height') or grid_width
+    grid_width = ctx.params.get('grid_width_meters')
+    # if grid_height_meters is not specified, use grid_width_meters
+    # for grid_height_meters
+    grid_height = ctx.params.get('grid_height_meters') or grid_width
     sorting_keys = ctx.params.get('sorting_keys')
 
     # leaving items_matching, grid_size, or max_items as None (or zero)
@@ -3174,8 +3172,6 @@ def keep_n_features_gridded(ctx):
         return None
 
     minx, miny, maxx, maxy = ctx.unpadded_bounds
-    bucket_width = (maxx - minx) / grid_width
-    bucket_height = (maxy - miny) / grid_height
 
     # Sort the features into buckets
     buckets = defaultdict(list)
@@ -3189,8 +3185,8 @@ def keep_n_features_gridded(ctx):
         # Calculate the bucket to put this feature in.
         # Note that this purposefully allows for buckets outside the unpadded bounds
         # so we can bucketize the padding area, too.
-        bucket_x = int((shape.x - minx) / bucket_width)
-        bucket_y = int((shape.y - miny) / bucket_height)
+        bucket_x = int((shape.x - minx) / grid_width)
+        bucket_y = int((shape.y - miny) / grid_height)
         bucket_id = (bucket_x, bucket_y)
 
         buckets[bucket_id].append((shape, props, fid))
