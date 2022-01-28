@@ -18,7 +18,7 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
-                '__ne_pop_max': u'20000000'
+                '__ne_pop_max': u'3450000'
             }),
         )
 
@@ -31,7 +31,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
                 'population': 864816,
-                'population_rank': 15
+                'population_rank': 12
             })
         # __ne_pop_max shouldn't appear in the final result
         self.assert_no_matching_feature(
@@ -40,7 +40,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                '__ne_pop_max': 20000000,
+                '__ne_pop_max': 3450000,
             })
 
     def test_ne_pop_min_override_estimate(self):
@@ -55,7 +55,7 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
-                '__ne_pop_min': u'50000000'
+                '__ne_pop_min': u'732072'
             }),
         )
 
@@ -69,8 +69,8 @@ class OSMNEJoinTest(FixtureTest):
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                'population': 50000000,
-                'population_rank': 16
+                'population': 732072,
+                'population_rank': 11
             })
 
         # __ne_pop_min shouldn't appear in the final result
@@ -80,7 +80,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                '__ne_pop_min': 50000000,
+                '__ne_pop_min': 732072,
             })
 
     def test_ne_pop_max_override_estimate_pop_rank(self):
@@ -95,7 +95,7 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
-                '__ne_pop_max': u'20000000'
+                '__ne_pop_max': u'3450000'
             }),
         )
 
@@ -109,7 +109,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
                 'population': 10000,
-                'population_rank': 15
+                'population_rank': 12
             })
         # __ne_pop_max shouldn't appear in the final result
         self.assert_no_matching_feature(
@@ -118,7 +118,7 @@ class OSMNEJoinTest(FixtureTest):
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                '__ne_pop_max': 20000000,
+                '__ne_pop_max': 3450000,
             })
 
     # test that the min_zoom is overridden by __ne_min_zoom
@@ -134,20 +134,20 @@ class OSMNEJoinTest(FixtureTest):
                 'source': u'openstreetmap.org',
                 'wikidata': u'Q62',
                 'wikipedia': u'en:San Francisco',
-                '__ne_min_zoom': 10,
+                '__ne_min_zoom': 2.7,
             }),
         )
 
         # without __ne_min_zoom, the min_zoom should be 8 which is from the
         # https://github.com/tilezen/vector-datasource/blob/80799e74e0283a96b520c6fea8fa00455095e09b/yaml/places.yaml#L145
-        # but with __ne_min_zoom override, it is 10
+        # but with __ne_min_zoom override, it is 2.7
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 26819236,
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                'min_zoom': 10,
+                'min_zoom': 3.0,
             })
 
         # __ne_min_zoom shouldn't appear in the final result
@@ -157,5 +157,5 @@ class OSMNEJoinTest(FixtureTest):
                 'kind': 'locality',
                 'kind_detail': 'city',
                 'wikidata_id': 'Q62',
-                '__ne_min_zoom': 10,
+                '__ne_min_zoom': 2.7,
             })

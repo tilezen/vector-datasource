@@ -8,7 +8,7 @@ SELECT
     'source', 'openstreetmap.org'
   ) AS __properties__,
 
-  {# The `CASE WHEN mz_xxx_min_zoom IS NOT NULL` here is used to indicate whether the current row is from a particular layer #}
+  {# Since the WHERE clause is a UNION of multiple tables the `CASE WHEN mz_building_min_zoom IS NOT NULL` here is used to conditionally operate the rows from mz_building_min_zoom table #}
   CASE WHEN mz_building_min_zoom IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_building_min_zoom,

@@ -35,7 +35,9 @@ sources:
   ne:
     ## places
     # ne_10m_populated_places
+    # Note: we add start_zoom 2 here otherwise the zoom 0/0/0 tile at 512px(or zoom1 tile at 256px) tile size will get a lot bigger because there are 11 features with min_zoom of 1.7 as of Jan 2022.
     - template: ne-places.jinja2
+      start_zoom: 2
 
     ## boundaries
 

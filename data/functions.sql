@@ -1032,7 +1032,8 @@ BEGIN
   -- finally, try localities
   IF NOT FOUND THEN
     SELECT
-      rank_min, rank_max INTO min_zoom, max_zoom
+      -- There is no concept of max_zoom for ne_10m_populated_places
+      min_zoom, NULL INTO min_zoom, max_zoom
       FROM ne_10m_populated_places pp
       WHERE pp.wikidataid = wikidata_id
   END IF;
