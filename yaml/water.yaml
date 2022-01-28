@@ -90,7 +90,7 @@ filters:
             then: { col: water }
           # other common OSM water values that we'd expect to map to Tilezen lake value
           - when: { water: [lagoon, oxbow, pond, reservoir, wastewater] }
-            then: { lake }
+            then: lake
       reservoir:
         case:
           - when: { water: [reservoir] }
