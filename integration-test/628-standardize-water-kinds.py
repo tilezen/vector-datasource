@@ -24,7 +24,7 @@ class StandardizeWaterKinds(FixtureTest):
             16, 10481, 25324, 'water',
             {'kind': 'lake', 'reservoir': True})
 
-    # this test is for https://github.com/tilezen/vector-datasource/pull/2047
+    # This test is for https://github.com/tilezen/vector-datasource/pull/2047
     def test_water_reservoir(self):
         # Francisco Reservoir, SF
         self.generate_fixtures(dsl.way(386662458, wkt_loads('POLYGON ((-122.421611012467 37.80395991667648, -122.420227786592 37.80413210674329, -122.420159873957 37.80408277780808, -122.420117832801 37.80383748120349, -122.42154480663 37.80365748294528, -122.421611012467 37.80395991667648))'), {
@@ -34,7 +34,7 @@ class StandardizeWaterKinds(FixtureTest):
             16, 10481, 25324, 'water',
             {'kind': 'lake', 'reservoir': True, 'kind_detail': 'lake'})
 
-    # this test is for https://github.com/tilezen/vector-datasource/pull/2047
+    # This test is for https://github.com/tilezen/vector-datasource/pull/2047
     def test_water_lagoon(self):
         # Francisco Reservoir, SF
         self.generate_fixtures(dsl.way(386662458, wkt_loads('POLYGON ((-122.421611012467 37.80395991667648, -122.420227786592 37.80413210674329, -122.420159873957 37.80408277780808, -122.420117832801 37.80383748120349, -122.42154480663 37.80365748294528, -122.421611012467 37.80395991667648))'), {
@@ -44,7 +44,7 @@ class StandardizeWaterKinds(FixtureTest):
             16, 10481, 25324, 'water',
             {'kind': 'lake', 'alkaline': True, 'kind_detail': 'lake'})
 
-    # this test is for https://github.com/tilezen/vector-datasource/pull/2047
+    # This test is for https://github.com/tilezen/vector-datasource/pull/2047
     def test_water_ditch(self):
         # Francisco Reservoir, SF
         self.generate_fixtures(dsl.way(386662458, wkt_loads('POLYGON ((-122.421611012467 37.80395991667648, -122.420227786592 37.80413210674329, -122.420159873957 37.80408277780808, -122.420117832801 37.80383748120349, -122.42154480663 37.80365748294528, -122.421611012467 37.80395991667648))'), {
