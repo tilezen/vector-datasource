@@ -25,13 +25,16 @@ class KeepNGriddedPlaces(FixtureTest):
         # We should thin out most of the data at zoom 8
         self.assert_n_matching_features(
             8, 227, 100, 'places',
-            {'kind': 'locality'}, 34)
+            {'kind': 'locality'}, 9)
 
         # Zoom 11 should have Tokyo
         self.assert_has_feature(
             11, 1819, 806, 'places',
             {'kind': 'locality', 'id': 4})
-        # .. and SHOULD have the nearby small locality Chiyoda
+        self.assert_n_matching_features(
+            11, 1819, 806, 'places',
+            {'kind': 'locality'}, 5)
+        # .. and SHOULD have the nearby smaller locality
         self.assert_has_feature(
             11, 1819, 806, 'places',
-            {'kind': 'locality', 'id': 143})
+            {'kind': 'locality', 'id': 66})
