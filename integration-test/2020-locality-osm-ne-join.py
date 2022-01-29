@@ -141,6 +141,8 @@ class OSMNEJoinTest(FixtureTest):
         # without __ne_min_zoom, the min_zoom should be 8 which is from the
         # https://github.com/tilezen/vector-datasource/blob/80799e74e0283a96b520c6fea8fa00455095e09b/yaml/places.yaml#L145
         # but with __ne_min_zoom override, it is 2.7
+        # because of the logic in tags_set_ne_min_max_zoom, the expected
+        # value is converted from 2.7 to 3.0
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 26819236,

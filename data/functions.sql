@@ -1030,9 +1030,9 @@ BEGIN
   END IF;
 
   -- finally, try localities
+  -- There is no concept of max_zoom for ne_10m_populated_places
   IF NOT FOUND THEN
     SELECT
-      -- There is no concept of max_zoom for ne_10m_populated_places
       min_zoom, NULL INTO min_zoom, max_zoom
       FROM ne_10m_populated_places pp
       WHERE pp.wikidataid = wikidata_id
@@ -1048,7 +1048,7 @@ BEGIN
     '__ne_min_zoom', min_zoom,
     '__ne_max_zoom', max_zoom
   );
-END
+END;
 $$ LANGUAGE plpgsql STABLE;
 
 
