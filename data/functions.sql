@@ -1033,7 +1033,7 @@ BEGIN
   -- There is no concept of max_zoom for ne_10m_populated_places
   IF NOT FOUND THEN
     SELECT
-      min_zoom, NULL INTO min_zoom, max_zoom
+      pp.min_zoom, NULL INTO min_zoom, max_zoom
       FROM ne_10m_populated_places pp
       WHERE pp.wikidataid = wikidata_id
   END IF;
