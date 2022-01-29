@@ -1064,7 +1064,7 @@ BEGIN
   END IF;
 
   SELECT
-    pop_min, pop_max INTO pop_min, pop_max
+    pp.pop_min, pp.pop_max INTO pop_min, pop_max
     FROM ne_10m_populated_places pp
     WHERE pp.wikidataid = wikidata_id;
 
@@ -1078,7 +1078,7 @@ BEGIN
     '__ne_pop_min', pop_min,
     '__ne_pop_max', pop_max
   );
-END
+END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- return the min zoom for a node that looks like a service area.
