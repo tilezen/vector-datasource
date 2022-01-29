@@ -424,7 +424,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=1,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'foo'},
                 ],
@@ -461,7 +461,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=1,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'foo'},
                 ],
@@ -499,7 +499,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=1,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'min_zoom'},
                     {'sort_key': 'population', 'reverse': True},
@@ -538,7 +538,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=1,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'min_zoom'},
                     {'sort_key': 'population', 'reverse': True},
@@ -581,7 +581,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=1,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'population', 'reverse': True},
                 ],
@@ -625,7 +625,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=5,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'min_zoom', 'reverse': True},
                     {'sort_key': 'population'},
@@ -667,7 +667,7 @@ class KeepNGriddedTest(unittest.TestCase):
                 source_layer='test_layer',
                 items_matching=dict(foo='bar'),
                 max_items=5,
-                grid_width=2,
+                grid_width_meters=50,
                 sorting_keys=[
                     {'sort_key': 'population', 'reverse': True},
                 ],
