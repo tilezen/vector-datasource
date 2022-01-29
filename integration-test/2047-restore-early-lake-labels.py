@@ -104,7 +104,8 @@ class WaterKinds(FixtureTest):
                         'min_zoom': 6.0,
                     })
 
-            if z < 9:
+            # the following assert will start to fail on z == 6
+            if z < 6:
                 self.assert_no_matching_feature(z, x, y, 'water',
                                                 {
                                                     'kind': 'water',
