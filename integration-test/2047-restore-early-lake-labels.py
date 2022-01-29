@@ -1,28 +1,9 @@
 # -*- encoding: utf-8 -*-
 import dsl
 from shapely.wkt import loads as wkt_loads
+from tilequeue.tile import deg2num
 
 from . import FixtureTest
-
-
-class BoundsTest(FixtureTest):
-    def generate_fixtures(self, *objs):
-        from dsl import Feature
-
-        boundaries = []
-        for feature in objs:
-            if feature.shape.geom_type in ('Polygon', 'MultiPolygon'):
-                props = feature.properties.copy()
-                props['boundary'] = True
-                boundary = Feature(
-                    feature.fid,
-                    feature.shape.boundary,
-                    props)
-                boundaries.append(boundary)
-
-        new_objs = list(objs)
-        new_objs.extend(boundaries)
-        FixtureTest.generate_fixtures(self, *new_objs)
 
 
 class WaterKinds(FixtureTest):
@@ -93,25 +74,49 @@ class WaterKinds(FixtureTest):
     def test_name_not_drop(self):
         import dsl
 
-        for z in range(6, 13):
-            x, y = (3, 4)
-            area = 265548000
+        lon, lat = (-122.417169, 37.769196)
 
+        for z in range(0, 16):
+            x, y = deg2num(lat, lon, z)
+            area = 265548000
             self.generate_fixtures(
-                dsl.way(1, dsl.box_area(z, x, y, area, include_boundary=True), {
+                dsl.way(1, dsl.box_area(z, x, y, area), {
                     'name': u'Clear Lake',
                     'natural': u'water',
-                    'type': u'multipolygon',
                     'water': u'lake',
                     'wikidata': u'Q1099503',
                     'source': u'openstreetmap.org',
                 }),
             )
 
-            self.assert_has_feature(
-                z, x, y, 'water', {
-                    'kind': 'water',
-                    'kind_detail': 'lake',
-                    'name': 'Clear Lake',
-                    'min_zoom': 6.0,
-                })
+            if z < 6:
+                self.assert_no_matching_feature(z, x, y, 'water',
+                                                {
+                                                    'kind': 'water',
+                                                    'kind_detail': 'lake',
+                                                })
+            if z >= 6:
+                self.assert_has_feature(
+                    z, x, y, 'water', {
+                        'kind': 'water',
+                        'kind_detail': 'lake',
+                        'name': 'Clear Lake',
+                        'min_zoom': 6.0,
+                    })
+
+            if z < 9:
+                self.assert_no_matching_feature(z, x, y, 'water',
+                                                {
+                                                    'kind': 'water',
+                                                    'label_placement': True,
+                                                })
+
+            # if z >= 9:
+            #     self.assert_has_feature(
+            #         z, x, y, 'water', {
+            #             'kind': 'water',
+            #             'kind_detail': 'lake',
+            #             'name': 'Clear Lake',
+            #             'label_placement': True,
+            #             'min_zoom': 6.0,
+            #         })
