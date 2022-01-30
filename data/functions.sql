@@ -1035,7 +1035,7 @@ BEGIN
     SELECT
       pp.min_zoom, NULL INTO min_zoom, max_zoom
       FROM ne_10m_populated_places pp
-      WHERE pp.wikidataid = wikidata_id
+      WHERE pp.wikidataid = wikidata_id;
   END IF;
 
   -- return an empty JSONB rather than null, so that it can be safely
