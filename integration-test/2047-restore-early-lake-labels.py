@@ -119,12 +119,10 @@ class WaterKinds(FixtureTest):
                                                 })
 
             if z >= 9:
-                with self.features_in_tile_layer(z, x, y, 'water') as features:
-                    for f in features:
-                        if f['geometry']['type'] == 'Point':
-                            assert f['id'] is None
-                            assert f['properties']['name'] == 'Clear Lake'
-                            assert f['properties']['kind'] == 'water'
-                            assert f['properties']['kind_detail'] == 'lake'
-                            assert f['properties']['min_zoom'] == 9.0
-                            assert f['properties']['label_placement'] is True
+                self.assert_has_feature(z, x, y, 'water', {
+                    'kind': 'water',
+                    'name': 'Clear Lake',
+                    'kind_detail': 'lake',
+                    'label_placement': True,
+                    'min_zoom': 9.0,
+                })
