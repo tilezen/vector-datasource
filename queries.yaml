@@ -807,7 +807,7 @@ post_process:
       properties:
         - name
         - old_name
-      # TODO the properties.get('is_tunnel') is True might not work, need to fix it
+      # TODO the properties.get('is_tunnel') is True might not work, need to fix it; refer to a similar fix in https://github.com/tilezen/vector-datasource/pull/2047
       where: >-
         (kind == 'sea' and zoom < 4) or
         (kind == 'bay' and zoom < 5) or
