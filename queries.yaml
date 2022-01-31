@@ -881,8 +881,10 @@ post_process:
             (15,        10000),
             (16,         None),
         ] if area >= area_threshold][0]
+      # note the following line cannot be written as
+      # properties is not None and properties.get('label_placement') is True
       where: >-
-        (properties is not None and properties.get('label_placement') is True)
+        properties is not None and label_placement
 
   # now that we have the label points
   # drop most water properties at lower zooms

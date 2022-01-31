@@ -71,7 +71,7 @@ class WaterKinds(FixtureTest):
                 'kind_detail': 'ditch'
             })
 
-    def test_name_not_drop(self):
+    def test_prop_drop(self):
         import dsl
 
         lon, lat = (-122.417169, 37.769196)
@@ -93,31 +93,38 @@ class WaterKinds(FixtureTest):
                 self.assert_no_matching_feature(z, x, y, 'water',
                                                 {
                                                     'kind': 'water',
-                                                    'kind_detail': 'lake',
                                                 })
-            if z >= 6:
-                self.assert_has_feature(
-                    z, x, y, 'water', {
-                        'kind': 'water',
-                        'kind_detail': 'lake',
-                        'name': 'Clear Lake',
-                        'min_zoom': 6.0,
-                    })
+            if 6 <= z <= 14:
+                with self.features_in_tile_layer(z, x, y, 'water') as features:
+                    for f in features:
+                        if f['geometry']['type'] == 'Polygon':
+                            assert f['id'] is None
+                            assert f['properties']['min_zoom'] == 6
+                            assert 'name' not in f['properties']
+                            assert 'old_name' not in f['properties']
+            if z == 15:
+                with self.features_in_tile_layer(z, x, y, 'water') as features:
+                    for f in features:
+                        if f['geometry']['type'] == 'Polygon':
+                            assert f['id'] is None
+                            assert f['properties']['name'] == 'Clear Lake'
+                            assert f['properties']['kind'] == 'water'
+                            assert f['properties']['kind_detail'] == 'lake'
 
-            # the following assert will start to fail on z == 6
-            if z < 6:
+            if z < 9:
                 self.assert_no_matching_feature(z, x, y, 'water',
                                                 {
                                                     'kind': 'water',
                                                     'label_placement': True,
                                                 })
 
-            # if z >= 9:
-            #     self.assert_has_feature(
-            #         z, x, y, 'water', {
-            #             'kind': 'water',
-            #             'kind_detail': 'lake',
-            #             'name': 'Clear Lake',
-            #             'label_placement': True,
-            #             'min_zoom': 6.0,
-            #         })
+            if z >= 9:
+                with self.features_in_tile_layer(z, x, y, 'water') as features:
+                    for f in features:
+                        if f['geometry']['type'] == 'Point':
+                            assert f['id'] is None
+                            assert f['properties']['name'] == 'Clear Lake'
+                            assert f['properties']['kind'] == 'water'
+                            assert f['properties']['kind_detail'] == 'lake'
+                            assert f['properties']['min_zoom'] == 9.0
+                            assert f['properties']['label_placement'] is True
