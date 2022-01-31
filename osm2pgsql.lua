@@ -1,5 +1,4 @@
 -- This config example file is released into the Public Domain.
-inspect = require('inspect')
 -- This configuration for the flex output tries to be compatible with the
 -- original pgsql C transform output. There might be some corner cases but
 -- it should do exactly the same in almost all cases.
