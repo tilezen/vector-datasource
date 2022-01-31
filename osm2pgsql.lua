@@ -1,11 +1,47 @@
+-- This config example file is released into the Public Domain.
+inspect = require('inspect')
+-- This configuration for the flex output tries to be compatible with the
+-- original pgsql C transform output. There might be some corner cases but
+-- it should do exactly the same in almost all cases.
+-- The output projection used (3857, web mercator is the default). Set this
+-- to 4326 if you were using the -l|--latlong option or to the EPSG
+-- code you were using on the -E|-proj option.
 local srid = 3857
+
+-- Set this to true if you were using option -K|--keep-coastlines.
 local keep_coastlines = false
+
+-- Set this to the table name prefix (what used to be option -p|--prefix).
 local prefix = 'planet_osm'
+
+-- Set this to true if multipolygons should be written as multipolygons into
+-- db (what used to be option -G|--multi-geometry).
 local multi_geometry = false
+
+-- Set this to true if you want an hstore column (what used to be option
+-- -k|--hstore). Can not be true if "hstore_all" is true.
 local hstore = false
+
+-- Set this to true if you want all tags in an hstore column (what used to
+-- be option -j|--hstore-all). Can not be true if "hstore" is true.
 local hstore_all = true
+
+-- Only keep objects that have a value in one of the non-hstore columns
+-- (normal action with --hstore is to keep all objects). Equivalent to
+-- what used to be set through option --hstore-match-only.
 local hstore_match_only = false
+
+-- Set this to add an additional hstore (key/value) column containing all tags
+-- that start with the specified string, eg "name:". Will produce an extra
+-- hstore column that contains all "name:xx" tags. Equivalent to what used to
+-- be set through option -z|--hstore-column. Unlike the -z option which can
+-- be specified multiple time, this does only support a single additional
+-- hstore column.
 local hstore_column = nil
+
+-- There is some very old specialized handling of route relations in osm2pgsql,
+-- which you probably don't need. This is disabled here, but you can enable
+-- it by setting this to true. If you don't understand this, leave it alone.
 local enable_legacy_route_processing = false
 
 -- ---------------------------------------------------------------------------
@@ -169,7 +205,7 @@ function gen_columns(text_columns, with_hstore, area, geometry_type)
         if area then
             add_column('way_area', 'area')
         else
-            add_column('way_area', 'real')
+            add_column('way_area', 'hstore')
         end
     end
 
@@ -188,6 +224,11 @@ function gen_columns(text_columns, with_hstore, area, geometry_type)
 end
 
 local tables = {}
+
+--for storing node tags later
+local n2r = {}
+local twadmin = {}
+local disputed = {}
 
 tables.point = osm2pgsql.define_table{
     name = prefix .. '_point',
@@ -388,6 +429,14 @@ function osm2pgsql.process_node(object)
         output[hstore_column] = get_hstore_column(object.tags)
     end
 
+--	Pulls out place tag for adding to relation later
+    if object.tags.place then
+        if not n2r[object.id] then
+            n2r[object.id] = {}
+        end
+        n2r[object.id] = object.tags.place
+    end
+
     tables.point:add_row(output)
 end
 
@@ -442,6 +491,49 @@ function osm2pgsql.process_way(object)
     local z_order, roads = get_z_order(object.tags)
     output.z_order = z_order
 
+-- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
+    for k, v in pairs(twadmin) do
+        if k == object.id then
+            output_hstore.tw_tags = 'yes'
+            output_hstore['admin_level:AR'] = '4'
+            output_hstore['admin_level:BD'] = '4'
+            output_hstore['admin_level:BR'] = '4'
+            output_hstore['admin_level:CN'] = '6'
+            output_hstore['admin_level:DE'] = '4'
+            output_hstore['admin_level:EG'] = '4'
+            output_hstore['admin_level:ES'] = '4'
+            output_hstore['admin_level:FR'] = '4'
+            output_hstore['admin_level:GB'] = '4'
+            output_hstore['admin_level:GR'] = '4'
+            output_hstore['admin_level:ID'] = '4'
+            output_hstore['admin_level:IL'] = '4'
+            output_hstore['admin_level:IN'] = '4'
+            output_hstore['admin_level:IT'] = '4'
+            output_hstore['admin_level:JP'] = '4'
+            output_hstore['admin_level:KO'] = '4'
+            output_hstore['admin_level:MA'] = '4'
+            output_hstore['admin_level:NL'] = '4'
+            output_hstore['admin_level:NP'] = '4'
+            output_hstore['admin_level:PK'] = '4'
+            output_hstore['admin_level:PL'] = '4'
+            output_hstore['admin_level:PS'] = '4'
+            output_hstore['admin_level:PT'] = '4'
+            output_hstore['admin_level:SA'] = '4'
+            output_hstore['admin_level:SE'] = '4'
+            output_hstore['admin_level:TR'] = '4'
+            output_hstore['admin_level:TW'] = '4'
+            output_hstore['admin_level:UA'] = '4'
+            output_hstore['admin_level:US'] = '4'
+            output_hstore['admin_level:VN'] = '4'
+        end
+    end
+
+    for k, v in pairs(disputed) do
+        if k == object.id then
+            output_hstore.dispute = 'yes'
+        end
+    end
+
     output.tags = output_hstore
 
     if hstore_column then
@@ -457,6 +549,12 @@ function osm2pgsql.process_way(object)
         if roads then
             tables.roads:add_row(output)
         end
+    end
+end
+
+function osm2pgsql.select_relation_members(relation)
+    if relation.tags.type == 'boundary' then
+        return { ways = osm2pgsql.way_member_ids(relation) }
     end
 end
 
@@ -490,6 +588,77 @@ function osm2pgsql.process_relation(object)
 
     if not next(output) and not next(output_hstore) then
         return
+    end
+
+--	Filters on boundaries with a label role node
+--	Compares node to n2r ids and adds place tag to relation if a match occurs
+    if type == 'boundary' then
+        for _, member in ipairs(object.members) do
+            if member.role == 'label' then
+                for k, v in pairs(n2r) do
+                    if k == member.ref then
+                        output_hstore.place = v
+                    end
+                end
+            end
+        end
+    end
+
+-- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
+    if type == 'boundary' and (object.tags.admin_level == ( '4') or object.tags.admin_level == ( '6')) and object.tags['ISO3166-2'] then
+        if string.match(object.tags['ISO3166-2'], 'TW-') then
+            for _, member in ipairs(object.members) do
+                if member.type == 'w' then
+                    if not twadmin[member.ref] then
+                        twadmin[member.ref] = {}
+                    end
+                    twadmin[member.ref] = object.id
+                end
+            end
+            output_hstore.tw_tags = 'yes'
+            output_hstore['admin_level:AR'] = '4'
+            output_hstore['admin_level:BD'] = '4'
+            output_hstore['admin_level:BR'] = '4'
+            output_hstore['admin_level:CN'] = '6'
+            output_hstore['admin_level:DE'] = '4'
+            output_hstore['admin_level:EG'] = '4'
+            output_hstore['admin_level:ES'] = '4'
+            output_hstore['admin_level:FR'] = '4'
+            output_hstore['admin_level:GB'] = '4'
+            output_hstore['admin_level:GR'] = '4'
+            output_hstore['admin_level:ID'] = '4'
+            output_hstore['admin_level:IL'] = '4'
+            output_hstore['admin_level:IN'] = '4'
+            output_hstore['admin_level:IT'] = '4'
+            output_hstore['admin_level:JP'] = '4'
+            output_hstore['admin_level:KO'] = '4'
+            output_hstore['admin_level:MA'] = '4'
+            output_hstore['admin_level:NL'] = '4'
+            output_hstore['admin_level:NP'] = '4'
+            output_hstore['admin_level:PK'] = '4'
+            output_hstore['admin_level:PL'] = '4'
+            output_hstore['admin_level:PS'] = '4'
+            output_hstore['admin_level:PT'] = '4'
+            output_hstore['admin_level:SA'] = '4'
+            output_hstore['admin_level:SE'] = '4'
+            output_hstore['admin_level:TR'] = '4'
+            output_hstore['admin_level:TW'] = '4'
+            output_hstore['admin_level:UA'] = '4'
+            output_hstore['admin_level:US'] = '4'
+            output_hstore['admin_level:VN'] = '4'
+        end
+    end
+
+--     Adds dispute=yes to any ways part of a boundary=disputed relation
+    if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
+        for _, member in ipairs(object.members) do
+            if member.type == 'w' then
+                if not disputed[member.ref] then
+                    disputed[member.ref] = {}
+                end
+                disputed[member.ref] = object.id
+            end
+        end
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
