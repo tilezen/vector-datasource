@@ -9466,7 +9466,8 @@ def update_min_zoom(ctx):
         local = defaultdict(lambda: None)
         local.update(props)
         local['zoom'] = zoom
-        # this is to make the name `properties` visible at the yaml layer
+        # this is to make the name `properties` visible in the queries.yaml's
+        # where clause
         local['properties'] = props
 
         if where and eval(where, {}, local):
