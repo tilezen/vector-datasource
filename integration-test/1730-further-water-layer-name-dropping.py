@@ -216,6 +216,6 @@ class WaterLabelZoomAdjustmentTest(FixtureTest):
             z, x, y, 'water', {
                 'kind': 'lake',
                 'min_zoom': 2,  # min_zoom changed at https://github.com/tilezen/vector-datasource/pull/2010/
-                'name': str,
-                'name:de': str,
+                'name': type(None),
+                'name:de': type(None),
             })
