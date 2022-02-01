@@ -804,7 +804,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `name`
 * `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
-* `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
+* `population`: population integer values from OpenStreetMap or Natural Earth's minimum population value(`pop_min`) if the place has a join from OpenStreetMap and NatualEarth or an estimate based on the type of place.
 * `population_rank`: A value from 18 down to 0, indicating how large the population is on a particular place. A larger value indicates a bigger population. See "Population Rank" below for more details.
 * `source`: `openstreetmap`, `naturalearthdata.com`, or `whosonfirst.org`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
@@ -867,7 +867,9 @@ The values of population rank are derived from the `population` value as follows
 * 3: 1k to 2k
 * 2: 200 to 1k
 * 1: Less than 200
-* 0: No `population` value available.
+* 0: No `population` value available or `population` value zero.
+
+When available, for the largest cities, OSM localities gets their population_rank from NaturalEarth's `pop_max` tag because NaturalEarth `pop_max` is for the metro area and is more useful for label grading in the stylesheet.
 
 ## Points of Interest
 

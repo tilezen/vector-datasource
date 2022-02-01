@@ -35,7 +35,9 @@ sources:
   ne:
     ## places
     # ne_10m_populated_places
+    # Note: we add start_zoom 2 here otherwise for the zoom 0/0/0 tile at 512px (or zoom1 at 256px), the size will get a lot bigger because there are 11 features with min_zoom of 1.7 as of Jan 2022.
     - template: ne-places.jinja2
+      start_zoom: 2
 
     ## boundaries
 
@@ -675,8 +677,12 @@ post_process:
       where: kind == 'region'
 
   # IMPORTANT! do this _after_ the YAMLToDict default stuff, otherwise the
-  # default will overwrite the value fron Natural Earth.
+  # default will overwrite the value from Natural Earth.
   - fn: vectordatasource.transform.tags_set_ne_min_max_zoom
+    params:
+      layer: places
+
+  - fn: vectordatasource.transform.tags_set_ne_pop_min_max_default
     params:
       layer: places
 
