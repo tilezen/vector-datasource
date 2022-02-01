@@ -1805,7 +1805,7 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 14
-      end_zoom: 15
+      end_zoom: 16
       where: scale_rank > 4
 
   - fn: vectordatasource.transform.drop_small_inners

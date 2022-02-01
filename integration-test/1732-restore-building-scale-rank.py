@@ -107,6 +107,34 @@ class BuildingScaleRankTest(FixtureTest):
                 'scale_rank': 5,
             })
 
+    def test_drop_scale_rank_5_at_z15(self):
+        # make a row of buildings, check that they get assigned scale
+        # rank and are merged at z15.
+        z, x, y = (15, 0, 0)
+
+        self._setup_row(z, x, y, 10, 40, 10)
+
+        # scale_rank 5 features should be dropped at this zoom.
+        self.assert_no_matching_feature(
+            z, x, y, 'buildings', {
+                'kind': 'building',
+                'scale_rank': 5,
+            })
+
+    def test_no_drop_scale_rank_5_at_z16(self):
+        # make a row of buildings, check that they get assigned scale
+        # rank and are merged at z15.
+        z, x, y = (16, 0, 0)
+
+        self._setup_row(z, x, y, 10, 40, 10)
+
+        # scale_rank 5 features should be dropped at this zoom.
+        self.assert_has_feature(
+            z, x, y, 'buildings', {
+                'kind': 'building',
+                'scale_rank': 5,
+            })
+
     def test_merged_z14(self):
         # make a row of buildings, check that they get assigned scale
         # rank and are merged at z14.
