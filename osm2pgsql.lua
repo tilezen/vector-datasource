@@ -1,4 +1,5 @@
 -- This config example file is released into the Public Domain.
+-- inspect = require('inspect')
 -- This configuration for the flex output tries to be compatible with the
 -- original pgsql C transform output. There might be some corner cases but
 -- it should do exactly the same in almost all cases.
@@ -228,6 +229,7 @@ local tables = {}
 local n2r = {}
 local twadmin = {}
 local disputed = {}
+local province_dispute = {}
 
 tables.point = osm2pgsql.define_table{
     name = prefix .. '_point',
@@ -493,7 +495,6 @@ function osm2pgsql.process_way(object)
 -- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
     for k, v in pairs(twadmin) do
         if k == object.id then
-            output_hstore.tw_tags = 'yes'
             output_hstore['admin_level:AR'] = '4'
             output_hstore['admin_level:BD'] = '4'
             output_hstore['admin_level:BR'] = '4'
@@ -527,9 +528,21 @@ function osm2pgsql.process_way(object)
         end
     end
 
+-- Adds dispute=yes to ways on disputed relations
     for k, v in pairs(disputed) do
         if k == object.id then
             output_hstore.dispute = 'yes'
+        end
+    end
+
+-- adds tags from province level dispute relations
+    for k, v in pairs(province_dispute) do
+        if k == object.id then
+            for a, i in pairs(v) do
+                if not output_hstore[a] then
+                    output_hstore[a] = i
+                end
+            end
         end
     end
 
@@ -591,7 +604,7 @@ function osm2pgsql.process_relation(object)
 
 --	Filters on boundaries with a label role node
 --	Compares node to n2r ids and adds place tag to relation if a match occurs
-    if type == 'boundary' then
+    if type == 'boundary' and object.tags.admin_level == '3' and object.tags.wikidata ~= 'Q205047' then
         for _, member in ipairs(object.members) do
             if member.role == 'label' then
                 for k, v in pairs(n2r) do
@@ -603,9 +616,9 @@ function osm2pgsql.process_relation(object)
         end
     end
 
--- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
-    if type == 'boundary' and (object.tags.admin_level == ( '4') or object.tags.admin_level == ( '6')) and object.tags['ISO3166-2'] then
-        if string.match(object.tags['ISO3166-2'], 'TW-') then
+-- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways.
+    if type == 'boundary' and (object.tags.admin_level == '4' or object.tags.admin_level == '6') and object.tags['ISO3166-2'] then
+        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'TW-') then
             for _, member in ipairs(object.members) do
                 if member.type == 'w' then
                     if not twadmin[member.ref] then
@@ -614,7 +627,6 @@ function osm2pgsql.process_relation(object)
                     twadmin[member.ref] = object.id
                 end
             end
-            output_hstore.tw_tags = 'yes'
             output_hstore['admin_level:AR'] = '4'
             output_hstore['admin_level:BD'] = '4'
             output_hstore['admin_level:BR'] = '4'
@@ -645,6 +657,18 @@ function osm2pgsql.process_relation(object)
             output_hstore['admin_level:UA'] = '4'
             output_hstore['admin_level:US'] = '4'
             output_hstore['admin_level:VN'] = '4'
+        end
+    end
+
+-- Adds tags to redefine other relation admin levels, based on relation. Applies to both relation and ways.
+    if type == 'linestring' and object.tags.boundary == 'claim' and object.tags.claimed_by == nil then
+        for _, member in ipairs(object.members) do
+            if member.type == 'w' then
+                if not province_dispute[member.ref] then
+                    province_dispute[member.ref] = {}
+                end
+                province_dispute[member.ref] = object.tags
+            end
         end
     end
 
