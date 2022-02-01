@@ -463,7 +463,6 @@ def pois_direction_int(shape, props, fid, zoom):
     direction = props.get('direction')
     if not direction:
         return shape, props, fid
-
     props['direction'] = _to_int_degrees(direction)
     return shape, props, fid
 
@@ -9535,6 +9534,9 @@ def update_min_zoom(ctx):
         local = defaultdict(lambda: None)
         local.update(props)
         local['zoom'] = zoom
+        # this is to make the name `properties` visible in the queries.yaml's
+        # where clause
+        local['properties'] = props
 
         if where and eval(where, {}, local):
             new_min_zoom = eval(min_zoom, {}, local)

@@ -2508,12 +2508,24 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 * `swimming_pool` - polygon
 * `water` - polygon
 
+#### Water `kind_detail` values:
+
+When `water` polygons are sourced from OpenStreetMap, we add `kind_detail` values in an allowlist.
+
+* `basin`
+* `canal`
+* `ditch`
+* `drain`
+* `lake` - remap of lake, lagoon, oxbow, pond, reservoir, and wastewater source values
+* `river`
+* `stream`
+
 Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
 
 The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_rank` property that starts from 1 and counts up as the feature gets smaller. Note that the ranking is done on a "metatile", which means that each tile (of size 256px, 512px or other) won't necessarily contain the full range from 1 to N of `kind_tile_rank`s.
 
 **Gotchas:**
 
-* `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
-* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984)._
+* `lake` features with `alkaline: true` and `playa` features are sourced from Natural Earth at low zooms and are sparesly populated at high zooms from OpenStreetMap. Zooming in, your feature may disappear (when there is no equivalent in OpenStreetMap), or the feature may still exist as a water or lake polygon but without the alkaline indicator. Beware the desert around Great Salt Lake in Utah!
+* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984). However, kind_detail value is available._
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from osmdata.openstreetmap.de.

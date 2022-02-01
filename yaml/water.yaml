@@ -80,6 +80,25 @@ filters:
     output:
       <<: *water_standard_properties_osm
       kind: water
+      # OSM buries the detailed type of water so let's surface that, see Issue #984
+      # in v2.x series we'd promote these to kind values, but we add them as kind_detail
+      # here as a non-breaking change for v1.x series as a bridge
+      kind_detail:
+        case:
+          # existing Tilezen kinds
+          - when: { water: [basin, canal, ditch, drain, lake, river, stream] }
+            then: { col: water }
+          # other common OSM water values that we'd expect to map to Tilezen lake value
+          - when: { water: [lagoon, oxbow, pond, reservoir, wastewater] }
+            then: lake
+      reservoir:
+        case:
+          - when: { water: [reservoir] }
+            then: true
+      alkaline:
+        case:
+          - when: { water: [lagoon, salt, salt_pool] }
+            then: true
     table: osm
   - filter: {natural: bay}
     min_zoom: *water_standard_min_zoom
