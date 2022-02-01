@@ -7,7 +7,7 @@ class BayTest(FixtureTest):
     def test_bays(self):
         import dsl
 
-        z, x, y = 8, 0, 0
+        z, x, y = 10, 0, 0
 
         def _bay(osm_id, area, name):
             return dsl.way(osm_id, dsl.box_area(z, x, y, area), {
