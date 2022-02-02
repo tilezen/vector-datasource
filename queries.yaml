@@ -1740,6 +1740,58 @@ post_process:
       source_layer: buildings
       target_value_type: int
 
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - landuse_kind
+      where: >-
+        - landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'university', 'college', 'school', 'hospital', 'park']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - kind_detail
+      where: >-
+        - kind_detail not in ['industrial', 'warehouse', 'commercial', 'retail', 'university', 'college', 'school', 'church', 'synagogue', 'office', 'military', 'hospital', 'fire_station', 'civic', 'public', 'train_station', 'station', 'prison', 'stadium', 'sports_centre', 'airport']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - building_material
+        - layer
+        - location
+        - osm_relation
+        - roof_color
+        - roof_height
+        - roof_material
+        - roof_orientation
+        - roof_shape
+        - root_id
+        - volume
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
+        - addr_housenumber
+        - addr_street
+
   # fit min zoom onto the scale rank, as we'll be using the scale rank rather
   # than the min zoom to calculate whether a building should make it into a
   # tile. having them split separately means we can't merge them together.
