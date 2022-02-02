@@ -73,10 +73,10 @@ class BuildingScaleRankTest(FixtureTest):
                 'scale_rank': (lambda r: r != 5)
             })
 
-    def test_merged_z15(self):
+    def test_merged_z16(self):
         # make a row of buildings, check that they get assigned scale
-        # rank and are merged at z15.
-        z, x, y = (15, 0, 0)
+        # rank and are merged at z16.
+        z, x, y = (16, 0, 0)
 
         self._setup_row(z, x, y, 10, 40, 10)
 
@@ -85,7 +85,7 @@ class BuildingScaleRankTest(FixtureTest):
             z, x, y, 'buildings', {
                 'kind': 'building',
                 'scale_rank': 5,
-            }, 1)
+            }, 10)
 
         # and none with any other scale rank value.
         self.assert_no_matching_feature(
