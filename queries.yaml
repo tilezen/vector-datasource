@@ -241,7 +241,7 @@ layers:
   buildings:
     simplify_before_intersect: yes
     area_threshold: 0.0
-    tolerance: 2.0
+    tolerance: 3.0
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -259,7 +259,7 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.buildings
-    area-inclusion-threshold: 2
+    area-inclusion-threshold: 3
   pois:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -1833,7 +1833,7 @@ post_process:
     params:
       end_zoom: 16
       source_layers: [buildings]
-      pixel_area: 0.5
+      pixel_area: 1.0
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
