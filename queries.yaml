@@ -1744,27 +1744,27 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
       properties:
         - landuse_kind
       where: >-
-        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'university', 'college', 'school', 'hospital', 'park']
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'hospital', 'park', 'school', 'university']
 
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
       properties:
         - kind_detail
       where: >-
-        kind_detail not in ['industrial', 'warehouse', 'commercial', 'retail', 'university', 'college', 'school', 'church', 'synagogue', 'office', 'military', 'hospital', 'fire_station', 'civic', 'public', 'train_station', 'station', 'prison', 'stadium', 'sports_centre', 'airport']
+        kind_detail not in ['airport', 'civic', 'church', 'college', 'commercial', 'fire_station', 'industrial', 'military', 'hospital', 'office', 'public', 'prison', 'retail', 'school', 'sports_centre', 'stadium', 'station', 'synagogue', 'train_station', 'university', 'warehouse']
 
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 15
+      end_zoom: 16
       properties:
         - building_material
         - layer
