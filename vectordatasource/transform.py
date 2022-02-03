@@ -410,8 +410,12 @@ def place_population_int(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
-def population_rank(shape, properties, fid, zoom):
-    population = properties.get('population')
+def _calculate_population_rank(population):
+    population = to_float(population)
+    if population is None:
+        population = 0
+    else:
+        population = int(population)
     pop_breaks = [
         1000000000,
         100000000,
@@ -438,8 +442,12 @@ def population_rank(shape, properties, fid, zoom):
             break
     else:
         rank = 0
+    return rank
 
-    properties['population_rank'] = rank
+
+def population_rank(shape, properties, fid, zoom):
+    population = properties.get('population')
+    properties['population_rank'] = _calculate_population_rank(population)
     return (shape, properties, fid)
 
 
@@ -455,7 +463,6 @@ def pois_direction_int(shape, props, fid, zoom):
     direction = props.get('direction')
     if not direction:
         return shape, props, fid
-
     props['direction'] = _to_int_degrees(direction)
     return shape, props, fid
 
@@ -3122,13 +3129,10 @@ def keep_n_features_gridded(ctx):
     pairs in `items_matching` into a grid, then keep the
     first `max_items` features in each grid cell.
 
-    The grid is created by dividing the tile into buckets.
-    You can specify the `grid_width` and `grid_height` to
-    get grid_width*grid_height buckets or just `grid_width`
-    to get grid_width*grid_width buckets.
-
-    This may impact "256" and "512" sized tiles differently,
-    so it might be worth checking both sizes.
+    The grid is created by dividing the bounds into cells.
+    The `grid_width_meters` and `grid_height_meters` params
+    specify the width and height (in mercator meters) of
+    each grid cell.
 
     NOTE: This only works with point features and will
     pass through non-point features untouched.
@@ -3145,9 +3149,10 @@ def keep_n_features_gridded(ctx):
     end_zoom = ctx.params.get('end_zoom')
     items_matching = ctx.params.get('items_matching')
     max_items = ctx.params.get('max_items')
-    grid_width = ctx.params.get('grid_width')
-    # if grid_height is not specified, use grid_width for grid_height
-    grid_height = ctx.params.get('grid_height') or grid_width
+    grid_width = ctx.params.get('grid_width_meters')
+    # if grid_height_meters is not specified, use grid_width_meters
+    # for grid_height_meters
+    grid_height = ctx.params.get('grid_height_meters') or grid_width
     sorting_keys = ctx.params.get('sorting_keys')
 
     # leaving items_matching, grid_size, or max_items as None (or zero)
@@ -3174,8 +3179,6 @@ def keep_n_features_gridded(ctx):
         return None
 
     minx, miny, maxx, maxy = ctx.unpadded_bounds
-    bucket_width = (maxx - minx) / grid_width
-    bucket_height = (maxy - miny) / grid_height
 
     # Sort the features into buckets
     buckets = defaultdict(list)
@@ -3189,8 +3192,8 @@ def keep_n_features_gridded(ctx):
         # Calculate the bucket to put this feature in.
         # Note that this purposefully allows for buckets outside the unpadded bounds
         # so we can bucketize the padding area, too.
-        bucket_x = int((shape.x - minx) / bucket_width)
-        bucket_y = int((shape.y - miny) / bucket_height)
+        bucket_x = int((shape.x - minx) / grid_width)
+        bucket_y = int((shape.y - miny) / grid_height)
         bucket_id = (bucket_x, bucket_y)
 
         buckets[bucket_id].append((shape, props, fid))
@@ -8823,6 +8826,66 @@ def min_zoom_filter(ctx):
     return None
 
 
+def tags_set_ne_pop_min_max_default(ctx):
+    """
+    The data may potentially a join result of OSM and NE so there are different
+    scenarios when we populate the population and population_rank fields.
+
+    population:
+    (1) if the data has population from OSM use it as is
+    (2) if the data has no population from OSM, use __ne_pop_min to back-fill
+    (3) if the data has no population from OSM and no __ne_pop_min from NE
+    either(no OSM<>NE join or NE just don't have non-nil __ne_pop_min value),
+    then use the estimate value to back-fill based its kind_detail
+
+    population_rank:
+    (1) if the data has __ne_pop_max, use it to calculate population_rank
+    (2) if the data doesn't have __ne_pop_max(no OSM<>NE join or NE just don't
+    have non-nil __ne_pop_max value) use the population value determined by the
+    above procedure to calculate it.
+    """
+    params = _Params(ctx, 'tags_set_ne_pop_min_max')
+    layer_name = params.required('layer')
+    layer = _find_layer(ctx.feature_layers, layer_name)
+
+    for _, props, _ in layer['features']:
+        __ne_pop_min = props.pop('__ne_pop_min', None)
+        __ne_pop_max = props.pop('__ne_pop_max', None)
+
+        population = props.get('population')
+
+        if population is None:
+            population = __ne_pop_min
+        if population is None:
+            kind = props.get('kind')
+            kind_detail = props.get('kind_detail')
+            # the following are estimate population for each kind_detail
+            if kind == 'locality':
+                if kind_detail == 'city':
+                    population = 10000
+                elif kind_detail == 'town':
+                    population = 5000
+                elif kind_detail == 'village':
+                    population = 2000
+                elif kind_detail == 'locality':
+                    population = 1000
+                elif kind_detail == 'hamlet':
+                    population = 200
+                elif kind_detail == 'isolated_dwelling':
+                    population = 100
+                elif kind_detail == 'farm':
+                    population = 50
+
+        population = to_float(population)
+        if population is not None:
+            props['population'] = int(population)
+        if __ne_pop_max is not None:
+            props['population_rank'] = _calculate_population_rank(__ne_pop_max)
+        elif population is not None:
+            props['population_rank'] = \
+                _calculate_population_rank(props['population'])
+
+
 def tags_set_ne_min_max_zoom(ctx):
     """
     Override the min zoom and max zoom properties with __ne_* variants from
@@ -9471,6 +9534,9 @@ def update_min_zoom(ctx):
         local = defaultdict(lambda: None)
         local.update(props)
         local['zoom'] = zoom
+        # this is to make the name `properties` visible in the queries.yaml's
+        # where clause
+        local['properties'] = props
 
         if where and eval(where, {}, local):
             new_min_zoom = eval(min_zoom, {}, local)

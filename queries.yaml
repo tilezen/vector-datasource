@@ -35,7 +35,9 @@ sources:
   ne:
     ## places
     # ne_10m_populated_places
+    # Note: we add start_zoom 2 here otherwise for the zoom 0/0/0 tile at 512px (or zoom1 at 256px), the size will get a lot bigger because there are 11 features with min_zoom of 1.7 as of Jan 2022.
     - template: ne-places.jinja2
+      start_zoom: 2
 
     ## boundaries
 
@@ -676,8 +678,12 @@ post_process:
       where: kind == 'region'
 
   # IMPORTANT! do this _after_ the YAMLToDict default stuff, otherwise the
-  # default will overwrite the value fron Natural Earth.
+  # default will overwrite the value from Natural Earth.
   - fn: vectordatasource.transform.tags_set_ne_min_max_zoom
+    params:
+      layer: places
+
+  - fn: vectordatasource.transform.tags_set_ne_pop_min_max_default
     params:
       layer: places
 
@@ -808,24 +814,32 @@ post_process:
       properties:
         - name
         - old_name
+      # TODO the properties.get('is_tunnel') is True might not work, need to fix it; refer to a similar fix in https://github.com/tilezen/vector-datasource/pull/2047
       where: >-
         (kind == 'sea' and zoom < 4) or
         (kind == 'bay' and zoom < 5) or
         (kind == 'fjord' and zoom < 5) or
         (kind == 'strait' and zoom < 5) or
         (kind == 'lake' and zoom < 5) or
+        (kind_detail == 'lake' and zoom < 5) or
         (kind == 'playa' and zoom < 6) or
         (kind == 'reef' and zoom < 6) or
         (kind == 'river' and zoom <  12) or
+        (kind_detail == 'river' and zoom <  12) or
         (kind == 'riverbank' and zoom <  12) or
-        (kind == 'water' and zoom <  12) or
+        (kind == 'water' and kind_detail is None and zoom <  12) or
         (kind == 'canal' and zoom <  13) or
+        (kind_detail == 'canal' and zoom <  13) or
         (kind == 'basin' and zoom <  13) or
+        (kind_detail == 'basin' and zoom <  13) or
         (kind == 'dock' and zoom <  13) or
         (kind == 'dam' and zoom <  14) or
         (kind == 'stream' and zoom <  14) or
+        (kind_detail == 'stream' and zoom <  14) or
         (kind == 'ditch' and zoom <  15) or
+        (kind_detail == 'ditch' and zoom <  15) or
         (kind == 'drain' and zoom <  15) or
+        (kind_detail == 'drain' and zoom <  15) or
         (kind == 'swimming_pool' and zoom <  15) or
         (kind == 'fountain' and zoom <  15) or
         (properties is not None and properties.get('is_tunnel') is True)
@@ -875,8 +889,10 @@ post_process:
             (15,        10000),
             (16,         None),
         ] if area >= area_threshold][0]
+      # note the following line cannot be written as
+      # properties is not None and properties.get('label_placement') is True
       where: >-
-        (properties is not None and properties.get('label_placement') is True)
+        properties is not None and label_placement
 
   # now that we have the label points
   # drop most water properties at lower zooms
@@ -1053,7 +1069,7 @@ post_process:
       end_zoom: 9
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 3
+      grid_width_meters: 52181.0113
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
@@ -1063,10 +1079,23 @@ post_process:
     params:
       source_layer: places
       start_zoom: 9
+      end_zoom: 10
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 26090.5056
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 10
       end_zoom: 11
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 6
+      grid_width_meters: 13045.2528
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }
@@ -1076,10 +1105,23 @@ post_process:
     params:
       source_layer: places
       start_zoom: 11
+      end_zoom: 12
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 6522.1264
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 12
       end_zoom: 13
       items_matching: { kind: locality }
       max_items: 1
-      grid_width: 12
+      grid_width_meters: 3261.0632
       sorting_keys:
         - { sort_key: 'min_zoom', reverse: False }
         - { sort_key: 'collision_rank', reverse: False }

@@ -94,8 +94,8 @@ class PopulationRankTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'places', {
-                'population': type(None),
-                'population_rank': 0,
+                'population': 10000,  # from hardcode estimate for city
+                'population_rank': 6,
             })
 
     def _rank_for_pop(self, population, capital=None):
@@ -121,10 +121,10 @@ class PopulationRankTest(FixtureTest):
             return features[0]['properties'].get('collision_rank')
 
     def test_collision_rank_decreasing(self):
-        last = self._rank_for_pop(None)
+        last = self._rank_for_pop(0)
         self.assertGreater(last, 0)
 
-        for exp in xrange(30):
+        for exp in xrange(1, 30):
             population = 1 << exp
             rank = self._rank_for_pop(population)
             self.assertLessEqual(rank, last)
