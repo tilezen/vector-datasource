@@ -565,7 +565,7 @@ function osm2pgsql.process_way(object)
 end
 
 function osm2pgsql.select_relation_members(relation)
-    if relation.tags.type == 'boundary' then
+    if relation.tags.type == 'boundary' or relation.tags.type == 'linestring' then
         return { ways = osm2pgsql.way_member_ids(relation) }
     end
 end
@@ -682,6 +682,10 @@ function osm2pgsql.process_relation(object)
                 disputed[member.ref] = object.id
             end
         end
+    end
+
+    if type == 'boundary' and (object.tags['ISO3166-1'] == 'MO' or object.tags['ISO3166-1'] == 'HK') then
+        output_hstore['admin_level:CN'] = '4'
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
