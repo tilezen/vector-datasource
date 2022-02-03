@@ -241,7 +241,7 @@ layers:
   buildings:
     simplify_before_intersect: yes
     area_threshold: 0.0
-    tolerance: 1.0
+    tolerance: 2.0
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -259,7 +259,7 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.buildings
-    area-inclusion-threshold: 1
+    area-inclusion-threshold: 2
   pois:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -1831,9 +1831,9 @@ post_process:
   # process may also have created small inners.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 16
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 0.5
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
