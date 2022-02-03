@@ -291,6 +291,7 @@ layers:
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.admin_level_alternate_viewpoint
       - vectordatasource.transform.tags_remove
       - vectordatasource.transform.admin_level_as_int
       - vectordatasource.transform.add_id_to_properties

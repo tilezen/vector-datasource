@@ -153,6 +153,25 @@ filters:
       claimed_by: {col: claimed_by}
       recognized_by: {col: recognized_by}
     table: osm
+  # these filters look for claims that don't have a claimed_by
+  - filter: {admin_level: '2', boundary: claim, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: country
+    table: osm
+  - filter: {admin_level: '4', boundary: claim, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: region
+    table: osm
+  - filter: {admin_level: '6', boundary: claim, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: county
+    table: osm
   - filter:
       all:
         - geom_type: line
@@ -165,7 +184,6 @@ filters:
       <<: *output_properties
       kind: mz_internal_dispute_mask
       disputed_by: {col: disputed_by}
-      dispute: 'yes'
     table: osm
 
   # osm

@@ -9205,10 +9205,10 @@ def remap_viewpoint_kinds(shape, props, fid, zoom):
     Remap Natural Earth kinds in kind:* country viewpoints into the standard
     Tilezen nomenclature.
     """
-
     for key in props.keys():
-        if key.startswith('kind:'):
-            props[key] = _REMAP_VIEWPOINT_KIND.get(props[key])
+
+        if key.startswith('kind:') and props[key] in _REMAP_VIEWPOINT_KIND:
+            props[key] = _REMAP_VIEWPOINT_KIND[props[key]]
 
     return (shape, props, fid)
 
@@ -9556,5 +9556,27 @@ def capital_alternate_viewpoint(shape, props, fid, zoom):
 
             elif default_region_capital and not region_capital:
                 props['region_capital:' + viewpoint] = False
+
+    return shape, props, fid
+
+
+_ADMIN_LEVEL_TO_KIND = {'2': 'country', '4': 'region', '6': 'county', '8': 'locality'}
+
+
+def admin_level_alternate_viewpoint(shape, props, fid, zoom):
+    """
+    turns e.g. admin_level:XX=4 into kind:XX=region
+    """
+    admin_viewpoint_prefix = 'admin_level:'
+    tags = props['tags']
+
+    for k in tags.keys():
+        if k.startswith(admin_viewpoint_prefix):
+            viewpoint = k[len(admin_viewpoint_prefix):].upper()
+            admin_level = tags.pop(k)
+
+            # use a mapping if we have it, leave it out otherwise
+            if admin_level in _ADMIN_LEVEL_TO_KIND:
+                props['kind:' + viewpoint] = _ADMIN_LEVEL_TO_KIND.get(admin_level, None)
 
     return shape, props, fid
