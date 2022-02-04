@@ -121,7 +121,9 @@ filters:
   #    should appear in the viewpoint of the `claimed_by=` value. additionally,
   #    extra viewpoints which don't make a claim for themselves but still want
   #    the claimant's view reflected in their own can be specified in a
-  #    `recognized_by=*` tag.
+  #    `recognized_by=*` tag. There are also cases where boundary=claim but there
+  #    is no corresponding claimed_by - these will have admin_level:XX tags instead
+  #    that will dictate what kind each viewpoint should have.
   #
   # 2. **disputes**, which have `dispute=yes` or `disputed=yes`, plus a list of
   #    disputant viewpoints in the `disputed_by=*` tag. when a viewpoint is
