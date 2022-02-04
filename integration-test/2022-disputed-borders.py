@@ -110,7 +110,7 @@ class DisputedBoundariesTest(FixtureTest):
             dsl.way(345678, dsl.tile_diagonal(z, x, y), {
                 'admin_level': '3',
                 'boundary': 'administrative',
-                'place': 'I feel I am a country - do you agree?',
+                'place': 'Neither state nor country',
                 'source': 'openstreetmap.org',
             }),
         )
