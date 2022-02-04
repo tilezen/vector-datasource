@@ -50,12 +50,6 @@ class DisputedBoundariesTest(FixtureTest):
             }),
         )
 
-        with self.layers_in_tile(z, x, y) as layers:
-            for layer in layers:
-                with self.features_in_tile_layer(z, x, y, layer) as features:
-                    for feature in features:
-                        print(feature)
-
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 726514231,
