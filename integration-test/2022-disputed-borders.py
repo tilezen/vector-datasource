@@ -5,7 +5,7 @@ from . import FixtureTest
 
 
 class DisputedBoundariesTest(FixtureTest):
-    def test_add_dispute_yes(self):
+    def test_admin_level_viewpoint(self):
         z, x, y = (16, 39109, 26572)
 
         self.generate_fixtures(
@@ -69,3 +69,58 @@ class DisputedBoundariesTest(FixtureTest):
             'id': 726514231,
             'kind:VN': None
         })
+
+    def test_admin_level_3_state(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/909074085
+            dsl.way(909074085, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'place': 'state',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 909074085,
+            })
+
+    def test_admin_level_3_country(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # this one is made up - just place = country
+            # TODO - this is currently confused by these lines overlapping.  Need to fix
+            dsl.way(123456, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'place': 'country',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 123456,
+            })
+
+    def test_admin_level_3_other_place(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # also made up - we should ignore other place values
+            dsl.way(345678, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'place': 'I feel I am a country - do you agree?',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_no_matching_feature(
+            z, x, y, 'boundaries', {
+                'id': 345678,
+            })

@@ -175,6 +175,18 @@ filters:
   - filter:
       all:
         - geom_type: line
+        - admin_level: '3'
+        - any:
+            - place: 'state'
+            - place: 'country'
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: disputed_country
+    table: osm
+  - filter:
+      all:
+        - geom_type: line
         - disputed_by: true
         - any:
             - dispute: 'yes'
