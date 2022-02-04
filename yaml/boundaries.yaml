@@ -121,7 +121,9 @@ filters:
   #    should appear in the viewpoint of the `claimed_by=` value. additionally,
   #    extra viewpoints which don't make a claim for themselves but still want
   #    the claimant's view reflected in their own can be specified in a
-  #    `recognized_by=*` tag.
+  #    `recognized_by=*` tag. There are also cases where boundary=claim but there
+  #    is no corresponding claimed_by - these will have admin_level:XX tags instead
+  #    that will dictate what kind each viewpoint should have.
   #
   # 2. **disputes**, which have `dispute=yes` or `disputed=yes`, plus a list of
   #    disputant viewpoints in the `disputed_by=*` tag. when a viewpoint is
@@ -154,6 +156,7 @@ filters:
       recognized_by: {col: recognized_by}
     table: osm
   # these filters look for claims that don't have a claimed_by
+  # but have different point of view tags for admin_level:XX
   - filter: {admin_level: '2', boundary: claim, geom_type: line}
     min_zoom: 8
     output:

@@ -9631,14 +9631,14 @@ _ADMIN_LEVEL_TO_KIND = {'2': 'country', '4': 'region', '6': 'county', '8': 'loca
 
 def admin_level_alternate_viewpoint(shape, props, fid, zoom):
     """
-    turns e.g. admin_level:XX=4 into kind:XX=region
+    turns e.g. admin_level:XX=4 into kind:xx=region
     """
     admin_viewpoint_prefix = 'admin_level:'
     tags = props['tags']
 
     for k in tags.keys():
         if k.startswith(admin_viewpoint_prefix):
-            viewpoint = k[len(admin_viewpoint_prefix):].upper()
+            viewpoint = k[len(admin_viewpoint_prefix):].lower()
             admin_level = tags.pop(k)
 
             # use a mapping if we have it, leave it out otherwise
