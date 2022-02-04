@@ -185,7 +185,7 @@ filters:
     min_zoom: 8
     output:
       <<: *output_properties
-      kind: disputed_country
+      kind: disputed_reference_line
       disputed: True
     table: osm
   - filter:

@@ -81,7 +81,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 909074085,
-                'kind': 'disputed_country',
+                'kind': 'disputed_reference_line',
                 'kind:xx': 'country',
                 'disputed': True,
             })
@@ -103,7 +103,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 123456,
-                'kind': 'disputed_country',
+                'kind': 'disputed_reference_line',
                 'kind:yy': 'country',
                 'disputed': True,
             })
@@ -118,6 +118,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'boundary': 'administrative',
                 'place': 'Neither state nor country',
                 'source': 'openstreetmap.org',
+                'admin_level:ZZ': '2'
             }),
         )
 
