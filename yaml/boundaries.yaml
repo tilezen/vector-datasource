@@ -154,6 +154,7 @@ filters:
       recognized_by: {col: recognized_by}
     table: osm
   # these filters look for claims that don't have a claimed_by
+  # but have different point of view tags for admin_level:XX
   - filter: {admin_level: '2', boundary: claim, geom_type: line}
     min_zoom: 8
     output:
