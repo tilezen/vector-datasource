@@ -86,6 +86,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 909074085,
+                'kind': 'disputed_country'
             })
 
     def test_admin_level_3_country(self):
@@ -93,7 +94,6 @@ class DisputedBoundariesTest(FixtureTest):
 
         self.generate_fixtures(
             # this one is made up - just place = country
-            # TODO - this is currently confused by these lines overlapping.  Need to fix
             dsl.way(123456, dsl.tile_diagonal(z, x, y), {
                 'admin_level': '3',
                 'boundary': 'administrative',
@@ -105,6 +105,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 123456,
+                'kind': 'disputed_country'
             })
 
     def test_admin_level_3_other_place(self):
