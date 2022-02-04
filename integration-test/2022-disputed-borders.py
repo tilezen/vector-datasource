@@ -5,7 +5,7 @@ from . import FixtureTest
 
 
 class DisputedBoundariesTest(FixtureTest):
-    def test_add_dispute_yes(self):
+    def test_admin_level_viewpoint(self):
         z, x, y = (16, 39109, 26572)
 
         self.generate_fixtures(
@@ -63,3 +63,66 @@ class DisputedBoundariesTest(FixtureTest):
             'id': 726514231,
             'kind:vn': None
         })
+
+    def test_admin_level_3_state(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/909074085
+            dsl.way(909074085, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'place': 'state',
+                'source': 'openstreetmap.org',
+                'admin_level:XX': '2'
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 909074085,
+                'kind': 'disputed_reference_line',
+                'kind:xx': 'country',
+                'disputed': True,
+            })
+
+    def test_admin_level_3_country(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # this one is made up - just place = country
+            dsl.way(123456, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'place': 'country',
+                'source': 'openstreetmap.org',
+                'admin_level:YY': '2'
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 123456,
+                'kind': 'disputed_reference_line',
+                'kind:yy': 'country',
+                'disputed': True,
+            })
+
+    def test_admin_level_3_other_place(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # also made up - we should ignore other place values
+            dsl.way(345678, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '3',
+                'boundary': 'administrative',
+                'place': 'Neither state nor country',
+                'source': 'openstreetmap.org',
+                'admin_level:ZZ': '2'
+            }),
+        )
+
+        self.assert_no_matching_feature(
+            z, x, y, 'boundaries', {
+                'id': 345678,
+            })

@@ -175,6 +175,21 @@ filters:
       <<: *output_properties
       kind: county
     table: osm
+  # this filter covers admin_level 3 boundaries for countries and states,
+  # turning them into disputed_reference_lines
+  - filter:
+      all:
+        - geom_type: line
+        - admin_level: '3'
+        - any:
+            - place: 'state'
+            - place: 'country'
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: disputed_reference_line
+      disputed: True
+    table: osm
   - filter:
       all:
         - geom_type: line
