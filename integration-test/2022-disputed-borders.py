@@ -126,3 +126,34 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 345678,
             })
+
+    def test_disputed_by_to_unrecognized_disputed_reference_line(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/13574166
+            dsl.way(13574166, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'disputed',
+                'disputed_by': 'RU;PK;IL;PS;SA;EG;ID;BD',
+                'name': '1949 Israeli-Syrian DMZ',
+                'ne:brk_a3': 'B16',
+                'ne_id': '1746705859;1746705871',
+                'type': 'linestring',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 13574166,
+                'disputed': True,
+                'kind:ru': 'disputed_reference_line',
+                'kind:pk': 'disputed_reference_line',
+                'kind:il': 'disputed_reference_line',
+                'kind:ps': 'disputed_reference_line',
+                'kind:sa': 'disputed_reference_line',
+                'kind:eg': 'disputed_reference_line',
+                'kind:id': 'disputed_reference_line',
+                'kind:bd': 'disputed_reference_line',
+                'kind': 'unrecognized_disputed_reference_line'
+            })

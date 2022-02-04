@@ -9320,6 +9320,7 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     recognized_by = props.get('recognized_by')
 
     if kind and kind.startswith(prefix) and claimed_by:
+
         claimed_kind = kind[len(prefix):]
 
         for country in _list_of_countries(claimed_by):
@@ -9472,9 +9473,19 @@ def apply_disputed_boundary_viewpoints(ctx):
         # we want to apply disputes to already generally-unrecognised borders
         # too, as this allows for multi-level fallback from one viewpoint
         # possibly through several others before reaching the default.
-        elif (kind.startswith('unrecognized_') and
-              kind[len('unrecognized_'):] in _BOUNDARY_KINDS):
-            boundaries.append((shape, props, fid))
+        elif kind.startswith('unrecognized_'):
+            disputed_kind = kind[len('unrecognized_'):]
+            if disputed_kind in _BOUNDARY_KINDS:
+                boundaries.append((shape, props, fid))
+            else:
+                # this covers the unrecognized_disputed_reference_line case
+                # unpack all the viewpoints from disputed_by
+                disputed_by = props['disputed_by']
+                if disputed_by:
+                    for country in _list_of_countries(disputed_by):
+                        props['kind:' + country] = disputed_kind
+
+                new_features.append((shape, props, fid))
 
         else:
             # pass through this feature - we just ignore it.

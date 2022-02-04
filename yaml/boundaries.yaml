@@ -190,6 +190,30 @@ filters:
       kind: disputed_reference_line
       disputed: True
     table: osm
+  - filter: {admin_level: '2', boundary: disputed, disputed_by: true, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: unrecognized_disputed_reference_line
+      disputed: True
+      disputed_by: {col: disputed_by}
+    table: osm
+  - filter: {admin_level: '4', boundary: disputed, disputed_by: true, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: unrecognized_disputed_reference_line
+      disputed: True
+      disputed_by: {col: disputed_by}
+    table: osm
+  - filter: {admin_level: '6', boundary: disputed, disputed_by: true, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: *output_properties
+      kind: unrecognized_disputed_reference_line
+      disputed: True
+      disputed_by: {col: disputed_by}
+    table: osm
   - filter:
       all:
         - geom_type: line
