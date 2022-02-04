@@ -58,7 +58,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:us': 'region',
             })
 
-        # make sure kind:VN didn't make it in because its admin_level doesn't map to anything
+        # make sure kind:vn didn't make it in because its admin_level doesn't map to anything
         self.assert_no_matching_feature(z, x, y, 'boundaries', {
             'id': 726514231,
             'kind:vn': None
