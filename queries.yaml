@@ -1744,7 +1744,7 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 16
+      end_zoom: 17
       properties:
         - landuse_kind
       where: >-
