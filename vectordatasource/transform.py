@@ -9638,7 +9638,7 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
 
     for k in tags.keys():
         if k.startswith(admin_viewpoint_prefix):
-            viewpoint = k[len(admin_viewpoint_prefix):].upper()
+            viewpoint = k[len(admin_viewpoint_prefix):].lower()
             admin_level = tags.pop(k)
 
             # use a mapping if we have it, leave it out otherwise
