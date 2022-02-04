@@ -241,7 +241,7 @@ layers:
   buildings:
     simplify_before_intersect: yes
     area_threshold: 0.0
-    tolerance: 3.0
+    tolerance: 1.0
     clip_factor: 3.0
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
@@ -1714,7 +1714,7 @@ post_process:
     params:
       end_zoom: 15
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 1.0
 
   - fn: vectordatasource.transform.quantize_height
     params:
