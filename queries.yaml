@@ -1782,7 +1782,7 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 16
+      end_zoom: 17
       # short-hand for "name" property in the list below means all name-like
       # properties.
       all_name_variants: true
