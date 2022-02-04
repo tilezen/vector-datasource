@@ -186,6 +186,7 @@ filters:
     output:
       <<: *output_properties
       kind: disputed_country
+      disputed: True
     table: osm
   - filter:
       all:
