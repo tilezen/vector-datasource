@@ -62,9 +62,9 @@ globals:
         way_area: { min: 500 }
         volume: { min: 50000 }
   - &z15_area_volume
-      way_area: { min: 20 }
+      way_area: { min: 40 }
   - &z16_area_volume
-      way_area: { min: 10 }
+      way_area: { min: 20 }
 # synthetic columns are values available to filters and output, but which are
 # generated in the SQL function and not passed in from the tables. in this case,
 # we generate the volume from the building height and way_area, where available.
