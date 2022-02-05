@@ -259,7 +259,7 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.buildings
-    area-inclusion-threshold: 3
+    area-inclusion-threshold: 1
   pois:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon]
     transform:
