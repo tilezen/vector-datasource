@@ -1712,9 +1712,9 @@ post_process:
   # drop small inners in buildings before we do the merge.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 1.0
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.quantize_height
     params:
@@ -1831,9 +1831,9 @@ post_process:
   # process may also have created small inners.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 16
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 1.0
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
