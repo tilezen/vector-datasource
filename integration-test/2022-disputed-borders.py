@@ -147,13 +147,13 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 13574166,
                 'disputed': True,
-                'kind:ru': 'disputed_reference_line',
-                'kind:pk': 'disputed_reference_line',
-                'kind:il': 'disputed_reference_line',
-                'kind:ps': 'disputed_reference_line',
-                'kind:sa': 'disputed_reference_line',
-                'kind:eg': 'disputed_reference_line',
-                'kind:id': 'disputed_reference_line',
-                'kind:bd': 'disputed_reference_line',
-                'kind': 'unrecognized_disputed_reference_line'
+                'kind:ru': 'unrecognized_disputed_reference_line',
+                'kind:pk': 'unrecognized_disputed_reference_line',
+                'kind:il': 'unrecognized_disputed_reference_line',
+                'kind:ps': 'unrecognized_disputed_reference_line',
+                'kind:sa': 'unrecognized_disputed_reference_line',
+                'kind:eg': 'unrecognized_disputed_reference_line',
+                'kind:id': 'unrecognized_disputed_reference_line',
+                'kind:bd': 'unrecognized_disputed_reference_line',
+                'kind': 'disputed_reference_line'
             })

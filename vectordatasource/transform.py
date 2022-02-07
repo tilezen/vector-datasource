@@ -9474,18 +9474,18 @@ def apply_disputed_boundary_viewpoints(ctx):
         # too, as this allows for multi-level fallback from one viewpoint
         # possibly through several others before reaching the default.
         elif kind.startswith('unrecognized_'):
-            disputed_kind = kind[len('unrecognized_'):]
-            if disputed_kind in _BOUNDARY_KINDS:
+            if kind[len('unrecognized_'):] in _BOUNDARY_KINDS:
                 boundaries.append((shape, props, fid))
-            else:
-                # this covers the unrecognized_disputed_reference_line case
-                # unpack all the viewpoints from disputed_by
-                disputed_by = props['disputed_by']
-                if disputed_by:
-                    for country in _list_of_countries(disputed_by):
-                        props['kind:' + country] = disputed_kind
 
-                new_features.append((shape, props, fid))
+        # this covers the disputed_reference_line case.
+        # unpack all the viewpoints from disputed_by, and make them all unrecognized
+        elif kind == 'disputed_reference_line':
+            disputed_by = props.get('disputed_by')
+            if disputed_by:
+                for country in _list_of_countries(disputed_by):
+                    props['kind:' + country] = 'unrecognized_disputed_reference_line'
+
+            new_features.append((shape, props, fid))
 
         else:
             # pass through this feature - we just ignore it.
