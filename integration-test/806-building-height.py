@@ -12,9 +12,10 @@ class BuildingHeight(FixtureTest):
         self.generate_fixtures(dsl.way(431358377, wkt_loads('POLYGON ((127.055528903431 37.25885030044089, 127.056004112216 37.2594416554027, 127.05683658099 37.2590179623059, 127.056361372205 37.25842660401769, 127.055528903431 37.25885030044089))'), {
                                u'building': u'office', u'building:levels': u'25', u'way_area': u'10799.6', u'name': u'R5 Tower A', u'source': u'openstreetmap.org'}))
 
+        # the height is processed quantize_height_round_nearest_5_meters from 77.0 to 75.0 introduced at https://github.com/tilezen/vector-datasource/pull/2052/
         self.assert_has_feature(
             16, 55897, 25449, 'buildings',
-            {'id': 431358377, 'height': 77.0, 'kind': 'building',
+            {'id': 431358377, 'height': 75.0, 'kind': 'building',
              'building:levels': type(None), 'building_levels': type(None)})
 
     def test_min_height_from_min_levels(self):

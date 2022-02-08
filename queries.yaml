@@ -1725,7 +1725,7 @@ post_process:
         13: vectordatasource.transform.quantize_height_round_nearest_20_meters
         14: vectordatasource.transform.quantize_height_round_nearest_10_meters
         15: vectordatasource.transform.quantize_height_round_nearest_10_meters
-        16: vectordatasource.transform.quantize_height_round_nearest_10_meters
+        16: vectordatasource.transform.quantize_height_round_nearest_5_meters
 
   # assign `scale_rank` - BEFORE merging, as we want to assign this based on
   # the original area/height/volume of the building before it is possibly
