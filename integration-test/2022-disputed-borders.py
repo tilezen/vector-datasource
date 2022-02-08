@@ -157,3 +157,66 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:bd': 'unrecognized_disputed_reference_line',
                 'kind': 'disputed_reference_line'
             })
+
+    def test_boundary_claim_disputed_by_claimed_by(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/13574166
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'claim',
+                'claimed_by': 'CN;TW',
+                'disputed_by': 'IN;PK;TR',
+                'name': 'Extent of Chinese Claim - ﻿Bara Hoti area',
+                'name:de': 'Ausdehnung des chinesischen Anspruchs',
+                'name:en': 'Extent of Chinese Claim - ﻿Bara Hoti area',
+                'name:zh': '中国声称边境线',
+                'name:zh_pinyin': 'Zhōngguó shēngchēng biānjìng xiàn',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746705405',
+                'recognized_by': 'RU',
+                'type': 'linestring',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 202058477,
+                'kind': 'unrecognized_country',
+                'kind:cn': 'country',
+                'kind:tw': 'country',
+                'kind:in': 'unrecognized_disputed_reference_line',
+                'kind:pk': 'unrecognized_disputed_reference_line',
+                'kind:tr': 'unrecognized_disputed_reference_line',
+            })
+
+    # TODO add a testcase for recognized_by
+
+    def test_boundary_dispute_disputed_by_claimed_by(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/13574166
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'disputed',
+                'claimed_by': 'IN',
+                'disputed_by': 'CN;RU;TW',
+                'name': 'Extent of Indian Claim at Bara Hotii Valleys',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746708469',
+                'type': 'linestring',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 13574166,
+                'disputed': True,
+                'kind:in': 'country',
+                'kind:cn': 'unrecognized_disputed_reference_line',
+                'kind:ru': 'unrecognized_disputed_reference_line',
+                'kind:tw': 'unrecognized_disputed_reference_line',
+                'kind': 'disputed_reference_line'
+            })

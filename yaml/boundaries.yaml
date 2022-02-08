@@ -138,6 +138,7 @@ filters:
       kind: unrecognized_country
       claimed_by: {col: claimed_by}
       recognized_by: {col: recognized_by}
+      disputed_by: {col: disputed_by}
     table: osm
   - filter: {admin_level: '4', boundary: claim, claimed_by: true, geom_type: line}
     min_zoom: 8
@@ -146,6 +147,7 @@ filters:
       kind: unrecognized_region
       claimed_by: {col: claimed_by}
       recognized_by: {col: recognized_by}
+      disputed_by: {col: disputed_by}
     table: osm
   - filter: {admin_level: '6', boundary: claim, claimed_by: true, geom_type: line}
     min_zoom: 8
@@ -154,6 +156,7 @@ filters:
       kind: unrecognized_county
       claimed_by: {col: claimed_by}
       recognized_by: {col: recognized_by}
+      disputed_by: {col: disputed_by}
     table: osm
   # these filters look for claims that don't have a claimed_by
   # but have different point of view tags for admin_level:XX
@@ -199,6 +202,8 @@ filters:
       kind: disputed_reference_line
       disputed: True
       disputed_by: {col: disputed_by}
+      claimed_by: { col: claimed_by }
+      recognized_by: { col: recognized_by }
     table: osm
   - filter: {admin_level: '4', boundary: disputed, disputed_by: true, geom_type: line}
     min_zoom: 8
@@ -207,6 +212,8 @@ filters:
       kind: disputed_reference_line
       disputed: True
       disputed_by: {col: disputed_by}
+      claimed_by: { col: claimed_by }
+      recognized_by: { col: recognized_by }
     table: osm
   - filter: {admin_level: '6', boundary: disputed, disputed_by: true, geom_type: line}
     min_zoom: 8
@@ -215,6 +222,8 @@ filters:
       kind: disputed_reference_line
       disputed: True
       disputed_by: {col: disputed_by}
+      claimed_by: { col: claimed_by }
+      recognized_by: { col: recognized_by }
     table: osm
   - filter:
       all:
