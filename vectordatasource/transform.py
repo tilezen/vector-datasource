@@ -9318,6 +9318,7 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     kind = props.get('kind')
     claimed_by = props.get('claimed_by')
     recognized_by = props.get('recognized_by')
+    disputed_by = props.get('disputed_by')
 
     if kind and kind.startswith(prefix) and claimed_by:
 
@@ -9329,6 +9330,10 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
         if recognized_by:
             for viewpoint in _list_of_countries(recognized_by):
                 props['kind:' + viewpoint] = claimed_kind
+
+        if disputed_by:
+            for viewpoint in _list_of_countries(disputed_by):
+                props['kind:' + viewpoint] = 'unrecognized_disputed_reference_line'
 
     return (shape, props, fid)
 
@@ -9484,6 +9489,18 @@ def apply_disputed_boundary_viewpoints(ctx):
             if disputed_by:
                 for country in _list_of_countries(disputed_by):
                     props['kind:' + country] = 'unrecognized_disputed_reference_line'
+
+            kind_from_admin_level = _ADMIN_LEVEL_TO_KIND.get(str(props.get('tz_admin_level')))
+            if kind_from_admin_level:
+                claimed_by = props.get('claimed_by')
+                if claimed_by:
+                    for country in _list_of_countries(claimed_by):
+                        props['kind:' + country] = kind_from_admin_level
+
+                recognized_by = props.get('recognized_by')
+                if recognized_by:
+                    for country in _list_of_countries(recognized_by):
+                        props['kind:' + country] = kind_from_admin_level
 
             new_features.append((shape, props, fid))
 

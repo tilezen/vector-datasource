@@ -189,20 +189,20 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:in': 'unrecognized_disputed_reference_line',
                 'kind:pk': 'unrecognized_disputed_reference_line',
                 'kind:tr': 'unrecognized_disputed_reference_line',
+                'kind:ru': 'country',
             })
-
-    # TODO add a testcase for recognized_by
 
     def test_boundary_dispute_disputed_by_claimed_by(self):
         z, x, y = (16, 53533, 28559)
 
         self.generate_fixtures(
-            # https://www.openstreetmap.org/relation/13574166
+            # https://www.openstreetmap.org/relation/202058477
             dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
                 'admin_level': '2',
                 'boundary': 'disputed',
                 'claimed_by': 'IN',
                 'disputed_by': 'CN;RU;TW',
+                'recognized_by': 'XX;YY',
                 'name': 'Extent of Indian Claim at Bara Hotii Valleys',
                 'ne:brk_a3': 'B02',
                 'ne_id': '1746708469',
@@ -212,11 +212,13 @@ class DisputedBoundariesTest(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'id': 13574166,
+                'id': 202058477,
                 'disputed': True,
                 'kind:in': 'country',
                 'kind:cn': 'unrecognized_disputed_reference_line',
                 'kind:ru': 'unrecognized_disputed_reference_line',
                 'kind:tw': 'unrecognized_disputed_reference_line',
-                'kind': 'disputed_reference_line'
+                'kind': 'disputed_reference_line',
+                'kind:xx': 'country',
+                'kind:yy': 'country'
             })
