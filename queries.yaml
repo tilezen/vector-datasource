@@ -2036,7 +2036,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 17
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
@@ -2057,7 +2057,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 17
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
       # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
       # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
@@ -2068,7 +2068,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 17
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
