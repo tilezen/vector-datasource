@@ -1749,7 +1749,7 @@ post_process:
       properties:
         - landuse_kind
       where: >-
-        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'hospital', 'park', 'school', 'university']
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'national_park', 'nature_reserve', 'park', 'protected_area', 'runway', 'school', 'taxiway', 'university']
 
   - fn: vectordatasource.transform.drop_properties
     params:
