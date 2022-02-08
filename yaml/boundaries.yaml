@@ -193,8 +193,8 @@ filters:
       kind: disputed_reference_line
       disputed: True
     table: osm
-  # These are kind=unrecognized_disputed_reference_lines that, for viewpoint XX in disputed_by,
-  # becomes kind:xx=disputed_reference_line
+  # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
+  # becomes kind:xx=unrecognized_disputed_reference_line
   - filter: {admin_level: ['2','4','6'], boundary: disputed, disputed_by: true, geom_type: line}
     min_zoom: 8
     output:
