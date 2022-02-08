@@ -9331,6 +9331,7 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
             for viewpoint in _list_of_countries(recognized_by):
                 props['kind:' + viewpoint] = claimed_kind
 
+        # TODO what do I need to do with geometry here?
         if disputed_by:
             for viewpoint in _list_of_countries(disputed_by):
                 props['kind:' + viewpoint] = 'unrecognized_disputed_reference_line'
@@ -9484,6 +9485,7 @@ def apply_disputed_boundary_viewpoints(ctx):
 
         # this covers the disputed_reference_line case.
         # unpack all the viewpoints from disputed_by, and make them all unrecognized
+        # TODO what do I need to do with geometry here?
         elif kind == 'disputed_reference_line':
             disputed_by = props.get('disputed_by')
             if disputed_by:
