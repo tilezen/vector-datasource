@@ -2063,7 +2063,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 17
+      end_zoom: 16
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
@@ -2105,7 +2105,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 17
+      end_zoom: 16
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
@@ -2127,8 +2127,8 @@ post_process:
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
-      start_zoom: 15
-      end_zoom: 16
+      start_zoom: 16
+      end_zoom: 17
       # setting the following will cause lines, or parts of multi-lines,
       # shorter than 1px at nominal zoom to be dropped.
       drop_short_segments: true
