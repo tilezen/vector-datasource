@@ -1277,7 +1277,7 @@ post_process:
         (kind == 'minor_road' and zoom < 15)
 
   # Because we have is_bus_route encodes, we don't need the
-  # details about bus network, operator, and shield text until 
+  # details about bus network, operator, and shield text until
   # later zooms when there is enough space to label them
   - fn: vectordatasource.transform.drop_properties
     params:
