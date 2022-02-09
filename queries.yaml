@@ -1936,18 +1936,18 @@ post_process:
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_rank', reverse: True }
 
-  # drop landuse_kind=residential or industrial at mid-low zooms, because they
+  # conditionally drop landuse_kind at mid-low zooms, because they
   # interfere a lot with merging, and tend to be not strongly styled unlike
   # military, hospital or park/forest land uses.
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 14
+      end_zoom: 16
       properties:
         - landuse_kind
       where: >-
-        landuse_kind in ('residential', 'industrial')
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'military', 'national_park', 'nature_reserve', 'park', 'parking', 'protected_area', 'runway', 'school', 'taxiway', 'university']
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1957,10 +1957,10 @@ post_process:
       properties:
         - landuse_kind
       where: >-
-        (kind_detail == 'trunk' and zoom < 11) or
-        (kind_detail == 'primary' and zoom < 12) or
-        (kind_detail == 'secondary' and zoom < 13) or
-        (kind_detail == 'tertiary' and zoom < 13) or
+        (kind_detail == 'trunk' and zoom < 10) or
+        (kind_detail == 'primary' and zoom < 11) or
+        (kind_detail == 'secondary' and zoom < 12) or
+        (kind_detail == 'tertiary' and zoom < 12) or
         (kind_detail == 'motorway_link' and zoom < 14) or
         (kind_detail == 'trunk_link' and zoom < 14) or
         (kind_detail == 'primary_link' and zoom < 15) or
