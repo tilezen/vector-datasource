@@ -1265,8 +1265,6 @@ post_process:
       start_zoom: 0
       end_zoom: 15
       properties:
-        - bus_shield_text
-        - bus_shield_text_length
         - bicycle_shield_text
         - bicycle_shield_text_length
         - walking_shield_text
@@ -1277,6 +1275,22 @@ post_process:
         (kind == 'highway' and zoom < 12) or
         (kind == 'major_road' and zoom < 13) or
         (kind == 'minor_road' and zoom < 15)
+
+  # Because we have is_bus_route encodes, we don't need the
+  # details about bus network, operator, and shield text until 
+  # later zooms when there is enough space to label them
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 17
+      properties:
+        - bus_network
+        - bus_shield_text
+        - bus_shield_text_length
+        - operator
+      where: >-
+        kind in ('highway', 'major_road', 'minor_road')
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1303,6 +1317,22 @@ post_process:
         (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
+  # drop ref, relation, and odd name tags till the end
+  # these aren't used for rendering and bloat property size
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 17
+      properties:
+        - ref
+        - osm_relation
+        - alt_name
+        - alt_name:ar
+        - alt_name:en
+        - alt_name:es
+        - old_name
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -1313,12 +1343,10 @@ post_process:
       all_name_variants: true
       properties:
         - name
-        - ref
         - all_networks
         - all_shield_texts
         - service
         - access
-        - osm_relation
       where: >-
         (kind == 'highway' and zoom <  11) or
         (kind_detail == 'trunk' and zoom <  12) or
@@ -1348,7 +1376,6 @@ post_process:
         - cycleway_right
         - cycleway_left
         - hgv
-        - operator
       where: >-
         (kind == 'highway' and zoom <  12) or
         (kind == 'major_road' and zoom <  13) or
