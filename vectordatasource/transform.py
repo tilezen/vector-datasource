@@ -2671,6 +2671,9 @@ def _project_properties(ctx, action):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
+    if source_layer == 'buildings':
+        print('peitibuildings zoom:{}'.format(zoom))
+
     layer = _find_layer(feature_layers, source_layer)
     if layer is None:
         return None
