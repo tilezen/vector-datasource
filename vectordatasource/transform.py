@@ -2672,7 +2672,7 @@ def _project_properties(ctx, action):
         return None
 
     if source_layer == 'buildings':
-        print('peitibuildings zoom:{}'.format(zoom))
+        print('peitidebug_vd_properties zoom:{}'.format(zoom))
 
     layer = _find_layer(feature_layers, source_layer)
     if layer is None:
