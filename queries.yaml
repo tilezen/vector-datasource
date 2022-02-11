@@ -1745,11 +1745,11 @@ post_process:
     params:
       source_layer: buildings
       start_zoom: 0
-      end_zoom: 17
+      end_zoom: 16
       properties:
         - landuse_kind
       where: >-
-        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'national_park', 'nature_reserve', 'park', 'protected_area', 'runway', 'school', 'taxiway', 'university']
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'national_park', 'nature_reserve', 'park', 'protected_area', 'retail', 'runway', 'school', 'station', 'taxiway', 'university']
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1768,8 +1768,6 @@ post_process:
       end_zoom: 16
       properties:
         - building_material
-        - layer
-        - location
         - osm_relation
         - roof_color
         - roof_height
