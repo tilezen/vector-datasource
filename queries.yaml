@@ -1265,8 +1265,6 @@ post_process:
       start_zoom: 0
       end_zoom: 15
       properties:
-        - bus_shield_text
-        - bus_shield_text_length
         - bicycle_shield_text
         - bicycle_shield_text_length
         - walking_shield_text
@@ -1277,6 +1275,25 @@ post_process:
         (kind == 'highway' and zoom < 12) or
         (kind == 'major_road' and zoom < 13) or
         (kind == 'minor_road' and zoom < 15)
+
+  # Because we have is_bus_route boolean, we don't need the
+  # details about bus network, operator, and shield text until
+  # later zooms when there is enough space to label them
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 17
+      properties:
+        - bus_network
+        - bus_shield_text
+        - bus_shield_text_length
+        - all_bus_networks
+        - all_bus_shield_texts
+        - all_bus_shield_text_length
+        - operator
+      where: >-
+        kind in ('highway', 'major_road', 'minor_road')
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1303,6 +1320,22 @@ post_process:
         (kind == 'ferry' and zoom < 14) or
         (kind == 'rail' and zoom < 15)
 
+  # drop ref, relation, and odd name tags till the end
+  # these aren't used for rendering and bloat property size
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 17
+      properties:
+        - ref
+        - osm_relation
+        - alt_name
+        - alt_name:ar
+        - alt_name:en
+        - alt_name:es
+        - old_name
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -1313,12 +1346,10 @@ post_process:
       all_name_variants: true
       properties:
         - name
-        - ref
         - all_networks
         - all_shield_texts
         - service
         - access
-        - osm_relation
       where: >-
         (kind == 'highway' and zoom <  11) or
         (kind_detail == 'trunk' and zoom <  12) or
@@ -1348,7 +1379,6 @@ post_process:
         - cycleway_right
         - cycleway_left
         - hgv
-        - operator
       where: >-
         (kind == 'highway' and zoom <  12) or
         (kind == 'major_road' and zoom <  13) or
@@ -1713,15 +1743,15 @@ post_process:
   # drop small inners in buildings before we do the merge.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.quantize_height
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 16
+      end_zoom: 17
       quantize:
         13: vectordatasource.transform.quantize_height_round_nearest_20_meters
         14: vectordatasource.transform.quantize_height_round_nearest_10_meters
@@ -1740,6 +1770,56 @@ post_process:
     params:
       source_layer: buildings
       target_value_type: int
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - landuse_kind
+      where: >-
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'national_park', 'nature_reserve', 'park', 'protected_area', 'retail', 'runway', 'school', 'station', 'taxiway', 'university']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - kind_detail
+      where: >-
+        kind_detail not in ['airport', 'civic', 'church', 'college', 'commercial', 'fire_station', 'industrial', 'military', 'hospital', 'office', 'public', 'prison', 'retail', 'school', 'sports_centre', 'stadium', 'station', 'synagogue', 'train_station', 'university', 'warehouse']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - building_material
+        - osm_relation
+        - roof_color
+        - roof_height
+        - roof_material
+        - roof_orientation
+        - roof_shape
+        - root_id
+        - volume
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 17
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
+        - addr_housenumber
+        - addr_street
 
   # fit min zoom onto the scale rank, as we'll be using the scale rank rather
   # than the min zoom to calculate whether a building should make it into a
@@ -1780,9 +1860,9 @@ post_process:
   # process may also have created small inners.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
@@ -1859,18 +1939,18 @@ post_process:
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_rank', reverse: True }
 
-  # drop landuse_kind=residential or industrial at mid-low zooms, because they
+  # conditionally drop landuse_kind at mid-low zooms, because they
   # interfere a lot with merging, and tend to be not strongly styled unlike
   # military, hospital or park/forest land uses.
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 14
+      end_zoom: 16
       properties:
         - landuse_kind
       where: >-
-        landuse_kind in ('residential', 'industrial')
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'military', 'national_park', 'nature_reserve', 'park', 'parking', 'protected_area', 'runway', 'school', 'taxiway', 'university']
 
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1880,10 +1960,10 @@ post_process:
       properties:
         - landuse_kind
       where: >-
-        (kind_detail == 'trunk' and zoom < 11) or
-        (kind_detail == 'primary' and zoom < 12) or
-        (kind_detail == 'secondary' and zoom < 13) or
-        (kind_detail == 'tertiary' and zoom < 13) or
+        (kind_detail == 'trunk' and zoom < 10) or
+        (kind_detail == 'primary' and zoom < 11) or
+        (kind_detail == 'secondary' and zoom < 12) or
+        (kind_detail == 'tertiary' and zoom < 12) or
         (kind_detail == 'motorway_link' and zoom < 14) or
         (kind_detail == 'trunk_link' and zoom < 14) or
         (kind_detail == 'primary_link' and zoom < 15) or
@@ -1986,7 +2066,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 16
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
@@ -2009,16 +2089,26 @@ post_process:
       start_zoom: 8
       end_zoom: 15
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
-      # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
-      # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
+      # the name gets dropped. larger values mean fewer lines are eligible for labelling.
       pixels_per_letter: 11
+
+  # drop labels on roads which are too short to render
+  # but with more flexibility for range of style text sizes
+  - fn: vectordatasource.transform.drop_names_on_short_boundaries
+    params:
+      source_layer: roads
+      start_zoom: 15
+      end_zoom: 17
+      # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
+      # the name gets dropped. larger values mean fewer lines are eligible for labelling.
+      pixels_per_letter: 5
 
   # since we drop names in the previous step, we would like merge it again
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
       start_zoom: 8
-      end_zoom: 15
+      end_zoom: 16
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
@@ -2040,8 +2130,8 @@ post_process:
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
-      start_zoom: 15
-      end_zoom: 16
+      start_zoom: 16
+      end_zoom: 17
       # setting the following will cause lines, or parts of multi-lines,
       # shorter than 1px at nominal zoom to be dropped.
       drop_short_segments: true

@@ -14,7 +14,7 @@ class RoadSortKeysRoads(FixtureTest):
         self.assert_has_feature(
             16, 10472, 25323, 'roads',
             {'kind': 'highway', 'kind_detail': 'motorway', 'id': 26765956,
-             'name': 'Presidio Pkwy.', 'sort_rank': 383})
+             'name': type(None), 'sort_rank': 383})
 
     def test_trunk(self):
         self.generate_fixtures(dsl.way(65310628, wkt_loads('POINT (-122.475980826386 37.74678596946688)'), {u'source': u'openstreetmap.org', u'highway': u'traffic_signals'}), dsl.way(65316090, wkt_loads('POINT (-122.476110093955 37.74865039228589)'), {u'source': u'openstreetmap.org', u'highway': u'traffic_signals'}), dsl.way(89802409, wkt_loads('LINESTRING (-122.476110093955 37.74865039228589, -122.475980826386 37.74678596946688)'), {
@@ -41,7 +41,7 @@ class RoadSortKeysRoads(FixtureTest):
         self.assert_has_feature(
             16, 10482, 25332, 'roads',
             {'kind': 'major_road', 'kind_detail': 'secondary', 'id': 25337673,
-             'name': 'Mission St.', 'sort_rank': 379})
+             'name': type(None), 'sort_rank': 379})
 
     def test_tertiary(self):
         self.generate_fixtures(dsl.way(65322629, wkt_loads('POINT (-122.40181420973 37.80231791588138)'), {u'source': u'openstreetmap.org', u'highway': u'traffic_signals'}), dsl.way(65333972, wkt_loads('POINT (-122.401067530066 37.79858441788151)'), {u'source': u'openstreetmap.org', u'turn_restrictions': u'no', u'highway': u'traffic_signals'}), dsl.way(3645272798, wkt_loads('POINT (-122.401086484518 37.79867910806588)'), {u'crossing': u'traffic_signals', u'source': u'openstreetmap.org', u'highway': u'crossing'}), dsl.way(255330035, wkt_loads(
@@ -68,7 +68,7 @@ class RoadSortKeysRoads(FixtureTest):
         self.assert_has_feature(
             16, 10485, 25344, 'roads',
             {'kind': 'minor_road', 'kind_detail': 'residential', 'id': 8919312,
-             'name': 'Racine Ln.', 'sort_rank': 360})
+             'name': type(None), 'sort_rank': 360})
 
     def test_service(self):
         self.generate_fixtures(dsl.way(59161514, wkt_loads('LINESTRING (-122.4472244965 37.80663996058681, -122.44711463254 37.8067056828995, -122.446758001373 37.80679809149498, -122.446403795656 37.80689000315549, -122.446004135186 37.80698539243338, -122.444982211719 37.80729270973048, -122.444909807507 37.80734345599718, -122.444832013403 37.80740499023472)'), {

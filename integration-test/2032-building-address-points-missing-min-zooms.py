@@ -9,7 +9,7 @@ class BuildingAddressPointsMissingMinZooms(FixtureTest):
     def test_address_point_gen_has_min_zoom_17(self):
         import dsl
 
-        z, x, y = (16, 19299, 24630)
+        z, x, y = (17, 19299, 24630)
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/265302092
@@ -74,7 +74,7 @@ class BuildingAddressPointsMissingMinZooms(FixtureTest):
     def test_address_point_falls_back_to_name(self):
         import dsl
 
-        z, x, y = (16, 19299, 24630)
+        z, x, y = (17, 19299, 24630)
 
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/265302092
@@ -107,7 +107,6 @@ class BuildingAddressPointsMissingMinZooms(FixtureTest):
     # if there is no housenumber, and the building name is not just a number, don't make an address point
     def test_no_address_point_if_no_usable_address(self):
         import dsl
-
         z, x, y = (16, 19299, 24630)
 
         self.generate_fixtures(

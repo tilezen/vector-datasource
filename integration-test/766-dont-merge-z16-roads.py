@@ -14,8 +14,8 @@ class DontMergeZ16Roads(FixtureTest):
 
         self.assert_has_feature(
             16, 19829, 24234, 'roads',
-            {'kind': 'major_road', 'kind_detail': 'trunk', 'id': 89912879})
+            {'kind': 'major_road', 'kind_detail': 'trunk', 'id': type(None)})
 
         self.assert_has_feature(
             16, 19829, 24234, 'roads',
-            {'kind': 'major_road', 'kind_detail': 'trunk', 'id': 89911760})
+            {'kind': 'major_road', 'kind_detail': 'trunk', 'id': type(None)})

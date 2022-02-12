@@ -14,7 +14,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 10475, 25324, 'roads',
             {'kind': 'highway', 'kind_detail': 'motorway', 'id': 167952621,
-             'name': 'Presidio Pkwy.', 'is_tunnel': True, 'sort_rank': 333})
+             'name': type(None), 'is_tunnel': True, 'sort_rank': 333})
 
     def test_trunk_level_0(self):
         self.generate_fixtures(dsl.way(259492789, wkt_loads('LINESTRING (-74.16702601822249 40.73275266220829, -74.16711180733211 40.73254919807029)'), {u'tunnel': u'yes', u'tiger:name_base': u'McCarter', u'hgv:state_network': u'yes', u'name': u'McCarter Highway', u'tiger:cfcc': u'A35', u'tiger:name_base_1': u'State Route 21', u'hgv': u'designated', u'tiger:zip_left': u'07104',
@@ -23,7 +23,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 19266, 24635, 'roads',
             {'kind': 'major_road', 'kind_detail': 'trunk', 'id': 259492789,
-             'name': 'McCarter Hwy.', 'is_tunnel': True, 'sort_rank': 331})
+             'name': type(None), 'is_tunnel': True, 'sort_rank': 331})
 
         self.generate_fixtures(dsl.way(277441866, wkt_loads('LINESTRING (-83.51858074221251 35.74467572285489, -83.5186876417313 35.74474476841309, -83.51881250755579 35.74482300053089, -83.5189321631516 35.74490640915329, -83.51904642885579 35.74499477553549, -83.51915494534208 35.74508795384219, -83.51925717362138 35.74518557950971, -83.5193531136938 35.74528736088479, -83.519442406233 35.74539315213308, -83.51952478174461 35.74550258869337, -83.5196001503969 35.74561537891499, -83.5196680630324 35.74573115823921, -83.51972860948248 35.745849707927, -83.51978143042119 35.7459706634228, -83.519826436017 35.74609380599009, -83.51986353643818 35.74621847944319, -83.51989255202189 35.74634468377489, -83.519913482768 35.746471981529, -83.51992632867659 35.74660000815989, -83.51993082025298 35.74672825330868)'), {
                                u'unsigned_ref': u'SR 71;SR 73', u'lanes': u'2', u'name': u'Gatlinburg Spur Road (north)', u'tunnel': u'yes', u'surface': u'paved', u'source': u'openstreetmap.org', u'official_name': u'Gatlinburg Spur Road (north)', u'NHS': u'yes', u'oneway': u'yes', u'ref': u'US 321;US 441', u'highway': u'trunk'}))
@@ -31,7 +31,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 17563, 25792, 'roads',
             {'kind': 'major_road', 'kind_detail': 'trunk', 'id': 277441866,
-             'name': 'Gatlinburg Spur Road (north)', 'is_tunnel': True,
+             'name': type(None), 'is_tunnel': True,
              'sort_rank': 331})
 
     def test_primary_level_0(self):
@@ -41,7 +41,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 16808, 24434, 'roads',
             {'kind': 'major_road', 'kind_detail': 'primary', 'id': 117837633,
-             'name': 'Dixie Hwy.', 'is_tunnel': True, 'sort_rank': 330})
+             'name': type(None), 'is_tunnel': True, 'sort_rank': 330})
 
     def test_secondary_level_0(self):
         self.generate_fixtures(dsl.way(57782075, wkt_loads('LINESTRING (-87.64371486497609 41.7396067862949, -87.64368198663669 41.73869201695129)'), {u'tiger:source': u'tiger_import_dch_v0.6_20070809', u'tiger:name_base': u'Halsted', u'name': u'South Halsted Street', u'tiger:cfcc': u'A41', u'tiger:separated': u'no', u'tunnel': u'yes',
@@ -50,7 +50,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 16812, 24391, 'roads',
             {'kind': 'major_road', 'kind_detail': 'secondary', 'id': 57782075,
-             'name': 'S Halsted St.', 'is_tunnel': True, 'sort_rank': 329})
+             'name': type(None), 'is_tunnel': True, 'sort_rank': 329})
 
     def test_teriary_level_0(self):
         self.generate_fixtures(dsl.way(57708079, wkt_loads('LINESTRING (-87.63913570281528 41.75983047016649, -87.63944553175681 41.75982631559528)'), {u'tiger:source': u'tiger_import_dch_v0.6_20070809', u'tiger:name_base': u'74th', u'name': u'West 74th Street', u'tiger:cfcc': u'A41', u'tiger:separated': u'no', u'tunnel': u'yes', u'tiger:zip_left': u'60636', u'tiger:zip_right': u'60636', u'tiger:reviewed': u'no',
@@ -59,7 +59,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 16813, 24386, 'roads',
             {'kind': 'major_road', 'kind_detail': 'tertiary', 'id': 57708079,
-             'name': 'W 74th St.', 'is_tunnel': True, 'sort_rank': 327})
+             'name': type(None), 'is_tunnel': True, 'sort_rank': 327})
 
     def test_residential_level_0(self):
         self.generate_fixtures(dsl.way(56393654, wkt_loads('LINESTRING (-87.6687173149529 41.85966997294218, -87.66872872355698 41.86017336309299)'), {u'tiger:source': u'tiger_import_dch_v0.6_20070809', u'tiger:name_base': u'Paulina', u'bicycle': u'yes', u'name': u'South Paulina Street', u'tiger:cfcc': u'A41', u'tiger:separated': u'no', u'tunnel': u'yes', u'tiger:zip_left': u'60608', u'tiger:zip_right': u'60608', u'tiger:reviewed': u'no',
@@ -68,7 +68,7 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 16808, 24362, 'roads',
             {'kind': 'minor_road', 'kind_detail': 'residential',
-             'id': 56393654, 'name': 'S Paulina St.', 'is_tunnel': True,
+             'id': 56393654, 'name': type(None), 'is_tunnel': True,
              'sort_rank': 310})
 
     def test_service_level_0(self):
@@ -78,4 +78,4 @@ class RoadSortKeysTunnel(FixtureTest):
         self.assert_has_feature(
             16, 16814, 24363, 'roads',
             {'kind': 'minor_road', 'kind_detail': 'service', 'id': 190835369,
-             'name': 'S Wong Pkwy.', 'is_tunnel': True, 'sort_rank': 308})
+             'name': type(None), 'is_tunnel': True, 'sort_rank': 308})

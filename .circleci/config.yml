@@ -45,7 +45,8 @@ jobs:
           name: Check Code Style using pre-commit
           command: |
             . ~/env/bin/activate
-            pre-commit run --show-diff-on-failure --all-files
+# we enabled pre-commit.ci for the repo so no need to run it on Circle here again
+#           pre-commit run --show-diff-on-failure --all-files
       - run:
           name: Setup.py develop
           command: |
