@@ -70,6 +70,7 @@ class ShieldTextLengthTest(FixtureTest):
                 'shield_text_length': '2',
                 'bicycle_shield_text': '50',
                 'bicycle_shield_text_length': '2',
+                'is_bus_related': True,
                 'bus_shield_text': type(None),
                 'bus_shield_text_length': type(None),
             })
@@ -121,6 +122,7 @@ class ShieldTextLengthTest(FixtureTest):
                 'shield_text_length': '6',
                 'bicycle_shield_text': '1234567',
                 'bus_shield_text': type(None),
+                'is_bus_related': True,
             })
 
         self.assert_no_matching_feature(z, x, y, 'roads', {
