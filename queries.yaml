@@ -1288,6 +1288,9 @@ post_process:
         - bus_network
         - bus_shield_text
         - bus_shield_text_length
+        - all_bus_networks
+        - all_bus_shield_texts
+        - all_bus_shield_text_length
         - operator
       where: >-
         kind in ('highway', 'major_road', 'minor_road')
