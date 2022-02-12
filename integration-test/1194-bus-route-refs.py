@@ -72,7 +72,7 @@ class BusRouteRefs(FixtureTest):
              'bicycle_shield_text': '50',
              'bus_network': type(None),
              'bus_shield_text': type(None),
-             'is_bus_related': True})
+             'is_bus_related': type(None)})
 
     def test_inbound_and_outbound_routes(self):
         # Jackson St. SF, part of trolley-bus route 3
@@ -116,9 +116,9 @@ class BusRouteRefs(FixtureTest):
             {'id': 225516711,
              'bus_network': type(None),
              'bus_shield_text': type(None),
-             'is_bus_related': True,
-             'all_bus_networks': [type(None)],
-             'all_bus_shield_texts': [type(None)]})
+             'is_bus_related': type(None),
+             'all_bus_networks': type(None),
+             'all_bus_shield_texts': type(None)})
 
     def test_full_lists_disappear_by_zoom_12(self):
         # make sure the all_* lists are gone by zoom 12 on major roads, but
