@@ -14,5 +14,5 @@ class RoadsSurfaceCobblestoneValueTransformed(FixtureTest):
 
         self.assert_has_feature(
             16, 39650, 22780, 'roads',
-            {'id': 239860289, 'name:en': 'Illicha Avenue',
+            {'id': 239860289, 'name:en': type(None),
              'kind': 'major_road', 'surface': 'cobblestone_flattened'})

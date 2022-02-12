@@ -13,7 +13,7 @@ class RoadSortKeysBridges(FixtureTest):
         self.assert_has_feature(
             16, 10472, 25323, 'roads',
             {'kind': 'highway', 'kind_detail': 'motorway', 'id': 28412298,
-             'name': 'Presidio Pkwy.', 'is_bridge': True, 'sort_rank': 443})
+             'name': type(None), 'is_bridge': True, 'sort_rank': 443})
 
     def test_trunk_bridge(self):
         self.generate_fixtures(dsl.way(59801274, wkt_loads('LINESTRING (-122.479362893599 37.77087721656759, -122.479200837522 37.77058011511458)'), {u'bridge': u'yes', u'layer': u'1', u'maxspeed': u'35 mph', u'lanes': u'3', u'name': u'Crossover Drive', u'tiger:cfcc': u'A35', u'source': u'openstreetmap.org', u'hgv': u'designated',
@@ -22,7 +22,7 @@ class RoadSortKeysBridges(FixtureTest):
         self.assert_has_feature(
             16, 10471, 25331, 'roads',
             {'kind': 'major_road', 'kind_detail': 'trunk', 'id': 59801274,
-             'name': 'Crossover Dr.', 'is_bridge': True, 'sort_rank': 443})
+             'name': type(None), 'is_bridge': True, 'sort_rank': 443})
 
     def test_primary_bridge(self):
         self.generate_fixtures(dsl.way(399640204, wkt_loads('LINESTRING (-118.117754009656 33.8102109201601, -118.117900794373 33.80993729058998)'), {u'bridge': u'yes', u'tiger:name_base': u'Los Coyotes Diagonal', u'lanes': u'2', u'name': u'North Los Coyotes Diagonal',
@@ -31,7 +31,7 @@ class RoadSortKeysBridges(FixtureTest):
         self.assert_has_feature(
             16, 11265, 26221, 'roads',
             {'kind': 'major_road', 'kind_detail': 'primary', 'id': 399640204,
-             'name': 'North Los Coyotes Diagonal', 'is_bridge': True,
+             'name': type(None), 'is_bridge': True,
              'sort_rank': 430})
 
     def test_secondary_bridge(self):
@@ -41,7 +41,7 @@ class RoadSortKeysBridges(FixtureTest):
         self.assert_has_feature(
             16, 10486, 25339, 'roads',
             {'kind': 'major_road', 'kind_detail': 'secondary', 'id': 27613581,
-             'name': 'Oakdale Ave.', 'is_bridge': True, 'sort_rank': 429})
+             'name': type(None), 'is_bridge': True, 'sort_rank': 429})
 
     def test_teriary_bridge(self):
         self.generate_fixtures(dsl.way(242940297, wkt_loads('LINESTRING (-122.395271869347 37.7907203080898, -122.395156974822 37.79062745343989, -122.394827562608 37.79036145403797)'), {
@@ -50,7 +50,7 @@ class RoadSortKeysBridges(FixtureTest):
         self.assert_has_feature(
             16, 10486, 25327, 'roads',
             {'kind': 'major_road', 'kind_detail': 'tertiary', 'id': 242940297,
-             'name': 'Beale St.', 'is_bridge': True, 'sort_rank': 427})
+             'name': type(None), 'is_bridge': True, 'sort_rank': 427})
 
     def test_residential_bridge(self):
         self.generate_fixtures(dsl.way(162038104, wkt_loads('LINESTRING (-121.009686569766 39.24352031486828, -121.009910968924 39.24385926543338)'), {
@@ -59,7 +59,7 @@ class RoadSortKeysBridges(FixtureTest):
         self.assert_has_feature(
             16, 10738, 24989, 'roads',
             {'kind': 'minor_road', 'kind_detail': 'residential',
-             'id': 162038104, 'name': 'Woodwardia Pl.', 'sort_rank': 410})
+             'id': 162038104, 'name': type(None), 'sort_rank': 410})
 
     def test_service_bridge(self):
         self.generate_fixtures(dsl.way(232303398, wkt_loads('LINESTRING (-122.416602904758 37.63546055316739, -122.416466181171 37.63550956768369)'), {

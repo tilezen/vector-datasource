@@ -15,14 +15,28 @@ class RoadShieldCleanup(FixtureTest):
             {'id': way_id, 'shield_text': expected_shield_text})
 
     def test_A151(self):
-        self._check_network_relation(
-            way_id=208288552, rel_id=1159812, tile=(16, 32949, 22362),
-            expected_shield_text='A151')
+        tile = (16, 32949, 22362)
+        self.load_fixtures([
+            'https://www.openstreetmap.org/way/%d' % (208288552,),
+            'https://www.openstreetmap.org/relation/%d' % (1159812,),
+        ], clip=self.tile_bbox(*tile))
+
+        z, x, y = tile
+        self.assert_has_feature(
+            z, x, y, 'roads',
+            {'id': type(None), 'shield_text': 'A151'})
 
     def test_E402(self):
-        self._check_network_relation(
-            way_id=121496753, rel_id=88503, tile=(16, 32975, 22371),
-            expected_shield_text='E402')
+        tile = (16, 32975, 22371)
+        self.load_fixtures([
+            'https://www.openstreetmap.org/way/%d' % (121496753,),
+            'https://www.openstreetmap.org/relation/%d' % (88503,),
+        ], clip=self.tile_bbox(*tile))
+
+        z, x, y = tile
+        self.assert_has_feature(
+            z, x, y, 'roads',
+            {'id': type(None), 'shield_text': 'E402'})
 
     def test_A52(self):
         self._check_network_relation(

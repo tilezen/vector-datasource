@@ -168,7 +168,7 @@ class CycleRoute(FixtureTest):
 
         self.assert_has_feature(
             16, 16842, 24939, 'roads',
-            {'id': 95578389, 'kind': 'major_road', 'bicycle_network': 'ncn'})
+            {'id': type(None), 'kind': 'major_road', 'bicycle_network': 'ncn'})
 
     def test_kananaskis_trail(self):
         # Way: Kananaskis Trail (385652955)
@@ -202,7 +202,7 @@ class CycleRoute(FixtureTest):
 
         self.assert_has_feature(
             16, 10535, 25419, 'roads',
-            {'id': 173846425, 'kind': 'major_road', 'bicycle_network': 'lcn'})
+            {'id': type(None), 'kind': 'major_road', 'bicycle_network': 'lcn'})
 
     def test_segregated(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/255652148'])

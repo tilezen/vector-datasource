@@ -10,7 +10,7 @@ class TrolleybusIsABus(FixtureTest):
 
         self.assert_has_feature(
             16, 10484, 25339, 'roads',
-            {'is_bus_route': True, 'name': 'Industrial St.'})
+            {'is_bus_route': True, 'name': type(None)})
 
     def test_clayton_street(self):
         self.load_fixtures([
@@ -20,7 +20,7 @@ class TrolleybusIsABus(FixtureTest):
 
         self.assert_has_feature(
             16, 10477, 25333, 'roads',
-            {'is_bus_route': True, 'name': 'Clayton St.'})
+            {'is_bus_route': True, 'name': type(None)})
 
     def test_union_street(self):
         import dsl

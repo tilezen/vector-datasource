@@ -36,7 +36,7 @@ class ArgentinaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads',
             {'id': 1, 'kind': 'highway', 'network': 'AR:national',
-             'ref': 'RNA002', 'shield_text': 'A002'})
+             'ref': type(None), 'shield_text': 'A002'})
 
     def test_ruta_provincial_shield_text(self):
         import dsl
@@ -71,7 +71,7 @@ class ArgentinaShieldTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'roads',
             {'id': 1, 'kind': 'major_road', 'network': 'AR:provincial',
-             'ref': 'RP21', 'shield_text': '21'})
+             'ref': type(None), 'shield_text': '21'})
 
     # same as the test above, but using the country backfill rather than
     # the relation.

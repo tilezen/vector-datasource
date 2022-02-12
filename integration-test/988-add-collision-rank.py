@@ -455,8 +455,8 @@ class WhereTest(FixtureTest):
                 'kind': 'minor_road',
                 'name': type(None),
                 'shield_text': type(None),
-                'ref': '1',
-                'collision_rank': int,
+                'ref': type(None),
+                'collision_rank': type(None),
             })
 
     def test_road_shield_text(self):
