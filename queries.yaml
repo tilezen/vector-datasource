@@ -1713,15 +1713,15 @@ post_process:
   # drop small inners in buildings before we do the merge.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.quantize_height
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 16
+      end_zoom: 17
       quantize:
         13: vectordatasource.transform.quantize_height_round_nearest_20_meters
         14: vectordatasource.transform.quantize_height_round_nearest_10_meters
@@ -1740,6 +1740,56 @@ post_process:
     params:
       source_layer: buildings
       target_value_type: int
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - landuse_kind
+      where: >-
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'national_park', 'nature_reserve', 'park', 'protected_area', 'retail', 'runway', 'school', 'station', 'taxiway', 'university']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - kind_detail
+      where: >-
+        kind_detail not in ['airport', 'civic', 'church', 'college', 'commercial', 'fire_station', 'industrial', 'military', 'hospital', 'office', 'public', 'prison', 'retail', 'school', 'sports_centre', 'stadium', 'station', 'synagogue', 'train_station', 'university', 'warehouse']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - building_material
+        - osm_relation
+        - roof_color
+        - roof_height
+        - roof_material
+        - roof_orientation
+        - roof_shape
+        - root_id
+        - volume
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 17
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
+        - addr_housenumber
+        - addr_street
 
   # fit min zoom onto the scale rank, as we'll be using the scale rank rather
   # than the min zoom to calculate whether a building should make it into a
@@ -1780,9 +1830,9 @@ post_process:
   # process may also have created small inners.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
