@@ -71,6 +71,7 @@ class BusRouteRefs(FixtureTest):
              'bicycle_network': 'lcn',
              'bicycle_shield_text': '50',
              'bus_network': type(None),
+             'bus_shield_text': type(None),
              'is_bus_related': True})
 
     def test_inbound_and_outbound_routes(self):
@@ -114,6 +115,7 @@ class BusRouteRefs(FixtureTest):
             16, 10477, 25327, 'roads',
             {'id': 225516711,
              'bus_network': type(None),
+             'bus_shield_text': type(None),
              'is_bus_related': True,
              'all_bus_networks': [type(None)],
              'all_bus_shield_texts': [type(None)]})
