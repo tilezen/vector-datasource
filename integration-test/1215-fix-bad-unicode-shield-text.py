@@ -44,5 +44,5 @@ class FixBadUnicodeShieldText(FixtureTest):
 
         self.assert_has_feature(
             16, 63085, 15623, 'roads',
-            {'id': -3948946, 'osm_relation': type(True),
+            {'id': -3948946, 'osm_relation': type(None),
              'shield_text': u'77\u041a'})

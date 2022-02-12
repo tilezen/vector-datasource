@@ -71,7 +71,7 @@ class BusRouteRefs(FixtureTest):
              'bicycle_network': 'lcn',
              'bicycle_shield_text': '50',
              'bus_network': type(None),
-             'bus_shield_text': '23'})
+             'bus_shield_text': type(None)})
 
     def test_inbound_and_outbound_routes(self):
         # Jackson St. SF, part of trolley-bus route 3
@@ -114,7 +114,7 @@ class BusRouteRefs(FixtureTest):
             16, 10477, 25327, 'roads',
             {'id': 225516711,
              'bus_network': type(None),
-             'bus_shield_text': '3',
+             'bus_shield_text': type(None),
              'all_bus_networks': [type(None)],
              'all_bus_shield_texts': ['3']})
 

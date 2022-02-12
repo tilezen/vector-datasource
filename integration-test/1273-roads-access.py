@@ -32,7 +32,7 @@ class RoadsAccess(FixtureTest):
         self.assert_has_feature(
             12, 3344, 1785, 'roads',
             {'kind': 'highway', 'kind_detail': 'motorway',
-             'alt_name:en': 'Shenzhen Bay Bridge', 'access': 'no'})
+             'alt_name:en': type(None), 'access': 'no'})
 
     def test_access_yes(self):
         # cycleway in Gdańsk, Poland
