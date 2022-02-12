@@ -2098,7 +2098,7 @@ post_process:
       end_zoom: 17
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
       # the name gets dropped. larger values mean fewer lines are eligible for labelling.
-      pixels_per_letter: 8
+      pixels_per_letter: 5
 
   # since we drop names in the previous step, we would like merge it again
   - fn: vectordatasource.transform.merge_line_features
