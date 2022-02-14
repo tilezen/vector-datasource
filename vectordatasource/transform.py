@@ -9494,6 +9494,7 @@ def apply_disputed_boundary_viewpoints(ctx):
 
             kind_from_admin_level = _ADMIN_LEVEL_TO_KIND.get(str(props.get('tz_admin_level')))
             if kind_from_admin_level:
+                props.pop('tz_admin_level')
                 claimed_by = props.get('claimed_by')
                 if claimed_by:
                     for country in _list_of_countries(claimed_by):
