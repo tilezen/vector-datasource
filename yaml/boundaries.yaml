@@ -191,6 +191,7 @@ filters:
     output:
       <<: *output_properties
       kind: disputed_reference_line
+      kind_detail: '2'
       disputed: True
     table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
@@ -200,6 +201,7 @@ filters:
     output:
       <<: *output_properties
       kind: disputed_reference_line
+      kind_detail: '2'
       disputed: True
       disputed_by: {col: disputed_by }
       claimed_by: { col: claimed_by }

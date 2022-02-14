@@ -82,6 +82,7 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 909074085,
                 'kind': 'disputed_reference_line',
+                'kind_detail': '2',
                 'kind:xx': 'country',
                 'disputed': True,
             })
@@ -104,6 +105,7 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 123456,
                 'kind': 'disputed_reference_line',
+                'kind_detail': '2',
                 'kind:yy': 'country',
                 'disputed': True,
             })
@@ -155,7 +157,8 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:eg': 'unrecognized_disputed_reference_line',
                 'kind:id': 'unrecognized_disputed_reference_line',
                 'kind:bd': 'unrecognized_disputed_reference_line',
-                'kind': 'disputed_reference_line'
+                'kind': 'disputed_reference_line',
+                'kind_detail': '2',
             })
 
     def test_boundary_claim_disputed_by_claimed_by(self):
@@ -219,6 +222,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:ru': 'unrecognized_disputed_reference_line',
                 'kind:tw': 'unrecognized_disputed_reference_line',
                 'kind': 'disputed_reference_line',
+                'kind_detail': '2',
                 'kind:xx': 'country',
                 'kind:yy': 'country'
             })
