@@ -495,6 +495,7 @@ function osm2pgsql.process_way(object)
 -- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
     for k, v in pairs(twadmin) do
         if k == object.id then
+            output_hstore.admin_level = '4'
             output_hstore['admin_level:AR'] = '4'
             output_hstore['admin_level:BD'] = '4'
             output_hstore['admin_level:BR'] = '4'
@@ -627,6 +628,7 @@ function osm2pgsql.process_relation(object)
                     twadmin[member.ref] = object.id
                 end
             end
+            output_hstore.admin_level = '4'
             output_hstore['admin_level:AR'] = '4'
             output_hstore['admin_level:BD'] = '4'
             output_hstore['admin_level:BR'] = '4'
@@ -685,7 +687,36 @@ function osm2pgsql.process_relation(object)
     end
 
     if type == 'boundary' and (object.tags['ISO3166-1'] == 'MO' or object.tags['ISO3166-1'] == 'HK') then
+        output_hstore['admin_level:AR'] = '2'
+        output_hstore['admin_level:BD'] = '2'
+        output_hstore['admin_level:BR'] = '2'
         output_hstore['admin_level:CN'] = '4'
+        output_hstore['admin_level:DE'] = '2'
+        output_hstore['admin_level:EG'] = '2'
+        output_hstore['admin_level:ES'] = '2'
+        output_hstore['admin_level:FR'] = '2'
+        output_hstore['admin_level:GB'] = '2'
+        output_hstore['admin_level:GR'] = '2'
+        output_hstore['admin_level:ID'] = '2'
+        output_hstore['admin_level:IL'] = '2'
+        output_hstore['admin_level:IN'] = '2'
+        output_hstore['admin_level:IT'] = '2'
+        output_hstore['admin_level:JP'] = '2'
+        output_hstore['admin_level:KO'] = '2'
+        output_hstore['admin_level:MA'] = '2'
+        output_hstore['admin_level:NL'] = '2'
+        output_hstore['admin_level:NP'] = '2'
+        output_hstore['admin_level:PK'] = '2'
+        output_hstore['admin_level:PL'] = '2'
+        output_hstore['admin_level:PS'] = '2'
+        output_hstore['admin_level:PT'] = '2'
+        output_hstore['admin_level:SA'] = '2'
+        output_hstore['admin_level:SE'] = '2'
+        output_hstore['admin_level:TR'] = '2'
+        output_hstore['admin_level:TW'] = '2'
+        output_hstore['admin_level:UA'] = '2'
+        output_hstore['admin_level:US'] = '2'
+        output_hstore['admin_level:VN'] = '2'
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
