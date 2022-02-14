@@ -492,6 +492,13 @@ function osm2pgsql.process_way(object)
     local z_order, roads = get_z_order(object.tags)
     output.z_order = z_order
 
+-- Stripped disputed tags off of ways
+    if object.tags.claimed_by or object.tags.disputed_by or object.tags.recognized_by then
+        output_hstore.claimed_by = nil
+        output_hstore.disputed_by = nil
+        output_hstore.recognized_by = nil
+    end
+
 -- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
     for k, v in pairs(twadmin) do
         if k == object.id then
