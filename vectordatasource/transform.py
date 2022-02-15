@@ -9303,7 +9303,7 @@ def _list_of_countries(value):
 
 def unpack_viewpoint_claims(shape, props, fid, zoom):
     """
-    Unpack OSM "claimed_by" list into viewpoint kinds.
+    Unpack OSM "claimed_by" and "disputed_by" lists into viewpoint kinds.
 
     For example; "claimed_by=AA;BB;CC" should become "kind:aa=country,
     kind:bb=country, kind:cc=country" (or region, etc... as appropriate for
@@ -9330,6 +9330,8 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
         if recognized_by:
             for viewpoint in _list_of_countries(recognized_by):
                 props['kind:' + viewpoint] = claimed_kind
+
+    if kind and kind.startswith(prefix) and disputed_by:
 
         # TODO what do I need to do with geometry here?
         if disputed_by:

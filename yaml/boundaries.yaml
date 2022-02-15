@@ -131,7 +131,14 @@ filters:
   #    `unrecognized_*` (where XX is the viewpoint / country code and * is the
   #    kind of boundary it is).
   #
-  - filter: {admin_level: '2', boundary: claim, claimed_by: true, geom_type: line}
+  - filter:
+      all:
+        - geom_type: line
+        - admin_level: '2'
+        - boundary: claim
+        - any:
+            - claimed_by: true
+            - disputed_by: true
     min_zoom: 8
     output:
       <<: *output_properties
@@ -140,7 +147,14 @@ filters:
       recognized_by: {col: recognized_by}
       disputed_by: {col: disputed_by}
     table: osm
-  - filter: {admin_level: '4', boundary: claim, claimed_by: true, geom_type: line}
+  - filter:
+      all:
+        - geom_type: line
+        - admin_level: '4'
+        - boundary: claim
+        - any:
+            - claimed_by: true
+            - disputed_by: true
     min_zoom: 8
     output:
       <<: *output_properties
@@ -149,7 +163,14 @@ filters:
       recognized_by: {col: recognized_by}
       disputed_by: {col: disputed_by}
     table: osm
-  - filter: {admin_level: '6', boundary: claim, claimed_by: true, geom_type: line}
+  - filter:
+      all:
+        - geom_type: line
+        - admin_level: '6'
+        - boundary: claim
+        - any:
+            - claimed_by: true
+            - disputed_by: true
     min_zoom: 8
     output:
       <<: *output_properties
