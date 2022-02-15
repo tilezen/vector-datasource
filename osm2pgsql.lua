@@ -499,6 +499,10 @@ function osm2pgsql.process_way(object)
         output_hstore.recognized_by = nil
     end
 
+    if object.tags.boundary == 'disputed' then
+        output_hstore.boundary = 'administrative'
+    end
+
 -- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
     for k, v in pairs(twadmin) do
         if k == object.id then
