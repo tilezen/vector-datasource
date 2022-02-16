@@ -230,6 +230,8 @@ local n2r = {}
 local twadmin = {}
 local disputed = {}
 local province_dispute = {}
+local iladmin = {}
+
 
 tables.point = osm2pgsql.define_table{
     name = prefix .. '_point',
@@ -493,10 +495,11 @@ function osm2pgsql.process_way(object)
     output.z_order = z_order
 
 -- Stripped disputed tags off of ways
-    if object.tags.claimed_by or object.tags.disputed_by or object.tags.recognized_by then
+    if object.tags.claimed_by or object.tags.disputed_by or object.tags.recognized_by or object.tags.dispute then
         output_hstore.claimed_by = nil
         output_hstore.disputed_by = nil
         output_hstore.recognized_by = nil
+        output_hstore.dispute = nil
     end
 
     if object.tags.boundary == 'disputed' then
@@ -540,10 +543,26 @@ function osm2pgsql.process_way(object)
         end
     end
 
--- Adds dispute=yes to ways on disputed relations
+-- Adds tags to turn off Israel admin 4 boundaries for Palestine. Applies to both relation and ways.
+    for k, v in pairs(iladmin) do
+        if k == object.id then
+            output_hstore.disputed_by = 'PS'
+        end
+    end
+
+-- Adds dispute tags to ways in disputed relations
     for k, v in pairs(disputed) do
         if k == object.id then
             output_hstore.dispute = 'yes'
+            if v.disputed_by then
+                output_hstore.disputed_by = v.disputed_by
+            end
+            if v.claimed_by then
+                output_hstore.claimed_by = v.claimed_by
+            end
+            if v.recognized_by_by then
+                output_hstore.recognized_by = v.recognized_by
+            end
         end
     end
 
@@ -673,6 +692,21 @@ function osm2pgsql.process_relation(object)
         end
     end
 
+-- Adds tags to turn off Israel admin 4 boundaries for Palestine. Applies to both relation and ways.
+    if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
+        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
+            for _, member in ipairs(object.members) do
+                if member.type == 'w' then
+                    if not iladmin[member.ref] then
+                        iladmin[member.ref] = {}
+                    end
+                    iladmin[member.ref] = object.id
+                end
+            end
+            output_hstore.disputed_by = 'PS'
+        end
+    end
+
 -- Adds tags to redefine other relation admin levels, based on relation. Applies to both relation and ways.
     if type == 'linestring' and object.tags.boundary == 'claim' and object.tags.claimed_by == nil then
         for _, member in ipairs(object.members) do
@@ -692,7 +726,7 @@ function osm2pgsql.process_relation(object)
                 if not disputed[member.ref] then
                     disputed[member.ref] = {}
                 end
-                disputed[member.ref] = object.id
+                disputed[member.ref] = object.tags
             end
         end
     end
