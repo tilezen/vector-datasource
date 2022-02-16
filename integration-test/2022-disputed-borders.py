@@ -230,12 +230,13 @@ class DisputedBoundariesTest(FixtureTest):
             dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
                 'admin_level': '2',
                 'boundary': 'disputed',
-                'claimed_by': 'IN',
-                'disputed_by': 'CN;RU;TW',
-                'recognized_by': 'XX;YY',
-                'name': 'Extent of Indian Claim at Bara Hotii Valleys',
-                'ne:brk_a3': 'B02',
-                'ne_id': '1746708469',
+                'claimed_by': 'CN;TW',
+                'disputed_by': 'IN',
+                'name': 'Extent', 'of': 'Chinese', 'Claim': 'at', 'Aksai': 'Chin',
+                'name:ur': 'اکسائی', 'چن': 'میں', 'چینی': 'دعوے', 'کی': 'حد',
+                'ne:brk_a3': 'B07',
+                'ne_id': '1746705319',
+                'recognized_by': 'RU;PK;TR',
                 'type': 'linestring',
             }),
         )
@@ -244,14 +245,14 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 202058477,
                 'disputed': True,
-                'kind:in': 'country',
-                'kind:cn': 'unrecognized_disputed_reference_line',
-                'kind:ru': 'unrecognized_disputed_reference_line',
-                'kind:tw': 'unrecognized_disputed_reference_line',
+                'kind:in': 'unrecognized_disputed_reference_line',
+                'kind:cn': 'country',
+                'kind:tw': 'country',
+                'kind:ru': 'country',
+                'kind:pk': 'country',
+                'kind:tr': 'country',
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
-                'kind:xx': 'country',
-                'kind:yy': 'country'
             })
 
     def test_boundary_dispute_no_disputed_by_claimed_by(self):
