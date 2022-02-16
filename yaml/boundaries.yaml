@@ -212,17 +212,16 @@ filters:
     output:
       <<: *output_properties
       kind: disputed_reference_line
-      kind_detail: '2'
       disputed: True
     table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
   # becomes kind:xx=unrecognized_disputed_reference_line
-  - filter: {admin_level: ['2','4','6'], boundary: disputed, disputed_by: true, geom_type: line}
+  - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
     min_zoom: 8
     output:
       <<: *output_properties
       kind: disputed_reference_line
-      kind_detail: '2'
+      kind_detail: {col: admin_level }
       disputed: True
       disputed_by: {col: disputed_by }
       claimed_by: { col: claimed_by }

@@ -82,7 +82,6 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 909074085,
                 'kind': 'disputed_reference_line',
-                'kind_detail': '2',
                 'kind:xx': 'country',
                 'disputed': True,
             })
@@ -105,7 +104,6 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 123456,
                 'kind': 'disputed_reference_line',
-                'kind_detail': '2',
                 'kind:yy': 'country',
                 'disputed': True,
             })
@@ -254,4 +252,27 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind_detail': '2',
                 'kind:xx': 'country',
                 'kind:yy': 'country'
+            })
+
+    def test_boundary_dispute_no_disputed_by_claimed_by(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/202058477
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'disputed',
+                'name': 'Extent of Indian Claim at Bara Hotii Valleys',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746708469',
+                'type': 'linestring',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 202058477,
+                'disputed': True,
+                'kind': 'disputed_reference_line',
+                'kind_detail': '2',
             })
