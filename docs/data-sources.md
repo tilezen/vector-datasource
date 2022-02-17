@@ -25,7 +25,7 @@ All OpenStreetMap data is licensed under the [ODbL](http://opendatacommons.org/l
 
 `source:osmdata.openstreetmap.de`
 
-We include coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) at mid- and high-zooms. This service, now run by [FOSSGIS e.V.](https://www.fossgis.de/), replaces `openstreetmapdata.com` - it's the same service, but a different hosting arrangement. The service was created by Jochen Topf and Christoph Hormann for the OpenStreetMap community and the general public and it rocks!
+We include coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) at mid- and high-zooms. This service, now run by [FOSSGIS e.V.](https://www.fossgis.de/), replaces `openstreetmap.org` - it's the same service, but a different hosting arrangement. The service was created by Jochen Topf and Christoph Hormann for the OpenStreetMap community and the general public and it rocks!
 
 As they say, "The coastline in OpenStreetMap is often broken. The update process will try to repair it, but this does not always work. If the OSM data can't be repaired automatically, the data here will not be updated."
 
