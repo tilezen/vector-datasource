@@ -213,6 +213,8 @@ filters:
       <<: *output_properties
       kind: disputed_reference_line
       disputed: True
+      recognized_by: { col: recognized_by }
+      tz_admin_level: {col: admin_level }
     table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
   # becomes kind:xx=unrecognized_disputed_reference_line

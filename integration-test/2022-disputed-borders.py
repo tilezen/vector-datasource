@@ -74,7 +74,8 @@ class DisputedBoundariesTest(FixtureTest):
                 'boundary': 'administrative',
                 'place': 'state',
                 'source': 'openstreetmap.org',
-                'admin_level:XX': '2'
+                'admin_level:XX': '2',
+                'recognized_by:': 'YY'
             }),
         )
 
@@ -84,6 +85,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind': 'disputed_reference_line',
                 'kind:xx': 'country',
                 'disputed': True,
+                'kind:yy': 'country',
             })
 
     def test_admin_level_3_country(self):
@@ -96,7 +98,8 @@ class DisputedBoundariesTest(FixtureTest):
                 'boundary': 'administrative',
                 'place': 'country',
                 'source': 'openstreetmap.org',
-                'admin_level:YY': '2'
+                'admin_level:XX': '2',
+                'recognized_by': 'YY',
             }),
         )
 
@@ -104,6 +107,7 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 123456,
                 'kind': 'disputed_reference_line',
+                'kind:xx': 'country',
                 'kind:yy': 'country',
                 'disputed': True,
             })
