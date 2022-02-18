@@ -231,6 +231,7 @@ local twadmin = {}
 local disputed = {}
 local province_dispute = {}
 local iladmin = {}
+local cyprus_ways = {}
 
 
 tables.point = osm2pgsql.define_table{
@@ -577,6 +578,14 @@ function osm2pgsql.process_way(object)
         end
     end
 
+-- Convert admin_level 5 boundaries in Northern Cyprus to 4
+    for _, v in pairs(cyprus_ways) do
+        if v == object.id then
+            output_hstore.admin_level = '4'
+        end
+    end
+
+
     output.tags = output_hstore
 
     if hstore_column then
@@ -719,7 +728,7 @@ function osm2pgsql.process_relation(object)
         end
     end
 
---     Adds dispute=yes to any ways part of a boundary=disputed relation
+-- Adds dispute=yes to any ways part of a boundary=disputed relation
     if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
@@ -729,6 +738,7 @@ function osm2pgsql.process_relation(object)
                 disputed[member.ref] = object.tags
             end
         end
+        output_hstore.dispute = 'yes'
     end
 
     if type == 'boundary' and (object.tags['ISO3166-1'] == 'MO' or object.tags['ISO3166-1'] == 'HK') then
@@ -762,6 +772,12 @@ function osm2pgsql.process_relation(object)
         output_hstore['admin_level:UA'] = '2'
         output_hstore['admin_level:US'] = '2'
         output_hstore['admin_level:VN'] = '2'
+    end
+
+-- Convert admin_level 5 boundaries in Northern Cyprus to 4
+    if type == 'boundary' and object.tags.is_in == 'Northern Cyprus' and object.tags.admin_level == '5' then
+        output_hstore.admin_level = '4'
+        cyprus_ways = osm2pgsql.way_member_ids(object)
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
