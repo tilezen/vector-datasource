@@ -9659,7 +9659,13 @@ def capital_alternate_viewpoint(shape, props, fid, zoom):
     return shape, props, fid
 
 
-_ADMIN_LEVEL_TO_KIND = {'2': 'country', '4': 'region', '6': 'county', '8': 'locality'}
+# Map admin level to the kind it should become. Admin_level 3 isn't a widely recognized country,
+# but the only uses of 3 we care about are when it is a country from some viewpoint
+_ADMIN_LEVEL_TO_KIND = {'2': 'country',
+                        '3': 'country',
+                        '4': 'region',
+                        '6': 'county',
+                        '8': 'locality'}
 
 
 def admin_level_alternate_viewpoint(shape, props, fid, zoom):
