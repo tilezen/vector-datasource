@@ -564,6 +564,9 @@ function osm2pgsql.process_way(object)
             if v.recognized_by_by then
                 output_hstore.recognized_by = v.recognized_by
             end
+            if v.boundary == 'administrative' then
+                output_hstore.boundary = 'disputed'
+            end
         end
     end
 
