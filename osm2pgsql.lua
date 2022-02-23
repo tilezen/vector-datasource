@@ -547,7 +547,6 @@ function osm2pgsql.process_way(object)
     for k, v in pairs(disputed) do
         if k == object.id then
             output_hstore.dispute = 'yes'
-            output_hstore.boundary = 'disputed'
             if v.disputed_by then
                 output_hstore.disputed_by = v.disputed_by
             end
