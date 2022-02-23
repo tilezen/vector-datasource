@@ -230,7 +230,6 @@ local n2r = {}
 local twadmin = {}
 local disputed = {}
 local province_dispute = {}
-local iladmin = {}
 local cyprus_ways = {}
 
 
@@ -544,17 +543,11 @@ function osm2pgsql.process_way(object)
         end
     end
 
--- Adds tags to turn off Israel admin 4 boundaries for Palestine. Applies to both relation and ways.
-    for k, v in pairs(iladmin) do
-        if k == object.id then
-            output_hstore.disputed_by = 'PS'
-        end
-    end
-
 -- Adds dispute tags to ways in disputed relations
     for k, v in pairs(disputed) do
         if k == object.id then
             output_hstore.dispute = 'yes'
+            output_hstore.boundary = 'disputed'
             if v.disputed_by then
                 output_hstore.disputed_by = v.disputed_by
             end
@@ -563,9 +556,6 @@ function osm2pgsql.process_way(object)
             end
             if v.recognized_by_by then
                 output_hstore.recognized_by = v.recognized_by
-            end
-            if v.boundary == 'administrative' then
-                output_hstore.boundary = 'disputed'
             end
         end
     end
@@ -704,18 +694,10 @@ function osm2pgsql.process_relation(object)
         end
     end
 
--- Adds tags to turn off Israel admin 4 boundaries for Palestine. Applies to both relation and ways.
+-- Adds tags to turn off Israel admin 4 boundaries for Palestine.
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-            for _, member in ipairs(object.members) do
-                if member.type == 'w' then
-                    if not iladmin[member.ref] then
-                        iladmin[member.ref] = {}
-                    end
-                    iladmin[member.ref] = object.id
-                end
-            end
-            output_hstore.disputed_by = 'PS'
+            output_hstore['admin_level:PS'] = '6'
         end
     end
 
@@ -745,6 +727,7 @@ function osm2pgsql.process_relation(object)
     end
 
     if type == 'boundary' and (object.tags['ISO3166-1'] == 'MO' or object.tags['ISO3166-1'] == 'HK') then
+        output_hstore['admin_level'] = '2'
         output_hstore['admin_level:AR'] = '2'
         output_hstore['admin_level:BD'] = '2'
         output_hstore['admin_level:BR'] = '2'
