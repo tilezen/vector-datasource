@@ -9381,14 +9381,6 @@ class _DisputeMasks(object):
 
         updated_features = []
 
-        # figure out what we want the boundary kind to be, if it's intersected
-        # with the dispute mask.
-        kind = props['kind']
-        if kind.startswith('unrecognized_'):
-            unrecognized = kind
-        else:
-            unrecognized = 'unrecognized_' + kind
-
         for mask_shape, disputants in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
@@ -9412,7 +9404,9 @@ class _DisputeMasks(object):
                 if not cut_shape.is_empty:
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
-                        new_props['kind:' + disputant] = unrecognized
+                        new_props['kind:' + disputant] = 'unrecognized_disputed_reference_line'
+
+                    new_props['kind'] = 'disputed_reference_line'
                     updated_features.append((cut_shape, new_props, None))
 
         if not shape.is_empty:

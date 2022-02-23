@@ -242,6 +242,8 @@ filters:
       <<: *output_properties
       kind: mz_internal_dispute_mask
       disputed_by: {col: disputed_by}
+      claimed_by: { col: claimed_by }
+      recognized_by: { col: recognized_by }
       disputed: True
     table: osm
 
