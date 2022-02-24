@@ -9314,31 +9314,25 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     see it in their viewpoint as a country/region/county.
     """
 
-    prefix = 'unrecognized_'
-    kind = props.get('kind')
-    claimed_by = props.get('claimed_by')
-    recognized_by = props.get('recognized_by')
-    disputed_by = props.get('disputed_by')
+    claimed_by = props.get('claimed_by', '')
+    recognized_by = props.get('recognized_by', '')
+    disputed_by = props.get('disputed_by', '')
 
-    if kind and kind.startswith(prefix) and claimed_by:
+    admin_level = str(props.get('tz_admin_level', ''))
 
-        claimed_kind = kind[len(prefix):]
+    if admin_level:
+        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level)
 
-        for country in _list_of_countries(claimed_by):
-            props['kind:' + country] = claimed_kind
+        for viewpoint in _list_of_countries(claimed_by):
+            props['kind:' + viewpoint] = base_kind
 
-        if recognized_by:
-            for viewpoint in _list_of_countries(recognized_by):
-                props['kind:' + viewpoint] = claimed_kind
+        for viewpoint in _list_of_countries(recognized_by):
+            props['kind:' + viewpoint] = base_kind
 
-    if kind and kind.startswith(prefix) and disputed_by:
+        for viewpoint in _list_of_countries(disputed_by):
+            props['kind:' + viewpoint] = 'unrecognized_' + base_kind
 
-        # TODO what do I need to do with geometry here?
-        if disputed_by:
-            for viewpoint in _list_of_countries(disputed_by):
-                props['kind:' + viewpoint] = 'unrecognized_disputed_reference_line'
-
-    return (shape, props, fid)
+    return shape, props, fid
 
 
 class _DisputeMasks(object):

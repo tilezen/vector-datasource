@@ -105,6 +105,7 @@ global:
     claimed_by: { col: claimed_by }
     recognized_by: { col: recognized_by }
     disputed_by: { col: disputed_by }
+    tz_admin_level: {col: admin_level }
     dispute_id: {col: 'ne:brk_a3'}
 
 filters:
@@ -210,7 +211,6 @@ filters:
     output:
       <<: [ *output_properties, *dispute_properties ]
       kind: disputed_reference_line
-      tz_admin_level: {col: admin_level }
     table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
   # becomes kind:xx=unrecognized_disputed_reference_line
@@ -220,7 +220,6 @@ filters:
       <<: [ *output_properties, *dispute_properties ]
       kind: disputed_reference_line
       kind_detail: {col: admin_level }
-      tz_admin_level: {col: admin_level }
     table: osm
   - filter:
       all:
