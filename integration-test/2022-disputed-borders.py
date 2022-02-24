@@ -75,7 +75,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'place': 'state',
                 'source': 'openstreetmap.org',
                 'admin_level:XX': '2',
-                'recognized_by:': 'YY'
+                'recognized_by': 'YY'
             }),
         )
 
