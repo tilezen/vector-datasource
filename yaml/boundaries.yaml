@@ -101,6 +101,12 @@ global:
           - geom_type: line
           - mz_boundary_from_polygon: true
 
+  - &dispute_properties
+    claimed_by: { col: claimed_by }
+    recognized_by: { col: recognized_by }
+    disputed_by: { col: disputed_by }
+    dispute_id: {col: 'ne:brk_a3'}
+
 filters:
 
   # kind pre-generated for buffered_land
@@ -141,11 +147,8 @@ filters:
             - disputed_by: true
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [*output_properties, *dispute_properties]
       kind: unrecognized_country
-      claimed_by: {col: claimed_by}
-      recognized_by: {col: recognized_by}
-      disputed_by: {col: disputed_by}
     table: osm
   - filter:
       all:
@@ -157,11 +160,8 @@ filters:
             - disputed_by: true
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [ *output_properties, *dispute_properties ]
       kind: unrecognized_region
-      claimed_by: {col: claimed_by}
-      recognized_by: {col: recognized_by}
-      disputed_by: {col: disputed_by}
     table: osm
   - filter:
       all:
@@ -173,11 +173,8 @@ filters:
             - disputed_by: true
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [ *output_properties, *dispute_properties ]
       kind: unrecognized_county
-      claimed_by: {col: claimed_by}
-      recognized_by: {col: recognized_by}
-      disputed_by: {col: disputed_by}
     table: osm
   # these filters look for claims that don't have a claimed_by
   # but have different point of view tags for admin_level:XX
@@ -200,7 +197,7 @@ filters:
       kind: county
     table: osm
   # this filter covers admin_level 3 boundaries for countries and states,
-  # turning them into disputed_reference_lines
+  # turning them into disputed_reference_lines.
   - filter:
       all:
         - geom_type: line
@@ -210,9 +207,8 @@ filters:
             - place: 'country'
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [ *output_properties, *dispute_properties ]
       kind: disputed_reference_line
-      recognized_by: { col: recognized_by }
       tz_admin_level: {col: admin_level }
     table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
@@ -220,12 +216,9 @@ filters:
   - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [ *output_properties, *dispute_properties ]
       kind: disputed_reference_line
       kind_detail: {col: admin_level }
-      disputed_by: {col: disputed_by }
-      claimed_by: { col: claimed_by }
-      recognized_by: { col: recognized_by }
       tz_admin_level: {col: admin_level }
     table: osm
   - filter:
@@ -237,11 +230,8 @@ filters:
             - disputed: 'yes'
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [ *output_properties, *dispute_properties ]
       kind: mz_internal_dispute_mask
-      disputed_by: {col: disputed_by}
-      claimed_by: { col: claimed_by }
-      recognized_by: { col: recognized_by }
     table: osm
 
   # osm
@@ -315,6 +305,7 @@ filters:
       <<: [*output_properties, *ne_localized_kind_properties]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
+      dispute_id: { col: 'ne:brk_a3' }
     table: ne
 
   # ne for disputed kind:xx POV we want to always include
@@ -332,6 +323,7 @@ filters:
       <<: [*output_properties, *ne_localized_kind_properties]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
+      dispute_id: { col: 'ne:brk_a3' }
     table: ne
 
   - filter:
@@ -366,6 +358,7 @@ filters:
       <<: [*output_properties, *ne_localized_kind_properties]
       kind: unrecognized_macroregion
       kind_detail: '4'
+      dispute_id: { col: 'ne:brk_a3' }
     table: ne
   - filter:
       featurecla:
@@ -378,4 +371,5 @@ filters:
       <<: [*output_properties, *ne_localized_kind_properties]
       kind: unrecognized_region
       kind_detail: '4'
+      dispute_id: { col: 'ne:brk_a3' }
     table: ne
