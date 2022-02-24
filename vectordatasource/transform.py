@@ -9482,30 +9482,6 @@ def apply_disputed_boundary_viewpoints(ctx):
             if kind[len('unrecognized_'):] in _BOUNDARY_KINDS:
                 boundaries.append((shape, props, fid))
 
-        # this covers the disputed_reference_line case.
-        # unpack all the viewpoints from disputed_by, and make them all unrecognized
-        # TODO what do I need to do with geometry here?
-        elif kind == 'disputed_reference_line':
-            disputed_by = props.get('disputed_by')
-            if disputed_by:
-                for country in _list_of_countries(disputed_by):
-                    props['kind:' + country] = 'unrecognized_disputed_reference_line'
-
-            kind_from_admin_level = _ADMIN_LEVEL_TO_KIND.get(str(props.get('tz_admin_level')))
-            if kind_from_admin_level:
-                props.pop('tz_admin_level')
-                claimed_by = props.get('claimed_by')
-                if claimed_by:
-                    for country in _list_of_countries(claimed_by):
-                        props['kind:' + country] = kind_from_admin_level
-
-                recognized_by = props.get('recognized_by')
-                if recognized_by:
-                    for country in _list_of_countries(recognized_by):
-                        props['kind:' + country] = kind_from_admin_level
-
-            new_features.append((shape, props, fid))
-
         else:
             # pass through this feature - we just ignore it.
             new_features.append((shape, props, fid))
