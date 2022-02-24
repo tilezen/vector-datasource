@@ -728,6 +728,7 @@ post_process:
         - disputed_by
         - "disputed_by:left"
         - "disputed_by:right"
+        - recognized_by
 
   # drop id/id:left/id:right on boundaries up to zoom 13 inclusive.
   # the left/right IDs tend to be unique as a pair, and so prevent merging.
