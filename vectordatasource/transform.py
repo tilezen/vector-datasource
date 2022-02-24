@@ -9362,13 +9362,16 @@ class _DisputeMasks(object):
         disputed_by = props.get('disputed_by', '')
         disputants = _list_of_countries(disputed_by)
 
+        recognizants = _list_of_countries(props.get('recognized_by', ''))
+        claimants = _list_of_countries(props.get('claimed_by', ''))
+
         if disputants:
             # we use a flat cap to avoid straying too much into nearby lines
             # and a mitred join to avoid creating extra geometry points to
             # represent the curve, as this slows down intersection checks.
             buffered_shape = shape.buffer(
                 self.buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
-            self.masks.append((buffered_shape, disputants))
+            self.masks.append((buffered_shape, disputants, recognizants, claimants))
 
     def empty(self):
         return not self.masks
@@ -9381,7 +9384,7 @@ class _DisputeMasks(object):
 
         updated_features = []
 
-        for mask_shape, disputants in self.masks:
+        for mask_shape, disputants, recognizants, claimants in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
             # a kind override has already been set.
@@ -9405,6 +9408,12 @@ class _DisputeMasks(object):
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
                         new_props['kind:' + disputant] = 'unrecognized_disputed_reference_line'
+
+                    for recognizant in recognizants:
+                        new_props['kind:' + recognizant] = 'country'
+
+                    for claimant in claimants:
+                        new_props['kind:' + claimant] = 'country'
 
                     new_props['kind'] = 'disputed_reference_line'
                     updated_features.append((cut_shape, new_props, None))
