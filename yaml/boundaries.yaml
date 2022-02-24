@@ -203,6 +203,7 @@ filters:
         - geom_type: line
         - admin_level: '3'
         - any:
+            # place is added in the osm2pgsql import LUA script
             - place: 'state'
             - place: 'country'
     min_zoom: 8
