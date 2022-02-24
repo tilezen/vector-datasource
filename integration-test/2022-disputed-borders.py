@@ -84,7 +84,6 @@ class DisputedBoundariesTest(FixtureTest):
                 'id': 909074085,
                 'kind': 'disputed_reference_line',
                 'kind:xx': 'country',
-                'disputed': True,
                 'kind:yy': 'country',
             })
 
@@ -109,7 +108,6 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind': 'disputed_reference_line',
                 'kind:xx': 'country',
                 'kind:yy': 'country',
-                'disputed': True,
             })
 
     def test_admin_level_3_other_place(self):
@@ -150,7 +148,6 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 13574166,
-                'disputed': True,
                 'kind:ru': 'unrecognized_disputed_reference_line',
                 'kind:pk': 'unrecognized_disputed_reference_line',
                 'kind:il': 'unrecognized_disputed_reference_line',
@@ -248,7 +245,6 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 202058477,
-                'disputed': True,
                 'kind:in': 'unrecognized_disputed_reference_line',
                 'kind:cn': 'country',
                 'kind:tw': 'country',
@@ -277,7 +273,6 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 202058477,
-                'disputed': True,
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
             })

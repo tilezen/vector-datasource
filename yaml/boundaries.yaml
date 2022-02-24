@@ -212,7 +212,6 @@ filters:
     output:
       <<: *output_properties
       kind: disputed_reference_line
-      disputed: True
       recognized_by: { col: recognized_by }
       tz_admin_level: {col: admin_level }
     table: osm
@@ -224,7 +223,6 @@ filters:
       <<: *output_properties
       kind: disputed_reference_line
       kind_detail: {col: admin_level }
-      disputed: True
       disputed_by: {col: disputed_by }
       claimed_by: { col: claimed_by }
       recognized_by: { col: recognized_by }
@@ -244,7 +242,6 @@ filters:
       disputed_by: {col: disputed_by}
       claimed_by: { col: claimed_by }
       recognized_by: { col: recognized_by }
-      disputed: True
     table: osm
 
   # osm
