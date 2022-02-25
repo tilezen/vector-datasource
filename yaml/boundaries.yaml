@@ -141,20 +141,7 @@ filters:
   - filter:
       all:
         - geom_type: line
-        - admin_level: '2'
-        - boundary: claim
-        - any:
-            - claimed_by: true
-            - disputed_by: true
-    min_zoom: 8
-    output:
-      <<: [*output_properties, *dispute_properties]
-      kind: unrecognized_country
-    table: osm
-  - filter:
-      all:
-        - geom_type: line
-        - admin_level: '4'
+        - admin_level: ['2', '4', '6']
         - boundary: claim
         - any:
             - claimed_by: true
@@ -162,20 +149,7 @@ filters:
     min_zoom: 8
     output:
       <<: [ *output_properties, *dispute_properties ]
-      kind: unrecognized_region
-    table: osm
-  - filter:
-      all:
-        - geom_type: line
-        - admin_level: '6'
-        - boundary: claim
-        - any:
-            - claimed_by: true
-            - disputed_by: true
-    min_zoom: 8
-    output:
-      <<: [ *output_properties, *dispute_properties ]
-      kind: unrecognized_county
+      kind: disputed_claim
     table: osm
   # these filters look for claims that don't have a claimed_by
   # but have different point of view tags for admin_level:XX

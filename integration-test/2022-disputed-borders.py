@@ -185,7 +185,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 202058477,
-                'kind': 'unrecognized_country',
+                'kind': 'disputed_claim',
                 'kind:cn': 'country',
                 'kind:tw': 'country',
                 'kind:in': 'unrecognized_country',
@@ -217,7 +217,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 202058477,
-                'kind': 'unrecognized_country',
+                'kind': 'disputed_claim',
                 'kind:in': 'unrecognized_country',
                 'kind:pk': 'unrecognized_country',
                 'kind:tr': 'unrecognized_country',
