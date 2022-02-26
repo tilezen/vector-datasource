@@ -553,7 +553,7 @@ function osm2pgsql.process_way(object)
             if v.claimed_by then
                 output_hstore.claimed_by = v.claimed_by
             end
-            if v.recognized_by_by then
+            if v.recognized_by then
                 output_hstore.recognized_by = v.recognized_by
             end
         end
