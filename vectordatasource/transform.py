@@ -9646,7 +9646,7 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
     turns e.g. admin_level:XX=4 into kind:xx=region
     """
     admin_viewpoint_prefix = 'admin_level:'
-    tags = props['tags']
+    tags = props.get('tags', {})
 
     for k in tags.keys():
         if k.startswith(admin_viewpoint_prefix):

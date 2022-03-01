@@ -42,8 +42,9 @@ class DisputedBoundariesTest(FixtureTest):
                 'admin_level:UA': '4',
                 'admin_level:US': '4',
                 'admin_level:VN': '2.5',
-                'boundary': 'claim',
+                'boundary': 'disputed',
                 'name': 'Viewpoints on Disputed Administrative Boundaries',
+                'disputed_by': 'SA,XX',
                 'ne:brk_a3': 'B91',
                 'type': 'linestring',
                 'source': 'openstreetmap.org',
@@ -54,8 +55,12 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 726514231,
                 'kind:ps': 'locality',
-                'kind': 'region',
+                'kind': 'disputed_reference_line',
                 'kind:us': 'region',
+                # in the absence of a admin_level:XX, the disputed_by tag dictates the kind
+                'kind:xx': 'unrecognized_region',
+                # verifies the admin_level:SA overrides the disputed_by
+                'kind:sa': 'region',
             })
 
         # make sure kind:vn didn't make it in because its admin_level doesn't map to anything
