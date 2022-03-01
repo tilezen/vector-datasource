@@ -229,6 +229,7 @@ local tables = {}
 local twadmin = {}
 local disputed = {}
 local cyprus_ways = {}
+local province_dispute = {}
 
 
 tables.point = osm2pgsql.define_table{
