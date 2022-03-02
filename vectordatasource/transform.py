@@ -9646,7 +9646,7 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
     turns e.g. admin_level:XX=4 into kind:xx=region
     """
     admin_viewpoint_prefix = 'admin_level:'
-    tags = props['tags']
+    tags = props.get('tags', {})
 
     for k in tags.keys():
         if k.startswith(admin_viewpoint_prefix):
@@ -9656,5 +9656,18 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
             # use a mapping if we have it, leave it out otherwise
             if admin_level in _ADMIN_LEVEL_TO_KIND:
                 props['kind:' + viewpoint] = _ADMIN_LEVEL_TO_KIND.get(admin_level, None)
+
+    return shape, props, fid
+
+
+def unpack_places_disputes(shape, props, fid, zoom):
+    """
+    turns disputed places into 'unrecognized' for that viewpoint
+    """
+    disputed_by = props.pop('disputed_by', '')
+    disputants = _list_of_countries(disputed_by)
+
+    for disputant in disputants:
+        props['kind:' + disputant] = 'unrecognized'
 
     return shape, props, fid

@@ -171,21 +171,6 @@ filters:
       <<: *output_properties
       kind: county
     table: osm
-  # this filter covers admin_level 3 boundaries for countries and states,
-  # turning them into disputed_reference_lines.
-  - filter:
-      all:
-        - geom_type: line
-        - admin_level: '3'
-        - any:
-            # place is added in the osm2pgsql import LUA script
-            - place: 'state'
-            - place: 'country'
-    min_zoom: 8
-    output:
-      <<: [ *output_properties, *dispute_properties ]
-      kind: disputed_reference_line
-    table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
   # becomes kind:xx=unrecognized_disputed_reference_line
   - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}

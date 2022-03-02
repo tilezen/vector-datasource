@@ -42,8 +42,9 @@ class DisputedBoundariesTest(FixtureTest):
                 'admin_level:UA': '4',
                 'admin_level:US': '4',
                 'admin_level:VN': '2.5',
-                'boundary': 'claim',
+                'boundary': 'disputed',
                 'name': 'Viewpoints on Disputed Administrative Boundaries',
+                'disputed_by': 'SA,XX',
                 'ne:brk_a3': 'B91',
                 'type': 'linestring',
                 'source': 'openstreetmap.org',
@@ -54,8 +55,12 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 726514231,
                 'kind:ps': 'locality',
-                'kind': 'region',
+                'kind': 'disputed_reference_line',
                 'kind:us': 'region',
+                # in the absence of a admin_level:XX, the disputed_by tag dictates the kind
+                'kind:xx': 'unrecognized_region',
+                # verifies the admin_level:SA overrides the disputed_by
+                'kind:sa': 'region',
             })
 
         # make sure kind:vn didn't make it in because its admin_level doesn't map to anything
@@ -79,12 +84,9 @@ class DisputedBoundariesTest(FixtureTest):
             }),
         )
 
-        self.assert_has_feature(
+        self.assert_no_matching_feature(
             z, x, y, 'boundaries', {
                 'id': 909074085,
-                'kind': 'disputed_reference_line',
-                'kind:xx': 'country',
-                'kind:yy': 'country',
             })
 
     def test_admin_level_3_country(self):
@@ -102,12 +104,9 @@ class DisputedBoundariesTest(FixtureTest):
             }),
         )
 
-        self.assert_has_feature(
+        self.assert_no_matching_feature(
             z, x, y, 'boundaries', {
                 'id': 123456,
-                'kind': 'disputed_reference_line',
-                'kind:xx': 'country',
-                'kind:yy': 'country',
             })
 
     def test_admin_level_3_other_place(self):
@@ -275,4 +274,58 @@ class DisputedBoundariesTest(FixtureTest):
                 'id': 202058477,
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
+            })
+
+    def test_places_disputed_by(self):
+        import dsl
+
+        z, x, y = (10, 11, 12)
+
+        import dsl
+
+        z, x, y = (10, 725, 402)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/316441092
+            dsl.point(316441092, (75.0000023, 35.9999972), {
+                'description': u'Formed in 1970 from the amalgamation of the Gilgit Agency, the Baltistan District of the Ladakh Wazarat, and the states of Hunza and Nagar.',
+                'gns:dsg': u'ADMD',
+                'gns:uni': u'-3846588',
+                'is_in:country': u'Pakistan',
+                'name': u'گلگت بلتستان',
+                'name:ar': u'غلغت-بلتستان',
+                'name:bft': u'གིལྒིཏ་བལྟིསྟན',
+                'name:en': u'Gilgit-Baltistan',
+                'name:fr': u'Gilgit-Baltistan',
+                'name:hi': u'गिलगित-बल्तिस्तान',
+                'name:hu': u'Északi területek',
+                'name:ja': u'ギルギット・バルティスタン',
+                'name:ko': u'길기트발티스탄',
+                'name:pl': u'Gilgit-Baltistan',
+                'name:ru': u'Гилгит-Балтистан',
+                'name:uk': u'Гілгіт-Балтистан',
+                'name:ur': u'گلگت - بلتستان',
+                'name:vi': u'Gilgit-Baltistan',
+                'old_name': u'Northern Areas;Federally Administered Northern Areas;FANA',
+                'old_name:de': u'Nordgebiete',
+                'old_name:ru': u'Северная территория',
+                'old_name:ur': u'شمالی علاقہ جات, Shumālī Ilāqe Jāt',
+                'old_name:vi': u'Các khu vực phía Bắc',
+                'place': u'state',
+                'population': u'1800000',
+                'ref': u'NA',
+                'source': u'openstreetmap.org',
+                'state_code': u'NA',
+                'wikidata': u'Q200697',
+                'wikipedia': u'en:Gilgit-Baltistan',
+                'disputed_by': 'IN,XX',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 316441092,
+                'kind': 'region',
+                'kind:in': 'unrecognized',
+                'kind:xx': 'unrecognized'
             })
