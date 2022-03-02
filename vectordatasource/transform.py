@@ -9321,7 +9321,9 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     admin_level = str(props.get('tz_admin_level', ''))
 
     if admin_level:
-        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level)
+        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level, '')
+        if not base_kind:
+            base_kind = 'debug'
 
         for viewpoint in _list_of_countries(claimed_by):
             props['kind:' + viewpoint] = base_kind
