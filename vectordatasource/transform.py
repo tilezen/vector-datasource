@@ -9636,11 +9636,20 @@ def capital_alternate_viewpoint(shape, props, fid, zoom):
 
 # Map admin level to the kind it should become. Admin_level 3 isn't a widely recognized country,
 # but the only uses of 3 we care about are when it is a country from some viewpoint
+# Similarly 5 is typically used for disputed regions.
 _ADMIN_LEVEL_TO_KIND = {'2': 'country',
-                        '3': 'country',
                         '4': 'region',
                         '6': 'county',
                         '8': 'locality'}
+
+_PLACE_TO_KIND = {'country': 'country',
+                  'state': 'region',
+                  'region': 'region',
+                  'county': 'county',
+                  'district': 'county',
+                  'locality': 'locality',
+                  'town': 'locality',
+                  }
 
 
 def admin_level_alternate_viewpoint(shape, props, fid, zoom):
@@ -9671,5 +9680,26 @@ def unpack_places_disputes(shape, props, fid, zoom):
 
     for disputant in disputants:
         props['kind:' + disputant] = 'unrecognized'
+
+    return shape, props, fid
+
+
+def apply_places_with_viewpoints(shape, props, fid, zoom):
+    """
+    turns a valid place:XX into a corresponding kind:xx
+    """
+    prefix = 'place:'
+
+    for prop, value in list(props.items()):
+        if not prop.startswith(prefix):
+            continue
+
+        viewpoint = prop[len(prefix):].strip().lower()
+        kind = _PLACE_TO_KIND.get(value.strip().lower(), '')
+        if not kind:
+            continue
+
+        props['kind:' + viewpoint] = kind
+        props.pop(prop)
 
     return shape, props, fid

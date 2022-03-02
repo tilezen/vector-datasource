@@ -191,6 +191,7 @@ layers:
       - vectordatasource.transform.population_rank
       - vectordatasource.transform.capital_alternate_viewpoint
       - vectordatasource.transform.unpack_places_disputes
+      - vectordatasource.transform.apply_places_with_viewpoints
       - vectordatasource.transform.calculate_default_place_min_zoom
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation

@@ -329,3 +329,49 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:in': 'unrecognized',
                 'kind:xx': 'unrecognized'
             })
+
+    def test_places_with_viewpoints(self):
+        import dsl
+
+        z, x, y = (10, 856, 441)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/432425099
+            dsl.point(432425099, (120.9820179, 23.9739374), {
+                'name': u'臺灣',
+                'name:en': u'Taiwan',
+                'place': u'country',
+                'place:CN': 'state',
+                # the rest of these place:xx are made up
+                'place:US': 'country',
+                'place:PK': 'region',
+                'place:IN': 'county',
+                'place:RU': 'district',
+                'place:JP': 'locality',
+                'place:IT': 'town',
+                'place:TR': 'not_there',
+                'place:XX': 'country',
+                'source': u'openstreetmap.org',
+                'source:sqkm': u'CIA World Factbook',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 432425099,
+                'kind': 'country',
+                'kind:cn': 'region',
+                'kind:us': 'country',
+                'kind:pk': 'region',
+                'kind:in': 'county',
+                'kind:ru': 'county',
+                'kind:jp': 'locality',
+                'kind:it': 'locality'
+            })
+
+        self.assert_no_matching_feature(
+            z, x, y, 'places', {
+                'id': 432425099,
+                'kind:tr': None,  # invalid place type not converted to a kind
+                'kind:xx': None,  # invalid viewpoint not exported
+            })
