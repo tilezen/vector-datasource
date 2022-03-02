@@ -275,3 +275,57 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
             })
+
+    def test_places_disputed_by(self):
+        import dsl
+
+        z, x, y = (10, 11, 12)
+
+        import dsl
+
+        z, x, y = (10, 725, 402)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/316441092
+            dsl.point(316441092, (75.0000023, 35.9999972), {
+                'description': u'Formed in 1970 from the amalgamation of the Gilgit Agency, the Baltistan District of the Ladakh Wazarat, and the states of Hunza and Nagar.',
+                'gns:dsg': u'ADMD',
+                'gns:uni': u'-3846588',
+                'is_in:country': u'Pakistan',
+                'name': u'گلگت بلتستان',
+                'name:ar': u'غلغت-بلتستان',
+                'name:bft': u'གིལྒིཏ་བལྟིསྟན',
+                'name:en': u'Gilgit-Baltistan',
+                'name:fr': u'Gilgit-Baltistan',
+                'name:hi': u'गिलगित-बल्तिस्तान',
+                'name:hu': u'Északi területek',
+                'name:ja': u'ギルギット・バルティスタン',
+                'name:ko': u'길기트발티스탄',
+                'name:pl': u'Gilgit-Baltistan',
+                'name:ru': u'Гилгит-Балтистан',
+                'name:uk': u'Гілгіт-Балтистан',
+                'name:ur': u'گلگت - بلتستان',
+                'name:vi': u'Gilgit-Baltistan',
+                'old_name': u'Northern Areas;Federally Administered Northern Areas;FANA',
+                'old_name:de': u'Nordgebiete',
+                'old_name:ru': u'Северная территория',
+                'old_name:ur': u'شمالی علاقہ جات, Shumālī Ilāqe Jāt',
+                'old_name:vi': u'Các khu vực phía Bắc',
+                'place': u'state',
+                'population': u'1800000',
+                'ref': u'NA',
+                'source': u'openstreetmap.org',
+                'state_code': u'NA',
+                'wikidata': u'Q200697',
+                'wikipedia': u'en:Gilgit-Baltistan',
+                'disputed_by': 'IN,XX',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 316441092,
+                'kind': 'region',
+                'kind:in': 'unrecognized',
+                'kind:xx': 'unrecognized'
+            })

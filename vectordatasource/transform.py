@@ -9658,3 +9658,16 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
                 props['kind:' + viewpoint] = _ADMIN_LEVEL_TO_KIND.get(admin_level, None)
 
     return shape, props, fid
+
+
+def unpack_places_disputes(shape, props, fid, zoom):
+    """
+    turns disputed places into 'unrecognized' for that viewpoint
+    """
+    disputed_by = props.pop('disputed_by', '')
+    disputants = _list_of_countries(disputed_by)
+
+    for disputant in disputants:
+        props['kind:' + disputant] = 'unrecognized'
+
+    return shape, props, fid
