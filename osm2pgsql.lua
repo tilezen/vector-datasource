@@ -581,9 +581,16 @@ function osm2pgsql.process_relation(object)
         end
     end
 
--- Adds dispute=yes to boundary=disputed relation
+-- Adds dispute=yes to any ways part of a  boundary=disputed relation
     if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
-        output_hstore.dispute = 'yes'
+        for _, member in ipairs(object.members) do
+            if member.type == 'w' then
+                if not disputed[member.ref] then
+                    disputed[member.ref] = {}
+                end
+                disputed[member.ref] = object.tags
+            end
+        end
     end
 
 -- Add tags to redefine Hong Kong and Macau as admin 2 except for China which is Admin 4
