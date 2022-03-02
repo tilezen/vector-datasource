@@ -422,28 +422,28 @@ function osm2pgsql.process_node(object)
     end
 
 -- Add POV tags to certain place nodes to change label rendering
--- Arunachal Pradesh
-    if type == 'place' and object.tags.wikidata == 'Q1162' then
+-- Hide Arunachal Pradesh region label for China POV
+    if object.tags.place and object.tags.wikidata == 'Q1162' then
         output_hstore['disputed_by'] = 'CN'
     end
--- Gilgit-Baltistan
-    if type == 'place' and object.tags.wikidata == 'Q200697' then
+-- Hide Gilgit-Baltistan region label for India POV
+    if object.tags.place and object.tags.wikidata == 'Q200697' then
         output_hstore['disputed_by'] = 'IN'
     end
--- Azad Kashmir
-    if type == 'place' and object.tags.wikidata == 'Q200130' then
+-- Hide Azad Kashmir region label for India POV
+    if object.tags.place and object.tags.wikidata == 'Q200130' then
         output_hstore['disputed_by'] = 'IN'
     end
--- Ladakh
-    if type == 'place' and object.tags.wikidata == 'Q200667' then
+-- Hide Ladakh region label for Pakistan POV
+    if object.tags.place and object.tags.wikidata == 'Q200667' then
         output_hstore['disputed_by'] = 'PK'
     end
--- Taiwan country label
-    if type == 'place' and object.tags.wikidata == 'Q865' then
+-- Recast Taiwan country label as region label for China POV
+    if object.tags.place and object.tags.wikidata == 'Q865' then
         output_hstore['place:CN'] = 'region'
     end
--- Taiwan city labels
-    if type == 'place' and (object.tags.wikidata == 'Q133865' or object.tags.wikidata == 'Q166977' or
+-- Recast Taiwan region to county labels for China POV
+    if object.tags.place and (object.tags.wikidata == 'Q133865' or object.tags.wikidata == 'Q166977' or
     object.tags.wikidata == 'Q249995' or object.tags.wikidata == 'Q74054' or object.tags.wikidata == 'Q249994' or
     object.tags.wikidata == 'Q249868' or object.tags.wikidata == 'Q181557' or object.tags.wikidata == 'Q249996' or
     object.tags.wikidata == 'Q249870' or object.tags.wikidata == 'Q249872' or object.tags.wikidata == 'Q63706' or
@@ -451,11 +451,17 @@ function osm2pgsql.process_node(object)
     object.tags.wikidata == 'Q194989' or object.tags.wikidata == 'Q245023' or object.tags.wikidata == 'Q140631' or
     object.tags.wikidata == 'Q1867' or object.tags.wikidata == 'Q249904' or object.tags.wikidata == 'Q115256' or
     object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
-        output_hstore['place:CN'] = 'city'
+        output_hstore['place:CN'] = 'county'
     end
-
--- Kosovo country and district labels
-    if type == 'place' and (object.tags.wikidata == 'Q1246' or object.tags.wikidata == 'Q474651' or
+-- Recast Taiwan country label as region label for China POV
+    if object.tags.place and object.tags.wikidata == 'Q1246' then
+        output_hstore['place:CN'] = 'region'
+        output_hstore['place:RU'] = 'region'
+        output_hstore['place:IN'] = 'region'
+        output_hstore['place:GR'] = 'region'
+    end
+-- Hide Kosovo country and region labels for several POVs including China and Russia
+    if object.tags.place and (object.tags.wikidata == 'Q474651' or
     object.tags.wikidata == 'Q939112' or object.tags.wikidata == 'Q59074' or object.tags.wikidata == 'Q1008042' or
     object.tags.wikidata == 'Q739808' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q248378' or
     object.tags.wikidata == 'Q963121' or object.tags.wikidata == 'Q786124' or object.tags.wikidata == 'Q124725' or
@@ -623,7 +629,6 @@ function osm2pgsql.process_relation(object)
                 end
                 disputed[member.ref] = object.tags
             end
-            output_hstore = nil
         end
     end
 
