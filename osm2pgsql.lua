@@ -226,12 +226,7 @@ end
 local tables = {}
 
 --for storing node tags later
-local n2r = {}
-local twadmin = {}
 local disputed = {}
-local province_dispute = {}
-local cyprus_ways = {}
-
 
 tables.point = osm2pgsql.define_table{
     name = prefix .. '_point',
@@ -426,18 +421,58 @@ function osm2pgsql.process_node(object)
         end
     end
 
+-- Add POV tags to certain place nodes to change label rendering
+-- Arunachal Pradesh
+    if type == 'place' and object.tags.wikidata == 'Q1162' then
+        output_hstore['disputed_by'] = 'CN'
+    end
+-- Gilgit-Baltistan
+    if type == 'place' and object.tags.wikidata == 'Q200697' then
+        output_hstore['disputed_by'] = 'IN'
+    end
+-- Azad Kashmir
+    if type == 'place' and object.tags.wikidata == 'Q200130' then
+        output_hstore['disputed_by'] = 'IN'
+    end
+-- Ladakh
+    if type == 'place' and object.tags.wikidata == 'Q200667' then
+        output_hstore['disputed_by'] = 'PK'
+    end
+-- Taiwan country label
+    if type == 'place' and object.tags.wikidata == 'Q865' then
+        output_hstore['place:CN'] = 'region'
+    end
+-- Taiwan city labels
+    if type == 'place' and (object.tags.wikidata == 'Q133865' or object.tags.wikidata == 'Q166977' or
+    object.tags.wikidata == 'Q249995' or object.tags.wikidata == 'Q74054' or object.tags.wikidata == 'Q249994' or
+    object.tags.wikidata == 'Q249868' or object.tags.wikidata == 'Q181557' or object.tags.wikidata == 'Q249996' or
+    object.tags.wikidata == 'Q249870' or object.tags.wikidata == 'Q249872' or object.tags.wikidata == 'Q63706' or
+    object.tags.wikidata == 'Q82357' or object.tags.wikidata == 'Q244898' or object.tags.wikidata == 'Q198525' or
+    object.tags.wikidata == 'Q194989' or object.tags.wikidata == 'Q245023' or object.tags.wikidata == 'Q140631' or
+    object.tags.wikidata == 'Q1867' or object.tags.wikidata == 'Q249904' or object.tags.wikidata == 'Q115256' or
+    object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
+        output_hstore['place:CN'] = 'city'
+    end
+
+-- Kosovo country and district labels
+    if type == 'place' and (object.tags.wikidata == 'Q1246' or object.tags.wikidata == 'Q474651' or
+    object.tags.wikidata == 'Q939112' or object.tags.wikidata == 'Q59074' or object.tags.wikidata == 'Q1008042' or
+    object.tags.wikidata == 'Q739808' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q248378' or
+    object.tags.wikidata == 'Q963121' or object.tags.wikidata == 'Q786124' or object.tags.wikidata == 'Q124725' or
+    object.tags.wikidata == 'Q42328687' or object.tags.wikidata == 'Q991313' or object.tags.wikidata == 'Q994730' or
+    object.tags.wikidata == 'Q59089' or object.tags.wikidata == 'Q15710469' or object.tags.wikidata == 'Q608274' or
+    object.tags.wikidata == 'Q733155' or object.tags.wikidata == 'Q112657' or object.tags.wikidata == 'Q994245' or
+    object.tags.wikidata == 'Q25270' or object.tags.wikidata == 'Q4864476' or object.tags.wikidata == 'Q991291' or
+    object.tags.wikidata == 'Q991291' or object.tags.wikidata == 'Q392505' or object.tags.wikidata == 'Q59086' or
+    object.tags.wikidata == 'Q738901' or object.tags.wikidata == 'Q1021775' or object.tags.wikidata == 'Q911241' or
+    object.tags.wikidata == 'Q227569' or object.tags.wikidata == 'Q62172') then
+        output_hstore['disputed_by'] = 'CN;RU;IN;GR'
+    end
+
     output.tags = output_hstore
 
     if hstore_column then
         output[hstore_column] = get_hstore_column(object.tags)
-    end
-
---	Pulls out place tag for adding to relation later
-    if object.tags.place then
-        if not n2r[object.id] then
-            n2r[object.id] = {}
-        end
-        n2r[object.id] = object.tags.place
     end
 
     tables.point:add_row(output)
@@ -502,45 +537,9 @@ function osm2pgsql.process_way(object)
         output_hstore.dispute = nil
     end
 
+-- Redefine extra admin ways as disputed
     if object.tags.boundary == 'disputed' then
         output_hstore.boundary = 'administrative'
-    end
-
--- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways
-    for k, v in pairs(twadmin) do
-        if k == object.id then
-            output_hstore.admin_level = '4'
-            output_hstore['admin_level:AR'] = '4'
-            output_hstore['admin_level:BD'] = '4'
-            output_hstore['admin_level:BR'] = '4'
-            output_hstore['admin_level:CN'] = '6'
-            output_hstore['admin_level:DE'] = '4'
-            output_hstore['admin_level:EG'] = '4'
-            output_hstore['admin_level:ES'] = '4'
-            output_hstore['admin_level:FR'] = '4'
-            output_hstore['admin_level:GB'] = '4'
-            output_hstore['admin_level:GR'] = '4'
-            output_hstore['admin_level:ID'] = '4'
-            output_hstore['admin_level:IL'] = '4'
-            output_hstore['admin_level:IN'] = '4'
-            output_hstore['admin_level:IT'] = '4'
-            output_hstore['admin_level:JP'] = '4'
-            output_hstore['admin_level:KO'] = '4'
-            output_hstore['admin_level:MA'] = '4'
-            output_hstore['admin_level:NL'] = '4'
-            output_hstore['admin_level:NP'] = '4'
-            output_hstore['admin_level:PK'] = '4'
-            output_hstore['admin_level:PL'] = '4'
-            output_hstore['admin_level:PS'] = '4'
-            output_hstore['admin_level:PT'] = '4'
-            output_hstore['admin_level:SA'] = '4'
-            output_hstore['admin_level:SE'] = '4'
-            output_hstore['admin_level:TR'] = '4'
-            output_hstore['admin_level:TW'] = '4'
-            output_hstore['admin_level:UA'] = '4'
-            output_hstore['admin_level:US'] = '4'
-            output_hstore['admin_level:VN'] = '4'
-        end
     end
 
 -- Adds dispute tags to ways in disputed relations
@@ -558,25 +557,6 @@ function osm2pgsql.process_way(object)
             end
         end
     end
-
--- adds tags from province level dispute relations
-    for k, v in pairs(province_dispute) do
-        if k == object.id then
-            for a, i in pairs(v) do
-                if not output_hstore[a] then
-                    output_hstore[a] = i
-                end
-            end
-        end
-    end
-
--- Convert admin_level 5 boundaries in Northern Cyprus to 4
-    for _, v in pairs(cyprus_ways) do
-        if v == object.id then
-            output_hstore.admin_level = '4'
-        end
-    end
-
 
     output.tags = output_hstore
 
@@ -634,85 +614,7 @@ function osm2pgsql.process_relation(object)
         return
     end
 
---	Filters on boundaries with a label role node
---	Compares node to n2r ids and adds place tag to relation if a match occurs
-    if type == 'boundary' and object.tags.admin_level == '3' and object.tags.wikidata ~= 'Q205047' then
-        for _, member in ipairs(object.members) do
-            if member.role == 'label' then
-                for k, v in pairs(n2r) do
-                    if k == member.ref then
-                        output_hstore.place = v
-                    end
-                end
-            end
-        end
-    end
-
--- Adds tags to redefine Taiwan admin levels. Applies to both relation and ways.
-    if type == 'boundary' and (object.tags.admin_level == '4' or object.tags.admin_level == '6') and object.tags['ISO3166-2'] then
-        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'TW-') then
-            for _, member in ipairs(object.members) do
-                if member.type == 'w' then
-                    if not twadmin[member.ref] then
-                        twadmin[member.ref] = {}
-                    end
-                    twadmin[member.ref] = object.id
-                end
-            end
-            output_hstore.admin_level = '4'
-            output_hstore['admin_level:AR'] = '4'
-            output_hstore['admin_level:BD'] = '4'
-            output_hstore['admin_level:BR'] = '4'
-            output_hstore['admin_level:CN'] = '6'
-            output_hstore['admin_level:DE'] = '4'
-            output_hstore['admin_level:EG'] = '4'
-            output_hstore['admin_level:ES'] = '4'
-            output_hstore['admin_level:FR'] = '4'
-            output_hstore['admin_level:GB'] = '4'
-            output_hstore['admin_level:GR'] = '4'
-            output_hstore['admin_level:ID'] = '4'
-            output_hstore['admin_level:IL'] = '4'
-            output_hstore['admin_level:IN'] = '4'
-            output_hstore['admin_level:IT'] = '4'
-            output_hstore['admin_level:JP'] = '4'
-            output_hstore['admin_level:KO'] = '4'
-            output_hstore['admin_level:MA'] = '4'
-            output_hstore['admin_level:NL'] = '4'
-            output_hstore['admin_level:NP'] = '4'
-            output_hstore['admin_level:PK'] = '4'
-            output_hstore['admin_level:PL'] = '4'
-            output_hstore['admin_level:PS'] = '4'
-            output_hstore['admin_level:PT'] = '4'
-            output_hstore['admin_level:SA'] = '4'
-            output_hstore['admin_level:SE'] = '4'
-            output_hstore['admin_level:TR'] = '4'
-            output_hstore['admin_level:TW'] = '4'
-            output_hstore['admin_level:UA'] = '4'
-            output_hstore['admin_level:US'] = '4'
-            output_hstore['admin_level:VN'] = '4'
-        end
-    end
-
--- Adds tags to turn off Israel admin 4 boundaries for Palestine.
-    if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
-        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-            output_hstore['admin_level:PS'] = '6'
-        end
-    end
-
--- Adds tags to redefine other relation admin levels, based on relation. Applies to both relation and ways.
-    if type == 'linestring' and object.tags.boundary == 'claim' and object.tags.claimed_by == nil then
-        for _, member in ipairs(object.members) do
-            if member.type == 'w' then
-                if not province_dispute[member.ref] then
-                    province_dispute[member.ref] = {}
-                end
-                province_dispute[member.ref] = object.tags
-            end
-        end
-    end
-
--- Adds dispute=yes to any ways part of a boundary=disputed relation
+-- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
     if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
@@ -721,48 +623,34 @@ function osm2pgsql.process_relation(object)
                 end
                 disputed[member.ref] = object.tags
             end
+            output_hstore = nil
         end
-        output_hstore.dispute = 'yes'
     end
 
+-- Adds tags to redefine Taiwan admin levels.
+    if type == 'boundary' and (object.tags.admin_level == '4' or object.tags.admin_level == '6') and object.tags['ISO3166-2'] then
+        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'TW-') then
+            output_hstore.admin_level = '4'
+            output_hstore['admin_level:CN'] = '6'
+        end
+    end
+
+-- Adds tags to redefine Israel admin 4 boundaries for Palestine.
+    if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
+        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
+            output_hstore['admin_level:PS'] = '6'
+        end
+    end
+
+-- Add tags to redefine Hong Kong and Macau as admin 2 except for China which is Admin 4
     if type == 'boundary' and (object.tags['ISO3166-1'] == 'MO' or object.tags['ISO3166-1'] == 'HK') then
         output_hstore['admin_level'] = '2'
-        output_hstore['admin_level:AR'] = '2'
-        output_hstore['admin_level:BD'] = '2'
-        output_hstore['admin_level:BR'] = '2'
         output_hstore['admin_level:CN'] = '4'
-        output_hstore['admin_level:DE'] = '2'
-        output_hstore['admin_level:EG'] = '2'
-        output_hstore['admin_level:ES'] = '2'
-        output_hstore['admin_level:FR'] = '2'
-        output_hstore['admin_level:GB'] = '2'
-        output_hstore['admin_level:GR'] = '2'
-        output_hstore['admin_level:ID'] = '2'
-        output_hstore['admin_level:IL'] = '2'
-        output_hstore['admin_level:IN'] = '2'
-        output_hstore['admin_level:IT'] = '2'
-        output_hstore['admin_level:JP'] = '2'
-        output_hstore['admin_level:KO'] = '2'
-        output_hstore['admin_level:MA'] = '2'
-        output_hstore['admin_level:NL'] = '2'
-        output_hstore['admin_level:NP'] = '2'
-        output_hstore['admin_level:PK'] = '2'
-        output_hstore['admin_level:PL'] = '2'
-        output_hstore['admin_level:PS'] = '2'
-        output_hstore['admin_level:PT'] = '2'
-        output_hstore['admin_level:SA'] = '2'
-        output_hstore['admin_level:SE'] = '2'
-        output_hstore['admin_level:TR'] = '2'
-        output_hstore['admin_level:TW'] = '2'
-        output_hstore['admin_level:UA'] = '2'
-        output_hstore['admin_level:US'] = '2'
-        output_hstore['admin_level:VN'] = '2'
     end
 
 -- Convert admin_level 5 boundaries in Northern Cyprus to 4
     if type == 'boundary' and object.tags.is_in == 'Northern Cyprus' and object.tags.admin_level == '5' then
-        output_hstore.admin_level = '4'
-        cyprus_ways = osm2pgsql.way_member_ids(object)
+        output_hstore['admin_level'] = '4'
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
