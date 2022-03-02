@@ -421,6 +421,54 @@ function osm2pgsql.process_node(object)
         end
     end
 
+-- Add POV tags to certain place nodes to change label rendering
+-- Arunachal Pradesh
+    if type == 'place' and object.tags.wikidata == 'Q1162' then
+        output_hstore['disputed_by'] = 'CN'
+    end
+-- Gilgit-Baltistan
+    if type == 'place' and object.tags.wikidata == 'Q200697' then
+        output_hstore['disputed_by'] = 'IN'
+    end
+-- Azad Kashmir
+    if type == 'place' and object.tags.wikidata == 'Q200130' then
+        output_hstore['disputed_by'] = 'IN'
+    end
+-- Ladakh
+    if type == 'place' and object.tags.wikidata == 'Q200667' then
+        output_hstore['disputed_by'] = 'PK'
+    end
+-- Taiwan country label
+    if type == 'place' and object.tags.wikidata == 'Q865' then
+        output_hstore['place:CN'] = 'region'
+    end
+-- Taiwan city labels
+    if type == 'place' and (object.tags.wikidata == 'Q133865' or object.tags.wikidata == 'Q166977' or
+    object.tags.wikidata == 'Q249995' or object.tags.wikidata == 'Q74054' or object.tags.wikidata == 'Q249994' or
+    object.tags.wikidata == 'Q249868' or object.tags.wikidata == 'Q181557' or object.tags.wikidata == 'Q249996' or
+    object.tags.wikidata == 'Q249870' or object.tags.wikidata == 'Q249872' or object.tags.wikidata == 'Q63706' or
+    object.tags.wikidata == 'Q82357' or object.tags.wikidata == 'Q244898' or object.tags.wikidata == 'Q198525' or
+    object.tags.wikidata == 'Q194989' or object.tags.wikidata == 'Q245023' or object.tags.wikidata == 'Q140631' or
+    object.tags.wikidata == 'Q1867' or object.tags.wikidata == 'Q249904' or object.tags.wikidata == 'Q115256' or
+    object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
+        output_hstore['place:CN'] = 'city'
+    end
+
+-- Kosovo country and district labels
+    if type == 'place' and (object.tags.wikidata == 'Q1246' or object.tags.wikidata == 'Q474651' or
+    object.tags.wikidata == 'Q939112' or object.tags.wikidata == 'Q59074' or object.tags.wikidata == 'Q1008042' or
+    object.tags.wikidata == 'Q739808' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q248378' or
+    object.tags.wikidata == 'Q963121' or object.tags.wikidata == 'Q786124' or object.tags.wikidata == 'Q124725' or
+    object.tags.wikidata == 'Q42328687' or object.tags.wikidata == 'Q991313' or object.tags.wikidata == 'Q994730' or
+    object.tags.wikidata == 'Q59089' or object.tags.wikidata == 'Q15710469' or object.tags.wikidata == 'Q608274' or
+    object.tags.wikidata == 'Q733155' or object.tags.wikidata == 'Q112657' or object.tags.wikidata == 'Q994245' or
+    object.tags.wikidata == 'Q25270' or object.tags.wikidata == 'Q4864476' or object.tags.wikidata == 'Q991291' or
+    object.tags.wikidata == 'Q991291' or object.tags.wikidata == 'Q392505' or object.tags.wikidata == 'Q59086' or
+    object.tags.wikidata == 'Q738901' or object.tags.wikidata == 'Q1021775' or object.tags.wikidata == 'Q911241' or
+    object.tags.wikidata == 'Q227569' or object.tags.wikidata == 'Q62172') then
+        output_hstore['disputed_by'] = 'CN;RU;IN;GR'
+    end
+
     output.tags = output_hstore
 
     if hstore_column then
@@ -566,6 +614,19 @@ function osm2pgsql.process_relation(object)
         return
     end
 
+-- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
+    if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
+        for _, member in ipairs(object.members) do
+            if member.type == 'w' then
+                if not disputed[member.ref] then
+                    disputed[member.ref] = {}
+                end
+                disputed[member.ref] = object.tags
+            end
+            output_hstore = nil
+        end
+    end
+
 -- Adds tags to redefine Taiwan admin levels.
     if type == 'boundary' and (object.tags.admin_level == '4' or object.tags.admin_level == '6') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'TW-') then
@@ -578,18 +639,6 @@ function osm2pgsql.process_relation(object)
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
             output_hstore['admin_level:PS'] = '6'
-        end
-    end
-
--- Adds dispute=yes to any ways part of a  boundary=disputed relation
-    if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
-        for _, member in ipairs(object.members) do
-            if member.type == 'w' then
-                if not disputed[member.ref] then
-                    disputed[member.ref] = {}
-                end
-                disputed[member.ref] = object.tags
-            end
         end
     end
 
