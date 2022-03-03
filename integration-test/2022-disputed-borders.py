@@ -69,65 +69,6 @@ class DisputedBoundariesTest(FixtureTest):
             'kind:vn': None
         })
 
-    def test_admin_level_3_state(self):
-        z, x, y = (16, 53533, 28559)
-
-        self.generate_fixtures(
-            # https://www.openstreetmap.org/way/909074085
-            dsl.way(909074085, dsl.tile_diagonal(z, x, y), {
-                'admin_level': '3',
-                'boundary': 'administrative',
-                'place': 'state',
-                'source': 'openstreetmap.org',
-                'admin_level:XX': '2',
-                'recognized_by': 'YY'
-            }),
-        )
-
-        self.assert_no_matching_feature(
-            z, x, y, 'boundaries', {
-                'id': 909074085,
-            })
-
-    def test_admin_level_3_country(self):
-        z, x, y = (16, 53533, 28559)
-
-        self.generate_fixtures(
-            # this one is made up - just place = country
-            dsl.way(123456, dsl.tile_diagonal(z, x, y), {
-                'admin_level': '3',
-                'boundary': 'administrative',
-                'place': 'country',
-                'source': 'openstreetmap.org',
-                'admin_level:XX': '2',
-                'recognized_by': 'YY',
-            }),
-        )
-
-        self.assert_no_matching_feature(
-            z, x, y, 'boundaries', {
-                'id': 123456,
-            })
-
-    def test_admin_level_3_other_place(self):
-        z, x, y = (16, 53533, 28559)
-
-        self.generate_fixtures(
-            # also made up - we should ignore other place values
-            dsl.way(345678, dsl.tile_diagonal(z, x, y), {
-                'admin_level': '3',
-                'boundary': 'administrative',
-                'place': 'Neither state nor country',
-                'source': 'openstreetmap.org',
-                'admin_level:ZZ': '2'
-            }),
-        )
-
-        self.assert_no_matching_feature(
-            z, x, y, 'boundaries', {
-                'id': 345678,
-            })
-
     def test_disputed_by_to_unrecognized_disputed_reference_line(self):
         z, x, y = (16, 53533, 28559)
 
@@ -232,8 +173,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'boundary': 'disputed',
                 'claimed_by': 'CN;TW',
                 'disputed_by': 'IN',
-                'name': 'Extent', 'of': 'Chinese', 'Claim': 'at', 'Aksai': 'Chin',
-                'name:ur': 'اکسائی', 'چن': 'میں', 'چینی': 'دعوے', 'کی': 'حد',
+                'name': 'Extent of Chinese Claim at Aksai Chin',
                 'ne:brk_a3': 'B07',
                 'ne_id': '1746705319',
                 'recognized_by': 'RU;PK;TR',

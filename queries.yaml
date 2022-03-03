@@ -302,6 +302,8 @@ layers:
       - vectordatasource.transform.truncate_min_zoom_to_1dp
       - vectordatasource.transform.remap_viewpoint_kinds
       - vectordatasource.transform.unpack_viewpoint_claims
+      # note: the next line needs to come after anything else that touches the kind:XX values.
+      # admin_level:XX is intended to be an override for all the other general logic for disputes
       - vectordatasource.transform.admin_level_alternate_viewpoint
       - vectordatasource.transform.tags_remove
     area-inclusion-threshold: 1
@@ -731,6 +733,10 @@ post_process:
         - "disputed_by:left"
         - "disputed_by:right"
         - recognized_by
+        - "recognized_by:left"
+        - "recognized_by:right"
+        - tz_admin_level
+
 
   # drop id/id:left/id:right on boundaries up to zoom 13 inclusive.
   # the left/right IDs tend to be unique as a pair, and so prevent merging.

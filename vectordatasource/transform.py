@@ -9643,12 +9643,18 @@ _ADMIN_LEVEL_TO_KIND = {'2': 'country',
                         '8': 'locality'}
 
 _PLACE_TO_KIND = {'country': 'country',
-                  'state': 'region',
                   'region': 'region',
+                  'state': 'region',
+                  'province': 'region',
                   'county': 'county',
                   'district': 'county',
-                  'locality': 'locality',
+                  'city': 'locality',
                   'town': 'locality',
+                  'village': 'locality',
+                  'locality': 'locality',
+                  'hamlet': 'locality',
+                  'isolated_dwelling': 'locality',
+                  'farm': 'locality',
                   }
 
 
