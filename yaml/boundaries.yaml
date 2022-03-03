@@ -101,12 +101,16 @@ global:
           - geom_type: line
           - mz_boundary_from_polygon: true
 
+  - &dispute_id_components
+    tz_breakaway_code: { col: 'ne:brk_a3' }
+    tz_ne_id: { col: 'ne_id' }
+
   - &dispute_properties
     claimed_by: { col: claimed_by }
     recognized_by: { col: recognized_by }
     disputed_by: { col: disputed_by }
     tz_admin_level: {col: admin_level }
-    dispute_id: {col: 'ne:brk_a3'}
+    <<: *dispute_id_components
 
 filters:
 
@@ -264,10 +268,10 @@ filters:
         - 'Map unit boundary'
     min_zoom: { col: min_zoom }
     output:
-      <<: [*output_properties, *ne_localized_kind_properties]
+      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
-      dispute_id: { col: 'ne:brk_a3' }
+
     table: ne
 
   # ne for disputed kind:xx POV we want to always include
@@ -282,10 +286,9 @@ filters:
         - 'Unrecognized'
     min_zoom: 1
     output:
-      <<: [*output_properties, *ne_localized_kind_properties]
+      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
-      dispute_id: { col: 'ne:brk_a3' }
     table: ne
 
   - filter:
@@ -317,10 +320,9 @@ filters:
     min_zoom: *ne_region_boundaries_min_zoom
     extra_columns: [scalerank]
     output:
-      <<: [*output_properties, *ne_localized_kind_properties]
+      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
       kind: unrecognized_macroregion
       kind_detail: '4'
-      dispute_id: { col: 'ne:brk_a3' }
     table: ne
   - filter:
       featurecla:
@@ -330,8 +332,7 @@ filters:
     min_zoom: *ne_region_boundaries_min_zoom
     extra_columns: [scalerank]
     output:
-      <<: [*output_properties, *ne_localized_kind_properties]
+      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
       kind: unrecognized_region
       kind_detail: '4'
-      dispute_id: { col: 'ne:brk_a3' }
     table: ne

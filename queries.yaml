@@ -305,6 +305,7 @@ layers:
       # note: the next line needs to come after anything else that touches the kind:XX values.
       # admin_level:XX is intended to be an override for all the other general logic for disputes
       - vectordatasource.transform.admin_level_alternate_viewpoint
+      - vectordatasource.transform.create_dispute_ids
       - vectordatasource.transform.tags_remove
     area-inclusion-threshold: 1
   transit:

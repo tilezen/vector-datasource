@@ -61,6 +61,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:xx': 'unrecognized_region',
                 # verifies the admin_level:SA overrides the disputed_by
                 'kind:sa': 'region',
+                'dispute_id': 'B91',
             })
 
         # make sure kind:vn didn't make it in because its admin_level doesn't map to anything
@@ -98,6 +99,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:bd': 'unrecognized_country',
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
+                'dispute_id': 'B16_1746705859;1746705871',
             })
 
     def test_boundary_claim_disputed_by_claimed_by(self):
@@ -132,6 +134,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:pk': 'unrecognized_country',
                 'kind:tr': 'unrecognized_country',
                 'kind:ru': 'country',
+                'dispute_id': 'B02_1746705405'
             })
 
     def test_boundary_claim_disputed_by_only(self):
@@ -161,6 +164,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:in': 'unrecognized_country',
                 'kind:pk': 'unrecognized_country',
                 'kind:tr': 'unrecognized_country',
+                'dispute_id': 'B02_1746705405'
             })
 
     def test_boundary_dispute_disputed_by_claimed_by(self):
@@ -192,6 +196,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:tr': 'country',
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
+                'dispute_id': 'B07_1746705319'
             })
 
     def test_boundary_dispute_no_disputed_by_claimed_by(self):
@@ -214,6 +219,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'id': 202058477,
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
+                'dispute_id': 'B02_1746708469',
             })
 
     def test_places_disputed_by(self):

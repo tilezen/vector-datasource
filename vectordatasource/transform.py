@@ -9709,3 +9709,20 @@ def apply_places_with_viewpoints(shape, props, fid, zoom):
         props.pop(prop)
 
     return shape, props, fid
+
+
+def create_dispute_ids(shape, props, fid, zoom):
+    """
+    concatenate <breakaway_code>_<ne_id> and store in dispute_id.  Just use what's there
+    stores no dispute_id if both input fields are missing
+    """
+
+    # retrieve and remove these items from props.  This is the only func that will use them
+    items = [props.pop('tz_breakaway_code', None), props.pop('tz_ne_id', None)]
+    items = [item for item in items if item is not None]
+
+    dispute_id = '_'.join(items)
+    if dispute_id:
+        props['dispute_id'] = dispute_id
+
+    return shape, props, fid
