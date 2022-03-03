@@ -152,23 +152,23 @@ filters:
       kind: disputed_claim
     table: osm
   # these filters look for claims that don't have a claimed_by
-  # but have different point of view tags for admin_level:XX
+  # they should have different point of view tags for admin_level:XX
   - filter: {admin_level: '2', boundary: claim, geom_type: line}
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [*output_properties, *dispute_properties]
       kind: country
     table: osm
   - filter: {admin_level: '4', boundary: claim, geom_type: line}
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [*output_properties, *dispute_properties]
       kind: region
     table: osm
   - filter: {admin_level: '6', boundary: claim, geom_type: line}
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [*output_properties, *dispute_properties]
       kind: county
     table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
