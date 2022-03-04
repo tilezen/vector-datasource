@@ -58,7 +58,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind': 'disputed_reference_line',
                 'kind:us': 'region',
                 # in the absence of a admin_level:XX, the disputed_by tag dictates the kind
-                'kind:xx': 'unrecognized_region',
+                'kind:xx': 'unrecognized',
                 # verifies the admin_level:SA overrides the disputed_by
                 'kind:sa': 'region',
                 'dispute_id': 'B91',
@@ -70,7 +70,7 @@ class DisputedBoundariesTest(FixtureTest):
             'kind:vn': None
         })
 
-    def test_disputed_by_to_unrecognized_disputed_reference_line(self):
+    def test_disputed_by_to_unrecognized(self):
         z, x, y = (16, 53533, 28559)
 
         self.generate_fixtures(
@@ -89,14 +89,14 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 13574166,
-                'kind:ru': 'unrecognized_country',
-                'kind:pk': 'unrecognized_country',
-                'kind:il': 'unrecognized_country',
-                'kind:ps': 'unrecognized_country',
-                'kind:sa': 'unrecognized_country',
-                'kind:eg': 'unrecognized_country',
-                'kind:id': 'unrecognized_country',
-                'kind:bd': 'unrecognized_country',
+                'kind:ru': 'unrecognized',
+                'kind:pk': 'unrecognized',
+                'kind:il': 'unrecognized',
+                'kind:ps': 'unrecognized',
+                'kind:sa': 'unrecognized',
+                'kind:eg': 'unrecognized',
+                'kind:id': 'unrecognized',
+                'kind:bd': 'unrecognized',
                 'kind': 'disputed_reference_line',
                 'kind_detail': '2',
                 'dispute_id': 'B16_1746705859;1746705871',
@@ -130,9 +130,9 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind': 'disputed_claim',
                 'kind:cn': 'country',
                 'kind:tw': 'country',
-                'kind:in': 'unrecognized_country',
-                'kind:pk': 'unrecognized_country',
-                'kind:tr': 'unrecognized_country',
+                'kind:in': 'unrecognized',
+                'kind:pk': 'unrecognized',
+                'kind:tr': 'unrecognized',
                 'kind:ru': 'country',
                 'dispute_id': 'B02_1746705405'
             })
@@ -161,9 +161,9 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 202058477,
                 'kind': 'disputed_claim',
-                'kind:in': 'unrecognized_country',
-                'kind:pk': 'unrecognized_country',
-                'kind:tr': 'unrecognized_country',
+                'kind:in': 'unrecognized',
+                'kind:pk': 'unrecognized',
+                'kind:tr': 'unrecognized',
                 'dispute_id': 'B02_1746705405'
             })
 
@@ -188,7 +188,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'id': 202058477,
-                'kind:in': 'unrecognized_country',
+                'kind:in': 'unrecognized',
                 'kind:cn': 'country',
                 'kind:tw': 'country',
                 'kind:ru': 'country',

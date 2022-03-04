@@ -9332,7 +9332,7 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
             props['kind:' + viewpoint] = base_kind
 
         for viewpoint in _list_of_countries(disputed_by):
-            props['kind:' + viewpoint] = 'unrecognized_' + base_kind
+            props['kind:' + viewpoint] = 'unrecognized'
 
     return shape, props, fid
 
@@ -9403,7 +9403,7 @@ class _DisputeMasks(object):
                 if not cut_shape.is_empty:
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
-                        new_props['kind:' + disputant] = 'unrecognized_disputed_reference_line'
+                        new_props['kind:' + disputant] = 'unrecognized'
 
                     for recognizant in recognizants:
                         new_props['kind:' + recognizant] = 'country'
