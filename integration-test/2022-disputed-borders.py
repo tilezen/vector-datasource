@@ -42,8 +42,9 @@ class DisputedBoundariesTest(FixtureTest):
                 'admin_level:UA': '4',
                 'admin_level:US': '4',
                 'admin_level:VN': '2.5',
-                'boundary': 'claim',
+                'boundary': 'disputed',
                 'name': 'Viewpoints on Disputed Administrative Boundaries',
+                'disputed_by': 'SA,XX',
                 'ne:brk_a3': 'B91',
                 'type': 'linestring',
                 'source': 'openstreetmap.org',
@@ -54,8 +55,13 @@ class DisputedBoundariesTest(FixtureTest):
             z, x, y, 'boundaries', {
                 'id': 726514231,
                 'kind:ps': 'locality',
-                'kind': 'region',
+                'kind': 'disputed_reference_line',
                 'kind:us': 'region',
+                # in the absence of a admin_level:XX, the disputed_by tag dictates the kind
+                'kind:xx': 'unrecognized',
+                # verifies the admin_level:SA overrides the disputed_by
+                'kind:sa': 'region',
+                'dispute_id': 'B91',
             })
 
         # make sure kind:vn didn't make it in because its admin_level doesn't map to anything
@@ -64,65 +70,254 @@ class DisputedBoundariesTest(FixtureTest):
             'kind:vn': None
         })
 
-    def test_admin_level_3_state(self):
+    def test_disputed_by_to_unrecognized(self):
         z, x, y = (16, 53533, 28559)
 
         self.generate_fixtures(
-            # https://www.openstreetmap.org/way/909074085
-            dsl.way(909074085, dsl.tile_diagonal(z, x, y), {
-                'admin_level': '3',
-                'boundary': 'administrative',
-                'place': 'state',
-                'source': 'openstreetmap.org',
-                'admin_level:XX': '2'
+            # https://www.openstreetmap.org/relation/13574166
+            dsl.way(13574166, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'disputed',
+                'disputed_by': 'RU;PK;IL;PS;SA;EG;ID;BD',
+                'name': '1949 Israeli-Syrian DMZ',
+                'ne:brk_a3': 'B16',
+                'ne_id': '1746705859;1746705871',
+                'type': 'linestring',
             }),
         )
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'id': 909074085,
+                'id': 13574166,
+                'kind:ru': 'unrecognized',
+                'kind:pk': 'unrecognized',
+                'kind:il': 'unrecognized',
+                'kind:ps': 'unrecognized',
+                'kind:sa': 'unrecognized',
+                'kind:eg': 'unrecognized',
+                'kind:id': 'unrecognized',
+                'kind:bd': 'unrecognized',
                 'kind': 'disputed_reference_line',
-                'kind:xx': 'country',
-                'disputed': True,
+                'kind_detail': '2',
+                'dispute_id': 'B16_1746705859;1746705871',
             })
 
-    def test_admin_level_3_country(self):
+    def test_boundary_claim_disputed_by_claimed_by(self):
         z, x, y = (16, 53533, 28559)
 
         self.generate_fixtures(
-            # this one is made up - just place = country
-            dsl.way(123456, dsl.tile_diagonal(z, x, y), {
-                'admin_level': '3',
-                'boundary': 'administrative',
-                'place': 'country',
-                'source': 'openstreetmap.org',
-                'admin_level:YY': '2'
+            # https://www.openstreetmap.org/relation/13574166
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'claim',
+                'claimed_by': 'CN;TW',
+                'disputed_by': 'IN;PK;TR',
+                'name': 'Extent of Chinese Claim - ﻿Bara Hoti area',
+                'name:de': 'Ausdehnung des chinesischen Anspruchs',
+                'name:en': 'Extent of Chinese Claim - ﻿Bara Hoti area',
+                'name:zh': '中国声称边境线',
+                'name:zh_pinyin': 'Zhōngguó shēngchēng biānjìng xiàn',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746705405',
+                'recognized_by': 'RU',
+                'type': 'linestring',
             }),
         )
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'id': 123456,
-                'kind': 'disputed_reference_line',
-                'kind:yy': 'country',
-                'disputed': True,
+                'id': 202058477,
+                'kind': 'disputed_claim',
+                'kind:cn': 'country',
+                'kind:tw': 'country',
+                'kind:in': 'unrecognized',
+                'kind:pk': 'unrecognized',
+                'kind:tr': 'unrecognized',
+                'kind:ru': 'country',
+                'dispute_id': 'B02_1746705405'
             })
 
-    def test_admin_level_3_other_place(self):
+    def test_boundary_claim_disputed_by_only(self):
         z, x, y = (16, 53533, 28559)
 
         self.generate_fixtures(
-            # also made up - we should ignore other place values
-            dsl.way(345678, dsl.tile_diagonal(z, x, y), {
-                'admin_level': '3',
-                'boundary': 'administrative',
-                'place': 'Neither state nor country',
-                'source': 'openstreetmap.org',
-                'admin_level:ZZ': '2'
+            # https://www.openstreetmap.org/relation/13574166
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'claim',
+                'disputed_by': 'IN;PK;TR',
+                'name': 'Extent of Chinese Claim - ﻿Bara Hoti area',
+                'name:de': 'Ausdehnung des chinesischen Anspruchs',
+                'name:en': 'Extent of Chinese Claim - ﻿Bara Hoti area',
+                'name:zh': '中国声称边境线',
+                'name:zh_pinyin': 'Zhōngguó shēngchēng biānjìng xiàn',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746705405',
+                'type': 'linestring',
             }),
         )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 202058477,
+                'kind': 'disputed_claim',
+                'kind:in': 'unrecognized',
+                'kind:pk': 'unrecognized',
+                'kind:tr': 'unrecognized',
+                'dispute_id': 'B02_1746705405'
+            })
+
+    def test_boundary_dispute_disputed_by_claimed_by(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/202058477
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'disputed',
+                'claimed_by': 'CN;TW',
+                'disputed_by': 'IN',
+                'name': 'Extent of Chinese Claim at Aksai Chin',
+                'ne:brk_a3': 'B07',
+                'ne_id': '1746705319',
+                'recognized_by': 'RU;PK;TR',
+                'type': 'linestring',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 202058477,
+                'kind:in': 'unrecognized',
+                'kind:cn': 'country',
+                'kind:tw': 'country',
+                'kind:ru': 'country',
+                'kind:pk': 'country',
+                'kind:tr': 'country',
+                'kind': 'disputed_reference_line',
+                'kind_detail': '2',
+                'dispute_id': 'B07_1746705319'
+            })
+
+    def test_boundary_dispute_no_disputed_by_claimed_by(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/202058477
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'disputed',
+                'name': 'Extent of Indian Claim at Bara Hotii Valleys',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746708469',
+                'type': 'linestring',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 202058477,
+                'kind': 'disputed_reference_line',
+                'kind_detail': '2',
+                'dispute_id': 'B02_1746708469',
+            })
+
+    def test_places_disputed_by(self):
+        import dsl
+
+        z, x, y = (10, 11, 12)
+
+        import dsl
+
+        z, x, y = (10, 725, 402)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/316441092
+            dsl.point(316441092, (75.0000023, 35.9999972), {
+                'description': u'Formed in 1970 from the amalgamation of the Gilgit Agency, the Baltistan District of the Ladakh Wazarat, and the states of Hunza and Nagar.',
+                'gns:dsg': u'ADMD',
+                'gns:uni': u'-3846588',
+                'is_in:country': u'Pakistan',
+                'name': u'گلگت بلتستان',
+                'name:ar': u'غلغت-بلتستان',
+                'name:bft': u'གིལྒིཏ་བལྟིསྟན',
+                'name:en': u'Gilgit-Baltistan',
+                'name:fr': u'Gilgit-Baltistan',
+                'name:hi': u'गिलगित-बल्तिस्तान',
+                'name:hu': u'Északi területek',
+                'name:ja': u'ギルギット・バルティスタン',
+                'name:ko': u'길기트발티스탄',
+                'name:pl': u'Gilgit-Baltistan',
+                'name:ru': u'Гилгит-Балтистан',
+                'name:uk': u'Гілгіт-Балтистан',
+                'name:ur': u'گلگت - بلتستان',
+                'name:vi': u'Gilgit-Baltistan',
+                'old_name': u'Northern Areas;Federally Administered Northern Areas;FANA',
+                'old_name:de': u'Nordgebiete',
+                'old_name:ru': u'Северная территория',
+                'old_name:ur': u'شمالی علاقہ جات, Shumālī Ilāqe Jāt',
+                'old_name:vi': u'Các khu vực phía Bắc',
+                'place': u'state',
+                'population': u'1800000',
+                'ref': u'NA',
+                'source': u'openstreetmap.org',
+                'state_code': u'NA',
+                'wikidata': u'Q200697',
+                'wikipedia': u'en:Gilgit-Baltistan',
+                'disputed_by': 'IN,XX',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 316441092,
+                'kind': 'region',
+                'kind:in': 'unrecognized',
+                'kind:xx': 'unrecognized'
+            })
+
+    def test_places_with_viewpoints(self):
+        import dsl
+
+        z, x, y = (10, 856, 441)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/node/432425099
+            dsl.point(432425099, (120.9820179, 23.9739374), {
+                'name': u'臺灣',
+                'name:en': u'Taiwan',
+                'place': u'country',
+                'place:CN': 'state',
+                # the rest of these place:xx are made up
+                'place:US': 'country',
+                'place:PK': 'region',
+                'place:IN': 'county',
+                'place:RU': 'district',
+                'place:JP': 'locality',
+                'place:IT': 'town',
+                'place:TR': 'not_there',
+                'place:XX': 'country',
+                'source': u'openstreetmap.org',
+                'source:sqkm': u'CIA World Factbook',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'places', {
+                'id': 432425099,
+                'kind': 'country',
+                'kind:cn': 'region',
+                'kind:us': 'country',
+                'kind:pk': 'region',
+                'kind:in': 'county',
+                'kind:ru': 'county',
+                'kind:jp': 'locality',
+                'kind:it': 'locality'
+            })
 
         self.assert_no_matching_feature(
-            z, x, y, 'boundaries', {
-                'id': 345678,
+            z, x, y, 'places', {
+                'id': 432425099,
+                'kind:tr': None,  # invalid place type not converted to a kind
+                'kind:xx': None,  # invalid viewpoint not exported
             })

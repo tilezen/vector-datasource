@@ -9303,7 +9303,7 @@ def _list_of_countries(value):
 
 def unpack_viewpoint_claims(shape, props, fid, zoom):
     """
-    Unpack OSM "claimed_by" list into viewpoint kinds.
+    Unpack OSM "claimed_by" and "disputed_by" lists into viewpoint kinds.
 
     For example; "claimed_by=AA;BB;CC" should become "kind:aa=country,
     kind:bb=country, kind:cc=country" (or region, etc... as appropriate for
@@ -9314,22 +9314,27 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     see it in their viewpoint as a country/region/county.
     """
 
-    prefix = 'unrecognized_'
-    kind = props.get('kind')
-    claimed_by = props.get('claimed_by')
-    recognized_by = props.get('recognized_by')
+    claimed_by = props.get('claimed_by', '')
+    recognized_by = props.get('recognized_by', '')
+    disputed_by = props.get('disputed_by', '')
 
-    if kind and kind.startswith(prefix) and claimed_by:
-        claimed_kind = kind[len(prefix):]
+    admin_level = str(props.get('tz_admin_level', ''))
 
-        for country in _list_of_countries(claimed_by):
-            props['kind:' + country] = claimed_kind
+    if admin_level:
+        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level, '')
+        if not base_kind:
+            base_kind = 'debug'
 
-        if recognized_by:
-            for viewpoint in _list_of_countries(recognized_by):
-                props['kind:' + viewpoint] = claimed_kind
+        for viewpoint in _list_of_countries(claimed_by):
+            props['kind:' + viewpoint] = base_kind
 
-    return (shape, props, fid)
+        for viewpoint in _list_of_countries(recognized_by):
+            props['kind:' + viewpoint] = base_kind
+
+        for viewpoint in _list_of_countries(disputed_by):
+            props['kind:' + viewpoint] = 'unrecognized'
+
+    return shape, props, fid
 
 
 class _DisputeMasks(object):
@@ -9353,13 +9358,16 @@ class _DisputeMasks(object):
         disputed_by = props.get('disputed_by', '')
         disputants = _list_of_countries(disputed_by)
 
+        recognizants = _list_of_countries(props.get('recognized_by', ''))
+        claimants = _list_of_countries(props.get('claimed_by', ''))
+
         if disputants:
             # we use a flat cap to avoid straying too much into nearby lines
             # and a mitred join to avoid creating extra geometry points to
             # represent the curve, as this slows down intersection checks.
             buffered_shape = shape.buffer(
                 self.buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
-            self.masks.append((buffered_shape, disputants))
+            self.masks.append((buffered_shape, disputants, recognizants, claimants))
 
     def empty(self):
         return not self.masks
@@ -9372,15 +9380,7 @@ class _DisputeMasks(object):
 
         updated_features = []
 
-        # figure out what we want the boundary kind to be, if it's intersected
-        # with the dispute mask.
-        kind = props['kind']
-        if kind.startswith('unrecognized_'):
-            unrecognized = kind
-        else:
-            unrecognized = 'unrecognized_' + kind
-
-        for mask_shape, disputants in self.masks:
+        for mask_shape, disputants, recognizants, claimants in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
             # a kind override has already been set.
@@ -9403,7 +9403,15 @@ class _DisputeMasks(object):
                 if not cut_shape.is_empty:
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
-                        new_props['kind:' + disputant] = unrecognized
+                        new_props['kind:' + disputant] = 'unrecognized'
+
+                    for recognizant in recognizants:
+                        new_props['kind:' + recognizant] = 'country'
+
+                    for claimant in claimants:
+                        new_props['kind:' + claimant] = 'country'
+
+                    new_props['kind'] = 'disputed_reference_line'
                     updated_features.append((cut_shape, new_props, None))
 
         if not shape.is_empty:
@@ -9472,9 +9480,9 @@ def apply_disputed_boundary_viewpoints(ctx):
         # we want to apply disputes to already generally-unrecognised borders
         # too, as this allows for multi-level fallback from one viewpoint
         # possibly through several others before reaching the default.
-        elif (kind.startswith('unrecognized_') and
-              kind[len('unrecognized_'):] in _BOUNDARY_KINDS):
-            boundaries.append((shape, props, fid))
+        elif kind.startswith('unrecognized_'):
+            if kind[len('unrecognized_'):] in _BOUNDARY_KINDS:
+                boundaries.append((shape, props, fid))
 
         else:
             # pass through this feature - we just ignore it.
@@ -9626,7 +9634,28 @@ def capital_alternate_viewpoint(shape, props, fid, zoom):
     return shape, props, fid
 
 
-_ADMIN_LEVEL_TO_KIND = {'2': 'country', '4': 'region', '6': 'county', '8': 'locality'}
+# Map admin level to the kind it should become. Admin_level 3 isn't a widely recognized country,
+# but the only uses of 3 we care about are when it is a country from some viewpoint
+# Similarly 5 is typically used for disputed regions.
+_ADMIN_LEVEL_TO_KIND = {'2': 'country',
+                        '4': 'region',
+                        '6': 'county',
+                        '8': 'locality'}
+
+_PLACE_TO_KIND = {'country': 'country',
+                  'region': 'region',
+                  'state': 'region',
+                  'province': 'region',
+                  'county': 'county',
+                  'district': 'county',
+                  'city': 'locality',
+                  'town': 'locality',
+                  'village': 'locality',
+                  'locality': 'locality',
+                  'hamlet': 'locality',
+                  'isolated_dwelling': 'locality',
+                  'farm': 'locality',
+                  }
 
 
 def admin_level_alternate_viewpoint(shape, props, fid, zoom):
@@ -9634,7 +9663,7 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
     turns e.g. admin_level:XX=4 into kind:xx=region
     """
     admin_viewpoint_prefix = 'admin_level:'
-    tags = props['tags']
+    tags = props.get('tags', {})
 
     for k in tags.keys():
         if k.startswith(admin_viewpoint_prefix):
@@ -9644,5 +9673,56 @@ def admin_level_alternate_viewpoint(shape, props, fid, zoom):
             # use a mapping if we have it, leave it out otherwise
             if admin_level in _ADMIN_LEVEL_TO_KIND:
                 props['kind:' + viewpoint] = _ADMIN_LEVEL_TO_KIND.get(admin_level, None)
+
+    return shape, props, fid
+
+
+def unpack_places_disputes(shape, props, fid, zoom):
+    """
+    turns disputed places into 'unrecognized' for that viewpoint
+    """
+    disputed_by = props.pop('disputed_by', '')
+    disputants = _list_of_countries(disputed_by)
+
+    for disputant in disputants:
+        props['kind:' + disputant] = 'unrecognized'
+
+    return shape, props, fid
+
+
+def apply_places_with_viewpoints(shape, props, fid, zoom):
+    """
+    turns a valid place:XX into a corresponding kind:xx
+    """
+    prefix = 'place:'
+
+    for prop, value in list(props.items()):
+        if not prop.startswith(prefix):
+            continue
+
+        viewpoint = prop[len(prefix):].strip().lower()
+        kind = _PLACE_TO_KIND.get(value.strip().lower(), '')
+        if not kind:
+            continue
+
+        props['kind:' + viewpoint] = kind
+        props.pop(prop)
+
+    return shape, props, fid
+
+
+def create_dispute_ids(shape, props, fid, zoom):
+    """
+    concatenate <breakaway_code>_<ne_id> and store in dispute_id.  Just use what's there
+    stores no dispute_id if both input fields are missing
+    """
+
+    # retrieve and remove these items from props.  This is the only func that will use them
+    items = [props.pop('tz_breakaway_code', None), props.pop('tz_ne_id', None)]
+    items = [item for item in items if item is not None]
+
+    dispute_id = '_'.join(items)
+    if dispute_id:
+        props['dispute_id'] = dispute_id
 
     return shape, props, fid
