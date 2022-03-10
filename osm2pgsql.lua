@@ -453,7 +453,7 @@ function osm2pgsql.process_node(object)
     object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
         output_hstore['place:CN'] = 'county'
     end
--- Recast Taiwan country label as region label for China POV
+-- Recast Kosovo country label as region label for several POVs including China and Russia
     if object.tags.place and object.tags.wikidata == 'Q1246' then
         output_hstore['place:CN'] = 'region'
         output_hstore['place:RU'] = 'region'
@@ -541,9 +541,10 @@ function osm2pgsql.process_way(object)
         output_hstore.disputed_by = nil
         output_hstore.recognized_by = nil
         output_hstore.dispute = nil
+        output_hstore.disputed = nil
     end
 
--- Redefine extra admin ways as disputed
+-- Redefine extra disputed admin ways as administrative to discard them
     if object.tags.boundary == 'disputed' then
         output_hstore.boundary = 'administrative'
     end
@@ -560,6 +561,9 @@ function osm2pgsql.process_way(object)
             end
             if v.recognized_by then
                 output_hstore.recognized_by = v.recognized_by
+            end
+            if v.admin_level and not object.tags.admin_level then
+                output_hstore.admin_level = v.admin_level
             end
         end
     end
@@ -621,7 +625,7 @@ function osm2pgsql.process_relation(object)
     end
 
 -- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
-    if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
+    if (type == 'linestring' or type == 'boundary') and (object.tags.boundary == 'disputed' or object.tags.boundary == 'claim') then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
                 if not disputed[member.ref] then
@@ -630,6 +634,7 @@ function osm2pgsql.process_relation(object)
                 disputed[member.ref] = object.tags
             end
         end
+        output_hstore = nil
     end
 
 -- Adds tags to redefine Taiwan admin levels.
