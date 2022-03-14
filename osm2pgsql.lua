@@ -644,6 +644,7 @@ function osm2pgsql.process_relation(object)
                 disputed[member.ref] = object.tags
             end
         end
+           output_hstore.dispute = 'yes'
 --         output_hstore = nil
     end
 
