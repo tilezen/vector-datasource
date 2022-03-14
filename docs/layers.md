@@ -1620,7 +1620,7 @@ Time periods (duration) which are composed of several time interval units are re
 * Intersection of sets notation: `*`
 * Subtraction of sets notation: `-`
 
-All the Time Domain strings are stored in prefix form: it uses the polish/prefix operator notation and omit brackets made redundant by this. For example: 
+All the Time Domain strings are stored in prefix form: it uses the polish/prefix operator notation and omit brackets made redundant by this. For example:
 `[[(d1){w1}]-[(d3){d1}]]` has prefix form `-(d1){w1}(d3){d1}`
 `[[(d1){w1}]*[(d3){-w1}]]` has prefix form `*(d1){w1}(d3){-w1}`
 
