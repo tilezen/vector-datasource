@@ -248,14 +248,14 @@ class CountryBoundaryTest(FixtureTest):
                 props = feature['properties']
                 kind = props.get('kind')
 
-                if kind == 'country':
+                if kind == 'disputed_reference_line':
                     # generally accepted viewpoint, XA should dispute
                     self.assertEqual(
-                        props.get('kind:xa'), 'unrecognized_country')
+                        props.get('kind:xa'), 'unrecognized')
                     self.assertEqual(props.get('name'), 'XB')
                     saw_xb = True
 
-                elif kind == 'unrecognized_country':
+                elif kind == 'disputed_claim':
                     # XA's viewpoint, which should claim it as part of XA
                     self.assertEqual(props.get('kind:xa'), 'country')
                     self.assertEqual(props.get('name'), "Extent of XA's claim")
@@ -439,8 +439,8 @@ class RegionBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'region',
-                'kind:xb': 'unrecognized_region',
+                'kind': 'disputed_reference_line',
+                'kind:xb': 'unrecognized',
                 'name': 'XA region 2',
             })
 
@@ -469,8 +469,9 @@ class RegionBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'unrecognized_region',
+                'kind': 'disputed_claim',
                 'kind:xa': 'region',
+                'kind:xb': 'unrecognized',
             })
 
 
@@ -504,8 +505,8 @@ class CountyBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'county',
-                'kind:xb': 'unrecognized_county',
+                'kind': 'disputed_reference_line',
+                'kind:xb': 'unrecognized',
                 'name': 'XA county 2',
             })
 
@@ -534,7 +535,7 @@ class CountyBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'unrecognized_county',
+                'kind': 'disputed_claim',
                 'kind:xa': 'county',
             })
 

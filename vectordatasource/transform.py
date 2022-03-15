@@ -9321,7 +9321,9 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     admin_level = str(props.get('tz_admin_level', ''))
 
     if admin_level:
-        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level)
+        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level, '')
+        if not base_kind:
+            base_kind = 'debug'
 
         for viewpoint in _list_of_countries(claimed_by):
             props['kind:' + viewpoint] = base_kind
@@ -9330,7 +9332,7 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
             props['kind:' + viewpoint] = base_kind
 
         for viewpoint in _list_of_countries(disputed_by):
-            props['kind:' + viewpoint] = 'unrecognized_' + base_kind
+            props['kind:' + viewpoint] = 'unrecognized'
 
     return shape, props, fid
 
@@ -9401,7 +9403,7 @@ class _DisputeMasks(object):
                 if not cut_shape.is_empty:
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
-                        new_props['kind:' + disputant] = 'unrecognized_disputed_reference_line'
+                        new_props['kind:' + disputant] = 'unrecognized'
 
                     for recognizant in recognizants:
                         new_props['kind:' + recognizant] = 'country'
@@ -9634,11 +9636,26 @@ def capital_alternate_viewpoint(shape, props, fid, zoom):
 
 # Map admin level to the kind it should become. Admin_level 3 isn't a widely recognized country,
 # but the only uses of 3 we care about are when it is a country from some viewpoint
+# Similarly 5 is typically used for disputed regions.
 _ADMIN_LEVEL_TO_KIND = {'2': 'country',
-                        '3': 'country',
                         '4': 'region',
                         '6': 'county',
                         '8': 'locality'}
+
+_PLACE_TO_KIND = {'country': 'country',
+                  'region': 'region',
+                  'state': 'region',
+                  'province': 'region',
+                  'county': 'county',
+                  'district': 'county',
+                  'city': 'locality',
+                  'town': 'locality',
+                  'village': 'locality',
+                  'locality': 'locality',
+                  'hamlet': 'locality',
+                  'isolated_dwelling': 'locality',
+                  'farm': 'locality',
+                  }
 
 
 def admin_level_alternate_viewpoint(shape, props, fid, zoom):
@@ -9669,5 +9686,43 @@ def unpack_places_disputes(shape, props, fid, zoom):
 
     for disputant in disputants:
         props['kind:' + disputant] = 'unrecognized'
+
+    return shape, props, fid
+
+
+def apply_places_with_viewpoints(shape, props, fid, zoom):
+    """
+    turns a valid place:XX into a corresponding kind:xx
+    """
+    prefix = 'place:'
+
+    for prop, value in list(props.items()):
+        if not prop.startswith(prefix):
+            continue
+
+        viewpoint = prop[len(prefix):].strip().lower()
+        kind = _PLACE_TO_KIND.get(value.strip().lower(), '')
+        if not kind:
+            continue
+
+        props['kind:' + viewpoint] = kind
+        props.pop(prop)
+
+    return shape, props, fid
+
+
+def create_dispute_ids(shape, props, fid, zoom):
+    """
+    concatenate <breakaway_code>_<ne_id> and store in dispute_id.  Just use what's there
+    stores no dispute_id if both input fields are missing
+    """
+
+    # retrieve and remove these items from props.  This is the only func that will use them
+    items = [props.pop('tz_breakaway_code', None), props.pop('tz_ne_id', None)]
+    items = [item for item in items if item is not None]
+
+    dispute_id = '_'.join(items)
+    if dispute_id:
+        props['dispute_id'] = dispute_id
 
     return shape, props, fid

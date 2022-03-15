@@ -35,6 +35,37 @@ global:
         args: [ { col: is_landuse_aoi } ]
     wikidata_id: {col: wikidata}
     disputed_by: {col: disputed_by }
+    'place:ISO': { col: 'place:ISO' }
+    'place:AR': { col: 'place:AR' }
+    'place:BD': { col: 'place:BD' }
+    'place:BR': { col: 'place:BR' }
+    'place:CN': { col: 'place:CN' }
+    'place:DE': { col: 'place:DE' }
+    'place:EG': { col: 'place:EG' }
+    'place:ES': { col: 'place:ES' }
+    'place:FR': { col: 'place:FR' }
+    'place:GB': { col: 'place:GB' }
+    'place:GR': { col: 'place:GR' }
+    'place:ID': { col: 'place:ID' }
+    'place:IL': { col: 'place:IL' }
+    'place:IN': { col: 'place:IN' }
+    'place:IT': { col: 'place:IT' }
+    'place:JP': { col: 'place:JP' }
+    'place:KO': { col: 'place:KO' }
+    'place:MA': { col: 'place:MA' }
+    'place:NL': { col: 'place:NL' }
+    'place:NP': { col: 'place:NP' }
+    'place:PK': { col: 'place:PK' }
+    'place:PL': { col: 'place:PL' }
+    'place:PS': { col: 'place:PS' }
+    'place:PT': { col: 'place:PT' }
+    'place:RU': { col: 'place:RU' }
+    'place:SA': { col: 'place:SA' }
+    'place:SE': { col: 'place:SE' }
+    'place:TR': { col: 'place:TR' }
+    'place:TW': { col: 'place:TW' }
+    'place:US': { col: 'place:US' }
+    'place:VN': { col: 'place:VN' }
 
   - &ne_places_min_zoom
     lookup:
