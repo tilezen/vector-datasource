@@ -453,14 +453,14 @@ function osm2pgsql.process_node(object)
     object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
         output_hstore['place:CN'] = 'county'
     end
--- Recast Taiwan country label as region label for China POV
+-- Recast Kosovo country label as region label for several POVs including China and Russia
     if object.tags.place and object.tags.wikidata == 'Q1246' then
         output_hstore['place:CN'] = 'region'
         output_hstore['place:RU'] = 'region'
         output_hstore['place:IN'] = 'region'
         output_hstore['place:GR'] = 'region'
     end
--- Hide Kosovo country and region labels for several POVs including China and Russia
+-- Hide Kosovo region labels for several POVs including China and Russia
     if object.tags.place and (object.tags.wikidata == 'Q474651' or
     object.tags.wikidata == 'Q939112' or object.tags.wikidata == 'Q59074' or object.tags.wikidata == 'Q1008042' or
     object.tags.wikidata == 'Q739808' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q248378' or
@@ -473,6 +473,13 @@ function osm2pgsql.process_node(object)
     object.tags.wikidata == 'Q738901' or object.tags.wikidata == 'Q1021775' or object.tags.wikidata == 'Q911241' or
     object.tags.wikidata == 'Q227569' or object.tags.wikidata == 'Q62172') then
         output_hstore['disputed_by'] = 'CN;RU;IN;GR'
+    end
+-- Recast Northern Cyprus country label as region label for several POVs including China and Russia
+    if object.tags.place and object.tags.wikidata == 'Q23681' then
+        output_hstore['place:CN'] = 'region'
+        output_hstore['place:RU'] = 'region'
+        output_hstore['place:IN'] = 'region'
+        output_hstore['place:GR'] = 'region'
     end
 
     output.tags = output_hstore
@@ -541,9 +548,10 @@ function osm2pgsql.process_way(object)
         output_hstore.disputed_by = nil
         output_hstore.recognized_by = nil
         output_hstore.dispute = nil
+        output_hstore.disputed = nil
     end
 
--- Redefine extra admin ways as disputed
+-- Redefine extra disputed admin ways as administrative to avoid them
     if object.tags.boundary == 'disputed' then
         output_hstore.boundary = 'administrative'
     end
@@ -560,6 +568,12 @@ function osm2pgsql.process_way(object)
             end
             if v.recognized_by then
                 output_hstore.recognized_by = v.recognized_by
+            end
+            if v.admin_level and not object.tags.admin_level then
+                output_hstore.admin_level = v.admin_level
+            end
+            if v.boundary then
+                output_hstore.boundary = v.boundary
             end
         end
     end
@@ -621,7 +635,7 @@ function osm2pgsql.process_relation(object)
     end
 
 -- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
-    if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'disputed' then
+    if (type == 'linestring' or type == 'boundary') and (object.tags.boundary == 'disputed' or object.tags.boundary == 'claim') then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
                 if not disputed[member.ref] then
@@ -630,6 +644,7 @@ function osm2pgsql.process_relation(object)
                 disputed[member.ref] = object.tags
             end
         end
+        output_hstore = nil
     end
 
 -- Adds tags to redefine Taiwan admin levels.
@@ -643,7 +658,7 @@ function osm2pgsql.process_relation(object)
 -- Adds tags to redefine Israel admin 4 boundaries for Palestine.
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-            output_hstore['admin_level:PS'] = '6'
+            output_hstore['disputed_by'] = 'PS'
         end
     end
 
@@ -656,6 +671,11 @@ function osm2pgsql.process_relation(object)
 -- Convert admin_level 5 boundaries in Northern Cyprus to 4
     if type == 'boundary' and object.tags.is_in == 'Northern Cyprus' and object.tags.admin_level == '5' then
         output_hstore['admin_level'] = '4'
+    end
+
+-- Turn off Judea and Samaria relation for everyone but Israel
+    if type == 'boundary' and object.tags.wikidata == 'Q513200' then
+        output_hstore['disputed_by'] = 'US;FR;RU;ES;CN;TW;IN;NP;PK;DE;GB;BR;PS;SA;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;BD;UA'
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
