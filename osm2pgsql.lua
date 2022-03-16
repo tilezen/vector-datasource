@@ -594,12 +594,6 @@ function osm2pgsql.process_way(object)
             if v.recognized_by then
                 output_hstore.recognized_by = v.recognized_by
             end
-            if v.admin_level and not object.tags.admin_level then
-                output_hstore.admin_level = v.admin_level
-            end
-            if v.boundary then
-                output_hstore.boundary = v.boundary
-            end
         end
     end
 
