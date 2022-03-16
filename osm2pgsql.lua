@@ -227,6 +227,8 @@ local tables = {}
 
 --for storing node tags later
 local disputed = {}
+local claimed = {}
+
 
 tables.point = osm2pgsql.define_table{
     name = prefix .. '_point',
@@ -678,6 +680,16 @@ function osm2pgsql.process_way(object)
         output_hstore.boundary = 'administrative'
     end
 
+-- Adds suppress any ways involved with claims. The claim relation will render instead for everyone.
+    for k, v in pairs(claimed) do
+        if k == object.id then
+            output_hstore.dispute = 'yes'
+            if v.disputed_by then
+                output_hstore.disputed_by = 'US;FR;RU;ES;CN;TW;IN;NP;PK;DE;GB;BR;IL;PS;SA;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;BD;UA'
+            end
+        end
+    end
+
 -- Adds dispute tags to ways in disputed relations
     for k, v in pairs(disputed) do
         if k == object.id then
@@ -750,8 +762,16 @@ function osm2pgsql.process_relation(object)
         return
     end
 
+-- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
     if (type == 'linestring' or type == 'boundary') and (object.tags.boundary == 'claim') then
-        output_hstore.disputed = 'yes'
+        for _, member in ipairs(object.members) do
+            if member.type == 'w' then
+                if not claimed[member.ref] then
+                    claimed[member.ref] = {}
+                end
+                claimed[member.ref] = object.tags
+            end
+        end
     end
 
 -- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
