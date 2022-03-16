@@ -763,7 +763,7 @@ function osm2pgsql.process_relation(object)
     end
 
 -- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
-    if (type == 'linestring' or type == 'boundary') and (object.tags.boundary == 'claim') then
+    if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'claim' and object.tags.admin_level == '4' then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
                 if not claimed[member.ref] then
