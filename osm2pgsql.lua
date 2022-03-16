@@ -438,6 +438,31 @@ function osm2pgsql.process_node(object)
     if object.tags.place and object.tags.wikidata == 'Q200667' then
         output_hstore['disputed_by'] = 'PK'
     end
+-- Recast Gaza Strip label as country
+    if object.tags.place and object.tags.wikidata == 'Q39760' then
+        output_hstore['place'] = 'country'
+        output_hstore['place:IL'] = 'region'
+    end
+-- Recast West Bank label as country
+    if object.tags.place and object.tags.wikidata == 'Q36678' then
+       output_hstore['place'] = 'country'
+       output_hstore['place:IL'] = 'region'
+    end
+-- Recast Northern Cyprus label as country except for CY;CN;SA;GR;PS
+    if object.tags.place and object.tags.wikidata == 'Q23681' then
+        output_hstore['place'] = 'country'
+        output_hstore['disputed_by'] = 'CY;CN;SA;GR;PS'
+    end
+-- Recast Western Sahara label as country expect for FR;IN;PS;SA;MA;TR;ID;Pl;NL
+    if object.tags.place and object.tags.wikidata == 'Q6250' then
+        output_hstore['place'] = 'country'
+        output_hstore['disputed_by'] = 'FR;IN;PS;SA;MA;TR;ID;Pl;NL'
+    end
+-- Turn off Israel label for certain countries
+    if object.tags.place and object.tags.wikidata == 'Q801' then
+        output_hstore['disputed_by'] = 'PS;SA;PK;ID'
+    end
+
 -- Recast Taiwan country label as region label for China POV
     if object.tags.place and object.tags.wikidata == 'Q865' then
         output_hstore['place:CN'] = 'region'
@@ -556,27 +581,27 @@ function osm2pgsql.process_way(object)
         output_hstore.boundary = 'administrative'
     end
 
--- -- Adds dispute tags to ways in disputed relations
---     for k, v in pairs(disputed) do
---         if k == object.id then
---             output_hstore.dispute = 'yes'
---             if v.disputed_by then
---                 output_hstore.disputed_by = v.disputed_by
---             end
---             if v.claimed_by then
---                 output_hstore.claimed_by = v.claimed_by
---             end
---             if v.recognized_by then
---                 output_hstore.recognized_by = v.recognized_by
---             end
---             if v.admin_level and not object.tags.admin_level then
---                 output_hstore.admin_level = v.admin_level
---             end
---             if v.boundary then
---                 output_hstore.boundary = v.boundary
---             end
---         end
---     end
+-- Adds dispute tags to ways in disputed relations
+    for k, v in pairs(disputed) do
+        if k == object.id then
+            output_hstore.dispute = 'yes'
+            if v.disputed_by then
+                output_hstore.disputed_by = v.disputed_by
+            end
+            if v.claimed_by then
+                output_hstore.claimed_by = v.claimed_by
+            end
+            if v.recognized_by then
+                output_hstore.recognized_by = v.recognized_by
+            end
+            if v.admin_level and not object.tags.admin_level then
+                output_hstore.admin_level = v.admin_level
+            end
+            if v.boundary then
+                output_hstore.boundary = v.boundary
+            end
+        end
+    end
 
     output.tags = output_hstore
 
