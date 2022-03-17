@@ -443,29 +443,21 @@ function osm2pgsql.process_node(object)
 -- Recast Gaza Strip label as country
     if object.tags.place and object.tags.wikidata == 'Q39760' then
         output_hstore['place'] = 'country'
-        output_hstore['place:IL'] = 'region'
+        output_hstore['disputed_by'] = 'SA;PK;ID'
     end
 -- Recast West Bank label as country
     if object.tags.place and object.tags.wikidata == 'Q36678' then
        output_hstore['place'] = 'country'
-       output_hstore['place:IL'] = 'region'
+       output_hstore['disputed_by'] = 'SA;PK;ID'
     end
 -- Recast Western Sahara label as country expect for FR;IN;PS;SA;MA;TR;ID;Pl;NL
     if object.tags.place and object.tags.wikidata == 'Q6250' then
         output_hstore['place'] = 'country'
-        output_hstore['place:FR'] = 'region'
-        output_hstore['place:IN'] = 'region'
-        output_hstore['place:PS'] = 'region'
-        output_hstore['place:SA'] = 'region'
-        output_hstore['place:MA'] = 'region'
-        output_hstore['place:TR'] = 'region'
-        output_hstore['place:ID'] = 'region'
-        output_hstore['place:Pl'] = 'region'
-        output_hstore['place:NL'] = 'region'
+        output_hstore['disputed_by'] = 'FR;IN;PS;SA;MA;TR;ID;Pl;NL'
     end
--- Turn off Israel label for certain countries
+-- Turn off Israel country label for SA;PK;ID
     if object.tags.place and object.tags.wikidata == 'Q801' then
-        output_hstore['disputed_by'] = 'PS;SA;PK;ID'
+        output_hstore['disputed_by'] = 'SA;PK;ID'
     end
 -- Recast Taiwan country label as region label for China POV
     if object.tags.place and object.tags.wikidata == 'Q865' then
@@ -482,12 +474,9 @@ function osm2pgsql.process_node(object)
     object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
         output_hstore['place:CN'] = 'county'
     end
--- Recast Kosovo country label as region label for several POVs including China and Russia
+-- Turn off Kosovo country label for CN;RU;IN;GR
     if object.tags.place and object.tags.wikidata == 'Q1246' then
-        output_hstore['place:CN'] = 'region'
-        output_hstore['place:RU'] = 'region'
-        output_hstore['place:IN'] = 'region'
-        output_hstore['place:GR'] = 'region'
+        output_hstore['disputed_by'] = 'CN;RU;IN;GR'
     end
 -- Hide Kosovo region labels for several POVs including China and Russia
     if object.tags.place and (object.tags.wikidata == 'Q474651' or
@@ -506,11 +495,7 @@ function osm2pgsql.process_node(object)
 -- Recast Northern Cyprus country label as region label for several POVs including China and Russia
     if object.tags.place and object.tags.wikidata == 'Q23681' then
         output_hstore['place'] = 'country'
-        output_hstore['place:CN'] = 'region'
-        output_hstore['place:RU'] = 'region'
-        output_hstore['place:IN'] = 'region'
-        output_hstore['place:GR'] = 'region'
-        output_hstore['place:CY'] = 'region'
+        output_hstore['disputed_by'] = 'CN;RU;IN;GR;CY'
     end
 -- Turn off Abkhazia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23334' then
@@ -797,7 +782,10 @@ function osm2pgsql.process_relation(object)
 -- Adds tags to redefine Israel admin 4 boundaries for Palestine.
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-            output_hstore['disputed_by'] = 'PS'
+           output_hstore.disputed_by = 'PS;PK;SA;BD'
+           output_hstore.dispute = 'yes'
+           output_hstore.recognized_by = 'US;FR;RU;ES;CN;TW;IN;NP;DE;GB;BR;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;UA'
+           output_hstore.claimed_by = 'IL'
         end
     end
 
@@ -810,6 +798,15 @@ function osm2pgsql.process_relation(object)
 -- Convert admin_level 5 boundaries in Northern Cyprus to 4
     if type == 'boundary' and object.tags.is_in == 'Northern Cyprus' and object.tags.admin_level == '5' then
         output_hstore['admin_level'] = '4'
+    end
+
+-- Turn off West Bank and Judea and Samaria relations for everyone but Israel
+    if type == 'boundary' and object.tags.wikidata == 'Q36678' then
+        output_hstore.recognized_by = 'IL'
+        output_hstore.disputed_by = 'US;FR;RU;ES;CN;TW;IN;NP;PK;DE;GB;BR;PS;SA;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;BD;UA'
+    end
+    if type == 'boundary' and object.tags.wikidata == '	Q513200' then
+        output_hstore = nil
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
