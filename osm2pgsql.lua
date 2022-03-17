@@ -830,7 +830,7 @@ function osm2pgsql.process_relation(object)
         output_hstore.recognized_by = 'IL'
         output_hstore.disputed_by = 'US;FR;RU;ES;CN;TW;IN;NP;PK;DE;GB;BR;PS;SA;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;BD;UA'
     end
-    if type == 'boundary' and object.tags.wikidata == '	Q513200' then
+    if type == 'boundary' and object.tags.wikidata == 'Q513200' then
         output_hstore = nil
     end
 
