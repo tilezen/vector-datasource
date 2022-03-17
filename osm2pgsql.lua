@@ -590,6 +590,31 @@ function osm2pgsql.process_node(object)
          output_hstore['place:SE'] = 'region'
          output_hstore['place:BD'] = 'region'
     end
+-- Turn off Somaliland label for most countries
+    if object.tags.place and object.tags.wikidata == 'Q34754' then
+         output_hstore['place:SO'] = 'region'
+         output_hstore['place:RU'] = 'region'
+         output_hstore['place:CN'] = 'region'
+         output_hstore['place:TW'] = 'region'
+         output_hstore['place:IN'] = 'region'
+         output_hstore['place:NP'] = 'region'
+         output_hstore['place:PK'] = 'region'
+         output_hstore['place:BR'] = 'region'
+         output_hstore['place:IL'] = 'region'
+         output_hstore['place:PS'] = 'region'
+         output_hstore['place:SA'] = 'region'
+         output_hstore['place:EG'] = 'region'
+         output_hstore['place:MA'] = 'region'
+         output_hstore['place:PT'] = 'region'
+         output_hstore['place:AR'] = 'region'
+         output_hstore['place:VN'] = 'region'
+         output_hstore['place:TR'] = 'region'
+         output_hstore['place:ID'] = 'region'
+         output_hstore['place:PL'] = 'region'
+         output_hstore['place:GR'] = 'region'
+         output_hstore['place:BD'] = 'region'
+         output_hstore['place:UA'] = 'region'
+    end
 
     output.tags = output_hstore
 
