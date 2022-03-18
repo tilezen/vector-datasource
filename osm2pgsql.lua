@@ -455,11 +455,11 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
         output_hstore['disputed_by'] = 'FR;ID;IN;MA;NL;Pl;PS;SA;TR'
     end
--- Turn off Israel country label for SA;PK;ID
+-- Redefine Israel country label for SA;PK;ID
     if object.tags.place and object.tags.wikidata == 'Q801' then
-        output_hstore['disputed_by'] = 'ID;PK;SA'
         output_hstore["name:id"] = 'Palestina'
-        output_htsore["name:ur"] = 'فلسطین'
+        output_hstore["name:ur"] = 'فلسطین'
+        output_hstore["name:ar"] = 'فلسطين'
     end
 -- Recast Taiwan country label as region label for China POV
     if object.tags.place and object.tags.wikidata == 'Q865' then
