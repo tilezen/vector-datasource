@@ -807,10 +807,10 @@ function osm2pgsql.process_relation(object)
 -- Adds tags to redefine Israel admin 4 boundaries for Palestine.
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-           output_hstore.['admin_level:PS'] = '8'
-           output_hstore.['admin_level:PK'] = '8'
-           output_hstore.['admin_level:SA'] = '8'
-           output_hstore.['admin_level:BD'] = '8'
+           output_hstore['admin_level:PS'] = '8'
+           output_hstore['admin_level:PK'] = '8'
+           output_hstore['admin_level:SA'] = '8'
+           output_hstore['admin_level:BD'] = '8'
         end
     end
 
