@@ -811,6 +811,7 @@ function osm2pgsql.process_relation(object)
            output_hstore['admin_level:PK'] = '8'
            output_hstore['admin_level:SA'] = '8'
            output_hstore['admin_level:BD'] = '8'
+           output_hstore['admin_level:ID'] = '8'
         end
     end
 
