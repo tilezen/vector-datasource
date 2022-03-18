@@ -72,6 +72,7 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
             6, 10, 24, 'boundaries',
             {'kind': 'region', 'min_zoom': 3.0, 'name': type(None)})
 
+
 class BoundariesMinZoomAndNameOsm(FixtureTest):
     def test_region_boundary_zug_luzern_z8(self):
         import dsl
