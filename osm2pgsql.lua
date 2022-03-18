@@ -828,8 +828,35 @@ function osm2pgsql.process_relation(object)
 
 -- Turn off West Bank and Judea and Samaria relations for everyone but Israel
     if type == 'boundary' and object.tags.wikidata == 'Q36678' then
-        output_hstore['admin_level'] = '8'
-        output_hstore['admin_level:IL'] = '4'
+        output_hstore['admin_level:US'] = '8'
+        output_hstore['admin_level:FR'] = '8'
+        output_hstore['admin_level:RU'] = '8'
+        output_hstore['admin_level:ES'] = '8'
+        output_hstore['admin_level:CN'] = '8'
+        output_hstore['admin_level:TW'] = '8'
+        output_hstore['admin_level:IN'] = '8'
+        output_hstore['admin_level:NP'] = '8'
+        output_hstore['admin_level:PK'] = '8'
+        output_hstore['admin_level:DE'] = '8'
+        output_hstore['admin_level:GB'] = '8'
+        output_hstore['admin_level:BR'] = '8'
+        output_hstore['admin_level:PS'] = '8'
+        output_hstore['admin_level:SA'] = '8'
+        output_hstore['admin_level:EG'] = '8'
+        output_hstore['admin_level:MA'] = '8'
+        output_hstore['admin_level:PT'] = '8'
+        output_hstore['admin_level:AR'] = '8'
+        output_hstore['admin_level:JP'] = '8'
+        output_hstore['admin_level:KO'] = '8'
+        output_hstore['admin_level:VN'] = '8'
+        output_hstore['admin_level:TR'] = '8'
+        output_hstore['admin_level:ID'] = '8'
+        output_hstore['admin_level:PL'] = '8'
+        output_hstore['admin_level:GR'] = '8'
+        output_hstore['admin_level:IT'] = '8'
+        output_hstore['admin_level:NL'] = '8'
+        output_hstore['admin_level:SE'] = '8'
+        output_hstore['admin_level:BD'] = '8'
     end
     if type == 'boundary' and object.tags.wikidata == 'Q513200' then
         output_hstore = nil
