@@ -66,10 +66,11 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
 
         # because of clamping the 2.0 goes to 3.0
         # now from the 10m scale set table
-        # and it should now have a text name
+        # and it should not have name because of stripping
+        # in later transforms to reduce file size
         self.assert_has_feature(
             6, 10, 24, 'boundaries',
-            {'kind': 'region', 'min_zoom': 3.0, 'name': 'California - Nevada'})
+            {'kind': 'region', 'min_zoom': 3.0, 'name': type(None)})
 
 class BoundariesMinZoomAndNameOsm(FixtureTest):
     def test_region_boundary_zug_luzern_z8(self):
