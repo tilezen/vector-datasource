@@ -76,7 +76,7 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
         # Mexico region (scalerank=4, 1:10m NE only)
         self.assert_has_feature(
             5, 7, 14, 'boundaries',
-            {'kind': 'region', 'min_zoom': 5})
+            {'kind': 'region', 'min_zoom': 3})
 
         # Mexico region NO name, Natural Earth
         self.assert_has_feature(
@@ -86,7 +86,7 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
         # Poland region (scalerank=5, 1:10m NE only)
         self.assert_has_feature(
             5, 17, 10, 'boundaries',
-            {'kind': 'region', 'min_zoom': 5.5})
+            {'kind': 'region', 'min_zoom': 3})
 
         # Poland region NO name, Natural Earth
         self.assert_has_feature(
@@ -96,7 +96,7 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
         # Austria region (scalerank=6, 1:10m NE only)
         self.assert_has_feature(
             6, 34, 22, 'boundaries',
-            {'kind': 'region', 'min_zoom': 6})
+            {'kind': 'region', 'min_zoom': 3})
 
         # Austria region NO name, Natural Earth
         self.assert_has_feature(
@@ -111,17 +111,17 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
         # Sweden region (scalerank=7, 1:10m NE only)
         self.assert_has_feature(
             6, 35, 18, 'boundaries',
-            {'kind': 'region', 'min_zoom': 6.7})
+            {'kind': 'region', 'min_zoom': 3})
 
         # United Kingdom region (scalerank=8, 1:10m NE only)
         self.assert_has_feature(
             6, 31, 18, 'boundaries',
-            {'kind': 'region', 'min_zoom': 6.8})
+            {'kind': 'region', 'min_zoom': 3})
 
         # Switzerland region (scalerank=9, 1:10m NE only)
         self.assert_has_feature(
             7, 66, 44, 'boundaries',
-            {'kind': 'region', 'min_zoom': 7})
+            {'kind': 'region', 'min_zoom': 3})
 
 
 class BoundariesMinZoomAndNameOsm(FixtureTest):
