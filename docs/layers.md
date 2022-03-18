@@ -1595,34 +1595,36 @@ The `hgv` property indicates general truck heavy goods vehicle truck access, val
 For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values (units vary) include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle length, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `axles` (number of axles), `other` and `multiple` if more than one.
 
 #### Road Transportation `hgv_time_restrictions` Values
-Time restriction is a semicolon-delimited array of date and time restrictions,
-where date and time of a restriction are delimited with a pipe `|` character.
-Note, that restrictions use English names for days and months. For example,
-the restriction "Monday, Tuesday, Friday from 7 to 20; Saturday, Sunday from
-dusk to dawn" is given as follows:
+Property specifies date and time period during which the condition applies. Value is a string in the Time Domain format. Time Domain is part of the GDF(Geographic Data Files) specification which is an ISO standard. Current standard is GDF 5.1 which is ISO 20524-1:2020.
 
-```
-days_of_week Mon,Tue,Fri|start_time25200end_time72000;days_of_week Sat,Sun|dusk_to_dawn
-```
+A basic Time Domain is the combination of a Starting Date and a Time Duration with the following notation: `[(Starting Date) {Time duration}]`. For example, `[(M5d1){d1}]` means: Starting Date: any year, month 5 (May), day 1st, at 0:00 a.m. Duration: 1 complete day (i.e., 24 hours or 1440 minutes).
 
-* `days_of_week` - array of weekdays, for example, `days_of_week Mon,Tue,Fri`
-* `date_range` - start and end dates as unix timestamps, for example, `date_range 1546344000 1577880000`
-* `days_of_month` - range of days of month, for example, from 1st until 31st day `days_of_month 1-31`
-* `day_week_month` - range of days of the week of the month, for example, from Monday of the first week until Saturday of the third week - `day_week_month Mon1-Sat3`
-* `day_week_year` - range of days of the week of the year, for example, from Friday of 12th week until Friday of 36th week - `day_week_year Wed12-Fri36`
-* `week_of_month` - range of weeks of the month, for example, from 1st until 4th week of month `week_of_month 1-4`
-* `month_of_year` - range of months of the year, for example, `month_of_year Jan-Jul`
-* `day_month_year` - range of days of months of the year, for example, `day_month_year Jan1-Jul31`
-* `day_week_month_year` - range of days of weeks of months of the year, for example, from 1st Sunday of July until 1 Monday of December `day_week_month_year JulSun1-DecMon1`
-* `externally_specified` - externally specified string value as a raw text, for example for the holiday season, `externally_specified Easter`
-* `dusk_to_dawn` - during nighttime
-* `dawn_to_dusk` - during daytime
-* `start_time` - seconds since midnight when the restriction starts, for example,
-  `start_time25200`; if specified, `end_time` must also be specified
-* `end_time` - seconds since mighnight when the restriction ends, for example,
-  `end_time72000`; if specified, `start_time` must also be specified
-* `excluded` - if the restriction is excluded, then the time period specified is the period during which the restriction does not apply,
-for example, `excluded days_of_week Sat,Sun|start_time25200end_time72000`
+Starting Dates and time intervals are defined by means of a set of graphical symbols allowing the description of years, months, weeks, days, and so on down to the smallest time unit, which is the second. The symbols have to be organized in a sequential order starting with the longest time unit. Attached to a starting date, the interval constitutes a basic Time Domain. Without a starting date, it just indicates a duration. If the very first time type code in duration section is preceded by a minus sign, it means that the duration is counted in the reverse order. The following list describes starting date and time interval unit types:
+
+* `ynn` - Year. Defines either a particular nnnn year in a starting date; or a duration of nn years. For example, `[(y1991M11d14h5m30s19){y1}]` means from 14 November 1991, 5:30:19 a.m. to 14 November 1992, 5:30:19 a.m. If there is no identical calendar date in the year in question, which occurs only for 29 February, “plus 1 year” leads to 28 February of the following year. Notice that `{y1}` = `{M12}`
+* `Mnn` - Month. Defines either a particular month (1 to 12) within a particular year, or any year when no `y` information is given in starting date; or a duration of nn months. For example, `[(y1991M11d14h5m30s19) {M3}]` means from 14 November 1991, 5:31:19 a.m. to 14 February 1992, 5:30:19 a.m.
+* `wnn` - Week. Defines either a week (1 to 53) within a previously defined year, or any year when no `y` information is given in a starting date; or a duration of nn weeks, i.e., nn*7 days. For example, `[(y1991M11d14h5m30s19) {w2}]` means from 14 November 1991 at 5:30:19 a.m. to 28 November 1991, 5:30:19 a.m. Notice that `{w1}` = `{d7}`
+* `dnn` - Day. Defines either a particular day (1 to 28, 29, 30, 31) within a particular month if previously defined with the `M` format in a starting date; or a duration of nn days, i.e., nn*24 hours. For example, `[(y1991M11d14h5m30s19) {d2}]` means from 14 November 1991 at 5:30:19 a.m. to 16 November 1991, 5:30:19 a.m. Notice that `{d1}` = `{h24}`
+* `tn` - Day. Only in starting date defines a particular weekday (`1`:Sunday, `2`:Monday, `3`:Tuesday, `4`:Wednesday, `5`:Thursday, `6`:Friday, `7`:Saturday) in a previously (if any) defined week. For example, `(M5t2)` means each Monday in the fifth month (May) of any year, at 0:00:00 a.m.
+* `fxn` - Day. Only in starting date defines a particular weekday in a previously (if any) defined month, with the following rules: n is used as in the “t” format with the same domain of values, `1`:Sunday up to `7`:Saturday. For “x” one of the following values has to be substituted: `1`:first, `2`:second, `3`:third, `4`:fourth, `5`:fifth. For example: `(...f12)` means the first Monday at 0:00:00 a.m.
+* `lxn` - Day. Only in starting date defines a particular weekday in a previously (if any) defined month, with the following rules: n is used as for the “t” format with the same domain of values, `1`:Sunday up to `7`:Saturday. x has to be chosen from the following set: `1`:first, `2`:second, `3`:third, `4`:fourth, `5`:fifth. Values are given in reverse order starting from the end of the month and have the meaning: `1`=last, `2`=last but one, `3`= last but two, etc. For example, `(...l12)` means the last Monday at 0:00:00 a.m.
+* `hnn` - Hour. Defines either a particular hour (0 to 23) within a particular day (if previously defined) in a starting date; or a duration of nn hours, i.e., nn*60 minutes. For example, `[(y1991M11d14h5m30s19) {h10}]` means from 14 November 1991, 5:30:19 a.m. to 14 November 1991 at 3:30:19 p.m. Notice that `{h1}` = `{m60}`
+* `mnn` - Minute. Defines either a particular minute (0 to 59) within a particular hour (if previously defined) in a starting date; or a duration of nn minutes, i.e., nn*60 seconds. For example, `[(y1991M11d14h5m30s19) {m11}]` means from 14 November 1991 at 5:30:19 a.m. to 14 November 1991 at 5:41:19 a.m. Notice that `{m1}` = `{s60}`
+* `snn` - Second. Defines either a particular second (0 to 59) within a particular minute (if previously defined) in a starting date; or a duration of nn seconds. For example, `[(y1991M11d14h5m30s19) {s21}]` means from 14 November 1991 at 5:30:19 a.m. to 14 November 1991 at 5:30:40 a.m. Notice that `{m1}` = `{s60}`
+* `znn` - Fuzzy symbols for special time terms. Currently only 2 variants are used: `[(z1){z51}]` means dawn til dusk (nighttime) and `[(z2){z52}]` means dusk til dawn (daytime). May be extended in future
+* `string_value` - Externally specified string value. For example `[*EASTER(h8){h14}]` means from 8:00 am to 10:00 pm during Easter
+
+Starting Dates which are composed of several time units (e.g., 14 November 1991) are defined by placing the symbols sequentially in a hierarchical order.
+
+Time periods (duration) which are composed of several time interval units are represented by listing the individual symbols sequentially in hierarchical order. The total time duration of a particular combination of symbols is the sum of all single time intervals. For example, `{y2M1w2}` means a period of 2 years, 1 month, and 2 weeks. Since Time Domains can be considered as a set of the smallest time unit described here, the second, Time Domains may also be combined with set operations, such as:
+
+* Union of sets notation: `+`
+* Intersection of sets notation: `*`
+* Subtraction of sets notation: `-`
+
+All the Time Domain strings are stored in prefix form: it uses the polish/prefix operator notation and omit brackets made redundant by this. For example:
+`[[(d1){w1}]-[(d3){d1}]]` has prefix form `-(d1){w1}(d3){d1}`
+`[[(d1){w1}]*[(d3){-w1}]]` has prefix form `*(d1){w1}(d3){-w1}`
 
 
 #### Roads layer network values

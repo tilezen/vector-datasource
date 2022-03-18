@@ -38,7 +38,7 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
 
     def test_usa_region(self):
         # region min_zoom (via scalerank)
-        # USA region (scalerank=2, 1:50m NE and 1:10m NE)
+        # USA region (scalerank=2, min_zoom=2, 1:50m NE and 1:10m NE)
         self.load_fixtures([
             'file://integration-test/fixtures/'
             'ne_10m_admin_1_states_provinces_lines/'
@@ -46,13 +46,14 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
             'europe-mexico.shp',
         ])
 
+        # because of clamping the 2.0 goes to 3.0
         self.assert_has_feature(
-            2, 0, 1, 'boundaries',
-            {'kind': 'region', 'min_zoom': 2})
+            3, 1, 3, 'boundaries',
+            {'kind': 'region', 'min_zoom': 3.0})
 
         # USA region NO name, Natural Earth
         self.assert_has_feature(
-            2, 0, 1, 'boundaries',
+            3, 1, 3, 'boundaries',
             {'kind': 'region', 'name': type(None)})
 
     def test_10m_regions(self):
@@ -63,65 +64,13 @@ class BoundariesMinZoomAndNameNe(FixtureTest):
             '-europe-mexico.shp',
         ])
 
-        # Germany region (scalerank=3, 1:10m NE only)
+        # because of clamping the 2.0 goes to 3.0
+        # now from the 10m scale set table
+        # and it should not have name because of stripping
+        # in later transforms to reduce file size
         self.assert_has_feature(
-            5, 17, 10, 'boundaries',
-            {'kind': 'region', 'min_zoom': 3})
-
-        # Germany region NO name, Natural Earth
-        self.assert_has_feature(
-            5, 17, 10, 'boundaries',
-            {'kind': 'region', 'name': type(None)})
-
-        # Mexico region (scalerank=4, 1:10m NE only)
-        self.assert_has_feature(
-            5, 7, 14, 'boundaries',
-            {'kind': 'region', 'min_zoom': 5})
-
-        # Mexico region NO name, Natural Earth
-        self.assert_has_feature(
-            5, 7, 14, 'boundaries',
-            {'kind': 'region', 'name': type(None)})
-
-        # Poland region (scalerank=5, 1:10m NE only)
-        self.assert_has_feature(
-            5, 17, 10, 'boundaries',
-            {'kind': 'region', 'min_zoom': 5.5})
-
-        # Poland region NO name, Natural Earth
-        self.assert_has_feature(
-            5, 17, 10, 'boundaries',
-            {'kind': 'region', 'name': type(None)})
-
-        # Austria region (scalerank=6, 1:10m NE only)
-        self.assert_has_feature(
-            6, 34, 22, 'boundaries',
-            {'kind': 'region', 'min_zoom': 6})
-
-        # Austria region NO name, Natural Earth
-        self.assert_has_feature(
-            6, 34, 22, 'boundaries',
-            {'kind': 'region', 'name': type(None)})
-
-        # Austria region HAS name, Natural Earth
-        self.assert_has_feature(
-            7, 68, 44, 'boundaries',
-            {'kind': 'region', 'name': 'Tirol - Salzburg'})
-
-        # Sweden region (scalerank=7, 1:10m NE only)
-        self.assert_has_feature(
-            6, 35, 18, 'boundaries',
-            {'kind': 'region', 'min_zoom': 6.7})
-
-        # United Kingdom region (scalerank=8, 1:10m NE only)
-        self.assert_has_feature(
-            6, 31, 18, 'boundaries',
-            {'kind': 'region', 'min_zoom': 6.8})
-
-        # Switzerland region (scalerank=9, 1:10m NE only)
-        self.assert_has_feature(
-            7, 66, 44, 'boundaries',
-            {'kind': 'region', 'min_zoom': 7})
+            6, 10, 24, 'boundaries',
+            {'kind': 'region', 'min_zoom': 3.0, 'name': type(None)})
 
 
 class BoundariesMinZoomAndNameOsm(FixtureTest):
