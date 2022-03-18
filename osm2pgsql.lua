@@ -483,6 +483,7 @@ function osm2pgsql.process_node(object)
 -- Turn off Kosovo country label for CN;RU;IN;GR
     if object.tags.place and object.tags.wikidata == 'Q1246' then
         output_hstore['disputed_by'] = 'CN;GR;IN;RU'
+        output_hstore['recognized_by'] = 'AR;BD;BR;DE;EG;ES;FR;GB;ID;IL;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;SA;SE;TR;TW;UA;US;VN'
     end
 -- Hide Kosovo region labels for several POVs including China and Russia
     if object.tags.place and (object.tags.wikidata == 'Q1008042' or object.tags.wikidata == 'Q1021775' or
@@ -838,6 +839,11 @@ function osm2pgsql.process_relation(object)
     end
     if type == 'boundary' and object.tags.wikidata == 'Q513200' then
         output_hstore = nil
+    end
+
+-- Fix Kosovo dispute viewpoints
+    if type == 'linestring' and object.tags.ne_id == '1746706755' then
+        output_hstore['recognized_by'] = 'AR;BD;BR;DE;EG;ES;FR;GB;ID;IL;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;SA;SE;TR;TW;UA;US;VN'
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
