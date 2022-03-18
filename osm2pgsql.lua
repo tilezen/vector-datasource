@@ -443,12 +443,16 @@ function osm2pgsql.process_node(object)
 -- Recast Gaza Strip label as country
     if object.tags.place and object.tags.wikidata == 'Q39760' then
         output_hstore['place'] = 'country'
-        output_hstore['disputed_by'] = 'ID;PK;SA'
+        output_hstore['place:ID'] = 'region'
+        output_hstore['place:PK'] = 'region'
+        output_hstore['place:SA'] = 'region'
     end
 -- Recast West Bank label as country
     if object.tags.place and object.tags.wikidata == 'Q36678' then
        output_hstore['place'] = 'country'
-       output_hstore['disputed_by'] = 'ID;PK;SA'
+       output_hstore['place:ID'] = 'region'
+       output_hstore['place:PK'] = 'region'
+       output_hstore['place:SA'] = 'region'
     end
 -- Recast Western Sahara label as country expect for FR;IN;PS;SA;MA;TR;ID;Pl;NL
     if object.tags.place and object.tags.wikidata == 'Q6250' then
