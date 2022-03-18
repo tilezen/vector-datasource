@@ -492,7 +492,7 @@ function osm2pgsql.process_node(object)
     object.tags.wikidata == 'Q227569' or object.tags.wikidata == 'Q62172') then
         output_hstore['disputed_by'] = 'CN;RU;IN;GR'
     end
--- Recast Northern Cyprus country label as region label for several POVs including China and Russia
+-- Recast Northern Cyprus as country label and turn off for several POVs including China and Russia
     if object.tags.place and object.tags.wikidata == 'Q23681' then
         output_hstore['place'] = 'country'
         output_hstore['disputed_by'] = 'CN;RU;IN;GR;CY'
@@ -772,7 +772,7 @@ function osm2pgsql.process_relation(object)
         return
     end
 
--- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
+-- Adds tags from boundary=claim relation to its ways
     if (type == 'linestring' or type == 'boundary') and object.tags.boundary == 'claim' and object.tags.admin_level == '4' then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
@@ -784,7 +784,7 @@ function osm2pgsql.process_relation(object)
         end
     end
 
--- Adds tags from boundary=disputed relation to its ways then discards the relation to remove redundancy
+-- Adds tags from boundary=disputed relation to its ways
     if (type == 'linestring' or type == 'boundary') and (object.tags.boundary == 'disputed') then
         for _, member in ipairs(object.members) do
             if member.type == 'w' then
