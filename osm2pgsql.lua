@@ -807,10 +807,10 @@ function osm2pgsql.process_relation(object)
 -- Adds tags to redefine Israel admin 4 boundaries for Palestine.
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-           output_hstore.disputed_by = 'PS;PK;SA;BD'
-           output_hstore.dispute = 'yes'
-           output_hstore.recognized_by = 'US;FR;RU;ES;CN;TW;IN;NP;DE;GB;BR;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;UA'
-           output_hstore.claimed_by = 'IL'
+           output_hstore.['admin_level:PS'] = '8'
+           output_hstore.['admin_level:PK'] = '8'
+           output_hstore.['admin_level:SA'] = '8'
+           output_hstore.['admin_level:BD'] = '8'
         end
     end
 
@@ -827,10 +827,37 @@ function osm2pgsql.process_relation(object)
 
 -- Turn off West Bank and Judea and Samaria relations for everyone but Israel
     if type == 'boundary' and object.tags.wikidata == 'Q36678' then
-        output_hstore.recognized_by = 'IL'
-        output_hstore.disputed_by = 'US;FR;RU;ES;CN;TW;IN;NP;PK;DE;GB;BR;PS;SA;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;BD;UA'
+        output_hstore['place:US'] = 'locality'
+        output_hstore['place:FR'] = 'locality'
+        output_hstore['place:RU'] = 'locality'
+        output_hstore['place:ES'] = 'locality'
+        output_hstore['place:CN'] = 'locality'
+        output_hstore['place:TW'] = 'locality'
+        output_hstore['place:IN'] = 'locality'
+        output_hstore['place:NP'] = 'locality'
+        output_hstore['place:PK'] = 'locality'
+        output_hstore['place:DE'] = 'locality'
+        output_hstore['place:GB'] = 'locality'
+        output_hstore['place:BR'] = 'locality'
+        output_hstore['place:PS'] = 'locality'
+        output_hstore['place:SA'] = 'locality'
+        output_hstore['place:EG'] = 'locality'
+        output_hstore['place:MA'] = 'locality'
+        output_hstore['place:PT'] = 'locality'
+        output_hstore['place:AR'] = 'locality'
+        output_hstore['place:JP'] = 'locality'
+        output_hstore['place:KO'] = 'locality'
+        output_hstore['place:VN'] = 'locality'
+        output_hstore['place:TR'] = 'locality'
+        output_hstore['place:ID'] = 'locality'
+        output_hstore['place:PL'] = 'locality'
+        output_hstore['place:GR'] = 'locality'
+        output_hstore['place:IT'] = 'locality'
+        output_hstore['place:NL'] = 'locality'
+        output_hstore['place:SE'] = 'locality'
+        output_hstore['place:BD'] = 'locality'
     end
-    if type == 'boundary' and object.tags.wikidata == 'Q513200' then
+    if type == 'boundary' and object.tags.wikidata == 'ZQ513200' then
         output_hstore = nil
     end
 
