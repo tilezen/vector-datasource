@@ -443,53 +443,55 @@ function osm2pgsql.process_node(object)
 -- Recast Gaza Strip label as country
     if object.tags.place and object.tags.wikidata == 'Q39760' then
         output_hstore['place'] = 'country'
-        output_hstore['disputed_by'] = 'SA;PK;ID'
+        output_hstore['disputed_by'] = 'ID;PK;SA'
     end
 -- Recast West Bank label as country
     if object.tags.place and object.tags.wikidata == 'Q36678' then
        output_hstore['place'] = 'country'
-       output_hstore['disputed_by'] = 'SA;PK;ID'
+       output_hstore['disputed_by'] = 'ID;PK;SA'
     end
 -- Recast Western Sahara label as country expect for FR;IN;PS;SA;MA;TR;ID;Pl;NL
     if object.tags.place and object.tags.wikidata == 'Q6250' then
         output_hstore['place'] = 'country'
-        output_hstore['disputed_by'] = 'FR;IN;PS;SA;MA;TR;ID;Pl;NL'
+        output_hstore['disputed_by'] = 'FR;ID;IN;MA;NL;Pl;PS;SA;TR'
     end
 -- Turn off Israel country label for SA;PK;ID
     if object.tags.place and object.tags.wikidata == 'Q801' then
-        output_hstore['disputed_by'] = 'SA;PK;ID'
+        output_hstore['disputed_by'] = 'ID;PK;SA'
+        output_hstore["name:id"] = 'Palestina'
+        output_htsore["name:ur"] = 'فلسطین'
     end
 -- Recast Taiwan country label as region label for China POV
     if object.tags.place and object.tags.wikidata == 'Q865' then
         output_hstore['place:CN'] = 'region'
     end
 -- Recast Taiwan region to county labels for China POV
-    if object.tags.place and (object.tags.wikidata == 'Q133865' or object.tags.wikidata == 'Q166977' or
-    object.tags.wikidata == 'Q249995' or object.tags.wikidata == 'Q74054' or object.tags.wikidata == 'Q249994' or
-    object.tags.wikidata == 'Q249868' or object.tags.wikidata == 'Q181557' or object.tags.wikidata == 'Q249996' or
-    object.tags.wikidata == 'Q249870' or object.tags.wikidata == 'Q249872' or object.tags.wikidata == 'Q63706' or
-    object.tags.wikidata == 'Q82357' or object.tags.wikidata == 'Q244898' or object.tags.wikidata == 'Q198525' or
-    object.tags.wikidata == 'Q194989' or object.tags.wikidata == 'Q245023' or object.tags.wikidata == 'Q140631' or
-    object.tags.wikidata == 'Q1867' or object.tags.wikidata == 'Q249904' or object.tags.wikidata == 'Q115256' or
-    object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q153221') then
+    if object.tags.place and (object.tags.wikidata == 'Q115256' or object.tags.wikidata == 'Q133865' or
+        object.tags.wikidata == 'Q140631' or object.tags.wikidata == 'Q153221' or object.tags.wikidata == 'Q166977' or
+        object.tags.wikidata == 'Q181557' or object.tags.wikidata == 'Q1867' or object.tags.wikidata == 'Q194989' or
+        object.tags.wikidata == 'Q198525' or object.tags.wikidata == 'Q237258' or object.tags.wikidata == 'Q244898' or
+        object.tags.wikidata == 'Q245023' or object.tags.wikidata == 'Q249868' or object.tags.wikidata == 'Q249870' or
+        object.tags.wikidata == 'Q249872' or object.tags.wikidata == 'Q249904' or object.tags.wikidata == 'Q249994' or
+        object.tags.wikidata == 'Q249995' or object.tags.wikidata == 'Q249996' or object.tags.wikidata == 'Q63706' or
+        object.tags.wikidata == 'Q74054' or object.tags.wikidata == 'Q82357') then
         output_hstore['place:CN'] = 'county'
     end
 -- Turn off Kosovo country label for CN;RU;IN;GR
     if object.tags.place and object.tags.wikidata == 'Q1246' then
-        output_hstore['disputed_by'] = 'CN;RU;IN;GR'
+        output_hstore['disputed_by'] = 'CN;GR;IN;RU'
     end
 -- Hide Kosovo region labels for several POVs including China and Russia
-    if object.tags.place and (object.tags.wikidata == 'Q474651' or
-    object.tags.wikidata == 'Q939112' or object.tags.wikidata == 'Q59074' or object.tags.wikidata == 'Q1008042' or
-    object.tags.wikidata == 'Q739808' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q248378' or
-    object.tags.wikidata == 'Q963121' or object.tags.wikidata == 'Q786124' or object.tags.wikidata == 'Q124725' or
-    object.tags.wikidata == 'Q42328687' or object.tags.wikidata == 'Q991313' or object.tags.wikidata == 'Q994730' or
-    object.tags.wikidata == 'Q59089' or object.tags.wikidata == 'Q15710469' or object.tags.wikidata == 'Q608274' or
-    object.tags.wikidata == 'Q733155' or object.tags.wikidata == 'Q112657' or object.tags.wikidata == 'Q994245' or
-    object.tags.wikidata == 'Q25270' or object.tags.wikidata == 'Q4864476' or object.tags.wikidata == 'Q991291' or
-    object.tags.wikidata == 'Q991291' or object.tags.wikidata == 'Q392505' or object.tags.wikidata == 'Q59086' or
-    object.tags.wikidata == 'Q738901' or object.tags.wikidata == 'Q1021775' or object.tags.wikidata == 'Q911241' or
-    object.tags.wikidata == 'Q227569' or object.tags.wikidata == 'Q62172') then
+    if object.tags.place and (object.tags.wikidata == 'Q1008042' or object.tags.wikidata == 'Q1021775' or
+        object.tags.wikidata == 'Q112657' or object.tags.wikidata == 'Q124725' or object.tags.wikidata == 'Q15710469' or
+        object.tags.wikidata == 'Q227569' or object.tags.wikidata == 'Q248378' or object.tags.wikidata == 'Q25270' or
+        object.tags.wikidata == 'Q392505' or object.tags.wikidata == 'Q42328687' or object.tags.wikidata == 'Q474651' or
+        object.tags.wikidata == 'Q4864476' or object.tags.wikidata == 'Q59074' or object.tags.wikidata == 'Q59086' or
+        object.tags.wikidata == 'Q59089' or object.tags.wikidata == 'Q608274' or object.tags.wikidata == 'Q62172' or
+        object.tags.wikidata == 'Q733155' or object.tags.wikidata == 'Q738901' or object.tags.wikidata == 'Q739808' or
+        object.tags.wikidata == 'Q786124' or object.tags.wikidata == 'Q911241' or object.tags.wikidata == 'Q939112' or
+        object.tags.wikidata == 'Q963121' or object.tags.wikidata == 'Q991291' or object.tags.wikidata == 'Q991291' or
+        object.tags.wikidata == 'Q991313' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q994245' or
+        object.tags.wikidata == 'Q994730') then
         output_hstore['disputed_by'] = 'CN;RU;IN;GR'
     end
 -- Recast Northern Cyprus as country label and turn off for several POVs including China and Russia
@@ -499,121 +501,121 @@ function osm2pgsql.process_node(object)
     end
 -- Turn off Abkhazia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23334' then
-        output_hstore['place:CN'] = 'region'
-        output_hstore['place:TW'] = 'region'
-        output_hstore['place:IN'] = 'region'
-        output_hstore['place:NP'] = 'region'
-        output_hstore['place:PK'] = 'region'
-        output_hstore['place:DE'] = 'region'
-        output_hstore['place:GB'] = 'region'
-        output_hstore['place:BR'] = 'region'
-        output_hstore['place:IL'] = 'region'
-        output_hstore['place:PS'] = 'region'
-        output_hstore['place:SA'] = 'region'
-        output_hstore['place:EG'] = 'region'
-        output_hstore['place:MA'] = 'region'
-        output_hstore['place:PT'] = 'region'
         output_hstore['place:AR'] = 'region'
+        output_hstore['place:BD'] = 'region'
+        output_hstore['place:BR'] = 'region'
+        output_hstore['place:CN'] = 'region'
+        output_hstore['place:DE'] = 'region'
+        output_hstore['place:EG'] = 'region'
+        output_hstore['place:GB'] = 'region'
+        output_hstore['place:GR'] = 'region'
+        output_hstore['place:ID'] = 'region'
+        output_hstore['place:IL'] = 'region'
+        output_hstore['place:IN'] = 'region'
+        output_hstore['place:IT'] = 'region'
         output_hstore['place:JP'] = 'region'
         output_hstore['place:KO'] = 'region'
-        output_hstore['place:VN'] = 'region'
-        output_hstore['place:TR'] = 'region'
-        output_hstore['place:ID'] = 'region'
-        output_hstore['place:PL'] = 'region'
-        output_hstore['place:GR'] = 'region'
-        output_hstore['place:IT'] = 'region'
+        output_hstore['place:MA'] = 'region'
         output_hstore['place:NL'] = 'region'
+        output_hstore['place:NP'] = 'region'
+        output_hstore['place:PK'] = 'region'
+        output_hstore['place:PL'] = 'region'
+        output_hstore['place:PS'] = 'region'
+        output_hstore['place:PT'] = 'region'
+        output_hstore['place:SA'] = 'region'
         output_hstore['place:SE'] = 'region'
-        output_hstore['place:BD'] = 'region'
+        output_hstore['place:TR'] = 'region'
+        output_hstore['place:TW'] = 'region'
         output_hstore['place:UA'] = 'region'
+        output_hstore['place:VN'] = 'region'
     end
 -- Turn off South Ossetia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23427' then
-        output_hstore['place:CN'] = 'region'
-        output_hstore['place:TW'] = 'region'
-        output_hstore['place:IN'] = 'region'
-        output_hstore['place:NP'] = 'region'
-        output_hstore['place:PK'] = 'region'
-        output_hstore['place:DE'] = 'region'
-        output_hstore['place:GB'] = 'region'
-        output_hstore['place:BR'] = 'region'
-        output_hstore['place:IL'] = 'region'
-        output_hstore['place:PS'] = 'region'
-        output_hstore['place:SA'] = 'region'
-        output_hstore['place:EG'] = 'region'
-        output_hstore['place:MA'] = 'region'
-        output_hstore['place:PT'] = 'region'
         output_hstore['place:AR'] = 'region'
+        output_hstore['place:BD'] = 'region'
+        output_hstore['place:BR'] = 'region'
+        output_hstore['place:CN'] = 'region'
+        output_hstore['place:DE'] = 'region'
+        output_hstore['place:EG'] = 'region'
+        output_hstore['place:GB'] = 'region'
+        output_hstore['place:GR'] = 'region'
+        output_hstore['place:ID'] = 'region'
+        output_hstore['place:IL'] = 'region'
+        output_hstore['place:IN'] = 'region'
+        output_hstore['place:IT'] = 'region'
         output_hstore['place:JP'] = 'region'
         output_hstore['place:KO'] = 'region'
-        output_hstore['place:VN'] = 'region'
-        output_hstore['place:TR'] = 'region'
-        output_hstore['place:ID'] = 'region'
-        output_hstore['place:PL'] = 'region'
-        output_hstore['place:GR'] = 'region'
-        output_hstore['place:IT'] = 'region'
+        output_hstore['place:MA'] = 'region'
         output_hstore['place:NL'] = 'region'
+        output_hstore['place:NP'] = 'region'
+        output_hstore['place:PK'] = 'region'
+        output_hstore['place:PL'] = 'region'
+        output_hstore['place:PS'] = 'region'
+        output_hstore['place:PT'] = 'region'
+        output_hstore['place:SA'] = 'region'
         output_hstore['place:SE'] = 'region'
-        output_hstore['place:BD'] = 'region'
+        output_hstore['place:TR'] = 'region'
+        output_hstore['place:TW'] = 'region'
         output_hstore['place:UA'] = 'region'
+        output_hstore['place:VN'] = 'region'
     end
 -- Turn off Nagorno-Karabakh label for most countries
     if object.tags.place and object.tags.wikidata == 'Q2397204' then
-         output_hstore['place:US'] = 'region'
-         output_hstore['place:FR'] = 'region'
-         output_hstore['place:RU'] = 'region'
-         output_hstore['place:ES'] = 'region'
-         output_hstore['place:CN'] = 'region'
-         output_hstore['place:TW'] = 'region'
-         output_hstore['place:IN'] = 'region'
-         output_hstore['place:NP'] = 'region'
-         output_hstore['place:PK'] = 'region'
-         output_hstore['place:DE'] = 'region'
-         output_hstore['place:GB'] = 'region'
-         output_hstore['place:BR'] = 'region'
-         output_hstore['place:IL'] = 'region'
-         output_hstore['place:PS'] = 'region'
-         output_hstore['place:SA'] = 'region'
-         output_hstore['place:EG'] = 'region'
-         output_hstore['place:MA'] = 'region'
-         output_hstore['place:PT'] = 'region'
-         output_hstore['place:AR'] = 'region'
-         output_hstore['place:JP'] = 'region'
-         output_hstore['place:KO'] = 'region'
-         output_hstore['place:VN'] = 'region'
-         output_hstore['place:TR'] = 'region'
-         output_hstore['place:ID'] = 'region'
-         output_hstore['place:PL'] = 'region'
-         output_hstore['place:GR'] = 'region'
-         output_hstore['place:IT'] = 'region'
-         output_hstore['place:NL'] = 'region'
-         output_hstore['place:SE'] = 'region'
-         output_hstore['place:BD'] = 'region'
+        output_hstore['place:AR'] = 'region'
+        output_hstore['place:BD'] = 'region'
+        output_hstore['place:BR'] = 'region'
+        output_hstore['place:CN'] = 'region'
+        output_hstore['place:DE'] = 'region'
+        output_hstore['place:EG'] = 'region'
+        output_hstore['place:ES'] = 'region'
+        output_hstore['place:FR'] = 'region'
+        output_hstore['place:GB'] = 'region'
+        output_hstore['place:GR'] = 'region'
+        output_hstore['place:ID'] = 'region'
+        output_hstore['place:IL'] = 'region'
+        output_hstore['place:IN'] = 'region'
+        output_hstore['place:IT'] = 'region'
+        output_hstore['place:JP'] = 'region'
+        output_hstore['place:KO'] = 'region'
+        output_hstore['place:MA'] = 'region'
+        output_hstore['place:NL'] = 'region'
+        output_hstore['place:NP'] = 'region'
+        output_hstore['place:PK'] = 'region'
+        output_hstore['place:PL'] = 'region'
+        output_hstore['place:PS'] = 'region'
+        output_hstore['place:PT'] = 'region'
+        output_hstore['place:RU'] = 'region'
+        output_hstore['place:SA'] = 'region'
+        output_hstore['place:SE'] = 'region'
+        output_hstore['place:TR'] = 'region'
+        output_hstore['place:TW'] = 'region'
+        output_hstore['place:US'] = 'region'
+        output_hstore['place:VN'] = 'region'
     end
 -- Turn off Somaliland label for most countries
     if object.tags.place and object.tags.wikidata == 'Q34754' then
-         output_hstore['place:SO'] = 'region'
-         output_hstore['place:RU'] = 'region'
-         output_hstore['place:CN'] = 'region'
-         output_hstore['place:TW'] = 'region'
-         output_hstore['place:IN'] = 'region'
-         output_hstore['place:NP'] = 'region'
-         output_hstore['place:PK'] = 'region'
-         output_hstore['place:BR'] = 'region'
-         output_hstore['place:IL'] = 'region'
-         output_hstore['place:PS'] = 'region'
-         output_hstore['place:SA'] = 'region'
-         output_hstore['place:EG'] = 'region'
-         output_hstore['place:MA'] = 'region'
-         output_hstore['place:PT'] = 'region'
-         output_hstore['place:AR'] = 'region'
-         output_hstore['place:VN'] = 'region'
-         output_hstore['place:TR'] = 'region'
-         output_hstore['place:ID'] = 'region'
-         output_hstore['place:PL'] = 'region'
-         output_hstore['place:GR'] = 'region'
-         output_hstore['place:BD'] = 'region'
-         output_hstore['place:UA'] = 'region'
+        output_hstore['place:AR'] = 'region'
+        output_hstore['place:BD'] = 'region'
+        output_hstore['place:BR'] = 'region'
+        output_hstore['place:CN'] = 'region'
+        output_hstore['place:EG'] = 'region'
+        output_hstore['place:GR'] = 'region'
+        output_hstore['place:ID'] = 'region'
+        output_hstore['place:IL'] = 'region'
+        output_hstore['place:IN'] = 'region'
+        output_hstore['place:MA'] = 'region'
+        output_hstore['place:NP'] = 'region'
+        output_hstore['place:PK'] = 'region'
+        output_hstore['place:PL'] = 'region'
+        output_hstore['place:PS'] = 'region'
+        output_hstore['place:PT'] = 'region'
+        output_hstore['place:RU'] = 'region'
+        output_hstore['place:SA'] = 'region'
+        output_hstore['place:SO'] = 'region'
+        output_hstore['place:TR'] = 'region'
+        output_hstore['place:TW'] = 'region'
+        output_hstore['place:UA'] = 'region'
+        output_hstore['place:VN'] = 'region'
     end
 
     output.tags = output_hstore
@@ -695,7 +697,7 @@ function osm2pgsql.process_way(object)
         if k == object.id then
             output_hstore.dispute = 'yes'
             if v.disputed_by then
-                output_hstore.disputed_by = 'US;FR;RU;ES;CN;TW;IN;NP;PK;DE;GB;BR;IL;PS;SA;EG;MA;PT;AR;JP;KO;VN;TR;ID;PL;GR;IT;NL;SE;BD;UA'
+                output_hstore.disputed_by = 'AR;BD;BR;CN;DE;EG;ES;FR;GB;GR;ID;IL;IN;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;RU;SA;SE;TR;TW;UA;US;VN'
             end
         end
     end
@@ -807,11 +809,11 @@ function osm2pgsql.process_relation(object)
 -- Adds tags to redefine Israel admin 4 boundaries for Palestine.
     if type == 'boundary' and (object.tags.admin_level == '4') and object.tags['ISO3166-2'] then
         if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'IL-') then
-           output_hstore['admin_level:PS'] = '8'
-           output_hstore['admin_level:PK'] = '8'
-           output_hstore['admin_level:SA'] = '8'
-           output_hstore['admin_level:BD'] = '8'
-           output_hstore['admin_level:ID'] = '8'
+            output_hstore['admin_level:BD'] = '8'
+            output_hstore['admin_level:ID'] = '8'
+            output_hstore['admin_level:PK'] = '8'
+            output_hstore['admin_level:PS'] = '8'
+            output_hstore['admin_level:SA'] = '8'
         end
     end
 
@@ -828,35 +830,35 @@ function osm2pgsql.process_relation(object)
 
 -- Turn off West Bank and Judea and Samaria relations for everyone but Israel
     if type == 'boundary' and object.tags.wikidata == 'Q36678' then
-        output_hstore['admin_level:US'] = '8'
-        output_hstore['admin_level:FR'] = '8'
-        output_hstore['admin_level:RU'] = '8'
-        output_hstore['admin_level:ES'] = '8'
-        output_hstore['admin_level:CN'] = '8'
-        output_hstore['admin_level:TW'] = '8'
-        output_hstore['admin_level:IN'] = '8'
-        output_hstore['admin_level:NP'] = '8'
-        output_hstore['admin_level:PK'] = '8'
-        output_hstore['admin_level:DE'] = '8'
-        output_hstore['admin_level:GB'] = '8'
-        output_hstore['admin_level:BR'] = '8'
-        output_hstore['admin_level:PS'] = '8'
-        output_hstore['admin_level:SA'] = '8'
-        output_hstore['admin_level:EG'] = '8'
-        output_hstore['admin_level:MA'] = '8'
-        output_hstore['admin_level:PT'] = '8'
         output_hstore['admin_level:AR'] = '8'
+        output_hstore['admin_level:BD'] = '8'
+        output_hstore['admin_level:BR'] = '8'
+        output_hstore['admin_level:CN'] = '8'
+        output_hstore['admin_level:DE'] = '8'
+        output_hstore['admin_level:EG'] = '8'
+        output_hstore['admin_level:ES'] = '8'
+        output_hstore['admin_level:FR'] = '8'
+        output_hstore['admin_level:GB'] = '8'
+        output_hstore['admin_level:GR'] = '8'
+        output_hstore['admin_level:ID'] = '8'
+        output_hstore['admin_level:IN'] = '8'
+        output_hstore['admin_level:IT'] = '8'
         output_hstore['admin_level:JP'] = '8'
         output_hstore['admin_level:KO'] = '8'
-        output_hstore['admin_level:VN'] = '8'
-        output_hstore['admin_level:TR'] = '8'
-        output_hstore['admin_level:ID'] = '8'
-        output_hstore['admin_level:PL'] = '8'
-        output_hstore['admin_level:GR'] = '8'
-        output_hstore['admin_level:IT'] = '8'
+        output_hstore['admin_level:MA'] = '8'
         output_hstore['admin_level:NL'] = '8'
+        output_hstore['admin_level:NP'] = '8'
+        output_hstore['admin_level:PK'] = '8'
+        output_hstore['admin_level:PL'] = '8'
+        output_hstore['admin_level:PS'] = '8'
+        output_hstore['admin_level:PT'] = '8'
+        output_hstore['admin_level:RU'] = '8'
+        output_hstore['admin_level:SA'] = '8'
         output_hstore['admin_level:SE'] = '8'
-        output_hstore['admin_level:BD'] = '8'
+        output_hstore['admin_level:TR'] = '8'
+        output_hstore['admin_level:TW'] = '8'
+        output_hstore['admin_level:US'] = '8'
+        output_hstore['admin_level:VN'] = '8'
     end
     if type == 'boundary' and object.tags.wikidata == 'Q513200' then
         output_hstore = nil
