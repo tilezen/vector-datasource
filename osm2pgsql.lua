@@ -831,7 +831,7 @@ function osm2pgsql.process_relation(object)
         output_hstore['admin_level'] = '8'
         output_hstore['admin_level:IL'] = '4'
     end
-    if type == 'boundary' and object.tags.wikidata == 'ZQ513200' then
+    if type == 'boundary' and object.tags.wikidata == 'Q513200' then
         output_hstore = nil
     end
 
