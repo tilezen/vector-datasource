@@ -1,7 +1,6 @@
 global:
   - &ne_country_capital [Admin-0 capital, Admin-0 capital alt, Admin-0 region capital]
   - &ne_region_capital [Admin-1 capital, Admin-1 region capital]
-
   - &output_properties
     name: {col: name}
     source: {col: source}
@@ -35,6 +34,38 @@ global:
         func: util.true_or_none
         args: [ { col: is_landuse_aoi } ]
     wikidata_id: {col: wikidata}
+    disputed_by: {col: disputed_by }
+    'place:ISO': { col: 'place:ISO' }
+    'place:AR': { col: 'place:AR' }
+    'place:BD': { col: 'place:BD' }
+    'place:BR': { col: 'place:BR' }
+    'place:CN': { col: 'place:CN' }
+    'place:DE': { col: 'place:DE' }
+    'place:EG': { col: 'place:EG' }
+    'place:ES': { col: 'place:ES' }
+    'place:FR': { col: 'place:FR' }
+    'place:GB': { col: 'place:GB' }
+    'place:GR': { col: 'place:GR' }
+    'place:ID': { col: 'place:ID' }
+    'place:IL': { col: 'place:IL' }
+    'place:IN': { col: 'place:IN' }
+    'place:IT': { col: 'place:IT' }
+    'place:JP': { col: 'place:JP' }
+    'place:KO': { col: 'place:KO' }
+    'place:MA': { col: 'place:MA' }
+    'place:NL': { col: 'place:NL' }
+    'place:NP': { col: 'place:NP' }
+    'place:PK': { col: 'place:PK' }
+    'place:PL': { col: 'place:PL' }
+    'place:PS': { col: 'place:PS' }
+    'place:PT': { col: 'place:PT' }
+    'place:RU': { col: 'place:RU' }
+    'place:SA': { col: 'place:SA' }
+    'place:SE': { col: 'place:SE' }
+    'place:TR': { col: 'place:TR' }
+    'place:TW': { col: 'place:TW' }
+    'place:US': { col: 'place:US' }
+    'place:VN': { col: 'place:VN' }
 
   - &ne_places_min_zoom
     lookup:
@@ -83,6 +114,16 @@ global:
     fclass_us: { col: fclass_us }
     fclass_vn: { col: fclass_vn }
 
+  # min/max zooms from NaturalEarth
+  - &ne_zooms
+    __ne_min_zoom: { col: __ne_min_zoom }
+    __ne_max_zoom: { col: __ne_max_zoom }
+
+  # populations from NaturalEarth
+  - &ne_pops
+    __ne_pop_min: {col: __ne_pop_min}
+    __ne_pop_max: {col: __ne_pop_max}
+
 filters:
   - filter:
       meta.source: wof
@@ -106,10 +147,8 @@ filters:
     # which doesn't match an NE curated one.
     min_zoom: 1
     output:
-      <<: *output_properties
+      <<: [*output_properties, *ne_zooms]
       kind: country
-      __ne_min_zoom: {col: __ne_min_zoom}
-      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, place: state}
     # note: min_zoom needs to be smaller than any min_label in
@@ -120,11 +159,9 @@ filters:
     # which doesn't match an NE curated one.
     min_zoom: 3
     output:
-      <<: *output_properties
+      <<: [*output_properties, *ne_zooms]
       kind: region
       kind_detail: state
-      __ne_min_zoom: {col: __ne_min_zoom}
-      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, place: province}
     # note: min_zoom needs to be smaller than any min_label in
@@ -135,73 +172,98 @@ filters:
     # which doesn't match an NE curated one.
     min_zoom: 3
     output:
-      <<: *output_properties
+      <<: [*output_properties, *ne_zooms]
       kind: region
       kind_detail: province
-      __ne_min_zoom: {col: __ne_min_zoom}
-      __ne_max_zoom: {col: __ne_max_zoom}
     table: osm
   - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: {col: place}
     table: osm
-  - filter: {name: true, place: [city, town]}
+  - filter: {name: true, place: city}
     min_zoom: 9
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
-      kind_detail: {col: place}
+      kind_detail: city
+    table: osm
+  - filter: {name: true, place: town}
+    min_zoom: 10
+    output:
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
+      kind: locality
+      kind_detail: town
     table: osm
   - filter: {name: true, population: true, place: village}
-    min_zoom: 11
+    min_zoom: 12
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: village
     table: osm
   - filter: {name: true, place: village}
-    min_zoom: 12
+    min_zoom: 13
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: village
     table: osm
-  - filter: {name: true, population: true, place: hamlet}
-    min_zoom: 12
+  - filter: {name: true, population: true, place: locality}
+    min_zoom: 13
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
+      kind: locality
+      kind_detail: locality
+    table: osm
+  - filter: {name: true, place: locality}
+    min_zoom: 14
+    output:
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
+      kind: locality
+      kind_detail: locality
+    table: osm
+  - filter: {name: true, population: true, place: hamlet}
+    min_zoom: 13
+    output:
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: hamlet
     table: osm
-  - filter: {name: true, place: [locality, hamlet]}
-    min_zoom: 13
+  - filter: {name: true, place: hamlet}
+    min_zoom: 14
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
-      kind_detail: {col: place}
+      kind_detail: hamlet
     table: osm
-  - filter: {name: true, place: isolated_dwelling}
-    min_zoom: 13
+  - filter: {name: true, population: true, place: isolated_dwelling}
+    min_zoom: 14
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: isolated_dwelling
     table: osm
-  - filter: {name: true, place: farm}
-    min_zoom: 13
+  - filter: { name: true, place: isolated_dwelling }
+    min_zoom: 15
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
+      kind: locality
+      kind_detail: isolated_dwelling
+    table: osm
+  - filter: { name: true, population: true, place: farm }
+    min_zoom: 14
+    output:
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
+      kind: locality
+      kind_detail: farm
+    table: osm
+  - filter: {name: true, place: farm}
+    min_zoom: 15
+    output:
+      <<: [*output_properties, *alternate_fclass, *ne_zooms, *ne_pops]
       kind: locality
       kind_detail: farm
     table: osm
@@ -211,8 +273,7 @@ filters:
       featurecla: *ne_country_capital
     min_zoom: *ne_places_min_zoom
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass]
       kind: locality
       country_capital: true
     table: ne
@@ -221,16 +282,14 @@ filters:
       featurecla: *ne_region_capital
     min_zoom: *ne_places_min_zoom
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass]
       kind: locality
       region_capital: true
     table: ne
   - filter: {featurecla: Populated place, scalerank: true}
     min_zoom: *ne_places_min_zoom
     output:
-      <<: *output_properties
-      <<: *alternate_fclass
+      <<: [*output_properties, *alternate_fclass]
       kind: locality
     table: ne
 

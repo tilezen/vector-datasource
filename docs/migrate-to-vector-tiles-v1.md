@@ -95,7 +95,7 @@ Below is a summary of the major, breaking changes listed for the vector tiles 1.
   		  * minor_road:
   		  *   * filter: { kind: minor_road }
   	  ```
-     
+
     * for OSM roads in mid- and high zooms, optionally:
 
         ```

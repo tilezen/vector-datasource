@@ -18,8 +18,39 @@ class BusinessAndSpurRoutes(FixtureTest):
             {'id': way_id, 'shield_text': shield_text, 'network': network})
 
     def test_first_capitol_dr_i70_business(self):
-        self._check_route_relation(
-            1933234, 12276055, '16/16294/25097', '70', 'US:I:Business')
+        import dsl
+        z, x, y = 16, 16294, 25097
+
+        self.generate_fixtures(
+            dsl.way(12276055, dsl.tile_diagonal(16, 16294, 25097), {
+                'source': 'openstreetmap.org',
+                'highway': 'primary',
+                'name': 'First Capitol Drive',
+                'ref': 'I 70 Business;MO 94',
+                'tiger:cfcc': 'A25',
+                'tiger:county': 'St. Charles, MO',
+                'tiger:name_base': 'First Capitol',
+                'tiger:name_base_2': 'I-70 (Loop)',
+                'tiger:name_type': 'Dr',
+                'tiger:reviewed': 'no',
+                'tiger:zip_left': '63301',
+                'tiger:zip_right': '63301'
+            }),
+            dsl.relation(1933234, {
+                'source': 'openstreetmap.org',
+                'is_in:state': 'MO',
+                'modifier': 'Business',
+                'name': 'I 70 Business (St. Charles, MO)',
+                'network': 'US:I',
+                'ref': '70',
+                'route': 'road',
+                'type': 'route'
+            }, ways=[12276055]),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'roads',
+            {'id': 12276055, 'shield_text': '70', 'network': 'US:I:Business'})
 
     def test_business_loop(self):
         self._check_route_relation(

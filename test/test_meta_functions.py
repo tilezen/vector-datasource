@@ -8,15 +8,15 @@ class UnitParsingTest(unittest.TestCase):
         parsed = mz_to_float_meters(tag_value)
 
         if parsed is None and expected is not None:
-            self.fail("Failed to parse %r, but expected %r."
+            self.fail('Failed to parse %r, but expected %r.'
                       % (tag_value, expected))
 
         elif parsed is not None and expected is None:
-            self.fail("Parsed %r as %r, but expected parsing to fail."
+            self.fail('Parsed %r as %r, but expected parsing to fail.'
                       % (tag_value, parsed))
 
         elif parsed != expected and abs(parsed - expected) > 0.001:
-            self.fail("Expected %r from %r, but got %r instead."
+            self.fail('Expected %r from %r, but got %r instead.'
                       % (expected, tag_value, parsed))
 
     def test_parse_miles(self):

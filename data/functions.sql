@@ -307,6 +307,10 @@ DECLARE
   -- station node, way or relation passed as input.
   seed_relations bigint[];
 
+  -- the geometry of the passed in OSM object, used to limit the
+  -- station_and_stops query
+  origin_point geometry;
+
   -- IDs of nodes which are tagged as stations or stops and are
   -- members of the stop area relations. these will contain the
   -- original `station_node_id`, but probably many others as well.
@@ -422,6 +426,13 @@ BEGIN
           NOT cycle
     ) SELECT id FROM downward_search WHERE NOT cycle);
 
+  -- get the geometry for the passed-in OSM object. we'll use this to
+  -- limit the stations and stops collected in the next step
+  origin_point := COALESCE(
+    (SELECT way FROM planet_osm_point WHERE osm_id = station_point_osm_id),
+    (SELECT ST_PointOnSurface(way) FROM planet_osm_polygon WHERE osm_id = station_polygon_osm_id)
+  );
+
   -- collect all the interesting nodes - this includes the station node (if
   -- any) and any nodes which are members of found relations which have
   -- public transport tags indicating that they're stations or stops.
@@ -435,7 +446,8 @@ BEGIN
     ON n.id = p.osm_id
     WHERE
       (p.tags->'railway' IN ('station', 'stop', 'tram_stop') OR
-       p.tags->'public_transport' IN ('stop', 'stop_position', 'tram_stop'))
+       p.tags->'public_transport' IN ('stop', 'stop_position', 'tram_stop')) AND
+      ST_DWithin(p.way, origin_point, 1000)
     -- re-include the station node, if there was one.
     UNION
     SELECT station_point_osm_id AS id
@@ -671,9 +683,9 @@ BEGIN
         MIN(
             CASE WHEN hstore(tags)->'network' IN ('icn', 'ncn') THEN 8
                  WHEN hstore(tags)->'network' IN ('iwn', 'nwn') THEN 9
-                 WHEN hstore(tags)->'network' IN ('rcn') THEN 10
+                 WHEN hstore(tags)->'network' IN ('rcn') THEN 11
                  WHEN hstore(tags)->'network' IN ('rwn') THEN 11
-                 WHEN hstore(tags)->'network' IN ('lcn') THEN 11
+                 WHEN hstore(tags)->'network' IN ('lcn') THEN 12
                  WHEN hstore(tags)->'network' IN ('lwn') THEN 12
             ELSE NULL
             END
@@ -1009,12 +1021,21 @@ BEGIN
       WHERE mu.wikidataid = wikidata_id;
   END IF;
 
-  -- finally, try states and provinces
+  -- try states and provinces
   IF NOT FOUND THEN
     SELECT
       min_label, max_label INTO min_zoom, max_zoom
       FROM ne_10m_admin_1_states_provinces sp
       WHERE sp.wikidataid = wikidata_id;
+  END IF;
+
+  -- finally, try localities
+  -- There is no concept of max_zoom for ne_10m_populated_places
+  IF NOT FOUND THEN
+    SELECT
+      pp.min_zoom, NULL INTO min_zoom, max_zoom
+      FROM ne_10m_populated_places pp
+      WHERE pp.wikidataid = wikidata_id;
   END IF;
 
   -- return an empty JSONB rather than null, so that it can be safely
@@ -1027,7 +1048,37 @@ BEGIN
     '__ne_min_zoom', min_zoom,
     '__ne_max_zoom', max_zoom
   );
-END
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+
+-- returns a JSONB object containing __ne_pop_min and __ne_pop_max
+CREATE OR REPLACE FUNCTION tz_get_ne_pop_min_max(wikidata_id TEXT)
+RETURNS JSONB AS $$
+DECLARE
+  pop_min REAL;
+  pop_max REAL;
+BEGIN
+  IF wikidata_id IS NULL THEN
+    RETURN '{}'::jsonb;
+  END IF;
+
+  SELECT
+    pp.pop_min, pp.pop_max INTO pop_min, pop_max
+    FROM ne_10m_populated_places pp
+    WHERE pp.wikidataid = wikidata_id;
+
+  -- return an empty JSONB rather than null, so that it can be safely
+  -- concatenated with whatever other JSONB rather than needing a check for
+  -- null.
+  IF NOT FOUND THEN
+    RETURN '{}'::jsonb;
+  END IF;
+  RETURN jsonb_build_object(
+    '__ne_pop_min', pop_min,
+    '__ne_pop_max', pop_max
+  );
+END;
 $$ LANGUAGE plpgsql STABLE;
 
 -- return the min zoom for a node that looks like a service area.
@@ -1059,14 +1110,20 @@ DECLARE
   levels_int INTEGER;
   spaces_per_level INTEGER;
 BEGIN
-  -- if the capacity is set, then use that.
-  IF capacity ~ '^[0-9]+$' THEN
+  -- if the capacity is set to something between 0 and 99999, then use that.
+  IF capacity ~ '^[0-9]{1,5}$' THEN
     RETURN capacity::integer;
+  END IF;
+  -- don't try to do this if way_area is abnormally large.
+  -- (Epcot's parking lot is 647k m^2)
+  IF way_area > 2000000 THEN
+    RETURN NULL;
   END IF;
   -- otherwise, try to use the information we have to guess the capacity
   spaces_per_level := (way_area / 46.0)::integer;
   levels_int := CASE
-    WHEN levels ~ '^[0-9]+$' THEN levels::integer
+    -- limit levels to an integer between 0 and 99
+    WHEN levels ~ '^[0-9]{1,2}$' THEN levels::integer
     WHEN parking = 'multi-storey' THEN 2
     ELSE 1
   END;

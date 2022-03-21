@@ -1,13 +1,14 @@
+import csv
+import sys
+from optparse import OptionParser
+
+import yaml
 from vectordatasource.colour import parse_colour
 from vectordatasource.transform import Palette
-from optparse import OptionParser
-import sys
-import csv
-import yaml
 
 
 def to_hex(colour):
-    return "#%02x%02x%02x" % tuple(colour)
+    return '#%02x%02x%02x' % tuple(colour)
 
 
 yaml_config_file = None
@@ -16,16 +17,16 @@ output_colour_key = 'Colour name'
 input_colour_key = 'colour'
 
 parser = OptionParser()
-parser.add_option("-c", "--config", dest="config",
-                  help="YAML configuration file to read")
-parser.add_option("-o", "--output", dest="output",
-                  help="Output file. Default is stdout.")
-parser.add_option("-k", "--key", dest="colour_key",
-                  help="Key / CSV header to use for output colour.")
-parser.add_option("-i", "--input-key", dest="input_colour_key",
-                  help="Key / CSV header to use for input colour.")
-parser.add_option("-x", "--output-hex-key", dest="output_hex_key",
-                  help="Optional key to output hex colour in addition to name")
+parser.add_option('-c', '--config', dest='config',
+                  help='YAML configuration file to read')
+parser.add_option('-o', '--output', dest='output',
+                  help='Output file. Default is stdout.')
+parser.add_option('-k', '--key', dest='colour_key',
+                  help='Key / CSV header to use for output colour.')
+parser.add_option('-i', '--input-key', dest='input_colour_key',
+                  help='Key / CSV header to use for input colour.')
+parser.add_option('-x', '--output-hex-key', dest='output_hex_key',
+                  help='Optional key to output hex colour in addition to name')
 (options, args) = parser.parse_args()
 
 if options.output:

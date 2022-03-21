@@ -31,7 +31,7 @@ class WaterLayerTooBigTest(FixtureTest):
             shape = dsl.tile_centre_shape(
                 zoom, coord, coord).buffer(radius * 1.1)
             shape_lnglat = transform(
-                    reproject_mercator_to_lnglat, shape)
+                reproject_mercator_to_lnglat, shape)
 
             self.generate_fixtures(
                 dsl.way(1, shape_lnglat, {
@@ -43,14 +43,13 @@ class WaterLayerTooBigTest(FixtureTest):
             self.assert_has_feature(
                 zoom, coord, coord, 'water', {
                     'kind': 'water',
-                    'name': 'Foo',
                 })
 
             # smaller shape should drop it
             shape = dsl.tile_centre_shape(
                 zoom, coord, coord).buffer(radius / 1.1)
             shape_lnglat = transform(
-                    reproject_mercator_to_lnglat, shape)
+                reproject_mercator_to_lnglat, shape)
 
             self.generate_fixtures(
                 dsl.way(1, shape_lnglat, {

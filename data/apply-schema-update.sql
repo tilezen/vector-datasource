@@ -92,10 +92,12 @@ PERFORM add_column_if_not_exists('planet_osm_line', 'mz_boundary_min_zoom', 'REA
 PERFORM add_column_if_not_exists('ne_110m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_50m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_50m_admin_0_boundary_lines_disputed_areas', 'mz_boundary_min_zoom', 'REAL');
+PERFORM add_column_if_not_exists('ne_50m_admin_0_boundary_lines_maritime_indicator_chn', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_50m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_10m_admin_0_boundary_lines_land', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_10m_admin_0_boundary_lines_map_units', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_10m_admin_0_boundary_lines_disputed_areas', 'mz_boundary_min_zoom', 'REAL');
+PERFORM add_column_if_not_exists('ne_10m_admin_0_boundary_lines_maritime_indicator_chn', 'mz_boundary_min_zoom', 'REAL');
 PERFORM add_column_if_not_exists('ne_10m_admin_1_states_provinces_lines', 'mz_boundary_min_zoom', 'REAL');
 
 PERFORM add_column_if_not_exists('planet_osm_point', 'mz_building_min_zoom', 'REAL');

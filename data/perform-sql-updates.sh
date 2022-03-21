@@ -24,7 +24,7 @@ echo "Generating functions from YAML..."
 
 # store SQL in a temporary file, so make a temporary directory for it.
 tmpdir=$(mktemp -d "${TMPDIR:-/tmp/}$(basename 0).XXXXXXXXXXXX")
-sqlfile="${tmpdir}/generated-fuctions.sql"
+sqlfile="${tmpdir}/generated-functions.sql"
 trap "{ rm -rf $tmpdir; }" EXIT
 
 # the reason for doing it this way is that the failure of `python sql.py`
@@ -51,16 +51,20 @@ psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
 # now.
 for tbl in polygon line point; do
     sql_script="apply-planet_osm_${tbl}.sql"
-    for pct in 25 50 75; do
+    for pct in 12 25 37 50 62 75 87; do
         breaks[$pct]=`psql -t -c "select (histogram_bounds::text::bigint[])[$pct] from pg_stats where tablename='planet_osm_${tbl}' and attname='osm_id'" $PSQLOPTS $@`
     done
 
-    # try to paralellise across 4 processors.
-    if [ -n "${breaks[25]}" ] && [ -n "${breaks[50]}" ] && [ -n "${breaks[75]}" ]; then
-        sed "s/{{SHARDING}}/osm_id < ${breaks[25]}/" "${sql_script}" | psql $PSQLOPTS $@ &
-        sed "s/{{SHARDING}}/osm_id >= ${breaks[25]} AND osm_id < ${breaks[50]}/" "${sql_script}" | psql $PSQLOPTS $@ &
-        sed "s/{{SHARDING}}/osm_id >= ${breaks[50]} AND osm_id < ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
-        sed "s/{{SHARDING}}/osm_id >= ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+    # try to parallelise across 8 processors.
+    if [ -n "${breaks[12]}" ] && [ -n "${breaks[25]}" ] && [ -n "${breaks[37]}" ] && [ -n "${breaks[50]}" ] && [ -n "${breaks[62]}" ] && [ -n "${breaks[75]}" ] && [ -n "${breaks[87]}" ]; then
+        sed "s/{{SHARDING}}/osm_id < ${breaks[12]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[12]} AND osm_id < ${breaks[25]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[25]} AND osm_id < ${breaks[37]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[37]} AND osm_id < ${breaks[50]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[50]} AND osm_id < ${breaks[62]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[62]} AND osm_id < ${breaks[75]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[75]} AND osm_id < ${breaks[87]}/" "${sql_script}" | psql $PSQLOPTS $@ &
+        sed "s/{{SHARDING}}/osm_id >= ${breaks[87]}/" "${sql_script}" | psql $PSQLOPTS $@ &
 
     else
         # if no breaks, just use the serial version

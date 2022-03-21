@@ -109,9 +109,9 @@ global:
         - [ 9,    5000000 ]
         - [ 10,   1000000 ]
         - [ 11,    500000 ]
-        - [ 12,    250000 ]
-        - [ 13,    100000 ]
-        - [ 14,     50000 ]
+        - [ 12,    150000 ]
+        - [ 13,     50000 ]
+        - [ 14,     20000 ]
         - [ 15,      2000 ]
       default: 16
   - &tier3_min_zoom
@@ -491,25 +491,22 @@ filters:
       protect_class: '6'
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: forest
-      <<: *leaftype_kind_detail
       tier: 2
   - filter:
       landuse: forest
       operator: *us_forest_service
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: forest
-      <<: *leaftype_kind_detail
       tier: 2
   - filter: { landuse: forest }
     min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: forest
-      <<: *leaftype_kind_detail
       tier: 2
 
   # nature reserves
@@ -553,39 +550,34 @@ filters:
       operator: *us_forest_service
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: wood
-      <<: *leaftype_kind_detail
       tier: 2
   - filter: { landuse: wood }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: wood
-      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: { natural: forest, operator: *us_forest_service }
     min_zoom: { max: [ 6, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: natural_forest
-      <<: *leaftype_kind_detail
       tier: 2
   - filter: { natural: forest }
     min_zoom: { max: [ 10, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: natural_forest
-      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: { natural: wood }
     min_zoom: { max: [ 9, *tier2_min_zoom ] }
     output:
-      <<: *output_properties
+      <<: [*output_properties, *leaftype_kind_detail]
       kind: natural_wood
-      <<: *leaftype_kind_detail
       tier: 2
 
   - filter: {landuse: urban}
@@ -723,14 +715,13 @@ filters:
         amenity: grave_yard
     min_zoom: *tier4_min_zoom
     output:
-      <<: *output_properties
+      <<: [*output_properties, *religion_kind_detail]
       kind:
         case:
           - when: { landuse: cemetery }
             then: cemetery
           - else: grave_yard
       tier: 4
-      <<: *religion_kind_detail
       denomination: { col: denomination }
   # commercial
   - filter: {landuse: commercial}
@@ -966,7 +957,7 @@ filters:
       kind: theme_park
       tier: 5
   # resort
-  - filter: {tourism: resort}
+  - filter: {leisure: resort}
     min_zoom: *tier5_min_zoom
     output:
       <<: *output_properties

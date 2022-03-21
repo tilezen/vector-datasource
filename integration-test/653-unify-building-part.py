@@ -271,11 +271,58 @@ class UnifyBuildingPart(FixtureTest):
             {'id': 404449724, 'kind': 'building_part', 'root_id': 558731934})
 
     def test_waterloo_station(self):
-        self.load_fixtures([
-            'http://www.openstreetmap.org/relation/1242762',  # tube and rail
-            'http://www.openstreetmap.org/relation/238793',   # tube station
-            'http://www.openstreetmap.org/relation/238792',   # building
-        ])
+        import dsl
+        from shapely.wkt import loads as wkt_loads
+        self.generate_fixtures(
+            dsl.point(3638795617, dsl.tile_centre(16, 32747, 21793), {
+                'wikipedia': 'en:London Waterloo station',
+                'wheelchair': 'yes',
+                'wheelchair_toilet': 'yes',
+                'toilets:wheelchair': 'yes',
+                'ref': 'WAT',
+                'railway:ref:DB': 'XKLW',
+                'railway': 'station',
+                'name': 'London Waterloo',
+                'name:et': 'Waterloo metroojaam',
+                'naptan:AtcoCode': '9100WATRLMN',
+                'network': 'National Rail',
+                'old_name': 'Waterloo Bridge',
+                'operator': 'Network Rail'
+            }),
+            dsl.point(3638795618, dsl.tile_centre(16, 32747, 21793), {
+                'wheelchair': 'yes',
+                'station': 'subway',
+                'railway': 'station',
+                'operator': 'Transport for London',
+                'network': 'London Underground',
+                'name': 'Waterloo'
+            }),
+            dsl.relation(1242762, {
+                'name': 'Waterloo (tube and rail)',
+                'note': 'This relation can be used for Underground/National Rail interchange detection.',
+                'site': 'stop_area',
+                'type': 'site'
+            }, relations=[238792, 238793]),
+            dsl.relation(238792, {
+                'wikipedia': 'en:London Waterloo station',
+                'type': 'site',
+                'name': 'London Waterloo',
+                'operator': 'Network Rail',
+                'railway': 'station',
+                'site': 'railway_station',
+                'wikidata': 'Q795691'
+            }, nodes=[3638795617, 3638795618]),
+            dsl.relation(238793, {
+                'railway': 'station',
+                'name': 'Waterloo (tube station)',
+                'network': 'Transport for London',
+                'wikipedia': 'en:Waterloo tube station',
+                'brand': 'Transport for London',
+                'public_transport': 'stop_area',
+                'type': 'public_transport',
+                'wikidata': 'Q13141057'
+            }, nodes=[3638795617, 3638795618]),
+        )
 
         self.assert_has_feature(
             16, 32747, 21793, 'pois',

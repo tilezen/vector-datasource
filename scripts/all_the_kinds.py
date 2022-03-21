@@ -26,13 +26,13 @@ if __name__ == '__main__':
 
     all_kinds = parse_all_kinds(yaml_path, sort_rank_path, args.kind_detail)
 
-    row_fmt = "%(layer)12s %(kind)30s %(min_zoom)8s %(sort_rank)s"
+    row_fmt = '%(layer)12s %(kind)30s %(min_zoom)8s %(sort_rank)s'
     if args.kind_detail:
-        row_fmt = "%(layer)12s %(kind)30s %(kind_detail)30s " \
-                  "%(min_zoom)8s %(sort_rank)s"
+        row_fmt = '%(layer)12s %(kind)30s %(kind_detail)30s ' \
+                  '%(min_zoom)8s %(sort_rank)s'
 
-    print row_fmt % dict(layer="LAYER", kind="KIND", kind_detail="KIND_DETAIL",
-                         min_zoom="MIN_ZOOM", sort_rank="SORT_RANK")
+    print row_fmt % dict(layer='LAYER', kind='KIND', kind_detail='KIND_DETAIL',
+                         min_zoom='MIN_ZOOM', sort_rank='SORT_RANK')
     for k in sorted(all_kinds):
         v = all_kinds[k]
         print row_fmt % \

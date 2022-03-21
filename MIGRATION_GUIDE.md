@@ -195,6 +195,6 @@ This is a cheat sheet summarizing the v1.0 Mapzen Vector Tiles [CHANGLELOG](http
 
 * **earth** layer: `continent` labels
   * If you haven't updated for several versions, continent labels moved to the earth layer (from places layer)
-  
+
 * **water** layer: `ocean` and `sea` labels
   * If you haven't updated for several versions, ocean and sea labels moved to the water layer (from places layer)

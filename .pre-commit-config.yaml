@@ -1,0 +1,32 @@
+default_language_version:
+    python: python2.7
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+      - id: check-docstring-first
+      - id: check-yaml
+      - id: debug-statements
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: requirements-txt-fixer
+      - id: double-quote-string-fixer
+  - repo: https://github.com/asottile/reorder_python_imports
+    rev: v1.9.0
+    hooks:
+      - id: reorder-python-imports
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.5.7
+    hooks:
+      - id: autopep8
+  - repo: https://github.com/asottile/yesqa
+    rev: v0.0.11
+    hooks:
+      - id: yesqa
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8

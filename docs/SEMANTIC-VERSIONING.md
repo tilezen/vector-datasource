@@ -151,7 +151,10 @@ In addition to the `common` **name** locals call a place, the following `common`
 1. `name:sv` **Svenska (Swedish)** – _common-optional_
 1. `name:tr` **Türkçe (Turkish)** – _common-optional_
 1. `name:vi` **Tiếng Việt (Vietnamese)** – _common-optional_
-1. `name:zh` **中文 (Chinese)**: primarily simplified but sometimes traditional – _common_
+1. `name:zh` **中文 (Chinese)**: primarily simplified but sometimes traditional – _common_ – _deprecated_
+1. `name:zh-Hans` **中文 (Chinese)**: primarily simplified but sometimes traditional – _common_
+1. `name:zh-Hant` **中文 (Chinese)**: primarily traditional but sometimes simplified – _common_
+
 
 Arabic, Chinese, English, French, Russian and Spanish are used by the United Nations for meetings and official documents. The other languages listed are either proposed as official language of the United Nations (Bengali, Hindi, Portugese, and Turkish) or frequently used in OpenStreetMap, Who's On First, or Wikipedia.
 

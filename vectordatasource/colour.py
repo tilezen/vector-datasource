@@ -1,6 +1,7 @@
-from collections import namedtuple
-import webcolors
 import re
+from collections import namedtuple
+
+import webcolors
 
 
 # a type to hold an RGB colour, expect RGB integers between 0-255
@@ -27,7 +28,7 @@ def parse_colour(colour):
 
     # normalise the string
     colour = colour.lower()
-    colour = colour.replace(" ", "")
+    colour = colour.replace(' ', '')
 
     if HEX6.match(colour) or HEX3.match(colour):
         rgb = webcolors.hex_to_rgb(colour)

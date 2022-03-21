@@ -1,5 +1,14 @@
 # Tilezen Vector Tile Tests
 
+## Setup
+
+In your virtual environment of this repo run the following commands to install dependencies
+
+```
+pip install -U -r requirements.txt
+python setup.py develop
+```
+
 ## Code / Unit Tests
 
 The `vector-datasource` project comes with some unit tests for the code in the `vectordatasource/` directory. These can be run with the command:
@@ -52,7 +61,7 @@ Unit tests go in the `tests/` subdirectory. Each should be a Python file, and us
 
 ### Integration tests
 
-Integration tests go in the `integration-tests/` subdirectory. Each should be a Python file, but uses a custom test harness which can be found in the `integration-test/__init__.py` file. Tests are generally named starting with the issue number of any issue which led to the test being written and a short description of the issue. It can he helpful if the description is the same as the git branch on which the issue is being addressed.
+Integration tests go in the `integration-tests/` subdirectory. Each should be a Python file, but uses a custom test harness which can be found in the `integration-test/__init__.py` file. Tests are generally named starting with the issue number of any issue which led to the test being written and a short description of the issue. It can be helpful if the description is the same as the git branch on which the issue is being addressed.
 
 The integration test defines a `unittest` compatible class called `FixtureTest` which provides useful tile-related test functions such as:
 

@@ -43,7 +43,7 @@ class CountryBoundaryTest(FixtureTest):
                     'source': 'openstreetmap.org',
                     'type': 'boundary',
                     'name': 'XX Claim',
-                }),
+            }),
             # "b" ways give us linestring(s)
             dsl.way(2, dsl.fit_in_tile(
                 z, x, y, 'LINESTRING(0.1 0.5, 0.5 0.5, 0.5 0.9)'), {
@@ -52,7 +52,7 @@ class CountryBoundaryTest(FixtureTest):
                     'disputed': 'yes',
                     'disputed_by': 'XX',
                     'source': 'openstreetmap.org',
-                }),
+            }),
             # "b & c" ways + country relation give us a polygon => oriented
             # boundary curve. we get an oriented boundary curve for each
             # country boundary. (note: b & c together should be a closed ring).
@@ -65,7 +65,7 @@ class CountryBoundaryTest(FixtureTest):
                     'name': 'XX',
                     'source': 'openstreetmap.org',
                     'mz_boundary_from_polygon': True,  # need this for hack
-                }),
+            }),
             dsl.way(4, dsl.fit_in_tile(
                 z, x, y,
                 'LINESTRING(0.5 0.9, 0.9 0.9, 0.9 0.1, 0.1 0.1, 0.1 0.5, '
@@ -75,7 +75,7 @@ class CountryBoundaryTest(FixtureTest):
                     'name': 'YY',
                     'source': 'openstreetmap.org',
                     'mz_boundary_from_polygon': True,  # need this for hack
-                }),
+            }),
             # this is just here to turn off maritime boundaries for everything
             # in this tile.
             dsl.way(5, dsl.tile_box(z, x, y), {
@@ -248,14 +248,14 @@ class CountryBoundaryTest(FixtureTest):
                 props = feature['properties']
                 kind = props.get('kind')
 
-                if kind == 'country':
+                if kind == 'disputed_reference_line':
                     # generally accepted viewpoint, XA should dispute
                     self.assertEqual(
-                        props.get('kind:xa'), 'unrecognized_country')
+                        props.get('kind:xa'), 'unrecognized')
                     self.assertEqual(props.get('name'), 'XB')
                     saw_xb = True
 
-                elif kind == 'unrecognized_country':
+                elif kind == 'disputed_claim':
                     # XA's viewpoint, which should claim it as part of XA
                     self.assertEqual(props.get('kind:xa'), 'country')
                     self.assertEqual(props.get('name'), "Extent of XA's claim")
@@ -439,8 +439,8 @@ class RegionBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'region',
-                'kind:xb': 'unrecognized_region',
+                'kind': 'disputed_reference_line',
+                'kind:xb': 'unrecognized',
                 'name': 'XA region 2',
             })
 
@@ -469,8 +469,9 @@ class RegionBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'unrecognized_region',
+                'kind': 'disputed_claim',
                 'kind:xa': 'region',
+                'kind:xb': 'unrecognized',
             })
 
 
@@ -504,8 +505,8 @@ class CountyBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'county',
-                'kind:xb': 'unrecognized_county',
+                'kind': 'disputed_reference_line',
+                'kind:xb': 'unrecognized',
                 'name': 'XA county 2',
             })
 
@@ -534,12 +535,33 @@ class CountyBoundary(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'unrecognized_county',
+                'kind': 'disputed_claim',
                 'kind:xa': 'county',
             })
 
 
 class NaturalEarth(FixtureTest):
+    def test_claim_boundary(self):
+        import dsl
+
+        z, x, y = 1, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal_dexter(z, x, y), {
+                'featurecla': 'Claim boundary',
+                'fclass_cn': 'International boundary (verify)',
+                'min_zoom': 5,  # min_zoom is set to 5 in the source data
+                'scalerank': 5,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+        for zoom in range(1, 17):
+            self.assert_has_feature(
+                zoom, x, y, 'boundaries', {
+                    'kind': 'disputed_claim',
+                    'kind:cn': 'country',
+                    'min_zoom': 1,  # we change the min_zoom override in boundaries.yaml to 1 so we assert here
+                })
 
     def test_country_claim(self):
         # test that a boundary tagged as generally unrecognized, but a country
