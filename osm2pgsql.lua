@@ -835,10 +835,10 @@ function osm2pgsql.process_relation(object)
 
 -- Turn off West Bank and Judea and Samaria relations
     if type == 'boundary' and object.tags.wikidata == 'Q36678' then
-        output_hstore['admin_level'] = '8'
+        output_hstore = {}
     end
     if type == 'boundary' and object.tags.wikidata == 'Q513200' then
-        output_hstore['admin_level'] = '8'
+        output_hstore = {}
     end
 
 -- Fix Kosovo dispute viewpoints
