@@ -24,13 +24,6 @@ osm2pgsql --slim \
           -d "${POSTGRES_DB:-osm}"
 rm ${METRO_EXTRACT_NAME}.osm.pbf
 
-# Step to apply sql based changes to the database
-psql -h "${POSTGRES_HOST:-postgres}" \
-     -p "${POSTGRES_PORT:-5432}" \
-     -U "${POSTGRES_USER:-osm}" \
-     -d "${POSTGRES_DB:-osm}" \
-     -f osm_database_processing.sql
-
 cd data
 /usr/bin/python2.7 bootstrap.py
 /usr/bin/make -f Makefile-import-data
