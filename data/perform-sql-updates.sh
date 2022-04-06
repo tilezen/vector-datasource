@@ -40,6 +40,10 @@ echo "done."
 echo -e "\nApplying updates in parallel across tables..."
 psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
 
+# delete name tags from planet tables in certain disputed areas
+echo -e "\nDeleting disputed names"
+psql $PSQLOPTS  $@ -f apply-planet_disputed_area_features_name_suppression.sql
+
 # use postgres' own estimate of the percentile breakdown of the osm_id column to
 # guide the distribution of jobs, so hopefully they end up mostly evenly sized.
 #

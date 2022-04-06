@@ -1,4 +1,4 @@
--- Suppress certain disputed location names
+-- Script to delete names from certain disputed locations after osm2pgsql import.
 
 with bbox as
     (select *
@@ -79,5 +79,3 @@ update planet_osm_roads p
 set tags = delete(p.tags, (select array_agg(key) from (select distinct skeys(tags) as key from suppress_roads) a where key like '%name%'))
 from suppress_roads s
 where s.osm_id = p.osm_id
-
--- end disputed location names query
