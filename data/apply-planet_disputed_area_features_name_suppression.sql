@@ -91,21 +91,9 @@ with bbox as
      (select *
       from planet_osm_polygon l,
            bbox
-      where st_within(l.way, bbox.geom)),
-
- update_polygon as
-     (update planet_osm_polygon p
-         set tags = delete(p.tags, (select array_agg(key) from (select distinct skeys(tags) as key from suppress_polygon) a where key like '%name%'))
-         from suppress_polygon s
-         where s.osm_id = p.osm_id),
-
- suppress_roads as
-     (select *
-      from planet_osm_roads l,
-           bbox
       where st_within(l.way, bbox.geom))
 
-update planet_osm_roads p
-set tags = delete(p.tags, (select array_agg(key) from (select distinct skeys(tags) as key from suppress_roads) a where key like '%name%'))
-from suppress_roads s
-where s.osm_id = p.osm_id
+ update planet_osm_polygon p
+     set tags = delete(p.tags, (select array_agg(key) from (select distinct skeys(tags) as key from suppress_polygon) a where key like '%name%'))
+     from suppress_polygon s
+     where s.osm_id = p.osm_id
