@@ -1,4 +1,7 @@
 -- Script to delete names from certain disputed locations after osm2pgsql import.
+-- The "bbox" query creates polygon geometries to define which areas to select for name removal
+-- The "suppress" query selects features from the planet table that are fully within a "bbox" polygon
+-- The "update" query then deletes any key value pair within the selection with "name" somewhere in the key's string.
 
 with bbox as
     (select *
