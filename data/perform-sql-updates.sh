@@ -36,6 +36,13 @@ popd
 psql $PSQLOPTS  -f $sqlfile $@
 echo "done."
 
+# Delete name tags from planet tables in certain disputed areas
+# this removes a vector for name vandalism in contentious parts of the map.
+# While not addressed here, geometry vandalism can be mitigated by using a
+# OSM Planet distribution like Daylight.
+echo -e "\nDeleting disputed names"
+psql $PSQLOPTS  $@ -f apply-planet_disputed_area_features_name_suppression.sql
+
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."
 psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
