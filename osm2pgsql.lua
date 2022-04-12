@@ -623,6 +623,97 @@ function osm2pgsql.process_node(object)
         output_hstore['place:VN'] = 'region'
     end
 
+-- Recast various dependencies as countries
+-- American Samoa
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'AS' then
+        output_hstore['place'] = 'county'
+    end
+-- Christmas Island
+    if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'CX' then
+        output_hstore['place'] = 'county'
+    end
+-- Cocos (Keeling) Islands
+    if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'CC' then
+        output_hstore['place'] = 'county'
+    end
+-- French Guiana
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GF' then
+        output_hstore['place'] = 'county'
+    end
+-- French Polynesia
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'PF' then
+        output_hstore['place'] = 'county'
+    end
+-- French Southern and Antarctic Lands
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'TF' then
+        output_hstore['place'] = 'county'
+    end
+-- Guadeloupe
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GP' then
+        output_hstore['place'] = 'county'
+    end
+-- Guam
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GU' then
+        output_hstore['place'] = 'county'
+    end
+-- Heard Island and McDonald Islands
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'HM' then
+        output_hstore['place'] = 'county'
+    end
+-- Martinique
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MQ' then
+        output_hstore['place'] = 'county'
+    end
+-- Mayotte
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'YT' then
+        output_hstore['place'] = 'county'
+    end
+-- Norfolk Island
+    if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'NF' then
+        output_hstore['place'] = 'county'
+    end
+-- Northern Mariana Islands
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MP' then
+        output_hstore['place'] = 'county'
+    end
+-- Puerto Rico
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'PR' then
+        output_hstore['place'] = 'county'
+    end
+-- Réunion
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'RE' then
+        output_hstore['place'] = 'county'
+    end
+-- Saint Barthelemy
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'BL' then
+        output_hstore['place'] = 'county'
+    end
+-- Saint Helena, Ascension and Tristan da Cunha
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'SH' then
+        output_hstore['place'] = 'county'
+    end
+-- Saint Martin
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MF' then
+        output_hstore['place'] = 'county'
+    end
+-- Saint Pierre and Miquelon
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'PM' then
+        output_hstore['place'] = 'county'
+    end
+-- Svalbard
+    if object.tags.place == 'region' and object.tags['ISO3166-1'] == 'SJ' then
+        output_hstore['place'] = 'county'
+    end
+-- United States Virgin Islands
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'VI' then
+        output_hstore['place'] = 'county'
+    end
+-- Wallis and Futuna
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'WF' then
+        output_hstore['place'] = 'county'
+    end
+
+
     output.tags = output_hstore
 
     if hstore_column then
