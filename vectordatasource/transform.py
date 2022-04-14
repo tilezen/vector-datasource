@@ -8912,7 +8912,7 @@ def tags_set_ne_min_max_zoom(ctx):
             # way, we probably don't want to see them at zoom, which is lower
             # than most of the curated NE min zooms. see issue #1826 for more
             # information.
-            props['min_zoom'] = max(20, props['min_zoom'])
+            props['min_zoom'] = max(16, props['min_zoom'])
 
         elif props.get('kind') == 'region':
             props['min_zoom'] = max(8, props['min_zoom'])
