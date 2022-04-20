@@ -500,6 +500,27 @@ function osm2pgsql.process_node(object)
         output_hstore['disputed_by'] = 'CN;RU;IN;GR'
     end
 
+-- Turn off Northern Cyprus label
+    if object.tags.place and object.tags.wikidata == 'Q23681' then
+        output_hstore['place'] = nil
+    end
+-- Turn off Abkhazia label
+    if object.tags.place and object.tags.wikidata == 'Q23334' then
+        output_hstore['place'] = nil
+    end
+-- Turn off South Ossetia label
+    if object.tags.place and object.tags.wikidata == 'Q23427' then
+        output_hstore['place'] = nil
+    end
+-- Turn off Nagorno-Karabakh label
+    if object.tags.place and object.tags.wikidata == 'Q2397204' then
+        output_hstore['place'] = nil
+    end
+-- Turn off Somaliland label
+    if object.tags.place and object.tags.wikidata == 'Q34754' then
+        output_hstore['place'] = nil
+    end
+
 -- Recast various dependencies as countries
 -- American Samoa
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'AS' then
