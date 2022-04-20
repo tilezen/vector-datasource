@@ -690,8 +690,8 @@ function osm2pgsql.process_way(object)
             if v.ne_id then
                 output_hstore.ne_id = v.ne_id
             end
-            if v['ne:brk'] then
-                output_hstore['ne:brk'] = v['ne:brk']
+            if v['ne:brk_a3'] then
+                output_hstore['ne:brk_a3'] = v['ne:brk_a3']
             end
         end
     end
