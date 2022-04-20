@@ -77,8 +77,12 @@ global:
           - geom_type: line
           - mz_boundary_from_polygon: true
 
-  - &dispute_id_components
+  - &osm_dispute_id_components
     tz_breakaway_code: { col: 'ne:brk_a3' }
+    tz_ne_id: { col: 'ne_id' }
+
+  - &ne_dispute_id_components
+    tz_breakaway_code: { col: 'BRK_A3' }
     tz_ne_id: { col: 'ne_id' }
 
   - &dispute_properties
@@ -86,7 +90,7 @@ global:
     recognized_by: { col: recognized_by }
     disputed_by: { col: disputed_by }
     tz_admin_level: {col: admin_level }
-    <<: *dispute_id_components
+    <<: *osm_dispute_id_components
 
 filters:
 
@@ -244,7 +248,7 @@ filters:
         - 'Map unit boundary'
     min_zoom: { col: min_zoom }
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
 
@@ -262,7 +266,7 @@ filters:
         - 'Unrecognized'
     min_zoom: 1
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
     table: ne
@@ -296,7 +300,7 @@ filters:
     min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: unrecognized_macroregion
       kind_detail: '4'
     table: ne
@@ -308,7 +312,7 @@ filters:
     min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: unrecognized_region
       kind_detail: '4'
     table: ne
