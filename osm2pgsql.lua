@@ -534,7 +534,7 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
     end
 -- Heard Island and McDonald Islands
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'HM' then
+    if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'HM' then
         output_hstore['place'] = 'country'
     end
 -- Martinique
