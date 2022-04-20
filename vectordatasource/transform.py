@@ -7,6 +7,12 @@ from collections import namedtuple
 from math import ceil
 from numbers import Number
 from sys import float_info
+from tilequeue.process import _make_valid_if_necessary
+from tilequeue.process import _visible_shape
+from tilequeue.tile import calc_meters_per_pixel_area
+from tilequeue.tile import normalize_geometry_type
+from tilequeue.tile import tolerance_for_zoom
+from tilequeue.transform import calculate_padded_bounds
 
 import hanzidentifier
 import kdtree
@@ -28,12 +34,6 @@ from shapely.ops import linemerge
 from shapely.strtree import STRtree
 from sort import pois as sort_pois
 from StreetNames import short_street_name
-from tilequeue.process import _make_valid_if_necessary
-from tilequeue.process import _visible_shape
-from tilequeue.tile import calc_meters_per_pixel_area
-from tilequeue.tile import normalize_geometry_type
-from tilequeue.tile import tolerance_for_zoom
-from tilequeue.transform import calculate_padded_bounds
 from util import safe_int
 from util import to_float
 from zope.dottedname.resolve import resolve
@@ -9367,7 +9367,7 @@ class _DisputeMasks(object):
             # represent the curve, as this slows down intersection checks.
             buffered_shape = shape.buffer(
                 self.buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
-            self.masks.append((buffered_shape, disputants, recognizants, claimants))
+            self.masks.append((buffered_shape, disputants, recognizants, claimants, props))
 
     def empty(self):
         return not self.masks
@@ -9380,7 +9380,7 @@ class _DisputeMasks(object):
 
         updated_features = []
 
-        for mask_shape, disputants, recognizants, claimants in self.masks:
+        for mask_shape, disputants, recognizants, claimants, dispute_props in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
             # a kind override has already been set.
@@ -9412,6 +9412,12 @@ class _DisputeMasks(object):
                         new_props['kind:' + claimant] = 'country'
 
                     new_props['kind'] = 'disputed_reference_line'
+
+                    # apply all the properties that aren't already there from the dispute feature
+                    for prop, value in dispute_props.items():
+                        if not new_props.get(prop):
+                            new_props[prop] = value
+
                     updated_features.append((cut_shape, new_props, None))
 
         if not shape.is_empty:
