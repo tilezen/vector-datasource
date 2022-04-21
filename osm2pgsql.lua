@@ -500,25 +500,29 @@ function osm2pgsql.process_node(object)
         output_hstore['disputed_by'] = 'CN;RU;IN;GR'
     end
 
--- Turn off Northern Cyprus label
+-- Recast Northern Cyprus as country label and turn off for several POVs including China and Russia
     if object.tags.place and object.tags.wikidata == 'Q23681' then
-        output_hstore['place'] = nil
+        output_hstore['place'] = 'country'
+        output_hstore['disputed_by'] = 'CN;RU;IN;GR;CY'
     end
--- Turn off Abkhazia label
+-- Turn off Abkhazia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23334' then
-        output_hstore['place'] = nil
+        output_hstore['place'] = 'region'
+        output_hstore['place:RU'] = 'country'
     end
--- Turn off South Ossetia label
+-- Turn off South Ossetia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23427' then
-        output_hstore['place'] = nil
+        output_hstore['place'] = 'country'
+        output_hstore['place:RU'] = 'country'
     end
--- Turn off Nagorno-Karabakh label
+-- Turn off Nagorno-Karabakh label for most countries
     if object.tags.place and object.tags.wikidata == 'Q2397204' then
-        output_hstore['place'] = nil
+        output_hstore['place'] = 'country'
+        output_hstore['place:RU'] = 'region'
     end
--- Turn off Somaliland label
+-- Turn off Somaliland label for most countries
     if object.tags.place and object.tags.wikidata == 'Q34754' then
-        output_hstore['place'] = nil
+        output_hstore['place'] = 'country'
     end
 
 -- Recast various dependencies as countries
@@ -820,6 +824,18 @@ function osm2pgsql.process_relation(object)
     if type == 'boundary' and (object.tags['ISO3166-1'] == 'MO' or object.tags['ISO3166-1'] == 'HK') then
         output_hstore['admin_level'] = '2'
         output_hstore['admin_level:CN'] = '4'
+    end
+
+-- Convert admin_level 5 boundaries in Northern Cyprus to 4
+    if type == 'boundary' and object.tags.is_in == 'Northern Cyprus' and object.tags.admin_level == '5' then
+        output_hstore['admin_level'] = '4'
+    end
+
+-- Convert admin_level 5 boundaries in Cyprus to 4
+    if type == 'boundary' and object.tags.admin_level == '5' and object.tags['ISO3166-2'] then
+        if osm2pgsql.has_prefix(object.tags['ISO3166-2'], 'CY-') then
+            output_hstore['admin_level'] = '4'
+        end
     end
 
 -- Turn off West Bank and Judea and Samaria relations
