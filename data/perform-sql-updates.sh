@@ -43,6 +43,11 @@ echo "done."
 echo -e "\nDeleting disputed names"
 psql $PSQLOPTS  $@ -f apply-planet_disputed_area_features_name_suppression.sql
 
+# Australia suburbs are treated more like cities than typical US style suburbs so we recast them to place=town
+echo -e "\nRecasting Australia suburbs"
+psql $PSQLOPTS  $@ -f apply-planet_australia_suburb_recast.sql
+
+
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."
 psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &
