@@ -13,9 +13,19 @@ with bbox as
      selection as
          (select * from suburb,
                         bbox
-          where st_within(way, bbox.geom))
+          where st_within(way, bbox.geom)),
+
+    trim_major_cities as
+        (select * from selection
+            where tags->'name' not in (
+                'Adelaide'
+                'Brisbane',
+                'Melbourne,',
+                'Perth',
+                'Sydney')
+        )
 
 update planet_osm_point p
 set tags = p.tags || hstore('place', 'town')
-from selection s
+from trim_major_cities s
 where s.osm_id = p.osm_id
