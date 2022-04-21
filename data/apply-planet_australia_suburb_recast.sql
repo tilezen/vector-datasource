@@ -1,4 +1,4 @@
-
+-- Suburbs in Australia are treated more like cities, so this recasts them to  place=town
 
 with bbox as
          (select *
@@ -16,6 +16,6 @@ with bbox as
           where st_within(way, bbox.geom))
 
 update planet_osm_point p
-set tags['place'] = 'town'
-    from selection s
+set tags = p.tags || hstore('place', 'town')
+from selection s
 where s.osm_id = p.osm_id
