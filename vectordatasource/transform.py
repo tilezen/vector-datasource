@@ -9413,10 +9413,12 @@ class _DisputeMasks(object):
 
                     new_props['kind'] = 'disputed_reference_line'
 
+                    new_props['cutness'] = 'affirmative'
                     # apply all the properties that aren't already there from the dispute feature
                     for prop, value in dispute_props.items():
                         if not new_props.get(prop):
                             new_props[prop] = value
+                            new_props[prop + '_cut'] = value
 
                     updated_features.append((cut_shape, new_props, None))
 
@@ -9724,8 +9726,7 @@ def create_dispute_ids(shape, props, fid, zoom):
     """
 
     # retrieve and remove these items from props.  This is the only func that will use them
-    items = [props.pop('tz_breakaway_code', None), props.pop('tz_ne_id', None)]
-    items = [item for item in items if item is not None]
+    items = [props.pop('tz_breakaway_code', 'brk3'), props.pop('tz_ne_id', 'id')]
 
     dispute_id = '_'.join(items)
     if dispute_id:
