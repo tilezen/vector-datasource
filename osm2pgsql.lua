@@ -538,20 +538,12 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'CC' then
         output_hstore['place'] = 'country'
     end
--- French Guiana
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GF' then
-        output_hstore['place'] = 'country'
-    end
 -- French Polynesia
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'PF' then
         output_hstore['place'] = 'country'
     end
 -- French Southern and Antarctic Lands
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'TF' then
-        output_hstore['place'] = 'country'
-    end
--- Guadeloupe
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GP' then
         output_hstore['place'] = 'country'
     end
 -- Guam
@@ -562,13 +554,9 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'HM' then
         output_hstore['place'] = 'country'
     end
--- Martinique
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MQ' then
-        output_hstore['place'] = 'country'
-    end
--- Mayotte
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'YT' then
-        output_hstore['place'] = 'country'
+-- New Caledonia
+    if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NF' then
+        output_hstore['place'] = 'region'
     end
 -- Norfolk Island
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'NF' then
@@ -580,10 +568,6 @@ function osm2pgsql.process_node(object)
     end
 -- Puerto Rico
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'PR' then
-        output_hstore['place'] = 'country'
-    end
--- Réunion
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'RE' then
         output_hstore['place'] = 'country'
     end
 -- Saint Barthelemy
@@ -614,6 +598,29 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'WF' then
         output_hstore['place'] = 'country'
     end
+
+-- Recast various French overseas departments as region
+-- Réunion
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'RE' then
+        output_hstore['place'] = 'region'
+    end
+-- Martinique
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MQ' then
+        output_hstore['place'] = 'region'
+    end
+-- Mayotte
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'YT' then
+        output_hstore['place'] = 'region'
+    end
+-- Guadeloupe
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GP' then
+        output_hstore['place'] = 'region'
+    end
+-- French Guiana
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GF' then
+        output_hstore['place'] = 'region'
+    end
+
 
     output.tags = output_hstore
 
