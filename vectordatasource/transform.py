@@ -7,12 +7,6 @@ from collections import namedtuple
 from math import ceil
 from numbers import Number
 from sys import float_info
-from tilequeue.process import _make_valid_if_necessary
-from tilequeue.process import _visible_shape
-from tilequeue.tile import calc_meters_per_pixel_area
-from tilequeue.tile import normalize_geometry_type
-from tilequeue.tile import tolerance_for_zoom
-from tilequeue.transform import calculate_padded_bounds
 
 import hanzidentifier
 import kdtree
@@ -34,6 +28,12 @@ from shapely.ops import linemerge
 from shapely.strtree import STRtree
 from sort import pois as sort_pois
 from StreetNames import short_street_name
+from tilequeue.process import _make_valid_if_necessary
+from tilequeue.process import _visible_shape
+from tilequeue.tile import calc_meters_per_pixel_area
+from tilequeue.tile import normalize_geometry_type
+from tilequeue.tile import tolerance_for_zoom
+from tilequeue.transform import calculate_padded_bounds
 from util import safe_int
 from util import to_float
 from zope.dottedname.resolve import resolve
