@@ -46,9 +46,9 @@ shapefiles:
     shapefile-name: land-polygons-split-3857/land_polygons.shp
 
   - name: buffered_land
-    url: http://s3.amazonaws.com/tilezen-assets/curated/buffered_land_05232017.zip
+    url: http://s3.amazonaws.com/tilezen-assets/curated/buffered_land_04182022.zip
     prj: 3857
-    shapefile-name: buffered_land_05232017.shp
+    shapefile-name: buffered_land_04182022.shp
     tile: true
 
   - name: admin_areas
