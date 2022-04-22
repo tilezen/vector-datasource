@@ -9726,7 +9726,7 @@ def create_dispute_ids(shape, props, fid, zoom):
     """
 
     # retrieve and remove these items from props.  This is the only func that will use them
-    items = [props.pop('tz_breakaway_code', 'brk3'), props.pop('tz_ne_id', 'id')]
+    items = [str(props.pop('tz_breakaway_code', 'brk3')), str(props.pop('tz_ne_id', 'id'))]
 
     dispute_id = '_'.join(items)
     if dispute_id:
