@@ -58,9 +58,5 @@ ne_10m_admin_0_boundary_lines_disputed_areas as
     (delete from ne_10m_admin_0_boundary_lines_disputed_areas l
     where l.ne_id in (select ne_id from remove_lines)),
 
-ne_50m_admin_0_boundary_lines_disputed_areas as
-    (delete from ne_50m_admin_0_boundary_lines_disputed_areas l
-    where l.ne_id in (select ne_id from remove_lines))
-
-delete from ne_110m_admin_0_boundary_lines_disputed_areas l
-where l.ne_id in (select ne_id from remove_lines)
+delete from ne_50m_admin_0_boundary_lines_disputed_areas l
+    where l.ne_id in (select ne_id from remove_lines)
