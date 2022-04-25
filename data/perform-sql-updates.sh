@@ -43,6 +43,10 @@ echo "done."
 echo -e "\nDeleting disputed names"
 psql $PSQLOPTS  $@ -f apply-planet_disputed_area_features_name_suppression.sql
 
+# Deletes some of the NE disputes as they are not currently supported on our map
+echo -e "\nDeleting unwanted NE disputed lines"
+psql $PSQLOPTS  $@ -f apply-ne_disputed_border_suppression.sql
+
 # Australia suburbs are treated more like cities than typical US style suburbs so we recast them to place=town
 echo -e "\nRecasting Australia suburbs"
 psql $PSQLOPTS  $@ -f apply-planet_australia_suburb_recast.sql
