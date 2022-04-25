@@ -46,7 +46,7 @@ shapefiles:
     shapefile-name: land-polygons-split-3857/land_polygons.shp
 
   - name: buffered_land
-    url: http://s3.amazonaws.com/tilezen-assets/curated/buffered_land_04182022.zip
+    url: https://nextzen-tile-assets.s3.amazonaws.com/curated/buffered_land_04182022.zip
     prj: 3857
     shapefile-name: buffered_land_04182022.shp
     tile: true
