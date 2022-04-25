@@ -1,9 +1,9 @@
 -- Deletes disputed borders from the natural earth tables that we do not want to render
 
-with ne_id as
+with remove_lines as
          (select *
           from (values
--- Northern Cyprus related
+-- Northern Cyprus
                     (1746708483),
                     (1746708491),
                     (1746708497),
@@ -37,16 +37,30 @@ with ne_id as
 -- Donbass
                     (1763286563),
                     (1763286519),
-                    (1763286559)
+                    (1763286559),
 -- Transnistria
-                    (1746705379),
-               ) as b (id)),
+                    (1746705379)
+               ) as b (ne_id)),
 
-delete from
+ ne_10m_admin_0_boundary_lines_land as
+    (delete from ne_10m_admin_0_boundary_lines_land l
+    where l.ne_id in (select ne_id from remove_lines)),
 
-ne_10m_admin_0_boundary_lines_land
-    ne_50m_admin_0_boundary_lines_land
-    ne_110m_admin_0_boundary_lines_land
-    ne_10m_admin_0_boundary_lines_disputed_areas
-    ne_50m_admin_0_boundary_lines_disputed_areas
-    ne_110m_admin_0_boundary_lines_disputed_areas
+ne_50m_admin_0_boundary_lines_land as
+    (delete from ne_50m_admin_0_boundary_lines_land l
+    where l.ne_id in (select ne_id from remove_lines)),
+
+ne_110m_admin_0_boundary_lines_land as
+    (delete from ne_110m_admin_0_boundary_lines_land l
+    where l.ne_id in (select ne_id from remove_lines)),
+
+ne_10m_admin_0_boundary_lines_disputed_areas as
+    (delete from ne_10m_admin_0_boundary_lines_disputed_areas l
+    where l.ne_id in (select ne_id from remove_lines)),
+
+ne_50m_admin_0_boundary_lines_disputed_areas as
+    (delete from ne_50m_admin_0_boundary_lines_disputed_areas l
+    where l.ne_id in (select ne_id from remove_lines)),
+
+delete from ne_110m_admin_0_boundary_lines_disputed_areas l
+where l.ne_id in (select ne_id from remove_lines)
