@@ -156,6 +156,18 @@ filters:
       <<: [*output_properties, *dispute_properties]
       kind: county
     table: osm
+  - filter:
+    all:
+      - geom_type: line
+      - disputed_by: true
+      - any:
+          - dispute: 'yes'
+          - disputed: 'yes'
+    min_zoom: 8
+    output:
+      <<: [ *output_properties, *dispute_properties ]
+      kind: mz_internal_dispute_mask
+    table: osm
   # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
   # project to kind:xx=unrecognized.  The lua preprocessing
   # project admin_level 3 and 5 cases to appropriate tags for us, so we don't need
@@ -166,18 +178,6 @@ filters:
       <<: [ *output_properties, *dispute_properties ]
       kind: disputed_reference_line
       kind_detail: {col: admin_level }
-    table: osm
-  - filter:
-      all:
-        - geom_type: line
-        - disputed_by: true
-        - any:
-            - dispute: 'yes'
-            - disputed: 'yes'
-    min_zoom: 8
-    output:
-      <<: [ *output_properties, *dispute_properties ]
-      kind: mz_internal_dispute_mask
     table: osm
 
   # osm
