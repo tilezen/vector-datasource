@@ -157,12 +157,12 @@ filters:
       kind: county
     table: osm
   - filter:
-    all:
-      - geom_type: line
-      - disputed_by: true
-      - any:
-          - dispute: 'yes'
-          - disputed: 'yes'
+      all:
+        - geom_type: line
+        - disputed_by: true
+        - any:
+            - dispute: 'yes'
+            - disputed: 'yes'
     min_zoom: 8
     output:
       <<: [ *output_properties, *dispute_properties ]
