@@ -1,4 +1,4 @@
--- Deletes disputed borders from the natural earth tables that we do not want to render
+-- Deletes lines from the natural earth border tables matching the ne_ids of disputes that we do not want to render
 
 with remove_lines as
          (select *

@@ -43,7 +43,7 @@ echo "done."
 echo -e "\nDeleting disputed names"
 psql $PSQLOPTS  $@ -f apply-planet_disputed_area_features_name_suppression.sql
 
-# Deletes some of the NE disputes as they are not currently supported on our map
+# Deletes some of the Natural Earth dispute borders that we do not want to render
 echo -e "\nDeleting unwanted NE disputed lines"
 psql $PSQLOPTS  $@ -f apply-ne_disputed_border_suppression.sql
 
