@@ -500,9 +500,9 @@ function osm2pgsql.process_node(object)
         output_hstore['disputed_by'] = 'CN;RU;IN;GR'
     end
 
--- Recast Northern Cyprus as country label and turn off for several POVs including China and Russia
+-- Turn off Northern Cyprus label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23681' then
-        output_hstore['place'] = 'country'
+        output_hstore['place'] = 'region'
         output_hstore['disputed_by'] = 'CN;RU;IN;GR;CY'
     end
 -- Turn off Abkhazia label for most countries
@@ -512,17 +512,17 @@ function osm2pgsql.process_node(object)
     end
 -- Turn off South Ossetia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23427' then
-        output_hstore['place'] = 'country'
+        output_hstore['place'] = 'region'
         output_hstore['place:RU'] = 'country'
     end
 -- Turn off Nagorno-Karabakh label for most countries
     if object.tags.place and object.tags.wikidata == 'Q2397204' then
-        output_hstore['place'] = 'country'
-        output_hstore['place:RU'] = 'region'
+        output_hstore['place'] = 'region'
+        output_hstore['place:RU'] = 'country'
     end
 -- Turn off Somaliland label for most countries
     if object.tags.place and object.tags.wikidata == 'Q34754' then
-        output_hstore['place'] = 'country'
+        output_hstore['place'] = 'region'
     end
 
 -- Recast various dependencies as countries
