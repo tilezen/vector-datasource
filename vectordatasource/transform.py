@@ -9727,11 +9727,13 @@ def create_dispute_ids(shape, props, fid, zoom):
     if breakaway_code is None:
         # no breakaway code, not a dispute
         return shape, props, fid
+    items = [breakaway_code]
 
-    breakaway_code_str = str(breakaway_code)
-    ne_id = str(props.pop('tz_ne_id', None))
+    ne_id = props.pop('tz_ne_id', None)
+    if ne_id is not None:
+        items.append(str(ne_id))
 
-    dispute_id = '_'.join([breakaway_code_str, ne_id])
+    dispute_id = '_'.join(items)
     if dispute_id:
         props['dispute_id'] = dispute_id
 
