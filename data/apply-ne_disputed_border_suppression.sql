@@ -1,4 +1,4 @@
--- Deletes lines from the natural earth border tables matching the ne_ids of disputes that we do not want to render
+-- Recasts the fclass for certain disputed lines from the NE border tables to mark as unrecognized or apply a viewpoint
 
 -- Abkahzia
 with abkahzia as
@@ -121,7 +121,7 @@ where l.ne_id in (
     select ne_id from south_ossetia
     union
     select ne_id from transnistria
-)),
+    )),
 
 ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
@@ -336,7 +336,7 @@ where l.ne_id in (
     select ne_id from south_ossetia
     union
     select ne_id from transnistria
-)),
+    )),
 
 ru_ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
@@ -390,20 +390,20 @@ where l.ne_id in (
     select ne_id from transnistria
     )),
 
+
 -- Add Russian disputed view to Nagorno-Karabakh
 ab_do_so_tr_ne_10m_admin_0_boundary_lines_land as (
 update ne_10m_admin_0_boundary_lines_land l set
             fclass_ru = ''
 where l.ne_id in (
     select ne_id from nagorno_karabakh
-)),
+    )),
 
 ab_do_so_tr_ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
             fclass_ru = ''
 where l.ne_id in (
     select ne_id from nagorno_karabakh
-
     )),
 
 ab_do_so_tr_ne_110m_admin_0_boundary_lines_land as (
@@ -411,7 +411,6 @@ update ne_110m_admin_0_boundary_lines_land l set
             fclass_ru = ''
 where l.ne_id in (
     select ne_id from nagorno_karabakh
-
     )),
 
 ab_do_so_tr_ne_10m_admin_0_boundary_lines_disputed_areas as (
@@ -419,7 +418,6 @@ update ne_10m_admin_0_boundary_lines_disputed_areas l set
             fclass_ru = ''
 where l.ne_id in (
     select ne_id from nagorno_karabakh
-
     )),
 
 ab_do_so_tr_ne_50m_admin_0_boundary_lines_disputed_areas as (
@@ -427,7 +425,6 @@ update ne_50m_admin_0_boundary_lines_disputed_areas l set
             fclass_ru = ''
 where l.ne_id in (
     select ne_id from nagorno_karabakh
-
     )),
 
 
@@ -436,77 +433,69 @@ tr_ne_10m_admin_0_boundary_lines_land as (
 update ne_10m_admin_0_boundary_lines_land l set
             fclass_tr = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-)),
+    select ne_id from northern_cyprus
+    )),
 
 tr_ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
             fclass_tr = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from northern_cyprus
     )),
 
 tr_ne_110m_admin_0_boundary_lines_land as (
 update ne_110m_admin_0_boundary_lines_land l set
             fclass_tr = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from northern_cyprus
     )),
 
 tr_ne_10m_admin_0_boundary_lines_disputed_areas as (
 update ne_10m_admin_0_boundary_lines_disputed_areas l set
             fclass_tr = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from northern_cyprus
     )),
 
 tr_ne_50m_admin_0_boundary_lines_disputed_areas as (
 update ne_50m_admin_0_boundary_lines_disputed_areas l set
             fclass_tr = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from northern_cyprus
     )),
+
 
 -- Add Taiwanese view to Somaliland
 tw_ne_10m_admin_0_boundary_lines_land as (
 update ne_10m_admin_0_boundary_lines_land l set
             fclass_tw = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-)),
+    select ne_id from somaliland
+    )),
 
 tw_ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
             fclass_tw = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from somaliland
     )),
 
 tw_ne_110m_admin_0_boundary_lines_land as (
 update ne_110m_admin_0_boundary_lines_land l set
             fclass_tw = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from somaliland
     )),
 
 tw_ne_10m_admin_0_boundary_lines_disputed_areas as (
 update ne_10m_admin_0_boundary_lines_disputed_areas l set
             fclass_tw = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from somaliland
     ))
-
 
 update ne_50m_admin_0_boundary_lines_disputed_areas l set
             fclass_tw = 'country'
 where l.ne_id in (
-    select ne_id from nagorno_karabakh
-
+    select ne_id from somaliland
     )
