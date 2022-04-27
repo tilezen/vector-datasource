@@ -1,4 +1,4 @@
--- Recasts the fclass for certain disputed lines from the NE border tables to mark as unrecognized or apply a viewpoint
+-- Recasts the fclass for certain disputed lines from the NE border tables to mark as Unrecognized or apply a viewpoint
 
 -- Abkahzia
 with abkahzia as
@@ -72,42 +72,42 @@ transnistria as
                     (1746705379)
                ) as b (ne_id)),
 
--- Initially mark all viewpoints as unrecognized. Subsequent steps will add some country specific views back.
+-- Initially mark all viewpoints as Unrecognized. Subsequent steps will add some country specific views back.
 ne_10m_admin_0_boundary_lines_land as (
 update ne_10m_admin_0_boundary_lines_land l set
-            featurecla = 'unrecognized',
-            fclass_ar = 'unrecognized',
-            fclass_bd = 'unrecognized',
-            fclass_br = 'unrecognized',
-            fclass_cn = 'unrecognized',
-            fclass_de = 'unrecognized',
-            fclass_eg = 'unrecognized',
-            fclass_es = 'unrecognized',
-            fclass_fr = 'unrecognized',
-            fclass_gb = 'unrecognized',
-            fclass_gr = 'unrecognized',
-            fclass_id = 'unrecognized',
-            fclass_il = 'unrecognized',
-            fclass_in = 'unrecognized',
-            fclass_iso = 'unrecognized',
-            fclass_it = 'unrecognized',
-            fclass_jp = 'unrecognized',
-            fclass_ko = 'unrecognized',
-            fclass_ma = 'unrecognized',
-            fclass_nl = 'unrecognized',
-            fclass_np = 'unrecognized',
-            fclass_pk = 'unrecognized',
-            fclass_pl = 'unrecognized',
-            fclass_ps = 'unrecognized',
-            fclass_pt = 'unrecognized',
-            fclass_ru = 'unrecognized',
-            fclass_sa = 'unrecognized',
-            fclass_se = 'unrecognized',
-            fclass_tr = 'unrecognized',
-            fclass_tw = 'unrecognized',
-            fclass_ua = 'unrecognized',
-            fclass_us = 'unrecognized',
-            fclass_vn = 'unrecognized'
+            featurecla = 'Unrecognized',
+            fclass_ar = 'Unrecognized',
+            fclass_bd = 'Unrecognized',
+            fclass_br = 'Unrecognized',
+            fclass_cn = 'Unrecognized',
+            fclass_de = 'Unrecognized',
+            fclass_eg = 'Unrecognized',
+            fclass_es = 'Unrecognized',
+            fclass_fr = 'Unrecognized',
+            fclass_gb = 'Unrecognized',
+            fclass_gr = 'Unrecognized',
+            fclass_id = 'Unrecognized',
+            fclass_il = 'Unrecognized',
+            fclass_in = 'Unrecognized',
+            fclass_iso = 'Unrecognized',
+            fclass_it = 'Unrecognized',
+            fclass_jp = 'Unrecognized',
+            fclass_ko = 'Unrecognized',
+            fclass_ma = 'Unrecognized',
+            fclass_nl = 'Unrecognized',
+            fclass_np = 'Unrecognized',
+            fclass_pk = 'Unrecognized',
+            fclass_pl = 'Unrecognized',
+            fclass_ps = 'Unrecognized',
+            fclass_pt = 'Unrecognized',
+            fclass_ru = 'Unrecognized',
+            fclass_sa = 'Unrecognized',
+            fclass_se = 'Unrecognized',
+            fclass_tr = 'Unrecognized',
+            fclass_tw = 'Unrecognized',
+            fclass_ua = 'Unrecognized',
+            fclass_us = 'Unrecognized',
+            fclass_vn = 'Unrecognized'
 where l.ne_id in (
     select ne_id from abkahzia
     union
@@ -126,39 +126,39 @@ where l.ne_id in (
 
 ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
-            featurecla = 'unrecognized',
-            fclass_ar = 'unrecognized',
-            fclass_bd = 'unrecognized',
-            fclass_br = 'unrecognized',
-            fclass_cn = 'unrecognized',
-            fclass_de = 'unrecognized',
-            fclass_eg = 'unrecognized',
-            fclass_es = 'unrecognized',
-            fclass_fr = 'unrecognized',
-            fclass_gb = 'unrecognized',
-            fclass_gr = 'unrecognized',
-            fclass_id = 'unrecognized',
-            fclass_il = 'unrecognized',
-            fclass_in = 'unrecognized',
-            fclass_iso = 'unrecognized',
-            fclass_it = 'unrecognized',
-            fclass_jp = 'unrecognized',
-            fclass_ko = 'unrecognized',
-            fclass_ma = 'unrecognized',
-            fclass_nl = 'unrecognized',
-            fclass_np = 'unrecognized',
-            fclass_pk = 'unrecognized',
-            fclass_pl = 'unrecognized',
-            fclass_ps = 'unrecognized',
-            fclass_pt = 'unrecognized',
-            fclass_ru = 'unrecognized',
-            fclass_sa = 'unrecognized',
-            fclass_se = 'unrecognized',
-            fclass_tr = 'unrecognized',
-            fclass_tw = 'unrecognized',
-            fclass_ua = 'unrecognized',
-            fclass_us = 'unrecognized',
-            fclass_vn = 'unrecognized'
+            featurecla = 'Unrecognized',
+            fclass_ar = 'Unrecognized',
+            fclass_bd = 'Unrecognized',
+            fclass_br = 'Unrecognized',
+            fclass_cn = 'Unrecognized',
+            fclass_de = 'Unrecognized',
+            fclass_eg = 'Unrecognized',
+            fclass_es = 'Unrecognized',
+            fclass_fr = 'Unrecognized',
+            fclass_gb = 'Unrecognized',
+            fclass_gr = 'Unrecognized',
+            fclass_id = 'Unrecognized',
+            fclass_il = 'Unrecognized',
+            fclass_in = 'Unrecognized',
+            fclass_iso = 'Unrecognized',
+            fclass_it = 'Unrecognized',
+            fclass_jp = 'Unrecognized',
+            fclass_ko = 'Unrecognized',
+            fclass_ma = 'Unrecognized',
+            fclass_nl = 'Unrecognized',
+            fclass_np = 'Unrecognized',
+            fclass_pk = 'Unrecognized',
+            fclass_pl = 'Unrecognized',
+            fclass_ps = 'Unrecognized',
+            fclass_pt = 'Unrecognized',
+            fclass_ru = 'Unrecognized',
+            fclass_sa = 'Unrecognized',
+            fclass_se = 'Unrecognized',
+            fclass_tr = 'Unrecognized',
+            fclass_tw = 'Unrecognized',
+            fclass_ua = 'Unrecognized',
+            fclass_us = 'Unrecognized',
+            fclass_vn = 'Unrecognized'
 where l.ne_id in (
     select ne_id from abkahzia
     union
@@ -177,39 +177,39 @@ where l.ne_id in (
 
 ne_110m_admin_0_boundary_lines_land as (
 update ne_110m_admin_0_boundary_lines_land l set
-            featurecla = 'unrecognized',
-            fclass_ar = 'unrecognized',
-            fclass_bd = 'unrecognized',
-            fclass_br = 'unrecognized',
-            fclass_cn = 'unrecognized',
-            fclass_de = 'unrecognized',
-            fclass_eg = 'unrecognized',
-            fclass_es = 'unrecognized',
-            fclass_fr = 'unrecognized',
-            fclass_gb = 'unrecognized',
-            fclass_gr = 'unrecognized',
-            fclass_id = 'unrecognized',
-            fclass_il = 'unrecognized',
-            fclass_in = 'unrecognized',
-            fclass_iso = 'unrecognized',
-            fclass_it = 'unrecognized',
-            fclass_jp = 'unrecognized',
-            fclass_ko = 'unrecognized',
-            fclass_ma = 'unrecognized',
-            fclass_nl = 'unrecognized',
-            fclass_np = 'unrecognized',
-            fclass_pk = 'unrecognized',
-            fclass_pl = 'unrecognized',
-            fclass_ps = 'unrecognized',
-            fclass_pt = 'unrecognized',
-            fclass_ru = 'unrecognized',
-            fclass_sa = 'unrecognized',
-            fclass_se = 'unrecognized',
-            fclass_tr = 'unrecognized',
-            fclass_tw = 'unrecognized',
-            fclass_ua = 'unrecognized',
-            fclass_us = 'unrecognized',
-            fclass_vn = 'unrecognized'
+            featurecla = 'Unrecognized',
+            fclass_ar = 'Unrecognized',
+            fclass_bd = 'Unrecognized',
+            fclass_br = 'Unrecognized',
+            fclass_cn = 'Unrecognized',
+            fclass_de = 'Unrecognized',
+            fclass_eg = 'Unrecognized',
+            fclass_es = 'Unrecognized',
+            fclass_fr = 'Unrecognized',
+            fclass_gb = 'Unrecognized',
+            fclass_gr = 'Unrecognized',
+            fclass_id = 'Unrecognized',
+            fclass_il = 'Unrecognized',
+            fclass_in = 'Unrecognized',
+            fclass_iso = 'Unrecognized',
+            fclass_it = 'Unrecognized',
+            fclass_jp = 'Unrecognized',
+            fclass_ko = 'Unrecognized',
+            fclass_ma = 'Unrecognized',
+            fclass_nl = 'Unrecognized',
+            fclass_np = 'Unrecognized',
+            fclass_pk = 'Unrecognized',
+            fclass_pl = 'Unrecognized',
+            fclass_ps = 'Unrecognized',
+            fclass_pt = 'Unrecognized',
+            fclass_ru = 'Unrecognized',
+            fclass_sa = 'Unrecognized',
+            fclass_se = 'Unrecognized',
+            fclass_tr = 'Unrecognized',
+            fclass_tw = 'Unrecognized',
+            fclass_ua = 'Unrecognized',
+            fclass_us = 'Unrecognized',
+            fclass_vn = 'Unrecognized'
 where l.ne_id in (
     select ne_id from abkahzia
     union
@@ -228,39 +228,39 @@ where l.ne_id in (
 
 ne_10m_admin_0_boundary_lines_disputed_areas as (
 update ne_10m_admin_0_boundary_lines_disputed_areas l set
-            featurecla = 'unrecognized',
-            fclass_ar = 'unrecognized',
-            fclass_bd = 'unrecognized',
-            fclass_br = 'unrecognized',
-            fclass_cn = 'unrecognized',
-            fclass_de = 'unrecognized',
-            fclass_eg = 'unrecognized',
-            fclass_es = 'unrecognized',
-            fclass_fr = 'unrecognized',
-            fclass_gb = 'unrecognized',
-            fclass_gr = 'unrecognized',
-            fclass_id = 'unrecognized',
-            fclass_il = 'unrecognized',
-            fclass_in = 'unrecognized',
-            fclass_iso = 'unrecognized',
-            fclass_it = 'unrecognized',
-            fclass_jp = 'unrecognized',
-            fclass_ko = 'unrecognized',
-            fclass_ma = 'unrecognized',
-            fclass_nl = 'unrecognized',
-            fclass_np = 'unrecognized',
-            fclass_pk = 'unrecognized',
-            fclass_pl = 'unrecognized',
-            fclass_ps = 'unrecognized',
-            fclass_pt = 'unrecognized',
-            fclass_ru = 'unrecognized',
-            fclass_sa = 'unrecognized',
-            fclass_se = 'unrecognized',
-            fclass_tr = 'unrecognized',
-            fclass_tw = 'unrecognized',
-            fclass_ua = 'unrecognized',
-            fclass_us = 'unrecognized',
-            fclass_vn = 'unrecognized'
+            featurecla = 'Unrecognized',
+            fclass_ar = 'Unrecognized',
+            fclass_bd = 'Unrecognized',
+            fclass_br = 'Unrecognized',
+            fclass_cn = 'Unrecognized',
+            fclass_de = 'Unrecognized',
+            fclass_eg = 'Unrecognized',
+            fclass_es = 'Unrecognized',
+            fclass_fr = 'Unrecognized',
+            fclass_gb = 'Unrecognized',
+            fclass_gr = 'Unrecognized',
+            fclass_id = 'Unrecognized',
+            fclass_il = 'Unrecognized',
+            fclass_in = 'Unrecognized',
+            fclass_iso = 'Unrecognized',
+            fclass_it = 'Unrecognized',
+            fclass_jp = 'Unrecognized',
+            fclass_ko = 'Unrecognized',
+            fclass_ma = 'Unrecognized',
+            fclass_nl = 'Unrecognized',
+            fclass_np = 'Unrecognized',
+            fclass_pk = 'Unrecognized',
+            fclass_pl = 'Unrecognized',
+            fclass_ps = 'Unrecognized',
+            fclass_pt = 'Unrecognized',
+            fclass_ru = 'Unrecognized',
+            fclass_sa = 'Unrecognized',
+            fclass_se = 'Unrecognized',
+            fclass_tr = 'Unrecognized',
+            fclass_tw = 'Unrecognized',
+            fclass_ua = 'Unrecognized',
+            fclass_us = 'Unrecognized',
+            fclass_vn = 'Unrecognized'
 where l.ne_id in (
     select ne_id from abkahzia
     union
@@ -279,39 +279,39 @@ where l.ne_id in (
 
 ne_50m_admin_0_boundary_lines_disputed_areas as (
 update ne_50m_admin_0_boundary_lines_disputed_areas l set
-            featurecla = 'unrecognized',
-            fclass_ar = 'unrecognized',
-            fclass_bd = 'unrecognized',
-            fclass_br = 'unrecognized',
-            fclass_cn = 'unrecognized',
-            fclass_de = 'unrecognized',
-            fclass_eg = 'unrecognized',
-            fclass_es = 'unrecognized',
-            fclass_fr = 'unrecognized',
-            fclass_gb = 'unrecognized',
-            fclass_gr = 'unrecognized',
-            fclass_id = 'unrecognized',
-            fclass_il = 'unrecognized',
-            fclass_in = 'unrecognized',
-            fclass_iso = 'unrecognized',
-            fclass_it = 'unrecognized',
-            fclass_jp = 'unrecognized',
-            fclass_ko = 'unrecognized',
-            fclass_ma = 'unrecognized',
-            fclass_nl = 'unrecognized',
-            fclass_np = 'unrecognized',
-            fclass_pk = 'unrecognized',
-            fclass_pl = 'unrecognized',
-            fclass_ps = 'unrecognized',
-            fclass_pt = 'unrecognized',
-            fclass_ru = 'unrecognized',
-            fclass_sa = 'unrecognized',
-            fclass_se = 'unrecognized',
-            fclass_tr = 'unrecognized',
-            fclass_tw = 'unrecognized',
-            fclass_ua = 'unrecognized',
-            fclass_us = 'unrecognized',
-            fclass_vn = 'unrecognized'
+            featurecla = 'Unrecognized',
+            fclass_ar = 'Unrecognized',
+            fclass_bd = 'Unrecognized',
+            fclass_br = 'Unrecognized',
+            fclass_cn = 'Unrecognized',
+            fclass_de = 'Unrecognized',
+            fclass_eg = 'Unrecognized',
+            fclass_es = 'Unrecognized',
+            fclass_fr = 'Unrecognized',
+            fclass_gb = 'Unrecognized',
+            fclass_gr = 'Unrecognized',
+            fclass_id = 'Unrecognized',
+            fclass_il = 'Unrecognized',
+            fclass_in = 'Unrecognized',
+            fclass_iso = 'Unrecognized',
+            fclass_it = 'Unrecognized',
+            fclass_jp = 'Unrecognized',
+            fclass_ko = 'Unrecognized',
+            fclass_ma = 'Unrecognized',
+            fclass_nl = 'Unrecognized',
+            fclass_np = 'Unrecognized',
+            fclass_pk = 'Unrecognized',
+            fclass_pl = 'Unrecognized',
+            fclass_ps = 'Unrecognized',
+            fclass_pt = 'Unrecognized',
+            fclass_ru = 'Unrecognized',
+            fclass_sa = 'Unrecognized',
+            fclass_se = 'Unrecognized',
+            fclass_tr = 'Unrecognized',
+            fclass_tw = 'Unrecognized',
+            fclass_ua = 'Unrecognized',
+            fclass_us = 'Unrecognized',
+            fclass_vn = 'Unrecognized'
 where l.ne_id in (
     select ne_id from abkahzia
     union
@@ -399,35 +399,35 @@ where l.ne_id in (
 -- Add Russian disputed view to Nagorno-Karabakh
 ab_do_so_tr_ne_10m_admin_0_boundary_lines_land as (
 update ne_10m_admin_0_boundary_lines_land l set
-            fclass_ru = ''
+            fclass_ru = 'Reference line'
 where l.ne_id in (
     select ne_id from nagorno_karabakh
     )),
 
 ab_do_so_tr_ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
-            fclass_ru = ''
+            fclass_ru = 'Reference line'
 where l.ne_id in (
     select ne_id from nagorno_karabakh
     )),
 
 ab_do_so_tr_ne_110m_admin_0_boundary_lines_land as (
 update ne_110m_admin_0_boundary_lines_land l set
-            fclass_ru = ''
+            fclass_ru = 'Reference line'
 where l.ne_id in (
     select ne_id from nagorno_karabakh
     )),
 
 ab_do_so_tr_ne_10m_admin_0_boundary_lines_disputed_areas as (
 update ne_10m_admin_0_boundary_lines_disputed_areas l set
-            fclass_ru = ''
+            fclass_ru = 'Reference line'
 where l.ne_id in (
     select ne_id from nagorno_karabakh
     )),
 
 ab_do_so_tr_ne_50m_admin_0_boundary_lines_disputed_areas as (
 update ne_50m_admin_0_boundary_lines_disputed_areas l set
-            fclass_ru = ''
+            fclass_ru = 'Reference line'
 where l.ne_id in (
     select ne_id from nagorno_karabakh
     )),
