@@ -9728,7 +9728,7 @@ def create_dispute_ids(shape, props, fid, zoom):
     breakaway_code = props.pop('tz_breakaway_code', None)
     if breakaway_code is None:
         # no breakaway code, not a dispute
-        return
+        return shape, props, fid
 
     breakaway_code_str = str(breakaway_code)
     ne_id = str(props.pop('tz_ne_id', None))
