@@ -75,6 +75,7 @@ transnistria as
 -- Initially mark all viewpoints as unrecognized. Subsequent steps will add some country specific views back.
 ne_10m_admin_0_boundary_lines_land as (
 update ne_10m_admin_0_boundary_lines_land l set
+            featurecla = 'unrecognized',
             fclass_ar = 'unrecognized',
             fclass_bd = 'unrecognized',
             fclass_br = 'unrecognized',
@@ -125,6 +126,7 @@ where l.ne_id in (
 
 ne_50m_admin_0_boundary_lines_land as (
 update ne_50m_admin_0_boundary_lines_land l set
+            featurecla = 'unrecognized',
             fclass_ar = 'unrecognized',
             fclass_bd = 'unrecognized',
             fclass_br = 'unrecognized',
@@ -175,6 +177,7 @@ where l.ne_id in (
 
 ne_110m_admin_0_boundary_lines_land as (
 update ne_110m_admin_0_boundary_lines_land l set
+            featurecla = 'unrecognized',
             fclass_ar = 'unrecognized',
             fclass_bd = 'unrecognized',
             fclass_br = 'unrecognized',
@@ -225,6 +228,7 @@ where l.ne_id in (
 
 ne_10m_admin_0_boundary_lines_disputed_areas as (
 update ne_10m_admin_0_boundary_lines_disputed_areas l set
+            featurecla = 'unrecognized',
             fclass_ar = 'unrecognized',
             fclass_bd = 'unrecognized',
             fclass_br = 'unrecognized',
@@ -275,6 +279,7 @@ where l.ne_id in (
 
 ne_50m_admin_0_boundary_lines_disputed_areas as (
 update ne_50m_admin_0_boundary_lines_disputed_areas l set
+            featurecla = 'unrecognized',
             fclass_ar = 'unrecognized',
             fclass_bd = 'unrecognized',
             fclass_br = 'unrecognized',
