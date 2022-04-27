@@ -43,7 +43,7 @@ nagorno_karabakh as
                     (1746705769)
                ) as b (ne_id)),
 -- Northern Cyprus
-nothern_cyprus as
+northern_cyprus as
     (select *
     from (values
                     (1746708483),
@@ -114,7 +114,7 @@ where l.ne_id in (
     union
     select ne_id from nagorno_karabakh
     union
-    select ne_id from nothern_cyprus
+    select ne_id from northern_cyprus
     union
     select ne_id from somaliland
     union
@@ -164,7 +164,7 @@ where l.ne_id in (
     union
     select ne_id from nagorno_karabakh
     union
-    select ne_id from nothern_cyprus
+    select ne_id from northern_cyprus
     union
     select ne_id from somaliland
     union
@@ -214,7 +214,7 @@ where l.ne_id in (
     union
     select ne_id from nagorno_karabakh
     union
-    select ne_id from nothern_cyprus
+    select ne_id from northern_cyprus
     union
     select ne_id from somaliland
     union
@@ -264,7 +264,7 @@ where l.ne_id in (
     union
     select ne_id from nagorno_karabakh
     union
-    select ne_id from nothern_cyprus
+    select ne_id from northern_cyprus
     union
     select ne_id from somaliland
     union
@@ -314,7 +314,7 @@ where l.ne_id in (
     union
     select ne_id from nagorno_karabakh
     union
-    select ne_id from nothern_cyprus
+    select ne_id from northern_cyprus
     union
     select ne_id from somaliland
     union
