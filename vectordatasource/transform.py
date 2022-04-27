@@ -9413,12 +9413,10 @@ class _DisputeMasks(object):
 
                     new_props['kind'] = 'disputed_reference_line'
 
-                    new_props['cutness'] = 'affirmative'
                     # apply all the properties that aren't already there from the dispute feature
                     for prop, value in dispute_props.items():
                         if not new_props.get(prop):
                             new_props[prop] = value
-                            new_props[prop + '_cut'] = value
 
                     updated_features.append((cut_shape, new_props, None))
 
