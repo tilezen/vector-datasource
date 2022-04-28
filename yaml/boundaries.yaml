@@ -167,6 +167,18 @@ filters:
       kind: disputed_reference_line
       kind_detail: {col: admin_level }
     table: osm
+  - filter:
+      all:
+        - geom_type: line
+        - disputed_by: true
+        - any:
+            - dispute: 'yes'
+            - disputed: 'yes'
+    min_zoom: 8
+    output:
+      <<: [ *output_properties, *dispute_properties ]
+      kind: disputed_reference_line
+    table: osm
 
   # osm
   - filter:
