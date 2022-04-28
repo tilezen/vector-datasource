@@ -176,6 +176,18 @@ filters:
       kind: region
       kind_detail: province
     table: osm
+  - filter: {name: true, place: unrecognized}
+    # note: min_zoom needs to be smaller than any min_label in
+    # ne_10m_admin_1_states_provinces to make sure we're not dropping any by
+    # not being included in the PostgreSQL index.
+    #
+    # note: also, we knock this down to 6 during post-processing for any province
+    # which doesn't match an NE curated one.
+    min_zoom: 6
+    output:
+      <<: [*output_properties, *ne_zooms]
+      kind: unrecognized
+    table: osm
   - filter: {name: true, population: true, place: [city, town]}
     min_zoom: 8
     output:
