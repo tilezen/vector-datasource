@@ -5,6 +5,8 @@
 -- 'B35'
 -- Donbass
 -- 'C02'
+-- 'B90'
+-- 'C03'
 -- Nagorno-karabakh
 -- 'B38'
 -- Northern Cyprus
@@ -87,7 +89,7 @@ update ne_50m_admin_0_boundary_lines_land set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
 
 update ne_110m_admin_0_boundary_lines_land set
             featurecla = 'Unrecognized',
@@ -123,7 +125,7 @@ update ne_110m_admin_0_boundary_lines_land set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
 
 update ne_10m_admin_0_boundary_lines_disputed_areas set
             featurecla = 'Unrecognized',
@@ -159,7 +161,7 @@ update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
 
 update ne_50m_admin_0_boundary_lines_disputed_areas set
             featurecla = 'Unrecognized',
@@ -195,29 +197,29 @@ update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
 
 
 -- Add Russian view to Abkhazia, Donbass, South Ossetia, Transnistria
 update ne_10m_admin_0_boundary_lines_land set
             fclass_ru = 'country'
-where brk_a3 in ('B35', 'C02', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B37', 'B36');
 
 update ne_50m_admin_0_boundary_lines_land set
             fclass_ru = 'country'
-where brk_a3 in ('B35', 'C02', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B37', 'B36');
 
 update ne_110m_admin_0_boundary_lines_land set
             fclass_ru = 'country'
-where brk_a3 in ('B35', 'C02', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B37', 'B36');
 
 update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_ru = 'country'
-where brk_a3 in ('B35', 'C02', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B37', 'B36');
 
 update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_ru = 'country'
-where brk_a3 in ('B35', 'C02', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B37', 'B36');
 
 
 -- Add Russian disputed view to Nagorno-Karabakh
