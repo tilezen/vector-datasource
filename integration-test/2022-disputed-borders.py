@@ -321,3 +321,104 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:tr': None,  # invalid place type not converted to a kind
                 'kind:xx': None,  # invalid viewpoint not exported
             })
+
+    def test_boundary_administrative_has_dispute_id(self):
+        z, x, y = (16, 53533, 28559)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/relation/202058477
+            dsl.way(202058477, dsl.tile_diagonal(z, x, y), {
+                'admin_level': '2',
+                'boundary': 'administrative',
+                'dispute': 'yes',
+                'disputed_by': 'XX',
+                'name': 'Extent of Indian Claim at Bara Hotii Valleys',
+                'ne:brk_a3': 'B02',
+                'ne_id': '1746708469',
+                'type': 'linestring',
+                'source': 'openstreetmap.org',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'id': 202058477,
+                'kind': 'disputed_reference_line',
+                'dispute_id': 'B02_1746708469',
+                'kind:xx': 'unrecognized'
+            })
+
+    def test_ne_breakaway_has_dispute_id(self):
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Breakaway',
+                'BRK_A3': '456',
+                'ne_id': 123,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'disputed_breakaway',
+                'dispute_id': '456_123',
+            })
+
+    def test_ne_dispute_has_dispute_id(self):
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Disputed (please verify)',
+                'BRK_A3': 'AAAA',
+                'ne_id': 2222,
+                'min_zoom': 7,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'disputed',
+                'dispute_id': 'AAAA_2222',
+            })
+
+    def test_ne_unrecognized_region_boundary_has_dispute_id(self):
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Unrecognized Admin-1 region boundary',
+                'BRK_A3': 'AAAA',
+                'ne_id': 2222,
+                'min_zoom': 7,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_macroregion',
+                'dispute_id': 'AAAA_2222',
+            })
+
+    def test_ne_unrecognized_boundary_has_dispute_id(self):
+        z, x, y = 8, 0, 0
+
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_diagonal(z, x, y), {
+                'featurecla': 'Unrecognized Admin-1 boundary',
+                'BRK_A3': 'AAAA',
+                'ne_id': 2222,
+                'min_zoom': 7,
+                'source': 'naturalearthdata.com',
+            }),
+        )
+
+        self.assert_has_feature(
+            z, x, y, 'boundaries', {
+                'kind': 'unrecognized_region',
+                'dispute_id': 'AAAA_2222',
+            })
