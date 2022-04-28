@@ -11,6 +11,7 @@
 -- 'B38'
 -- Northern Cyprus
 -- 'B20'
+-- 'B43'
 -- Somaliland
 -- 'B30'
 -- South Ossetia
@@ -53,7 +54,7 @@ update ne_10m_admin_0_boundary_lines_land set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B43', 'B37', 'B36');
 
 update ne_50m_admin_0_boundary_lines_land set
             featurecla = 'Unrecognized',
@@ -89,7 +90,7 @@ update ne_50m_admin_0_boundary_lines_land set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B43', 'B37', 'B36');
 
 update ne_110m_admin_0_boundary_lines_land set
             featurecla = 'Unrecognized',
@@ -125,7 +126,7 @@ update ne_110m_admin_0_boundary_lines_land set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B43', 'B37', 'B36');
 
 update ne_10m_admin_0_boundary_lines_disputed_areas set
             featurecla = 'Unrecognized',
@@ -161,7 +162,7 @@ update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B43', 'B37', 'B36');
 
 update ne_50m_admin_0_boundary_lines_disputed_areas set
             featurecla = 'Unrecognized',
@@ -197,7 +198,7 @@ update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B37', 'B36');
+where brk_a3 in ('B35', 'C02', 'C03', 'B90', 'B38', 'B20', 'B30', 'B43', 'B37', 'B36');
 
 
 -- Add Russian view to Abkhazia, Donbass, South Ossetia, Transnistria
@@ -247,23 +248,23 @@ where brk_a3 in ('B38');
 -- Add Turkish view to Northern Cyprus
 update ne_10m_admin_0_boundary_lines_land set
             fclass_tr = 'country'
-where brk_a3 in ('B20');
+where brk_a3 in ('B20', 'B43');
 
 update ne_50m_admin_0_boundary_lines_land set
             fclass_tr = 'country'
-where brk_a3 in ('B20');
+where brk_a3 in ('B20', 'B43');
 
 update ne_110m_admin_0_boundary_lines_land set
             fclass_tr = 'country'
-where brk_a3 in ('B20');
+where brk_a3 in ('B20', 'B43');
 
 update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_tr = 'country'
-where brk_a3 in ('B20');
+where brk_a3 in ('B20', 'B43');
 
 update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_tr = 'country'
-where brk_a3 in ('B20');
+where brk_a3 in ('B20', 'B43');
 
 
 -- Add Taiwanese view to Somaliland
