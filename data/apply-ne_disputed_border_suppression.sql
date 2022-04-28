@@ -1,80 +1,23 @@
 -- Recasts the fclass for certain disputed lines from the NE border tables to mark as Unrecognized or apply a viewpoint
 
+-- Dispute brk_a3 ids for reference
 -- Abkahzia
-with abkahzia as
-         (select *
-          from (values
-                    (1746705383)
-               ) as b (ne_id)),
+-- 'B35'
 -- Donbass
-donbass as
-    (select *
-    from (values
-
-                    (1763286563),
-                    (1763286519),
-                    (1763286559)
-               ) as b (ne_id)),
+-- 'C02'
 -- Nagorno-karabakh
-nagorno_karabakh as
-    (select *
-    from (values
-
-                    (1746705365),
-                    (1746705369),
-                    (1746705567),
-                    (1746705575),
-                    (1746705583),
-                    (1746705599),
-                    (1746705625),
-                    (1746705713),
-                    (1746705727),
-                    (1746705781),
-                    (1746705489),
-                    (1746705589),
-                    (1746705669),
-                    (1746705677),
-                    (1746705687),
-                    (1746705695),
-                    (1746705703),
-                    (1746705737),
-                    (1746705745),
-                    (1746705757),
-                    (1746705769)
-               ) as b (ne_id)),
+-- 'B38'
 -- Northern Cyprus
-northern_cyprus as
-    (select *
-    from (values
-                    (1746708483),
-                    (1746708491),
-                    (1746708497),
-                    (1746708639),
-                    (1746708645),
-                    (1746708649)
-               ) as b (ne_id)),
+-- 'B20'
 -- Somaliland
-somaliland as
-    (select *
-    from (values
-                    (1746705343)
-               ) as b (ne_id)),
+-- 'B30'
 -- South Ossetia
-south_ossetia as
-    (select *
-    from (values
-                    (1746705385)
-               ) as b (ne_id)),
+-- 'B37'
 -- Transnistria
-transnistria as
-    (select *
-    from (values
-                    (1746705379)
-               ) as b (ne_id)),
+-- 'B36'
 
 -- Initially mark all viewpoints as Unrecognized. Subsequent steps will add some country specific views back.
-ne_10m_admin_0_boundary_lines_land as (
-update ne_10m_admin_0_boundary_lines_land l set
+update ne_10m_admin_0_boundary_lines_land set
             featurecla = 'Unrecognized',
             fclass_ar = 'Unrecognized',
             fclass_bd = 'Unrecognized',
@@ -108,24 +51,9 @@ update ne_10m_admin_0_boundary_lines_land l set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from nagorno_karabakh
-    union
-    select ne_id from northern_cyprus
-    union
-    select ne_id from somaliland
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
 
-ne_50m_admin_0_boundary_lines_land as (
-update ne_50m_admin_0_boundary_lines_land l set
+update ne_50m_admin_0_boundary_lines_land set
             featurecla = 'Unrecognized',
             fclass_ar = 'Unrecognized',
             fclass_bd = 'Unrecognized',
@@ -159,24 +87,9 @@ update ne_50m_admin_0_boundary_lines_land l set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from nagorno_karabakh
-    union
-    select ne_id from northern_cyprus
-    union
-    select ne_id from somaliland
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
 
-ne_110m_admin_0_boundary_lines_land as (
-update ne_110m_admin_0_boundary_lines_land l set
+update ne_110m_admin_0_boundary_lines_land set
             featurecla = 'Unrecognized',
             fclass_ar = 'Unrecognized',
             fclass_bd = 'Unrecognized',
@@ -210,24 +123,9 @@ update ne_110m_admin_0_boundary_lines_land l set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from nagorno_karabakh
-    union
-    select ne_id from northern_cyprus
-    union
-    select ne_id from somaliland
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
 
-ne_10m_admin_0_boundary_lines_disputed_areas as (
-update ne_10m_admin_0_boundary_lines_disputed_areas l set
+update ne_10m_admin_0_boundary_lines_disputed_areas set
             featurecla = 'Unrecognized',
             fclass_ar = 'Unrecognized',
             fclass_bd = 'Unrecognized',
@@ -261,24 +159,9 @@ update ne_10m_admin_0_boundary_lines_disputed_areas l set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from nagorno_karabakh
-    union
-    select ne_id from northern_cyprus
-    union
-    select ne_id from somaliland
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
 
-ne_50m_admin_0_boundary_lines_disputed_areas as (
-update ne_50m_admin_0_boundary_lines_disputed_areas l set
+update ne_50m_admin_0_boundary_lines_disputed_areas set
             featurecla = 'Unrecognized',
             fclass_ar = 'Unrecognized',
             fclass_bd = 'Unrecognized',
@@ -312,195 +195,92 @@ update ne_50m_admin_0_boundary_lines_disputed_areas l set
             fclass_ua = 'Unrecognized',
             fclass_us = 'Unrecognized',
             fclass_vn = 'Unrecognized'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from nagorno_karabakh
-    union
-    select ne_id from northern_cyprus
-    union
-    select ne_id from somaliland
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B38', 'B20', 'B30', 'B37', 'B36');
 
 
 -- Add Russian view to Abkhazia, Donbass, South Ossetia, Transnistria
-ru_ne_10m_admin_0_boundary_lines_land as (
-update ne_10m_admin_0_boundary_lines_land l set
+update ne_10m_admin_0_boundary_lines_land set
             fclass_ru = 'country'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B37', 'B36');
 
-ru_ne_50m_admin_0_boundary_lines_land as (
-update ne_50m_admin_0_boundary_lines_land l set
+update ne_50m_admin_0_boundary_lines_land set
             fclass_ru = 'country'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B37', 'B36');
 
-ru_ne_110m_admin_0_boundary_lines_land as (
-update ne_110m_admin_0_boundary_lines_land l set
+update ne_110m_admin_0_boundary_lines_land set
             fclass_ru = 'country'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B37', 'B36');
 
-ru_ne_10m_admin_0_boundary_lines_disputed_areas as (
-update ne_10m_admin_0_boundary_lines_disputed_areas l set
+update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_ru = 'country'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B37', 'B36');
 
-ru_ne_50m_admin_0_boundary_lines_disputed_areas as (
-update ne_50m_admin_0_boundary_lines_disputed_areas l set
+update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_ru = 'country'
-where l.ne_id in (
-    select ne_id from abkahzia
-    union
-    select ne_id from donbass
-    union
-    select ne_id from south_ossetia
-    union
-    select ne_id from transnistria
-    )),
+where brk_a3 in ('B35', 'C02', 'B37', 'B36');
 
 
 -- Add Russian disputed view to Nagorno-Karabakh
-ab_do_so_tr_ne_10m_admin_0_boundary_lines_land as (
-update ne_10m_admin_0_boundary_lines_land l set
+update ne_10m_admin_0_boundary_lines_land set
             fclass_ru = 'Reference line'
-where l.ne_id in (
-    select ne_id from nagorno_karabakh
-    )),
+where brk_a3 in ('B38');
 
-ab_do_so_tr_ne_50m_admin_0_boundary_lines_land as (
-update ne_50m_admin_0_boundary_lines_land l set
+update ne_50m_admin_0_boundary_lines_land set
             fclass_ru = 'Reference line'
-where l.ne_id in (
-    select ne_id from nagorno_karabakh
-    )),
+where brk_a3 in ('B38');
 
-ab_do_so_tr_ne_110m_admin_0_boundary_lines_land as (
-update ne_110m_admin_0_boundary_lines_land l set
+update ne_110m_admin_0_boundary_lines_land set
             fclass_ru = 'Reference line'
-where l.ne_id in (
-    select ne_id from nagorno_karabakh
-    )),
+where brk_a3 in ('B38');
 
-ab_do_so_tr_ne_10m_admin_0_boundary_lines_disputed_areas as (
-update ne_10m_admin_0_boundary_lines_disputed_areas l set
+update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_ru = 'Reference line'
-where l.ne_id in (
-    select ne_id from nagorno_karabakh
-    )),
+where brk_a3 in ('B38');
 
-ab_do_so_tr_ne_50m_admin_0_boundary_lines_disputed_areas as (
-update ne_50m_admin_0_boundary_lines_disputed_areas l set
+update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_ru = 'Reference line'
-where l.ne_id in (
-    select ne_id from nagorno_karabakh
-    )),
+where brk_a3 in ('B38');
 
 
 -- Add Turkish view to Northern Cyprus
-tr_ne_10m_admin_0_boundary_lines_land as (
-update ne_10m_admin_0_boundary_lines_land l set
+update ne_10m_admin_0_boundary_lines_land set
             fclass_tr = 'country'
-where l.ne_id in (
-    select ne_id from northern_cyprus
-    )),
+where brk_a3 in ('B20');
 
-tr_ne_50m_admin_0_boundary_lines_land as (
-update ne_50m_admin_0_boundary_lines_land l set
+update ne_50m_admin_0_boundary_lines_land set
             fclass_tr = 'country'
-where l.ne_id in (
-    select ne_id from northern_cyprus
-    )),
+where brk_a3 in ('B20');
 
-tr_ne_110m_admin_0_boundary_lines_land as (
-update ne_110m_admin_0_boundary_lines_land l set
+update ne_110m_admin_0_boundary_lines_land set
             fclass_tr = 'country'
-where l.ne_id in (
-    select ne_id from northern_cyprus
-    )),
+where brk_a3 in ('B20');
 
-tr_ne_10m_admin_0_boundary_lines_disputed_areas as (
-update ne_10m_admin_0_boundary_lines_disputed_areas l set
+update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_tr = 'country'
-where l.ne_id in (
-    select ne_id from northern_cyprus
-    )),
+where brk_a3 in ('B20');
 
-tr_ne_50m_admin_0_boundary_lines_disputed_areas as (
-update ne_50m_admin_0_boundary_lines_disputed_areas l set
+update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_tr = 'country'
-where l.ne_id in (
-    select ne_id from northern_cyprus
-    )),
+where brk_a3 in ('B20');
 
 
 -- Add Taiwanese view to Somaliland
-tw_ne_10m_admin_0_boundary_lines_land as (
-update ne_10m_admin_0_boundary_lines_land l set
+update ne_10m_admin_0_boundary_lines_land set
             fclass_tw = 'country'
-where l.ne_id in (
-    select ne_id from somaliland
-    )),
+where brk_a3 in ('B30');
 
-tw_ne_50m_admin_0_boundary_lines_land as (
-update ne_50m_admin_0_boundary_lines_land l set
+update ne_50m_admin_0_boundary_lines_land set
             fclass_tw = 'country'
-where l.ne_id in (
-    select ne_id from somaliland
-    )),
+where brk_a3 in ('B30');
 
-tw_ne_110m_admin_0_boundary_lines_land as (
-update ne_110m_admin_0_boundary_lines_land l set
+update ne_110m_admin_0_boundary_lines_land set
             fclass_tw = 'country'
-where l.ne_id in (
-    select ne_id from somaliland
-    )),
+where brk_a3 in ('B30');
 
-tw_ne_10m_admin_0_boundary_lines_disputed_areas as (
-update ne_10m_admin_0_boundary_lines_disputed_areas l set
+update ne_10m_admin_0_boundary_lines_disputed_areas set
             fclass_tw = 'country'
-where l.ne_id in (
-    select ne_id from somaliland
-    ))
+where brk_a3 in ('B30');
 
-update ne_50m_admin_0_boundary_lines_disputed_areas l set
+update ne_50m_admin_0_boundary_lines_disputed_areas set
             fclass_tw = 'country'
-where l.ne_id in (
-    select ne_id from somaliland
-    )
+where brk_a3 in ('B30');
