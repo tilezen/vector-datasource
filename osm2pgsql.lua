@@ -482,7 +482,7 @@ function osm2pgsql.process_node(object)
     end
 -- Turn off Kosovo country label for CN;RU;IN;GR
     if object.tags.place and object.tags.wikidata == 'Q1246' then
-        output_hstore['disputed_by'] = 'CN;GR;IN;RU'
+        output_hstore['disputed_by'] = 'AR;BR;CN;GR;ID;IN;MA;NP;PS;RU;UA;VN'
         output_hstore['recognized_by'] = 'AR;BD;BR;DE;EG;ES;FR;GB;ID;IL;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;SA;SE;TR;TW;UA;US;VN'
     end
 -- Hide Kosovo region labels for several POVs including China and Russia
@@ -497,7 +497,7 @@ function osm2pgsql.process_node(object)
         object.tags.wikidata == 'Q963121' or object.tags.wikidata == 'Q991291' or object.tags.wikidata == 'Q991291' or
         object.tags.wikidata == 'Q991313' or object.tags.wikidata == 'Q991332' or object.tags.wikidata == 'Q994245' or
         object.tags.wikidata == 'Q994730') then
-        output_hstore['disputed_by'] = 'CN;RU;IN;GR'
+        output_hstore['disputed_by'] = 'AR;BR;CN;GR;ID;IN;MA;NP;PS;RU;UA;VN'
     end
 
 -- Turn off Northern Cyprus label for most countries
@@ -511,12 +511,12 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'region'
         output_hstore['place:RU'] = 'country'
     end
--- Show South Ossetia label as region for most countries
+-- Turn off South Ossetia label for most countries
     if object.tags.place and object.tags.wikidata == 'Q23427' then
         output_hstore['place'] = 'unrecognized'
         output_hstore['place:RU'] = 'country'
     end
--- Turn off Nagorno-Karabakh label for most countries
+-- Turn off Artsakh (Nagorno-Karabakh) label for most countries
     if object.tags.place and object.tags.wikidata == 'Q2397204' then
         output_hstore['place'] = 'unrecognized'
         output_hstore['place:RU'] = 'country'
@@ -558,7 +558,7 @@ function osm2pgsql.process_node(object)
     end
 -- New Caledonia
     if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NF' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'country'
     end
 -- Norfolk Island
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'NF' then
