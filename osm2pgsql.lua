@@ -483,7 +483,7 @@ function osm2pgsql.process_node(object)
 -- Turn off Kosovo country label for CN;RU;IN;GR
     if object.tags.place and object.tags.wikidata == 'Q1246' then
         output_hstore['disputed_by'] = 'AR;BR;CN;GR;ID;IN;MA;NP;PS;RU;UA;VN'
-        output_hstore['recognized_by'] = 'AR;BD;BR;DE;EG;ES;FR;GB;ID;IL;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;SA;SE;TR;TW;UA;US;VN'
+        output_hstore['recognized_by'] = 'BD;DE;EG;ES;FR;GB;IL;IT;JP;KO;NL;PK;PL;PT;SA;SE;TR;TW;US'
     end
 -- Hide Kosovo region labels for several POVs including China and Russia
     if object.tags.place and (object.tags.wikidata == 'Q1008042' or object.tags.wikidata == 'Q1021775' or
@@ -604,23 +604,23 @@ function osm2pgsql.process_node(object)
 -- Recast various French overseas departments as region
 -- Réunion
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'RE' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'country'
     end
 -- Martinique
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MQ' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'country'
     end
 -- Mayotte
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'YT' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'country'
     end
 -- Guadeloupe
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GP' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'country'
     end
 -- French Guiana
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GF' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'country'
     end
 
 
