@@ -702,6 +702,7 @@ function osm2pgsql.process_way(object)
     for k, v in pairs(claimed) do
         if k == object.id then
             output_hstore.dispute = 'yes'
+            output_hstore.unrecognized_dispute = 'yes'
             if v.disputed_by then
                 output_hstore.disputed_by = 'AR;BD;BR;CN;DE;EG;ES;FR;GB;GR;ID;IL;IN;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;RU;SA;SE;TR;TW;UA;US;VN'
             end
@@ -726,6 +727,9 @@ function osm2pgsql.process_way(object)
             end
             if v['ne:brk_a3'] then
                 output_hstore['ne:brk_a3'] = v['ne:brk_a3']
+            end
+            if v['unrecognized_dispute'] then
+                output_hstore.unrecognized_dispute = 'yes'
             end
         end
     end
@@ -784,6 +788,14 @@ function osm2pgsql.process_relation(object)
 
     if not next(output) and not next(output_hstore) then
         return
+    end
+
+-- Mark some disputes as unrecognized to hide them by default
+    if (type == 'linestring' or type == 'boundary') and (object.tags['ne:brk_a3'] == 'B20' or object.tags['ne:brk_a3'] == 'B35'
+    or object.tags['ne:brk_a3'] == 'B37' or object.tags['ne:brk_a3'] == 'B38' or object.tags['ne:brk_a3'] == 'B43' or
+    object.tags['ne:brk_a3'] == 'B75' or object.tags['ne:brk_a3'] == 'B90' or object.tags['ne:brk_a3'] == 'C02' or
+    object.tags['ne:brk_a3'] == 'C03') then
+        output_hstore.unrecognized_dispute = 'yes'
     end
 
 -- Adds tags from boundary=claim relation to its ways
