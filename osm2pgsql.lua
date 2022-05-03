@@ -784,10 +784,11 @@ function osm2pgsql.process_relation(object)
     end
 
 -- Mark some disputes as unrecognized to hide them by default
-    if (type == 'linestring' or type == 'boundary') and (object.tags.ne:brk_a3 == 'B20' or object.tags.ne:brk_a3 == 'B35'
-    or object.tags.ne:brk_a3 == 'B37' or object.tags.ne:brk_a3 == 'B38' or object.tags.ne:brk_a3 == 'B43' or
-    object.tags.ne:brk_a3 == 'B75') then
-        output_hstore.unrecognized = 'yes'
+    if (type == 'linestring' or type == 'boundary') and (object.tags['ne:brk_a3'] == 'B20' or object.tags['ne:brk_a3'] == 'B35'
+    or object.tags['ne:brk_a3'] == 'B37' or object.tags['ne:brk_a3'] == 'B38' or object.tags['ne:brk_a3'] == 'B43' or
+    object.tags['ne:brk_a3'] == 'B75' or object.tags['ne:brk_a3'] == 'B90' or object.tags['ne:brk_a3'] == 'C02' or
+    object.tags['ne:brk_a3'] == 'C03') then
+        output_hstore.unrecognized_dispute = 'yes'
     end
 
 -- Adds tags from boundary=claim relation to its ways
