@@ -118,6 +118,19 @@ filters:
   #    `unrecognized_*` (where XX is the viewpoint / country code and * is the
   #    kind of boundary it is).
   #
+
+  # Additionally, we filter out disputes that are not currently desired for widespread display.
+  # These get a kind of `unrecognized` in order to suppress their display
+  # These have been marked in the lua with unrecognized_dispute=yes to identify them.
+  - filter:
+      all:
+        - geom_type: line
+        - unrecognized_dispute: yes
+    min_zoom: 8
+    output:
+      <<: [ *output_properties, *dispute_properties ]
+      kind: unrecognized
+    table: osm
   - filter:
       all:
         - geom_type: line
