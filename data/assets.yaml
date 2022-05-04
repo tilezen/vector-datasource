@@ -142,6 +142,12 @@ shapefiles:
   - name: ne_10m_admin_0_countries
     url: https://naciscdn.org/naturalearth/5.1.0/10m/cultural/ne_10m_admin_0_countries.zip
 
+  - name: ne_10m_admin_0_countries_iso
+    url: https://naciscdn.org/naturalearth/5.1.0/10m/cultural/ne_10m_admin_0_countries_iso.zip
+
+  - name: ne_10m_admin_0_countries_tlc
+    url: https://naciscdn.org/naturalearth/5.1.0/10m/cultural/ne_10m_admin_0_countries_tlc.zip
+
   - name: ne_10m_admin_0_map_units
     url: https://naciscdn.org/naturalearth/5.1.0/10m/cultural/ne_10m_admin_0_map_units.zip
 
