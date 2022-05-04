@@ -27,7 +27,7 @@ SELECT
     THEN jsonb_build_object(
       'min_zoom', mz_places_min_zoom
     ) ||
-      tz_get_ne_min_max_zoom(tags->'wikidata')
+      tz_get_ne_min_max_zoom(tags->'wikidata', tags->'place')
       ||
       tz_get_ne_pop_min_max(tags->'wikidata')
   END AS __places_properties__,

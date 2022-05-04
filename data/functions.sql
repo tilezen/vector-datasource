@@ -996,7 +996,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- returns a JSONB object containing __ne_min_zoom and __ne_max_zoom set to the
 -- label min and max zoom of any matching row from the Natural Earth countries,
 -- map units and states/provinces themes.
-CREATE OR REPLACE FUNCTION tz_get_ne_min_max_zoom(wikidata_id TEXT)
+CREATE OR REPLACE FUNCTION tz_get_ne_min_max_zoom(wikidata_id TEXT, place_tag TEXT)
 RETURNS JSONB AS $$
 DECLARE
   min_zoom REAL;
@@ -1006,28 +1006,30 @@ BEGIN
     RETURN '{}'::jsonb;
   END IF;
 
-  -- first, try the countries table
-  SELECT
-    min_label, max_label INTO min_zoom, max_zoom
-    FROM ne_10m_admin_0_countries c
-    WHERE c.wikidataid = wikidata_id;
+  -- if it's a country, only look it up in the iso and tlc tables
+  IF place_tag='country' OR place_tag='unrecognized' THEN
+      SELECT
+        min_label, max_label INTO min_zoom, max_zoom
+        FROM ne_10m_admin_0_countries_iso i
+        WHERE i.wikidataid = wikidata_id;
 
-  -- if that fails, try map_units (which contains some sub-country but super-
-  -- state level stuff such as England, Scotland and Wales).
-  IF NOT FOUND THEN
-    SELECT
-      min_label, max_label INTO min_zoom, max_zoom
-      FROM ne_10m_admin_0_map_units mu
-      WHERE mu.wikidataid = wikidata_id;
+      IF NOT FOUND THEN
+        SELECT
+            min_label, max_label INTO min_zoom, max_zoom
+        FROM ne_10m_admin_0_countries_tlc t
+        WHERE t.wikidataid = wikidata_id;
+      END IF;
+
+      IF NOT FOUND THEN
+        RETURN '{}'::jsonb;
+      END IF;
   END IF;
 
-  -- try states and provinces
-  IF NOT FOUND THEN
-    SELECT
+  -- try states and provinces if it's not a country
+  SELECT
       min_label, max_label INTO min_zoom, max_zoom
       FROM ne_10m_admin_1_states_provinces sp
       WHERE sp.wikidataid = wikidata_id;
-  END IF;
 
   -- finally, try localities
   -- There is no concept of max_zoom for ne_10m_populated_places
