@@ -795,6 +795,7 @@ function osm2pgsql.process_relation(object)
     or object.tags['ne:brk_a3'] == 'B37' or object.tags['ne:brk_a3'] == 'B38' or object.tags['ne:brk_a3'] == 'B43' or
     object.tags['ne:brk_a3'] == 'B75' or object.tags['ne:brk_a3'] == 'B90' or object.tags['ne:brk_a3'] == 'C02' or
     object.tags['ne:brk_a3'] == 'C03') then
+        object.tags.unrecognized_dispute = 'yes'
         output_hstore.unrecognized_dispute = 'yes'
     end
 
