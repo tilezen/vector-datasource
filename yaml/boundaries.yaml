@@ -82,7 +82,7 @@ global:
     tz_ne_id: { col: 'ne_id' }
 
   - &ne_dispute_id_components
-    tz_breakaway_code: { col: 'BRK_A3' }
+    tz_breakaway_code: { col: 'brk_a3' }
     tz_ne_id: { col: 'ne_id' }
 
   - &dispute_properties
