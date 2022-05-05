@@ -996,7 +996,7 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- returns a JSONB object containing __ne_min_zoom and __ne_max_zoom set to the
 -- label min and max zoom of any matching row from the Natural Earth countries,
 -- map units and states/provinces themes.
-CREATE OR REPLACE FUNCTION tz_get_ne_min_max_zoom(wikidata_id TEXT)
+CREATE OR REPLACE FUNCTION tz_get_ne_min_max_zoom(wikidata_id TEXT, place_tag TEXT)
 RETURNS JSONB AS $$
 DECLARE
   min_zoom REAL;
@@ -1006,28 +1006,30 @@ BEGIN
     RETURN '{}'::jsonb;
   END IF;
 
-  -- first, try the countries table
-  SELECT
-    min_label, max_label INTO min_zoom, max_zoom
-    FROM ne_10m_admin_0_countries c
-    WHERE c.wikidataid = wikidata_id;
+  -- if it's a country, only look it up in the iso and tlc tables
+  IF place_tag='country' OR place_tag='unrecognized' THEN
+      SELECT
+        min_label, max_label INTO min_zoom, max_zoom
+        FROM ne_10m_admin_0_countries_iso i
+        WHERE i.wikidataid = wikidata_id;
 
-  -- if that fails, try map_units (which contains some sub-country but super-
-  -- state level stuff such as England, Scotland and Wales).
-  IF NOT FOUND THEN
-    SELECT
-      min_label, max_label INTO min_zoom, max_zoom
-      FROM ne_10m_admin_0_map_units mu
-      WHERE mu.wikidataid = wikidata_id;
+      IF NOT FOUND THEN
+        SELECT
+            min_label, max_label INTO min_zoom, max_zoom
+        FROM ne_10m_admin_0_countries_tlc t
+        WHERE t.wikidataid = wikidata_id;
+      END IF;
+
+      IF NOT FOUND THEN
+        RETURN '{}'::jsonb;
+      END IF;
   END IF;
 
-  -- try states and provinces
-  IF NOT FOUND THEN
-    SELECT
+  -- try states and provinces if it's not a country
+  SELECT
       min_label, max_label INTO min_zoom, max_zoom
       FROM ne_10m_admin_1_states_provinces sp
       WHERE sp.wikidataid = wikidata_id;
-  END IF;
 
   -- finally, try localities
   -- There is no concept of max_zoom for ne_10m_populated_places
@@ -1048,6 +1050,65 @@ BEGIN
     '__ne_min_zoom', min_zoom,
     '__ne_max_zoom', max_zoom
   );
+END;
+$$ LANGUAGE plpgsql STABLE;
+
+CREATE OR REPLACE FUNCTION tz_get_fclass_and_label_position(wikidata_id TEXT, place_tag TEXT)
+RETURNS JSONB AS $$
+DECLARE
+fclass_iso TEXT;
+fclass_tlc TEXT;
+label_x REAL;
+label_y REAL;
+BEGIN
+  IF wikidata_id IS NULL THEN
+    RETURN '{}'::jsonb;
+END IF;
+
+  -- if it's a country, only look it up in the iso and tlc tables
+  IF place_tag='country' OR place_tag='unrecognized' THEN
+    SELECT
+        fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso, fclass_tlc, label_x, label_y
+    FROM ne_10m_admin_0_countries_iso i
+    WHERE i.wikidataid = wikidata_id;
+
+    IF NOT FOUND THEN
+        SELECT
+            fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso, fclass_tlc, label_x, label_y
+        FROM ne_10m_admin_0_countries_tlc t
+        WHERE t.wikidataid = wikidata_id;
+    END IF;
+
+    IF NOT FOUND THEN
+        RETURN '{}'::jsonb;
+    END IF;
+  END IF;
+
+  -- There is no label_x and label_y for the non-countries (please confirm @nkelso!)
+  SELECT
+    fclass_iso, fclass_tlc, NULL, NULL INTO fclass_iso, fclass_tlc, label_x, label_y
+  FROM ne_10m_admin_1_states_provinces sp
+  WHERE sp.wikidataid = wikidata_id;
+
+  -- finally, try localities
+  IF NOT FOUND THEN
+  SELECT
+    fclass_iso, fclass_tlc, NULL, NULL INTO fclass_iso, fclass_tlc, label_x, label_y
+  FROM ne_10m_populated_places pp
+  WHERE pp.wikidataid = wikidata_id;END IF;
+
+  -- return an empty JSONB rather than null, so that it can be safely
+  -- concatenated with whatever other JSONB rather than needing a check for
+  -- null.
+  IF NOT FOUND THEN
+    RETURN '{}'::jsonb;
+  END IF;
+  RETURN jsonb_build_object(
+        '__ne_fclass_iso', fclass_iso,
+        '__ne_fclass_tlc', fclass_tlc,
+        '__ne_label_x', label_x,
+        '__ne_label_y', label_y
+    );
 END;
 $$ LANGUAGE plpgsql STABLE;
 

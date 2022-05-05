@@ -9296,7 +9296,7 @@ def _list_of_countries(value):
         # should have an ISO 3166-1 alpha-2 code, so should be 2 ASCII
         # latin characters.
         candidate = candidate.strip().lower()
-        if candidate == 'iso' or match('[a-z][a-z]', candidate):
+        if candidate == 'iso' or candidate == 'tlc' or match('[a-z][a-z]', candidate):
             countries.append(candidate)
 
     return countries
