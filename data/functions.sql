@@ -1085,7 +1085,7 @@ END IF;
     END IF;
   END IF;
 
-  -- There is no label_x and label_y for the non-countries (please confirm @nkelso!)
+  -- There is no label_x and label_y for the non-countries
   SELECT
     fclass_iso, fclass_tlc, NULL, NULL INTO fclass_iso, fclass_tlc, label_x, label_y
   FROM ne_10m_admin_1_states_provinces sp
