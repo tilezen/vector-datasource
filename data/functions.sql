@@ -1076,7 +1076,8 @@ END IF;
         SELECT
             fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso, fclass_tlc, label_x, label_y
         FROM ne_10m_admin_0_countries_tlc t
-        WHERE t.wikidataid = wikidata_id;
+        WHERE t.wikidataid = wikidata_id
+        AND fclass_tlc IN ('Admin-0 country' or 'Admin-0 dependency');
     END IF;
 
     IF NOT FOUND THEN

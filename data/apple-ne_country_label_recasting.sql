@@ -1,5 +1,5 @@
--- This adjusts a few rows in the ne_10m_admin_0_countries_iso and ne_10m_admin_0_countries_tlc tables
--- to either show labels or hide them.
+-- Recasts a few rows in the ne_10m_admin_0_countries_iso and ne_10m_admin_0_countries_tlc
+-- tables to either show or hide certain labels
 
 
 -- Akrotiri Sovereign Base Area
