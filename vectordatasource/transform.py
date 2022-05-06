@@ -9318,7 +9318,7 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     recognized_by = props.get('recognized_by', '')
     disputed_by = props.get('disputed_by', '')
 
-    admin_level = str(props.pop('tz_admin_level', ''))
+    admin_level = str(props.get('tz_admin_level', ''))
 
     if admin_level:
         base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level, '')
