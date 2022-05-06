@@ -713,6 +713,12 @@ post_process:
       base_layer: boundaries
       start_zoom: 8
 
+  # TODO: document OSM disputed boundary clipping procedure
+  - fn: vectordatasource.transform.apply_disputed_boundary_viewpoints
+    params:
+      base_layer: boundaries
+      start_zoom: 8
+
   # drop the claimed_by, disputed_by (and any left/right versions) on any
   # borders. these should have been projected into kind:xx viewpoints in the
   # previous step.

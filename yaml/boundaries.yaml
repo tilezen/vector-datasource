@@ -82,7 +82,7 @@ global:
     tz_ne_id: { col: 'ne_id' }
 
   - &ne_dispute_id_components
-    tz_breakaway_code: { col: 'BRK_A3' }
+    tz_breakaway_code: { col: 'brk_a3' }
     tz_ne_id: { col: 'ne_id' }
 
   - &dispute_properties
@@ -169,17 +169,6 @@ filters:
       <<: [*output_properties, *dispute_properties]
       kind: county
     table: osm
-  # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
-  # project to kind:xx=unrecognized.  The lua preprocessing
-  # project admin_level 3 and 5 cases to appropriate tags for us, so we don't need
-  # to handle them here
-  - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
-    min_zoom: 8
-    output:
-      <<: [ *output_properties, *dispute_properties ]
-      kind: disputed_reference_line
-      kind_detail: {col: admin_level }
-    table: osm
   - filter:
       all:
         - geom_type: line
@@ -190,7 +179,18 @@ filters:
     min_zoom: 8
     output:
       <<: [ *output_properties, *dispute_properties ]
+      kind: mz_internal_dispute_mask
+    table: osm
+  # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
+  # project to kind:xx=unrecognized.  The lua preprocessing
+  # project admin_level 3 and 5 cases to appropriate tags for us, so we don't need
+  # to handle them here
+  - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: [ *output_properties, *dispute_properties ]
       kind: disputed_reference_line
+      kind_detail: {col: admin_level }
     table: osm
 
   # osm

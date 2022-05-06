@@ -354,7 +354,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'featurecla': 'Breakaway',
-                'BRK_A3': '456',
+                'brk_a3': '456',
                 'ne_id': 123,
                 'source': 'naturalearthdata.com',
             }),
@@ -372,7 +372,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'featurecla': 'Disputed (please verify)',
-                'BRK_A3': 'AAAA',
+                'brk_a3': 'AAAA',
                 'ne_id': 2222,
                 'min_zoom': 7,
                 'source': 'naturalearthdata.com',
@@ -391,7 +391,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'featurecla': 'Unrecognized Admin-1 region boundary',
-                'BRK_A3': 'AAAA',
+                'brk_a3': 'AAAA',
                 'ne_id': 2222,
                 'min_zoom': 7,
                 'source': 'naturalearthdata.com',
@@ -410,7 +410,7 @@ class DisputedBoundariesTest(FixtureTest):
         self.generate_fixtures(
             dsl.way(1, dsl.tile_diagonal(z, x, y), {
                 'featurecla': 'Unrecognized Admin-1 boundary',
-                'BRK_A3': 'AAAA',
+                'brk_a3': 'AAAA',
                 'ne_id': 2222,
                 'min_zoom': 7,
                 'source': 'naturalearthdata.com',
