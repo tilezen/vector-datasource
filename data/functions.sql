@@ -1020,27 +1020,22 @@ BEGIN
         WHERE t.wikidataid = wikidata_id
         AND fclass_tlc IN ('Admin-0 country' or 'Admin-0 dependency');
       END IF;
-
-      IF NOT FOUND THEN
-        RETURN '{}'::jsonb;
-      END IF;
-  END IF;
-
-  -- try states and provinces if it's not a country
-  SELECT
-      min_label, max_label INTO min_zoom, max_zoom
-      FROM ne_10m_admin_1_states_provinces sp
-      WHERE sp.wikidataid = wikidata_id;
-
-  -- finally, try localities
-  -- There is no concept of max_zoom for ne_10m_populated_places
-  IF NOT FOUND THEN
+  ELSE
+    -- try states and provinces if it's not a country
     SELECT
-      pp.min_zoom, NULL INTO min_zoom, max_zoom
-      FROM ne_10m_populated_places pp
-      WHERE pp.wikidataid = wikidata_id;
-  END IF;
+        min_label, max_label INTO min_zoom, max_zoom
+    FROM ne_10m_admin_1_states_provinces sp
+    WHERE sp.wikidataid = wikidata_id;
 
+    -- finally, try localities
+    -- There is no concept of max_zoom for ne_10m_populated_places
+    IF NOT FOUND THEN
+        SELECT
+            pp.min_zoom, NULL INTO min_zoom, max_zoom
+        FROM ne_10m_populated_places pp
+        WHERE pp.wikidataid = wikidata_id;
+    END IF;
+  END IF;
   -- return an empty JSONB rather than null, so that it can be safely
   -- concatenated with whatever other JSONB rather than needing a check for
   -- null.
@@ -1088,14 +1083,14 @@ END IF;
 
   -- There is no label_x and label_y for the non-countries
   SELECT
-    fclass_iso, fclass_tlc, NULL, NULL INTO fclass_iso, fclass_tlc, label_x, label_y
+    fclass_iso, fclass_tlc, longitude, latitude INTO fclass_iso, fclass_tlc, label_x, label_y
   FROM ne_10m_admin_1_states_provinces sp
   WHERE sp.wikidataid = wikidata_id;
 
   -- finally, try localities
   IF NOT FOUND THEN
   SELECT
-    fclass_iso, fclass_tlc, NULL, NULL INTO fclass_iso, fclass_tlc, label_x, label_y
+    fclass_iso, fclass_tlc, longitude, latitude INTO fclass_iso, fclass_tlc, label_x, label_y
   FROM ne_10m_populated_places pp
   WHERE pp.wikidataid = wikidata_id;END IF;
 
