@@ -702,7 +702,6 @@ function osm2pgsql.process_way(object)
     for k, v in pairs(claimed) do
         if k == object.id then
             output_hstore.dispute = 'yes'
-            output_hstore.unrecognized_dispute = 'yes'
             if v.disputed_by then
                 output_hstore.disputed_by = 'AR;BD;BR;CN;DE;EG;ES;FR;GB;GR;ID;IL;IN;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;RU;SA;SE;TR;TW;UA;US;VN'
             end
