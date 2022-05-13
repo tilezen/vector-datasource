@@ -1063,13 +1063,13 @@ END IF;
   -- if it's a country, only look it up in the iso and tlc tables
   IF place_tag='country' OR place_tag='unrecognized' THEN
     SELECT
-        fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
+        i.fclass_iso, i.fclass_tlc, i.label_x, i.label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
     FROM ne_10m_admin_0_countries_iso i
     WHERE i.wikidataid = wikidata_id;
 
     IF NOT FOUND THEN
         SELECT
-            fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
+            t.fclass_iso, t.fclass_tlc, t.label_x, t.label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
         FROM ne_10m_admin_0_countries_tlc t
         WHERE t.wikidataid = wikidata_id;
     END IF;
@@ -1077,20 +1077,26 @@ END IF;
     IF NOT FOUND THEN
         RETURN '{}'::jsonb;
     END IF;
+    RETURN jsonb_build_object(
+        '__ne_fclass_iso', fclass_iso_var,
+        '__ne_fclass_tlc', fclass_tlc_var,
+        '__ne_label_x', label_x_var,
+        '__ne_label_y', label_y_var
+    );
   END IF;
 
-  -- There is no label_x and label_y for the non-countries
   SELECT
-    fclass_iso, fclass_tlc, longitude, latitude INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
+    sp.fclass_iso, sp.fclass_tlc, sp.longitude, sp.latitude INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
   FROM ne_10m_admin_1_states_provinces sp
   WHERE sp.wikidataid = wikidata_id;
 
   -- finally, try localities
   IF NOT FOUND THEN
-  SELECT
-    fclass_iso, fclass_tlc, longitude, latitude INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
-  FROM ne_10m_populated_places pp
-  WHERE pp.wikidataid = wikidata_id;END IF;
+      SELECT
+        pp.fclass_iso, pp.fclass_tlc, pp.longitude, pp.latitude INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
+      FROM ne_10m_populated_places pp
+      WHERE pp.wikidataid = wikidata_id;
+  END IF;
 
   -- return an empty JSONB rather than null, so that it can be safely
   -- concatenated with whatever other JSONB rather than needing a check for
