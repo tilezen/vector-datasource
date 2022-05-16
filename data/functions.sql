@@ -1052,10 +1052,10 @@ $$ LANGUAGE plpgsql STABLE;
 CREATE OR REPLACE FUNCTION tz_get_fclass_and_label_position(wikidata_id TEXT, place_tag TEXT)
 RETURNS JSONB AS $$
 DECLARE
-fclass_iso TEXT;
-fclass_tlc TEXT;
-label_x REAL;
-label_y REAL;
+fclass_iso_var TEXT;
+fclass_tlc_var TEXT;
+label_x_var REAL;
+label_y_var REAL;
 BEGIN
   IF wikidata_id IS NULL THEN
     RETURN '{}'::jsonb;
@@ -1064,13 +1064,13 @@ END IF;
   -- if it's a country, only look it up in the iso and tlc tables
   IF place_tag='country' OR place_tag='unrecognized' THEN
     SELECT
-        fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso, fclass_tlc, label_x, label_y
+        i.fclass_iso, i.fclass_tlc, i.label_x, i.label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
     FROM ne_10m_admin_0_countries_iso i
     WHERE i.wikidataid = wikidata_id;
 
     IF NOT FOUND THEN
         SELECT
-            fclass_iso, fclass_tlc, label_x, label_y INTO fclass_iso, fclass_tlc, label_x, label_y
+            t.fclass_iso, t.fclass_tlc, t.label_x, t.label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
         FROM ne_10m_admin_0_countries_tlc t
         WHERE t.wikidataid = wikidata_id
         AND fclass_tlc IN ('Admin-0 country' or 'Admin-0 dependency');
@@ -1079,20 +1079,26 @@ END IF;
     IF NOT FOUND THEN
         RETURN '{}'::jsonb;
     END IF;
+    RETURN jsonb_build_object(
+        '__ne_fclass_iso', fclass_iso_var,
+        '__ne_fclass_tlc', fclass_tlc_var,
+        '__ne_label_x', label_x_var,
+        '__ne_label_y', label_y_var
+    );
   END IF;
 
-  -- There is no label_x and label_y for the non-countries
   SELECT
-    fclass_iso, fclass_tlc, longitude, latitude INTO fclass_iso, fclass_tlc, label_x, label_y
+    sp.fclass_iso, sp.fclass_tlc, sp.longitude, sp.latitude INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
   FROM ne_10m_admin_1_states_provinces sp
   WHERE sp.wikidataid = wikidata_id;
 
   -- finally, try localities
   IF NOT FOUND THEN
-  SELECT
-    fclass_iso, fclass_tlc, longitude, latitude INTO fclass_iso, fclass_tlc, label_x, label_y
-  FROM ne_10m_populated_places pp
-  WHERE pp.wikidataid = wikidata_id;END IF;
+      SELECT
+        pp.fclass_iso, pp.fclass_tlc, pp.longitude, pp.latitude INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
+      FROM ne_10m_populated_places pp
+      WHERE pp.wikidataid = wikidata_id;
+  END IF;
 
   -- return an empty JSONB rather than null, so that it can be safely
   -- concatenated with whatever other JSONB rather than needing a check for
@@ -1101,10 +1107,10 @@ END IF;
     RETURN '{}'::jsonb;
   END IF;
   RETURN jsonb_build_object(
-        '__ne_fclass_iso', fclass_iso,
-        '__ne_fclass_tlc', fclass_tlc,
-        '__ne_label_x', label_x,
-        '__ne_label_y', label_y
+        '__ne_fclass_iso', fclass_iso_var,
+        '__ne_fclass_tlc', fclass_tlc_var,
+        '__ne_label_x', label_x_var,
+        '__ne_label_y', label_y_var
     );
 END;
 $$ LANGUAGE plpgsql STABLE;
