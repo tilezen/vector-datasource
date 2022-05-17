@@ -78,8 +78,12 @@ global:
           - geom_type: line
           - mz_boundary_from_polygon: true
 
-  - &dispute_id_components
+  - &osm_dispute_id_components
     tz_breakaway_code: { col: 'ne:brk_a3' }
+    tz_ne_id: { col: 'ne_id' }
+
+  - &ne_dispute_id_components
+    tz_breakaway_code: { col: 'brk_a3' }
     tz_ne_id: { col: 'ne_id' }
 
   - &dispute_properties
@@ -87,7 +91,7 @@ global:
     recognized_by: { col: recognized_by }
     disputed_by: { col: disputed_by }
     tz_admin_level: {col: admin_level }
-    <<: *dispute_id_components
+    <<: *osm_dispute_id_components
 
 filters:
 
@@ -153,17 +157,6 @@ filters:
       <<: [*output_properties, *dispute_properties]
       kind: county
     table: osm
-  # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
-  # project to kind:xx=unrecognized.  The lua preprocessing
-  # project admin_level 3 and 5 cases to appropriate tags for us, so we don't need
-  # to handle them here
-  - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
-    min_zoom: 8
-    output:
-      <<: [ *output_properties, *dispute_properties ]
-      kind: disputed_reference_line
-      kind_detail: {col: admin_level }
-    table: osm
   - filter:
       all:
         - geom_type: line
@@ -175,6 +168,17 @@ filters:
     output:
       <<: [ *output_properties, *dispute_properties ]
       kind: mz_internal_dispute_mask
+    table: osm
+  # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
+  # project to kind:xx=unrecognized.  The lua preprocessing
+  # project admin_level 3 and 5 cases to appropriate tags for us, so we don't need
+  # to handle them here
+  - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: [ *output_properties, *dispute_properties ]
+      kind: disputed_reference_line
+      kind_detail: {col: admin_level }
     table: osm
 
   # osm
@@ -245,7 +249,7 @@ filters:
         - 'Map unit boundary'
     min_zoom: { col: min_zoom }
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
 
@@ -263,7 +267,7 @@ filters:
         - 'Unrecognized'
     min_zoom: 1
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
     table: ne
@@ -297,7 +301,7 @@ filters:
     min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: unrecognized_macroregion
       kind_detail: '4'
     table: ne
@@ -309,7 +313,7 @@ filters:
     min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: [*output_properties, *ne_localized_kind_properties, *dispute_id_components]
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: unrecognized_region
       kind_detail: '4'
     table: ne

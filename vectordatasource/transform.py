@@ -9368,7 +9368,7 @@ class _DisputeMasks(object):
             # represent the curve, as this slows down intersection checks.
             buffered_shape = shape.buffer(
                 self.buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
-            self.masks.append((buffered_shape, disputants, recognizants, claimants))
+            self.masks.append((buffered_shape, disputants, recognizants, claimants, props))
 
     def empty(self):
         return not self.masks
@@ -9381,7 +9381,7 @@ class _DisputeMasks(object):
 
         updated_features = []
 
-        for mask_shape, disputants, recognizants, claimants in self.masks:
+        for mask_shape, disputants, recognizants, claimants, dispute_props in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
             # a kind override has already been set.
@@ -9413,6 +9413,12 @@ class _DisputeMasks(object):
                         new_props['kind:' + claimant] = 'country'
 
                     new_props['kind'] = 'disputed_reference_line'
+
+                    # apply all the properties that aren't already there from the dispute feature
+                    for prop, value in dispute_props.items():
+                        if not new_props.get(prop):
+                            new_props[prop] = value
+
                     updated_features.append((cut_shape, new_props, None))
 
         if not shape.is_empty:
@@ -9718,9 +9724,15 @@ def create_dispute_ids(shape, props, fid, zoom):
     stores no dispute_id if both input fields are missing
     """
 
-    # retrieve and remove these items from props.  This is the only func that will use them
-    items = [props.pop('tz_breakaway_code', None), props.pop('tz_ne_id', None)]
-    items = [item for item in items if item is not None]
+    breakaway_code = props.pop('tz_breakaway_code', None)
+    if breakaway_code is None:
+        # no breakaway code, not a dispute
+        return shape, props, fid
+    items = [breakaway_code]
+
+    ne_id = props.pop('tz_ne_id', None)
+    if ne_id is not None:
+        items.append(str(ne_id))
 
     dispute_id = '_'.join(items)
     if dispute_id:
