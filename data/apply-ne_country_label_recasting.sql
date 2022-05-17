@@ -35,4 +35,4 @@ update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 country' where ne_
 
 
 -- Fix Saint Helena wikidata id for this build. Remove once NE is updated
-update ne_10m_admin_0_countries_iso set wikidata = 'Q192184' where ne_id = 1159320733
+update ne_10m_admin_0_countries_iso set wikidataid = 'Q192184' where ne_id = 1159320733
