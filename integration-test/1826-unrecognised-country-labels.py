@@ -38,7 +38,7 @@ class CountryTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'kind': 'unrecognized',
-                'min_zoom': 6,
+                'min_zoom': 8,
             })
 
     def test_region_no_ne(self):
