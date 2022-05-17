@@ -36,6 +36,7 @@ global:
     wikidata_id: {col: wikidata}
     disputed_by: {col: disputed_by }
     'place:ISO': { col: 'place:ISO' }
+    'place:TLC': { col: 'place:TLC' }
     'place:AR': { col: 'place:AR' }
     'place:BD': { col: 'place:BD' }
     'place:BR': { col: 'place:BR' }
@@ -83,6 +84,7 @@ global:
 
   - &alternate_fclass
     fclass_iso: { col: fclass_iso }
+    fclass_tlc: { col: fclass_tlc }
     fclass_ar: { col: fclass_ar }
     fclass_bd: { col: fclass_bd }
     fclass_br: { col: fclass_br }
