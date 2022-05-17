@@ -2,6 +2,8 @@
 -- tables to either show or hide certain labels
 
 -- sets featurcla to equal fclass_tlc values. We can then further modify the values while keeping the fclass intact.
+-- featurecla has a shorter varchar length and needs altering first
+alter table ne_10m_admin_0_countries_tlc alter column featurecla type varchar;
 update ne_10m_admin_0_countries_tlc set featurecla = fclass_tlc;
 
 -- Akrotiri Sovereign Base Area
