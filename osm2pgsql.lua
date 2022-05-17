@@ -557,7 +557,7 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
     end
 -- New Caledonia
-    if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NF' then
+    if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NC' then
         output_hstore['place'] = 'country'
     end
 -- Norfolk Island
