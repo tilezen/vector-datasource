@@ -147,7 +147,11 @@ filters:
     #
     # note: also, we knock this down to 6 during post-processing for any country
     # which doesn't match an NE curated one.
-    min_zoom: 1
+    min_zoom:
+      case:
+        - when: { place: country }
+          then: 1
+        - else: 8
     output:
       <<: [*output_properties, *ne_zooms]
       kind: {col: place}
