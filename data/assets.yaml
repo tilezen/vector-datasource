@@ -1,5 +1,5 @@
 bucket: nextzen-tile-assets
-datestamp: 20220426
+datestamp: 20220516
 
 shapefiles:
 
@@ -55,98 +55,104 @@ shapefiles:
     url: http://s3.amazonaws.com/tilezen-assets/curated/admin_areas_20180409.zip
 
   - name: ne_110m_lakes
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_lakes.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/110m/physical/ne_110m_lakes.zip
 
   - name: ne_50m_lakes
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_lakes.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/physical/ne_50m_lakes.zip
 
   - name: ne_10m_lakes
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_lakes.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/physical/ne_10m_lakes.zip
 
   - name: ne_110m_ocean
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_ocean.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/110m/physical/ne_110m_ocean.zip
 
   - name: ne_50m_ocean
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_ocean.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/physical/ne_50m_ocean.zip
 
   - name: ne_10m_ocean
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_ocean.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/physical/ne_10m_ocean.zip
 
   - name: ne_50m_playas
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_playas.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/physical/ne_50m_playas.zip
 
   - name: ne_10m_playas
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_playas.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/physical/ne_10m_playas.zip
 
   - name: ne_50m_urban_areas
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_urban_areas.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/cultural/ne_50m_urban_areas.zip
 
   - name: ne_10m_urban_areas
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_urban_areas.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_urban_areas.zip
 
   - name: ne_110m_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_land.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/110m/physical/ne_110m_land.zip
 
   - name: ne_50m_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_land.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/physical/ne_50m_land.zip
 
   - name: ne_10m_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_land.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/physical/ne_10m_land.zip
     tile: true
 
   - name: ne_10m_populated_places
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_populated_places.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_populated_places.zip
 
   - name: ne_110m_admin_0_boundary_lines_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/110m/cultural/ne_110m_admin_0_boundary_lines_land.zip
 
   - name: ne_50m_admin_0_boundary_lines_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/cultural/ne_50m_admin_0_boundary_lines_land.zip
 
   - name: ne_10m_admin_0_boundary_lines_land
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_boundary_lines_land.zip
 
   - name: ne_10m_admin_0_boundary_lines_map_units
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_boundary_lines_map_units.zip
 
   - name: ne_50m_admin_1_states_provinces_lines
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/cultural/ne_50m_admin_1_states_provinces_lines.zip
 
   - name: ne_10m_admin_1_states_provinces_lines
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_1_states_provinces_lines.zip
 
   - name: ne_50m_admin_0_boundary_lines_disputed_areas
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_disputed_areas.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/cultural/ne_50m_admin_0_boundary_lines_disputed_areas.zip
 
   - name: ne_50m_admin_0_boundary_lines_maritime_indicator_chn
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/cultural/ne_50m_admin_0_boundary_lines_maritime_indicator_chn.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/cultural/ne_50m_admin_0_boundary_lines_maritime_indicator_chn.zip
 
   - name: ne_10m_admin_0_boundary_lines_disputed_areas
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_disputed_areas.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_boundary_lines_disputed_areas.zip
 
   - name: ne_10m_admin_0_boundary_lines_maritime_indicator_chn
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_boundary_lines_maritime_indicator_chn.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_boundary_lines_maritime_indicator_chn.zip
 
   - name: ne_10m_roads
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_roads.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_roads.zip
 
   - name: ne_110m_coastline
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_coastline.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/110m/physical/ne_110m_coastline.zip
 
   - name: ne_50m_coastline
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/50m/physical/ne_50m_coastline.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/50m/physical/ne_50m_coastline.zip
 
   - name: ne_10m_coastline
-    url: http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/physical/ne_10m_coastline.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/physical/ne_10m_coastline.zip
 
   - name: ne_10m_admin_0_countries
-    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_countries.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_countries.zip
+
+  - name: ne_10m_admin_0_countries_iso
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_countries_iso.zip
+
+  - name: ne_10m_admin_0_countries_tlc
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_countries_tlc.zip
 
   - name: ne_10m_admin_0_map_units
-    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_0_map_units.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_0_map_units.zip
 
   - name: ne_10m_admin_1_states_provinces
-    url: https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip
+    url: https://naciscdn.org/naturalearth/5.1.2/10m/cultural/ne_10m_admin_1_states_provinces.zip
 
 wikidata-queries:
   - name: aerodrome_passenger_count

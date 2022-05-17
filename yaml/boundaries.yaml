@@ -29,6 +29,7 @@ global:
 
   - &ne_localized_kind_properties
     'kind:iso': {col: fclass_iso }
+    'kind:tlc': {col: fclass_tlc }
     'kind:ar': {col: fclass_ar }
     'kind:bd': {col: fclass_bd }
     'kind:br': {col: fclass_br }
