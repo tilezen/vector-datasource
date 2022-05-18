@@ -1750,6 +1750,9 @@ post_process:
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
 
+  - fn: vectordatasource.transform.drop_properties_with_prefix
+    params: {prefix: tz_}
+
   # drop small inners in buildings before we do the merge.
   - fn: vectordatasource.transform.drop_small_inners
     params:
