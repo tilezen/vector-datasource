@@ -8906,7 +8906,7 @@ def tags_set_ne_min_max_zoom(ctx):
                 min_zoom = ceil(min_zoom)
             props['min_zoom'] = min_zoom
 
-        elif props.get('kind') in ('country','unrecognized'):
+        elif props.get('kind') in ('country', 'unrecognized'):
             # countries and regions which don't have a min zoom joined from NE
             # are probably either vandalism or unrecognised countries. either
             # way, we probably don't want to see them at zoom, which is lower
