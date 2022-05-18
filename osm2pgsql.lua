@@ -508,7 +508,7 @@ function osm2pgsql.process_node(object)
     end
 -- Show Abkhazia label as region for most countries
     if object.tags.place and object.tags.wikidata == 'Q23334' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'state'
         output_hstore['place:RU'] = 'country'
     end
 -- Turn off South Ossetia label for most countries
