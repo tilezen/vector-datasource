@@ -1,8 +1,11 @@
 -- Recasts a few rows in the ne_10m_admin_0_countries_iso and ne_10m_admin_0_countries_tlc
--- tables to either show or hide certain labels
+-- tables to either show or hide certain labels.
+-- The TLC table yields around 10 country and dependency features over ISO (including Kosovo and Taiwan),
+-- which Tilezen sometimes has opinions about.
+
 
 -- sets featurcla to equal fclass_tlc values. We can then further modify the values while keeping the fclass intact.
--- featurecla has a shorter varchar length and needs altering first
+-- featurecla column has a shorter varchar length and needs altering first.
 alter table ne_10m_admin_0_countries_tlc alter column featurecla type varchar;
 update ne_10m_admin_0_countries_tlc set featurecla = fclass_tlc;
 
@@ -31,7 +34,7 @@ update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id 
 update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id = 1159320531;
 
 -- West Bank
-update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 country' where ne_id = 1159320903;
+update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 dependency' where ne_id = 1159320903;
 
 
 -- Fix Saint Helena wikidata id for this build. Remove once NE is updated
