@@ -727,6 +727,9 @@ function osm2pgsql.process_way(object)
             if v['ne:brk_a3'] then
                 output_hstore['ne:brk_a3'] = v['ne:brk_a3']
             end
+            if v['unrecognized_dispute'] then
+                output_hstore.unrecognized_dispute = 'yes'
+            end
         end
     end
 
@@ -784,6 +787,30 @@ function osm2pgsql.process_relation(object)
 
     if not next(output) and not next(output_hstore) then
         return
+    end
+
+-- Mark some disputes as unrecognized to hide them by default
+    if (type == 'linestring' or type == 'boundary') and (
+    -- Abkahzia
+    object.tags['ne:brk_a3'] == 'B35' or
+    -- Artsakh (Nagorno-Karabakh)
+    object.tags['ne:brk_a3'] == 'B38' or
+    -- Donbass
+    object.tags['ne:brk_a3'] == 'B90' or
+    object.tags['ne:brk_a3'] == 'C02' or
+    object.tags['ne:brk_a3'] == 'C03' or
+    -- Northern Cyprus
+    object.tags['ne:brk_a3'] == 'B20' or
+    object.tags['ne:brk_a3'] == 'B43' or
+    -- Somaliland
+    object.tags['ne:brk_a3'] == 'B30' or
+    -- South Ossetia
+    object.tags['ne:brk_a3'] == 'B37' or
+    -- Transnistria
+    object.tags['ne:brk_a3'] == 'B36')
+    then
+        object.tags.unrecognized_dispute = 'yes'
+        output_hstore.unrecognized_dispute = 'yes'
     end
 
 -- Adds tags from boundary=claim relation to its ways
