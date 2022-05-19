@@ -31,7 +31,7 @@ update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 country' where ne_
 update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id = 1159321259;
 
 -- Svalbard
-update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 dependency' where ne_id = 1159321119
+update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 dependency' where ne_id = 1159321119;
 
 -- Turkish Republic of Northern Cyprus
 update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id = 1159320531;
