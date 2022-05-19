@@ -556,6 +556,16 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'HM' then
         output_hstore['place'] = 'country'
     end
+-- Hong Kong
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'HK' then
+        output_hstore['place'] = 'country'
+        output_hstore['place:CN'] = 'state'
+    end
+-- Hong Kong
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MO' then
+        output_hstore['place'] = 'country'
+        output_hstore['place:CN'] = 'state'
+    end
 -- New Caledonia
     if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NC' then
         output_hstore['place'] = 'country'
