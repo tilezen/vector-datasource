@@ -565,7 +565,7 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
         output_hstore['place:CN'] = 'state'
     end
--- Hong Kong
+-- Macau
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MO' then
         output_hstore['place'] = 'country'
         output_hstore['place:CN'] = 'state'
