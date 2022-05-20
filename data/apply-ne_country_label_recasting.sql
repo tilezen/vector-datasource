@@ -25,7 +25,7 @@ update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id 
 update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id = 1159320709;
 
 -- Gaza Strip
-update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 country' where ne_id = 1159320901;
+update ne_10m_admin_0_countries_tlc set featurecla = 'Admin-0 dependency' where ne_id = 1159320901;
 
 -- Somaliland
 update ne_10m_admin_0_countries_tlc set featurecla = 'unrecognized' where ne_id = 1159321259;
