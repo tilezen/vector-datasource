@@ -529,7 +529,7 @@ function osm2pgsql.process_node(object)
 
 -- Recast various dependencies as countries
 -- Aland
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'AX' then
+    if object.tags.place == 'county' and object.tags['ISO3166-1'] == 'AX' then
         output_hstore['place'] = 'country'
     end
 -- American Samoa
