@@ -536,6 +536,10 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'AS' then
         output_hstore['place'] = 'country'
     end
+-- Bouvet Island
+    if object.tags.place == 'island' and object.tags['ISO3166-1'] == 'BV' then
+        output_hstore['place'] = 'country'
+    end
 -- Christmas Island
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'CX' then
         output_hstore['place'] = 'country'
@@ -606,6 +610,10 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'region' and object.tags['ISO3166-1'] == 'SJ' then
         output_hstore['place'] = 'country'
     end
+-- United States Minor Outlying Islands
+    if object.tags.place == 'region' and object.tags['ISO3166-1'] == 'UM' then
+        output_hstore['place'] = 'country'
+    end
 -- United States Virgin Islands
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'VI' then
         output_hstore['place'] = 'country'
@@ -637,6 +645,19 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
     end
 
+-- Update names of some countries for better rendering. We will update the data and deprecate this eventually.
+-- Rename Falkland Islands
+    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'FK' then
+        output_hstore['name:en'] = 'Falkland Islands (Islas Malvinas)'
+    end
+-- Rename Saint Martin
+    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'SX' then
+        output_hstore['name:en'] = 'Sint Maarten'
+    end
+-- Rename Sint Maarten
+    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'MF' then
+        output_hstore['name:en'] = 'Saint Martin'
+    end
 
     output.tags = output_hstore
 
