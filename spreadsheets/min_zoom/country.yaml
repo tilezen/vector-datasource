@@ -330,7 +330,7 @@ GN:
 # Guadeloupe
 GP:
   min_zoom:  5.0
-  max_zoom:  10.0
+  max_zoom: 10.0
 # Eq. Guinea
 GQ:
   min_zoom:  4.0
@@ -649,7 +649,7 @@ NL:
   max_zoom: 10.0
 # Norway
 NO:
-  min_zoom:  3.0
+  min_zoom: 3.0
   max_zoom: 7.0
 # Nepal
 NP:
@@ -858,7 +858,7 @@ TJ:
 # Tokelau
 TK:
   min_zoom:  5.0
-  max_zoom:  10.0
+  max_zoom: 10.0
 
 # Timor-Leste
 TL:
