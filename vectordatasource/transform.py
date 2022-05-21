@@ -8898,6 +8898,7 @@ def tags_set_ne_min_max_zoom(ctx):
 
     for _, props, _ in layer['features']:
         min_zoom = props.pop('__ne_min_zoom', None)
+        max_zoom = props.pop('__ne_max_zoom', None)
         if min_zoom is not None:
             # don't overstuff features into tiles when they are in the
             # long tail of won't display, but make their min_zoom
@@ -8914,12 +8915,11 @@ def tags_set_ne_min_max_zoom(ctx):
             # information.
             props['kind'] = 'unrecognized'
             props['min_zoom'] = max(8, props['min_zoom'])
-            props['max_zoom'] = max(10, props['max_zoom'])
+            props['max_zoom'] = min(10, props['max_zoom'])
 
         elif props.get('kind') == 'region':
             props['min_zoom'] = max(8, props['min_zoom'])
 
-        max_zoom = props.pop('__ne_max_zoom', None)
         if max_zoom is not None:
             props['max_zoom'] = max_zoom
 
