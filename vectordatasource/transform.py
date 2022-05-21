@@ -8914,6 +8914,7 @@ def tags_set_ne_min_max_zoom(ctx):
             # information.
             props['kind'] = 'unrecognized'
             props['min_zoom'] = max(8, props['min_zoom'])
+            props['max_zoom'] = max(10, props['max_zoom'])
 
         elif props.get('kind') == 'region':
             props['min_zoom'] = max(8, props['min_zoom'])

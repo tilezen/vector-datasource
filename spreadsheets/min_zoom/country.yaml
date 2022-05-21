@@ -279,6 +279,10 @@ FM:
 FO:
   min_zoom:  4.0
   max_zoom:  9.0
+# France
+FR:
+  min_zoom:  1.7
+  max_zoom:  6.7
 # Gabon
 GA:
   min_zoom:  3.0
@@ -295,6 +299,10 @@ GD:
 GE:
   min_zoom:  4.0
   max_zoom:  9.0
+# French Guiana
+GF:
+  min_zoom:  5.0
+  max_zoom: 10.0
 # Guernsey
 GG:
   min_zoom:  5.0
@@ -319,6 +327,10 @@ GM:
 GN:
   min_zoom:  3.0
   max_zoom:  8.0
+# Guadeloupe
+GP:
+  min_zoom:  5.0
+  max_zoom:  10.0
 # Eq. Guinea
 GQ:
   min_zoom:  4.0
@@ -567,6 +579,10 @@ MO:
 MP:
   min_zoom:  5.0
   max_zoom: 10.0
+# Martinique
+MQ:
+  min_zoom:  5.0
+  max_zoom: 10.0
 # Mauritania
 MR:
   min_zoom:  3.0
@@ -631,6 +647,10 @@ NI:
 NL:
   min_zoom:  5.0
   max_zoom: 10.0
+# Norway
+NO:
+  min_zoom:  3.0
+  max_zoom: 7.0
 # Nepal
 NP:
   min_zoom:  3.0
@@ -711,6 +731,10 @@ PY:
 QA:
   min_zoom:  4.0
   max_zoom:  9.0
+# Réunion
+RE:
+  min_zoom:  3.0
+  max_zoom:  8.0
 # Romania
 RO:
   min_zoom:  3.0
@@ -817,8 +841,8 @@ TD:
   max_zoom:  8.0
 # Fr. S. Antarctic Lands
 TF:
-  min_zoom:  4.0
-  max_zoom:  9.0
+  min_zoom:  4.5
+  max_zoom:  9.5
 # Togo
 TG:
   min_zoom:  5.0
@@ -831,6 +855,11 @@ TH:
 TJ:
   min_zoom:  4.0
   max_zoom:  9.0
+# Tokelau
+TK:
+  min_zoom:  5.0
+  max_zoom:  10.0
+
 # Timor-Leste
 TL:
   min_zoom:  4.0
@@ -935,6 +964,10 @@ XK:
 YE:
   min_zoom:  3.0
   max_zoom:  8.0
+# Mayotte
+YT:
+  min_zoom:  5.0
+  max_zoom:  10.0
 # South Africa
 ZA:
   min_zoom:  1.7
