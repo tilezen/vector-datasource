@@ -127,6 +127,10 @@ BS:
 BT:
   min_zoom:  4.0
   max_zoom:  9.0
+# Bouvet Island
+BV:
+  min_zoom:  4.5
+  max_zoom:  9.5
 # Botswana
 BW:
   min_zoom:  4.0
@@ -649,8 +653,8 @@ NL:
   max_zoom: 10.0
 # Norway
 NO:
-  min_zoom: 3.0
-  max_zoom: 7.0
+  min_zoom:  3.0
+  max_zoom:  7.0
 # Nepal
 NP:
   min_zoom:  3.0
@@ -783,6 +787,10 @@ SH:
 SI:
   min_zoom:  5.0
   max_zoom: 10.0
+# Svalbard and Jan Mayen
+SJ:
+  min_zoom:  3.0
+  max_zoom: 8.0
 # Slovakia
 SK:
   min_zoom:  4.0
