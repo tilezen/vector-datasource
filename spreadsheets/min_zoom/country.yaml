@@ -790,7 +790,7 @@ SI:
 # Svalbard and Jan Mayen
 SJ:
   min_zoom:  3.0
-  max_zoom: 8.0
+  max_zoom:  8.0
 # Slovakia
 SK:
   min_zoom:  4.0
