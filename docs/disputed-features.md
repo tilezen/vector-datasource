@@ -25,7 +25,7 @@ We have a two-step process to patching in these disputes. First, we download and
 3. ssh onto the server and navigate to /mnt/username/
 4. Run [`parallel_create_planet_file.sh`](https://github.com/tilezen/vector-datasource/tree/master/scripts/parallel_create_planet_file.sh) with a daylight version to build a fresh pbf. This will take some time.
    *  example usage: `sh parallel_create_planet_file.sh 1.10`
-5. Once the `parallel_create_planet_file.sh` has been run on a daylight version at least once, you can use the [`patch_disputes_into_pbf.sh`](https://github.com/tilezen/vector-datasource/tree/master/scripts/scripts/patch_disputes_into_pbf.sh) script to repatch the disputes if changes need to be made. This script just cuts out some of the early steps to save time.
+5. Once the `parallel_create_planet_file.sh` has been run on a Daylight version at least once, you can use the [`patch_disputes_into_pbf.sh`](https://github.com/tilezen/vector-datasource/tree/master/scripts/scripts/patch_disputes_into_pbf.sh) script to repatch the disputes if changes need to be made. This script just cuts out some of the early steps to save time.
    * example usage: `sh patch_disputes_into_pbf.sh 1.10`
 6. If you want to test out disputes in a build, run [`create_disputed_areas_pbf.sh`](https://github.com/tilezen/vector-datasource/tree/master/scripts/create_disputed_areas_pbf.sh) to create a smaller pbf with just the data within disputed areas.
    * example usage: `sh create_disputed_areas-pbf.sh 1.10`
@@ -33,6 +33,6 @@ We have a two-step process to patching in these disputes. First, we download and
 
 ## Disputed capitals
 
-Some cities are considered different administrative levels depending on a country's viewpoint. One country may consider a city to be a regional or country capital while a disputant does not. Natural Earth has this information in the `ne_10m_admin_1_label_points_details` table for affected countries in the `FCLASS_XX` columns. Using Wikidata tags, the NE `FCLASS_XX` data is joined to the OSM feature to create output kinds of `regional_capital:xx` or `country_capital:xx` with a true or false value to allow for different rendering options.
+Some cities are considered different administrative levels depending on a country's viewpoint. One country may consider a city to be a regional or country capital while a disputant does not. Natural Earth has this information in the `ne_10m_populated_places` table for affected countries in the `FCLASS_XX` columns. Using Wikidata ID tags, the NE `FCLASS_XX` data is joined to the OSM feature to create output kinds of `regional_capital:xx` or `country_capital:xx` with a true or false value to allow for different rendering options.
 
 This should all happen automatically in Tilezen, however, Wikidata ID tag changes in OSM could cause breakages in the join. In this instance, a locally applied patch to Daylight like described in the disputed border section may be needed or an update to NE if the OSM change is valid.
