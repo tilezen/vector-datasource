@@ -21,6 +21,10 @@ With its coverage of roads, POIs, landuse, as well as rich metadata, OpenStreetM
 
 All OpenStreetMap data is licensed under the [ODbL](http://opendatacommons.org/licenses/odbl/), a [share-alike](https://en.wikipedia.org/wiki/Share-alike) license which also requires attribution.
 
+Tilezen uses [Daylight Distribution](https://daylightmap.org/) which combines OpenStreetMap data validated with quality and consistency checks with additional opensource datasets.
+
+Dynamic viewpoint processing of OSM data is described in [disputed-features.md](disputed-features.md).
+
 ## osmdata.openstreetmap.de
 
 `source:osmdata.openstreetmap.de`
