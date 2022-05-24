@@ -31,8 +31,8 @@ We have a two-step process to patching in these disputes. First, we download and
    * example usage: `sh create_disputed_areas-pbf.sh 1.10`
 
 
-## Disputed capitals 
+## Disputed capitals
 
-Some cities are considered different administrative levels depending on a country's viewpoint. One country may consider a city to be a regional or country capital while a disputant does not. Natural Earth has this information in the `ne_10m_populated_places` table for affected countries in the `FCLASS_XX` columns. Using Wikidata ID tags, the NE `FCLASS_XX` data is joined to the OSM feature to create output kinds of `regional_capital:xx` or `country_capital:xx` with a true or false value to allow for different rendering options.
+Some cities are considered different administrative levels depending on a country's viewpoint. One country may consider a city to be a regional or country capital while a disputant does not. Natural Earth has this information in the `ne_10m_admin_1_label_points_details` table for affected countries in the `FCLASS_XX` columns. Using Wikidata tags, the NE `FCLASS_XX` data is joined to the OSM feature to create output kinds of `regional_capital:xx` or `country_capital:xx` with a true or false value to allow for different rendering options.
 
 This should all happen automatically in Tilezen, however, Wikidata ID tag changes in OSM could cause breakages in the join. In this instance, a locally applied patch to Daylight like described in the disputed border section may be needed or an update to NE if the OSM change is valid.
