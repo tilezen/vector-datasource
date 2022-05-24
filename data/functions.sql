@@ -1017,7 +1017,8 @@ BEGIN
         SELECT
             min_label, max_label INTO min_zoom, max_zoom
         FROM ne_10m_admin_0_countries_tlc t
-        WHERE t.wikidataid = wikidata_id;
+        WHERE t.wikidataid = wikidata_id
+        AND featurecla IN ('Admin-0 country', 'Admin-0 dependency');
       END IF;
   ELSE
     -- try states and provinces if it's not a country
@@ -1071,7 +1072,8 @@ END IF;
         SELECT
             t.fclass_iso, t.fclass_tlc, t.label_x, t.label_y INTO fclass_iso_var, fclass_tlc_var, label_x_var, label_y_var
         FROM ne_10m_admin_0_countries_tlc t
-        WHERE t.wikidataid = wikidata_id;
+        WHERE t.wikidataid = wikidata_id
+        AND featurecla IN ('Admin-0 country', 'Admin-0 dependency');
     END IF;
 
     IF NOT FOUND THEN

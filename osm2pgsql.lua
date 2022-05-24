@@ -508,7 +508,7 @@ function osm2pgsql.process_node(object)
     end
 -- Show Abkhazia label as region for most countries
     if object.tags.place and object.tags.wikidata == 'Q23334' then
-        output_hstore['place'] = 'region'
+        output_hstore['place'] = 'state'
         output_hstore['place:RU'] = 'country'
     end
 -- Turn off South Ossetia label for most countries
@@ -528,8 +528,16 @@ function osm2pgsql.process_node(object)
     end
 
 -- Recast various dependencies as countries
+-- Aland
+    if object.tags.place == 'county' and object.tags['ISO3166-1'] == 'AX' then
+        output_hstore['place'] = 'country'
+    end
 -- American Samoa
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'AS' then
+        output_hstore['place'] = 'country'
+    end
+-- Bouvet Island
+    if object.tags.place == 'island' and object.tags['ISO3166-1'] == 'BV' then
         output_hstore['place'] = 'country'
     end
 -- Christmas Island
@@ -556,8 +564,18 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'territory' and object.tags['ISO3166-1'] == 'HM' then
         output_hstore['place'] = 'country'
     end
+-- Hong Kong
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'HK' then
+        output_hstore['place'] = 'country'
+        output_hstore['place:CN'] = 'state'
+    end
+-- Macau
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MO' then
+        output_hstore['place'] = 'country'
+        output_hstore['place:CN'] = 'state'
+    end
 -- New Caledonia
-    if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NF' then
+    if object.tags.place == 'archipelago' and object.tags['ISO3166-1'] == 'NC' then
         output_hstore['place'] = 'country'
     end
 -- Norfolk Island
@@ -592,6 +610,10 @@ function osm2pgsql.process_node(object)
     if object.tags.place == 'region' and object.tags['ISO3166-1'] == 'SJ' then
         output_hstore['place'] = 'country'
     end
+-- United States Minor Outlying Islands
+    if object.tags.place == 'region' and object.tags['ISO3166-1'] == 'UM' then
+        output_hstore['place'] = 'country'
+    end
 -- United States Virgin Islands
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'VI' then
         output_hstore['place'] = 'country'
@@ -623,6 +645,19 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
     end
 
+-- Update names of some countries for better rendering. We will update the data and deprecate this eventually.
+-- Rename Falkland Islands
+    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'FK' then
+        output_hstore['name:en'] = 'Falkland Islands (Islas Malvinas)'
+    end
+-- Rename Saint Martin
+    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MF' then
+        output_hstore['name:en'] = 'Saint Martin'
+    end
+-- Rename Sint Maarten
+    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'SX' then
+        output_hstore['name:en'] = 'Sint Maarten'
+    end
 
     output.tags = output_hstore
 

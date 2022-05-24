@@ -47,6 +47,11 @@ psql $PSQLOPTS  $@ -f apply-planet_disputed_area_features_name_suppression.sql
 echo -e "\nRecasting unwanted NE disputed lines to unrecognized"
 psql $PSQLOPTS  $@ -f apply-ne_disputed_border_suppression.sql
 
+# Recasts a few rows in the ne_10m_admin_0_countries_iso and ne_10m_admin_0_countries_tlc
+# tables to either show or hide certain labels.
+echo -e "\nRecasting NE country labels"
+psql $PSQLOPTS  $@ -f apply-ne_country_label_recasting.sql
+
 # Australia suburbs are treated more like cities than typical US style suburbs so we recast them to place=town
 echo -e "\nRecasting Australia suburbs"
 psql $PSQLOPTS  $@ -f apply-planet_australia_suburb_recast.sql
