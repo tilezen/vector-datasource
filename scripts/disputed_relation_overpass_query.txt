@@ -1,7 +1,7 @@
 // Contains the relations needed for a filtered_dispute package.
-// Recommended to download fresh package with each new Daylight release then
-// compare with previous package for edits or deletions that may need correction
-// or updating before using in a build.
+// Recommended to download fresh package with each new Daylight release,
+// then compare with previous package for edits or deletions that may need
+// correction or updating before using in a build.
 
 [out:xml][timeout:25];
 (
