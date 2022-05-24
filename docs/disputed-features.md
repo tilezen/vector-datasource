@@ -18,7 +18,7 @@ We have a two-step process to patching in these disputes. First, we download and
 7. Save the new patch file as something like `filtered_disputes.1.10.osm` using the desired Daylight version and upload to the [`scripts`](https://github.com/tilezen/vector-datasource/tree/master/scripts) folder for tracking.
 
 ### Patching Daylight
-1. Run osmium cat to convert the .osm file to a pbf. The script expects the name to be `filtered_disputes.pbf`. An example file can be used to try out the process [filtered_disputes_example.osm](https://github.com/tilezen/vector-datasource/tree/master/scripts/)
+1. Run osmium cat to convert the .osm file to a pbf. The script expects the name to be `filtered_disputes.pbf`. [filtered_disputes_example.osm](https://github.com/tilezen/vector-datasource/tree/master/scripts/filtered_disputes_example.osm) can be used to try out the process.
    * `osmium cat filtered_disputes.1.10.osm -o filtered_disputes.pbf --overwrite`
 2. Scp the file to the server
    * `scp -i tilezen.pem filtered_disputes.pbf  ubuntu@1.2.3.4:/mnt/username/`
