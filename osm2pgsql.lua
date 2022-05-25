@@ -228,6 +228,7 @@ local tables = {}
 --for storing node tags later
 local disputed = {}
 local claimed = {}
+local somaliland = {}
 
 
 tables.point = osm2pgsql.define_table{
@@ -719,7 +720,7 @@ function osm2pgsql.process_way(object)
     local z_order, roads = get_z_order(object.tags)
     output.z_order = z_order
 
--- Stripped disputed tags off of ways
+-- Strips disputed tags off of ways
     if object.tags.claimed_by or object.tags.disputed_by or object.tags.recognized_by or object.tags.dispute then
         output_hstore.claimed_by = nil
         output_hstore.disputed_by = nil
@@ -764,6 +765,15 @@ function osm2pgsql.process_way(object)
             end
             if v['unrecognized_dispute'] then
                 output_hstore.unrecognized_dispute = 'yes'
+            end
+        end
+    end
+
+-- Turn off admin 4 ways within Somaliland
+    for k, v in pairs(somaliland) do
+        if k == object.id then
+            if v['admin_level'] == '4' then
+                output_hstore.admin_level = nil
             end
         end
     end
@@ -920,6 +930,23 @@ function osm2pgsql.process_relation(object)
 -- Fix Kosovo dispute viewpoints
     if type == 'linestring' and object.tags.ne_id == '1746706755' then
         output_hstore['recognized_by'] = 'AR;BD;BR;DE;EG;ES;FR;GB;ID;IL;IT;JP;KO;MA;NL;NP;PK;PL;PS;PT;SA;SE;TR;TW;UA;US;VN'
+    end
+
+-- Turn off admin 4 relations within Somaliland
+    if type == 'boundary' and (object.tags.wikidata == 'Q281589' or object.tags.wikidata == 'Q751387' or
+    object.tags.wikidata == 'Q791667' or object.tags.wikidata == 'Q848864' or object.tags.wikidata == 'Q865590'
+    or object.tags.wikidata == 'Q877021') then
+        for _, member in ipairs(object.members) do
+            if object.tags.admin_level == '4' then
+                output_hstore['admin_level'] = nil
+            end
+            if member.type == 'w' then
+                if not somaliland[member.ref] then
+                    somaliland[member.ref] = {}
+                end
+                somaliland[member.ref] = object.tags
+            end
+        end
     end
 
     if enable_legacy_route_processing and (hstore or hstore_all) and type == 'route' then
