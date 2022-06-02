@@ -143,3 +143,18 @@ class BuildingScaleRankTest(FixtureTest):
                 'kind': 'building',
                 'min_zoom': 17,
             }, 1)
+
+    def test_slightly_larger_outbuilding_z16(self):
+        # check that a small building (or large shed), assigned zoom 16 in the
+        # buildings.yaml, doesn't get re-assigned a lower zoom. it should stay
+        # at z16.
+        z, x, y = (16, 0, 0)
+
+        # make one 4x4m building.
+        self._setup_row(z, x, y, 4, 4, 1)
+
+        self.assert_n_matching_features(
+            z, x, y, 'buildings', {
+                'kind': 'building',
+                'min_zoom': 16,
+            }, 1)
