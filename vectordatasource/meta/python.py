@@ -5,8 +5,8 @@ from collections import namedtuple
 from numbers import Number
 
 import astformatter
-
 import yaml
+
 from vectordatasource import util
 from vectordatasource.meta import function
 
