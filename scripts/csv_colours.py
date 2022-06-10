@@ -45,7 +45,6 @@ for file_name in args:
     with open(file_name, 'rb') as csvfile:
         reader = csv.DictReader(csvfile)
         writer = None
-
         for row in reader:
             if writer is None:
                 keys = list(row.keys()) + [output_colour_key]
