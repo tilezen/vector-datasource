@@ -1,3 +1,5 @@
+ci:
+    skip: [reorder-python-imports]
 default_language_version:
     python: python2.7
 repos:
