@@ -46,7 +46,7 @@ jobs:
           command: |
             . ~/env/bin/activate
 # we enabled pre-commit.ci for the repo so no need to run it on Circle here again
-#           pre-commit run --show-diff-on-failure --all-files
+#            pre-commit run --show-diff-on-failure --all-files
       - run:
           name: Setup.py develop
           command: |

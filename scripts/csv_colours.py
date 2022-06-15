@@ -3,6 +3,7 @@ import sys
 from optparse import OptionParser
 
 import yaml
+
 from vectordatasource.colour import parse_colour
 from vectordatasource.transform import Palette
 
