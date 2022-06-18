@@ -21,9 +21,10 @@ simplejson==3.12.0
 six==1.11.0
 StreetNames==0.1.5
 tqdm==4.31.1
-urllib3==1.24.3 ## REMOVE THIS AS SOON AS botocore ALLOWS >=1.25
+urllib3==1.25.11
+webcolors<=1.11 ## Last version to support py2
 Werkzeug==0.12.2
 wsgiref==0.1.2
-git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
+git+https://github.com/tilezen/tilequeue@v2.4.1-final#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
 git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles

@@ -127,7 +127,7 @@ FROM (
     unnest(tags) AS unnested
   FROM (
     SELECT
-      mz_modify_network(hstore(tags))->ARRAY['route','network','ref'] AS tags
+      mz_modify_network(hstore(tags))->ARRAY['route','network','ref','colour','symbol'] AS tags
     FROM
       planet_osm_rels
     WHERE
@@ -135,7 +135,9 @@ FROM (
       parts[way_off+1:rel_off] && ARRAY[way_id] AND
       hstore(tags) ? 'route' AND
       (hstore(tags) ? 'network' OR
-       hstore(tags) ? 'ref')
+       hstore(tags) ? 'ref') AND
+      hstore(tags) ? 'colour' AND
+      hstore(tags) ? 'symbol'
     ) inner1
   ) inner2;
 $$ LANGUAGE sql STABLE;
