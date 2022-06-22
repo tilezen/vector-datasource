@@ -1264,3 +1264,155 @@ BEGIN
   RETURN to_jsonb(coalesce(tags, ''::hstore) || coalesce(ne_tags, ''::hstore));
 END;
 $$ LANGUAGE plpgsql STABLE;
+
+-- Get names from Natural Earth if the wikidata tag matches
+CREATE OR REPLACE FUNCTION tz_get_ne_names(wikidata_id TEXT, place_tag TEXT)
+RETURNS JSONB AS $$
+DECLARE
+    ne_name_tags HSTORE DEFAULT NULL;
+BEGIN
+    IF wikidata_id IS NULL THEN
+        RETURN '{}'::jsonb;
+    END IF;
+
+  -- if it's a country, only look it up in the iso and tlc tables
+    IF place_tag='country' OR place_tag='unrecognized' THEN
+        SELECT hstore(ARRAY[
+            'ne_name_ar', i.name_ar,
+            'ne_name_bn', i.name_bn,
+            'ne_name_de', i.name_de,
+            'ne_name_en', i.name_en,
+            'ne_name_es', i.name_es,
+            'ne_name_fa', i.name_fa,
+            'ne_name_fr', i.name_fr,
+            'ne_name_el', i.name_el,
+            'ne_name_he', i.name_he,
+            'ne_name_hi', i.name_hi,
+            'ne_name_hu', i.name_hu,
+            'ne_name_id', i.name_id,
+            'ne_name_it', i.name_it,
+            'ne_name_ja', i.name_ja,
+            'ne_name_ko', i.name_ko,
+            'ne_name_nl', i.name_nl,
+            'ne_name_pl', i.name_pl,
+            'ne_name_pt', i.name_pt,
+            'ne_name_ru', i.name_ru,
+            'ne_name_sv', i.name_sv,
+            'ne_name_tr', i.name_tr,
+            'ne_name_uk', i.name_uk,
+            'ne_name_ur', i.name_ur,
+            'ne_name_vi', i.name_vi,
+            'ne_name_zh', i.name_zh,
+            'ne_name_zht', i.name_zht
+            ]) INTO ne_name_tags
+        FROM ne_10m_admin_0_countries_iso i
+        WHERE i.wikidataid = wikidata_id;
+
+    IF NOT FOUND THEN
+        SELECT hstore(ARRAY[
+            'ne_name_ar', t.name_ar,
+            'ne_name_bn', t.name_bn,
+            'ne_name_de', t.name_de,
+            'ne_name_en', t.name_en,
+            'ne_name_es', t.name_es,
+            'ne_name_fa', t.name_fa,
+            'ne_name_fr', t.name_fr,
+            'ne_name_el', t.name_el,
+            'ne_name_he', t.name_he,
+            'ne_name_hi', t.name_hi,
+            'ne_name_hu', t.name_hu,
+            'ne_name_id', t.name_id,
+            'ne_name_it', t.name_it,
+            'ne_name_ja', t.name_ja,
+            'ne_name_ko', t.name_ko,
+            'ne_name_nl', t.name_nl,
+            'ne_name_pl', t.name_pl,
+            'ne_name_pt', t.name_pt,
+            'ne_name_ru', t.name_ru,
+            'ne_name_sv', t.name_sv,
+            'ne_name_tr', t.name_tr,
+            'ne_name_uk', t.name_uk,
+            'ne_name_ur', t.name_ur,
+            'ne_name_vi', t.name_vi,
+            'ne_name_zh', t.name_zh,
+            'ne_name_zht', t.name_zht
+            ]) INTO ne_name_tags
+        FROM ne_10m_admin_0_countries_tlc t
+        WHERE t.wikidataid = wikidata_id
+            AND featurecla IN ('Admin-0 country', 'Admin-0 dependency');
+
+    IF NOT FOUND THEN
+        SELECT hstore(ARRAY[
+            'ne_name_ar', sp.name_ar,
+            'ne_name_bn', sp.name_bn,
+            'ne_name_de', sp.name_de,
+            'ne_name_en', sp.name_en,
+            'ne_name_es', sp.name_es,
+            'ne_name_fa', sp.name_fa,
+            'ne_name_fr', sp.name_fr,
+            'ne_name_el', sp.name_el,
+            'ne_name_he', sp.name_he,
+            'ne_name_hi', sp.name_hi,
+            'ne_name_hu', sp.name_hu,
+            'ne_name_id', sp.name_id,
+            'ne_name_it', sp.name_it,
+            'ne_name_ja', sp.name_ja,
+            'ne_name_ko', sp.name_ko,
+            'ne_name_nl', sp.name_nl,
+            'ne_name_pl', sp.name_pl,
+            'ne_name_pt', sp.name_pt,
+            'ne_name_ru', sp.name_ru,
+            'ne_name_sv', sp.name_sv,
+            'ne_name_tr', sp.name_tr,
+            'ne_name_uk', sp.name_uk,
+            'ne_name_ur', sp.name_ur,
+            'ne_name_vi', sp.name_vi,
+            'ne_name_zh', sp.name_zh,
+            'ne_name_zht', sp.name_zht
+            ]) INTO ne_name_tags
+        FROM ne_10m_admin_1_states_provinces sp
+        WHERE sp.wikidataid = wikidata_id;
+
+    -- finally, try localities
+    IF NOT FOUND THEN
+        SELECT hstore(ARRAY[
+            'ne_name_ar', pp.name_ar,
+            'ne_name_bn', pp.name_bn,
+            'ne_name_de', pp.name_de,
+            'ne_name_en', pp.name_en,
+            'ne_name_es', pp.name_es,
+            'ne_name_fa', pp.name_fa,
+            'ne_name_fr', pp.name_fr,
+            'ne_name_el', pp.name_el,
+            'ne_name_he', pp.name_he,
+            'ne_name_hi', pp.name_hi,
+            'ne_name_hu', pp.name_hu,
+            'ne_name_id', pp.name_id,
+            'ne_name_it', pp.name_it,
+            'ne_name_ja', pp.name_ja,
+            'ne_name_ko', pp.name_ko,
+            'ne_name_nl', pp.name_nl,
+            'ne_name_pl', pp.name_pl,
+            'ne_name_pt', pp.name_pt,
+            'ne_name_ru', pp.name_ru,
+            'ne_name_sv', pp.name_sv,
+            'ne_name_tr', pp.name_tr,
+            'ne_name_uk', pp.name_uk,
+            'ne_name_ur', pp.name_ur,
+            'ne_name_vi', pp.name_vi,
+            'ne_name_zh', pp.name_zh,
+            'ne_name_zht', pp.name_zht
+            ]) INTO ne_name_tags
+        FROM ne_10m_populated_places pp
+        WHERE pp.wikidataid = wikidata_id;
+    END IF;
+
+      -- return an empty JSONB rather than null, so that it can be safely
+      -- concatenated with whatever other JSONB rather than needing a check for
+      -- null.
+    IF NOT FOUND THEN
+        RETURN '{}'::jsonb;
+    END IF;
+    RETURN to_jsonb(coalesce(ne_name_tags, ''::hstore));
+END;
+$$ LANGUAGE plpgsql STABLE;
