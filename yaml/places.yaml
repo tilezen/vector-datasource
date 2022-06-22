@@ -126,33 +126,34 @@ global:
     __ne_pop_min: {col: __ne_pop_min}
     __ne_pop_max: {col: __ne_pop_max}
 
+  # names from NaturalEarth
   - &ne_names
-    name_ar: {col: ne_name_ar}
-    name_bn: {col: ne_name_bn}
-    name_de: {col: ne_name_de}
-    name_en: {col: ne_name_en}
-    name_es: {col: ne_name_es}
-    name_fa: {col: ne_name_fa}
-    name_fr: {col: ne_name_fr}
-    name_el: {col: ne_name_el}
-    name_he: {col: ne_name_he}
-    name_hi: {col: ne_name_hi}
-    name_hu: {col: ne_name_hu}
-    name_id: {col: ne_name_id}
-    name_it: {col: ne_name_it}
-    name_ja: {col: ne_name_ja}
-    name_ko: {col: ne_name_ko}
-    name_nl: {col: ne_name_nl}
-    name_pl: {col: ne_name_pl}
-    name_pt: {col: ne_name_pt}
-    name_ru: {col: ne_name_ru}
-    name_sv: {col: ne_name_sv}
-    name_tr: {col: ne_name_tr}
-    name_uk: {col: ne_name_uk}
-    name_ur: {col: ne_name_ur}
-    name_vi: {col: ne_name_vi}
-    name_zh: {col: ne_name_zh}
-    name_zht: {col: ne_name_zht}
+    __ne_name_ar: {col: ne_name_ar}
+    __ne_name_bn: {col: ne_name_bn}
+    __ne_name_de: {col: ne_name_de}
+    __ne_name_en: {col: ne_name_en}
+    __ne_name_es: {col: ne_name_es}
+    __ne_name_fa: {col: ne_name_fa}
+    __ne_name_fr: {col: ne_name_fr}
+    __ne_name_el: {col: ne_name_el}
+    __ne_name_he: {col: ne_name_he}
+    __ne_name_hi: {col: ne_name_hi}
+    __ne_name_hu: {col: ne_name_hu}
+    __ne_name_id: {col: ne_name_id}
+    __ne_name_it: {col: ne_name_it}
+    __ne_name_ja: {col: ne_name_ja}
+    __ne_name_ko: {col: ne_name_ko}
+    __ne_name_nl: {col: ne_name_nl}
+    __ne_name_pl: {col: ne_name_pl}
+    __ne_name_pt: {col: ne_name_pt}
+    __ne_name_ru: {col: ne_name_ru}
+    __ne_name_sv: {col: ne_name_sv}
+    __ne_name_tr: {col: ne_name_tr}
+    __ne_name_uk: {col: ne_name_uk}
+    __ne_name_ur: {col: ne_name_ur}
+    __ne_name_vi: {col: ne_name_vi}
+    __ne_name_zh: {col: ne_name_zh}
+    __ne_name_zht: {col: ne_name_zht}
 
 filters:
   - filter:
@@ -181,7 +182,7 @@ filters:
           then: 1
         - else: 8
     output:
-      <<: [*ne_names, *output_properties, *ne_zooms]
+      <<: [*output_properties, *ne_zooms, *ne_names]
       kind: {col: place}
     table: osm
   - filter: {name: true, place: state}
@@ -193,7 +194,7 @@ filters:
     # which doesn't match an NE curated one.
     min_zoom: 3
     output:
-      <<: [*ne_names, *output_properties, *ne_zooms]
+      <<: [*output_properties, *ne_zooms, *ne_names]
       kind: region
       kind_detail: state
     table: osm
@@ -206,7 +207,7 @@ filters:
     # which doesn't match an NE curated one.
     min_zoom: 3
     output:
-      <<: [*ne_names, *output_properties, *ne_zooms]
+      <<: [*output_properties, *ne_zooms, *ne_names]
       kind: region
       kind_detail: province
     table: osm

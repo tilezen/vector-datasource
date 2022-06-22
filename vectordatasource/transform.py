@@ -9739,3 +9739,21 @@ def create_dispute_ids(shape, props, fid, zoom):
         props['dispute_id'] = dispute_id
 
     return shape, props, fid
+
+
+def override_with_ne_names(shape, props, fid, zoom):
+    """
+    Override the min zoom and max zoom properties with __ne_* variants from
+    Natural Earth, if there are any.
+    """
+
+    name_prefix = '__ne_name_'
+
+    for k in props.keys():
+        if k.startswith(name_prefix):
+            language = k[len(name_prefix):]
+            name = props.pop(k)
+
+            props['name:' + language] = name
+
+    return shape, props, fid
