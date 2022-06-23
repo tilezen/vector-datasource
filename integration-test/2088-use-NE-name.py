@@ -44,7 +44,6 @@ class TestNEName(FixtureTest):
                 'name:en': u'Test'
             })
 
-
     def test_no_ne_name(self):
         z, x, y = (16, 10482, 25333)
 
