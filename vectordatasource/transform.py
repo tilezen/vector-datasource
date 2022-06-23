@@ -9743,7 +9743,7 @@ def create_dispute_ids(shape, props, fid, zoom):
 
 def override_with_ne_names(shape, props, fid, zoom):
     """
-    Override the min zoom and max zoom properties with __ne_* variants from
+    Override the name:xx properties with __ne_* variants from
     Natural Earth, if there are any.
     """
 
