@@ -5,8 +5,9 @@ boto==2.49.0
 edtf==2.6.0
 future==0.16.0
 gunicorn==19.9.0
+hanzidentifier==1.0.2
 hiredis==0.2.0
-lxml==4.1.1
+lxml==4.6.2
 mapbox-vector-tile==1.2.0
 ModestMaps==1.4.7
 protobuf==3.4.0
@@ -15,16 +16,17 @@ pyclipper==1.0.6
 pycountry==17.9.23
 python-dateutil==2.6.1
 PyYAML==4.2b4
+git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles
 redis==2.10.6
+setuptools<=44.1.1 ## Last version to support py2
 Shapely==1.6.2.post1
 simplejson==3.12.0
 six==1.11.0
 StreetNames==0.1.5
+git+https://github.com/tilezen/tilequeue@v2.4.1-final#egg=tilequeue
+git+https://github.com/tilezen/tileserver@master#egg=tileserver
 tqdm==4.31.1
 urllib3==1.25.11
 webcolors<=1.11 ## Last version to support py2
-Werkzeug==0.12.2
+Werkzeug<=0.16.1
 wsgiref==0.1.2
-git+https://github.com/tilezen/tilequeue@v2.4.1-final#egg=tilequeue
-git+https://github.com/tilezen/tileserver@master#egg=tileserver
-git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles
