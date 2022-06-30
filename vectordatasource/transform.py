@@ -9739,3 +9739,18 @@ def create_dispute_ids(shape, props, fid, zoom):
         props['dispute_id'] = dispute_id
 
     return shape, props, fid
+
+
+def add_root_id(shape, props, fid, zoom):
+    """
+    adds a root id equal to the id to a building
+    """
+
+    kind = props.get("kind")
+    if kind == "building":
+        id = props.get("id")
+        root_id = props.get("root_id")
+        if id and not root_id:
+            props["root_id"] = id
+
+    return shape, props, fid
