@@ -10,6 +10,10 @@ all:
   - transit
   - admin_areas
 
+
+external_layers:
+  -
+
 sources:
 
   # NOTE: each source represents a query to the database
@@ -337,6 +341,11 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
+
+#TODO: we should use a top level external layers rather than per transform
+#external_layers:
+#  - 
+
 post_process:
   - fn: vectordatasource.transform.build_fence
     params:
@@ -540,6 +549,35 @@ post_process:
     params:
       source_layer: roads
       properties: [layer]
+
+  # supersede existing osm buildings with data from external geojson layer
+  - fn: vectordatasource.transform.overlap
+    params:
+      base_layer: buildings
+      cutting_layer: auxiliary_buildings
+      attribute: superseded
+      target_attribute: superseded
+      linear: false
+      external_layers_dir: ./external_layers
+#      resources:
+#        external_layers:
+#          type: directory
+#          init_fn: vectordatasource.transform.geojsonsToLayers
+#          path: external_layers
+
+  # turn the external buildings into point features
+  - fn: vectordatasource.transform.mutate
+    params:
+      layer: auxiliary_buildings
+      start_zoom: 13
+      geometry_expression: Point(eval({properties}['origin']))
+      properties_expression: "dict(filter(lambda p: p[0] not in ['superseded', 'origin'], {properties}.items()))"
+      external_layers_dir: ./external_layers
+#      resources:
+#        external_layers:
+#          type: directory
+#          init_fn: vectordatasource.transform.geojsonsToLayers
+#          path: external_layers
 
   # cut with admin_areas to put country_code attributes on roads
   # which are mostly within a particular country.
@@ -1864,6 +1902,7 @@ post_process:
         - addr_housenumber
         - addr_street
         - osm_relation
+      exclude: ['superseded']
       # NOTE: max_merged_features is set to keep the time taken for geometry
       # merging down, as it seems to go up with the square of the number of
       # features.

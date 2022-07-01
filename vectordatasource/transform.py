@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
 import csv
+import itertools
+import json
+import os
 import re
 from collections import defaultdict
 from collections import namedtuple
@@ -14,7 +17,7 @@ import pycountry
 import shapely.errors
 import shapely.ops
 import shapely.wkb
-from shapely.geometry import box as Box
+from shapely.geometry import box as Box, shape
 from shapely.geometry import LinearRing
 from shapely.geometry import LineString
 from shapely.geometry import Point
@@ -1291,12 +1294,55 @@ def _intersect_linear_overlap(min_fraction):
     return _f
 
 
+# we can load external geojson layers from file, all we need is a directory and geojson file named after the layer
+# we expect it to already be in mercator projection and we only fill out the minimal structure of the feature tuple
+# there's no ID, most of the datum stuff is missing, we are mostly worried about the shape and properties
+# we return None if we couldnt load the layer for any reason
+def _load_external_layer(params, name):
+    # bail if there isnt anything to do
+    if 'external_layers_dir' not in params:
+        return None
+    layer_path = os.path.join(params['external_layers_dir'], name + '.geojson')
+    if not os.path.isfile(layer_path):
+        return None
+
+    # load the geojson into a shapely geometry collection
+    with open(layer_path) as fh:
+        try:
+            fc = json.load(fh)
+            # skip if this isnt pseudo mercator
+            if fc['crs']['properties']['name'] != 'urn:ogc:def:crs:EPSG::3857':
+                return None  # TODO: reproject?
+            gc = GeometryCollection([shape(feature['geometry']) for feature in fc['features']])
+        except:
+            return None
+
+    # start with a name
+    external_layer = {'name': name}
+
+    # padded_bounds is a dict of left bottom right top in mercator meters no idea why it has line and point
+    bounds = gc.bounds
+    bounds = (bounds[0], bounds[3], bounds[2], bounds[1])
+    external_layer['padded_bounds'] = {'polygon': bounds, 'line': bounds, 'point': bounds}
+
+    # add the layer_datum, but do we need more of the properties?
+    external_layer['layer_datum'] = {'name': name, 'is_clipped': False, 'area_threshold': 1,
+                                     'simplify_before_intersect': False, 'simplify_start': False}
+
+    # add the features geometries with their properties (values must be strings) in tuples
+    external_layer['features'] = []
+    for geom, feat in itertools.izip(gc.geoms, fc['features']):
+        properties = {k: str(v) if type(v) is not bool else str(v).lower() for k,v in feat['properties'].iteritems()}
+        external_layer['features'].append((geom, properties, None))
+
+    return external_layer
+
 # find a layer by iterating through all the layers. this
 # would be easier if they layers were in a dict(), but
 # that's a pretty invasive change.
 #
 # returns None if the layer can't be found.
-def _find_layer(feature_layers, name):
+def _find_layer(feature_layers, name, params):
 
     for feature_layer in feature_layers:
         layer_datum = feature_layer['layer_datum']
@@ -1305,7 +1351,7 @@ def _find_layer(feature_layers, name):
         if layer_name == name:
             return feature_layer
 
-    return None
+    return _load_external_layer(params, name)
 
 
 # shared implementation of the intercut algorithm, used both when cutting
@@ -1317,7 +1363,7 @@ def _find_layer(feature_layers, name):
 # unchanged.
 def _intercut_impl(intersect_func, feature_layers, base_layer, cutting_layer,
                    attribute, target_attribute, cutting_attrs, keep_geom_type,
-                   cutting_filter_fn=None, base_filter_fn=None):
+                   cutting_filter_fn=None, base_filter_fn=None, params={}):
     # the target attribute can default to the attribute if
     # they are distinct. but often they aren't, and that's
     # why target_attribute is a separate parameter.
@@ -1329,8 +1375,8 @@ def _intercut_impl(intersect_func, feature_layers, base_layer, cutting_layer,
     # it would seem to be better to use a dict() for
     # layers, and this will give odd results if names are
     # allowed to be duplicated.
-    base = _find_layer(feature_layers, base_layer)
-    cutting = _find_layer(feature_layers, cutting_layer)
+    base = _find_layer(feature_layers, base_layer, params)
+    cutting = _find_layer(feature_layers, cutting_layer, params)
 
     # base or cutting layer not available. this could happen
     # because of a config problem, in which case you'd want
@@ -1471,7 +1517,8 @@ def intercut(ctx):
     return _intercut_impl(
         _intersect_cut, feature_layers, base_layer, cutting_layer,
         attribute, target_attribute, cutting_attrs, keep_geom_type,
-        base_filter_fn=base_where, cutting_filter_fn=cutting_where)
+        base_filter_fn=base_where, cutting_filter_fn=cutting_where,
+        params=ctx.params)
 
 
 # overlap measures the area overlap between each feature in
@@ -1534,7 +1581,7 @@ def overlap(ctx):
         overlap_fn, feature_layers, base_layer,
         cutting_layer, attribute, target_attribute, cutting_attrs,
         keep_geom_type, cutting_filter_fn=cutting_where,
-        base_filter_fn=base_where)
+        base_filter_fn=base_where, params=ctx.params)
 
 
 # intracut cuts a layer with a set of features from that same
@@ -1559,7 +1606,7 @@ def intracut(ctx):
         'should have been an attribute name. Perhaps check ' + \
         'your configuration file and queries.'
 
-    base = _find_layer(feature_layers, base_layer)
+    base = _find_layer(feature_layers, base_layer, ctx.params)
     if base is None:
         return None
 
@@ -1806,7 +1853,7 @@ def exterior_boundaries(ctx):
     # search through all the layers and extract the one
     # which has the name of the base layer we were given
     # as a parameter.
-    layer = _find_layer(feature_layers, base_layer)
+    layer = _find_layer(feature_layers, base_layer, ctx.params)
 
     # if we failed to find the base layer then it's
     # possible the user just didn't ask for it, so return
@@ -2220,7 +2267,7 @@ def admin_boundaries(ctx):
     if zoom < start_zoom:
         return layer
 
-    layer = _find_layer(feature_layers, base_layer)
+    layer = _find_layer(feature_layers, base_layer, ctx.params)
     if layer is None:
         return None
 
@@ -2407,7 +2454,7 @@ def drop_names_on_short_boundaries(ctx):
     pixels_per_letter = params.optional('pixels_per_letter', typ=(int, float),
                                         default=10.0)
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
     zoom = ctx.nominal_zoom
 
     if zoom < start_zoom or \
@@ -2526,7 +2573,7 @@ def generate_address_points(ctx):
     if zoom < start_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -2627,7 +2674,7 @@ def drop_features_where(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -2671,7 +2718,7 @@ def _project_properties(ctx, action):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -2969,7 +3016,7 @@ def merge_duplicate_stations(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -3070,7 +3117,7 @@ def normalize_station_properties(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -3174,7 +3221,7 @@ def keep_n_features_gridded(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -3270,7 +3317,7 @@ def keep_n_features(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -3323,7 +3370,7 @@ def rank_features(ctx):
     if zoom < start_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -3388,7 +3435,7 @@ def numeric_min_filter(ctx):
     if not minima:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -3435,11 +3482,11 @@ def copy_features(ctx):
         ('copy_features: you must specify at least one type of geometry in '
          'geometry_types')
 
-    src_layer = _find_layer(feature_layers, source_layer)
+    src_layer = _find_layer(feature_layers, source_layer, ctx.params)
     if src_layer is None:
         return None
 
-    tgt_layer = _find_layer(feature_layers, target_layer)
+    tgt_layer = _find_layer(feature_layers, target_layer, ctx.params)
     if tgt_layer is None:
         # create target layer if it doesn't already exist.
         tgt_layer_datum = src_layer['layer_datum'].copy()
@@ -4011,7 +4058,7 @@ def quantize_height(ctx):
     end_zoom = params.optional('end_zoom', typ=int)
     quantize_cfg = params.required('quantize', typ=dict)
 
-    layer = _find_layer(ctx.feature_layers, source_layer)
+    layer = _find_layer(ctx.feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -4044,7 +4091,7 @@ def merge_building_features(ctx):
     max_merged_features = ctx.params.get('max_merged_features')
 
     assert source_layer, 'merge_building_features: missing source layer'
-    layer = _find_layer(ctx.feature_layers, source_layer)
+    layer = _find_layer(ctx.feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -4109,7 +4156,7 @@ def merge_polygon_features(ctx):
     buffer_merge_tolerance = ctx.params.get('buffer_merge_tolerance')
 
     assert source_layer, 'merge_polygon_features: missing source layer'
-    layer = _find_layer(ctx.feature_layers, source_layer)
+    layer = _find_layer(ctx.feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -4657,7 +4704,7 @@ def merge_line_features(ctx):
         'split_threshold', default=15000, typ=int)
 
     assert source_layer, 'merge_line_features: missing source layer'
-    layer = _find_layer(ctx.feature_layers, source_layer)
+    layer = _find_layer(ctx.feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -4761,7 +4808,7 @@ def build_fence(ctx):
     # search through all the layers and extract the one
     # which has the name of the base layer we were given
     # as a parameter.
-    layer = _find_layer(feature_layers, base_layer)
+    layer = _find_layer(feature_layers, base_layer, ctx.params)
 
     # if we failed to find the base layer then it's
     # possible the user just didn't ask for it, so return
@@ -5101,7 +5148,7 @@ def csv_match_properties(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -5145,7 +5192,7 @@ def update_parenthetical_properties(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -5341,7 +5388,7 @@ def simplify_layer(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -8383,7 +8430,7 @@ def buildings_unify(ctx):
     source_layer = ctx.params.get('source_layer')
     assert source_layer is not None, 'unify_buildings: missing source_layer'
     feature_layers = ctx.feature_layers
-    layer = _find_layer(feature_layers, source_layer)
+    layer = _find_layer(feature_layers, source_layer, ctx.params)
     if layer is None:
         return None
 
@@ -8513,7 +8560,7 @@ def palettize_colours(ctx):
         'Dict mapping colour names to RGB triples was missing from config'
     input_attrs = ctx.params.get('input_attributes', ['colour'])
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
     palette = Palette(colours)
 
     for (shape, props, fid) in layer['features']:
@@ -8558,8 +8605,8 @@ def backfill_from_other_layer(ctx):
         'Parameter other_key was missing from ' \
         'backfill_from_other_layer config'
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
-    other_layer = _find_layer(ctx.feature_layers, other_layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
+    other_layer = _find_layer(ctx.feature_layers, other_layer_name, ctx.params)
 
     # build an index of feature ID to property value in the other layer
     other_values = {}
@@ -8637,7 +8684,7 @@ def road_networks(ctx):
     params = _Params(ctx, 'road_networks')
     layer_name = params.required('layer')
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
     zoom = ctx.nominal_zoom
 
     funcs = [
@@ -8724,8 +8771,8 @@ def point_in_country_logic(ctx):
 
     where = params.optional('where')
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
-    country_layer = _find_layer(ctx.feature_layers, country_layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
+    country_layer = _find_layer(ctx.feature_layers, country_layer_name, ctx.params)
 
     if where is not None:
         where = compile(where, 'queries.yaml', 'eval')
@@ -8784,7 +8831,7 @@ def max_zoom_filter(ctx):
     nominal_zoom = ctx.nominal_zoom
 
     for layer_name in layers:
-        layer = _find_layer(ctx.feature_layers, layer_name)
+        layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
         features = layer['features']
         new_features = []
@@ -8810,7 +8857,7 @@ def min_zoom_filter(ctx):
     nominal_zoom = ctx.nominal_zoom
 
     for layer_name in layers:
-        layer = _find_layer(ctx.feature_layers, layer_name)
+        layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
         features = layer['features']
         new_features = []
@@ -8846,7 +8893,7 @@ def tags_set_ne_pop_min_max_default(ctx):
     """
     params = _Params(ctx, 'tags_set_ne_pop_min_max')
     layer_name = params.required('layer')
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
     for _, props, _ in layer['features']:
         __ne_pop_min = props.pop('__ne_pop_min', None)
@@ -8894,7 +8941,7 @@ def tags_set_ne_min_max_zoom(ctx):
 
     params = _Params(ctx, 'tags_set_ne_min_max_zoom')
     layer_name = params.required('layer')
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
     for _, props, _ in layer['features']:
         min_zoom = props.pop('__ne_min_zoom', None)
@@ -8950,7 +8997,7 @@ def whitelist(ctx):
     if where is not None:
         where = compile(where, 'queries.yaml', 'eval')
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
     features = layer['features']
     for feature in features:
@@ -9004,7 +9051,7 @@ def remap(ctx):
     if where is not None:
         where = compile(where, 'queries.yaml', 'eval')
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
     features = layer['features']
     for feature in features:
@@ -9049,7 +9096,7 @@ def backfill(ctx):
     if where is not None:
         where = compile(where, 'queries.yaml', 'eval')
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
     features = layer['features']
     for feature in features:
@@ -9088,7 +9135,7 @@ def clamp_min_zoom(ctx):
     if end_zoom is not None and ctx.nominal_zoom >= end_zoom:
         return None
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
 
     features = layer['features']
     for feature in features:
@@ -9448,7 +9495,7 @@ def apply_disputed_boundary_viewpoints(ctx):
     start_zoom = params.optional('start_zoom', typ=int, default=0)
     end_zoom = params.optional('end_zoom', typ=int)
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
     zoom = ctx.nominal_zoom
 
     if zoom < start_zoom or \
@@ -9533,7 +9580,7 @@ def update_min_zoom(ctx):
     min_zoom = params.required('min_zoom')
     where = params.optional('where')
 
-    layer = _find_layer(ctx.feature_layers, layer_name)
+    layer = _find_layer(ctx.feature_layers, layer_name, ctx.params)
     zoom = ctx.nominal_zoom
 
     if zoom < start_zoom or \
@@ -9739,3 +9786,42 @@ def create_dispute_ids(shape, props, fid, zoom):
         props['dispute_id'] = dispute_id
 
     return shape, props, fid
+
+
+def mutate(ctx):
+    """
+    We take a layer and we modify the geometry using the python expression in the query. The expressions have access to
+    both the existing shape and existing properties via python string format replacements {shape} and {properties}
+    respectively. Each expression is then eval'd to replace the existing feature in the layer with the result of the
+    expressions. By default the expressions are a no-op
+    """
+
+    layer = ctx.params.get('layer')
+    assert layer, 'regenerate_geometry: missing layer'
+    geometry_expression = ctx.params.get('geometry_expression', '{shape}')
+    properties_expression = ctx.params.get('properties_expression', '{properties}')
+    assert geometry_expression or properties_expression, 'regenerate_geometry: missing one of geometry or properties expression'
+    geometry_expression = geometry_expression.format(shape='shape', properties='props')
+    properties_expression = properties_expression.format(shape='shape', properties='props')
+
+    zoom = ctx.nominal_zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    layer = _find_layer(ctx.feature_layers, layer, ctx.params)
+    if layer is None:
+        return None
+
+    new_features = []
+    for feature in layer['features']:
+        shape, props, fid = feature
+        shape = eval(geometry_expression)
+        props = eval(properties_expression)
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer

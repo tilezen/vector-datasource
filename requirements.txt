@@ -7,6 +7,7 @@ future==0.16.0
 gunicorn==19.9.0
 hanzidentifier==1.0.2
 hiredis==0.2.0
+kdtree
 lxml==4.6.2
 mapbox-vector-tile==1.2.0
 ModestMaps==1.4.7
@@ -16,6 +17,7 @@ pyclipper==1.0.6
 pycountry==17.9.23
 python-dateutil==2.6.1
 PyYAML==4.2b4
+pyshp==2.3.0
 git+https://github.com/tilezen/raw_tiles@master#egg=raw_tiles
 redis==2.10.6
 setuptools<=44.1.1 ## Last version to support py2
