@@ -11,8 +11,16 @@ class FitnessPois(FixtureTest):
         self._run_test(16, 10473, 25333, 'node/3674255652')
 
     def test_amenity_gym(self):
+        import dsl
         # Alameda Athletic Club, amenity=gym
-        self._run_test(16, 10514, 25334, 'node/310972983')
+        z, x, y = (16, 10514, 25334)
+
+        self.generate_fixtures(dsl.point(310972983, dsl.tile_centre(z, x, y),
+                                         {'leisure': 'fitness_centre',
+                                          'name': 'Alameda Athletic Club'}))
+        self.assert_has_feature(
+            z, x, y, 'pois',
+            {'kind': 'fitness'})
 
     def test_pushup_fitness_station(self):
         # Pushup, fitness_station

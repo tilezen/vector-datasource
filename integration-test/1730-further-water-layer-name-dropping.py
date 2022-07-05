@@ -211,13 +211,11 @@ class WaterLabelZoomAdjustmentTest(FixtureTest):
             }),
         )
 
-        # we should get a label placement point, and its zoom should have been
-        # adjusted. we should also have all the names at this point.
+        # we should also have all the names at this point.
         self.assert_has_feature(
             z, x, y, 'water', {
                 'kind': 'lake',
-                'label_placement': True,
-                'min_zoom': 5,
-                'name': str,
-                'name:de': str,
+                'min_zoom': 2,  # min_zoom changed at https://github.com/tilezen/vector-datasource/pull/2010/
+                'name': type(None),
+                'name:de': type(None),
             })

@@ -1,8 +1,12 @@
-from vectordatasource.meta.python import parse_layers, output_kind, \
-        output_min_zoom, LayerParseResult, FunctionData
-import sys
 import ast
+import sys
 from cStringIO import StringIO
+
+from vectordatasource.meta.python import FunctionData
+from vectordatasource.meta.python import LayerParseResult
+from vectordatasource.meta.python import output_kind
+from vectordatasource.meta.python import output_min_zoom
+from vectordatasource.meta.python import parse_layers
 
 
 LAYER_TABLES = {
@@ -10,10 +14,12 @@ LAYER_TABLES = {
         'ne_10m_admin_0_boundary_lines_land',
         'ne_10m_admin_0_boundary_lines_map_units',
         'ne_10m_admin_0_boundary_lines_disputed_areas',
+        'ne_10m_admin_0_boundary_lines_maritime_indicator_chn',
         'ne_10m_admin_1_states_provinces_lines',
         'ne_110m_admin_0_boundary_lines_land',
         'ne_50m_admin_0_boundary_lines_land',
         'ne_50m_admin_0_boundary_lines_disputed_areas',
+        'ne_50m_admin_0_boundary_lines_maritime_indicator_chn',
         'ne_50m_admin_1_states_provinces_lines',
         'planet_osm_line',
         'planet_osm_polygon',
@@ -112,39 +118,39 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 """
 
 BOOL_OPS = {
-    ast.And: "AND",
-    ast.Or:  "OR",
+    ast.And: 'AND',
+    ast.Or:  'OR',
 }
 
 
 CMP_OPS = {
-    ast.Eq:    "=",
-    ast.NotEq: "<>",
-    ast.In:    "IN",
-    ast.Is:    "IS",
-    ast.GtE:   ">=",
-    ast.LtE:   "<=",
+    ast.Eq:    '=',
+    ast.NotEq: '<>',
+    ast.In:    'IN',
+    ast.Is:    'IS',
+    ast.GtE:   '>=',
+    ast.LtE:   '<=',
 }
 
 
 CMP_DEFAULTS = {
-    ast.Eq:    "FALSE",
-    ast.NotEq: "TRUE",
-    ast.In:    "FALSE",
-    ast.Is:    "FALSE",
-    ast.GtE:   "FALSE",
-    ast.LtE:   "FALSE",
+    ast.Eq:    'FALSE',
+    ast.NotEq: 'TRUE',
+    ast.In:    'FALSE',
+    ast.Is:    'FALSE',
+    ast.GtE:   'FALSE',
+    ast.LtE:   'FALSE',
 }
 
 
 UNARY_OPS = {
-    ast.Not: "NOT ",
+    ast.Not: 'NOT ',
 }
 
 
 BINARY_OPS = {
-    ast.Add:  "+",
-    ast.Mult: "*",
+    ast.Add:  '+',
+    ast.Mult: '*',
 }
 
 
@@ -206,7 +212,7 @@ def instance_lookup(obj, mapping):
             value = val
             break
 
-    assert value, "instance lookup for %s" % type(obj)
+    assert value, 'instance lookup for %s' % type(obj)
     return value
 
 
@@ -226,25 +232,25 @@ def sql_type(expr):
 def sql_as_json(d):
     s = StringIO()
 
-    s.write("{")
+    s.write('{')
     first = True
     for (k, v) in zip(d.keys, d.values):
         if first:
             first = False
         else:
-            s.write(", ")
+            s.write(', ')
         assert isinstance(k, ast.Str)
         s.write("\"%s\": " % k.s)
 
         if isinstance(v, ast.Str):
             s.write("\"%s\"" % v.s)
         elif isinstance(v, ast.Num):
-            s.write("%d" % v.n)
+            s.write('%d' % v.n)
         elif isinstance(v, ast.Name):
             if v.id == 'None':
-                s.write("null")
+                s.write('null')
             else:
-                raise RuntimeError("What is a %r?" % v.id)
+                raise RuntimeError('What is a %r?' % v.id)
         elif isinstance(v, (ast.Call, ast.IfExp)):
             s.write("' || mz_to_json_null_safe(")
             s.write(sql_expression(v))
@@ -252,7 +258,7 @@ def sql_as_json(d):
         else:
             raise RuntimeError("Don't know what to do with %r" % (v,))
 
-    s.write("}")
+    s.write('}')
     return s.getvalue()
 
 
@@ -261,7 +267,7 @@ def fn_name(node):
         return node.id
     elif isinstance(node, ast.Attribute):
         assert isinstance(node.value, ast.Name)
-        return node.value.id + "." + fn_name(node.attr)
+        return node.value.id + '.' + fn_name(node.attr)
     elif isinstance(node, (str, unicode)):
         return node
     else:
@@ -277,23 +283,23 @@ class SQLExpression(ast.NodeVisitor):
         self.in_json = False
 
     def visit_BoolOp(self, op):
-        self.buf.write("(")
+        self.buf.write('(')
         first = True
         for v in op.values:
             if first:
                 first = False
             else:
                 val = instance_lookup(op.op, BOOL_OPS)
-                self.buf.write(" " + val + " ")
+                self.buf.write(' ' + val + ' ')
             self.visit(v)
-        self.buf.write(")")
+        self.buf.write(')')
 
     def visit_Compare(self, cp):
         old_type = self.force_type
         typ = sql_type(cp.left)
         self.force_type = None
 
-        self.buf.write("(")
+        self.buf.write('(')
 
         # special case for IN, since in Python 'x in tuple' and 'x in dict'
         # are treated the same way, but in SQL we have to use different
@@ -302,42 +308,42 @@ class SQLExpression(ast.NodeVisitor):
            isinstance(cp.ops[0], ast.In) and \
            isinstance(cp.comparators[0], ast.Name):
             self.visit(cp.comparators[0])
-            self.buf.write(" ? ")
+            self.buf.write(' ? ')
             self.visit(cp.left)
 
         else:
             if len(cp.comparators) != 1:
-                raise RuntimeError("Expecting only one comparator, got %d" %
+                raise RuntimeError('Expecting only one comparator, got %d' %
                                    (len(cp.comparators),))
 
             default = instance_lookup(cp.ops[0], CMP_DEFAULTS)
-            self.buf.write("COALESCE(")
+            self.buf.write('COALESCE(')
 
             self.force_type = typ
             self.visit(cp.left)
 
             for (op, v) in zip(cp.ops, cp.comparators):
                 val = instance_lookup(op, CMP_OPS)
-                self.buf.write(" " + val + " ")
+                self.buf.write(' ' + val + ' ')
                 self.visit(v)
 
-            self.buf.write(",%s)" % (default,))
+            self.buf.write(',%s)' % (default,))
 
-        self.buf.write(")")
+        self.buf.write(')')
         self.force_type = old_type
 
     def visit_UnaryOp(self, op):
-        self.buf.write("(")
+        self.buf.write('(')
         self.buf.write(instance_lookup(op.op, UNARY_OPS))
         self.visit(op.operand)
-        self.buf.write(")")
+        self.buf.write(')')
 
     def visit_BinOp(self, op):
-        self.buf.write("(")
+        self.buf.write('(')
         self.visit(op.left)
         self.buf.write(instance_lookup(op.op, BINARY_OPS))
         self.visit(op.right)
-        self.buf.write(")")
+        self.buf.write(')')
 
     def visit_Str(self, s):
         # TODO: escaping
@@ -356,9 +362,9 @@ class SQLExpression(ast.NodeVisitor):
                 self.buf.write("'%d'" % n.n)
         else:
             if isinstance(n.n, float):
-                self.buf.write("%f" % n.n)
+                self.buf.write('%f' % n.n)
             else:
-                self.buf.write("%d" % n.n)
+                self.buf.write('%d' % n.n)
 
     def visit_Call(self, call):
         if isinstance(call.func, ast.Attribute) and \
@@ -366,8 +372,8 @@ class SQLExpression(ast.NodeVisitor):
            call.func.value.id == 'props':
             col_name = call.args[0].s
             if "'" in col_name:
-                raise RuntimeError("Tag/column name cannot contain "
-                                   "single quote: %r" % (col_name,))
+                raise RuntimeError('Tag/column name cannot contain '
+                                   'single quote: %r' % (col_name,))
 
             if self.force_type == int:
                 self.buf.write("(tags->'%s')::integer" % col_name)
@@ -379,21 +385,21 @@ class SQLExpression(ast.NodeVisitor):
             name = fn_name(call.func)
             func = KNOWN_FUNCS.get(name)
             if not func:
-                raise RuntimeError("Call to name not implemented yet: %r"
+                raise RuntimeError('Call to name not implemented yet: %r'
                                    % (name,))
             force_type = self.force_type
             self.force_type = FUNC_FORCE_TYPE.get(func)
 
             self.buf.write(func)
-            self.buf.write("(")
+            self.buf.write('(')
             first = True
             for arg in call.args:
                 if first:
                     first = False
                 else:
-                    self.buf.write(", ")
+                    self.buf.write(', ')
                 self.visit(arg)
-            self.buf.write(")")
+            self.buf.write(')')
 
             self.force_type = force_type
 
@@ -405,15 +411,15 @@ class SQLExpression(ast.NodeVisitor):
             raise RuntimeError("Don't know what name %r means" % name.id)
 
     def visit_Tuple(self, t):
-        self.buf.write("(")
+        self.buf.write('(')
         first = True
         for elt in t.elts:
             if first:
                 first = False
             else:
-                self.buf.write(", ")
+                self.buf.write(', ')
             self.visit(elt)
-        self.buf.write(")")
+        self.buf.write(')')
 
     def visit_Dict(self, d):
         old_in_json = self.in_json
@@ -424,45 +430,45 @@ class SQLExpression(ast.NodeVisitor):
         self.in_json = old_in_json
 
     def visit_IfExp(self, ifexp):
-        self.buf.write("(CASE")
+        self.buf.write('(CASE')
         while ifexp:
-            self.buf.write(" WHEN ")
+            self.buf.write(' WHEN ')
             self.visit(ifexp.test)
-            self.buf.write(" THEN ")
+            self.buf.write(' THEN ')
             self.visit(ifexp.body)
             if isinstance(ifexp.orelse, ast.IfExp):
                 ifexp = ifexp.orelse
             elif isinstance(ifexp.orelse, ast.AST):
-                self.buf.write(" ELSE ")
+                self.buf.write(' ELSE ')
                 self.visit(ifexp.orelse)
                 break
             else:
                 ifexp = None
 
-        self.buf.write(" END)")
+        self.buf.write(' END)')
 
-    def visit_List(self, l):
+    def visit_List(self, the_list):
         if self.in_json:
             self.buf.write("('[")
             first = True
-            for elt in l.elts:
+            for elt in the_list.elts:
                 if first:
                     first = False
                 else:
-                    self.buf.write(", ")
+                    self.buf.write(', ')
                 self.buf.write(sql_as_json(elt))
             self.buf.write("]')")
 
         else:
-            self.buf.write("ARRAY[")
+            self.buf.write('ARRAY[')
             first = True
-            for elt in l.elts:
+            for elt in the_list.elts:
                 if first:
                     first = False
                 else:
-                    self.buf.write(", ")
+                    self.buf.write(', ')
                 self.visit(elt)
-            self.buf.write("]")
+            self.buf.write(']')
 
     def visit_Attribute(self, a):
         assert isinstance(a.value, ast.Name)
@@ -470,20 +476,20 @@ class SQLExpression(ast.NodeVisitor):
         attr = a.attr
 
         if name == 'shape' and attr == 'type':
-            self.buf.write("ST_GeomType(way)")
+            self.buf.write('ST_GeomType(way)')
         elif name == 'meta' and attr == 'source':
             self.buf.write("\"meta_source\"")
         elif name == 'meta' and attr in ('ways', 'relations'):
             # we have no need to pass in ways or relations, as we can just
             # query the data from the planet_osm_ways/rels table. so this is
             # only needed to make the arguments list the right "shape".
-            self.buf.write("NULL")
+            self.buf.write('NULL')
         else:
-            raise RuntimeError("Unknown attribute pair (%r, %r)"
+            raise RuntimeError('Unknown attribute pair (%r, %r)'
                                % (name, attr))
 
     def generic_visit(self, node):
-        self.buf.write("<<<%s>>>" % type(node))
+        self.buf.write('<<<%s>>>' % type(node))
 
     def __str__(self):
         return self.buf.getvalue()
@@ -580,19 +586,19 @@ class SQLVisitor(ast.NodeVisitor):
         self.indent = 0
 
     def writeln(self, msg):
-        self.io.write(" " * self.indent)
+        self.io.write(' ' * self.indent)
         self.io.write(msg)
-        self.io.write("\n")
+        self.io.write('\n')
 
     def add_indent(self, n):
         self.indent += n
 
     def visit_FunctionDef(self, defn):
-        self.writeln("CREATE OR REPLACE FUNCTION %s"
-                     "(fid bigint, way geometry, tags hstore, way_area real,"
-                     " meta_source text)"
+        self.writeln('CREATE OR REPLACE FUNCTION %s'
+                     '(fid bigint, way geometry, tags hstore, way_area real,'
+                     ' meta_source text)'
                      % defn.name)
-        self.writeln("RETURNS %s AS $$" % (self.return_type,))
+        self.writeln('RETURNS %s AS $$' % (self.return_type,))
         self.add_indent(2)
         seen_begin = False
         wrote_declare = False
@@ -602,10 +608,10 @@ class SQLVisitor(ast.NodeVisitor):
                     continue
                 if seen_begin:
                     raise RuntimeError(
-                        "Assignment statement after function body begins.")
+                        'Assignment statement after function body begins.')
                 if not wrote_declare:
                     self.add_indent(-2)
-                    self.writeln("DECLARE")
+                    self.writeln('DECLARE')
                     self.add_indent(2)
                     wrote_declare = True
                 self.visit(stmt)
@@ -613,42 +619,42 @@ class SQLVisitor(ast.NodeVisitor):
                 if not seen_begin:
                     seen_begin = True
                     self.add_indent(-2)
-                    self.writeln("BEGIN")
+                    self.writeln('BEGIN')
                     self.add_indent(2)
                 self.visit(stmt)
         self.add_indent(-2)
-        self.writeln("END")
-        self.writeln("$$ LANGUAGE plpgsql IMMUTABLE;")
-        self.writeln("")
-        self.writeln("")
+        self.writeln('END')
+        self.writeln('$$ LANGUAGE plpgsql IMMUTABLE;')
+        self.writeln('')
+        self.writeln('')
 
     def visit_If(self, if_stmt):
         condition = sql_expression(if_stmt.test)
-        self.writeln("IF (%s) THEN" % str(condition))
+        self.writeln('IF (%s) THEN' % str(condition))
         self.add_indent(2)
         for stmt in if_stmt.body:
             self.visit(stmt)
         self.add_indent(-2)
         if if_stmt.orelse:
-            self.writeln("ELSE")
+            self.writeln('ELSE')
             self.add_indent(2)
             for stmt in if_stmt.orelse:
                 self.visit(stmt)
             self.add_indent(-2)
-        self.writeln("ENDIF")
+        self.writeln('ENDIF')
 
     def visit_Case(self, case):
-        self.writeln("RETURN CASE")
+        self.writeln('RETURN CASE')
         self.add_indent(2)
         for when in case.whens:
-            self.writeln("WHEN %s" % sql_expression(when.test))
+            self.writeln('WHEN %s' % sql_expression(when.test))
             self.add_indent(2)
-            self.writeln("THEN %s" % sql_expression(when.body[0].value,
+            self.writeln('THEN %s' % sql_expression(when.body[0].value,
                                                     self.force_type))
             self.add_indent(-2)
-        self.writeln("ELSE NULL")
+        self.writeln('ELSE NULL')
         self.add_indent(-2)
-        self.writeln("END;")
+        self.writeln('END;')
 
     def visit_Assign(self, assign):
         assert len(assign.targets) == 1
@@ -657,7 +663,7 @@ class SQLVisitor(ast.NodeVisitor):
         name = assign.targets[0].id
         # TODO: need to support variable types other than REAL?
         expr = sql_expression(assign.value, float)
-        self.writeln("%s REAL := %s;" % (name, expr))
+        self.writeln('%s REAL := %s;' % (name, expr))
 
     def generic_visit(self, node):
         self.writeln("<<< don't yet understand what a %s is for... >>>"

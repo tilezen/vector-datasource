@@ -1,3 +1,5 @@
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+
 # Tilezen Vector Tiles
 
 The [Nextzen vector tile service](https://developers.nextzen.org/) provides worldwide basemap coverage sourced from [OpenStreetMap](http://www.openstreetmap.org) and other open data projects, updated ~quarterly.
@@ -65,7 +67,7 @@ Vector tiles are served by clipping geometries to the tile bounding box, and the
 
 When changes are made to OpenStreetMap or another map [data sources](docs/data-sources.md), rather than waiting for an image tile to be redrawn, only the geometry coordinates and feature attributes for that particular building or road need to be updated in the vector tile.
 
-Depending on the URL syntax, Mapzen vector tiles can return all of the map data, or just individual [layers](docs/layers.md), or combinations of layers, including water, earth, landuse, roads, buildings and points of interest.
+Depending on the URL syntax, Mapzen vector tiles can return all of the map data, or just individual [layers](docs/layers.md), or combinations of layers, including water, earth, landuse, roads, buildings and points of interest(POI).
 
 ### Build from source
 

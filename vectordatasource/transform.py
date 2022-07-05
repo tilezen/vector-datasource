@@ -1,15 +1,25 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
-
-from collections import defaultdict, namedtuple
+import csv
+import re
+from collections import defaultdict
+from collections import namedtuple
 from math import ceil
 from numbers import Number
-from shapely.geometry.collection import GeometryCollection
+from sys import float_info
+
+import hanzidentifier
+import kdtree
+import pycountry
+import shapely.errors
+import shapely.ops
+import shapely.wkb
 from shapely.geometry import box as Box
 from shapely.geometry import LinearRing
 from shapely.geometry import LineString
 from shapely.geometry import Point
 from shapely.geometry import Polygon
+from shapely.geometry.collection import GeometryCollection
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multipolygon import MultiPolygon
@@ -18,23 +28,15 @@ from shapely.ops import linemerge
 from shapely.strtree import STRtree
 from sort import pois as sort_pois
 from StreetNames import short_street_name
-from sys import float_info
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
 from tilequeue.tile import calc_meters_per_pixel_area
 from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
-from util import to_float
 from util import safe_int
+from util import to_float
 from zope.dottedname.resolve import resolve
-import csv
-import pycountry
-import re
-import shapely.errors
-import shapely.wkb
-import shapely.ops
-import kdtree
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
@@ -5760,7 +5762,7 @@ def _do_not_backfill(tags):
     return None
 
 
-def _sort_network_us(network, ref, osmc_symbol):
+def _sort_network_us(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'US:I':
@@ -5789,7 +5791,7 @@ _AU_NETWORK_IMPORTANCE = {
 }
 
 
-def _sort_network_au(network, ref, osmc_symbol):
+def _sort_network_au(network, ref):
     if network is None or \
        not network.startswith('AU:'):
         network_code = 9999
@@ -5801,7 +5803,7 @@ def _sort_network_au(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_br(network, ref, osmc_symbol):
+def _sort_network_br(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'BR:Trans-Amazonian':
@@ -5814,7 +5816,7 @@ def _sort_network_br(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ca(network, ref, osmc_symbol):
+def _sort_network_ca(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'CA:transcanada':
@@ -5829,7 +5831,7 @@ def _sort_network_ca(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ch(network, ref, osmc_symbol):
+def _sort_network_ch(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'CH:national':
@@ -5846,7 +5848,7 @@ def _sort_network_ch(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_cn(network, ref, osmc_symbol):
+def _sort_network_cn(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'CN:expressway':
@@ -5865,7 +5867,7 @@ def _sort_network_cn(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_es(network, ref, osmc_symbol):
+def _sort_network_es(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'ES:A-road':
@@ -5888,7 +5890,7 @@ def _sort_network_es(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_fr(network, ref, osmc_symbol):
+def _sort_network_fr(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'FR:A-road':
@@ -5909,7 +5911,7 @@ def _sort_network_fr(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_de(network, ref, osmc_symbol):
+def _sort_network_de(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'DE:BAB':
@@ -5934,7 +5936,7 @@ def _sort_network_de(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ga(network, ref, osmc_symbol):
+def _sort_network_ga(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'GA:national':
@@ -5949,7 +5951,7 @@ def _sort_network_ga(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_gr(network, ref, osmc_symbol):
+def _sort_network_gr(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'GR:motorway':
@@ -5966,7 +5968,7 @@ def _sort_network_gr(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_in(network, ref, osmc_symbol):
+def _sort_network_in(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'IN:NH':
@@ -5983,7 +5985,7 @@ def _sort_network_in(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ir(network, ref, osmc_symbol):
+def _sort_network_ir(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'AsianHighway':
@@ -5996,7 +5998,7 @@ def _sort_network_ir(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_kz(network, ref, osmc_symbol):
+def _sort_network_kz(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'KZ:national':
@@ -6015,7 +6017,7 @@ def _sort_network_kz(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_la(network, ref, osmc_symbol):
+def _sort_network_la(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'LA:national':
@@ -6030,7 +6032,7 @@ def _sort_network_la(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_mx(network, ref, osmc_symbol):
+def _sort_network_mx(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'MX:MEX':
@@ -6043,7 +6045,7 @@ def _sort_network_mx(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_my(network, ref, osmc_symbol):
+def _sort_network_my(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'MY:federal':
@@ -6060,7 +6062,7 @@ def _sort_network_my(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_no(network, ref, osmc_symbol):
+def _sort_network_no(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'NO:oslo:ring':
@@ -6079,7 +6081,7 @@ def _sort_network_no(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_gb(network, ref, osmc_symbol):
+def _sort_network_gb(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'GB:M-road':
@@ -6100,7 +6102,7 @@ def _sort_network_gb(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_pl(network, ref, osmc_symbol):
+def _sort_network_pl(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'PL:motorway':
@@ -6119,7 +6121,7 @@ def _sort_network_pl(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_pt(network, ref, osmc_symbol):
+def _sort_network_pt(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'PT:motorway':
@@ -6148,7 +6150,7 @@ def _sort_network_pt(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ro(network, ref, osmc_symbol):
+def _sort_network_ro(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'RO:motorway':
@@ -6169,7 +6171,7 @@ def _sort_network_ro(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ru(network, ref, osmc_symbol):
+def _sort_network_ru(network, ref):
     ref = _make_unicode_or_none(ref)
 
     if network is None:
@@ -6200,7 +6202,7 @@ def _sort_network_ru(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_tr(network, ref, osmc_symbol):
+def _sort_network_tr(network, ref):
     ref = _make_unicode_or_none(ref)
 
     if network is None:
@@ -6233,7 +6235,7 @@ def _sort_network_tr(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_ua(network, ref, osmc_symbol):
+def _sort_network_ua(network, ref):
     ref = _make_unicode_or_none(ref)
 
     if network is None:
@@ -6259,7 +6261,7 @@ def _sort_network_ua(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_vn(network, ref, osmc_symbol):
+def _sort_network_vn(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'VN:expressway':
@@ -6283,7 +6285,7 @@ def _sort_network_vn(network, ref, osmc_symbol):
     return network_code * 10000 + min(ref, 9999)
 
 
-def _sort_network_za(network, ref, osmc_symbol):
+def _sort_network_za(network, ref):
     if network is None:
         network_code = 9999
     elif network == 'ZA:national':
@@ -7649,8 +7651,6 @@ def merge_networks_from_tags(shape, props, fid, zoom):
 
     network = props.get('network')
     ref = props.get('ref')
-    osmc_symbol = props.get('osmc:symbol')
-
     mz_networks = props.get('mz_networks', [])
     country_code = props.get('country_code')
 
@@ -7660,8 +7660,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     #  * if they begin with two letters and a dash, then make the letters upper
     #    case and replace the dash with a colon.
     #  * expand ;-delimited lists in refs
-    for i in xrange(0, len(mz_networks), 4):
-        t, n, r, o = mz_networks[i:i+4]
+    for i in xrange(0, len(mz_networks), 3):
+        t, n, r = mz_networks[i:i+3]
         if t == 'road' and n is not None:
             n = _fixup_network_country_code(n)
             mz_networks[i+1] = n
@@ -7669,7 +7669,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
             refs = r.split(';')
             mz_networks[i+2] = refs.pop()
             for new_ref in refs:
-                mz_networks.extend((t, n, new_ref, o))
+                mz_networks.extend((t, n, new_ref))
 
     # for road networks, if there's no explicit network, but the country code
     # and ref are both available, then try to use them to back-fill the
@@ -7685,8 +7685,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
         # then use the network from the relation instead.
         if network is None:
             solo_networks_from_relations = []
-            for i in xrange(0, len(mz_networks), 4):
-                t, n, r, o = mz_networks[i:i+4]
+            for i in xrange(0, len(mz_networks), 3):
+                t, n, r = mz_networks[i:i+3]
                 if t == 'road' and n and (r is None or r == ref):
                     solo_networks_from_relations.append((n, i))
 
@@ -7699,7 +7699,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
                 # add network back into properties in case we need to pass it
                 # to the backfill.
                 props['network'] = network
-                del mz_networks[i:i+4]
+                del mz_networks[i:i+3]
 
         if logic and logic.backfill:
             networks_and_refs = logic.backfill(props) or []
@@ -7726,8 +7726,8 @@ def merge_networks_from_tags(shape, props, fid, zoom):
             # an entry in mz_networks with the same ref!
             if ref:
                 found = False
-                for i in xrange(0, len(mz_networks), 4):
-                    t, _, r, _ = mz_networks[i:i+4]
+                for i in xrange(0, len(mz_networks), 3):
+                    t, _, r = mz_networks[i:i+3]
                     if t == 'road' and r == ref:
                         found = True
                         break
@@ -7746,7 +7746,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
     if network and ref:
         props.pop('network', None)
         props.pop('ref')
-        mz_networks.extend([_guess_type_from_network(network), network, ref, osmc_symbol])
+        mz_networks.extend([_guess_type_from_network(network), network, ref])
 
     if mz_networks:
         props['mz_networks'] = mz_networks
@@ -7759,7 +7759,7 @@ def merge_networks_from_tags(shape, props, fid, zoom):
 _ANY_NUMBER = re.compile('[^0-9]*([0-9]+)')
 
 
-def _default_sort_network(network, ref, osmc_symbol):
+def _default_sort_network(network, ref):
     """
     Returns an integer representing the numeric importance of the network,
     where lower numbers are more important.
@@ -7826,15 +7826,15 @@ def _generic_network_importance(network, ref, codes):
     return code * 10000 + min(ref, 9999)
 
 
-def _walking_network_importance(network, ref, osmc_symbol):
+def _walking_network_importance(network, ref):
     return _generic_network_importance(network, ref, _WALKING_NETWORK_CODES)
 
 
-def _bicycle_network_importance(network, ref, osmc_symbol):
+def _bicycle_network_importance(network, ref):
     return _generic_network_importance(network, ref, _BICYCLE_NETWORK_CODES)
 
 
-def _bus_network_importance(network, ref, osmc_symbol):
+def _bus_network_importance(network, ref):
     return _generic_network_importance(network, ref, {})
 
 
@@ -7966,15 +7966,14 @@ def extract_network_information(shape, properties, fid, zoom):
         itr = iter(mz_networks)
 
         groups = defaultdict(list)
-        for (type, network, ref, osmc_symbol) in zip(itr, itr, itr, itr):
+        for (type, network, ref) in zip(itr, itr, itr):
             n = _NETWORKS.get(type)
             if n:
-                groups[n].append([network, ref, osmc_symbol])
+                groups[n].append([network, ref])
 
         for network, vals in groups.items():
             all_networks = 'all_' + network.prefix + 'networks'
             all_shield_texts = 'all_' + network.prefix + 'shield_texts'
-            all_osmc_symbols = 'all_' + network.prefix + 'osmc_symbols'
 
             shield_text_fn = network.shield_text_fn
             if network is _ROAD_NETWORK and country_logic and \
@@ -7983,8 +7982,7 @@ def extract_network_information(shape, properties, fid, zoom):
 
             shield_texts = list()
             network_names = list()
-            osmc_symbols = list()
-            for network_name, ref, osmc_symbol in vals:
+            for network_name, ref in vals:
                 network_names.append(network_name)
 
                 ref = _make_unicode_or_none(ref)
@@ -7998,11 +7996,9 @@ def extract_network_information(shape, properties, fid, zoom):
                     ref = ref.encode('utf-8')
 
                 shield_texts.append(ref)
-                osmc_symbols.append(osmc_symbol)
 
             properties[all_networks] = network_names
             properties[all_shield_texts] = shield_texts
-            properties[all_osmc_symbols] = osmc_symbols
 
     return (shape, properties, fid)
 
@@ -8015,18 +8011,16 @@ def _choose_most_important_network(properties, prefix, importance_fn):
 
     all_networks = 'all_' + prefix + 'networks'
     all_shield_texts = 'all_' + prefix + 'shield_texts'
-    all_osmc_symbols = 'all_' + prefix + 'osmc_symbols'
 
     networks = properties.pop(all_networks, None)
     shield_texts = properties.pop(all_shield_texts, None)
-    osmc_symbols = properties.pop(all_osmc_symbols, None)
     country_code = properties.get('country_code')
 
-    if networks and shield_texts and osmc_symbols:
+    if networks and shield_texts:
         def network_key(t):
             return importance_fn(*t)
 
-        tuples = sorted(set(zip(networks, shield_texts, osmc_symbols)), key=network_key)
+        tuples = sorted(set(zip(networks, shield_texts)), key=network_key)
 
         # i think most route designers would try pretty hard to make sure that
         # a segment of road isn't on two routes of different networks but with
@@ -8036,38 +8030,27 @@ def _choose_most_important_network(properties, prefix, importance_fn):
         # with the same ref (and network != none).
         seen_ref = set()
         new_tuples = []
-        for network, ref, osmc_symbol in tuples:
+        for network, ref in tuples:
             if network:
                 if ref:
                     seen_ref.add(ref)
-                new_tuples.append((network, ref, osmc_symbol))
+                new_tuples.append((network, ref))
 
             elif ref is not None and ref not in seen_ref:
                 # network is None, fall back to the country code
-                new_tuples.append((country_code, ref, osmc_symbol))
+                new_tuples.append((country_code, ref))
 
         tuples = new_tuples
 
         if tuples:
             # expose first network as network/shield_text
-            network, ref, osmc_symbol = tuples[0]
+            network, ref = tuples[0]
             properties[prefix + 'network'] = network
             properties[prefix + 'shield_text'] = ref
-            properties[prefix + 'osmc_symbol'] = osmc_symbol
 
             # replace properties with sorted versions of themselves
             properties[all_networks] = [n[0] for n in tuples]
             properties[all_shield_texts] = [n[1] for n in tuples]
-            properties[all_osmc_symbols] = [n[2] for n in tuples]
-
-            properties[all_osmc_symbols + '_str'] = ''
-
-            if properties[all_osmc_symbols] is not None:
-                for x in properties[all_osmc_symbols]:
-                    if x is not None:
-                        properties[all_osmc_symbols + '_str'] += ("," if properties[all_osmc_symbols + '_str'] != '' else '') + x
-                    else:
-                        properties[all_osmc_symbols + '_str'] += ("," if properties[all_osmc_symbols + '_str'] != '' else '')
 
     return properties
 
@@ -8343,10 +8326,10 @@ def _fixup_country_specific_networks(shape, props, fid, zoom):
         # mz_networks is a list of repeated [type, network, ref, ...], it isn't
         # nested!
         itr = iter(mz_networks)
-        for (type, network, ref, osmc_symbol) in zip(itr, itr, itr, itr):
+        for (type, network, ref) in zip(itr, itr, itr):
             if type == 'road':
                 network, ref = logic.fix(network, ref)
-            new_networks.extend([type, network, ref, osmc_symbol])
+            new_networks.extend([type, network, ref])
 
         props['mz_networks'] = new_networks
 

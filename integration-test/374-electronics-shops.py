@@ -21,7 +21,7 @@ class ElectronicsShops(FixtureTest):
     def test_apple_store(self):
         self._run_test(
             'https://www.openstreetmap.org/way/332223480',
-            16, 10484, 25327, 'Apple Store, Union Square')
+            16, 10484, 25327, 'Apple Store Union Square')
 
     def _run_test(self, url, z, x, y, name):
         self.load_fixtures([url])

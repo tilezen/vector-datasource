@@ -1,22 +1,45 @@
+import dsl
+
 from . import FixtureTest
 
 
 class ShieldTextRef(FixtureTest):
 
     def test_james_lick_freeway(self):
+        z, x, y = 16, 10484, 25334
+
         # US 101, "James Lick Freeway"
-        self.load_fixtures([
-            'http://www.openstreetmap.org/way/27183379',
-            'http://www.openstreetmap.org/relation/108619',
-        ], clip=self.tile_bbox(16, 10484, 25334))
+        self.generate_fixtures(
+            dsl.way(1, dsl.tile_box(z, x, y), {
+                'kind': 'admin_area', 'iso_code': 'US',
+                'source': 'openstreetmap.org'
+            }),
+            # http://www.openstreetmap.org/way/27183379
+            dsl.way(27183379, dsl.tile_diagonal(z, x, y), {
+                'NHS': 'STRAHNET', 'bicycle': 'no', 'hgv': 'designated',
+                'hgv:national_network': 'yes', 'highway': 'motorway',
+                'lanes': '4', 'maxspeed': '50 mph', 'name': 'James Lick Freeway',
+                'name:etymology:wikidata': 'Q629500', 'oneway': 'yes',
+                'ref': 'US 101',
+                'source:imagery': 'Bing', 'surface': 'concrete',
+                'source': 'openstreetmap.org'
+            }),
+            # http://www.openstreetmap.org/relation/108619
+            dsl.relation(108619, {
+                'NHS': 'STRAHNET', 'direction': 'north', 'from': 'Los Angeles',
+                'is_in:state': 'CA', 'name': 'US 101 (CA northbound, south of Hopland)',
+                'network': 'US:US', 'ref': '101', 'route': 'road',
+                'to': 'Hopland', 'type': 'route', 'wikidata': 'Q400444',
+                'wikipedia': 'en:U.S. Route 101 in California', 'source': 'openstreetmap.org'
+            }, ways=[27183379]),
+        )
+
         self.assert_has_feature(
-            16, 10484, 25334, 'roads',
+            z, x, y, 'roads',
             {'kind': 'highway', 'network': 'US:US', 'id': 27183379,
              'shield_text': '101'})
 
     def test_multiple_shields(self):
-        import dsl
-
         z, x, y = 16, 18022, 25522
 
         # I-77, I-81, US-11 & US-52 all in one road West Virginia.
@@ -60,7 +83,7 @@ class ShieldTextRef(FixtureTest):
         )
 
         self.assert_has_feature(
-            16, 18022, 25522, 'roads',
+            z, x, y, 'roads',
             {'kind': 'highway', 'network': 'US:I', 'id': 51388984,
              'shield_text': '77',
              'all_networks': ['US:I', 'US:I', 'US:US', 'US:US'],

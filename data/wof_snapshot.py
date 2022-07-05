@@ -1,18 +1,21 @@
+import json
 from os.path import basename
-from os.path import splitext
 from os.path import join as path_join
+from os.path import splitext
+
+import requests
+from tilequeue.wof import create_neighbourhood_from_json
 from tilequeue.wof import Neighbourhood
 from tilequeue.wof import NeighbourhoodFailure
 from tilequeue.wof import NeighbourhoodMeta
-from tilequeue.wof import create_neighbourhood_from_json
 from tilequeue.wof import write_neighbourhood_data_to_file
-import json
-import tarfile
-import requests
 from tqdm import tqdm
 
 
 def _parse_wof_id(s):
+    """
+        expects input to look like "123456.geojson"
+    """
     wof_id, ext = splitext(basename(s))
     assert ext == '.geojson'
     return int(wof_id)
@@ -26,6 +29,15 @@ def _parse_neighbourhood(file_name, data, placetype, file_hash):
     return n
 
 
+def _parse_neighbourhood_from_json(json_str):
+    j = json.loads(json_str)
+    wof_id = j['id']
+    placetype = j['properties']['wof:placetype']
+    meta = NeighbourhoodMeta(wof_id, placetype, None, '123', None)
+    hood = create_neighbourhood_from_json(j, meta)
+    return hood
+
+
 class WOFArchiveReader(object):
     """
     Collects WOF parsed data items (mostly neighbourhoods) from a series of
@@ -35,35 +47,48 @@ class WOFArchiveReader(object):
     def __init__(self):
         self.wof_items = []
 
-    def add_archive(self, archive, file_hash, count):
-        """
-        Adds the GeoJSON files in the tar.gz archive to the list of wof_items.
-
-        Displays a progress bar, with count being the expected number of items
-        in the tar.gz.
-        """
-
-        with tqdm(total=count) as pbar:
-            with tarfile.open(archive) as tar:
-                for info in tar:
-                    if info.isfile() and info.name.endswith('.geojson'):
-                        self._parse_file(
-                            info.name, tar.extractfile(info).read(), file_hash)
-                        pbar.update(1)
-
-    def _parse_file(self, file_name, data, file_hash):
-        n_or_fail = _parse_neighbourhood(file_name, data, placetype, file_hash)
+    def handle_neighborhood_or_fail(self, n_or_fail):
         if isinstance(n_or_fail, Neighbourhood):
             self.wof_items.append(n_or_fail)
         elif isinstance(n_or_fail, NeighbourhoodFailure):
             if n_or_fail.skipped or n_or_fail.funky or n_or_fail.superseded:
                 pass
             else:
-                raise ValueError("Failed to parse neighbourhood: %s "
-                                 "(because: %s)"
+                raise ValueError('Failed to parse neighbourhood: %s '
+                                 '(because: %s)'
                                  % (n_or_fail.message, n_or_fail.reason))
         else:
-            raise ValueError("Unexpected %r" % (n_or_fail,))
+            raise ValueError('Unexpected %r' % (n_or_fail,))
+
+    def add_sqlite_file(self, sqlite_filename, file_hash):
+        with tqdm(desc='Grabbing rows from sqlite file %s' % sqlite_filename, unit='Rows', unit_scale=True) as pbar:
+            import sqlite3
+            from _sqlite3 import Error
+            try:
+                conn = sqlite3.connect(sqlite_filename)
+                pbar.update(1)
+            except Error as e:
+                print(e)
+
+            cursor = conn.cursor()
+            pbar.update(1)
+            query = """
+                    select geojson.body from geojson where geojson.id in (
+                    select spr.id from spr
+                    where spr.placetype IN ('neighbourhood', 'borough','macrohood', 'microhood')
+                    AND spr.id != 1
+                    AND spr.is_deprecated = 0
+                    AND spr.is_superseded = 0
+                    AND spr.is_current != 0
+                    ) AND geojson.is_alt = 0
+                    """
+            cursor.execute(query)
+            pbar.update(1)
+
+            for row in cursor:
+                n_or_fail = _parse_neighbourhood_from_json(row[0])
+                self.handle_neighborhood_or_fail(n_or_fail)
+                pbar.update(1)
 
 
 class tmpdownload(object):
@@ -72,7 +97,7 @@ class tmpdownload(object):
     the scope exits, deletes the temporary file.
     """
 
-    def __init__(self, url, expected_size):
+    def __init__(self, url):
         import tempfile
         self.tempdir = tempfile.mkdtemp()
 
@@ -83,7 +108,7 @@ class tmpdownload(object):
         with requests.get(url, stream=True) as response:
             response.raise_for_status()
 
-            with tqdm(total=expected_size) as pbar:
+            with tqdm(desc='Downloading %s' % url, unit='bytes', unit_scale=True) as pbar:
                 with open(abs_fname, 'wb') as fh:
                     for chunk in response.iter_content(chunk_size=16384):
                         if chunk:
@@ -100,37 +125,44 @@ class tmpdownload(object):
         shutil.rmtree(self.tempdir)
 
 
-WOF_INVENTORY = 'https://dist.whosonfirst.org/bundles/inventory.json'
-WOF_BUNDLE_PREFIX = 'https://dist.whosonfirst.org/bundles/'
+class TmpBz2Decompress(object):
+    def __init__(self, filename):
+        import bz2
+        suffix_length = len('.bz2')
+        input_filename = filename[:filename.rfind('/')+1]
+        output_filename = filename[:-suffix_length]
+        with tqdm(desc='Decompressing %s' % input_filename, unit='bytes', unit_scale=True) as pbar:
+            with open(output_filename, 'w') as outfile:
+                with bz2.BZ2File(filename, 'r') as bzfile:
+                    for chunk in bzfile:
+                        outfile.write(chunk)
+                        pbar.update(len(chunk))
 
+        self.abs_fname = output_filename
+
+    def __enter__(self):
+        return self.abs_fname
+
+    def __exit__(self, type, value, traceback):
+        import os
+        os.remove(self.abs_fname)
+
+
+WOF_SQLITE = 'https://data.geocode.earth/wof/dist/sqlite/whosonfirst-data-admin-latest.db.bz2'
 
 if __name__ == '__main__':
-    inventory = requests.get(WOF_INVENTORY).json()
     reader = WOFArchiveReader()
 
-    for placetype in ('neighbourhood', 'macrohood', 'microhood', 'borough'):
-        fname = 'whosonfirst-data-%s-latest.tar.bz2' % (placetype,)
+    with tmpdownload(WOF_SQLITE) as fname:
+        with TmpBz2Decompress(fname) as decompressed:
+            reader.add_sqlite_file(decompressed, 'latest')
 
-        matching = [item for item in inventory
-                    if item['name_compressed'] == fname]
-        assert len(matching) == 1
-        item = matching[0]
-
-        version = item['last_updated']
-        count = item['count']
-        download_size = item['size_compressed']
-
-        print "Downloading %r with %d entries" % (placetype, count)
-        with tmpdownload(WOF_BUNDLE_PREFIX + fname, download_size) as fname:
-            print "Parsing WOF data"
-            reader.add_archive(fname, version, count)
-
-    print "Writing output SQL"
+    print 'Writing output SQL'
     with open('wof_snapshot.sql', 'w') as fh:
-        fh.write("COPY public.wof_neighbourhood ("
-                 "wof_id, placetype, name, hash, n_photos, area, min_zoom, "
-                 "max_zoom, is_landuse_aoi, label_position, geometry, "
-                 "inception, cessation, is_visible, l10n_name, wikidata) "
-                 "FROM stdin;\n")
+        fh.write('COPY public.wof_neighbourhood ('
+                 'wof_id, placetype, name, hash, n_photos, area, min_zoom, '
+                 'max_zoom, is_landuse_aoi, label_position, geometry, '
+                 'inception, cessation, is_visible, l10n_name, wikidata) '
+                 'FROM stdin;\n')
         write_neighbourhood_data_to_file(fh, reader.wof_items)
-        fh.write("\\.\n")
+        fh.write('\\.\n')

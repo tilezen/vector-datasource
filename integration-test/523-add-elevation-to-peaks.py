@@ -11,7 +11,7 @@ class AddElevationToPeaks(FixtureTest):
 
         self.assert_has_feature(
             9, 104, 195, 'pois',
-            {'kind': 'peak', 'id': 358915477, 'elevation': 4397})
+            {'kind': 'peak', 'id': 358915477, 'elevation': 4401.2})
 
     def test_mt_rainier(self):
         # Mount Rainier, WA (volcano)

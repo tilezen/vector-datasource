@@ -293,8 +293,7 @@ filters:
     min_zoom: 5
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: highway
       kind_detail: motorway
   - filter:
@@ -303,8 +302,7 @@ filters:
     min_zoom: 6
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: {col: highway}
   - filter:
@@ -313,8 +311,7 @@ filters:
     min_zoom: 8
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: {col: highway}
   - filter:
@@ -322,8 +319,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 10, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: secondary
   - filter:
@@ -331,8 +327,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: highway
       kind_detail: motorway_link
   - filter:
@@ -340,8 +335,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: tertiary
   - filter:
@@ -349,8 +343,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: trunk_link
   - filter:
@@ -358,8 +351,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: {col: highway}
   - filter:
@@ -367,8 +359,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: major_road
       kind_detail: tertiary_link
   #############################################################
@@ -384,8 +375,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: portage_way
   #############################################################
   #
@@ -394,11 +384,10 @@ filters:
   #############################################################
   - filter:
       highway: [unclassified]
-    min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
+    min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: minor_road
       kind_detail: {col: highway}
   - filter:
@@ -406,8 +395,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: minor_road
       kind_detail: {col: highway}
   - filter:
@@ -415,8 +403,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: minor_road
       kind_detail: living_street
   - filter:
@@ -424,9 +411,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: pedestrian
   - filter:
@@ -439,9 +424,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 11, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: track
   - filter:
@@ -454,9 +437,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 12, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: track
   - filter:
@@ -464,9 +445,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: {col: highway}
   - filter:
@@ -481,9 +460,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: footway
       footway: {col: footway}
@@ -500,9 +477,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: steps
       footway: {col: footway}
@@ -512,9 +487,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 15, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: footway
       footway: {col: footway}
@@ -523,9 +496,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: {col: highway}
       footway: {col: footway}
@@ -533,9 +504,7 @@ filters:
     min_zoom: 16
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: corridor
   - filter:
@@ -544,8 +513,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 13, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: minor_road
       kind_detail: service
       service: alley
@@ -555,8 +523,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 15, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: minor_road
       kind_detail: service
       service:
@@ -570,8 +537,7 @@ filters:
     min_zoom: { clamp: { min: 0, max: 14, value: { call: { func: mz_calculate_path_major_route, args: [ { col: fid }, { col: meta.relations } ] } } } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: minor_road
       kind_detail: service
   - filter: {highway: raceway}
@@ -593,8 +559,7 @@ filters:
     min_zoom: 12
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: construction
       kind_detail: {col: construction}
   - filter:
@@ -604,8 +569,7 @@ filters:
     min_zoom: 13
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: construction
       kind_detail: {col: construction}
   - filter:
@@ -615,8 +579,7 @@ filters:
     min_zoom: 14
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: construction
       kind_detail: {col: construction}
   - filter:
@@ -626,8 +589,7 @@ filters:
     min_zoom: 16
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: construction
       kind_detail: {col: construction}
   #############################################################
@@ -640,8 +602,7 @@ filters:
     min_zoom: 9
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: aeroway
       kind_detail: runway
   - filter:
@@ -649,8 +610,7 @@ filters:
     min_zoom: 11
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: aeroway
       kind_detail: taxiway
   #############################################################
@@ -664,8 +624,7 @@ filters:
     min_zoom: 12
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: rail
       kind_detail: rail
       service: {col: service}
@@ -675,8 +634,7 @@ filters:
     min_zoom: 13
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: rail
       kind_detail: rail
       service: {col: service}
@@ -686,8 +644,7 @@ filters:
     min_zoom: 15
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: rail
       kind_detail: rail
       service: {col: service}
@@ -707,8 +664,7 @@ filters:
     min_zoom: 15
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: rail
       kind_detail: rail
       railway: {col: railway}
@@ -718,8 +674,7 @@ filters:
     min_zoom: 11
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: rail
       kind_detail: rail
   - filter:
@@ -727,8 +682,7 @@ filters:
     min_zoom: 15
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: rail
       kind_detail: {col: railway}
   #############################################################
@@ -741,8 +695,7 @@ filters:
     min_zoom: { call: { func: mz_calculate_ferry_level, args: [ { col: shape } ] } }
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: ferry
   #############################################################
   #
@@ -754,8 +707,7 @@ filters:
     min_zoom: 12
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: aerialway
       kind_detail: {col: aerialway}
   - filter:
@@ -763,8 +715,7 @@ filters:
     min_zoom: 13
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: aerialway
       kind_detail: {col: aerialway}
   - filter:
@@ -785,8 +736,7 @@ filters:
     min_zoom: 15
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       kind: aerialway
       kind_detail:
         case:
@@ -822,8 +772,7 @@ filters:
     min_zoom: 14
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
+      <<: [*osm_highway_properties, *osm_network]
       # note: racetrack rather than track, as track might be confusing
       # between a track for racing and a track as in a faint trail.
       kind: racetrack
@@ -844,9 +793,7 @@ filters:
     min_zoom: 13
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: {col: man_made}
       mooring: {col: mooring}
@@ -857,9 +804,7 @@ filters:
     min_zoom: 13
     table: osm
     output:
-      <<: *osm_highway_properties
-      <<: *osm_network
-      <<: *osm_footway_properties
+      <<: [*osm_highway_properties, *osm_network, *osm_footway_properties]
       kind: path
       kind_detail: {col: man_made}
   #############################################################

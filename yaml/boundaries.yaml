@@ -6,30 +6,6 @@ global:
     min_zoom: {col: min_zoom}
     maritime_boundary: {col: maritime_boundary}
 
-  # NOTE: Natural Earth 1:50 million used zooms 0,1,2,3,4
-  #       and only has USA, Canada, Brazil, and Australia
-  #       all with scalerank of 2 (a documented NE omission).
-  #       Then 1:10 million NE is selected at zooms 5, 6, 7
-  #       and includes most all countries, with various scalerank
-  #       but is inconsistent with 1:50 in scalerank=2 so countries
-  #       like Russia will "pop" in at 5, but with min_zoom of 2
-  #       (and India, China, Indonesia, and South Africa).
-  - &ne_region_boundaries_min_zoom
-    lookup:
-      key: { col: scalerank }
-      op: '<='
-      table:
-        - [ 7,   0 ]
-        - [ 2,   2 ]
-        - [ 3,   3 ]
-        - [ 5,   4 ]
-        - [ 5.5, 5 ]
-        - [ 6,   6 ]
-        - [ 6.7, 7 ]
-        - [ 6.8, 8 ]
-        - [ 7,   9 ]
-      default: null
-
   #
   - &ne_country_boundaries_kind
     lookup:
@@ -53,6 +29,7 @@ global:
 
   - &ne_localized_kind_properties
     'kind:iso': {col: fclass_iso }
+    'kind:tlc': {col: fclass_tlc }
     'kind:ar': {col: fclass_ar }
     'kind:bd': {col: fclass_bd }
     'kind:br': {col: fclass_br }
@@ -101,6 +78,21 @@ global:
           - geom_type: line
           - mz_boundary_from_polygon: true
 
+  - &osm_dispute_id_components
+    tz_breakaway_code: { col: 'ne:brk_a3' }
+    tz_ne_id: { col: 'ne_id' }
+
+  - &ne_dispute_id_components
+    tz_breakaway_code: { col: 'brk_a3' }
+    tz_ne_id: { col: 'ne_id' }
+
+  - &dispute_properties
+    claimed_by: { col: claimed_by }
+    recognized_by: { col: recognized_by }
+    disputed_by: { col: disputed_by }
+    tz_admin_level: {col: admin_level }
+    <<: *osm_dispute_id_components
+
 filters:
 
   # kind pre-generated for buffered_land
@@ -121,7 +113,9 @@ filters:
   #    should appear in the viewpoint of the `claimed_by=` value. additionally,
   #    extra viewpoints which don't make a claim for themselves but still want
   #    the claimant's view reflected in their own can be specified in a
-  #    `recognized_by=*` tag.
+  #    `recognized_by=*` tag. There are also cases where boundary=claim but there
+  #    is no corresponding claimed_by - these will have admin_level:XX tags instead
+  #    that will dictate what kind each viewpoint should have.
   #
   # 2. **disputes**, which have `dispute=yes` or `disputed=yes`, plus a list of
   #    disputant viewpoints in the `disputed_by=*` tag. when a viewpoint is
@@ -129,29 +123,52 @@ filters:
   #    `unrecognized_*` (where XX is the viewpoint / country code and * is the
   #    kind of boundary it is).
   #
-  - filter: {admin_level: '2', boundary: claim, claimed_by: true, geom_type: line}
+
+  # Additionally, we filter out disputes that are not currently desired for widespread display.
+  # These get a kind of `unrecognized` in order to suppress their display
+  # These have been marked in the lua with unrecognized_dispute=yes to identify them.
+  - filter:
+      all:
+        - geom_type: line
+        - unrecognized_dispute: yes
     min_zoom: 8
     output:
-      <<: *output_properties
-      kind: unrecognized_country
-      claimed_by: {col: claimed_by}
-      recognized_by: {col: recognized_by}
+      <<: [ *output_properties, *dispute_properties ]
+      kind: unrecognized
     table: osm
-  - filter: {admin_level: '4', boundary: claim, claimed_by: true, geom_type: line}
+  - filter:
+      all:
+        - geom_type: line
+        - admin_level: ['2', '4', '6']
+        - boundary: claim
+        - any:
+            - claimed_by: true
+            - disputed_by: true
+            - recognized_by: true
     min_zoom: 8
     output:
-      <<: *output_properties
-      kind: unrecognized_region
-      claimed_by: {col: claimed_by}
-      recognized_by: {col: recognized_by}
+      <<: [ *output_properties, *dispute_properties ]
+      kind: disputed_claim
     table: osm
-  - filter: {admin_level: '6', boundary: claim, claimed_by: true, geom_type: line}
+  # these filters look for claims that don't have a claimed_by
+  # they should have different point of view tags for admin_level:XX
+  - filter: {admin_level: '2', boundary: claim, geom_type: line}
     min_zoom: 8
     output:
-      <<: *output_properties
-      kind: unrecognized_county
-      claimed_by: {col: claimed_by}
-      recognized_by: {col: recognized_by}
+      <<: [*output_properties, *dispute_properties]
+      kind: country
+    table: osm
+  - filter: {admin_level: '4', boundary: claim, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: [*output_properties, *dispute_properties]
+      kind: region
+    table: osm
+  - filter: {admin_level: '6', boundary: claim, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: [*output_properties, *dispute_properties]
+      kind: county
     table: osm
   - filter:
       all:
@@ -162,9 +179,19 @@ filters:
             - disputed: 'yes'
     min_zoom: 8
     output:
-      <<: *output_properties
+      <<: [ *output_properties, *dispute_properties ]
       kind: mz_internal_dispute_mask
-      disputed_by: {col: disputed_by}
+    table: osm
+  # These are kind=disputed_reference_lines that, for viewpoint XX in disputed_by,
+  # project to kind:xx=unrecognized.  The lua preprocessing
+  # project admin_level 3 and 5 cases to appropriate tags for us, so we don't need
+  # to handle them here
+  - filter: {admin_level: ['2','4','6'], boundary: disputed, geom_type: line}
+    min_zoom: 8
+    output:
+      <<: [ *output_properties, *dispute_properties ]
+      kind: disputed_reference_line
+      kind_detail: {col: admin_level }
     table: osm
 
   # osm
@@ -232,16 +259,28 @@ filters:
         - 'Lease limit'
         - 'Line of control (please verify)'
         - 'Overlay limit'
-        - 'Unrecognized'
         - 'Map unit boundary'
+    min_zoom: { col: min_zoom }
+    output:
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
+      kind: *ne_country_boundaries_kind
+      kind_detail: '2'
+
+    table: ne
+
+  # ne for disputed kind:xx POV we want to always include
+  # the disputed lines early so when that POV enables them
+  # and the data is available in tiles
+  - filter:
+      featurecla:
         - 'Breakaway'
         - 'Claim boundary'
         - 'Elusive frontier'
         - 'Reference line'
-    min_zoom: { col: min_zoom }
+        - 'Unrecognized'
+    min_zoom: 1
     output:
-      <<: *output_properties
-      <<: *ne_localized_kind_properties
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: *ne_country_boundaries_kind
       kind_detail: '2'
     table: ne
@@ -249,10 +288,9 @@ filters:
   - filter:
       featurecla:
         - Admin-1 region boundary
-    min_zoom: *ne_region_boundaries_min_zoom
+    min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     output:
-      <<: *output_properties
-      <<: *ne_localized_kind_properties
+      <<: [*output_properties, *ne_localized_kind_properties]
       kind: macroregion
       kind_detail: '3'
     extra_columns: [scalerank]
@@ -263,22 +301,20 @@ filters:
         - Admin-1 statistical boundary
         - Admin-1 statistical meta bounds
         - 1st Order Admin Lines
-    min_zoom: *ne_region_boundaries_min_zoom
+    min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: *output_properties
-      <<: *ne_localized_kind_properties
+      <<: [*output_properties, *ne_localized_kind_properties]
       kind: region
       kind_detail: '4'
     table: ne
   - filter:
       featurecla:
         - Unrecognized Admin-1 region boundary
-    min_zoom: *ne_region_boundaries_min_zoom
+    min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: *output_properties
-      <<: *ne_localized_kind_properties
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: unrecognized_macroregion
       kind_detail: '4'
     table: ne
@@ -287,11 +323,10 @@ filters:
         - Unrecognized Admin-1 boundary
         - Unrecognized Admin-1 statistical boundary
         - Unrecognized Admin-1 statistical meta bounds
-    min_zoom: *ne_region_boundaries_min_zoom
+    min_zoom: { clamp: { max: 11, min: 3, value: { col: min_zoom } } }
     extra_columns: [scalerank]
     output:
-      <<: *output_properties
-      <<: *ne_localized_kind_properties
+      <<: [*output_properties, *ne_localized_kind_properties, *ne_dispute_id_components]
       kind: unrecognized_region
       kind_detail: '4'
     table: ne

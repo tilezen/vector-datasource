@@ -52,11 +52,11 @@ COPY wikidata(id, tags) FROM stdin;
 
     for wikidata_id, props in data.iteritems():
         hstore = ','.join(
-            "%s=>%s" % (esc(k), esc(v))
+            '%s=>%s' % (esc(k), esc(v))
             for k, v in props.iteritems())
-        io.write("%s\t%s\n" % (wikidata_id, hstore))
+        io.write('%s\t%s\n' % (wikidata_id, hstore))
 
-    io.write("\\.\n")
+    io.write('\\.\n')
 
 
 if __name__ == '__main__':

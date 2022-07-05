@@ -1,5 +1,5 @@
-{% set ne_languages = ['ar', 'bn', 'de', 'en', 'es', 'fr', 'el', 'hi', 'hu', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'sv', 'tr', 'vi', 'zh'] %}
-{% set ne_viewpoints = ['iso', 'ar', 'bd', 'br', 'cn', 'de', 'eg', 'es', 'fr', 'gb', 'gr', 'id', 'il', 'in', 'it', 'jp', 'ko', 'ma', 'nl', 'np', 'pk', 'pl', 'ps', 'pt', 'ru', 'sa', 'se', 'tr', 'tw', 'us', 'vn'] %}
+{% set ne_languages = ['ar', 'bn', 'de', 'el', 'en', 'es', 'fa', 'fr', 'he', 'hi', 'hu', 'id', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'sv', 'tr', 'uk', 'ur', 'vi', 'zh', 'zht'] %}
+{% set ne_viewpoints = ['iso', 'tlc', 'ar', 'bd', 'br', 'cn', 'de', 'eg', 'es', 'fr', 'gb', 'gr', 'id', 'il', 'in', 'it', 'jp', 'ko', 'ma', 'nl', 'np', 'pk', 'pl', 'ps', 'pt', 'ru', 'sa', 'se', 'tr', 'tw', 'ua', 'us', 'vn'] %}
 
 {% macro ne_common_properties() %}
 
@@ -32,7 +32,9 @@ SELECT
 {% endif %}
     'min_zoom', mz_boundary_min_zoom,
     'featurecla', featurecla,
-    'scalerank', scalerank
+    'scalerank', scalerank,
+    'ne_id', ne_id,
+    'BRK_A3', brk_a3
   ) AS __boundaries_properties__,
 
   NULL::jsonb AS __earth_properties__,

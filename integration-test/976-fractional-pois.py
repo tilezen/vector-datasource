@@ -1,10 +1,14 @@
+from shapely.wkt import loads as wkt_loads
+
 from . import FixtureTest
 
 
 class FractionalPois(FixtureTest):
     def test_apple_store(self):
+        import dsl
         # Apple Store, SF
-        self.load_fixtures(['https://www.openstreetmap.org/way/332223480'])
+        self.generate_fixtures(dsl.way(332223480, wkt_loads('POLYGON ((-122.40739859999999339 37.78850529999999708, -122.40729509999999891 37.78851889999999969, -122.40699510000000316 37.78855829999999827, -122.4069194000000067 37.78856820000000027, -122.40695669999999495 37.78875810000000257, -122.40699449999999615 37.78875279999999748, -122.40709259999999858 37.78873920000000197, -122.40730430000000695 37.78870969999999829, -122.40736409999999523 37.78870140000000077, -122.40743530000000305 37.78869149999999877, -122.40739859999999339 37.78850529999999708))'), {
+                               u'addr:housenumber': u'300', u'addr:street': u'Post Street', u'brand': 'Apple Store', u'brand:wikidata': u'Q421253', u'brand:wikipedia': u'en:Apple Store', u'building': u'retail', u'building:levels': u'2', u'height': u'15', u'name': u'Apple Store Union Square', u'shop': u'electronics', u'smoking': u'no'}))
 
         self.assert_has_feature(
             15, 5242, 12663, 'pois',
@@ -76,24 +80,24 @@ class FractionalPois(FixtureTest):
 
         self.generate_fixtures(
             dsl.way(1359387, dsl.tile_diagonal(z, x, y), {
-                "website": "http://www.amtrak.com",
-                "passenger": "national",
-                "via": "New York Penn Station",
-                "from": "Washington, DC",
-                "name": "Vermonter",
-                "service": "long_distance",
-                "to": "Saint Albans, Vermont",
-                "route": "train",
-                "wikipedia": "en:Vermonter (train)",
-                "route_name": "Vermonter",
-                "route_pref_color": "0",
-                "public_transport:version": "1",
-                "wikidata": "Q1412872",
-                "source": "openstreetmap.org",
-                "operator": "Amtrak",
-                "ref": "54-57",
-                "colour": "#005480",
-                "network": "Amtrak"
+                'website': 'http://www.amtrak.com',
+                'passenger': 'national',
+                'via': 'New York Penn Station',
+                'from': 'Washington, DC',
+                'name': 'Vermonter',
+                'service': 'long_distance',
+                'to': 'Saint Albans, Vermont',
+                'route': 'train',
+                'wikipedia': 'en:Vermonter (train)',
+                'route_name': 'Vermonter',
+                'route_pref_color': '0',
+                'public_transport:version': '1',
+                'wikidata': 'Q1412872',
+                'source': 'openstreetmap.org',
+                'operator': 'Amtrak',
+                'ref': '54-57',
+                'colour': '#005480',
+                'network': 'Amtrak'
             }),
         )
 

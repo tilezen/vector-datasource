@@ -35,7 +35,9 @@ sources:
   ne:
     ## places
     # ne_10m_populated_places
+    # Note: we add start_zoom 2 here otherwise for the zoom 0/0/0 tile at 512px (or zoom1 at 256px), the size will get a lot bigger because there are 11 features with min_zoom of 1.7 as of Jan 2022.
     - template: ne-places.jinja2
+      start_zoom: 2
 
     ## boundaries
 
@@ -152,11 +154,12 @@ layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 8
+    simplify_start: 0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
       - vectordatasource.transform.tags_remove
+      - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.water_tunnel
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
@@ -167,7 +170,7 @@ layers:
   earth:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 8
+    simplify_start: 0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -187,11 +190,13 @@ layers:
       - vectordatasource.transform.place_population_int
       - vectordatasource.transform.population_rank
       - vectordatasource.transform.capital_alternate_viewpoint
+      - vectordatasource.transform.unpack_places_disputes
+      - vectordatasource.transform.apply_places_with_viewpoints
       - vectordatasource.transform.calculate_default_place_min_zoom
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.places
     area-inclusion-threshold: 1
   landuse:
@@ -207,13 +212,13 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.normalize_operator_values
       - vectordatasource.transform.major_airport_detector
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
     geometry_types: [LineString, MultiLineString]
-    simplify_start: 8
-    tolerance: 2.0
+    simplify_start: 4
+    tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -232,7 +237,7 @@ layers:
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
@@ -254,7 +259,7 @@ layers:
       - vectordatasource.transform.normalize_tourism_kind
       - vectordatasource.transform.building_trim_properties
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
@@ -279,28 +284,34 @@ layers:
       - vectordatasource.transform.major_airport_detector
       - vectordatasource.transform.elevation_to_meters
       - vectordatasource.transform.normalize_operator_values
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 8
-    tolerance: 2.0
+    simplify_start: 0
+    tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
-      - vectordatasource.transform.tags_remove
       - vectordatasource.transform.admin_level_as_int
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
       - vectordatasource.transform.remap_viewpoint_kinds
       - vectordatasource.transform.unpack_viewpoint_claims
+      # note: the next line needs to come after anything else that touches the kind:XX values.
+      # admin_level:XX is intended to be an override for all the other general logic for disputes
+      - vectordatasource.transform.admin_level_alternate_viewpoint
+      - vectordatasource.transform.create_dispute_ids
+      - vectordatasource.transform.tags_remove
     area-inclusion-threshold: 1
   transit:
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
+    simplify_start: 5
+    tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -311,7 +322,7 @@ layers:
       - vectordatasource.transform.route_name
       - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_2dp
+      - vectordatasource.transform.truncate_min_zoom_to_1dp
     sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
   admin_areas:
@@ -672,8 +683,12 @@ post_process:
       where: kind == 'region'
 
   # IMPORTANT! do this _after_ the YAMLToDict default stuff, otherwise the
-  # default will overwrite the value fron Natural Earth.
+  # default will overwrite the value from Natural Earth.
   - fn: vectordatasource.transform.tags_set_ne_min_max_zoom
+    params:
+      layer: places
+
+  - fn: vectordatasource.transform.tags_set_ne_pop_min_max_default
     params:
       layer: places
 
@@ -718,8 +733,13 @@ post_process:
         - disputed_by
         - "disputed_by:left"
         - "disputed_by:right"
+        - recognized_by
+        - "recognized_by:left"
+        - "recognized_by:right"
+        - tz_admin_level
 
-  # drop id/id:left/id:right on boundaries up to zoom 12 inclusive.
+
+  # drop id/id:left/id:right on boundaries up to zoom 13 inclusive.
   # the left/right IDs tend to be unique as a pair, and so prevent merging.
   # the id itself will be dropped by merging if it's possible to merge, and
   # at mid and low zooms is of dubious usefulness.
@@ -727,23 +747,24 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 0
-      end_zoom: 13
+      end_zoom: 14
       properties:
         - id
         - "id:left"
         - "id:right"
 
-  # drop any name on locality boundaries at zooms 11 and 12 (min two zooms).
+  # drop any name on locality boundaries at zooms 11 and 13 (min two zooms).
   #
-  # NOTE: the start_zoom of 11 here comes in because this is the first zoom
-  # at which we show locality boundaries. if that changes (in boundaries.yaml)
+  # NOTE: the start_zoom of 10 here comes in because this is the first zoom
+  # at which we show county boundaries. if that changes (in boundaries.yaml)
   # then it needs to change here, and vice-versa!
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: boundaries
-      start_zoom: 11
-      end_zoom: 13
+      start_zoom: 10
+      end_zoom: 14
       where: >-
+        kind == 'county' or
         kind == 'locality'
 
   # try to merge boundaries into as long segments as possible.
@@ -758,7 +779,7 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 8
-      end_zoom: 11
+      end_zoom: 15
       # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
       # the name gets dropped. name pairs (e.g: :left and :right) get dropped if either are longer
       # than pixels_per_letter. larger values mean fewer lines are eligible for labelling.
@@ -776,7 +797,7 @@ post_process:
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: boundaries
-      start_zoom: 8
+      start_zoom: 0
       end_zoom: 15
 
   # no lake labels at zoom 0-3:
@@ -789,6 +810,49 @@ post_process:
       geom_types: [Polygon, MultiPolygon]
       where: >-
         kind == 'lake'
+
+  # remove names per kind for a given zoom
+  # before generating any label placements
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 16
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
+      # TODO the properties.get('is_tunnel') is True might not work, need to fix it; refer to a similar fix in https://github.com/tilezen/vector-datasource/pull/2047
+      where: >-
+        (kind == 'sea' and zoom < 4) or
+        (kind == 'bay' and zoom < 5) or
+        (kind == 'fjord' and zoom < 5) or
+        (kind == 'strait' and zoom < 5) or
+        (kind == 'lake' and zoom < 5) or
+        (kind_detail == 'lake' and zoom < 5) or
+        (kind == 'playa' and zoom < 6) or
+        (kind == 'reef' and zoom < 6) or
+        (kind == 'river' and zoom <  12) or
+        (kind_detail == 'river' and zoom <  12) or
+        (kind == 'riverbank' and zoom <  12) or
+        (kind == 'water' and kind_detail is None and zoom <  12) or
+        (kind == 'canal' and zoom <  13) or
+        (kind_detail == 'canal' and zoom <  13) or
+        (kind == 'basin' and zoom <  13) or
+        (kind_detail == 'basin' and zoom <  13) or
+        (kind == 'dock' and zoom <  13) or
+        (kind == 'dam' and zoom <  14) or
+        (kind == 'stream' and zoom <  14) or
+        (kind_detail == 'stream' and zoom <  14) or
+        (kind == 'ditch' and zoom <  15) or
+        (kind_detail == 'ditch' and zoom <  15) or
+        (kind == 'drain' and zoom <  15) or
+        (kind_detail == 'drain' and zoom <  15) or
+        (kind == 'swimming_pool' and zoom <  15) or
+        (kind == 'fountain' and zoom <  15) or
+        (properties is not None and properties.get('is_tunnel') is True)
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
@@ -818,22 +882,60 @@ post_process:
       # table.
       min_zoom: >-
         [min_zoom for min_zoom, area_threshold in [
-            (4,  40000000000),
-            (5,  10000000000),
-            (6,   5000000000),
-            (7,    400000000),
-            (8,    200000000),
-            (9,    100000000),
-            (10,    10000000),
-            (11,     4000000),
-            (12,      750000),
-            (13,      100000),
-            (14,       50000),
-            (15,       10000),
-            (16,        None),
+            (1, 1000000000000),
+            (2,  500000000000),
+            (3,  250000000000),
+            (4,  120000000000),
+            (5,   80000000000),
+            (6,   40000000000),
+            (7,   10000000000),
+            (8,     500000000),
+            (9,     200000000),
+            (10,     40000000),
+            (11,      8000000),
+            (12,      1000000),
+            (13,       500000),
+            (14,        50000),
+            (15,        10000),
+            (16,         None),
         ] if area >= area_threshold][0]
+      # note the following line cannot be written as
+      # properties is not None and properties.get('label_placement') is True
       where: >-
-        kind == 'lake' and label_placement
+        properties is not None and label_placement
+
+  # now that we have the label points
+  # drop most water properties at lower zooms
+  # this is for lines and polygons
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 15
+      geom_types: [LineString, MultiLineString, Polygon, MultiPolygon]
+      properties:
+        - id
+        - area
+        - boundary
+        - layer
+        - wikidata_id
+        - osm_relation
+        - kind_tile_rank
+
+  # now that we have the label points
+  # drop water names at lower zooms for polys only
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: water
+      start_zoom: 0
+      end_zoom: 15
+      geom_types: [Polygon, MultiPolygon]
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
 
   - fn: vectordatasource.transform.handle_label_placement
     params:
@@ -970,6 +1072,71 @@ post_process:
       items_matching:
         kind: station
       rank_key: kind_tile_rank
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 8
+      end_zoom: 9
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 52181.0113
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 9
+      end_zoom: 10
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 26090.5056
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 10
+      end_zoom: 11
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 13045.2528
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 11
+      end_zoom: 12
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 6522.1264
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
+  - fn: vectordatasource.transform.keep_n_features_gridded
+    params:
+      source_layer: places
+      start_zoom: 12
+      end_zoom: 13
+      items_matching: { kind: locality }
+      max_items: 1
+      grid_width_meters: 3261.0632
+      sorting_keys:
+        - { sort_key: 'min_zoom', reverse: False }
+        - { sort_key: 'collision_rank', reverse: False }
+        - { sort_key: 'population', reverse: True }
+        - { sort_key: 'id', reverse: True }
   - fn: vectordatasource.transform.rank_features
     params:
       source_layer: places
@@ -1013,7 +1180,7 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       properties:
         - bicycle
         - colour
@@ -1028,17 +1195,8 @@ post_process:
         - symbol
         - tracktype
         - type           # NVK (2017425): this is a suspicious tag
+
   # drop certain road properties at lower zooms
-  - fn: vectordatasource.transform.drop_properties
-    params:
-      source_layer: roads
-      start_zoom: 0
-      end_zoom: 14
-      properties:
-        - all_walking_networks
-        - all_walking_shield_texts
-        - all_bus_networks
-        - all_bus_shield_texts
   # drop all_bicycle_* until the max zoom:
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522176
   - fn: vectordatasource.transform.drop_properties
@@ -1047,8 +1205,13 @@ post_process:
       start_zoom: 0
       end_zoom: 16
       properties:
+        - all_walking_networks
+        - all_walking_shield_texts
         - all_bicycle_networks
         - all_bicycle_shield_texts
+        - all_bus_networks
+        - all_bus_shield_texts
+
   # drop certain road properties at lower zooms
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1073,13 +1236,14 @@ post_process:
         - sidewalk_right
         - sport
         - trail_visibility
+
   # drop name and other properties on early paths to
   # allow more line merging (use walking network for labeling)
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 13
       # this means remove all the names if "name" is one of the properties
       # we're dropping. in other words, allows us to use "name" as a short-
       # hand for name:XX, official_name, old_name, etc... without having to
@@ -1090,6 +1254,98 @@ post_process:
         - ref
       where: >-
         kind == 'path'
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - bus_network
+        - walking_network
+        - bicycle_network
+      where: >-
+        (kind == 'highway' and zoom < 13) or
+        (kind == 'major_road' and zoom < 14) or
+        (kind == 'minor_road' and zoom < 15)
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - bicycle_shield_text
+        - bicycle_shield_text_length
+        - walking_shield_text
+        - walking_shield_text_length
+        - hgv_restriction_shield_text
+        - hgv_restriction_shield_text_length
+      where: >-
+        (kind == 'highway' and zoom < 12) or
+        (kind == 'major_road' and zoom < 13) or
+        (kind == 'minor_road' and zoom < 15)
+
+  # Because we have is_bus_route boolean, we don't need the
+  # details about bus network, operator, and shield text until
+  # later zooms when there is enough space to label them
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 17
+      properties:
+        - bus_network
+        - bus_shield_text
+        - bus_shield_text_length
+        - all_bus_networks
+        - all_bus_shield_texts
+        - all_bus_shield_text_length
+        - operator
+      where: >-
+        kind in ('highway', 'major_road', 'minor_road')
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - network
+        - shield_text
+        - shield_text_length
+      where: >-
+        (kind_detail == 'motorway' and zoom <  7) or
+        (kind_detail == 'trunk' and zoom <  9) or
+        (kind_detail == 'primary' and zoom <  11) or
+        (kind_detail == 'secondary' and zoom <  12) or
+        (kind_detail == 'tertiary' and zoom <  13) or
+        (kind_detail == 'motorway_link' and zoom <  13) or
+        (kind_detail == 'trunk_link' and zoom <  13) or
+        (kind_detail == 'primary_link' and zoom <  14) or
+        (kind_detail == 'secondary_link' and zoom <  14) or
+        (kind_detail == 'tertiary_link' and zoom <  14) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
+        (kind == 'rail' and zoom < 15)
+
+  # drop ref, relation, and odd name tags till the end
+  # these aren't used for rendering and bloat property size
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 17
+      properties:
+        - ref
+        - osm_relation
+        - alt_name
+        - alt_name:ar
+        - alt_name:en
+        - alt_name:es
+        - old_name
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -1100,17 +1356,47 @@ post_process:
       all_name_variants: true
       properties:
         - name
-        - ref
-        - network
-        - shield_text
         - all_networks
         - all_shield_texts
-        - bus_network
-        - bus_shield_text
+        - service
+        - access
       where: >-
+        (kind == 'highway' and zoom <  11) or
+        (kind_detail == 'trunk' and zoom <  12) or
+        (kind_detail == 'primary' and zoom <  13) or
+        (kind_detail == 'secondary' and zoom <  14) or
+        (kind_detail == 'tertiary' and zoom <  14) or
+        (kind_detail == 'motorway_link' and zoom <  14) or
+        (kind_detail == 'trunk_link' and zoom <  14) or
+        (kind_detail == 'primary_link' and zoom <  15) or
+        (kind_detail == 'secondary_link' and zoom <  15) or
+        (kind_detail == 'tertiary_link' and zoom <  15) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 14) or
+        (kind == 'path' and zoom < 14) or
         (kind == 'rail' and zoom < 15) or
-        (kind == 'minor_road' and zoom < 14) or
-        (kind == 'major_road' and zoom <  7)
+        (kind == 'ferry' and zoom < 15)
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 15
+      properties:
+        - service
+        - surface
+        - cycleway
+        - cycleway_right
+        - cycleway_left
+        - hgv
+      where: >-
+        (kind == 'highway' and zoom <  12) or
+        (kind == 'major_road' and zoom <  13) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 15) or
+        (kind == 'rail' and zoom < 15)
+
   # drop these "detail" tags to get better merging at zoom < 16
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1181,6 +1467,19 @@ post_process:
         sand: unpaved
         woodchips: unpaved
 
+ # drop these "detail" tags to get better merging at zoom < 14
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 0
+      end_zoom: 14
+      properties:
+        - surface
+      where: >-
+        kind == 'minor_road' or
+        (kind == 'aeroway' and zoom < 12) or
+        (kind == 'path' and zoom < 13)
+
   # drop to get better merging at mid zooms.
   - fn: vectordatasource.transform.drop_properties
     params:
@@ -1232,12 +1531,12 @@ post_process:
         - private
 
   # this is a patch because we still want to drop name, network from major_road
-  # features between zoom 7 and 10
+  # features between zoom 7 and 11
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 11
+      end_zoom: 12
       # short-hand for "name" property in the list below means all name-like
       # properties.
       all_name_variants: true
@@ -1248,12 +1547,12 @@ post_process:
       where: >-
         kind == 'major_road'
   # this is a patch to get rid of name, but keep ref & network, for highways
-  # when zoom < 11.
+  # when zoom < 12.
   - fn: vectordatasource.transform.drop_names
     params:
       source_layer: roads
       start_zoom: 7
-      end_zoom: 11
+      end_zoom: 12
       where: >-
         kind == 'highway'
   # drop name, ref and the multi-shield properties, but keep single-shield
@@ -1273,8 +1572,10 @@ post_process:
         - all_shield_texts
         - walking_network
         - walking_shield_text
+        - walking_shield_text_length
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         kind == 'highway'
   # drop non-road shield stuff a good deal earlier.
@@ -1282,12 +1583,13 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 12
       properties:
         - all_walking_networks
         - all_walking_shield_texts
         - bus_network
         - bus_shield_text
+        - bus_shield_text_length
         - all_bus_networks
         - all_bus_shield_texts
       where: >-
@@ -1338,28 +1640,27 @@ post_process:
       properties:
         - walking_network
         - walking_shield_text
-  # drop RCN network & shield text below zoom 11, and shield text at one more
+        - walking_shield_text_length
+  # drop RCN network & shield text below zoom 13, and shield text at one more
   # zoom.
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236522771
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 11
+      end_zoom: 13
       properties:
         - bicycle_network
         - bicycle_shield_text
-      where: >-
-        bicycle_network == 'rcn'
+        - bicycle_shield_text_length
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 12
+      end_zoom: 14
       properties:
         - bicycle_shield_text
-      where: >-
-        bicycle_network == 'rcn'
+        - bicycle_shield_text_length
   # drop LCN network & shield text below zoom 14 and shield text only at
   # one more zoom level. (should be present at zoom 15).
   # https://github.com/tilezen/vector-datasource/pull/1707#discussion_r236523895
@@ -1367,10 +1668,11 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 15
       properties:
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         bicycle_network == 'lcn'
   - fn: vectordatasource.transform.drop_properties
@@ -1380,6 +1682,7 @@ post_process:
       end_zoom: 15
       properties:
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         bicycle_network == 'lcn'
   # drop any bicycle network & shield text on tracks below zoom 13.
@@ -1392,6 +1695,7 @@ post_process:
       properties:
         - bicycle_network
         - bicycle_shield_text
+        - bicycle_shield_text_length
       where: >-
         kind == 'path' and kind_detail == 'track'
   - fn: vectordatasource.transform.update_parenthetical_properties
@@ -1446,18 +1750,21 @@ post_process:
   - fn: vectordatasource.transform.drop_properties_with_prefix
     params: {prefix: mz_}
 
+  - fn: vectordatasource.transform.drop_properties_with_prefix
+    params: {prefix: tz_}
+
   # drop small inners in buildings before we do the merge.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.quantize_height
     params:
       source_layer: buildings
       start_zoom: 13
-      end_zoom: 16
+      end_zoom: 17
       quantize:
         13: vectordatasource.transform.quantize_height_round_nearest_20_meters
         14: vectordatasource.transform.quantize_height_round_nearest_10_meters
@@ -1476,6 +1783,56 @@ post_process:
     params:
       source_layer: buildings
       target_value_type: int
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - landuse_kind
+      where: >-
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'national_park', 'nature_reserve', 'park', 'protected_area', 'retail', 'runway', 'school', 'station', 'taxiway', 'university']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - kind_detail
+      where: >-
+        kind_detail not in ['airport', 'civic', 'church', 'college', 'commercial', 'fire_station', 'industrial', 'military', 'hospital', 'office', 'public', 'prison', 'retail', 'school', 'sports_centre', 'stadium', 'station', 'synagogue', 'train_station', 'university', 'warehouse']
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 16
+      properties:
+        - building_material
+        - osm_relation
+        - roof_color
+        - roof_height
+        - roof_material
+        - roof_orientation
+        - roof_shape
+        - root_id
+        - volume
+
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: buildings
+      start_zoom: 0
+      end_zoom: 17
+      # short-hand for "name" property in the list below means all name-like
+      # properties.
+      all_name_variants: true
+      properties:
+        - name
+        - old_name
+        - addr_housenumber
+        - addr_street
 
   # fit min zoom onto the scale rank, as we'll be using the scale rank rather
   # than the min zoom to calculate whether a building should make it into a
@@ -1516,9 +1873,9 @@ post_process:
   # process may also have created small inners.
   - fn: vectordatasource.transform.drop_small_inners
     params:
-      end_zoom: 15
+      end_zoom: 17
       source_layers: [buildings]
-      pixel_area: 0.25
+      pixel_area: 10.0
 
   - fn: vectordatasource.transform.numeric_min_filter
     params:
@@ -1595,9 +1952,19 @@ post_process:
       target_attribute: landuse_kind
       cutting_attrs: { sort_key: 'sort_rank', reverse: True }
 
-  # drop landuse_kind=residential or industrial at mid-low zooms, because they
+  # conditionally drop landuse_kind at mid-low zooms, because they
   # interfere a lot with merging, and tend to be not strongly styled unlike
   # military, hospital or park/forest land uses.
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 16
+      properties:
+        - landuse_kind
+      where: >-
+        landuse_kind not in ['aerodrome', 'airfield', 'cemetery', 'college', 'conservation', 'forest', 'garden', 'golf_course', 'hospital', 'military', 'national_park', 'nature_reserve', 'park', 'parking', 'protected_area', 'runway', 'school', 'taxiway', 'university']
+
   - fn: vectordatasource.transform.drop_properties
     params:
       source_layer: roads
@@ -1606,7 +1973,20 @@ post_process:
       properties:
         - landuse_kind
       where: >-
-        landuse_kind in ('residential', 'industrial')
+        (kind_detail == 'trunk' and zoom < 10) or
+        (kind_detail == 'primary' and zoom < 11) or
+        (kind_detail == 'secondary' and zoom < 12) or
+        (kind_detail == 'tertiary' and zoom < 12) or
+        (kind_detail == 'motorway_link' and zoom < 14) or
+        (kind_detail == 'trunk_link' and zoom < 14) or
+        (kind_detail == 'primary_link' and zoom < 15) or
+        (kind_detail == 'secondary_link' and zoom < 15) or
+        (kind_detail == 'tertiary_link' and zoom < 15) or
+        (kind == 'minor_road' and zoom < 15) or
+        (kind == 'aeroway' and zoom < 13) or
+        (kind == 'path' and zoom < 14) or
+        (kind == 'ferry' and zoom < 14) or
+        (kind == 'rail' and zoom < 14)
 
   # drop osm_relation tag, used to indicate that shapes came from OSM relations.
   # however, it interferes with merging.
@@ -1626,6 +2006,27 @@ post_process:
       source_layer: landuse
       start_zoom: 4
       end_zoom: 13
+
+  # drop properties on landuse areas at mid and low zooms. it blocks merging
+  - fn: vectordatasource.transform.drop_properties
+    params:
+      source_layer: landuse
+      start_zoom: 4
+      end_zoom: 14
+      properties:
+        - id
+        - kind_detail
+        - tier
+        - passenger_count
+        - natural
+        - operator
+        - sport
+        - religion
+        - surface
+        - attraction
+        - zoo
+        - barrier
+        - fence_type
 
   # drop small inners before merge, as not having to consider these can speed up
   # the buffer & clipping algorithms.
@@ -1678,7 +2079,49 @@ post_process:
     params:
       source_layer: roads
       start_zoom: 8
+      end_zoom: 16
+      # setting the following will try to merge linestrings across junctions
+      # (i.e: more than 2 roads meeting at a point) where the angle between
+      # roads at that point is less than 5 degrees.
+      merge_junctions: true
+      merge_junction_angle: 5.0
+      # setting the following will cause lines, or parts of multi-lines,
+      # shorter than 1px at nominal zoom to be dropped.
+      drop_short_segments: true
+      drop_length_pixels: 1.0
+      # integrated simplification step tolerance. NOTE: simplification is only
+      # performed if junction merging is set to true! the idea is to simplify
+      # away points at junctions where the road is straight, so it shouldn't
+      # need to be a large tolerance.
+      simplify_tolerance: 1.0
+
+  # drop labels on roads which are too short to render.
+  - fn: vectordatasource.transform.drop_names_on_short_boundaries
+    params:
+      source_layer: roads
+      start_zoom: 8
       end_zoom: 15
+      # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
+      # the name gets dropped. larger values mean fewer lines are eligible for labelling.
+      pixels_per_letter: 11
+
+  # drop labels on roads which are too short to render
+  # but with more flexibility for range of style text sizes
+  - fn: vectordatasource.transform.drop_names_on_short_boundaries
+    params:
+      source_layer: roads
+      start_zoom: 15
+      end_zoom: 17
+      # pixels (256px nominal) to require per letter in the name. if lines are shorter than this,
+      # the name gets dropped. larger values mean fewer lines are eligible for labelling.
+      pixels_per_letter: 5
+
+  # since we drop names in the previous step, we would like merge it again
+  - fn: vectordatasource.transform.merge_line_features
+    params:
+      source_layer: roads
+      start_zoom: 8
+      end_zoom: 16
       # setting the following will try to merge linestrings across junctions
       # (i.e: more than 2 roads meeting at a point) where the angle between
       # roads at that point is less than 5 degrees.
@@ -1700,12 +2143,12 @@ post_process:
   - fn: vectordatasource.transform.merge_line_features
     params:
       source_layer: roads
-      start_zoom: 15
-      end_zoom: 16
+      start_zoom: 16
+      end_zoom: 17
       # setting the following will cause lines, or parts of multi-lines,
-      # shorter than 0.1px at nominal zoom to be dropped.
+      # shorter than 1px at nominal zoom to be dropped.
       drop_short_segments: true
-      drop_length_pixels: 0.1
+      drop_length_pixels: 1.0
 
   # NOTE: want to do this _before_ buildings_unify, as after that we might not
   # have a feature ID to match buildings on!

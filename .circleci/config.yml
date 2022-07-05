@@ -6,6 +6,10 @@ jobs:
     steps:
       - checkout
       - run:
+          command: |
+            cp .pre-commit-config.yaml pre-commit-cache-key.txt
+            python --version --version >> pre-commit-cache-key.txt
+      - run:
           name: Update packages
           command: sudo apt-get update
       - run:
@@ -23,17 +27,26 @@ jobs:
             sudo service postgresql start
             sudo sudo -u postgres createuser -s circleci
       - restore_cache:
-          key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          keys:
+          - python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
       - run:
-          name: Install Pip dependencies
+          name: Install Pip dependencies and pre-commit
           command: |
             virtualenv ~/env
             . ~/env/bin/activate
             pip install -Ur requirements.txt
+            pip install pre-commit
       - save_cache:
           key: python-requirements-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
+            - ~/.cache/pre-commit
             - "~/env"
+      - run:
+          name: Check Code Style using pre-commit
+          command: |
+            . ~/env/bin/activate
+# we enabled pre-commit.ci for the repo so no need to run it on Circle here again
+#            pre-commit run --show-diff-on-failure --all-files
       - run:
           name: Setup.py develop
           command: |
@@ -44,16 +57,17 @@ jobs:
           command: |
             . ~/env/bin/activate
             python integration-test/__init__.py --download-only
-      - run:
-          name: Install flake8
-          command: |
-            . ~/env/bin/activate
-            pip install -U flake8
-      - run:
-          name: Check PEP8 compliance
-          command: |
-            . ~/env/bin/activate
-            find . -not -path '*/.eggs/*' -not -path '*/data/*' -name '*.py' | xargs flake8
+# This section is commented out because now flake8 is part of an earlier step - `Check Code Style using pre-commit`. See https://github.com/tilezen/vector-datasource/pull/2027/
+#      - run:
+#          name: Install flake8
+#          command: |
+#            . ~/env/bin/activate
+#            pip install -U flake8
+#      - run:
+#          name: Check PEP8 compliance
+#          command: |
+#            . ~/env/bin/activate
+#            find . -not -path '*/.eggs/*' -not -path '*/data/*' -not -path '*/venv/*' -name '*.py' | xargs flake8
       - run:
           name: Unit tests
           command: |
