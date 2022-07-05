@@ -9746,11 +9746,11 @@ def add_root_id(shape, props, fid, zoom):
     adds a root id equal to the id to a building
     """
 
-    kind = props.get("kind")
-    if kind == "building":
-        id = props.get("id")
-        root_id = props.get("root_id")
-        if id and not root_id:
-            props["root_id"] = id
+    kind = props.get('kind')
+    if kind == 'building':
+        this_id = props.get('id')
+        # note, we don't bring in root_id from the database, so no need to check if it exists already
+        if this_id:
+            props['root_id'] = this_id
 
     return shape, props, fid
