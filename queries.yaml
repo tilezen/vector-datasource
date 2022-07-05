@@ -260,7 +260,6 @@ layers:
       - vectordatasource.transform.building_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.truncate_min_zoom_to_1dp
-      - vectordatasource.transform.add_root_id
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:

@@ -8404,6 +8404,7 @@ def buildings_unify(ctx):
             if building_id:
                 indexed_building = geom_with_building_id(shape, building_id)
                 indexable_buildings.append(indexed_building)
+                props['root_id'] = building_id
         elif kind == 'building_part':
             parts.append(feature)
 
@@ -9737,20 +9738,5 @@ def create_dispute_ids(shape, props, fid, zoom):
     dispute_id = '_'.join(items)
     if dispute_id:
         props['dispute_id'] = dispute_id
-
-    return shape, props, fid
-
-
-def add_root_id(shape, props, fid, zoom):
-    """
-    adds a root id equal to the id to a building
-    """
-
-    kind = props.get('kind')
-    if kind == 'building':
-        this_id = props.get('id')
-        # note, we don't bring in root_id from the database, so no need to check if it exists already
-        if this_id:
-            props['root_id'] = this_id
 
     return shape, props, fid
