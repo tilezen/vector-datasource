@@ -8404,6 +8404,7 @@ def buildings_unify(ctx):
             if building_id:
                 indexed_building = geom_with_building_id(shape, building_id)
                 indexable_buildings.append(indexed_building)
+                props['root_id'] = building_id
         elif kind == 'building_part':
             parts.append(feature)
 
