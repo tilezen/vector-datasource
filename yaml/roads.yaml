@@ -177,31 +177,31 @@ global:
           - when:
               sov_a3: CAN
               level: ['Federal', 'Interstate', 'State']
-            then: ['road', 'CA:??:primary', { col: name }]
+            then: ['road', 'CA:??:primary', { col: name }, { col: "osmc:symbol" }]
           - when:
               sov_a3: 'MEX'
               level: 'Interstate'
-            then: ['road', 'MX', { col: name }]
+            then: ['road', 'MX', { col: name }, { col: "osmc:symbol" }]
           - when:
               sov_a3: 'MEX'
               level: 'Federal'
-            then: ['road', 'MX:MX', { col: name }]
+            then: ['road', 'MX:MX', { col: name }, { col: "osmc:symbol" }]
           - when:
               sov_a3: 'USA'
               level: 'Interstate'
-            then: ['road', 'US:I', { col: name }]
+            then: ['road', 'US:I', { col: name }, { col: "osmc:symbol" }]
           - when:
               sov_a3: 'USA'
               level: 'Federal'
-            then: ['road', 'US:US', { col: name }]
+            then: ['road', 'US:US', { col: name }, { col: "osmc:symbol" }]
           - when:
               continent: 'Oceania'
               level: 'Federal'
-            then: ['road', 'NZ:SH', { col: label}]
+            then: ['road', 'NZ:SH', { col: label}, { col: "osmc:symbol" }]
           - when:
               continent: ['Europe', 'Asia']
               level: 'E'
-            then: ['road', 'e-road', { col: name }]
+            then: ['road', 'e-road', { col: name }, { col: "osmc:symbol" }]
         columns: [ sov_a3, continent, label, level ]
       # tolls
       toll:

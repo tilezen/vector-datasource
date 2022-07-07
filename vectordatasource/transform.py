@@ -410,12 +410,8 @@ def place_population_int(shape, properties, fid, zoom):
     return shape, properties, fid
 
 
-def _calculate_population_rank(population):
-    population = to_float(population)
-    if population is None:
-        population = 0
-    else:
-        population = int(population)
+def population_rank(shape, properties, fid, zoom):
+    population = properties.get('population')
     pop_breaks = [
         1000000000,
         100000000,
@@ -442,12 +438,8 @@ def _calculate_population_rank(population):
             break
     else:
         rank = 0
-    return rank
 
-
-def population_rank(shape, properties, fid, zoom):
-    population = properties.get('population')
-    properties['population_rank'] = _calculate_population_rank(population)
+    properties['population_rank'] = rank
     return (shape, properties, fid)
 
 
@@ -463,6 +455,7 @@ def pois_direction_int(shape, props, fid, zoom):
     direction = props.get('direction')
     if not direction:
         return shape, props, fid
+
     props['direction'] = _to_int_degrees(direction)
     return shape, props, fid
 
@@ -529,24 +522,7 @@ def _alpha_2_code_of(lang):
 LangResult = namedtuple('LangResult', ['code', 'priority'])
 
 
-zh_alpha_2_lang_code = 'zh'
-
-# key is the name in WOF source; value is the Tilezen internal name and its
-# priority
-wof_zh_variants_lookup = {
-    'zho_cn_x_preferred': ('zh-Hans', 0),  # Simplified Chinese
-    'zho_x_preferred': ('zh-Hans', 1),  # Simplified Chinese
-    'wuu_x_preferred': ('zh-Hans', 2),  # Simplified Chinese
-    'zho_tw_x_preferred': ('zh-Hant', 0),  # Traditional Chinese
-    'zho_x_variant': ('zh-Hant', 1),  # Traditional Chinese
-}
-
-
 def _convert_wof_l10n_name(x):
-    if x in wof_zh_variants_lookup:
-        return LangResult(code=wof_zh_variants_lookup[x][0],
-                          priority=wof_zh_variants_lookup[x][1])
-
     lang_str_iso_639_3 = x[:3]
     if len(lang_str_iso_639_3) != 3:
         return None
@@ -554,38 +530,17 @@ def _convert_wof_l10n_name(x):
         lang = pycountry.languages.get(alpha_3=lang_str_iso_639_3)
     except KeyError:
         return None
-
-    lang_code = _alpha_2_code_of(lang)
-    if lang_code == zh_alpha_2_lang_code:
-        return None
     return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
-# key is the name in NE source; value is a tuple of Tilezen internal
-# name and its priority value
-ne_zh_variants_lookup = {
-    'zh': ('zh-Hans', 0),  # Simplified Chinese
-    'zht': ('zh-Hant', 0),  # Traditional Chinese
-}
-
-
 def _convert_ne_l10n_name(x):
-    if x in ne_zh_variants_lookup:
-        return LangResult(code=ne_zh_variants_lookup[x][0],
-                          priority=ne_zh_variants_lookup[x][1])
-
     if len(x) != 2:
         return None
     try:
         lang = pycountry.languages.get(alpha_2=x)
     except KeyError:
         return None
-
-    lang_code = _alpha_2_code_of(lang)
-    if lang_code == zh_alpha_2_lang_code:
-        return None
-
-    return LangResult(code=lang_code, priority=0)
+    return LangResult(code=_alpha_2_code_of(lang), priority=0)
 
 
 def _normalize_osm_lang_code(x):
@@ -623,39 +578,18 @@ def _normalize_country_code(x):
 
 osm_l10n_lookup = set([
     'zh-min-nan',
+    'zh-yue'
 ])
-
-
-# key is the name in OSM source; value is a tuple of Tilezen internal name
-# and its priority value
-osm_zh_variants_lookup = {
-    'zh-Hans': ('zh-Hans', 0),  # Simplified Chinese
-    'zh-SG': ('zh-Hans', 1),  # Simplified Chinese
-    'zh': ('zh-default', 0),  # Simplified Chinese presumably, can contain Traditional Chinese
-    'zh-Hant': ('zh-Hant', 0),    # Traditional Chinese
-    'zh-Hant-tw': ('zh-Hant', 1),  # Traditional Chinese
-    'zh-Hant-hk': ('zh-Hant', 2),  # Traditional Chinese
-    'zh-yue': ('zh-Hant', 3),  # Traditional Chinese
-    'zh-HK': ('zh-Hant', 4),  # Traditional Chinese
-}
 
 
 def _convert_osm_l10n_name(x):
     if x in osm_l10n_lookup:
         return LangResult(code=x, priority=0)
 
-    if x in osm_zh_variants_lookup:
-        return LangResult(code=osm_zh_variants_lookup[x][0],
-                          priority=osm_zh_variants_lookup[x][1])
-
-    # all accepted Chinese variants should be handled in the shortcuts already
-    # so won't accept other tags that starts with `zh` any more
-    if x.startswith('zh'):
-        return None
-
     if '_' not in x:
         lang_code_candidate = x
         country_candidate = None
+
     else:
         fields_by_underscore = x.split('_', 1)
         lang_code_candidate, country_candidate = fields_by_underscore
@@ -677,115 +611,7 @@ def _convert_osm_l10n_name(x):
     else:
         result = lang_code_result
 
-    if result == zh_alpha_2_lang_code:
-        return None
-
     return LangResult(code=result, priority=priority)
-
-
-def post_process_ne_wof_zh(properties):
-    """ If there is no Simplified Chinese, Traditional
-    Chinese will be used to further backfill, and vice versa """
-    if 'name:zh-Hans' not in properties and 'name:zh-Hant' in properties:
-        properties['name:zh-Hans'] = properties['name:zh-Hant']
-
-    if 'name:zh-Hant' not in properties and 'name:zh-Hans' in properties:
-        properties['name:zh-Hant'] = properties['name:zh-Hans']
-
-
-def clean_backfill_zh(properties):
-    """ only select one of the options if the field is separated by "/"
-    for example if the field is "旧金山市县/三藩市市縣/舊金山市郡" only the first
-    one 旧金山市县 will be preserved
-    also some data source may have leading backslash char or whitespace,
-    need to remove those too.
-
-    Also for backward compatibility, we also populate name:zh field
-
-    Finally, if any of the 'name:zh-Hans', 'name:zh-Hant' or 'name:zh' field
-    is empty or is whitespace string, we remove it.
-    """
-    if properties.get('name:zh-Hans'):
-        properties['name:zh-Hans'] = properties['name:zh-Hans'].split('/')[0].strip().strip('\\')
-    if properties.get('name:zh-Hant'):
-        properties['name:zh-Hant'] = properties['name:zh-Hant'].split('/')[0].strip().strip('\\')
-
-    if properties.get('name:zh-Hans'):
-        properties['name:zh'] = properties['name:zh-Hans']
-    elif properties.get('name:zh-Hant'):
-        properties['name:zh'] = properties['name:zh-Hant']
-
-    # if the field is empty/whitespace string we don't include the properties
-    if 'name:zh-Hans' in properties and \
-            (properties['name:zh-Hans'] is None or
-             not properties['name:zh-Hans'].strip()):
-        del properties['name:zh-Hans']
-
-    if 'name:zh-Hant' in properties and \
-            (properties['name:zh-Hant'] is None or
-             not properties['name:zh-Hant'].strip()):
-        del properties['name:zh-Hant']
-
-    if 'name:zh' in properties and \
-            (properties['name:zh'] is None or
-             not properties['name:zh'].strip()):
-        del properties['name:zh']
-
-
-def post_process_osm_zh(properties):
-    """ First check whether name:zh (Simplified) and name:zht(Traditional)
-    are set already, if not we use the name:zh-default to backfill them.
-    During the backfill, if there is no Simplified Chinese, Traditional
-    Chinese will be used to further backfill, and vice versa
-    It also deletes the intermediate property `zh-default`
-    Before the function returns, 'name:zh-Hant' or 'name:zh-Hans' may
-    contain an empty string or whitespaces string.
-    """
-
-    if 'name:zh-Hans' not in properties and 'name:zh-Hant' not in properties and \
-            'name:zh-default' not in properties:
-        return
-
-    if 'name:zh-Hans' in properties and 'name:zh-Hant' in properties:
-        if 'name:zh-default' in properties:
-            del properties['name:zh-default']
-        return
-
-    zh_Hans_fallback = properties['name:zh-Hans'] if 'name:zh-Hans' in \
-                                                     properties else u''
-    zh_Hant_fallback = properties['name:zh-Hant'] if 'name:zh-Hant' in \
-                                                     properties else u''
-
-    if properties.get('name:zh-default'):
-        names = properties['name:zh-default'].split('/')
-        for name in names:
-            if hanzidentifier.is_simplified(name) and \
-                    len(zh_Hans_fallback) == 0:
-                zh_Hans_fallback = name
-            if hanzidentifier.is_traditional(name) and \
-                    len(zh_Hant_fallback) == 0:
-                zh_Hant_fallback = name
-        # hanzidentifier cannot deem it either way
-        if len(names) != 0:
-            if len(zh_Hans_fallback) == 0:
-                zh_Hans_fallback = names[0]
-            if len(zh_Hant_fallback) == 0:
-                zh_Hant_fallback = names[0]
-
-    if not properties.get('name:zh-Hans'):
-        if zh_Hans_fallback:
-            properties['name:zh-Hans'] = zh_Hans_fallback
-        elif zh_Hant_fallback:
-            properties['name:zh-Hans'] = zh_Hant_fallback
-
-    if not properties.get('name:zh-Hant'):
-        if zh_Hant_fallback:
-            properties['name:zh-Hant'] = zh_Hant_fallback
-        elif zh_Hans_fallback:
-            properties['name:zh-Hant'] = zh_Hans_fallback
-
-    if 'name:zh-default' in properties:
-        del properties['name:zh-default']
 
 
 def tags_name_i18n(shape, properties, fid, zoom):
@@ -847,14 +673,6 @@ def tags_name_i18n(shape, properties, fid, zoom):
 
     for lang_key, (lang, v) in langs.items():
         properties[lang_key] = v
-
-    if is_osm:
-        post_process_osm_zh(properties)
-
-    if is_wof or is_ne:
-        post_process_ne_wof_zh(properties)
-
-    clean_backfill_zh(properties)
 
     for alt_tag_name_candidate in tag_name_alternates:
         alt_tag_name_value = tags.get(alt_tag_name_candidate)
@@ -2564,7 +2382,6 @@ def generate_address_points(ctx):
         # address points.
         label_properties = dict(
             addr_housenumber=addr_housenumber,
-            min_zoom=17,
             kind='address')
 
         source = properties.get('source')
@@ -3121,109 +2938,6 @@ def _match_props(props, items_matching):
             return False
 
     return True
-
-
-def keep_n_features_gridded(ctx):
-    """
-    Distribute the features matching _all_ the key-value
-    pairs in `items_matching` into a grid, then keep the
-    first `max_items` features in each grid cell.
-
-    The grid is created by dividing the bounds into cells.
-    The `grid_width_meters` and `grid_height_meters` params
-    specify the width and height (in mercator meters) of
-    each grid cell.
-
-    NOTE: This only works with point features and will
-    pass through non-point features untouched.
-
-    This is useful for removing less-important features
-    in areas that are geographically dense.
-    """
-
-    feature_layers = ctx.feature_layers
-    zoom = ctx.nominal_zoom
-    source_layer = ctx.params.get('source_layer')
-    assert source_layer, 'keep_n_features_gridded: missing source layer'
-    start_zoom = ctx.params.get('start_zoom', 0)
-    end_zoom = ctx.params.get('end_zoom')
-    items_matching = ctx.params.get('items_matching')
-    max_items = ctx.params.get('max_items')
-    grid_width = ctx.params.get('grid_width_meters')
-    # if grid_height_meters is not specified, use grid_width_meters
-    # for grid_height_meters
-    grid_height = ctx.params.get('grid_height_meters') or grid_width
-    sorting_keys = ctx.params.get('sorting_keys')
-
-    # leaving items_matching, grid_size, or max_items as None (or zero)
-    # would mean that this filter would do nothing, so assume
-    # that this is really a configuration error.
-    assert items_matching, 'keep_n_features_gridded: missing or empty item match dict'
-    assert max_items, 'keep_n_features_gridded: missing or zero max number of items'
-    assert grid_width, 'keep_n_features_gridded: missing or zero grid width'
-    assert sorting_keys, 'keep_n_features_gridded: missing sorting keys'
-    assert isinstance(sorting_keys, list), 'keep_n_features_gridded: sorting keys should be a list'
-
-    if zoom < start_zoom:
-        return None
-
-    # we probably don't want to do this at higher zooms (e.g: 17 &
-    # 18), even if there are a bunch of features in the tile, as
-    # we use the high-zoom tiles for overzooming to 20+, and we'd
-    # eventually expect to see _everything_.
-    if end_zoom is not None and zoom >= end_zoom:
-        return None
-
-    layer = _find_layer(feature_layers, source_layer)
-    if layer is None:
-        return None
-
-    minx, miny, maxx, maxy = ctx.unpadded_bounds
-
-    # Sort the features into buckets
-    buckets = defaultdict(list)
-    new_features = []
-    for shape, props, fid in layer['features']:
-        # Pass non-point shapes through untouched
-        if shape.type != 'Point' or not _match_props(props, items_matching):
-            new_features.append((shape, props, fid))
-            continue
-
-        # Calculate the bucket to put this feature in.
-        # Note that this purposefully allows for buckets outside the unpadded bounds
-        # so we can bucketize the padding area, too.
-        bucket_x = int((shape.x - minx) / grid_width)
-        bucket_y = int((shape.y - miny) / grid_height)
-        bucket_id = (bucket_x, bucket_y)
-
-        buckets[bucket_id].append((shape, props, fid))
-
-    def sorting_values_for_feature(f):
-        _, props, _ = f
-
-        values = []
-        for k in sorting_keys:
-            v = props.get(k['sort_key'])
-
-            if v is None:
-                values.append(v)
-                continue
-
-            if k.get('reverse'):
-                v *= -1
-                if v == '':
-                    raise ValueError('Cannot reverse string value %s' % props.get(k['sort_key']))
-
-            values.append(v)
-        return values
-
-    # Sort the features in each bucket and pick the top items to include in the output
-    for features_in_bucket in buckets.values():
-        sorted_features = sorted(features_in_bucket, key=sorting_values_for_feature)
-        new_features.extend(sorted_features[:max_items])
-
-    layer['features'] = new_features
-    return layer
 
 
 def keep_n_features(ctx):
@@ -8332,11 +8046,7 @@ def _choose_most_important_network(properties, prefix, importance_fn):
             # expose first network as network/shield_text
             network, ref = tuples[0]
             properties[prefix + 'network'] = network
-
-            if ref is not None:
-                properties[prefix + 'shield_text'] = ref
-                if 0 < len(ref) <= 7:
-                    properties[prefix + 'shield_text_length'] = str(len(ref))
+            properties[prefix + 'shield_text'] = ref
 
             # replace properties with sorted versions of themselves
             properties[all_networks] = [n[0] for n in tuples]
@@ -8827,66 +8537,6 @@ def min_zoom_filter(ctx):
     return None
 
 
-def tags_set_ne_pop_min_max_default(ctx):
-    """
-    The data may potentially a join result of OSM and NE so there are different
-    scenarios when we populate the population and population_rank fields.
-
-    population:
-    (1) if the data has population from OSM use it as is
-    (2) if the data has no population from OSM, use __ne_pop_min to back-fill
-    (3) if the data has no population from OSM and no __ne_pop_min from NE
-    either(no OSM<>NE join or NE just don't have non-nil __ne_pop_min value),
-    then use the estimate value to back-fill based its kind_detail
-
-    population_rank:
-    (1) if the data has __ne_pop_max, use it to calculate population_rank
-    (2) if the data doesn't have __ne_pop_max(no OSM<>NE join or NE just don't
-    have non-nil __ne_pop_max value) use the population value determined by the
-    above procedure to calculate it.
-    """
-    params = _Params(ctx, 'tags_set_ne_pop_min_max')
-    layer_name = params.required('layer')
-    layer = _find_layer(ctx.feature_layers, layer_name)
-
-    for _, props, _ in layer['features']:
-        __ne_pop_min = props.pop('__ne_pop_min', None)
-        __ne_pop_max = props.pop('__ne_pop_max', None)
-
-        population = props.get('population')
-
-        if population is None:
-            population = __ne_pop_min
-        if population is None:
-            kind = props.get('kind')
-            kind_detail = props.get('kind_detail')
-            # the following are estimate population for each kind_detail
-            if kind == 'locality':
-                if kind_detail == 'city':
-                    population = 10000
-                elif kind_detail == 'town':
-                    population = 5000
-                elif kind_detail == 'village':
-                    population = 2000
-                elif kind_detail == 'locality':
-                    population = 1000
-                elif kind_detail == 'hamlet':
-                    population = 200
-                elif kind_detail == 'isolated_dwelling':
-                    population = 100
-                elif kind_detail == 'farm':
-                    population = 50
-
-        population = to_float(population)
-        if population is not None:
-            props['population'] = int(population)
-        if __ne_pop_max is not None:
-            props['population_rank'] = _calculate_population_rank(__ne_pop_max)
-        elif population is not None:
-            props['population_rank'] = \
-                _calculate_population_rank(props['population'])
-
-
 def tags_set_ne_min_max_zoom(ctx):
     """
     Override the min zoom and max zoom properties with __ne_* variants from
@@ -8907,14 +8557,13 @@ def tags_set_ne_min_max_zoom(ctx):
                 min_zoom = ceil(min_zoom)
             props['min_zoom'] = min_zoom
 
-        elif props.get('kind') in ('country', 'unrecognized'):
+        elif props.get('kind') == 'country':
             # countries and regions which don't have a min zoom joined from NE
             # are probably either vandalism or unrecognised countries. either
             # way, we probably don't want to see them at zoom, which is lower
             # than most of the curated NE min zooms. see issue #1826 for more
             # information.
-            props['kind'] = 'unrecognized'
-            props['min_zoom'] = max(8, props['min_zoom'])
+            props['min_zoom'] = max(6, props['min_zoom'])
 
         elif props.get('kind') == 'region':
             props['min_zoom'] = max(8, props['min_zoom'])
@@ -9171,8 +8820,6 @@ def add_vehicle_restrictions(shape, props, fid, zoom):
         props['hgv_restriction'] = hgv_restriction
     if hgv_restriction_shield_text:
         props['hgv_restriction_shield_text'] = hgv_restriction_shield_text
-        if 0 < len(hgv_restriction_shield_text) < 7:
-            props['hgv_restriction_shield_text_length'] = str(len(hgv_restriction_shield_text))
 
     return shape, props, fid
 
@@ -9270,10 +8917,10 @@ def remap_viewpoint_kinds(shape, props, fid, zoom):
     Remap Natural Earth kinds in kind:* country viewpoints into the standard
     Tilezen nomenclature.
     """
-    for key in props.keys():
 
-        if key.startswith('kind:') and props[key] in _REMAP_VIEWPOINT_KIND:
-            props[key] = _REMAP_VIEWPOINT_KIND[props[key]]
+    for key in props.keys():
+        if key.startswith('kind:'):
+            props[key] = _REMAP_VIEWPOINT_KIND.get(props[key])
 
     return (shape, props, fid)
 
@@ -9297,7 +8944,7 @@ def _list_of_countries(value):
         # should have an ISO 3166-1 alpha-2 code, so should be 2 ASCII
         # latin characters.
         candidate = candidate.strip().lower()
-        if candidate == 'iso' or candidate == 'tlc' or match('[a-z][a-z]', candidate):
+        if candidate == 'iso' or match('[a-z][a-z]', candidate):
             countries.append(candidate)
 
     return countries
@@ -9305,7 +8952,7 @@ def _list_of_countries(value):
 
 def unpack_viewpoint_claims(shape, props, fid, zoom):
     """
-    Unpack OSM "claimed_by" and "disputed_by" lists into viewpoint kinds.
+    Unpack OSM "claimed_by" list into viewpoint kinds.
 
     For example; "claimed_by=AA;BB;CC" should become "kind:aa=country,
     kind:bb=country, kind:cc=country" (or region, etc... as appropriate for
@@ -9316,27 +8963,22 @@ def unpack_viewpoint_claims(shape, props, fid, zoom):
     see it in their viewpoint as a country/region/county.
     """
 
-    claimed_by = props.get('claimed_by', '')
-    recognized_by = props.get('recognized_by', '')
-    disputed_by = props.get('disputed_by', '')
+    prefix = 'unrecognized_'
+    kind = props.get('kind')
+    claimed_by = props.get('claimed_by')
+    recognized_by = props.get('recognized_by')
 
-    admin_level = str(props.get('tz_admin_level', ''))
+    if kind and kind.startswith(prefix) and claimed_by:
+        claimed_kind = kind[len(prefix):]
 
-    if admin_level:
-        base_kind = _ADMIN_LEVEL_TO_KIND.get(admin_level, '')
-        if not base_kind:
-            base_kind = 'debug'
+        for country in _list_of_countries(claimed_by):
+            props['kind:' + country] = claimed_kind
 
-        for viewpoint in _list_of_countries(claimed_by):
-            props['kind:' + viewpoint] = base_kind
+        if recognized_by:
+            for viewpoint in _list_of_countries(recognized_by):
+                props['kind:' + viewpoint] = claimed_kind
 
-        for viewpoint in _list_of_countries(recognized_by):
-            props['kind:' + viewpoint] = base_kind
-
-        for viewpoint in _list_of_countries(disputed_by):
-            props['kind:' + viewpoint] = 'unrecognized'
-
-    return shape, props, fid
+    return (shape, props, fid)
 
 
 class _DisputeMasks(object):
@@ -9360,16 +9002,13 @@ class _DisputeMasks(object):
         disputed_by = props.get('disputed_by', '')
         disputants = _list_of_countries(disputed_by)
 
-        recognizants = _list_of_countries(props.get('recognized_by', ''))
-        claimants = _list_of_countries(props.get('claimed_by', ''))
-
         if disputants:
             # we use a flat cap to avoid straying too much into nearby lines
             # and a mitred join to avoid creating extra geometry points to
             # represent the curve, as this slows down intersection checks.
             buffered_shape = shape.buffer(
                 self.buffer_distance, CAP_STYLE.flat, JOIN_STYLE.mitre)
-            self.masks.append((buffered_shape, disputants, recognizants, claimants, props))
+            self.masks.append((buffered_shape, disputants))
 
     def empty(self):
         return not self.masks
@@ -9382,7 +9021,15 @@ class _DisputeMasks(object):
 
         updated_features = []
 
-        for mask_shape, disputants, recognizants, claimants, dispute_props in self.masks:
+        # figure out what we want the boundary kind to be, if it's intersected
+        # with the dispute mask.
+        kind = props['kind']
+        if kind.startswith('unrecognized_'):
+            unrecognized = kind
+        else:
+            unrecognized = 'unrecognized_' + kind
+
+        for mask_shape, disputants in self.masks:
             # we don't want to override a kind:xx if it has already been set
             # (e.g: by a claim), so we filter out disputant viewpoints where
             # a kind override has already been set.
@@ -9405,21 +9052,7 @@ class _DisputeMasks(object):
                 if not cut_shape.is_empty:
                     new_props = props.copy()
                     for disputant in non_claim_disputants:
-                        new_props['kind:' + disputant] = 'unrecognized'
-
-                    for recognizant in recognizants:
-                        new_props['kind:' + recognizant] = 'country'
-
-                    for claimant in claimants:
-                        new_props['kind:' + claimant] = 'country'
-
-                    new_props['kind'] = 'disputed_reference_line'
-
-                    # apply all the properties that aren't already there from the dispute feature
-                    for prop, value in dispute_props.items():
-                        if not new_props.get(prop):
-                            new_props[prop] = value
-
+                        new_props['kind:' + disputant] = unrecognized
                     updated_features.append((cut_shape, new_props, None))
 
         if not shape.is_empty:
@@ -9488,9 +9121,9 @@ def apply_disputed_boundary_viewpoints(ctx):
         # we want to apply disputes to already generally-unrecognised borders
         # too, as this allows for multi-level fallback from one viewpoint
         # possibly through several others before reaching the default.
-        elif kind.startswith('unrecognized_'):
-            if kind[len('unrecognized_'):] in _BOUNDARY_KINDS:
-                boundaries.append((shape, props, fid))
+        elif (kind.startswith('unrecognized_') and
+              kind[len('unrecognized_'):] in _BOUNDARY_KINDS):
+            boundaries.append((shape, props, fid))
 
         else:
             # pass through this feature - we just ignore it.
@@ -9550,9 +9183,6 @@ def update_min_zoom(ctx):
         local = defaultdict(lambda: None)
         local.update(props)
         local['zoom'] = zoom
-        # this is to make the name `properties` visible in the queries.yaml's
-        # where clause
-        local['properties'] = props
 
         if where and eval(where, {}, local):
             new_min_zoom = eval(min_zoom, {}, local)
@@ -9638,105 +9268,5 @@ def capital_alternate_viewpoint(shape, props, fid, zoom):
 
             elif default_region_capital and not region_capital:
                 props['region_capital:' + viewpoint] = False
-
-    return shape, props, fid
-
-
-# Map admin level to the kind it should become. Admin_level 3 isn't a widely recognized country,
-# but the only uses of 3 we care about are when it is a country from some viewpoint
-# Similarly 5 is typically used for disputed regions.
-_ADMIN_LEVEL_TO_KIND = {'2': 'country',
-                        '4': 'region',
-                        '6': 'county',
-                        '8': 'locality'}
-
-_PLACE_TO_KIND = {'country': 'country',
-                  'region': 'region',
-                  'state': 'region',
-                  'province': 'region',
-                  'county': 'county',
-                  'district': 'county',
-                  'city': 'locality',
-                  'town': 'locality',
-                  'village': 'locality',
-                  'locality': 'locality',
-                  'hamlet': 'locality',
-                  'isolated_dwelling': 'locality',
-                  'farm': 'locality',
-                  }
-
-
-def admin_level_alternate_viewpoint(shape, props, fid, zoom):
-    """
-    turns e.g. admin_level:XX=4 into kind:xx=region
-    """
-    admin_viewpoint_prefix = 'admin_level:'
-    tags = props.get('tags', {})
-
-    for k in tags.keys():
-        if k.startswith(admin_viewpoint_prefix):
-            viewpoint = k[len(admin_viewpoint_prefix):].lower()
-            admin_level = tags.pop(k)
-
-            # use a mapping if we have it, leave it out otherwise
-            if admin_level in _ADMIN_LEVEL_TO_KIND:
-                props['kind:' + viewpoint] = _ADMIN_LEVEL_TO_KIND.get(admin_level, None)
-
-    return shape, props, fid
-
-
-def unpack_places_disputes(shape, props, fid, zoom):
-    """
-    turns disputed places into 'unrecognized' for that viewpoint
-    """
-    disputed_by = props.pop('disputed_by', '')
-    disputants = _list_of_countries(disputed_by)
-
-    for disputant in disputants:
-        props['kind:' + disputant] = 'unrecognized'
-
-    return shape, props, fid
-
-
-def apply_places_with_viewpoints(shape, props, fid, zoom):
-    """
-    turns a valid place:XX into a corresponding kind:xx
-    """
-    prefix = 'place:'
-
-    for prop, value in list(props.items()):
-        if not prop.startswith(prefix):
-            continue
-
-        viewpoint = prop[len(prefix):].strip().lower()
-        kind = _PLACE_TO_KIND.get(value.strip().lower(), '')
-        if not kind:
-            continue
-
-        props['kind:' + viewpoint] = kind
-        props.pop(prop)
-
-    return shape, props, fid
-
-
-def create_dispute_ids(shape, props, fid, zoom):
-    """
-    concatenate <breakaway_code>_<ne_id> and store in dispute_id.  Just use what's there
-    stores no dispute_id if both input fields are missing
-    """
-
-    breakaway_code = props.pop('tz_breakaway_code', None)
-    if breakaway_code is None:
-        # no breakaway code, not a dispute
-        return shape, props, fid
-    items = [breakaway_code]
-
-    ne_id = props.pop('tz_ne_id', None)
-    if ne_id is not None:
-        items.append(str(ne_id))
-
-    dispute_id = '_'.join(items)
-    if dispute_id:
-        props['dispute_id'] = dispute_id
 
     return shape, props, fid

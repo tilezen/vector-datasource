@@ -23,7 +23,7 @@ Shapely==1.6.2.post1
 simplejson==3.12.0
 six==1.11.0
 StreetNames==0.1.5
-git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
+git+https://github.com/tilezen/tilequeue@v2.4.1-final#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
 tqdm==4.31.1
 urllib3==1.25.11
