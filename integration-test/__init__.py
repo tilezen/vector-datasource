@@ -1,49 +1,52 @@
-import unittest
-from os.path import dirname
-from os import listdir
-from os.path import join as path_join
-from os.path import getsize as path_getsize
 import fnmatch
-from importlib import import_module
+import hashlib
+import json
+import re
+import subprocess
+import time
+import unittest
+import urllib
+import urlparse
+from collections import defaultdict
 from collections import namedtuple
-from vectordatasource.meta.python import parse_layers
-from vectordatasource.meta.python import output_kind
-from vectordatasource.meta.python import make_function_name_props
-from vectordatasource.meta.python import output_min_zoom
-from vectordatasource.meta.python import make_function_name_min_zoom
-from tilequeue.query import make_fixture_data_fetcher
-from tilequeue.query.common import LayerInfo
+from contextlib import contextmanager
+from importlib import import_module
+from itertools import izip_longest
+from os import environ
+from os import getpid
+from os import listdir
+from os import makedirs
+from os.path import abspath
+from os.path import dirname
+from os.path import exists as path_exists
+from os.path import getsize as path_getsize
+from os.path import join as path_join
+
+import lxml.etree as ET
+import requests
+import shapefile
+import shapely.ops
 from ModestMaps.Core import Coordinate
-from tilequeue.tile import coord_to_mercator_bounds
-from tilequeue.tile import coord_to_bounds
+from shapely.geometry import mapping
+from shapely.geometry import shape as make_shape
+from tilequeue import wof
+from tilequeue.command import parse_layer_data
 from tilequeue.process import convert_source_data_to_feature_layers
 from tilequeue.process import process_coord_no_format
+from tilequeue.query import make_fixture_data_fetcher
+from tilequeue.query.common import LayerInfo
+from tilequeue.tile import coord_to_bounds
+from tilequeue.tile import coord_to_mercator_bounds
 from tilequeue.tile import reproject_lnglat_to_mercator
 from tilequeue.tile import reproject_mercator_to_lnglat
-from shapely.geometry import shape as make_shape
-import shapely.ops
-from shapely.geometry import mapping
-import hashlib
-import urlparse
-import requests
-from tilequeue.command import parse_layer_data
-from vectordatasource.meta import find_yaml_path
-import json
-from os import environ, makedirs
-from os.path import abspath
-from os.path import exists as path_exists
-from os import getpid
 from yaml import load as load_yaml
-from contextlib import contextmanager
-import re
-import lxml.etree as ET
-import time
-from collections import defaultdict
-import subprocess
-import urllib
-import shapefile
-from tilequeue import wof
-from itertools import izip_longest
+
+from vectordatasource.meta import find_yaml_path
+from vectordatasource.meta.python import make_function_name_min_zoom
+from vectordatasource.meta.python import make_function_name_props
+from vectordatasource.meta.python import output_kind
+from vectordatasource.meta.python import output_min_zoom
+from vectordatasource.meta.python import parse_layers
 
 
 # the Overpass server is used to download data about OSM elements. the
@@ -65,10 +68,10 @@ def make_acceptable_module_name(path):
     stem = path.rsplit('.', 1)[0]
 
     # replace all dashes with underscores
-    nodash = stem.replace("-", "_")
+    nodash = stem.replace('-', '_')
 
     # put an alphabetic prefix to ensure no leading digits
-    return "test_" + nodash
+    return 'test_' + nodash
 
 
 ##
@@ -165,26 +168,26 @@ def match_distance(actual, expected):
         if exp_v is not None:
             if isinstance(exp_v, set):
                 if v not in exp_v:
-                    misses[exp_k] = "%r not in %r" % (v, exp_v)
+                    misses[exp_k] = '%r not in %r' % (v, exp_v)
                     distance += 1
 
             elif isinstance(exp_v, type):
                 if not isinstance(v, exp_v):
-                    misses[exp_k] = "%r not an instance of %r" % (v, exp_v)
+                    misses[exp_k] = '%r not an instance of %r' % (v, exp_v)
                     distance += 1
 
             elif callable(exp_v):
                 if not exp_v(v):
-                    misses[exp_k] = "%r(%r) is not truthy" % (exp_v, v)
+                    misses[exp_k] = '%r(%r) is not truthy' % (exp_v, v)
                     distance += 1
 
             elif v != exp_v:
-                misses[exp_k] = "%r != %r" % (v, exp_v)
+                misses[exp_k] = '%r != %r' % (v, exp_v)
                 distance += 1
 
         else:
             if v is None:
-                misses[exp_k] = "missing"
+                misses[exp_k] = 'missing'
                 distance += 1
 
     return (distance, misses)
@@ -230,7 +233,7 @@ def load_tests(loader, standard_tests, test_instance, pattern=None):
     test_dir = dirname(__file__)
 
     # can't load modules if there's a ".." in the path to them
-    assert ".." not in test_dir
+    assert '..' not in test_dir
 
     if pattern is None:
         pattern = '*.py'
@@ -277,57 +280,57 @@ def parse_layer_dict(yaml_path, output_fn, fn_name_fn):
     layer_parse_result = parse_layers(yaml_path, output_fn, fn_name_fn)
 
     layers = {}
-    for l in layer_parse_result.layer_data:
-        layers[l.layer] = l.fn
+    for layer_data in layer_parse_result.layer_data:
+        layers[layer_data.layer] = layer_data.fn
 
     return layers
 
 
-class OSMDataObject(namedtuple("OSMDataObject", "typ fid")):
+class OSMDataObject(namedtuple('OSMDataObject', 'typ fid')):
 
     def canonical_url(self):
-        return "http://www.openstreetmap.org/%s/%d" % (self.typ, self.fid)
+        return 'https://www.openstreetmap.org/%s/%d' % (self.typ, self.fid)
 
 
-class OverpassObject(namedtuple("OverpassObject", "raw_query")):
+class OverpassObject(namedtuple('OverpassObject', 'raw_query')):
 
     def canonical_url(self):
         query = urllib.urlencode(dict(data=self.raw_query))
         url = urlparse.urlunparse((
-            'http', 'overpass-api.de', '/api/interpreter',
+            'https', 'overpass-api.de', '/api/interpreter',
             None, query, None))
         return url
 
 
 class FixtureShapeDataObject(
-        namedtuple("FixtureShapeDataObject", "table name")):
+        namedtuple('FixtureShapeDataObject', 'table name')):
 
     def canonical_url(self):
-        path = "/".join(["", "fixtures", self.table, self.name])
+        path = '/'.join(['', 'fixtures', self.table, self.name])
         url = urlparse.urlunparse((
             'file', 'integration-tests', path, None, None, None))
         return url
 
 
-class WOFDataObject(namedtuple("WOFDataObject", "wof_id")):
+class WOFDataObject(namedtuple('WOFDataObject', 'wof_id')):
 
     def canonical_url(self):
-        slashed = ""
+        slashed = ''
         # get digits in groups of 3
         for digits in izip_longest(*([iter(str(self.wof_id))]*3)):
             if slashed:
-                slashed += "/"
+                slashed += '/'
             for d in digits:
                 if d is not None:
                     slashed += d
-        url = "https://data.whosonfirst.org/%s/%d.geojson" \
+        url = 'https://data.whosonfirst.org/%s/%d.geojson' \
               % (slashed, self.wof_id)
         return url
 
 
 # minimal implementation of the WOF metadata class to be passed into
 # the WOF data fetcher.
-WOFMeta = namedtuple("WOFMeta", "wof_id hash")
+WOFMeta = namedtuple('WOFMeta', 'wof_id hash')
 
 
 class withlog(object):
@@ -344,8 +347,8 @@ def load_data_into_database(osc_file, base_dir, dbname, shell):
     style_file = path_join(base_dir, 'osm2pgsql.style')
     empty_osm = path_join(base_dir, 'scripts', 'empty.osm')
 
-    assert path_exists(style_file), "Could not find osm2pgsql style file"
-    assert path_exists(empty_osm), "Could not find empty OSM file"
+    assert path_exists(style_file), 'Could not find osm2pgsql style file'
+    assert path_exists(empty_osm), 'Could not find empty OSM file'
 
     for ext in ('postgis', 'hstore'):
         shell('psql', '-d', dbname, '-c', 'CREATE EXTENSION %s' % ext)
@@ -383,9 +386,9 @@ def dump_table(conn, typ, clip, simplify):
 
     # allow the way to be simplified for large geometries where we don't need
     # positional accuracy (e.g: when testing tag transforms).
-    geom = "way"
+    geom = 'way'
     if simplify:
-        geom = "ST_SimplifyPreserveTopology(%s, %f)" % (geom, simplify)
+        geom = 'ST_SimplifyPreserveTopology(%s, %f)' % (geom, simplify)
 
     query = """
     SELECT
@@ -400,7 +403,7 @@ def dump_table(conn, typ, clip, simplify):
     # query anything outside of the clipping shape.
     if clip:
         query += " AND way && ST_Transform(ST_GeomFromText('%s', " \
-                 "4326), 3857)" % (clip.wkt,)
+                 '4326), 3857)' % (clip.wkt,)
 
     cur.execute(query)
     for osm_id, geom, tags in cur:
@@ -470,7 +473,7 @@ def dump_table(conn, typ, clip, simplify):
 def dump_geojson(dbname, target_file, log, clip, simplify):
     import psycopg2
 
-    conn = psycopg2.connect("dbname=%s" % dbname)
+    conn = psycopg2.connect('dbname=%s' % dbname)
     features = []
     relations = []
 
@@ -555,11 +558,11 @@ def _download_from_overpass(objs, target_file, clip, simplify, base_dir):
 
 def _convert_shape_to_geojson(shpfile, jsonfile, override_properties, clip,
                               simplify):
-    dbffile = shpfile.replace(".shp", ".dbf")
+    dbffile = shpfile.replace('.shp', '.dbf')
     features = []
 
-    with open(shpfile, "rb") as shp:
-        with open(dbffile, "rb") as dbf:
+    with open(shpfile, 'rb') as shp:
+        with open(dbffile, 'rb') as dbf:
             sf = shapefile.Reader(shp=shp, dbf=dbf)
             field_names = [f[0].lower() for f in sf.fields[1:]]
             gid = 0
@@ -602,10 +605,10 @@ class OverpassDataSource(object):
 
     def parse(self, url):
         assert url.path == '/api/interpreter', \
-            "Overpass URL paths should be /api/interpreter, not %r" \
+            'Overpass URL paths should be /api/interpreter, not %r' \
             % (url.path,)
         url_query = urlparse.parse_qs(url.query)
-        raw_query = "".join(url_query['data'])
+        raw_query = ''.join(url_query['data'])
         return OverpassObject(raw_query)
 
     def download(self, objs, target_file, clip, simplify):
@@ -620,15 +623,15 @@ class OSMDataSource(object):
         self.hosts = ('osm.org', 'openstreetmap.org')
 
     def parse(self, url):
-        parts = url.path.split("/")
+        parts = url.path.split('/')
         if len(parts) != 3:
-            raise Exception("OSM URLs should look like "
+            raise Exception('OSM URLs should look like '
                             "\"http://openstreetmap.org/node/1234\", "
-                            "not %r." % (url.path,))
+                            'not %r.' % (url.path,))
         typ = parts[1]
         fid = int(parts[2])
         if typ not in ('node', 'way', 'relation'):
-            raise Exception("OSM URLs should be for a node, way or "
+            raise Exception('OSM URLs should be for a node, way or '
                             "relation. I didn't understand %r"
                             % (typ,))
 
@@ -646,15 +649,15 @@ class FixtureShapeSource(object):
         self.hosts = ('integration-test',)
 
     def parse(self, url):
-        parts = url.path.split("/")
+        parts = url.path.split('/')
         if len(parts) != 4:
             raise Exception(
-                "Fixture shape URLs should look like: "
-                "file://integration-test/fixtures/ne_10m_ocean/"
-                "1030-invalid-wkb-polygon.shp, not %r" %
+                'Fixture shape URLs should look like: '
+                'file://integration-test/fixtures/ne_10m_ocean/'
+                '1030-invalid-wkb-polygon.shp, not %r' %
                 (url,))
-        if parts[0] != "" or parts[1] != "fixtures":
-            raise Exception("Malformed fixture shapefile URL")
+        if parts[0] != '' or parts[1] != 'fixtures':
+            raise Exception('Malformed fixture shapefile URL')
         table = parts[2]
         name = parts[3]
 
@@ -665,20 +668,20 @@ class FixtureShapeSource(object):
             jsonfiles = []
             for obj in objs:
                 jsonfile = path_join(
-                    tmp, "%s_%s.geojson" % (obj.table, obj.name))
+                    tmp, '%s_%s.geojson' % (obj.table, obj.name))
                 shpfile = path_join(
-                    self.base_dir, "integration-test", "fixtures",
+                    self.base_dir, 'integration-test', 'fixtures',
                     obj.table, obj.name)
-                if obj.table.startswith("ne_"):
-                    override_properties = dict(source="naturalearthdata.com")
-                elif obj.table in ("buffered_land"):
+                if obj.table.startswith('ne_'):
+                    override_properties = dict(source='naturalearthdata.com')
+                elif obj.table in ('buffered_land'):
                     # have to add the maritime_boundary setting here, as the
                     # name is too long to be a field in the shapefile!
                     override_properties = dict(
-                        source="tilezen.org",
+                        source='tilezen.org',
                         maritime_boundary=True,
                     )
-                elif obj.table in ("admin_areas"):
+                elif obj.table in ('admin_areas'):
                     # fix up column names here too!
                     override_properties = dict(
                         source='openstreetmap.org',
@@ -687,7 +690,7 @@ class FixtureShapeSource(object):
                     )
                 else:
                     override_properties = dict(
-                        source="osmdata.openstreetmap.de",
+                        source='osmdata.openstreetmap.de',
                     )
                 _convert_shape_to_geojson(
                     shpfile, jsonfile, override_properties, clip, simplify)
@@ -702,20 +705,20 @@ class WOFSource(object):
         self.hosts = ('data.whosonfirst.org',)
 
     def parse(self, url):
-        parts = url.path.rsplit("/", 1)
+        parts = url.path.rsplit('/', 1)
         if len(parts) != 2:
             raise Exception(
-                "WOF fixture URLs should look like: "
-                "https://data.whosonfirst.org/858/260/37/"
-                "85826037.geojson, not %r" %
+                'WOF fixture URLs should look like: '
+                'https://data.whosonfirst.org/858/260/37/'
+                '85826037.geojson, not %r' %
                 (url,))
         prefix, filename = parts
         if not prefix.startswith('/') or not filename.endswith('.geojson'):
-            raise Exception("Malformed fixture geojson URL")
+            raise Exception('Malformed fixture geojson URL')
         id_str = prefix.replace('/', '')
-        if filename != (id_str + ".geojson"):
+        if filename != (id_str + '.geojson'):
             raise Exception("Expected URL to be redundant, but %r doesn't "
-                            "look like %r" % (prefix, filename))
+                            'look like %r' % (prefix, filename))
 
         return WOFDataObject(int(id_str))
 
@@ -729,7 +732,7 @@ class WOFSource(object):
 
                 n = wof.fetch_url_raw_neighbourhood(url, meta, 1)
                 if isinstance(n, wof.NeighbourhoodFailure):
-                    raise Exception("Failed to get WOF data: %s"
+                    raise Exception('Failed to get WOF data: %s'
                                     % n.reason)
 
                 geometry = shapely.ops.transform(
@@ -753,7 +756,7 @@ class WOFSource(object):
                 )]
                 geojson = dict(type='FeatureCollection', features=features)
 
-                jsonfile = path_join(tmp, "%d.geojson" % (obj.wof_id))
+                jsonfile = path_join(tmp, '%d.geojson' % (obj.wof_id))
                 with open(jsonfile, 'w') as fh:
                     json.dump(geojson, fh)
                 jsonfiles.append(jsonfile)
@@ -764,18 +767,18 @@ class WOFSource(object):
 class tempdb(object):
 
     def __init__(self, log):
-        self.name = "vector_datasource_%d" % (getpid(),)
+        self.name = 'vector_datasource_%d' % (getpid(),)
         self.log = log
 
     def __enter__(self):
         subprocess.check_call(
-            ["createdb", "-E", "UTF8", "-T", "template0", self.name],
+            ['createdb', '-E', 'UTF8', '-T', 'template0', self.name],
             stdout=self.log, stderr=subprocess.STDOUT)
         return self.name
 
     def __exit__(self, type, value, traceback):
         subprocess.call(
-            ["dropdb", "--if-exists", self.name],
+            ['dropdb', '--if-exists', self.name],
             stdout=self.log, stderr=subprocess.STDOUT)
 
 
@@ -798,8 +801,8 @@ def combine_geojson_files(inputs, output):
         with open(input_file) as fh:
             geojson = json.load(fh)
             assert geojson['type'] == 'FeatureCollection', \
-                "combine_geojson_files can only handle FeatureCollections, " \
-                "sorry."
+                'combine_geojson_files can only handle FeatureCollections, ' \
+                'sorry.'
             features.extend(geojson['features'])
             relations.extend(geojson.get('relations', []))
 
@@ -836,8 +839,8 @@ class FixtureDataSources(object):
         if source:
             return source.parse(p)
 
-        raise Exception("Unable to load fixtures for host %r, used "
-                        "in request for %r." % (p.netloc, url))
+        raise Exception('Unable to load fixtures for host %r, used '
+                        'in request for %r.' % (p.netloc, url))
 
     def download(self, urls, output_file, clip, simplify):
         groups = defaultdict(list)
@@ -846,7 +849,7 @@ class FixtureDataSources(object):
             p = urlparse.urlsplit(url)
             source = self._source_for(p)
             if not source:
-                raise Exception("Unknown source for url %r", (url,))
+                raise Exception('Unknown source for url %r', (url,))
             groups[source].append(source.parse(p))
 
         with tempdir() as tmp:
@@ -856,13 +859,13 @@ class FixtureDataSources(object):
                 target_file = path_join(tmp, '%s.geojson' % (source_name,))
                 source.download(group, target_file, clip, simplify)
                 assert path_exists(target_file), \
-                    "Failed to download target %r" % (target_file,)
+                    'Failed to download target %r' % (target_file,)
                 geojson_files.append(target_file)
 
             combine_geojson_files(geojson_files, output_file)
 
         assert path_exists(output_file), \
-            "Failed to make target %r" % (output_file)
+            'Failed to make target %r' % (output_file)
 
 
 class FixtureEnvironment(object):
@@ -889,7 +892,7 @@ class FixtureEnvironment(object):
         with open(config_file) as query_cfg_fp:
             query_cfg = load_yaml(query_cfg_fp)
         all_layer_data, layer_data, post_process_data = parse_layer_data(
-                query_cfg, buffer_cfg, dirname(config_file))
+            query_cfg, buffer_cfg, dirname(config_file))
 
         yaml_path = find_yaml_path()
         layer_props = parse_layer_dict(
@@ -953,7 +956,7 @@ class FixtureEnvironment(object):
 
             # first try - download it from the global fixture cache
             try:
-                r = requests.get("%s/%s.geojson" % (FIXTURE_CACHE, test_uuid))
+                r = requests.get('%s/%s.geojson' % (FIXTURE_CACHE, test_uuid))
 
                 if r.status_code == 200:
                     with open(geojson_file, 'wb') as fh:
@@ -966,7 +969,7 @@ class FixtureEnvironment(object):
         # second try - generate it from the URLs
         self.data_sources.download(urls, geojson_file, clip, simplify)
         assert path_exists(geojson_file), \
-            "Ooops, something went wrong downloading %r" % (geojson_file,)
+            'Ooops, something went wrong downloading %r' % (geojson_file,)
 
         return geojson_file
 
@@ -1130,7 +1133,7 @@ def _hash(urls, clip, simplify):
     if clip:
         m.update(clip.wkt)
     if simplify:
-        m.update("simplify=%f" % (simplify,))
+        m.update('simplify=%f' % (simplify,))
     return m.hexdigest()
 
 
@@ -1147,14 +1150,14 @@ class Assertions(object):
 
             if num_features == 0:
                 self.test.fail(
-                    "Did not find feature including properties %r (because "
-                    "layer %r was empty)" % (properties, layer))
+                    'Did not find feature including properties %r (because '
+                    'layer %r was empty)' % (properties, layer))
 
             if num_matching == 0:
                 closest, misses = closest_matching(features, properties)
                 self.test.fail(
-                    "Did not find feature including properties %r. The "
-                    "closest match was %r: missed %r." %
+                    'Did not find feature including properties %r. The '
+                    'closest match was %r: missed %r.' %
                     (properties, closest['properties'], misses))
 
     def assert_at_least_n_features(self, z, x, y, layer, properties, n):
@@ -1168,14 +1171,14 @@ class Assertions(object):
 
             if num_features < n:
                 self.test.fail(
-                    "Found fewer than %d features including properties %r "
-                    "(because layer %r had %d features)" %
+                    'Found fewer than %d features including properties %r '
+                    '(because layer %r had %d features)' %
                     (n, properties, layer, num_features))
 
             if num_matching < n:
                 self.test.fail(
-                    "Did not find %d features including properties "
-                    "%r, found only %d" % (n, properties, num_matching))
+                    'Did not find %d features including properties '
+                    '%r, found only %d' % (n, properties, num_matching))
 
     def assert_less_than_n_features(self, z, x, y, layer, properties, n):
         """
@@ -1188,8 +1191,8 @@ class Assertions(object):
 
             if num_matching >= n:
                 self.test.fail(
-                    "Did not find %d features including properties "
-                    "%r, found only %d" % (n, properties, num_matching))
+                    'Did not find %d features including properties '
+                    '%r, found only %d' % (n, properties, num_matching))
 
     def assert_no_matching_feature(self, z, x, y, layer, properties):
         with self.ff.features_in_tile_layer(z, x, y, layer) as features:
@@ -1204,9 +1207,9 @@ class Assertions(object):
                         break
 
                 self.test.fail(
-                    "Found feature matching properties %r in "
-                    "layer %r, but was supposed to find none. For example: "
-                    "%r" % (properties, layer, feature['properties']))
+                    'Found feature matching properties %r in '
+                    'layer %r, but was supposed to find none. For example: '
+                    '%r' % (properties, layer, feature['properties']))
 
     def assert_n_matching_features(self, z, x, y, layer, properties, n):
         with self.ff.features_in_tile_layer(z, x, y, layer) as features:
@@ -1215,9 +1218,9 @@ class Assertions(object):
 
             if num_matching != n:
                 self.test.fail(
-                    "Found %d features matching properties %r in "
-                    "layer %r, but was supposed to find %d. "
-                    "Found %d total features." %
+                    'Found %d features matching properties %r in '
+                    'layer %r, but was supposed to find %d. '
+                    'Found %d total features.' %
                     (num_matching, properties, layer, n, num_features))
 
     def assert_feature_geom_type(self, z, x, y, layer, feature_id,
@@ -1294,8 +1297,8 @@ class RunTestInstance(object):
             geojson_size = path_getsize(geojson_file)
             if geojson_size > (100 * 1024):
                 import sys
-                print>>sys.stderr, "WARNING: %s: GeoJSON fixture is " \
-                    "very large, %d bytes." \
+                print>>sys.stderr, 'WARNING: %s: GeoJSON fixture is ' \
+                    'very large, %d bytes.' \
                     % (geojson_file, geojson_size)
 
         rows, rels = _load_fixtures([geojson_file])
@@ -1551,14 +1554,14 @@ class OsmChange(object):
         self.fh.write("<osmChange version=\"0.6\">\n")
 
     def flush(self):
-        self.fh.write("</osmChange>\n")
+        self.fh.write('</osmChange>\n')
 
     def query_result(self, query):
         retry_count = 4
         wait_time_in_s = 100
         r = None
         for _ in range(retry_count):
-            r = requests.get("http://%s/api/interpreter" % OVERPASS_SERVER,
+            r = requests.get('http://%s/api/interpreter' % OVERPASS_SERVER,
                              params=dict(data=query))
             if r.status_code == 200:
                 # "200 OK is sent when the query has been successfully
@@ -1581,16 +1584,16 @@ class OsmChange(object):
                 # enough to get an expected response
                 break
 
-            print "%d code returned instead of overpass response - request " \
-                "will be repeated after %d seconds" % \
+            print '%d code returned instead of overpass response - request ' \
+                'will be repeated after %d seconds' % \
                 (r.status_code, wait_time_in_s)
             time.sleep(wait_time_in_s)
 
         if r.status_code != 200:
-            raise RuntimeError("Unable to fetch data from Overpass: %r"
+            raise RuntimeError('Unable to fetch data from Overpass: %r'
                                % r.status_code)
         if r.headers['content-type'] != 'application/osm3s+xml':
-            raise RuntimeError("Expected XML, but got %r"
+            raise RuntimeError('Expected XML, but got %r'
                                % r.headers['content-type'])
         return r.content
 
@@ -1633,23 +1636,23 @@ class DataDumper(object):
         self.raw_queries.append(raw)
 
     def build_query(self, fmt, ids):
-        query = "("
+        query = '('
         for id in ids:
             query += fmt % id
-        query += ");out;"
+        query += ');out;'
         return query
 
     def download_to(self, fh):
         osc = OsmChange(fh)
 
         for n_ids in chunks(1000, self.nodes):
-            osc.add_query(self.build_query("node(%d);", n_ids))
+            osc.add_query(self.build_query('node(%d);', n_ids))
         for w_ids in chunks(100, self.ways):
-            osc.add_query(self.build_query("way(%d);>;", w_ids))
+            osc.add_query(self.build_query('way(%d);>;', w_ids))
         for r_ids in chunks(10, self.relations):
-            osc.add_query(self.build_query("relation(%d);>;",  r_ids))
+            osc.add_query(self.build_query('relation(%d);>;',  r_ids))
         for raw_query in self.raw_queries:
-            osc.add_query("(" + raw_query + ");out;")
+            osc.add_query('(' + raw_query + ');out;')
 
         osc.flush()
 
@@ -1661,10 +1664,10 @@ class DataDumper(object):
                 elif isinstance(obj, OverpassObject):
                     self.add_query(obj.raw_query)
                 else:
-                    raise Exception("Unknown data object type: %r" % (obj,))
+                    raise Exception('Unknown data object type: %r' % (obj,))
 
             except Exception:
-                print>>log, "FAIL: fetching OSM data for %r" % (obj,)
+                print>>log, 'FAIL: fetching OSM data for %r' % (obj,)
                 raise
 
 
@@ -1734,7 +1737,7 @@ if __name__ == '__main__':
     tests = []
     if filters:
         for t in flatten_tests(suite):
-            test_name = strclass(t.__class__) + "." + t._testMethodName
+            test_name = strclass(t.__class__) + '.' + t._testMethodName
             for prefix in filters:
                 if test_name.startswith(prefix):
                     tests.append(t)
@@ -1754,4 +1757,4 @@ if __name__ == '__main__':
 
     if isinstance(test_instance, CollectTilesInstance):
         for z, x, y in test_instance.tiles:
-            print "%d/%d/%d" % (z, x, y)
+            print '%d/%d/%d' % (z, x, y)

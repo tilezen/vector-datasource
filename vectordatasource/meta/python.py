@@ -1,12 +1,14 @@
-from collections import namedtuple
-from numbers import Number
-from vectordatasource import util
-from vectordatasource.meta import function
 import ast
-import astformatter
 import os.path
 import sys
+from collections import namedtuple
+from numbers import Number
+
+import astformatter
 import yaml
+
+from vectordatasource import util
+from vectordatasource.meta import function
 
 
 # this captures the end result of processing a layer's yaml
@@ -112,20 +114,20 @@ _KNOWN_OPS = {
 }
 
 
-def parse_lookup(ast_state, l):
-    assert isinstance(l, dict)
-    assert set(l.keys()) >= set(('key', 'op', 'table'))
+def parse_lookup(ast_state, lookup):
+    assert isinstance(lookup, dict)
+    assert set(lookup.keys()) >= set(('key', 'op', 'table'))
 
-    key = ast_value(ast_state, l['key'])
+    key = ast_value(ast_state, lookup['key'])
 
     # only support >=, <= for now
-    assert l['op'] in _KNOWN_OPS, '%r is not one of %r known binary ' \
-        'operators' % (l['op'], _KNOWN_OPS.keys())
-    op = _KNOWN_OPS[l['op']]()
+    assert lookup['op'] in _KNOWN_OPS, '%r is not one of %r known binary ' \
+        'operators' % (lookup['op'], _KNOWN_OPS.keys())
+    op = _KNOWN_OPS[lookup['op']]()
 
-    default = ast_value(ast_state, l.get('default'))
+    default = ast_value(ast_state, lookup.get('default'))
 
-    table = l['table']
+    table = lookup['table']
     assert isinstance(table, list)
 
     expr = default
@@ -648,7 +650,7 @@ def output_kind(yaml_datum):
 def output_min_zoom(yaml_datum):
     min_zoom = yaml_datum['min_zoom']
     assert not isinstance(min_zoom, (str, unicode)), \
-        "Min zoom cannot be a string in %r." % yaml_datum
+        'Min zoom cannot be a string in %r.' % yaml_datum
     return min_zoom
 
 

@@ -4,9 +4,19 @@ from . import FixtureTest
 class InclusivePois(FixtureTest):
 
     def test_healthcare_midwife(self):
-        self._run_test(
-            'https://www.openstreetmap.org/node/3761053357',
-            '16/10500/22491', {'kind': 'midwife'})
+        import dsl
+        z, x, y = 16, 10500, 22491
+        self.generate_fixtures(
+            dsl.point(3761053357, dsl.tile_centre(z, x, y), {
+                'addr:unit': '304',
+                'healthcare': 'midwife',
+                'level': '3',
+                'name': 'Cheam midwifery',
+                'phone': '+1 604-744-8873',
+                'website': 'http://www.cheam-midwifery.com'}))
+
+        self.assert_has_feature(
+            z, x, y, 'pois', {'kind': 'midwife'})
 
     def test_childcare_amenities(self):
         self._run_test(
@@ -32,8 +42,8 @@ class InclusivePois(FixtureTest):
         # also with social_facility:for -> for and turned into a list to make
         # it easier to consume.
         self._run_test(
-            'https://www.openstreetmap.org/node/1126947892',
-            '16/10480/25332', {'kind': 'social_facility', 'for': ['aids']})
+            'https://www.openstreetmap.org/node/3505221950',
+            '16/20331/22950', {'kind': 'social_facility', 'for': ['diseased']})
         self._run_test(
             'https://www.openstreetmap.org/way/121024970',
             '16/10480/25332', {'kind': 'group_home',
@@ -48,8 +58,8 @@ class InclusivePois(FixtureTest):
             'https://www.openstreetmap.org/way/377082896',
             '16/10480/25404', {'kind': 'group_home', 'for': ['senior']})
         self._run_test(
-            'https://www.openstreetmap.org/node/358816623',
-            '16/10529/25405', {'kind': 'assisted_living'})
+            'https://www.openstreetmap.org/node/8633946670',
+            '16/10542/25423', {'kind': 'assisted_living'})
 
     def test_medical_amenities(self):
         # amenity={clinic, doctors, dentist}

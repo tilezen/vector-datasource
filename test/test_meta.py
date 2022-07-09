@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import unittest
 
 
@@ -606,6 +605,23 @@ class BoundariesMinZoomTest(unittest.TestCase):
         out_min_zoom = self.boundaries.fn(shape, props, None, meta)
         self.assertEquals(8, out_min_zoom)
 
+    # ne for disputed kind:xx POV we want to always include
+    # the disputed lines early so when that POV enables them
+    # and the data is available in tiles
+    def test_feature_pov(self):
+        import shapely.geometry
+        shape = shapely.geometry.LineString([(0, 0), (1, 1), (1, 0)])
+        props = [
+            {'featurecla': 'Breakaway'},
+            {'featurecla': 'Claim boundary'},
+            {'featurecla': 'Elusive frontier'},
+            {'featurecla': 'Reference line'},
+        ]
+        meta = make_test_metadata()
+        for prop in props:
+            out_min_zoom = self.boundaries.fn(shape, prop, None, meta)
+            self.assertEquals(1, out_min_zoom)
+
 
 class BuildingsMinZoomTest(unittest.TestCase):
 
@@ -681,6 +697,19 @@ class PoisMinZoomTest(unittest.TestCase):
         meta = make_test_metadata()
         out_min_zoom = self.pois.fn(shape, props, None, meta)
         self.assertEquals(16, out_min_zoom)
+
+    def test_large_parking_capacity(self):
+        import shapely.geometry
+        shape = shapely.geometry.Point(0, 0)
+        props = {
+            'amenity': 'parking',
+            'capacity': '6472217472217',
+            'parking': 'surface',
+        }
+        meta = make_test_metadata()
+        out_min_zoom = self.pois.fn(shape, props, None, meta)
+        # An unbelievably big capacity should default to a high min_zoom
+        self.assertEquals(18, out_min_zoom)
 
 
 class RoadsMinZoomTest(unittest.TestCase):

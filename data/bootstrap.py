@@ -1,7 +1,8 @@
+import urllib
+
+import yaml
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
-import yaml
-import urllib
 
 with open('assets.yaml') as fh:
     asset_cfg = yaml.load(fh)
@@ -52,6 +53,9 @@ for cfg_shapefile in cfg_shapefiles:
 
     urls_to_download[src_zip] = shapefile['url']
 
+    if 'prj' not in shapefile:
+        shapefile['prj'] = 4326
+
     shapefile['src_zip'] = src_zip
     shapefile['src_shp'] = src_shp
     shapefile['src_wildcard'] = src_wildcard
@@ -59,7 +63,7 @@ for cfg_shapefile in cfg_shapefiles:
     src_shapefile_shps.append(src_shp)
     src_shapefile_wildcards.append(src_wildcard)
 
-    if shapefile['prj'] != 3857:
+    if shapefile['prj'] == 4326:
         tgt_shp = src_shp.replace('.shp', '-merc.shp')
         tgt_zip = tgt_shp.replace('.shp', '.zip')
         shapefile['tgt_zip'] = tgt_zip

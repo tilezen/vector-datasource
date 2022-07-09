@@ -52,6 +52,64 @@ For features in the `boundaries` layer, there are two additional variants `name:
 * `name:left:*` _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 * `name:right:*` _See planned bug fix [#1102](https://github.com/tilezen/vector-datasource/issues/1102)._
 
+##### Chinese name localization
+
+We populate two fields for Chinese variants based on [ISO 15924](https://en.wikipedia.org/wiki/ISO_15924) codes::
+
+* `name:zh-Hans`: Simplified Chinese
+* `name:zh-Hant`: Traditional Chinese
+
+Both `name:zh-Hans` and `name:zh-Hant` properties are best-effort. It means `name:zh-Hans` can sometimes contain Traditional Chinese and `name:zh-Hant` can sometimes contain Simplified Chinese. And we don't auto-translate Traditional Chinese to Simplified Chinese or vice versa.
+
+The `name:zh` field is now deprecated. But for backward-compatibility we also populate it, and this field is Simplified Chinese most time but can also be Traditional Chinese. Don't rely on this field.
+
+If Tilezen cannot find any Chinese properties in the predefined list of each provider (see below), none of `name:zh`, `name:zh-Hans` or `name:zh-Hant` will be populated.
+
+###### OSM
+
+We use several tags from OSM to populate the two properties:
+
+* `name:zh-Hans`: Simplified Chinese
+* `name:zh-SG`: Simplified Chinese
+* `name:zh`: Simplified/Traditional Chinese
+* `name:zh-Hant`: Traditional Chinese
+* `name:zh-Hant-tw`: Traditional Chinese
+* `name:zh-Hant-hk`: Traditional Chinese
+* `name:zh-yue`: Traditional Chinese
+* `name:zh-HK`: Traditional Chinese
+
+We first try to use OSM tag `name:zh-Hans` to populate `name:zh-Hans` and OSM tag `name:zh-Hant` to populate `name:zh-Hant`, but if they are not available we parse other OSM tags such as `name:zh-SG`, `name:zh-Hant-tw`, `zh-Hant-hk`, `name:zh-yue`, `name:zh-HK`, `name:zh` to backfill them. After the backfilling, if either one is still missing, we will use the other variant to further backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-Hant`.
+
+
+###### WhosOnFirst
+
+We use several properties to populate Simplified Chinese and Traditional Chinese with the following priority (first priority is at the top):
+
+Simplified Chinese
+* `name:zho_cn_x_preferred`
+* `name:zho_x_preferred`
+* `name:wuu_x_preferred`
+
+Traditional Chinese
+* `name:zho_tw_x_preferred`
+* `name:zho_x_variant`
+
+If either variant is missing, we will use the other variant to backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-Hant`.
+
+
+###### NaturalEarth
+
+We use two properties to populate Simplified Chinese and Traditional Chinese:
+
+Simplified Chinese
+* `name_zh`
+
+Traditional Chinese
+* `name_zht`
+
+If either variant is missing, we will use the other variant to backfill, i.e. Traditional Chinese can be used to backfill `name:zh-Hans` or Simplified Chinese can be used to backfill `name:zh-Hant`.
+
+
 #### Geometry types
 
 Individual Tilezen vector tile layers can include mixed geometry types. This is common in the `landuse`, `water`, and `buildings` layers.
@@ -62,7 +120,7 @@ A tile geometry can be one of three types:
 * LineString, MultiLineString
 * Polygon, MultiPolygon
 
-In Tangram, Mapzen's GL graphics library, the keyword `$geometry` matches the feature's geometry type, for cases when a FeatureCollection includes more than one type of kind of geometry. Valid geometry types are:
+In Tangram, Mapzen's GL graphics library, the keyword `$geometry` matches the feature's geometry type, for cases when a FeatureCollection includes more than one type of geometry. Valid geometry types are:
 
 * `point`: matches Point, MultiPoint
 * `line`: matches LineString, MultiLineString
@@ -152,7 +210,7 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `kind_detail`: mapping of OpenStreetMap's `admin_level` values. `2` for countries, `4` for regions, and `6`, `8` (zoom 10+)
 * `source`: `openstreetmap.org` or `naturalearthdata.com`
 * `sort_rank`: a suggestion for which order to draw features. The value is an integer where smaller numbers suggest that features should be "behind" features with larger numbers.
-* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on scalerank value from Natural Earth, and invented for OpenStreetMap, a float.
+* `min_zoom`: a suggested minimum zoom at which the boundary line should become visible based on `scalerank` and `min_zoom` value from Natural Earth, and invented for OpenStreetMap, a float.
 
 #### Boundaries properties (common optional):
 
@@ -173,6 +231,10 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `country`
 * `county`
 * `disputed`
+* `disputed_breakaway`
+* `disputed_claim`
+* `disputed_elusive`
+* `disputed_reference_line`
 * `indefinite`
 * `indeterminate`
 * `lease_limit`
@@ -182,6 +244,16 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 * `map_unit`
 * `overlay_limit`
 * `region`
+* `unrecognized_country`
+* `unrecognized_region`
+
+### Viewpoints for Disputed Boundaries
+
+When there is a **boundary dispute** between two countries, the default boundary between them is generally shown according to the _de facto_ status marking where one country's on the ground administration ends and another's begins. The boundary line itself is marked `disputed`, and the extend of the other country's claim is tagged with one of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, and `disputed_reference_line`.
+
+Audiences in different countries may have different expectations and legal requirements so Tilezen optionally supports _de jure_ boundary viewpoints with `kind:xx` properties, where `xx` is a lower-cased [ISO 3166-1 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) with support for `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `us`, `vn`. Use these properties to "turn off" `unrecognized_country` and `unrecognized_region` boundary lines, and restyle the claims as `country` and `region`. The range of values is the same as for `kind`, and should be used in conjunction with `kind` as `kind:xx` in a coalesce as it's only included when that country's viewpoint is different than the default. These should be paired with **places** layer viewpoint support for country and region capitals.
+
+Some disputed boundaries, like the  [China 9-dashed line](https://en.wikipedia.org/wiki/Nine-dash_line), are marked `unrecognized_country` by default and are only available in a specific `kind:xx` viewpoint (in this case `kind:cn` and `kind:tw`).
 
 ## Buildings and Addresses
 
@@ -503,7 +575,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `camp_site`
 * `caravan_site`
 * `carousel`
-* `cemetery` with `kind_detail` and `denomination` properties. 
+* `cemetery` with `kind_detail` and `denomination` properties.
 * `cinema`
 * `city_wall`
 * `college`
@@ -537,7 +609,7 @@ _TIP: Some `landuse` features only exist as point features in OpenStreetMap. Fin
 * `golf_course`
 * `grass`
 * `grassland`
-* `grave_yard` with `kind_detail` and `denomination` properties. 
+* `grave_yard` with `kind_detail` and `denomination` properties.
 * `groyne`
 * `guard_rail` line.
 * `hanami`
@@ -732,7 +804,7 @@ Places with `kind` values of `continent`, `country`, with others added starting 
 * `name`
 * `id`: The `osm_id` from OpenStreetMap or Natural Earth id
 * `kind`: normalized values between OpenStreetMap and Natural Earth
-* `population`: population integer values from OpenStreetMap or Natural Earth's maximum population value.
+* `population`: population integer values from OpenStreetMap or Natural Earth's minimum population value(`pop_min`) if the place has a join from OpenStreetMap and NatualEarth or an estimate based on the type of place.
 * `population_rank`: A value from 18 down to 0, indicating how large the population is on a particular place. A larger value indicates a bigger population. See "Population Rank" below for more details.
 * `source`: `openstreetmap`, `naturalearthdata.com`, or `whosonfirst.org`
 * `min_zoom`: a suggested minimum zoom at which the place should become visible based on scalerank and population values from Natural Earth, and invented for OpenStreetMap. Note that this is not an integer, and may contain fractional parts.
@@ -795,7 +867,9 @@ The values of population rank are derived from the `population` value as follows
 * 3: 1k to 2k
 * 2: 200 to 1k
 * 1: Less than 200
-* 0: No `population` value available.
+* 0: No `population` value available or `population` value zero.
+
+When available, for the largest cities, OSM localities gets their population_rank from NaturalEarth's `pop_max` tag because NaturalEarth `pop_max` is for the metro area and is more useful for label grading in the stylesheet.
 
 ## Points of Interest
 
@@ -828,6 +902,7 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 * `kind_detail`: cuisine, sport
 * `attraction`: TODO
+* `direction`: generally only for `viewpoint` and other oriented features. Expressed as an integer in range of 0-359, where 0 is equal to north, using a clockwise rotation of the "main" direction.
 * `exit_to`: only for highway exits
 * `ref`: generally only for `aeroway_gate` and `station_entrance` features
 * `religion`: TODO
@@ -881,426 +956,419 @@ To resolve inconsistency in data tagging in OpenStreetMap we normalize several o
 
 #### POI `kind` values:
 
-* `accountant`
-* `adit`
-* `administrative`
-* `adult_gaming_centre`
-* `advertising_agency`
-* `aerodrome` - with `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
-* `aeroway_gate`
-* `airfield` for military use.
-* `airport`
-* `alcohol`
-* `alpine_hut`
-* `ambulatory_care`
-* `amusement_ride`
-* `animal`
-* `aquarium`
-* `archaeological_site`
-* `architect`
-* `art`
-* `arts_centre` - A venue where arts are performed or exhibited.
-* `artwork`
-* `assisted_living`
-* `association`
-* `atm`
-* `attraction`
-* `atv`
-* `aviary`
-* `baby_hatch`
-* `bakery`
-* `bank`
-* `bar`
-* `battlefield`
-* `bbq`
-* `beach_resort`
-* `beach` - Where the land meets the sea gradually. With `kind_detail` property.
-* `beacon`
-* `beauty`
-* `bed_and_breakfast`
-* `bench`
-* `bicycle_junction` - Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
-* `bicycle_parking`
-* `bicycle_rental_station` - Bike share station offering free or low cost bicycle rentals as part of a public bike scheme.
-* `bicycle_rental` - Bicycle rental shop.
-* `bicycle_repair_station`
-* `bicycle` - Bicycle sales shop, often with bike repair service.
-* `biergarten`
-* `block`
-* `blood_bank`
-* `boat_lift`
-* `boat_rental`
-* `boat_storage`
-* `boatyard` - a place for building, fixing, and storing boats.
-* `bollard`
-* `bookmaker`
-* `books`
-* `border_control`
-* `brewery`
-* `bunker` - A reinforced military building. With `kind_detail` property.
-* `bureau_de_change`
-* `bus_station`
-* `bus_stop`
-* `butcher`
-* `cafe`
-* `camera` - A shop selling cameras.
-* `camp_site`
-* `car_parts` - A shop selling car parts.
-* `car_rental` - A business which rents cars.
-* `car_repair`
-* `car_sharing`
-* `car_wash`
-* `car`
-* `caravan_site`
-* `care_home`
-* `carousel`
-* `carpenter`
-* `casino` - A venue for gambling.
-* `cattle_grid` barrier
-* `cave_entrance`
-* `cemetery` with `kind_detail` and `denomination` properties.
-* `chain` barrier
-* `chalet`
-* `charging_station` - May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false
-* `charity` - A shop selling items, often second-hand clothes, in order to raise money for charity.
-* `chemist` - A shop selling household chemicals, often including soaps, toothpaste and cosmetics.
-* `childcare`
-* `childrens_centre`
-* `chiropractor`
-* `cinema`
-* `clinic` with `kind_detail` property.
-* `closed`. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
-* `clothes`
-* `club`
-* `coffee`
-* `college`
-* `communications_tower`
-* `community_centre`
-* `company`
-* `computer`
-* `confectionery`
-* `consulting`
-* `container_terminal`
-* `convenience`
-* `copyshop` - A shop offering photocopying and printing services.
-* `cosmetics` - A specialty shop selling cosmetics.
-* `courthouse`
-* `craft` - A shop or workshop producing craft items. Used when the POI doesn't match a more specific craft, such as `brewery`, `carpenter`, `confectionery`, `dressmaker`, etc...
-* `crane` with `kind_detail` property.
-* `cross`
-* `customs` - A place where border control is carried out, which may involve [customs taxes](https://en.wikipedia.org/wiki/Customs_(tax)).
-* `cycle_barrier` - Barrier for bicycles.
-* `dairy_kitchen`
-* `dam`
-* `danger_area` - e.g: military training zones, firing ranges.
-* `day_care`
-* `defibrillator`
-* `deli`
-* `dentist` with `kind_detail` property.
-* `department_store`
-* `dispensary`
-* `dive_centre`
-* `doctors` with `kind_detail` property.
-* `dog_park`
-* `doityourself`
-* `dressmaker`
-* `drinking_water`
-* `dry_cleaning`
-* `dune`
-* `educational_institution`
-* `egress`
-* `electrician`
-* `electronics`
-* `elevator` - An enclosure for vertical travel.
-* `embassy`
-* `emergency_phone`
-* `employment_agency`
-* `enclosure` - at a zoo
-* `estate_agent`
-* `farm`
-* `fashion`
-* `fast_food`
-* `ferry_terminal`
-* `field_hospital` with `kind_detail` property.
-* `financial`
-* `fire_hydrant`
-* `fire_station`
-* `firepit`
-* `fishing_area`
-* `fishing`
-* `fishmonger` - A shop selling fish and seafood.
-* `fitness_station`
-* `fitness`
-* `florist`
-* `food_bank`
-* `ford`
-* `forest`
-* `fort`
-* `foundation`
-* `fuel` - Fuel stations provide liquid gas (or diesel) for automotive use.
-* `funeral_directors` - A venue offering funerary services.
-* `furniture`
-* `gallery` - An art gallery.
-* `gambling`
-* `garden_centre`
-* `garden`
-* `gardener`
-* `gas_canister` - Shop selling bottled gas for cooking. Some offer gas canister refills.
-* `gate` with `kind_detail` property.
-* `generator` - A building or structure which generates power. With `kind_detail` property.
-* `geyser`
-* `gift`
-* `golf_course`
-* `golf` - Shop selling golf equipment.
-* `government`
-* `grave_yard` with `kind_detail` and `denomination` properties. 
-* `greengrocer` - Shop selling fruits and vegetables.
-* `grocery` - Shop selling non-perishable food often similar to, but smaller than, a `supermarket`. See also [grocery store on Wikipedia](https://en.wikipedia.org/wiki/Grocery_store).
-* `group_home`
-* `guest_house`
-* `hairdresser`
-* `halt`
-* `hanami`
-* `handicraft`
-* `harbourmaster`
-* `hardware`
-* `hazard`
-* `health_centre`
-* `healthcare_alternative`
-* `healthcare_centre`
-* `healthcare_laboratory`
-* `healthcare` with `kind_detail` property.
-* `helipad`
-* `heliport`
-* `hifi`
-* `historical` – _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
-* `horse_riding`
-* `hospice`
-* `hospital` with `kind_detail` property.
-* `hostel`
-* `hot_spring`
-* `hotel`
-* `hunting_stand`
-* `hunting`
-* `hvac`
-* `ice_cream` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
-* `industrial` - An industrial POI which didn't match a more specific kind.
-* `information`
-* `insurance`
-* `it`
-* `jewelry`
-* `karaoke_box`
-* `karaoke`
-* `kindergarten`
-* `landmark`
-* `laundry`
-* `lawyer`
-* `level_crossing`
-* `library`
-* `life_ring`
-* `lifeguard_tower`
-* `lighthouse`
-* `lock`
-* `lottery` - A shop selling lottery tickets.
-* `love_hotel`
-* `mall`
-* `marina`
-* `marketplace`
-* `mast`
-* `maze`
-* `memorial`
-* `metal_construction`
-* `midwife`
-* `military`
-* `mineshaft`
-* `mini_roundabout` - has optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
-* `miniature_golf` - A venue for playing miniature golf.
-* `mobile_phone`
-* `money_transfer` - A business which specialises in transferring money between people, often internationally.
-* `monument`
-* `mooring` with `kind_detail` property.
-* `motel`
-* `motorcycle_parking`
-* `motorcycle`
-* `motorway_junction`
-* `museum`
-* `music`
-* `national_park`
-* `nature_reserve`
-* `naval_base`
-* `newsagent`
-* `newspaper`
-* `ngo`
-* `nightclub`
-* `notary`
-* `nursing_home` with `kind_detail` property.
-* `obelisk` - A tall structure, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
-* `observatory`
-* `occupational_therapist`
-* `office` - An office which didn't match a more specific kind.
-* `offshore_platform`
-* `optician`
-* `optometrist`
-* `orchard` - An area intentionally planted with trees or shrubs for their crops, rather than their wood. Optional `kind_detail` property.
-* `outdoor`
-* `outreach`
-* `paediatrics`
-* `painter`
-* `park`
-* `parking_garage` parking type is `multi-storey`, `underground`, or `rooftop`.
-* `parking`
-* `peak` A mountain peak. See above for properties available on peaks and volcanos.
-* `perfumery`
-* `pet`
-* `petroleum_well`
-* `petting_zoo`
-* `pharmacy` with `kind_detail` property.
-* `phone`
-* `photo` - A shop offering photograph processing services, e.g: developing or mounting.
-* `photographer`
-* `photographic_laboratory`
-* `physician`
-* `physiotherapist`
-* `picnic_site`
-* `picnic_table`
-* `pitch` - With `kind_detail` optionally describing the sport. Common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
-* `place_of_worship`
-* `plant`
-* `plaque` - A memorial plaque.
-* `playground`
-* `plumber`
-* `podiatrist`
-* `police`
-* `political_party`
-* `port_terminal`
-* `post_box`
-* `post_office`
-* `pottery`
-* `power_pole`
-* `power_tower`
-* `power_wind`
-* `prison`
-* `protected_area`
-* `psychotherapist`
-* `pub`
-* `put_in_egress`
-* `put_in`
-* `pylon`
-* `quarry`
-* `quay` - if available, with `mooring` property.
-* `range` - e.g: military training zones where soldiers practice with their weapons
-* `ranger_station`
-* `rapid`
-* `recreation_ground`
-* `recreation_track`
-* `recycling`
-* `refugee_camp`
-* `rehabilitation`
-* `religion`
-* `research`
-* `residential_home`
-* `resort`
-* `rest_area`
-* `restaurant`
-* `rock`
-* `roller_coaster`
-* `saddle`
-* `sanitary_dump_station`
-* `sawmill`
-* `school`
-* `scuba_diving`
-* `service_area`
-* `shelter`
-* `ship_chandler`
-* `shipyard`
-* `shoemaker`
-* `shoes`
-* `shop` - A shop or store which didn't match a more specific kind.
-* `shower`
-* `sinkhole`
-* `ski_rental`
-* `ski_school`
-* `ski`
-* `slaughterhouse`
-* `slipway`
-* `snow_cannon`
-* `snowmobile`
-* `social_facility` with `kind_detail` property.
-* `soup_kitchen`
-* `speech_therapist`
-* `sports_centre`
-* `sports`
-* `spring`
-* `stadium`
-* `station` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
-* `stationery`
-* `stone`
-* `stonemason`
-* `street_lamp`
-* `studio` - A specialised location for making audio or video recordings. If known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
-* `substation`
-* `subway_entrance`
-* `summer_camp`
-* `summer_toboggan`
-* `supermarket`
-* `swimming_area`
-* `tailor`
-* `tax_advisor`
-* `taxi` for taxi stands.
-* `telecommunication`
-* `telephone`
-* `telescope`
-* `theatre`
-* `theme_park`
-* `therapist`
-* `tobacco`
-* `toilets` with `kind_detail` property.
-* `toll_booth`
-* `townhall`
-* `toys`
-* `trade`
-* `traffic_signals`
-* `trail_riding_station`
-* `trailhead`
-* `tram_stop`
-* `travel_agency`
-* `travel_agent`
-* `tree`
-* `turning_circle`
-* `turning_loop`
-* `tyres` - A shop selling car tyres or tires.
-* `university`
-* `variety_store`
-* `veterinary` with `kind_detail` property.
-* `viewpoint`
-* `volcano` The peak of a volcano. See above for properties available on peaks and volcanos.
-* `walking_junction` - Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
-* `waste_basket`
-* `waste_disposal`
-* `wastewater_plant`
-* `water_park`
-* `water_point`
-* `water_slide`
-* `water_tower`
-* `water_well` - A location where water can be extracted from the ground. With `kind_detail` property.
-* `water_works`
-* `waterfall`
-* `watering_place`
-* `watermill` - A structure for using water power to do work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
-* `waterway_fuel`
-* `wayside_cross`
-* `wetland` with `kind_detail` property.
-* `wharf` with mooring property.
-* `wilderness_hut`
-* `wildlife_park`
-* `windmill`
-* `wine`
-* `winery` - _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
-* `winter_sports`
-* `wood`
-* `works`
-* `workshop`
-* `zoo`
+Icon sprite artwork from Mapzen's Bubble Wrap and Walkabout map styles ([docs](https://github.com/tangrams/cartography-docs/blob/master/icons.md)), when available.
+
+kind | icon | wikidata id | definition
+:--- | :---: | :--------- | :---------
+`accountant` | ![accountant](images/sprite/2x/accountant.png) | [Q326653](https://www.wikidata.org/wiki/Q326653) | An office responsible for preparing finances, billing, and payroll-type services.
+`adit` | ![adit](images/sprite/2x/adit.png) | [Q58917](https://www.wikidata.org/wiki/Q58917) | A man-made, horizontal entrance shaft to an underground mine.
+`administrative` | ![administrative](images/sprite/2x/administrative.png) | [Q304157](https://www.wikidata.org/wiki/Q304157) | An office for government agencies and other support staff. It's better to use the government category instead.
+`adult_gaming_centre` | ![adult_gaming_centre](images/sprite/2x/adult_gaming_centre.png) | [Q47521258](https://www.wikidata.org/wiki/Q47521258) | A place of leisure for adults with gaming machines, often with monetary payouts.
+`advertising_agency` | ![advertising_agency](images/sprite/2x/advertising_agency.png) | [Q216931](https://www.wikidata.org/wiki/Q216931) | An office that creates advertisements and/or placing them in third-party media publications.
+`aerodrome` | ![aerodrome](images/sprite/2x/aerodrome.png) | [Q62447](https://www.wikidata.org/wiki/Q62447) | An aeroway landuse area containing all runways, taxiways, passenger terminals, and other facilities for aircraft flight operations, for civilian and commercial airport use. With `kind_detail` in `public`, `private`, `military_public`, `airfield`, `international`, `regional`, `gliding`. And _optional_ `passenger_count` giving the number of passengers through the aerodrome per year.
+`aeroway_gate` | ![aeroway_gate](images/sprite/2x/aeroway_gate.png) |  | An access door at an airport terminal used to board and disembark flights.
+`airfield` | ![airfield](images/sprite/2x/airfield.png) |  | A military airport.
+`airport` | ![airport](images/sprite/2x/airport.png) | [Q1248784](https://www.wikidata.org/wiki/Q1248784) | An aeroway landuse area containing all runways, taxiways, passenger terminals, and other facilities for aircraft flight operations, for civilian and commercial use.
+`alcohol` | ![alcohol](images/sprite/2x/alcohol.png) | [Q156](https://www.wikidata.org/wiki/Q156) | A shop selling and sometimes producing beer, liquor, and other beverages.
+`alpine_hut` | ![alpine_hut](images/sprite/2x/alpine_hut.png) | [Q182676](https://www.wikidata.org/wiki/Q182676) | A tourist building located in the mountains, often offering lodging and refreshment.
+`ambulatory_care` | ![ambulatory_care](images/sprite/2x/ambulatory_care.png) |  | A social facility that acts as a hub for outpatient care and administrative office for home nurses or streetworkers.
+`amusement_ride` | ![amusement_ride](images/sprite/2x/amusement_ride.png) | [Q64514817](https://www.wikidata.org/wiki/Q64514817) | An attraction or other structure at a fair, theme park, or carnival that people can ride.
+`animal` | ![animal](images/sprite/2x/animal.png) | [Q729](https://www.wikidata.org/wiki/Q729) | An attraction featuring animals at zoos and other tourist spots.
+`aquarium` | ![aquarium](images/sprite/2x/aquarium.png) | [Q45782](https://www.wikidata.org/wiki/Q45782) | A tourism attraction featuring fish or other water-dwelling species.
+`archaeological_site` | ![archaeological_site](images/sprite/2x/archaeological_site.png) | [Q839954](https://www.wikidata.org/wiki/Q839954) | A historic place preserving ancient man-made buildings and artifacts, sometimes with an excavation.
+`architect` | ![architect](images/sprite/2x/architect.png) | [Q42973](https://www.wikidata.org/wiki/Q42973) | An office that plans and designs buildings, and oversees their construction.
+`art` | ![art](images/sprite/2x/art.png) | [Q735](https://www.wikidata.org/wiki/Q735) | A shop selling artwork that is appreciated for its beauty or emotional power.
+`arts_centre` | ![arts_centre](images/sprite/2x/arts_centre.png) |  | An amenity where arts are performed or exhibited.
+`artwork` | ![artwork](images/sprite/2x/artwork.png) | [Q838948](https://www.wikidata.org/wiki/Q838948) | A tourism spot with art installations like statues or paintings.
+`association` | ![association](images/sprite/2x/association.png) | [Q2864132](https://www.wikidata.org/wiki/Q2864132) | An office for a group of people organized around a common purpose.
+`atm` | ![atm](images/sprite/2x/atm.png) | [Q299037](https://www.wikidata.org/wiki/Q299037) | An amenity that provides access to financial transactions like a cash machine
+`attraction` | ![attraction](images/sprite/2x/attraction.png) | [Q744128](https://www.wikidata.org/wiki/Q744128) | A tourism feature, object, or area that attracts people.
+`atv` | ![atv](images/sprite/2x/atv.png) |  | A shop selling all terrain vehicles.
+`aviary` | ![aviary](images/sprite/2x/aviary.png) | [Q1363025](https://www.wikidata.org/wiki/Q1363025) | A large enclosure that confines birds but allows human access, commonly at a zoo.
+`baby_hatch` | ![baby_hatch](images/sprite/2x/baby_hatch.png) |  | An amenity where parents can leave their baby anonymously in a safe place (or “safe haven”) for foster care.
+`bakery` | ![bakery](images/sprite/2x/bakery.png) | [Q274393](https://www.wikidata.org/wiki/Q274393) | A shop selling baked goods, often made at that location.
+`bank` | ![bank](images/sprite/2x/bank.png) | [Q22687](https://www.wikidata.org/wiki/Q22687) | An amenity otherwise known as a financial institution.
+`bar` | ![bar](images/sprite/2x/bar.png) | [Q187456](https://www.wikidata.org/wiki/Q187456) | An amenity serving alcoholic beverages for consumption on the premises, sometimes also selling food.
+`battlefield` | ![battlefield](images/sprite/2x/battlefield.png) | [Q4895508](https://www.wikidata.org/wiki/Q4895508) | A historic location of a battle, often managed as a local or national park.
+`bbq` | ![bbq](images/sprite/2x/bbq.png) |  | A food service amenity selling bbq meat, either sit down or take out.
+`beach` | ![beach](images/sprite/2x/beach.png) | [Q40080](https://www.wikidata.org/wiki/Q40080) | A natural area at the edge of the sea, lake or other body of water offering a sandy or stony surface for recreation. With `kind_detail` property.
+`beach_resort` | ![beach_resort](images/sprite/2x/beach_resort.png) | [Q1021711](https://www.wikidata.org/wiki/Q1021711) | A leisure resort community or hotel located on the coast.
+`beacon` | ![beacon](images/sprite/2x/beacon.png) | [Q17484395](https://www.wikidata.org/wiki/Q17484395) | A man-made structure built to send signals that are visible from long distance, on land or water.
+`beauty` | ![beauty](images/sprite/2x/beauty.png) | [Q7242](https://www.wikidata.org/wiki/Q7242) | A shop focusing on cosmetic treatments for aesthetic value.
+`bed_and_breakfast` | ![bed_and_breakfast](images/sprite/2x/bed_and_breakfast.png) | [Q367914](https://www.wikidata.org/wiki/Q367914) | A tourism establishment for lodging that includes breakfast, often in a residential area.
+`bench` | ![bench](images/sprite/2x/bench.png) | [Q622346](https://www.wikidata.org/wiki/Q622346) | An amenity used to sit down and rest, often able to accommodate multiple people, sometimes with a nice view.
+`bicycle` | ![bicycle](images/sprite/2x/bicycle.png) | [Q11442](https://www.wikidata.org/wiki/Q11442) | A shop selling bicycles and other pedal-driven two-wheel vehicles, sometimes with a repair service.
+`bicycle_junction` | ![bicycle_junction](images/sprite/2x/bicycle_junction.png) |  | A place where two bike paths intersect along an international, national, regional, or local trail network. Common in Europe for signed bicycle routes with named junctions. The cycle network reference point's `ref` value is derived from one of `icn_ref`, `ncn_ref`, `rcn_ref` or `lcn_ref`, in descending order and is suitable for naming or use in a shield.
+`bicycle_parking` | ![bicycle_parking](images/sprite/2x/bicycle_parking.png) | [Q16243822](https://www.wikidata.org/wiki/Q16243822) | A parking amenity for bicycles, sometimes named.
+`bicycle_rental` | ![bicycle_rental](images/sprite/2x/bicycle_rental.png) | [Q10611118](https://www.wikidata.org/wiki/Q10611118) | An amenity in a shop or at a kiosk for the rental of, pick up, or drop off a bicycle.
+`bicycle_rental_station` | ![bicycle_rental_station](images/sprite/2x/bicycle_rental_station.png) |  | An amenity on the street for free or low cost rental of, pick up, or drop off a bicycle, part of a public bike scheme. Often requires a membership or day-pass.
+`bicycle_repair_station` | ![bicycle_repair_station](images/sprite/2x/bicycle_repair_station.png) |  | An amenity or kiosk with tools necessary to perform basic bike repairs and maintenance, often along bike paths or roads.
+`biergarten` | ![biergarten](images/sprite/2x/biergarten.png) | [Q857909](https://www.wikidata.org/wiki/Q857909) | An outdoor amenity in which beer, other drinks, and local food are served.
+`block` | ![block](images/sprite/2x/block.png) | [Q6536648](https://www.wikidata.org/wiki/Q6536648) | A large barrier used to control vehicular traffic, often an immobile block of stone or concrete that was placed by heavy machinery.
+`blood_bank` | ![blood_bank](images/sprite/2x/blood_bank.png) |  | A health care facility for blood donation or storage.
+`boat_lift` | ![boat_lift](images/sprite/2x/boat_lift.png) |  | A waterway adjacent structure for lowering or raising a boat out of the water.
+`boat_rental` | ![boat_rental](images/sprite/2x/boat_rental.png) | [Q17020200](https://www.wikidata.org/wiki/Q17020200) | A shop or kiosk, usually attended, where you can pick up and drop off rental watercraft, similar to a lock.
+`boat_storage` | ![boat_storage](images/sprite/2x/boat_storage.png) |  | An amenity to store watercraft, often on land.
+`boatyard` | ![boatyard](images/sprite/2x/boatyard.png) |  | A waterway adjacent area for building, fixing, and storing boats.
+`bollard` | ![bollard](images/sprite/2x/bollard.png) | [Q1148389](https://www.wikidata.org/wiki/Q1148389) | A barrier used to control vehicular traffic, often a short vertical post made out of metal or concrete.
+`bookmaker` | ![bookmaker](images/sprite/2x/bookmaker.png) | [Q664702](https://www.wikidata.org/wiki/Q664702) | A shop or person that takes bets on sporting events.
+`books` | ![books](images/sprite/2x/books.png) | [Q571](https://www.wikidata.org/wiki/Q571) | A shop selling or dealing in written materials and sometimes images.
+`border_control` | ![border_control](images/sprite/2x/border_control.png) | [Q218719](https://www.wikidata.org/wiki/Q218719) | A barrier or checkpoint that controls movement of people and objects at borders.
+`brewery` | ![brewery](images/sprite/2x/brewery.png) | [Q131734](https://www.wikidata.org/wiki/Q131734) | A craft place that makes and sells beer.
+`bunker` | ![bunker](images/sprite/2x/bunker.png) |  | A military building that is reinforced and sometimes underground. With `kind_detail` property.
+`bureau_de_change` | ![bureau_de_change](images/sprite/2x/bureau_de_change.png) | [Q2002539](https://www.wikidata.org/wiki/Q2002539) | An amenity where people can exchange one currency for another.
+`bus_station` | ![bus_station](images/sprite/2x/bus_station.png) | [Q494829](https://www.wikidata.org/wiki/Q494829) | An amenity, larger than a bus stop, where city or intercity buses stop to pick up and drop off passengers.
+`bus_stop` | ![bus_stop](images/sprite/2x/bus_stop.png) | [Q953806](https://www.wikidata.org/wiki/Q953806) | A highway pole, shelter, or other designated place where buses stop for passengers that isn't a fully developed platform.
+`butcher` | ![butcher](images/sprite/2x/butcher.png) | [Q329737](https://www.wikidata.org/wiki/Q329737) | A shop selling poultry, meat, and sometimes fish.
+`cafe` | ![cafe](images/sprite/2x/cafe.png) | [Q30022](https://www.wikidata.org/wiki/Q30022) | An amenity serving coffee, tea, and light cuisine.
+`camera` | ![camera](images/sprite/2x/camera.png) | [Q15328](https://www.wikidata.org/wiki/Q15328) | A shop selling cameras and other optical devices used for recording or transmitting photographic images or videos.
+`camp_site` | ![camp_site](images/sprite/2x/camp_site.png) | [Q832778](https://www.wikidata.org/wiki/Q832778) | A tourist site used for overnight stay in the outdoors, often developed and sometimes with a sanitary dump station.
+`car` | ![car](images/sprite/2x/car.png) | [Q786803](https://www.wikidata.org/wiki/Q786803) | A shop selling, buying, and trading motorized passenger vehicles, aka an automotive car dealership.
+`car_parts` | ![car_parts](images/sprite/2x/car_parts.png) |  | A shop selling car parts.
+`car_rental` | ![car_rental](images/sprite/2x/car_rental.png) | [Q291240](https://www.wikidata.org/wiki/Q291240) | An amenity or business that rents automobiles for short periods of time, often in a building and lot and near an airport.
+`car_repair` | ![car_repair](images/sprite/2x/car_repair.png) | [Q16846061](https://www.wikidata.org/wiki/Q16846061) | A shop that conducts maintenance on motor vehicles.
+`car_sharing` | ![car_sharing](images/sprite/2x/car_sharing.png) | [Q847201](https://www.wikidata.org/wiki/Q847201) | An amenity specializing in car rental, usually on the street, sometimes with a name.
+`car_wash` | ![car_wash](images/sprite/2x/car_wash.png) | [Q1139861](https://www.wikidata.org/wiki/Q1139861) | An amenity for cleaning the exterior and sometimes the interior of a motor vehicle.
+`caravan_site` | ![caravan_site](images/sprite/2x/caravan_site.png) | [Q5643618](https://www.wikidata.org/wiki/Q5643618) | A tourism site for parking for an overnight stay in a motorhome, RV, or caravan, often with a sanitary dump station.
+`carousel` | ![carousel](images/sprite/2x/carousel.png) | [Q208322](https://www.wikidata.org/wiki/Q208322) | An attraction or other amusement that rotates riders on a circular platform, sometimes with seats that move up and down.
+`carpenter` | ![carpenter](images/sprite/2x/carpenter.png) | [Q203605](https://www.wikidata.org/wiki/Q203605) | A craftsperson with a skilled trade related to wood construction and repair.
+`casino` | ![casino](images/sprite/2x/casino.png) | [Q133215](https://www.wikidata.org/wiki/Q133215) | An amenity which houses and accommodates certain types of gambling activities.
+`cattle_grid` | ![cattle_grid](images/sprite/2x/cattle_grid.png) |  | A barrier to prevent cattle and other animals crossing a road, usually connecting with a fence.
+`cave_entrance` | ![cave_entrance](images/sprite/2x/cave_entrance.png) |  | A natural amenity where one enters an underground cave.
+`cemetery` | ![cemetery](images/sprite/2x/cemetery.png) | [Q39614](https://www.wikidata.org/wiki/Q39614) | A landuse area where people are buried but not next to a place of worship, though often for certain religious denominations indicated with a `kind_detail` and `denomination` properties.
+`chalet` | ![chalet](images/sprite/2x/chalet.png) | [Q136689](https://www.wikidata.org/wiki/Q136689) | A tourist building or house, common to the Alps in Europe, but also found worldwide.
+`charging_station` | ![charging_station](images/sprite/2x/charging_station.png) | [Q2140665](https://www.wikidata.org/wiki/Q2140665) | An amenity infrastructure that supplies electric energy for the recharging of electric vehicles including cars, trucks, scooters, and bicycles. May also have `bicycle`, `scooter`, `car`, and `truck` set to true or false.
+`charity` | ![charity](images/sprite/2x/charity.png) | [Q445832](https://www.wikidata.org/wiki/Q445832) | A shop selling items, often second-hand clothes, in order to raise money to fundraise for a charitable foundation or organization.
+`chemist` | ![chemist](images/sprite/2x/chemist.png) | [Q13107184](https://www.wikidata.org/wiki/Q13107184) | A shop selling household chemicals including soaps, toothpaste, and cosmetics.
+`childcare` | ![childcare](images/sprite/2x/childcare.png) | [Q1455871](https://www.wikidata.org/wiki/Q1455871) | An amenity providing day-care, babysitting, or otherwise looking after children.
+`chiropractor` | ![chiropractor](images/sprite/2x/chiropractor.png) |  | A healthcare office providing diagnosis and treatment of misaligned joints.
+`cinema` | ![cinema](images/sprite/2x/cinema.png) | [Q567053](https://www.wikidata.org/wiki/Q567053) | An amenity that shows movies and films, aka movie theater, cineplex or multiplex.
+`clinic` | ![clinic](images/sprite/2x/clinic.png) | [Q1774898](https://www.wikidata.org/wiki/Q1774898) | An amenity for outpatient health care. With `kind_detail` property.
+`closed` | ![closed](images/sprite/2x/closed.png) |  | A recently closed place. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
+`clothes` | ![clothes](images/sprite/2x/clothes.png) | [Q2090555](https://www.wikidata.org/wiki/Q2090555) | A shop selling clothes and other body coverings.
+`club` | ![club](images/sprite/2x/club.png) | [Q182949](https://www.wikidata.org/wiki/Q182949) | A place of leisure where food and drinks are often served, often with restricted access.
+`coffee` | ![coffee](images/sprite/2x/coffee.png) | [Q8486](https://www.wikidata.org/wiki/Q8486) | A shop specializing in brewed beverages prepared from roasted coffee beans, often with sit down seating and sometimes selling food.
+`college` | ![college](images/sprite/2x/college.png) | [Q189004](https://www.wikidata.org/wiki/Q189004) | An amenity for higher education and learning, stand alone or part of a university.
+`common` | ![common](images/sprite/2x/common.png) | [Q9828451](https://www.wikidata.org/wiki/Q9828451) | A leisure or protected open area used by people to congregate.
+`communications_tower` | ![communications_tower](images/sprite/2x/communications_tower.png) | [Q1068623](https://www.wikidata.org/wiki/Q1068623) | A man-made structure that is tall and supports large radio and TV broadcast antennas.
+`community_centre` | ![community_centre](images/sprite/2x/community_centre.png) | [Q77115](https://www.wikidata.org/wiki/Q77115) | An amenity where members of a community gather for group activities, social support, and public information.
+`company` | ![company](images/sprite/2x/company.png) | [Q783794](https://www.wikidata.org/wiki/Q783794) | An office of a private company that doesn't match a more specific category.
+`computer` | ![computer](images/sprite/2x/computer.png) | [Q43182520](https://www.wikidata.org/wiki/Q43182520) | A shop selling computers, computer related equipment, and other electronic devices.
+`confectionery` | ![confectionery](images/sprite/2x/confectionery.png) | [Q5159627](https://www.wikidata.org/wiki/Q5159627) | A craft that focuses on creating items of sweet food.
+`consulting` | ![consulting](images/sprite/2x/consulting.png) | [Q15978655](https://www.wikidata.org/wiki/Q15978655) | An office for professionals who provides advice in their specific field of expertise.
+`container_terminal` | ![container_terminal](images/sprite/2x/container_terminal.png) |  | A landuse area where containers are stored and loaded onto or off ships, often with cranes.
+`convenience` | ![convenience](images/sprite/2x/convenience.png) | [Q7361709](https://www.wikidata.org/wiki/Q7361709) | A shop selling convenience items including food, beverage, and other small household items.
+`copyshop` | ![copyshop](images/sprite/2x/copyshop.png) | [Q1131628](https://www.wikidata.org/wiki/Q1131628) | A shop that offers photocopying, printing, or design services.
+`cosmetics` | ![cosmetics](images/sprite/2x/cosmetics.png) | [Q47508166](https://www.wikidata.org/wiki/Q47508166) | A shop selling products to enhance the body's appearance.
+`courthouse` | ![courthouse](images/sprite/2x/courthouse.png) | [Q1137809](https://www.wikidata.org/wiki/Q1137809) | A building where legal cases are adjudicated by judges and lawyers.
+`craft` | ![craft](images/sprite/2x/craft.png) | [Q2207288](https://www.wikidata.org/wiki/Q2207288) | A fallback for pastime or profession that requires particular skills and knowledge of skilled work, when no other category applies.
+`crane` | ![crane](images/sprite/2x/crane.png) |  | A man-made structure that is permanent built to move items from one place to another, usually outdoors at a dock. With `kind_detail` property.
+`cross` | ![cross](images/sprite/2x/cross.png) | [Q361665](https://www.wikidata.org/wiki/Q361665) | A man-made navigational aid marking the summit of a mountain peak that does not have religious context.
+`customs` | ![customs](images/sprite/2x/customs.png) | [Q182290](https://www.wikidata.org/wiki/Q182290) | A border station responsible for collecting customs duties and for controlling the flow of goods.
+`cycle_barrier` | ![cycle_barrier](images/sprite/2x/cycle_barrier.png) |  | A barrier at the entrance to a bicycle path designed to discourage motor vehicle access by cars or motorcycles.
+`dam` | ![dam](images/sprite/2x/dam.png) | [Q12323](https://www.wikidata.org/wiki/Q12323) | A waterway barrier that holds back and raises the water level.
+`danger_area` | ![danger_area](images/sprite/2x/danger_area.png) |  | A military training zone like a firing range that uses live amunition.
+`defibrillator` | ![defibrillator](images/sprite/2x/defibrillator.png) |  | An emergency first-aid device that can restart the heart during cardiac arrest.
+`deli` | ![deli](images/sprite/2x/deli.png) | [Q406177](https://www.wikidata.org/wiki/Q406177) | A shop selling cold cuts of meats, sandwiches, and other foods.
+`dentist` | ![dentist](images/sprite/2x/dentist.png) | [Q27349](https://www.wikidata.org/wiki/Q27349) | A healthcare amenity specializing in teeth and gums. With `kind_detail` property.
+`department_store` | ![department_store](images/sprite/2x/department_store.png) | [Q216107](https://www.wikidata.org/wiki/Q216107) | A large retail shop offering a wide range of consumer goods.
+`dispensary` | ![dispensary](images/sprite/2x/dispensary.png) |  | A shop selling cannabis and related products that is legally permitted.
+`dive_centre` | ![dive_centre](images/sprite/2x/dive_centre.png) | [Q3664857](https://www.wikidata.org/wiki/Q3664857) | A recreation amenity for diver training, equipment, and dive outings.
+`doctors` | ![doctors](images/sprite/2x/doctors.png) | [Q1233862](https://www.wikidata.org/wiki/Q1233862) | An amenity offering in-person checkups and other medical services. With `kind_detail` property.
+`dog_park` | ![dog_park](images/sprite/2x/dog_park.png) | [Q38516](https://www.wikidata.org/wiki/Q38516) | A leisure area for dog-owners to exercise their dogs, typically a fenced outdoor space.
+`doityourself` | ![doityourself](images/sprite/2x/doityourself.png) |  | A shop selling home improvement items that is larger than a hardware store and has a wider range of products.
+`dressmaker` | ![dressmaker](images/sprite/2x/dressmaker.png) | [Q2034021](https://www.wikidata.org/wiki/Q2034021) | A craftsperson making custom clothing for men and women.
+`drinking_water` | ![drinking_water](images/sprite/2x/drinking_water.png) | [Q7892](https://www.wikidata.org/wiki/Q7892) | An amenity offering safe potable water for household consumption.
+`dry_cleaning` | ![dry_cleaning](images/sprite/2x/dry_cleaning.png) | [Q878156](https://www.wikidata.org/wiki/Q878156) | A shop that cleans clothing and fabrics.
+`dune` | ![dune](images/sprite/2x/dune.png) | [Q25391](https://www.wikidata.org/wiki/Q25391) | A natural landform consisting of a hill of sand.
+`educational_institution` | ![educational_institution](images/sprite/2x/educational_institution.png) | [Q2385804](https://www.wikidata.org/wiki/Q2385804) | An office or institution that provides educational instruction that isn't a primary school, college, or university.
+`egress` | ![egress](images/sprite/2x/egress.png) | [Q5348260](https://www.wikidata.org/wiki/Q5348260) | A whitewater recreation location for pulling your boat out of the water.
+`electrician` | ![electrician](images/sprite/2x/electrician.png) | [Q165029](https://www.wikidata.org/wiki/Q165029) | A craftsperson specializing in wiring of buildings or electrical equipment.
+`electronics` | ![electronics](images/sprite/2x/electronics.png) | [Q43156817](https://www.wikidata.org/wiki/Q43156817) | A shop selling TVs, computers, and other electronics.
+`elevator` | ![elevator](images/sprite/2x/elevator.png) |  | An pedestrian enclosure for vertical travel from one elevation to another, sometimes providing access into a public transit station.
+`embassy` | ![embassy](images/sprite/2x/embassy.png) | [Q213283](https://www.wikidata.org/wiki/Q213283) | An diplomatic amenity that eases relations between nations and provides services for traveling citizens.
+`emergency_phone` | ![emergency_phone](images/sprite/2x/emergency_phone.png) | [Q1613929](https://www.wikidata.org/wiki/Q1613929) | An amenity with a telephone to call for emergency service help, often along a highway, beach, or university campus.
+`employment_agency` | ![employment_agency](images/sprite/2x/employment_agency.png) | [Q261362](https://www.wikidata.org/wiki/Q261362) | An office that helps with job placement.
+`enclosure` | ![enclosure](images/sprite/2x/enclosure.png) | [Q792164](https://www.wikidata.org/wiki/Q792164) | A fenced off area in a zoo for animals to roam.
+`estate_agent` | ![estate_agent](images/sprite/2x/estate_agent.png) | [Q16148831](https://www.wikidata.org/wiki/Q16148831) | An office assisting with the selling or purchasing of property and other real estate.
+`farm` | ![farm](images/sprite/2x/farm.png) | [Q131596](https://www.wikidata.org/wiki/Q131596) | An area of land used for farming or other agriculture, including buildings.
+`fashion` | ![fashion](images/sprite/2x/fashion.png) | [Q12684](https://www.wikidata.org/wiki/Q12684) | A shop selling popular styles of clothing, jewelry, and other accessories.
+`fast_food` | ![fast_food](images/sprite/2x/fast_food.png) | [Q81799](https://www.wikidata.org/wiki/Q81799) | An amenity selling hamburgers and other quick to make foods, often with a drive thru for ordering and pickup.
+`ferry_terminal` | ![ferry_terminal](images/sprite/2x/ferry_terminal.png) | [Q66724450](https://www.wikidata.org/wiki/Q66724450) | An amenity where passengers can purchase tickets for and board a ferry, including the building, surrounding plaza and piers.
+`field_hospital` | ![field_hospital](images/sprite/2x/field_hospital.png) |  | A health facility set up near a combat zone as a temporary hospital to care for the wounded. With `kind_detail` property.
+`financial` | ![financial](images/sprite/2x/financial.png) | [Q43015](https://www.wikidata.org/wiki/Q43015) | An office offering investment advice and other financial services.
+`fire_hydrant` | ![fire_hydrant](images/sprite/2x/fire_hydrant.png) |  | An emergency water tap along the street that provides fire fighters water from local water pipe network.
+`fire_station` | ![fire_station](images/sprite/2x/fire_station.png) | [Q1195942](https://www.wikidata.org/wiki/Q1195942) | An amenity housing fire trucks, often with living quarters for firefighters.
+`firepit` | ![firepit](images/sprite/2x/firepit.png) | [Q187317](https://www.wikidata.org/wiki/Q187317) | A leisure area used to contain fires, often during social gatherings or events.
+`fishing` | ![fishing](images/sprite/2x/fishing.png) | [Q47516535](https://www.wikidata.org/wiki/Q47516535) | A shop selling fishing poles, flies, bait, boats, and other fishing supplies.
+`fishing_area` | ![fishing_area](images/sprite/2x/fishing_area.png) | [Q55468590](https://www.wikidata.org/wiki/Q55468590) | A leisure area for catching fish along a waterway.
+`fishmonger` | ![fishmonger](images/sprite/2x/fishmonger.png) | [Q550594](https://www.wikidata.org/wiki/Q550594) | A shop selling raw fish and other seafood.
+`fitness` | ![fitness](images/sprite/2x/fitness.png) | [Q523402](https://www.wikidata.org/wiki/Q523402) | An amenity like a gym, exercise room, or other fitness area.
+`fitness_station` | ![fitness_station](images/sprite/2x/fitness_station.png) |  | A leisure area, often outside that contains a variety of exercise equipment.
+`florist` | ![florist](images/sprite/2x/florist.png) | [Q637125](https://www.wikidata.org/wiki/Q637125) | A shop selling cut flowers and other decorative plants.
+`ford` | ![ford](images/sprite/2x/ford.png) |  | A short section of road that passes thru a shallow waterway without a bridge.
+`forest` | ![forest](images/sprite/2x/forest.png) | [Q4421](https://www.wikidata.org/wiki/Q4421) | A protected landuse where trees cover a large area, often designated and named as a forest and managed by a group (like the US National Forest Service).
+`fort` | ![fort](images/sprite/2x/fort.png) | [Q57821](https://www.wikidata.org/wiki/Q57821) | A historical building typically designed for defense in warfare, sometimes found on military bases.
+`foundation` | ![foundation](images/sprite/2x/foundation.png) | [Q227744](https://www.wikidata.org/wiki/Q227744) | An office for non-governmental organizations that supports other social welfare organizations, often with an endowment.
+`fuel` | ![fuel](images/sprite/2x/fuel.png) | [Q205495](https://www.wikidata.org/wiki/Q205495) | A amenity selling gas or diesel for automotive use, sometimes the gas station includes a small shop selling fast food and other convenience items, or offers car repairs.
+`funeral_directors` | ![funeral_directors](images/sprite/2x/funeral_directors.png) | [Q316490](https://www.wikidata.org/wiki/Q316490) | An amenity offering or selling funeral rite services.
+`furniture` | ![furniture](images/sprite/2x/furniture.png) | [Q47516358](https://www.wikidata.org/wiki/Q47516358) | A shop selling tables, chairs, sofas and other household furniture.
+`gallery` | ![gallery](images/sprite/2x/gallery.png) | [Q4039221](https://www.wikidata.org/wiki/Q4039221) | A tourism shop displaying artwork, often paintings or sculptures for sale.
+`gambling` | ![gambling](images/sprite/2x/gambling.png) | [Q11416](https://www.wikidata.org/wiki/Q11416) | An amenity where one can wager money on a game or sporting event.
+`garden` | ![garden](images/sprite/2x/garden.png) | [Q1107656](https://www.wikidata.org/wiki/Q1107656) | A leisure area for the display, cultivation, and enjoyment of plants (but not allotments in a community garden).
+`garden_centre` | ![garden_centre](images/sprite/2x/garden_centre.png) | [Q260569](https://www.wikidata.org/wiki/Q260569) | A shop selling plants and related products for the home garden
+`gardener` | ![gardener](images/sprite/2x/gardener.png) | [Q758780](https://www.wikidata.org/wiki/Q758780) | A craftsperson who tends to plants in gardens, open spaces, or offices.
+`gas_canister` | ![gas_canister](images/sprite/2x/gas_canister.png) | [Q774332](https://www.wikidata.org/wiki/Q774332) | A shop selling cylindrical containers for storing pressurized gas used for fuel or heat, sometimes offering refills.
+`gate` | ![gate](images/sprite/2x/gate.png) | [Q53060](https://www.wikidata.org/wiki/Q53060) | A barrier that swings open to allow access thru a fence, wall, or other structure. With `kind_detail` property.
+`generator` | ![generator](images/sprite/2x/generator.png) | [Q227907](https://www.wikidata.org/wiki/Q227907) | A power source that derives energy from wind, solar, hydro, oil, or another source. With `kind_detail` property.
+`geyser` | ![geyser](images/sprite/2x/geyser.png) | [Q83471](https://www.wikidata.org/wiki/Q83471) | A natural hot spring that occasionally ejects hot water and steam.
+`gift` | ![gift](images/sprite/2x/gift.png) | [Q5560006](https://www.wikidata.org/wiki/Q5560006) | A shop selling arts, crafts, and souvenirs appropriate for small gifts.
+`golf_course` | ![golf_course](images/sprite/2x/golf_course.png) | [Q1048525](https://www.wikidata.org/wiki/Q1048525) | A leisure area containing a series of holes, greens, and other outdoor space designed for the game of golf.
+`golf` | ![golf](images/sprite/2x/golf.png) |  | A shop selling equipment for the game of golf.
+`government` | ![government](images/sprite/2x/government.png) | [Q16831714](https://www.wikidata.org/wiki/Q16831714) | An office offering public services and administrative functions for government officials and staff.
+`grave_yard` | ![grave_yard](images/sprite/2x/grave_yard.png) | [Q39614](https://www.wikidata.org/wiki/Q39614) | An amenity where people or animals are buried and is located next to a place of worship. With `kind_detail` and `denomination` properties.
+`greengrocer` | ![greengrocer](images/sprite/2x/greengrocer.png) | [Q145658](https://www.wikidata.org/wiki/Q145658) | A shop specializing in fruits and vegetables, usually a smaller corner store.
+`grocery` | ![grocery](images/sprite/2x/grocery.png) | [Q1295201](https://www.wikidata.org/wiki/Q1295201) | A shop selling fruits, vegetables, packaged food and other household supplies, usually a medium sized store smaller than a `supermarket`.
+`guest_house` | ![guest_house](images/sprite/2x/guest_house.png) | [Q2460422](https://www.wikidata.org/wiki/Q2460422) | A tourism amenity offering temporary overnight lodging.
+`hairdresser` | ![hairdresser](images/sprite/2x/hairdresser.png) | [Q55187](https://www.wikidata.org/wiki/Q55187) | A shop that cuts and styles hair.
+`halt` | ![halt](images/sprite/2x/halt.png) |  | A railway stop that is smaller than a station where trains only stop for passengers on request, often without a platform.
+`hanami` | ![hanami](images/sprite/2x/hanami.png) | [Q210150](https://www.wikidata.org/wiki/Q210150) | A tourism site where one can enjoy the transient beauty of flowers, common in Japan and found worldwide.
+`handicraft` | ![handicraft](images/sprite/2x/handicraft.png) | [Q877729](https://www.wikidata.org/wiki/Q877729) | A craft shop that makes utilitarian or decorative objects by hand, sometimes using simple tools.
+`harbourmaster` | ![harbourmaster](images/sprite/2x/harbourmaster.png) |  | An amenity where the harbor master has their office.
+`hardware` | ![hardware](images/sprite/2x/hardware.png) | [Q294550](https://www.wikidata.org/wiki/Q294550) | A shop selling tools, lumber, and other construction material.
+`hazard` | ![hazard](images/sprite/2x/hazard.png) | [Q1132455](https://www.wikidata.org/wiki/Q1132455) | A whitewater location that poses a potential threat to life, health, property, or environment.
+`health_centre` | ![health_centre](images/sprite/2x/health_centre.png) | [Q569500](https://www.wikidata.org/wiki/Q569500) | A clinic or other facility staffed by a group of general practitioners and nurses providing healthcare services.
+`healthcare_alternative` | ![healthcare_alternative](images/sprite/2x/healthcare_alternative.png) |  | A health care office for someone practicing non-traditional medicine like acupuncture, aromatherapy, herbalism, or reiki.
+`healthcare_centre` | ![healthcare_centre](images/sprite/2x/healthcare_centre.png) |  | A health care building that is either a clinic or hospital, common in India and elsewhere.
+`healthcare_laboratory` | ![healthcare_laboratory](images/sprite/2x/healthcare_laboratory.png) | [Q483242](https://www.wikidata.org/wiki/Q483242) | A facility that conducts medical analysis or diagnostics.
+`helipad` | ![helipad](images/sprite/2x/helipad.png) | [Q534159](https://www.wikidata.org/wiki/Q534159) | An aeroway with a dedicated landing area or platform for helicopters.
+`heliport` | ![heliport](images/sprite/2x/heliport.png) | [Q502074](https://www.wikidata.org/wiki/Q502074) | An airport designed for civilian or commercial helicopter use.
+`hifi` | ![hifi](images/sprite/2x/hifi.png) | [Q26674](https://www.wikidata.org/wiki/Q26674) | A shop selling high-quality audio equipment to listen to recorded sounds.
+`historical` | ![historical](images/sprite/2x/historical.png) |  | A former site of a venue. _See planned bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
+`horse_riding` | ![horse_riding](images/sprite/2x/horse_riding.png) |  | A leisure area for equestrians to ride horses, often with stables and an arena.
+`hospice` | ![hospice](images/sprite/2x/hospice.png) |  | An amenity that provides end-of-life care prioritizing comfort and quality of life.
+`hospital` | ![hospital](images/sprite/2x/hospital.png) | [Q16917](https://www.wikidata.org/wiki/Q16917) | An amenity offering general and specialized healthcare, often in a large building. With `kind_detail` property.
+`hostel` | ![hostel](images/sprite/2x/hostel.png) | [Q654772](https://www.wikidata.org/wiki/Q654772) | A tourism amenity offering cheap, sociable accommodation, sometimes with meals and popular with students.
+`hot_spring` | ![hot_spring](images/sprite/2x/hot_spring.png) | [Q177380](https://www.wikidata.org/wiki/Q177380) | A natural spring produced by the emergence of geothermally heated groundwater.
+`hotel` | ![hotel](images/sprite/2x/hotel.png) | [Q27686](https://www.wikidata.org/wiki/Q27686) | A tourism amenity that provides overnight lodging, often in a large building and sometimes with breakfast service.
+`hunting` | ![hunting](images/sprite/2x/hunting.png) | [Q36963](https://www.wikidata.org/wiki/Q36963) | A shop selling guns, ammo, camo and guide services to find, pursue, catch and kill wild animals.
+`hunting_stand` | ![hunting_stand](images/sprite/2x/hunting_stand.png) | [Q1279822](https://www.wikidata.org/wiki/Q1279822) | An amenity for hunters to gain an elevated view of their pray on an open or enclosed platform.
+`hvac` | ![hvac](images/sprite/2x/hvac.png) | [Q1798773](https://www.wikidata.org/wiki/Q1798773) | A craftsperson specializing in heating, ventilation, and air conditioning.
+`ice_cream` | ![ice_cream](images/sprite/2x/ice_cream.png) | [Q13233](https://www.wikidata.org/wiki/Q13233) | An amenity or shop selling frozen desserts and sweets._See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+`industrial` | ![industrial](images/sprite/2x/industrial.png) | [Q404367](https://www.wikidata.org/wiki/Q404367) | Factories, warehouses, or other industrial building that specialize in the manufacturing or raw goods or materials.
+`information` | ![information](images/sprite/2x/information.png) | [Q11028](https://www.wikidata.org/wiki/Q11028) | A tourism information station or kiosk that provides basic orientation services.
+`insurance` | ![insurance](images/sprite/2x/insurance.png) | [Q43183](https://www.wikidata.org/wiki/Q43183) | An office selling products that limit risk of property and other losses.
+`it` | ![it](images/sprite/2x/it.png) | [Q11661](https://www.wikidata.org/wiki/Q11661) | An office specializing in technologies and services that let people access and send information electronically
+`jewelry` | ![jewelry](images/sprite/2x/jewelry.png) | [Q161439](https://www.wikidata.org/wiki/Q161439) | A shop selling necklaces, rings, and other forms of personal adornment.
+`karaoke` | ![karaoke](images/sprite/2x/karaoke.png) | [Q229345](https://www.wikidata.org/wiki/Q229345) | An entertainment amenity that allows singing to recorded music.
+`karaoke_box` | ![karaoke_box](images/sprite/2x/karaoke_box.png) | [Q910635](https://www.wikidata.org/wiki/Q910635) | An entertainment amenity with multiple rooms for singing and dancing, each with karaoke equipment, sometimes offering food or beverages.
+`kindergarten` | ![kindergarten](images/sprite/2x/kindergarten.png) | [Q126807](https://www.wikidata.org/wiki/Q126807) | An amenity offering preschool education for young children.
+`landmark` | ![landmark](images/sprite/2x/landmark.png) | [Q4895393](https://www.wikidata.org/wiki/Q4895393) | A natural or artificial feature used for navigation, sometimes a tourist attraction of historic significance.
+`laundry` | ![laundry](images/sprite/2x/laundry.png) | [Q852100](https://www.wikidata.org/wiki/Q852100) | A shop with pay-per-load washing machines.
+`lawyer` | ![lawyer](images/sprite/2x/lawyer.png) | [Q40348](https://www.wikidata.org/wiki/Q40348) | An office for legal professionals who represent clients in matters before a judge or other magistrate.
+`level_crossing` | ![level_crossing](images/sprite/2x/level_crossing.png) |  | A railroad crossing where tracks go across an automotive road.
+`library` | ![library](images/sprite/2x/library.png) | [Q7075](https://www.wikidata.org/wiki/Q7075) | An amenity that collects and loans out books and recordings, usually in a large public building.
+`life_ring` | ![life_ring](images/sprite/2x/life_ring.png) | [Q587334](https://www.wikidata.org/wiki/Q587334) | An amenity designed to be thrown to a person in water, to prevent drowning.
+`lifeguard_tower` | ![lifeguard_tower](images/sprite/2x/lifeguard_tower.png) | [Q6545380](https://www.wikidata.org/wiki/Q6545380) | An emergency amenity at a beach or swimming pool staffed to prevent drownings and other dangers.
+`lift_gate` | ![lift_gate](images/sprite/2x/lift_gate.png) | [Q216762](https://www.wikidata.org/wiki/Q216762) | A barrier that swings upward to control vehicular access along a road.
+`lighthouse` | ![lighthouse](images/sprite/2x/lighthouse.png) | [Q39715](https://www.wikidata.org/wiki/Q39715) | A man-made structure that emits light to aid navigation at night, sometimes also a tourist attraction.
+`lock` | ![lock](images/sprite/2x/lock.png) | [Q366453](https://www.wikidata.org/wiki/Q366453) | A waterway feature that is man-made to raise and lower boats between different water elevations along a river or canal.
+`lottery` | ![lottery](images/sprite/2x/lottery.png) | [Q189409](https://www.wikidata.org/wiki/Q189409) | A shop selling lottery tickets and other drawings of lots for prizes, related to gambling.
+`love_hotel` | ![love_hotel](images/sprite/2x/love_hotel.png) |  | An amenity similar to a hotel but adult themed allowing guests privacy for sexual activities.
+`mall` | ![mall](images/sprite/2x/mall.png) | [Q437425](https://www.wikidata.org/wiki/Q437425) | A large building that contains many individual shops, stores, businesses, and food establishments.
+`marina` | ![marina](images/sprite/2x/marina.png) | [Q721207](https://www.wikidata.org/wiki/Q721207) | A leisure area offering slip rentals to park boats and other water vehicles, sometimes with a sanitary dump station or fuel station.
+`marketplace` | ![marketplace](images/sprite/2x/marketplace.png) | [Q330284](https://www.wikidata.org/wiki/Q330284) | An amenity for a public marketplace where food, goods, and services are traded daily or weekly, sometimes in a market hall. Sometimes called a farmers market or a night market.
+`mast` | ![mast](images/sprite/2x/mast.png) | [Q1068623](https://www.wikidata.org/wiki/Q1068623) | A man-made post or other vertical structure built to hold antennas, of short to medium height sometimes with ground support wires.
+`maze` | ![maze](images/sprite/2x/maze.png) | [Q606777](https://www.wikidata.org/wiki/Q606777) | An attraction that is man-made out of rocks or plants formed into complex branching passageways.
+`memorial` | ![memorial](images/sprite/2x/memorial.png) | [Q5003624](https://www.wikidata.org/wiki/Q5003624) | An object or area built to remind people of a historic person or event.
+`metal_construction` | ![metal_construction](images/sprite/2x/metal_construction.png) | [Q1924856](https://www.wikidata.org/wiki/Q1924856) | A craftsperson specializes in working with metals for construction.
+`midwife` | ![midwife](images/sprite/2x/midwife.png) | [Q185196](https://www.wikidata.org/wiki/Q185196) | A healthcare professional who helps with childbirth and provides related obstetrics services
+`military` | ![military](images/sprite/2x/military.png) | [Q8473](https://www.wikidata.org/wiki/Q8473) | A landuse area established to prepare and provision soldiers for war or other operations.
+`mineshaft` | ![mineshaft](images/sprite/2x/mineshaft.png) | [Q87003562](https://www.wikidata.org/wiki/Q87003562) | A man-made vertical hole into the ground to extract minerals.
+`mini_roundabout` | ![mini_roundabout](images/sprite/2x/mini_roundabout.png) |  | A highway road junction where the traffic goes around a painted circle and has right of way . With optional property `drives_on_left` to indicate whether the roundabout is in a country which drives on the left (`drives_on_left=true`) and therefore goes around the mini roundabout in  a clockwise direction as seen from above. The property is omitted when the country drives on the right and has counter-clockwise mini roundabouts (i.e: default `false`).
+`miniature_golf` | ![miniature_golf](images/sprite/2x/miniature_golf.png) | [Q754796](https://www.wikidata.org/wiki/Q754796) | A leisure area for playing a novelty version of golf focusing on putting the ball in and around amusements.
+`mobile_phone` | ![mobile_phone](images/sprite/2x/mobile_phone.png) | [Q17517](https://www.wikidata.org/wiki/Q17517) | A shop selling portable electronic devices that make telephone calls on a cellular network.
+`money_transfer` | ![money_transfer](images/sprite/2x/money_transfer.png) | [Q21130860](https://www.wikidata.org/wiki/Q21130860) | An amenity facilitating monetary transactions, often for guest workers sending remittances to their home country.
+`monument` | ![monument](images/sprite/2x/monument.png) | [Q4989906](https://www.wikidata.org/wiki/Q4989906) | A historic structure commemorating a person or important event.
+`mooring` | ![mooring](images/sprite/2x/mooring.png) |  | A waterway feature for boats to tie up or otherwise park. With `kind_detail` property indicating commercial, cruise, customers, declaration, ferry, guest, pile, waiting, yacht, yachts.
+`motel` | ![motel](images/sprite/2x/motel.png) | [Q216212](https://www.wikidata.org/wiki/Q216212) | A tourism amenity that provides lodging where all rooms face directly onto a car park, or low-cost motor hotel.
+`motorcycle` | ![motorcycle](images/sprite/2x/motorcycle.png) | [Q47516542](https://www.wikidata.org/wiki/Q47516542) | A shop selling two, three, and four wheeled motor vehicles.
+`motorcycle_parking` | ![motorcycle_parking](images/sprite/2x/motorcycle_parking.png) |  | An amenity used to store motorcycles while not in use, often with a degree of security to prevent theft.
+`motorway_junction` | ![motorway_junction](images/sprite/2x/motorway_junction.png) |  | An exit from a highway, motorway, or other major road, often named or numbered.
+`museum` | ![museum](images/sprite/2x/museum.png) | [Q33506](https://www.wikidata.org/wiki/Q33506) | A tourism amenity or institution showcasing artifacts and other objects of scientific, artistic, cultural, historical, or other importance.
+`music` | ![music](images/sprite/2x/music.png) | [Q3868546](https://www.wikidata.org/wiki/Q3868546) | A shop selling recordings of vocal, instrumental, and other sounds.
+`national_park` | ![national_park](images/sprite/2x/national_park.png) | [Q46169](https://www.wikidata.org/wiki/Q46169) | A park of national or international significance that conserves plants, animals, or natural wonders.
+`nature_reserve` | ![nature_reserve](images/sprite/2x/nature_reserve.png) | [Q179049](https://www.wikidata.org/wiki/Q179049) | A leisure area that provides protection for plants, animals, or natural wonders.
+`naval_base` | ![naval_base](images/sprite/2x/naval_base.png) |  | A military base in and next to the water where warships are docked and provisioned.
+`newsagent` | ![newsagent](images/sprite/2x/newsagent.png) | [Q1528905](https://www.wikidata.org/wiki/Q1528905) | A shop or kiosk selling newspapers and magazines.
+`newspaper` | ![newspaper](images/sprite/2x/newspaper.png) | [Q11032](https://www.wikidata.org/wiki/Q11032) | An office that publishes news reports, general articles, features, editorials, and advertising.
+`ngo` | ![ngo](images/sprite/2x/ngo.png) | [Q79913](https://www.wikidata.org/wiki/Q79913) | An office for a non-governmental organization often focused on social welfare.
+`nightclub` | ![nightclub](images/sprite/2x/nightclub.png) | [Q622425](https://www.wikidata.org/wiki/Q622425) | An entertainment amenity which usually operates late into the night, sometimes sells food and beverages.
+`notary` | ![notary](images/sprite/2x/notary.png) | [Q189010](https://www.wikidata.org/wiki/Q189010) | An office with licensed staff who witness signatures on legal documents.
+`nursing_home` | ![nursing_home](images/sprite/2x/nursing_home.png) | [Q837142](https://www.wikidata.org/wiki/Q837142) | A health care amenity focused on residential care, typically for elderly adults. With `kind_detail` property.
+`obelisk` | ![obelisk](images/sprite/2x/obelisk.png) |  | A man-made structure that is tall, usually a monument or memorial. If known, the `kind_detail` will be set to either `monument` or `memorial`.
+`observatory` | ![observatory](images/sprite/2x/observatory.png) | [Q62832](https://www.wikidata.org/wiki/Q62832) | A man-made structure used for observing terrestrial or celestial events.
+`occupational_therapist` | ![occupational_therapist](images/sprite/2x/occupational_therapist.png) |  | A health care office for doctors who help patients recover thru everyday activities.
+`office` | ![office](images/sprite/2x/office.png) | [Q12823105](https://www.wikidata.org/wiki/Q12823105) | A generic office where people perform their job-related duties, when a more specific category is not available.
+`offshore_platform` | ![offshore_platform](images/sprite/2x/offshore_platform.png) | [Q689880](https://www.wikidata.org/wiki/Q689880) | A larger man-made offshore structure, often for oil drilling and related activities.
+`optician` | ![optician](images/sprite/2x/optician.png) | [Q1996635](https://www.wikidata.org/wiki/Q1996635) | A shop selling functional and designer eyeglasses and contact lenses.
+`optometrist` | ![optometrist](images/sprite/2x/optometrist.png) |  | A health care office for people with vision impairment or other eye issues, often selling glasses.
+`outdoor` | ![outdoor](images/sprite/2x/outdoor.png) | [Q2041907](https://www.wikidata.org/wiki/Q2041907) | A shop selling equipment to be used for camping, hiking, bicycling, and other outdoor activities.
+`paediatrics` | ![paediatrics](images/sprite/2x/paediatrics.png) |  | A health care office for doctors specializing in medicine for children.
+`painter` | ![painter](images/sprite/2x/painter.png) | [Q11629](https://www.wikidata.org/wiki/Q11629) | A craftsperson specializing in painting indoor or outdoor building spaces.
+`park` | ![park](images/sprite/2x/park.png) | [Q22698](https://www.wikidata.org/wiki/Q22698) | A landuse, leisure, recreation, or other area often of outstanding natural beauty that is managed by a regional or local authority.
+`parking` | ![parking](images/sprite/2x/parking.png) | [Q267917](https://www.wikidata.org/wiki/Q267917) | An amenity for storing unattended cars, trucks, and other motor vehicles, usually a surface lot with multiple spaces.
+`parking_garage` | ![parking_garage](images/sprite/2x/parking_garage.png) |  | An amenity for storing unattended cars, trucks, and other motor vehicles, usually a multi-story, underground, or rooftop lot.
+`peak` | ![peak](images/sprite/2x/peak.png) | [Q1039790](https://www.wikidata.org/wiki/Q1039790) | A natural feature at the top of a mountain or hill, often with an elevation (in meters).
+`perfumery` | ![perfumery](images/sprite/2x/perfumery.png) | [Q131746](https://www.wikidata.org/wiki/Q131746) | A shop selling perfumes and other pleasant scents.
+`pet` | ![pet](images/sprite/2x/pet.png) | [Q39201](https://www.wikidata.org/wiki/Q39201) | A shop selling dogs, cats, birds, and other animals and their food, toys, and other products.
+`petroleum_well` | ![petroleum_well](images/sprite/2x/petroleum_well.png) | [Q587682](https://www.wikidata.org/wiki/Q587682) | A man-made boring designed to bring petroleum oil to the ground's surface for collection and later processing into fuel.
+`petting_zoo` | ![petting_zoo](images/sprite/2x/petting_zoo.png) | [Q459886](https://www.wikidata.org/wiki/Q459886) | A small zoo for children with friendly animals that can be touched.
+`pharmacy` | ![pharmacy](images/sprite/2x/pharmacy.png) | [Q614304](https://www.wikidata.org/wiki/Q614304) | An amenity selling medication and other drugs for health care, sometimes selling other household products or consultations. With `kind_detail` property.
+`phone` | ![phone](images/sprite/2x/phone.png) | [Q11035](https://www.wikidata.org/wiki/Q11035) | An amenity with a telephone to call for emergency service help, often along a highway, beach, or university campus. Instead it's better to use the `emergency_phone` or `telephone` categories.
+`photo` | ![photo](images/sprite/2x/photo.png) | [Q125191](https://www.wikidata.org/wiki/Q125191) | A shop that prints photos and sells photography-related products, sometimes also selling cameras.
+`photographer` | ![photographer](images/sprite/2x/photographer.png) | [Q33231](https://www.wikidata.org/wiki/Q33231) | A craftsperson specializing in taking and editing photographs.
+`photographic_laboratory` | ![photographic_laboratory](images/sprite/2x/photographic_laboratory.png) | [Q172839](https://www.wikidata.org/wiki/Q172839) | A craft specializing in the processing of visible images and sometimes video.
+`physician` | ![physician](images/sprite/2x/physician.png) | [Q39631](https://www.wikidata.org/wiki/Q39631) | An office with professionals who practice medicine.
+`physiotherapist` | ![physiotherapist](images/sprite/2x/physiotherapist.png) |  | A health care office for a physical therapists specializing in massage, exercise, and other treatments.
+`picnic_site` | ![picnic_site](images/sprite/2x/picnic_site.png) | [Q47520603](https://www.wikidata.org/wiki/Q47520603) | A tourism area used for outdoor seating or leisure activity, often with benches, tables, or barbecue pits.
+`picnic_table` | ![picnic_table](images/sprite/2x/picnic_table.png) | [Q2466395](https://www.wikidata.org/wiki/Q2466395) | An amenity for eating outdoor meals at a table with attached benches.
+`pitch` | ![pitch](images/sprite/2x/pitch.png) | [Q340394](https://www.wikidata.org/wiki/Q340394) | A leisure field used for sports, sometimes named. The `kind_detail` optionally describes the sport, common values are `baseball`, `basketball`, `football`, `hockey`, `soccer, `tennis`.
+`place_of_worship` | ![place_of_worship](images/sprite/2x/place_of_worship.png) | [Q1370598](https://www.wikidata.org/wiki/Q1370598) | An amenity for worshipping in a building consecrated as a church, mosque, synagogue, temple, or other sacred space.
+`plant` | ![plant](images/sprite/2x/plant.png) | [Q159719](https://www.wikidata.org/wiki/Q159719) | A power station generating electrical energy from coal, natural gas, solar, hydro, nuclear, or other sources.
+`plaque` | ![plaque](images/sprite/2x/plaque.png) |  | A memorial plaque commemorating a person or event.
+`platform` | ![platform](images/sprite/2x/platform.png) | [Q224617](https://www.wikidata.org/wiki/Q224617) | A place to wait for public transportation with developed infrastructure, often along a railway, highway, or bus line.
+`playground` | ![playground](images/sprite/2x/playground.png) | [Q11875349](https://www.wikidata.org/wiki/Q11875349) | A leisure area designed for children to play on swings, bars, climbing structures, or sandbox, sometimes named.
+`plumber` | ![plumber](images/sprite/2x/plumber.png) | [Q252924](https://www.wikidata.org/wiki/Q252924) | A craftsperson specialized in the installation and repair of water and sewage pipes.
+`podiatrist` | ![podiatrist](images/sprite/2x/podiatrist.png) |  | A health care office for a doctors specializing in feet.
+`police` | ![police](images/sprite/2x/police.png) | [Q35535](https://www.wikidata.org/wiki/Q35535) | An amenity housing a local police force empowered by the government to enforce the law, sometimes with a small jail.
+`political_party` | ![political_party](images/sprite/2x/political_party.png) | [Q7278](https://www.wikidata.org/wiki/Q7278) | An office of an organized group seeking to influence government policy and actions.
+`port_terminal` | ![port_terminal](images/sprite/2x/port_terminal.png) |  | A landuse area part of a port for containers or other bulk cargo.
+`post_box` | ![post_box](images/sprite/2x/post_box.png) | [Q49844](https://www.wikidata.org/wiki/Q49844) | An amenity for dropping off outbound mail, usually a bin on the public sidewalk, and collected daily or weekly for delivery by an organized postal system.
+`post_office` | ![post_office](images/sprite/2x/post_office.png) | [Q35054](https://www.wikidata.org/wiki/Q35054) | An amenity for sending and receiving letters, packages, and other mail, part of an organized postal system.
+`pottery` | ![pottery](images/sprite/2x/pottery.png) | [Q11642](https://www.wikidata.org/wiki/Q11642) | A craftsperson making household objects and artwork out of clay.
+`power_pole` | ![power_pole](images/sprite/2x/power_pole.png) | [Q1144084](https://www.wikidata.org/wiki/Q1144084) | A post used by public utilities to support overhead wires and related equipment.
+`power_tower` | ![power_tower](images/sprite/2x/power_tower.png) | [Q7236649](https://www.wikidata.org/wiki/Q7236649) | A man-made tower for carrying high voltage electricity lines, often constructed from steel latticework or solid pylons.
+`power_wind` | ![power_wind](images/sprite/2x/power_wind.png) |  | A man-made structure built to turn wind into electricity and supply it to power grid, larger than a windmill.
+`prison` | ![prison](images/sprite/2x/prison.png) | [Q40357](https://www.wikidata.org/wiki/Q40357) | An amenity that physically confines people as punishment for breaking laws and usually deprives them of a range of personal freedoms.
+`protected_area` | ![protected_area](images/sprite/2x/protected_area.png) | [Q473972](https://www.wikidata.org/wiki/Q473972) | A protected landuse or landscape recognised natural, ecological or cultural value managed by a public agency (like US Bureau of Land Management), can be an overlay of a park or forest.
+`psychotherapist` | ![psychotherapist](images/sprite/2x/psychotherapist.png) |  | A health care office for doctors who treat mental disorders and psychological issues.
+`pub` | ![pub](images/sprite/2x/pub.png) | [Q212198](https://www.wikidata.org/wiki/Q212198) | An amenity selling beer, similar to a bar, sometimes also selling food.
+`put_in` | ![put_in](images/sprite/2x/put_in.png) |  | A whitewater recreation location for putting your boat into the water.
+`put_in_egress` | ![put_in_egress](images/sprite/2x/put_in_egress.png) |  | A waterwater recreation location suitable both for putting your boat in the water and pulling it out.
+`pylon` | ![pylon](images/sprite/2x/pylon.png) |  | An aerialway pole that supports the cable on a ski lift or other aerial tram.
+`quarry` | ![quarry](images/sprite/2x/quarry.png) | [Q188040](https://www.wikidata.org/wiki/Q188040) | A landuse area where stone, rock, construction aggregate, or similar material is excavated from the ground.
+`quay` | ![quay](images/sprite/2x/quay.png) |  | A man-made area for mooring a boat along the shore, sometimes named. If available, with `mooring` property.
+`range` | ![range](images/sprite/2x/range.png) |  | A military training zone where soldiers practice with their weapons
+`ranger_station` | ![ranger_station](images/sprite/2x/ranger_station.png) | [Q36728566](https://www.wikidata.org/wiki/Q36728566) | An amenity building at a park where rangers interact with tourists and other park visitors, sometimes with public toilets and interpretive exhibits.
+`rapid` | ![rapid](images/sprite/2x/rapid.png) | [Q695793](https://www.wikidata.org/wiki/Q695793) | A whitewater section of a river where the water's velocity and turbulence due to a change in riverbed elevation.
+`recreation_ground` | ![recreation_ground](images/sprite/2x/recreation_ground.png) | [Q22698](https://www.wikidata.org/wiki/Q22698) | A landuse dedicated to recreation, typically open to the public and generally characterized by natural, historic, or landscape features.
+`recreation_track` | ![recreation_track](images/sprite/2x/recreation_track.png) | [Q1004435](https://www.wikidata.org/wiki/Q1004435) | A leisure path used for hiking, walking, running, or other physical activity outdoors.
+`recycling` | ![recycling](images/sprite/2x/recycling.png) | [Q132580](https://www.wikidata.org/wiki/Q132580) | A bin, kiosk, or station amenity that accepts used materials for processing into new products to reduce waste.
+`rehabilitation` | ![rehabilitation](images/sprite/2x/rehabilitation.png) |  | A health care facility for medical rehabilitation, including drugs rehabilitation and psychiatric wards.
+`religion` | ![religion](images/sprite/2x/religion.png) | [Q9174](https://www.wikidata.org/wiki/Q9174) | An office associated with a place of worship for administrative staff.
+`research` | ![research](images/sprite/2x/research.png) | [Q42240](https://www.wikidata.org/wiki/Q42240) | An office focusing on the systematic study undertaken to increase knowledge.
+`resort` | ![resort](images/sprite/2x/resort.png) | [Q875157](https://www.wikidata.org/wiki/Q875157) | A tourism amenity with a hotel, pool, spa, bar, restaurant, and other vacationer delights, not along a beach.
+`rest_area` | ![rest_area](images/sprite/2x/rest_area.png) | [Q786014](https://www.wikidata.org/wiki/Q786014) | A highway amenity with bathroom toilets and picnic area, sometimes with vending machines.
+`restaurant` | ![restaurant](images/sprite/2x/restaurant.png) | [Q11707](https://www.wikidata.org/wiki/Q11707) | An amenity with indoor seating that prepares and serves food for on-premise dining.
+`rock` | ![rock](images/sprite/2x/rock.png) | [Q280874](https://www.wikidata.org/wiki/Q280874) | A natural rock that is not freestanding but has a notable size, shape, or other characteristic.
+`roller_coaster` | ![roller_coaster](images/sprite/2x/roller_coaster.png) | [Q204832](https://www.wikidata.org/wiki/Q204832) | An attraction at an amusement or theme park that provides thrills on a fixed track with sharp turns and drops.
+`saddle` | ![saddle](images/sprite/2x/saddle.png) | [Q10862618](https://www.wikidata.org/wiki/Q10862618) | A natural feature that represents the lowest point along a ridge or between two mountain peaks.
+`sanitary_dump_station` | ![sanitary_dump_station](images/sprite/2x/sanitary_dump_station.png) |  | An amenity for depositing human waste from a toilet holding tank, often at a campground or caravan site.
+`sawmill` | ![sawmill](images/sprite/2x/sawmill.png) | [Q505213](https://www.wikidata.org/wiki/Q505213) | A craft building where logs are cut into timber, sometimes with a public yard selling construction lumber.
+`school` | ![school](images/sprite/2x/school.png) | [Q3914](https://www.wikidata.org/wiki/Q3914) | An educational amenity with classrooms for group instruction of students by teachers.
+`scuba_diving` | ![scuba_diving](images/sprite/2x/scuba_diving.png) | [Q47516552](https://www.wikidata.org/wiki/Q47516552) | A shop selling gear used for underwater diving and related activities.
+`service_area` | ![service_area](images/sprite/2x/service_area.png) | [Q19929305](https://www.wikidata.org/wiki/Q19929305) | A highway amenity with bathroom toilets, fuel station to fill up gas, and fast food restaurants
+`shelter` | ![shelter](images/sprite/2x/shelter.png) | [Q2800597](https://www.wikidata.org/wiki/Q2800597) | An amenity providing temporary protection from harm, typically bad weather in a park or natural area.
+`ship_chandler` | ![ship_chandler](images/sprite/2x/ship_chandler.png) |  | A shop selling supplies and equipment for maintaining ships.
+`shipyard` | ![shipyard](images/sprite/2x/shipyard.png) |  | An industrial landuse area for building ships.
+`shoemaker` | ![shoemaker](images/sprite/2x/shoemaker.png) | [Q6408486](https://www.wikidata.org/wiki/Q6408486) | A craftsperson specializing in the making and sale of custom footwear.
+`shoes` | ![shoes](images/sprite/2x/shoes.png) | [Q22676](https://www.wikidata.org/wiki/Q22676) | A shop selling manufactured footwear.
+`shop` | ![shop](images/sprite/2x/shop.png) | [Q736272](https://www.wikidata.org/wiki/Q736272) | A shop selling services or products, when there is not another more specific category.
+`shower` | ![shower](images/sprite/2x/shower.png) | [Q7863](https://www.wikidata.org/wiki/Q7863) | An amenity for bathing under a spray of water, often at a beach or camp site.
+`sinkhole` | ![sinkhole](images/sprite/2x/sinkhole.png) | [Q188734](https://www.wikidata.org/wiki/Q188734) | A natural depression or hole in the ground caused by some form of collapse.
+`ski` | ![ski](images/sprite/2x/ski.png) | [Q172226](https://www.wikidata.org/wiki/Q172226) | A shop selling supplies for winter sports like skiing, snowboarding, or snowshoeing.
+`ski_rental` | ![ski_rental](images/sprite/2x/ski_rental.png) | [Q1406663](https://www.wikidata.org/wiki/Q1406663) | A shop or other amenity that rents skis for the day or season, often associated with a ski resort.
+`ski_school` | ![ski_school](images/sprite/2x/ski_school.png) | [Q2292514](https://www.wikidata.org/wiki/Q2292514) | An educational amenity offering ski instruction, typically at a ski resort.
+`slaughterhouse` | ![slaughterhouse](images/sprite/2x/slaughterhouse.png) |  | An industrial facility for killing animals and cutting them into pieces of meat.
+`slipway` | ![slipway](images/sprite/2x/slipway.png) | [Q361945](https://www.wikidata.org/wiki/Q361945) | A leisure area on the shore where ships or boats can be moved to and from the water, sometimes called a boat ramp, boat landing, or boat launch.
+`snow_cannon` | ![snow_cannon](images/sprite/2x/snow_cannon.png) | [Q720493](https://www.wikidata.org/wiki/Q720493) | A man-made feature often found at a ski resort for blowing artificial snow onto a slope.
+`snowmobile` | ![snowmobile](images/sprite/2x/snowmobile.png) |  | A shop selling snowmobiles.
+`social_facility` | ![social_facility](images/sprite/2x/social_facility.png) |  | An amenity where people gather for social services like a drug clinic, workshop for the physically disabled, or homeless shelter. With `kind_detail` property.
+`speech_therapist` | ![speech_therapist](images/sprite/2x/speech_therapist.png) |  | A health care office for people with speach impairment or vocal issues.
+`sports` | ![sports](images/sprite/2x/sports.png) |  | A shop selling clothing, balls, and other merchandise used for competitive physical activity.
+`sports_centre` | ![sports_centre](images/sprite/2x/sports_centre.png) | [Q30313989](https://www.wikidata.org/wiki/Q30313989) | A leisure area or fitness facility for active sports like football, baseball, and basketball, sometimes includes a gym, playground, or swimming pool.
+`spring` | ![spring](images/sprite/2x/spring.png) | [Q19304](https://www.wikidata.org/wiki/Q19304) | A natural feature where water flows from an aquifer to the ground's surface.
+`stadium` | ![stadium](images/sprite/2x/stadium.png) | [Q483110](https://www.wikidata.org/wiki/Q483110) | A leisure area or large building for outdoor sports, concerts, or other events, sometimes with a retractable roof.
+`station` | ![station](images/sprite/2x/station.png) |  | A railway station, also used for light rail and subway, where customers access the train. _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+`stationery` | ![stationery](images/sprite/2x/stationery.png) | [Q875696](https://www.wikidata.org/wiki/Q875696) | A shop selling paper, pens, and other office and art supplies.
+`stone` | ![stone](images/sprite/2x/stone.png) | [Q8063](https://www.wikidata.org/wiki/Q8063) | A natural rock that is freestanding and of large size or other notable characteristic.
+`stonemason` | ![stonemason](images/sprite/2x/stonemason.png) | [Q19794820](https://www.wikidata.org/wiki/Q19794820) | A craftsperson who creates buildings, structures, and sculpture using stone from the earth.
+`street_lamp` | ![street_lamp](images/sprite/2x/street_lamp.png) |  | A highway adjacent pole with one or more lights that illuminates the street.
+`stop_area` | ![stop_area](images/sprite/2x/stop_area.png) |  | A grouping of bus or rail stops and platforms at a transit station.
+`studio` | ![studio](images/sprite/2x/studio.png) | [Q746628](https://www.wikidata.org/wiki/Q746628) | An amenity where professional artists creates audio, cinema, photography, radio, TV, video, or other works. When known, the type will be in `kind_detail`, one of: `audio`, `cinema`, `photography`, `radio`, `television`, `video`.
+`substation` | ![substation](images/sprite/2x/substation.png) |  | A power substation that controls the flow of electricity in a power network with transformers, switchgear or compensators.
+`subway_entrance` | ![subway_entrance](images/sprite/2x/subway_entrance.png) |  | A railway or subway entrance where people enter or exit a train station
+`summer_camp` | ![summer_camp](images/sprite/2x/summer_camp.png) | [Q876852](https://www.wikidata.org/wiki/Q876852) | A leisure program for children or teenagers conducted during the summer months, at a facility built solely for that purpose.
+`summer_toboggan` | ![summer_toboggan](images/sprite/2x/summer_toboggan.png) | [Q1477533](https://www.wikidata.org/wiki/Q1477533) | An attraction found in alpine areas with a long slide to chute down on a wheeled toboggan, built by ski resorts to attract summer visitors.
+`supermarket` | ![supermarket](images/sprite/2x/supermarket.png) | [Q180846](https://www.wikidata.org/wiki/Q180846) | A shop selling groceries in a large 'big box' building, including fruits, vegetables, packaged foods, and other household products.
+`swimming_area` | ![swimming_area](images/sprite/2x/swimming_area.png) | [Q47524436](https://www.wikidata.org/wiki/Q47524436) | A leisure area used to swim, typically outdoor and around a body of water.
+`tailor` | ![tailor](images/sprite/2x/tailor.png) | [Q242468](https://www.wikidata.org/wiki/Q242468) | A craftsperson who makes, repairs, or alters clothing, typically men's clothing.
+`tax_advisor` | ![tax_advisor](images/sprite/2x/tax_advisor.png) | [Q688576](https://www.wikidata.org/wiki/Q688576) | An office with financial experts specially trained in tax law.
+`taxi` | ![taxi](images/sprite/2x/taxi.png) | [Q82650](https://www.wikidata.org/wiki/Q82650) | An amenity or stand offering vehicles for hire with a driver.
+`telecommunication` | ![telecommunication](images/sprite/2x/telecommunication.png) | [Q418](https://www.wikidata.org/wiki/Q418) | An office for staff of a company specialized in the electronic transmission of information between locations.
+`telephone` | ![telephone](images/sprite/2x/telephone.png) | [Q11035](https://www.wikidata.org/wiki/Q11035) | A amenity for making phone calls, usually at a streetside stand or box.
+`telescope` | ![telescope](images/sprite/2x/telescope.png) | [Q4213](https://www.wikidata.org/wiki/Q4213) | A man-made structure built to observe remote celestial objects, often at an observatory.
+`theatre` | ![theatre](images/sprite/2x/theatre.png) | [Q11635](https://www.wikidata.org/wiki/Q11635) | An amenity focused on the collaborative form of performing and fine arts.
+`theme_park` | ![theme_park](images/sprite/2x/theme_park.png) | [Q194195](https://www.wikidata.org/wiki/Q194195) | A tourism amenity with rides and attractions.
+`therapist` | ![therapist](images/sprite/2x/therapist.png) | [Q179661](https://www.wikidata.org/wiki/Q179661) | A medical office focused on remediation of health problems, usually following a diagnosis.
+`tobacco` | ![tobacco](images/sprite/2x/tobacco.png) | [Q1566](https://www.wikidata.org/wiki/Q1566) | A shop selling cigarettes, cigars, and other tobacco products containing nicotine.
+`toilets` | ![toilets](images/sprite/2x/toilets.png) | [Q7857](https://www.wikidata.org/wiki/Q7857) | An amenity for public sanitation like a flush toilet or pit latrine. With `kind_detail` property.
+`toll_booth` | ![toll_booth](images/sprite/2x/toll_booth.png) | [Q7814355](https://www.wikidata.org/wiki/Q7814355) | A barrier for collecting tolls or fees to access roads, sometimes staffed.
+`townhall` | ![townhall](images/sprite/2x/townhall.png) | [Q7830117](https://www.wikidata.org/wiki/Q7830117) | An amenity used for the administration of local government that also hosts public meetings.
+`toys` | ![toys](images/sprite/2x/toys.png) | [Q11422](https://www.wikidata.org/wiki/Q11422) | A shop selling amusements for children and toddlers.
+`trade` | ![trade](images/sprite/2x/trade.png) | [Q601401](https://www.wikidata.org/wiki/Q601401) | A speciality shop selling construction materials, craft and industrial supplies, often open to the general public.
+`traffic_signals` | ![traffic_signals](images/sprite/2x/traffic_signals.png) |  | A highway fixture at a road intersection or pedestrian crossing to control traffic flow. Sometimes called traffic lights, traffic lamps, signal lights and stop lights.
+`trail_riding_station` | ![trail_riding_station](images/sprite/2x/trail_riding_station.png) |  | A tourism amenity providing temporary accommodation for horses and their riders.
+`trailhead` | ![trailhead](images/sprite/2x/trailhead.png) | [Q7832815](https://www.wikidata.org/wiki/Q7832815) | A pedestrian highway feature indicating where a trail begins, often with a signpost.
+`tram_stop` | ![tram_stop](images/sprite/2x/tram_stop.png) |  | A railway stop for trams where passengers board and alight, often without a platform.
+`travel_agency` | ![travel_agency](images/sprite/2x/travel_agency.png) | [Q217107](https://www.wikidata.org/wiki/Q217107) | A shop that provides tourism-related services to the public to reserve flights, hotels, and book events.
+`travel_agent` | ![travel_agent](images/sprite/2x/travel_agent.png) | [Q217107](https://www.wikidata.org/wiki/Q217107) | An office that provides tourism-related services to the public for booking flights, hotels, and events.
+`tree` | ![tree](images/sprite/2x/tree.png) | [Q10884](https://www.wikidata.org/wiki/Q10884) | A natural, perennial woody plant, usually with a single trunk or stem.
+`turning_circle` | ![turning_circle](images/sprite/2x/turning_circle.png) |  | A highway "cul-de-sac" at the end of a road that is wide enough for vehicles to turn around.
+`turning_loop` | ![turning_loop](images/sprite/2x/turning_loop.png) |  | A highway "cul-de-sac" at the end of a road that is wide enough for vehicles to turn around non-traversable island.
+`tyres` | ![tyres](images/sprite/2x/tyres.png) | [Q169545](https://www.wikidata.org/wiki/Q169545) | A shop selling automotive tires for cars and trucks.
+`university` | ![university](images/sprite/2x/university.png) | [Q3918](https://www.wikidata.org/wiki/Q3918) | An amenity for higher education and studies.
+`variety_store` | ![variety_store](images/sprite/2x/variety_store.png) | [Q2301114](https://www.wikidata.org/wiki/Q2301114) | A shop selling a wide range of inexpensive household goods.
+`veterinary` | ![veterinary](images/sprite/2x/veterinary.png) | [Q170201](https://www.wikidata.org/wiki/Q170201) | An amenity offering animal welfare and medical services. With `kind_detail` property.
+`viewpoint` | ![viewpoint](images/sprite/2x/viewpoint.png) | [Q17000190](https://www.wikidata.org/wiki/Q17000190) | A tourism attraction with an elevated or unique perspective, often offering a nice view.
+`volcano` | ![volcano](images/sprite/2x/volcano.png) | [Q8072](https://www.wikidata.org/wiki/Q8072) | A natural mountain with a vent or fissure that occasionally disperses lava, rock fragments, or toxic gases, with optional elevation (in meters).
+`walking_junction` | ![walking_junction](images/sprite/2x/walking_junction.png) |  | A place where two walking paths intersect along an international, national, regional, or local trail network. Common in Europe for signed walking routes with named junctions. The walking network reference point's `ref` value is derived from one of `iwn_ref`, `nwn_ref`, `rwn_ref` or `lwn_ref`, in descending order and is suitable for naming or use in a shield.
+`waste_basket` | ![waste_basket](images/sprite/2x/waste_basket.png) | [Q216530](https://www.wikidata.org/wiki/Q216530) | An amenity for depositing trash, usually in small bins along the street. Sometimes called a rubbish bin, litter bin, trash can, or garbage can.
+`waste_disposal` | ![waste_disposal](images/sprite/2x/waste_disposal.png) | [Q180388](https://www.wikidata.org/wiki/Q180388) | An amenity for collecting solid household or industrial trash, usually in medium and large waste bins behind buildings.
+`wastewater_plant` | ![wastewater_plant](images/sprite/2x/wastewater_plant.png) | [Q1058719](https://www.wikidata.org/wiki/Q1058719) | A man-made facility that collects sewage and other dirty water and cleans it for release back into the environment.
+`water_park` | ![water_park](images/sprite/2x/water_park.png) | [Q740326](https://www.wikidata.org/wiki/Q740326) | A leisure amenity with water slides, pools, and other play areas.
+`water_point` | ![water_point](images/sprite/2x/water_point.png) |  | An amenity supplying larger amounts of drinking water for filling holding tanks of caravans, RVs and boats. Often found at camp sites, caravan sites, and marinas.
+`water_slide` | ![water_slide](images/sprite/2x/water_slide.png) | [Q1163166](https://www.wikidata.org/wiki/Q1163166) | An attraction for sliding down an open or closed tub with running water, often at a water park.
+`water_tower` | ![water_tower](images/sprite/2x/water_tower.png) | [Q274153](https://www.wikidata.org/wiki/Q274153) | A man-man structure that supports an elevated water tank part of a local water pipe network.
+`water_well` | ![water_well](images/sprite/2x/water_well.png) | [Q43483](https://www.wikidata.org/wiki/Q43483) | A man-made excavation or pump to access groundwater, often for drinking water and sometimes powered. With `kind_detail` property.
+`water_works` | ![water_works](images/sprite/2x/water_works.png) | [Q7974580](https://www.wikidata.org/wiki/Q7974580) | A man-made facility that cleans water for human consumption and distribution via local water pipe networks.
+`waterfall` | ![waterfall](images/sprite/2x/waterfall.png) | [Q34038](https://www.wikidata.org/wiki/Q34038) | A natural waterway feature that flows over an abrupt vertical drop, sometimes with a height (in meters).
+`watering_place` | ![watering_place](images/sprite/2x/watering_place.png) | [Q7974154](https://www.wikidata.org/wiki/Q7974154) | An amenity where animals can drink water, either natural or man-made.
+`watermill` | ![watermill](images/sprite/2x/watermill.png) |  | A man-made structure harnessing water power to do mechanical work. Note that this is different from a modern structure to generate electric power from water, which would be a `generator`. Abandoned or disused features are not shown unless they are attractions, landmarks or other kinds.
+`waterway_fuel` | ![waterway_fuel](images/sprite/2x/waterway_fuel.png) |  | A waterway amenity selling fuel for boats.
+`wayside_cross` | ![wayside_cross](images/sprite/2x/wayside_cross.png) |  | A historic structure shaped like a cross with religious significance.
+`wetland` | ![wetland](images/sprite/2x/wetland.png) |  | A natural area of shallow standing water with plants and frequented by fish and birds. With `kind_detail` property.
+`wharf` | ![wharf](images/sprite/2x/wharf.png) |  | A man-made area for mooring a boat built out from the shore into the water, sometimes named. If available, with `mooring` property.
+`wilderness_hut` | ![wilderness_hut](images/sprite/2x/wilderness_hut.png) | [Q17087359](https://www.wikidata.org/wiki/Q17087359) | A tourist shelter or hut for temporary accommodation, typically in a natural setting or outside built-up areas.
+`wildlife_park` | ![wildlife_park](images/sprite/2x/wildlife_park.png) | [Q642682](https://www.wikidata.org/wiki/Q642682) | A zoo with larger outdoor enclosures, often that allow animals to roam in a simulated natural environment that also allows visitors to drive-thru.
+`windmill` | ![windmill](images/sprite/2x/windmill.png) | [Q38720](https://www.wikidata.org/wiki/Q38720) | A man-made machine that converts the energy of wind into rotational energy.
+`wine` | ![wine](images/sprite/2x/wine.png) | [Q282](https://www.wikidata.org/wiki/Q282) | A shop selling alcoholic drinks typically made from grapes.
+`winery` | ![winery](images/sprite/2x/winery.png) | [Q156362](https://www.wikidata.org/wiki/Q156362) | A craft facility that turns grapes into wine, often with a public tasting room. _See planned bug fix in [#532](https://github.com/tilezen/vector-datasource/issues/532)._
+`winter_sports` | ![winter_sports](images/sprite/2x/winter_sports.png) | [Q204686](https://www.wikidata.org/wiki/Q204686) | A landuse area for snow and ice sports like skiing, skating, snowboarding, and snowshoeing.
+`wood` | ![wood](images/sprite/2x/wood.png) | [Q287](https://www.wikidata.org/wiki/Q287) | A landuse area covered by trees, usually smaller than a forest.
+`works` | ![works](images/sprite/2x/works.png) | [Q420817](https://www.wikidata.org/wiki/Q420817) | A man-made industrial production plant or factory that produces manufactured goods.
+`zoo` | ![zoo](images/sprite/2x/zoo.png) | [Q43501](https://www.wikidata.org/wiki/Q43501) | A tourist attraction with wild animals kept for study, conservation, educational and/or commercial exhibition.
 
 #### Beach `kind_detail` values:
 
@@ -1384,6 +1452,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_networks` and `all_shield_texts`: All the networks of which this road is a part, and all of the shield texts. See `network` and `shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `network`: eg: `US:I` for the United States Interstate network, useful for shields and road selections. This only contains _road_ network types. Please see `bicycle_network` and `walking_network` for bicycle and walking networks, respectively. Note that networks may include "modifier" information, for example `US:I:Business` for a business route or `US:I:Truck` for a truck route. The whitelist of "modifier" values is; `Alternate`, `Business`, `Bypass`, `Connector`, `Historic`, `Scenic`, `Spur`, `Toll` and `Truck`.
 * `shield_text`: Contains text to display on a shield. For example, I 90 would have a `network` of `US:I` and a `shield_text` of `90`. The `ref`, `I 90`, is less useful for shield display without further processing. For some roads, this can include non-numeric characters, for example the M1 motorway in the UK will have a `shield_text` of `M1`, rather than just `1`. Whitepsace, punctuation, and prefixes are generally stripped.
+* `shield_text_length`: The length of the `shield_text` field as a string.  E.g. if `shield_text` is `'12345'`, `shield_text_length` would be `'5'`. Missing if `shield_text` is !(0 < length < 7) or field doesn't exist
 
 #### Road properties (common optional):
 
@@ -1409,12 +1478,15 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `all_walking_networks` and `all_walking_shield_texts`: All of the walking networks of which this road is a part, and each corresponding shield text. See `walking_network` and `walking_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `walking_network`: e.g: `nwn` for a "National Walking Network". Other common values include `iwn` for international, `rwn` for regional and `lwn` for local walking networks.
 * `walking_shield_text`: Contains text intended to be displayed on a shield related to the walking network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `walking_shield_text_length`: The length of the `walking_shield_text` field as a string.  E.g. if `walking_shield_text` is `'12345'`, `walking_shield_text_length` would be `'5'`.  Missing if `walking_shield_text` is !(0 < length < 7) or field doesn't exist
 * `all_bicycle_networks` and `all_bicycle_shield_texts`: All of the bicycle networks of which this road is a part, and each corresponding shield text. See `bicycle_network` and `bicycle_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bicycle_network`: Present if the feature is part of a cycling network. If so, the value will be one of `icn` for International Cycling Network, `ncn` for National Cycling Network, `rcn` for Regional Cycling Network, `lcn` for Local Cycling Network.
 * `bicycle_shield_text`: Contains text intended to be displayed on a shield related to the bicycle network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `bicycle_shield_text_length`: The length of the `bicycle_shield_text` field as a string.  E.g. if `bicycle_shield_text` is `'12345'`, `bicycle_shield_text_length` would be `'5'`.  Missing if `bicycle_shield_text` is !(0 < length < 7) or field doesn't exist
 * `all_bus_networks` and `all_bus_shield_texts`: All of the bus and trolley-bus routes of which this road is a part, and each corresponding shield text. See `bus_network` and `bus_shield_text` below. **Note** that these properties will not be present on MVT format tiles, as we cannot currently encode lists as values.
 * `bus_network`: Note that this is often not present for bus routes / networks. This may be replaced with `operator` in the future, see [issue 1194](https://github.com/tilezen/vector-datasource/issues/1194).
 * `bus_shield_text`: Contains text intended to be displayed on a shield related to the bus or trolley-bus network. This is the value from the `ref` tag and is _not_ guaranteed to be numeric, or even concise.
+* `bus_shield_text_length`: The length of the `bus_shield_text` field as a string.  E.g. if `bus_shield_text` is `'12345'`, `bus_shield_text_length` would be `'5'`. Missing if `bus_shield_text` is !(0 < length < 7) or field doesn't exist
 * `surface`: Common values include `asphalt`, `unpaved`, `paved`, `ground`, `gravel`, `dirt`, `concrete`, `grass`, `paving_stones`, `compacted`, `sand`, and `cobblestone`. `cobblestone:flattened`, `concrete:plates` and `concrete:lanes` values are transformed to `cobblestone_flattened`, `concrete_plates` and `concrete_lanes` respectively. These values are simplified at lower zooms, see the section "Roads surface values simplification" for more details.
 
 #### Road properties (optional):
@@ -1430,7 +1502,9 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 * `embankment`: If the road or railway is on an embankment the value will be one of `yes`, `left` or `right` depending on whether the embankment is on both sides, the left side or the right side, respectively.
 * `hgv`: optional property indicating general truck heavy goods vehicle truck access. See below for list of values.
 * `hgv_restriction`: optional property indicating limitations to heavy goods vehicle truck access. See below for list of values. Available on both point and line geometries. See also `hgv_restriction_shield_text`.
+* `hgv_time_restrictions` - optional property specifying when heavy goods vehicle truck access is restricted. See the `hgv_time_restrictions` values list below.
 * `hgv_restriction_shield_text`: optional and paired with `hgv_restriction` points with values like `5.1m`. Because the units are different per restriction an abbreviation should be provided. Values in meters can be specified with one decimal precision but value of 5.0m should be given as 5m.
+* `hgv_restriction_shield_text_length`: optional.  Returns length of `hgv_restriction_shield_text` as a string.  Missing if `hgv_restriction_shield_text` is !(0 < length < 7) or field doesn't exist
 * `motor_vehicle`: OpenStreetMap features
 * `operator`: OpenStreetMap features
 * `piste_difficulty`: ski pistes from OpenStreetMap
@@ -1467,7 +1541,7 @@ To improve performance, some road segments are merged at low and mid-zooms. To f
 
 **Roads** from **Natural Earth**  are used at low zooms below 8. Road `kind_detail` values are limited to `motorway`, `trunk`, `primary`, `secondary`, `tertiary`.
 
-**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary`, `unclassified`, and paved grade1 `track` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `residential`, `road`, and grade1 and grade2 `track`. Zoom 13 adds `primary_link`, `secondary_link`, `raceway`, remaining `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway`. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, `corridor`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`. Internationally and nationally significant paths (`path`, `footway`, `steps`) are added at zoom 9, regionally significant paths are added at zoom 11, locally significant at zoom 12, and named or designated paths at zoom 13. Internationally and nationally significant bicycle routes are added at zoom 8, regionally significant bike routes at zoom 10, and locally significant at zoom 11.
+**Roads** from **OpenStreetMap** are shown starting at zoom 8 with `motorway`, `trunk`, `primary`. `secondary` are added starting at zoom 10, with `motorway_link`, `tertiary`, and paved grade1 `track` added at zoom 11. Zoom 12 sees addition of `trunk_link`, `unclassified`, `residential`, `road`, and grade1 and grade2 `track`. Zoom 13 adds `primary_link`, `secondary_link`, `raceway`, remaining `track`, `pedestrian`, `living_street`, `cycleway` and `bridleway`. Zoom 14 adds `tertiary_link`, all remaining `path`, `footway`, and `steps`, `corridor`, and `alley` service roads. By zoom 15 all remaining service roads are added, including `driveway`, `parking_aisle`, `drive_through`. Internationally and nationally significant paths (`path`, `footway`, `steps`) are added at zoom 9, regionally significant paths are added at zoom 11, locally significant at zoom 12, and named or designated paths at zoom 13. Internationally and nationally significant bicycle routes are added at zoom 8, regionally significant bike routes at zoom 10, and locally significant at zoom 11.
 
 **Ferries** from both Natural Earth and OpenStreetMap are shown starting at zoom 5 with `kind` values of `ferry`.
 
@@ -1518,7 +1592,39 @@ The `hgv` property indicates general truck heavy goods vehicle truck access, val
 
 **Roads `hgv_restriction` values:**
 
-For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values (units vary) include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle length, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `other` and `multiple` if more than one.
+For `hgv_restriction` property indicates general truck heavy goods vehicle truck access restrictions, values (units vary) include: `weight` (metric tonnes), `height` (metres), `length` (metres), `width` (metres), `wpa` (weight per axle, in metric tonnes), `kpra` (king pin to rear axle length, in metric tonnes), `hazmat` (true if restricted, otherwise omitted), `axles` (number of axles), `other` and `multiple` if more than one.
+
+#### Road Transportation `hgv_time_restrictions` Values
+Property specifies date and time period during which the condition applies. Value is a string in the Time Domain format. Time Domain is part of the GDF(Geographic Data Files) specification which is an ISO standard. Current standard is GDF 5.1 which is ISO 20524-1:2020.
+
+A basic Time Domain is the combination of a Starting Date and a Time Duration with the following notation: `[(Starting Date) {Time duration}]`. For example, `[(M5d1){d1}]` means: Starting Date: any year, month 5 (May), day 1st, at 0:00 a.m. Duration: 1 complete day (i.e., 24 hours or 1440 minutes).
+
+Starting Dates and time intervals are defined by means of a set of graphical symbols allowing the description of years, months, weeks, days, and so on down to the smallest time unit, which is the second. The symbols have to be organized in a sequential order starting with the longest time unit. Attached to a starting date, the interval constitutes a basic Time Domain. Without a starting date, it just indicates a duration. If the very first time type code in duration section is preceded by a minus sign, it means that the duration is counted in the reverse order. The following list describes starting date and time interval unit types:
+
+* `ynn` - Year. Defines either a particular nnnn year in a starting date; or a duration of nn years. For example, `[(y1991M11d14h5m30s19){y1}]` means from 14 November 1991, 5:30:19 a.m. to 14 November 1992, 5:30:19 a.m. If there is no identical calendar date in the year in question, which occurs only for 29 February, “plus 1 year” leads to 28 February of the following year. Notice that `{y1}` = `{M12}`
+* `Mnn` - Month. Defines either a particular month (1 to 12) within a particular year, or any year when no `y` information is given in starting date; or a duration of nn months. For example, `[(y1991M11d14h5m30s19) {M3}]` means from 14 November 1991, 5:31:19 a.m. to 14 February 1992, 5:30:19 a.m.
+* `wnn` - Week. Defines either a week (1 to 53) within a previously defined year, or any year when no `y` information is given in a starting date; or a duration of nn weeks, i.e., nn*7 days. For example, `[(y1991M11d14h5m30s19) {w2}]` means from 14 November 1991 at 5:30:19 a.m. to 28 November 1991, 5:30:19 a.m. Notice that `{w1}` = `{d7}`
+* `dnn` - Day. Defines either a particular day (1 to 28, 29, 30, 31) within a particular month if previously defined with the `M` format in a starting date; or a duration of nn days, i.e., nn*24 hours. For example, `[(y1991M11d14h5m30s19) {d2}]` means from 14 November 1991 at 5:30:19 a.m. to 16 November 1991, 5:30:19 a.m. Notice that `{d1}` = `{h24}`
+* `tn` - Day. Only in starting date defines a particular weekday (`1`:Sunday, `2`:Monday, `3`:Tuesday, `4`:Wednesday, `5`:Thursday, `6`:Friday, `7`:Saturday) in a previously (if any) defined week. For example, `(M5t2)` means each Monday in the fifth month (May) of any year, at 0:00:00 a.m.
+* `fxn` - Day. Only in starting date defines a particular weekday in a previously (if any) defined month, with the following rules: n is used as in the “t” format with the same domain of values, `1`:Sunday up to `7`:Saturday. For “x” one of the following values has to be substituted: `1`:first, `2`:second, `3`:third, `4`:fourth, `5`:fifth. For example: `(...f12)` means the first Monday at 0:00:00 a.m.
+* `lxn` - Day. Only in starting date defines a particular weekday in a previously (if any) defined month, with the following rules: n is used as for the “t” format with the same domain of values, `1`:Sunday up to `7`:Saturday. x has to be chosen from the following set: `1`:first, `2`:second, `3`:third, `4`:fourth, `5`:fifth. Values are given in reverse order starting from the end of the month and have the meaning: `1`=last, `2`=last but one, `3`= last but two, etc. For example, `(...l12)` means the last Monday at 0:00:00 a.m.
+* `hnn` - Hour. Defines either a particular hour (0 to 23) within a particular day (if previously defined) in a starting date; or a duration of nn hours, i.e., nn*60 minutes. For example, `[(y1991M11d14h5m30s19) {h10}]` means from 14 November 1991, 5:30:19 a.m. to 14 November 1991 at 3:30:19 p.m. Notice that `{h1}` = `{m60}`
+* `mnn` - Minute. Defines either a particular minute (0 to 59) within a particular hour (if previously defined) in a starting date; or a duration of nn minutes, i.e., nn*60 seconds. For example, `[(y1991M11d14h5m30s19) {m11}]` means from 14 November 1991 at 5:30:19 a.m. to 14 November 1991 at 5:41:19 a.m. Notice that `{m1}` = `{s60}`
+* `snn` - Second. Defines either a particular second (0 to 59) within a particular minute (if previously defined) in a starting date; or a duration of nn seconds. For example, `[(y1991M11d14h5m30s19) {s21}]` means from 14 November 1991 at 5:30:19 a.m. to 14 November 1991 at 5:30:40 a.m. Notice that `{m1}` = `{s60}`
+* `znn` - Fuzzy symbols for special time terms. Currently only 2 variants are used: `[(z1){z51}]` means dawn til dusk (nighttime) and `[(z2){z52}]` means dusk til dawn (daytime). May be extended in future
+* `string_value` - Externally specified string value. For example `[*EASTER(h8){h14}]` means from 8:00 am to 10:00 pm during Easter
+
+Starting Dates which are composed of several time units (e.g., 14 November 1991) are defined by placing the symbols sequentially in a hierarchical order.
+
+Time periods (duration) which are composed of several time interval units are represented by listing the individual symbols sequentially in hierarchical order. The total time duration of a particular combination of symbols is the sum of all single time intervals. For example, `{y2M1w2}` means a period of 2 years, 1 month, and 2 weeks. Since Time Domains can be considered as a set of the smallest time unit described here, the second, Time Domains may also be combined with set operations, such as:
+
+* Union of sets notation: `+`
+* Intersection of sets notation: `*`
+* Subtraction of sets notation: `-`
+
+All the Time Domain strings are stored in prefix form: it uses the polish/prefix operator notation and omit brackets made redundant by this. For example:
+`[[(d1){w1}]-[(d3){d1}]]` has prefix form `-(d1){w1}(d3){d1}`
+`[[(d1){w1}]*[(d3){-w1}]]` has prefix form `*(d1){w1}(d3){-w1}`
 
 
 #### Roads layer network values
@@ -1599,7 +1705,7 @@ Network value include:
 * `CA:NT`
 * `CA:ON:primary`
 * `CA:ON:secondary`
-* `CA:PEI`
+* `CA:PE`
 * `CA:QC:A`
 * `CA:QC:R`
 * `CA:SK:primary`
@@ -2289,12 +2395,13 @@ If the roads layer features include `linear_ref_id`, then traffic flow layer fea
 
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
-* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
-* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind`: [kind of the road](#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
 * `is_hov_lane`: set to `true` when the linear is an HOV (High-Occupancy Vechicle) express lane
+* `network`: 2-character country code and optional region (eg. `DE:BS`) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
 
 ## Traffic Incidents
 
@@ -2343,14 +2450,14 @@ If the roads layer features include `linear_ref_id`, then traffic incidents laye
 
 However, if the roads layer does not include `linear_ref_id`, then it should be delivered with geometry and the following properties to enable sizing and layering of the traffic overlay with respect to the roads network:
 
-* `road_kind`: [kind of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
-* `road_kind_detail`: [kind_detail of the road](https://github.com/tilezen/vector-datasource/blob/master/docs/layers.md#road-properties-common)
+* `road_kind`: [kind of the road](#road-properties-common)
+* `road_kind_detail`: [kind_detail of the road](#road-properties-common)
 * `is_bridge`: set to `true` when the linear is a bridge
 * `is_tunnel`: set to `true` when the linear is a tunnel
 * `is_link`: set to true when the linear is a slip-road
 * `drives_on_left`: set to `true` when the country drives on the left (e.g. in the United Kingdom)
 * `is_hov_lane`: set to `true` when the linear is, or the incident affects, a HOV (High-Occupancy Vechicle) express lane
-
+* `network`: 2-character country code and optional region (eg. `DE:BS`) of the traffic information (See: [Roads Layer Network Values](#roads-layer-network-values))
 
 ## Water
 
@@ -2359,7 +2466,7 @@ However, if the roads layer does not include `linear_ref_id`, then it should be 
 * Layer name: `water`
 * Geometry types: `point`, `line`, and `polygon`
 
-Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+.
+Water `polygons` representing oceans, riverbanks and lakes. Derived from a combination of the `waterway`, `natural`, and `landuse` OpenStreetMap tags. Includes coastline-derived water polygons from [osmdata.openstreetmap.de](https://osmdata.openstreetmap.de) and inland water directly from OpenStreetMap at higher zoom levels 8+, and [Natural Earth](http://naturalearthdata.com) polygons at lower zoom levels (0-7). Water polygons are progressively added based on an area filter until all water is shown at zoom 16+. Covered water is not included.
 
 Also includes water `line` geometries for river and stream centerlines and "label_position" `points` for labeling polygons de-duplicated across tile boundaries. OpenStreetMap sourced waterway lines kinds of `river`, `canal`, and `stream` are included starting at zoom 11 and `ditch`, `drain` (zoom 16+).
 
@@ -2403,12 +2510,24 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 * `swimming_pool` - polygon
 * `water` - polygon
 
+#### Water `kind_detail` values:
+
+When `water` polygons are sourced from OpenStreetMap, we add `kind_detail` values in an allowlist.
+
+* `basin`
+* `canal`
+* `ditch`
+* `drain`
+* `lake` - remap of lake, lagoon, oxbow, pond, reservoir, and wastewater source values
+* `river`
+* `stream`
+
 Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
 
 The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_rank` property that starts from 1 and counts up as the feature gets smaller. Note that the ranking is done on a "metatile", which means that each tile (of size 256px, 512px or other) won't necessarily contain the full range from 1 to N of `kind_tile_rank`s.
 
 **Gotchas:**
 
-* `lake` features with `alkaline: true` and `playa` features are sourced solely from Natural Earth. Zooming in, your feature may disappear (there is no equivalent in OpenStreetMap). Beware the desert around Great Salt Lake in Utah!
-* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984)._
+* `lake` features with `alkaline: true` and `playa` features are sourced from Natural Earth at low zooms and are sparesly populated at high zooms from OpenStreetMap. Zooming in, your feature may disappear (when there is no equivalent in OpenStreetMap), or the feature may still exist as a water or lake polygon but without the alkaline indicator. Beware the desert around Great Salt Lake in Utah!
+* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984). However, kind_detail value is available._
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from osmdata.openstreetmap.de.

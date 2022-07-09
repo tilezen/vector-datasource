@@ -79,7 +79,19 @@ class LanduseTier(FixtureTest):
     def test_national_forest(self):
         # this is USFS, so demoted to tier 2 :-(
         # area 86685400
-        self.load_fixtures(['http://www.openstreetmap.org/way/34416231'])
+        import dsl
+
+        z, x, y = (8, 71, 98)
+
+        self.generate_fixtures(
+            # https://www.openstreetmap.org/way/34416231
+            dsl.way(34416231, dsl.box_area(z, x, y, 39749330), {
+                'boundary': 'national_park', 'district': 'Warm Springs',
+                'landuse': 'forest', 'leisure': 'nature_reserve',
+                'name': 'George Washington National Forest', 'operator': 'US Forest Service',
+                'source': 'openstreetmap.org'
+            })
+        )
 
         self.assert_has_feature(
             8, 71, 98, 'landuse',

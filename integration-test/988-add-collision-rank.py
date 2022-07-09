@@ -343,8 +343,8 @@ class ItemList(object):
                     assert fid not in items
                     items[fid] = rank
 
-        self.test_instance.assertTrue(items, msg="Expected some items, but "
-                                      "received an empty tile.")
+        self.test_instance.assertTrue(items, msg='Expected some items, but '
+                                      'received an empty tile.')
         # note that we only get inside this "if" statement if we're in
         # "download only" mode, as it short-circuits the assertions.
         # otherwise a genuinely empty tile would have triggered the assertion
@@ -358,13 +358,13 @@ class ItemList(object):
         rank = 0
         for item_fid in order:
             self.test_instance.assertTrue(
-                item_fid in items, msg="Item %d missing from items seen in "
+                item_fid in items, msg='Item %d missing from items seen in '
                 "tile (%r), perhaps it wasn't correctly matched?"
                 % (item_fid, items.keys()))
             item_rank = items[item_fid]
             self.test_instance.assertTrue(
-                item_rank > rank, msg="Item ranks lower than previous items "
-                "in the list. (%d <= %d)" % (item_rank, rank))
+                item_rank > rank, msg='Item ranks lower than previous items '
+                'in the list. (%d <= %d)' % (item_rank, rank))
             rank = item_rank
 
 
@@ -455,8 +455,8 @@ class WhereTest(FixtureTest):
                 'kind': 'minor_road',
                 'name': type(None),
                 'shield_text': type(None),
-                'ref': '1',
-                'collision_rank': int,
+                'ref': type(None),
+                'collision_rank': type(None),
             })
 
     def test_road_shield_text(self):

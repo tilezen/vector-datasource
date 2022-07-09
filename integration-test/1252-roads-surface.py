@@ -40,13 +40,13 @@ class RoadsSurface(FixtureTest):
         # first, test at high zoom, where we do not expect the road to be
         # merged, so should still retain its original ID.
         self.load_fixtures(
-            ['http://www.openstreetmap.org/way/58691615',
+            ['http://www.openstreetmap.org/way/847053513',
              'http://www.openstreetmap.org/relation/2599024'],
-            clip=self.tile_bbox(15, 17456, 10780))
+            clip=self.tile_bbox(15, 17454, 10783))
 
         self.assert_has_feature(
-            15, 17456, 10780, 'roads',
-            {'id': 58691615, 'kind_detail': 'track',
+            15, 17454, 10783, 'roads',
+            {'id': 847053513, 'kind_detail': 'track',
              'surface': 'concrete_lanes'})
 
         # check at a bunch of lower zooms, where we're expecting the road to be
@@ -71,4 +71,4 @@ class RoadsSurface(FixtureTest):
                 })
 
             self.assert_has_feature(
-                z, 17456 / coord_scale, 10780 / coord_scale, 'roads', props)
+                z, 17454 / coord_scale, 10783 / coord_scale, 'roads', props)

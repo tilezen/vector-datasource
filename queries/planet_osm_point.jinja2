@@ -8,6 +8,7 @@ SELECT
     'source', 'openstreetmap.org'
   ) AS __properties__,
 
+  {# Since the WHERE clause is a UNION of multiple tables the `CASE WHEN mz_building_min_zoom IS NOT NULL` here is used to conditionally operate the rows from mz_building_min_zoom table #}
   CASE WHEN mz_building_min_zoom IS NOT NULL
     THEN jsonb_build_object(
       'min_zoom', mz_building_min_zoom,
@@ -26,7 +27,11 @@ SELECT
     THEN jsonb_build_object(
       'min_zoom', mz_places_min_zoom
     ) ||
-      tz_get_ne_min_max_zoom(tags->'wikidata')
+      tz_get_ne_min_max_zoom(tags->'wikidata', tags->'place')
+      ||
+      tz_get_ne_pop_min_max(tags->'wikidata')
+      ||
+      tz_get_fclass_and_label_position(tags->'wikidata', tags->'place')
   END AS __places_properties__,
 
   CASE WHEN mz_poi_min_zoom IS NOT NULL
@@ -49,7 +54,6 @@ SELECT
   END AS __water_properties__
 
 FROM (
-
   SELECT
     osm_id,
     way,

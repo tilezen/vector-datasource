@@ -1,15 +1,25 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
-
-from collections import defaultdict, namedtuple
+import csv
+import re
+from collections import defaultdict
+from collections import namedtuple
 from math import ceil
 from numbers import Number
-from shapely.geometry.collection import GeometryCollection
+from sys import float_info
+
+import hanzidentifier
+import kdtree
+import pycountry
+import shapely.errors
+import shapely.ops
+import shapely.wkb
 from shapely.geometry import box as Box
 from shapely.geometry import LinearRing
 from shapely.geometry import LineString
 from shapely.geometry import Point
 from shapely.geometry import Polygon
+from shapely.geometry.collection import GeometryCollection
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipoint import MultiPoint
 from shapely.geometry.multipolygon import MultiPolygon
@@ -18,23 +28,15 @@ from shapely.ops import linemerge
 from shapely.strtree import STRtree
 from sort import pois as sort_pois
 from StreetNames import short_street_name
-from sys import float_info
 from tilequeue.process import _make_valid_if_necessary
 from tilequeue.process import _visible_shape
 from tilequeue.tile import calc_meters_per_pixel_area
 from tilequeue.tile import normalize_geometry_type
 from tilequeue.tile import tolerance_for_zoom
 from tilequeue.transform import calculate_padded_bounds
-from util import to_float
 from util import safe_int
+from util import to_float
 from zope.dottedname.resolve import resolve
-import csv
-import pycountry
-import re
-import shapely.errors
-import shapely.wkb
-import shapely.ops
-import kdtree
 
 
 feet_pattern = re.compile('([+-]?[0-9.]+)\'(?: *([+-]?[0-9.]+)")?')
@@ -125,7 +127,8 @@ def _to_int_degrees(x):
 
     as_int = safe_int(x)
     if as_int is not None:
-        return as_int
+        # always return within range of 0 to 360
+        return as_int % 360
 
     # trim whitespace to simplify further matching
     x = x.strip()
@@ -137,7 +140,8 @@ def _to_int_degrees(x):
         'west':  270, 'W': 270, 'WNW': 292, 'NW': 315, 'NNW': 337
     }
 
-    return cardinals[x]
+    # protect against bad cardinal notations
+    return cardinals.get(x)
 
 
 def _coalesce(properties, *property_names):
@@ -4964,53 +4968,6 @@ def drop_properties_with_prefix(ctx):
             for k in props.keys():
                 if k.startswith(prefix):
                     del props[k]
-
-
-def drop_features_mz_min_pixels(ctx):
-    """
-    Drop all features that have a mz_min_pixels set whose area doesn't
-    meet the threshold.
-    """
-    source_layers = ctx.params.get('source_layers')
-    assert source_layers, 'drop_features_mz_min_pixels: missing source_layers'
-    source_layer_names = set(source_layers)  # set to speed up lookups
-
-    prop_name = ctx.params.get('property')
-    assert prop_name, 'drop_features_mz_min_pixels: missing property'
-
-    meters_per_pixel_area = calc_meters_per_pixel_area(ctx.nominal_zoom)
-
-    feature_layers = ctx.feature_layers
-    for source_layer_name in source_layer_names:
-        for feature_layer in feature_layers:
-            if feature_layer['name'] not in source_layer_names:
-                continue
-
-            features_to_keep = []
-            for feature in feature_layer['features']:
-                shape, props, fid = feature
-                pixel_threshold = props.get(prop_name)
-                if pixel_threshold is None:
-                    features_to_keep.append(feature)
-                    continue
-
-                assert isinstance(pixel_threshold, Number)
-
-                if shape.type not in ('Polygon', 'MultiPolygon'):
-                    features_to_keep.append(feature)
-                    continue
-
-                area_threshold = meters_per_pixel_area * pixel_threshold
-                area = props.get('area')
-                if area is None:
-                    area = shape.area
-                else:
-                    assert isinstance(area, Number)
-
-                if area >= area_threshold:
-                    features_to_keep.append(feature)
-
-            feature_layer['features'] = features_to_keep
 
 
 def _drop_small_inners(poly, area_tolerance):

@@ -83,8 +83,6 @@ class L10nOsmTransformTest(unittest.TestCase):
     def test_osm_convert_lookup(self):
         zh_min_nan = self._call_fut('zh-min-nan')
         self.assertEquals(zh_min_nan, 'zh-min-nan')
-        zh_min_nan = self._call_fut('zh-yue')
-        self.assertEquals(zh_min_nan, 'zh-yue')
 
 
 class L10nWofTransformTest(unittest.TestCase):
@@ -107,13 +105,15 @@ class L10nWofTransformTest(unittest.TestCase):
 
 class TagsNameI18nTest(unittest.TestCase):
 
-    def _call_fut(self, source, name_key, name_val):
+    def _call_fut(self, source, name_tuples):
+        # (str, List[Tuple[str, str]]) -> None
+        # tuple[0] is key tuple[1] is value
         from vectordatasource.transform import tags_name_i18n
         shape = fid = zoom = None
-        name = 'name:%s' % name_key
-        tags = {
-            name: name_val,
-        }
+        tags = {}
+        for nt in name_tuples:
+            name = 'name:%s' % nt[0] if source != 'naturalearthdata.com' else 'name_%s' % nt[0]
+            tags[name] = nt[1]
         props = dict(
             source=source,
             tags=tags,
@@ -122,22 +122,563 @@ class TagsNameI18nTest(unittest.TestCase):
         result = tags_name_i18n(shape, props, fid, zoom)
         return result
 
+    def test_osm_zh(self):
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh', u'旧金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh-Hans'])
+        self.assertEquals(u'旧金山', props[u'name:zh-Hant'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hans(self):
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hans', u'旧金山/三藩市')])
+        self.assertEquals(u'旧金山', props[u'name:zh-Hans'])
+        self.assertEquals(u'旧金山', props[u'name:zh-Hant'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hant(self):
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hant', u'舊金山')])
+        self.assertEquals(u'舊金山', props[u'name:zh-Hans'])
+        self.assertEquals(u'舊金山', props[u'name:zh-Hant'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hans_and_fallback1(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [(u'zh-Hans', u'旧金山'),
+                                            (u'zh', u'旧金山/三藩市/舊金山')])
+        self.assertEquals(u'旧金山', props[u'name:zh-Hans'])
+        self.assertEquals(u'三藩市', props[u'name:zh-Hant'])
+        self.assertFalse(u'name:zh-default' in props)
+
+    def test_osm_zh_hans_and_fallback2(self):
+        """ Test the case when both `name:zh` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', '旧金山'),
+                                            ('zh-Hant', '舊金山'),
+                                            ('zh', '旧金山/三藩市/舊金山')])
+        self.assertEquals('旧金山', props['name:zh-Hans'])
+        self.assertEquals('舊金山', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+    def test_osm_zh_hans_and_fallback3(self):
+        """ Test the case when both `name:zh-Hans`, `name:zh-yue` and `name:Hans` are present """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', '旧金山'),
+                                            ('zh-yue', '三藩市'),
+                                            ('zh', '舊金山')])
+        self.assertEquals('旧金山', props['name:zh-Hans'])
+        self.assertEquals('三藩市', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+    def test_zh_clean(self):
+        """ Test the case when there are leading whitespace or blackslash """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hans', u' \\旧金山 / 三藩市')])
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertEquals(u'旧金山', props['name:zh'])  # for backward compatible we still populate name:zh field
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [('zho_cn_x_preferred',
+                                             u'\\旧金山')])
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertEquals(u'旧金山', props['name:zh'])  # for backward compatible we still populate name:zh field
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zh', u'  旧金山')])
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+    def test_osm_zh_reject(self):
+        """ Test the case when some not-interested `zh` tags such as
+        `name:zh_pinyin` are present and we don't use them
+        """
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh', '美国'),
+                                            ('zh_pinyin', 'Měiguó')])
+        self.assertEquals('美国', props['name:zh-Hans'])
+        self.assertEquals('美国', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hant', '美國'),
+                                            ('zh_pinyin', 'Měiguó')])
+        self.assertEquals('美國', props['name:zh-Hans'])
+        self.assertEquals('美國', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hant', '美國'),
+                                            ('zh_random', 'Měiguó')])
+        self.assertEquals('美國', props['name:zh-Hans'])
+        self.assertEquals('美國', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-Hant', '美國'),
+                                            ('zh-random', 'Měiguó')])
+        self.assertEquals('美國', props['name:zh-Hans'])
+        self.assertEquals('美國', props['name:zh-Hant'])
+        self.assertFalse('name:zh-default' in props)
+
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('zh-pinyin', 'Měiguó')])
+        self.assertFalse('name:zh-default' in props)
+        self.assertFalse('name:zh-Hans' in props)
+        self.assertFalse('name:zh-Hant' in props)
+
     def test_osm_source(self):
-        shape, props, fid = self._call_fut('openstreetmap.org', 'en', 'foo')
+        shape, props, fid = self._call_fut('openstreetmap.org',
+                                           [('en', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
+        self.assertTrue(u'name:zh-Hans' not in props)
+        self.assertTrue(u'name:zh-Hant' not in props)
+        self.assertFalse(u'name:zh-default' in props)
 
     def test_wof_source(self):
         shape, props, fid = self._call_fut('whosonfirst.org',
-                                           'eng_x', 'foo')
+                                           [('eng_x', 'foo')])
         self.assertTrue('name:en' in props)
         self.assertEquals('foo', props['name:en'])
 
+    def test_wof_zh_all(self):
+        """ All variants data are available """
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [(u'zho_cn_x_preferred', u'旧金山'),
+                                            (u'zho_tw_x_preferred', u'舊金山'),
+                                            (u'zho_x_preferred', u'旧金山'),
+                                            (u'zho_x_variant', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'舊金山', props['name:zh-Hant'])
+
+    def test_wof_zh_non_primary(self):
+        """ Non primary data are available """
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [(u'wuu_x_preferred', u'旧金山'),
+                                            (u'zho_x_variant', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'舊金山', props['name:zh-Hant'])
+
+    def test_wof_zh_primary_override(self):
+        """ Both primary and secondary data are available """
+        shape, props, fid = self._call_fut('whosonfirst.org',
+                                           [(u'zho_cn_x_preferred', u'旧金山'),
+                                            (u'zho_x_preferred', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])  # backfilled
+
+    def test_ne_zh(self):
+        """ All variants data are available """
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zh', u'旧金山'),
+                                            (u'zht', u'舊金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'舊金山', props['name:zh-Hant'])
+
+    def test_ne_zh_fallback(self):
+        """ Either Simplified or Traditional Chinese variant is available  """
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zh', u'旧金山'),
+                                            ],)
+        self.assertEquals(u'旧金山', props['name:zh-Hans'])
+        self.assertEquals(u'旧金山', props['name:zh-Hant'])
+
+        shape, props, fid = self._call_fut('naturalearthdata.com',
+                                           [(u'zht', u'舊金山'),
+                                            ], )
+        self.assertEquals(u'舊金山', props['name:zh-Hans'])
+        self.assertEquals(u'舊金山', props['name:zh-Hant'])
+
+    def test_zh_empty_none(self):
+        """ Test Chinese field are empty or None """
+        for v in [None, u'', u' ', u'\t', u'\n']:
+            _, props, _ = self._call_fut('naturalearthdata.com',
+                                         [(u'zh', v)], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('naturalearthdata.com',
+                                         [(u'zht', v)], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('whosonfirst.org',
+                                         [(u'zho_x_preferred', v),
+                                          ], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('whosonfirst.org',
+                                         [(u'zho_cn_x_preferred', v),
+                                          ], )
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('openstreetmap.org',
+                                         [('zh-Hant', v)])
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('openstreetmap.org',
+                                         [('zh-Hans', v)])
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+            _, props, _ = self._call_fut('openstreetmap.org',
+                                         [('zh', v)])
+            self.assertFalse(u'name:zh-Hans' in props)
+            self.assertFalse(u'name:zh-Hant' in props)
+            self.assertFalse(u'name:zh' in props)
+
+    def test_no_zh_filed(self):
+        """ Test the source doesn't have zh field at all """
+
+        _, props, _ = self._call_fut('naturalearthdata.com', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('naturalearthdata.com', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('whosonfirst.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('whosonfirst.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('openstreetmap.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('openstreetmap.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
+        _, props, _ = self._call_fut('openstreetmap.org', [('short', 'foo')])
+        self.assertFalse(u'name:zh-Hans' in props)
+        self.assertFalse(u'name:zh-Hant' in props)
+        self.assertFalse(u'name:zh' in props)
+
     def test_short_name(self):
         shape, props, fid = self._call_fut(
-            'openstreetmap.org', 'short', 'foo')
+            'openstreetmap.org', [('short', 'foo')])
         self.assertTrue('name:short' in props)
+        self.assertFalse('name:zh' in props)
+        self.assertFalse('name:zh-Hans' in props)
+        self.assertFalse('name:zh-Hant' in props)
         self.assertEquals('foo', props['name:short'])
+
+
+class KeepNGriddedTest(unittest.TestCase):
+    longMessage = True
+
+    def test_not_points(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Polygon(
+            [(1, 1), (2, 2), (1, 2), (1, 1)])
+        test_shape_2 = shapely.geometry.Polygon(
+            [(10, 10), (20, 20), (10, 20), (10, 10)])
+        features = [
+            (test_shape_1, {'foo': 'bar'}, 'test_shape_1'),
+            (test_shape_2, {'foo': 'bar'}, 'test_shape_2'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=1,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'foo'},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEquals(features, output_features, 'Non-point features should pass through without modification')
+
+    def test_points_keep_1(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.1, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.1, 1.0))
+        features = [
+            (test_shape_1, {'foo': 'bar'}, 'test_shape_1'),
+            (test_shape_2, {'foo': 'bar'}, 'test_shape_2'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=1,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'foo'},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(1, len(output_features), 'Should consolidate to a single point in the bucket')
+        self.assertEqual('test_shape_1', output_features[0][2], 'All values equal, should pick first one')
+
+    def test_points_keep_1_multisort_second(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.1, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.1, 1.0))
+        features = [
+            (test_shape_2, {'foo': 'bar', 'min_zoom': 12.0, 'population': 20000}, 'test_shape_2'),
+            (test_shape_1, {'foo': 'bar', 'min_zoom': 12.0, 'population': 10000}, 'test_shape_1'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=1,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'min_zoom'},
+                    {'sort_key': 'population', 'reverse': True},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(1, len(output_features), 'Should consolidate to a single point in the bucket')
+        self.assertEqual('test_shape_2', output_features[0][2], 'Should pick the shape with higher population')
+
+    def test_points_keep_1_multisort_minzoom(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.1, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.1, 1.0))
+        features = [
+            (test_shape_2, {'foo': 'bar', 'min_zoom': 12.0, 'population': 20000}, 'test_shape_2'),
+            (test_shape_1, {'foo': 'bar', 'min_zoom': 10.0, 'population': 10000}, 'test_shape_1'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=1,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'min_zoom'},
+                    {'sort_key': 'population', 'reverse': True},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(1, len(output_features), 'Should consolidate to a single point in the bucket')
+        self.assertEqual('test_shape_1', output_features[0][2], 'Should pick the shape with lower min_zoom')
+
+    def test_points_keep_1_different_buckets(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.0, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.0, 1.0))
+        test_shape_3 = shapely.geometry.Point((75.0, 75.0))
+        test_shape_4 = shapely.geometry.Point((25.0, 75.0))
+        features = [
+            (test_shape_1, {'foo': 'bar', 'population': 1000}, 'test_shape_1'),
+            (test_shape_2, {'foo': 'bar', 'population': 2000}, 'test_shape_2'),
+            (test_shape_3, {'foo': 'bar', 'population': 3000}, 'test_shape_3'),
+            (test_shape_4, {'foo': 'bar', 'population': 4000}, 'test_shape_4'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=1,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'population', 'reverse': True},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(3, len(output_features), 'Should consolidate to 3 points')
+        self.assertEqual('test_shape_4', output_features[0][2])
+        self.assertEqual('test_shape_2', output_features[1][2])
+        self.assertEqual('test_shape_3', output_features[2][2])
+
+    def test_points_keep_more_than_in_one_bucket(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.0, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.0, 1.0))
+        test_shape_3 = shapely.geometry.Point((75.0, 75.0))
+        test_shape_4 = shapely.geometry.Point((25.0, 75.0))
+        features = [
+            (test_shape_1, {'foo': 'bar', 'population': 1000}, 'test_shape_1'),
+            (test_shape_2, {'foo': 'bar', 'population': 2000}, 'test_shape_2'),
+            (test_shape_3, {'foo': 'bar', 'population': 3000}, 'test_shape_3'),
+            (test_shape_4, {'foo': 'bar', 'population': 4000}, 'test_shape_4'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=5,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'min_zoom', 'reverse': True},
+                    {'sort_key': 'population'},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        layer = keep_n_features_gridded(ctx)
+        output_features = layer['features']
+        self.assertEqual(4, len(output_features), "Should not consolidate because we're keeping top 5")
+        self.assertEqual('test_shape_4', output_features[0][2])
+        self.assertEqual('test_shape_1', output_features[1][2])
+        self.assertEqual('test_shape_2', output_features[2][2])
+        self.assertEqual('test_shape_3', output_features[3][2])
+
+    def test_fail_on_non_integer_reverse_sort_key(self):
+        from tilequeue.process import Context
+        import shapely.geometry
+
+        test_shape_1 = shapely.geometry.Point((1.0, 1.0))
+        test_shape_2 = shapely.geometry.Point((1.0, 1.0))
+        features = [
+            (test_shape_1, {'foo': 'bar', 'population': 1000}, 'test_shape_1'),
+            (test_shape_2, {'foo': 'bar', 'population': 'error'}, 'test_shape_2'),
+        ]
+        feature_layer = dict(
+            features=features,
+            layer_datum=dict(name='test_layer'),
+        )
+        feature_layers = [feature_layer]
+        bounds = (0, 0, 100, 100)
+        ctx = Context(
+            feature_layers=feature_layers,
+            nominal_zoom=0,
+            unpadded_bounds=bounds,
+            params=dict(
+                source_layer='test_layer',
+                items_matching=dict(foo='bar'),
+                max_items=5,
+                grid_width_meters=50,
+                sorting_keys=[
+                    {'sort_key': 'population', 'reverse': True},
+                ],
+            ),
+            resources=None,
+            log=None,
+        )
+        from vectordatasource.transform import keep_n_features_gridded
+        with self.assertRaises(ValueError):
+            keep_n_features_gridded(ctx)
+            self.fail('Should raise an exception when reverse-sorting a non-numeric property')
 
 
 class TagsPriorityI18nTest(unittest.TestCase):
@@ -205,62 +746,6 @@ class TagsPriorityI18nTest(unittest.TestCase):
         self.assertFalse('name:en_CT' in props)
 
 
-class DropFeaturesMinPixelsTest(unittest.TestCase):
-
-    def _make_feature_layers(self, pixel_threshold, shape):
-        props = dict(mz_min_pixels=pixel_threshold)
-        fid = None
-        feature = shape, props, fid
-        features = [feature]
-        feature_layers = [dict(name='layer-name', features=features)]
-        return feature_layers
-
-    def _call_fut(self, feature_layers, zoom):
-        from tilequeue.process import Context
-        from vectordatasource.transform import drop_features_mz_min_pixels
-        params = dict(property='mz_min_pixels', source_layers=('layer-name',))
-        ctx = Context(
-            feature_layers=feature_layers,
-            nominal_zoom=zoom,
-            params=params,
-            unpadded_bounds=None,
-            resources=None,
-            log=None,
-        )
-        result = drop_features_mz_min_pixels(ctx)
-        return result
-
-    def test_feature_drops(self):
-        import shapely.geometry
-        exterior_ring = [
-            (0, 0),
-            (0, 1),
-            (1, 1),
-            (0, 0),
-        ]
-        polygon = shapely.geometry.Polygon(exterior_ring)
-        feature_layers = self._make_feature_layers(1, polygon)
-        zoom = 1
-        self._call_fut(feature_layers, zoom)
-        features = feature_layers[0]['features']
-        self.assertEquals(0, len(features))
-
-    def test_feature_remains(self):
-        import shapely.geometry
-        exterior_ring = [
-            (0, 0),
-            (0, 1),
-            (1, 1),
-            (0, 0),
-        ]
-        polygon = shapely.geometry.Polygon(exterior_ring)
-        feature_layers = self._make_feature_layers(1, polygon)
-        zoom = 20
-        self._call_fut(feature_layers, zoom)
-        features = feature_layers[0]['features']
-        self.assertEquals(1, len(features))
-
-
 class LanduseSortKeysAreUniqueTest(unittest.TestCase):
 
     def _check_unique(self, csv_name):
@@ -275,8 +760,8 @@ class LanduseSortKeysAreUniqueTest(unittest.TestCase):
             seen = set()
             for row in rows[1:]:
                 sort_key = int(row[-1])
-                self.assertFalse(sort_key in seen, "Duplicate sort_key "
-                                 "value: %d" % (sort_key,))
+                self.assertFalse(sort_key in seen, 'Duplicate sort_key '
+                                 'value: %d' % (sort_key,))
                 seen.add(sort_key)
 
     def test_landuse(self):
@@ -593,65 +1078,65 @@ class ShieldTextTransform(unittest.TestCase):
                           properties['all_shield_texts'])
 
     def test_just_a_number(self):
-        self._assert_shield_text("whatever", "101", "101")
+        self._assert_shield_text('whatever', '101', '101')
 
     def test_a_road(self):
         # based on http://www.openstreetmap.org/relation/2592
-        self._assert_shield_text("BAB", "A 66", "A66")
+        self._assert_shield_text('BAB', 'A 66', 'A66')
 
         # based on http://www.openstreetmap.org/relation/446270
-        self._assert_shield_text("FR:A-road", "A 66", "A66")
+        self._assert_shield_text('FR:A-road', 'A 66', 'A66')
 
     def test_sr70var1(self):
         # based on http://www.openstreetmap.org/relation/449595
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("IT:Toscana", "SR70var1", "70var1")
+        self._assert_shield_text('IT:Toscana', 'SR70var1', '70var1')
 
     def test_cth_j(self):
         # based on http://www.openstreetmap.org/relation/4010101
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:WI:CTH", "CTH J", "J")
+        self._assert_shield_text('US:WI:CTH', 'CTH J', 'J')
 
     def test_purple_belt(self):
         # based on http://www.openstreetmap.org/relation/544634
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:PA:Belt", "Purple Belt", "Purple Belt")
+        self._assert_shield_text('US:PA:Belt', 'Purple Belt', 'Purple Belt')
 
     def test_t_02_16(self):
         # based on http://www.openstreetmap.org/relation/1296750
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("ua:territorial", u"Т-02-16", u"Т0216")
+        self._assert_shield_text('ua:territorial', u'Т-02-16', u'Т0216')
 
     def test_fi_pi_li(self):
         # based on http://www.openstreetmap.org/relation/1587534
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("IT:B-road", "FI-PI-LI", "FI-PI-LI")
+        self._assert_shield_text('IT:B-road', 'FI-PI-LI', 'FI-PI-LI')
 
     def test_cr_315a(self):
         # based on http://www.openstreetmap.org/relation/2564219
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:TX:Guadalupe", "CR 315A", "315A")
+        self._assert_shield_text('US:TX:Guadalupe', 'CR 315A', '315A')
 
     def test_eo1a(self):
         # based on http://www.openstreetmap.org/relation/5641878
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("GR:national", u"ΕΟ1α", u"ΕΟ1α")
+        self._assert_shield_text('GR:national', u'ΕΟ1α', u'ΕΟ1α')
 
     def test_i5_truck(self):
         # based on http://www.openstreetmap.org/relation/146933
         # see https://github.com/tilezen/vector-datasource/issues/192
         # note: original example was SD 37 Truck, but that wasn't in the 'ref',
         # so changed to this example.
-        self._assert_shield_text("US:I", "5 Truck", "5")
+        self._assert_shield_text('US:I', '5 Truck', '5')
 
     def test_cth_pv(self):
         # based on http://www.openstreetmap.org/relation/5179634
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("US:WI:Washington", "CTH PV", "PV")
+        self._assert_shield_text('US:WI:Washington', 'CTH PV', 'PV')
 
     def test_null(self):
         # see https://github.com/tilezen/vector-datasource/issues/192
-        self._assert_shield_text("something", None, None)
+        self._assert_shield_text('something', None, None)
 
     def test_ne(self):
         self._assert_shield_text('NZ:SH', 'SH16', '16')
@@ -762,12 +1247,12 @@ class AdminBoundaryTest(unittest.TestCase):
         # geometry class will cause Shapely to throw AttributeError whenever
         # it's used in a geometric operation, as it doesn't have the _geom
         # attribute used to store a pointer to GEOS' native object.
-        class FakeGeom(namedtuple("FakeGeom", "geom_type envelope")):
+        class FakeGeom(namedtuple('FakeGeom', 'geom_type envelope')):
             def difference(self, other_shape):
                 from shapely.geometry import GeometryCollection
                 return GeometryCollection([])
 
-        fake_geom = FakeGeom("LineString", box(*bounds))
+        fake_geom = FakeGeom('LineString', box(*bounds))
 
         feature_layers = [dict(
             layer_datum=dict(
@@ -804,16 +1289,16 @@ class RoadNetworkFixTest(unittest.TestCase):
 
     def test_normalize_br_netref(self):
         from vectordatasource.transform import _normalize_br_netref
-        net, ref = _normalize_br_netref(None, "SP-1")
-        self.assertEqual("BR:SP", net)
-        self.assertEqual("SP-1", ref)
+        net, ref = _normalize_br_netref(None, 'SP-1')
+        self.assertEqual('BR:SP', net)
+        self.assertEqual('SP-1', ref)
 
     def test_guess_network_br(self):
         from vectordatasource.transform import _guess_network_br
         # should be empty for a missing ref
         self.assertEqual([], _guess_network_br({}))
         # should be empty for a blank ref
-        self.assertEqual([], _guess_network_br(dict(ref="")))
+        self.assertEqual([], _guess_network_br(dict(ref='')))
 
 
 # utility method to sort linestrings canonically, so that they can

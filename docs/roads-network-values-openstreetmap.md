@@ -17,7 +17,7 @@ _If not specified the network is from the raw OpenStreetMap network value._
 * `AM:AM` - **Armenia**
 * `AR:national` - **Argentina** when ref starts with `RN`
 * `AR:provincial` - **Argentina** when ref starts with `RP`
-* `AsianHighway` - **Asian Highway** across multiple countries when network is `AH` or ref starts with `AH` 
+* `AsianHighway` - **Asian Highway** across multiple countries when network is `AH` or ref starts with `AH`
 * `AT:A-road` - **Austria**
 * `AU:A-road` - **Australia** when ref starts with `A`
 * `AU:B-road` - **Australia** when ref starts with `B`
@@ -115,7 +115,7 @@ _If not specified the network is from the raw OpenStreetMap network value._
 * `e-road` - **European E-Road** when ref starts with `E` or network is `e-road` already
 * `ES:A-road` - **Spain** when ref starts with `A` or `AP` and ref digits are 1 or 2 in length.
 * `ES:autonoma` - **Spain** when ref starts with `ARA`, `A`, `CA`, `CL`, `CM`, `C`, `EX`, `AG`, `M`, `R`, `Ma`, `Me`, `ML`, `RC`, `RM`, `V`, `CV`, `Cv`
-* `ES:city` - **Spain** when ref starts with `AI`, `IA`, `CT`, `CS`, `CU`, `CHE`, `EL`, `FE`, `GJ`, `H`,  `VM`, `J`, `LN`, `LL`, `LO`, `ME`, `E`, `MU`, `O`, `PA`, `PR`, `PI`, `CHMS`, `PT`, `SL`, `S`, `SC`, `SI`, `VG`, `EI`, 
+* `ES:city` - **Spain** when ref starts with `AI`, `IA`, `CT`, `CS`, `CU`, `CHE`, `EL`, `FE`, `GJ`, `H`,  `VM`, `J`, `LN`, `LL`, `LO`, `ME`, `E`, `MU`, `O`, `PA`, `PR`, `PI`, `CHMS`, `PT`, `SL`, `S`, `SC`, `SI`, `VG`, `EI`,
 * `ES:N-road` - **Spain** when ref starts with `N`
 * `ES:province` - **Spain** when ref starts with `AC`, `DP`, `AB`, `F`, `AL`, `AE`, `AS`, `AV`, `BA`, `B`,  , `BP`, `BV`, `BI`, `BU`, `CC`, `CO`, `CR`, `GIP`, `GIV`, `GI`, `GR`, `GU`, `HU`, `JA`, `JV`, `LR`, `LE`, `L`,  , `LP`, `LV`, `LU`, `MP`, `MA`, `NA`, `OU`, `P`, `PP`, `EP`, `PO`, `DSA`, `SA`, `NI`, `SG`, `SE`, `SO`, `TP`, `TV`, `TE`, `TO`, `VA`, `ZA`, `CP`, `Z`, `PM`, `PMV`
 * `ES` - **Spain** when operator in `Administración central`, `Departamento de Infraestructuras Viarias y Movilidad`

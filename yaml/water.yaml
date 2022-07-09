@@ -10,6 +10,7 @@ globals:
     mz_label_placement: {col: mz_label_placement}
     label_placement: {col: label_placement}
     boundary: {col: boundary}
+    layer : {col: layer}
     tunnel: {col: tunnel}
     wikidata_id: {col: wikidata}
   - &water_standard_properties_osm
@@ -24,9 +25,15 @@ globals:
       key: { col: way_area }
       op: '>='
       table:
-        # OSM data starts at z8, but we should include some stuff at z7 so that
+        # OSM data starts at z8, but we should include some stuff at earlier so
         # the transition doesn't have a gap in it.
-        - [ 7,   160000000 ]
+        - [ 1, 20000000000 ]
+        - [ 2, 10000000000 ]
+        - [ 3,  5000000000 ]
+        - [ 4,  2000000000 ]
+        - [ 5,   500000000 ]
+        - [ 6,   200000000 ]
+        - [ 7,    50000000 ]
         - [ 8,    20000000 ]
         - [ 9,     5000000 ]
         - [ 10,    1000000 ]
@@ -44,6 +51,12 @@ globals:
       - else: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
 
 filters:
+  # Not show covered water in the water layer. This filter has to be placed before filter: {natural: water}
+  - filter:
+      covered: "yes"
+    min_zoom: null
+    output:
+      kind: null
   - filter: {waterway: riverbank}
     min_zoom: *water_polygon_min_zoom
     output:
@@ -67,6 +80,25 @@ filters:
     output:
       <<: *water_standard_properties_osm
       kind: water
+      # OSM buries the detailed type of water so let's surface that, see Issue #984
+      # in v2.x series we'd promote these to kind values, but we add them as kind_detail
+      # here as a non-breaking change for v1.x series as a bridge
+      kind_detail:
+        case:
+          # existing Tilezen kinds
+          - when: { water: [basin, canal, ditch, drain, lake, river, stream] }
+            then: { col: water }
+          # other common OSM water values that we'd expect to map to Tilezen lake value
+          - when: { water: [lagoon, oxbow, pond, reservoir, wastewater] }
+            then: lake
+      reservoir:
+        case:
+          - when: { water: [reservoir] }
+            then: true
+      alkaline:
+        case:
+          - when: { water: [lagoon, salt, salt_pool] }
+            then: true
     table: osm
   - filter: {natural: bay}
     min_zoom: *water_standard_min_zoom

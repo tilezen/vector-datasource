@@ -62,9 +62,13 @@ globals:
         way_area: { min: 500 }
         volume: { min: 50000 }
   - &z15_area_volume
-      way_area: { min: 20 }
+      any:
+        way_area: { min: 50 }
+        volume: { min: 20000 }
   - &z16_area_volume
-      way_area: { min: 10 }
+      any:
+        way_area: { min: 30 }
+        volume: { min: 8000 }
 # synthetic columns are values available to filters and output, but which are
 # generated in the SQL function and not passed in from the tables. in this case,
 # we generate the volume from the building height and way_area, where available.
@@ -76,64 +80,56 @@ filters:
       - <<: *z13_area_volume
     min_zoom: 13
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       - <<: *is_building
       - <<: *z14_area_volume
     min_zoom: 14
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       - <<: *is_building
       - <<: *z15_area_volume
     min_zoom: 15
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       - <<: *is_building
       - <<: *z16_area_volume
     min_zoom: 16
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   - filter:
       <<: *is_building
     min_zoom: 17
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_kind_detail]
       kind: building
-      <<: *building_kind_detail
   # building part
   - filter:
       - <<: *is_building_part
       - <<: *z15_area_volume
     min_zoom: 15
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_part_kind_detail]
       kind: building_part
-      <<: *building_part_kind_detail
   - filter:
       - <<: *is_building_part
       - <<: *z16_area_volume
     min_zoom: 16
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_part_kind_detail]
       kind: building_part
-      <<: *building_part_kind_detail
   - filter:
       <<: *is_building_part
     min_zoom: 17
     output:
-      <<: *building_standard_properties
+      <<: [*building_standard_properties, *building_part_kind_detail]
       kind: building_part
-      <<: *building_part_kind_detail
   # address points
   - filter:
       "addr:housenumber": true

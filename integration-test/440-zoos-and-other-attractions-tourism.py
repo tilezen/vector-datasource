@@ -3,8 +3,8 @@ from . import FixtureTest
 
 class ZoosAndOtherAttractionsTourism(FixtureTest):
     def test_tourism(self):
-        # City Sculpture, Detroit
-        self._run_test(16, 17645, 24242, 358445798, 'artwork')
+        # Sinclair Oil Apatosaurus, Windsor
+        self._run_test(16, 17645, 24251, 786994983, 'artwork')
         # Walt Disney World Resort
         self._run_test(13, 2240, 3421, -1228099, 'theme_park')
         # Busch Gardens Williamsburg

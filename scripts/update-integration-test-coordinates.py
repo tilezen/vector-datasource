@@ -1,8 +1,9 @@
+import fileinput
+
 from boto import connect_s3
 from boto.s3.bucket import Bucket
 from tilequeue.tile import deserialize_coord
 from tilequeue.tile import serialize_coord
-import fileinput
 
 
 bucket_name = 'mapzen-tiles-assets'

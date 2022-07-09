@@ -1,3 +1,6 @@
+import dsl
+from shapely.wkt import loads as wkt_loads
+
 from . import FixtureTest
 
 
@@ -15,10 +18,11 @@ class AddHikingRoutes(FixtureTest):
     def test_steps(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/25292070'])
 
+        # we don't assert name feature because name has been dropped in
+        # https://github.com/tilezen/vector-datasource/pull/2031
         self.assert_has_feature(
             14, 2620, 6334, 'roads',
-            {'kind': 'path', 'kind_detail': 'steps',
-             'name': 'Esmeralda Ave.'})
+            {'kind': 'path', 'kind_detail': 'steps'})
 
     def test_footway(self):
         self.load_fixtures(['https://www.openstreetmap.org/way/346093021'])
@@ -37,10 +41,23 @@ class AddHikingRoutes(FixtureTest):
         # Baker River Road - residential - part of Pacific Northwest
         # Trail (nwn)
         # should be visible at z11
-        self.load_fixtures([
-            'http://www.openstreetmap.org/way/5260896',
-            'http://www.openstreetmap.org/relation/3718820',
-        ], clip=self.tile_bbox(11, 331, 706))
+        self.generate_fixtures(
+            dsl.way(5260896, dsl.tile_diagonal(11, 331, 706), {
+                'source': 'openstreetmap.org',
+                'highway': 'residential',
+                'name': 'Baker River Road'
+            }),
+            dsl.relation(3718820, {
+                'source': 'openstreetmap.org',
+                'type': 'route',
+                'route': 'hiking',
+                'network': 'nwn',
+                'ref': 'PNT',
+                'name': 'Pacific Northwest Trail 03 Washington',
+                'wikidata': 'Q3360192',
+                'symbol': 'totem on yellow background'
+            }, ways=[5260896]),
+        )
 
         self.assert_has_feature(
             11, 331, 706, 'roads',
@@ -79,10 +96,26 @@ class AddHikingRoutes(FixtureTest):
         # Matz Road - service - part of Ice Age National Scenic Trail
         # (nwn)
         # should be visible at z11
-        self.load_fixtures([
-            'http://www.openstreetmap.org/way/6671321',
-            'http://www.openstreetmap.org/relation/2381423',
-        ], clip=self.tile_bbox(11, 514, 751))
+        self.generate_fixtures(
+            dsl.way(6671321, dsl.tile_diagonal(11, 514, 751), {
+                'source': 'openstreetmap.org',
+                'highway': 'service',
+                'access': 'private',
+                'tiger:name_base': 'Matz',
+                'tiger:cfcc': 'A74',
+                'tiger:county': 'Polk, IA',
+                'tiger:reviewed': 'no'
+            }),
+            dsl.relation(2381423, {
+                'source': 'openstreetmap.org',
+                'type': 'route',
+                'route': 'hiking',
+                'network': 'nwn',
+                'ref': 'ADT',
+                'name': 'American Discovery Trail',
+                'operator': 'American Discovery Trail Society'
+            }, ways=[6671321]),
+        )
 
         self.assert_has_feature(
             11, 514, 751, 'roads',
@@ -93,10 +126,25 @@ class AddHikingRoutes(FixtureTest):
         # Dogbane - service=driveway - part of American Discovery Trail
         # (nwn)
         # should be visible at z11
-        self.load_fixtures([
-            'http://www.openstreetmap.org/way/16000421',
-            'http://www.openstreetmap.org/relation/1544944',
-        ], clip=self.tile_bbox(11, 491, 762))
+        self.generate_fixtures(
+            dsl.way(16000421, dsl.tile_diagonal(11, 491, 762), {
+                'source': 'openstreetmap.org',
+                'highway': 'service',
+                'oneway': 'yes',
+                'service': 'driveway',
+                'tiger:cfcc': 'A74',
+                'tiger:county': 'Polk, IA'
+            }),
+            dsl.relation(1544944, {
+                'source': 'openstreetmap.org',
+                'type': 'route',
+                'route': 'hiking',
+                'network': 'nwn',
+                'ref': 'ADT',
+                'name': 'American Discovery Trail',
+                'operator': 'American Discovery Trail Society'
+            }, ways=[16000421])
+        )
 
         self.assert_has_feature(
             11, 491, 762, 'roads',
