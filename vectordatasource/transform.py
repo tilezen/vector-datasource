@@ -710,9 +710,9 @@ def _sorted_attributes(features, attrs, attribute):
     sort_key = attrs.get('sort_key')
     reverse = attrs.get('reverse')
 
-    assert sort_key is not None, "Configuration " + \
+    assert sort_key is not None, 'Configuration ' + \
         "parameter 'sort_key' is missing, please " + \
-        "check your configuration."
+        'check your configuration.'
 
     # first, we find the _minimum_ ordering over the
     # group of key values. this is because we only do
@@ -776,8 +776,8 @@ _GEOMETRY_DIMENSIONS = {
 #   4: contains a polygon / two-dimensional object
 def _geom_dimensions(g):
     dim = _GEOMETRY_DIMENSIONS.get(g.geom_type)
-    assert dim is not None, "Unknown geometry type " + \
-        "%s in transform._geom_dimensions." % \
+    assert dim is not None, 'Unknown geometry type ' + \
+        '%s in transform._geom_dimensions.' % \
         repr(g.geom_type)
 
     # recurse for geometry collections to find the true
@@ -1865,7 +1865,7 @@ def _make_joined_name(props):
     >>> _make_joined_name(x)
     >>> x
     {'name:right': 'Right', 'name': 'Already Exists', 'name:left': 'Left'}
-    """  # noqa
+    """
 
     # don't overwrite an existing name
     if 'name' in props:
@@ -1876,7 +1876,7 @@ def _make_joined_name(props):
 
     if lname is not None:
         if rname is not None:
-            props['name'] = "%s - %s" % (lname, rname)
+            props['name'] = '%s - %s' % (lname, rname)
         else:
             props['name'] = lname
     elif rname is not None:
@@ -2564,7 +2564,7 @@ def remove_zero_area(shape, properties, fid, zoom):
     # remove the property if it's present. we _only_ want
     # to replace it if it matches the positive, float
     # criteria.
-    area = properties.pop("area", None)
+    area = properties.pop('area', None)
 
     # try to parse a string if the area has been sent as a
     # string. it should come through as a float, though,
@@ -3533,7 +3533,7 @@ RecursiveMerger = namedtuple('RecursiveMerger', 'leaf node root tolerance')
 
 
 # A bucket used to sort shapes into the next level of the quad tree.
-Bucket = namedtuple("Bucket", "bounds box shapes")
+Bucket = namedtuple('Bucket', 'bounds box shapes')
 
 
 def _mkbucket(*bounds):
@@ -3602,8 +3602,8 @@ def _merge_shapes_recursively(shapes, shapes_per_merge, merger, depth=0,
                 break
         else:
             raise AssertionError(
-                "Expected shape %r to intersect at least one quadrant, but "
-                "intersects none." % (shape.wkt))
+                'Expected shape %r to intersect at least one quadrant, but '
+                'intersects none.' % (shape.wkt))
 
     # recurse if necessary to get below the number of shapes per merge that
     # we want.
@@ -3885,7 +3885,7 @@ def _angle_at(linestring, pt):
         nx = pt
         pt = linestring.coords[-2]
     else:
-        assert False, "Expected point to be first or last"
+        assert False, 'Expected point to be first or last'
 
     if nx == pt:
         return None
@@ -4039,7 +4039,7 @@ def _loop_merge_junctions(geom, angle_tolerance):
             break
 
         assert len(geom.geoms) < mls_size, \
-            "Number of geometries should stay the same or reduce after merge."
+            'Number of geometries should stay the same or reduce after merge.'
 
         # otherwise, keep looping
         mls_size = len(geom.geoms)
@@ -4404,7 +4404,7 @@ def normalize_tourism_kind(shape, properties, fid, zoom):
     main kind.
 
     See https://github.com/mapzen/vector-datasource/issues/440 for more details.
-    """  # noqa
+    """
 
     zoo = properties.pop('zoo', None)
     if zoo is not None:
@@ -4586,7 +4586,7 @@ class _AnyMatcher(object):
         return True
 
     def __repr__(self):
-        return "*"
+        return '*'
 
 
 class _NoneMatcher(object):
@@ -4594,7 +4594,7 @@ class _NoneMatcher(object):
         return other is None
 
     def __repr__(self):
-        return "-"
+        return '-'
 
 
 class _SomeMatcher(object):
@@ -4602,7 +4602,7 @@ class _SomeMatcher(object):
         return other is not None
 
     def __repr__(self):
-        return "+"
+        return '+'
 
 
 class _TrueMatcher(object):
@@ -4610,7 +4610,7 @@ class _TrueMatcher(object):
         return other is True
 
     def __repr__(self):
-        return "true"
+        return 'true'
 
 
 class _ExactMatcher(object):
@@ -4697,7 +4697,7 @@ _KEY_TYPE_LOOKUP = {
 
 
 def _parse_kt(key_type):
-    kt = key_type.split("::")
+    kt = key_type.split('::')
 
     type_key = kt[1] if len(kt) > 1 else None
     fn = _KEY_TYPE_LOOKUP.get(type_key, str)
@@ -4994,9 +4994,9 @@ def drop_small_inners(ctx):
     source_layers = ctx.params.get('source_layers')
 
     assert source_layers, \
-        "You must provide source_layers (layer names) to drop_small_inners"
+        'You must provide source_layers (layer names) to drop_small_inners'
     assert pixel_area, \
-        "You must provide a pixel_area parameter to drop_small_inners"
+        'You must provide a pixel_area parameter to drop_small_inners'
 
     if zoom < start_zoom:
         return None
@@ -5168,31 +5168,31 @@ def simplify_and_clip(ctx):
 
 
 _lookup_operator_rules = {
-                        'United States National Park Service': (
-                            'National Park Service',
-                            'US National Park Service',
-                            'U.S. National Park Service',
-                            'US National Park service'),
-                        'United States Forest Service': (
-                            'US Forest Service',
-                            'U.S. Forest Service',
-                            'USDA Forest Service',
-                            'United States Department of Agriculture',
-                            'US National Forest Service',
-                            'United State Forest Service',
-                            'U.S. National Forest Service'),
-                        'National Parks & Wildife Service NSW': (
-                            'Department of National Parks NSW',
-                            'Dept of NSW National Parks',
-                            'Dept of National Parks NSW',
-                            'Department of National Parks NSW',
-                            'NSW National Parks',
-                            'NSW National Parks & Wildlife Service',
-                            'NSW National Parks and Wildlife Service',
-                            'NSW Parks and Wildlife Service',
-                            'NSW Parks and Wildlife Service (NPWS)',
-                            'National Parks and Wildlife NSW',
-                            'National Parks and Wildlife Service NSW')}
+    'United States National Park Service': (
+        'National Park Service',
+        'US National Park Service',
+        'U.S. National Park Service',
+        'US National Park service'),
+    'United States Forest Service': (
+        'US Forest Service',
+        'U.S. Forest Service',
+        'USDA Forest Service',
+        'United States Department of Agriculture',
+        'US National Forest Service',
+        'United State Forest Service',
+        'U.S. National Forest Service'),
+    'National Parks & Wildife Service NSW': (
+        'Department of National Parks NSW',
+        'Dept of NSW National Parks',
+        'Dept of National Parks NSW',
+        'Department of National Parks NSW',
+        'NSW National Parks',
+        'NSW National Parks & Wildlife Service',
+        'NSW National Parks and Wildlife Service',
+        'NSW Parks and Wildlife Service',
+        'NSW Parks and Wildlife Service (NPWS)',
+        'National Parks and Wildlife NSW',
+        'National Parks and Wildlife Service NSW')}
 
 normalized_operator_lookup = {}
 for normalized_operator, variants in _lookup_operator_rules.items():
@@ -8178,13 +8178,13 @@ class Palette(object):
         self.namelookup = dict()
         for name, colour in colours.items():
             assert len(colour) == 3, \
-                "Colours must lists of be of length 3 (%r: %r)" % \
+                'Colours must lists of be of length 3 (%r: %r)' % \
                 (name, colour)
             for val in colour:
                 assert isinstance(val, int), \
-                    "Colour values must be integers (%r: %r)" % (name, colour)
+                    'Colour values must be integers (%r: %r)' % (name, colour)
                 assert val >= 0 and val <= 255, \
-                    "Colour values must be between 0 and 255 (%r: %r)" % \
+                    'Colour values must be between 0 and 255 (%r: %r)' % \
                     (name, colour)
             self.namelookup[tuple(colour)] = name
         self.tree = kdtree.create(colours.values())
@@ -8765,8 +8765,8 @@ def add_vehicle_restrictions(shape, props, fid, zoom):
     def _one_dp(val, unit):
         deci = int(floor(10 * val))
         if deci % 10 == 0:
-            return "%d%s" % (deci / 10, unit)
-        return "%.1f%s" % (0.1 * deci, unit)
+            return '%d%s' % (deci / 10, unit)
+        return '%.1f%s' % (0.1 * deci, unit)
 
     def _metres(val):
         # parse metres or feet and inches, return cm

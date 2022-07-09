@@ -13,4 +13,3 @@ filters:
     output:
       <<: *output_properties
       kind: contour
-
