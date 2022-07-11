@@ -1308,6 +1308,7 @@ BEGIN
         FROM ne_10m_admin_0_countries_iso i
         WHERE i.wikidataid = wikidata_id;
 
+    -- Next, try the tlc table
         IF NOT FOUND THEN
             SELECT hstore(ARRAY[
                 'ne_name_ar', t.name_ar,
@@ -1342,6 +1343,7 @@ BEGIN
                 AND featurecla IN ('Admin-0 country', 'Admin-0 dependency');
         END IF;
 
+    -- If not a country, try states
     ELSE
             SELECT hstore(ARRAY[
                 'ne_name_ar', sp.name_ar,
