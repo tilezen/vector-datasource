@@ -32,6 +32,8 @@ SELECT
       tz_get_ne_pop_min_max(tags->'wikidata')
       ||
       tz_get_fclass_and_label_position(tags->'wikidata', tags->'place')
+      ||
+      tz_get_ne_names(tags->'wikidata', tags->'place')
   END AS __places_properties__,
 
   CASE WHEN mz_poi_min_zoom IS NOT NULL
