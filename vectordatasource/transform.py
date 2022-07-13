@@ -1332,7 +1332,7 @@ def _load_external_layer(params, name):
     # add the features geometries with their properties (values must be strings) in tuples
     external_layer['features'] = []
     for geom, feat in itertools.izip(gc.geoms, fc['features']):
-        properties = {k: str(v) if type(v) is not bool else str(v).lower() for k,v in feat['properties'].iteritems()}
+        properties = {k: str(v) if type(v) is not bool else str(v).lower() for k, v in feat['properties'].iteritems()}
         external_layer['features'].append((geom, properties, None))
 
     return external_layer
@@ -1342,6 +1342,8 @@ def _load_external_layer(params, name):
 # that's a pretty invasive change.
 #
 # returns None if the layer can't be found.
+
+
 def _find_layer(feature_layers, name, params):
 
     for feature_layer in feature_layers:

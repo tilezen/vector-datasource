@@ -34,14 +34,14 @@ class ExternalLayers(FixtureTest):
         # we can temporarily add the external layer, here we build a square structure over the center of the map
         # note that the origin of the feature is in the upper right quadrant but should appear in all quadrants
         null_island = {
-            "type": "FeatureCollection",
-            "name": "foo",
-            "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:EPSG::3857"}},
-            "features": [
-                {"type": "Feature",
-                 "properties": {"name": "null island hut", "superseded": True, "baz": "qux", "origin": [1, 1], "id": 42},
-                 "geometry": {"type": "Polygon", "coordinates":
-                     [[[111, 111], [-111, 111],  [-111, -111], [111, -111], [111, 111]]]}}
+            'type': 'FeatureCollection',
+            'name': 'foo',
+            'crs': {'type': 'name', 'properties': {'name': 'urn:ogc:def:crs:EPSG::3857'}},
+            'features': [
+                {'type': 'Feature',
+                 'properties': {'name': 'null island hut', 'superseded': True, 'baz': 'qux', 'origin': [1, 1], 'id': 42},
+                 'geometry': {'type': 'Polygon', 'coordinates':
+                              [[[111, 111], [-111, 111],  [-111, -111], [111, -111], [111, 111]]]}}
             ]
         }
 
