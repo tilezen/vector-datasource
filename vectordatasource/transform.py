@@ -8451,6 +8451,7 @@ def buildings_unify(ctx):
             if building_id:
                 indexed_building = geom_with_building_id(shape, building_id)
                 indexable_buildings.append(indexed_building)
+                props['root_id'] = building_id
         elif kind == 'building_part':
             parts.append(feature)
 
@@ -9784,6 +9785,24 @@ def create_dispute_ids(shape, props, fid, zoom):
     dispute_id = '_'.join(items)
     if dispute_id:
         props['dispute_id'] = dispute_id
+
+    return shape, props, fid
+
+
+def override_with_ne_names(shape, props, fid, zoom):
+    """
+    Override the name:xx properties with __ne_* variants from
+    Natural Earth, if there are any.
+    """
+
+    name_prefix = '__ne_name_'
+
+    for k in props.keys():
+        if k.startswith(name_prefix):
+            language = k[len(name_prefix):]
+            ne_name = props.pop(k)
+
+            props['name:' + language] = ne_name
 
     return shape, props, fid
 
