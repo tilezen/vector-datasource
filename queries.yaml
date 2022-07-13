@@ -10,10 +10,6 @@ all:
   - transit
   - admin_areas
 
-
-external_layers:
-  -
-
 sources:
 
   # NOTE: each source represents a query to the database
@@ -342,10 +338,6 @@ layers:
       - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
 
-#TODO: we should use a top level external layers rather than per transform
-#external_layers:
-#  - 
-
 post_process:
   - fn: vectordatasource.transform.build_fence
     params:
@@ -550,34 +542,24 @@ post_process:
       source_layer: roads
       properties: [layer]
 
-  # supersede existing osm buildings with data from external geojson layer
+  # supersede existing osm buildings with data from landmark geojson layer
   - fn: vectordatasource.transform.overlap
     params:
       base_layer: buildings
-      cutting_layer: auxiliary_buildings
+      cutting_layer: landmarks
       attribute: superseded
       target_attribute: superseded
       linear: false
       external_layers_dir: ./external_layers
-#      resources:
-#        external_layers:
-#          type: directory
-#          init_fn: vectordatasource.transform.geojsonsToLayers
-#          path: external_layers
 
-  # turn the external buildings into point features
+  # turn the landmark geojson polygons into point features
   - fn: vectordatasource.transform.mutate
     params:
-      layer: auxiliary_buildings
+      layer: landmarks
       start_zoom: 13
       geometry_expression: Point(eval({properties}['origin']))
       properties_expression: "dict(filter(lambda p: p[0] not in ['superseded', 'origin'], {properties}.items()))"
       external_layers_dir: ./external_layers
-#      resources:
-#        external_layers:
-#          type: directory
-#          init_fn: vectordatasource.transform.geojsonsToLayers
-#          path: external_layers
 
   # cut with admin_areas to put country_code attributes on roads
   # which are mostly within a particular country.

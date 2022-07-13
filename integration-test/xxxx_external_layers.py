@@ -48,7 +48,7 @@ class ExternalLayers(FixtureTest):
         # write it to disk
         shutil.rmtree('external_layers', ignore_errors=True)
         os.makedirs('external_layers')
-        with open('external_layers/auxiliary_buildings.geojson', 'w') as f:
+        with open('external_layers/landmarks.geojson', 'w') as f:
             json.dump(null_island, f)
 
         # get a building or two in there right next to each other so they will merge
@@ -65,14 +65,14 @@ class ExternalLayers(FixtureTest):
         self.assert_has_feature(17, 65536, 65535, 'buildings', {'superseded': 'true', 'name': 'foo'})
 
         # check that the pois made it in properly mutated from the original feature
-        self.assert_has_feature(15, 16383, 16383, 'auxiliary_buildings', {'baz': 'qux'})
-        self.assert_feature_geom_type(15, 16383, 16383, 'auxiliary_buildings', '42', 'Point')
-        self.assert_has_feature(15, 16384, 16383, 'auxiliary_buildings', {'baz': 'qux'})
-        self.assert_feature_geom_type(15, 16384, 16383, 'auxiliary_buildings', '42', 'Point')
-        self.assert_has_feature(15, 16383, 16384, 'auxiliary_buildings', {'baz': 'qux'})
-        self.assert_feature_geom_type(15, 16383, 16384, 'auxiliary_buildings', '42', 'Point')
-        self.assert_has_feature(15, 16384, 16384, 'auxiliary_buildings', {'baz': 'qux'})
-        self.assert_feature_geom_type(15, 16384, 16384, 'auxiliary_buildings', '42', 'Point')
+        self.assert_has_feature(15, 16383, 16383, 'landmarks', {'baz': 'qux'})
+        self.assert_feature_geom_type(15, 16383, 16383, 'landmarks', '42', 'Point')
+        self.assert_has_feature(15, 16384, 16383, 'landmarks', {'baz': 'qux'})
+        self.assert_feature_geom_type(15, 16384, 16383, 'landmarks', '42', 'Point')
+        self.assert_has_feature(15, 16383, 16384, 'landmarks', {'baz': 'qux'})
+        self.assert_feature_geom_type(15, 16383, 16384, 'landmarks', '42', 'Point')
+        self.assert_has_feature(15, 16384, 16384, 'landmarks', {'baz': 'qux'})
+        self.assert_feature_geom_type(15, 16384, 16384, 'landmarks', '42', 'Point')
 
         # clean up external layer
         shutil.rmtree('external_layers')
