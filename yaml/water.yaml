@@ -20,6 +20,9 @@ globals:
           - when:
               intermittent: 'yes'
             then: true
+          - when:
+              { basin: [infiltration, detention] }
+            then: true
   - &water_polygon_min_zoom
     lookup:
       key: { col: way_area }
