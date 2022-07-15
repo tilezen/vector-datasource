@@ -17,11 +17,12 @@ import pycountry
 import shapely.errors
 import shapely.ops
 import shapely.wkb
-from shapely.geometry import box as Box, shape
+from shapely.geometry import box as Box
 from shapely.geometry import LinearRing
 from shapely.geometry import LineString
 from shapely.geometry import Point
 from shapely.geometry import Polygon
+from shapely.geometry import shape
 from shapely.geometry.collection import GeometryCollection
 from shapely.geometry.multilinestring import MultiLineString
 from shapely.geometry.multipoint import MultiPoint
@@ -1332,7 +1333,7 @@ def _load_external_layer(params, name):
     # add the features geometries with their properties (values must be strings) in tuples
     external_layer['features'] = []
     for geom, feat in itertools.izip(gc.geoms, fc['features']):
-        properties = {k: str(v) if type(v) is not bool else str(v).lower() for k,v in feat['properties'].iteritems()}
+        properties = {k: str(v) if type(v) is not bool else str(v).lower() for k, v in feat['properties'].iteritems()}
         external_layer['features'].append((geom, properties, None))
 
     return external_layer
@@ -1342,6 +1343,8 @@ def _load_external_layer(params, name):
 # that's a pretty invasive change.
 #
 # returns None if the layer can't be found.
+
+
 def _find_layer(feature_layers, name, params):
 
     for feature_layer in feature_layers:
