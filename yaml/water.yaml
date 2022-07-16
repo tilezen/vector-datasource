@@ -148,6 +148,11 @@ filters:
     output:
       <<: *water_standard_properties_osm
       kind: canal
+      boat:
+        case:
+          - when:
+              boat: 'yes'
+            then: 'yes'
     table: osm
   - filter: {waterway: river}
     min_zoom: 9
