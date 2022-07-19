@@ -290,5 +290,8 @@ where brk_a3 in ('B30');
 
 
 -- Remove Taiwanese view for nine dash line
+update ne_10m_admin_0_boundary_lines_maritime_indicator_chn set
+            fclass_tw = 'Unrecognized';
+
 update ne_50m_admin_0_boundary_lines_maritime_indicator_chn set
             fclass_tw = 'Unrecognized';
