@@ -913,7 +913,6 @@ class FixtureEnvironment(object):
             'roads': set(['linestring']),
             'transit': set(['linestring', 'polygon']),
             'water': set(['point', 'linestring', 'polygon']),
-            'landmarks': set(['point', 'linestring', 'polygon']),
         }
 
         layers = {}
