@@ -9,6 +9,7 @@ all:
   - boundaries
   - transit
   - admin_areas
+  - landmarks
 
 sources:
 
@@ -338,6 +339,14 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
+  # optional inline layer, if the file is found on disk it will be used
+  landmarks:
+    geometry_types: [Point, Polygon, MultiPolygon]
+    clip: false
+    area-inclusion-threshold: 1
+    simplify_before_intersect: false
+    simplify_start: 0,
+    layer_path: ./metatile-layers/landmarks.geojson
 
 post_process:
   - fn: vectordatasource.transform.build_fence
@@ -551,7 +560,6 @@ post_process:
       attribute: superseded
       target_attribute: superseded
       linear: false
-      external_layers_dir: ./external_layers
 
   # turn the landmark geojson polygons into point features
   - fn: vectordatasource.transform.mutate
@@ -560,7 +568,6 @@ post_process:
       start_zoom: 13
       geometry_expression: Point(eval({properties}['origin']))
       properties_expression: "dict(filter(lambda p: p[0] not in ['superseded', 'origin'], {properties}.items()))"
-      external_layers_dir: ./external_layers
 
   # cut with admin_areas to put country_code attributes on roads
   # which are mostly within a particular country.

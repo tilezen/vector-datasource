@@ -39,7 +39,6 @@ from tilequeue.tile import coord_to_bounds
 from tilequeue.tile import coord_to_mercator_bounds
 from tilequeue.tile import reproject_lnglat_to_mercator
 from tilequeue.tile import reproject_mercator_to_lnglat
-from yaml import load as load_yaml
 
 from vectordatasource.meta import find_yaml_path
 from vectordatasource.meta.python import make_function_name_min_zoom
@@ -47,6 +46,7 @@ from vectordatasource.meta.python import make_function_name_props
 from vectordatasource.meta.python import output_kind
 from vectordatasource.meta.python import output_min_zoom
 from vectordatasource.meta.python import parse_layers
+from yaml import load as load_yaml
 
 
 # the Overpass server is used to download data about OSM elements. the
@@ -913,6 +913,7 @@ class FixtureEnvironment(object):
             'roads': set(['linestring']),
             'transit': set(['linestring', 'polygon']),
             'water': set(['point', 'linestring', 'polygon']),
+            'landmarks': set(['point', 'linestring', 'polygon']),
         }
 
         layers = {}

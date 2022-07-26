@@ -9,13 +9,13 @@ from shapely.wkt import loads as wkt_loads
 from . import FixtureTest
 
 
-class ExternalLayers(FixtureTest):
-    def test_no_external_layer_building_merge(self):
+class InlineLayers(FixtureTest):
+    def test_no_landmarks_buildings_merged(self):
         """
         First make sure that even if there is no external layer everything still loads fine and the buildings do merge
         """
         # just in case a failed test didnt cleanup
-        shutil.rmtree('external_layers', ignore_errors=True)
+        shutil.rmtree('metatile-layers', ignore_errors=True)
 
         # get two adjacent buildings there so they will merge
         self.generate_fixtures(dsl.way(777, wkt_loads('POLYGON ((0 0, 0 .001, .001 .001, .001 0, 0 0))'),
@@ -28,9 +28,9 @@ class ExternalLayers(FixtureTest):
         self.assert_n_matching_features(15, 16384, 16383, 'buildings', {'kind': 'building'}, 1)
 
         # prove there are no auxiliary buildings pois
-        self.assert_no_matching_feature(15, 16384, 16383, 'auxiliary_buildings', {})
+        self.assert_no_matching_feature(15, 16384, 16383, 'landmarks', {})
 
-    def test_external_layer_blocks_building_merge(self):
+    def test_landmarks_buildings_unmerged(self):
         # we can temporarily add the external layer, here we build a square structure over the center of the map
         # note that the origin of the feature is in the upper right quadrant but should appear in all quadrants
         null_island = {
@@ -46,9 +46,9 @@ class ExternalLayers(FixtureTest):
         }
 
         # write it to disk
-        shutil.rmtree('external_layers', ignore_errors=True)
-        os.makedirs('external_layers')
-        with open('external_layers/landmarks.geojson', 'w') as f:
+        shutil.rmtree('metatile-layers', ignore_errors=True)
+        os.makedirs('metatile-layers')
+        with open('metatile-layers/landmarks.geojson', 'w') as f:
             json.dump(null_island, f)
 
         # get a building or two in there right next to each other so they will merge
@@ -75,4 +75,4 @@ class ExternalLayers(FixtureTest):
         self.assert_feature_geom_type(15, 16384, 16384, 'landmarks', '42', 'Point')
 
         # clean up external layer
-        shutil.rmtree('external_layers')
+        shutil.rmtree('metatile-layers')
