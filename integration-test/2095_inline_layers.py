@@ -40,7 +40,7 @@ class InlineLayers(FixtureTest):
             'crs': {'type': 'name', 'properties': {'name': 'urn:ogc:def:crs:EPSG::3857'}},
             'features': [
                 {'type': 'Feature',
-                 'properties': {'name': 'null island hut', 'superseded': True, 'height': math.pi, 'origin': str([1, 1]), 'id': 42},
+                 'properties': {'name': 'null island hut', 'superseded': True, 'height': math.pi, 'origin': [1, 1], 'id': 42},
                  'geometry': {'type': 'Polygon', 'coordinates':
                               [[[111, 111], [-111, 111],  [-111, -111], [111, -111], [111, 111]]]}}
             ]
