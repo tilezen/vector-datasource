@@ -9773,7 +9773,7 @@ def mutate(ctx):
     geometry_expression = ctx.params.get('geometry_expression', '{shape}')
     properties_expression = ctx.params.get('properties_expression', '{properties}')
     assert geometry_expression or properties_expression, \
-        'regenerate_geometry: missing one of geometry or properties expression'
+        'mutate: requires at least one geometry or properties expression'
     geometry_expression = geometry_expression.format(shape='shape', properties='props')
     properties_expression = properties_expression.format(shape='shape', properties='props')
 
