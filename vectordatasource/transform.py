@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
+import copy
 import csv
 import re
 from collections import defaultdict
@@ -9785,7 +9786,8 @@ def mutate(ctx):
     if end_zoom is not None and zoom >= end_zoom:
         return None
 
-    layer = _find_layer(ctx.feature_layers, layer)
+    # for the max zoom a transform needs to be re-entrant so we take a copy here
+    layer = copy.deepcopy(_find_layer(ctx.feature_layers, layer))
     if layer is None:
         return None
 
