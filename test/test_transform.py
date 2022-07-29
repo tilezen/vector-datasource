@@ -886,6 +886,10 @@ class BuildingsUnifyTest(unittest.TestCase):
             if props['kind'] == 'building_part':
                 root_id = props.get('root_id')
                 self.assertEquals(root_id, 2)
+            elif props['kind'] == 'building':
+                root_id = props.get('root_id')
+                id = props.get('id')
+                self.assertEquals(root_id, id)
             else:
                 assert 'root_id' not in props
 
