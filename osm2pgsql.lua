@@ -462,12 +462,6 @@ function osm2pgsql.process_node(object)
         output_hstore['place'] = 'country'
         output_hstore['disputed_by'] = 'FR;ID;IN;MA;NL;Pl;PS;SA;TR'
     end
--- Redefine Israel country label for SA;PK;ID
-    if object.tags.place and object.tags.wikidata == 'Q801' then
-        output_hstore["name:id"] = 'Palestina'
-        output_hstore["name:ur"] = 'فلسطین'
-        output_hstore["name:ar"] = 'فلسطين'
-    end
 -- Recast Taiwan country label as region label for China POV
     if object.tags.place and object.tags.wikidata == 'Q865' then
         output_hstore['place:CN'] = 'region'
@@ -646,20 +640,6 @@ function osm2pgsql.process_node(object)
 -- French Guiana
     if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'GF' then
         output_hstore['place'] = 'country'
-    end
-
--- Update names of some countries for better rendering. We will update the data and deprecate this eventually.
--- Rename Falkland Islands
-    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'FK' then
-        output_hstore['name:en'] = 'Falkland Islands (Islas Malvinas)'
-    end
--- Rename Saint Martin
-    if object.tags.place == 'state' and object.tags['ISO3166-1'] == 'MF' then
-        output_hstore['name:en'] = 'Saint Martin'
-    end
--- Rename Sint Maarten
-    if object.tags.place == 'country' and object.tags['ISO3166-1'] == 'SX' then
-        output_hstore['name:en'] = 'Sint Maarten'
     end
 
     output.tags = output_hstore
