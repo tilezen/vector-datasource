@@ -46,11 +46,27 @@ update ne_10m_admin_0_countries_iso set wikidataid = 'Q192184' where ne_id = 115
 
 -- Fixes to country labels for some languages to shorten or match local expectations
 
+--Update Australia name
+update ne_10m_admin_0_countries_iso set name_zht = '澳大利亚' where ne_id = 1159320355;
+
+--Update Bahamas name
+update ne_10m_admin_0_countries_iso set name_ru = 'Багамы' where ne_id = 1159320415;
+
+--Update Central Africa Republic name
+update ne_10m_admin_0_countries_iso set name_fr = 'Centrafrique' where ne_id = 1159320463;
+
 --Update China name
 update ne_10m_admin_0_countries_iso set name_de = 'China' where ne_id = 1159320471;
 update ne_10m_admin_0_countries_iso set name_en = 'China' where ne_id = 1159320471;
 update ne_10m_admin_0_countries_iso set name_fr = 'Chine' where ne_id = 1159320471;
 update ne_10m_admin_0_countries_iso set name_ko = '중국' where ne_id = 1159320471;
+
+--Update Cocos (Keeling) Island
+update ne_10m_admin_0_countries_iso set name_ar = 'جزر كوكوس (كيلينغ)' where ne_id = 1159320367;
+update ne_10m_admin_0_countries_iso set name_en = 'Cocos (Keeling) Islands' where ne_id = 1159320367;
+update ne_10m_admin_0_countries_iso set name_es = 'Islas Cocos (Keeling)' where ne_id = 1159320367;
+update ne_10m_admin_0_countries_iso set name_ja = 'ココス[キーリング]諸島' where ne_id = 1159320367;
+update ne_10m_admin_0_countries_iso set name_ru = 'Кокосовые (Килинг) острова' where ne_id = 1159320367;
 
 --Update Cyprus name
 update ne_10m_admin_0_countries_iso set name_de = 'Zypern' where ne_id = 1159320533;
@@ -82,6 +98,7 @@ update ne_10m_admin_0_countries_iso set name_pt = 'Irlanda' where ne_id = 115932
 
 --Update Kosovo name
 update ne_10m_admin_0_countries_iso set name_ja = 'コソボ' where ne_id = 1159321007;
+update ne_10m_admin_0_countries_iso set name_ru = 'Косово' where ne_id = 1159321007;
 
 --Update Mali name
 update ne_10m_admin_0_countries_iso set name_ja = 'マリ' where ne_id = 1159321063;
@@ -91,9 +108,6 @@ update ne_10m_admin_0_countries_iso set name_de = 'Moldawien' where ne_id = 1159
 
 --Update Myanmar name
 update ne_10m_admin_0_countries_iso set name_es = 'Myanmar' where ne_id = 1159321067;
-
---Update North Korea name
-update ne_10m_admin_0_countries_iso set name_ = 'Корейская Народно-Демократическая Республика' where ne_id = 1159321181;
 
 --Update Oman name
 update ne_10m_admin_0_countries_iso set name_ar = 'عمان' where ne_id = 1159321151;
@@ -113,7 +127,6 @@ update ne_10m_admin_0_countries_iso set name_ru = 'Острова Святой �
 --Update South Africa name
 update ne_10m_admin_0_countries_iso set name_ja = '南アフリカ' where ne_id = 1159321431;
 update ne_10m_admin_0_countries_iso set name_ko = '남아프리카' where ne_id = 1159321431;
-update ne_10m_admin_0_countries_iso set name_ru = 'Южно-Африканская Республика' where ne_id = 1159321431;
 
 --Update Taiwan name
 update ne_10m_admin_0_countries_iso set name_de = 'Taiwan' where ne_id = 1159321335;
@@ -123,4 +136,3 @@ update ne_10m_admin_0_countries_iso set name_ko = '타이완' where ne_id = 1159
 
 --Update United States name
 update ne_10m_admin_0_countries_iso set name_en = 'United States' where ne_id = 1159321369;
-update ne_10m_admin_0_countries_iso set name_ = 'Соединённые Штаты Америки' where ne_id = 1159321369;
