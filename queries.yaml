@@ -567,7 +567,7 @@ post_process:
       layer: landmarks
       start_zoom: 13
       geometry_expression: Point({properties}['origin'])
-      properties_expression: "dict(filter(lambda p: p[0] not in ['superseded', 'origin'], {properties}.items()))"
+      properties_expression: "dict(filter(lambda p: p[0] not in ['supersede', 'origin'], {properties}.items()))"
 
   # cut with admin_areas to put country_code attributes on roads
   # which are mostly within a particular country.
@@ -1892,7 +1892,7 @@ post_process:
         - addr_housenumber
         - addr_street
         - osm_relation
-      exclude: ['superseded']
+      exclude: ['superseded_by']
       # NOTE: max_merged_features is set to keep the time taken for geometry
       # merging down, as it seems to go up with the square of the number of
       # features.
