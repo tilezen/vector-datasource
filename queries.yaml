@@ -557,8 +557,8 @@ post_process:
     params:
       base_layer: buildings
       cutting_layer: landmarks
-      attribute: superseded
-      target_attribute: superseded
+      attribute: supersede
+      target_attribute: superseded_by
       linear: false
 
   # turn the landmark geojson polygons into point features

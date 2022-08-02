@@ -40,7 +40,7 @@ class InlineLayers(FixtureTest):
             'crs': {'type': 'name', 'properties': {'name': 'urn:ogc:def:crs:EPSG::3857'}},
             'features': [
                 {'type': 'Feature',
-                 'properties': {'name': 'null island hut', 'superseded': True, 'height': math.pi, 'origin': [1, 1], 'id': 42},
+                 'properties': {'name': 'null island hut', 'supersede': True, 'height': math.pi, 'origin': [1, 1], 'id': 42},
                  'geometry': {'type': 'Polygon', 'coordinates':
                               [[[111, 111], [-111, 111],  [-111, -111], [111, -111], [111, 111]]]}}
             ]
@@ -63,7 +63,7 @@ class InlineLayers(FixtureTest):
         self.assert_n_matching_features(15, 16384, 16383, 'buildings', {'kind': 'building'}, 2)
 
         # check that the property was copied to the right building
-        self.assert_has_feature(17, 65536, 65535, 'buildings', {'superseded': True, 'name': 'foo'})
+        self.assert_has_feature(17, 65536, 65535, 'buildings', {'superseded_by': True, 'name': 'foo'})
 
         # check that the pois made it in properly mutated from the original feature
         props = {'name': 'null island hut', 'height': math.pi, 'id': 42}
