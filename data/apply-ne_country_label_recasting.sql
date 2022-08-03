@@ -46,9 +46,6 @@ update ne_10m_admin_0_countries_iso set wikidataid = 'Q192184' where ne_id = 115
 
 -- Fixes to country labels for some languages to shorten or match local expectations
 
---Update Australia name
-update ne_10m_admin_0_countries_iso set name_zht = '澳大利亚' where ne_id = 1159320355;
-
 --Update Bahamas name
 update ne_10m_admin_0_countries_iso set name_ru = 'Багамы' where ne_id = 1159320415;
 
