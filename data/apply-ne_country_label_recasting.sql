@@ -97,8 +97,8 @@ update ne_10m_admin_0_countries_iso set name_ar = 'أيرلندا' where ne_id =
 update ne_10m_admin_0_countries_iso set name_pt = 'Irlanda' where ne_id = 1159320877;
 
 --Update Kosovo name
-update ne_10m_admin_0_countries_iso set name_ja = 'コソボ' where ne_id = 1159321007;
-update ne_10m_admin_0_countries_iso set name_ru = 'Косово' where ne_id = 1159321007;
+update ne_10m_admin_0_countries_tlc set name_ja = 'コソボ' where ne_id = 1159321007;
+update ne_10m_admin_0_countries_tlc set name_ru = 'Косово' where ne_id = 1159321007;
 
 --Update Mali name
 update ne_10m_admin_0_countries_iso set name_ja = 'マリ' where ne_id = 1159321063;
