@@ -9,6 +9,7 @@ all:
   - boundaries
   - transit
   - admin_areas
+  - landmarks
 
 sources:
 
@@ -338,6 +339,15 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
     area-inclusion-threshold: 1
+  # optional inline layer, if the file is found on disk it will be used
+  landmarks:
+    geometry_types: [Point, Polygon, MultiPolygon]
+    clip: false
+    area-inclusion-threshold: 1
+    simplify_before_intersect: false
+    simplify_start: 0,
+    pre_processed_layer_path: ./metatile-layers/landmarks.geojson
+
 post_process:
   - fn: vectordatasource.transform.build_fence
     params:
@@ -541,6 +551,23 @@ post_process:
     params:
       source_layer: roads
       properties: [layer]
+
+  # supersede existing osm buildings with data from landmark geojson layer
+  - fn: vectordatasource.transform.overlap
+    params:
+      base_layer: buildings
+      cutting_layer: landmarks
+      attribute: supersede
+      target_attribute: superseded_by
+      linear: false
+
+  # turn the landmark geojson polygons into point features
+  - fn: vectordatasource.transform.mutate
+    params:
+      layer: landmarks
+      start_zoom: 13
+      geometry_expression: Point({properties}['origin'])
+      properties_expression: "dict(filter(lambda p: p[0] not in ['supersede', 'origin'], {properties}.items()))"
 
   # cut with admin_areas to put country_code attributes on roads
   # which are mostly within a particular country.
@@ -1865,6 +1892,7 @@ post_process:
         - addr_housenumber
         - addr_street
         - osm_relation
+      exclude: ['superseded_by']
       # NOTE: max_merged_features is set to keep the time taken for geometry
       # merging down, as it seems to go up with the square of the number of
       # features.
