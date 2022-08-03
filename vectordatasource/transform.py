@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 # transformation functions to apply to features
+import copy
 import csv
 import re
 from collections import defaultdict
@@ -9758,3 +9759,44 @@ def override_with_ne_names(shape, props, fid, zoom):
             props['name:' + language] = ne_name
 
     return shape, props, fid
+
+
+def mutate(ctx):
+    """
+    We take a layer and we modify the geometry using the python expression in the query. The expressions have access to
+    both the existing shape and existing properties via python string format replacements {shape} and {properties}
+    respectively. Each expression is then eval'd to replace the existing feature in the layer with the result of the
+    expressions. By default the expressions are a no-op
+    """
+
+    layer = ctx.params.get('layer')
+    assert layer, 'regenerate_geometry: missing layer'
+    geometry_expression = ctx.params.get('geometry_expression', '{shape}')
+    properties_expression = ctx.params.get('properties_expression', '{properties}')
+    assert geometry_expression or properties_expression, \
+        'mutate: requires at least one geometry or properties expression'
+    geometry_expression = geometry_expression.format(shape='shape', properties='props')
+    properties_expression = properties_expression.format(shape='shape', properties='props')
+
+    zoom = ctx.nominal_zoom
+    start_zoom = ctx.params.get('start_zoom', 0)
+    end_zoom = ctx.params.get('end_zoom')
+    if zoom < start_zoom:
+        return None
+    if end_zoom is not None and zoom >= end_zoom:
+        return None
+
+    # for the max zoom a transform needs to be re-entrant so we take a copy here
+    layer = copy.deepcopy(_find_layer(ctx.feature_layers, layer))
+    if layer is None:
+        return None
+
+    new_features = []
+    for feature in layer['features']:
+        shape, props, fid = feature
+        shape = eval(geometry_expression)
+        props = eval(properties_expression)
+        new_features.append((shape, props, fid))
+
+    layer['features'] = new_features
+    return layer
