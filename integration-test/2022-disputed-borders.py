@@ -297,6 +297,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'place:IT': 'town',
                 'place:TR': 'not_there',
                 'place:XX': 'country',
+                '__ne_min_zoom': 4,
                 'source': u'openstreetmap.org',
                 'source:sqkm': u'CIA World Factbook',
             }),

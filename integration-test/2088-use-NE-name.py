@@ -16,6 +16,7 @@ class TestNEName(FixtureTest):
                 u'name:zh-Hant': u'\u745e\u58eb',
                 u'source': u'openstreetmap.org',
                 u'wikidata': u'Q30',
+                u'__ne_min_zoom': 4,
                 u'ne_name_en': u'Test',
                 u'ne_name_zh-Hans': u'\u745e\u58eb\u8054\u90a6',
                 u'ne_name_zh-Hant': u'\u745e\u58eb\u806f\u90a6'
@@ -25,6 +26,7 @@ class TestNEName(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 10200326532,
+                'kind': 'country',
                 'name:en': u'Test',
                 'name:zh-Hans': u'\u745e\u58eb\u8054\u90a6',
                 'name:zh-Hant': u'\u745e\u58eb\u806f\u90a6'
@@ -51,6 +53,7 @@ class TestNEName(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 10200326532,
+                'kind': 'locality',
                 'name:en': u'Test',
                 'name:zh-Hans': u'\u745e\u58eb\u8054\u90a6',
                 'name:zh-Hant': u'\u745e\u58eb\u806f\u90a6'
@@ -66,6 +69,7 @@ class TestNEName(FixtureTest):
                 u'name:en': u'Switzerland',
                 u'name:zh-Hans': u'\u745e\u58eb',
                 u'name:zh-Hant': u'\u745e\u58eb',
+                u'__ne_min_zoom': 4,
                 u'source': u'openstreetmap.org',
                 u'wikidata': u'Q30'
             }),
@@ -74,6 +78,7 @@ class TestNEName(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 10200326532,
+                'kind': 'country',
                 'name:en': u'Switzerland',
                 'name:zh-Hans': u'\u745e\u58eb',
                 'name:zh-Hant': u'\u745e\u58eb'
@@ -89,6 +94,7 @@ class TestNEName(FixtureTest):
                 u'name:en': u'Switzerland',
                 u'source': u'openstreetmap.org',
                 u'wikidata': u'Q30',
+                u'__ne_min_zoom': 4,
                 u'ne_name_en': u''
             }),
         )
@@ -96,5 +102,6 @@ class TestNEName(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'places', {
                 'id': 10200326532,
+                'kind': 'country',
                 'name:en': u'Switzerland'
             })

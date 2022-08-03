@@ -90,6 +90,7 @@ class TestTLCPOV(FixtureTest):
                 'place:TLC': 'district',
                 'source': 'openstreetmap.org',
                 'source:sqkm': 'CIA World Factbook',
+                '__ne_min_zoom': 4,
             }),
         )
 
