@@ -98,7 +98,7 @@ class CountryBoundaryTest(FixtureTest):
         # should get a section recognised only by XX
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'unrecognized_country',
+                'kind': 'disputed_claim',
                 'kind:xx': 'country',
                 'name': 'XX Claim',
 
@@ -157,7 +157,7 @@ class CountryBoundaryTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 # generally unrecognised
-                'kind': 'unrecognized_country',
+                'kind': 'disputed_claim',
                 # but BB & CC both claim this as a border
                 'kind:bb': 'country',
                 'kind:cc': 'country',
