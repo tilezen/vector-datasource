@@ -12,13 +12,13 @@ class TestNEName(FixtureTest):
                 u'place': u'country',
                 u'name': u'Schweiz/Suisse/Svizzera/Svizra',
                 u'name:en': u'Switzerland',
-                u'name:zh-Hans': u'瑞士',
-                u'name:zh-Hant': u'瑞士',
+                u'name:zh-Hans': u'\u745e\u58eb',
+                u'name:zh-Hant': u'\u745e\u58eb',
                 u'source': u'openstreetmap.org',
                 u'wikidata': u'Q30',
                 u'ne_name_en': u'Test',
-                u'ne_name_zh-Hans': u'瑞士联邦',
-                u'ne_name_zh-Hant': u'瑞士聯邦'
+                u'ne_name_zh-Hans': u'\u745e\u58eb\u8054\u90a6',
+                u'ne_name_zh-Hant': u'\u745e\u58eb\u806f\u90a6'
             }),
         )
 
@@ -26,8 +26,8 @@ class TestNEName(FixtureTest):
             z, x, y, 'places', {
                 'id': 10200326532,
                 'name:en': u'Test',
-                'name:zh-Hans': u'瑞士联邦',
-                'name:zh-Hant': u'瑞士聯邦'
+                'name:zh-Hans': u'\u745e\u58eb\u8054\u90a6',
+                'name:zh-Hant': u'\u745e\u58eb\u806f\u90a6'
             })
 
     def test_use_ne_name_hamlet(self):
@@ -38,13 +38,13 @@ class TestNEName(FixtureTest):
                 u'place': u'hamlet',
                 u'name': u'Schweiz/Suisse/Svizzera/Svizra',
                 u'name:en': u'Switzerland',
-                u'name:zh-Hans': u'瑞士',
-                u'name:zh-Hant': u'瑞士',
+                u'name:zh-Hans': u'\u745e\u58eb',
+                u'name:zh-Hant': u'\u745e\u58eb',
                 u'source': u'openstreetmap.org',
                 u'wikidata': u'Q30',
                 u'ne_name_en': u'Test',
-                u'ne_name_zh-Hans': u'瑞士联邦',
-                u'ne_name_zh-Hant': u'瑞士聯邦'
+                u'ne_name_zh-Hans': u'\u745e\u58eb\u8054\u90a6',
+                u'ne_name_zh-Hant': u'\u745e\u58eb\u806f\u90a6'
             }),
         )
 
@@ -52,8 +52,8 @@ class TestNEName(FixtureTest):
             z, x, y, 'places', {
                 'id': 10200326532,
                 'name:en': u'Test',
-                'name:zh-Hans': u'瑞士联邦',
-                'name:zh-Hant': u'瑞士聯邦'
+                'name:zh-Hans': u'\u745e\u58eb\u8054\u90a6',
+                'name:zh-Hant': u'\u745e\u58eb\u806f\u90a6'
             })
 
     def test_no_ne_name(self):
@@ -64,8 +64,8 @@ class TestNEName(FixtureTest):
                 u'place': u'country',
                 u'name': u'Schweiz/Suisse/Svizzera/Svizra',
                 u'name:en': u'Switzerland',
-                u'name:zh-Hans': u'瑞士',
-                u'name:zh-Hant': u'瑞士',
+                u'name:zh-Hans': u'\u745e\u58eb',
+                u'name:zh-Hant': u'\u745e\u58eb',
                 u'source': u'openstreetmap.org',
                 u'wikidata': u'Q30'
             }),
@@ -75,8 +75,8 @@ class TestNEName(FixtureTest):
             z, x, y, 'places', {
                 'id': 10200326532,
                 'name:en': u'Switzerland',
-                'name:zh-Hans': u'瑞士',
-                'name:zh-Hant': u'瑞士'
+                'name:zh-Hans': u'\u745e\u58eb',
+                'name:zh-Hant': u'\u745e\u58eb'
             })
 
     def test_null_name(self):
