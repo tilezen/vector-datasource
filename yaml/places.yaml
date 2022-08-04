@@ -152,8 +152,8 @@ global:
     __ne_name_uk: {col: ne_name_uk}
     __ne_name_ur: {col: ne_name_ur}
     __ne_name_vi: {col: ne_name_vi}
-    __ne_name_zh: {col: ne_name_zh}
-    __ne_name_zht: {col: ne_name_zht}
+    __ne_name_zh-Hans: {col: ne_name_zh-Hans}
+    __ne_name_zh-Hant: {col: ne_name_zh-Hant}
 
 filters:
   - filter:

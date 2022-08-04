@@ -9756,7 +9756,8 @@ def override_with_ne_names(shape, props, fid, zoom):
             language = k[len(name_prefix):]
             ne_name = props.pop(k)
 
-            props['name:' + language] = ne_name
+            if len(ne_name) > 0:
+                props['name:' + language] = ne_name
 
     return shape, props, fid
 

@@ -153,6 +153,7 @@ class CountryTest(FixtureTest):
                 'name': 'Foo Country',
                 'population': '1000000000',
                 'source': 'openstreetmap.org',
+                '__ne_min_zoom': 4,
             }),
         )
 

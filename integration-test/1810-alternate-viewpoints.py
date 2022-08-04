@@ -98,7 +98,7 @@ class CountryBoundaryTest(FixtureTest):
         # should get a section recognised only by XX
         self.assert_has_feature(
             z, x, y, 'boundaries', {
-                'kind': 'unrecognized_country',
+                'kind': 'unrecognized',
                 'kind:xx': 'country',
                 'name': 'XX Claim',
 
@@ -111,14 +111,14 @@ class CountryBoundaryTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 'kind': 'country',
-                'kind:xx': 'unrecognized_country',
+                'kind:xx': 'unrecognized',
                 'name': 'XX - YY',
             })
 
     def test_claim(self):
         # test that a claim by countries BB & CC (and recognised by DD) is
         # only kind:country for those countries. everyone else's view is
-        # kind: unrecognized_country.
+        # kind: unrecognized.
         #
         # TODO: recognized_by not working yet.
         import dsl
@@ -157,7 +157,7 @@ class CountryBoundaryTest(FixtureTest):
         self.assert_has_feature(
             z, x, y, 'boundaries', {
                 # generally unrecognised
-                'kind': 'unrecognized_country',
+                'kind': 'unrecognized',
                 # but BB & CC both claim this as a border
                 'kind:bb': 'country',
                 'kind:cc': 'country',
@@ -165,7 +165,7 @@ class CountryBoundaryTest(FixtureTest):
                 # added to the output even though it duplicates the kind. this
                 # is to help with multi-level fallback. see
                 # https://github.com/tilezen/vector-datasource/pull/1895#discussion_r283912502
-                'kind:aa': 'unrecognized_country',
+                'kind:aa': 'unrecognized',
                 # DD recognizes BB's claim, so should see this as a country.
                 'kind:dd': 'country',
             })

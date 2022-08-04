@@ -1302,8 +1302,8 @@ BEGIN
             'ne_name_uk', i.name_uk,
             'ne_name_ur', i.name_ur,
             'ne_name_vi', i.name_vi,
-            'ne_name_zh', i.name_zh,
-            'ne_name_zht', i.name_zht
+            'ne_name_zh-Hans', i.name_zh,
+            'ne_name_zh-Hant', i.name_zht
             ]) INTO ne_name_tags
         FROM ne_10m_admin_0_countries_iso i
         WHERE i.wikidataid = wikidata_id;
@@ -1335,8 +1335,8 @@ BEGIN
                 'ne_name_uk', t.name_uk,
                 'ne_name_ur', t.name_ur,
                 'ne_name_vi', t.name_vi,
-                'ne_name_zh', t.name_zh,
-                'ne_name_zht', t.name_zht
+                'ne_name_zh-Hans', t.name_zh,
+                'ne_name_zh-Hant', t.name_zht
                 ]) INTO ne_name_tags
             FROM ne_10m_admin_0_countries_tlc t
             WHERE t.wikidataid = wikidata_id
@@ -1370,8 +1370,8 @@ BEGIN
                 'ne_name_uk', sp.name_uk,
                 'ne_name_ur', sp.name_ur,
                 'ne_name_vi', sp.name_vi,
-                'ne_name_zh', sp.name_zh,
-                'ne_name_zht', sp.name_zht
+                'ne_name_zh-Hans', sp.name_zh,
+                'ne_name_zh-Hant', sp.name_zht
                 ]) INTO ne_name_tags
             FROM ne_10m_admin_1_states_provinces sp
             WHERE sp.wikidataid = wikidata_id;
@@ -1403,8 +1403,8 @@ BEGIN
                 'ne_name_uk', pp.name_uk,
                 'ne_name_ur', pp.name_ur,
                 'ne_name_vi', pp.name_vi,
-                'ne_name_zh', pp.name_zh,
-                'ne_name_zht', pp.name_zht
+                'ne_name_zh-Hans', pp.name_zh,
+                'ne_name_zh-Hant', pp.name_zht
                 ]) INTO ne_name_tags
             FROM ne_10m_populated_places pp
             WHERE pp.wikidataid = wikidata_id;

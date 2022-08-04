@@ -84,12 +84,12 @@ rel(13563121); // Extent of Claim at South Ossetia
 rel(13573737); // Extent of Chilean Claim at Southern Glaciers Field
 rel(13573738); // Extent of Argentinian Claim at Southern Glaciers Field
 rel(13573952); // Extent of Claim at Abkhazia
-rel(13573966); // Extent of Claim at Donbass
+// timeline(rel,13573966);foreach(retro(u(t["created"]))(rel(13573966);(._;>;); out meta;);); // Extent of Claim at Donbass
 rel(13573969); // Extent of Belize Claim
 rel(13573970); // Extent of Guatemalan Claim
 rel(13573985); // Extent of Kosovo Claim
 rel(13574165); // Extent of Israeli Claim at Golan Heights
-rel(13574166); // 1949 Israeli–Syrian DMZ
+timeline(rel,13574166);foreach(retro(u(t["created"]))(rel(13574166);(._;>;); out meta;);); // 1949 Israeli–Syrian DMZ
 rel(13574167); // Extent of Syrian Claims at Golan Heights
 rel(13790690); // Approximate Extent of Siachen Glacier Dispute
 rel(13812677); // Line of Control at Demchok
