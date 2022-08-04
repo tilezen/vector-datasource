@@ -51,12 +51,16 @@ update ne_10m_admin_0_countries_iso set name_ru = 'Багамы' where ne_id = 1
 
 --Update Central Africa Republic name
 update ne_10m_admin_0_countries_iso set name_fr = 'Centrafrique' where ne_id = 1159320463;
+update ne_10m_admin_0_countries_iso set name_zh = '中非' where ne_id = 1159320463;
+update ne_10m_admin_0_countries_iso set name_zht = '中非' where ne_id = 1159320463;
 
 --Update China name
 update ne_10m_admin_0_countries_iso set name_de = 'China' where ne_id = 1159320471;
 update ne_10m_admin_0_countries_iso set name_en = 'China' where ne_id = 1159320471;
 update ne_10m_admin_0_countries_iso set name_fr = 'Chine' where ne_id = 1159320471;
 update ne_10m_admin_0_countries_iso set name_ko = '중국' where ne_id = 1159320471;
+update ne_10m_admin_0_countries_iso set name_zh = '中国' where ne_id = 1159320471;
+update ne_10m_admin_0_countries_iso set name_zht = '中国' where ne_id = 1159320471;
 
 --Update Cocos (Keeling) Island
 update ne_10m_admin_0_countries_iso set name_ar = 'جزر كوكوس (كيلينغ)' where ne_id = 1159320367;
@@ -71,6 +75,7 @@ update ne_10m_admin_0_countries_iso set name_de = 'Zypern' where ne_id = 1159320
 --Update Czechia name
 update ne_10m_admin_0_countries_iso set name_en = 'Czechia' where ne_id = 1159320535;
 update ne_10m_admin_0_countries_iso set name_es = 'Chequia' where ne_id = 1159320535;
+update ne_10m_admin_0_countries_iso set name_zht = '捷克' where ne_id = 1159320535;
 
 --Update Dominica name
 update ne_10m_admin_0_countries_iso set name_ko = '도미니카' where ne_id = 1159320543;
@@ -99,6 +104,7 @@ update ne_10m_admin_0_countries_tlc set name_ru = 'Косово' where ne_id = 1
 
 --Update Mali name
 update ne_10m_admin_0_countries_iso set name_ja = 'マリ' where ne_id = 1159321063;
+update ne_10m_admin_0_countries_iso set name_zht = '馬利' where ne_id = 1159321063;
 
 --Update Moldova name
 update ne_10m_admin_0_countries_iso set name_de = 'Moldawien' where ne_id = 1159321045;
@@ -106,11 +112,16 @@ update ne_10m_admin_0_countries_iso set name_de = 'Moldawien' where ne_id = 1159
 --Update Myanmar name
 update ne_10m_admin_0_countries_iso set name_es = 'Myanmar' where ne_id = 1159321067;
 
+--Update North Korea name
+update ne_10m_admin_0_countries_iso set name_zh = '朝鲜' where ne_id = 1159321181;
+update ne_10m_admin_0_countries_iso set name_zht = '北韓' where ne_id = 1159321181;
+
 --Update Oman name
 update ne_10m_admin_0_countries_iso set name_ar = 'عمان' where ne_id = 1159321151;
 
 --Update Saint Barthélemy name
 update ne_10m_admin_0_countries_iso set name_pt = 'São Bartolomeu' where ne_id = 1159320633;
+update ne_10m_admin_0_countries_iso set name_zht = '聖巴多祿繆島' where ne_id = 1159320633;
 
 --Update Saint Helena, Ascension and Tristan da Cunha name
 update ne_10m_admin_0_countries_iso set name_ar = 'سانت هيلينا، أسينسيون وتريستان دا كونها' where ne_id = 1159320769;
@@ -120,8 +131,17 @@ update ne_10m_admin_0_countries_iso set name_es = 'Santa Elena, Ascensión y Tri
 update ne_10m_admin_0_countries_iso set name_fr = 'Sainte-Hélène, Ascension et Tristan da Cunha' where ne_id = 1159320769;
 update ne_10m_admin_0_countries_iso set name_pt = 'Santa Helena, Ascensão e Tristão da Cunha' where ne_id = 1159320769;
 update ne_10m_admin_0_countries_iso set name_ru = 'Острова Святой Елены, Вознесения и Тристан-да-Кунья' where ne_id = 1159320769;
+update ne_10m_admin_0_countries_iso set name_zh= '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320769;
+update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320769;
+
+--Update Saint Kitts and Nevis
+update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320983;
 
 --Update South Africa name
+update ne_10m_admin_0_countries_iso set name_zh = '南アフリカ' where ne_id = 1159320985;
+update ne_10m_admin_0_countries_iso set name_zht = '남아프리카' where ne_id = 1159320985;
+
+--Update South Korea name
 update ne_10m_admin_0_countries_iso set name_ja = '南アフリカ' where ne_id = 1159321431;
 update ne_10m_admin_0_countries_iso set name_ko = '남아프리카' where ne_id = 1159321431;
 
@@ -130,6 +150,11 @@ update ne_10m_admin_0_countries_iso set name_de = 'Taiwan' where ne_id = 1159321
 update ne_10m_admin_0_countries_iso set name_es = 'Taiwán' where ne_id = 1159321335;
 update ne_10m_admin_0_countries_iso set name_ja = '台湾' where ne_id = 1159321335;
 update ne_10m_admin_0_countries_iso set name_ko = '타이완' where ne_id = 1159321335;
+update ne_10m_admin_0_countries_iso set name_zh = '台湾' where ne_id = 1159321335;
+update ne_10m_admin_0_countries_iso set name_zht = '臺灣' where ne_id = 1159321335;
+
+--Update Turks and Caicos Island
+update ne_10m_admin_0_countries_iso set name_zht = '特克斯和凱科斯群島' where ne_id = 1159320737;
 
 --Update United States name
 update ne_10m_admin_0_countries_iso set name_en = 'United States' where ne_id = 1159321369;
