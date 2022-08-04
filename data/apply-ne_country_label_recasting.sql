@@ -135,15 +135,15 @@ update ne_10m_admin_0_countries_iso set name_zh= '圣赫勒拿、阿森松和特
 update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320733;
 
 --Update Saint Kitts and Nevis
-update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320983;
+update ne_10m_admin_0_countries_iso set name_zht = '圣基茨和尼维斯' where ne_id = 1159320983;
 
 --Update South Africa name
-update ne_10m_admin_0_countries_iso set name_zh = '南アフリカ' where ne_id = 1159320985;
-update ne_10m_admin_0_countries_iso set name_zht = '남아프리카' where ne_id = 1159320985;
-
---Update South Korea name
 update ne_10m_admin_0_countries_iso set name_ja = '南アフリカ' where ne_id = 1159321431;
 update ne_10m_admin_0_countries_iso set name_ko = '남아프리카' where ne_id = 1159321431;
+
+--Update South Korea name
+update ne_10m_admin_0_countries_iso set name_zh = '韩国' where ne_id = 1159320985;
+update ne_10m_admin_0_countries_iso set name_zht = '南韓' where ne_id = 1159320985;
 
 --Update Taiwan name
 update ne_10m_admin_0_countries_iso set name_de = 'Taiwan' where ne_id = 1159321335;
