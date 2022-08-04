@@ -124,15 +124,15 @@ update ne_10m_admin_0_countries_iso set name_pt = 'São Bartolomeu' where ne_id 
 update ne_10m_admin_0_countries_iso set name_zht = '聖巴多祿繆島' where ne_id = 1159320633;
 
 --Update Saint Helena, Ascension and Tristan da Cunha name
-update ne_10m_admin_0_countries_iso set name_ar = 'سانت هيلينا، أسينسيون وتريستان دا كونها' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_de = 'St. Helena, Ascension und Tristan da Cunha' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_en = 'Saint Helena, Ascension and Tristan da Cunha' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_es = 'Santa Elena, Ascensión y Tristán de Acuña' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_fr = 'Sainte-Hélène, Ascension et Tristan da Cunha' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_pt = 'Santa Helena, Ascensão e Tristão da Cunha' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_ru = 'Острова Святой Елены, Вознесения и Тристан-да-Кунья' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_zh= '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320769;
-update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320769;
+update ne_10m_admin_0_countries_iso set name_ar = 'سانت هيلينا، أسينسيون وتريستان دا كونها' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_de = 'St. Helena, Ascension und Tristan da Cunha' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_en = 'Saint Helena, Ascension and Tristan da Cunha' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_es = 'Santa Elena, Ascensión y Tristán de Acuña' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_fr = 'Sainte-Hélène, Ascension et Tristan da Cunha' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_pt = 'Santa Helena, Ascensão e Tristão da Cunha' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_ru = 'Острова Святой Елены, Вознесения и Тристан-да-Кунья' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_zh= '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320733;
+update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320733;
 
 --Update Saint Kitts and Nevis
 update ne_10m_admin_0_countries_iso set name_zht = '圣赫勒拿、阿森松和特里斯坦-达库尼亚' where ne_id = 1159320983;
