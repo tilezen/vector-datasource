@@ -9,6 +9,20 @@ pip install -U -r requirements.txt
 python setup.py develop
 ```
 
+### Apple Silicon Macs
+M1 and subsequent Mac computers may encounter the error below when attempting to run tests.
+
+```
+OSError: Could not find lib geos_c or load any of its variants ['/Library/Frameworks/GEOS.framework/Versions/Current/GEOS', '/opt/local/lib/libgeos_c.dylib', '/usr/local/lib/libgeos_c.dylib'].
+```
+
+Try this for one possible fix. Requires [homebrew](https://brew.sh/).
+```
+brew install geos
+sudo ln -s /opt/homebrew/lib/libgeos_c.dylib /usr/local/lib
+```
+
+
 ## Code / Unit Tests
 
 The `vector-datasource` project comes with some unit tests for the code in the `vectordatasource/` directory. These can be run with the command:
