@@ -11,7 +11,6 @@ class AerodromeTest(FixtureTest):
         import dsl
 
         z, x, y = (13, 1311, 3170)
-
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/545819287
             dsl.way(545819287, dsl.tile_box(z, x, y), {
