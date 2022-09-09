@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class PopulationRankTest(FixtureTest):
@@ -210,7 +210,7 @@ class CountryTest(FixtureTest):
 
         self.assertLess(rank1, rank2)
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_country_collision_rank(self):
         rank1 = self._rank('country', 5000000)
         rank2 = self._rank('country', 1000000)

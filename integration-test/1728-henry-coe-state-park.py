@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class ParkTest(FixtureTest):
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_henry_coe_state_park(self):
         import dsl
 
@@ -37,7 +37,7 @@ class ParkTest(FixtureTest):
                 'kind': 'park',
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_lake_district_national_park(self):
         import dsl
 

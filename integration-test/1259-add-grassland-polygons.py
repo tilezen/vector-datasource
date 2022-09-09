@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class GrasslandTest(FixtureTest):
@@ -107,7 +107,7 @@ class GrasslandTest(FixtureTest):
                 'kind': 'bare_rock',
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_desert(self):
         import dsl
 

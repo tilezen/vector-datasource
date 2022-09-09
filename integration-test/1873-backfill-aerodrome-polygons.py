@@ -1,10 +1,11 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
+@unittest.skip(BROKEN)
 class AerodromeTest(FixtureTest):
     def test_sfo(self):
         # SFO should be "international": both the polygon _and_ the POI.

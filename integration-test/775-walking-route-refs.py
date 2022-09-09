@@ -1,11 +1,11 @@
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class WalkingRouteRefs(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_single_route(self):
         # walking route constituent ways should have the walking route
         # properties projected onto them.

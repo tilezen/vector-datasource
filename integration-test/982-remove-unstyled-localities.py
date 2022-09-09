@@ -4,8 +4,8 @@ import unittest
 import dsl
 from shapely.wkt import loads as wkt_loads
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class RemoveUnstyledLocalities(FixtureTest):
@@ -23,7 +23,7 @@ class RemoveUnstyledLocalities(FixtureTest):
             {'kind': 'locality', 'kind_detail': 'town', 'name': 'Arcata',
              'id': 141029389, 'min_zoom': 8})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_zoom_9_10(self):
         # zoom 9 and 10:
         # include only those localities with name and kind_detail IN
@@ -44,7 +44,7 @@ class RemoveUnstyledLocalities(FixtureTest):
             {'kind': 'locality', 'kind_detail': 'town', 'name': 'Hoopa',
              'id': 4270230299, 'min_zoom': 9})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_zoom_11(self):
         # zoom 11:
         # include only those localities with name and kind_detail IN
@@ -67,7 +67,7 @@ class RemoveUnstyledLocalities(FixtureTest):
             {'kind': 'locality', 'kind_detail': 'village', 'name': 'Fairfax',
              'id': 150949805, 'min_zoom': 11})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_zoom_12(self):
         # zoom 12:
         # include only those localities with name and kind_detail IN
@@ -91,7 +91,7 @@ class RemoveUnstyledLocalities(FixtureTest):
             {'kind': 'locality', 'kind_detail': 'hamlet',
              'name': 'Duncans Mills', 'id': 150966610, 'min_zoom': 12})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_zoom_13_and_up(self):
         # example: http://www.openstreetmap.org/node/150973394 - Inverness
         # hamlet with NO population should NOT show up at zoom 12

@@ -4,11 +4,11 @@ import unittest
 import dsl
 from shapely.wkt import loads as wkt_loads
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
-@unittest.skip(SKIP_UNIT_TEST_REASON)
+@unittest.skip(BROKEN)
 class EarlierPiers(FixtureTest):
 
     def test_very_large_pier(self):

@@ -1,7 +1,7 @@
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 def _tile_centre(z, x, y):
@@ -11,7 +11,7 @@ def _tile_centre(z, x, y):
 
 
 class UnifyBuildingPart(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_one_madison(self):
         # Way: One Madison
         self.load_fixtures([
@@ -32,7 +32,7 @@ class UnifyBuildingPart(FixtureTest):
             16, 19298, 24633, 'buildings',
             {'id': 160967739, 'kind': 'building_part', 'root_id': 264768910})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_ferry_building(self):
         import dsl
         from shapely.wkt import loads as wkt_loads

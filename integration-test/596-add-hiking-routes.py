@@ -2,8 +2,8 @@ import unittest
 
 import dsl
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class AddHikingRoutes(FixtureTest):
@@ -39,7 +39,7 @@ class AddHikingRoutes(FixtureTest):
             15, 5234, 12667, 'roads',
             {'kind': 'path', 'kind_detail': 'footway'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_minor_road_nwn(self):
         # Baker River Road - residential - part of Pacific Northwest
         # Trail (nwn)
@@ -67,7 +67,7 @@ class AddHikingRoutes(FixtureTest):
             {'kind': 'minor_road', 'kind_detail': 'residential',
              'walking_network': 'nwn'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_major_road_nwn(self):
         # Mount Baker Highway - secondary - part of Pacific Northwest
         # Trail (nwn)
@@ -82,7 +82,7 @@ class AddHikingRoutes(FixtureTest):
             {'kind': 'major_road', 'kind_detail': 'secondary',
              'walking_network': 'nwn'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_unclassified_nwn(self):
         # Whiskey Bend Road - unclassified - part of Pacific Northwest
         # Trail (nwn)
@@ -97,7 +97,7 @@ class AddHikingRoutes(FixtureTest):
             {'kind': 'minor_road', 'kind_detail': 'unclassified',
              'walking_network': 'nwn'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_service_nwn(self):
         # Matz Road - service - part of Ice Age National Scenic Trail
         # (nwn)
@@ -128,7 +128,7 @@ class AddHikingRoutes(FixtureTest):
             {'kind': 'minor_road', 'kind_detail': 'service',
              'walking_network': 'nwn'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_driveway_nwn(self):
         # Dogbane - service=driveway - part of American Discovery Trail
         # (nwn)

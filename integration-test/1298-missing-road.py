@@ -1,10 +1,10 @@
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
-@unittest.skip(SKIP_UNIT_TEST_REASON)
+@unittest.skip(BROKEN)
 class MissingRoad(FixtureTest):
     def test_route_611(self):
         # Relation: route 611 (975266)

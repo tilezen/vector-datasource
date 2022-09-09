@@ -2,11 +2,11 @@ import unittest
 
 import dsl
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
-@unittest.skip(SKIP_UNIT_TEST_REASON)
+@unittest.skip(BROKEN)
 class BusRouteRefs(FixtureTest):
     def test_one_bus_route(self):
         # Sloat Blvd, part of:

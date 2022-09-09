@@ -1,11 +1,11 @@
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class ZoosAndOtherAttractionsTourism(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_tourism(self):
         # Sinclair Oil Apatosaurus, Windsor
         self._run_test(16, 17645, 24251, 786994983, 'artwork')

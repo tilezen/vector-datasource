@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 # https://www.openstreetmap.org/relation/3694102
 SAN_ANSELMO = {
@@ -93,7 +93,7 @@ class LocalityTest(FixtureTest):
                 'official_name:left': type(None),
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_name_not_stripped_at_z13(self):
         z, x, y = (13, 1307, 3160)
         self._setup(z, x, y, SAN_ANSELMO, SAN_RAFAEL)

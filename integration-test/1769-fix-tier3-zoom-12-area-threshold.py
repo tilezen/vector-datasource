@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
-@unittest.skip(SKIP_UNIT_TEST_REASON)
+@unittest.skip(BROKEN)
 class LanduseTest(FixtureTest):
     def test_tier1_national_park(self):
         import dsl

@@ -4,8 +4,8 @@ import unittest
 import dsl
 from shapely.wkt import loads as wkt_loads
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class NeShieldEnums(FixtureTest):
@@ -29,7 +29,7 @@ class NeShieldEnums(FixtureTest):
             {'source': 'naturalearthdata.com', 'network': 'US:I',
              'kind': 'highway', 'shield_text': '20'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_us76(self):
         # US-76
         self.assert_has_feature(
@@ -44,7 +44,7 @@ class NeShieldEnums(FixtureTest):
             {'source': 'naturalearthdata.com', 'network': 'MX',
              'kind': 'highway', 'shield_text': '49'})
 
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_mex54(self):
         # MEX 54 (federal)
         self.assert_has_feature(

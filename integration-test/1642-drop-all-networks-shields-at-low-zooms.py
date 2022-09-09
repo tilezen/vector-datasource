@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 import unittest
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 # To decrease file size let's drop all_networks and all_shield_texts
 # from low and mid-zooms when there's often not room to display this
 # information.
-@unittest.skip(SKIP_UNIT_TEST_REASON)
+@unittest.skip(BROKEN)
 class DropAllNetworksShieldsAtLowZooms(FixtureTest):
 
     def _drop_at_zoom(self, z, osm=None, kind=None):

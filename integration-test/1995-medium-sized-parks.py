@@ -3,12 +3,12 @@ import unittest
 
 import dsl
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 
 class MediumSizedParks(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_alamo_square_min_zoom_12(self):
 
         z, x, y = (12, 654, 1583)

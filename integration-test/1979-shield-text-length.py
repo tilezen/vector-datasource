@@ -3,8 +3,8 @@ import unittest
 
 import dsl
 
+from . import BROKEN
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_REASON
 
 z, x, y = (16, 10470, 25340)
 
@@ -56,7 +56,7 @@ rel23Bus = {
 
 
 class ShieldTextLengthTest(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_create_shield_text_length(self):
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/417097119
@@ -99,7 +99,7 @@ class ShieldTextLengthTest(FixtureTest):
             })
 
     # empty strings and route refs over 6 chars in length don't report length
-    @unittest.skip(SKIP_UNIT_TEST_REASON)
+    @unittest.skip(BROKEN)
     def test_lengths_over_6_or_empty_are_not_reported(self):
 
         rel123456 = rel35.copy()
