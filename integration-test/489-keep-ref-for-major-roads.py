@@ -1,6 +1,10 @@
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
+@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
 class KeepRefForMajorRoads(FixtureTest):
     def test_I495(self):
         # just checks that there is at least one major_road with a ref set.

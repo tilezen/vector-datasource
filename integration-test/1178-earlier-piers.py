@@ -1,10 +1,14 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
+@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
 class EarlierPiers(FixtureTest):
 
     def test_very_large_pier(self):

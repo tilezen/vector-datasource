@@ -1,7 +1,10 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class DisputedBoundariesTest(FixtureTest):
@@ -323,6 +326,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'kind:xx': None,  # invalid viewpoint not exported
             })
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_boundary_administrative_has_dispute_id(self):
         z, x, y = (16, 53533, 28559)
 
@@ -386,6 +390,7 @@ class DisputedBoundariesTest(FixtureTest):
                 'dispute_id': 'AAAA_2222',
             })
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_ne_unrecognized_region_boundary_has_dispute_id(self):
         z, x, y = 8, 0, 0
 

@@ -1,9 +1,12 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class DemoteEarlyLandcover(FixtureTest):
-
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_forest(self):
         import dsl
 

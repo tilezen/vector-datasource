@@ -1,9 +1,12 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class AerodromeTest(FixtureTest):
-
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_sfo(self):
         # SFO should be international because the "aerodrome" tag is
         # international. that should override the "aerodrome:type=public" tag.

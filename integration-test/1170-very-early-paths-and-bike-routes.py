@@ -1,9 +1,13 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class VeryEarlyPathsAndBikeRoutes(FixtureTest):
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_path_with_international_route(self):
         # highway=path, with route inter-national
         # GR5-Grand Traverse de Jura between France and Switzerland
@@ -36,6 +40,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             9, 265, 179, 'roads',
             {'kind': 'path', 'walking_network': 'iwn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_path_with_national_route(self):
         # highway=path, with route national (Pacific Crest Trail) at zoom 9
         #         self.load_fixtures([
@@ -86,6 +91,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             11, 343, 792, 'roads',
             {'kind': 'path', 'walking_network': 'rwn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_unclassified_with_local_route(self):
         # highway=unclassified, with route local (Grant Avenue) at zoom 12
         # part of The Barbary Coast Trail in San Francisco
@@ -98,6 +104,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             12, 655, 1582, 'roads',
             {'kind': 'minor_road', 'walking_network': 'lwn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_secondary_with_international_route(self):
         # Strøby Bygade secondary road part of international cycle network
         # https://www.openstreetmap.org/relation/28441
@@ -120,6 +127,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             {'kind': 'major_road', 'kind_detail': 'secondary',
              'is_bicycle_related': True, 'bicycle_network': 'icn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_teriary_with_national_route(self):
         # Sundbylillevej tertiary road part of national cycle network
         self.load_fixtures([
@@ -132,6 +140,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             {'kind': 'major_road', 'kind_detail': 'tertiary',
              'is_bicycle_related': True, 'bicycle_network': 'ncn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_cycleway_with_international_route(self):
         # Way: North Sea Cycle Route - part Netherlands (1977662)
         # A really long highway=cycleway
@@ -203,6 +212,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             {'kind': 'path', 'is_bicycle_related': True,
              'bicycle_network': 'icn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_ferry_with_international_route(self):
         # Ferry between Denmark and Germany, icn
         self.load_fixtures([
@@ -215,6 +225,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             {'kind': 'ferry', 'is_bicycle_related': True,
              'bicycle_network': 'icn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_minor_road_with_national_route(self):
         # Søndervangsvej minor road in Denmark as national cycle route
         self.load_fixtures([
@@ -247,6 +258,7 @@ class VeryEarlyPathsAndBikeRoutes(FixtureTest):
             {'kind': 'path', 'is_bicycle_related': True,
              'bicycle_network': type(None)})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_residential_with_regional_route(self):
         # Hyltebjerg Allé residential road with rcn in Copenhagen
         self.load_fixtures([

@@ -1,11 +1,15 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class GardenPois(FixtureTest):
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_garden_with_area(self):
         # update gardens in pois
         # garden with area in pois

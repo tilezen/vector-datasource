@@ -1,5 +1,8 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class BoundaryIdTest(FixtureTest):
@@ -55,6 +58,7 @@ class BoundaryIdTest(FixtureTest):
             ),
         )
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_have_ids_at_z13(self):
         z, x, y = (13, 100, 100)
         self._setup(z, x, y, 1, 2)

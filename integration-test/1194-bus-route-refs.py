@@ -1,9 +1,12 @@
+import unittest
+
 import dsl
-from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
+@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
 class BusRouteRefs(FixtureTest):
     def test_one_bus_route(self):
         # Sloat Blvd, part of:

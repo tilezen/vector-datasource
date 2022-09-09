@@ -1,7 +1,11 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
+@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
 class DropRoadPropertiesTest(FixtureTest):
 
     def test_rcn(self):

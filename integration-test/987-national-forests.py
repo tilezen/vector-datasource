@@ -1,11 +1,15 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class NationalForests(FixtureTest):
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_boundary_national_park(self):
         # Example Stanislaus National Forest in California near Yosemite
         # should be kind:forest.
@@ -16,6 +20,7 @@ class NationalForests(FixtureTest):
             11, 340, 788, 'landuse',
             {'kind': 'forest', 'id': -972008})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_protect_class_5(self):
         # But this other Humboldt forest in Nevada has protect_class 5 so
         # that's not guaranteed, should be kind:forest.
@@ -36,6 +41,7 @@ class NationalForests(FixtureTest):
             14, 2559, 6099, 'landuse',
             {'kind': 'forest', 'id': -6213964})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_operator_usnps_not_forest(self):
         # Counter example is Mojave National Preserve which is operated by
         # United States National Park Service so we don't want it to become
@@ -77,7 +83,7 @@ class NationalForests(FixtureTest):
     # to say forest, and it's not a national park. Alternatively
     # boundary:type=protected_area could give us kind: protected_area
     # instead.
-
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_protection_title_national_forest(self):
         # This feature also has protection_title=National Forest, and the
         # name is "Arapaho National Forest", so it should probably be classed
@@ -89,6 +95,7 @@ class NationalForests(FixtureTest):
             13, 1683, 3103, 'landuse',
             {'kind': 'forest', 'id': -396026})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_nature_reserve_protected_area(self):
         # leisure=nature_reserve in North Farallon Islands State Marine
         # Reserve has boundary=protected_area with protect_class=4 in tile
@@ -101,6 +108,7 @@ class NationalForests(FixtureTest):
             11, 323, 791, 'landuse',
             {'kind': 'nature_reserve', 'id': 436801947})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_nature_reserve_national_park(self):
         # leisure=nature_reserve in Mount Tamalpais Watershed has
         # boundary=national_park with boundary:type=protected_area and
@@ -125,6 +133,7 @@ class NationalForests(FixtureTest):
             15, 5229, 12648, 'landuse',
             {'kind': 'common', 'id': 297452972})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_nature_reserve_boundary_type(self):
         # leisure=nature_reserve in Glen Canyon National Recreation Area with
         # boundary=national_park and boundary:type=protected_area and
@@ -137,6 +146,7 @@ class NationalForests(FixtureTest):
             12, 784, 1585, 'landuse',
             {'kind': 'nature_reserve', 'id': -5273153})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_plain_nature_reserve(self):
         # leisure=nature_reserve in Parque Natural Sierra de Andújar with
         # finally kind:nature_reserve.
@@ -147,6 +157,7 @@ class NationalForests(FixtureTest):
             13, 4003, 3151, 'landuse',
             {'kind': 'nature_reserve', 'id': 373769670})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_protected_area_protect_class_5(self):
         # boundary=protected_area in Naturpark Steigerwald with
         # protect_class=5 should end up with kind: protected_area
@@ -168,6 +179,7 @@ class NationalForests(FixtureTest):
             16, 10452, 25302, 'landuse',
             {'kind': 'national_park', 'id': -6229828})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_park_protect_class_5(self):
         # leisure=park in Henry W. Coe State Park with boundary=protected_area
         # and protect_class=5 should end up with kind:park.
@@ -178,6 +190,7 @@ class NationalForests(FixtureTest):
             13, 1332, 3184, 'landuse',
             {'kind': 'park', 'id': -318202})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_nature_reserve_plus_operator_national_park_service(self):
         # operator=United States National Park Service and protect_class=2 in
         # Yosemite National Park with boundary=national_park and
@@ -189,6 +202,7 @@ class NationalForests(FixtureTest):
             13, 1371, 3164, 'landuse',
             {'kind': 'national_park', 'id': -1643367})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_boundary_national_park_plus_operator_usnps_redwood(self):
         # operator=United States National Park Service and protect_class=2 in
         # Redwood National Park with boundary=national_park and
@@ -200,6 +214,7 @@ class NationalForests(FixtureTest):
             13, 1274, 3066, 'landuse',
             {'kind': 'national_park', 'id': -215231})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_boundary_national_park_plus_operator_usnps_yellowstone(self):
         # operator=United States National Park Service and protect_class=2 in
         # Yellowstone National Park with boundary=national_park and
@@ -211,6 +226,7 @@ class NationalForests(FixtureTest):
             13, 1591, 2972, 'landuse',
             {'kind': 'national_park', 'id': -1453306})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_boundary_national_park_adirondack(self):
         # boundary=national_park in Adirondack Park should end up with
         # kind:park.
@@ -221,6 +237,7 @@ class NationalForests(FixtureTest):
             13, 2410, 3001, 'landuse',
             {'kind': 'park', 'id': -1695394})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_boundary_national_park_plus_operator_usnps_shenandoah(self):
         # operator=United States National Park Service and protect_class=2 in
         # Shenandoah National Park with boundary=national_park and
@@ -232,6 +249,7 @@ class NationalForests(FixtureTest):
             13, 2313, 3142, 'landuse',
             {'kind': 'national_park', 'id': -5548542})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_designation_national_park(self):
         # designation=national_park in Cairngorms National Park with
         # boundary=national_park should end up with kind:national_park.
@@ -242,6 +260,7 @@ class NationalForests(FixtureTest):
             13, 4014, 2512, 'landuse',
             {'kind': 'national_park', 'id': -1947603})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_designation_aonb(self):
         # boundary=national_park in North Wessex Downs AONB with
         # designation=area_of_outstanding_natural_beauty should end up with
@@ -253,6 +272,7 @@ class NationalForests(FixtureTest):
             13, 4054, 2728, 'landuse',
             {'kind': 'park', 'id': -2904192})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_parks_canada(self):
         # operator:en=Parks Canada and boundary=national_park in Riding
         # Mountain National Park with leisure=nature_reserve.

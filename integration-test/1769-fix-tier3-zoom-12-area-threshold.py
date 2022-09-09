@@ -1,9 +1,12 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
+@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
 class LanduseTest(FixtureTest):
-
     def test_tier1_national_park(self):
         import dsl
 

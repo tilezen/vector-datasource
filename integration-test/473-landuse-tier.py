@@ -1,4 +1,7 @@
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class LanduseTier(FixtureTest):
@@ -46,6 +49,7 @@ class LanduseTier(FixtureTest):
             {'kind': 'national_park', 'id': -1453306, 'tier': 1,
              'min_zoom': 5})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_national_park(self):
         import dsl
 
@@ -76,6 +80,7 @@ class LanduseTier(FixtureTest):
             {'kind': 'national_park', 'id': -921675, 'tier': 1,
              'min_zoom': 8})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_national_forest(self):
         # this is USFS, so demoted to tier 2 :-(
         # area 86685400

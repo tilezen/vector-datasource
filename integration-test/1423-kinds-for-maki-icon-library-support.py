@@ -1,5 +1,8 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class KindsForMakiIconSupportTest(FixtureTest):
@@ -915,6 +918,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'name': u'cliff top',
             })
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_danger_area_otmoor(self):
         import dsl
 

@@ -1,7 +1,10 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 
 from . import FixtureTest
+from . import SKIP_UNIT_TEST_MESSAGE
 
 
 class CycleRoute(FixtureTest):
@@ -84,6 +87,7 @@ class CycleRoute(FixtureTest):
             16, 32209, 22024, 'roads',
             {'id': 315261543, 'kind': 'path', 'bicycle_network': 'ncn'})
 
+    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
     def test_path_rcn(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/44422697'])
 
