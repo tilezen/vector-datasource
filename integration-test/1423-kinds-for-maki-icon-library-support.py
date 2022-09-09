@@ -2,7 +2,7 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class KindsForMakiIconSupportTest(FixtureTest):
@@ -918,7 +918,7 @@ class KindsForMakiIconSupportTest(FixtureTest):
                 'name': u'cliff top',
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_danger_area_otmoor(self):
         import dsl
 

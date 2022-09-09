@@ -5,11 +5,11 @@ import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class GardenPois(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_garden_with_area(self):
         # update gardens in pois
         # garden with area in pois

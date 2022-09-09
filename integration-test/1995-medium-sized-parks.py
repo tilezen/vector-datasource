@@ -4,11 +4,11 @@ import unittest
 import dsl
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class MediumSizedParks(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_alamo_square_min_zoom_12(self):
 
         z, x, y = (12, 654, 1583)

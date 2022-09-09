@@ -5,11 +5,11 @@ import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class RoadsAccess(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_restricted_access(self):
         # Add surface properties to roads layer (at max zooms)
         # restricted access road in military base, Kraków, Poland

@@ -2,11 +2,11 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class RoadsSurface(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_cobblestones(self):
         # Add surface properties to roads layer (at max zooms)
         # Prince St with cobblestones in Alexandria, VA
@@ -34,7 +34,7 @@ class RoadsSurface(FixtureTest):
             7, 71, 43, 'roads',
             {'kind_detail': 'motorway', 'surface': 'asphalt'})
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_concrete_lanes(self):
         # track with cycling route in Schartau, Germany
         # http://www.openstreetmap.org/way/58691615

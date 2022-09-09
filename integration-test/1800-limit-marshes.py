@@ -2,7 +2,7 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class MarshTest(FixtureTest):
@@ -42,7 +42,7 @@ class MarshTest(FixtureTest):
                 'name': str,
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_oro_loma_marsh(self):
         import dsl
 

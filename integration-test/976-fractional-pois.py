@@ -3,11 +3,11 @@ import unittest
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class FractionalPois(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_apple_store(self):
         import dsl
         # Apple Store, SF
@@ -64,7 +64,7 @@ class FractionalPois(FixtureTest):
              'source': 'openstreetmap.org',
              'name': 'New Jersey - New York'})
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_major_road_route(self):
         self.load_fixtures([
             'http://www.openstreetmap.org/relation/568499',
@@ -130,7 +130,7 @@ class FractionalPoisNe(FixtureTest):
 
         self.load_fixtures(fixtures)
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_boundaries(self):
         # Test that source and min_zoom are set properly for boundaries, roads,
         # transit, and water

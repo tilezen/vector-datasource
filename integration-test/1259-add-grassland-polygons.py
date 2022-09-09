@@ -2,7 +2,7 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class GrasslandTest(FixtureTest):
@@ -107,7 +107,7 @@ class GrasslandTest(FixtureTest):
                 'kind': 'bare_rock',
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_desert(self):
         import dsl
 

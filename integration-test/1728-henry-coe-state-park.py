@@ -2,12 +2,12 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class ParkTest(FixtureTest):
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_henry_coe_state_park(self):
         import dsl
 
@@ -37,7 +37,7 @@ class ParkTest(FixtureTest):
                 'kind': 'park',
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_lake_district_national_park(self):
         import dsl
 

@@ -2,11 +2,11 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class CountryBoundaryTest(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_boundary(self):
         import dsl
 
@@ -118,7 +118,7 @@ class CountryBoundaryTest(FixtureTest):
                 'name': 'XX - YY',
             })
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_claim(self):
         # test that a claim by countries BB & CC (and recognised by DD) is
         # only kind:country for those countries. everyone else's view is

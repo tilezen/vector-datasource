@@ -5,10 +5,10 @@ import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
-@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+@unittest.skip(SKIP_UNIT_TEST_REASON)
 class EarlyUnclassifiedRoads(FixtureTest):
 
     def test_early_unclassified_road1_utah(self):

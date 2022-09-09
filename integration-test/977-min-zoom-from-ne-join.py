@@ -2,7 +2,7 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 class MinZoomFromNETest(FixtureTest):
@@ -63,7 +63,7 @@ class MinZoomFromNETest(FixtureTest):
 
 
 class MinZoomFromAdminAreaBasedDefault(FixtureTest):
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_united_kingdom(self):
         # in the absence of data joined from NE, we should fall back to a
         # default based on the country that the label point is in.

@@ -5,7 +5,7 @@ import dsl
 from shapely.wkt import loads as wkt_loads
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
 # I think we should remove for v1 (and never should be been included at zoom
@@ -41,7 +41,7 @@ class NeShieldEnums2(FixtureTest):
             {'source': 'naturalearthdata.com', 'kind': 'highway',
              'namealtt': None})
 
-    @unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+    @unittest.skip(SKIP_UNIT_TEST_REASON)
     def test_network_and_shield(self):
         # network & shield text should stay on highways at lower zooms.
         # E30 (M4) in UK

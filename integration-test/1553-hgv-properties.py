@@ -2,10 +2,10 @@
 import unittest
 
 from . import FixtureTest
-from . import SKIP_UNIT_TEST_MESSAGE
+from . import SKIP_UNIT_TEST_REASON
 
 
-@unittest.skip(SKIP_UNIT_TEST_MESSAGE)
+@unittest.skip(SKIP_UNIT_TEST_REASON)
 class LowEmissionZoneTest(FixtureTest):
 
     def test_low_emission_zone_way(self):
