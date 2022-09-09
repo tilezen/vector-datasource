@@ -101,4 +101,4 @@ Additionally, optional arguments can be provided to `load_fixtures`:
 NOTE: z/x/y coordinates [are describing location and zoom level](https://mapzen.com/documentation/vector-tiles/use-service/#specify-z-x-and-y-tile-coordinates).
 
 ## Skipped Tests
-There are some broken tests that are decorated with `@unittest.skip(BROKEN)` are currently skipped. Once these tests are fixed, we can remove the decorators.
+There are some broken tests that we skip with the `@unittest.skip(BROKEN)` decorator. Once these tests are fixed, we can remove the decorators.
