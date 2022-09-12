@@ -1,9 +1,12 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
+from . import BROKEN
 from . import FixtureTest
 
 
 class CommonTest(FixtureTest):
-
+    @unittest.skip(BROKEN)
     def test_blithedale_summit_landuse(self):
         import dsl
 

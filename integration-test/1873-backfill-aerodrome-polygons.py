@@ -1,15 +1,17 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
+from . import BROKEN
 from . import FixtureTest
 
 
+@unittest.skip(BROKEN)
 class AerodromeTest(FixtureTest):
-
     def test_sfo(self):
         # SFO should be "international": both the polygon _and_ the POI.
         import dsl
 
         z, x, y = (13, 1311, 3170)
-
         self.generate_fixtures(
             # https://www.openstreetmap.org/way/545819287
             dsl.way(545819287, dsl.tile_box(z, x, y), {
