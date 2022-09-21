@@ -63,7 +63,7 @@ class FeatureTests(FixtureTest):
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4991752549',
             '16/33891/21798',
-            {'kind': 'charging_station', 'scooter': True, 'motorcar': False})
+            {'kind': 'charging_station', 'scooter': True, 'truck': False})
 
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4882913388',
