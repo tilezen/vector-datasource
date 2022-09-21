@@ -59,6 +59,7 @@ class FeatureTests(FixtureTest):
         self._run_poi_test(
             'http://www.openstreetmap.org/node/3656027075',
             '16/19337/24632', {'kind': 'charging_station'})
+        # flaky?
         self._run_poi_test(
             'http://www.openstreetmap.org/node/4991752549',
             '16/33891/21798',
