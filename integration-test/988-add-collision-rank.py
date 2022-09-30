@@ -205,7 +205,6 @@ class CollisionRankTest(FixtureTest):
         import dsl
 
         z, x, y = (8, 44, 88)
-
         left_props = {
             'source': 'openstreetmap.org',
             'boundary': 'administrative',
