@@ -1,3 +1,59 @@
+v1.9.0
+------
+* **Release date:** 2023-02-20.
+* **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.4.0](https://github.com/tilezen/tilequeue/releases/tag/v2.4.0) and [rawr_tiles v1.1.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.1.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
+* **Credits:** [@travisgrigsby](https://github.com/travisgrigsby), [@jeffdefacto](https://github.com/jeffdefacto), [@peitili](https://github.com/peitili), [@iandees](https://github.com/iandees), and [@nvkelso](https://github.com/nvkelso)
+
+  #### ENHANCEMENTS
+
+  * **Significant file size reductions** of between x% (p50) and y% (p90) globally by additional geometry simplification, dropping features, dropping properties, and more aggressive merging to multi-lines and multi-polygons in low- and mid-zooms. Can be paired with layer dropping in [Tapalcatl](link_here) (eg for `earth` and `transit` layuers) for additional file size savings. _Chart shows sizes in bytes (logarithmic scale), based on top 100,000 tiles from openstreetmap.org logs at 512 pixel zoom. NOTE: all other zooms in this document use nominal 256 pixel zooms, offset by 1)._
+![tilezen_size_v1d5_versus_v1d6](https://github.com/tilezen/vector-datasource/raw/master/docs/images/tilezen-v1d5-versus-v1d6-size-zooms.gif)
+  * Model point-of-view (POV) for disputed lines that should render from OSM. (Issue [#1901](https://github.com/tilezen/vector-datasource/issues/1901))
+  * Add missing Cyprus line of control (aka "green line"). (Issue [#1898](https://github.com/tilezen/vector-datasource/issues/1898))
+  * Add disputed boundary for South China Sea for China point-of-view (POV). (Issue [#1983](https://github.com/tilezen/vector-datasource/issues/1983))
+  * Show more disputed lines for point-of-view (POV) in low-zooms. (Issue [#1970](https://github.com/tilezen/vector-datasource/issues/1970))
+  * Add Ukraine point of view for disputed boundaries. (Issue [#1911](https://github.com/tilezen/vector-datasource/issues/1911))
+  * Improve continuity between Natural Earth and OpenStreetMap (OSM) localities. (Issue [#2020](https://github.com/tilezen/vector-datasource/issues/2020))
+  * Cull features from places layer based on grid. (Issue [#1999](https://github.com/tilezen/vector-datasource/issues/1999)) and (issue [#2040](https://github.com/tilezen/vector-datasource/issues/2040))
+  * Backfill `population` estimates for OpenStreetMap-sourced places. (Issue [#1992](https://github.com/tilezen/vector-datasource/issues/1992))
+  * Join OpenStreetMap localities with Natural Earth (NE), and prefers NE population to calculate `population_rank` for label grading. (Issue [#2048](https://github.com/tilezen/vector-datasource/issues/2048))
+  * Upgrade to Natural Earth to v5.1.0 (Issue [#2074](https://github.com/tilezen/vector-datasource/issues/2074))
+  * Always validate OpenStreetMap-sourced country labels against Natural Earth. (Issue [#2077](https://github.com/tilezen/vector-datasource/issues/2077) and (issue [#2075](https://github.com/tilezen/vector-datasource/issues/2075))
+  * Distinguish water reservoirs that are covered. (Issue [#1982](https://github.com/tilezen/vector-datasource/issues/1982))
+  * Calculate `shield_text_length` in roads layer to ease styling of road shields in MapboxGL-based map styles. (Issue [#1979](https://github.com/tilezen/vector-datasource/issues/1979))
+  * Vary the MVT tile `extent` so **8192** is only used on `max_zoom` (and **4096** earlier). (Issue [#1985](https://github.com/tilezen/vector-datasource/issues/1985))
+
+
+  #### BUG FIXES
+
+  * Simplify geometry of low zoom Natural Earth features. (Issue [#2014](https://github.com/tilezen/vector-datasource/issues/2014))
+  * Still more road merging. (Issue [#2018](https://github.com/tilezen/vector-datasource/issues/2018))
+  * French regions and province boundary lines show too early. (Issue [#2062](https://github.com/tilezen/vector-datasource/issues/2062))
+  * Canal tunnel should draw under pedestrian plaza. (Issue [#1910](https://github.com/tilezen/vector-datasource/issues/1910))
+  * Remove early water labels. (Issue [#2003](https://github.com/tilezen/vector-datasource/issues/2003))
+  * Show more medium sized parks in cities. (Issue [#1995](https://github.com/tilezen/vector-datasource/issues/1995))
+  * For buildings, add `root_id` = `id`. (Issue [#2092](https://github.com/tilezen/vector-datasource/issues/2092))
+  * Address points in buildings layer sometimes missing `min_zoom`. (Issue [#2023](https://github.com/tilezen/vector-datasource/issues/2023))
+  * Add `min_zoom` = `17` for generated address points. (Issue [#2032](https://github.com/tilezen/vector-datasource/issues/2032))
+  * Revert poor tolerance roads and boundaries. (Issue [#1980](https://github.com/tilezen/vector-datasource/issues/1980))
+  * Remove early ferry and aeroway properties. (Issue [#2017](https://github.com/tilezen/vector-datasource/issues/2017))
+  * Remove names from short road segments. (Issue [#2019](https://github.com/tilezen/vector-datasource/issues/2019))
+
+  #### DOCUMENTATION CHANGES
+
+  * Updated TileJSON for v1.9 schema changes.
+  * Updated Layers documentation for v1.9 schema changes.
+  * Resolved some dangling TODOs from v1.8.0 documentation release.
+
+  #### INTERNAL CHANGES
+
+  * introduce pre-commit linters to this repo enhancement. (Issue [#2004](https://github.com/tilezen/vector-datasource/issues/2004))
+  * Bump werkzeug from 0.12.2 to 0.15.3  dependenciesPull requests that update a dependency file. (Issue [#1934](https://github.com/tilezen/vector-datasource/issues/1934))
+  * Tests: changed protocol to https, thanks @MrKrisKrisu. (Issue [#1922](https://github.com/tilezen/vector-datasource/issues/1922))
+  * Fix two new water test failures. (Issue [#2038](https://github.com/tilezen/vector-datasource/issues/2038))
+  * Remove outdated `mz_min_pixels` Python transform (Issue [#1917](https://github.com/tilezen/vector-datasource/issues/1917))
+
+
 v1.8.0
 ------
 * **Release date:** 2019-06-27.
@@ -47,7 +103,7 @@ v1.8.0
   * **roads**: `min_zooms` at zoom 5 are mix of 3, 4 and 5 instead of just 5.x. (Issue [#1074](https://github.com/tilezen/vector-datasource/issues/1074))
   * **roads**: Add low-zoom `toll` property from Natural Earth to match earlier high-zoom data from OpenStreetMap. (Issue [#1817](https://github.com/tilezen/vector-datasource/issues/1817))
   * **roads**: Add new road `construction` kind with _kind_detail_ from the usual kind from zoom 12+. (Issue [#394](https://github.com/tilezen/vector-datasource/issues/394))
-      * `kind_detail`: `motorway`, `motorway_link`, `trunk`, `primary`, `secondary`, `tertiary`, `trunk_link`, `unclassified`, `residential`, `road`, `primary_link`, `secondary_link`, `living_street`, `service`, `pedestrian`, `track`, `cycleway`, `bridleway`, `tertiary_link`, `footway`, `steps`, `corridor
+      * `kind_detail`: `motorway`, `motorway_link`, `trunk`, `primary`, `secondary`, `tertiary`, `trunk_link`, `unclassified`, `residential`, `road`, `primary_link`, `secondary_link`, `living_street`, `service`, `pedestrian`, `track`, `cycleway`, `bridleway`, `tertiary_link`, `footway`, `steps`, `corridor`
   * **water**: Reduce the marine water labels visible at zoom 8 by limiting number of bays in the tile to the largest 10. (Issue [#1838](https://github.com/tilezen/vector-datasource/issues/1838))
       * The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_rank` property that starts from 1 and counts up as the feature gets smaller. Note that the ranking is done on a "metatile", which means that each tile (of size 256px, 512px or other) won't necessarily contain the full range from 1 to N of `kind_tile_rank`s.
   * **water**: Water boundary lines now indicate intermittent property (playas), matching their polygons. (Issue [#1249](https://github.com/tilezen/vector-datasource/issues/1249))
@@ -274,7 +330,7 @@ v1.6.0
   #### BUG FIXES
 
   * **boundaries**: Drop buffered land polygons from low zooms introduced in v1.5 in error. [PR #1699](https://github.com/tilezen/vector-datasource/pull/1699).
-  * **landuse**: Update and/or add **sort_rank** for `airfield`, `boatyard`, `container_terminal`, `danger_area`, `embankment` lines, `ferry_terminal`, `natural_forest`, `natural_park`, `natural_wood`, `naval_base`, `port_terminal`, `quay`, `range`, `shipyard`, `wetland`, and `wharf`. Some other kinds are also affected due to sort_rank ordering. Issues [#1096](https://github.com/tilezen/vector-datasource/issues/1096), [#1588](https://github.com/tilezen/vector-datasource/issues/1588), [#1574](https://github.com/tilezen/vector-datasource/issues/1574), and [#1569](https://github.com/tilezen/vector-datasource/issues/1569).
+  * **landuse**: Update and/or add **sort_rank** for `airfield`, `boatyard`, `container_terminal`, `danger_area`, `embankment` lines, `ferry_terminal`, `natural_forest`, `natural_park`, `natural_wood`, `naval_base`, `port_terminal`, `quay`, `range`, `shipyard`, `wetland`, and `wharf`. Some other kinds are also affected due to `sort_rank` ordering. Issues [#1096](https://github.com/tilezen/vector-datasource/issues/1096), [#1588](https://github.com/tilezen/vector-datasource/issues/1588), [#1574](https://github.com/tilezen/vector-datasource/issues/1574), and [#1569](https://github.com/tilezen/vector-datasource/issues/1569).
   * **pois**: Allow no-name `drinking_water` and `playground` features.
   * **pois**: Remove bogus `service_area` and `rest_area` features at mid zooms. [Issue #1698](https://github.com/tilezen/vector-datasource/issues/1698).
   * **pois**: Refine `min_zoom` for `pitch`, `playground`, and `bicycle_parking` if they have a name, and push back no-name to a later zoom. Modify `min_zoom` for `drinking_water` and `traffic_signals`. [Issue #1638](https://github.com/tilezen/vector-datasource/issues/1638) and [PR #1727](https://github.com/tilezen/vector-datasource/pull/1727)
