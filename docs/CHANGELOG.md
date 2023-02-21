@@ -8,21 +8,20 @@ v1.9.0
 
   * **Significant file size reductions** of between x% (p50) and y% (p90) globally by additional geometry simplification, dropping features, dropping properties, and more aggressive merging to multi-lines and multi-polygons in low- and mid-zooms. Can be paired with layer dropping in [Tapalcatl](link_here) (eg for `earth` and `transit` layuers) for additional file size savings. _Chart shows sizes in bytes (logarithmic scale), based on top 100,000 tiles from openstreetmap.org logs at 512 pixel zoom. NOTE: all other zooms in this document use nominal 256 pixel zooms, offset by 1)._
 ![tilezen_size_v1d5_versus_v1d6](https://github.com/tilezen/vector-datasource/raw/master/docs/images/tilezen-v1d5-versus-v1d6-size-zooms.gif)
-  * **boundaries**: Model point-of-view (POV) for disputed lines that should render from OpenStreetMap. (Issue [#1901](https://github.com/tilezen/vector-datasource/issues/1901))
-  * **boundaries**: Add missing Cyprus line-of-control (aka "green line"). (Issue [#1898](https://github.com/tilezen/vector-datasource/issues/1898))
-  * **boundaries**: Add disputed boundary for South China Sea for China point-of-view (POV). (Issue [#1983](https://github.com/tilezen/vector-datasource/issues/1983))
+  * **boundaries**: Add disputed boundary line point-of-view (POV) for mid- and high-zoom features sourced from OpenStreetMap (OSM), including extensive upstream editing in OSM to match Natural Earth's low-zoom disputed area modeling in earlier releases. (Issue [#1901](https://github.com/tilezen/vector-datasource/issues/1901))
+  * **boundaries**: Add missing Cyprus line-of-control (aka "green line") as it has odd `admin_level` tagging. (Issue [#1898](https://github.com/tilezen/vector-datasource/issues/1898))
   * **boundaries**: Add Ukraine point-of-view for disputed boundaries. (Issue [#1911](https://github.com/tilezen/vector-datasource/issues/1911))
-  * **places**: Improve continuity between Natural Earth and OpenStreetMap (OSM) `locality` features. (Issue [#2020](https://github.com/tilezen/vector-datasource/issues/2020))
-  * **places**: Cull `locality` and `neighbourhood` features based on grid to right size tile payload to rendered features. (Issue [#1999](https://github.com/tilezen/vector-datasource/issues/1999)) and (issue [#2040](https://github.com/tilezen/vector-datasource/issues/2040))
-  * **places**: Backfill `population` estimates for OpenStreetMap-sourced `locality` features. (Issue [#1992](https://github.com/tilezen/vector-datasource/issues/1992))
-  * **places**: Join OpenStreetMap `locality` features with Natural Earth (NE), and prefers NE population to calculate `population_rank` for label grading. (Issue [#2048](https://github.com/tilezen/vector-datasource/issues/2048))
+  * **boundaries**: Add disputed boundary for South China Sea for China point-of-view (POV) only. (Issue [#1983](https://github.com/tilezen/vector-datasource/issues/1983))
   * **places**: Always validate OpenStreetMap-sourced `country`, `dependency` and `disputed` labels against Natural Earth. (Issue [#2077](https://github.com/tilezen/vector-datasource/issues/2077) and (issue [#2075](https://github.com/tilezen/vector-datasource/issues/2075))
-  * **water**: Distinguish reservoirs that are covered with new flag. (Issue [#1982](https://github.com/tilezen/vector-datasource/issues/1982))
-  * **roads**: Calculate new `shield_text_length` property in roads layer to ease styling of road shields in MapboxGL-based map styles. (Issue [#1979](https://github.com/tilezen/vector-datasource/issues/1979))
-  * **transit**: Calculate new `shield_text_length` property in roads layer to ease styling of road shields in MapboxGL-based map styles. (Issue [#1979](https://github.com/tilezen/vector-datasource/issues/1979))
+  * **places**: Improve continuity between Natural Earth and OpenStreetMap (OSM) `locality` features and their `min_zoom` grading. (Issue [#2020](https://github.com/tilezen/vector-datasource/issues/2020))
+  * **places**: Join OpenStreetMap `locality` features with Natural Earth (NE), and prefers NE population to calculate `population_rank` for label grading. (Issue [#2048](https://github.com/tilezen/vector-datasource/issues/2048))
+  * **places**: Backfill `population` estimates for OpenStreetMap-sourced `locality` features. (Issue [#1992](https://github.com/tilezen/vector-datasource/issues/1992))
+  * **places**: Cull `locality` and `neighbourhood` features based on grid to right size tile payload to rendered features. (Issue [#1999](https://github.com/tilezen/vector-datasource/issues/1999)) and (issue [#2040](https://github.com/tilezen/vector-datasource/issues/2040))
+  * **water**: Distinguish `reservoir` features that are covered with a "roof". (Issue [#1982](https://github.com/tilezen/vector-datasource/issues/1982))
+  * **roads**: Calculate new `shield_text_length` property to ease styling of road shields in MapboxGL-based map styles. (Issue [#1979](https://github.com/tilezen/vector-datasource/issues/1979))
+  * **transit**: Calculate new `shield_text_length` property to ease styling of transit shields in MapboxGL-based map styles. (Issue [#1979](https://github.com/tilezen/vector-datasource/issues/1979))
   * **all layers**: Upgrade to Natural Earth to v5.1.0 (Issue [#2074](https://github.com/tilezen/vector-datasource/issues/2074))
   * **all layers**: Vary the MVT tile `extent` so **8192** is only used on `max_zoom` (and **4096** earlier) to optimize file size while preserving overzooming. (Issue [#1985](https://github.com/tilezen/vector-datasource/issues/1985))
-
 
   #### BUG FIXES
 
