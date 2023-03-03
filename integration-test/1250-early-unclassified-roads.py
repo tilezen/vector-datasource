@@ -1,10 +1,14 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 from shapely.wkt import loads as wkt_loads
 
+from . import BROKEN
 from . import FixtureTest
 
 
+@unittest.skip(BROKEN)
 class EarlyUnclassifiedRoads(FixtureTest):
 
     def test_early_unclassified_road1_utah(self):

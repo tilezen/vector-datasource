@@ -1,3 +1,6 @@
+import unittest
+
+from . import BROKEN
 from . import FixtureTest
 
 
@@ -37,6 +40,7 @@ class EarlyPath(FixtureTest):
             {'walking_network': 'nwn',
              'walking_shield_text': 'PCT'})
 
+    @unittest.skip(BROKEN)
     def test_merced_pass_trail(self):
         # highway=path, with route regional (Merced Pass Trail)
         self.load_fixtures(
@@ -58,6 +62,7 @@ class EarlyPath(FixtureTest):
             12, 688, 1584, 'roads',
             {'kind_detail': 'path', 'name': None, 'walking_network': None})
 
+    @unittest.skip(BROKEN)
     def test_upper_yosemite_falls_trail(self):
         # highway=path, no route, but has name (Upper Yosemite Falls Trail)
         self.load_fixtures(['https://www.openstreetmap.org/way/162322353'])

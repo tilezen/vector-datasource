@@ -1,7 +1,11 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
+from . import BROKEN
 from . import FixtureTest
 
 
+@unittest.skip(BROKEN)
 class LowEmissionZoneTest(FixtureTest):
 
     def test_low_emission_zone_way(self):

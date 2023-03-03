@@ -99,3 +99,6 @@ Additionally, optional arguments can be provided to `load_fixtures`:
 * `simplify=...` generalises the geometry to the tolerance given as the argument. This is also useful for reducing the size of fixtures and the complexity of the processing when the test does not need the geometry to be accurate.
 
 NOTE: z/x/y coordinates [are describing location and zoom level](https://mapzen.com/documentation/vector-tiles/use-service/#specify-z-x-and-y-tile-coordinates).
+
+## Skipped Tests
+There are some broken tests that we skip with the `@unittest.skip(BROKEN)` decorator. Once these tests are fixed, we can remove the decorators.
