@@ -11,7 +11,7 @@ kdtree
 lxml==4.6.2
 mapbox-vector-tile==1.2.0
 ModestMaps==1.4.7
-protobuf==3.4.0
+protobuf==3.18.3
 psycopg2==2.7.3.2
 pyclipper==1.0.6
 pycountry==17.9.23
