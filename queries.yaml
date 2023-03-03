@@ -930,7 +930,7 @@ post_process:
       # note the following line cannot be written as
       # properties is not None and properties.get('label_placement') is True
       where: >-
-        properties is not None and 
+        properties is not None and
         (label_placement or geom_type in ('Polygon', 'MultiPolygon'))
 
   # now that we have the label points
