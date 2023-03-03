@@ -11,7 +11,7 @@ from . import FixtureTest
 class SeaOceanLabelsWaterLayer(FixtureTest):
 
     def test_gulf_of_california(self):
-        z = 9
+        z = 15     # visible starting at zoom 9
         x, y = deg2num(27.5578100671435, -111.704650024786, z)
 
         # Gulf of California: http://www.openstreetmap.org/node/305639734
@@ -31,7 +31,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             {'kind': 'sea', 'name': 'Gulf of California'})
 
     def test_greenland_sea(self):
-        z = 9
+        z = 15     # visible starting at zoom 9
         x, y = deg2num(74.9999999953685, -10.0000000185705, z)
         # Greenland Sea: http://www.openstreetmap.org/node/305639396
         self.generate_fixtures(dsl.way(305639396, wkt_loads('POINT (-10.0000000185705 74.9999999953685)'), {u'name:pt': u'Mar da Gronel\xe2ndia', u'name:ms': u'Laut Greenland', u'name:ko': u'\uadf8\ub9b0\ub780\ub4dc \ud574', u'gns:dsg': u'SEA', u'name:ar': u'\u0628\u062d\u0631 \u063a\u0631\u064a\u0646\u0644\u0627\u0646\u062f', u'name:cs': u'Gr\xf3nsk\xe9 mo\u0159e', u'wikidata': u'Q132868', u'name:it': u'Mare di Groenlandia', u'name:vi': u'Bi\u1ec3n Greenland', u'name:pl': u'Morze Grenlandzkie', u'name:fi': u'Gr\xf6nlanninmeri', u'name:da': u'Gr\xf8nlandshavet', u'wikipedia': u'en:Greenland Sea',
