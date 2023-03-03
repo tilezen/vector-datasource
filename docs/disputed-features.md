@@ -8,7 +8,7 @@ We have a two-step process to patching in these disputes. First, we download and
 
 
 ### Building a dispute patch
-1. When Daylight has a new release, it is best to start with a fresh disputed relation package. Using the overpass query in `disputed_relation_overpass_query.txt` run an overpass query to get the data.
+1. When Daylight has a new release, it is best to start with a fresh disputed relation package. Using the overpass query in `disputed_relation_overpass_query.overpassql` run an overpass query to get the data.
 2. Click export and select download as raw osm data
 3. Open the file in JOSM and compare this file with the previous version. Features may have been altered or deleted since the last build and updates may be necessary. If there are fixes necessary, make and upload them.
 4. Some edits may need to be made locally on the patch without committing to OSM itself, such as when daylight borders are out of alignment with live OSM. These edits can be done in JOSM and the file then just saved without uploading. The reverter plugin is handy for realigning borders that have been moved.
