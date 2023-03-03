@@ -6,7 +6,7 @@ class ZoosAndOtherAttractionsAttraction(FixtureTest):
         # Sable Island Horse
         self._run_test(16, 21228, 23551, 342984911, 'animal')
         # Fun Mountain Water Park
-        self._run_test(16, 15113, 22273, 243814268, 'water_slide')
+        self._run_test(16, 15113, 22273, 243814268, 'water_park')
         # Woodstock Express
         self._run_test(16, 18670, 25315, 235396958, 'roller_coaster')
         # Carousel
