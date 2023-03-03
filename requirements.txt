@@ -28,7 +28,7 @@ StreetNames==0.1.5
 git+https://github.com/tilezen/tilequeue@master#egg=tilequeue
 git+https://github.com/tilezen/tileserver@master#egg=tileserver
 tqdm==4.31.1
-urllib3==1.25.11
+urllib3==1.26.5
 webcolors<=1.11 ## Last version to support py2
 Werkzeug<=0.16.1
 wsgiref==0.1.2
