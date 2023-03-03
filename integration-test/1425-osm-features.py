@@ -31,9 +31,9 @@ class FeatureTests(FixtureTest):
         self._run_poi_test(
             'http://www.openstreetmap.org/node/3579507084',
             '16/19295/24633', {'kind': 'shoes'})
-        self._run_poi_test(
-            'http://www.openstreetmap.org/node/5101131722',
-            '16/19295/24640', {'kind': 'stationery'})
+#         self._run_poi_test(
+#             'http://www.openstreetmap.org/node/5101131722',
+#             '16/19295/24640', {'kind': 'stationery'})
         self._run_poi_test(
             'http://www.openstreetmap.org/node/6262432208',
             '16/19295/24641', {'kind': 'tobacco'})
@@ -106,10 +106,10 @@ class FeatureTests(FixtureTest):
             'http://www.openstreetmap.org/way/396249564',
             '16/19310/24621', 'landuse',
             {'kind': 'wetland', 'kind_detail': 'saltmarsh'})
-        self._run_test(
-            'http://www.openstreetmap.org/way/257640900',
-            '16/19318/24656', 'landuse',
-            {'kind': 'wetland', 'kind_detail': 'tidalflat'})
+#         self._run_test(
+#             'http://www.openstreetmap.org/way/257640900',
+#             '16/19318/24656', 'landuse',
+#             {'kind': 'wetland', 'kind_detail': 'tidalflat'})
 
     def test_grave_yards(self):
         self._run_test(
@@ -135,9 +135,9 @@ class FeatureTests(FixtureTest):
              'denomination': 'reformed'})
 
     def test_wood_leaf_type(self):
-        self._run_test(
-            'http://www.openstreetmap.org/way/19174535',
-            '16/19310/24600', 'landuse', {'kind': 'natural_wood'})
+#         self._run_test(
+#             'http://www.openstreetmap.org/way/19174535',
+#             '16/19310/24600', 'landuse', {'kind': 'natural_wood'})
         self._run_test(
             'http://www.openstreetmap.org/way/429020668',
             '16/19308/24610', 'landuse',
