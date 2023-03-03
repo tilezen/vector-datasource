@@ -135,9 +135,9 @@ class FeatureTests(FixtureTest):
              'denomination': 'reformed'})
 
     def test_wood_leaf_type(self):
-#         self._run_test(
-#             'http://www.openstreetmap.org/way/19174535',
-#             '16/19310/24600', 'landuse', {'kind': 'natural_wood'})
+        #         self._run_test(
+        #             'http://www.openstreetmap.org/way/19174535',
+        #             '16/19310/24600', 'landuse', {'kind': 'natural_wood'})
         self._run_test(
             'http://www.openstreetmap.org/way/429020668',
             '16/19308/24610', 'landuse',
