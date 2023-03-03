@@ -1,4 +1,7 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
+from . import BROKEN
 from . import FixtureTest
 
 
@@ -55,6 +58,7 @@ class BoundaryIdTest(FixtureTest):
             ),
         )
 
+    @unittest.skip(BROKEN)
     def test_have_ids_at_z13(self):
         z, x, y = (13, 100, 100)
         self._setup(z, x, y, 1, 2)

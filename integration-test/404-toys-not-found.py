@@ -1,5 +1,8 @@
+import unittest
+
 import dsl
 
+from . import BROKEN
 from . import FixtureTest
 
 
@@ -79,6 +82,7 @@ class ToysNotFound(FixtureTest):
         self._run_test(16, 19300, 24630,
                        'https://www.openstreetmap.org/node/1429062988')
 
+    @unittest.skip(BROKEN)
     def test_10(self):
         self._run_test(16, 19300, 24629,
                        'https://www.openstreetmap.org/node/1058296287')

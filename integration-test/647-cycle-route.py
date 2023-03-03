@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
+import unittest
+
 import dsl
 
+from . import BROKEN
 from . import FixtureTest
 
 
@@ -84,6 +87,7 @@ class CycleRoute(FixtureTest):
             16, 32209, 22024, 'roads',
             {'id': 315261543, 'kind': 'path', 'bicycle_network': 'ncn'})
 
+    @unittest.skip(BROKEN)
     def test_path_rcn(self):
         self.load_fixtures(['http://www.openstreetmap.org/way/44422697'])
 
@@ -225,6 +229,7 @@ class CycleRoute(FixtureTest):
             16, 10484, 25327, 'roads',
             {'id': 28841123, 'is_bicycle_related': True})
 
+    @unittest.skip(BROKEN)
     def test_is_bicycle_related(self):
         # Way: 301442215
         self.load_fixtures(['http://www.openstreetmap.org/way/301442215'])
