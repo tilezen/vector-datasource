@@ -83,13 +83,8 @@ v1.9.0
 
   #### INTERNAL CHANGES
 
-  * Introduce pre-commit linters. (Issue [#2004](https://github.com/tilezen/vector-datasource/issues/2004) and pull request [#2029](https://github.com/tilezen/vector-datasource/pull/2029))
-  * Bump werkzeug dependency from 0.12.2 to 0.15.3. (Issue [#1934](https://github.com/tilezen/vector-datasource/issues/1934))
-  * Add geo indexes and `ST_DWithin` to limit the amount of work done when calculating transit information. (Pull request [#1946](https://github.com/tilezen/vector-datasource/pull/1946))
-  * Update Werkzeug and urllib3 to account for security patches. (Pull request [#1946](https://github.com/tilezen/vector-datasource/pull/1946))
-  * Limit setuptools to a version that supports Python 2 until we support Python 3. (Pull request [#1946](https://github.com/tilezen/vector-datasource/pull/1946))
-  * Tests: changed protocol to https, thanks [@MrKrisKrisu](https://github.com/MrKrisKrisu). (Issue [#1922](https://github.com/tilezen/vector-datasource/issues/1922))
-  * Tests: Fix two new water failures. (Issue [#2038](https://github.com/tilezen/vector-datasource/issues/2038))
+  * Introduce pre-commit linters for YAML, JSON, and Python. (Issue [#2004](https://github.com/tilezen/vector-datasource/issues/2004) and pull request [#2029](https://github.com/tilezen/vector-datasource/pull/2029) and [#2113]((https://github.com/tilezen/vector-datasource/pull/2113)))
+  * Add geo indexes and `ST_DWithin` to limit the amount of work done when calculating transit layer features. (Pull request [#1946](https://github.com/tilezen/vector-datasource/pull/1946))
   * Add new `pois_direction_int` Python transform, thanks [@rwrx](https://github.com/rwrx). (Issue [#1916](https://github.com/tilezen/vector-datasource/issues/1916))
   * Add new `osm_zh_variants_lookup`, `wof_zh_variants_lookup` and `ne_zh_variants_lookup` Python options.
   * Add new `clean_backfill_zh` and `post_process_osm_zh` Python transforms.
@@ -97,6 +92,8 @@ v1.9.0
   * Add new `tags_set_ne_pop_min_max_default` Python transform.
   * Remove outdated `mz_min_pixels` Python transform. (Issue [#1917](https://github.com/tilezen/vector-datasource/issues/1917))
   * Add ability to skip broken integration tests with `@unittest.skip(BROKEN)` decorator, many of these are because of OSM data drift not logic problems.
+  * Tests: changed protocol to https, thanks [@MrKrisKrisu](https://github.com/MrKrisKrisu). (Issue [#1922](https://github.com/tilezen/vector-datasource/issues/1922))
+  * Tests: Fix two new water failures. (Issue [#2038](https://github.com/tilezen/vector-datasource/issues/2038))
   * Update the way we grab OpenStreetMap assets to Daylight distribution.
   * Switch OpenStreetMap import config as LUA to Postgres. (Pull request [#2089](https://github.com/tilezen/vector-datasource/pull/2089))
   * Update the way we grab tile assets, like `buffered_land`.
@@ -104,6 +101,9 @@ v1.9.0
   * Update the way we grab Who's On First assets. (Pull request [#1977](https://github.com/tilezen/vector-datasource/pull/1977))
   * Add SQL script to allow suppressing names in disputed island areas. (Pull request [#2067](https://github.com/tilezen/vector-datasource/pull/2067))
   * Add support for on-the-fly GeoJson layers and a new Mutator Transform. (Pull request [#2095](https://github.com/tilezen/vector-datasource/pull/2095) and related [tilequeue/414](https://github.com/tilezen/tilequeue/pull/414))
+  * Bump werkzeug dependency from 0.12.2 to 0.15.3. (Issue [#1934](https://github.com/tilezen/vector-datasource/issues/1934))
+  * Update Werkzeug and urllib3 to account for security patches. (Pull request [#1946](https://github.com/tilezen/vector-datasource/pull/1946))
+  * Limit setuptools to a version that supports Python 2 until we support Python 3. (Pull request [#1946](https://github.com/tilezen/vector-datasource/pull/1946))
 
 
 v1.8.0
