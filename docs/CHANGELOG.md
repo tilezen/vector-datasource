@@ -1,7 +1,7 @@
 v1.9.0
 ------
-* **Release date:** 2023-02-22.
-* **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.4.0](https://github.com/tilezen/tilequeue/releases/tag/v2.4.0) and [rawr_tiles v1.1.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.1.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
+* **Release date:** 2023-03-03.
+* **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.5.0](https://github.com/tilezen/tilequeue/releases/tag/v2.5.0) and [rawr_tiles v1.1.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.1.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
 * **Credits:** [@travisgrigsby](https://github.com/travisgrigsby), [@jeffdefacto](https://github.com/jeffdefacto), [@peitili](https://github.com/peitili), [@iandees](https://github.com/iandees), and [@nvkelso](https://github.com/nvkelso)
 
   #### ENHANCEMENTS
@@ -9,11 +9,11 @@ v1.9.0
   * **Significant file size reductions** of between x% (p50) and y% (p90) globally by additional geometry simplification, dropping features, dropping properties, and more aggressive merging to multi-lines and multi-polygons in low- and mid-zooms. Can be paired with layer dropping in [Tapalcatl](link_here) (eg for `earth` and `transit` layuers) for additional file size savings. _Chart shows sizes in bytes (logarithmic scale), based on top 100,000 tiles from openstreetmap.org logs at 512 pixel zoom. NOTE: all other zooms in this document use nominal 256 pixel zooms, offset by 1)._
 ![tilezen_size_v1d5_versus_v1d6](https://github.com/tilezen/vector-datasource/raw/master/docs/images/tilezen-v1d5-versus-v1d6-size-zooms.gif)
   * **boundaries**: Add disputed boundary line point-of-view (POV) for mid- and high-zoom features sourced from OpenStreetMap (OSM), including extensive upstream editing in OSM to match Natural Earth's low-zoom disputed area modeling in earlier releases. New `unrecognized_dispute` kind and `disputed_by` property. (Issue [#1901](https://github.com/tilezen/vector-datasource/issues/1901))
-  * **boundaries**: Add missing Cyprus line-of-control (aka "green line") as it has odd `admin_level` tagging. (Issue [#1898](https://github.com/tilezen/vector-datasource/issues/1898))
+  * **boundaries**: Add missing Cyprus line-of-control (aka "green line") as it has custom `admin_level` tagging. (Issue [#1898](https://github.com/tilezen/vector-datasource/issues/1898))
   * **boundaries**: Add Ukraine point-of-view for disputed boundaries. (Issue [#1911](https://github.com/tilezen/vector-datasource/issues/1911))
-  * **boundaries**: Add disputed boundary for South China Sea for China point-of-view (POV) only. (Issue [#1983](https://github.com/tilezen/vector-datasource/issues/1983))
-  * **boundaries**: Mark some Natural Earth low-zoom boundaries as default `unrecognized`, including for Abkahzia, Donbass, Nagorno-Karabakh, Northern Cyprus, Somaliland, South Ossetia, and Transnistria. (Pull request [#2072](https://github.com/tilezen/vector-datasource/issues/2072))
-  * **buildings**: Add additional non-OpenStreetMap buildings from the Microsoft sidecar in Daylight distro.
+  * **boundaries**: Add disputed boundary in South China Sea scoped to China's point-of-view (POV). (Issue [#1983](https://github.com/tilezen/vector-datasource/issues/1983))
+  * **boundaries**: Mark some Natural Earth low-zoom boundaries as default `unrecognized`, including for Abkhazia, Donbass, Nagorno-Karabakh, Northern Cyprus, Somaliland, South Ossetia, and Transnistria. (Pull request [#2072](https://github.com/tilezen/vector-datasource/issues/2072))
+  * **buildings**: Add additional non-OpenStreetMap buildings from the Microsoft sidecar in Daylight distribution.
   * **places**: Always validate OpenStreetMap-sourced `country`, `dependency` and `disputed` labels against Natural Earth and new ISO and TLC point-of-views. (Issue [#2075](https://github.com/tilezen/vector-datasource/issues/2075), [#2076](https://github.com/tilezen/vector-datasource/issues/2076), and [#2077](https://github.com/tilezen/vector-datasource/issues/2077) and pull request [#2069](https://github.com/tilezen/vector-datasource/pull/2069))
   * **places**: Add Australia suburbs from OpenStreetMap as `locality` features to match local expectations.  (Pull request [#2070](https://github.com/tilezen/vector-datasource/pull/2070))
   * **places**: Improve continuity between Natural Earth and OpenStreetMap (OSM) `locality` features and their `min_zoom` grading. (Issue [#2020](https://github.com/tilezen/vector-datasource/issues/2020))
@@ -27,8 +27,9 @@ v1.9.0
   * **water**: Add `kind_detail` for polygon features, with values including: `basin`, `canal`, `ditch`, `drain`, `lake`, `river`, and `stream`. (Pull request [#2047](https://github.com/tilezen/vector-datasource/pull/2047))
   * **water**: Mark water polygon feature as `kind_detail` =  `lake` when upstream OpenStreetMap value is `lagoon`, `oxbow`, `pond`, `reservoir`, or `wastewater`. (Pull request [#2047](https://github.com/tilezen/vector-datasource/pull/2047))
   * **water**: Add optional `layer` property. (Issue [#1910](https://github.com/tilezen/vector-datasource/issues/1910))
-  * **all layers**: Switch to Daylight distribution for ingesting OpenStreetMap planet files, including building and admin sidecar files. Note: Some OSM feature IDs may be renumbered. (Pull request [#2085](https://github.com/tilezen/vector-datasource/pull/2085))
-  * **all layers**: Upgrade to Natural Earth to v5.1.0 (Issue [#2074](https://github.com/tilezen/vector-datasource/issues/2074))
+  * **all layers**: Switch to Daylight distribution for ingesting OpenStreetMap planet files, including building and admin sidecars. Note: Some OSM feature IDs may be re-numbered. (Pull request [#2085](https://github.com/tilezen/vector-datasource/pull/2085))
+  * **all layers**: Upgrade to Natural Earth to v5.1.2, circa May 2022 (Issue [#2074](https://github.com/tilezen/vector-datasource/issues/2074))
+  * **places**: Upgrade to Who's On First `neighbourhood` features, circa October 2021.
   * **all layers**: Vary the MVT tile `extent` so **8192** is only used on `max_zoom` (and **4096** earlier) to optimize file size while preserving overzooming. (Issue [#1985](https://github.com/tilezen/vector-datasource/issues/1985))
 
   #### BUG FIXES
@@ -78,7 +79,7 @@ v1.9.0
   * Add scripts and documentation for OSM disputed borders. (Pull request [#2085](https://github.com/tilezen/vector-datasource/pull/2085))
   * Document Mac support for Apple silicon (eg M1 chips). (Pull request [#2102](https://github.com/tilezen/vector-datasource/pull/2102))
   * Document Python 2.7 working environment.
-  * Add new and missing requirements to requirements.txt (like hanzidentifier).
+  * Add new and missing projects to requirements.txt (like hanzidentifier).
 
   #### INTERNAL CHANGES
 
