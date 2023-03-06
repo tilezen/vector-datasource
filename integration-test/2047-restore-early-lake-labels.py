@@ -78,6 +78,8 @@ class WaterKinds(FixtureTest):
 
         for z in range(0, 16):
             x, y = deg2num(lat, lon, z)
+            # without remapping min_zoom this area would result in min_zoom of 6,
+            # but after remapping it'd be 9
             area = 265548000
             self.generate_fixtures(
                 dsl.way(1, dsl.box_area(z, x, y, area), {
