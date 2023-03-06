@@ -29,6 +29,10 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         self.assert_no_matching_feature(
             8, x, y, 'water',
             {'kind': 'sea', 'name': 'Gulf of California'})
+        self.assert_has_feature(
+            9, x, y, 'water',
+            {'kind': 'sea', 'name': 'Gulf of California',
+             'label_placement': True})
 
     def test_greenland_sea(self):
         z = 16     # visible starting at zoom 9
@@ -48,5 +52,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         self.assert_no_matching_feature(
             8, x, y, 'water',
             {'kind': 'sea', 'name': 'Greenland Sea'})
+        self.assert_has_feature(
+            9, x, y, 'water',
+            {'kind': 'sea', 'name': 'Greenland Sea',
+             'label_placement': True})
 
 # NOTE: No ocean points in the North America extract :-(
