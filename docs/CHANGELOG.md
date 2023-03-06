@@ -80,6 +80,7 @@ v1.9.0
   * Explain Chinese language name properties for traditional and simplified settings. `name:zh` has been _deprecated_ but is still included. Instead use explicate `name:zh-Hans` **中文 (Chinese)**: for primarily simplified (but sometimes traditional) and `name:zh-Hant` **中文 (Chinese)**: for primarily traditional (but sometimes simplified) properties. (Pull request [#1986](https://github.com/tilezen/vector-datasource/pull/1986), [#1956](https://github.com/tilezen/vector-datasource/pull/1956), [#1960](https://github.com/tilezen/vector-datasource/pull/1960), and [#1961](https://github.com/tilezen/vector-datasource/pull/1961))
   * Add missing documentation for boundaries layer kind values from Natural Earth, including: `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, and `disputed_reference_line`. (Pull request [#1986](https://github.com/tilezen/vector-datasource/pull/1986))
   * Add scripts and documentation for OSM disputed borders. (Pull request [#2085](https://github.com/tilezen/vector-datasource/pull/2085))
+  * Better document project, tile schema, and documentation licenses. (Issue [#1136](https://github.com/tilezen/vector-datasource/issues/1136))
   * Document Mac support for Apple silicon (eg M1 chips). (Pull request [#2102](https://github.com/tilezen/vector-datasource/pull/2102))
   * Document Python 2.7 working environment.
 
