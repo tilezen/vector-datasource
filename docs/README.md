@@ -23,6 +23,6 @@ If you have any comments on the documentation, you can drop a note as a GitHub i
 
 ## Licenses
 
-- The Tilezen tile schema is [MIT](LICENSE-SCHEMA.md)
+- The Tilezen vector tile schema is [MIT](LICENSE-SCHEMA.md)
 - The project documentation and Tilezen vector tile schema documentation is [CC-BY 4.0](LICENSE-DOCS.md)
 - The code and all other material to generate the tiles is [MIT](LICENSE.md)
