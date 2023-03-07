@@ -247,7 +247,7 @@ filters:
       kind: ocean
     table: osm
   - filter: {name: true, place: sea}
-    min_zoom: 3
+    min_zoom: 4
     output:
       <<: *output_properties
       kind: sea
