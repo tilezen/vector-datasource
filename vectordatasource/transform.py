@@ -1608,10 +1608,10 @@ _default_min_zoom_for_place_kind = {
     'province': 4,
     'state': 4,
 
-    'sea': 3,
+    'sea': 4,
 
     'country': 0,
-    'ocean': 0,
+    'ocean': 1,
     'continent': 0
 }
 

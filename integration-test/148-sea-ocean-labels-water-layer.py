@@ -93,69 +93,67 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
                             assert f['properties']['kind'] == 'sea'
 
     def test_hudson_bay(self):
+        z = 16
         lon, lat = (-122.417169, 37.769196)
 
-        for z in range(0, 16):
-            x, y = deg2num(lat, lon, z)
-            # without remapping min_zoom this area would result in min_zoom of 6,
-            # but after remapping it'd be 9
-            area = 5000000001
-            self.generate_fixtures(
-                dsl.way(9441240, dsl.box_area(z, x, y, area), {
-                    'name': u'Hudson Bay',
-                    'place': u'sea',
-                    'wikidata': u'Q3040',
-                    'source': u'openstreetmap.org',
-                }),
-            )
+		x, y = deg2num(lat, lon, z)
+		# without remapping min_zoom this area would result in min_zoom of 6,
+		# but after remapping it'd be 9
+		area = 5000000001
+		self.generate_fixtures(
+			dsl.way(9441240, dsl.box_area(z, x, y, area), {
+				'name': u'Hudson Bay',
+				'place': u'sea',
+				'wikidata': u'Q3040',
+				'source': u'openstreetmap.org',
+			}),
+		)
 
-            if z < 3:
-                self.assert_no_matching_feature(z, x, y, 'water',
-                                                {
-                                                    'kind': 'sea',
-                                                    'name': 'Hudson Bay',
-                                                    'label_placement': True
-                                                })
-            if 3 <= z <= 15:
-                with self.features_in_tile_layer(z, x, y, 'water') as features:
-                    for f in features:
-                        if f['geometry']['type'] == 'Point':
-                            assert f['id'] is None
-                            assert f['properties']['min_zoom'] == 4
-                            assert f['properties']['name'] == 'Hudson Bay'
-                            assert f['properties']['kind'] == 'sea'
+        self.assert_has_feature(
+            z, x, y, 'water',
+            {'kind': 'sea', 'name': 'Hudson Bay',
+             'label_placement': True})
+
+        self.assert_no_matching_feature(
+            2, x, y, 'water',
+            {'kind': 'sea', 'name': 'Hudson Bay',
+             'label_placement': True})
+
+        self.assert_has_feature(
+            3, x, y, 'water',
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 3.0
+             'label_placement': True})
 
     def test_james_bay(self):
+        z = 16
         lon, lat = (-122.417169, 37.769196)
 
-        for z in range(0, 16):
-            x, y = deg2num(lat, lon, z)
-            # without remapping min_zoom this area would result in min_zoom of 6,
-            # but after remapping it'd be 9
-            area = 265548000
-            self.generate_fixtures(
-                dsl.way(13360255, dsl.box_area(z, x, y, area), {
-                    'name': u'James Bay',
-                    'place': u'sea',
-                    'wikidata': u'Q223810',
-                    'source': u'openstreetmap.org',
-                }),
-            )
+		x, y = deg2num(lat, lon, z)
+		# without remapping min_zoom this area would result in min_zoom of 6,
+		# but after remapping it'd be 9
+		area = 80000000001
+		self.generate_fixtures(
+			dsl.way(13360255, dsl.box_area(z, x, y, area), {
+				'name': u'James Bay',
+				'place': u'sea',
+				'wikidata': u'Q223810',
+				'source': u'openstreetmap.org',
+			}),
+		)
 
-            if z < 5:
-                self.assert_no_matching_feature(z, x, y, 'water',
-                                                {
-                                                    'kind': 'sea',
-                                                    'name': 'James Bay',
-                                                    'label_placement': True
-                                                })
-            if 5 <= z <= 15:
-                with self.features_in_tile_layer(z, x, y, 'water') as features:
-                    for f in features:
-                        if f['geometry']['type'] == 'Point':
-                            assert f['id'] is None
-                            assert f['properties']['min_zoom'] == 4
-                            assert f['properties']['name'] == 'James Bay'
-                            assert f['properties']['kind'] == 'sea'
+        self.assert_has_feature(
+            z, x, y, 'water',
+            {'kind': 'sea', 'name': 'James Bay',
+             'label_placement': True})
+
+        self.assert_no_matching_feature(
+            4, x, y, 'water',
+            {'kind': 'sea', 'name': 'James Bay',
+             'label_placement': True})
+
+        self.assert_has_feature(
+            5, x, y, 'water',
+            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0
+             'label_placement': True})
 
 # NOTE: No ocean points in the North America extract :-(
