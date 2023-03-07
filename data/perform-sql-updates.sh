@@ -56,6 +56,14 @@ psql $PSQLOPTS  $@ -f apply-ne_country_label_recasting.sql
 echo -e "\nRecasting Australia suburbs"
 psql $PSQLOPTS  $@ -f apply-planet_australia_suburb_recast.sql
 
+# The short_name labels (eg two-character state abbreviations) for Maryland, Massachusetts, and Texas are funky in Daylight 1.15
+echo -e "\nFixing short_name region (state) abbreviation labels in OSM"
+psql $PSQLOPTS  $@ -f apply-short_name_fixes.sql
+
+# Some major roads in Seattle, Washington, USA are misstagged in Daylight 1.15
+echo -e "\nFixing funky road classification in Seattle, Washington, USA in OSM"
+psql $PSQLOPTS  $@ -f apply-highway_99_fixes.sql
+
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."
 psql $PSQLOPTS  $@ -f apply-updates-non-planet-tables.sql &

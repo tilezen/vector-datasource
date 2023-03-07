@@ -251,9 +251,9 @@ Combination of OpenStreetMap administrative boundaries (zoom >= 8) and Natural E
 
 When there is a **boundary dispute** between two countries, the default boundary between them is generally shown according to the _de facto_ status marking where one country's on the ground administration ends and another's begins. The boundary line itself is marked `disputed`, and the extend of the other country's claim is tagged with one of `disputed_breakaway`, `disputed_claim`, `disputed_elusive`, and `disputed_reference_line`.
 
-Audiences in different countries may have different expectations and legal requirements so Tilezen optionally supports _de jure_ boundary viewpoints with `kind:xx` properties, where `xx` is a lower-cased [ISO 3166-1 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) with support for `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `us`, `vn`. Use these properties to "turn off" `unrecognized_country` and `unrecognized_region` boundary lines, and restyle the claims as `country` and `region`. The range of values is the same as for `kind`, and should be used in conjunction with `kind` as `kind:xx` in a coalesce as it's only included when that country's viewpoint is different than the default. These should be paired with **places** layer viewpoint support for country and region capitals.
+Audiences in different countries may have different expectations and legal requirements so Tilezen optionally supports _de jure_ boundary viewpoints with `kind:xx` properties, where `xx` is a lower-cased [ISO 3166-1 codes](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) with support for `ar`, `bd`, `br`, `cn`, `de`, `eg`, `es`, `fr`, `gb`, `gr`, `id`, `il`, `in`, `it`, `jp`, `ko`, `ma`, `nl`, `np`, `pk`, `pl`, `ps`, `pt`, `ru`, `sa`, `se`, `tr`, `tw`, `ua`, `us`, `vn`. Use these properties to "turn off" `unrecognized_country` and `unrecognized_region` boundary lines, and restyle the claims as `country` and `region`. The range of values is the same as for `kind`, and should be used in conjunction with `kind` as `kind:xx` in a coalesce as it's only included when that country's viewpoint is different than the default. These should be paired with **places** layer viewpoint support for country and region capitals.
 
-Some disputed boundaries, like the  [China 9-dashed line](https://en.wikipedia.org/wiki/Nine-dash_line), are marked `unrecognized_country` by default and are only available in a specific `kind:xx` viewpoint (in this case `kind:cn` and `kind:tw`).
+Some disputed boundaries, like the [China 9-dashed line](https://en.wikipedia.org/wiki/Nine-dash_line), are marked `unrecognized_country` by default and are only available in a specific `kind:xx` viewpoint (in this case `kind:cn` and `kind:tw`).
 
 ## Buildings and Addresses
 
@@ -268,7 +268,7 @@ Individual `building_part` geometries from OpenStreetMap following the [Simple 3
 
 Tilezen calculates the `landuse_kind` value by intercutting `buildings` with the `landuse` layer to determine if a building is over a parks, hospitals, universities or other landuse features. Use this property to modify the visual appearance of buildings over these features. For instance, light grey buildings look great in general, but aren't legible over most landuse colors unless they are darkened (or colorized to match landuse styling).
 
-Label position points may also have `closed` or `historical` kind_detail values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms. _See related bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
+Label position points may also have `closed` or `historical` `kind_detail` values if the original building name ended in "(closed)" or "(historical)", respectively. These points will have a `min_zoom` of 17, suggesting that they are suitable for display only at high zooms. _See related bug fix in [#1026](https://github.com/tilezen/vector-datasource/issues/1026)._
 
 Values for `kind_detail`  are sourced from OpenStreetMap's `building` tag for building footprints and from `building:part` tag for building parts.
 
@@ -278,6 +278,7 @@ Note that building geometries, like most geometries in Tilezen tiles, are clippe
 
 * `name`
 * `id`: from OpenStreetMap
+* `root_id`: so building parts can be associated back with their "root" building relation
 * `kind`: see below
 * `kind_detail`: see below
 * `source`: `openstreetmap.org`
@@ -869,7 +870,7 @@ The values of population rank are derived from the `population` value as follows
 * 1: Less than 200
 * 0: No `population` value available or `population` value zero.
 
-When available, for the largest cities, OSM localities gets their population_rank from NaturalEarth's `pop_max` tag because NaturalEarth `pop_max` is for the metro area and is more useful for label grading in the stylesheet.
+When available, for the largest cities, OSM localities gets their `population_rank` from NaturalEarth's `pop_max` tag because NaturalEarth `pop_max` is for the metro area and is more useful for label grading in the stylesheet.
 
 ## Points of Interest
 
@@ -1705,7 +1706,7 @@ Network value include:
 * `CA:NT`
 * `CA:ON:primary`
 * `CA:ON:secondary`
-* `CA:PE`
+* `CA:PE` (NOTE: was `CA:PEI` in error before)
 * `CA:QC:A`
 * `CA:QC:R`
 * `CA:SK:primary`
@@ -2487,12 +2488,15 @@ Tilezen calculates the composite exterior edge for overlapping water polygons an
 * `id`: OpenStreetMap feature `osm_id`, when sourced from `openstreetmap.org`
 * `is_tunnel`: for `line` features only (`true` values only)
 * `wikidata_id`: when present, the [Wikidata](https://www.wikidata.org) ID corresponding to this feature.
+* `alkaline`: boolean
+* `intermittent`: boolean
+* `reservoir`: boolean
 
 #### Water `kind` values:
 
 * `basin` - polygon
 * `bay` - point, intended for label placement only. With `tile_kind_rank`, see below.
-* `canal` - line
+* `canal` - line, can also indicate `boat: true` when navigable by a vessel
 * `ditch` - line
 * `dock` - polygon
 * `drain` - line
@@ -2522,12 +2526,12 @@ When `water` polygons are sourced from OpenStreetMap, we add `kind_detail` value
 * `river`
 * `stream`
 
-Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true`.
+Additionally, a `reservoir: true` or `alkaline: true` value can be present on the appropriate `kind=lake` features. Intermittent water features that sometimes run dry or disappear seasonally are marked `intermittent: true` (including implied infiltration and detention features).
 
 The kinds `bay`, `strait` and `fjord` are ranked by size and given a `kind_tile_rank` property that starts from 1 and counts up as the feature gets smaller. Note that the ranking is done on a "metatile", which means that each tile (of size 256px, 512px or other) won't necessarily contain the full range from 1 to N of `kind_tile_rank`s.
 
 **Gotchas:**
 
 * `lake` features with `alkaline: true` and `playa` features are sourced from Natural Earth at low zooms and are sparesly populated at high zooms from OpenStreetMap. Zooming in, your feature may disappear (when there is no equivalent in OpenStreetMap), or the feature may still exist as a water or lake polygon but without the alkaline indicator. Beware the desert around Great Salt Lake in Utah!
-* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. _See planned bug fix in [#984](https://github.com/tilezen/vector-datasource/issues/984). However, kind_detail value is available._
+* `lake` features from Natural Earth sometimes change to `water` features on zoom into OpenStreetMap data. To work around this, also use `kind_detail` at high zooms.
 * Some of the minor kinds (like `bay`, `strait`, and `fjord`) are used for label_placement points only, as their area would duplicate water polygons already present from osmdata.openstreetmap.de.
