@@ -48,17 +48,10 @@ globals:
         - [ 16,        400 ]
       default: 17
   - &water_sea_min_zoom
-    lookup:
-      key: { col: way_area }
-      op: '>='
-      table:
-        # OSM data starts at z8, but we should include some stuff at earlier so
-        # the transition doesn't have a gap in it.
-        - [ 3,  5000000000 ]
-        - [ 4,  2000000000 ]
-        - [ 5,   500000000 ]
-        - [ 6,   200000000 ]
-      default: 5
+    case:
+      - when: { way_area: { min: 102400 } }
+        then: { min: [ 5, { clamp: { min: 3, max: 6, value: { sum: [ { col: zoom }, 1.066 ] } } } ] }
+      - else: { clamp: { min: 3, max: 6, value: { sum: [ { col: zoom }, 1.066 ] } } }
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
