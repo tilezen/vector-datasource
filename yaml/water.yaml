@@ -47,6 +47,18 @@ globals:
         - [ 15,       1000 ]
         - [ 16,        400 ]
       default: 17
+  - &water_sea_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      table:
+        # OSM data starts at z8, but we should include some stuff at earlier so
+        # the transition doesn't have a gap in it.
+        - [ 3,  5000000000 ]
+        - [ 4,  2000000000 ]
+        - [ 5,   500000000 ]
+        - [ 6,   200000000 ]
+      default: 5
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
@@ -54,6 +66,29 @@ globals:
       - else: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
 
 filters:
+  #
+  # OSM water "place" features (ocean, sea labels)
+  #
+  - filter: {name: true, place: ocean}
+    min_zoom: 1
+    output:
+      <<: *output_properties
+      kind: ocean
+      label_placement: true
+    table: osm
+  # most seas are points, but some area areas
+  - filter: {name: true, place: sea}
+    min_zoom: *water_sea_min_zoom
+    output:
+      <<: *output_properties
+      kind: sea
+      label_placement: true
+    table: osm
+
+  #
+  # OSM regular water features
+  #
+
   # Not show covered water in the water layer. This filter has to be placed before filter: {natural: water}
   - filter:
       covered: "yes"
@@ -238,26 +273,7 @@ filters:
     table: ne
 
   #
-  # OSM water place points (ocean, sea labels)
-  #
-  - filter: {name: true, place: ocean}
-    min_zoom: 1
-    output:
-      <<: *output_properties
-      kind: ocean
-    table: osm
-  - filter: {name: true, place: sea}
-    min_zoom: 4
-    output:
-      <<: *output_properties
-      kind: sea
-    table: osm
-  # - filter: {gid: true}
-  #   min_zoom: 0
-  #   output:
-  #     - *output_properties
-  #     - {kind: ocean}
-  #   table: shp
+  # OSM ocean water polygons from alternate source
   - filter: {meta.source: shp}
     min_zoom: 0
     output:
