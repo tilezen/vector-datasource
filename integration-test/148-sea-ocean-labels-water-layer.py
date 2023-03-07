@@ -121,7 +121,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             3, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 3.0
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 3.0,
              'label_placement': True})
 
     def test_james_bay(self):
@@ -153,7 +153,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             5, x, y, 'water',
-            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0
+            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0,
              'label_placement': True})
 
 # NOTE: No ocean points in the North America extract :-(
