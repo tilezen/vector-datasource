@@ -50,7 +50,7 @@ globals:
   - &water_sea_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
-        then: { min: [ 5, { clamp: { min: 3, max: 6, value: { sum: [ { col: zoom }, 1.066 ] } } } ] }
+        then: { min: [ 4, { clamp: { min: 3, max: 6, value: { sum: [ { col: zoom }, 1.066 ] } } } ] }
       - else: { clamp: { min: 3, max: 6, value: { sum: [ { col: zoom }, 1.066 ] } } }
   - &water_standard_min_zoom
     case:
