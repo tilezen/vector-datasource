@@ -96,18 +96,18 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         z = 16
         lon, lat = (-122.417169, 37.769196)
 
-		x, y = deg2num(lat, lon, z)
-		# without remapping min_zoom this area would result in min_zoom of 6,
-		# but after remapping it'd be 9
-		area = 5000000001
-		self.generate_fixtures(
-			dsl.way(9441240, dsl.box_area(z, x, y, area), {
-				'name': u'Hudson Bay',
-				'place': u'sea',
-				'wikidata': u'Q3040',
-				'source': u'openstreetmap.org',
-			}),
-		)
+        x, y = deg2num(lat, lon, z)
+        # without remapping min_zoom this area would result in min_zoom of 6,
+        # but after remapping it'd be 9
+        area = 5000000001
+        self.generate_fixtures(
+            dsl.way(9441240, dsl.box_area(z, x, y, area), {
+                'name': u'Hudson Bay',
+                'place': u'sea',
+                'wikidata': u'Q3040',
+                'source': u'openstreetmap.org',
+            }),
+        )
 
         self.assert_has_feature(
             z, x, y, 'water',
@@ -128,18 +128,18 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         z = 16
         lon, lat = (-122.417169, 37.769196)
 
-		x, y = deg2num(lat, lon, z)
-		# without remapping min_zoom this area would result in min_zoom of 6,
-		# but after remapping it'd be 9
-		area = 80000000001
-		self.generate_fixtures(
-			dsl.way(13360255, dsl.box_area(z, x, y, area), {
-				'name': u'James Bay',
-				'place': u'sea',
-				'wikidata': u'Q223810',
-				'source': u'openstreetmap.org',
-			}),
-		)
+        x, y = deg2num(lat, lon, z)
+        # without remapping min_zoom this area would result in min_zoom of 6,
+        # but after remapping it'd be 9
+        area = 80000000001
+        self.generate_fixtures(
+            dsl.way(13360255, dsl.box_area(z, x, y, area), {
+                'name': u'James Bay',
+                'place': u'sea',
+                'wikidata': u'Q223810',
+                'source': u'openstreetmap.org',
+            }),
+        )
 
         self.assert_has_feature(
             z, x, y, 'water',
