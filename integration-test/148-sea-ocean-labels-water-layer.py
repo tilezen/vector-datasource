@@ -21,7 +21,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         # Oceans are not graded by area, they are constant zoom
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'ocean', 'name': 'Atlantic Ocean',
+            {'kind': 'ocean', 'name': 'Atlantic Ocean', 'min_zoom': 1.0,
              'label_placement': True})
         # even though OSM tags as place, Tilezen recasts to water layer
         self.assert_no_matching_feature(
@@ -32,8 +32,8 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             0, x, y, 'water',
             {'kind': 'ocean', 'name': 'Atlantic Ocean'})
         self.assert_has_feature(
-            1, x, y, 'water',
-            {'kind': 'ocean', 'name': 'Atlantic Ocean',
+            9, x, y, 'water',
+            {'kind': 'ocean', 'name': 'Atlantic Ocean', 'min_zoom': 1.0,
              'label_placement': True})
 
     def test_gulf_of_california_point(self):
@@ -57,8 +57,8 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             4, x, y, 'water',
             {'kind': 'sea', 'name': 'Gulf of California'})
         self.assert_has_feature(
-            5, x, y, 'water',
-            {'kind': 'sea', 'name': 'Gulf of California',
+            9, x, y, 'water',
+            {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 5.0,
              'label_placement': True})
 
     def test_greenland_sea_point(self):
@@ -81,8 +81,8 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             4, x, y, 'water',
             {'kind': 'sea', 'name': 'Greenland Sea'})
         self.assert_has_feature(
-            5, x, y, 'water',
-            {'kind': 'sea', 'name': 'Greenland Sea',
+            9, x, y, 'water',
+            {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 5.0,
              'label_placement': True})
 
     def test_hudson_bay_large_polygon(self):
@@ -117,7 +117,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
              'label_placement': True})
 
         self.assert_has_feature(
-            3, x, y, 'water',
+            9, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 3.0,
              'label_placement': True})
 
@@ -153,6 +153,6 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
              'label_placement': True})
 
         self.assert_has_feature(
-            5, x, y, 'water',
+            9, x, y, 'water',
             {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0,
              'label_placement': True})

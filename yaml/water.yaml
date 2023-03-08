@@ -60,7 +60,7 @@ globals:
 
 filters:
   #
-  # OSM water "place" features (ocean, sea labels)
+  # OSM water "place" features (ocean, sea labels) from point and polygon tables
   #
   - filter: {name: true, place: ocean}
     min_zoom: 1
