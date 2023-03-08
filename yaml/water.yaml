@@ -77,9 +77,16 @@ filters:
       <<: *output_properties
       kind: ocean
     table: osm
-  # most seas are points, but some area areas
-  - filter: {name: true, place: sea}
-    min_zoom: 5 # *water_sea_min_zoom
+  # most seas are points
+  - filter: {name: true, place: sea, geom_type: point }
+    min_zoom: 5
+    output:
+      <<: *output_properties
+      kind: sea
+    table: osm
+  # but some seas are polygons
+  - filter: {name: true, place: sea, geom_type: polygon }
+    min_zoom: *water_sea_min_zoom
     output:
       <<: *output_properties
       kind: sea
