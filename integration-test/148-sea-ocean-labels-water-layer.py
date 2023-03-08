@@ -15,7 +15,8 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         x, y = deg2num(1.0, 1.0, z)
 
         # Fake Ocean
-        self.generate_fixtures(dsl.way(1, wkt_loads('POINT (1.0 1.0)'), {u'name': u'Atlantic Ocean', u'source': u'openstreetmap.org', u'natural': u'sea', u'place': u'sea' }))
+        self.generate_fixtures(dsl.way(1, wkt_loads('POINT (1.0 1.0)'), {
+                               u'name': u'Atlantic Ocean', u'source': u'openstreetmap.org', u'natural': u'sea', u'place': u'sea'}))
         # Oceans are not graded by area, they are constant zoom
         self.assert_has_feature(
             z, x, y, 'water',
