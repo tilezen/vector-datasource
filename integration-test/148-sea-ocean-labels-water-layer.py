@@ -63,9 +63,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         self.assert_no_matching_feature(
             4, x, y, 'water',
             {'kind': 'sea', 'name': 'Gulf of California'})
-        x, y = deg2num(1.0, 1.0, 5)
+        x, y = deg2num(1.0, 1.0, 10)
         self.assert_has_feature(
-            5, x, y, 'water',
+            10, x, y, 'water',
             {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 5.0,
              'label_placement': True})
 
@@ -92,9 +92,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         self.assert_no_matching_feature(
             4, x, y, 'water',
             {'kind': 'sea', 'name': 'Greenland Sea'})
-        x, y = deg2num(1.0, 1.0, 5)
+        x, y = deg2num(1.0, 1.0, 10)
         self.assert_has_feature(
-            5, x, y, 'water',
+            10, x, y, 'water',
             {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 5.0,
              'label_placement': True})
 
@@ -127,10 +127,10 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             1, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay',
              'label_placement': True})
-        x, y = deg2num(1.0, 1.0, 2)
+        x, y = deg2num(1.0, 1.0, 10)
         self.assert_has_feature(
-            2, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 2.0,
+            10, x, y, 'water',
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 5.0,
              'label_placement': True})
 
     def test_james_bay_medium_polygon(self):
@@ -162,8 +162,8 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             {'kind': 'sea', 'name': 'James Bay',
              'label_placement': True})
 
-        x, y = deg2num(1.0, 1.0, 5)
+        x, y = deg2num(1.0, 1.0, 10)
         self.assert_has_feature(
-            5, x, y, 'water',
+            10, x, y, 'water',
             {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0,
              'label_placement': True})
