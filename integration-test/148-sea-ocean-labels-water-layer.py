@@ -10,6 +10,30 @@ from . import FixtureTest
 # layer.
 class SeaOceanLabelsWaterLayer(FixtureTest):
 
+    def test_ocean(self):
+        z = 16     # visible starting at zoom 9 because of NE - OSM transition, but with different min_zoom
+        x, y = deg2num(1.0, 1.0, z)
+
+        # Fake Ocean
+        self.generate_fixtures(dsl.way(1, wkt_loads('POINT (1.0 1.0)'), {u'name': u'Atlantic Ocean', u'source': u'openstreetmap.org', u'natural': u'sea', u'place': u'sea' }))
+        # Oceans are not graded by area, they are constant zoom
+        self.assert_has_feature(
+            z, x, y, 'water',
+            {'kind': 'sea', 'name': 'Atlantic Ocean',
+             'label_placement': True})
+        # even though OSM tags as place, Tilezen recasts to water layer
+        self.assert_no_matching_feature(
+            z, x, y, 'places',
+            {'kind': 'sea', 'name': 'Atlantic Ocean'})
+        # ensure the zoom range is correct vis-a-vis the size
+        self.assert_no_matching_feature(
+            0, x, y, 'water',
+            {'kind': 'sea', 'name': 'Atlantic Ocean'})
+        self.assert_has_feature(
+            1, x, y, 'water',
+            {'kind': 'sea', 'name': 'Atlantic Ocean',
+             'label_placement': True})
+
     def test_gulf_of_california(self):
         z = 16     # visible starting at zoom 9 because of NE - OSM transition, but with different min_zoom
         x, y = deg2num(27.5578100671435, -111.704650024786, z)
