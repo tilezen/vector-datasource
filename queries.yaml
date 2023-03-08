@@ -1038,7 +1038,7 @@ post_process:
   - fn: vectordatasource.transform.drop_features_where
     params:
       source_layer: water
-      start_zoom: 3
+      start_zoom: 2
       where: >-
         'label_placement' not in properties and kind in ('sea', 'bay', 'strait', 'fjord', 'marina', 'harbour')
   - fn: vectordatasource.transform.drop_features_where
