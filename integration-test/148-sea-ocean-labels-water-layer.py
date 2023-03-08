@@ -46,7 +46,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         # Seas are not graded by area, they are constant zoom (that should probably change)
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Gulf of California',
+            {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 5.0,
              'label_placement': True})
         # even though OSM tags as place, Tilezen recasts to water layer
         self.assert_no_matching_feature(
@@ -70,7 +70,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         # Seas are not graded by area, they are constant zoom (that should probably change)
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Greenland Sea',
+            {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 5.0,
              'label_placement': True})
         # even though OSM tags as place, Tilezen recasts to water layer
         self.assert_no_matching_feature(
@@ -104,7 +104,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay',
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 3.0,
              'label_placement': True})
 
         #         self.assert_no_matching_feature(
@@ -140,7 +140,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'James Bay',
+            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0,
              'label_placement': True})
 
         #         self.assert_no_matching_feature(
