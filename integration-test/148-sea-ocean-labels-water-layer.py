@@ -118,19 +118,19 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 5.0,
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 2.0,
              'label_placement': True})
 
         # ensure the zoom range is correct vis-a-vis the size
-        x, y = deg2num(1.0, 1.0, 4)
+        x, y = deg2num(1.0, 1.0, 1)
         self.assert_no_matching_feature(
-            4, x, y, 'water',
+            1, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay',
              'label_placement': True})
-        x, y = deg2num(1.0, 1.0, 5)
+        x, y = deg2num(1.0, 1.0, 2)
         self.assert_has_feature(
-            5, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 5.0,
+            2, x, y, 'water',
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 2.0,
              'label_placement': True})
 
     def test_james_bay_medium_polygon(self):
