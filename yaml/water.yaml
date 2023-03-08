@@ -79,7 +79,7 @@ filters:
     table: osm
   # most seas are points, but some area areas
   - filter: {name: true, place: sea}
-    min_zoom: *water_sea_min_zoom
+    min_zoom: 5
     output:
       <<: *output_properties
       kind: sea
