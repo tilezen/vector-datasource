@@ -60,7 +60,7 @@ globals:
         - [ 6,     200000000 ]
         - [ 7,      40000000 ]
       # OSM points
-      default: 5
+      default: 4
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
@@ -79,7 +79,7 @@ filters:
     table: osm
   # most seas are points, but some area areas
   - filter: {name: true, place: sea}
-    min_zoom: 4
+    min_zoom: *water_sea_min_zoom
     output:
       <<: *output_properties
       kind: sea
