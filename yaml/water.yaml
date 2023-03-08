@@ -67,7 +67,6 @@ filters:
     output:
       <<: *output_properties
       kind: ocean
-      label_placement: true
     table: osm
   # most seas are points, but some area areas
   - filter: {name: true, place: sea}
@@ -75,7 +74,6 @@ filters:
     output:
       <<: *output_properties
       kind: sea
-      label_placement: true
     table: osm
 
   #
