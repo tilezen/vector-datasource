@@ -81,9 +81,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             {'kind': 'sea', 'name': 'Hudson Bay',
              'label_placement': True})
 
-		#         self.assert_no_matching_feature(
-		#             z, x, y, 'water',
-		#             {'kind': 'sea', 'label_placement': None})
+        #         self.assert_no_matching_feature(
+        #             z, x, y, 'water',
+        #             {'kind': 'sea', 'label_placement': None})
 
         self.assert_no_matching_feature(
             2, x, y, 'water',
@@ -117,9 +117,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             {'kind': 'sea', 'name': 'James Bay',
              'label_placement': True})
 
-		#         self.assert_no_matching_feature(
-		#             z, x, y, 'water',
-		#             {'kind': 'sea', 'label_placement': None})
+        #         self.assert_no_matching_feature(
+        #             z, x, y, 'water',
+        #             {'kind': 'sea', 'label_placement': None})
 
         self.assert_no_matching_feature(
             4, x, y, 'water',
