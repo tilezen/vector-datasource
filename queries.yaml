@@ -930,9 +930,7 @@ post_process:
       # note the following line cannot be written as
       # properties is not None and properties.get('label_placement') is True
       where: >-
-        properties is not None and
-        (label_placement or geom_type in ('Polygon', 'MultiPolygon') and
-         kind not in ('sea', 'ocean'))
+        properties is not None and label_placement and kind not in ('sea', 'ocean')
 
   # now that we have the label points
   # drop most water properties at lower zooms
