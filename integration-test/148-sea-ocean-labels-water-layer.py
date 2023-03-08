@@ -104,7 +104,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         x, y = deg2num(lat, lon, z)
         # without remapping min_zoom this area would result in min_zoom of 6,
-        # but after remapping it'd be 9
+        # but after remapping it'd be 2
         area = 80000000001
 
         self.generate_fixtures(
@@ -139,7 +139,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         x, y = deg2num(lat, lon, z)
         # without remapping min_zoom this area would result in min_zoom of 6,
-        # but after remapping it'd be 9
+        # but after remapping it'd be 5
         area = 500000001
         self.generate_fixtures(
             dsl.way(13360255, dsl.box_area(z, x, y, area), {
