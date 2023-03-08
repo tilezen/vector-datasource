@@ -50,7 +50,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         # Seas are not graded by area, they are constant zoom (that should probably change)
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 4.0,
+            {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 5.0,
              'label_placement': True})
 
         # even though OSM tags as place, Tilezen recasts to water layer
@@ -59,14 +59,14 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             {'kind': 'sea', 'name': 'Gulf of California'})
 
         # ensure the zoom range is correct vis-a-vis the size
-        x, y = deg2num(1.0, 1.0, 3)
-        self.assert_no_matching_feature(
-            3, x, y, 'water',
-            {'kind': 'sea', 'name': 'Gulf of California'})
         x, y = deg2num(1.0, 1.0, 4)
-        self.assert_has_feature(
+        self.assert_no_matching_feature(
             4, x, y, 'water',
-            {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 4.0,
+            {'kind': 'sea', 'name': 'Gulf of California'})
+        x, y = deg2num(1.0, 1.0, 5)
+        self.assert_has_feature(
+            5, x, y, 'water',
+            {'kind': 'sea', 'name': 'Gulf of California', 'min_zoom': 5.0,
              'label_placement': True})
 
     def test_greenland_sea_point(self):
@@ -79,7 +79,7 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
         # Seas are not graded by area, they are constant zoom (that should probably change)
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 4.0,
+            {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 5.0,
              'label_placement': True})
 
         # even though OSM tags as place, Tilezen recasts to water layer
@@ -88,14 +88,14 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             {'kind': 'sea', 'name': 'Greenland Sea'})
 
         # ensure the zoom range is correct vis-a-vis the size
-        x, y = deg2num(1.0, 1.0, 3)
-        self.assert_no_matching_feature(
-            3, x, y, 'water',
-            {'kind': 'sea', 'name': 'Greenland Sea'})
         x, y = deg2num(1.0, 1.0, 4)
-        self.assert_has_feature(
+        self.assert_no_matching_feature(
             4, x, y, 'water',
-            {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 4.0,
+            {'kind': 'sea', 'name': 'Greenland Sea'})
+        x, y = deg2num(1.0, 1.0, 5)
+        self.assert_has_feature(
+            5, x, y, 'water',
+            {'kind': 'sea', 'name': 'Greenland Sea', 'min_zoom': 5.0,
              'label_placement': True})
 
     def test_hudson_bay_large_polygon(self):
@@ -118,19 +118,19 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 4.0,
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 5.0,
              'label_placement': True})
 
         # ensure the zoom range is correct vis-a-vis the size
-        x, y = deg2num(1.0, 1.0, 3)
+        x, y = deg2num(1.0, 1.0, 4)
         self.assert_no_matching_feature(
-            3, x, y, 'water',
+            4, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay',
              'label_placement': True})
-        x, y = deg2num(1.0, 1.0, 4)
+        x, y = deg2num(1.0, 1.0, 5)
         self.assert_has_feature(
-            4, x, y, 'water',
-            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 4.0,
+            5, x, y, 'water',
+            {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 5.0,
              'label_placement': True})
 
     def test_james_bay_medium_polygon(self):
@@ -152,18 +152,18 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
 
         self.assert_has_feature(
             z, x, y, 'water',
-            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 4.0,
+            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0,
              'label_placement': True})
 
         # ensure the zoom range is correct vis-a-vis the size
-        x, y = deg2num(1.0, 1.0, 3)
+        x, y = deg2num(1.0, 1.0, 4)
         self.assert_no_matching_feature(
-            3, x, y, 'water',
+            4, x, y, 'water',
             {'kind': 'sea', 'name': 'James Bay',
              'label_placement': True})
 
-        x, y = deg2num(1.0, 1.0, 4)
+        x, y = deg2num(1.0, 1.0, 5)
         self.assert_has_feature(
-            4, x, y, 'water',
-            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 4.0,
+            5, x, y, 'water',
+            {'kind': 'sea', 'name': 'James Bay', 'min_zoom': 5.0,
              'label_placement': True})
