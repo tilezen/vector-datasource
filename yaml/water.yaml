@@ -77,7 +77,9 @@ filters:
       <<: *output_properties
       kind: ocean
     table: osm
-  # most OSM seas are points, but are are polygons
+
+  # Some seas are also tagged bays, and we want to prioritize sea so we order sea first
+  # Most OSM seas are points, but are are polygons
   - filter: {name: true, place: sea }
     # NOTE: the min_zoom values for seas and oceans are used straight for label
     # placement min_zooms, while lakes are regraded in a later transform
