@@ -79,6 +79,8 @@ filters:
     table: osm
   # most OSM seas are points, but are are polygons
   - filter: {name: true, place: sea }
+    # NOTE: the min_zoom values for seas and oceans are used straight for label
+    # placement min_zooms, while lakes are regraded in a later transform
     min_zoom: *water_sea_min_zoom
     output:
       <<: *output_properties
