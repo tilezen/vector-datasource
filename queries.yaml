@@ -903,7 +903,7 @@ post_process:
   - fn: vectordatasource.transform.update_min_zoom
     params:
       source_layer: water
-      start_zoom: 4
+      start_zoom: 2
       end_zoom: 16
       # the inclusion of "None" in the list might seem odd, but None compares
       # numerically smaller than any integer, so acts as a default for this
@@ -929,6 +929,7 @@ post_process:
         ] if area >= area_threshold][0]
       # note the following line cannot be written as
       # properties is not None and properties.get('label_placement') is True
+      # and we exclude sea and ocean because those are pre-graded
       where: >-
         properties is not None and label_placement and kind not in ('sea', 'ocean')
 

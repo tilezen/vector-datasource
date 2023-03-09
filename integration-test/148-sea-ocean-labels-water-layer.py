@@ -127,9 +127,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             1, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay',
              'label_placement': True})
-        x, y = deg2num(1.0, 1.0, 2)
+        x, y = deg2num(1.0, 1.0, 5)
         self.assert_has_feature(
-            2, x, y, 'water',
+            5, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay', 'min_zoom': 2.0,
              'label_placement': True})
 
