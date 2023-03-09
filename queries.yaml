@@ -24,6 +24,7 @@ sources:
   planet_osm_polygon:
     - template: planet_osm_polygon.jinja2
       # landuse and pois start at 4
+      # seas start at zoom 2 (but will "pop" in at 4 in this config)
       start_zoom: 4
   planet_osm_line:
     - template: planet_osm_line.jinja2
@@ -31,6 +32,7 @@ sources:
       start_zoom: 5
   planet_osm_point:
     # earth and places start at zoom 0
+    # ocean and seas start at zoom 1 and 5 respectively
     - template: planet_osm_point.jinja2
 
   ne:

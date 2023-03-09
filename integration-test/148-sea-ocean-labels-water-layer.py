@@ -127,6 +127,9 @@ class SeaOceanLabelsWaterLayer(FixtureTest):
             1, x, y, 'water',
             {'kind': 'sea', 'name': 'Hudson Bay',
              'label_placement': True})
+        # Even though the feature has min_zoom 2, it isn't exported in a tile
+        # until zoom 4 because of the queries.yaml water layers start zoom config
+        # which is at 4 now so we don't get too much landuse at early zooms
         x, y = deg2num(1.0, 1.0, 4)
         self.assert_has_feature(
             4, x, y, 'water',

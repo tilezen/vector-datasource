@@ -52,6 +52,10 @@ globals:
       key: { col: way_area }
       op: '>='
       # OSM polygons
+      # We grade starting at zoom 2, even though they won't be exported in a tile
+      # until zoom 4 because of the queries.yaml water layers start zoom config
+      # which is at 4 now so we don't get too much landuse at early zooms and to not
+      # balloon file size. It's still useful to size grade them, though, for labeling.
       table:
         - [ 2,   80000000000 ]
         - [ 3,   40000000000 ]
