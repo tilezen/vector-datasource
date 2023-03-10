@@ -1,6 +1,6 @@
 v1.9.0
 ------
-* **Release date:** 2023-03-03.
+* **Release date:** 2023-03-10.
 * **Requires:** [tileserver v2.2.0](https://github.com/tilezen/tileserver/releases/tag/v2.2.0) and [tilequeue v2.5.0](https://github.com/tilezen/tilequeue/releases/tag/v2.5.0) and [rawr_tiles v1.1.0](https://github.com/tilezen/raw_tiles/releases/tag/v1.1.0) and [coanacatl v1.0.0](https://github.com/tilezen/coanacatl/releases/tag/v1.0.0).
 * **Credits:** [@travisgrigsby](https://github.com/travisgrigsby), [@jeffdefacto](https://github.com/jeffdefacto), [@peitili](https://github.com/peitili), [@iandees](https://github.com/iandees), and [@nvkelso](https://github.com/nvkelso)
 
@@ -67,7 +67,7 @@ v1.9.0
   * **water**: Tunnels for `canal` should draw under `pedestrian` plaza so adjust `sort_rank`. (Issue [#1910](https://github.com/tilezen/vector-datasource/issues/1910))
   * **water**: Remove `reservoir` features that are covered with a "roof". (Issue [#1982](https://github.com/tilezen/vector-datasource/issues/1982))
   * **water**: Remove low- and mid-zoom water labels from small polygons. (Issue [#2003](https://github.com/tilezen/vector-datasource/issues/2003))
-  * **water**: Ensure sea labels are visible at mid- and high-zooms, not just the max zoom. (Pull request[#2103](https://github.com/tilezen/vector-datasource/pulls/2103))
+  * **water**: Ensure sea labels are visible at mid- and high-zooms, not just the max zoom. (Pull request[#2103](https://github.com/tilezen/vector-datasource/pull/2103))
   * **all layers**: Simplify geometry of low-zoom Natural Earth features in all layers to reduce file size. (Issue [#2014](https://github.com/tilezen/vector-datasource/issues/2014))
 
   #### DOCUMENTATION CHANGES
