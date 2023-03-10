@@ -150,7 +150,7 @@ Most Tilezen vector tile content is updated minutely from OpenStreetMap. Low and
 
 #### Changelog
 
-The current version of Tilezen vector tile data schema is **v1.6.0**.
+The current version of Tilezen vector tile data schema is **v1.9.0**.
 
 Tiles are still in active development, but Tilezen promises to minimize backwards incompatible breaking changes. Data model promises are listed in the Tilezen [SEMANTIC VERSIONING](https://github.com/mapzen/vector-datasource/tree/master/SEMANTIC-VERSIONING.md) statement.
 
