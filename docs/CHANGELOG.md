@@ -69,6 +69,7 @@ v1.9.0
   * **water**: Remove low- and mid-zoom water labels from small polygons. (Issue [#2003](https://github.com/tilezen/vector-datasource/issues/2003))
   * **water**: Ensure sea labels are visible at mid- and high-zooms, not just the max zoom. (Pull request[#2103](https://github.com/tilezen/vector-datasource/pull/2103))
   * **all layers**: Simplify geometry of low-zoom Natural Earth features in all layers to reduce file size. (Issue [#2014](https://github.com/tilezen/vector-datasource/issues/2014))
+  * **all layers**: Are now MVT v2 spec compliant, via related changes in Tilezen's mapbox-vector-tile [v2.0.0](https://github.com/tilezen/mapbox-vector-tile/releases/tag/v2.0.0) release.
 
   #### DOCUMENTATION CHANGES
 
