@@ -34,6 +34,7 @@ v1.9.0
   * **places**: Upgrade to Who's On First `neighbourhood` features, circa October 2021.
   * **all layers**: Add MVT buffer support to enable MapboxGL to render stroked lines at tile boundaries without missing triangles (eg for road casings). [Tilequeue #401](https://github.com/tilezen/tilequeue/pull/401)
   * **all layers**: Vary the MVT tile `extent` so 8192 is only used on `max_zoom` (and 4096 earlier) to optimize file size while preserving overzooming. (Issue [#1985](https://github.com/tilezen/vector-datasource/issues/1985))
+  * **all layers**: Are now MVT v2 spec compliant, via related changes in Tilezen's mapbox-vector-tile [v2.0.0](https://github.com/tilezen/mapbox-vector-tile/releases/tag/v2.0.0) release.
 
   #### BUG FIXES
 
@@ -69,7 +70,6 @@ v1.9.0
   * **water**: Remove low- and mid-zoom water labels from small polygons. (Issue [#2003](https://github.com/tilezen/vector-datasource/issues/2003))
   * **water**: Ensure sea labels are visible at mid- and high-zooms, not just the max zoom. (Pull request[#2103](https://github.com/tilezen/vector-datasource/pull/2103))
   * **all layers**: Simplify geometry of low-zoom Natural Earth features in all layers to reduce file size. (Issue [#2014](https://github.com/tilezen/vector-datasource/issues/2014))
-  * **all layers**: Are now MVT v2 spec compliant, via related changes in Tilezen's mapbox-vector-tile [v2.0.0](https://github.com/tilezen/mapbox-vector-tile/releases/tag/v2.0.0) release.
 
   #### DOCUMENTATION CHANGES
 
