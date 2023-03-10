@@ -47,6 +47,24 @@ globals:
         - [ 15,       1000 ]
         - [ 16,        400 ]
       default: 17
+  - &water_sea_min_zoom
+    lookup:
+      key: { col: way_area }
+      op: '>='
+      # OSM polygons
+      # We grade starting at zoom 2, even though they won't be exported in a tile
+      # until zoom 4 because of the queries.yaml water layers start zoom config
+      # which is at 4 now so we don't get too much landuse at early zooms and to not
+      # balloon file size. It's still useful to size grade them, though, for labeling.
+      table:
+        - [ 2,   80000000000 ]
+        - [ 3,   40000000000 ]
+        - [ 4,   10000000000 ]
+        - [ 5,     500000000 ]
+        - [ 6,     200000000 ]
+        - [ 7,      40000000 ]
+      # OSM points
+      default: 5
   - &water_standard_min_zoom
     case:
       - when: { way_area: { min: 102400 } }
@@ -54,6 +72,31 @@ globals:
       - else: { clamp: { min: 0, max: 16, value: { sum: [ { col: zoom }, 1.066 ] } } }
 
 filters:
+  #
+  # OSM water "place" features (ocean, sea labels) from point and polygon tables
+  #
+  - filter: {name: true, place: ocean}
+    min_zoom: 1
+    output:
+      <<: *output_properties
+      kind: ocean
+    table: osm
+
+  # Some seas are also tagged bays, and we want to prioritize sea so we order sea first
+  # Most OSM seas are points, but are are polygons
+  - filter: {name: true, place: sea }
+    # NOTE: the min_zoom values for seas and oceans are used straight for label
+    # placement min_zooms, while lakes are regraded in a later transform
+    min_zoom: *water_sea_min_zoom
+    output:
+      <<: *output_properties
+      kind: sea
+    table: osm
+
+  #
+  # OSM regular water features
+  #
+
   # Not show covered water in the water layer. This filter has to be placed before filter: {natural: water}
   - filter:
       covered: "yes"
@@ -238,26 +281,7 @@ filters:
     table: ne
 
   #
-  # OSM water place points (ocean, sea labels)
-  #
-  - filter: {name: true, place: ocean}
-    min_zoom: 1
-    output:
-      <<: *output_properties
-      kind: ocean
-    table: osm
-  - filter: {name: true, place: sea}
-    min_zoom: 3
-    output:
-      <<: *output_properties
-      kind: sea
-    table: osm
-  # - filter: {gid: true}
-  #   min_zoom: 0
-  #   output:
-  #     - *output_properties
-  #     - {kind: ocean}
-  #   table: shp
+  # OSM ocean water polygons from alternate source
   - filter: {meta.source: shp}
     min_zoom: 0
     output:

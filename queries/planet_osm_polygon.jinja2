@@ -160,12 +160,22 @@ FROM (
       mz_poi_min_zoom < {{ zoom + 1 }} OR
       mz_transit_level < {{ zoom + 1 }} OR
       mz_water_min_zoom < {{ zoom + 1 }}))
+-- NOTE: we include earth and water layers here, even below zoom 8, because the polygon
+-- features going into the earth and water layers are converted to label placements and
+-- don't conflict with the Natural Earth data at zoom < 8.
 {% elif zoom >= 7 %}
     ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
       (mz_earth_min_zoom < {{ zoom + 1 }} OR
        mz_landuse_min_zoom < {{ zoom + 1 }} OR
        mz_poi_min_zoom < {{ zoom + 1 }} OR
-       mz_transit_level < {{ zoom + 1 }}))
+       mz_transit_level < {{ zoom + 1 }} OR
+       mz_water_min_zoom < {{ zoom + 1 }}))
+{% elif zoom >= 2 %}
+    ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
+      (mz_earth_min_zoom < {{ zoom + 1 }} OR
+       mz_landuse_min_zoom < {{ zoom + 1 }} OR
+       mz_poi_min_zoom < {{ zoom + 1 }} OR
+       mz_water_min_zoom < {{ zoom + 1 }}))
 {% else %}
     ({{ bounds['polygon']|bbox_filter('way', 3857) }} AND
       (mz_building_min_zoom < {{ zoom + 1 }} OR
