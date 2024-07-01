@@ -947,7 +947,6 @@ post_process:
       properties:
         - id
         - area
-        - boundary
         - layer
         - wikidata_id
         - osm_relation
