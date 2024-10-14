@@ -4,7 +4,7 @@ default_language_version:
     python: python2.7
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
+    rev: v5.0.0
     hooks:
       - id: check-docstring-first
       - id: check-yaml
@@ -16,19 +16,19 @@ repos:
       - id: trailing-whitespace
       - id: requirements-txt-fixer
       - id: double-quote-string-fixer
-  - repo: https://github.com/asottile/reorder_python_imports
-    rev: v1.9.0
+  - repo: https://github.com/asottile/reorder-python-imports
+    rev: v3.14.0
     hooks:
       - id: reorder-python-imports
-  - repo: https://github.com/pre-commit/mirrors-autopep8
-    rev: v1.5.7
+  - repo: https://github.com/hhatto/autopep8
+    rev: v2.3.1
     hooks:
       - id: autopep8
   - repo: https://github.com/asottile/yesqa
-    rev: v0.0.11
+    rev: v1.5.0
     hooks:
       - id: yesqa
   - repo: https://github.com/PyCQA/flake8
-    rev: 3.9.2
+    rev: 7.1.1
     hooks:
       - id: flake8
