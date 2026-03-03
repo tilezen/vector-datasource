@@ -224,6 +224,12 @@ filters:
       <<: *water_standard_properties_osm
       kind: drain
     table: osm
+  - filter: {waterway: weir}
+    min_zoom: 14
+    output:
+      <<: *water_standard_properties_osm
+      kind: weir
+    table: osm
   # reef
   - filter:
       natural: reef

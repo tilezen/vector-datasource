@@ -153,11 +153,15 @@ sources:
     - template: buffered_land.jinja2
       start_zoom: 8
 
+  contours:
+    - template: contours.jinja2
+      start_zoom: 13
+
 layers:
   water:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 0
+    simplify_start: 8
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -167,13 +171,13 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.water
     area-inclusion-threshold: 1
   earth:
     geometry_types: [Point, MultiPoint, Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 0
+    simplify_start: 8
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -181,7 +185,7 @@ layers:
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.earth
     area-inclusion-threshold: 1
   places:
@@ -216,13 +220,13 @@ layers:
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.normalize_operator_values
       - vectordatasource.transform.major_airport_detector
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.landuse
     area-inclusion-threshold: 1
   roads:
     geometry_types: [LineString, MultiLineString]
-    simplify_start: 4
-    tolerance: 1.0
+    simplify_start: 8
+    tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -241,7 +245,7 @@ layers:
       - vectordatasource.transform.road_trim_properties
       - vectordatasource.transform.remove_feature_id
       - vectordatasource.transform.tags_remove
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.roads
     area-inclusion-threshold: 1
   buildings:
@@ -263,7 +267,7 @@ layers:
       - vectordatasource.transform.normalize_tourism_kind
       - vectordatasource.transform.building_trim_properties
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.buildings
     area-inclusion-threshold: 1
   pois:
@@ -288,14 +292,14 @@ layers:
       - vectordatasource.transform.major_airport_detector
       - vectordatasource.transform.elevation_to_meters
       - vectordatasource.transform.normalize_operator_values
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.pois
     area-inclusion-threshold: 1
   boundaries:
     geometry_types: [Polygon, MultiPolygon, LineString, MultiLineString]
     simplify_before_intersect: true
-    simplify_start: 0
-    tolerance: 1.0
+    simplify_start: 8
+    tolerance: 2.0
     transform:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.tags_name_i18n
@@ -303,7 +307,7 @@ layers:
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.detect_osm_relation
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
       - vectordatasource.transform.remap_viewpoint_kinds
       - vectordatasource.transform.unpack_viewpoint_claims
       # note: the next line needs to come after anything else that touches the kind:XX values.
@@ -314,7 +318,7 @@ layers:
     area-inclusion-threshold: 1
   transit:
     geometry_types: [LineString, MultiLineString, Polygon, MultiPolygon]
-    simplify_start: 5
+    simplify_start: 8
     tolerance: 1.0
     transform:
       - vectordatasource.transform.tags_create_dict
@@ -326,7 +330,7 @@ layers:
       - vectordatasource.transform.route_name
       - vectordatasource.transform.parse_layer_as_float
       - vectordatasource.transform.remove_feature_id
-      - vectordatasource.transform.truncate_min_zoom_to_1dp
+      - vectordatasource.transform.truncate_min_zoom_to_2dp
     sort: vectordatasource.sort.transit
     area-inclusion-threshold: 1
   admin_areas:
@@ -340,6 +344,15 @@ layers:
       - vectordatasource.transform.tags_create_dict
       - vectordatasource.transform.add_id_to_properties
       - vectordatasource.transform.remove_feature_id
+    area-inclusion-threshold: 1
+  contours:
+    geometry_types: [LineString, MultiLineString]
+    simplify_start: 999
+    tolerance: 2.0
+    transform:
+      - vectordatasource.transform.tags_create_dict
+      - vectordatasource.transform.tags_name_i18n
+      - vectordatasource.transform.tags_remove
     area-inclusion-threshold: 1
   # optional inline layer, if the file is found on disk it will be used
   landmarks:
@@ -397,6 +410,7 @@ post_process:
         scree: barren
         shingle: barren
         stone: barren
+        fell: barren
 
         # desert
         bare_rock: desert
@@ -503,6 +517,15 @@ post_process:
         path: spreadsheets/sort_rank/transit.csv
     params:
       source_layer: transit
+      target_value_type: int
+  - fn: vectordatasource.transform.csv_match_properties
+    resources:
+      matcher:
+        type: file
+        init_fn: vectordatasource.transform.CSVMatcher
+        path: spreadsheets/sort_rank/contours.csv
+    params:
+      source_layer: contours
       target_value_type: int
   # this needs to run before the water sort_rank csv matcher
   - fn: vectordatasource.transform.exterior_boundaries
@@ -777,7 +800,7 @@ post_process:
     params:
       source_layer: boundaries
       start_zoom: 0
-      end_zoom: 14
+      end_zoom: 11
       properties:
         - id
         - "id:left"
@@ -947,7 +970,6 @@ post_process:
       properties:
         - id
         - area
-        - boundary
         - layer
         - wikidata_id
         - osm_relation
@@ -1895,7 +1917,6 @@ post_process:
         - addr_housenumber
         - addr_street
         - osm_relation
-      exclude: ['superseded_by']
       # NOTE: max_merged_features is set to keep the time taken for geometry
       # merging down, as it seems to go up with the square of the number of
       # features.

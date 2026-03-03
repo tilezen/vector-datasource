@@ -61,8 +61,8 @@ echo -e "\nFixing short_name region (state) abbreviation labels in OSM"
 psql $PSQLOPTS  $@ -f apply-short_name_fixes.sql
 
 # Some major roads in Seattle, Washington, USA are misstagged in Daylight 1.15
-echo -e "\nFixing funky road classification in Seattle, Washington, USA in OSM"
-psql $PSQLOPTS  $@ -f apply-highway_99_fixes.sql
+#echo -e "\nFixing funky road classification in Seattle, Washington, USA in OSM"
+#psql $PSQLOPTS  $@ -f apply-highway_99_fixes.sql
 
 # apply updates in parallel across tables
 echo -e "\nApplying updates in parallel across tables..."

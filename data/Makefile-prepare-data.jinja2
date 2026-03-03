@@ -1,7 +1,7 @@
 # clip input to the bounds of EPSG:3857 _before_ projecting. this ensures that
 # there are no unprojectable points, but that the data fills the all the way to
 # the corners of the world.
-OGR_CLIP_OPTS=-clipsrc -180 -85.051128779806604 180 85.051128779806604
+OGR_CLIP_OPTS=
 
 all: download shapefiles
 

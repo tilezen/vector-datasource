@@ -21,6 +21,7 @@ global:
     zoo: {col: zoo}
     barrier: {col: barrier}
     fence_type: {col: fence_type}
+    crop: {col: crop}
     min_zoom:
       case:
         - when: { meta.source: ne }
@@ -882,14 +883,13 @@ filters:
       <<: *output_properties
       kind: groyne
       tier: 4
-  # dike
+  # dyke
   - filter:
-      man_made: dike
-      geom_type: polygon
-    min_zoom: { max: [ 13, *tier4_min_zoom ] }
+      man_made: dyke
+    min_zoom: 13
     output:
       <<: *output_properties
-      kind: dike
+      kind: dyke
       tier: 4
   # cutline
   - filter:
@@ -1156,6 +1156,11 @@ filters:
     output:
       <<: *output_properties
       kind: {col: natural}
+  - filter: {natural: fell}
+    min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
+    output:
+      <<: *output_properties
+      kind: fell
   - filter: {landuse: vineyard}
     min_zoom: { clamp: { max: 16, min: 9, value: { col: zoom } } }
     output:

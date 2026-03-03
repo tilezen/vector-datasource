@@ -9,6 +9,7 @@ layer::int,kind,boundary,sort_rank
 -3,riverbank,-,7
 -4,riverbank,-,6
 -5,riverbank,-,5
+*,weir,-,205
 *,riverbank,-,204
 *,playa,-,203
 -1,river,-,9
