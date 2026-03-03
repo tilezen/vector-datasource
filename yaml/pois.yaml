@@ -454,7 +454,7 @@ global:
         - harbour: harbour_master
         - highway: [ bus_stop, elevator, ford, turning_circle, turning_loop, mini_roundabout, motorway_junction, platform,
             rest_area, street_lamp, traffic_signals, trailhead ]
-        - historic: [landmark, wayside_cross]
+        - historic: [boundary_stone, cannon, city_gate, landmark, manor, technical_monument, wayside_cross, wayside_shrine]
         - landuse: quarry
         - leisure: [ amusement_arcade, bird_hide, bowling_alley, dance, dog_park, firepit, fishing, ice_rink, outdoor_seating, picnic_table, pitch, playground, sauna, slipway, swimming_area ]
         - lock: yes
